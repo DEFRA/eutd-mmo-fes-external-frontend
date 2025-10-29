@@ -1,0 +1,22 @@
+{
+  "documentNumber": "GBR-2023-SD-2F908AEB9",
+  "catchDetails": {
+    "product": "Barbados keyhole limpet (FSB)",
+    "id": "5252-1719818888-0",
+    "commodityCode": "03021180",
+    "certificateNumber": "",
+    "productWeight": "55",
+    "dateOfUnloading": "21/05/2024",
+    "placeOfUnloading": "Dover",
+    "transportUnloadedFrom": "3535",
+    "weightOnCC": "345",
+    "scientificName": "Fissurella barbadensis",
+    "certificateType": "non_uk",
+    "_id": "66825a88f12677f458ade977"
+  },
+  "errors": {
+    "catches-0-certificateNumber": "sdAddProductToConsignmentCertificateNumberErrorNull"
+  },
+  "catchIndex": 0,
+  "nextUri": ""
+}

@@ -1,0 +1,212 @@
+[
+  {
+    "officialCountryName": "Albania",
+    "isoCodeAlpha2": "AL",
+    "isoCodeAlpha3": "ALB",
+    "isoNumericCode": "008"
+  },
+  {
+    "officialCountryName": "Austria",
+    "isoCodeAlpha2": "AT",
+    "isoCodeAlpha3": "AUT",
+    "isoNumericCode": "040"
+  },
+  {
+    "officialCountryName": "Belgium",
+    "isoCodeAlpha2": "BE",
+    "isoCodeAlpha3": "BEL",
+    "isoNumericCode": "056"
+  },
+  {
+    "officialCountryName": "Bulgaria",
+    "isoCodeAlpha2": "BG",
+    "isoCodeAlpha3": "BGR",
+    "isoNumericCode": "100"
+  },
+  {
+    "officialCountryName": "Croatia",
+    "isoCodeAlpha2": "HR",
+    "isoCodeAlpha3": "HRV",
+    "isoNumericCode": "191"
+  },
+  {
+    "officialCountryName": "Estonia",
+    "isoCodeAlpha2": "EE",
+    "isoCodeAlpha3": "EST",
+    "isoNumericCode": "233"
+  },
+  {
+    "officialCountryName": "France",
+    "isoCodeAlpha2": "FR",
+    "isoCodeAlpha3": "FRA",
+    "isoNumericCode": "250"
+  },
+  {
+    "officialCountryName": "Germany",
+    "isoCodeAlpha2": "DE",
+    "isoCodeAlpha3": "DEU",
+    "isoNumericCode": "276"
+  },
+  {
+    "officialCountryName": "Greece",
+    "isoCodeAlpha2": "GR",
+    "isoCodeAlpha3": "GRC",
+    "isoNumericCode": "300"
+  },
+  {
+    "officialCountryName": "Hungary",
+    "isoCodeAlpha2": "HU",
+    "isoCodeAlpha3": "HUN",
+    "isoNumericCode": "348"
+  },
+  {
+    "officialCountryName": "Iceland",
+    "isoCodeAlpha2": "IS",
+    "isoCodeAlpha3": "ISL",
+    "isoNumericCode": "352"
+  },
+  {
+    "officialCountryName": "Ireland",
+    "isoCodeAlpha2": "IE",
+    "isoCodeAlpha3": "IRL",
+    "isoNumericCode": "372"
+  },
+  {
+    "officialCountryName": "Isle of Man",
+    "isoCodeAlpha2": "IM",
+    "isoCodeAlpha3": "IMN",
+    "isoNumericCode": "833"
+  },
+  {
+    "officialCountryName": "Italy",
+    "isoCodeAlpha2": "IT",
+    "isoCodeAlpha3": "ITA",
+    "isoNumericCode": "380"
+  },
+  {
+    "officialCountryName": "Latvia",
+    "isoCodeAlpha2": "LV",
+    "isoCodeAlpha3": "LVA",
+    "isoNumericCode": "428"
+  },
+  {
+    "officialCountryName": "Liechtenstein",
+    "isoCodeAlpha2": "LI",
+    "isoCodeAlpha3": "LIE",
+    "isoNumericCode": "438"
+  },
+  {
+    "officialCountryName": "Lithuania",
+    "isoCodeAlpha2": "LT",
+    "isoCodeAlpha3": "LTU",
+    "isoNumericCode": "440"
+  },
+  {
+    "officialCountryName": "Luxembourg",
+    "isoCodeAlpha2": "LU",
+    "isoCodeAlpha3": "LUX",
+    "isoNumericCode": "442"
+  },
+  {
+    "officialCountryName": "Moldova, Republic of",
+    "isoCodeAlpha2": "MD",
+    "isoCodeAlpha3": "MDA",
+    "isoNumericCode": "498"
+  },
+  {
+    "officialCountryName": "Monaco",
+    "isoCodeAlpha2": "MC",
+    "isoCodeAlpha3": "MCO",
+    "isoNumericCode": "492"
+  },
+  {
+    "officialCountryName": "Montenegro",
+    "isoCodeAlpha2": "ME",
+    "isoCodeAlpha3": "MNE",
+    "isoNumericCode": "499"
+  },
+  {
+    "officialCountryName": "Netherlands",
+    "isoCodeAlpha2": "NL",
+    "isoCodeAlpha3": "NLD",
+    "isoNumericCode": "528"
+  },
+  {
+    "officialCountryName": "Norway",
+    "isoCodeAlpha2": "NO",
+    "isoCodeAlpha3": "NOR",
+    "isoNumericCode": "578"
+  },
+  {
+    "officialCountryName": "Poland",
+    "isoCodeAlpha2": "PL",
+    "isoCodeAlpha3": "POL",
+    "isoNumericCode": "616"
+  },
+  {
+    "officialCountryName": "Portugal",
+    "isoCodeAlpha2": "PT",
+    "isoCodeAlpha3": "PRT",
+    "isoNumericCode": "620"
+  },
+  {
+    "officialCountryName": "Romania",
+    "isoCodeAlpha2": "RO",
+    "isoCodeAlpha3": "ROU",
+    "isoNumericCode": "642"
+  },
+  {
+    "officialCountryName": "San Marino",
+    "isoCodeAlpha2": "SM",
+    "isoCodeAlpha3": "SMR",
+    "isoNumericCode": "674"
+  },
+  {
+    "officialCountryName": "Serbia",
+    "isoCodeAlpha2": "RS",
+    "isoCodeAlpha3": "SRB",
+    "isoNumericCode": "688"
+  },
+  {
+    "officialCountryName": "Slovakia",
+    "isoCodeAlpha2": "SK",
+    "isoCodeAlpha3": "SVK",
+    "isoNumericCode": "703"
+  },
+  {
+    "officialCountryName": "Slovenia",
+    "isoCodeAlpha2": "SI",
+    "isoCodeAlpha3": "SVN",
+    "isoNumericCode": "705"
+  },
+  {
+    "officialCountryName": "Spain",
+    "isoCodeAlpha2": "ES",
+    "isoCodeAlpha3": "ESP",
+    "isoNumericCode": "724"
+  },
+  {
+    "officialCountryName": "Sweden",
+    "isoCodeAlpha2": "SE",
+    "isoCodeAlpha3": "SWE",
+    "isoNumericCode": "752"
+  },
+  {
+    "officialCountryName": "Switzerland",
+    "isoCodeAlpha2": "CH",
+    "isoCodeAlpha3": "CHE",
+    "isoNumericCode": "756"
+  },
+  {
+    "officialCountryName": "Ukraine",
+    "isoCodeAlpha2": "UA",
+    "isoCodeAlpha3": "UKR",
+    "isoNumericCode": "804"
+  },
+  {
+    "officialCountryName": "United Kingdom of Great Britain and Northern Ireland",
+    "isoCodeAlpha2": "GB",
+    "isoCodeAlpha3": "GBR",
+    "isoNumericCode": "826"
+  }
+]

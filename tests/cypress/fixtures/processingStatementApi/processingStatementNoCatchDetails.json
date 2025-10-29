@@ -1,0 +1,28 @@
+{
+  "catches": [
+    {
+      "catchCertificateType": "non_uk"
+    }
+  ],
+  "validationErrors": [],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": null,
+  "healthCertificateDate": null,
+  "healthCertificateNumber": null,
+  "personResponsibleForConsignment": null,
+  "plantApprovalNumber": null,
+  "plantName": null,
+  "plantAddressOne": null,
+  "plantBuildingName": null,
+  "plantBuildingNumber": null,
+  "plantSubBuildingName": null,
+  "plantStreetName": null,
+  "plantCounty": null,
+  "plantCountry": null,
+  "plantTownCity": null,
+  "plantPostcode": null,
+  "dateOfAcceptance": null,
+  "exportedTo": null,
+  "_plantDetailsUpdated": false
+}

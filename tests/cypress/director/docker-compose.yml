@@ -1,0 +1,61 @@
+version: '3.6'
+
+networks:
+  cypress:
+    external: true
+
+services:
+  mongo:
+    image: mongo:4.4
+    ports:
+      - 27017:27017
+    networks:
+      - cypress
+
+  director:
+    image: agoldis/sorry-cypress-director:latest
+    environment:
+      DASHBOARD_URL: http://localhost:8080
+      MONGODB_URI: 'mongodb://mongo:27017'
+      MONGODB_DATABASE: 'sorry-cypress'
+      EXECUTION_DRIVER: '../execution/mongo/driver'
+      SCREENSHOTS_DRIVER: '../screenshots/s3.driver'
+      GITLAB_JOB_RETRIES: 'false'
+      AWS_ACCESS_KEY_ID: 'key'
+      AWS_SECRET_ACCESS_KEY: 'secret'
+      S3_BUCKET: sorry-cypress
+      PROBE_LOGGER: "false"
+    ports:
+      - 1234:1234
+    depends_on:
+      - mongo
+    networks:
+      - cypress
+
+  api:
+    image: agoldis/sorry-cypress-api:latest
+    environment:
+      MONGODB_URI: 'mongodb://mongo:27017'
+      MONGODB_DATABASE: 'sorry-cypress'
+      APOLLO_PLAYGROUND: 'false'
+    ports:
+      - 4000:4000
+    depends_on:
+      - mongo
+    networks:
+      - cypress
+
+  dashboard:
+    image: agoldis/sorry-cypress-dashboard:latest
+    environment:
+      GRAPHQL_SCHEMA_URL: http://localhost:4000
+      GRAPHQL_CLIENT_CREDENTIALS: ''
+      CI_URL: ''
+      PORT: 8080
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongo
+      - api
+    networks:
+      - cypress

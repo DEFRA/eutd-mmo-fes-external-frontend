@@ -1,0 +1,10 @@
+{
+  "_id": "627bd56cd2298ef39b93c797",
+  "__t": "storageDocument",
+  "exportData": {},
+  "userReference": "",
+  "errors": {
+    "catches-0-certificateType": "psAddCatchTypeErrorSelectCertificateType"
+  },
+  "errorsUrl": "/create-storage-document/GBR-2022-SD-9CB99F69A/what-export-destination"
+}

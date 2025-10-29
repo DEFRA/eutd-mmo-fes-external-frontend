@@ -1,0 +1,6 @@
+{
+  "signOutPageTitle": "Daw’r amser i wneud eich cais i ben cyn hir",
+  "signOutWarningMessage": "Byddwn yn ailosod eich cais os na fyddwch yn ymateb o fewn {{warningTimeToDisplay}}. Rydyn ni’n cadw’ch gwybodaeth yn ddiogel.",
+  "signOutMinutes": "munud",
+  "signOutSeconds": "eiliad"
+}

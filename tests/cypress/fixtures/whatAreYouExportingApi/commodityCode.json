@@ -1,0 +1,23 @@
+[
+  {
+    "code": "03024400",
+    "description": "Fresh or chilled mackerel \"Scomber scombrus, Scomber australasicus, Scomber japonicus\"",
+    "faoName": "Pacific chub mackerel",
+    "stateLabel": "fresh",
+    "presentationLabel": "gutted"
+  },
+  {
+    "code": "16051000",
+    "description": "Crab, prepared or preserved (excl. smoked)",
+    "faoName": "Pacific chub mackerel",
+    "stateLabel": "fresh",
+    "presentationLabel": "gutted"
+  },
+  {
+    "code": "03063590",
+    "description": "Fresh or chilled fish, n.e.s",
+    "faoName": "Alfonsinos nei",
+    "stateLabel": "fresh",
+    "presentationLabel": "whole"
+  }
+]

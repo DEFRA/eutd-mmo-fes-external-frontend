@@ -1,0 +1,15 @@
+{
+  "catches": [
+    [
+      {
+        "id": "111",
+        "certificateNumber": "56556565",
+        "certificateType": "sometext"
+      }
+    ]
+  ],
+  "storageFacilities": [],
+  "validationErrors": [{}],
+  "addAnotherProduct": "No",
+  "addAnotherStorageFacility": "No"
+}

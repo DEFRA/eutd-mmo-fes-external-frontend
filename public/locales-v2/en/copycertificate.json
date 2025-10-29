@@ -1,0 +1,20 @@
+{
+  "ccCopyAllCertificateData": "Copy all certificate data",
+  "commonCopyThisProcessingStatementCopyAllCertificateData": "Copy all document data",
+  "sdCopyThisStorageDocumentCopyAllCertificateDataHint": "Enables you to quickly create a new draft storage document from a previously submitted document with similar data",
+  "commonCopyThisProcessingStatementCopyAllCertificateDataHint": "Enables you to quickly create a new draft processing statement from a previously submitted document with similar data",
+  "commonCopyThisStorageDocumentCopyAllCertificateDataHint": "Enables you to quickly create a new draft storage document from a previously submitted document with similar data",
+  "commonCopyThisDocumentVoidDocumentConfirm": "Copy all document data AND void the original",
+  "ccCopyAllCertificateDataExceptTheLandings": "Copy all certificate data EXCEPT the landings",
+  "ccCopyAllCertificateDataAndVoidTheOriginal": "Copy all certificate data AND void the original",
+  "ccCopyAllCertificateDataSubtitle1": "Enables you to quickly create a new draft catch certificate from a previously submitted document with similar data",
+  "ccCopyAllCertificateDataSubtitle2": "Enables you to quickly create a new draft catch certificate from a previously submitted document with similar data, but exclude the landings in the copy",
+  "commonCopyThisDocumentVoidDocumentConfirmHint": "Allows you correct errors in a submitted document by copying and replacing it",
+  "commonCopyThisAcknowledgement": "Acknowledgement",
+  "catchCertificateCopyThisDocumentWarningMessage": "You must not use a {{journeyText}} or {{addRemoveLandingText}} data for catches that have already been exported. Knowingly reusing catch certificates or using {{addRemoveLandingText}} data that relate to a previous export is a serious offence and may result in enforcement action being taken.",
+  "processingStatementCopyThisDocumentWarningMessage": "You must not use a {{journeyText}} or data for catches that have already been exported. Knowingly reusing processing statements or using {{addRemoveLandingText}} data that relate to a previous export is a serious offence and may result in enforcement action being taken.",
+  "storageDocumentCopyThisDocumentWarningMessage": "You must not use a {{journeyText}} or data for catches that have already been exported. Knowingly reusing storage documents or using {{addRemoveLandingText}} data that relate to a previous export is a serious offence and may result in enforcement action being taken.",
+  "catchCertificateCopyDocumentAcknowledgedMessage": "I understand I must not reuse the same {{journeyText}} or {{addRemoveLandingText}} data for catches that have already been exported",
+  "pssdCopyDocumentAcknowledgedMessage": "I understand I must not reuse the same {{journeyText}} or data for catches that have already been exported",
+  "commonCopyCreatedraftJourney": "Create draft {{journeyText}}"
+}

@@ -1,0 +1,12 @@
+{
+  "sdCreatedPanelTitle": "Mae'r ddogfen storio wedi'i chreu",
+  "sdCreatedPanelBody": "Rhif y datganiad storio",
+  "sdCreatedNextStepsHeader": "Beth mae angen i chi ei wneud nesaf",
+  "sdCreatedDownloadLink": "Llwytho’r ddogfen storio i lawr",
+  "sdCreatedDownloadDocumentNotesSubHeading": "Peidiwch â diwygio’r ddogfen. Sylwer:",
+  "sdCreatedDownloadDocumentNotesFirefox": "os ydych yn defnyddio Firefox fel porwr rhyngrwyd, gwnewch yn siŵr bod JavaScript wedi’i alluogi er mwyn gweld y dystysgrif a’i llwytho i lawr",
+  "sdCreatedDownloadDocumentNotesMobile": "os ydych chi’n defnyddio dyfais symudol, gwnewch yn siŵr eich bod wedi gosod dangosydd PDF",
+  "sdCreatedEmailToImporter": "E-bostio’r ddogfen storio at y mewnforiwr",
+  "commonDocumentCreatedImportersResponsibility": "Cyfrifoldeb y mewnforiwr yw ei gyflwyno i’r awdurdod rheoli mewnforio lle bydd eich allforion yn dod i mewn i’r UE. Bydd yr awdurdod sy’n mewnforio yn llenwi ac yn llofnodi ei adran o’r ddogfen yn y Man Archwilio ar y Ffin (BIP).",
+  "sdCreatedViewOrCreateNewLink": "Gweld dogfennau storio wedi’u cwblhau neu greu dogfen allforio newydd"
+}

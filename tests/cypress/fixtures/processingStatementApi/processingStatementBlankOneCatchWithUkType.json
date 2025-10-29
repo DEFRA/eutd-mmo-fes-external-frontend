@@ -1,0 +1,35 @@
+{
+  "catches": [
+    {
+      "_id": "639760c33fc11363b1071295",
+      "id": "1670865091",
+      "catchCertificateType": "uk",
+      "catchCertificateNumber": "QW",
+      "totalWeightLanded": "5",
+      "exportWeightBeforeProcessing": "5",
+      "exportWeightAfterProcessing": "5",
+      "scientificName": "Alosa alosa"
+    }
+  ],
+  "validationErrors": [],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": null,
+  "healthCertificateDate": null,
+  "healthCertificateNumber": null,
+  "personResponsibleForConsignment": null,
+  "plantApprovalNumber": null,
+  "plantName": null,
+  "plantAddressOne": null,
+  "plantBuildingName": null,
+  "plantBuildingNumber": null,
+  "plantSubBuildingName": null,
+  "plantStreetName": null,
+  "plantCounty": null,
+  "plantCountry": null,
+  "plantTownCity": null,
+  "plantPostcode": null,
+  "dateOfAcceptance": null,
+  "exportedTo": null,
+  "_plantDetailsUpdated": false
+}

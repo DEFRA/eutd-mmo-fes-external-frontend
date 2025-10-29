@@ -1,0 +1,66 @@
+export const supportedLanguages = {
+  en: { displayName: "English", description: "Change the language to English" },
+  cy: { displayName: "Cymraeg", description: "Newid yr iaith ir Gymraeg" },
+};
+
+export const defaultLocale = "en";
+
+export const getSupportedLanguages = () => Object.keys(supportedLanguages);
+
+export const initLanguages = () => ({
+  supportedLngs: getSupportedLanguages(),
+  defaultNS: "common",
+  fallbackLng: defaultLocale,
+  react: { useSuspense: false },
+});
+
+export const allNamespaces = [
+  "common",
+  "header",
+  "footer",
+  "banner",
+  "landingsEntry",
+  "errorsText",
+  "favourites",
+  "dashboard",
+  "journeySelection",
+  "progress",
+  "title",
+  "forbidden",
+  "landingsTypeConfirmation",
+  "pageNotFound",
+  "whoseWatersWereTheyCaughtIn",
+  "whatExportJourney",
+  "whatAreYouExporting",
+  "copycertificate",
+  "transportation",
+  "uploadFile",
+  "directLandings",
+  "catchCertificateCreated",
+  "catchCertificatePending",
+  "checkYourInformation",
+  "uploadGuidance",
+  "addLandings",
+  "addConsignmentDetails",
+  "addProcessingPlantDetails",
+  "addCatchWeights",
+  "addProcessingPlantAddress",
+  "addStorageFacilityDetails",
+  "psCheckYourInformation",
+  "addHealthCertificate",
+  "privacyNotice",
+  "signOut",
+  "timedOut",
+  "accessibility",
+  "serviceImprovement",
+  "cookies",
+  "catchAdded",
+  "sdYouHaveAddedAProduct",
+  "psAddCatchDetails",
+  "processingStatementCreated",
+  "sdCheckYourInformation",
+  "youAddedStorageFacility",
+  "storageDocumentCreated",
+  "addProductToThisConsignment",
+  "sdDepartureProductSummary",
+];

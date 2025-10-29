@@ -1,0 +1,21 @@
+{
+  "vehicle": "truck",
+  "journey": "storageDocument",
+  "currentUri": "/create-storage-document/:documentNumber/add-arrival-transportation-details-container-vessel",
+  "nextUri": "/forbidden",
+  "user_id": "e9980bf3-0408-4255-9a4c-887bb268a2ad",
+  "allowedVehicles": ["truck", "train", "plane"],
+  "isAllowed": false,
+  "error": {
+    "code": "TRANSPORT_NOT_ALLOWED",
+    "message": "Container vessel transport is not allowed for this storage document"
+  },
+  "departurePlace": "",
+  "departurePort": "",
+  "departureDate": "",
+  "departureCountry": null,
+  "freightBillNumber": "",
+  "flagState": "",
+  "vesselName": "",
+  "containerNumber": ""
+}

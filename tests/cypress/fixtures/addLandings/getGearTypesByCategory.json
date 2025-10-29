@@ -1,0 +1,22 @@
+[
+  {
+    "gearName": "Towed dredges",
+    "gearCode": "DRB"
+  },
+  {
+    "gearName": "Mechanized dredges",
+    "gearCode": "DRM"
+  },
+  {
+    "gearName": "Dredges (nei)",
+    "gearCode": "DRX"
+  },
+  {
+    "gearName": "Purse seines",
+    "gearCode": "PS"
+  },
+  {
+    "gearName": "Trawls (nei)",
+    "gearCode": "TX"
+  }
+]

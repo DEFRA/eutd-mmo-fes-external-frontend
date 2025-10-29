@@ -1,0 +1,6 @@
+@media screen and (max-width: 538px) {
+  .td-width {
+    max-width: 200px;
+    word-break: break-word;
+  }
+}

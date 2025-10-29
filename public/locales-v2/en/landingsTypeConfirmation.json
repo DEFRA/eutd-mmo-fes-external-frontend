@@ -1,0 +1,6 @@
+{
+  "ccLandingsTypeConfirmationWarningText": "Switching between direct and non-direct landings types will require the re-entry of landings data.",
+  "ccLandingsTypeConfirmationOptionYesText": "Yes, I want to change my landings type",
+  "ccLandingsTypeConfirmationOptionNoText": "No, I want to keep my current landings type",
+  "ccLandingsTypeConfirmationHeaderText": "Are you sure you want to change your landings type?"
+}

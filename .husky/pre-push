@@ -1,4 +1,6 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
-npm run test --coverage
+# - Runs Cypress and Jest tests and merges code-coverage stats
+# - Ensure the app has been started with `npm run :cy:start`
+npm run :test:all

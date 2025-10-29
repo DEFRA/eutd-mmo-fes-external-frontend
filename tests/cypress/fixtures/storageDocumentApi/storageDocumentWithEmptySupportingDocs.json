@@ -1,0 +1,60 @@
+{
+  "catches": [
+    {
+      "_id": "64550db5c61c2d186476b888",
+      "product": "Peacock sole (ADJ)",
+      "commodityCode": "03011100",
+      "certificateNumber": "GBR-2023-SD-A46E23603",
+      "productWeight": "10",
+      "weightOnCC": "10",
+      "placeOfUnloading": "dover",
+      "dateOfUnloading": "03/05/2023",
+      "transportUnloadedFrom": "43",
+      "id": "someDocumentNumber-1683295546",
+      "scientificName": "Pardachirus pavoninus",
+      "certificateType": "non_uk",
+      "supportingDocuments": [],
+      "productDescription": "productDescription",
+      "netWeightProductArrival": "10",
+      "netWeightFisheryProductArrival": "20"
+    }
+  ],
+  "storageFacilities": [
+    {
+      "facilityName": "top",
+      "facilityAddressOne": "56, 3, Arc House, test",
+      "facilityBuildingName": "Arc House",
+      "facilityBuildingNumber": "56",
+      "facilitySubBuildingName": "3",
+      "facilityStreetName": "test",
+      "facilityTownCity": "Brussels",
+      "facilityCounty": "pre",
+      "facilityCountry": "Belgium",
+      "facilityPostcode": "sw11aa",
+      "_facilityUpdated": false
+    }
+  ],
+  "validationErrors": [{}],
+  "addAnotherProduct": "No",
+  "addAnotherStorageFacility": "No",
+  "transport": {
+    "vehicle": "containerVessel",
+    "vesselName": "gfs",
+    "flagState": "ghj",
+    "containerNumber": "56",
+    "departurePlace": "hull",
+    "exportDate": "10/11/2023",
+    "exportedTo": {
+      "officialCountryName": "British Indian Ocean Territory",
+      "isoCodeAlpha2": "IO",
+      "isoCodeAlpha3": "IOT",
+      "isoNumericCode": "086"
+    }
+  },
+  "exportedTo": {
+    "officialCountryName": "British Indian Ocean Territory",
+    "isoCodeAlpha2": "IO",
+    "isoCodeAlpha3": "IOT",
+    "isoNumericCode": "086"
+  }
+}

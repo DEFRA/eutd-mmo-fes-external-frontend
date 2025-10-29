@@ -1,0 +1,94 @@
+{
+  "documentNumber": "GBR-2022-CC-F4A9D192D",
+  "status": "DRAFT",
+  "startedAt": "2022-08-25T14:33:23.232Z",
+  "exporter": {
+    "model": {
+      "exporterFullName": "Athena Wong",
+      "exporterCompanyName": "Wiggins Kelley Plc",
+      "addressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
+      "subBuildingName": "MMO",
+      "buildingName": "LANCASTER HOUSE",
+      "streetName": "HAMPSHIRE COURT",
+      "county": "TYNESIDE",
+      "country": "ENGLAND",
+      "townCity": "NEWCASTLE UPON TYNE",
+      "postcode": "NE4 7YH",
+      "user_id": "",
+      "journey": "",
+      "currentUri": "",
+      "nextUri": ""
+    }
+  },
+  "exportPayload": {
+    "items": [
+      {
+        "product": {
+          "id": "GBR-2022-CC-F4A9D192D-c3a403de-4fdb-4204-b02a-e98c7dcd635f",
+          "commodityCode": "03028180",
+          "commodityCodeDescription": "Fresh or chilled dogfish and other sharks (excl. picked dogfish \"Squalus acanthias\", catsharks \"Scyliorhinus spp.\", porbeagle shark \"Lamna nasus\" and blue shark \"Prionace glauca\")",
+          "presentation": {
+            "code": "WHL",
+            "label": "Whole"
+          },
+          "scientificName": "Galeus melastomus",
+          "state": {
+            "code": "FRE",
+            "label": "Fresh"
+          },
+          "species": {
+            "code": "SHO",
+            "label": "Blackmouth catshark (SHO)"
+          }
+        },
+        "landings": [
+          {
+            "model": {
+              "id": "GBR-2022-CC-F4A9D192D-4202556105",
+              "vessel": {
+                "pln": "N/A",
+                "vesselName": "Vessel not found",
+                "label": "Vessel not found (N/A)",
+                "homePort": "N/A",
+                "flag": "GBR",
+                "cfr": null,
+                "imoNumber": null,
+                "licenceNumber": "27619",
+                "licenceValidTo": "2300-12-31T00:01:00",
+                "vesselOverriddenByAdmin": true
+              },
+              "faoArea": "FAO27",
+              "dateLanded": "2022-08-24",
+              "exportWeight": 123,
+              "numberOfSubmissions": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "conservation": {
+    "conservationReference": "UK Fisheries Policy",
+    "legislation": ["UK Fisheries Policy"],
+    "caughtInUKWaters": "Y",
+    "user_id": "Test",
+    "currentUri": "Test",
+    "nextUri": "Test"
+  },
+  "transportations": [
+    {
+      "vehicle": "directLanding"
+    }
+  ],
+  "exportLocation": {
+    "exportedFrom": "United Kingdom",
+    "exportedTo": {
+      "officialCountryName": "Netherlands",
+      "isoCodeAlpha2": "NL",
+      "isoCodeAlpha3": "NLD",
+      "isoNumericCode": "528"
+    }
+  },
+  "landingsEntryOption": "directLanding",
+  "validationErrors": null
+}

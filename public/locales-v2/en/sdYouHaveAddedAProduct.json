@@ -1,0 +1,9 @@
+{
+  "sdYouAddedSingleProductsTitle": "You have added {{count}} product to this consignment",
+  "sdYouAddedMultiProductsTitle": "You have added {{count}} products to this consignment",
+  "sdYouAddedProductNeedToAddProductTitle": "Do you need to add another product?",
+  "sdYouAddedProductTableHeaderDocumentReference": "Document reference",
+  "sdActions": "Actions",
+  "sdYouAddedProductGuidanceTitle": "Why add another product?",
+  "sdYouAddedProductGuidanceDescription": "You may need to add another product if your UK entry document covers multiple species or product types."
+}

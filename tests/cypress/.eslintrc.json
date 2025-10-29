@@ -1,0 +1,9 @@
+{
+  "extends": ["plugin:cypress/recommended"],
+  "rules": {
+    "jest/valid-expect": "off",
+    "testing-library/await-async-query": "off",
+    "testing-library/prefer-screen-queries": "off"
+  },
+  "plugins": ["cypress"]
+}

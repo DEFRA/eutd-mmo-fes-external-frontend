@@ -1,0 +1,12 @@
+{
+  "psAddCatchWeightsTotalWeightOnCatchCertificate": "Total weight shown on catch certificate in kg",
+  "psAddCatchWeightsExportWeightBeforeProcessing": "Export weight in kg (before processing)",
+  "psAddCatchWeightsExportWeightAfterProcessing": "Export weight in kg (after processing)",
+  "psAddCatchWeightsPageHeader": "Add catch weights",
+  "psAddCatchWeightsExportWeightAfterProcessingHint": "This should be weight of the species, \n not additional ingredients",
+  "psAddCatchWeightsDetail": "Ensure total weight is correct",
+  "psAddCatchWeightsConfirm": "Please confirm the total weight shown on the catch certificate in kg.",
+  "psAddCatchWeightsIncorrect": "If the weight shown above is incorrect then please call {{telephoneNumber}}.",
+  "psAddCatchWeightsButtonLabel": "Add Catch Certificate",
+  "psUpdateCatchWeightsButtonLabel": "Update Catch Certificate"
+}

@@ -1,0 +1,13 @@
+{
+  "progress": {
+    "reference": "OPTIONAL",
+    "exporter": "INCOMPLETE",
+    "catches": "INCOMPLETE",
+    "storageFacilities": "INCOMPLETE",
+    "exportDestination": "INCOMPLETE",
+    "transportType": "INCOMPLETE",
+    "transportDetails": "CANNOT START"
+  },
+  "requiredSections": 6,
+  "completedSections": 0
+}

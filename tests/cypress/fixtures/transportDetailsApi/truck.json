@@ -1,0 +1,21 @@
+{
+  "id": "1",
+  "vehicle": "truck",
+  "nationalityOfVehicle": "Dakota Hill",
+  "registrationNumber": "Vincent Nunez",
+  "departurePlace": "Joelle Rhodes",
+  "freightBillNumber": "AA1234567",
+  "documents": [
+    { "name": "Invoice 1", "reference": "INV00001" },
+    { "name": "Invoice 2", "reference": "INV00002" }
+  ],
+  "exportedTo": {
+    "officialCountryName": "Netherlands",
+    "isoCodeAlpha2": "NL",
+    "isoCodeAlpha3": "NLD",
+    "isoNumericCode": "528"
+  },
+  "currentUri": "/create-catch-certificate/:documentNumber/how-does-the-export-leave-the-uk",
+  "user_id": "ABCD-EFGH-IJKL-MNOP-QRST-UVWX-YZ12",
+  "journey": "catchCertificate"
+}

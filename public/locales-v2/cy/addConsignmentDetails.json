@@ -1,0 +1,16 @@
+{
+  "addConsignmentDetailsConsignmentPageHeader": "Ychwanegu cynnyrch wedi'i brosesu",
+  "addConsignmentDetailsConsignmentPageHint": "A bydd testun y cyfarwyddyd wedi’i gyfieithu i’r Gymraeg “Bydd y manylion a gofnodir yma yn ymddangos ar eich dogfen a rhaid iddyn nhw fod yn ddarllenadwy yn Saesneg. Er enghraifft, Battered cod fillets",
+  "addConsignmentDetailsConsignmentDescriptionHint": "Dechreuwch deipio i chwilio am y cod nwyddau cywir ar gyfer eich cynnyrch pysgod",
+  "addConsignmentDetailsConsignmentDescriptionLinkHint1": "Gallwch ddefnyddio’r rhestr Codau Tariffau ar ",
+  "addConsignmentDetailsConsignmentDescriptionLinkHint2": " i gael y cod nwyddau cywir.",
+  "addConsignmentDetailsConsignmentHelpTitle": "Help gyda chod nwyddau",
+  "addConsignmentDetailsConsignmentHelpText": "Tariff Ar-lein Integredig y DU i ddod o hyd i'r cod nwyddau cywir (yn agor mewn tab newydd)",
+  "addConsignmentDetailsConsignmentHelpText1": "Gallwch ddefnyddio",
+  "addConsignmentDetailsConsignmentStaticDescriptionCount": "Cewch roi hyd at {{count}} o gymeriadau",
+  "addConsignmentDetailsConsignmentDescriptionCount": "Mae gennych chi {{remainingCount}} o gymeriadau ar ôl",
+  "addConsignmentDetailsConsignmentDescriptionOverCount": "Mae gennych chi {{overLimitBy}} o gymeriadau yn ormod",
+  "addConsignmentDetailsConsignmentDescriptionHeader": "Disgrifiad o'r cynnyrch",
+  "addConsignmentDetailsConsignmentLinkLabel": "Tariff Ar-lein Integredig y DU: Chwilio am godau nwyddau a chyfraddau TAW - GOV.UK",
+  "addConsignmentDetailsWarningLabel": "Rhaid ichi ychwanegu un cynnyrch wedi'i brosesu ar y tro."
+}

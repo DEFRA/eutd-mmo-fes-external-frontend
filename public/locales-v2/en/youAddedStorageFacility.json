@@ -1,0 +1,6 @@
+{
+  "sdFacilityAddedSingleFacilityTitle": "You have added {{count}} storage facility",
+  "sdFacilityAddedMultiFacilityTitle": "You have added {{count}} storage facilities",
+  "sdAddFacilityConfirmationText": "Do you need to add another storage facility?",
+  "sdFacilityHeading": "Facility name"
+}

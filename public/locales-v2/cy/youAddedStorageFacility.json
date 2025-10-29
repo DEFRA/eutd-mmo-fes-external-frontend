@@ -1,0 +1,6 @@
+{
+  "sdFacilityAddedSingleFacilityTitle": "Rydych chi wedi ychwanegu {{count}} cyfleuster storio",
+  "sdFacilityAddedMultiFacilityTitle": "Rydych chi wedi ychwanegu {{count}} cyfleuster storio",
+  "sdAddFacilityConfirmationText": "Ydych chi am ychwanegu cyfleuster storio arall?",
+  "sdFacilityHeading": "Enw’r cyfleuster"
+}

@@ -1,0 +1,142 @@
+{
+  "documentNumber": "GBR-2022-CC-F4CB5AD50",
+  "status": "DRAFT",
+  "startedAt": "2022-08-01T14:47:13.670Z",
+  "exporter": {
+    "model": {
+      "exporterFullName": "Paki Hopkins",
+      "exporterCompanyName": "Hansen Patterson Plc",
+      "addressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
+      "subBuildingName": "MMO",
+      "buildingName": "LANCASTER HOUSE",
+      "streetName": "HAMPSHIRE COURT",
+      "county": "TYNESIDE",
+      "country": "ENGLAND",
+      "townCity": "NEWCASTLE UPON TYNE",
+      "postcode": "NE4 7YH",
+      "user_id": "",
+      "journey": "",
+      "currentUri": "",
+      "nextUri": ""
+    }
+  },
+  "exportPayload": {
+    "items": [
+      {
+        "product": {
+          "id": "GBR-2022-CC-F4CB5AD50-0c7b6f86-ec76-45fd-904b-49dbb5a2194b",
+          "commodityCode": "03028590",
+          "commodityCodeDescription": "Fresh or chilled sea bream \"Sparidae\" (excl. gilt-head sea bream, Dentex dentex and Pagellus spp.)",
+          "presentation": {
+            "code": "WHL",
+            "label": "Whole"
+          },
+          "scientificName": "Brama brama",
+          "state": {
+            "code": "FRE",
+            "label": "Fresh"
+          },
+          "species": {
+            "code": "POA",
+            "label": "Atlantic pomfret (POA)"
+          }
+        },
+        "landings": [
+          {
+            "model": {
+              "id": "GBR-2022-CC-F4CB5AD50-7157665387",
+              "vessel": {
+                "pln": "PE1211",
+                "vesselName": "FAE SILVIE",
+                "label": "FAE SILVIE (PE1211)",
+                "homePort": "POOLE",
+                "flag": "GBR",
+                "cfr": "GBRC20252",
+                "imoNumber": null,
+                "licenceNumber": "25358",
+                "licenceValidTo": "2382-12-31T00:00:00",
+                "vesselOverriddenByAdmin": true
+              },
+              "faoArea": "FAO27",
+              "dateLanded": "2022-08-19",
+              "exportWeight": 123,
+              "numberOfSubmissions": 0
+            }
+          }
+        ]
+      },
+      {
+        "product": {
+          "id": "GBR-2022-CC-F4CB5AD50-80f1d07d-5f76-4d2a-91c4-a8d79ed2211a",
+          "commodityCode": "03044990",
+          "commodityCodeDescription": "Fresh or chilled fillets of fish, n.e.s.",
+          "presentation": {
+            "code": "FIL",
+            "label": "Filleted"
+          },
+          "scientificName": "Genypterus blacodes",
+          "state": {
+            "code": "FRE",
+            "label": "Fresh"
+          },
+          "species": {
+            "code": "CUS",
+            "label": "Pink cusk-eel (CUS)"
+          }
+        },
+        "landings": [
+          {
+            "model": {
+              "id": "GBR-2022-CC-F4CB5AD50-4687464060",
+              "vessel": {
+                "pln": "J11",
+                "vesselName": "SYLVIES GRACE",
+                "label": "SYLVIES GRACE (J11)",
+                "homePort": "PLYMOUTH",
+                "flag": "GBR",
+                "cfr": "GBRJ10081",
+                "imoNumber": null,
+                "licenceNumber": "26417",
+                "licenceValidTo": "2382-12-31T00:00:00"
+              },
+              "faoArea": "FAO27",
+              "dateLanded": "2022-08-20",
+              "exportWeight": 321,
+              "numberOfSubmissions": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "conservation": {
+    "conservationReference": "UK Fisheries Policy",
+    "legislation": ["UK Fisheries Policy"],
+    "caughtInUKWaters": "Y",
+    "user_id": "Test",
+    "currentUri": "Test",
+    "nextUri": "Test"
+  },
+  "transportations": [
+    {
+      "id": "0",
+      "vehicle": "containerVessel",
+      "vesselName": "Martha Campbell",
+      "flagState": "Helen Hampton",
+      "containerNumber": "Sigourney King",
+      "departurePlace": "Hull",
+      "freightBillNumber": "AA1234567"
+    }
+  ],
+  "exportLocation": {
+    "exportedFrom": "United Kingdom",
+    "exportedTo": {
+      "officialCountryName": "South Georgia and the South Sandwich Islands",
+      "isoCodeAlpha2": "GS",
+      "isoCodeAlpha3": "SGS",
+      "isoNumericCode": "239"
+    }
+  },
+  "landingsEntryOption": "manualEntry",
+  "validationErrors": null
+}

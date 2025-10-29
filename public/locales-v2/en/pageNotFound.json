@@ -1,0 +1,8 @@
+{
+  "page_not_found": "Page not found",
+  "pageNotFound_first_line": "If you typed the web address, check it is correct.",
+  "pageNotFound_second_line": "If you pasted the web address, check you copied the full address.",
+  "pageNotFound_3rd_line": "If the web address is correct or you selected a link or button, ",
+  "pageNotFound_check_document_progress": "check the document is in progress",
+  "pageNotFound_save_message": " Everything you have done so far has been saved."
+}

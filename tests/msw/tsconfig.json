@@ -1,0 +1,12 @@
+{
+  "include": ["./**/*.ts"],
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "paths": {
+      "~/*": ["app/*"],
+      "@/fixtures/*": ["tests/cypress/fixtures/*"]
+    },
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  }
+}

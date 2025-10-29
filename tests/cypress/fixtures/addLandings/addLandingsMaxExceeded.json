@@ -1,0 +1,3096 @@
+{
+  "items": [
+    {
+      "product": {
+        "id": "GBR-2023-CC-2323EC498-81368201-50c5-4347-bf1f-5802be97b58b",
+        "commodityCode": "03045690",
+        "commodityCodeDescription": "Fresh or chilled meat, whether or not minced, of dogfish and other sharks (excl. fillets, picked dogfish \"Squalus acanthias\", catsharks \"Scyliorhinus spp.\", porbeagle shark \"Lamna nasus\" and blue shark \"Prionace glauca\")",
+        "presentation": {
+          "code": "OTH",
+          "label": "Other presentations"
+        },
+        "scientificName": "Centroscymnus crepidater",
+        "state": {
+          "code": "FRE",
+          "label": "Fresh"
+        },
+        "species": {
+          "code": "CYP",
+          "label": "Longnose velvet dogfish (CYP)"
+        }
+      },
+      "landings": [
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-B2DFABFDE-1321338481",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        },
+        {
+          "model": {
+            "id": "GBR-2023-CC-D952E7253-7520502207",
+            "vessel": {
+              "pln": "M5",
+              "vesselName": "BLAIDD",
+              "label": "BLAIDD (M5)",
+              "homePort": "NEYLAND",
+              "flag": "GBR",
+              "cfr": "GBR000A19090",
+              "imoNumber": null,
+              "licenceNumber": "44605",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "W H GRIFFITHS "
+            },
+            "faoArea": "FAO27",
+            "dateLanded": "2023-03-13",
+            "exportWeight": 123,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        }
+      ]
+    },
+    {
+      "product": {
+        "commodityCode": "03044790",
+        "commodityCodeDescription": "Fresh or chilled fillets of dogfish and other sharks (excl. picked dogfish \"Squalus acanthias\", catsharks \"Scyliorhinus spp.\", porbeagle shark \"Lamna nasus\" and blue shark \"Prionace glauca\")",
+        "id": "GBR-2023-CC-B2DFABFDE-48b06ca2-4074-4aa9-b64a-086d6d706c2b",
+        "presentation": {
+          "code": "FIS",
+          "label": "Filleted and skinned"
+        },
+        "scientificName": "Squalidae, Scyliorhinidae",
+        "species": {
+          "code": "DGH",
+          "label": "Dogfishes and hounds nei (DGH)"
+        },
+        "state": {
+          "code": "FRE",
+          "label": "Fresh"
+        }
+      }
+    }
+  ]
+}

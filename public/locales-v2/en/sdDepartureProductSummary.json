@@ -1,0 +1,16 @@
+{
+  "sdDepartureProductSummaryHeading": "Check and confirm your consignment weight",
+  "sdDepartureProductSummaryInfo": "If the product weight has changed or remained the same since storage, confirm the details below. Net weight on departure or fishery product weight on departure must be provided.",
+  "sdDepartureProductSummaryInfo2": "Net weight on departure or fishery product weight on departure must be provided.",
+  "sdDepartureProductSummaryTabHeading1": "Storage arrival",
+  "sdDepartureProductSummaryTabHeading2": "Storage departure",
+  "sdDepartureProductSummaryInfo1": "This could be a 3rd country catch certificate, processing statement or storage document.",
+  "sdDepartureProductSummarySaveButtonLabel": "I confirm",
+  "sdDepartureProductSummaryProduct": "Product",
+  "sdDepartureProductSummaryNetWeightArrival": "Net weight on arrival",
+  "sdDepartureProductSummaryNetWeightArrivalOptional": "Net weight on arrival (optional)",
+  "sdDepartureProductSummaryNetWeightDeparture": "Net weight on departure",
+  "sdDepartureProductSummaryNetWeightDepartureOptional": "Net weight on departure (optional)",
+  "sdDepartureProductSummaryFisheryProduct": "Fishery product weight",
+  "sdDepartureProductSummaryFisheryProductOptional": "Fishery product weight (optional)"
+}

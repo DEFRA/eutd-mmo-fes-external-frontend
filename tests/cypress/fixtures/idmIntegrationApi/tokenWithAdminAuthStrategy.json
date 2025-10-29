@@ -1,0 +1,16 @@
+{
+  "token": "bearerTokenValue",
+  "auth": {
+    "isAuthenticated": true,
+    "isAuthorized": false,
+    "isInjected": false,
+    "credentials": {
+      "tokenSet": {},
+      "claims": { "contactId": "ABCD-EFGH-IJKL-MNOP-QRST-UVWX-YZ13", "sub": "a1b2c3-fb69-49e5-be10-42525e40c1dc" }
+    },
+    "artifacts": {},
+    "strategy": "admin",
+    "mode": "required",
+    "error": null
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "psAddProcessingPDAddProcessingPlantDetails": "Add processing plant details",
+  "psAddProcessingPDAlertText": "An address must be added for this processing plant.",
+  "psAddProcessingPDPlantName": "Processing plant name",
+  "psAddProcessingPDPlantApprovalNumber": "Plant approval number",
+  "psAddProcessingPDHintTextForPlantApprovalNumber": "This is sometimes called a site code. For example, UK/1234/EC",
+  "psAddProcessingPDPersonResponsibleForThisConsignment": "Person responsible for this consignment",
+  "psAddProcessingPDHintTextForPersonResponsibleForThisConsignment": "Enter the name of the person in charge at the processing plant. For example, John Smith",
+  "psAddProcessingPDSaveButtonLabel": "Add address"
+}

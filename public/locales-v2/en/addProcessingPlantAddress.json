@@ -1,0 +1,9 @@
+{
+  "psAddProcessingPlantAddressDetailsNotificationText": "Due to improvements in the way addresses are managed, the processing plant address in this document must be re-entered.",
+  "psAddProcessingPlantAddressDetailsAddressText": "Add processing plant address",
+  "psAddProcessingPlantAddressDetailsPlantNameText": "Plant name",
+  "psAddProcessingPlantAddressDetailsAnAddressMustBeAddedForThisProcessingPlant": "An address must be added for this processing plant.",
+  "commonProgressProcessingPlantAddress": "processing plant address",
+  "psAddProcessingPlantAddressDetailsAddTheProcessingPlantAddressLinktext": "Add the processing plant address",
+  "psProcessingPlantAddressWhatIsProcessingPlantAddress": "What is the processing plant address?"
+}

@@ -1,0 +1,13 @@
+{
+  "progress": {
+    "reference": "OPTIONAL",
+    "exporter": "INCOMPLETE",
+    "processedProductDetails": "INCOMPLETE",
+    "processingPlant": "INCOMPLETE",
+    "processingPlantAddress": "INCOMPLETE",
+    "exportHealthCertificate": "INCOMPLETE",
+    "exportDestination": "INCOMPLETE"
+  },
+  "requiredSections": 6,
+  "completedSections": 0
+}

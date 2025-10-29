@@ -1,0 +1,10 @@
+{
+  "ccWhatExportJourneyExportJourneyHeader": "Pa daith mae’r broses allforio’n ei chymryd?",
+  "ccWhatExportJourneyDepartureCountry": "Dewiswch wlad ymadael y ddalfa",
+  "ccWhatExportJourneyDepartureCountryHint": "Gelwir hon hefyd yn wlad sy’n allforio, neu’n wladwriaeth baner y llong (yn achos glaniadau uniongyrchol)",
+  "ccWhatExportJourneyCountryUnitedKingdom": "Y Deyrnas Unedig",
+  "ccWhatExportJourneyCountryGuernsey": "Guernsey",
+  "ccWhatExportJourneyCountryIsleOfMan": "Ynys Manaw",
+  "ccWhatExportJourneyCountryJersey": "Jersey",
+  "psWhatExportDestination": "I ble mae’n cael ei allforio?"
+}

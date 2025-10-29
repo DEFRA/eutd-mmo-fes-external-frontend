@@ -1,0 +1,36 @@
+{
+  "catches": [
+    {
+      "_id": "6453a9b6036a819b8fc483cd",
+      "product": "Amberjacks nei (AMX)",
+      "commodityCode": "03011900",
+      "certificateNumber": "3",
+      "productWeight": "3",
+      "weightOnCC": "3",
+      "placeOfUnloading": "ee",
+      "dateOfUnloading": "04/02/2023",
+      "transportUnloadedFrom": "d",
+      "id": "undefined-1683196774",
+      "scientificName": "Seriola spp",
+      "certificateType": "non_uk"
+    },
+    {
+      "_id": "6453a9b6036a819b8fc483ce",
+      "product": "Spotted garden-eel (ACS)",
+      "commodityCode": "03011100",
+      "certificateNumber": "X",
+      "productWeight": "3",
+      "weightOnCC": "2",
+      "placeOfUnloading": "x",
+      "dateOfUnloading": "04/05/2023",
+      "transportUnloadedFrom": "x",
+      "id": "undefined-1683204464",
+      "scientificName": "Heteroconger hassi",
+      "certificateType": "non_uk"
+    }
+  ],
+  "storageFacilities": [],
+  "validationErrors": [{}],
+  "addAnotherProduct": "No",
+  "addAnotherStorageFacility": "No"
+}

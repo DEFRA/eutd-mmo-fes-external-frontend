@@ -1,0 +1,10 @@
+{
+  "_id": "63975c6f3fc11363b107125e",
+  "__t": "processingStatement",
+  "requestByAdmin": false,
+  "errors": {
+    "catches-species": "psAddCatchDetailsErrorEnterTheFAOCodeOrSpeciesName",
+    "catches-catchCertificateNumber": "psAddCatchDetailsErrorCCNumberMustOnlyContain"
+  },
+  "errorsUrl": "/create-processing-statement/GBR-2022-PS-0D12ABA0A/add-catch-details"
+}

@@ -1,0 +1,13 @@
+{
+  "ccLandingsEntryPageTitle": "Sut ydych chi am gofnodi eich cynnyrch a'ch glaniadau?",
+  "ccLandingsEntryPageWhatIsACSVFile": "Beth yw ffeil CSV?",
+  "ccLandingsEntryPageWhatIsACSVFileFormatDetails": "Ffeil testun yw ffeil CSV sy'n defnyddio comas i wahanu'r gwerthoedd. Mae pob gwerth yn y ffeil yn faes data ac mae pob llinell yn gofnod data.",
+  "ccLandingsEntryPageWhatIsACSVFileExportingDetails": "Fel arfer, gall taenlenni a rhai meddalwedd allgludo eu data i ffeil CSV.",
+  "ccLandingsEntryOptionsDirectLandingLabel": "Glaniad Uniongyrchol",
+  "ccLandingsEntryOptionsDirectLandingHint": "Argymhellir bod cychod pysgota cofrestredig yn y DU yn glanio ac yn allforio eu dalfa ar yr un pryd yn yr UE (neu gwch pysgota cofrestredig ym Mhrydain Fawr yn glanio’n uniongyrchol yng Ngogledd Iwerddon).",
+  "ccLandingsEntryOptionsManualEntryLabel": "Ei gofnodi eich hun",
+  "ccLandingsEntryOptionsManualEntryHint": "Argymhellir ar gyfer allforion bach i ganolig eu maint.",
+  "ccLandingsEntryOptionsUploadEntryLabel": "Llwytho i fyny o ffeil CSV",
+  "ccLandingsEntryOptionsUploadEntryHint": "Argymhellir ar gyfer allforion mawr. (Rhaid creu ffefrynnau cynnyrch).",
+  "ccLandingsEntryPageNewPageMessage": "Mae'r dudalen newydd hon yn cynnig ffyrdd o gofnodi cynnyrch a glaniadau ar gyfer gwahanol fathau o allforio. Dewiswch opsiwn i fwrw ymlaen"
+}

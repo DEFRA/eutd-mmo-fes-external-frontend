@@ -1,0 +1,41 @@
+{
+  "catches": [
+    {
+      "_id": "6453edac036a819b8fc485e4",
+      "product": "Amberjacks nei (AMX)",
+      "commodityCode": "03011900",
+      "certificateNumber": "3",
+      "productWeight": "3",
+      "weightOnCC": "3",
+      "placeOfUnloading": "ee",
+      "dateOfUnloading": "04/02/2023",
+      "transportUnloadedFrom": "d",
+      "id": "undefined-1683196774",
+      "scientificName": "Seriola spp",
+      "certificateType": "non_uk",
+      "supportingDocuments": ["Document-one"]
+    },
+    {
+      "_id": "6453edac036a819b8fc485e5",
+      "product": "Spotted garden-eel (ACS)",
+      "commodityCode": "03011100",
+      "certificateNumber": "X",
+      "productWeight": "h",
+      "weightOnCC": "2",
+      "placeOfUnloading": "x",
+      "dateOfUnloading": "04/05/2023",
+      "transportUnloadedFrom": "x",
+      "id": "undefined-1683204464",
+      "scientificName": "Heteroconger hassi",
+      "certificateType": "non_uk"
+    }
+  ],
+  "storageFacilities": [],
+  "validationErrors": [{}],
+  "addAnotherProduct": "No",
+  "addAnotherStorageFacility": "No",
+  "errors": {
+    "catches-0-supportingDocuments-0": "sdAddProductToConsignmentSupportingDocumentErrorInvalidFormat"
+  },
+  "errorsUrl": "/create-storage-document/GBR-2023-SD-68034B7AE/you-have-added-a-product"
+}

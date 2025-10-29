@@ -1,0 +1,10 @@
+{
+  "psAddProcessingPDAddProcessingPlantDetails": "Ychwanegwch fanylion y safle prosesu",
+  "psAddProcessingPDAlertText": "Rhaid ychwanegu cyfeiriad ar gyfer y safle prosesu hwn.",
+  "psAddProcessingPDPlantName": "Enw’r safle prosesu",
+  "psAddProcessingPDPlantApprovalNumber": "Rhif cymeradwyo’r safle",
+  "psAddProcessingPDHintTextForPlantApprovalNumber": "Mae hwn weithiau’n cael ei alw’n god safle. Er enghraifft, UK/1234/EC",
+  "psAddProcessingPDPersonResponsibleForThisConsignment": "Y person sy’n gyfrifol am y llwyth hwn",
+  "psAddProcessingPDHintTextForPersonResponsibleForThisConsignment": "Rhowch enw'r person sy’n gyfrifol yn y safle prosesu. Er enghraifft John Smith",
+  "psAddProcessingPDSaveButtonLabel": "Ychwanegu cyfeiriad"
+}

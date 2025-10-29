@@ -1,0 +1,32 @@
+{
+  "@odata.context": "https://defra-custmstr-eue-dev.crm4.dynamics.com/api/data/v9.2/$metadata#contacts(contactid,defra_b2cobjectid,defra_addrcoruprn,defra_addrcorbuildingnumber,defra_addrcorbuildingname,defra_addrcorsubbuildingname,defra_addrcorlocality,defra_addrcordependentlocality,defra_addrcorpostcode,defra_addrcorinternationalpostalcode,defra_addrcortown,defra_addrcorcounty,_defra_addrcorcountry_value,defra_addrcorstreet,firstname,lastname,emailaddress1,telephone1,defra_tacsacceptedversion,defra_tacsacceptedon)",
+  "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
+  "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
+  "@Microsoft.Dynamics.CRM.globalmetadataversion": "528324421",
+  "value": [
+    {
+      "@odata.etag": "W/\"521383239\"",
+      "contactid": "4704bf69-18f9-ec11-bb3d-000d3a2f806d",
+      "defra_b2cobjectid": "5bd2e0a1-a98d-4fe7-a004-336a22310b2a",
+      "defra_addrcoruprn": null,
+      "defra_addrcorbuildingnumber": null,
+      "defra_addrcorbuildingname": null,
+      "defra_addrcorsubbuildingname": null,
+      "defra_addrcorlocality": null,
+      "defra_addrcordependentlocality": null,
+      "defra_addrcorpostcode": null,
+      "defra_addrcorinternationalpostalcode": null,
+      "defra_addrcortown": null,
+      "defra_addrcorcounty": null,
+      "_defra_addrcorcountry_value": null,
+      "defra_addrcorstreet": null,
+      "firstname": "Automation",
+      "lastname": "Tester",
+      "emailaddress1": "automation119@yopmail.com",
+      "telephone1": "53534534",
+      "defra_tacsacceptedversion": "3",
+      "defra_tacsacceptedon@OData.Community.Display.V1.FormattedValue": "01/07/2022 08:31",
+      "defra_tacsacceptedon": "2022-07-01T08:31:00Z"
+    }
+  ]
+}

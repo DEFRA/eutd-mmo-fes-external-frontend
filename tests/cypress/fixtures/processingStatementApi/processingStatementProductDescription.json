@@ -1,0 +1,47 @@
+{
+  "catches": [
+    {
+      "_id": "63979a023fc11363b1071358",
+      "species": "Gymnotus pantherinus (AGH)",
+      "catchCertificateNumber": "GBR-2022-PS-F2D5CD656",
+      "id": "CC-10-1670865091",
+      "scientificName": "Gymnotus pantherinus",
+      "totalWeightLanded": "7",
+      "exportWeightBeforeProcessing": "5",
+      "exportWeightAfterProcessing": "6"
+    },
+    {
+      "_id": "639096e3c2b0ca268febc433",
+      "species": "Monopenchelys acuta (MMA)",
+      "catchCertificateNumber": "8",
+      "totalWeightLanded": "9",
+      "exportWeightBeforeProcessing": "9",
+      "exportWeightAfterProcessing": "9",
+      "id": "8-1670420184",
+      "scientificName": " Monopenchelys acuta"
+    }
+  ],
+  "validationErrors": [],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": "Herring fillets (16041210) and Atlantic cod fishcakes (16041992)",
+  "healthCertificateDate": "30/06/2022",
+  "healthCertificateNumber": "20/2/123456",
+  "personResponsibleForConsignment": "Test data",
+  "plantApprovalNumber": "Approval Number",
+  "plantName": "Test Plantname",
+  "plantAddressOne": "Test Address One",
+  "plantBuildingName": "Test Building Name",
+  "plantBuildingNumber": "Test Building Number",
+  "plantSubBuildingName": "Test Building Name",
+  "plantStreetName": "Test Street Name",
+  "plantCounty": "Plant County",
+  "plantCountry": "United Kingdom",
+  "plantTownCity": "My Test City",
+  "plantPostcode": "My Post Code",
+  "dateOfAcceptance": "21/11/2022",
+  "exportedTo": {
+    "officialCountryName": "Nicaragua"
+  },
+  "_plantDetailsUpdated": false
+}

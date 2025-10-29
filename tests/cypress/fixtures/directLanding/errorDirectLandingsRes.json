@@ -1,0 +1,59 @@
+{
+  "items": [
+    {
+      "product": {
+        "id": "GBR-2022-CC-6BC952BA3-c999c558-f753-4ab3-be2d-088f896b11e7",
+        "commodityCode": "03034190",
+        "commodityCodeDescription": "Frozen albacore or longfinned tunas \"Thunnus alalunga\" (excl. for industrial processing or preservation)",
+        "presentation": { "code": "GUH", "label": "Gutted and headed" },
+        "scientificName": "Thunnus alalunga",
+        "state": { "code": "FRO", "label": "Frozen" },
+        "species": { "code": "ALB", "label": "Albacore (ALB)" }
+      },
+      "landings": [
+        {
+          "model": {
+            "id": "GBR-2022-CC-6BC952BA3-7709976638",
+            "faoArea": "FAO18",
+            "dateLanded": "2022-12-11",
+            "exportWeight": 2,
+            "numberOfSubmissions": 0
+          }
+        }
+      ]
+    },
+    {
+      "product": {
+        "id": "GBR-2022-CC-6BC952BA3-c279be9f-551b-41d8-afb0-5b1b0a734a21",
+        "commodityCode": "03035910",
+        "commodityCodeDescription": "Frozen anchovies \"Engraulis spp.\"",
+        "presentation": { "code": "WHL", "label": "Whole" },
+        "scientificName": "Engraulis encrasicolus",
+        "state": { "code": "FRO", "label": "Frozen" },
+        "species": { "code": "ANE", "label": "European anchovy (ANE)" }
+      },
+      "landings": [
+        {
+          "model": {
+            "id": "GBR-2022-CC-6BC952BA3-2876524768",
+            "faoArea": "FAO18",
+            "dateLanded": "2022-12-11",
+            "exportWeight": 3,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        }
+      ]
+    }
+  ],
+  "error": "invalid",
+  "errors": {
+    "dateLanded": "error.dateLanded.date.base",
+    "weights.0.exportWeight": "error.weights.0.exportWeight.any.required",
+    "weights.1.exportWeight": "error.weights.1.exportWeight.any.required",
+    "vessel.vesselName": "error.vessel.vesselName.any.required"
+  }
+}

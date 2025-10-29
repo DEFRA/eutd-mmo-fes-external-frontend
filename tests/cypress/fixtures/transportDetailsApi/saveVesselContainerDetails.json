@@ -1,0 +1,12 @@
+{
+  "containerNumber": "Container",
+  "currentUri": "/create-catch-certificate/:documentNumber/add-transportation-details-container-vessel",
+  "departurePlace": "Place export",
+  "freightBillNumber": "AA1234567",
+  "flagState": "Flag",
+  "journey": "catchCertificate",
+  "nextUri": "/create-catch-certificate/:documentNumber/check-your-information",
+  "user_id": "e9980bf3-0408-4255-9a4c-887bb268a2ad",
+  "vehicle": "containerVessel",
+  "vesselName": "Vessel"
+}

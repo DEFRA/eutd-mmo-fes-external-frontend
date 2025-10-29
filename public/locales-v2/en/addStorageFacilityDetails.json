@@ -1,0 +1,21 @@
+{
+  "sdAddStorageDetailsHeader": "Add storage facility details",
+  "sdFacilityName": "Facility name",
+  "sdAddStorageFacilityDetailsAddressText": "An address must be added for this storage facility.",
+  "sdAddStorageFacilityDetailsAddAddressText": "Add address",
+  "sdWhatStorageFacilityText": "What is the storage facility address?",
+  "productStorageLegend": "How was the product stored?",
+  "productStorageHint": "Select all that apply.",
+  "productStorageChilledLabel": "Chilled",
+  "productStorageFrozenLabel": "Frozen",
+  "productStorageOtherLabel": "Other",
+  "productStorageApprovalNumberLabel": "Approval number (if applicable)",
+  "hintApprovalNumber": "If the storage facility has an approval number, enter it here. For example, UK/ABC/001, 1 UK 22028 or TSF001.",
+  "productApprovalheadingLabel": "From January 2026, adding details of product handling will be mandatory under new EU regulations. Press Save and continue to skip this section.",
+  "optionalText": "(optional)",
+  "sdAddStorageAddressRequired": "An address must be added for this storage facility.",
+  "sdAddStorageAddressLabel": "Add address",
+  "sdStorageArrivalDateOptional": "Arrival date (optional)",
+  "sdStorageArrivalDateHint": "This should be the date the product was unloaded at the storage facility. For example, 25 07 2025",
+  "sdArrivalDateValidationError": "Arrival date must be a real date"
+}

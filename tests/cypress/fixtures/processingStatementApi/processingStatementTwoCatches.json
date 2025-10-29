@@ -1,0 +1,49 @@
+{
+  "catches": [
+    {
+      "_id": "639fc1b50bb7cf12b8947a50",
+      "species": "Allis shad (ASD)",
+      "speciesCode": "ASD",
+      "catchCertificateNumber": "QW",
+      "catchCertificateType": "non_uk",
+      "totalWeightLanded": "5",
+      "exportWeightBeforeProcessing": "5",
+      "exportWeightAfterProcessing": "5",
+      "id": "qw-1671018160",
+      "scientificName": "Alosa alosa"
+    },
+    {
+      "_id": "639fc1b50bb7cf12b8947a53",
+      "species": "Allis shad (ASD)",
+      "speciesCode": "ASD",
+      "catchCertificateNumber": "QW2",
+      "catchCertificateType": "non_uk",
+      "totalWeightLanded": "35",
+      "exportWeightBeforeProcessing": "25",
+      "exportWeightAfterProcessing": "10",
+      "id": "qw-1671018162",
+      "scientificName": "Alosa seabream"
+    }
+  ],
+  "validationErrors": [],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": null,
+  "healthCertificateDate": null,
+  "healthCertificateNumber": null,
+  "personResponsibleForConsignment": null,
+  "plantApprovalNumber": null,
+  "plantName": null,
+  "plantAddressOne": null,
+  "plantBuildingName": null,
+  "plantBuildingNumber": null,
+  "plantSubBuildingName": null,
+  "plantStreetName": null,
+  "plantCounty": null,
+  "plantCountry": null,
+  "plantTownCity": null,
+  "plantPostcode": null,
+  "dateOfAcceptance": null,
+  "exportedTo": null,
+  "_plantDetailsUpdated": false
+}

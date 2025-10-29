@@ -1,0 +1,7 @@
+{
+  "error.departurePlace.any.required": "sdAddTransportationDetailsPlaneDeparturePlaceLabelError",
+  "error.departurePlace.any.empty": "sdAddTransportationDetailsPlaneDeparturePlaceLabelError",
+  "error.departurePlace.string.empty": "sdAddTransportationDetailsPlaneDeparturePlaceLabelError",
+  "error.departurePlace.string.pattern.base": "sdAddTransportationDetailsPlaneDeparturePlaceCharValidationError",
+  "error.departurePlace.string.max": "sdAddTransportationDetailsPlaneDeparturePlaceMaxCharError"
+}

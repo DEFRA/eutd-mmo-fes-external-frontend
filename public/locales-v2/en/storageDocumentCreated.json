@@ -1,0 +1,12 @@
+{
+  "sdCreatedPanelTitle": "The storage document has been created",
+  "sdCreatedPanelBody": "Storage document number",
+  "sdCreatedNextStepsHeader": "What you need to do next",
+  "sdCreatedDownloadLink": "Download the storage document",
+  "sdCreatedDownloadDocumentNotesSubHeading": "Do not amend the document. Please note:",
+  "sdCreatedDownloadDocumentNotesFirefox": "if you are using Firefox as an internet browser, please ensure JavaScript is enabled in order to view and download the certificate",
+  "sdCreatedDownloadDocumentNotesMobile": "if you are using a mobile device, please ensure you have installed a PDF viewer",
+  "sdCreatedEmailToImporter": "Email the storage document to the importer",
+  "commonDocumentCreatedImportersResponsibility": "It is the importer's responsibility to submit it to the import control authority where your export will enter the EU. The importing authority will complete and sign their section of the document at the Border Inspection Post (BIP).",
+  "sdCreatedViewOrCreateNewLink": "View completed storage documents or create a new export document"
+}

@@ -1,0 +1,13 @@
+{
+  "include": ["../../node_modules/cypress", "./**/*.ts", "./**/*.js"],
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "paths": {
+      "~/*": ["app/*"]
+    },
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "types": ["cypress", "@testing-library/cypress"]
+  }
+}

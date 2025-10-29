@@ -1,0 +1,34 @@
+{
+  "catches": [
+    {
+      "_id": "63bdc96a4e6bfdeb701e0d0c",
+      "species": "Atlantic bluefin tuna (BFT)",
+      "catchCertificateNumber": "GBR-2023-CC-7E720BE31",
+      "catchCertificateType": "uk",
+      "totalWeightLanded": "9",
+      "id": "GBR-2023-CC-7E720BE31-1673382250",
+      "scientificName": "Thunnus thynnus"
+    }
+  ],
+  "validationErrors": [],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": null,
+  "healthCertificateDate": null,
+  "healthCertificateNumber": null,
+  "personResponsibleForConsignment": null,
+  "plantApprovalNumber": null,
+  "plantName": null,
+  "plantAddressOne": null,
+  "plantBuildingName": null,
+  "plantBuildingNumber": null,
+  "plantSubBuildingName": null,
+  "plantStreetName": null,
+  "plantCounty": null,
+  "plantCountry": null,
+  "plantTownCity": null,
+  "plantPostcode": null,
+  "dateOfAcceptance": null,
+  "exportedTo": null,
+  "_plantDetailsUpdated": false
+}

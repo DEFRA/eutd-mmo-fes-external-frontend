@@ -34,7 +34,9 @@ resources:
 extends:
   template: /includes/app-deployment.yaml@MMOPipelineCommon
   parameters:
-    appName: 'mmo-fes-internal-admin-fe'
+    appName: 'mmo-fes-external-fe'
+    npmAuthenticate: false
+    runCypressTests: true
     deployFromFeature: ${{ parameters.deployFromFeature }}
     deployToSecondaryRegion: ${{ parameters.deployToSecondaryRegion }}
     skipPRE1: ${{ parameters.skipPRE1 }}

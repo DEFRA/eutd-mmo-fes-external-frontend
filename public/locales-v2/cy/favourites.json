@@ -1,0 +1,14 @@
+{
+  "ccProductFavouriteDetailSummary3ParagraphText": "Rheoli eich hoff gynnyrch",
+  "ccFavouritesPageHeader": "Hoff Gynnyrch",
+  "ccProductFavouritesTableTitle": "Eich hoff gynnyrch",
+  "ccFavouritesPageDetailsQuestion": "Beth yw'r hoff gynnyrch?",
+  "ccFavouritesPageDetailsAnswerOne": " Mae’r hoff gynnyrch yn hanfodol er mwyn gallu llwytho cynnyrch i fyny a gellir hefyd ei ddefnyddio i gyflymu’r broses o ychwanegu cynnyrch eich hun.",
+  "ccFavouritesPageDetailsAnswerTwo": " Pan fydd hoff gynnyrch yn cael ei gadw, mae'n cynhyrchu ID y cynnyrch a gellir ei ddefnyddio wedyn i adnabod cynnyrch wrth lwytho glaniadau i fyny. Dim ond yn fewnol y defnyddir ID y cynnyrch gan y gwasanaeth FES ac nid ydynt yn berthnasol i’r dystysgrif dalfa derfynol",
+  "ccFavouritesPageProductTableRowSpecies": "Rhywogaeth",
+  "ccFavouritesPageProductTableRowState": "Cyflwr",
+  "ccFavouritesPageProductTableRowPresentation": "Cyflwyniad",
+  "ccFavouritesPageProductTableRowCommodityCode": "Cod Nwyddau",
+  "ccFavouritesPageProductTableRowRemoveButton": "Tynnu",
+  "ccFavouritesPageFormCommodityCodeAddProductFavourites": "Ychwanegu hoff gynnyrch"
+}

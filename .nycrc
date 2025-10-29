@@ -1,0 +1,25 @@
+{
+  "extends": "@istanbuljs/nyc-config-babel",
+  "all": true,
+  "report-dir": "coverage/summary",
+  "include": [
+    "app/**/*.ts",
+    "app/**/*.tsx"
+  ],
+  "exclude": [
+    "coverage",
+    "public",
+    "tests",
+    "app/routes/coverage.tsx",
+    "app/routes/dev.null.ts",
+    "app/types",
+    "app/entry.client.tsx",
+    "app/entry.server.tsx",
+    "app/routes.d.ts"
+  ],
+  "per-file": true,
+  "branches": 80,
+  "lines": 80,
+  "functions": 80,
+  "statements": 80
+}

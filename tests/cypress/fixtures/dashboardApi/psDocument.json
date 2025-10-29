@@ -1,0 +1,31 @@
+{
+  "completed": [
+    {
+      "createdAt": "2022-08-18T09:57:36.000Z",
+      "documentNumber": "GBR-2022-PS-1C9833456",
+      "documentStatus": "COMPLETE",
+      "documentUri": "_ce5a5ac6-6480-4583-9a66-265250b752b0.pdf",
+      "userReference": "Test FI0-4567"
+    },
+    {
+      "createdAt": "2022-08-19T11:57:36.000Z",
+      "documentNumber": "GBR-2022-PS-1C9833123",
+      "documentStatus": "COMPLETE",
+      "documentUri": "_ce5a5ac6-6480-4583-9a66-265250b752b0.pdf",
+      "userReference": "Test FI0-1234"
+    }
+  ],
+  "inProgress": [
+    {
+      "documentNumber": "GBR-2022-PS-F0285BD8A",
+      "status": "DRAFT",
+      "userReference": "",
+      "startedAt": "04 May 2022"
+    },
+    {
+      "documentNumber": "GBR-2022-PS-45000FB43",
+      "status": "DRAFT",
+      "startedAt": "04 May 2022"
+    }
+  ]
+}

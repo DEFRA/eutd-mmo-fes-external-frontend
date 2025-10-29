@@ -1,0 +1,155 @@
+{
+  "cookiesPolicyTitle": "Polisi Cwcis",
+  "cookiesPolicyParagraph1": "Ffeiliau testun bach yw cwcis, sy’n cael eu rhoi ar eich ffôn, eich dyfais tabled neu’ch cyfrifiadur gan y gwefannau rydych chi’n ymweld â nhw. Maent yn cael eu defnyddio ar raddfa eang er mwyn i wefannau weithio, neu weithio'n fwy effeithlon, yn ogystal ag i ddarparu gwybodaeth i berchnogion y wefan.",
+  "cookiesPolicyParagraph2": "Mae’r gwasanaeth Allforio Pysgod yn defnyddio cwcis i storio gwybodaeth am sut rydych chi’n defnyddio ein gwefan, fel y tudalennau rydych chi’n ymweld â nhw. Mae’r wybodaeth isod yn egluro’r cwcis rydyn ni'n eu defnyddio a pham; ee Dewisiadau Cwcis, Google Analytics ac ati.",
+  "cookiePreferences": "Dewisiadau Cwcis",
+  "cookiePreferencesParagraph": "Defnyddir y cwci hwn i gofio eich dewis am gwcis. Os ydych chi wedi nodi eich dewis o’r blaen, bydd eich dewis yn cael ei storio yn y cwci hwn.",
+  "GoogleAnalytics": "Google Analytics",
+  "GoogleAnalyticsParagraph1": "Defnyddir y cwcis hyn i gasglu gwybodaeth am sut rydych chi’n defnyddio ein gwefan. Defnyddiwn y wybodaeth i lunio adroddiadau ac i'n helpu ni i wella'r wefan. Mae’r cwcis yn casglu gwybodaeth fel nifer yr ymwelwyr â’r wefan, o ble mae ymwelwyr wedi dod i’r wefan, a pha dudalennau maen nhw wedi ymweld â nhw. Nid yw’r wybodaeth hon yn datgelu pwy yw unrhyw un.",
+  "GoogleAnalyticsParagraph2": "Dydyn ni ddim yn caniatáu i Google ddefnyddio na rhannu’r data am sut rydych chi’n defnyddio’r wefan hon.",
+  "GoogleAnalyticsParagraph3": "Mae Google Analytics yn gosod cwcis sy’n storio gwybodaeth ddienw am:",
+  "GoogleAnalyticsList1": "sut y daethoch chi i'r wefan",
+  "GoogleAnalyticsList2": "y tudalennau rydych chi’n ymweld â nhw ar y gwasanaeth Allforio Pysgod, a faint o amser rydych chi’n ei dreulio ar bob tudalen",
+  "GoogleAnalyticsList3": "faint o ddogfennau a/neu dystysgrifau sy’n cael eu creu",
+  "GoogleAnalyticsList4": "sut rydych chi’n defnyddio’r gwasanaeth er mwyn i ni allu ei wella",
+  "GoogleAnalyticsList5": "sut rydyn ni’n mesur perfformiad y gwasanaeth digidol ac yn olrhain teithiau defnyddwyr",
+  "GoogleAnalyticsParagraph4": "Dydy Google ddim yn cael defnyddio na rhannu ein data dadansoddi, a ",
+  "GoogleAnalyticsOptOut": " gallwch optio allan o Google Analytics",
+  "GoogleAnalyticsTable": {
+    "tableHeader": {
+      "header1": "Cwci",
+      "header2": "Hanfodol/Dewisol",
+      "header3": "Diben",
+      "header4": "Yn dod i ben"
+    },
+    "tableContent": [
+      {
+        "cookie": "VstsSession",
+        "essential": "",
+        "purpose": "Storio data’r sesiwn",
+        "expiry": "4 mis"
+      },
+      {
+        "cookie": "_ga",
+        "essential": "Dewisol",
+        "purpose": "Mae hwn yn ein helpu i gyfrif faint o bobl sy'n ymweld â'r wefan hon trwy olrhain a ydych chi wedi ymweld o'r blaen",
+        "expiry": "13 mis"
+      },
+      {
+        "cookie": "_ga_YG4TWH4HDB",
+        "essential": "Dewisol",
+        "purpose": "Mae hwn yn ein helpu i ddod o hyd i sesiwn unigol a'i olrhain gyda'ch dyfais",
+        "expiry": "13 mis"
+      },
+      {
+        "cookie": "_gid",
+        "essential": "Dewisol",
+        "purpose": "Mae hwn yn storio ac yn diweddaru gwerth unigryw ar gyfer pob tudalen rydych chi wedi ymweld â hi i'n helpu i wella’ch profiad",
+        "expiry": "1 diwrnod"
+      },
+      {
+        "cookie": "ai_session",
+        "essential": "Dewisol",
+        "purpose": "Mae hwn yn ein helpu i gyfrif faint o bobl sy'n ymweld â'r wefan hon trwy olrhain a ydych chi wedi ymweld o'r blaen",
+        "expiry": "1 awr"
+      },
+      {
+        "cookie": "ai_user",
+        "essential": "Dewisol",
+        "purpose": "Yn cael ei ddefnyddio i reoli pa mor gyflym y mae ceisiadau am ymweld â thudalennau’n cael eu gwneud",
+        "expiry": "1 flwyddyn"
+      },
+      {
+        "cookie": "analytics_cookies_accepted",
+        "essential": "",
+        "purpose": "Mae hwn yn gadael inni wybod eich bod wedi derbyn cwcis dadansoddeg.",
+        "expiry": "Sesiwn"
+      },
+      {
+        "cookie": "fesSession",
+        "essential": "",
+        "purpose": "Storio data’r sesiwn",
+        "expiry": "1 diwrnod"
+      },
+      {
+        "cookie": "i18next",
+        "essential": "",
+        "purpose": "Mae hwn yn cael ei ddefnyddio i storio dewis iaith y defnyddiwr (Saesneg/Cymraeg).",
+        "expiry": "Sesiwn"
+      }
+    ]
+  },
+  "MSClarityHeading": "Microsoft Clarity",
+  "MSClarityParagraph1": "Rydyn ni’n defnyddio Microsoft Clarity i ddeall sut rydych chi'n defnyddio'r Gwasanaeth Allforio Pysgod, gan gynnwys symudiadau’r llygoden, cliciau, sgrolio ac yn y blaen. Mae'r wybodaeth hon yn ein helpu i wella'r wefan.",
+  "MSClarityParagraph2": "Mae Microsoft Clarity yn defnyddio’r cwcis a ganlyn:",
+  "MSClarityParagraph3": "Mae'r data yn ddienw ac nid ydym yn caniatáu i'r darparwyr dadansoddeg hyn ei rannu ag eraill. Gallwch optio allan o delemetreg Clarity trwy ddewis Microsoft ar wasanaeth ",
+  "MSClarityWebChoiceServiceLinkOut": "DAA WebChoices.",
+  "MSClarityTable": {
+    "tableHeader": {
+      "header1": "Enw",
+      "header2": "Diben",
+      "header3": "Yn dod i ben"
+    },
+    "tableContent": [
+      {
+        "name": "_clck",
+        "purpose": "Yn sicrhau bod ID a dewisiadau’r defnyddiwr Clarity, sy'n unigryw i'r wefan honno, yn cael eu priodoli i'r un ID defnyddiwr.",
+        "expiry": "1 flwyddyn"
+      },
+      {
+        "name": "_clsk",
+        "purpose": "Yn cysylltu nifer yr ymweliadau â thudalen gan y defnyddiwr yn un recordiad sesiwn Clarity.",
+        "expiry": "1 diwrnod"
+      },
+      {
+        "name": "CLID",
+        "purpose": "Yn nodi'r tro cyntaf i Clarity weld y defnyddiwr hwn ar unrhyw wefan sy’n ddefnyddio Clarity.",
+        "expiry": "1 flwyddyn"
+      },
+      {
+        "name": "ANONCHK",
+        "purpose": "Yn nodi a yw MUID yn cael ei drosglwyddo i ANID, sef cwci a ddefnyddir ar gyfer hysbysebu. Nid yw Clarity yn defnyddio ANID ac felly mae hyn bob amser wedi'i osod ar 0.",
+        "expiry": "Sesiwn"
+      },
+      {
+        "name": "MR",
+        "purpose": "Yn dynodi a ddylid adnewyddu MUID.",
+        "expiry": "1 flwyddyn"
+      },
+      {
+        "name": "MUID",
+        "purpose": "Yn nodi porwyr gwe unigryw sy'n ymweld â gwefannau Microsoft. Defnyddir y cwcis hyn ar gyfer hysbysebu, dadansoddeg gwefannau, a dibenion gweithredol eraill.",
+        "expiry": "1 year"
+      },
+      {
+        "name": "SM",
+        "purpose": "Yn cael ei ddefnyddio wrth gydamseru’r MUID ar draws parthau Microsoft.",
+        "expiry": "Sesiwn"
+      }
+    ]
+  },
+  "introductoryCookieMessage": "Neges Cwcis Ragarweiniol",
+  "introductoryCookieMessageParagraph": "Pan fyddwch yn defnyddio’r gwasanaeth am y tro cyntaf, byddwn yn dangos ‘neges cwcis’. Rydyn ni wedyn yn storio cwci ar eich ffôn, eich dyfais tabled neu’ch cyfrifiadur fel ei fod yn gwybod i beidio â dangos y neges hon eto. Bydd y cwci hwn yn dod i ben ar ôl mis, sy’n golygu y bydd rhywun yn gofyn yr un cwestiwn i chi ar ôl y cyfnod hwn.",
+  "cookiesRememberYourSettings": "Cwcis sy’n cofio eich gosodiadau",
+  "cookiesRememberYourSettingsParagraph": "Mae’r cwcis hyn yn cofio eich dewisiadau er mwyn personoli eich profiad wrth ddefnyddio’r wefan.",
+  "essentialCookies": "Cwcis hanfodol a chwcis y gallwch eu dewis",
+  "essentialCookiesParagraph": "Mae gwahanol fathau o gwcis yn gwneud gwahanol bethau ar ein gwefan. Mae angen rhai er mwyn gwneud i’r wefan weithio. Mae angen eich caniatâd chi arnom i ddefnyddio cwcis eraill sydd ddim yn hanfodol. Gallwch newid eich dewisiadau ar unrhyw adeg. Cliciwch ar y ddolen “Cwcis” ar waelod unrhyw dudalen.",
+  "strictlyNecessaryCookies": "Cwcis sydd wir eu hangen",
+  "strictlyNecessaryCookiesParagraph1": "Mae’r cwcis hanfodol hyn yn cofio ble rydych chi wedi cyrraedd ar ffurflen, er enghraifft wrth wneud cais am drwydded. Rhaid i’r rhain fod ar waith drwy’r amser.",
+  "strictlyNecessaryCookiesParagraph2": "Os ydych chi’n gwsmer, maen nhw’n ein helpu ni i wybod pwy ydych chi er mwyn i chi allu mewngofnodi a rheoli eich cyfrif. Maen nhw hefyd yn ein helpu i gadw eich manylion yn ddiogel ac yn breifat.",
+  "strictlyNecessaryCookiesParagraph3": "Dyma rai o’r swyddi pwysig eraill maen nhw’n eu gwneud:",
+  "strictlyNecessaryList1": "Helpu chi i symud o gwmpas y wefan",
+  "strictlyNecessaryList2": "Dweud wrthym ni a ydych chi wedi bod yma o’r blaen a pha dudalennau wnaethoch chi ymweld â nhw",
+  "strictlyNecessaryList3": "Dweud wrthym ni sut mae’r safle’n gweithio, er mwyn i ni allu canfod a thrwsio unrhyw broblemau.",
+  "functionalCookies": "Cwcis swyddogaethol",
+  "functionalCookiesPsragraph": "Mae angen i’r cwcis hyn fod ar waith drwy’r amser ac fe’u defnyddir i gofio pethau fel:",
+  "functionalCookiesList": "Eich enw defnyddiwr a’ch cyfrinair ar y dudalen mewngofnodi",
+  "sessioncookie": "Cwci sesiwn",
+  "sessioncookieParagraph": "Rydyn ni’n storio cwcis sesiwn ar eich ffôn, eich tabled neu’ch cyfrifiadur i helpu i gadw eich gwybodaeth yn ddiogel wrth i chi ddefnyddio’r gwasanaeth. Caiff y cwcis hyn eu dileu’n awtomatig ar ôl 15 munud os nad oes gweithgarwch neu pan fyddwch yn cau eich porwr gwe.",
+  "changeyourCookieSettings": "Newid eich gosodiadau cwcis",
+  "acceptCookies": "Hoffech chi dderbyn y cwcis dadansoddeg?",
+  "saveCookieSetting": "Cadw’r gosodiadau cwcis",
+  "goBackParagraph": "Rydych chi wedi gosod eich dewisiadau cwcis.",
+  "goBackLink": "Mynd yn ôl i’r dudalen roeddech chi’n edrych arni.",
+  "success": "Llwyddiant"
+}

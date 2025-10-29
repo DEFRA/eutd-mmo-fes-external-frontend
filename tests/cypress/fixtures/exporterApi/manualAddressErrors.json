@@ -1,0 +1,5 @@
+{
+  "townCity": "error.townCity.string.empty",
+  "postcode": "error.postcode.string.empty",
+  "country": "error.country.string.empty"
+}

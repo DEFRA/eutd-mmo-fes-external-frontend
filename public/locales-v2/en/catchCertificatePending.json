@@ -1,0 +1,21 @@
+{
+  "ccPendingPanel": "The catch certificate is being processed",
+  "ccNumber": "Catch certificate number",
+  "ccTextTitle": "What you need to do next",
+  "ccPendingTextOne": "Your catch certificate submission is being processed. You can check its progress on your exporter dashboard. Processing should take no more than {{offlineValidationTime}} minutes. If it takes significantly longer, please contact support on 0330 159 1989.",
+  "ccPendingTexTwo": "Once processing is complete, your submission will appear on your dashboard as either a successfully completed catch certificate or a draft document that has failed validation.",
+  "ccPendingTitleTwo": "Successfully completed catch certificates",
+  "ccPendingTextLiOne": "Find the document in the ‘Completed’ list on your exporter dashboard.",
+  "ccPendingTextLiTwoBold": "Download the catch certificate by selecting ‘View’.",
+  "ccPendingTextLiTwo": "Do not amend the document. Please note:",
+  "ccPendingTextLiThree": "if you are using Firefox as an internet browser, please ensure JavaScript is enabled in order to view and download the certificate",
+  "ccPendingTextLiFour": "if you are using a mobile device, please ensure you have installed a PDF viewer",
+  "ccPendingTextLiFiveBold": "Email the catch certificate to the importer.",
+  "ccPendingTextLiFive": " It is the importers responsibility to submit the document to the import control authority where your export will enter the EU. The importing authority will complete and sign their section of the document at the Border Inspection Post (BIP).",
+  "ccPendingTitleThree": "Submissions that fail validation",
+  "ccPendingTitleThreeTextOne": "Find the document (labelled ‘Failed’) in the ‘In progress’ list on your exporter dashboard.",
+  "ccPendingTitleThreeTextTwo": "View the validation failure reasons by selecting ‘Continue’.",
+  "ccPendingTitleThreeTextThree": "Use the error messages and guidance to help amend the document and/or to re-submit.",
+  "ccPendingLastText": "Please continue to your dashboard and refresh regularly to check for updates.",
+  "ccPendingLink": "Return to your exporter dashboard"
+}

@@ -1,0 +1,14 @@
+{
+  "_id": "63efe46129033c34d8d50c4b",
+  "__t": "storageDocument",
+  "requestByAdmin": false,
+  "exportData": {
+    "exporterDetails": {},
+    "catches": [],
+    "storageFacilities": []
+  },
+  "errors": {
+    "storageFacilities-0-facilityApproval": "sdAddStorageFacilityApprovalCharacterError"
+  },
+  "errorsUrl": "/create-storage-document/GBR-2023-SD-8EC0EA267/add-storage-facility-approval/0"
+}

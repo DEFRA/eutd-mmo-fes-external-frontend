@@ -1,0 +1,14 @@
+{
+  "ccProductFavouriteDetailSummary3ParagraphText": "Manage your product favourites",
+  "ccFavouritesPageHeader": "Product Favourites",
+  "ccProductFavouritesTableTitle": "Your product favourites",
+  "ccFavouritesPageDetailsQuestion": "What are the product favourites?",
+  "ccFavouritesPageDetailsAnswerOne": "Product favourites are essential to enable the uploading of products and also can be used to speed up the process of adding products manually.",
+  "ccFavouritesPageDetailsAnswerTwo": "When a product favourite is saved. it generates a product ID which can then be used to identify products during the uploading of landings. Product IDs are only used internally by the FES service and have no relevance to the final catch certificate",
+  "ccFavouritesPageFormCommodityCodeAddProductFavourites": "Add product favourite",
+  "ccFavouritesPageProductTableRowSpecies": "Species",
+  "ccFavouritesPageProductTableRowState": "State",
+  "ccFavouritesPageProductTableRowPresentation": "Presentation",
+  "ccFavouritesPageProductTableRowCommodityCode": "CommodityCode",
+  "ccFavouritesPageProductTableRowRemoveButton": "Remove"
+}

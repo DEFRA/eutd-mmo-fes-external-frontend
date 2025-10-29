@@ -1,0 +1,21 @@
+{
+  "inProgress": [
+    {
+      "documentNumber": "GBR-2022-PS-407EAA477",
+      "status": "DRAFT",
+      "startedAt": "14 Dec 2022",
+      "userReference": ""
+    },
+    {
+      "documentNumber": "GBR-2022-PS-A9B1E15B8",
+      "status": "DRAFT",
+      "startedAt": "13 Dec 2022"
+    },
+    {
+      "documentNumber": "GBR-2023-PS-97DA962EC",
+      "status": "DRAFT",
+      "startedAt": "13 Dec 2022"
+    }
+  ],
+  "completed": []
+}

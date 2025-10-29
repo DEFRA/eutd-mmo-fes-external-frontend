@@ -1,0 +1,88 @@
+{
+  "products": [
+    {
+      "id": "GBR-2022-CC-7E73BEF73-ed459b0b-5bd7-41d9-8a35-68d64885f186",
+      "species": "Baird's slickhead (ALC)",
+      "speciesCode": "ALC",
+      "scientificName": "Alepocephalus bairdii",
+      "commodity_code": "03028990",
+      "commodity_code_description": "Fresh or chilled fish, n.e.s.",
+      "user_id": null,
+      "caughtBy": [],
+      "state": "FRE",
+      "stateLabel": "Fresh",
+      "presentation": "GUT",
+      "presentationLabel": "Gutted"
+    },
+    {
+      "id": "GBR-2022-CC-7E73BEF73-9f7ad04c-2eff-40bf-b5a5-9a16d364f0b7",
+      "species": "Aesop shrimp (AES)",
+      "speciesCode": "AES",
+      "scientificName": "Pandalus montagui",
+      "commodity_code": "03063590",
+      "commodity_code_description": "Cold-water shrimps and prawns \"Pandalus spp.\", whether in shell or not, live, fresh or chilled",
+      "user_id": null,
+      "caughtBy": [],
+      "state": "FRE",
+      "stateLabel": "Fresh",
+      "presentation": "WHL",
+      "presentationLabel": "Whole"
+    },
+    {
+      "id": "GBR-2022-CC-7E73BEF73-5b7ca8e3-b1ed-4011-97d9-dd5504a5c5b6",
+      "species": "Albacore (ALB)",
+      "speciesCode": "ALB",
+      "scientificName": "Thunnus alalunga",
+      "commodity_code": "03023190",
+      "commodity_code_description": "Fresh or chilled albacore or longfinned tunas \"Thunnus alalunga\" (excl. for industrial processing or preservation)",
+      "user_id": null,
+      "caughtBy": [],
+      "state": "FRE",
+      "stateLabel": "Fresh",
+      "presentation": "GUT",
+      "presentationLabel": "Gutted"
+    },
+    {
+      "id": "GBR-2022-CC-7E73BEF73-452acdfd-f6da-4fb4-82b8-eb19109f9eda",
+      "species": "Alfonsinos nei (ALF)",
+      "speciesCode": "ALF",
+      "scientificName": "Beryx spp",
+      "commodity_code": "03028990",
+      "commodity_code_description": "Fresh or chilled fish, n.e.s.",
+      "user_id": null,
+      "caughtBy": [],
+      "state": "FRE",
+      "stateLabel": "Fresh",
+      "presentation": "WHL",
+      "presentationLabel": "Whole"
+    },
+    {
+      "id": "GBR-2022-CC-7E73BEF73-fb51ec38-f5e9-48e0-a830-80d8c4274a21",
+      "species": "Alfonsinos nei (ALF)",
+      "speciesCode": "ALF",
+      "scientificName": "Beryx spp",
+      "commodity_code": "03038990",
+      "commodity_code_description": "Frozen fish, n.e.s.",
+      "user_id": null,
+      "caughtBy": [],
+      "state": "FRO",
+      "stateLabel": "Frozen",
+      "presentation": "WHL",
+      "presentationLabel": "Whole"
+    }
+  ],
+  "favourite": {
+    "species": "Baird's slickhead (ALC)",
+    "id": "GBR-2022-CC-7E73BEF73-ed459b0b-5bd7-41d9-8a35-68d64885f186",
+    "state": "FRE",
+    "stateLabel": "Fresh",
+    "commodity_code": "03028990",
+    "commodity_code_description": "Fresh or chilled fish, n.e.s.",
+    "presentation": "GUT",
+    "presentationLabel": "Gutted",
+    "speciesCode": "ALC",
+    "scientificName": "Alepocephalus bairdii",
+    "user_id": "dca73323-b8c5-4594-af5a-a83b35cd9c8c"
+  },
+  "addedToFavourites": false
+}

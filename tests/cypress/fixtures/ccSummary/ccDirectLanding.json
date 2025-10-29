@@ -1,0 +1,91 @@
+{
+  "documentNumber": "GBR-2022-CC-D1630FF88",
+  "status": "DRAFT",
+  "startedAt": "2022-08-04T13:19:17.558Z",
+  "exporter": {
+    "model": {
+      "exporterFullName": "Orla Hood",
+      "exporterCompanyName": "Alston Mccray Trading",
+      "addressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
+      "subBuildingName": "MMO",
+      "buildingName": "LANCASTER HOUSE",
+      "streetName": "HAMPSHIRE COURT",
+      "county": "TYNESIDE",
+      "country": "ENGLAND",
+      "townCity": "NEWCASTLE UPON TYNE",
+      "postcode": "NE4 7YH",
+      "user_id": "",
+      "journey": "",
+      "currentUri": "",
+      "nextUri": ""
+    }
+  },
+  "exportPayload": {
+    "items": [
+      {
+        "product": {
+          "id": "GBR-2022-CC-D1630FF88-e72a132c-e68f-44c8-8f7c-40f319bf88ac",
+          "commodityCode": "03028180",
+          "commodityCodeDescription": "Fresh or chilled dogfish and other sharks (excl. picked dogfish \"Squalus acanthias\", catsharks \"Scyliorhinus spp.\", porbeagle shark \"Lamna nasus\" and blue shark \"Prionace glauca\")",
+          "presentation": {
+            "code": "WHL",
+            "label": "Whole"
+          },
+          "scientificName": "Centroscyllium fabricii",
+          "state": {
+            "code": "FRE",
+            "label": "Fresh"
+          },
+          "species": {
+            "code": "CFB",
+            "label": "Black dogfish (CFB)"
+          }
+        },
+        "landings": [
+          {
+            "model": {
+              "id": "GBR-2022-CC-D1630FF88-7980979717",
+              "vessel": {
+                "pln": "PE1211",
+                "vesselName": "FAE SILVIE",
+                "label": "FAE SILVIE (PE1211)",
+                "homePort": "POOLE",
+                "flag": "GBR",
+                "cfr": "GBRC20252",
+                "imoNumber": null,
+                "licenceNumber": "25358",
+                "licenceValidTo": "2382-12-31T00:00:00"
+              },
+              "faoArea": "FAO27",
+              "dateLanded": "2022-08-24",
+              "exportWeight": 123,
+              "numberOfSubmissions": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "conservation": {
+    "conservationReference": "UK Fisheries Policy",
+    "legislation": ["UK Fisheries Policy"],
+    "caughtInUKWaters": "Y",
+    "user_id": "Test",
+    "currentUri": "Test",
+    "nextUri": "Test"
+  },
+  "transport": {
+    "vehicle": "directLanding"
+  },
+  "exportLocation": {
+    "exportedFrom": "United Kingdom",
+    "exportedTo": {
+      "officialCountryName": "Hungary",
+      "isoCodeAlpha2": "HU",
+      "isoCodeAlpha3": "HUN",
+      "isoNumericCode": "348"
+    }
+  },
+  "landingsEntryOption": "directLanding",
+  "validationErrors": null
+}

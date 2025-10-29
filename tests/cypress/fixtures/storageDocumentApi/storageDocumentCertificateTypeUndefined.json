@@ -1,0 +1,14 @@
+{
+  "catches": [],
+  "storageFacilities": [],
+  "validationErrors": [{}],
+  "addAnotherProduct": "No",
+  "addAnotherStorageFacility": "No",
+  "transport": {},
+  "exportedTo": {
+    "officialCountryName": "British Indian Ocean Territory",
+    "isoCodeAlpha2": "IO",
+    "isoCodeAlpha3": "IOT",
+    "isoNumericCode": "086"
+  }
+}

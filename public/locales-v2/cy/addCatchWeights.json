@@ -1,0 +1,12 @@
+{
+  "psAddCatchWeightsTotalWeightOnCatchCertificate": "Cyfanswm y pwysau a ddangosir ar dystysgrif y ddalfa mewn cilogramau",
+  "psAddCatchWeightsExportWeightBeforeProcessing": "Pwysau allforio mewn kg (cyn prosesu)",
+  "psAddCatchWeightsExportWeightAfterProcessing": "Pwysau allforio mewn kg (ar ôl prosesu)",
+  "psAddCatchWeightsPageHeader": "Ychwanegwch bwysau’r dalfeydd",
+  "psAddCatchWeightsExportWeightAfterProcessingHint": "Dylech roi pwysau’r rhywogaeth, \n nid cynhwysion ychwanegol",
+  "psAddCatchWeightsDetail": "Sicrhewch fod y cyfanswm pwysau’n gywir",
+  "psAddCatchWeightsConfirm": "Cadarnhewch y cyfanswm pwysau sy’n cael ei ddangos ar y dystysgrif ddalfa mewn kg.",
+  "psAddCatchWeightsIncorrect": "Os yw’r pwysau a ddangosir uchod yn anghywir, ffoniwch {{telephoneNumber}}.",
+  "psAddCatchWeightsButtonLabel": "Ychwanegu Tystysgrif Ddalfa",
+  "psUpdateCatchWeightsButtonLabel": "Diweddaru Tystysgrif Ddalfa"
+}

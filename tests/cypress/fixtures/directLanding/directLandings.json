@@ -1,0 +1,53 @@
+{
+  "id": "GBR-2022-CC-6BC952BA3-4732932524",
+  "vessel": {
+    "vesselName": "AARON",
+    "pln": "N370",
+    "homePort": "KILKEEL",
+    "flag": "GBR",
+    "cfr": "GBR000A11177",
+    "imoNumber": null,
+    "licenceNumber": "30049",
+    "licenceValidTo": "2030-12-31T00:00:00",
+    "licenceHolder": "MR D MACBRIDE"
+  },
+  "numberOfSubmissions": 0,
+  "exclusiveEconomicZones": [
+    {
+      "officialCountryName": "Algeria",
+      "isoCodeAlpha2": "DZ",
+      "isoCodeAlpha3": "DZA",
+      "isoNumericCode": "012"
+    },
+    {
+      "officialCountryName": "French Polynesia",
+      "isoCodeAlpha2": "PF",
+      "isoCodeAlpha3": "PYF",
+      "isoNumericCode": "258"
+    },
+    {
+      "officialCountryName": "Germany",
+      "isoCodeAlpha2": "DE",
+      "isoCodeAlpha3": "DEU",
+      "isoNumericCode": "276"
+    }
+  ],
+  "dateLanded": "2021-12-11",
+  "faoArea": "FAO18",
+  "highSeasArea": "Yes",
+  "rfmo": "value",
+  "gearCategory": "Surrounding nets",
+  "gearType": "Purse seines (PS)",
+  "weights": [
+    {
+      "speciesId": "GBR-2022-CC-6BC952BA3-c999c558-f753-4ab3-be2d-088f896b11e7",
+      "speciesLabel": "Albacore (ALB), Frozen, Gutted and headed, 03034190",
+      "exportWeight": 2
+    },
+    {
+      "speciesId": "GBR-2022-CC-6BC952BA3-c279be9f-551b-41d8-afb0-5b1b0a734a21",
+      "speciesLabel": "European anchovy (ANE), Frozen, Whole, 03035910",
+      "exportWeight": 3
+    }
+  ]
+}

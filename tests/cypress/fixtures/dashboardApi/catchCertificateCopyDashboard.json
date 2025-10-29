@@ -1,0 +1,30 @@
+{
+  "inProgress": [
+    {
+      "documentNumber": "GBR-2022-CC-20C81C37F",
+      "status": "DRAFT",
+      "startedAt": "17 Nov 2022",
+      "isFailed": false,
+      "userReference": "xyz"
+    }
+  ],
+  "completed": [
+    {
+      "createdAt": "2022-11-08T13:35:02.000Z",
+      "__t": "catchCert",
+      "_id": "636a5ad22d94fe0827c4460d",
+      "status": "COMPLETE",
+      "documentNumber": "GBR-2022-CC-45A276B54",
+      "documentUri": "_c4a1c8d2-e6d9-4705-9c18-58d8a505acc4.pdf"
+    },
+    {
+      "createdAt": "2022-11-08T13:35:02.000Z",
+      "__t": "catchCert",
+      "_id": "636a5ad22d94fe0827c4460d",
+      "status": "COMPLETE",
+      "documentNumber": "GBR-2022-CC-45A276B54",
+      "documentUri": "_c4a1c8d2-e6d9-4705-9c18-58d8a505acc4.pdf",
+      "userReference": "completed document"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+[
+  {
+    "productId": "PRD769",
+    "landingDate": "10/10/2020",
+    "faoArea": "FAO18",
+    "vesselPln": "PH1100",
+    "exportWeight": "100",
+    "rowNumber": 3,
+    "originalRow": "PRD769,10/10/2020,FAO18,PH1100,100",
+    "errors": ["error.product.any.exists"],
+    "vessel": {
+      "pln": "PH1100",
+      "vesselName": "WIRON 5",
+      "flag": "GBR",
+      "cfr": "NLD200202641",
+      "homePort": "PLYMOUTH",
+      "licenceNumber": "12480",
+      "imoNumber": 9249556,
+      "licenceValidTo": "2021-08-09T00:00:00",
+      "rssNumber": "C20514",
+      "vesselLength": 50.63,
+      "licenceHolder": "INTERFISH WIRONS LIMITED"
+    }
+  },
+  {
+    "productId": "PRD635",
+    "landingDate": "10/10/2020",
+    "faoArea": "FBO18",
+    "vesselPln": "PH114",
+    "exportWeight": "100",
+    "rowNumber": 4,
+    "originalRow": "PRD635,10/10/2020,FBO18,PH114,100",
+    "errors": ["error.faoArea.any.missing", "error.product.any.exists", "error.vesselPln.any.invalid"]
+  }
+]

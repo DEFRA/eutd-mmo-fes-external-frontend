@@ -1,0 +1,20 @@
+{
+  "ccCopyAllCertificateData": "Copïo holl ddata’r dystysgrif",
+  "ccCopyAllCertificateDataExceptTheLandings": "Copïo holl ddata'r dystysgrif AC EITHRIO y glanio",
+  "sdCopyThisStorageDocumentCopyAllCertificateDataHint": "Yn eich galluogi i greu dogfen storio drafft newydd yn gyflym o ddogfen a gyflwynwyd yn flaenorol gyda data tebyg",
+  "commonCopyThisProcessingStatementCopyAllCertificateData": "Copïo holl ddata'r ddogfen",
+  "commonCopyThisProcessingStatementCopyAllCertificateDataHint": "Yn eich galluogi i greu datganiad prosesu drafft newydd yn gyflym o ddogfen a gyflwynwyd yn flaenorol gyda data tebyg",
+  "commonCopyThisStorageDocumentCopyAllCertificateDataHint": "Yn eich galluogi i greu dogfen storio drafft newydd yn gyflym o ddogfen a gyflwynwyd yn flaenorol gyda data tebyg",
+  "commonCopyThisDocumentVoidDocumentConfirm": "Copïo holl ddata'r ddogfen A dirymu'r gwreiddiol",
+  "ccCopyAllCertificateDataAndVoidTheOriginal": "Copïo holl ddata'r dystysgrif A di-rymu'r gwreiddiol",
+  "ccCopyAllCertificateDataSubtitle1": "Yn eich galluogi i greu tystysgrif dalfa drafft newydd yn gyflym o ddogfen sydd wedi cael ei chyflwyno o’r blaen gyda data tebyg",
+  "ccCopyAllCertificateDataSubtitle2": "Yn eich galluogi i greu tystysgrif dalfa ddrafft newydd yn gyflym o ddogfen sydd wedi cael ei chyflwyno o’r blaen gyda data tebyg, ond eithrio'r glanio yn y copi",
+  "commonCopyThisDocumentVoidDocumentConfirmHint": "Yn caniatáu i chi gywiro gwallau mewn dogfen a gyflwynwyd drwy ei chopïo a’i disodli",
+  "commonCopyThisAcknowledgement": "Cydnabyddiaeth",
+  "catchCertificateCopyThisDocumentWarningMessage": "Ni ddylech ddefnyddio {{journeyText}} na data {{addRemoveLandingText}} ar gyfer dalfeydd sydd eisoes wedi cael eu hallforio. Mae ailddefnyddio tystysgrifau dalfa neu ddefnyddio data {{addRemoveLandingText}} sy’n ymwneud ag eitem a allforiwyd yn flaenorol yn drosedd ddifrifol a gall arwain at gymryd camau gorfodi.",
+  "processingStatementCopyThisDocumentWarningMessage": "Ni ddylech ddefnyddio {{journeyText}} na data ar gyfer dalfeydd sydd eisoes wedi cael eu hallforio. Mae ailddefnyddio datganiadau prosesu neu ddefnyddio data {{addRemoveLandingText}} sy’n ymwneud ag eitem a allforiwyd yn flaenorol yn drosedd ddifrifol a gall arwain at gymryd camau gorfodi.",
+  "storageDocumentCopyThisDocumentWarningMessage": "Ni ddylech ddefnyddio {{journeyText}} na data ar gyfer dalfeydd sydd eisoes wedi cael eu hallforio. Mae ailddefnyddio dogfennau storio neu ddefnyddio data {{addRemoveLandingText}} sy’n ymwneud ag eitem a allforiwyd yn flaenorol yn drosedd ddifrifol a gall arwain at gymryd camau gorfodi.",
+  "catchCertificateCopyDocumentAcknowledgedMessage": "Rwyf yn deall na ddylwn ailddefnyddio'r un dystysgrif dalfa na'r un data glaniad ar gyfer dalfeydd sydd eisoes wedi cael eu hallforio",
+  "pssdCopyDocumentAcknowledgedMessage": "Rwyf yn deall na ddylwn ailddefnyddio'r un {{journeyText}} na'r un data ar gyfer dalfeydd sydd eisoes wedi cael eu hallforio",
+  "commonCopyCreatedraftJourney": "Creu {{journeyText}} ddrafft"
+}

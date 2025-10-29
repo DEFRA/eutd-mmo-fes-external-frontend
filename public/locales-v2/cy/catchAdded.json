@@ -1,0 +1,14 @@
+{
+  "psCatchAddedSingleCatchTitle": "Rydych chi wedi ychwanegu {{count}} o gynhyrchion wedi'u prosesu at y llwyth hwn",
+  "psCatchAddedMultiCatchTitle": "Rydych chi wedi ychwanegu {{count}} cynnyrch wedi'i brosesu at y llwyth hwn",
+  "psCatchAddedSpeciesAndcatchCertificates": "Tystysgrifau rhywogaeth a thystysgrifau dalfa",
+  "addCatchConfirmationText": "Ydych chi am ychwanegu dalfa arall?",
+  "psSpecies": "rhywogaeth",
+  "psCatchCertificateNumber": "Rhif tystysgrif y ddalfa",
+  "psTotalWeightShownInkg": "Cyfanswm y pwysau a ddangosir ar dystysgrif y ddalfa mewn cilogramau",
+  "psExportWeightBeforeProcessing": "Pwysau allforio mewn kg (cyn prosesu)",
+  "psExportWeightAfterProcessing": "Pwysau allforio mewn kg (ar ôl prosesu)",
+  "psAddedCatchesToConsignment": "Gwiriwch y dalfeydd sydd wedi’u hychwanegu at y llwyth",
+  "psAddAnotherSpecies": "Hoffech chi ychwanegu cynnyrch wedi'i brosesu arall?",
+  "CheckCatchesAddedConsignment": "Gwiriwch y tystysgrifau dalfa a ychwanegwyd at y llwyth"
+}

@@ -1,0 +1,6 @@
+{
+  "nextUri": "/create-catch-certificate/catch-certificates",
+  "journey": "catchCertificate",
+  "documentVoid": "No",
+  "ipAddress": "127.0.0.1"
+}

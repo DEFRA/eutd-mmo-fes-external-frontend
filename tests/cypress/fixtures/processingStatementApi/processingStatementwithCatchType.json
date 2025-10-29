@@ -1,0 +1,43 @@
+{
+  "catches": [
+    {
+      "_id": "63bfa25fb29d6c23d0566129",
+      "id": "555-9019711700",
+      "species": "Twobar seabream (AAB)",
+      "catchCertificateNumber": "555",
+      "catchCertificateType": "uk",
+      "totalWeightLanded": "5",
+      "exportWeightBeforeProcessing": "3",
+      "exportWeightAfterProcessing": "1",
+      "scientificName": "Acanthopagrus bifasciatus"
+    }
+  ],
+  "validationErrors": [
+    { "message": "psAddCatchDetailsErrorUKCCNumberNotExist", "key": "catches-0-catchCertificateNumber" }
+  ],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": "tt",
+  "healthCertificateDate": "24/05/2022",
+  "healthCertificateNumber": "33/2/123456",
+  "personResponsibleForConsignment": "test",
+  "plantApprovalNumber": "11",
+  "plantName": "hg",
+  "plantAddressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
+  "plantBuildingName": "LANCASTER HOUSE",
+  "plantBuildingNumber": null,
+  "plantSubBuildingName": "MMO",
+  "plantStreetName": "HAMPSHIRE COURT",
+  "plantCounty": "TYNESIDE",
+  "plantCountry": "ENGLAND",
+  "plantTownCity": "NEWCASTLE UPON TYNE",
+  "plantPostcode": "NE4 7YH",
+  "dateOfAcceptance": "11/01/2023",
+  "exportedTo": {
+    "officialCountryName": "Afghanistan",
+    "isoCodeAlpha2": "AF",
+    "isoCodeAlpha3": "AFG",
+    "isoNumericCode": "004"
+  },
+  "_plantDetailsUpdated": false
+}

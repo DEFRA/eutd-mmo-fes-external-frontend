@@ -1,0 +1,13 @@
+{
+  "id": "0",
+  "vehicle": "truck",
+  "nationalityOfVehicle": "UK",
+  "registrationNumber": "YH67YHK",
+  "departurePlace": "Hull",
+  "documents": [
+    {
+      "name": "Invoice",
+      "reference": "INV0001"
+    }
+  ]
+}

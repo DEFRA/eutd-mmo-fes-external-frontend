@@ -1,0 +1,11 @@
+[
+  { "value": "FRE", "label": "Fresh" },
+  { "value": "FRO", "label": "Frozen" },
+  { "value": "OTH", "label": "Other states" },
+  { "value": "SAL", "label": "Salted" },
+  { "value": "ALI", "label": "Alive" },
+  { "value": "BOI", "label": "Boiled" },
+  { "value": "SMO", "label": "Smoked" },
+  { "value": "FRE", "label": "Fresh" },
+  { "value": "FRO", "label": "Frozen" }
+]

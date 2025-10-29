@@ -1,0 +1,155 @@
+{
+  "cookiesPolicyTitle": "Cookies Policy ",
+  "cookiesPolicyParagraph1": "Cookies are small text files that are placed on your phone, tablet or computer by websites that you visit. They are widely used to make websites work, or work more efficiently, as well as to provide information to the owners of the site.",
+  "cookiesPolicyParagraph2": "The Fish Exports service uses cookies to store information about how you use our website, such as the pages you visit. The information below explains the cookies we use and why; e.g. Cookie Preferences and Google Analytics etc.",
+  "cookiePreferences": "Cookie Preferences",
+  "cookiePreferencesParagraph": "This cookie is used to remember your choice about cookies. Where you have previously indicated a preference, your preference will be stored in this cookie.",
+  "GoogleAnalytics": "Google Analytics",
+  "GoogleAnalyticsParagraph1": "These cookies are used to collect information about how you use our website. We use the information to compile reports and to help us improve the website. The cookies collect information such as the number of visitors to the website, where visitors have come to the website from and the pages they visited. This information does not identify anyone.",
+  "GoogleAnalyticsParagraph2": "We do not allow Google to use or share the data about how you use this site.",
+  "GoogleAnalyticsParagraph3": "Google Analytics sets cookies that store anonymised information about:",
+  "GoogleAnalyticsList1": "how you got to the site",
+  "GoogleAnalyticsList2": "the pages you visit on The Fish Exports services, and how long you spend on each page",
+  "GoogleAnalyticsList3": "how many documents and/or certificates are created",
+  "GoogleAnalyticsList4": "how you use the service so we can improve it",
+  "GoogleAnalyticsList5": "how we measure the performance of the digital service and track user journeys",
+  "GoogleAnalyticsParagraph4": "Google is not allowed to use or share our analytics data, and ",
+  "GoogleAnalyticsOptOut": " you can opt out of Google Analytics",
+  "GoogleAnalyticsTable": {
+    "tableHeader": {
+      "header1": "Cookie",
+      "header2": "Essential/Optional",
+      "header3": "Purpose",
+      "header4": "Expiry"
+    },
+    "tableContent": [
+      {
+        "cookie": "VstsSession",
+        "essential": "",
+        "purpose": "Stores session data",
+        "expiry": "4 months"
+      },
+      {
+        "cookie": "_ga",
+        "essential": "Optional",
+        "purpose": "This helps us count how many people visit this website by tracking if you've visited before",
+        "expiry": "13 months"
+      },
+      {
+        "cookie": "_ga_YG4TWH4HDB",
+        "essential": "Optional",
+        "purpose": "This helps us to find and track an individual session with your device",
+        "expiry": "13 months"
+      },
+      {
+        "cookie": "_gid",
+        "essential": "Optional",
+        "purpose": "This stores and updates a unique value for each page you've visited to help us improve your experience",
+        "expiry": "1 day"
+      },
+      {
+        "cookie": "ai_session",
+        "essential": "Optional",
+        "purpose": "This helps us count how many people visit this website by tracking if you've visited before",
+        "expiry": "1 hour"
+      },
+      {
+        "cookie": "ai_user",
+        "essential": "Optional",
+        "purpose": "Used to manage the rate at which page view requests are made",
+        "expiry": "1 year"
+      },
+      {
+        "cookie": "analytics_cookies_accepted",
+        "essential": "",
+        "purpose": "This lets us know you have accepted analytics cookies.",
+        "expiry": "Session"
+      },
+      {
+        "cookie": "fesSession",
+        "essential": "",
+        "purpose": "Stores session data",
+        "expiry": "1 day"
+      },
+      {
+        "cookie": "i18next",
+        "essential": "",
+        "purpose": "This is used to store the user’s language preference (English/Welsh).",
+        "expiry": "Session"
+      }
+    ]
+  },
+  "MSClarityHeading": "Microsoft Clarity",
+  "MSClarityParagraph1": "We use Microsoft Clarity to understand how you use The Fish Exports Service, including mouse movements, clicks, scrolling and so on. This information helps us to improve the website.",
+  "MSClarityParagraph2": "Microsoft Clarity uses the following cookies:",
+  "MSClarityParagraph3": "The data is anonymised and we do not allow these analytics providers to share it with others. You can opt out of Clarity telemetry by selecting Microsoft on the ",
+  "MSClarityWebChoiceServiceLinkOut": "DAA WebChoices service.",
+  "MSClarityTable": {
+    "tableHeader": {
+      "header1": "Name",
+      "header2": "Purpose",
+      "header3": "Expires"
+    },
+    "tableContent": [
+      {
+        "name": "_clck",
+        "purpose": "Persists the Clarity User ID and preferences, unique to that site is attributed to the same user ID.",
+        "expiry": "1 year"
+      },
+      {
+        "name": "_clsk",
+        "purpose": "Connects multiple page views by a user into a single Clarity session recording.",
+        "expiry": "1 day"
+      },
+      {
+        "name": "CLID",
+        "purpose": "Identifies the first-time Clarity saw this user on any site using Clarity.",
+        "expiry": "1 Year"
+      },
+      {
+        "name": "ANONCHK",
+        "purpose": "Indicates whether MUID is transferred to ANID, a cookie used for advertising. Clarity doesn't use ANID and so this is always set to 0.",
+        "expiry": "Session"
+      },
+      {
+        "name": "MR",
+        "purpose": "Indicates whether to refresh MUID.",
+        "expiry": "1 year"
+      },
+      {
+        "name": "MUID",
+        "purpose": "Identifies unique web browsers visiting Microsoft sites. These cookies are used for advertising, site analytics, and other operational purposes.",
+        "expiry": "7 days"
+      },
+      {
+        "name": "SM",
+        "purpose": "Used in synchronizing the MUID across Microsoft domains.",
+        "expiry": "Session"
+      }
+    ]
+  },
+  "introductoryCookieMessage": "Introductory Cookie Message",
+  "introductoryCookieMessageParagraph": "When you first use the service we show a ‘cookie message’. We then store a cookie on your phone, tablet or computer so it knows not to show this message again. This cookie will expire after one month, which means you’ll be asked the same question after this time.",
+  "cookiesRememberYourSettings": "Cookies that remember your settings",
+  "cookiesRememberYourSettingsParagraph": "These cookies remember your preferences and the choices you make, to personalise your experience when using the site.",
+  "essentialCookies": "Essential Cookies and Cookies you can choose",
+  "essentialCookiesParagraph": "Different types of cookies do different jobs on our website. Some are needed to make the website work. We need your consent to use other cookies that are not essential. You can change your choices at any time. Just click the 'Cookies' link at the end of any page.",
+  "strictlyNecessaryCookies": "Strictly Necessary Cookies",
+  "strictlyNecessaryCookiesParagraph1": "These essential cookies remember your progress through a form, for example a licence application, and always need to be on.",
+  "strictlyNecessaryCookiesParagraph2": "If you are a customer, they help us know who you are so that you can sign in and manage your account. They also help us keep your details safe and private.",
+  "strictlyNecessaryCookiesParagraph3": "Other important jobs they do are:",
+  "strictlyNecessaryList1": "Help you move around the site",
+  "strictlyNecessaryList2": "Tell us if you’ve been to it before and which pages you went to",
+  "strictlyNecessaryList3": "Tell us how the site is working, so that we can find and fix any problems.",
+  "functionalCookies": "Functional Cookies",
+  "functionalCookiesPsragraph": "These cookies always need to be on and are used for remembering things like:",
+  "functionalCookiesList": "Your username and password on the page where you sign in",
+  "sessioncookie": "Session cookie",
+  "sessioncookieParagraph": "We store session cookies on your phone, tablet or computer to help keep your information secure while you use the service. These cookies are automatically removed after 15 minutes following no activity or when you close your web browser.",
+  "changeyourCookieSettings": "Change your cookie settings",
+  "acceptCookies": "Do you want to accept the analytics cookies?",
+  "saveCookieSetting": "Save cookie settings",
+  "goBackParagraph": "You’ve set your cookie preferences.",
+  "goBackLink": "Go back to the page you were looking at.",
+  "success": "Success"
+}

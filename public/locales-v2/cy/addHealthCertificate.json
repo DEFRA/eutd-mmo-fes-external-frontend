@@ -1,0 +1,7 @@
+{
+  "psAddHealthCertificateHeader": "Ychwanegwch fanylion tystysgrif iechyd",
+  "psAddHealthCertificateHealthCertificateNumber": "Rhif Tystysgrif Iechyd Allforio (EHC)",
+  "psAddHealthCertificateHealthCertificateNumberHint": "Er enghraifft, 20/2/123456",
+  "psAddHealthCertificateHealthCertificateDateLabel": "Dyddiad Tystysgrif Iechyd Allforio (EHC)",
+  "psAddHealthCertificateDateFieldHint": "Er enghraifft, 31 03 1980"
+}

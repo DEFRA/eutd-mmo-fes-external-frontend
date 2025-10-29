@@ -1,0 +1,34 @@
+{
+  "error": "invalid",
+  "errors": {
+    "dateLanded": "error.dateLanded.any.empty",
+    "exportWeight": "error.exportWeight.number.base",
+    "product": "error.product.string.empty",
+    "vessel.vesselName": "error.vessel.vesselName.any.required",
+    "gearType": "error.gearType.string.empty",
+    "gearCategory": "error.gearCategory.string.empty"
+  },
+
+  "items": [
+    {
+      "product": {
+        "id": "GBR-2023-CC-2323EC498-81368201-50c5-4347-bf1f-5802be97b58b",
+        "commodityCode": "03045690",
+        "commodityCodeDescription": "Fresh or chilled meat, whether or not minced, of dogfish and other sharks (excl. fillets, picked dogfish \"Squalus acanthias\", catsharks \"Scyliorhinus spp.\", porbeagle shark \"Lamna nasus\" and blue shark \"Prionace glauca\")",
+        "presentation": {
+          "code": "OTH",
+          "label": "Other presentations"
+        },
+        "scientificName": "Centroscymnus crepidater",
+        "state": {
+          "code": "FRE",
+          "label": "Fresh"
+        },
+        "species": {
+          "code": "CYP",
+          "label": "Longnose velvet dogfish (CYP)"
+        }
+      }
+    }
+  ]
+}

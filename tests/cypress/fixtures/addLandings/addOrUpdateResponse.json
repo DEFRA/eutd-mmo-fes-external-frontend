@@ -1,0 +1,23 @@
+{
+  "dateLanded": "2023-03-13",
+  "exportWeight": "123",
+  "faoArea": "FAO27",
+  "product": "GBR-2023-CC-D952E7253-bd8a050f-128a-4541-8fe1-7b8b3c72a2d5",
+  "vesses": [
+    {
+      "cfr": "GBR000J10185",
+      "domId": "BANANASPLIT-J357",
+      "flag": "GBR",
+      "homePort": "PLYMOUTH",
+      "imoNumber": null,
+      "label": "BANANA SPLIT (J357)",
+      "licenceHolder": "MR S M SAMSON",
+      "licenceNumber": "26334",
+      "licenceValidTo": "2030-12-31T00:00:00",
+      "pln": "J357",
+      "rssNumber": "J10185",
+      "vesselLength": 6.86,
+      "vesselName": "BANANA SPLIT"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+[
+  { "faoName": "Albacore", "scientificName": "Thunnus alalunga", "faoCode": "ALB" },
+  { "faoName": "Baird's slickhead", "scientificName": "Alepocephalus bairdii", "faoCode": "ALC" },
+  { "faoName": "Alfonsinos nei", "scientificName": "Beryx spp", "faoCode": "ALF" },
+  { "faoName": "Greater amberjack", "scientificName": "Seriola dumerili", "faoCode": "AMB" },
+  { "faoName": "European anchovy", "scientificName": "Engraulis encrasicolus", "faoCode": "ANE" },
+  { "faoName": "Anglerfishes nei", "scientificName": "Lophiidae", "faoCode": "ANF" },
+  { "faoName": "Blackbellied angler", "scientificName": "Lophius budegassa", "faoCode": "ANK" },
+  { "faoName": "Blue antimora", "scientificName": "Antimora rostrata", "faoCode": "ANT" },
+  { "faoName": "Iceland catshark", "scientificName": "Apristurus laurussonii", "faoCode": "APQ" },
+  { "faoName": "Argentines", "scientificName": "Argentina spp", "faoCode": "ARG" },
+  { "faoName": "Greater argentine", "scientificName": "Argentina silus", "faoCode": "ARU" },
+  { "faoName": "Sand smelt", "scientificName": "Atherina presbyter", "faoCode": "ATP" },
+  { "faoName": "", "scientificName": "Brachypterois serrulata", "faoCode": "BER" },
+  { "faoName": "Bigeye tuna", "scientificName": "Thunnus obesus", "faoCode": "BET" },
+  { "faoName": "Atlantic bluefin tuna", "scientificName": "Thunnus thynnus", "faoCode": "BFT" },
+  { "faoName": "Pouting(=Bib)", "scientificName": "Trisopterus luscus", "faoCode": "BIB" },
+  { "faoName": "Marlins,sailfishes,etc. nei", "scientificName": "Istiophoridae", "faoCode": "BIL" },
+  { "faoName": "Blue ling", "scientificName": "Molva dypterygia", "faoCode": "BLI" },
+  { "faoName": "Brill", "scientificName": "Scophthalmus rhombus", "faoCode": "BLL" },
+  { "faoName": "Aesop shrimp", "scientificName": "Aesop shrimp", "faoCode": "AES" }
+]

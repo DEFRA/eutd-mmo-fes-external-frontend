@@ -1,0 +1,39 @@
+{
+  "storageFacilities": [
+    {
+      "facilityName": "top",
+      "facilityAddressOne": "56, 3, Arc House, test",
+      "facilityBuildingName": "Arc House",
+      "facilityBuildingNumber": "56",
+      "facilitySubBuildingName": "3",
+      "facilityStreetName": "test",
+      "facilityTownCity": "Brussels",
+      "facilityCounty": "pre",
+      "facilityCountry": "Belgium",
+      "facilityPostcode": "sw11aa",
+      "_facilityUpdated": false
+    }
+  ],
+  "validationErrors": [{}],
+  "addAnotherProduct": "No",
+  "addAnotherStorageFacility": "No",
+  "transport": {
+    "vehicle": "train",
+    "vesselName": "gfs",
+    "flagState": "ghj",
+    "containerNumber": "56",
+    "departurePlace": "hull",
+    "exportedTo": {
+      "officialCountryName": "British Indian Ocean Territory",
+      "isoCodeAlpha2": "IO",
+      "isoCodeAlpha3": "IOT",
+      "isoNumericCode": "086"
+    }
+  },
+  "exportedTo": {
+    "officialCountryName": "British Indian Ocean Territory",
+    "isoCodeAlpha2": "IO",
+    "isoCodeAlpha3": "IOT",
+    "isoNumericCode": "086"
+  }
+}

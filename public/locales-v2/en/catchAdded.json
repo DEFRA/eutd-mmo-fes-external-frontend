@@ -1,0 +1,14 @@
+{
+  "psCatchAddedSingleCatchTitle": "You have added {{count}} processed product to this consignment",
+  "psCatchAddedMultiCatchTitle": "You have added {{count}} processed products to this consignment",
+  "psCatchAddedSpeciesAndcatchCertificates": "Species and catch certificates",
+  "addCatchConfirmationText": "Do you need to add another catch?",
+  "psSpecies": "Species",
+  "psCatchCertificateNumber": "Catch Certificate number",
+  "psTotalWeightShownInkg": "Total weight shown on catch certificate in kg",
+  "psExportWeightBeforeProcessing": "Export weight in kg (before processing)",
+  "psExportWeightAfterProcessing": "Export weight in kg (after processing)",
+  "psAddedCatchesToConsignment": "Check the added catches to the consignment",
+  "psAddAnotherSpecies": "Do you want to add another processed product?",
+  "CheckCatchesAddedConsignment": "Check the catch certificates added to the consignment"
+}

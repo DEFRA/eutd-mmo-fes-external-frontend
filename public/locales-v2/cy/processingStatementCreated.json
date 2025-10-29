@@ -1,0 +1,12 @@
+{
+  "psCreatedPanelTitle": "Mae'r datganiad prosesu wedi'i greu",
+  "psCreatedPanelBody": "Rhif y datganiad prosesu",
+  "psCreatedNextStepsHeader": "Yr hyn sydd angen i chi ei wneud nesaf",
+  "psCreatedDownloadLink": "Lawrlwythwch y datganiad prosesu",
+  "psCreatedDownloadDocumentNotesSubHeading": "Peidiwch â diwygio’r ddogfen. Sylwer",
+  "psCreatedDownloadDocumentNotesFirefox": "os ydych chi’n defnyddio Firefox fel porwr rhyngrwyd, gwnewch yn siŵr bod JavaScript wedi’i alluogi er mwyn gweld a lawrlwytho’r dystysgrif ",
+  "psCreatedDownloadDocumentNotesMobile": "os ydych chi’n defnyddio dyfais symudol, gwnewch yn siŵr eich bod wedi gosod dangosydd PDF",
+  "psCreatedEmailToImporter": "Anfonwch y datganiad prosesu at y mewnforiwr drwy e-bost",
+  "commonDocumentCreatedImportersResponsibility": "Cyfrifoldeb y mewnforiwr yw ei gyflwyno i’r awdurdod rheoli mewnforio lle bydd eich allforion yn dod i mewn i’r UE. Bydd yr awdurdod sy’n mewnforio yn llenwi ac yn llofnodi ei adran o’r ddogfen yn y Man Archwilio ar y Ffin (BIP).",
+  "psCreatedViewOrCreateNewLink": "Gweld datganiadau prosesu wedi’u cwblhau neu greu dogfen allforio newydd"
+}

@@ -1,0 +1,15 @@
+{
+  "progress": {
+    "reference": "1234566",
+    "exporter": "INCOMPLETE",
+    "dataUpload": "",
+    "products": "INCOMPLETE",
+    "landings": "CANNOT START",
+    "conservation": "INCOMPLETE",
+    "exportJourney": "COMPLETED",
+    "transportType": "COMPLETED",
+    "transportDetails": "INCOMPLETE"
+  },
+  "requiredSections": 7,
+  "completedSections": 2
+}

@@ -1,0 +1,32 @@
+.add-landings-form {
+  background-color: rgba(245, 245, 245, 0.747);
+  padding: 15px;
+}
+
+.date-field-with-picker {
+  display: flex;
+  flex-direction: row;
+}
+
+.date-field-with-picker .date-field div label {
+  width: 60px;
+}
+
+.date-picker {
+  padding-top: 2px;
+  box-shadow: 0 2px 0 #929191;
+  background-color: #efefef;
+  border: none;
+  cursor: pointer;
+}
+.date-picker:hover,
+.date-picker:focus {
+  background-color: #cccccc;
+}
+.date-picker img {
+  width: 22px;
+}
+
+#gearCategory{
+  margin-right: 15px;
+}

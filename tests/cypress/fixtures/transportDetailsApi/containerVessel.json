@@ -1,0 +1,17 @@
+{
+  "vehicle": "containerVessel",
+  "vesselName": "Vessel name",
+  "flagState": "Flag state",
+  "containerNumber": "0123456789",
+  "departurePlace": "Hull",
+  "exportedTo": {
+    "officialCountryName": "Afghanistan",
+    "isoNumericCode": "004",
+    "isoCodeAlpha2": "AF",
+    "isoCodeAlpha3": "AFG"
+  },
+  "currentUri": "/create-catch-certificate/:documentNumber/add-transportation-details-container-vessel",
+  "nextUri": "/create-catch-certificate/:documentNumber/check-your-information",
+  "user_id": "2cd9755c-3f20-4474-a4ca-bcf3c4c2d6d9",
+  "journey": "catchCertificate"
+}

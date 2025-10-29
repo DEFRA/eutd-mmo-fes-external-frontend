@@ -1,0 +1,9 @@
+{
+  "sdYouAddedSingleProductsTitle": "Rydych chi wedi ychwanegu {{count}} cynnyrch i'r llwyth hwn",
+  "sdYouAddedMultiProductsTitle": "Rydych chi wedi ychwanegu {{count}} cynnyrch i'r llwyth hwn",
+  "sdYouAddedProductNeedToAddProductTitle": "Ydych chi am ychwanegu cynnyrch arall?",
+  "sdYouAddedProductTableHeaderDocumentReference": "Cyfeirnod y ddogfen",
+  "sdActions": "Camau i’w cymryd",
+  "sdYouAddedProductGuidanceTitle": "Pam ychwanegu cynnyrch arall?",
+  "sdYouAddedProductGuidanceDescription": "Gall fod angen ichi ychwanegu cynnyrch arall os yw’ch dogfen mynediad i’r DU yn cwmpasu sawl rhywogaeth neu sawl math o gynnyrch."
+}

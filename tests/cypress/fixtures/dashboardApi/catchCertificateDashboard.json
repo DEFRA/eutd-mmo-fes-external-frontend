@@ -1,0 +1,55 @@
+{
+  "inProgress": [
+    {
+      "documentNumber": "GBR-2022-CC-20C81C37F",
+      "status": "DRAFT",
+      "startedAt": "17 Nov 2022",
+      "isFailed": false,
+      "userReference": "xyz"
+    },
+    {
+      "documentNumber": "GBR-2022-CC-C8DEDE7FD",
+      "status": "DRAFT",
+      "startedAt": "17 Nov 2022",
+      "isFailed": false
+    },
+    {
+      "documentNumber": "GBR-2022-CC-89BA60007",
+      "status": "DRAFT",
+      "startedAt": "15 Nov 2022",
+      "isFailed": false
+    },
+    {
+      "documentNumber": "GBR-2022-CC-4A7B0258F",
+      "status": "DRAFT",
+      "userReference": "",
+      "startedAt": "14 Nov 2022",
+      "isFailed": true
+    },
+    {
+      "documentNumber": "GBR-2022-CC-916B8F1CC",
+      "status": "LOCKED",
+      "startedAt": "08 Nov 2022",
+      "isFailed": false
+    }
+  ],
+  "completed": [
+    {
+      "createdAt": "2022-11-08T13:35:02.000Z",
+      "__t": "catchCert",
+      "_id": "636a5ad22d94fe0827c4460d",
+      "status": "COMPLETE",
+      "documentNumber": "GBR-2022-CC-45A276B54",
+      "documentUri": "_c4a1c8d2-e6d9-4705-9c18-58d8a505acc4.pdf"
+    },
+    {
+      "createdAt": "2022-12-08T13:35:02.000Z",
+      "__t": "catchCert",
+      "_id": "636a5ad22d94fe0827c4460f",
+      "status": "COMPLETE",
+      "documentNumber": "GBR-2022-CC-45A276B55",
+      "documentUri": "_c4a1c8d2-e6d9-4705-9c18-58d8a505acc5.pdf",
+      "userReference": "abc"
+    }
+  ]
+}

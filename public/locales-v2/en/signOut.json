@@ -1,0 +1,6 @@
+{
+  "signOutPageTitle": "Your application will time out soon",
+  "signOutWarningMessage": "We will reset your application if you do not respond in {{warningTimeToDisplay}}. We do keep your information secure.",
+  "signOutMinutes": "minutes",
+  "signOutSeconds": "seconds"
+}

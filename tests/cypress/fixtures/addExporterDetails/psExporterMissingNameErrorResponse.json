@@ -1,0 +1,29 @@
+{
+  "model": {
+    "exporterCompanyName": "",
+    "user_id": "",
+    "journey": "processingStatement",
+    "currentUri": "/create-processing-statement/:documentNumber/add-exporter-details",
+    "nextUri": "/create-processing-statement/:documentNumber/add-consignment-details",
+    "preLoadedName": true,
+    "preLoadedAddress": true,
+    "preLoadedCompanyName": true,
+    "subBuildingName": "11",
+    "buildingNumber": "52",
+    "buildingName": "Mock",
+    "streetName": "Testing",
+    "townCity": "Mock City",
+    "county": "Country",
+    "postcode": "BD2 4JR",
+    "country": "United Kingdom of Great Britain and Northern Ireland",
+    "isoCodeAlpha2": "GB",
+    "isoCodeAlpha3": "GBR",
+    "isoNumericCode": "826",
+    "addressOne": "52, 11, Mock, Testing",
+    "isExporterDetailsSavedAsDraft": false
+  },
+  "error": "invalid",
+  "errors": {
+    "exporterCompanyName": "error.exporterCompanyName.string.empty"
+  }
+}

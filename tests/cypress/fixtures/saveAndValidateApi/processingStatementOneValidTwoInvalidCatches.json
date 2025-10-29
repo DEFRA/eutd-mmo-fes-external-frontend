@@ -1,0 +1,80 @@
+{
+  "_id": "63990f573fc11363b1071f91",
+  "__t": "processingStatement",
+  "requestByAdmin": false,
+  "exportData": {
+    "catches": [
+      {
+        "_id": "639fc1b50bb7cf12b8947a50",
+        "species": "Allis shad (ASD)",
+        "speciesCode": "ASD",
+        "catchCertificateNumber": "QW",
+        "catchCertificateType": "non_uk",
+        "totalWeightLanded": "5",
+        "exportWeightBeforeProcessing": "5",
+        "exportWeightAfterProcessing": "5",
+        "id": "qw-1671018160",
+        "scientificName": "Alosa alosa"
+      },
+      {
+        "_id": "639fc1b50bb7cf12b8947a51",
+        "species": "Bluntsnout smooth-head (AXC)",
+        "speciesCode": "AXC",
+        "catchCertificateNumber": "CVBM",
+        "id": "CVB-1671395586",
+        "scientificName": "Xenodermichthys copei",
+        "totalWeightLanded": "THIS IS AN INVALID FIGURE",
+        "exportWeightBeforeProcessing": "THIS IS AN INVALID FIGURE",
+        "exportWeightAfterProcessing": "THIS IS AN INVALID FIGURE"
+      },
+      {
+        "_id": "639fc1b50bb7cf12b8947a52",
+        "species": "Tanner crab (CVB)",
+        "speciesCode": "CVB",
+        "catchCertificateNumber": "VB",
+        "id": "vb-1671414197",
+        "scientificName": "Chionoecetes bairdi",
+        "totalWeightLanded": "THIS IS AN INVALID FIGURE",
+        "exportWeightBeforeProcessing": "THIS IS AN INVALID FIGURE",
+        "exportWeightAfterProcessing": "THIS IS AN INVALID FIGURE"
+      }
+    ],
+    "exporterDetails": {
+      "exporterCompanyName": "Acme Ltd",
+      "addressOne": "123, Test Bldg, Test Villa, Street 1",
+      "buildingNumber": "123",
+      "subBuildingName": "Test Bldg",
+      "buildingName": "Test Villa",
+      "streetName": "Street 1",
+      "county": "Surrey",
+      "country": "United Kingdom of Great Britain and Northern Ireland",
+      "townCity": "Test",
+      "postcode": "SW1A 1AA"
+    },
+    "consignmentDescription": "Test",
+    "healthCertificateNumber": "20/2/123456",
+    "healthCertificateDate": "15/12/2022",
+    "personResponsibleForConsignment": "Test",
+    "plantApprovalNumber": "QW12",
+    "plantName": "Asd",
+    "plantAddressOne": "123, Test Bldg, Test Villa, Street 1",
+    "plantBuildingName": "Test Villa",
+    "plantBuildingNumber": "123",
+    "plantSubBuildingName": "Test Bldg",
+    "plantStreetName": "Street 1",
+    "plantCounty": "Surrey",
+    "plantCountry": "United Kingdom of Great Britain and Northern Ireland",
+    "plantTownCity": "Test",
+    "plantPostcode": "SW1A 1AA",
+    "dateOfAcceptance": "15/12/2022"
+  },
+  "errors": {
+    "catches-1-totalWeightLanded": "psAddCatchWeightsErrorEnterTotalWeightLandedInKG",
+    "catches-1-exportWeightBeforeProcessing": "psAddCatchWeightsErrorEnterExportWeightInKGBeforeProcessing",
+    "catches-1-exportWeightAfterProcessing": "psAddCatchWeightsErrorEnterExportWeightInKGAfterProcessing",
+    "catches-2-totalWeightLanded": "psAddCatchWeightsErrorEnterTotalWeightLandedInKG",
+    "catches-2-exportWeightBeforeProcessing": "psAddCatchWeightsErrorEnterExportWeightInKGBeforeProcessing",
+    "catches-2-exportWeightAfterProcessing": "psAddCatchWeightsErrorEnterExportWeightInKGAfterProcessing"
+  },
+  "errorsUrl": "/create-processing-statement/GBR-2022-PS-22DDEB50E/catch-added"
+}

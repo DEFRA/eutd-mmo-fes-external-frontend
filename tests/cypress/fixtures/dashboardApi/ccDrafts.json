@@ -1,0 +1,18 @@
+{
+  "completed": [],
+  "inProgress": [
+    {
+      "documentNumber": "GBR-2022-CC-F0285BD8A",
+      "status": "DRAFT",
+      "userReference": "",
+      "startedAt": "04 May 2022",
+      "isFailed": false
+    },
+    {
+      "documentNumber": "GBR-2022-CC-45000FB43",
+      "status": "DRAFT",
+      "startedAt": "04 May 2022",
+      "isFailed": false
+    }
+  ]
+}

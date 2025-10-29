@@ -1,0 +1,27 @@
+{
+  "catches": [],
+  "validationErrors": [],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": "",
+  "products": [],
+  "healthCertificateDate": "30/06/2022",
+  "healthCertificateNumber": "20/2/123456",
+  "personResponsibleForConsignment": "Test data",
+  "plantApprovalNumber": "Approval Number",
+  "plantName": "Test Plantname",
+  "plantAddressOne": "Test Address One",
+  "plantBuildingName": "Test Building Name",
+  "plantBuildingNumber": "Test Building Number",
+  "plantSubBuildingName": "Test Building Name",
+  "plantStreetName": "Test Street Name",
+  "plantCounty": "Plant County",
+  "plantCountry": "United Kingdom",
+  "plantTownCity": "My Test City",
+  "plantPostcode": "My Post Code",
+  "dateOfAcceptance": "21/11/2022",
+  "exportedTo": {
+    "officialCountryName": "Nicaragua"
+  },
+  "_plantDetailsUpdated": false
+}

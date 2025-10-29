@@ -1,0 +1,8 @@
+{
+  "error.containerNumber.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+  "error.containerNumber.any.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+  "error.containerNumber.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+  "error.containerNumber.string.max": "commonAddTransportationDetailsPlaneContainerMaxCharError",
+  "error.containerNumber.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+  "error.containerNumber.string.pattern.base": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError"
+}

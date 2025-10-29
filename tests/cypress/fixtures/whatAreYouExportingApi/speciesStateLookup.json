@@ -1,0 +1,22 @@
+[
+  {
+    "state": { "value": "FRE", "label": "Fresh" },
+    "presentations": [
+      { "value": "FIL", "label": "Filleted" },
+      { "value": "FIS", "label": "Filleted and skinned" },
+      { "value": "GUT", "label": "Gutted" },
+      { "value": "WHL", "label": "Whole" }
+    ],
+    "scientificName": "Gadus morhua"
+  },
+  {
+    "state": { "value": "FRO", "label": "Frozen" },
+    "presentations": [
+      { "value": "FIL", "label": "Filleted" },
+      { "value": "FIS", "label": "Filleted and skinned" },
+      { "value": "GUT", "label": "Gutted" },
+      { "value": "WHL", "label": "Whole" }
+    ],
+    "scientificName": "Gadus morhua"
+  }
+]

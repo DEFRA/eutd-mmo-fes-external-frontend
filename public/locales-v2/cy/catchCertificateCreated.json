@@ -1,0 +1,12 @@
+{
+  "ccCreatedPanelTitle": "Mae tystysgrif y ddalfa wedi’i chreu",
+  "ccCreatedPanelBody": "Rhif tystysgrif y ddalfa",
+  "ccCreatedNextStepsHeader": "Beth mae angen i chi ei wneud nesaf",
+  "ccCreatedDownloadLink": "Llwythwch dystysgrif y ddalfa i lawr",
+  "ccCreatedDownloadDocumentNotesSubHeading": "Peidiwch â diwygio’r dystysgrif. Sylwch:",
+  "ccCreatedEmailToImporter": "E-bostiwch dystysgrif y ddalfa at y mewnforiwr",
+  "ccCreatedViewOrCreateNewLink": "Gweld tystysgrifau dalfa wedi’u cwblhau neu greu dogfen allforio newydd",
+  "downloadDocumentNotesFirefox": "os ydych chi’n defnyddio Firefox fel porwr rhyngrwyd, gwnewch yn siŵr bod JavaScript wedi’i alluogi er mwyn gweld a lawrlwytho’r dystysgrif",
+  "downloadDocumentNotesMobile": "os ydych chi’n defnyddio dyfais symudol, gwnewch yn siŵr eich bod wedi gosod dangosydd PDF",
+  "processingStatementEmailToImporterText": "Cyfrifoldeb y mewnforiwr yw ei chgyflwyno i’r awdurdod rheoli mewnforio lle bydd eich allforion yn dod i mewn i’r UE. Bydd yr awdurdod sy’n mewnforio yn llenwi ac yn llofnodi ei adran o’r ddogfen yn y Man Archwilio ar y Ffin (BIP)."
+}

@@ -1,0 +1,7 @@
+{
+  "error.flightNumber.any.required": "commonAddTransportationDetailsPlaneFlightNumberLabelError",
+  "error.flightNumber.any.empty": "commonAddTransportationDetailsPlaneFlightNumberLabelError",
+  "error.flightNumber.string.empty": "commonAddTransportationDetailsPlaneFlightNumberLabelError",
+  "error.flightNumber.string.max": "commonAddTransportationDetailsPlaneFlightNumberMaxCharError",
+  "error.flightNumber.string.alphanum": "commonAddTransportationDetailsPlaneFlightNumberOnlyNumbersError"
+}

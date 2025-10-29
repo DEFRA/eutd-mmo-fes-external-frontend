@@ -1,0 +1,15 @@
+{
+  "psAddCatchDetailsHeading": "Ychwanegu manylion dalfa ar gyfer dalfa o’r tu allan i’r DU at y llwyth",
+  "psAddCatchDetailsHeadingUk": "Ychwanegu manylion dalfa ar gyfer dalfa o’r DU at y llwyth",
+  "psAddCatchDetailsSpeciesAutocompleteHint": "Rhowch ran o’r cod FAO neu enw’r rhywogaeth i weld yr awgrymiadau e.e. Atlantic cod (COD). Rhaid i chi ddewis o blith yr awgrymiadau a ddarparwyd fel na fydd y dogfennau’n annilys.",
+  "psAddCatchDetailsSpeciesAutocompleteLabel": "Cod FAO neu enw’r rhywogaeth",
+  "psAddCatchDetailsSpeciesDetailsBestResults": "I gael y canlyniadau gorau, chwiliwch am yr enw Saesneg cyffredin neu’r cod FAO (os yw’n hysbys) oherwydd does dim modd chwilio am lysenwau rhywogaethau.",
+  "psAddCatchDetailsSpeciesDetailsCannotFindSpecies": "Os na allwch ddod o hyd i’r rhywogaeth ac nad yw wedi’i heithrio, ffoniwch ",
+  "psAddCatchDetailsSomeSpecies": "Mae rhai rhywogaethau wedi’u heithrio",
+  "psAddCatchDetailsSomeSpeciesLinkText": "Rhywogaethau wedi’u heithrio o {{exemptFrom}} (europa.eu)",
+  "psAddCatchDetailsCCNumberHint": "Rhowch rif dogfen un dystysgrif ddalfa yn unig, gan gynnwys unrhyw heiffen/llinell doriad neu gymeriadau eraill. Er enghraifft, GBR-2024-CC-BEFCD6036",
+  "psAddCatchDetailsCCNumberNonUKHint": "Rhowch rif dogfen un dystysgrif ddalfa yn unig, gan gynnwys unrhyw heiffen/llinell doriad a chymeriadau eraill.",
+  "psAddCatchDetailsProductDetailsText": "Ychwanegu Manylion Cynnyrch",
+  "psAddCatchDetailsTableHeader": "Rydych chi wedi ychwanegu {{number}} o dystysgrifau dalfa ar gyfer {{species}}",
+  "psAddCatchDetailsTableHeaderSingle": "Rydych chi wedi ychwanegu {{number}} dystysgrif dalfa ar gyfer {{species}}"
+}

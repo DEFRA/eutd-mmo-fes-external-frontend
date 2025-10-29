@@ -1,0 +1,60 @@
+{
+  "species": [
+    {
+      "id": "GBR-2022-CC-47A29D1D9-37f28405-f2ca-4d0a-9abb-233eea3e9278",
+      "species": "Black scabbardfish (BSF)",
+      "speciesCode": "BSF",
+      "scientificName": "Aphanopus carbo",
+      "commodity_code": "03038990",
+      "commodity_code_description": "Frozen fish, n.e.s.",
+      "user_id": null,
+      "caughtBy": [],
+      "state": "FRO",
+      "stateLabel": "Frozen",
+      "presentation": "GUT",
+      "presentationLabel": "Gutted"
+    },
+    {
+      "id": "GBR-2022-CC-47A29D1D9-6a36cb38-e985-4647-ba20-fcaafc54e662",
+      "species": "Marbled electric ray (TTR)",
+      "speciesCode": "TTR",
+      "scientificName": "Torpedo marmorata",
+      "commodity_code": "03038200",
+      "commodity_code_description": "Frozen rays and skates \"Rajidae\"",
+      "user_id": null,
+      "caughtBy": [],
+      "state": "FRO",
+      "stateLabel": "Frozen",
+      "presentation": "OTH",
+      "presentationLabel": "Other presentations"
+    },
+    {
+      "id": "GBR-2022-CC-47A29D1D9-53d639c7-8138-4003-a4b4-bfc70a2b9d7e",
+      "species": "Blackbelly rosefish (BRF)",
+      "speciesCode": "BRF",
+      "scientificName": "Helicolenus dactylopterus",
+      "commodity_code": "03038939",
+      "commodity_code_description": "Frozen redfish \"Sebastes spp.\" (excl. Sebastes marinus)",
+      "user_id": null,
+      "caughtBy": [],
+      "state": "FRO",
+      "stateLabel": "Frozen",
+      "presentation": "WHL",
+      "presentationLabel": "Whole"
+    },
+    {
+      "id": "GBR-2022-CC-47A29D1D9-6632572c-ce2a-4eea-848e-afaa1eaa03ca",
+      "species": "Palinurid spiny lobsters nei (CRW)",
+      "speciesCode": "CRW",
+      "scientificName": "Palinurus spp",
+      "commodity_code": "03063100",
+      "commodity_code_description": "Rock lobster and other sea crawfish \"Palinurus spp., Panulirus spp. and Jasus spp.\", whether in shell or not, live, fresh or chilled",
+      "user_id": null,
+      "caughtBy": [],
+      "state": "FRE",
+      "stateLabel": "Fresh",
+      "presentation": "OTH",
+      "presentationLabel": "Other presentations"
+    }
+  ]
+}

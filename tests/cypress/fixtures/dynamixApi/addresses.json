@@ -1,0 +1,40 @@
+{
+  "@odata.context": "https://defra-custmstr-eue-dev.crm4.dynamics.com/api/data/v9.2/$metadata#defra_addressdetailses(_defra_address_value,_defra_customer_value,defra_Address(defra_uprn,defra_buildingname,defra_subbuildingname,defra_premises,defra_street,defra_locality,defra_dependentlocality,defra_towntext,defra_county,defra_postcode,_defra_country_value,defra_internationalpostalcode,defra_fromcompanieshouse))",
+  "@Microsoft.Dynamics.CRM.totalrecordcount": -1,
+  "@Microsoft.Dynamics.CRM.totalrecordcountlimitexceeded": false,
+  "@Microsoft.Dynamics.CRM.globalmetadataversion": "528324421",
+  "value": [
+    {
+      "@odata.etag": "W/\"521383230\"",
+      "_defra_address_value@OData.Community.Display.V1.FormattedValue": "GA202228-M9-3307-M3-0108",
+      "_defra_address_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "defra_Address",
+      "_defra_address_value@Microsoft.Dynamics.CRM.lookuplogicalname": "defra_address",
+      "_defra_address_value": "a6bb5e78-18f9-ec11-bb3d-000d3a449c8e",
+      "_defra_customer_value@OData.Community.Display.V1.FormattedValue": "Automation Testing Ltd",
+      "_defra_customer_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "defra_Customer_account",
+      "_defra_customer_value@Microsoft.Dynamics.CRM.lookuplogicalname": "account",
+      "_defra_customer_value": "8504bf69-18f9-ec11-bb3d-000d3a2f806d",
+      "defra_addressdetailsid": "a9bb5e78-18f9-ec11-bb3d-000d3a449c8e",
+      "defra_Address": {
+        "defra_uprn": "10091818796",
+        "defra_buildingname": "LANCASTER HOUSE",
+        "defra_subbuildingname": "NATURAL ENGLAND",
+        "defra_premises": null,
+        "defra_street": "HAMPSHIRE COURT",
+        "defra_locality": "NEWCASTLE BUSINESS PARK",
+        "defra_dependentlocality": null,
+        "defra_towntext": "NEWCASTLE UPON TYNE",
+        "defra_county": null,
+        "defra_postcode": "NE4 7YH",
+        "_defra_country_value@OData.Community.Display.V1.FormattedValue": "United Kingdom of Great Britain and Northern Ireland",
+        "_defra_country_value@Microsoft.Dynamics.CRM.associatednavigationproperty": "defra_Country",
+        "_defra_country_value@Microsoft.Dynamics.CRM.lookuplogicalname": "defra_country",
+        "_defra_country_value": "f49cf73a-fa9c-e811-a950-000d3a3a2566",
+        "defra_internationalpostalcode": null,
+        "defra_fromcompanieshouse@OData.Community.Display.V1.FormattedValue": "No",
+        "defra_fromcompanieshouse": false,
+        "defra_addressid": "a6bb5e78-18f9-ec11-bb3d-000d3a449c8e"
+      }
+    }
+  ]
+}

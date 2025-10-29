@@ -1,0 +1,58 @@
+{
+  "items": [
+    {
+      "product": {
+        "id": "GBR-2025-CC-304690DBA-f06b8464-1b50-41ab-9348-82cf5bbc7699",
+        "commodityCode": "03025110",
+        "commodityCodeDescription": "Fresh or chilled cod \"Gadus morhua\"",
+        "presentation": {
+          "code": "WHL",
+          "label": "Whole"
+        },
+        "scientificName": "Gadus morhua",
+        "state": {
+          "code": "FRE",
+          "label": "Fresh"
+        },
+        "species": {
+          "code": "COD",
+          "label": "Atlantic cod (COD)"
+        }
+      },
+      "landings": [
+        {
+          "model": {
+            "id": "GBR-2025-CC-304690DBA-9783311167",
+            "vessel": {
+              "pln": "K373",
+              "vesselName": "AALSKERE",
+              "label": "AALSKERE (K373)",
+              "homePort": "KIRKWALL",
+              "flag": "GBR",
+              "cfr": "GBR000B14974",
+              "imoNumber": "9163178",
+              "licenceNumber": "40815",
+              "licenceValidTo": "2027-12-31T00:00:00",
+              "licenceHolder": "T A CUMMING "
+            },
+            "faoArea": "FAO27",
+            "startDate": "2025-06-18",
+            "dateLanded": "2025-06-18",
+            "exportWeight": 10,
+            "gearCategory": "Surrounding nets",
+            "gearType": "Purse seines (PS)",
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        }
+      ]
+    }
+  ],
+  "error": "invalid",
+  "errors": {
+    "gearType": "error.gearType.string.empty"
+  }
+}

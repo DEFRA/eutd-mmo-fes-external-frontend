@@ -1,0 +1,28 @@
+{
+  "catches": [],
+  "validationErrors": [],
+  "error": "",
+  "errors": {
+    "consignmentDescription": "psAddProcessingPlantAddressErrorNullPlantName"
+  },
+  "errorsUrl": "/create-processing-statement/GBR-2021-PS-8EEB7E123/add-processing-plant-address",
+  "addAnotherCatch": "No",
+  "consignmentDescription": "Herring fillets (16041210) and Atlantic cod fishcakes (16041992)",
+  "healthCertificateDate": null,
+  "healthCertificateNumber": null,
+  "personResponsibleForConsignment": null,
+  "plantApprovalNumber": null,
+  "plantName": null,
+  "plantAddressOne": null,
+  "plantBuildingName": null,
+  "plantBuildingNumber": null,
+  "plantSubBuildingName": null,
+  "plantStreetName": null,
+  "plantCounty": null,
+  "plantCountry": null,
+  "plantTownCity": null,
+  "plantPostcode": null,
+  "dateOfAcceptance": null,
+  "exportedTo": null,
+  "_plantDetailsUpdated": false
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "0",
+    "vehicle": "plane",
+    "nationalityOfVehicle": "adsf",
+    "registrationNumber": "asdsfsd",
+    "departurePlace": "Aylesbury"
+  },
+  {
+    "id": "1",
+    "vehicle": "truck",
+    "nationalityOfVehicle": "UK",
+    "registrationNumber": "UO89HGB",
+    "departurePlace": "Hull"
+  }
+]

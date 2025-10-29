@@ -1,0 +1,16 @@
+{
+  "addConsignmentDetailsConsignmentPageHeader": "Add a processed product",
+  "addConsignmentDetailsConsignmentPageHint": "The details entered here will appear on your document and must be legible in English. For example Battered cod fillets",
+  "addConsignmentDetailsConsignmentDescriptionHint": "Start typing to search  for the correct commodity code for your fish product",
+  "addConsignmentDetailsConsignmentDescriptionLinkHint1": "You can use the Tarrif Code list on ",
+  "addConsignmentDetailsConsignmentDescriptionLinkHint2": " to find the correct commodity code.",
+  "addConsignmentDetailsConsignmentHelpTitle": "Help with commodity code",
+  "addConsignmentDetailsConsignmentHelpText": "UK Integrated Online Tariff to find out correct commodity code (opens in new tab) ",
+  "addConsignmentDetailsConsignmentHelpText1": "You can use the",
+  "addConsignmentDetailsConsignmentStaticDescriptionCount": "You can enter up to {{count}} characters",
+  "addConsignmentDetailsConsignmentDescriptionCount": "You have {{remainingCount}} characters remaining",
+  "addConsignmentDetailsConsignmentDescriptionOverCount": "You have {{overLimitBy}} characters too many",
+  "addConsignmentDetailsConsignmentDescriptionHeader": "Product description",
+  "addConsignmentDetailsConsignmentLinkLabel": "UK Integrated Online Tariff: Look up commodity codes, duty and VAT rates - GOV.UK",
+  "addConsignmentDetailsWarningLabel": "You must add one processed product at a time."
+}

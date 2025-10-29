@@ -1,0 +1,18 @@
+[
+  {
+    "code": "03011100",
+    "description": "Live ornamental freshwater fish"
+  },
+  {
+    "code": "03011900",
+    "description": "Live ornamental fish (excl. freshwater)"
+  },
+  {
+    "code": "03019110",
+    "description": "Live trout \"Oncorhynchus apache and Oncorhynchus chrysogaster\""
+  },
+  {
+    "code": "03019190",
+    "description": "Live trout \"Salmo trutta, Oncorhynchus mykiss, Oncorhynchus clarki, Oncorhynchus aguabonita, Oncorhynchus gilae\""
+  }
+]

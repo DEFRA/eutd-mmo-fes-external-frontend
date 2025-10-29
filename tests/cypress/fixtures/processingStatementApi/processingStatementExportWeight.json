@@ -1,0 +1,40 @@
+{
+  "catches": [
+    {
+      "_id": "63766b360a97db79348c153f",
+      "species": "Yellowback seabream (DTT)",
+      "catchCertificateNumber": "12",
+      "totalWeightLanded": "9",
+      "exportWeightBeforeProcessing": "2",
+      "exportWeightAfterProcessing": "2",
+      "id": "12-3996489220",
+      "scientificName": "Dentex tumifrons"
+    }
+  ],
+  "validationErrors": [],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": "tt",
+  "healthCertificateDate": "24/05/2022",
+  "healthCertificateNumber": "33/2/123456",
+  "personResponsibleForConsignment": "test",
+  "plantApprovalNumber": "11",
+  "plantName": "hg",
+  "plantAddressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
+  "plantBuildingName": "LANCASTER HOUSE",
+  "plantBuildingNumber": null,
+  "plantSubBuildingName": "MMO",
+  "plantStreetName": "HAMPSHIRE COURT",
+  "plantCounty": "TYNESIDE",
+  "plantCountry": "ENGLAND",
+  "plantTownCity": "NEWCASTLE UPON TYNE",
+  "plantPostcode": "NE4 7YH",
+  "dateOfAcceptance": "16/11/2022",
+  "exportedTo": {
+    "officialCountryName": "Afghanistan",
+    "isoCodeAlpha2": "AF",
+    "isoCodeAlpha3": "AFG",
+    "isoNumericCode": "004"
+  },
+  "_plantDetailsUpdated": false
+}

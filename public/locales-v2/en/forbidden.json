@@ -1,0 +1,11 @@
+{
+  "forbiddenH1Text": "Forbidden",
+  "forbiddenPageP1Text": "You do not have permission to carry out this action.",
+  "forbiddenPageP2Text": "Navigate back in your browser to return.",
+  "commonForbiddenPageURLRejected": "Sorry, the requested URL was rejected",
+  "commonForbiddenPageTryAgain": "Please try again later",
+  "commonForbiddenPageContact": "If you need further support, contact the Fish Exports Service helpline:",
+  "commonFishExportsService": "Fish Exports Service",
+  "commonTelephone": "Telephone",
+  "commonForbiddenPageOpeningHours": "Monday to Friday 7:00 to 20:00 (except public holidays)"
+}

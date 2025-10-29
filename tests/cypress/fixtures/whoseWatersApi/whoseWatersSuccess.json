@@ -1,0 +1,8 @@
+{
+  "conservationReference": "UK Fisheries Policy, Common Fisheries Policy, Canada",
+  "legislation": ["UK Fisheries Policy", "Common Fisheries Policy", "Canada"],
+  "caughtInUKWaters": "Y",
+  "caughtInEUWaters": "Y",
+  "caughtInOtherWaters": "Y",
+  "otherWaters": "Canada"
+}

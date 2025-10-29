@@ -1,0 +1,14 @@
+{
+  "subBuildingName": "Test Bldg",
+  "buildingNumber": "123",
+  "buildingName": "Test Villa",
+  "streetName": "Street 1",
+  "townCity": "Test",
+  "county": "Test",
+  "postcode": "12345",
+  "country": "Albania",
+  "isoCodeAlpha2": "AL",
+  "isoCodeAlpha3": "ALB",
+  "isoNumericCode": "008",
+  "addressOne": "123, Test Bldg, Test Villa, Street 1"
+}

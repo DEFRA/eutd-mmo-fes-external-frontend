@@ -1,0 +1,29 @@
+{
+  "catches": [
+    {
+      "_id": "64550db5c61c2d186476b888",
+      "product": "Peacock sole (ADJ)",
+      "commodityCode": "03011100",
+      "certificateNumber": "invalid-entry-doc",
+      "productWeight": "10",
+      "placeOfUnloading": "dover",
+      "dateOfUnloading": "03/05/2023",
+      "transportUnloadedFrom": "43",
+      "id": "someDocumentNumber-1683295546",
+      "scientificName": "Pardachirus pavoninus",
+      "certificateType": "non_uk",
+      "supportingDocuments": ["someDocumentNumber-1683295546"],
+      "productDescription": "productDescription",
+      "netWeightProductArrival": "10",
+      "netWeightFisheryProductArrival": "20"
+    }
+  ],
+  "storageFacilities": [],
+  "validationErrors": [],
+  "addAnotherProduct": "No",
+  "addAnotherStorageFacility": "No",
+  "errors": {
+    "catches-0-certificateNumber": "sdAddUKEntryDocumentErrorUKDocumentNumberFormatInvalid"
+  },
+  "errorsUrl": "/create-storage-document/GBR-2023-SD-83552D3E5/add-product-to-this-consignment/0"
+}

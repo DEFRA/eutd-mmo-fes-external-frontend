@@ -1,0 +1,6 @@
+{
+  "sdAddDocumentTypeHeading": "Add document details",
+  "sdDocumentIssuedInTheUK": "Was the document issued in the UK?",
+  "sdDocumentUsedProductHint": "This is the last document used for the product to enter the UK.",
+  "sdThirdCountryHint": "This could be a 3rd country catch certificate, processing statement or storage document."
+}

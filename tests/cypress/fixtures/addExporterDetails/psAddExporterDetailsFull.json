@@ -1,0 +1,26 @@
+{
+  "model": {
+    "exporterCompanyName": "Nash LTD",
+    "addressOne": "52, 11, Mock, Testing",
+    "buildingNumber": "52",
+    "subBuildingName": "11",
+    "buildingName": "Mock",
+    "streetName": "Testing",
+    "county": "Country",
+    "country": "United Kingdom of Great Britain and Northern Ireland",
+    "townCity": "Mock City",
+    "postcode": "BD2 4JR",
+    "user_id": "ABCD-EFGH-IJKL-MNOP-QRST-UVWX-YZ12",
+    "journey": "processingStatement",
+    "currentUri": "/create-processing-statement/:documentNumber/add-exporter-details",
+    "nextUri": "/create-processing-statement/:documentNumber/add-consignment-details",
+    "preLoadedName": true,
+    "preLoadedAddress": true,
+    "preLoadedCompanyName": true,
+    "isoCodeAlpha2": "GB",
+    "isoCodeAlpha3": "GBR",
+    "isoNumericCode": "826",
+    "isExporterDetailsSavedAsDraft": false
+  },
+  "user_id": "ABCD-EFGH-IJKL-MNOP-QRST-UVWX-YZ12"
+}

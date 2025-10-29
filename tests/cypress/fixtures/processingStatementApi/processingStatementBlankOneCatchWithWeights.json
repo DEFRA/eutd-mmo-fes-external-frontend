@@ -1,0 +1,43 @@
+{
+  "catches": [
+    {
+      "_id": "63979a023fc11363b1071358",
+      "species": "Gymnotus pantherinus (AGH)",
+      "speciesCode": "AGH",
+      "catchCertificateNumber": "GBR-2022-PS-F2D5CD656",
+      "id": "CC-10-1670865091",
+      "scientificName": "Gymnotus pantherinus",
+      "totalWeightLanded": "7",
+      "exportWeightBeforeProcessing": "5",
+      "exportWeightAfterProcessing": "6"
+    }
+  ],
+  "products": [
+    {
+      "id": "GBR-2023-PS-2305703F5-012345678",
+      "description": "Herring fillets and Atlantic cod fishcakes",
+      "commodityCode": "03011100"
+    }
+  ],
+  "validationErrors": [],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": null,
+  "healthCertificateDate": null,
+  "healthCertificateNumber": null,
+  "personResponsibleForConsignment": null,
+  "plantApprovalNumber": null,
+  "plantName": null,
+  "plantAddressOne": null,
+  "plantBuildingName": null,
+  "plantBuildingNumber": null,
+  "plantSubBuildingName": null,
+  "plantStreetName": null,
+  "plantCounty": null,
+  "plantCountry": null,
+  "plantTownCity": null,
+  "plantPostcode": null,
+  "dateOfAcceptance": null,
+  "exportedTo": null,
+  "_plantDetailsUpdated": false
+}

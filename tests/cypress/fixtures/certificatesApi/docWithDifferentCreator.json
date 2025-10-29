@@ -1,0 +1,14 @@
+{
+  "_id": "637b54fb62a7325d7eb9b2dc",
+  "createdAt": "2022-11-21T10:51:46.000Z",
+  "__t": "catchCert",
+  "createdBy": "ABCD",
+  "createdByEmail": "foo@foo.com",
+  "status": "COMPLETE",
+  "documentNumber": "GBR-2022-CC-91E40B440",
+  "requestByAdmin": false,
+  "contactId": "EFGH",
+  "audit": [],
+  "__v": 0,
+  "documentUri": "_2d89e0c5-58f8-4f34-b96e-806135faa7f7.pdf"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "0",
+  "vehicle": "containerVessel",
+  "departurePlace": "Hull",
+  "documents": [
+    {
+      "name": "Invoice",
+      "reference": "INV0001"
+    }
+  ]
+}

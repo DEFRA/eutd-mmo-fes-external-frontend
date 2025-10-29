@@ -1,0 +1,9 @@
+{
+  "psAddProcessingPlantAddressDetailsNotificationText": "Oherwydd gwelliannau yn y ffordd y mae cyfeiriadau’n cael eu rheoli, rhaid rhoi cyfeiriad yr safle prosesu yn y ddogfen hon i mewn eto.",
+  "psAddProcessingPlantAddressDetailsAddressText": "Ychwanegwch gyfeiriad y safle prosesu",
+  "psAddProcessingPlantAddressDetailsPlantNameText": "Enw’r safle prosesu",
+  "psAddProcessingPlantAddressDetailsAnAddressMustBeAddedForThisProcessingPlant": "Rhaid rhoi cyfeiriad ar gyfer y safle prosesu hwn.",
+  "commonProgressProcessingPlantAddress": "cyfeiriad y safle prosesu",
+  "psAddProcessingPlantAddressDetailsAddTheProcessingPlantAddressLinktext": "Ychwanegwch gyfeiriad y safle prosesu",
+  "psProcessingPlantAddressWhatIsProcessingPlantAddress": "Beth yw cyfeiriad y safle prosesu?"
+}

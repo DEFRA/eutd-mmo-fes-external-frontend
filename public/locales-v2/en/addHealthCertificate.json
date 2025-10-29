@@ -1,0 +1,7 @@
+{
+  "psAddHealthCertificateHeader": "Add health certificate details",
+  "psAddHealthCertificateHealthCertificateNumberHint": "For example, 20/2/123456",
+  "psAddHealthCertificateHealthCertificateNumber": "Export Health Certificate (EHC) number",
+  "psAddHealthCertificateHealthCertificateDateLabel": "Export Health Certificate (EHC) date",
+  "psAddHealthCertificateDateFieldHint": "For example, 31 03 1980"
+}

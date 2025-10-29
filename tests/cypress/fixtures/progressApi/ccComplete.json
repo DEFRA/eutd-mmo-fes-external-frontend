@@ -1,0 +1,15 @@
+{
+  "progress": {
+    "reference": "OPTIONAL",
+    "exporter": "COMPLETED",
+    "dataUpload": "",
+    "products": "COMPLETED",
+    "landings": "COMPLETED",
+    "conservation": "COMPLETED",
+    "exportJourney": "COMPLETED",
+    "transportType": "COMPLETED",
+    "transportDetails": "COMPLETED"
+  },
+  "requiredSections": 7,
+  "completedSections": 7
+}

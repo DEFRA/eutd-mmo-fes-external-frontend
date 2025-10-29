@@ -1,0 +1,21 @@
+{
+  "ccPendingPanel": "Mae tystysgrif y ddalfa yn cael ei phrosesu",
+  "ccNumber": "Rhif tystysgrif y ddalfa",
+  "ccTextTitle": "Beth mae angen i chi ei wneud nesaf",
+  "ccPendingTextOne": "Mae cyflwyniad eich tystysgrif dalfa yn cael ei brosesu. Gallwch ddilyn ei hynt ar eich dangosfwrdd allforiwr. Ni ddylai gymryd mwy na {{offlineValidationTime}} munud i brosesu. Os bydd yn cymryd llawer hirach na hynny, cysylltwch â'r adran gymorth ar 0330 159 1989.",
+  "ccPendingTexTwo": "Ar ôl gorffen prosesu, bydd eich cyflwyniad yn ymddangos ar eich dangosfwrdd naill ai fel tystysgrif dalfa sydd wedi'i chwblhau'n llwyddiannus neu fel dogfen ddrafft sydd wedi methu'r cam dilysu.",
+  "ccPendingTitleTwo": "Tystysgrifau dalfa sydd wedi'u cwblhau'n llwyddiannus",
+  "ccPendingTextLiOne": "Gallwch ddod o hyd i'r ddogfen yn y rhestr 'Cwblhawyd' ar eich dangosfwrdd allforiwr.",
+  "ccPendingTextLiTwoBold": "Llwythwch dystysgrif y ddalfa i lawr drwy ddewis 'Gweld'.",
+  "ccPendingTextLiTwo": "Peidiwch â diwygio’r ddogfen. Sylwer",
+  "ccPendingTextLiThree": "os ydych yn defnyddio Firefox fel porwr rhyngrwyd, gwnewch yn siŵr bod JavaScript wedi’i alluogi er mwyn gweld y dystysgrif a’i llwytho i lawr",
+  "ccPendingTextLiFour": "os ydych yn defnyddio dyfais symudol, gwnewch yn siŵr eich bod wedi gosod dangosydd PDF",
+  "ccPendingTextLiFiveBold": "E-bostiwch dystysgrif y ddalfa at y mewnforiwr",
+  "ccPendingTextLiFive": " Cyfrifoldeb y mewnforiwr yw cyflwyno’r ddogfen i’r awdurdod rheoli mewnforion lle bydd eich allforio yn dod i mewn i’r UE. Bydd yr awdurdod mewnforio yn cwblhau ac yn llofnodi ei adran o'r ddogfen yn y Man Archwilio Ffin (BIP).",
+  "ccPendingTitleThree": "Cyflwyniadau sy'n methu'r cam dilysu",
+  "ccPendingTitleThreeTextOne": "Gallwch ddod o hyd i'r ddogfen (wedi'i labelu 'Wedi Methu') yn y rhestr 'Ar waith' ar eich dangosfwrdd allforiwr.",
+  "ccPendingTitleThreeTextTwo": "Edrychwch ar y rhesymau dros fethu'r cam dilysu drwy ddewis 'Bwrw ymlaen'.",
+  "ccPendingTitleThreeTextThree": "Defnyddiwch y negeseuon gwall a'r canllawiau i'ch helpu i ddiwygio'r ddogfen a/neu ei hailgyflwyno.",
+  "ccPendingLastText": "Symudwch ymlaen i'ch dangosfwrdd ac adnewyddu'n rheolaidd er mwyn chwilio am ddiweddariadau.",
+  "ccPendingLink": "Dychwelwch i'ch dangosfwrdd allforiwr"
+}

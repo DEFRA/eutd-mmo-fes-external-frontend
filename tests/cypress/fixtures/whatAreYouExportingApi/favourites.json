@@ -1,0 +1,26 @@
+[
+  {
+    "presentation": "WHL",
+    "presentationLabel": "Whole",
+    "species": "Aesop shrimp (AES)",
+    "speciesCode": "AES",
+    "state": "FRE",
+    "stateLabel": "Fresh",
+    "scientificName": "Pandalus montagui",
+    "commodity_code": "03063590",
+    "commodity_code_description": "Cold-water shrimps and prawns \"Pandalus spp.\", whether in shell or not, live, fresh or chilled",
+    "id": "PRD465"
+  },
+  {
+    "presentation": "WHL",
+    "presentationLabel": "Whole",
+    "species": "Alfonsinos nei (ALF)",
+    "speciesCode": "ALF",
+    "state": "FRE",
+    "stateLabel": "Fresh",
+    "scientificName": "Beryx spp",
+    "commodity_code": "03028990",
+    "commodity_code_description": "Fresh or chilled fish, n.e.s.",
+    "id": "PRD864"
+  }
+]

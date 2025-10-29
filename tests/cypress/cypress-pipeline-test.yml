@@ -1,0 +1,95 @@
+
+parameters:
+  - name: buildId
+    type: string
+    default: 'build-id'
+  - name: parallelTestingJobs
+    type: number
+    default: 1
+
+steps:
+  # Download the Docker image from the Build job
+  - task: DownloadPipelineArtifact@2
+    displayName: Download Docker image from Build
+    inputs:
+      buildType: 'current'
+      artifactName: 'docker-image-test'
+      targetPath: '$(Pipeline.Workspace)'
+  # Load the image into Docker
+  - task: Bash@3
+    displayName: Load Docker Image
+    inputs:
+      targetType: 'inline'
+      script: |
+        docker load --input $(Pipeline.Workspace)/$(repo)-test.tar
+  # Divide the available tests into an equal shards defined by parameters.parallelTestingJobs 
+  # and return the tests for this pipeline instance
+  - task: Bash@3
+    displayName: 'Split available test specs'
+    inputs:
+      targetType: 'inline'
+      script: |
+        #!/bin/bash
+        set -e
+        set -o pipefail
+        SPECS=$(docker run test:${{ parameters.buildId }} tests/cypress/findTests.sh tests/cypress/integration ${{ parameters.parallelTestingJobs }} | sed '$(JOB_NUMBER)!d')
+        echo "##vso[task.setvariable variable=SPECS]$SPECS"
+        echo "Spec files found are: $SPECS"
+        echo "Total spec files found: $(echo $SPECS | awk -F',' '{print NF}')"
+  # Run Cypress tests
+  - task: Bash@3
+    displayName: Cypress test
+    inputs:
+      targetType: 'inline'
+      script: |
+        #
+        # start container
+        #
+        container_id=$(
+          docker run \
+            --detach \
+            --name=fev2-container \
+            --user=root \
+            --volume $BUILD_STAGINGDIRECTORY/coverage:/home/node/coverage \
+            --volume $BUILD_STAGINGDIRECTORY/test-results:/home/node/test-results \
+            test:${{ parameters.buildId }}
+        )
+
+        #
+        # loop until container HEALTHCHECK stops reporting starting
+        #
+        status=starting
+        while [ $status == "starting" ]
+        do
+          sleep 5
+          status=$( docker inspect --format {{.State.Health.Status}} $container_id )
+          echo "Container status: $status"
+        done
+
+        #
+        # if healthy then run tests; otherwise (status is unhealthy) exit with failure
+        # tidy up containers
+        #
+        if [ $status == "healthy" ]
+        then
+          docker exec $container_id /bin/sh -c "npm run :test:ci -- --spec=$(SPECS)"
+          exit_code=$?
+          docker exec $container_id /bin/sh -c "npm run :report:coverage"
+        else
+          docker inspect --format "{{json .State.Health }}" $container_id | jq
+          exit_code=1
+        fi
+        docker stop $container_id
+        docker rm $container_id
+        exit $exit_code
+      condition: succeededOrFailed()
+  # Publish test results 
+  - publish: "$(Build.StagingDirectory)/test-results/junit.xml"
+    displayName: "Publish test results"
+    artifact: junit_$(JOB_NUMBER).xml
+    condition: succeededOrFailed()
+  # Publish Coverage report to pipeline
+  - publish: "$(Build.StagingDirectory)/coverage/summary"
+    displayName: "Publish coverage for Sonarqube"
+    artifact: coverage_$(JOB_NUMBER)
+    condition: succeededOrFailed()

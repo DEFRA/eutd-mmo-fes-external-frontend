@@ -1,0 +1,12 @@
+{
+  "ccCreatedPanelTitle": "The catch certificate has been created",
+  "ccCreatedPanelBody": "Catch certificate number",
+  "ccCreatedNextStepsHeader": "What you need to do next",
+  "ccCreatedDownloadLink": "Download the catch certificate",
+  "ccCreatedDownloadDocumentNotesSubHeading": "Do not amend the certificate. Please note:",
+  "ccCreatedEmailToImporter": "Email the catch certificate to the importer",
+  "ccCreatedViewOrCreateNewLink": "View completed catch certificates or create a new export document",
+  "downloadDocumentNotesFirefox": "if you are using Firefox as an internet browser, please ensure JavaScript is enabled in order to view and download the certificate",
+  "downloadDocumentNotesMobile": "if you are using a mobile device, please ensure you have installed a PDF viewer",
+  "processingStatementEmailToImporterText": "It is the importer's responsibility to submit it to the import control authority where your export will enter the EU. The importing authority will complete and sign their section of the document at the Border Inspection Post (BIP)."
+}

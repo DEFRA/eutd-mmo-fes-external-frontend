@@ -1,0 +1,16 @@
+{
+  "sdDepartureProductSummaryHeading": "Gwirio a chadarnhau pwysau’ch llwyth",
+  "sdDepartureProductSummaryInfo": "Os yw pwysau'r cynnyrch wedi newid neu wedi aros yr un fath ers ei storio, cadarnhewch y manylion isod. Rhaid i’r pwysau net wrth ymadael neu bwysau’r cynnyrch pysgodfeydd wrth ymadael gael eu rhoi.",
+  "sdDepartureProductSummaryInfo2": "Rhaid i’r pwysau net wrth ymadael neu bwysau’r cynnyrch pysgodfeydd wrth ymadael gael eu rhoi.",
+  "sdDepartureProductSummaryTabHeading1": "Cyrraedd y storfa",
+  "sdDepartureProductSummaryTabHeading2": "Ymadael â’r storfa",
+  "sdDepartureProductSummaryInfo1": "Gallai hon fod yn dystysgrif ddalfa, datganiad prosesu neu ddogfen storio o drydedd wlad.",
+  "sdDepartureProductSummarySaveButtonLabel": "Dwi'n cadarnhau",
+  "sdDepartureProductSummaryProduct": "Cynnyrch",
+  "sdDepartureProductSummaryNetWeightArrival": "Pwysau net wrth gyrraedd",
+  "sdDepartureProductSummaryNetWeightArrivalOptional": "Pwysau net wrth gyrraedd (dewisol)",
+  "sdDepartureProductSummaryNetWeightDeparture": "Pwysau net wrth ymadael",
+  "sdDepartureProductSummaryNetWeightDepartureOptional": "Pwysau net wrth ymadael (dewisol)",
+  "sdDepartureProductSummaryFisheryProduct": "Pwysau cynnyrch pysgodfeydd",
+  "sdDepartureProductSummaryFisheryProductOptional": "Pwysau cynnyrch pysgodfeydd (dewisol)"
+}

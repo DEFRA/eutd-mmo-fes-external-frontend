@@ -1,0 +1,89 @@
+#content {
+  max-width: 960px;
+}
+
+.content-dashboard {
+  width: 66%;
+  display: inline-block;
+}
+
+.govuk-heading-xl {
+  word-wrap: break-word;
+}
+
+.sidebar {
+  display: inline-block;
+  width: 34%;
+}
+
+.certificates-table {
+  border-collapse: collapse;
+}
+
+.certificates-table tr td {
+  padding: 10px 0px;
+}
+
+.certificates-table tr {
+  border-bottom: 1px solid #bfc1c3;
+}
+
+@media  (min-width: 641px) {
+.buttoncreate{
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    margin-bottom: 30px;
+}
+}
+.dashboardheader {
+    flex-direction: row;
+    margin-bottom: 30px;
+}
+
+
+.tablecaption {
+  font-family: "nta",Arial,sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.25;
+  text-align: left;
+  text-transform: none;
+  width: 100%;
+}
+
+
+
+@media  (min-width: 641px) {
+.tablecaption {
+    font-size: 19px;
+    line-height: 1.3;
+}
+}
+
+.tablerowclass {
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  font-weight: normal;
+}
+
+.sectionheader {
+  font-size: 24px;
+  line-height: 1.25;
+}
+.tablerowuserref {
+  text-transform: none;
+  overflow-wrap: anywhere;
+}
+
+@media  (max-width: 320px) {
+  .table-adjust-font {
+    font-size: 14px !important;
+  }
+}
+
+.centered {
+  display: flex;
+  align-items: center;          
+}

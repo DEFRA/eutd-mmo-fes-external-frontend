@@ -1,0 +1,10 @@
+{
+  "ccWhatExportJourneyExportJourneyHeader": "What journey does the export take?",
+  "ccWhatExportJourneyDepartureCountry": "Select the departure country",
+  "ccWhatExportJourneyDepartureCountryHint": "This is also known as the country of exportation, or vessel flag state (for direct landings)",
+  "ccWhatExportJourneyCountryUnitedKingdom": "United Kingdom",
+  "ccWhatExportJourneyCountryGuernsey": "Guernsey",
+  "ccWhatExportJourneyCountryIsleOfMan": "Isle of Man",
+  "ccWhatExportJourneyCountryJersey": "Jersey",
+  "psWhatExportDestination": "What is the export destination?"
+}

@@ -1,0 +1,33 @@
+version: '3.6'
+
+networks:
+  cypress:
+    external: true
+
+services:
+  frontend:
+    image: ${IMAGE}
+    hostname: ${FRONTEND_HOSTNAME:-frontend1}
+    environment:
+      - PORT=${FRONTEND_PORT:-3001}
+      - HOSTNAME=${FRONTEND_HOSTNAME:-frontend1}
+    ports:
+      - ${FRONTEND_PORT:-3001}:3000
+    networks:
+      - cypress
+
+  cypress:
+    image: ${IMAGE}
+    command: "npm run :test:ci -- --spec=${TEST_PATH:-./tests/cypress/integration}"
+    environment:
+      - PORT=${FRONTEND_PORT:-3001}
+      - HOSTNAME=${FRONTEND_HOSTNAME:-frontend1}
+      - TEST_PATH=${TEST_PATH-./tests/cypress/integration/}
+    networks:
+      - cypress
+    volumes:
+      - ./test-results:/app/test-results
+      - ./.nyc_output:/app/.nyc_output
+      - ./coverage:/app/coverage
+    depends_on:
+      - frontend

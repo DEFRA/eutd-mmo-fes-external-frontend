@@ -1,0 +1,82 @@
+{
+  "items": [
+    {
+      "product": {
+        "id": "GBR-2022-CC-6BC952BA3-c999c558-f753-4ab3-be2d-088f896b11e7",
+        "commodityCode": "03034190",
+        "commodityCodeDescription": "Frozen albacore or longfinned tunas \"Thunnus alalunga\" (excl. for industrial processing or preservation)",
+        "presentation": { "code": "GUH", "label": "Gutted and headed" },
+        "scientificName": "Thunnus alalunga",
+        "state": { "code": "FRO", "label": "Frozen" },
+        "species": { "code": "ALB", "label": "Albacore (ALB)" }
+      },
+      "landings": [
+        {
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {},
+          "model": {
+            "id": "GBR-2022-CC-6BC952BA3-7709976638",
+            "vessel": {
+              "vesselName": "AARON",
+              "pln": "N370",
+              "homePort": "KILKEEL",
+              "flag": "GBR",
+              "cfr": "GBR000A11177",
+              "imoNumber": null,
+              "licenceNumber": "30049",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "MR D MACBRIDE",
+              "label": "AARON (N370)",
+              "domId": "AARON-N370"
+            },
+            "dateLanded": "2021-12-11",
+            "exportWeight": 2,
+            "faoArea": "FAO18"
+          }
+        }
+      ]
+    },
+    {
+      "product": {
+        "id": "GBR-2022-CC-6BC952BA3-c279be9f-551b-41d8-afb0-5b1b0a734a21",
+        "commodityCode": "03035910",
+        "commodityCodeDescription": "Frozen anchovies \"Engraulis spp.\"",
+        "presentation": { "code": "WHL", "label": "Whole" },
+        "scientificName": "Engraulis encrasicolus",
+        "state": { "code": "FRO", "label": "Frozen" },
+        "species": { "code": "ANE", "label": "European anchovy (ANE)" }
+      },
+      "landings": [
+        {
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {},
+          "model": {
+            "id": "GBR-2022-CC-6BC952BA3-2876524768",
+            "vessel": {
+              "vesselName": "AARON",
+              "pln": "N370",
+              "homePort": "KILKEEL",
+              "flag": "GBR",
+              "cfr": "GBR000A11177",
+              "imoNumber": null,
+              "licenceNumber": "30049",
+              "licenceValidTo": "2030-12-31T00:00:00",
+              "licenceHolder": "MR D MACBRIDE",
+              "label": "AARON (N370)",
+              "domId": "AARON-N370"
+            },
+            "dateLanded": "2021-12-11",
+            "exportWeight": 3,
+            "faoArea": "FAO18"
+          }
+        }
+      ]
+    }
+  ],
+  "error": "",
+  "errors": {}
+}

@@ -1,0 +1,13 @@
+{
+  "ccLandingsEntryPageTitle": "How do you want to enter your products and landings?",
+  "ccLandingsEntryPageWhatIsACSVFile": "What is a CSV file?",
+  "ccLandingsEntryPageWhatIsACSVFileFormatDetails": "A CSV file is a text file that uses commas to separate its values. Each value in the file is a data field and each line is a data record.",
+  "ccLandingsEntryPageWhatIsACSVFileExportingDetails": "Spreadsheets and some software can usually export their data to a CSV file.",
+  "ccLandingsEntryOptionsDirectLandingLabel": "Direct Landing",
+  "ccLandingsEntryOptionsDirectLandingHint": "Recommended for UK registered fishing vessels landing and exporting their catch simultaneously in the EU (or a GB registered fishing vessel direct landing in Northern Ireland).",
+  "ccLandingsEntryOptionsManualEntryLabel": "Manual entry",
+  "ccLandingsEntryOptionsManualEntryHint": "Recommended for small to medium sized exports.",
+  "ccLandingsEntryOptionsUploadEntryLabel": "Upload from a CSV file",
+  "ccLandingsEntryOptionsUploadEntryHint": "Recommended for large exports. (Requires the set up of product favourites).",
+  "ccLandingsEntryPageNewPageMessage": "This new page offers ways to enter products and landings for different types of export. Select an option to continue"
+}

@@ -1,0 +1,35 @@
+{
+  "include": ["vite.config.mts", "**/*.js", "**/*.ts", "**/*.tsx"],
+  "exclude": ["coverage", "public", "build", "build-v2", "node_modules", "instrumented"],
+  "compilerOptions": {
+    "types": ["node", "@remix-run/node", "vite/client"], // Reference Vite's types from vite/client instead of the obsolete types from @remix-run/dev(For "@remix-run/node", "vite/client")
+    "skipLibCheck": true, // Remix won't require this flag in the future once the Vite plugin is the default compiler.
+    "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ES2019", "ES2023"],
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "target": "ES2019",
+    "strict": true,
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./app/*"],
+      "@/fixtures/*": ["tests/cypress/fixtures/*"],
+      "tests/*": ["tests/*"]
+    },
+
+    // Remix takes care of building everything in `remix build`.
+    "noEmit": true
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "types": ["node"],
+      "module": "ES2015",
+      "moduleResolution": "Node"
+    }
+  }
+}
