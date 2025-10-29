@@ -1,126 +1,40 @@
 name: $(BuildID).$(Date:yyyyMMdd).$(SourceBranchName)
 
 parameters:
-  - name: forceSndDeploy
-    displayName: Force SND Deploy
+  - name: deployFromFeature
+    displayName: "Deploy from Feature Branch"
+    type: boolean
+    default: false
+  - name: deployToSecondaryRegion
+    displayName: "Deploy to Secondary Region for DR"
+    type: boolean
+    default: false
+  - name: skipPRE1
+    displayName: "Skip PRE1 Deployment"
     type: boolean
     default: false
 
 trigger:
   branches:
     include:
-      - 'master'
-      - 'feature/*'
+      - 'main'
       - 'develop'
-      - 'prodfix'
       - 'hotfix/*'
+      - 'feature/*'
+      - 'epic/*'
 
-jobs:
-  - job: Build
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - script: |
-        docker build . \
-          -t sndmmofesacr001.azurecr.io/mmo-ecc-fe:$(Build.SourceVersion) \
-          -t sndmmofesacr001.azurecr.io/mmo-ecc-fe:$(Build.BuildNumber) \
-          -t sndmmofesacr001.azurecr.io/mmo-ecc-fe:latest \
-          --build-arg GIT_HASH=$(Build.SourceVersion)
+resources:
+  repositories:
+    - repository: MMOPipelineCommon
+      name: "DEFRA/eutd-mmo-fes-pipeline-common"
+      endpoint: DEFRA
+      type: github
+      ref: refs/heads/main
 
-        docker build . --target=test \
-          -t test:$(Build.BuildId)
-      displayName: "Docker build"
-
-    - script: |
-        docker run test:$(Build.BuildId) npm run lint
-      displayName: "Lint"
-      condition: succeededOrFailed()
-
-    - script: |
-        docker run --user=root -v $(Build.StagingDirectory)/coverage:/home/node/coverage -v $(Build.StagingDirectory)/test-results:/home/node/test-results test:$(Build.BuildId) npm run test:ci
-      displayName: "Test"
-      condition: succeededOrFailed()
-
-    - script: |
-        docker run test:$(Build.BuildId) npm audit --audit-level=critical
-      displayName: "NPM Audit"
-      continueOnError: true
-      condition: succeededOrFailed()
-
-    - task: PublishTestResults@2
-      condition: succeededOrFailed()
-      inputs:
-        testResultsFiles: '$(Build.StagingDirectory)/test-results/junit.xml'
-
-    - task: PublishCodeCoverageResults@1
-      condition: succeededOrFailed()
-      inputs:
-        codeCoverageTool: Cobertura
-        pathToSources: '$(System.DefaultWorkingDirectory)'
-        summaryFileLocation: '$(Build.StagingDirectory)/coverage/cobertura-coverage.xml'
-
-    - task: Docker@2
-      displayName: 'Push image to SND MMO ACR'
-      inputs:
-        containerRegistry: SNDMMOFESACR001
-        repository: 'mmo-ecc-fe'
-        command: push
-        tags: |
-          $(Build.SourceVersion)
-          $(Build.BuildNumber)
-          latest
-        addPipelineData: false
-      condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/develop', 'refs/heads/prodfix'),startsWith(variables['Build.SourceBranch'],'refs/heads/hotfix'), ne('${{ parameters.forceSndDeploy }}', 'false')))
-
-  - job: VStack
-    pool:
-      name: DEFRA-VSS
-    steps:
-    - powershell: |
-        Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
-        
-        $source = "https://apsvssinfsto001.blob.core.windows.net/component-live-executables/SonarQubeJunitQGVSTSWinClient.exe"
-        $destination = ".\SonarQubeJunitQGVSTSWinClient.exe"
-        
-        $client = New-Object System.Net.WebClient
-        $client.DownloadFile($source, $destination)
-        
-        $sonarproperties = @()
-        If ($env:BUILD_REASON -eq "PullRequest") {
-          $prid = ($env:BUILD_SOURCEBRANCH).split('/')[2]
-          $sourcebranch = "pr/${prid}"
-          $targetbranch = ($env:SYSTEM_PULLREQUEST_TARGETBRANCH).replace('refs/heads/', '')
-          $sonarproperties += "sonar.pullrequest.branch=${sourcebranch}"
-          $sonarproperties += "sonar.pullrequest.base=${targetbranch}"
-          $sonarproperties += "sonar.pullrequest.key=${env:SYSTEM_PULLREQUEST_PULLREQUESTID}"
-          $sonarproperties += "sonar.pullrequest.vsts.instanceUrl=${env:SYSTEM_TEAMFOUNDATIONCOLLECTIONURI}"
-          $sonarproperties += "sonar.pullrequest.vsts.project=${env:SYSTEM_TEAMPROJECT}"
-          $sonarproperties += "sonar.pullrequest.vsts.repository=${env:BUILD_REPOSITORY_NAME}"
-          $sonarproperties += "sonar.pullrequest.provider=vsts"
-        } Else {
-          $sourcebranch = ($env:BUILD_SOURCEBRANCH).replace('refs/heads/', '')
-          $sonarproperties += "sonar.branch.name=${sourcebranch}"
-          Switch ($sourcebranch) {
-            'master' {}
-            'develop' { $sonarproperties += "sonar.branch.target=master" }
-            default { $sonarproperties += "sonar.branch.target=develop" }
-          }
-        }
-        
-        $sonarproperties_str = $sonarproperties -join ';'
-        
-        $client_args = @(
-            $env:BUILD_REPOSITORY_URI,
-            $sourcebranch,
-            $sonarproperties_str,
-            'build.sh'
-        )
-        
-        Write-Host 'SonarQubeJunitQGVSTSWinClient arguments:'
-        $client_args | %{Write-Host $_}
-        
-        & .\SonarQubeJunitQGVSTSWinClient.exe $client_args
-      displayName: 'VStack - SonarQube (Code Analysis)'
-      continueOnError: true
-    
-    
+extends:
+  template: /includes/app-deployment.yaml@MMOPipelineCommon
+  parameters:
+    appName: 'mmo-fes-internal-admin-fe'
+    deployFromFeature: ${{ parameters.deployFromFeature }}
+    deployToSecondaryRegion: ${{ parameters.deployToSecondaryRegion }}
+    skipPRE1: ${{ parameters.skipPRE1 }}
