@@ -3,61 +3,63 @@ import { useTranslation } from "react-i18next";
 import { type MouseEventHandler } from "react";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import { CatchDetailsTableHeader } from "~/components";
+import { getCatchDetailsHeaders } from "~/helpers";
 
 type ProductTableRowProps = {
-  isForUKCatchCertificate: boolean;
+  productId: string;
   catches: Catch[];
-  species: string;
   navigationLinks: pageLinks;
   documentNumber: string;
   totalPages: number;
-  totalRecords: number;
-  specieCode: string;
   isLastPage: boolean;
   pageNo: number;
   isFirstPage: boolean;
+  productDescription: string;
+  speciesCountByCode: number;
+  documentCountByCertificateNumber: number;
   onClickHandler: MouseEventHandler<HTMLButtonElement>;
 };
 
 export const CatchDetailsTable = ({
-  isForUKCatchCertificate,
+  productId,
   catches,
-  species,
   navigationLinks,
   documentNumber,
   totalPages,
-  totalRecords,
-  specieCode,
   isLastPage,
   pageNo,
   isFirstPage,
+  productDescription,
+  speciesCountByCode,
+  documentCountByCertificateNumber,
   onClickHandler,
 }: ProductTableRowProps) => {
-  const { t } = useTranslation(["whatAreYouExporting", "common"]);
+  const { t } = useTranslation(["whatAreYouExporting", "catchDetailsTableHeader", "common"]);
 
   return (
     <>
       <h2 className={"govuk-heading-l govuk-!-margin-top-5"}>
-        {t(totalRecords === 1 ? "psAddCatchDetailsTableHeaderSingle" : "psAddCatchDetailsTableHeader", {
-          number: totalRecords,
-          species: species,
+        {`${t("psAddCatchDetailsTableHeader", {
+          uniqueSpeciesCount: speciesCountByCode,
+          uniqueDocumentCount: documentCountByCertificateNumber,
           ns: "psAddCatchDetails",
-        })}
+        })} ${productDescription}`}
       </h2>
       <table className="govuk-table" id="yourproducts">
         <CatchDetailsTableHeader
-          headersToRender={[
-            t("commonCatchCertificateNumber", { ns: "common" }),
-            t("psAddCatchWeightsTotalWeightOnCatchCertificate", { ns: "addCatchWeights" }),
-            t("psAddCatchWeightsExportWeightBeforeProcessing", { ns: "addCatchWeights" }),
-            t("psAddCatchWeightsExportWeightAfterProcessing", { ns: "addCatchWeights" }),
-          ]}
+          headersToRender={getCatchDetailsHeaders(
+            t("speciesNameFAO", { ns: "catchDetailsTableHeader" }),
+            t("catchCertificateWeight", { ns: "catchDetailsTableHeader" }),
+            t("exportWeightBeforeProcessing", { ns: "catchDetailsTableHeader" }),
+            t("exportWeightAfterProcessing", { ns: "catchDetailsTableHeader" }),
+            t("action", { ns: "catchDetailsTableHeader" })
+          )}
         />
         <tbody>
           {catches.map((ctch: Catch, index: number) => (
-            <tr className="govuk-table__row" key={`catches-${ctch.catchCertificateNumber}`}>
+            <tr className="govuk-table__row" key={`catches-${ctch.species}-${ctch._id}`}>
               <td className="govuk-table__cell">
-                <p className="govuk-!-margin-0">{ctch.catchCertificateNumber}</p>
+                <p className="govuk-!-margin-0">{ctch.species}</p>
               </td>
               <td className="govuk-table__cell">{ctch.totalWeightLanded}</td>
               <td className="govuk-table__cell">{ctch.exportWeightBeforeProcessing}</td>
@@ -140,7 +142,7 @@ export const CatchDetailsTable = ({
                 >
                   <a
                     className="govuk-link govuk-pagination__link"
-                    href={`/create-processing-statement/${documentNumber}/add-catch-details/${specieCode}?catchType=${isForUKCatchCertificate ? "uk" : "non_uk"}&pageNo=${pageNum}`}
+                    href={`/create-processing-statement/${documentNumber}/add-catch-details/${productId}&pageNo=${pageNum}`}
                     aria-label={`${t("commonDashboardPage")} ${pageNum}`}
                   >
                     {pageNum}{" "}

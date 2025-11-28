@@ -4,6 +4,11 @@
       "species": "Allis shad (ASD)",
       "catchCertificateNumber": "QW",
       "catchCertificateType": "non_uk",
+      "issuingCountry": {
+        "isoCodeAlpha2": "FR",
+        "isoCodeAlpha3": "FRA",
+        "officialCountryName": "France"
+      },
       "id": "qw-1671018160",
       "scientificName": "Alosa alosa"
     }

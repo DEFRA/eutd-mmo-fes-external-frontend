@@ -1,6 +1,6 @@
 import SummaryListRow from "~/components/summaryListRow";
 import { type AdditionalDocumentsData, type ITransport } from "~/types";
-import { generateActions } from "./transportationDetailsSummary";
+import lowerCase from "lodash/lowerCase";
 import { route } from "routes-gen";
 import { TransportType } from "~/helpers";
 
@@ -43,6 +43,26 @@ const transportFields: Record<TransportType, TransportFieldType> = {
     namespace: "transportation",
   },
 };
+
+export const generateActions = (
+  isLocked: boolean,
+  href: string,
+  hiddenText: string,
+  namespace: string,
+  t: any,
+  testId?: string
+) =>
+  !isLocked && (
+    <a
+      aria-label={t("commonWhatExportersAddressChangeLink", { ns: "common" })}
+      className="govuk-link"
+      href={href}
+      {...(testId && { "data-testid": testId })}
+    >
+      {t("commonWhatExportersAddressChangeLink", { ns: "common" })}
+      <span className="govuk-visually-hidden"> {lowerCase(t(hiddenText, { ns: namespace }))}</span>
+    </a>
+  );
 
 export const TransportationDocumentsSummary = ({
   documentNumber,

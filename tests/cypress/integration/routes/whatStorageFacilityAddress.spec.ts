@@ -126,7 +126,7 @@ describe("SD: Entering the address manually with errors", () => {
     cy.get("#country").type("Albania", { force: true });
 
     cy.get("[data-testid=continue]").click({ force: true });
-    cy.url().should("include", "/add-storage-facility-details/0");
+    cy.url().should("include", "/add-storage-facility-details");
   });
 
   it("should redirect to the forbidden page if the user is unauthorised", () => {
@@ -243,6 +243,22 @@ describe("SD: On Selected Address", () => {
 
     cy.get("[data-testid=cancel]").click({ force: true });
 
-    cy.url().should("include", "/add-storage-facility-details/0");
+    cy.url().should("include", "/add-storage-facility-details");
+  });
+
+  it("should go with existing postcode search with session", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDStorageFacilityAddress,
+    };
+
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    // Mock session data
+    cy.window().then((win) => {
+      win.sessionStorage.setItem("postcode", "sw11aa");
+      win.sessionStorage.setItem("addressOne", "56, 3, Arc House, test");
+      win.sessionStorage.setItem("currentStep", "selectedAddress");
+    });
+    cy.get("input[name=postcode]").should("be.visible");
   });
 });

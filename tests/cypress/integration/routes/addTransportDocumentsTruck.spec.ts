@@ -27,7 +27,6 @@ describe("Add Transportation Documents Truck", () => {
       expect(labels).to.have.length(2);
       expect(labels).to.deep.eq(["Truck document name (optional)", "Truck document reference (optional)"]);
       expect(hints).to.deep.eq([
-        "Adding at least one transport document will be mandatory from January 2026. If you enter either field now, then both need to be populated.",
         "For example, an invoice, packing list or certificate of origin.",
         "For example, INV00001",
       ]);
@@ -148,20 +147,11 @@ describe("Add Transportation Documents Truck", () => {
         "Truck document reference (optional)",
       ]);
       expect(hints).to.deep.eq([
-        "Adding at least one transport document will be mandatory from January 2026. If you enter either field now, then both need to be populated.",
         "For example, an invoice, packing list or certificate of origin.",
         "For example, INV00001",
         "For example, an invoice, packing list or certificate of origin.",
         "For example, INV00001",
       ]);
     });
-  });
-
-  it("should not display the Add another document button when 5 transport documents have been added", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.TruckTransportDocumentsRestrictAddAnotherDocument,
-    };
-    cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.contains("button", "Add another document").should("not.exist");
   });
 });

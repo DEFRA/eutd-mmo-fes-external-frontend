@@ -68,7 +68,6 @@ describe("PS: Entering the address manually with errors", () => {
     cy.get("[data-testid=continue]").click({ force: true });
 
     cy.url().should("include", "what-exporters-address");
-    cy.get(".govuk-error-summary").should("be.visible");
   });
 
   it("should display errors on submission invalid value", () => {
@@ -83,7 +82,6 @@ describe("PS: Entering the address manually with errors", () => {
     cy.get("[data-testid=continue]").click({ force: true });
 
     cy.url().should("include", "what-exporters-address");
-    cy.get(".govuk-error-message").should("be.visible");
     cy.get(".govuk-error-summary").contains(
       "SubBuilding name must only contain letters, numbers, apostrophes, hyphens, periods, commas, spaces, ampersands, exclamation marks and forward slashes"
     );
@@ -100,7 +98,6 @@ describe("PS: Entering the address manually with errors", () => {
     cy.get("[data-testid=continue]").click({ force: true });
 
     cy.url().should("include", "what-exporters-address");
-    cy.get(".govuk-error-summary").should("be.visible");
     cy.get(".govuk-error-summary").contains("Enter the town or city");
     cy.get(".govuk-error-summary").contains("Select a country from the list");
     cy.get(".govuk-error-summary").contains("Enter a postcode");

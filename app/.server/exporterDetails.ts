@@ -1,7 +1,17 @@
 import jwt from "jsonwebtoken";
 import isEmpty from "lodash/isEmpty";
 import { getEnv } from "~/env.server";
-import type { AddressDetails, ErrorResponse, Exporter, IError, IExporter, Journey, UserDetails } from "~/types";
+import type {
+  AddressDetails,
+  ErrorResponse,
+  Exporter,
+  IError,
+  IExporter,
+  IUnauthorised,
+  Journey,
+  ProcessingStatement,
+  UserDetails,
+} from "~/types";
 import {
   createCSRFToken,
   getBearerTokenForRequest,
@@ -9,6 +19,8 @@ import {
   getDynamicsHeader,
   getDynamicsToken,
   getLandingsEntryOption,
+  getProcessingStatement,
+  instanceOfUnauthorised,
   shouldLoadFromIdm,
   validateCSRFToken,
 } from "~/.server";
@@ -440,7 +452,7 @@ export const exporterDetailsLoader = async (request: Request, params: Params, jo
   const bearerToken = await getBearerTokenForRequest(request);
   const { documentNumber } = params;
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   if (journey === "processingStatement") {
@@ -520,6 +532,32 @@ export const exporterDetailsAction = async (
   const nextUri = form.get("nextUri") as string;
   const session = await getSessionFromRequest(request);
   const isCatchCertificate: boolean = journey === "catchCertificate";
+  const isProcessingStatement: boolean = journey === "processingStatement";
+  let processingStatementProductSuffix = "";
+
+  if (isProcessingStatement) {
+    const processingStatement: ProcessingStatement | IUnauthorised = await getProcessingStatement(
+      bearerToken,
+      documentNumber
+    );
+
+    if (instanceOfUnauthorised(processingStatement)) {
+      return redirect("/forbidden");
+    }
+
+    if (
+      processingStatement.products &&
+      Array.isArray(processingStatement.products) &&
+      processingStatement.products.length > 0
+    ) {
+      const products = processingStatement.products;
+      const lastProduct = products[products.length - 1];
+      const lastProductId = lastProduct?.id;
+      if (lastProductId) {
+        processingStatementProductSuffix = `/${lastProductId}`;
+      }
+    }
+  }
 
   const routes = {
     catchCertificate: {
@@ -531,7 +569,7 @@ export const exporterDetailsAction = async (
     processingStatement: {
       change: route("/create-processing-statement/:documentNumber/what-exporters-address", { documentNumber }),
       currentUri: route("/create-processing-statement/:documentNumber/add-exporter-details", { documentNumber }),
-      nextUri: `/create-processing-statement/${documentNumber}/add-consignment-details`,
+      nextUri: `/create-processing-statement/${documentNumber}/add-consignment-details${processingStatementProductSuffix}`,
       saveAsDraft: route("/create-processing-statement/processing-statements"),
     },
     storageNotes: {

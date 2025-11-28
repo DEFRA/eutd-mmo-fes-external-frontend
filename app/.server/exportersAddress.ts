@@ -49,7 +49,7 @@ export const exportersAddressLoader = async (request: Request, params: Params, j
   const shouldUpdateSession = !session.has("csrf");
 
   if (shouldUpdateSession) {
-    session.set("csrf", createCSRFToken());
+    session.set("csrf", await createCSRFToken(request));
   }
 
   const currentStep = session.get("currentStep");
@@ -170,7 +170,7 @@ export const exportersAddressAction = async (request: Request, params: Params, j
   session.unset("addressOne");
   session.unset("csrf");
 
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   let currentStep: ExporterAddressStep = "searchPostCode";
   let updatedSession;
   if (buttonClicked === "findaddress") {

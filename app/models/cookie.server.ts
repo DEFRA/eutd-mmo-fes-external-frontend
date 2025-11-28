@@ -24,7 +24,7 @@ export const CookieLoader = async (request: Request): Promise<Response> => {
   const bearerToken = await getBearerTokenForRequest(request);
   const userAttributes: UserAttribute[] = await getAllUserAttributes(bearerToken);
   const hasAcceptedCookies = isAcceptedCookies(userAttributes);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   const hasActionExecuted = session.get("actionExecuted");
   session.set("csrf", csrf);
   session.unset("actionExecuted");

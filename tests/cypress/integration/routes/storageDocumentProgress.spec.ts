@@ -109,7 +109,7 @@ describe("ProgressPage - Links", () => {
     cy.contains("h2", "Exporter").should("be.visible");
     cy.contains("h2", "Products").should("be.visible");
     cy.contains("h2", "Arrival at storage facility").should("be.visible");
-    cy.contains("h2", "Storage facilities").should("be.visible");
+    cy.contains("h2", "Storage facility details").should("be.visible");
     cy.contains("h2", "Departure from storage facility").should("be.visible");
   });
 
@@ -129,15 +129,15 @@ describe("ProgressPage - Links", () => {
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/add-product-to-this-consignment`);
 
-    cy.contains("a", "UK arrival transport details (optional)").should("be.visible");
-    cy.contains("a", "UK arrival transport details (optional)")
+    cy.contains("a", "UK arrival transport details").should("be.visible");
+    cy.contains("a", "UK arrival transport details")
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-arrive-to-the-uk`);
 
-    cy.contains("a", "Storage facilities").should("be.visible");
-    cy.contains("a", "Storage facilities")
+    cy.contains("a", "Storage facility details").should("be.visible");
+    cy.contains("a", "Storage facility details")
       .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/you-have-added-a-storage-facility`);
+      .should("have.attr", "href", `${certificateUrl}/add-storage-facility-details`);
   });
 });
 
@@ -151,7 +151,7 @@ describe("ProgressPage - Links with transport selected", () => {
   });
 
   it("should display correct links", () => {
-    cy.contains("a", "UK arrival transport details (optional)")
+    cy.contains("a", "UK arrival transport details")
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-arrive-to-the-uk`);
   });
@@ -172,7 +172,7 @@ describe("ProgressPage - Links with transport selected - truck", () => {
   });
 
   it("should display correct links", () => {
-    cy.contains("a", "UK arrival transport details (optional)")
+    cy.contains("a", "UK arrival transport details")
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-arrive-to-the-uk`);
   });

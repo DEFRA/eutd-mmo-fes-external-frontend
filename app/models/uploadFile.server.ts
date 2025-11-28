@@ -128,11 +128,11 @@ export const UploadFileLoader = async (request: Request, params: Params) => {
     return redirect("/forbidden");
   }
 
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   const session = await getSessionFromRequest(request);
   session.set("csrf", csrf);
 
-  return new Response(JSON.stringify({ documentNumber, csrf }), {
+  return new Response(JSON.stringify({ documentNumber, csrf, maxEEZ: getEnv().EU_CATCH_MAX_EEZ }), {
     status: 200,
     headers: {
       "Content-Type": "application/json",
@@ -141,6 +141,9 @@ export const UploadFileLoader = async (request: Request, params: Params) => {
 };
 
 export const UploadFileAction = async (request: Request, params: Params): Promise<Response | ErrorResponse> => {
+  /* istanbul ignore next */
+  setApiMock(request.url);
+
   try {
     const bearerToken = await getBearerTokenForRequest(request);
     const { documentNumber } = params;

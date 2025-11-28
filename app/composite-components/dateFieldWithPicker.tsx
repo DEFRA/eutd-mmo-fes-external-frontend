@@ -3,6 +3,7 @@ import { CommonDatePicker } from "../components/commonDatePicker";
 
 type Props = {
   id: string;
+  name: string;
   getDateSelected: (date: string) => void;
   dateSelected: string | undefined;
   errors: IError;
@@ -15,6 +16,7 @@ type Props = {
 
 export const DateFieldWithPicker = ({
   id,
+  name,
   getDateSelected,
   dateSelected = "",
   errors,
@@ -26,6 +28,7 @@ export const DateFieldWithPicker = ({
 }: Props) => (
   <CommonDatePicker
     id={id}
+    name={name}
     errors={errors}
     hintText={hintText}
     label={label}

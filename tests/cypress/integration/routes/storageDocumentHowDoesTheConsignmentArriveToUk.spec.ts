@@ -18,13 +18,6 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
 
     cy.get(".govuk-fieldset__heading").contains("How does your consignment arrive to the UK?");
 
-    cy.get("div.govuk-warning-text")
-      .find("strong")
-      .should(
-        "contain",
-        "From January 2026, adding transport details for the arrival to the storage facility will be mandatory under new EU regulations. Press Save and continue to skip this section."
-      );
-
     cy.get(".govuk-hint").contains("Select a type of transport").should("be.visible");
     cy.get("#transport-consignment-item-hint")
       .contains("Select truck if your vehicle travels by ferry or through the Eurotunnel.")
@@ -123,14 +116,18 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
     cy.url().should("include", "/create-storage-document/storage-documents");
   });
 
-  it("should redirect user to add product page when user clicks on Save and Continue button without selecting any options", () => {
+  it("should show validation error when user clicks on Save and Continue button without selecting any options", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.HowDoesTheExportLeaveNoTransportDetails,
+      testCaseId: TestCaseId.SaveTransportFailsWithErrorsArrival,
     };
 
     cy.visit(howDoesTheConsignmentArriveToUkUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue").click({ force: true });
 
-    cy.url().should("include", "/you-have-added-a-storage-facility");
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Select how the consignment arrives to the UK$/).should("be.visible");
+    cy.get("#vehicle-error").should("be.visible");
+    cy.get("#vehicle-error").should("contain", "Select how the consignment arrives to the UK");
+    cy.url().should("include", "/how-does-the-consignment-arrive-to-the-uk");
   });
 });

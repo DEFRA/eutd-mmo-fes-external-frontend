@@ -148,6 +148,7 @@ export const getGearTypesByCategoryUrl = (gearCategory: string) =>
 export const mockGetAllDocumentsUrl = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/documents/:year/:month`;
 export const mockCreateDocumentUrl = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/document/:journey`;
 export const mockFindExporterAddressUrl = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/addresses/search`;
+export const mockValidateExporterAddressUrl = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/exporter-validate`;
 export const mockGetProgress = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/progress/:journey`;
 export const mockCheckProgressUrl = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/progress/complete/:journey`;
 export const mockAddExporterDetails = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/exporter/:journey`;

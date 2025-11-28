@@ -1,7 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 const addStorageFacilityUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/add-storage-facility-details";
-const whatStorageFacilityUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/what-storage-facility-address";
 const progressUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/progress";
 const storageFacilityUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/add-storage-facility-approval";
 const checkYourInformationUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/check-your-information";
@@ -29,9 +28,25 @@ describe("Add Storage Facility Address", () => {
 
     cy.get(".govuk-heading-xl").contains("Add storage facility details");
 
-    cy.contains("strong", "An address must be added for this storage facility.");
+    cy.contains("strong", "A storage facility address must be added here.");
 
-    cy.contains("[data-testid=goToAddAddress-button]", /^Add address$/).should("be.visible");
+    // Arrival date label should not show the optional suffix and should show the new hint/info text
+    cy.get("#storageFacilities-facilityArrivalDate").should("contain", "Arrival date");
+    cy.contains("This should be the date the product arrives at the storage facility. For example, 25/07/2025.").should(
+      "be.visible"
+    );
+
+    // Expandable guidance should be present with title and content
+    cy.get("details.govuk-details")
+      .should("exist")
+      .within(() => {
+        cy.get("summary").contains("What is the arrival date?");
+        cy.contains(
+          "This is the date the product arrives at the storage facility and is unloaded. If unloading happens later, enter the date the product was physically removed from the transport and received into storage."
+        ).should("be.visible");
+      });
+
+    cy.contains("[data-testid=goToAddAddress-button]", /^Add the storage facility address$/).should("be.visible");
 
     cy.contains("button", "Save and continue").should("be.visible");
     cy.contains("button", "Save as draft").should("be.visible");
@@ -39,7 +54,7 @@ describe("Add Storage Facility Address", () => {
     cy.get("#backToProgress").should("be.visible").should("have.attr", "href", progressUrl);
 
     cy.get("[data-testid=goToAddAddress-button]").click({ force: true });
-    cy.url().should("include", whatStorageFacilityUrl);
+    cy.url().should("include", addStorageFacilityUrl);
   });
 
   it("should redirect to progress page", () => {
@@ -49,7 +64,8 @@ describe("Add Storage Facility Address", () => {
 
   it("should save and redirect to what storage facility address page on clicking save and continue", () => {
     cy.get("[data-testid=goToAddAddress-button]").click({ force: true });
-    cy.url().should("include", "/what-storage-facility-address/0");
+    cy.contains("Arrival date must be a real date").should("be.visible");
+    cy.url().should("include", "/add-storage-facility-details");
   });
 });
 
@@ -86,7 +102,7 @@ describe("Add Storage Facility Address - Error", () => {
     cy.contains("h2", "There is a problem");
     cy.contains("a", /^Enter the facility name$/)
       .should("be.visible")
-      .should("have.attr", "href", "#storageFacilities-0-facilityName");
+      .should("have.attr", "href", "#storageFacilities-facilityName");
     cy.get(".govuk-error-summary").should("be.visible");
   });
 
@@ -95,7 +111,19 @@ describe("Add Storage Facility Address - Error", () => {
     cy.contains("h2", "There is a problem");
     cy.contains("a", /^Enter the address$/)
       .should("be.visible")
-      .should("have.attr", "href", "#storageFacilities-0-facilityAddressOne");
+      .should("have.attr", "href", "#storageFacilities-facilityAddressOne");
+  });
+  it("redirects to address page on valid input", () => {
+    cy.get('input[name="facilityName"]').clear();
+    cy.get('input[name="facilityName"]').type("Test Facility");
+    cy.get('input[name="facilityArrivalDateDay"]').clear();
+    cy.get('input[name="facilityArrivalDateDay"]').type("17");
+    cy.get('input[name="facilityArrivalDateMonth"]').clear();
+    cy.get('input[name="facilityArrivalDateMonth"]').type("09");
+    cy.get('input[name="facilityArrivalDateYear"]').clear();
+    cy.get('input[name="facilityArrivalDateYear"]').type("2025");
+    cy.get("[data-testid=goToAddAddress-button]").click({ force: true });
+    cy.url().should("include", "/what-storage-facility-address");
   });
 });
 
@@ -119,7 +147,7 @@ describe("Add Storage Facility page when javascript is disabled", () => {
   });
 
   it("should render add date button in add storage facility  when JavaScript is disabled", () => {
-    cy.contains("[data-testid='add-facilityArrivalDate']", "Add Date");
+    cy.contains("[data-testid='add-storageFacilities-facilityArrivalDate']", "Add Date");
   });
 
   it("should redirect to #facilityArrivalDate on valid date input", () => {
@@ -131,7 +159,7 @@ describe("Add Storage Facility page when javascript is disabled", () => {
       cy.get('button[name="_action"][value="add-facilityArrivalDate"]').click();
     });
 
-    cy.url().should("include", "#facilityArrivalDate");
+    cy.url().should("include", "/add-storage-facility-details");
   });
 
   it("should show validation error on invalid date input", () => {
@@ -143,7 +171,10 @@ describe("Add Storage Facility page when javascript is disabled", () => {
       cy.get('button[name="_action"][value="add-facilityArrivalDate"]').click();
     });
 
+    // Field-level error text visible
     cy.contains("Arrival date must be a real date").should("be.visible");
+    // Error summary should also be visible at the top of the page
+    cy.get(".govuk-error-summary").should("be.visible");
   });
 
   describe("Add Storage Facility page save as draft", () => {
@@ -159,5 +190,30 @@ describe("Add Storage Facility page when javascript is disabled", () => {
       cy.get("[data-testid=save-draft-button]").click({ force: true });
       cy.url().should("include", "create-storage-document/storage-document");
     });
+  });
+});
+describe("Add Storage Facility Address - Error Both Name and Date", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityNameAddressError,
+    };
+    cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
+  });
+
+  it("shows both facility name and date errors", () => {
+    cy.get('input[name="facilityArrivalDateDay"]').clear();
+    cy.wait(100);
+    cy.get('input[name="facilityArrivalDateMonth"]').clear();
+    cy.wait(100);
+    cy.get('input[name="facilityArrivalDateYear"]').clear();
+    cy.wait(100);
+    cy.get('input[name="facilityName"]').clear();
+    cy.get("[data-testid=goToAddAddress-button]").click({ force: true });
+
+    cy.url({ timeout: 10000 }).should("include", "/add-storage-facility-details");
+    cy.get(".govuk-error-summary", { timeout: 10000 }).should("be.visible");
+    cy.contains("h2", "There is a problem").should("be.visible");
+    cy.contains("Enter the facility name").should("be.visible");
+    cy.contains("Arrival date must be a real date").should("be.visible");
   });
 });

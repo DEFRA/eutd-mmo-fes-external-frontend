@@ -66,6 +66,20 @@ describe("Add product to this consignment  page", () => {
       .should("be.visible");
   });
 
+  it("shows an error when product description is missing on Save and continue", () => {
+    const testParams = { testCaseId: TestCaseId.SDAddProductConsignmentProductDescriptionRequired };
+
+    cy.visit(`/create-storage-document/123/add-product-to-this-consignment/0`, { qs: { ...testParams } });
+
+    cy.get("#catches-0-productDescription", { timeout: 10000 }).should("exist").clear();
+
+    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+    cy.get(".govuk-error-summary__list").should("contain", "Enter a description of the product");
+
+    cy.contains(".govuk-error-message", "Enter a description of the product").should("be.visible");
+  });
+
   it("should redirect to dashboard on click of save as draft button", () => {
     cy.get("[data-testid=save-draft-button]").click({ force: true });
     cy.url().should("include", "/create-storage-document/storage-documents");
@@ -147,7 +161,6 @@ describe("Add product to this consignment  page", () => {
     cy.get("#catches-0-supportingDocuments-1").should("not.exist");
   });
   it("should remove the last doc and update selectedSupportingDocuments", () => {
-    // Wait for all docs to be added
     cy.get("#add-supporting-doc-button").should("exist");
     cy.wait(500); // Adding a wait to ensure the button is interactable
     cy.get("#add-supporting-doc-button").click({ force: true });
@@ -186,59 +199,65 @@ describe("Add product to this consignment  page", () => {
 
   describe("Accessibility", () => {
     it("should have label for all fields on the form", () => {
-      cy.get("form label").should("have.length", 11);
+      cy.get("form label").should("have.length", 12);
       // entry document issued in uk
       cy.get("form label")
         .eq(0)
         .should("have.text", "Was the entry document issued in the UK?")
         .and("be.visible")
         .and("have.attr", "for", "catches-0-certificateType");
-      // entry document
+      // issuing country
       cy.get("form label")
         .eq(3)
+        .should("have.text", "Issuing country")
+        .and("be.visible")
+        .and("have.attr", "for", "catches-0-issuingCountry");
+      // entry document
+      cy.get("form label")
+        .eq(4)
         .should("have.text", "Entry document")
         .and("be.visible")
         .and("have.attr", "for", "catches-0-certificateNumber");
       // weight on document in kg
       cy.get("form label")
-        .eq(4)
+        .eq(5)
         .should("have.text", "Weight on document in kg")
         .and("be.visible")
         .and("have.attr", "for", "catches-0-weightOnCC");
       // supporting documents
       cy.get("form label")
-        .eq(5)
+        .eq(6)
         .should("have.text", "Supporting documents (optional)")
         .and("be.visible")
         .and("have.attr", "for", "catches-0-supportingDocuments-0");
       // product
       cy.get("form label")
-        .eq(6)
-        .should("have.text", "Food and agriculture organisation (FAO) code or species name")
+        .eq(7)
+        .should("have.text", "Food and Agriculture Organisation (FAO) code or species name")
         .and("be.visible")
         .and("have.attr", "for", "catches-0-product");
       // commondity code
       cy.get("form label")
-        .eq(7)
+        .eq(8)
         .should("have.text", "Commodity code")
         .and("be.visible")
         .and("have.attr", "for", "catches-0-commodityCode");
       // product description
       cy.get("form label")
-        .eq(8)
-        .should("have.text", "Product description (optional)")
+        .eq(9)
+        .should("have.text", "Product description")
         .and("be.visible")
         .and("have.attr", "for", "catches-0-productDescription");
       // Net weight of the product on arrival
       cy.get("form label")
-        .eq(9)
-        .should("have.text", "Net weight of the product on arrival (optional)")
+        .eq(10)
+        .should("have.text", "Net weight of the product on arrival")
         .and("be.visible")
         .and("have.attr", "for", "netWeightProductArrival");
       // Net weight of fishery products on arrival
       cy.get("form label")
-        .eq(10)
-        .should("have.text", "Net weight of fishery products on arrival (optional)")
+        .eq(11)
+        .should("have.text", "Net weight of fishery products on arrival")
         .and("be.visible")
         .and("have.attr", "for", "netWeightFisheryProductArrival");
     });
@@ -420,5 +439,394 @@ describe("Add product to this consignment page: form submission and interaction"
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains(".govuk-error-message", "Select Yes if the document was issued in the UK");
+  });
+
+  it("should display issuing country field when 'No' is selected for UK certificate", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Select 'No' for UK-issued certificate
+    cy.get("input[name='docIssuedInUk'][value='non_uk']").click({ force: true });
+
+    // Check that issuing country field appears
+    cy.get("label").contains("Issuing country").should("be.visible");
+    cy.get("#catches-0-issuingCountry").should("be.visible");
+
+    // Check guidance text
+    cy.contains("Enter the country that issued the entry document").should("be.visible");
+
+    // Check that issuing country field appears above entry document field
+    cy.get("label[for='catches-0-issuingCountry']").should("be.visible");
+    cy.get("label[for='catches-0-certificateNumber']").should("be.visible");
+  });
+
+  it("should validate issuing country is required for non-UK certificates", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentIssuingCountryRequired,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Fill out required fields first
+    cy.get("#catches-0-product").type("Sole (SOL)");
+    cy.get("#catches-0-commodityCode").type("03011100 - Fresh or chilled trout");
+    cy.get("#catches-0-certificateNumber").type("TEST123");
+    cy.get("#catches-0-weightOnCC").type("10");
+
+    // Select 'No' for UK-issued certificate
+    cy.get("input[name='docIssuedInUk'][value='non_uk']").click({ force: true });
+
+    // Try to submit without entering issuing country
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    // Check error appears in error summary
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list")
+      .contains("Enter the country that issued the entry document")
+      .should("be.visible");
+
+    // Check error appears at the issuing country field
+    cy.contains(".govuk-error-message", "Enter the country that issued the entry document").should("be.visible");
+  });
+
+  it("should show error message above net weight of product on arrival when not populated", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataError,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains(".govuk-error-message", "Enter the net weight of product on arrival");
+  });
+
+  it("should show error message above net weight of fishery products on arrival when not populated", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataError,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains(".govuk-error-message", "Enter the net weight of fishery products on arrival");
+  });
+});
+
+describe("Add product to this consignment page: comprehensive coverage tests", () => {
+  it("should display warning message about product details", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='warning-message']").should("be.visible");
+    cy.get(".govuk-warning-text__icon").should("contain", "!");
+  });
+
+  it("should display all form fields with correct IDs and names", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("#catches-0-certificateType").should("exist");
+    cy.get("input[name='entryDocument']").should("exist");
+    cy.get("input[name='weight']").should("exist");
+    cy.get("#catches-0-product").should("exist");
+    cy.get("#catches-0-commodityCode").should("exist");
+    cy.get("#catches-0-productDescription").should("exist");
+    cy.get("#netWeightProductArrival").should("exist");
+    cy.get("#netWeightFisheryProductArrival").should("exist");
+  });
+
+  it("should validate weight field has kg suffix", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("#catches-0-netWeightProductArrival").parent().find(".govuk-input__suffix").should("contain", "kg");
+    cy.get("#catches-0-netWeightFisheryProductArrival").parent().find(".govuk-input__suffix").should("contain", "kg");
+  });
+
+  it("should have correct maxLength for weight fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("#netWeightProductArrival").should("have.attr", "maxLength", "16");
+    cy.get("#netWeightFisheryProductArrival").should("have.attr", "maxLength", "16");
+  });
+
+  it("should handle errors for all fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentCommonErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    // Check error summary
+    cy.get("#error-summary-title").should("be.visible");
+    cy.get(".govuk-error-summary__list").should("exist");
+
+    // Check for error classes on form groups
+    cy.get(".govuk-form-group--error").should("have.length.greaterThan", 0);
+  });
+
+  it("should show error for entry document field", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentInvalidEntryDocError,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get(".govuk-error-message").should("be.visible");
+  });
+
+  it("should handle commodity code selection", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("#catches-0-commodityCode").should("exist");
+    cy.get("#catches-0-commodityCode").type("03011100");
+  });
+
+  it("should display product description hint text", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("#catches-0-productDescription-hint").should("be.visible");
+    cy.get("#catches-0-productDescription-hint").should("contain", "Battered cod fillets");
+  });
+
+  it("should handle product index in URL correctly", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    const productIndexUrl = `${documentUrl}/add-product-to-this-consignment/1`;
+    cy.visit(productIndexUrl, { qs: { ...testParams } });
+
+    cy.get("#catches-1-certificateType").should("exist");
+    cy.get("#catches-1-product").should("exist");
+  });
+
+  it("should show supporting documents error when applicable", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataSupportingDocumentsError,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get(".govuk-error-message").should("be.visible");
+  });
+
+  it("should handle non-UK certificate with issuing country selected", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("input[name='docIssuedInUk'][value='non_uk']").click({ force: true });
+    cy.get("#catches-0-issuingCountry").should("be.visible");
+  });
+
+  it("should verify hidden input fields exist", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("input[name='nextUri']").should("exist");
+    cy.get("input[name='isNonJs']").should("exist");
+  });
+
+  it("should verify EntryDocumentGuidanceText component is rendered", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get(".govuk-details__summary").contains("Help with entry document reference").should("exist");
+  });
+
+  it("should verify ProductArrivalSpeciesDetails component is rendered", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get(".govuk-details__summary").contains("Help with species names").should("exist");
+  });
+
+  it("should verify ProductArrivalCommodityDetails component is rendered", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get(".govuk-details__summary").contains("Help with commodity codes").should("exist");
+  });
+
+  it("should handle form submission with all fields filled", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("input[name='docIssuedInUk'][value='uk']").click({ force: true });
+    cy.get("#catches-0-certificateNumber").type("GBR-2024-CC-TEST123");
+    cy.get("#catches-0-weightOnCC").type("100");
+    cy.get("#catches-0-product").type("Atlantic cod (COD)");
+    cy.get("#catches-0-commodityCode").type("03011100 - Fresh or chilled trout");
+    cy.get("#catches-0-productDescription").type("Test description");
+    cy.get("#netWeightProductArrival").type("50");
+    cy.get("#netWeightFisheryProductArrival").type("40");
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+  });
+
+  it("should display error state styling for invalid fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataError,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    cy.get(".govuk-input--error").should("have.length.greaterThan", 0);
+  });
+
+  it("should verify CSRF token input exists", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("input[name='csrf']").should("exist");
+  });
+
+  it("should check that maximum entry docs limit is enforced", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Add supporting docs until the limit
+    for (let i = 0; i < 4; i++) {
+      cy.get("#add-supporting-doc-button").click({ force: true });
+      cy.wait(100);
+    }
+
+    // Try to add one more (should not be possible if limit is 5)
+    cy.get("#add-supporting-doc-button").should("not.exist");
+  });
+
+  it("should display correct hint for certificate type field", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("#catches-0-certificateType-hint").should("be.visible");
+    cy.get("#catches-0-certificateType-hint").should(
+      "contain",
+      "This is the last document used to bring the product into the UK"
+    );
+  });
+
+  it("should verify ButtonGroup component is rendered", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid=save-and-continue]").should("exist");
+    cy.get("[data-testid=save-draft-button]").should("exist");
+  });
+
+  it("should handle errors scrolling to error summary", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataError,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    // Verify error island is visible (scroll behavior)
+    cy.get("#errorIsland").should("be.visible");
+  });
+
+  it("should handle default values for all fields from catchDetails", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Check that fields have default values loaded
+    cy.get("#catches-0-product").should("exist");
+    cy.get("input[name='weight']").should("exist");
+  });
+
+  it("should show page title correctly", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get(".govuk-heading-xl").should("contain", "Product details");
+  });
+
+  it("should verify spellCheck is false on weight inputs", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("#netWeightProductArrival").should("have.attr", "spellCheck", "false");
+    cy.get("#netWeightFisheryProductArrival").should("have.attr", "spellCheck", "false");
+  });
+
+  it("should handle error visibility for net weight fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentCommonErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    // Check if net weight errors are displayed when applicable
+    cy.get("#catches-0-netWeightProductArrival, #catches-0-netWeightFisheryProductArrival").should("exist");
+  });
+
+  it("should display form in a SecureForm component", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("form").should("exist");
+    cy.get("form").should("have.attr", "method", "post");
+  });
+
+  it("should handle empty supporting documents array", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("#catches-0-supportingDocuments-0").should("exist");
+    cy.get("#catches-0-supportingDocuments-0").should("have.value", "");
+  });
+
+  it("should verify all Details components expand correctly", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get(".govuk-details__summary").eq(1).click({ force: true });
+    cy.get(".govuk-details__text").should("be.visible");
   });
 });

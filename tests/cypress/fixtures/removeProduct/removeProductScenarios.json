@@ -1,0 +1,72 @@
+{
+  "processingStatementWithMultipleProducts": {
+    "documentNumber": "GBR-2022-PS-F0285BD8A",
+    "products": [
+      {
+        "id": "product-123",
+        "commodityCode": "03044410",
+        "description": "Frozen Atlantic Salmon Fillets"
+      },
+      {
+        "id": "product-456",
+        "commodityCode": "03035300",
+        "description": "Smoked Mackerel"
+      }
+    ],
+    "catches": [
+      {
+        "_id": "catch-1",
+        "productId": "product-123",
+        "species": "Salmon",
+        "totalWeightLanded": "100"
+      },
+      {
+        "_id": "catch-2",
+        "productId": "product-456",
+        "species": "Mackerel",
+        "totalWeightLanded": "50"
+      }
+    ]
+  },
+  "processingStatementSingleProduct": {
+    "documentNumber": "GBR-2022-PS-F0285BD8A",
+    "products": [
+      {
+        "id": "product-123",
+        "commodityCode": "03044410",
+        "description": "Frozen Atlantic Salmon Fillets"
+      }
+    ],
+    "catches": [
+      {
+        "_id": "catch-1",
+        "productId": "product-123",
+        "species": "Salmon",
+        "totalWeightLanded": "100"
+      }
+    ]
+  },
+  "processingStatementAfterRemoval": {
+    "documentNumber": "GBR-2022-PS-F0285BD8A",
+    "products": [
+      {
+        "id": "product-456",
+        "commodityCode": "03035300",
+        "description": "Smoked Mackerel"
+      }
+    ],
+    "catches": [
+      {
+        "_id": "catch-2",
+        "productId": "product-456",
+        "species": "Mackerel",
+        "totalWeightLanded": "50"
+      }
+    ]
+  },
+  "processingStatementNoProducts": {
+    "documentNumber": "GBR-2022-PS-F0285BD8A",
+    "products": [],
+    "catches": []
+  }
+}

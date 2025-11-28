@@ -2,13 +2,16 @@
   "error": "invalid",
   "errors": {
     "dateLanded": "error.dateLanded.any.empty",
+    "startDate": "error.startDate.any.required",
+    "highSeasArea": "error.highSeasArea.any.required",
+    "eez.0": "error.eez.0.any.required",
+    "rfmo": "error.rfmo.any.invalid",
     "exportWeight": "error.exportWeight.number.base",
     "product": "error.product.string.empty",
     "vessel.vesselName": "error.vessel.vesselName.any.required",
-    "gearType": "error.gearType.string.empty",
-    "gearCategory": "error.gearCategory.string.empty"
+    "gearType": "error.gearType.any.required",
+    "gearCategory": "error.gearCategory.any.required"
   },
-
   "items": [
     {
       "product": {

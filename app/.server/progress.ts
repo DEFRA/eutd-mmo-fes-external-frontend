@@ -118,8 +118,8 @@ export const progressPageLoader = async (request: Request, params: Params, journ
   // Get bearer token for API requests
   const bearerToken = await getBearerTokenForRequest(request);
   const { documentNumber } = params;
-  const csrf = createCSRFToken();
-  let landingsEntry: ILandingsEntryOptionGet;
+  const csrf = await createCSRFToken(request);
+  let landingsEntry: ILandingsEntryOptionGet | null = null;
   if (journey === "catchCertificate") {
     landingsEntry = await getLandingsEntryOption(bearerToken, documentNumber);
     if (!landingsEntry?.landingsEntryOption) {

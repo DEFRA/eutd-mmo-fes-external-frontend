@@ -42,12 +42,15 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
-  const airwayBillNumber = handleFormEmptyStringValue(form, "airwayBillNumber");
-  const flightNumber = handleFormEmptyStringValue(form, "flightNumber");
-  const departureCountry = handleFormEmptyStringValue(form, "departureCountry");
+  const saveAsDraft = form.get("_action") === "saveAsDraft";
+  const airwayBillNumber = handleFormEmptyStringValue(form, "airwayBillNumber", saveAsDraft);
+  const flightNumber = handleFormEmptyStringValue(form, "flightNumber", saveAsDraft);
+  const departureCountry = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
   const departureDate = calculateDepartureDate(form);
-  const departurePort = handleFormEmptyStringValue(form, "departurePort");
-  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber");
+  const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
+  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
+  const placeOfUnloading = handleFormEmptyStringValue(form, "placeOfUnloading", saveAsDraft);
+
   const nextUri = form.get("nextUri") as string;
 
   const { _action, ...values } = Object.fromEntries(form);
@@ -62,7 +65,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     currentUri: route("/create-storage-document/:documentNumber/add-arrival-transportation-details-plane", {
       documentNumber,
     }),
-    nextUri: route("/create-storage-document/:documentNumber/you-have-added-a-storage-facility", { documentNumber }),
+    nextUri: route("/create-storage-document/:documentNumber/add-storage-facility-details", { documentNumber }),
     journey: transport.journey,
     freightBillNumber,
     airwayBillNumber,
@@ -71,6 +74,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     departurePort,
     departureDate,
     departureCountry,
+    placeOfUnloading,
     vehicle: transport.vehicle,
     user_id: transport.user_id,
     arrival: true,

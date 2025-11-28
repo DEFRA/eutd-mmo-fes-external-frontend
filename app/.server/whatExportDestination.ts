@@ -21,7 +21,7 @@ export const WhatExportDestinationLoader = async (request: Request, params: Para
   const countries = await getCountries();
   const exportLocation = await getExportLocation(bearerToken, documentNumber);
   const unauthorised = exportLocation.unauthorised;
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   const session = await getSessionFromRequest(request);
   session.set("csrf", csrf);
   session.unset(`documentNumber-${documentNumber}`);
@@ -93,7 +93,7 @@ export const WhatExportDestinationAction = async (request: Request, params: Para
     isEmpty(nextUri)
       ? route(
           journey === "processingStatement"
-            ? "/create-processing-statement/:documentNumber/check-your-information"
+            ? "/create-processing-statement/:documentNumber/progress"
             : "/create-storage-document/:documentNumber/how-does-the-export-leave-the-uk",
           {
             documentNumber: documentNumber,

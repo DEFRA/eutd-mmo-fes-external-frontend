@@ -385,9 +385,9 @@ describe("Upload File Page Upload - gearCode errors", () => {
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload").click({ force: true });
-    cy.get("#row-1-PRD765-0-upload-file-error").contains("Nid yw’r Math o gêr yn bodoli");
-    cy.get("#row-1-PRD765-1-upload-file-error").contains("Nid yw’r Math o gêr yn bodoli");
+    cy.get("form").submit();
+    cy.get("#row-1-PRD765-0-upload-file-error").contains("Nid yw'r Math o gêr yn bodoli");
+    cy.get("#row-1-PRD765-1-upload-file-error").contains("Nid yw'r Math o gêr yn bodoli");
   });
 });
 
@@ -890,5 +890,74 @@ describe("Upload File Page -form onChange handler ", () => {
     cy.get(".govuk-notification-banner.govuk-notification-banner--success").should("exist");
     cy.get(".govuk-notification-banner__heading").should("exist");
     cy.get("#govuk-notification-banner-title").should("exist");
+  });
+
+  it("should trigger handleChange when file input changes and click upload", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadFileChangeHandler,
+    };
+    cy.visit(uploadFileUrl, { qs: { ...testParams } });
+
+    // Select file which should trigger onChange handler
+    cy.get('[data-testid="productCsvFileUploadInput"]').selectFile("tests/cypress/fixtures/fileUpload.csv");
+
+    // In Cypress tests (no JS), we need to click the upload button to submit
+    cy.get("form").submit();
+
+    // Verify notification banner appears after submission
+    cy.get(".govuk-notification-banner__heading").should("contain", "uploaded successfully");
+  });
+});
+
+describe("Upload File Page - clear button functionality", () => {
+  it("should clear the file input when clear button is clicked", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadFileClearButton,
+    };
+
+    cy.visit(uploadFileUrl, { qs: { ...testParams } });
+
+    // Upload a file first to populate the table
+    cy.get('[data-testid="productCsvFileUploadInput"]').selectFile("tests/cypress/fixtures/fileUpload.csv");
+    cy.get("form").submit();
+
+    // Wait for the upload to complete and verify rows exist
+    cy.get(".govuk-notification-banner__heading", { timeout: 10000 }).should("contain", "uploaded successfully");
+    cy.get(".govuk-table__body .govuk-table__row").should("have.length.greaterThan", 0);
+
+    // Click clear button - this triggers server-side form submission with _action=clear
+    cy.get('[data-testid="clear"]').click({ force: true });
+
+    // Wait for page reload after clear action completes
+    cy.get(".govuk-notification-banner", { timeout: 5000 }).should("not.exist");
+
+    // Verify the clear action worked - table rows should be cleared
+    cy.get(".govuk-table__body .govuk-table__row").should("not.exist");
+  });
+});
+
+describe("Upload File Page Upload - EEZ max length string error", () => {
+  it("should display EEZ max length error when error is a string", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadEEZMaxErrorString,
+    };
+
+    cy.visit("/create-catch-certificate/GBR-2021-CC-8EEB7E123/upload-file", { qs: { ...testParams } });
+    cy.get("[data-testid=upload]").click({ force: true });
+    cy.get("#row-1-PRD765-0-upload-file-error")
+      .should("exist")
+      .and("contain.text", "You are only able to add maximum of 5 EEZ");
+  });
+
+  it("should display EEZ max length error when error is a string", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadEEZMaxErrorObject,
+    };
+
+    cy.visit("/create-catch-certificate/GBR-2021-CC-8EEB7E123/upload-file", { qs: { ...testParams } });
+    cy.get("[data-testid=upload]").click({ force: true });
+    cy.get("#row-1-PRD765-0-upload-file-error")
+      .should("exist")
+      .and("contain.text", "You are only able to add maximum of 5 EEZ");
   });
 });

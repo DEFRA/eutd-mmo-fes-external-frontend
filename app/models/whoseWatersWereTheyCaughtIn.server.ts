@@ -21,7 +21,7 @@ export const WhoseWatersWereTheyCaughtInLoader = async (request: Request, params
   setApiMock(request.url);
 
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   // Get bearer token for API requests

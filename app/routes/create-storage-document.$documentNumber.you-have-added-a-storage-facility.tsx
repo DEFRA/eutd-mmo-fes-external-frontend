@@ -38,7 +38,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const bearerToken = await getBearerTokenForRequest(request);
   const session = await getSessionFromRequest(request);
 
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
@@ -96,7 +96,7 @@ const YouHaveAddedAStorageFacility = () => {
   const renderErrorSummary = (index: number) => {
     if (!isEmpty(groupedErrors) && !isEmpty(groupedErrors[index])) {
       const linkData: LinkData[] = groupedErrors[index].map(({ key }) => ({
-        href: `/create-storage-document/${documentNumber}/add-storage-facility-details/${index}#${key}`,
+        href: `/create-storage-document/${documentNumber}/add-storage-facility-details#${key}`,
       }));
 
       return (
@@ -110,7 +110,7 @@ const YouHaveAddedAStorageFacility = () => {
   const backLinkUrl =
     count > 1
       ? isFromStorageFacilityDetails
-      : `/create-storage-document/${documentNumber}/add-storage-facility-approval/0`;
+      : `/create-storage-document/${documentNumber}/add-storage-facility-approval`;
 
   return (
     <Main backUrl={backLinkUrl}>
@@ -139,7 +139,7 @@ const YouHaveAddedAStorageFacility = () => {
                         <input
                           type="hidden"
                           name="url"
-                          value={`/create-storage-document/${documentNumber}/add-storage-facility-approval/${validFacilityIndex}`}
+                          value={`/create-storage-document/${documentNumber}/add-storage-facility-approval`}
                         />
                         <input type="hidden" name="facilityId" value={index} />
                         <Button

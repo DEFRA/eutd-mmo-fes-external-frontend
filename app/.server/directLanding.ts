@@ -7,11 +7,13 @@ import type {
   IUnauthorised,
   IDirectLandingsResponseDetails,
   landingsDetails,
+  ICountry,
 } from "~/types";
 
 import { getErrorMessage } from "~/helpers";
 import { GET_DIRECT_LANDINGS_URL, VALIDATE_DIRECT_LANDINGS_URL, GET_RFMO_AREAS_URL } from "~/urls.server";
 import { get, post, getReferenceData } from "~/communication.server";
+import { getCountries } from "./countries";
 
 import { getEnv } from "~/env.server";
 import isEmpty from "lodash/isEmpty";
@@ -175,4 +177,30 @@ const transformError = (
 export const getRfmos = async (): Promise<string[]> => {
   const response: Response = await getReferenceData(GET_RFMO_AREAS_URL);
   return response.json();
+};
+
+/**
+ * Transforms form values containing EEZ (Exclusive Economic Zone) country names
+ * into an array of ICountry objects
+ * @param values - form values object containing keys that start with "eez"
+ * @returns Promise<ICountry[]> - array of country objects matching the EEZ values
+ */
+export const getSelectedEezInIcountryFormat = async (values: any): Promise<ICountry[]> => {
+  const eezCountries = Object.keys(values)
+    .filter((key) => key.startsWith("eez"))
+    .map((key) => values[key]);
+
+  if (!eezCountries) return [];
+
+  const countries: ICountry[] = await getCountries();
+
+  return eezCountries.reduce((acc: ICountry[], countryName: string) => {
+    const country = countries.find((c: ICountry) => c.officialCountryName === countryName);
+    if (country) {
+      acc.push(country);
+    } else {
+      acc.push({ officialCountryName: countryName });
+    }
+    return acc;
+  }, []);
 };

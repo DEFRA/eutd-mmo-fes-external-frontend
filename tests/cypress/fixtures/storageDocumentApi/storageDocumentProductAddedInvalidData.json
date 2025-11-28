@@ -18,10 +18,8 @@
       "netWeightFisheryProductArrival": ""
     }
   ],
-  "storageFacilities": [],
   "validationErrors": [],
   "addAnotherProduct": "No",
-  "addAnotherStorageFacility": "No",
   "errors": {
     "catches-0-certificateType": "sdAddCatchTypeErrorSelectCertificateType",
     "catches-0-weightOnCC": "sdAddProductToConsignmentWeightOnCCErrorNull",
@@ -30,8 +28,8 @@
     "catches-0-commodityCode": "sdAddProductToConsignmentCommodityCodeErrorNull",
     "catches-0-supportingDocuments-0": "sdAddProductToConsignmentSupportingDocumentErrorInvalidFormat",
     "catches-0-productDescription": "sdAddProductToConsignmentProductDescriptionErrorInvalidFormat",
-    "catches-0-netWeightProductArrival": "sdNetWeightProductArrivalPositiveMax2Decimal",
-    "catches-0-netWeightFisheryProductArrival": "sdNetWeightProductFisheryArrivalPositiveMax2Decimal"
+    "catches-0-netWeightProductArrival": "sdAddProductToConsignmentNetWeightOfProductErrorNull",
+    "catches-0-netWeightFisheryProductArrival": "sdAddProductToConsignmentNetWeightOfFisheryProductErrorNull"
   },
   "errorsUrl": "/create-storage-document/GBR-2023-SD-83552D3E5/add-product-to-this-consignment/0"
 }

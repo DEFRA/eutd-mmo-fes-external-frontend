@@ -10,7 +10,7 @@ export const psProgressTableDataBuilder = (
   errors?: IErrorsTransformed,
   products?: ProcessingStatementProduct[]
 ): Array<IProgressDataSection> => {
-  const ccContext = "/create-processing-statement/:documentNumber";
+  const psContext = "/create-processing-statement/:documentNumber";
 
   const hasProducts = Array.isArray(products) && products.length > 0;
 
@@ -24,13 +24,13 @@ export const psProgressTableDataBuilder = (
           status: progress?.reference,
           optional: true,
           testId: "yourReference",
-          url: `${ccContext}/add-your-reference`,
+          url: `${psContext}/add-your-reference`,
         },
         {
           title: "commonProgressPageExporterDetails",
           status: progress?.exporter,
           testId: "exporter",
-          url: `${ccContext}/add-exporter-details`,
+          url: `${psContext}/add-exporter-details`,
           error: errors?.exporter,
         },
       ],
@@ -43,7 +43,7 @@ export const psProgressTableDataBuilder = (
           title: "psProgressSectionProcessedProductDetails",
           status: progress?.processedProductDetails,
           testId: "processedProductDetails",
-          url: `${ccContext}/${hasProducts ? "catch-added" : "add-consignment-details"}`,
+          url: `${psContext}/${hasProducts ? "catch-added" : "add-consignment-details"}`,
           error: errors?.processedProductDetails,
         },
       ],
@@ -56,14 +56,14 @@ export const psProgressTableDataBuilder = (
           title: "psProgressProcessingPlantId",
           status: progress?.processingPlant,
           testId: "processingPlant",
-          url: `${ccContext}/add-processing-plant-details`,
+          url: `${psContext}/add-processing-plant-details`,
           error: errors?.processingPlant,
         },
         {
           title: "psProgressProcessingPlantAddress",
           status: progress?.processingPlantAddress,
           testId: "processingPlantAddress",
-          url: `${ccContext}/add-processing-plant-address`,
+          url: `${psContext}/add-processing-plant-address`,
           error: errors?.processingPlantAddress,
         },
       ],
@@ -76,14 +76,14 @@ export const psProgressTableDataBuilder = (
           title: "psProgressTransportationExportHealthCertificate",
           status: progress?.exportHealthCertificate,
           testId: "exportHealthCertificate",
-          url: `${ccContext}/add-health-certificate`,
+          url: `${psContext}/add-health-certificate`,
           error: errors?.exportHealthCertificate,
         },
         {
           title: "commonProgressTransportationExportDestination",
           status: progress?.exportDestination,
           testId: "exportDestination",
-          url: `${ccContext}/what-export-destination`,
+          url: `${psContext}/what-export-destination`,
           error: errors?.exportDestination,
         },
       ],

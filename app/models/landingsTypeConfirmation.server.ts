@@ -26,7 +26,7 @@ export const LandingsTypeConfirmationLoader = async (request: Request, params: P
   const newLanding = session.get("newLanding");
   const { landingsEntryOption, unauthorised } = await getLandingsEntryOption(bearerToken, documentNumber);
 
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   const landingTypes: LandingEntryType[] = ["manualEntry", "uploadEntry", "directLanding"];

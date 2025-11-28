@@ -4,6 +4,7 @@ import type { IError } from "~/types";
 
 type DateInputDayProps = {
   id: string;
+  name: string;
   isHydrated: boolean;
   errors: IError;
   daySelected: string;
@@ -14,6 +15,7 @@ type DateInputDayProps = {
 
 export const DateInputDay = ({
   id,
+  name,
   isHydrated,
   errors,
   daySelected,
@@ -33,7 +35,7 @@ export const DateInputDay = ({
             : "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
         }
         id={`${id}-day`}
-        name={`${id}Day`}
+        name={`${name}Day`}
         type="number"
         defaultValue={daySelected}
       />
@@ -45,7 +47,7 @@ export const DateInputDay = ({
             : "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
         }
         id={`${id}-day`}
-        name={`${id}Day`}
+        name={`${name}Day`}
         type="number"
         onChange={handleDayChange}
         inputMode="numeric"

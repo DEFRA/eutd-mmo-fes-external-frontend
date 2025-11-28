@@ -30,10 +30,8 @@
       "certificateType": "non_uk"
     }
   ],
-  "storageFacilities": [],
   "validationErrors": [{}],
   "addAnotherProduct": "No",
-  "addAnotherStorageFacility": "No",
   "errors": {
     "catches-0-supportingDocuments-0": "sdAddProductToConsignmentSupportingDocumentErrorInvalidFormat"
   },

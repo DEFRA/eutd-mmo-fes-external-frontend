@@ -1,4 +1,4 @@
-import { Details, List, ListItem, TYPE_LIST } from "@capgeminiuk/dcx-react-library";
+import { Details } from "@capgeminiuk/dcx-react-library";
 import { useTranslation } from "react-i18next";
 
 export const HighSeasAreasGuidance = () => {
@@ -12,21 +12,14 @@ export const HighSeasAreasGuidance = () => {
       detailsTextClassName="govuk-details__text"
     >
       <div>
-        <p>{t("ccAddLandingHSAGuidanceDesc1Heading")}</p>
-        <List type={TYPE_LIST.UNORDERED} className="govuk-list govuk-list--bullet">
-          <ListItem>{t("ccAddLandingHSAGuidanceDesc1li1")}</ListItem>
-          <ListItem>{t("ccAddLandingHSAGuidanceDesc1li2")}</ListItem>
-        </List>
-        <p>{t("ccAddLandingHSAGuidanceDesc2Heading")}</p>
-        <List type={TYPE_LIST.UNORDERED} className="govuk-list govuk-list--bullet">
-          <ListItem>{t("ccAddLandingHSAGuidanceDesc2li1")}</ListItem>
-          <ListItem>{t("ccAddLandingHSAGuidanceDesc2li2")}</ListItem>
-          <ListItem>{t("ccAddLandingHSAGuidanceDesc2li3")}</ListItem>
-          <ListItem>{t("ccAddLandingHSAGuidanceDesc2li4")}</ListItem>
-        </List>
-        <p>{t("ccAddLandingHSAGuidanceDesc3Heading")}</p>
-        <a href="https://www.fao.org/fishery/en/area/search" className="govuk-link" target="_blank" rel="noreferrer">
-          {t("ccAddLandingHSAGuidanceDesc3LinkText")}
+        <p>{t("ccAddLandingHSAGuidanceDesc1Content")}</p>
+        <a
+          href="https://www.gov.uk/government/publications/eu-iuu-regulation-2026-changes-guidance/fishing-area#high-seas"
+          className="govuk-link govuk-link--no-visited-state"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          {t("ccAddLandingHSAGuidanceDesc2Link")}
         </a>
       </div>
     </Details>

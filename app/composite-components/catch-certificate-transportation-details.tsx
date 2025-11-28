@@ -12,6 +12,7 @@ export const CatchCertificateTransportationDetails = ({
   railwayBillNumber,
   departurePlace,
   freightBillNumber,
+  containerIdentificationNumber,
   errors,
   legendTitle,
   displayOptionalSuffix,
@@ -29,6 +30,7 @@ export const CatchCertificateTransportationDetails = ({
       railwayBillNumber={railwayBillNumber}
       departurePlace={departurePlace}
       freightBillNumber={freightBillNumber}
+      containerIdentificationNumber={containerIdentificationNumber}
       displayOptionalSuffix={displayOptionalSuffix}
       errors={errors}
     />

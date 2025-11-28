@@ -269,11 +269,13 @@ export const AddProducts = ({
   useEffect(() => {
     setStateHolder(states);
     setCurrentState(selectedState);
+    setCurrentStateLabel(stateLabel);
   }, [states, selectedState]);
 
   useEffect(() => {
     setPresentationHolder(presentations);
     setCurrentPresentation(selectedPresentation);
+    setCurrentPresentationLabel(presentationLabel);
   }, [presentations, selectedPresentation]);
 
   useEffect(() => {

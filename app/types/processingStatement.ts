@@ -7,11 +7,16 @@ export interface Catch {
   catchCertificateNumber?: string;
   catchCertificateType?: CertificateType;
   totalWeightLanded?: string;
+  catchCertificateWeight?: string;
   exportWeightBeforeProcessing?: string;
   exportWeightAfterProcessing?: string;
+  issuingCountry?: ICountry;
   scientificName?: string;
   _id?: string;
   subIndex?: number;
+  productId?: string;
+  productDescription?: string;
+  productCommodityCode?: string;
 }
 
 export interface ProcessingStatementProduct {

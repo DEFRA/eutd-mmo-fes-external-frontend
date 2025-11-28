@@ -15,10 +15,13 @@ import noCatchDetails1 from "@/fixtures/processingStatementApi/processingStateme
 import noCatchWeights from "@/fixtures/processingStatementApi/processingStatementNoCatchWeights.json";
 import oneValidCatch from "@/fixtures/processingStatementApi/processingStatementBlankOneCatchWithWeights.json";
 import twoValidCatches from "@/fixtures/processingStatementApi/processingStatement.json";
+import twoValidCatchesOneEmpty from "@/fixtures/processingStatementApi/processingStatementWithEmpty.json";
 import twoValidCatchesSameSpecies from "@/fixtures/processingStatementApi/processingStatementSameSpecies.json";
 import oneValidCatchOneSpecies from "@/fixtures/processingStatementApi/processingStatementOneSpecies.json";
 import oneValidTwoInvalidCatches from "@/fixtures/processingStatementApi/processingStatementOneValidTwoInvalidCatches.json";
 import postOneValidTwoInvalidCatches from "@/fixtures/saveAndValidateApi/processingStatementOneValidTwoInvalidCatches.json";
+import productWithNoCatches from "@/fixtures/processingStatementApi/processingStatementWithProductsNoCatches.json";
+import manyMockCatches from "@/fixtures/processingStatementApi/processingStatementManyMockCatches.json";
 import psDocuments from "@/fixtures/dashboardApi/psDocument.json";
 import species from "@/fixtures/referenceDataApi/species.json";
 
@@ -51,7 +54,7 @@ const catchAddedHandler: ITestHandler = {
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
   ],
   [TestCaseId.PSCatchAddedTwoCatches]: () => [
-    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(twoValidCatches))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(twoValidCatchesOneEmpty))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) => res(ctx.json(oneValidCatch))),
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
   ],
@@ -94,6 +97,14 @@ const catchAddedHandler: ITestHandler = {
     ),
     rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psIncomplete))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocuments))),
+  ],
+  [TestCaseId.PSCatchAddedProductsNoCatches]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(productWithNoCatches))),
+  ],
+  [TestCaseId.PSCatchAddedManyMockCatches]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(manyMockCatches))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) => res(ctx.json(manyMockCatches))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
   ],
 };
 

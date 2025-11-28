@@ -15,7 +15,7 @@ import { commitSession, getSessionFromRequest } from "~/sessions.server";
 export const voidThisDocumentLoader = async (request: Request, params: Params) => {
   /* istanbul ignore next */
   setApiMock(request.url);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   const { documentNumber } = params;
   const session = await getSessionFromRequest(request);
   session.set("csrf", csrf);

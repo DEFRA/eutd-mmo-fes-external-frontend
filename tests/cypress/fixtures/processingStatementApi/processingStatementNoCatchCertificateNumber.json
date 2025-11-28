@@ -7,6 +7,13 @@
       "scientificName": " Monopenchelys acuta"
     }
   ],
+  "products": [
+    {
+      "id": "GBR-2025-PS-FDC3D66E1-1760436601",
+      "commodityCode": "03021180",
+      "description": "Battered cod fillets"
+    }
+  ],
   "validationErrors": [],
   "error": "",
   "addAnotherCatch": "No",

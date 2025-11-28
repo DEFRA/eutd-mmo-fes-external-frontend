@@ -66,7 +66,7 @@ describe("Add consignment details page", () => {
 
 describe("Add consignment details when updating product description", () => {
   const documentUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
-  const pageUrl = `${documentUrl}/add-consignment-details/0`;
+  const pageUrl = `${documentUrl}/add-consignment-details/GBR-2023-PS-2305703F5-012345678`;
 
   it("will display current added consignment details", () => {
     const testParams: ITestParams = {
@@ -117,7 +117,7 @@ describe("Add consignment details page: post unauthorised access", () => {
   const documentUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
   const pageUrl = `${documentUrl}/add-consignment-details`;
 
-  it("will redirect to the exporter dashboard", () => {
+  it("will redirect to the forbidden page", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddConsignmentDetailsUnauthorised,
     };
@@ -125,7 +125,7 @@ describe("Add consignment details page: post unauthorised access", () => {
 
     cy.get("[data-testid=save-draft-button").click({ force: true });
 
-    cy.url().should("include", "/create-processing-statement/processing-statements");
+    cy.url().should("include", "/forbidden");
   });
 });
 
@@ -178,5 +178,114 @@ describe("Add consignment details: save consignment details", () => {
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get("a").contains("Enter at least one product");
     cy.get(".govuk-error-message").contains("Enter at least one product");
+  });
+});
+
+describe("Add consignment details: edit mode scenarios", () => {
+  const documentUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
+  const productId = "GBR-2023-PS-2305703F5-012345678";
+  const editPageUrl = `${documentUrl}/add-consignment-details/${productId}`;
+  const createPageUrl = `${documentUrl}/add-consignment-details`;
+
+  it("should display edit info message in warning text when editing an existing product", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
+    };
+
+    cy.visit(editPageUrl, { qs: { ...testParams } });
+
+    cy.get('[data-testid="warning-message"]')
+      .should("be.visible")
+      .should("contain.text", "To edit or remove species from this product, press save and continue.");
+  });
+
+  it("should display standard warning message when adding a new product", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddConsignmentDetails,
+    };
+
+    cy.visit(createPageUrl, { qs: { ...testParams } });
+
+    cy.get('[data-testid="warning-message"]')
+      .should("be.visible")
+      .should("contain.text", "You must add one processed product at a time.")
+      .should("not.contain.text", "To edit or remove species");
+  });
+
+  it("should display remove product button when editing an existing product", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
+    };
+
+    cy.visit(editPageUrl, { qs: { ...testParams } });
+
+    cy.get('[data-testid="remove-product-button"]')
+      .should("be.visible")
+      .should("contain.text", "Remove product")
+      .should("have.class", "govuk-button--secondary");
+  });
+
+  it("should NOT display remove product button when adding a new product", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddConsignmentDetails,
+    };
+
+    cy.visit(createPageUrl, { qs: { ...testParams } });
+
+    cy.get('[data-testid="remove-product-button"]').should("not.exist");
+  });
+
+  it("should have correct href for remove product button", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
+    };
+
+    cy.visit(editPageUrl, { qs: { ...testParams } });
+
+    cy.get('[data-testid="remove-product-button"]').should("be.visible").should("have.attr", "type", "submit");
+  });
+
+  it("should display Welsh translations in edit mode", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
+      lng: "cy",
+    };
+
+    cy.visit(editPageUrl, { qs: { ...testParams } });
+
+    cy.get('[data-testid="warning-message"]')
+      .should("be.visible")
+      .should("contain.text", "I olygu neu dynnu rhywogaethau o'r cynnyrch hwn, pwyswch cadw a pharhau.");
+
+    cy.get('[data-testid="remove-product-button"]').should("be.visible").should("contain.text", "Tynnwch y cynnyrch");
+  });
+
+  it("should work without JavaScript in edit mode", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
+      disableScripts: true,
+    };
+
+    cy.visit(editPageUrl, { qs: { ...testParams } });
+
+    cy.get('[data-testid="warning-message"]')
+      .should("be.visible")
+      .should("contain.text", "To edit or remove species from this product");
+
+    cy.get('[data-testid="remove-product-button"]').should("be.visible").should("have.attr", "type", "submit");
+  });
+
+  it("should redirect to remove product page when remove button is clicked", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
+    };
+
+    cy.visit(editPageUrl, { qs: { ...testParams } });
+
+    cy.get('[data-testid="remove-product-button"]').should("be.visible");
+    cy.get('[data-testid="remove-product-button"]').click();
+
+    // Should redirect to remove product page
+    cy.url().should("include", `/remove-product/${productId}`);
   });
 });

@@ -22,7 +22,7 @@ export const doYouHaveRoadTransportDocumentLoader = async ({
   }
 
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
   return new Response(JSON.stringify({ documentNumber, cmr, vehicle, csrf }), {
     status: 200,

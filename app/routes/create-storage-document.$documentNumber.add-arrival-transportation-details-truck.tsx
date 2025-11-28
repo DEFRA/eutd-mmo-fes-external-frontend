@@ -3,7 +3,7 @@ import { useActionData } from "@remix-run/react";
 import { type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
 import { route } from "routes-gen";
 import { useEffect } from "react";
-import type { ITransport, ErrorResponse } from "~/types";
+import type { ITransport, ErrorResponse, ICountry } from "~/types";
 import { scrollToId, TransportType } from "~/helpers";
 import {
   getBearerTokenForRequest,
@@ -13,6 +13,7 @@ import {
   validateCSRFToken,
   calculateDepartureDate,
   handleFormEmptyStringValue,
+  getCountries,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
@@ -41,19 +42,25 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const isValid = await validateCSRFToken(request, form);
 
   if (!isValid) return redirect("/forbidden");
+  const countries: ICountry[] = await getCountries();
 
-  const nationalityOfVehicle = handleFormEmptyStringValue(form, "nationalityOfVehicle");
-  const registrationNumber = handleFormEmptyStringValue(form, "registrationNumber");
-  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber");
-  const departureCountry = handleFormEmptyStringValue(form, "departureCountry");
-  const departurePort = handleFormEmptyStringValue(form, "departurePort");
+  const saveAsDraft = form.get("_action") === "saveAsDraft";
+  const nationalityOfVehicleForm = handleFormEmptyStringValue(form, "nationalityOfVehicle", saveAsDraft);
+  const nationalityOfVehicle = countries.find(
+    (c: ICountry) => c.officialCountryName === nationalityOfVehicleForm
+  )?.officialCountryName;
+  const registrationNumber = handleFormEmptyStringValue(form, "registrationNumber", saveAsDraft);
+  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
+  const departureCountry = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
+  const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
+  const placeOfUnloading = handleFormEmptyStringValue(form, "placeOfUnloading", saveAsDraft);
   const nextUri = form.get("nextUri") as string;
 
   const payload: ITransport = {
     currentUri: route("/create-storage-document/:documentNumber/add-arrival-transportation-details-truck", {
       documentNumber,
     }),
-    nextUri: route("/create-storage-document/:documentNumber/you-have-added-a-storage-facility", { documentNumber }),
+    nextUri: route("/create-storage-document/:documentNumber/add-storage-facility-details", { documentNumber }),
     journey: transport.journey,
     freightBillNumber,
     nationalityOfVehicle,
@@ -61,6 +68,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     departurePort,
     departureDate: calculateDepartureDate(form),
     departureCountry,
+    placeOfUnloading,
     vehicle: transport.vehicle,
     user_id: transport.user_id,
     arrival: true,

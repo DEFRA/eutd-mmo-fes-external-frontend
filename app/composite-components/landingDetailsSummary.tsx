@@ -69,6 +69,7 @@ export const LandingDetailsSummary = ({
       {
         label: t("ccAddLandingCatchAreaLabel", { ns: "checkYourInformation" }),
         value: model.faoArea,
+        idAttribute: "catch-area",
       },
       model?.highSeasArea && {
         label: t("ccAddLandingHighSeasAreaLabel", { ns: "checkYourInformation" }),
@@ -94,10 +95,12 @@ export const LandingDetailsSummary = ({
       {
         label: t("ccAddLandingDateLandedLabel", { ns: "checkYourInformation" }),
         value: moment(model.dateLanded).format("D MMMM YYYY"),
+        idAttribute: "date-landed",
       },
       {
         label: t("ccAddLandingExportWeightFieldLabel", { ns: "checkYourInformation" }),
         value: `${model.exportWeight?.toFixed(2)}kg`,
+        idAttribute: "export-weight",
       },
       model?.gearCategory && {
         label: t("ccAddLandingGearCategoryFieldLabel", { ns: "checkYourInformation" }),
@@ -108,6 +111,7 @@ export const LandingDetailsSummary = ({
       model?.gearType && {
         label: t("ccAddLandingGearTypeFieldLabel", { ns: "checkYourInformation" }),
         value: model.gearType,
+        idAttribute: "gear-type",
       },
     ].filter(Boolean);
 
@@ -142,7 +146,7 @@ export const LandingDetailsSummary = ({
     shouldShowChangeLink: boolean,
     getChangeLink: (id: string) => string
   ) => (
-    <div key={`landingdata-${field.label}`} className="govuk-summary-list__row">
+    <div key={`landingdata-${field.idAttribute}-${index}`} className="govuk-summary-list__row">
       <dt className="govuk-summary-list__key">{field.label}</dt>
       <dd className="govuk-summary-list__value">{field.value}</dd>
       {field.hasChangeLink && shouldShowChangeLink && (

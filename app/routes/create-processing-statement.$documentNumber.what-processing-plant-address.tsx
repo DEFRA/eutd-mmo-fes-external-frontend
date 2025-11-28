@@ -4,7 +4,7 @@ import { type ActionFunction, type LoaderFunction, redirect } from "@remix-run/n
 import { useTranslation } from "react-i18next";
 import { route } from "routes-gen";
 import { apiCallFailed, json } from "~/communication.server";
-import { getAddressOne } from "~/helpers";
+import { getAddressOne, getCountryData } from "~/helpers";
 import {
   getBearerTokenForRequest,
   getCountries,
@@ -37,14 +37,6 @@ import type {
 import { getSessionFromRequest, commitSession } from "~/sessions.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
 
-const getCountryData = (countries: ICountry[], selectedCountry: string) =>
-  countries.find(
-    (c: ICountry) =>
-      !isEmpty(c.officialCountryName) &&
-      !isEmpty(selectedCountry) &&
-      c.officialCountryName.toLowerCase() === selectedCountry.toLowerCase()
-  ) ?? { officialCountryName: "" };
-
 export const loader: LoaderFunction = async ({ request, params }) => {
   /* istanbul ignore next */
   setApiMock(request.url);
@@ -63,7 +55,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const shouldUpdateSession = !session.has("csrf");
 
   if (shouldUpdateSession) {
-    session.set("csrf", createCSRFToken());
+    session.set("csrf", await createCSRFToken(request));
   }
 
   const currentStep = session.get("currentStep");
@@ -148,7 +140,6 @@ export const action: ActionFunction = async ({ request, params }) => {
   const buttonClicked = form.get("_action") as ExporterAddressButtonType;
   const session = await getSessionFromRequest(request);
   const formData = {
-    plantName: session.get("plantName"),
     plantAddressOne: form.get("selectaddress") as string,
     plantBuildingNumber: form.get("buildingNumber") as string,
     plantSubBuildingName: form.get("subBuildingName") as string,
@@ -167,7 +158,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   session.unset("postcode");
   session.unset("addressOne");
 
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   let currentStep: ExporterAddressStep = "searchPostCode";
 
   if (buttonClicked === "findaddress") {
@@ -333,7 +324,6 @@ export const action: ActionFunction = async ({ request, params }) => {
     if (unauthorised) {
       session.unset("currentStep");
       session.unset("postcode");
-      session.unset("plantName");
       session.unset("csrf");
 
       return redirect("/forbidden", {

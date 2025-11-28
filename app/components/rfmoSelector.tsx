@@ -10,14 +10,7 @@ type rfmoSelectorProps = {
   rfmoNullOption: string;
   rfmoHelpSectionLink: string;
   rfmoHelpSectionContentOne: string;
-  rfmoHelpSectionContentTwo: string;
-  rfmoHelpSectionContentThree: string;
-  rfmoHelpSectionContentFour: string;
-  rfmoHelpSectionContentFive: string;
-  ccRfmoHelpSectionBulletOne: string;
-  ccRfmoHelpSectionBulletTwo: string;
-  ccRfmoHelpSectionBulletThree: string;
-  ccRfmoHelpSectionBulletFour: string;
+  rfmoHelpSectionContentTwoLink: string;
 };
 
 export const RfmoSelector = ({
@@ -29,14 +22,7 @@ export const RfmoSelector = ({
   rfmoNullOption,
   rfmoHelpSectionLink,
   rfmoHelpSectionContentOne,
-  rfmoHelpSectionContentTwo,
-  rfmoHelpSectionContentThree,
-  rfmoHelpSectionContentFour,
-  rfmoHelpSectionContentFive,
-  ccRfmoHelpSectionBulletOne,
-  ccRfmoHelpSectionBulletTwo,
-  ccRfmoHelpSectionBulletThree,
-  ccRfmoHelpSectionBulletFour,
+  rfmoHelpSectionContentTwoLink,
 }: rfmoSelectorProps) => (
   <>
     <label htmlFor="rfmo" className="govuk-label govuk-!-font-weight-bold">
@@ -70,23 +56,14 @@ export const RfmoSelector = ({
       >
         <>
           <p>{rfmoHelpSectionContentOne}</p>
-          <p>{rfmoHelpSectionContentTwo}</p>
-          <ul className="govuk-list govuk-list--bullet">
-            <li key={ccRfmoHelpSectionBulletOne}>{ccRfmoHelpSectionBulletOne}</li>
-            <li key={ccRfmoHelpSectionBulletTwo}>{ccRfmoHelpSectionBulletTwo}</li>
-            <li key={ccRfmoHelpSectionBulletThree}>{ccRfmoHelpSectionBulletThree}</li>
-            <li key={ccRfmoHelpSectionBulletFour}>{ccRfmoHelpSectionBulletFour}</li>
-          </ul>
-          <p>{rfmoHelpSectionContentThree}</p>
-          <p>{rfmoHelpSectionContentFour}</p>
           <p>
             <a
-              href="https://www.fao.org/in-action/vulnerable-marine-ecosystems/background/regional-fishery-bodies/en/"
+              href="https://www.gov.uk/government/publications/eu-iuu-regulation-2026-changes-guidance/fishing-area#rfmo"
               target="_blank"
               rel="noopener noreferrer"
-              className="govuk-link"
+              className="govuk-link govuk-link--no-visited-state"
             >
-              {rfmoHelpSectionContentFive}
+              {rfmoHelpSectionContentTwoLink}
             </a>
           </p>
         </>

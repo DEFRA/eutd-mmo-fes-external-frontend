@@ -11,28 +11,7 @@ export const nonJsDateValidation = async (
   const day = values[`${fieldPrefix}Day`];
   const month = values[`${fieldPrefix}Month`];
   const year = values[`${fieldPrefix}Year`];
-
-  if (isEmpty(year) || isEmpty(month) || isEmpty(day)) {
-    const t = await i18next.getFixedT(request, ["uploadFile"]);
-
-    return new Response(
-      JSON.stringify({
-        values,
-        errors: getTransformedError([
-          {
-            key: fieldPrefix,
-            message: t(getErrorMessage(`error.${fieldPrefix}.date.missing`)),
-          },
-        ]),
-      }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  } else if (!isValidDate(selectedDate, ["YYYY-M-D", "YYYY-MM-DD"])) {
+  if (isEmpty(year) || isEmpty(month) || isEmpty(day) || !isValidDate(selectedDate, ["YYYY-M-D", "YYYY-MM-DD"])) {
     const t = await i18next.getFixedT(request, ["uploadFile"]);
 
     return new Response(
@@ -46,7 +25,7 @@ export const nonJsDateValidation = async (
         ]),
       }),
       {
-        status: 200,
+        status: 400,
         headers: {
           "Content-Type": "application/json",
         },

@@ -16,6 +16,7 @@ interface ContainerIdentificationNumberProps {
   maximumContainers: number;
   errors?: IErrorsTransformed;
   displayOptionalSuffix?: boolean;
+  vehicleType?: "truck" | "train" | "containerVessel" | "plane";
 }
 
 export const ContainerIdentificationNumber = ({
@@ -23,6 +24,7 @@ export const ContainerIdentificationNumber = ({
   maximumContainers,
   errors,
   displayOptionalSuffix,
+  vehicleType,
 }: ContainerIdentificationNumberProps) => {
   const { t } = useTranslation("transportation");
   const actionData = useActionData() ?? {};
@@ -56,6 +58,13 @@ export const ContainerIdentificationNumber = ({
     ? t("addTransportationArrivalDetailsContainerIdentificationNumberOptional")
     : t("addTransportationArrivalDetailsContainerIdentificationNumber");
 
+  const getHintText = () => {
+    if (vehicleType === "truck" || vehicleType === "train") {
+      return t("addTransportationDetailsContainerIdentificationNumberHintTruckTrain");
+    }
+    return t("addTransportationArrivalDetailsContainerIdentificationNumberHint");
+  };
+
   return (
     <div>
       {containerInputData.map((input, index) => (
@@ -69,7 +78,7 @@ export const ContainerIdentificationNumber = ({
                 ? {
                     id: "hint-containerIdentificationNumber",
                     position: "above",
-                    text: t("addTransportationArrivalDetailsContainerIdentificationNumberHint"),
+                    text: getHintText(),
                     className: "govuk-hint govuk-!-margin-bottom-0",
                   }
                 : undefined
@@ -80,7 +89,7 @@ export const ContainerIdentificationNumber = ({
               "govuk-input--error": errors?.[`containerNumbers.${index}`],
             })}
             inputProps={{
-              value: (actionData as any)[`containerNumbers.${index}`] ?? input.value,
+              value: !isHydrated ? (actionData as any)[`containerNumbers.${index}`] ?? input.value : input.value,
               id: `containerNumbers.${index}`,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(input.id, e.target.value),
             }}

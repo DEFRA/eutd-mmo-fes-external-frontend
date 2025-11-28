@@ -14,7 +14,7 @@ describe("HowDoesTheExportLeaveTheUk", () => {
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/you-have-added-a-storage-facility`);
+      .should("have.attr", "href", `${certificateUrl}/add-storage-facility-approval`);
 
     cy.get(".govuk-fieldset__heading").contains("How does the export leave the UK?");
 
@@ -48,7 +48,7 @@ describe("HowDoesTheExportLeaveTheUk", () => {
     cy.get("#truck").click({ force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
 
-    cy.url().should("include", "/do-you-have-a-road-transport-document");
+    cy.url().should("include", "/add-transportation-details-truck");
   });
 
   it("should navigate to plane transport details page when user selects and submits plane transport type", () => {

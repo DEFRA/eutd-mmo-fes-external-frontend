@@ -20,7 +20,7 @@ export const howDoesTheExportLeaveTheUkLoader = async ({
 }) => {
   const { vehicle } = await getTransportDetails(bearerToken, journey, documentNumber);
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   return new Response(JSON.stringify({ documentNumber, vehicle, journey, csrf }), {
@@ -63,6 +63,7 @@ export const howDoesTheExportLeaveTheUkAction = async ({
           exportDate: transportDetails.exportDate ? null : undefined,
           exportedTo: transportDetails.exportedTo ? null : undefined,
           freightBillNumber: transportDetails.freightBillNumber ? null : undefined,
+          containerNumbers: transportDetails.containerNumbers ? [] : undefined,
         }
       : { vehicle: vehicle };
 

@@ -63,6 +63,20 @@ const onSubmitCopyDocument = async (
     case 200:
     case 204: {
       const data = await response.json();
+      if (data.catches && data.products && Array.isArray(data.catches) && Array.isArray(data.products)) {
+        const productIdMapping = new Map();
+        data.products.forEach((product: any) => {
+          if (product.originalId) {
+            productIdMapping.set(product.originalId, product.id);
+          }
+        });
+        data.catches.forEach((ctch: any) => {
+          if (ctch.productId && productIdMapping.has(ctch.productId)) {
+            ctch.productId = productIdMapping.get(ctch.productId);
+          }
+        });
+      }
+
       return {
         ...data,
         errors: [],
@@ -135,7 +149,7 @@ export const copyDocumentLoader = async (request: Request, params: Params) => {
   }
 
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   let backUrl;

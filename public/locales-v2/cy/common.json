@@ -94,7 +94,8 @@
   "commonWhatExportDestinationSelectTheDestinationCountry": "Dewiswch wlad pen y daith",
   "commonWhatExportDestinationHintSelectTheDestinationCountry": "Dyma’r wlad ar ben y daith allforio, nid y gwledydd y bydd yn pasio drwyddynt. Ni fydd y wybodaeth hon yn ymddangos ar y ddogfen derfynol.",
   "commonConfirmDocumentVoidPageHeader": "Ydych chi’n siŵr eich bod am ddirymu’r {{journeyText}}?",
-  "commonNoResultsFound": "Dim Canlyniadau",
+  "commonNoResultsFound": "Dim canlyniadau wedi’i canfod",
+  "commonChangeLink": "Newid",
   "commonEditLink": "Golygu",
   "commonRemoveButton": "Tynnu",
   "commonImportant": "Pwysig",
@@ -122,5 +123,6 @@
   "commonCalenderButtonLabel": " Dewiswch Ddyddiad",
   "commonSpeciesDetailsOpenInNewTab": "(yn agor tab newydd)",
   "commonStorageToNonManipulationMsg": "O fis Ionawr 2026 ymlaen, bydd Dogfennau Storio yn newid i Ddogfennau dim triniaeth.",
-  "commonAddAnotherButtonText": "Ychwanegu un arall"
+  "commonAddAnotherButtonText": "Ychwanegu un arall",
+  "commonAddTripDetailsWarningContent": "O 10 Ionawr 2026 ymlaen, bydd meysydd dyddiad dechrau, ardal y ddalfa a math o gêr yn orfodol o dan reoliadau newydd yr UE."
 }

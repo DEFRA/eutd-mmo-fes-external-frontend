@@ -24,7 +24,7 @@
   "ccAddYourReferenceTitle": "Ychwanegwch eich cyfeirnod allforio - Creu tystysgrif dalfa ar gyfer y DU - GOV.UK",
   "psAddYourReferenceTitle": "Ychwanegwch eich cyfeirnod allforio - Creu datganiad prosesu y DU - GOV.UK",
   "sdAddYourReferenceTitle": "Ychwanegwch eich cyfeirnod allforio - Creu dogfen storio yn y DU - GOV.UK",
-  "psAddConsignmentDetailsConsignmentPageHeader": "Ychwanegwch ddisgrifiad a chod nwyddau - Creu datganiad prosesu y DU - GOV.UK",
+  "psAddConsignmentDetailsConsignmentPageHeader": "Ychwanegu cynnyrch wedi'i brosesu - Creu datganiad prosesu y DU - GOV.UK",
   "ccTransportSelectionPageTitle": "Sut mae’r allforion yn gadael y DU?",
   "sdTransportSelectionPageTitle": "Sut mae’r allforion yn gadael y DU? - Creu dogfen storio yn y DU - GOV.UK",
   "sdArrivalTransportSelectionPageTitle": "Sut mae eich llwyth yn cyrraedd y DU? - Creu dogfen storio yn y DU - GOV.UK",
@@ -92,5 +92,6 @@
   "addArrivalTransportationDetailsContainerVessel": "Llong cynwysyddion yn cyrraedd y DU - Creu dogfen storio’r DU - GOV.UK",
   "addArrivalTransportationDetailsPlane": "Awyren yn cyrraedd y DU - Creu dogfen storio’r DU - GOV.UK",
   "addArrivalTransportationDetailsTruck": "Lori yn cyrraedd y DU - Creu dogfen storio’r DU - GOV.UK",
-  "storageDocumentDepartureProductSummary": "Gwirio a chadarnhau pwysau’ch llwyth - Creu dogfen storio’r DU - GOV.UK"
+  "storageDocumentDepartureProductSummary": "Gwirio a chadarnhau pwysau’ch llwyth - Creu dogfen storio’r DU - GOV.UK",
+  "psRemoveProduct": "Tynnwch gynnyrch - Creu datganiad prosesu yn y DU - GOV.UK"
 }

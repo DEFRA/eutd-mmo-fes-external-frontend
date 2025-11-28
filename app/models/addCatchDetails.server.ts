@@ -1,6 +1,7 @@
 import { redirect } from "@remix-run/node";
 import type { Params } from "@remix-run/react";
 import isEmpty from "lodash/isEmpty";
+import moment from "moment";
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import {
@@ -14,22 +15,47 @@ import {
   removeCatchDescription,
   updateProcessingStatement,
   validateCSRFToken,
+  getProductDescription,
+  getCountries,
 } from "~/.server";
 import { getEnv } from "~/env.server";
-import { isMissing } from "~/helpers";
+import { countUniqueDocumentByCatchCertificateNumber, countUniqueSpeciesByCode, isMissing } from "~/helpers";
 import i18next from "~/i18next.server";
 import { getSessionFromRequest, commitSession } from "~/sessions.server";
-import type { ProcessingStatement, IUnauthorised, Catch, Species, ErrorResponse } from "~/types";
+import type {
+  ProcessingStatement,
+  IUnauthorised,
+  Catch,
+  Species,
+  ErrorResponse,
+  CertificateType,
+  ICountry,
+} from "~/types";
+
+const getCatchCertificateWeight = (catchItem: Catch | undefined) => {
+  if (!catchItem) {
+    return "";
+  }
+
+  if (catchItem.catchCertificateType === "uk") {
+    return catchItem.totalWeightLanded ?? "";
+  } else {
+    return catchItem.catchCertificateWeight ?? catchItem.totalWeightLanded ?? "";
+  }
+};
 
 const getLoaderData = (
-  currentCatchDetails: Catch,
+  currentCatchDetails: Catch | undefined,
   species: Species[],
-  speciesSelected: Catch | undefined,
-  catchIndex: number
+  catchIndex: number,
+  retainedSpecies?: string
 ) => ({
-  catchId: currentCatchDetails?._id ?? speciesSelected?._id,
+  catchId: currentCatchDetails?._id,
   catchCertificateNumber: currentCatchDetails?.catchCertificateNumber ?? "",
+  catchCertificateType: currentCatchDetails?.catchCertificateType ?? "",
+  issuingCountry: currentCatchDetails?.issuingCountry?.officialCountryName ?? "",
   totalWeightLanded: currentCatchDetails?.totalWeightLanded ?? "",
+  catchCertificateWeight: getCatchCertificateWeight(currentCatchDetails),
   exportWeightBeforeProcessing: currentCatchDetails?.exportWeightBeforeProcessing ?? "",
   exportWeightAfterProcessing: currentCatchDetails?.exportWeightAfterProcessing ?? "",
   isEditing:
@@ -39,58 +65,22 @@ const getLoaderData = (
     !isEmpty(currentCatchDetails.exportWeightBeforeProcessing),
   species: Array.isArray(species) ? species : [],
   catchIndex: isNaN(catchIndex) ? 0 : catchIndex,
-  speciesSelected: !isEmpty(speciesSelected?.species) ? speciesSelected?.species : "",
-  speciesCode: !isEmpty(speciesSelected?.speciesCode) ? speciesSelected?.speciesCode : "",
+  speciesSelected: !isEmpty(currentCatchDetails?.species) ? currentCatchDetails?.species : retainedSpecies ?? "",
+  speciesCode: !isEmpty(currentCatchDetails?.speciesCode) ? currentCatchDetails?.speciesCode : "",
 });
 
 const getCatches: (processingStatment: ProcessingStatement) => Catch[] = (processingStatement: ProcessingStatement) =>
   Array.isArray(processingStatement.catches) ? processingStatement.catches : [];
-const getUpdatedCatches: (
+const getUpdatedCatches: (updatedProcessingStatement: ProcessingStatement, productId: string) => Catch[] = (
   updatedProcessingStatement: ProcessingStatement,
-  speciesCode: string | undefined,
-  catchCertificateType: string
-) => Catch[] = (
-  updatedProcessingStatement: ProcessingStatement,
-  speciesCode: string | undefined,
-  catchCertificateType: string
+  productId: string | undefined
 ) =>
   updatedProcessingStatement.catches
-    ? updatedProcessingStatement.catches.filter(
-        (data: Catch) =>
-          data.speciesCode === speciesCode &&
-          data.catchCertificateType === catchCertificateType &&
-          !isMissing(data.catchCertificateNumber)
-      )
+    ? updatedProcessingStatement.catches.filter((data: Catch) => data.productId === productId)
     : [];
-const getCurrentUrl = (
-  documentNumber: string | undefined,
-  faoCode: string,
-  catchCertificateType: string,
-  goToPage: number,
-  totalPages: number
-) =>
-  `/create-processing-statement/${documentNumber}/add-catch-details/${faoCode}?catchType=${catchCertificateType}&pageNo=${goToPage > totalPages ? goToPage - 1 : goToPage}`;
-const getProducts = (catches: Catch[], faoCode: string, catchCertificateType: string) =>
-  catches?.find(
-    (data: Catch) =>
-      data.speciesCode === faoCode &&
-      data.catchCertificateType === catchCertificateType &&
-      "catchCertificateNumber" in data
-  );
-const validateProducts = (products: Catch | undefined, index: string) => {
-  if (products === undefined) {
-    return {
-      errors: {
-        [`catches-${index}-catchCertificateNumber`]: {
-          key: `catches-${index}-catchCertificateNumber`,
-          message: "psCatchCertificateDescription",
-        },
-      },
-    };
-  }
+const getCurrentUrl = (documentNumber: string | undefined, productId: string, goToPage: number, totalPages: number) =>
+  `/create-processing-statement/${documentNumber}/add-catch-details/${productId}?pageNo=${goToPage > totalPages ? goToPage - 1 : goToPage}`;
 
-  return {};
-};
 const getRedirectUrl = (nextUri: string, documentNumber?: string) =>
   isEmpty(nextUri) ? `/create-processing-statement/${documentNumber}/catch-added` : nextUri;
 
@@ -132,25 +122,33 @@ const getIndexBySpeciesForNewRecord = (catches: Catch[], speciesCode: string | u
   return catches.findIndex((ctch: Catch) => ctch.speciesCode === speciesCode && isMissing(ctch.catchCertificateNumber));
 };
 
+const getFaoCodeFromSelectedSpecies = (allSpecies: Species[], selectedSpeciesName: string): string => {
+  if (!selectedSpeciesName || !Array.isArray(allSpecies)) return "";
+
+  const foundSpecies = allSpecies.find(
+    (species) =>
+      `${species.faoName} (${species.faoCode})` === selectedSpeciesName || species.faoName === selectedSpeciesName
+  );
+
+  return foundSpecies?.faoCode ?? "";
+};
+
 export const AddCatchDetailsLoader = async (request: Request, params: Params) => {
   /* istanbul ignore next */
   setApiMock(request.url); // runs only when NODE_ENV === "test"
 
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   const { documentNumber } = params;
-
   const searchParams = new URLSearchParams(request.url.split("?")[1]);
   const splitParams = params["*"]?.split("/");
-  const specieCode = splitParams?.[0] ?? "";
+  const productId = splitParams?.[0] ?? "";
   const catchIndex = parseInt(splitParams?.[1] ?? "");
-
   const bearerToken = await getBearerTokenForRequest(request);
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
-  const catchCertificateType = url.searchParams.get("catchType") ?? "";
   const lang = url.searchParams.get("lng");
   const processingStatement: ProcessingStatement | IUnauthorised = await getProcessingStatement(
     bearerToken,
@@ -163,18 +161,27 @@ export const AddCatchDetailsLoader = async (request: Request, params: Params) =>
 
   validateResponseData(processingStatement);
 
-  const currentCatchDetails: Catch = getCatchDetails(processingStatement, catchIndex);
-
-  const isForUKCatchCertificate = catchCertificateType === "uk";
+  const currentCatchDetails: Catch | undefined = getCatchDetails(processingStatement, catchIndex);
 
   const pageNo: number = parseInt(searchParams.get("pageNo") ?? "1");
   const species = await getAllSpecies();
+  const countries = (await getCountries()).filter(
+    (c: ICountry) => !c.officialCountryName.includes("United Kingdom of Great Britain and Northern Ireland")
+  );
   const speciesExemptLink = getEnv().SPECIES_EXEMPT_LINK;
 
-  let getCatchesBySpeciesCode: Catch[] = getUpdatedCatches(processingStatement, splitParams?.[0], catchCertificateType);
+  const retainedSpecies = session.get("retainedSpecies") as string;
+
+  if (retainedSpecies && !currentCatchDetails) {
+    session.unset("retainedSpecies");
+  }
+
+  const allCatches = processingStatement.catches ?? [];
+
+  let getCatchesByProductId: Catch[] = getUpdatedCatches(processingStatement, productId);
 
   const recordsPerPage: number = parseInt(getEnv().PROCESSING_STATEMENT_CATCH_PER_PAGE, 10);
-  const totalRecords = getCatchesBySpeciesCode;
+  const totalRecords = getCatchesByProductId;
   const totalPages = Math.ceil(totalRecords.length / recordsPerPage);
 
   const isFirstPage = pageNo == 1;
@@ -183,35 +190,36 @@ export const AddCatchDetailsLoader = async (request: Request, params: Params) =>
   const nextLink = isLastPage ? totalPages : pageNo + 1;
 
   if (pageNo) {
-    getCatchesBySpeciesCode = getCatchesBySpeciesCode.slice(recordsPerPage * (pageNo - 1), recordsPerPage * pageNo);
+    getCatchesByProductId = getCatchesByProductId.slice(recordsPerPage * (pageNo - 1), recordsPerPage * pageNo);
   }
   const t = await i18next.getFixedT(request, ["psAddCatchDetails", "title"]);
-  const speciesSelected: Catch | undefined = processingStatement.catches?.find(
-    (data: Catch) => specieCode === data.speciesCode
-  );
+  const { currentProductDescription } = getProductDescription(processingStatement?.products, productId);
+  const productIdListedCatches = allCatches.filter((ctch: Catch) => ctch.productId === productId);
 
   return new Response(
     JSON.stringify({
       documentNumber,
       speciesExemptLink,
-      catches: getCatchesBySpeciesCode,
-      totalRecords: totalRecords.length,
+      catches: productIdListedCatches,
+      currentPageCatches: getCatchesByProductId,
       nextUri,
       lang,
-      specieCode,
+      productId,
       prevLink,
       nextLink,
       totalPages,
       isLastPage,
       isFirstPage,
       pageNo,
-      catchCertificateType,
+      currentProductDescription: currentProductDescription?.description,
+      currentProductCommodityCode: currentProductDescription?.commodityCode,
       commonTitle: t("psCommonTitle", { ns: "title" }),
-      pageTitle: t(isForUKCatchCertificate ? "psAddCatchDetailsHeadingUk" : "psAddCatchDetailsHeading", {
-        ns: "psAddCatchDetails",
-      }),
-      ...getLoaderData(currentCatchDetails, species, speciesSelected, catchIndex),
+      pageTitle: t("psAddCatchDetailsHeading", { ns: "psAddCatchDetails" }),
+      countries,
+      ...getLoaderData(currentCatchDetails, species, catchIndex, retainedSpecies),
       csrf,
+      speciesCountByCode: countUniqueSpeciesByCode(productIdListedCatches),
+      documentCountByCertificateNumber: countUniqueDocumentByCatchCertificateNumber(productIdListedCatches),
     }),
     {
       status: 200,
@@ -226,36 +234,51 @@ export const AddCatchDetailsLoader = async (request: Request, params: Params) =>
 export const AddCatchDetailsAction = async (request: Request, params: Params): Promise<Response | ErrorResponse> => {
   const { documentNumber } = params;
   const splitParams = params["*"]?.split("/");
+  let productId = splitParams?.[0] ?? "";
 
   const bearerToken = await getBearerTokenForRequest(request);
 
-  const form = await request.formData();
-  const { _action, ...values } = Object.fromEntries(form);
-  const nextUri = form.get("nextUri") as string;
-  const faoCode = values["speciesCode"] as string;
-  const goToPage = getGoToPage(values["pageNo"] as string);
-  const isDraft = form.get("_action") === "saveAsDraft";
-  const addCatch = form.get("_action") === "addCatch";
-  const updateCatch = form.get("_action") === "updateCatch";
-  const editCatch = (_action as string).includes("editButton");
-  const catchCertificateType = values["catchCertificateType"] as string;
-
-  const isValid = await validateCSRFToken(request, form);
-  if (!isValid) return redirect("/forbidden");
-
-  const session = await getSessionFromRequest(request);
   const processingStatement: ProcessingStatement | IUnauthorised = await getProcessingStatement(
     bearerToken,
     documentNumber
   );
 
   if (instanceOfUnauthorised(processingStatement)) {
-    return redirect("/forbidden");
+    return redirect("/unauthorised");
   }
 
   validateResponseData(processingStatement);
 
   const catches = getCatches(processingStatement);
+
+  // For copied documents, fix the productId mismatch
+  if (productId && documentNumber && !productId.startsWith(documentNumber)) {
+    // This is likely a copied document with old productId
+    // Use the current document's product ID
+    const currentProduct = processingStatement.products?.[0];
+    if (currentProduct) {
+      productId = currentProduct.id ?? "";
+    }
+  }
+
+  const form = await request.formData();
+  const { _action, ...values } = Object.fromEntries(form);
+  const nextUri = form.get("nextUri") as string;
+
+  const allSpecies: Species[] = await getAllSpecies();
+  const selectedSpeciesName = values["species"] as string;
+  const faoCode = getFaoCodeFromSelectedSpecies(allSpecies, selectedSpeciesName);
+
+  const goToPage = getGoToPage(values["pageNo"] as string);
+  const isDraft = _action === "saveAsDraft";
+  const addCatch = _action === "addCatch";
+  const updateCatch = _action === "updateCatch";
+  const editCatch = (_action as string).includes("editButton");
+
+  const isValid = await validateCSRFToken(request, form);
+  if (!isValid) return redirect("/forbidden");
+
+  const session = await getSessionFromRequest(request);
 
   if (editCatch) {
     const splitStr: string[] = (_action as string).split("-");
@@ -263,43 +286,127 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
     const pageNo = parseInt(splitStr[2]);
 
     return redirect(
-      `/create-processing-statement/${documentNumber}/add-catch-details/${faoCode}/${index}?catchType=${catchCertificateType}&pageNo=${pageNo}`
+      `/create-processing-statement/${documentNumber}/add-catch-details/${productId}/${index}?pageNo=${pageNo}`
     );
   }
 
   const removeCatch = (_action as string).includes("removeCatch");
-  const cancelCatch = form.get("_action") === "cancelCatch";
+  const cancelCatch = _action === "cancelCatch";
   const saveToRedisIfErrors = false;
-  const allSpecies: Species[] = await getAllSpecies();
+  const countries: ICountry[] = await getCountries();
 
   if (addCatch) {
+    const catchCertificateType = values["catchCertificateType"] as CertificateType;
+    const catchCertificateNumber = values["catchCertificateNumber"] as string;
+    const totalWeightLanded = values["totalWeightLanded"] as string;
+    const inputCatchCertificateWeight = values["catchCertificateWeight"] as string;
+    const issuingCountryName = values["issuingCountry"] as string;
+
+    let catchCertificateWeight = "";
+    let issuingCountry: ICountry | undefined = undefined;
+
+    if (catchCertificateType === "uk") {
+      catchCertificateWeight = totalWeightLanded;
+    } else {
+      catchCertificateWeight = inputCatchCertificateWeight ?? totalWeightLanded;
+      issuingCountry = countries.find((c) => c.officialCountryName === issuingCountryName);
+    }
+
+    const newCatch = {
+      id: `${documentNumber}-${moment.utc().unix()}-${catches.length}`,
+      species: values["species"] as string,
+      speciesCode: faoCode,
+      catchCertificateNumber: catchCertificateNumber,
+      catchCertificateType: catchCertificateType,
+      totalWeightLanded: totalWeightLanded,
+      catchCertificateWeight: catchCertificateWeight,
+      exportWeightBeforeProcessing: values["exportWeightBeforeProcessing"] as string,
+      exportWeightAfterProcessing: values["exportWeightAfterProcessing"] as string,
+      scientificName: getScientificName(allSpecies, faoCode),
+      productId: productId,
+      productDescription: values["productDescription"] as string,
+      issuingCountry: issuingCountry,
+      productCommodityCode: values["productCommodityCode"] as string,
+    };
+    // using index 0 as new record will always be added at the top of the list
     const errorResponse = await updateProcessingStatement(
       bearerToken,
       documentNumber,
-      {
-        ...values,
-        scientificName: getScientificName(allSpecies, faoCode),
-      },
-      `/create-processing-statement/${documentNumber}/add-catch-details/${faoCode}/0`,
+      newCatch,
+      `/create-processing-statement/${documentNumber}/add-catch-details/${productId}/0`,
       0,
       saveToRedisIfErrors,
       true,
-      getIndexBySpeciesForNewRecord(catches, values["speciesCode"] as string) === -1
+      getIndexBySpeciesForNewRecord(catches, faoCode) === -1
     );
 
-    return addCatchResponseHandler(errorResponse);
+    const handledResponse = addCatchResponseHandler(errorResponse);
+
+    if (errorResponse) {
+      return handledResponse;
+    }
+
+    // Store the selected species in session to retain after redirect
+    if (values["species"]) {
+      session.set("retainedSpecies", values["species"] as string);
+    }
+
+    let redirectUrl = `/create-processing-statement/${documentNumber}/add-catch-details/${productId}?pageNo=1`;
+
+    if (!isEmpty(nextUri)) {
+      redirectUrl += `&nextUri=${nextUri}`;
+    }
+
+    return redirect(redirectUrl, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   }
 
   if (updateCatch) {
+    const catchCertificateType = values["catchCertificateType"] as CertificateType;
+    const totalWeightLanded = values["totalWeightLanded"] as string;
+    const inputCatchCertificateWeight = values["catchCertificateWeight"] as string;
+    const issuingCountryName = values["issuingCountry"] as string;
+
+    let catchCertificateWeight = "";
+    let issuingCountry: ICountry | undefined = undefined;
+
+    if (catchCertificateType === "uk") {
+      catchCertificateWeight = totalWeightLanded;
+      issuingCountry = countries.find(
+        (c) => c.officialCountryName.includes("United Kingdom") || c.isoCodeAlpha2 === "GB" || c.isoCodeAlpha3 === "GBR"
+      );
+    } else {
+      catchCertificateWeight = inputCatchCertificateWeight ?? totalWeightLanded;
+      issuingCountry = countries.find((c: ICountry) => c.officialCountryName === issuingCountryName);
+    }
+
+    const updatedCatch = {
+      id: values["id"] as string,
+      _id: values["catchId"] as string,
+      species: values["species"] as string,
+      speciesCode: faoCode,
+      catchCertificateNumber: values["catchCertificateNumber"] as string,
+      catchCertificateType: catchCertificateType,
+      totalWeightLanded: totalWeightLanded,
+      catchCertificateWeight: catchCertificateWeight,
+      exportWeightBeforeProcessing: values["exportWeightBeforeProcessing"] as string,
+      exportWeightAfterProcessing: values["exportWeightAfterProcessing"] as string,
+      scientificName: getScientificName(allSpecies, faoCode),
+      productId: productId,
+      productDescription: values["productDescription"] as string,
+      issuingCountry: issuingCountry,
+      productCommodityCode: values["productCommodityCode"] as string,
+    };
+
     const catchIndex = findIndexByValue(catches, values["catchId"] as string);
     const errorResponse = await updateProcessingStatement(
       bearerToken,
       documentNumber,
-      {
-        ...values,
-        scientificName: getScientificName(allSpecies, faoCode),
-      },
-      `/create-processing-statement/${documentNumber}/add-catch-details/${splitParams?.[0]}/${catchIndex}`,
+      updatedCatch,
+      `/create-processing-statement/${documentNumber}/add-catch-details/${productId}/${catchIndex}`,
       catchIndex,
       saveToRedisIfErrors
     );
@@ -308,13 +415,21 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
       return errorResponse;
     }
 
-    let redirectUrl = `/create-processing-statement/${documentNumber}/add-catch-details/${splitParams?.[0]}?catchType=${catchCertificateType}&pageNo=${goToPage}`;
+    if (values["species"]) {
+      session.set("retainedSpecies", values["species"] as string);
+    }
+
+    let redirectUrl = `/create-processing-statement/${documentNumber}/add-catch-details/${productId}?pageNo=${goToPage}`;
 
     if (!isEmpty(nextUri)) {
       redirectUrl += `&nextUri=${nextUri}`;
     }
 
-    return redirect(redirectUrl);
+    return redirect(redirectUrl, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   }
 
   if (removeCatch) {
@@ -323,7 +438,7 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
       bearerToken,
       documentNumber,
       findIndexByValue(catches, index),
-      `/create-processing-statement/${documentNumber}/add-catch-details/${faoCode}`,
+      `/create-processing-statement/${documentNumber}/add-catch-details`,
       true
     );
 
@@ -332,38 +447,50 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
     }
 
     const recordsPerPage: number = parseInt(getEnv().PROCESSING_STATEMENT_CATCH_PER_PAGE, 10);
-    const ctches = getUpdatedCatches(updatedProcessingStatement, splitParams?.[0], catchCertificateType);
+    const ctches = getUpdatedCatches(updatedProcessingStatement, productId);
     const totalPages = Math.ceil(ctches.length / recordsPerPage);
 
-    const currentUrl = getCurrentUrl(documentNumber, faoCode, catchCertificateType, goToPage, totalPages);
+    const currentUrl = getCurrentUrl(documentNumber, productId, goToPage, totalPages);
     return redirect(currentUrl);
   }
 
   if (cancelCatch) {
-    return redirect(
-      `/create-processing-statement/${documentNumber}/add-catch-details/${splitParams?.[0]}?catchType=${catchCertificateType}&pageNo=${goToPage}`
-    );
-  }
-
-  if (isDraft) {
-    return redirect(route("/create-processing-statement/processing-statements"));
-  }
-
-  const findProducts: Catch | undefined = getProducts(catches, faoCode, catchCertificateType);
-  const errorData: any = validateProducts(findProducts, values["lastAddedOrdEditedIndex"] as string);
-
-  session.set(
-    "backLinkForCatchAdded",
-    `/create-processing-statement/${documentNumber}/add-catch-details/${faoCode}/${values["lastAddedOrdEditedIndex"]}?catchType=${catchCertificateType}&pageNo=1`
-  );
-
-  if (isEmpty(errorData)) {
-    return redirect(getRedirectUrl(nextUri, documentNumber), {
+    if (values["species"]) {
+      session.set("retainedSpecies", values["species"] as string);
+    }
+    const redirectUrl = `/create-processing-statement/${documentNumber}/add-catch-details/${productId}?pageNo=${goToPage}`;
+    return redirect(redirectUrl, {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
     });
   }
 
-  return errorData;
+  if (isDraft) {
+    return redirect(route("/create-processing-statement/processing-statements"));
+  }
+
+  const errorResponse = await updateProcessingStatement(
+    bearerToken,
+    documentNumber,
+    {
+      speciesCode: faoCode,
+    },
+    `/create-processing-statement/${documentNumber}/add-catch-details/${productId}`
+  );
+
+  if (errorResponse) {
+    return errorResponse;
+  }
+
+  session.set(
+    "backLinkForCatchAdded",
+    `/create-processing-statement/${documentNumber}/add-catch-details/${productId}?pageNo=1`
+  );
+
+  return redirect(getRedirectUrl(nextUri, documentNumber), {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 };

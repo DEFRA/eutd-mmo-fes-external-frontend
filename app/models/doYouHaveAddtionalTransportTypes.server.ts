@@ -25,7 +25,7 @@ export const DoYouHaveAddtionalTransportTypesLoader = async (params: Params, req
   setApiMock(request.url);
 
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   const { documentNumber } = params;
@@ -34,7 +34,13 @@ export const DoYouHaveAddtionalTransportTypesLoader = async (params: Params, req
   const transportations: ITransport[] = await getTransportations(bearerToken, documentNumber);
 
   if (Array.isArray(transportations) && transportations.length > 0) {
-    const transport: ITransport | undefined = transportations.findLast((transport: ITransport) => transport.id);
+    const lastUpdatedTransportId = session.get("lastUpdatedTransportId");
+    if (lastUpdatedTransportId) {
+      session.unset("lastUpdatedTransportId");
+    }
+    const transport: ITransport | undefined = lastUpdatedTransportId
+      ? transportations.find((transport: ITransport) => lastUpdatedTransportId === transport.id)
+      : transportations.findLast((transport: ITransport) => transport.id);
 
     const transportOptionType: IAddTransportationCheck = await getAdditionalTransportTypes(bearerToken, documentNumber);
 

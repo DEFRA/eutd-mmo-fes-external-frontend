@@ -1,9 +1,7 @@
 {
   "catches": [],
-  "storageFacilities": [],
   "validationErrors": [{}],
   "addAnotherProduct": "No",
-  "addAnotherStorageFacility": "No",
   "transport": {},
   "exportedTo": {
     "officialCountryName": "British Indian Ocean Territory",

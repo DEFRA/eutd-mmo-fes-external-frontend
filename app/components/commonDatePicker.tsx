@@ -12,6 +12,7 @@ import { errorMessageText } from "~/helpers/errorUtilities";
 
 type DatePickerProps = {
   id: string;
+  name: string;
   errors: IError;
   hintText?: string;
   label: string;
@@ -24,6 +25,7 @@ type DatePickerProps = {
 
 export const CommonDatePicker = ({
   id,
+  name,
   errors,
   hintText,
   label,
@@ -108,6 +110,7 @@ export const CommonDatePicker = ({
           <div className="govuk-date-input__item">
             <DateInputDay
               id={id}
+              name={name}
               isHydrated={isHydrated}
               errors={errors}
               daySelected={daySelected}
@@ -119,6 +122,7 @@ export const CommonDatePicker = ({
           <div className="govuk-date-input__item">
             <DateInputMonth
               id={id}
+              name={name}
               isHydrated={isHydrated}
               errors={errors}
               monthSelected={monthSelected}
@@ -130,6 +134,7 @@ export const CommonDatePicker = ({
           <div className="govuk-date-input__item">
             <DateInputYear
               id={id}
+              name={name}
               isHydrated={isHydrated}
               errors={errors}
               yearSelected={yearSelected}
@@ -146,7 +151,7 @@ export const CommonDatePicker = ({
               data-module="govuk-button"
               name="_action"
               // @ts-ignore
-              value={`add-${id}`}
+              value={`add-${name}`}
               data-testid={`add-${id}`}
             />
           ) : (

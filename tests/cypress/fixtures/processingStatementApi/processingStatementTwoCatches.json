@@ -6,11 +6,17 @@
       "speciesCode": "ASD",
       "catchCertificateNumber": "QW",
       "catchCertificateType": "non_uk",
+      "issuingCountry": {
+        "isoCodeAlpha2": "FR",
+        "isoCodeAlpha3": "FRA",
+        "officialCountryName": "France"
+      },
       "totalWeightLanded": "5",
       "exportWeightBeforeProcessing": "5",
       "exportWeightAfterProcessing": "5",
       "id": "qw-1671018160",
-      "scientificName": "Alosa alosa"
+      "scientificName": "Alosa alosa",
+      "productId": "GBR-2025-PS-FDC3D66E1-1760436601"
     },
     {
       "_id": "639fc1b50bb7cf12b8947a53",
@@ -18,11 +24,17 @@
       "speciesCode": "ASD",
       "catchCertificateNumber": "QW2",
       "catchCertificateType": "non_uk",
+      "issuingCountry": {
+        "isoCodeAlpha2": "FR",
+        "isoCodeAlpha3": "FRA",
+        "officialCountryName": "France"
+      },
       "totalWeightLanded": "35",
       "exportWeightBeforeProcessing": "25",
       "exportWeightAfterProcessing": "10",
       "id": "qw-1671018162",
-      "scientificName": "Alosa seabream"
+      "scientificName": "Alosa seabream",
+      "productId": "GBR-2025-PS-FDC3D66E1-1760436601"
     }
   ],
   "validationErrors": [],

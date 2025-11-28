@@ -58,3 +58,10 @@
   margin-bottom: 0;
   max-width: 100%;
 }
+
+.app-task-list__tag__float-left {
+  float: left;
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: 100%;
+}

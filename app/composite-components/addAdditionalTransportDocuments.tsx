@@ -20,7 +20,6 @@ type AddAdditionalTransportDocumentsProps = {
   transportType: TransportType;
   displayOptionalSuffix: boolean;
   csrf: string;
-  maximumTransportDocumentPerTransport: number;
 };
 
 export const AddAdditionalTransportDocuments = ({
@@ -33,7 +32,6 @@ export const AddAdditionalTransportDocuments = ({
   transportType,
   displayOptionalSuffix,
   csrf,
-  maximumTransportDocumentPerTransport,
 }: AddAdditionalTransportDocumentsProps) => {
   const { t } = useTranslation("common");
   const translationsKey = startCase(transportType).replaceAll(" ", "");
@@ -47,8 +45,6 @@ export const AddAdditionalTransportDocuments = ({
   useScrollOnPageLoad();
 
   const isAlreadyHaveDocuments = Array.isArray(documents) && documents.length > 0;
-  const displayAddAnotherDocumentButton =
-    (Array.isArray(documents) && documents.length < maximumTransportDocumentPerTransport) || !documents;
 
   return (
     <Main backUrl={backUrl}>
@@ -62,9 +58,6 @@ export const AddAdditionalTransportDocuments = ({
                   {t(`addAdditionalTransportDocuments${translationsKey}Title`, { ns: "transportation" })}
                 </h1>
               </legend>
-              <div id="document-hint" className="govuk-hint">
-                {t("addAdditionalTransportDocumentsTitleHint", { ns: "transportation" })}
-              </div>
               {isAlreadyHaveDocuments ? (
                 documents.map((data: AdditionalDocumentsData, index: number) => (
                   <CatchCertificateTransportationDocumentForm
@@ -88,19 +81,17 @@ export const AddAdditionalTransportDocuments = ({
                   displayOptionalSuffix={displayOptionalSuffix}
                 />
               )}
-              {displayAddAnotherDocumentButton && (
-                <Button
-                  id="addAnotherDocument"
-                  label={t("addAdditionalTransportDocumentsAddButton", { ns: "transportation" })}
-                  className="govuk-button govuk-button--secondary"
-                  type={BUTTON_TYPE.SUBMIT}
-                  data-module="govuk-button"
-                  name="_action"
-                  // @ts-ignore
-                  value="addAnotherDocument"
-                  data-testid="add-another-document-button"
-                />
-              )}
+              <Button
+                id="addAnotherDocument"
+                label={t("addAdditionalTransportDocumentsAddButton", { ns: "transportation" })}
+                className="govuk-button govuk-button--secondary"
+                type={BUTTON_TYPE.SUBMIT}
+                data-module="govuk-button"
+                name="_action"
+                // @ts-ignore
+                value="addAnotherDocument"
+                data-testid="add-another-document-button"
+              />
               <ButtonGroup />
               <input type="hidden" name="nextUri" value={nextUri} />
               <input type="hidden" name="totalDocumentCount" value={isAlreadyHaveDocuments ? documents.length : 1} />

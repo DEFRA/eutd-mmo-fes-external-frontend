@@ -34,7 +34,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
     });
   });
 
-  it("should navigate to CMR page when user selects and submits truck transport type", () => {
+  it("should navigate to truck transport details page when user selects and submits truck transport type", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveTruck, //mocking the selected transport vehicle so the next page does not redirect to the progress page
     };
@@ -44,7 +44,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
     cy.get("#truck").click({ force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
 
-    cy.url().should("include", "/do-you-have-a-road-transport-document");
+    cy.url().should("include", "/add-transportation-details-truck");
   });
 
   it("should navigate to plane transport details page when user selects and submits plane transport type", () => {

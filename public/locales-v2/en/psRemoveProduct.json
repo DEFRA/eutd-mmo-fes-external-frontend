@@ -1,0 +1,4 @@
+{
+  "psRemoveProductPageTitle": "Remove a product",
+  "psRemoveProductQuestion": "Do you want to remove '{{productDescription}}' and all its associated species?"
+}

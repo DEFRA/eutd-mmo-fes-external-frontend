@@ -29,6 +29,7 @@ import {
   getRfmos,
   type ManualEntryLandingsData,
   getCountries,
+  getSelectedEezInIcountryFormat,
 } from "~/.server";
 import { getEnv } from "~/env.server";
 import { getCodeFromLabel, getStrOrDefault, getTransformedError, isValidDate, toISODateFormat } from "~/helpers";
@@ -52,7 +53,7 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
   setApiMock(request.url);
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   const session = await getSessionFromRequest(request);
   session.set("csrf", csrf);
   const { landingsEntryOption } = await getLandingsEntryOption(bearerToken, documentNumber);
@@ -252,7 +253,7 @@ const addLandingAction = async (
     if (!selectedVessel) {
       return redirect(route("/forbidden"));
     }
-  } else if (isDateLandedProvided) {
+  } else {
     selectedVessel = await getVesselDetails(
       vessel as string,
       moment().format("YYYY-MM-DD"),
@@ -264,10 +265,7 @@ const addLandingAction = async (
   }
 
   const selectedRfmo = isEmpty(rfmo) ? undefined : (rfmo as string);
-  const countries = await getCountries();
-  const exclusiveEconomicZones = Object.entries(values)
-    .filter(([key, eez_value]) => key.startsWith("eez") && !isEmpty(eez_value))
-    .map(([, value]) => countries.find((item) => item.officialCountryName == value));
+  const exclusiveEconomicZones = await getSelectedEezInIcountryFormat(values);
 
   const gearTypes: IGearType[] = await getAllGearTypesByCategory(gearCategory as string);
   const gearTypeWithCode: IGearType | undefined =
@@ -303,17 +301,6 @@ const addLandingAction = async (
   }
 
   if (Array.isArray(response.errors) && response.errors.length > 0) {
-    session.set("selectedStartDate", selectedStartDate);
-    session.set("selectedDate", selectedDate);
-    session.set("selectedProduct", product);
-    session.set("selectedFaoArea", faoArea);
-    session.set("selectedHighSeasArea", highSeasArea);
-    session.set("selectedWeight", weight);
-    session.set("selectedVessel", vessel);
-    session.set("gearCategory", gearCategory);
-    session.set("gearType", gearType);
-    session.set("selectexclusiveEconomicZones", exclusiveEconomicZones);
-    session.set("selectedRfmo", selectedRfmo);
     session.set("hasLandingError", true);
 
     const errors = getTransformedError(response.errors);

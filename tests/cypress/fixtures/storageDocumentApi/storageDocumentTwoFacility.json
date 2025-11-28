@@ -1,34 +1,29 @@
 {
   "catches": [],
-  "storageFacilities": [
-    {
-      "facilityAddressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
-      "facilityBuildingName": "LANCASTER HOUSE",
-      "facilityBuildingNumber": "",
-      "facilitySubBuildingName": "MMO",
-      "facilityStreetName": "HAMPSHIRE COURT",
-      "facilityTownCity": "NEWCASTLE UPON TYNE",
-      "facilityCounty": "TYNESIDE",
-      "facilityCountry": "ENGLAND",
-      "facilityPostcode": "NE4 7YH",
-      "facilityName": "name",
-      "_facilityUpdated": false
-    },
-    {
-      "facilityAddressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
-      "facilityBuildingName": "LANCASTER HOUSE",
-      "facilityBuildingNumber": "",
-      "facilitySubBuildingName": "MMO",
-      "facilityStreetName": "HAMPSHIRE COURT",
-      "facilityTownCity": "NEWCASTLE UPON TYNE",
-      "facilityCounty": "TYNESIDE",
-      "facilityCountry": "Wales",
-      "facilityPostcode": "NE4 345",
-      "facilityName": "name",
-      "_facilityUpdated": false
-    }
-  ],
+  "facilityAddressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
+  "facilityBuildingName": "LANCASTER HOUSE",
+  "facilityBuildingNumber": "",
+  "facilitySubBuildingName": "MMO",
+  "facilityStreetName": "HAMPSHIRE COURT",
+  "facilityTownCity": "NEWCASTLE UPON TYNE",
+  "facilityCounty": "TYNESIDE",
+  "facilityCountry": "ENGLAND",
+  "facilityPostcode": "NE4 7YH",
+  "facilityName": "name",
   "validationErrors": [{}],
   "addAnotherProduct": "No",
-  "addAnotherStorageFacility": "No"
+  "arrivalTransport": {
+    "vehicle": "plane",
+    "vesselName": "gfs",
+    "flagState": "ghj",
+    "containerNumber": "56",
+    "departurePlace": "hull",
+    "departureDate": "09/1/2024",
+    "exportedTo": {
+      "officialCountryName": "British Indian Ocean Territory",
+      "isoCodeAlpha2": "IO",
+      "isoCodeAlpha3": "IOT",
+      "isoNumericCode": "086"
+    }
+  }
 }

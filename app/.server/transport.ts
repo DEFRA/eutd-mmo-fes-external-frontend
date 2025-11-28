@@ -340,7 +340,7 @@ export const saveTransportDetails = async (
     },
     { ...payload }
   );
-  return onSaveTransportDetails(response);
+  return onSaveTransportDetails(response, payload);
 };
 
 export const saveTransport = async (
@@ -360,10 +360,10 @@ export const saveTransport = async (
     { ...transport, currentUri, journey, isTransportSavedAsDraft }
   );
 
-  return onSaveTransportDetails(response);
+  return onSaveTransportDetails(response, transport);
 };
 
-const onSaveTransportDetails = async (response: Response): Promise<IBase> => {
+const onSaveTransportDetails = async (response: Response, payload?: ITransport): Promise<IBase> => {
   switch (response.status) {
     case 200:
     case 204:
@@ -376,6 +376,15 @@ const onSaveTransportDetails = async (response: Response): Promise<IBase> => {
         errors: Object.keys(errorsResponse).map((error) => {
           if (errorsResponse[error] === "error.nationalityOfVehicle.any.required") {
             errorsResponse[error] = "error.nationalityOfVehicle.any.invalid";
+          }
+
+          // Map departure date format error to required error when field is actually empty
+          if (error === "departureDate" && errorsResponse[error] === "error.departureDate.date.format") {
+            const departureDate = payload?.departureDate?.trim();
+            // Check if the field is empty or only contains whitespace or just date separators
+            if (!departureDate || /^[\s\-/]*$/.test(departureDate)) {
+              errorsResponse[error] = "error.departureDate.any.required";
+            }
           }
 
           return {

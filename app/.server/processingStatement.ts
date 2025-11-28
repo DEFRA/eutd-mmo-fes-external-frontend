@@ -129,18 +129,19 @@ export const getCatchDetails = (processingStatement: ProcessingStatement, catchI
 
 export const getProductDescription = (
   products: ProcessingStatementProduct[] | undefined,
-  index?: number
+  id?: string
 ): {
   currentProductDescription: ProcessingStatementProduct | undefined;
 } => {
   const hasProducts = Array.isArray(products) && products.length > 0;
 
-  if (!hasProducts || index === undefined || isNaN(index)) {
+  if (!hasProducts || id === undefined) {
     return { currentProductDescription: undefined };
   }
 
-  const hasValidProductIndex = index >= 0 && index < products.length;
-  const productDescription: ProcessingStatementProduct | undefined = hasValidProductIndex ? products[index] : undefined;
+  const productDescription: ProcessingStatementProduct | undefined = products.find(
+    (product: ProcessingStatementProduct) => product.id && product.id === id
+  );
   return { currentProductDescription: productDescription };
 };
 
@@ -187,23 +188,7 @@ export const removeCatchDescription = async (
   }
 
   if (data.catches?.[catchIndex]) {
-    const catchToRemove = data.catches[catchIndex];
-    const speciesCode = catchToRemove.speciesCode;
-    const remainingCatchesOfSpecies = data.catches.filter((catches: Catch) => catches.speciesCode === speciesCode);
-    const isLast = remainingCatchesOfSpecies.length === 1;
-    /**
-     * if the catch to remove is the only instance of that species then it can't just be removed entierly as some of that data is being used to display
-     * information on the add-catch-details page
-     */
-    if (isLast) {
-      // Remove the information which was added to the catch
-      delete data.catches[catchIndex].catchCertificateNumber;
-      delete data.catches[catchIndex].totalWeightLanded;
-      delete data.catches[catchIndex].exportWeightBeforeProcessing;
-      delete data.catches[catchIndex].exportWeightAfterProcessing;
-    } else {
-      data.catches.splice(catchIndex, 1);
-    }
+    data.catches.splice(catchIndex, 1);
     const updated: ProcessingStatement | IUnauthorised = await addProcessingDetails(
       bearerToken,
       documentNumber,
@@ -294,7 +279,7 @@ export const updateProcessingStatementProducts = async (
   bearerToken: string,
   documentNumber: string | undefined,
   data: Partial<ProcessingStatementProduct> = {},
-  productIndex: number = NaN,
+  productId: string | undefined,
   saveToRedisIfErrors: boolean = false,
   returnDataOnly?: boolean
 ): Promise<Response | ErrorResponse | undefined> => {
@@ -307,7 +292,10 @@ export const updateProcessingStatementProducts = async (
   }
 
   const currentProcessingStatement = (psData as ProcessingStatement) || {};
-  const isUpdatingProduct = productIndex >= 0;
+  const productIndex = currentProcessingStatement.products?.findIndex(
+    (p: ProcessingStatementProduct) => p.id === productId
+  );
+  const isUpdatingProduct = productIndex !== undefined && productIndex >= 0;
 
   // Check if the products array needs to updated or initialised
   if (Array.isArray(currentProcessingStatement?.products)) {
@@ -326,6 +314,20 @@ export const updateProcessingStatementProducts = async (
   } else {
     // Create a new products array
     currentProcessingStatement.products = [{ ...(data as ProcessingStatementProduct) }];
+  }
+
+  // Update catches that have the same productId with the new product description and commodity code
+  if (isUpdatingProduct && Array.isArray(currentProcessingStatement?.catches)) {
+    currentProcessingStatement.catches = currentProcessingStatement.catches.map((catchItem: Catch) => {
+      if (catchItem.productId === productId) {
+        return {
+          ...catchItem,
+          productDescription: data.description,
+          productCommodityCode: data.commodityCode,
+        };
+      }
+      return catchItem;
+    });
   }
 
   const updatedProcessingStatement: ProcessingStatement = {
@@ -348,6 +350,46 @@ export const updateProcessingStatementProducts = async (
   if (errorResponse) {
     return errorResponse;
   }
+};
+
+export const removeProcessingStatementProduct = async (
+  bearerToken: string,
+  documentNumber: string | undefined,
+  productId: string | undefined,
+  currentUrl: string,
+  saveToRedisIfErrors: boolean = false,
+  returnDataOnly?: boolean
+) => {
+  const psData: ProcessingStatement | IUnauthorised = await getProcessingStatement(bearerToken, documentNumber);
+
+  const errorResponse = validateResponseData(psData);
+  if (errorResponse) {
+    return { errorResponse, data: psData };
+  }
+
+  // Filter products and catches to exclude the provided productId
+  const currentProcessingStatement = psData as ProcessingStatement;
+  const updatedProcessingStatement: ProcessingStatement = {
+    ...currentProcessingStatement,
+    products: currentProcessingStatement.products?.filter(
+      (product: ProcessingStatementProduct) => product.id !== productId
+    ),
+    catches: currentProcessingStatement.catches?.filter((catchItem: Catch) => catchItem.productId !== productId),
+  };
+
+  const updatedData: ProcessingStatement | IUnauthorised = await addProcessingDetails(
+    bearerToken,
+    documentNumber,
+    updatedProcessingStatement,
+    currentUrl,
+    saveToRedisIfErrors
+  );
+
+  const finalErrorResponse = validateResponseData(updatedData, undefined, returnDataOnly);
+  return {
+    errorResponse: finalErrorResponse,
+    data: updatedData,
+  };
 };
 
 const hasExporterDetails = (exporter: Exporter | undefined): boolean =>

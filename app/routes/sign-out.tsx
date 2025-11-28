@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const warningTime: number = parseInt(ENV.WARNING_T0_TIME_OUT_IN_MILLISECONDS);
   const minuteInMilliseconds = 60000;
   const secondInMilliseconds = 1000;
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   const session = await getSessionFromRequest(request);
   session.set("csrf", csrf);
   return json(

@@ -5,10 +5,10 @@
   "exportData": {
     "exporterDetails": {},
     "catches": [],
-    "storageFacilities": []
+    "facilityApproval": ""
   },
   "errors": {
-    "storageFacilities-0-facilityApproval": "sdAddStorageFacilityApprovalCharacterError"
+    "storageFacilities-facilityApproval": "sdAddStorageFacilityApprovalCharacterError"
   },
-  "errorsUrl": "/create-storage-document/GBR-2023-SD-8EC0EA267/add-storage-facility-approval/0"
+  "errorsUrl": "/create-storage-document/GBR-2023-SD-8EC0EA267/add-storage-facility-approval"
 }

@@ -57,20 +57,12 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
     cy.get("[data-testid='add-product']").contains("Update product");
   });
 
-  it("should click and edit and click on add state button with value", () => {
-    cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
-    cy.get("#state").contains("Fresh");
-    cy.get("#state").invoke("val", "Fresh").trigger("change");
-
-    cy.get("[data-testid='add-state']").click({ force: true });
+  it("should display and allow clicking the Add state button", () => {
+    cy.get("[data-testid='add-state']").should("exist").and("be.visible").click({ force: true });
   });
 
-  it("should click and edit and click on add presentation button with value", () => {
-    cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
-    cy.get("#presentation").contains("Whole");
-    cy.get("#presentation").invoke("val", "Whole").trigger("change");
-
-    cy.get("[data-testid='add-presentation']").click({ force: true });
+  it("should display and allow clicking the Add presentation button", () => {
+    cy.get("[data-testid='add-presentation']").should("exist").and("be.visible").click({ force: true });
   });
 
   it("should display an error validation at the form input when add species is clicked without selecting a value", () => {

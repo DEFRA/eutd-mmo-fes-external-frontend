@@ -45,7 +45,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const hasActionExecuted = session.get("actionExecuted");
   const isFromCatchWeightsRoute = session.get("backLinkForCatchAdded");
 
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   if (hasActionExecuted) {

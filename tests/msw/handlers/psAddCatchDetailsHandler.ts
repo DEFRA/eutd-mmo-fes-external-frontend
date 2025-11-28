@@ -5,6 +5,7 @@ import {
   GET_PROCESSING_STATEMENT,
   mockSaveAndValidateDocument,
   mockGetAllDocumentsUrl,
+  COUNTRIES_URL,
 } from "~/urls.server";
 
 import species from "@/fixtures/referenceDataApi/species.json";
@@ -20,8 +21,15 @@ import addCatchDetailsWithErrors from "@/fixtures/saveAndValidateApi/addCatchDet
 import postProcessingStatementWithInvalidCCError from "@/fixtures/saveAndValidateApi/processingStatementWithInvalidCCError.json";
 import processingStatementWithIncorrectFormatCCError from "@/fixtures/saveAndValidateApi/processingStatementWithIncorrectFormatCCError.json";
 import processingStatementBlankOneCatchWithUkType from "@/fixtures/processingStatementApi/processingStatementBlankOneCatchWithUkType.json";
+import processingStatementWithInvalidWeightRatio from "@/fixtures/saveAndValidateApi/processingStatementWithInvalidWeightRatio.json";
 import ccDrafts from "@/fixtures/dashboardApi/ccDrafts.json";
 import psDocument from "@/fixtures/dashboardApi/psDocument.json";
+import processingStatementWithInvalidEmptyDetails from "@/fixtures/saveAndValidateApi/processingStatementWithInvalidEmptyDetails.json";
+import processingStatementMultipleSameSpecies from "@/fixtures/processingStatementApi/processingStatementMultipleSameSpecies.json";
+import processingStatementWithIssuingCountryValidationError from "@/fixtures/saveAndValidateApi/processingStatementWithIssuingCountryValidationError.json";
+import processingStatementWithCatchCertificateTypeError from "@/fixtures/saveAndValidateApi/processingStatementWithCatchCertificateTypeError.json";
+import countries from "@/fixtures/referenceDataApi/countries.json";
+
 let actionCalled = false;
 let removeCatchCalled = false;
 const psAddCatchDetailsHandler: ITestHandler = {
@@ -35,10 +43,12 @@ const psAddCatchDetailsHandler: ITestHandler = {
   ],
   [TestCaseId.PSAddCatchDetailsSingleCatch]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
   ],
   [TestCaseId.PSAddCatchDetailsRemoveCatch]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => {
       if (!removeCatchCalled) {
         removeCatchCalled = true;
@@ -53,11 +63,13 @@ const psAddCatchDetailsHandler: ITestHandler = {
   ],
   [TestCaseId.PSAddCatchDetailsRemoveCatchUnauthorised]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementTwoCatches))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) => res.once(ctx.status(403))),
   ],
   [TestCaseId.PSAddCatchDetailsUpdateCatch]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.json(processingStatementUpdateOneCatch))
@@ -72,6 +84,7 @@ const psAddCatchDetailsHandler: ITestHandler = {
   ],
   [TestCaseId.PSAddCatchDetailsContinueCatchError]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementNoCatchCertificateNumber))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(addCatchDetailsWithErrors))
@@ -79,14 +92,24 @@ const psAddCatchDetailsHandler: ITestHandler = {
   ],
   [TestCaseId.PSAddCatchDetailsFirstCatch]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.json(processingStatementBlankOneCatch))
     ),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
   ],
+  [TestCaseId.PSAddCatchDetailsNoCatchesSaveAndContinue]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementNoCatches))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(processingStatementWithInvalidEmptyDetails))
+    ),
+  ],
   [TestCaseId.PSAddCatchDetailsFirstCatchNoScientificNames]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json([]))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.json(processingStatementBlankOneCatch))
@@ -95,9 +118,18 @@ const psAddCatchDetailsHandler: ITestHandler = {
   ],
   [TestCaseId.PSAddCatchDetailsFirstCatchEmptyScientificNames]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(null))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.json(processingStatementBlankOneCatch))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+  ],
+  [TestCaseId.PSAddCatchDetailsMultipleSameSpecies]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementMultipleSameSpecies))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(processingStatementMultipleSameSpecies))
     ),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
   ],
@@ -123,11 +155,13 @@ const psAddCatchDetailsHandler: ITestHandler = {
   ],
   [TestCaseId.PSAddCatchDetailsPostPsForbidden]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) => res(ctx.status(403))),
   ],
   [TestCaseId.PSAddCatchDetailsWithBlankInput]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatchWithUkType))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(addCatchDetailWithErrors))
@@ -135,6 +169,7 @@ const psAddCatchDetailsHandler: ITestHandler = {
   ],
   [TestCaseId.PSAddCatchDetailsWithInvalidCCFormat]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(processingStatementWithIncorrectFormatCCError))
@@ -143,6 +178,7 @@ const psAddCatchDetailsHandler: ITestHandler = {
   ],
   [TestCaseId.PSAddCatchDetailsWithIncorrectFormatCCFormat]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(postProcessingStatementWithInvalidCCError))
@@ -152,6 +188,33 @@ const psAddCatchDetailsHandler: ITestHandler = {
   [TestCaseId.PSAddCatchDetailsUkCatchType]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatchWithUkType))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(processingStatementUpdateOneCatch))
+    ),
+  ],
+  [TestCaseId.PSAddCatchDetailsWithInvalidWeightRatio]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(processingStatementWithInvalidWeightRatio))
+    ),
+  ],
+  [TestCaseId.PSAddCatchDetailsIssuingCountryValidationError]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(processingStatementWithIssuingCountryValidationError))
+    ),
+  ],
+  [TestCaseId.PSAddCatchDetailsCatchCertificateTypeValidationError]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(processingStatementWithCatchCertificateTypeError))
+    ),
   ],
 };
 

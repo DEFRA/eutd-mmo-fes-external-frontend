@@ -4,6 +4,7 @@ import type { IError } from "~/types";
 
 type DateInputMonthProps = {
   id: string;
+  name: string;
   isHydrated: boolean;
   errors: IError;
   monthSelected: string;
@@ -14,6 +15,7 @@ type DateInputMonthProps = {
 
 export const DateInputMonth = ({
   id,
+  name,
   isHydrated,
   errors,
   monthSelected,
@@ -33,7 +35,7 @@ export const DateInputMonth = ({
             : "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
         }
         id={`${id}-month`}
-        name={`${id}Month`}
+        name={`${name}Month`}
         type="number"
         defaultValue={monthSelected}
       />
@@ -45,7 +47,7 @@ export const DateInputMonth = ({
             : "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
         }
         id={`${id}-month`}
-        name={`${id}Month`}
+        name={`${name}Month`}
         type="number"
         onChange={handleMonthChange}
         inputMode="numeric"

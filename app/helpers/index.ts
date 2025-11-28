@@ -21,3 +21,4 @@ export * from "./getServiceNameFromDocumentNumber";
 // export * from "../loadIdmData.server";
 export * from "./checkYourInformation";
 export * from "./containterIdentificationNumber";
+export * from "./processingStatement";

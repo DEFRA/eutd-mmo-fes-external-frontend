@@ -13,7 +13,7 @@ export const deleteDraftFormLoader = async ({ request, params }: reduxRequestPar
 
   const { documentNumber } = params;
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
   return new Response(JSON.stringify({ documentNumber, csrf }), {
     status: 200,

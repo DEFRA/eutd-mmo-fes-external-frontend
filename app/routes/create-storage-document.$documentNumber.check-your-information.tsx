@@ -4,12 +4,19 @@ import { useTranslation } from "react-i18next";
 import { useScrollOnPageLoad } from "~/hooks";
 import isEmpty from "lodash/isEmpty";
 import { useEffect } from "react";
-import { type LoaderFunction, type ActionFunction } from "@remix-run/node";
+import { type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { formatAddress } from "~/components";
-import { createCSRFToken, getBearerTokenForRequest, getExporterDetailsFromMongo, getStorageDocument } from "~/.server";
+import {
+  createCSRFToken,
+  getBearerTokenForRequest,
+  getExporterDetailsFromMongo,
+  getStorageDocument,
+  hasRequiredDataStorageDocumentSummary,
+  instanceOfUnauthorised,
+} from "~/.server";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import { backUri, scrollToId, hasExporterAddressBeenUpdated } from "~/helpers";
 import type {
@@ -20,7 +27,6 @@ import type {
   StorageDocumentCatch,
   ITransport,
   IValidationError,
-  StorageFacility,
 } from "~/types";
 import { useNavigation } from "react-router-dom";
 import {
@@ -49,11 +55,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   // Get bearer token for API requests
   const bearerToken = await getBearerTokenForRequest(request);
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
   const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
 
+  if (instanceOfUnauthorised(storageDocument)) {
+    return redirect("/forbidden");
+  }
+
   const exporter: IExporter = await getExporterDetailsFromMongo(bearerToken, documentNumber, "storageNotes");
+
+  if (!hasRequiredDataStorageDocumentSummary(exporter?.model, storageDocument)) {
+    return redirect(`/create-storage-document/${documentNumber}/progress`);
+  }
 
   return json(
     {
@@ -116,6 +130,7 @@ const CheckYourInformation = () => {
       headingTranslation="sdCheckYourInformation"
       checkInformationHeader="sdSummaryPageDocumentDetailsHeader"
       csrf={csrf}
+      journey="storageNotes"
     >
       <>
         <CheckInfoExporterDetails
@@ -199,95 +214,92 @@ const CheckYourInformation = () => {
         <h2 className="govuk-heading-l">
           {t("sdCheckYourInformationStorageDetailsText", { ns: "sdCheckYourInformation" })}
         </h2>
-        {Array.isArray(storageDocument?.storageFacilities) &&
-          storageDocument.storageFacilities.map((facility: StorageFacility, index: number) => (
-            <dl
-              key={`facilities-${facility.facilityName}-${facility.facilityPostcode}`}
-              className="govuk-summary-list govuk-!-margin-bottom-5"
-            >
-              {facility.facilityArrivalDate && (
-                <div className="govuk-summary-list__row">
-                  <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                    {t("sdCommonFacilityFacilityArrivalDate", { ns: "sdCheckYourInformation" })}
-                  </dt>
-                  <dd className="govuk-summary-list__value">
-                    {moment(facility.facilityArrivalDate, "DD/MM/YYYY").format("D MMMM YYYY")}
-                  </dd>
-                </div>
+        <dl
+          key={`facilities-${storageDocument.facilityName}-${storageDocument.facilityPostcode}`}
+          className="govuk-summary-list govuk-!-margin-bottom-5"
+        >
+          {storageDocument.facilityArrivalDate && (
+            <div className="govuk-summary-list__row">
+              <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                {t("sdCommonFacilityFacilityArrivalDate", { ns: "sdCheckYourInformation" })}
+              </dt>
+              <dd className="govuk-summary-list__value">
+                {moment(storageDocument.facilityArrivalDate, "DD/MM/YYYY").format("D MMMM YYYY")}
+              </dd>
+            </div>
+          )}
+          <div className="govuk-summary-list__row">
+            <dt className="govuk-summary-list__key govuk-!-width-one-half">
+              {t("sdCommonFacilityNameTitle", { ns: "sdCheckYourInformation" })}
+            </dt>
+            <dd className="govuk-summary-list__value">{storageDocument.facilityName}</dd>
+            <dd className="govuk-summary-list__actions">
+              <a
+                aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                className="govuk-link"
+                href={`/create-storage-document/${documentNumber}/add-storage-facility-details?nextUri=${route(
+                  "/create-storage-document/:documentNumber/check-your-information",
+                  { documentNumber }
+                )}`}
+              >
+                {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+              </a>
+            </dd>
+          </div>
+          <div className="govuk-summary-list__row">
+            <dt className="govuk-summary-list__key govuk-!-width-one-half">
+              {t("commonAddExporterDetailsAddressContent", { ns: "sdCheckYourInformation" })}
+            </dt>
+            <dd className="govuk-summary-list__value">
+              {formatAddress(
+                storageDocument?.facilityAddressOne,
+                storageDocument?.facilityAddressTwo,
+                storageDocument?.facilityTownCity,
+                storageDocument?.facilityPostcode
               )}
-              <div className="govuk-summary-list__row">
-                <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                  {t("sdCommonFacilityNameTitle", { ns: "sdCheckYourInformation" })}
-                </dt>
-                <dd className="govuk-summary-list__value">{facility.facilityName}</dd>
-                <dd className="govuk-summary-list__actions">
-                  <a
-                    aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
-                    className="govuk-link"
-                    href={`/create-storage-document/${documentNumber}/add-storage-facility-details/${index}?nextUri=${route(
-                      "/create-storage-document/:documentNumber/check-your-information",
-                      { documentNumber }
-                    )}`}
-                  >
-                    {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
-                  </a>
-                </dd>
-              </div>
-              <div className="govuk-summary-list__row">
-                <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                  {t("commonAddExporterDetailsAddressContent", { ns: "sdCheckYourInformation" })}
-                </dt>
-                <dd className="govuk-summary-list__value">
-                  {formatAddress(
-                    facility?.facilityAddressOne,
-                    facility?.facilityAddressTwo,
-                    facility?.facilityTownCity,
-                    facility?.facilityPostcode
-                  )}
-                </dd>
-              </div>
-              {facility.facilityApprovalNumber && (
-                <div className="govuk-summary-list__row">
-                  <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                    {t("sdCheckYourInformationApprovalNumber", { ns: "sdCheckYourInformation" })}
-                  </dt>
-                  <dd className="govuk-summary-list__value">{facility.facilityApprovalNumber}</dd>
-                  <dd className="govuk-summary-list__actions">
-                    <a
-                      aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
-                      className="govuk-link"
-                      href={`/create-storage-document/${documentNumber}/add-storage-facility-approval/${index}?nextUri=${route(
-                        "/create-storage-document/:documentNumber/check-your-information",
-                        { documentNumber }
-                      )}`}
-                    >
-                      {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
-                    </a>
-                  </dd>
-                </div>
-              )}
-              {facility.facilityStorage && (
-                <div className="govuk-summary-list__row">
-                  <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                    {t("sdCheckYourInformationProductStorage", { ns: "sdCheckYourInformation" })}
-                  </dt>
-                  <dd className="govuk-summary-list__value">{facility.facilityStorage}</dd>
-                  <dd className="govuk-summary-list__actions">
-                    <a
-                      aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
-                      className="govuk-link"
-                      href={`/create-storage-document/${documentNumber}/add-storage-facility-approval page /${index}?nextUri=${route(
-                        "/create-storage-document/:documentNumber/check-your-information",
-                        { documentNumber }
-                      )}`}
-                    >
-                      {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
-                    </a>
-                  </dd>
-                </div>
-              )}
-            </dl>
-          ))}
+            </dd>
+          </div>
+          {storageDocument.facilityApprovalNumber && (
+            <div className="govuk-summary-list__row">
+              <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                {t("sdCheckYourInformationApprovalNumber", { ns: "sdCheckYourInformation" })}
+              </dt>
+              <dd className="govuk-summary-list__value">{storageDocument.facilityApprovalNumber}</dd>
+              <dd className="govuk-summary-list__actions">
+                <a
+                  aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                  className="govuk-link"
+                  href={`/create-storage-document/${documentNumber}/add-storage-facility-approval?nextUri=${route(
+                    "/create-storage-document/:documentNumber/check-your-information",
+                    { documentNumber }
+                  )}`}
+                >
+                  {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                </a>
+              </dd>
+            </div>
+          )}
+          {storageDocument.facilityStorage && (
+            <div className="govuk-summary-list__row">
+              <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                {t("sdCheckYourInformationProductStorage", { ns: "sdCheckYourInformation" })}
+              </dt>
+              <dd className="govuk-summary-list__value">{storageDocument.facilityStorage}</dd>
+              <dd className="govuk-summary-list__actions">
+                <a
+                  aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                  className="govuk-link"
+                  href={`/create-storage-document/${documentNumber}/add-storage-facility-approval?nextUri=${route(
+                    "/create-storage-document/:documentNumber/check-your-information",
+                    { documentNumber }
+                  )}`}
+                >
+                  {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                </a>
+              </dd>
+            </div>
+          )}
+        </dl>
         <h2 className="govuk-heading-l">{t("commonSummaryPageTransportHeader", { ns: "sdCheckYourInformation" })}</h2>
         <dl className="govuk-summary-list govuk-!-margin-bottom-5">
           {storageDocument.transport?.vehicle && (
@@ -346,7 +358,7 @@ const CheckYourInformation = () => {
               </dd>
             </div>
           )}
-          {storageDocument.transport?.vehicle === "truck" && transport.cmr === "false" && (
+          {storageDocument.transport?.vehicle === "truck" && transport.cmr !== "true" && (
             <StorageDocumentTransportDisplay
               transportType="truck"
               transport={transport}

@@ -144,6 +144,7 @@ export const CatchCertificateTransportationDocumentsAction = async (request: Req
     }
 
     session.unset("addAnotherDocument");
+    session.set("lastUpdatedTransportId", transportId);
     return redirect(
       isEmpty(nextUri)
         ? route("/create-catch-certificate/:documentNumber/do-you-have-additional-transport-types", { documentNumber })

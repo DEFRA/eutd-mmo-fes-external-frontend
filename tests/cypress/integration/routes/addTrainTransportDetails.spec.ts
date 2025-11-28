@@ -17,7 +17,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       .should("have.attr", "href", `${certificateUrl}/how-does-the-export-leave-the-uk/0`);
     cy.get(".govuk-heading-xl").contains("Add transportation details: train");
     cy.get("form").should(($form) => {
-      expect($form.find("input[type='text']")).to.have.lengthOf(3);
+      expect($form.find("input[type='text']")).to.have.lengthOf(4);
 
       const labelObjects = $form.find("label").map((i, el) => Cypress.$(el).text());
       const textObjects = $form.find("input[type='text']").map((i, el) => Cypress.$(el).val());
@@ -26,14 +26,19 @@ describe("Add Transportation Details Train: Allowed", () => {
       const textinputs = textObjects.get();
       const hints = hintObjects.get();
 
-      expect(textinputs).to.have.length(3);
-      expect(labels).to.have.length(3);
+      expect(textinputs).to.have.length(4);
+      expect(labels).to.have.length(4);
       expect(labels).to.deep.eq([
         "Railway bill number",
         "Place export leaves the UK",
+        "Container identification number (optional)",
         "Freight bill number (optional)",
       ]);
-      expect(hints).to.deep.eq(["For example, Hull.", "For example, BD51SMR"]);
+      expect(hints).to.deep.eq([
+        "For example, Hull.",
+        "Enter container or trailer identification number. For example, ABCD1234567.",
+        "For example, BD51SMR",
+      ]);
     });
     cy.contains("button", "Save and continue").should("be.visible");
     cy.contains("button", "Save as draft").should("be.visible");
@@ -177,5 +182,64 @@ describe("should redirect to forbidden page it transport details return 403 on p
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     cy.url().should("include", "/forbidden");
+  });
+});
+
+describe("Add Transportation Details Train: Container Identification Number Validation", () => {
+  it("should display error when container identification number exceeds 150 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportContainerIdentificationNumberMaxLength,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.get("#railwayBillNumber").type("RB123456", { force: true });
+    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#containerIdentificationNumber").type(
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      { force: true }
+    );
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("form").submit();
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Container identification number must not exceed 150 characters$/).should("be.visible");
+  });
+
+  it("should display error when container identification number contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportContainerIdentificationNumberInvalidCharacters,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.get("#railwayBillNumber").type("RB123456", { force: true });
+    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#containerIdentificationNumber").type("ABC123!@#", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("form").submit();
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Container identification number must only contain letters, numbers and spaces$/).should(
+      "be.visible"
+    );
+  });
+
+  it("should save successfully when container identification number is not provided", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportSave,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.get("#railwayBillNumber").type("RB123456", { force: true });
+    cy.get("#departurePlace").type("Dover", { force: true });
+    // containerIdentificationNumber is not filled - should be optional
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", progressUrl);
+  });
+
+  it("should save successfully when container identification number is valid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportSave,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.get("#railwayBillNumber").type("RB123456", { force: true });
+    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#containerIdentificationNumber").type("ABCD1234567", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", progressUrl);
   });
 });

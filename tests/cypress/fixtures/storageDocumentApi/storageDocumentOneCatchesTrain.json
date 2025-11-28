@@ -1,0 +1,65 @@
+{
+  "catches": [
+    {
+      "_id": "64550db5c61c2d186476b888",
+      "product": "Peacock sole (ADJ)",
+      "commodityCode": "03011100",
+      "certificateNumber": "GBR-2023-SD-A46E23603",
+      "productWeight": "10",
+      "weightOnCC": "10",
+      "placeOfUnloading": "dover",
+      "dateOfUnloading": "03/05/2023",
+      "transportUnloadedFrom": "43",
+      "id": "someDocumentNumber-1683295546",
+      "scientificName": "Pardachirus pavoninus",
+      "certificateType": "non_uk"
+    }
+  ],
+  "facilityName": "top",
+  "facilityAddressOne": "56, 3, Arc House, test",
+  "facilityBuildingName": "Arc House",
+  "facilityBuildingNumber": "56",
+  "facilitySubBuildingName": "3",
+  "facilityStreetName": "test",
+  "facilityTownCity": "Brussels",
+  "facilityCounty": "pre",
+  "facilityCountry": "Belgium",
+  "facilityPostcode": "sw11aa",
+  "validationErrors": [{}],
+  "addAnotherProduct": "No",
+  "addAnotherStorageFacility": "No",
+  "transport": {
+    "vehicle": "train",
+    "vesselName": "gfs",
+    "flagState": "ghj",
+    "containerNumber": "56",
+    "containerNumbers": ["TRAIN001", "TRAIN002"],
+    "departurePlace": "hull",
+    "exportedTo": {
+      "officialCountryName": "British Indian Ocean Territory",
+      "isoCodeAlpha2": "IO",
+      "isoCodeAlpha3": "IOT",
+      "isoNumericCode": "086"
+    }
+  },
+  "exportedTo": {
+    "officialCountryName": "British Indian Ocean Territory",
+    "isoCodeAlpha2": "IO",
+    "isoCodeAlpha3": "IOT",
+    "isoNumericCode": "086"
+  },
+  "arrivalTransport": {
+    "vehicle": "plane",
+    "vesselName": "gfs",
+    "flagState": "ghj",
+    "containerNumber": "56",
+    "departurePlace": "hull",
+    "departureDate": "09/1/2024",
+    "exportedTo": {
+      "officialCountryName": "British Indian Ocean Territory",
+      "isoCodeAlpha2": "IO",
+      "isoCodeAlpha3": "IOT",
+      "isoNumericCode": "086"
+    }
+  }
+}

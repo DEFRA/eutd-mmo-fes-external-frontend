@@ -26,6 +26,7 @@ const TruckTransportDetailsPage = () => {
     registrationNumber,
     departurePlace,
     freightBillNumber,
+    containerIdentificationNumber,
     nextUri,
     csrf,
     id,
@@ -36,7 +37,7 @@ const TruckTransportDetailsPage = () => {
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${id}`;
-  const backUrl = `/create-catch-certificate/${documentNumber}/do-you-have-a-road-transport-document/${id}`;
+  const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
   useEffect(() => {
     if (!isEmpty(errors)) {
@@ -63,6 +64,9 @@ const TruckTransportDetailsPage = () => {
               registrationNumber={!isEmpty(errors) ? actionData.registrationNumber : registrationNumber}
               departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
+              containerIdentificationNumber={
+                !isEmpty(errors) ? actionData.containerIdentificationNumber : containerIdentificationNumber
+              }
               displayOptionalSuffix={displayOptionalSuffix}
             />
             <ButtonGroup />

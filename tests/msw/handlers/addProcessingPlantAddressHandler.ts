@@ -14,13 +14,23 @@ import {
   GET_PROCESSING_STATEMENT,
   mockGetAllDocumentsUrl,
   mockGetProgress,
+  mockAddExporterDetails,
+  mockFindExporterAddressUrl,
+  mockValidateExporterAddressUrl,
 } from "~/urls.server";
+import addressSearchValid from "@/fixtures/referenceDataApi/addressSearchValid.json";
+import manualAddressValid from "@/fixtures/referenceDataApi/manualAddressValid.json";
+import postcodeEmptyError from "@/fixtures/exporterApi/postcodeEmptyError.json";
+import manualAddressErrors from "@/fixtures/exporterApi/manualAddressErrors.json";
 
 const addProcessingPlantAddressHandler: ITestHandler = {
   [TestCaseId.PSAddProcessingPlantAddress]: () => [
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(prcessingStatementAddPlantAddress))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(prcessingStatementAddPlantAddress))),
+    rest.get(mockFindExporterAddressUrl, (req, res, ctx) => res(ctx.json(addressSearchValid))),
+    rest.post(mockValidateExporterAddressUrl, (req, res, ctx) => res(ctx.json(manualAddressValid))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
-      res(ctx.json(processingStatement))
+      res(ctx.json(processingStatementComplete))
     ),
   ],
   [TestCaseId.PSAddProcessingPlantAddressMissingPlantNameError]: () => [
@@ -32,10 +42,9 @@ const addProcessingPlantAddressHandler: ITestHandler = {
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(psProgressIncomplete))),
   ],
   [TestCaseId.PSAddProcessingPlantAddressMissingPlantAddressError]: () => [
-    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
-    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
-      res(ctx.status(400), ctx.json(processingStatementAddPlantAddressError))
-    ),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(prcessingStatementAddPlantAddress))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(prcessingStatementAddPlantAddress))),
+    rest.get(mockFindExporterAddressUrl, (req, res, ctx) => res(ctx.status(400), ctx.json(postcodeEmptyError))),
   ],
   [TestCaseId.PSAddProcessingPlantDetailsError]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
@@ -59,6 +68,14 @@ const addProcessingPlantAddressHandler: ITestHandler = {
   ],
   [TestCaseId.PSAddProcessingPlantAddressForbidden]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res.once(ctx.status(403))),
+  ],
+  [TestCaseId.PSAddProcessingPlantAddressWithExistingAddress]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(processingStatement))),
+  ],
+  [TestCaseId.PSPSAddProcessingPlantAddressWithErrors]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(prcessingStatementAddPlantAddress))),
+    rest.post(mockValidateExporterAddressUrl, (req, res, ctx) => res(ctx.status(400), ctx.json(manualAddressErrors))),
   ],
 };
 

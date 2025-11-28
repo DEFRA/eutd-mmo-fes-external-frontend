@@ -12,5 +12,7 @@
   "addConsignmentDetailsConsignmentDescriptionOverCount": "You have {{overLimitBy}} characters too many",
   "addConsignmentDetailsConsignmentDescriptionHeader": "Product description",
   "addConsignmentDetailsConsignmentLinkLabel": "UK Integrated Online Tariff: Look up commodity codes, duty and VAT rates - GOV.UK",
-  "addConsignmentDetailsWarningLabel": "You must add one processed product at a time."
+  "addConsignmentDetailsWarningLabel": "You must add one processed product at a time.",
+  "addConsignmentDetailsEditInfo": "To edit or remove species from this product, press save and continue.",
+  "addConsignmentDetailsRemoveProduct": "Remove product"
 }

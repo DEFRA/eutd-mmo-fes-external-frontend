@@ -20,41 +20,41 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should contain the required heading", () => {
-    cy.contains("dt", "Document number");
     cy.contains("dt", "Company name");
     cy.contains("dt", "Company address");
     cy.contains("dt", "Commodity code");
     cy.contains("dt", "Product description");
-    cy.contains("dt", "Health certificate number");
-    cy.contains("dt", "Health certificate date");
+    cy.contains("dt", "Export health certificate");
+    cy.contains("dt", "Issue date");
     cy.contains("dt", "Species");
-    cy.contains("dt", "Catch certificate number");
-    cy.contains("dt", "Total weight landed in kg");
-    cy.contains("dt", "Export weight in kg (before processing)");
-    cy.contains("dt", "Export weight in kg (after processing)");
-    cy.contains("dt", "Person responsible for this consignment");
+    cy.contains("dt", "Catch certificate");
+    cy.contains("dt", "Catch certificate weight");
+    cy.contains("dt", "Export weight before processing");
+    cy.contains("dt", "Export weight after processing");
+    cy.contains("dt", "Person responsible for consignment");
     cy.contains("dt", "Plant approval number");
-    cy.contains("dt", "Plant name");
+    cy.contains("dt", "Processing plant name");
     cy.contains("dt", "Address");
-    cy.contains("dt", "What is the export destination?");
+    cy.contains("dt", "Destination country");
   });
 
   it("should contain the required data", () => {
-    cy.contains("dd", "GBR-2023-PS-DE53D6E7C");
-    cy.contains("dd", "tesrt");
-    cy.contains("dd", "MMO, LANCASTER HOUSE, HAMPSHIRE COURT");
-    cy.contains("dd", "03011100");
-    cy.contains("dd", "Herring fillets and Atlantic cod fishcakes");
-    cy.contains("dd", "20/2/123456");
-    cy.contains("dd", "30/06/2022");
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.contains("dd", "GBR-2022-PS-F2D5CD656");
     cy.contains("dd", "Monopenchelys acuta (MMA)");
+    cy.contains("dd", "Herring fillets and Atlantic cod fishcakes");
+    cy.contains("dd", "03011100");
+    cy.contains("dd", "7");
+    cy.contains("dd", "5");
+    cy.contains("dd", "6");
     cy.contains("dd", "8");
-    cy.contains("dd", "9kg");
-    cy.contains("dd", "Test data");
     cy.contains("dd", "Approval Number");
-    cy.contains("dd", "Test Plantname");
-    cy.contains("dd", "Test Address One");
-    cy.contains("dd", "Nicaragua");
+    cy.contains("dd", "Test data");
+    cy.contains("dd", "30/06/2022");
+    cy.contains("dd", "20/2/123456");
   });
 
   it("should contain all the required change tags and urls", () => {
@@ -63,17 +63,7 @@ describe("Check Your Information (Summary) page: UI", () => {
       .should("have.attr", "href")
       .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-exporter-details");
 
-    cy.get("#exporterDetailsChangeLink")
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-exporter-details");
-
-    cy.get("#productCommodityCodeChangeLink-0")
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-consignment-detail");
-
-    cy.get("#productDescriptionChangeLink-0")
+    cy.get("#consignmentDescriptionChangeLink")
       .should("be.visible")
       .should("have.attr", "href")
       .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-consignment-detail");
@@ -82,68 +72,6 @@ describe("Check Your Information (Summary) page: UI", () => {
       .should("be.visible")
       .should("have.attr", "href")
       .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-health-certificate");
-
-    cy.get("#healthCertificateDateChangeLink")
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-health-certificate");
-
-    cy.get("#species0ChangeLink")
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-catch-type/63979a023fc11363b1071358");
-
-    cy.get("#catchCertificateNumber0ChangeLink")
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and(
-        "include",
-        "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-catch-details/AGH/0?catchType=uk&pageNo=1"
-      );
-
-    cy.get("#totalWeightLanded0ChangeLink")
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and(
-        "include",
-        "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-catch-details/AGH/0?catchType=uk&pageNo=1"
-      );
-
-    cy.get("#exportWeightBeforeProcessing0ChangeLink")
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and(
-        "include",
-        "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-catch-details/AGH/0?catchType=uk&pageNo=1"
-      );
-
-    cy.get("#exportWeightAfterProcessing0ChangeLink")
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and(
-        "include",
-        "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-catch-details/AGH/0?catchType=uk&pageNo=1"
-      );
-
-    cy.get("#personResponsibleForConsignmentChangeLink")
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-processing-plant-details");
-
-    cy.get("#plantApprovalNumberChangeLink")
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-processing-plant-details");
-
-    cy.get("#plantNameChangeLink")
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-processing-plant-address");
-
-    cy.get("#plantAddressChangeLink")
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-processing-plant-address");
 
     cy.get("#exportToChangeLink")
       .should("be.visible")
@@ -225,40 +153,45 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
   });
 
   it("should contain the required heading", () => {
-    cy.contains("dt", "Document number");
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
     cy.contains("dt", "Company name");
     cy.contains("dt", "Company address");
-    cy.contains("dt", "Description and commodity code");
-    cy.contains("dt", "Health certificate number");
-    cy.contains("dt", "Health certificate date");
+    cy.contains("dt", "Commodity code");
+    cy.contains("dt", "Product description");
+    cy.contains("dt", "Export health certificate");
+    cy.contains("dt", "Issue date");
     cy.contains("dt", "Species");
-    cy.contains("dt", "Was the catch certificate issued in the UK");
-    cy.contains("dt", "Catch certificate number");
-    cy.contains("dt", "Total weight landed in kg");
-    cy.contains("dt", "Export weight in kg (before processing)");
-    cy.contains("dt", "Export weight in kg (after processing)");
-    cy.contains("dt", "Person responsible for this consignment");
+    cy.contains("dt", "Catch certificate");
+    cy.contains("dt", "Catch certificate weight");
+    cy.contains("dt", "Export weight before processing");
+    cy.contains("dt", "Export weight after processing");
+    cy.contains("dt", "Person responsible for consignment");
     cy.contains("dt", "Plant approval number");
-    cy.contains("dt", "Plant name");
+    cy.contains("dt", "Processing plant name");
     cy.contains("dt", "Address");
-    cy.contains("dt", "What is the export destination?");
+    cy.contains("dt", "Destination country");
   });
 
   it("should contain the required data", () => {
-    cy.contains("dd", "GBR-2023-PS-DE53D6E7C");
-    cy.contains("dd", "tesrt");
-    cy.contains("dd", "MMO, LANCASTER HOUSE, HAMPSHIRE COURT");
-    cy.contains("dd", "Herring fillets (16041210) and Atlantic cod fishcakes (16041992)");
-    cy.contains("dd", "20/2/123456");
-    cy.contains("dd", "30/06/2022");
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.contains("dd", "GBR-2022-PS-F2D5CD656");
     cy.contains("dd", "Monopenchelys acuta (MMA)");
+    cy.contains("dd", "Herring fillets and Atlantic cod fishcakes");
+    cy.contains("dd", "03011100");
+    cy.contains("dd", "7");
+    cy.contains("dd", "5");
+    cy.contains("dd", "6");
     cy.contains("dd", "8");
-    cy.contains("dd", "9kg");
-    cy.contains("dd", "Test data");
     cy.contains("dd", "Approval Number");
-    cy.contains("dd", "Test Plantname");
-    cy.contains("dd", "Test Address One");
-    cy.contains("dd", "Nicaragua");
+    cy.contains("dd", "Test data");
+    cy.contains("dd", "30/06/2022");
+    cy.contains("dd", "20/2/123456");
   });
 });
 
@@ -283,12 +216,12 @@ describe("Check Your Information (Summary) page: page guard", () => {
 describe("Check Your Information (Summary) page: with product descriptions", () => {
   it("should render check your formation page", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSCheckYourInformationProductDescriptions,
+      testCaseId: TestCaseId.PSCheckYourInformation,
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
 
-    cy.contains("dt", "Description and commodity code");
-    cy.contains("dd", "Herring fillets (16041210) and Atlantic cod fishcakes (16041992)");
+    cy.contains("dt", "Product description");
+    cy.contains("dd", "Herring fillets and Atlantic cod fishcakes");
     cy.get("#consignmentDescriptionChangeLink")
       .should("be.visible")
       .should("have.attr", "href")
@@ -303,5 +236,26 @@ describe("Check Your Information (Summary) page: with product descriptions", () 
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
     cy.url().should("include", "/progress");
+  });
+});
+
+describe("Check Your Information (Summary) page: non-UK catch certificate with issuing country", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should display issuing country for non-UK certificates", () => {
+    // Check that the issuing country field is displayed
+    cy.contains("dt", "Issuing country").should("be.visible");
+    // Check that the issuing country value is displayed correctly
+    cy.contains("dt", "Issuing country").next("dd").should("contain.text", "France");
+  });
+
+  it("should not display issuing country for UK certificates", () => {
+    // The first catch is UK-issued, so there should be only one issuing country field
+    cy.get("dt").contains("Issuing country").should("have.length", 1);
   });
 });

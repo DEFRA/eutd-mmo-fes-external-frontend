@@ -17,7 +17,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get(".govuk-heading-xl").contains("Train departing the UK");
     cy.get("#exportDate").should("be.visible");
     cy.get("form").should(($form) => {
-      expect($form.find("input[type='text']")).to.have.lengthOf(4);
+      expect($form.find("input[type='text']")).to.have.lengthOf(5);
       const labelObjects = $form.find("label").map((i, el) => Cypress.$(el).text());
       const textObjects = $form.find("input[type='text']").map((i, el) => Cypress.$(el).val());
       const hintObjects = $form.find("div.govuk-hint").map((i, el) => Cypress.$(el).text());
@@ -25,11 +25,12 @@ describe("Add Transportation Details Train: Allowed", () => {
       const textinputs = textObjects.get();
       const hints = hintObjects.get();
 
-      expect(textinputs).to.have.length(4);
-      expect(labels).to.have.length(7);
+      expect(textinputs).to.have.length(5);
+      expect(labels).to.have.length(8);
       expect(labels).to.deep.eq([
         "Consignment destination",
         "Where the train departs from the UK",
+        "Container identification number (optional)",
         "Day",
         "Month",
         "Year",
@@ -39,6 +40,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       expect(hints).to.deep.eq([
         "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document.",
         "For example, Felixstowe Port, Dover Port, or the place the train departs from the UK",
+        "Enter container or trailer identification number. For example, ABCD1234567.",
         "For example, 25 07 2025",
         "For example, AB12345C",
         "For example, BD51SMR",
@@ -102,6 +104,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TrainTransportSaveAsDraft,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
     cy.get("#railwayBillNumber").type("Railbill", { force: true });
     cy.get("#departurePlace").type("Hull", { force: true });
     cy.get("[data-testid=save-draft-button").click({ force: true });
@@ -137,5 +140,68 @@ describe("Add Transportation Details Train: 403 on page load", () => {
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     cy.url().should("include", "/forbidden");
+  });
+});
+
+describe("Train Container Identification Number - Validation Scenarios", () => {
+  it("should display error when container number has invalid format", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainSaveInvalidFormatContainerNumber,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.get('[name="containerNumbers.0"]').should("be.visible").type("INVALID@#", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", "There is a problem").should("be.visible");
+  });
+
+  it("should show error when a container identification number exceeds 50 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainSaveMaxCharsContainerIdentificationNumber,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.get('[name="containerNumbers.0"]')
+      .should("be.visible")
+      .type("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", {
+        force: true,
+      });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", "There is a problem").should("be.visible");
+  });
+
+  it("should add 5 container numbers with correct format", () => {
+    const testParams = {
+      testCaseId: TestCaseId.TrainSaveContainerNumber,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    for (let i = 0; i < 5; i++) {
+      cy.wait(500);
+      cy.get(`[name="containerNumbers.${i}"]`).should("be.visible").type("ABCD1234567", { force: true });
+      if (i < 4) {
+        cy.get('[data-testid="add-another-container"]').click({ force: true });
+      }
+    }
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+  });
+
+  it("should remove a container input when the remove button is clicked", () => {
+    const testParams = {
+      testCaseId: TestCaseId.TrainSaveContainerNumber,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    cy.wait(500);
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+
+    cy.get('[name="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get('[name="containerNumbers.1"]').type("ABCD1234561", { force: true });
+
+    cy.get('[name^="containerNumbers."]').should("have.length", 2);
+
+    cy.get('[data-testid="remove-container-1"]').click({ force: true });
+
+    cy.get('[name^="containerNumbers."]').should("have.length", 1);
+    cy.get('[name="containerNumbers.0"]').should("have.value", "ABCD1234567");
   });
 });

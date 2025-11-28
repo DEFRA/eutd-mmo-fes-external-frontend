@@ -55,6 +55,7 @@ import loginHandler from "./loginHandler";
 import transportDocumentsHandler from "./transportDocumentsHandler";
 import addStorageApprovalHandler from "./addStorageApprovalHandler";
 import departureSummaryHandlerHandler from "./departureSummaryHandler";
+import removeProductHandler from "./removeProductHandler";
 
 const rootTestHandler: ITestHandler = {
   ...indexPageHandler,
@@ -112,6 +113,7 @@ const rootTestHandler: ITestHandler = {
   ...loginHandler,
   ...transportDocumentsHandler,
   ...departureSummaryHandlerHandler,
+  ...removeProductHandler,
 };
 
 export default rootTestHandler;

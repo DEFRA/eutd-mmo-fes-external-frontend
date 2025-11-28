@@ -20,7 +20,11 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   UploadFileAction(request, params);
 
 const UploadFile = () => {
-  const { documentNumber, csrf } = useLoaderData<{ documentNumber: string | undefined; csrf: string }>();
+  const { documentNumber, csrf, maxEEZ } = useLoaderData<{
+    documentNumber: string | undefined;
+    csrf: string;
+    maxEEZ: number;
+  }>();
   const { rows, showNotification, totalRows, successfullyUploadedRows, errors } = useActionData<{
     rows: IUploadedLanding[];
     showNotification: boolean;
@@ -38,6 +42,19 @@ const UploadFile = () => {
     event.target.blur();
     submit(event.currentTarget, { replace: true });
   };
+  function renderLandingError(error: ErrorObject | string, maxEEZ: number) {
+    if (typeof error === "string") {
+      if (error === "validation.eezCode.string.max") {
+        return t(getErrorMessage(error), { dynamicValue: maxEEZ });
+      }
+      return t(getErrorMessage(error));
+    } else {
+      if (error.key === "validation.eezCode.string.max") {
+        return t(getErrorMessage(error.key), { dynamicValue: maxEEZ });
+      }
+      return t(getErrorMessage(error.key), { dynamicValue: error.params[0] });
+    }
+  }
 
   useScrollOnPageLoad();
 
@@ -210,9 +227,7 @@ const UploadFile = () => {
                             }-${index}-upload-file-error`}
                             key={`row-${landing.productId}`}
                           >
-                            {typeof error === "string"
-                              ? t(getErrorMessage(error))
-                              : t(getErrorMessage(error.key), { dynamicValue: error.params[0] })}
+                            {renderLandingError(error, maxEEZ)}
                             <br />
                           </span>
                         ))}

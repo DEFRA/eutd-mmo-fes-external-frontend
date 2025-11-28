@@ -136,6 +136,7 @@ const AddHealthCertificate = () => {
             </div>
             <DateFieldWithPicker
               id="healthCertificateDate"
+              name="healthCertificateDate"
               getDateSelected={() => {}}
               dateSelected={yearSelected + "-" + monthSelected + "-" + daySelected}
               errors={errors?.healthCertificateDate}

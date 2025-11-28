@@ -107,4 +107,93 @@ describe("Add Processing Plant Details: save processing plant details", () => {
     cy.get("[data-testid=save-and-continue").click({ force: true });
     cy.url().should("include", "/create-processing-statement/GBR-2022-PS-3FE1169D1/add-processing-plant-address");
   });
+
+  it("should show validation errors on regular save but not on save as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
+    };
+
+    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    cy.get("#plantName").clear();
+    cy.get("#plantApprovalNumber").clear();
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "add-processing-plant-details");
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
+});
+
+// Add this new describe block after the existing tests
+describe("Add Processing Plant Details: Save as Draft functionality", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddProcessingPlantDetails,
+    };
+    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+  });
+
+  it("should save as draft with valid data and redirect to processing statements", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSPostAddProcessingPlantDetails,
+    };
+
+    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    cy.get("#plantName").clear();
+    cy.get("#plantName").type("Test Processing Plant");
+    cy.get("#plantApprovalNumber").clear();
+    cy.get("#plantApprovalNumber").type("UK/TEST/123");
+    cy.get("#personResponsibleForConsignment").clear();
+    cy.get("#personResponsibleForConsignment").type("John Doe");
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
+
+  it("should save as draft with partial data without validation errors", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSPostAddProcessingPlantDetails,
+    };
+
+    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    cy.get("#plantName").clear();
+    cy.get("#plantName").type("Partial Plant Name");
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+    cy.get(".govuk-error-summary").should("not.exist");
+    cy.get(".govuk-error-message").should("not.exist");
+  });
+
+  it("should save as draft with empty fields without validation errors", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSPostAddProcessingPlantDetails,
+    };
+
+    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    cy.get("#plantName").clear();
+    cy.get("#plantApprovalNumber").clear();
+    cy.get("#personResponsibleForConsignment").clear();
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+    cy.get(".govuk-error-summary").should("not.exist");
+    cy.get(".govuk-error-message").should("not.exist");
+  });
+
+  it("should handle save as draft when backend returns an error gracefully", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
+    };
+
+    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    cy.get("#plantName").clear();
+    cy.get("#plantName").type("Error Test Plant");
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
+
+  it("should show save as draft button is clearly labeled and accessible", () => {
+    cy.get("[data-testid=save-draft-button]")
+      .should("be.visible")
+      .should("contain.text", "Save as draft")
+      .should("not.be.disabled");
+    cy.get("[data-testid=save-and-continue]").should("be.visible").should("not.contain.text", "Save as draft");
+  });
 });

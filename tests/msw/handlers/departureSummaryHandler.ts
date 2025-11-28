@@ -9,7 +9,7 @@ import {
   mockTransportDetailsUrl,
   SPECIES_URL,
 } from "~/urls.server";
-import noFacilities from "@/fixtures/storageDocumentApi/storageDocumentNoFacilities.json";
+import oneFacilities from "@/fixtures/storageDocumentApi/storageDocumentOneFacilityPlaneDeparture.json";
 import noCatches from "@/fixtures/storageDocumentApi/storageDocumentNoCatches.json";
 import emptyCatches from "@/fixtures/storageDocumentApi/storageDocumentEmptyCatch.json";
 import multiCatches from "@/fixtures/storageDocumentApi/storageDocumentMultiCatches.json";
@@ -28,7 +28,7 @@ import sdDrafts from "@/fixtures/dashboardApi/sdDrafts.json";
 
 const departureSummaryHandlerHandler: ITestHandler = {
   [TestCaseId.SDDepartureSummary]: () => [
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(noFacilities))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneFacilities))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.status(200), ctx.json(planeTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
   ],

@@ -1,0 +1,15 @@
+{
+  "model": {
+    "addressOne": "198, Jerome Baldwin, Ingrid Davidson, Pamela Greer",
+    "buildingName": "Jerome Baldwin",
+    "buildingNumber": "198",
+    "country": "Afghanistan",
+    "county": "Quo sint commodi re",
+    "streetName": "Pamela Greer",
+    "subBuildingName": "Ingrid Davidson",
+    "townCity": "Qui tenetur elit ni",
+    "postcode": "SW1A 1AA"
+  },
+  "error": "",
+  "errors": {}
+}

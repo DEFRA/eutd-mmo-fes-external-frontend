@@ -1,0 +1,30 @@
+{
+  "documentNumber": "GBR-2022-PS-0D12ABA0A",
+  "products": [
+    {
+      "id": "GBR-2025-PS-FDC3D66E1-1760436601",
+      "description": "Description for Allis shad",
+      "commodityCode": "03021180"
+    }
+  ],
+  "catches": [
+    {
+      "_id": "catch-1",
+      "species": "Atlantic cod (COD)",
+      "catchCertificateNumber": "GBR-2022-CC-111111",
+      "totalWeightLanded": "50",
+      "exportWeightBeforeProcessing": "25",
+      "exportWeightAfterProcessing": "25",
+      "productId": "GBR-2025-PS-FDC3D66E1-1760436601"
+    },
+    {
+      "_id": "catch-2",
+      "species": "Atlantic cod (COD)",
+      "catchCertificateNumber": "GBR-2022-CC-222222",
+      "totalWeightLanded": "30",
+      "exportWeightBeforeProcessing": "15",
+      "exportWeightAfterProcessing": "15",
+      "productId": "GBR-2025-PS-FDC3D66E1-1760436601"
+    }
+  ]
+}

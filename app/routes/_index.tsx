@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   //   "ignore next" annotation down to just above setApiMock()
   //   and return a proper Response
   setApiMock(request.url);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   const session = await getSessionFromRequest(request);
   session.set("csrf", csrf);
   const url = new URL(request.url);

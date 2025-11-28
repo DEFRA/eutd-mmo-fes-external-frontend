@@ -6,7 +6,7 @@ export const forwardUri = (vehicle: Vehicle) => {
   let nextUri = "";
   switch (vehicle) {
     case "truck":
-      nextUri = "do-you-have-a-road-transport-document";
+      nextUri = "add-transportation-details-truck";
       break;
     case "plane":
       nextUri = "add-transportation-details-plane";

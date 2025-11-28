@@ -673,3 +673,103 @@ describe("Check Your Information (Summary) page: change links", () => {
     cy.url().should("include", "/add-additional-transport-documents-truck/1");
   });
 });
+
+describe("Check Your Information (Summary) page: Manual Landing render container identification number and change link when present", () => {
+  it("should render container identification number for truck when present on manual landing journey", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationManualLandingTruckContainerNumber,
+    };
+
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.contains("dt", "Container identification number").should("be.visible");
+    cy.contains("dt", "Container identification number").next("dd").should("contain", "CONTAINER123");
+  });
+
+  it("should link to the truck transportation page to change the container identification number", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationManualLandingTruckContainerNumber,
+    };
+
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.get('[data-testid="change-container-truck"]')
+      .should("be.visible")
+      .should("have.attr", "href")
+      .and("include", "/add-transportation-details-truck")
+      .and("include", "#containerIdentificationNumber");
+  });
+
+  it("should render container identification number for train when present on manual landing journey", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumber,
+    };
+
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.contains("dt", "Container identification number").should("be.visible");
+    cy.contains("dt", "Container identification number").next("dd").should("contain", "CONTAINER123");
+  });
+
+  it("should link to the train transportation page to change the container identification number", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumber,
+    };
+
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.get('[data-testid="change-container-train"]')
+      .should("be.visible")
+      .should("have.attr", "href")
+      .and("include", "/add-transportation-details-train")
+      .and("include", "#containerIdentificationNumber");
+  });
+
+  it("should not render container identification number for train when not present on manual landing journey", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumberNull,
+    };
+
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.contains("dt", "Container identification number").should("not.exist");
+  });
+});
+
+describe("Check Your Information (Summary) page: Manual Landing when JavaScript is disabled", () => {
+  it("should render container identification number for truck transport without JavaScript", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationManualLanding,
+      disableScripts: true,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+
+    cy.contains("dt", "Container identification number").should("be.visible");
+    cy.contains("dt", "Container identification number").next("dd").should("contain", "CONTAINER123");
+    cy.get('[data-testid="change-container-truck"]')
+      .should("have.attr", "href")
+      .and("include", "/add-transportation-details-truck")
+      .and("include", "#containerIdentificationNumber");
+  });
+
+  it("should render container identification number for train transport without JavaScript", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumber,
+      disableScripts: true,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+
+    cy.contains("dt", "Container identification number").should("be.visible");
+    cy.contains("dt", "Container identification number").next("dd").should("contain", "CONTAINER123");
+    cy.get('[data-testid="change-container-train"]')
+      .should("have.attr", "href")
+      .and("include", "/add-transportation-details-train")
+      .and("include", "#containerIdentificationNumber");
+  });
+
+  it("should allow form submission without JavaScript", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationManualLanding,
+      disableScripts: true,
+    };
+
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=create-cc-button]").click();
+    cy.url().should("include", "catch-certificate-created");
+  });
+});

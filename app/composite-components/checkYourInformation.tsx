@@ -1,4 +1,4 @@
-import type { Exporter, IError, ITransport, IValidationError, StorageDocumentCatch } from "~/types";
+import type { Exporter, IError, ITransport, IValidationError, Journey, StorageDocumentCatch } from "~/types";
 import { changeLinkUri } from "~/helpers";
 import { route } from "routes-gen";
 import { useTranslation } from "react-i18next";
@@ -142,6 +142,17 @@ export const StorageDocumentTransportDisplay = ({
       backLinkId: "departurePort",
     },
     {
+      label: t("sdCheckYourInformationContainer", { ns: "sdCheckYourInformation" }),
+      value: transport.containerNumber,
+      hasChangeLink: true,
+    },
+    {
+      label: t("sdCheckYourInformationContainer", { ns: "sdCheckYourInformation" }),
+      value: transport.containerNumbers?.join(", "),
+      hasChangeLink: true,
+      backLinkId: "containerNumbers.0",
+    },
+    {
       label: t("sdCheckYourInformationDepartureDate", { ns: "sdCheckYourInformation" }),
       value: transport.departureDate,
       hasChangeLink: true,
@@ -152,20 +163,6 @@ export const StorageDocumentTransportDisplay = ({
       value: transport.exportDate,
       hasChangeLink: true,
       backLinkId: "exportDate-day",
-    },
-  ];
-
-  const sharedContainerVesselPlaneFields = [
-    {
-      label: t("sdCheckYourInformationContainer", { ns: "sdCheckYourInformation" }),
-      value: transport.containerNumber,
-      hasChangeLink: true,
-    },
-    {
-      label: t("sdCheckYourInformationContainer", { ns: "sdCheckYourInformation" }),
-      value: transport.containerNumbers?.join(", "),
-      hasChangeLink: true,
-      backLinkId: "containerNumbers.0",
     },
   ];
 
@@ -214,7 +211,6 @@ export const StorageDocumentTransportDisplay = ({
         hasChangeLink: true,
         backLinkId: "flightNumber",
       },
-      ...sharedContainerVesselPlaneFields,
       ...sharedFreightBillNumberDepartureCountry,
       ...commonFields,
     ],
@@ -241,7 +237,6 @@ export const StorageDocumentTransportDisplay = ({
         hasChangeLink: true,
         backLinkId: "flagState",
       },
-      ...sharedContainerVesselPlaneFields,
       ...sharedFreightBillNumberDepartureCountry,
       ...commonFields,
     ],
@@ -275,7 +270,6 @@ export const StorageDocumentTransportDisplay = ({
         hasChangeLink: true,
         backLinkId: "flightNumber",
       },
-      ...sharedContainerVesselPlaneFields,
       ...sharedFreightBillNumberDepartureCountry,
     ],
     train: [
@@ -302,7 +296,6 @@ export const StorageDocumentTransportDisplay = ({
         hasChangeLink: true,
         backLinkId: "flagState",
       },
-      ...sharedContainerVesselPlaneFields,
       ...sharedFreightBillNumberDepartureCountry,
     ],
   };
@@ -351,6 +344,7 @@ type CheckYourInformationLayoutProps = {
   headingTranslation: string;
   checkInformationHeader: string;
   csrf: string;
+  journey: Journey;
 };
 
 export const CheckYourInformationLayout = ({
@@ -365,6 +359,7 @@ export const CheckYourInformationLayout = ({
   headingTranslation,
   checkInformationHeader,
   csrf,
+  journey,
 }: CheckYourInformationLayoutProps) => {
   const { t } = useTranslation(["common", "pscheckYourInformation", "sdCheckYourInformation"]);
   return (
@@ -381,11 +376,13 @@ export const CheckYourInformationLayout = ({
                 ns: headingTranslation,
               })}
             />
-            <CheckYourInformationDocumentNumber
-              checkInformationHeader={t(checkInformationHeader, { ns: headingTranslation })}
-              documentNumberTitle={t("commonDocumentNumber", { ns: "common" })}
-              documentNumber={documentNumber}
-            />
+            {journey === "storageNotes" && (
+              <CheckYourInformationDocumentNumber
+                checkInformationHeader={t(checkInformationHeader, { ns: headingTranslation })}
+                documentNumberTitle={t("commonDocumentNumber", { ns: "common" })}
+                documentNumber={documentNumber}
+              />
+            )}
             {children}
           </div>
         </div>
@@ -474,6 +471,18 @@ export const CheckYourInformationProductLayout = ({
           )}`}
           t={t}
         />
+        {ctch.certificateType === "non_uk" && ctch.issuingCountry && (
+          <CheckYourInformationRow
+            label={t("sdCheckYourInformationIssuingCountry", { ns: "sdCheckYourInformation" })}
+            value={ctch.issuingCountry.officialCountryName}
+            isActionEnabled={true}
+            actionURL={`/create-storage-document/${documentNumber}/add-product-to-this-consignment/${index}#catches-${index}-issuingCountry?nextUri=${route(
+              "/create-storage-document/:documentNumber/check-your-information",
+              { documentNumber }
+            )}`}
+            t={t}
+          />
+        )}
         <CheckYourInformationRow
           label={t("sdCheckYourInformationUkentryDocumentNumber", { ns: "sdCheckYourInformation" })}
           value={ctch.certificateNumber}

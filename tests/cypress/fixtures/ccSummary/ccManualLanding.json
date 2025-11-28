@@ -9,7 +9,8 @@
       "nationalityOfVehicle": "UK",
       "registrationNumber": "1234567",
       "departurePlace": "Hull",
-      "freightBillNumber": "AA1234567"
+      "freightBillNumber": "AA1234567",
+      "containerIdentificationNumber": "CONTAINER123"
     }
   ],
   "exporter": {

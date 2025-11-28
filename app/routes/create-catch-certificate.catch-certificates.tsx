@@ -1,6 +1,6 @@
 import * as React from "react";
 import isEmpty from "lodash/isEmpty";
-import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
+import { Link, PrefetchPageLinks, useLoaderData, useSearchParams } from "@remix-run/react";
 import { type MetaFunction, type ActionFunction, type LoaderFunction, redirect } from "@remix-run/node";
 import type { DashboardLinks, IDashboardData, IGetAllDocumentsData } from "~/types";
 import { Main } from "~/components";
@@ -20,6 +20,7 @@ import {
 } from "~/composite-components";
 import classNames from "classnames/bind";
 import { useScrollOnPageLoad } from "~/hooks";
+import { useMemo } from "react";
 
 export const meta: MetaFunction = ({ data }) => getDashboardMeta(data);
 
@@ -38,12 +39,22 @@ export const action: ActionFunction = async ({ request }): Promise<Response> => 
 };
 
 const populateRecordLinks = (documents: IGetAllDocumentsData, t: TFunction<"common"[], undefined>) => {
-  const journey = "catchCertificate";
+  // Cache translations outside the mapping
+  const translations = {
+    continue: t("continue", { ns: "dashboard" }),
+    delete: t("delete", { ns: "dashboard" }),
+    void: t("commonDashboardVoid", { ns: "common" }),
+    copy: t("commonDashboardCopy", { ns: "common" }),
+  };
 
+  const journey = "catchCertificate";
   const refinedDocuments = {} as IGetAllDocumentsData;
 
   refinedDocuments.completed = Array.isArray(documents?.completed)
     ? documents.completed.map((document) => {
+        const userRef = getDashboardUserReference(document);
+        const journeyRef = `${t(journey)} ${document.documentNumber} ${userRef}`;
+
         document.links = {
           voidLink: () => (
             <Link
@@ -54,10 +65,8 @@ const populateRecordLinks = (documents: IGetAllDocumentsData, t: TFunction<"comm
               className="govuk-link"
               reloadDocument
             >
-              {t("commonDashboardVoid", { ns: "common" })}
-              <span className="govuk-visually-hidden">
-                {`${t(journey)} ${document.documentNumber} ${getDashboardUserReference(document)}}`}
-              </span>
+              {translations.void}
+              <span className="govuk-visually-hidden">{journeyRef}</span>
             </Link>
           ),
           copyLink: () => (
@@ -69,10 +78,8 @@ const populateRecordLinks = (documents: IGetAllDocumentsData, t: TFunction<"comm
               className="govuk-link"
               reloadDocument
             >
-              {t("commonDashboardCopy", { ns: "common" })}
-              <span className="govuk-visually-hidden">
-                {`${t(journey)} ${document.documentNumber} ${getDashboardUserReference(document)}}`}
-              </span>
+              {translations.copy}
+              <span className="govuk-visually-hidden">{journeyRef}</span>
             </Link>
           ),
         };
@@ -82,6 +89,9 @@ const populateRecordLinks = (documents: IGetAllDocumentsData, t: TFunction<"comm
 
   refinedDocuments.inProgress = Array.isArray(documents?.inProgress)
     ? documents.inProgress.map((document) => {
+        const userRef = getDashboardUserReference(document);
+        const journeyRef = `${t(journey)} ${document.documentNumber} ${userRef}`;
+
         document.links = {
           continueLink: () => (
             <Link
@@ -98,10 +108,8 @@ const populateRecordLinks = (documents: IGetAllDocumentsData, t: TFunction<"comm
               className="govuk-link"
               reloadDocument
             >
-              {t("continue", { ns: "dashboard" })}
-              <span className="govuk-visually-hidden">
-                {`${t(journey)} ${document.documentNumber} ${getDashboardUserReference(document)}}`}
-              </span>
+              {translations.continue}
+              <span className="govuk-visually-hidden">{journeyRef}</span>
             </Link>
           ),
           deleteLink: () => (
@@ -113,10 +121,8 @@ const populateRecordLinks = (documents: IGetAllDocumentsData, t: TFunction<"comm
               className="govuk-link"
               reloadDocument
             >
-              {t("delete", { ns: "dashboard" })}
-              <span className="govuk-visually-hidden">
-                {`${t(journey)} ${document.documentNumber} ${getDashboardUserReference(document)}}`}
-              </span>
+              {translations.delete}
+              <span className="govuk-visually-hidden">{journeyRef}</span>
             </Link>
           ),
         };
@@ -129,29 +135,32 @@ const populateRecordLinks = (documents: IGetAllDocumentsData, t: TFunction<"comm
 
 const populateNavigationLinks = (t: TFunction<"common"[], undefined>, searchParams: URLSearchParams) => {
   const results: DashboardLinks = {
-    previousLink: () => (
-      <a
-        className="govuk-link govuk-pagination__link"
-        href={`${route("/create-catch-certificate/catch-certificates")}?month=${format(
-          paginationPreviousLinkDate(searchParams),
-          "MM"
-        )}&year=${format(paginationPreviousLinkDate(searchParams), "y")}&position=0`}
-        rel="next"
-      >
-        <svg
-          className="govuk-pagination__icon govuk-pagination__icon--prev"
-          xmlns="http://www.w3.org/2000/svg"
-          height="13"
-          width="15"
-          aria-hidden="true"
-          focusable="false"
-          viewBox="0 0 15 13"
-        >
-          <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
-        </svg>
-        <span className="govuk-pagination__link-title">{t("commonDashboardPrev", { ns: "common" })}</span>
-      </a>
-    ),
+    previousLink: () => {
+      const href = `${route("/create-catch-certificate/catch-certificates")}?month=${format(
+        paginationPreviousLinkDate(searchParams),
+        "MM"
+      )}&year=${format(paginationPreviousLinkDate(searchParams), "y")}&position=0`;
+
+      return (
+        <>
+          <PrefetchPageLinks page={href} />
+          <Link to={href} className="govuk-link govuk-pagination__link" prefetch="intent">
+            <svg
+              className="govuk-pagination__icon govuk-pagination__icon--prev"
+              xmlns="http://www.w3.org/2000/svg"
+              height="13"
+              width="15"
+              aria-hidden="true"
+              focusable="false"
+              viewBox="0 0 15 13"
+            >
+              <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+            </svg>
+            <span className="govuk-pagination__link-title">{t("commonDashboardPrev", { ns: "common" })}</span>
+          </Link>
+        </>
+      );
+    },
     monthlyLinks: () =>
       getCompletedPagination(searchParams).map((i, index) => {
         const journey = "catchCertificate";
@@ -217,13 +226,19 @@ const CatchCertificates = () => {
     dashboardFeedbackURL,
     csrf,
   } = useLoaderData<IDashboardData>();
-  const { t } = useTranslation(["common"]);
-  const refinedDocuments = populateRecordLinks(documents as IGetAllDocumentsData, t);
+
+  const { t } = useTranslation(["common", "dashboard"]);
   const [searchParams] = useSearchParams();
-  const navigationLinks = populateNavigationLinks(t, searchParams);
-  const catchCertificateHeading = isEmpty(heading)
-    ? getJourneyHeader(journey, t)
-    : `${heading}: ${getJourneyHeader(journey, t)}`;
+
+  // Memoize expensive operations
+  const refinedDocuments = useMemo(() => populateRecordLinks(documents as IGetAllDocumentsData, t), [documents, t]);
+
+  const navigationLinks = useMemo(() => populateNavigationLinks(t, searchParams), [t, searchParams]);
+
+  const catchCertificateHeading = useMemo(
+    () => (isEmpty(heading) ? getJourneyHeader(journey, t) : `${heading}: ${getJourneyHeader(journey, t)}`),
+    [heading, journey, t]
+  );
 
   useScrollOnPageLoad();
 

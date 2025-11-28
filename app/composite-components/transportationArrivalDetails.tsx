@@ -21,12 +21,10 @@ export const ArrivalTransportationModeDetails = ({
   nationalityOfVehicle,
   registrationNumber,
   errors,
-  displayOptionalSuffix,
   countries,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
-  displayOptionalSuffix: boolean;
   countries: ICountry[];
 }) => {
   const { t } = useTranslation("transportation");
@@ -41,11 +39,7 @@ export const ArrivalTransportationModeDetails = ({
       {vehicle === "train" && (
         <FormInput
           containerClassName="govuk-form-group govuk-!-width-one-half"
-          label={t(
-            displayOptionalSuffix
-              ? "addTransportationArrivalDetailsRailwayBillNumberOptional"
-              : "addTransportationArrivalDetailsRailwayBillNumber"
-          )}
+          label={t("addTransportationArrivalDetailsRailwayBillNumber")}
           name="railwayBillNumber"
           type="text"
           labelClassName="govuk-!-font-weight-bold"
@@ -74,7 +68,7 @@ export const ArrivalTransportationModeDetails = ({
         <>
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
-            label={t("addTransportationArrivalDetailsVesselNameOptional")}
+            label={t("addTransportationArrivalDetailsVesselName")}
             name="vesselName"
             type="text"
             labelClassName="govuk-!-font-weight-bold"
@@ -101,7 +95,7 @@ export const ArrivalTransportationModeDetails = ({
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
-            label={t("addTransportationArrivalDetailsFlagStateOptional")}
+            label={t("addTransportationArrivalDetailsFlagState")}
             name="flagState"
             type="text"
             labelClassName="govuk-!-font-weight-bold"
@@ -140,14 +134,11 @@ export const ArrivalTransportationModeDetails = ({
             errorMessageText={t(errors?.nationalityOfVehicle?.message, { ns: "errorsText" })}
             id="nationalityOfVehicle"
             name="nationalityOfVehicle"
-            labelText={t(
-              displayOptionalSuffix
-                ? "addTransportationArrivalDetailsTruckNationalityOptional"
-                : "addTransportationArrivalDetailsTruckNationality"
-            )}
+            labelText={t("addTransportationArrivalDetailsTruckNationality")}
             labelClassName="govuk-label govuk-!-font-weight-bold"
             hintText={t("addTransportationArrivalDetailsTruckNationalityHint")}
             defaultValue={nationalityOfVehicle ?? ""}
+            minCharsBeforeSearch={2}
             selectProps={{
               selectClassName: classNames("govuk-select", {
                 "govuk-select--error": errors?.nationalityOfVehicle,
@@ -162,11 +153,7 @@ export const ArrivalTransportationModeDetails = ({
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
-            label={t(
-              displayOptionalSuffix
-                ? "addTransportationArrivalDetailsRegistrationNumberOptional"
-                : "addTransportationArrivalDetailsRegistrationNumber"
-            )}
+            label={t("addTransportationArrivalDetailsRegistrationNumber")}
             name="registrationNumber"
             type="text"
             labelClassName="govuk-!-font-weight-bold"
@@ -196,11 +183,7 @@ export const ArrivalTransportationModeDetails = ({
         <>
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
-            label={t(
-              displayOptionalSuffix
-                ? "addTransportationArrivalDetailsAirwayBillNumberOptional"
-                : "addTransportationArrivalDetailsAirwayBillNumber"
-            )}
+            label={t("addTransportationArrivalDetailsAirwayBillNumber")}
             name="airwayBillNumber"
             type="text"
             labelClassName="govuk-label govuk-!-font-weight-bold"
@@ -226,11 +209,7 @@ export const ArrivalTransportationModeDetails = ({
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
-            label={t(
-              displayOptionalSuffix
-                ? "addTransportationArrivalDetailsFlightNumberOptional"
-                : "addTransportationArrivalDetailsFlightNumber"
-            )}
+            label={t("addTransportationArrivalDetailsFlightNumber")}
             name="flightNumber"
             type="text"
             labelClassName="govuk-!-font-weight-bold"
@@ -261,7 +240,8 @@ export const ArrivalTransportationModeDetails = ({
           containers={containerNumbers}
           maximumContainers={5}
           errors={errors}
-          displayOptionalSuffix={displayOptionalSuffix}
+          displayOptionalSuffix={false}
+          vehicleType={vehicle}
         />
       )}
     </>
@@ -287,6 +267,7 @@ export const TransportationArrivalDetails = ({
   freightBillNumber,
   countries,
   displayOptionalSuffix,
+  placeOfUnloading,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
@@ -310,7 +291,6 @@ export const TransportationArrivalDetails = ({
         registrationNumber={registrationNumber}
         departurePort={departurePort}
         errors={errors}
-        displayOptionalSuffix={displayOptionalSuffix}
         countries={countries}
       />
       <FormInput
@@ -357,11 +337,7 @@ export const TransportationArrivalDetails = ({
         errorMessageText={t(errors?.departureCountry?.message, { ns: "errorsText" })}
         id="departureCountry"
         name="departureCountry"
-        labelText={t(
-          displayOptionalSuffix
-            ? "addTransportationArrivalDetailsDepartureCountryOptional"
-            : "addTransportationArrivalDetailsDepartureCountry"
-        )}
+        labelText={t("addTransportationArrivalDetailsDepartureCountry")}
         labelClassName="govuk-label govuk-!-font-weight-bold"
         hintText={t(
           vehicle === "plane"
@@ -384,11 +360,7 @@ export const TransportationArrivalDetails = ({
       />
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
-        label={t(
-          displayOptionalSuffix
-            ? "addTransportationArrivalDetailsConsignmentOriginOptional"
-            : "addTransportationArrivalDetailsConsignmentOrigin"
-        )}
+        label={t("addTransportationArrivalDetailsConsignmentOrigin")}
         name="departurePort"
         labelClassName="govuk-!-font-weight-bold"
         type="text"
@@ -418,16 +390,45 @@ export const TransportationArrivalDetails = ({
         hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
         hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
       />
+      <FormInput
+        containerClassName="govuk-form-group govuk-!-width-one-half"
+        label={t("addTransportationArrivalDetailsTruckPlaceOfUnloading")}
+        name="placeOfUnloading"
+        labelClassName="govuk-!-font-weight-bold"
+        type="text"
+        inputClassName={classNames("govuk-input", {
+          "govuk-input--error": errors?.placeOfUnloading,
+        })}
+        inputProps={{
+          defaultValue: placeOfUnloading ?? "",
+          id: "placeOfUnloading",
+          "aria-describedby": "hint-placeOfUnloading",
+        }}
+        hint={{
+          id: "hint-placeOfUnloading",
+          position: "above",
+          text: t(
+            vehicle === "containerVessel"
+              ? "addTransportationArrivalDetailsVesselPlaceOfUnloadingHint"
+              : "addTransportationArrivalDetailsTruckPlaceOfUnloadingHint",
+            { vehicle: t(vehicle).toLowerCase() }
+          ),
+          className: "govuk-hint govuk-!-margin-bottom-0",
+        }}
+        errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.placeOfUnloading)) }}
+        staticErrorMessage={t(errors?.placeOfUnloading?.message, { ns: "errorsText" })}
+        errorPosition={ErrorPosition.AFTER_LABEL}
+        containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.placeOfUnloading))}
+        hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+        hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+      />
       <DateFieldWithPicker
         id="departureDate"
+        name="departureDate"
         getDateSelected={() => {}}
         dateSelected={moment(departureDate, ["DD/MM/YYYY", "YYYY-MM-DD", "D/M/YYYY", "YYYY-M-D"]).format("YYYY-MM-DD")}
         errors={errors?.departureDate}
-        label={
-          displayOptionalSuffix
-            ? "addTransportationArrivalDetailsDepartureDateOptional"
-            : "addTransportationArrivalDetailsDepartureDate"
-        }
+        label={"addTransportationArrivalDetailsDepartureDate"}
         translationNs="transportation"
         hideAddDateButton={true}
         hintText="addTransportationArrivalDetailsDepartureDateHint"

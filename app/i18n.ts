@@ -63,4 +63,6 @@ export const allNamespaces = [
   "storageDocumentCreated",
   "addProductToThisConsignment",
   "sdDepartureProductSummary",
+  "catchDetailsTableHeader",
+  "psRemoveProduct",
 ];

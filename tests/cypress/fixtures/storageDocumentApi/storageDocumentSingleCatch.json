@@ -19,10 +19,8 @@
       "netWeightFisheryProductDeparture": "100"
     }
   ],
-  "storageFacilities": [],
   "validationErrors": [{}],
   "addAnotherProduct": "No",
-  "addAnotherStorageFacility": "No",
   "transport": {
     "vehicle": "plane",
     "vesselName": "gfs",

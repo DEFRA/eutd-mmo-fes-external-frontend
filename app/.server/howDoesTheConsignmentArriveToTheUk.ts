@@ -5,7 +5,6 @@ import type { reduxRequestParams } from "~/types/reduxRequestParam";
 import { getBearerTokenForRequest } from "./auth";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import { createCSRFToken, validateCSRFToken } from "./csrfToken";
-import { getEnv } from "~/env.server";
 import { apiCallFailed } from "~/communication.server";
 
 export const HowDoesTheConsignmentArriveToTheUkLoader = async ({
@@ -19,14 +18,13 @@ export const HowDoesTheConsignmentArriveToTheUkLoader = async ({
   documentNumber: string | undefined;
   request: Request;
 }) => {
-  const displayOptionalSuffix = getEnv().EU_CATCH_FIELDS_OPTIONAL === "true";
   const isArrivalTransportation = true;
   const { vehicle } = await getTransportDetails(bearerToken, journey, documentNumber, isArrivalTransportation);
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
-  return new Response(JSON.stringify({ displayOptionalSuffix, documentNumber, vehicle, journey, csrf }), {
+  return new Response(JSON.stringify({ documentNumber, vehicle, journey, csrf }), {
     status: 200,
     headers: {
       "Content-Type": "application/json",
@@ -42,7 +40,6 @@ export const HowDoesTheConsignmentArriveToTheUkAction = async ({
   vehicle,
   currentUri,
   saveAsDraftUrl,
-  skipPageUrl,
   completedUrl,
 }: Omit<reduxRequestParams, "params"> & {
   form: FormData;
@@ -50,7 +47,6 @@ export const HowDoesTheConsignmentArriveToTheUkAction = async ({
   vehicle: Vehicle;
   currentUri: string;
   saveAsDraftUrl: string;
-  skipPageUrl: string;
   completedUrl: string;
 }): Promise<Response | ErrorResponse> => {
   const isValid = await validateCSRFToken(request, form);
@@ -71,6 +67,7 @@ export const HowDoesTheConsignmentArriveToTheUkAction = async ({
           departureCountry: isArrivalTransportation ? null : undefined,
           departurePort: isArrivalTransportation ? null : undefined,
           departureDate: isArrivalTransportation ? null : undefined,
+          placeOfUnloading: isArrivalTransportation ? null : undefined,
           arrival: isArrivalTransportation,
           containerNumbers: [],
         }
@@ -91,10 +88,9 @@ export const HowDoesTheConsignmentArriveToTheUkAction = async ({
     const isUnauthorised = transportDetailsResponse.unauthorised as boolean;
     if (isUnauthorised) return redirect("/forbidden");
 
-    if (buttonClicked === "saveAndContinue") {
+    if (buttonClicked === "saveAndContinue" && errors.length > 0) {
       const values = Object.fromEntries(form);
-      if (!values.vehicle) return redirect(skipPageUrl);
-      if (errors.length > 0) return apiCallFailed(errors, values);
+      return apiCallFailed(errors, values);
     }
   }
 
