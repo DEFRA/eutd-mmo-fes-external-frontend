@@ -1,9 +1,9 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const addStorageFacilityUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/add-storage-facility-details/0";
+const addStorageFacilityUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/add-storage-facility-details";
 const addStorageApprovalUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/add-storage-facility-approval";
 const progressUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/progress";
-const storageFacilityUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/you-have-added-a-storage-facility";
+const storageFacilityUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/how-does-the-export-leave-the-uk";
 const checkYourInformationUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/check-your-information";
 
 describe("Add Storage Facility Approval", () => {
@@ -20,16 +20,14 @@ describe("Add Storage Facility Approval", () => {
       .should("have.attr", "href", addStorageFacilityUrl);
     cy.get(".govuk-heading-xl").contains("Add storage facility details");
     cy.get(".govuk-label").contains("Approval number (if applicable)");
-    cy.get(".dcx-hint").contains(
-      "If the storage facility has an approval number, enter it here. For example, UK/ABC/001, 1 UK 22028 or TSF001."
+    cy.get(".govuk-hint").contains(
+      "If the storage facility has an approval number enter it here. For example, UK/ABC/001, 1 UK 22028 or TSF001."
     );
-    cy.get(".govuk-warning-text__text").contains(
-      "From January 2026, adding details of product handling will be mandatory under new EU regulations. Press Save and continue to skip this section."
-    );
-    cy.get(".govuk-checkboxes").should("be.visible");
-    cy.get(".govuk-checkboxes").contains("Chilled");
-    cy.get(".govuk-checkboxes").contains("Frozen");
-    cy.get(".govuk-checkboxes").contains("Other");
+
+    cy.get(".govuk-radios").should("be.visible");
+    cy.get(".govuk-radios").contains("Chilled");
+    cy.get(".govuk-radios").contains("Frozen");
+    cy.get(".govuk-radios").contains("Other");
     cy.contains("button", "Save and continue").should("be.visible");
     cy.contains("button", "Save as draft").should("be.visible");
 
@@ -48,6 +46,9 @@ describe("Add Storage Facility Approval - Complete", () => {
       testCaseId: TestCaseId.SDAddStorageApprovalComplete,
     };
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
+
+    cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001");
+    cy.get("#chilled").check();
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.url().should("include", storageFacilityUrl);
   });
@@ -80,8 +81,26 @@ describe("Add Storage Facility Approval - Error", () => {
     cy.contains("h2", "There is a problem");
     cy.contains("a", /Facility approval number must not exceed 50 characters$/)
       .should("be.visible")
-      .should("have.attr", "href", "#storageFacilities-0-facilityApproval");
+      .should("have.attr", "href", "#storageFacilities-facilityApproval");
     cy.get(".govuk-error-summary").should("be.visible");
+  });
+});
+
+describe("Add Storage Facility Approval - How product is stored error", () => {
+  it("should show an error message when the product stored radio button is not selected", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageProductStorageError,
+    };
+    cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", "There is a problem");
+    cy.contains("a", /Select how the product was stored$/)
+      .should("be.visible")
+      .should("have.attr", "href", "#storageFacilities-facilityStorage");
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get("#storageFacilities-facilityStorage-error")
+      .should("be.visible")
+      .contains("Select how the product was stored");
   });
 });
 

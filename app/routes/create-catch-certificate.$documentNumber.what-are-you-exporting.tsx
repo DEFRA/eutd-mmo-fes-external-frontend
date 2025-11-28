@@ -87,6 +87,9 @@ const WhatAreYouExporting = () => {
     presentation: selectedPresentation,
     stateLookup: stateLookupNonJs,
     commodityCodes: commodityCodesNonJs,
+    commodityCode: selectedCommodityCodeNonJs,
+    presentationLabel: presentationLabelNonJs,
+    stateLabel: stateLabelNonJs,
   } = useActionData() ?? {};
   const { t } = useTranslation(["whatAreYouExporting", "common"]);
   const tabRef = useRef<{ updateActiveTab: (id: string) => boolean } | null>();
@@ -178,7 +181,7 @@ const WhatAreYouExporting = () => {
                       selectedSpecies={selectedSpecies ?? loaderSpecies}
                       selectedState={selectedState ?? stateCode}
                       selectedPresentation={selectedPresentation ?? presentationCode}
-                      selectedCommodityCode={commodityCode}
+                      selectedCommodityCode={selectedCommodityCodeNonJs ?? commodityCode}
                       commodityCodes={commodityCodesNonJs ?? commodityCodes}
                       errors={Object.keys(errors).reduce(
                         (prev, curr) => ({
@@ -187,8 +190,8 @@ const WhatAreYouExporting = () => {
                         }),
                         {}
                       )}
-                      stateLabel={stateLabel}
-                      presentationLabel={presentationLabel}
+                      stateLabel={stateLabelNonJs ?? stateLabel}
+                      presentationLabel={presentationLabelNonJs ?? presentationLabel}
                       scientificName={scientificName}
                       speciesCode={faoCode}
                       displayAddProduct={products?.length < maxLandingsLimit}

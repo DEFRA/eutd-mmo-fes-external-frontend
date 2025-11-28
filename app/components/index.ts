@@ -27,3 +27,6 @@ export { formatAddress } from "./formatAddress";
 export { RfmoSelector } from "./rfmoSelector";
 export { HighSeasAreasDetails } from "./highSeasAreasDetails";
 export { FaoAreaSelector } from "./faoAreaSelector";
+export { FilterSearch } from "./filterSearch";
+export { ImportantNotice } from "./importantNotice";
+export { AddLandingsVesselHelpContent } from "./addLandingsVesselHelpContent";

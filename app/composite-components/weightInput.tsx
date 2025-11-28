@@ -31,6 +31,10 @@ export const WeightInput = ({
   inputWidth,
   weightKey,
   inputType,
+  label,
+  hint,
+  inputName,
+  onChange,
 }: WeightInputProps) => {
   const { t } = useTranslation("directLandings");
   const [landingsWeightInputValue, setLandingsWeightInputValue] = useState("");
@@ -42,10 +46,15 @@ export const WeightInput = ({
 
     setLandingsWeightInputValue(e.target.value);
     totalWeight(weightDetails);
+    if (onChange) {
+      onChange(e);
+    }
   };
 
   const inputId = errorID ?? `weights.${index}.exportWeight`;
   const inputWidthClass = inputWidth ? `govuk-input--width-${inputWidth}` : "govuk-input--width-4";
+  const hintId = hint ? `${inputId}-hint` : undefined;
+
   return (
     <div
       className={
@@ -54,11 +63,21 @@ export const WeightInput = ({
           : "govuk-form-group govuk-!-static-margin-top-0 govuk-!-static-margin-bottom-3"
       }
     >
+      {label && hint && (
+        <>
+          <label className="govuk-label govuk-!-font-weight-bold" htmlFor={inputId}>
+            {label}
+          </label>
+          <ErrorMessage text={t(errors[inputId]?.message, { ns: "errorsText" })} />
+          <div id={hintId} className="govuk-hint govuk-!-margin-bottom-2">
+            {hint}
+          </div>
+        </>
+      )}
       <div className="govuk-input__wrapper">
         {!errorID && errors && !isEmpty(errors[inputId]) && (
           <ErrorMessage text={t(errors[inputId]?.message, { ns: "errorsText" })} />
         )}
-
         <input
           className={
             !isEmpty(errors?.[inputId])
@@ -66,7 +85,7 @@ export const WeightInput = ({
               : `govuk-input  ${inputWidthClass}`
           }
           id={inputId}
-          name={`weight-${speciesId}`}
+          name={inputName ?? `weight-${speciesId}`}
           type={inputType ?? "number"}
           step="0.01"
           defaultValue={getWeightFieldValue(formValue, landingsWeightInputValue, exportWeight)}

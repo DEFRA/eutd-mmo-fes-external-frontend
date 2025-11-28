@@ -5,11 +5,12 @@
   "exportData": {
     "exporterDetails": {},
     "catches": [],
-    "storageFacilities": []
+    "facilityName": "",
+    "facilityAddressOne": ""
   },
   "errors": {
-    "storageFacilities-0-facilityName": "sdAddStorageFacilityDetailsErrorEnterTheFacilityName",
-    "storageFacilities-0-facilityAddressOne": "sdAddStorageFacilityDetailsErrorEnterTheAddress"
+    "storageFacilities-facilityName": "sdAddStorageFacilityDetailsErrorEnterTheFacilityName",
+    "storageFacilities-facilityAddressOne": "sdAddStorageFacilityDetailsErrorEnterTheAddress"
   },
-  "errorsUrl": "/create-storage-document/GBR-2023-SD-8EC0EA267/add-storage-facility-details/1"
+  "errorsUrl": "/create-storage-document/GBR-2023-SD-8EC0EA267/add-storage-facility-details"
 }

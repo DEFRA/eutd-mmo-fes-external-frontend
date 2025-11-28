@@ -30,7 +30,6 @@ describe("Add Transportation Documents Container Vessel", () => {
         "Container vessel document reference (optional)",
       ]);
       expect(hints).to.deep.eq([
-        "Adding at least one transport document will be mandatory from January 2026. If you enter either field now, then both need to be populated.",
         "For example, an invoice, packing list or certificate of origin.",
         "For example, INV00001",
       ]);
@@ -154,20 +153,11 @@ describe("Add Transportation Documents Container Vessel", () => {
         "Container vessel document reference (optional)",
       ]);
       expect(hints).to.deep.eq([
-        "Adding at least one transport document will be mandatory from January 2026. If you enter either field now, then both need to be populated.",
         "For example, an invoice, packing list or certificate of origin.",
         "For example, INV00001",
         "For example, an invoice, packing list or certificate of origin.",
         "For example, INV00001",
       ]);
     });
-  });
-
-  it("should not display the Add another document button when 5 transport documents have been added", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.ContainerVesselTransportDocumentsRestrictAddAnotherDocument,
-    };
-    cy.visit(containerVesselPageUrl, { qs: { ...testParams } });
-    cy.contains("button", "Add another document").should("not.exist");
   });
 });

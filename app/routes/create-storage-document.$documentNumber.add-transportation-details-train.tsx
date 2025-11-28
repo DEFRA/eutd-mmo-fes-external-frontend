@@ -14,6 +14,7 @@ import {
   validateCSRFToken,
   getCountries,
   handleFormEmptyStringValue,
+  extractContainerNumbers,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
@@ -34,7 +35,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const consignmentDestination = form.get("exportedTo") as string;
   const railwayBillNumber = form.get("railwayBillNumber") as string;
   const departurePlace = form.get("departurePlace") as string;
-  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber");
+  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", false);
 
   const nextUri = form.get("nextUri") as string;
 
@@ -42,6 +43,9 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const exportedTo: ICountry | undefined = countries.find(
     (c: ICountry) => c.officialCountryName === consignmentDestination
   );
+
+  const values = Object.fromEntries(form);
+  const containerNumbers = extractContainerNumbers(values);
 
   const payload: ITransport = {
     currentUri: route("/create-storage-document/:documentNumber/add-transportation-details-train", { documentNumber }),
@@ -55,6 +59,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     vehicle: transport.vehicle,
     exportDate: calculateExportDate(form),
     exportDateTo: moment().startOf("day").add(1, "day").toISOString(),
+    containerNumbers,
   };
 
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);

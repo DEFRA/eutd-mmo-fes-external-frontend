@@ -1,0 +1,38 @@
+{
+  "catches": [],
+  "validationErrors": [],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": "Herring fillets (16041210) and Atlantic cod fishcakes (16041992)",
+  "products": [
+    {
+      "id": "_product_id_0",
+      "description": "consignment description",
+      "commodityCode": "012343533"
+    },
+    {
+      "id": "_product_id_1",
+      "description": "consignment description",
+      "commodityCode": "012343533"
+    }
+  ],
+  "healthCertificateDate": "30/06/2022",
+  "healthCertificateNumber": "20/2/123456",
+  "personResponsibleForConsignment": "Test data",
+  "plantApprovalNumber": "Approval Number",
+  "plantName": "Test Plantname",
+  "plantAddressOne": "Test Address One",
+  "plantBuildingName": "Test Building Name",
+  "plantBuildingNumber": "Test Building Number",
+  "plantSubBuildingName": "Test Building Name",
+  "plantStreetName": "Test Street Name",
+  "plantCounty": "Plant County",
+  "plantCountry": "United Kingdom",
+  "plantTownCity": "My Test City",
+  "plantPostcode": "My Post Code",
+  "dateOfAcceptance": "21/11/2022",
+  "exportedTo": {
+    "officialCountryName": "Nicaragua"
+  },
+  "_plantDetailsUpdated": false
+}

@@ -29,8 +29,5 @@
       "certificateType": "non_uk"
     }
   ],
-  "storageFacilities": [],
-  "validationErrors": [{}],
-  "addAnotherProduct": "No",
-  "addAnotherStorageFacility": "No"
+  "addAnotherProduct": "No"
 }

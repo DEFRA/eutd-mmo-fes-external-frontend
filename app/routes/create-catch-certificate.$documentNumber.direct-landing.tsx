@@ -10,6 +10,8 @@ import {
   RfmoSelector,
   HighSeasAreasDetails,
   FaoAreaSelector,
+  ImportantNotice,
+  AddLandingsVesselHelpContent,
 } from "~/components";
 import { route } from "routes-gen";
 import { useEffect, useState } from "react";
@@ -18,19 +20,20 @@ import { type LoaderFunction, type ActionFunction } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import { Details } from "@capgeminiuk/dcx-react-library";
 import { useTranslation } from "react-i18next";
-import classNames from "classnames/bind";
+import classNames from "classnames";
 import {
   WeightInput,
   DateFieldWithPicker,
   ButtonGroup,
   AddExclusiveEconomicZoneComponent,
+  LandingHelpDetails,
 } from "~/composite-components";
 
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
 import logger from "~/logger";
 import { DirectLandingsAction, DirectLandingsLoader } from "~/models";
-import { faoAreas, displayErrorTransformedMessages, scrollToId, isValidDate, confirmHSATypeOptions } from "~/helpers";
+import { faoAreas, scrollToId, isValidDate, confirmHSATypeOptions, displayErrorMessagesInOrder } from "~/helpers";
 import type {
   IDirectLandingsDetails,
   IErrorsTransformed,
@@ -95,7 +98,6 @@ const DirectLanding = () => {
     nextUri,
     totalWeight,
     minCharsBeforeSearch,
-    displayOptionalSuffix,
     gearCategories,
     fallbackGearTypes,
     csrf,
@@ -283,7 +285,25 @@ const DirectLanding = () => {
         documentNumber,
       })}
     >
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorTransformedMessages(errors)} />}
+      {!isEmpty(errors) && (
+        <ErrorSummary
+          errors={displayErrorMessagesInOrder(errors, [
+            "startDate",
+            "dateLanded",
+            "faoArea",
+            "highSeasArea",
+            "eez.0",
+            "eez.1",
+            "eez.2",
+            "eez.3",
+            "eez.4",
+            "vessel.vesselName",
+            "gearCategory",
+            "gearType",
+            "weight",
+          ])}
+        />
+      )}
 
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
@@ -298,34 +318,48 @@ const DirectLanding = () => {
             </ul>
           </div>
           <Title title={t("ccDirectLandingAddYourLandingTitle")} />
+          <ImportantNotice messageKey="commonAddTripDetailsWarningContent" />
           <SecureForm method="post" noValidate csrf={csrf}>
-            <div className="add-landings-form">
+            <div className="form-light-grey-bg govuk-!-padding-5 govuk-!-margin-bottom-5">
               <DateFieldWithPicker
                 id="startDate"
+                name="startDate"
                 errors={errors?.startDate}
                 dateSelected={selectedStartDate}
                 getDateSelected={() => {}}
-                label={displayOptionalSuffix ? "ccAddStartDateOfTripOptionalLabel" : "ccAddStartDateOfTripLabel"}
+                label={t("ccAddStartDateOfTripLabel")}
                 translationNs="directLandings"
                 hintText="psAddHealthCertificateDateFieldHint"
-                hideAddDateButton={true}
               />
-              <Details
-                summary={t("ccAddLandingStartDateHelpSectionLinkText", { ns: "addLandings" })}
-                detailsClassName="govuk-details"
-                summaryClassName="govuk-details__summary"
-                detailsTextClassName="govuk-details__text"
-              >
-                <p>{t("ccAddLandingStartDateHelpSectionContent", { ns: "addLandings" })}</p>
-              </Details>
+              <LandingHelpDetails
+                namespace="addLandings"
+                headerKey="ccAddLandingStartDateHelpSectionLinkText"
+                firstLineKey="ccAddLandingStartDateHelpSectionContent"
+                secondLineKey="ccAddLandingStartDateHelpSectionContentHeaderText"
+                listItemKeys={[
+                  "ccAddLandingStartDateHelpSectionGuidanceListItem1",
+                  "ccAddLandingStartDateHelpSectionGuidanceListItem2",
+                ]}
+              />
               <DateFieldWithPicker
                 id="dateLanded"
+                name="dateLanded"
                 errors={errors?.dateLanded}
                 dateSelected={selectedDate}
                 getDateSelected={getDateSelected}
                 label="ccAddLandingDateLandedLabel"
                 translationNs="directLandings"
                 hintText="psAddHealthCertificateDateFieldHint"
+              />
+              <LandingHelpDetails
+                namespace="directLandings"
+                headerKey="ccAddLandingDateLandedHelpSectionLinkText"
+                firstLineKey="ccAddLandingDateLandedHelpSection"
+                secondLineKey="ccAddLandingDateLandedHelpSectionHeader1Text"
+                listItemKeys={[
+                  "ccAddLandingDateLandedHelpSectionGuidanceList1Item1",
+                  "ccAddLandingDateLandedHelpSectionGuidanceList1Item2",
+                ]}
               />
               <FaoAreaSelector
                 legendTitle={t("ccAddLandingCatchAreaLabel")}
@@ -336,32 +370,26 @@ const DirectLanding = () => {
                 highSeasArea={highSeasArea}
                 setHighSeasArea={setHighSeasArea}
                 getHSAOptionLabel={(option: HSAOptionType) => t(option.label, { ns: "common" })}
-                HSALabel={t(displayOptionalSuffix ? "ccAddLandingHSAOptionalLabel" : "ccAddLandingHSALabel", {
-                  ns: "directLandings",
-                })}
+                HSALabel={t("ccAddLandingHSALabel", { ns: "directLandings" })}
                 HSAHint={t("ccAddLandingHSAHint", { ns: "directLandings" })}
                 confirmHSATypeOptions={confirmHSATypeOptions}
+                errors={errors?.highSeasArea}
               />
               <AddExclusiveEconomicZoneComponent
                 availableExclusiveEconomicZones={availableExclusiveEconomicZones}
                 preloadedZones={exclusiveEconomicZones.length > 0 ? exclusiveEconomicZones : []}
                 onExclusiveEconomicZonesChange={handleExclusiveEconomicZonesChange}
                 maximumEezPerLanding={maximumEezPerLanding}
-                legendTitle={t("exclusiveZoneTitle", { ns: "addLandings" })}
+                legendTitle={t("ccEEZZoneTitle", { ns: "directLandings" })}
                 eezHint={t("eezHintText", { ns: "addLandings" })}
-                eezHelpSectionBulletOne={t("ccEezHelpSectionBulletOne", { ns: "addLandings" })}
-                eezHelpSectionBulletTwo={t("ccEezHelpSectionBulletTwo", { ns: "addLandings" })}
-                eezHelpSectionBulletThree={t("ccEezHelpSectionBulletThree", { ns: "addLandings" })}
-                eezHelpSectionBulletFour={t("ccEezHelpSectionBulletFour", { ns: "addLandings" })}
-                eezHelpSectionContentFour={t("ccEezHelpSectionContentFour", { ns: "addLandings" })}
-                eezHelpSectionContentFive={t("ccEezHelpSectionContentSix", { ns: "addLandings" })}
+                eezHelpSectionContentThreeLink={t("ccEezHelpSectionContentThreeLink", { ns: "addLandings" })}
                 addAnotherButtonText={t("ccAddLandingAddAnotherZoneButtonText", { ns: "addLandings" })}
                 removeButtonText={t("ccAddLandingRemoveZoneButtonText", { ns: "addLandings" })}
                 eezSelectEmptyHeader={t("ccEezSelectCountryText", { ns: "addLandings" })}
                 eezHelpSectionLink={t("ccEezHelpSectionLinkText", { ns: "addLandings" })}
                 eezHelpSectionContentOne={t("ccEezHelpSectionContentOne", { ns: "addLandings" })}
                 eezHelpSectionContentTwo={t("ccEezHelpSectionContentTwo", { ns: "addLandings" })}
-                eezHelpSectionContentThree={t("ccEezHelpSectionContentThree", { ns: "addLandings" })}
+                errors={errors}
               />
               <RfmoSelector
                 rfmos={rfmos}
@@ -371,15 +399,8 @@ const DirectLanding = () => {
                 rfmoHintText={t("ccRfmoHintText")}
                 rfmoNullOption={t("ccRfmoNullOption")}
                 rfmoHelpSectionLink={t("ccRfmoHelpSectionLinkText")}
-                ccRfmoHelpSectionBulletFour={t("ccRfmoHelpSectionBulletFour")}
-                ccRfmoHelpSectionBulletThree={t("ccRfmoHelpSectionBulletThree")}
-                ccRfmoHelpSectionBulletTwo={t("ccRfmoHelpSectionBulletTwo")}
-                ccRfmoHelpSectionBulletOne={t("ccRfmoHelpSectionBulletOne")}
                 rfmoHelpSectionContentOne={t("ccRfmoHelpSectionContentOne")}
-                rfmoHelpSectionContentTwo={t("ccRfmoHelpSectionContentTwo")}
-                rfmoHelpSectionContentThree={t("ccRfmoHelpSectionContentThree")}
-                rfmoHelpSectionContentFour={t("ccRfmoHelpSectionContentFour")}
-                rfmoHelpSectionContentFive={t("ccRfmoHelpSectionContentFive")}
+                rfmoHelpSectionContentTwoLink={t("ccRfmoHelpSectionContentTwoLink")}
               />
               <AutocompleteFormField
                 id="vessel.vesselName"
@@ -416,14 +437,7 @@ const DirectLanding = () => {
                 onChange={enableChange ? handleVesselChange : undefined}
                 onSelected={handleVesselSelected}
               />
-              <Details
-                summary={t("ccAddLandingHelpSectionLinkText")}
-                detailsClassName="govuk-details"
-                summaryClassName="govuk-details__summary"
-                detailsTextClassName="govuk-details__text"
-              >
-                <p>{t("ccAddLandingHelpSectionContent")}</p>
-              </Details>
+              <AddLandingsVesselHelpContent />
               <GearDetails
                 isHydrated={isHydrated}
                 selectedGearCategory={gearCategory}
@@ -436,9 +450,7 @@ const DirectLanding = () => {
                 addLandingGearCategoryNullOption={t("ccAddLandingGearCategoryNullOption")}
                 addLandingGearTypeNullOption={t("ccAddLandingGearTypeNullOption")}
                 groupedErrorIds={groupedErrorIds}
-                legendTitle={t(
-                  displayOptionalSuffix ? "ccAddLandingGearDetailsOptionalLabel" : "ccAddLandingGearDetailsLabel"
-                )}
+                legendTitle={t("ccAddLandingGearDetailsLabel")}
                 landingGearCategoryLabel={t("ccAddLandingGearCategoryLabel")}
                 visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                 gearDetailsHint={t("ccAddLandingGearDetailsHint")}
@@ -459,6 +471,16 @@ const DirectLanding = () => {
                   <p>{t("ccAddLandingGearDetailsHelpSectionContentOne")}</p>
                   <p>{t("ccAddLandingGearDetailsHelpSectionContentTwo")}</p>
                   <p>{t("ccAddLandingGearDetailsHelpSectionContentThree")}</p>
+                  <p>
+                    <a
+                      href="https://www.gov.uk/government/publications/eu-iuu-regulation-2026-changes-guidance/gear-type"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="govuk-link govuk-link--no-visited-state"
+                    >
+                      {t("ccAddLandingGearDetailsHelpSectionContentFourLink")}
+                    </a>
+                  </p>
                 </>
               </Details>
             </div>

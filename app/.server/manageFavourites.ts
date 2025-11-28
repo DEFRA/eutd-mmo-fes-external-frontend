@@ -19,7 +19,7 @@ export const manageFavouritesLoader = async (request: Request, params: Params) =
   const { documentNumber } = params;
   const speciesExemptLink = getEnv().SPECIES_EXEMPT_LINK;
   const bearerToken = await getBearerTokenForRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   const session = await getSessionFromRequest(request);
   session.set("csrf", csrf);
   const selectedSpecies = session.get("species") ?? "";

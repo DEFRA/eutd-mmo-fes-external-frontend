@@ -1,6 +1,6 @@
 {
-  "psCatchAddedSingleCatchTitle": "Rydych chi wedi ychwanegu {{count}} o gynhyrchion wedi'u prosesu at y llwyth hwn",
-  "psCatchAddedMultiCatchTitle": "Rydych chi wedi ychwanegu {{count}} cynnyrch wedi'i brosesu at y llwyth hwn",
+  "psCatchAddedSingleCatchTitle": "Rydych chi wedi ychwanegu {{count}} cynnyrch wedi'i brosesu at y llwyth hwn",
+  "psCatchAddedMultiCatchTitle": "Rydych chi wedi ychwanegu {{count}} o gynhyrchion wedi'u prosesu at y llwyth hwn",
   "psCatchAddedSpeciesAndcatchCertificates": "Tystysgrifau rhywogaeth a thystysgrifau dalfa",
   "addCatchConfirmationText": "Ydych chi am ychwanegu dalfa arall?",
   "psSpecies": "rhywogaeth",
@@ -10,5 +10,12 @@
   "psExportWeightAfterProcessing": "Pwysau allforio mewn kg (ar ôl prosesu)",
   "psAddedCatchesToConsignment": "Gwiriwch y dalfeydd sydd wedi’u hychwanegu at y llwyth",
   "psAddAnotherSpecies": "Hoffech chi ychwanegu cynnyrch wedi'i brosesu arall?",
-  "CheckCatchesAddedConsignment": "Gwiriwch y tystysgrifau dalfa a ychwanegwyd at y llwyth"
+  "CheckCatchesAddedConsignment": "Gwiriwch y tystysgrifau dalfa a ychwanegwyd at y llwyth",
+  "psFilterLabel": "Chwilio am y dogfennau ar gyfer cynnyrch wedi'i brosesu",
+  "psFilterHint": "Gallwch chwilio yn ôl disgrifiad o’r cynnyrch, cod FAO neu enw'r rhywogaeth",
+  "psFilterButtonLabel": "Chwilio",
+  "psFilterResetButtonLabel": "Ailosod",
+  "catchDetailsHeading": "Rydych chi wedi ychwanegu {{totalDocuments}} o ddogfennau ar gyfer",
+  "catchDetailsHeadingMultiple": "Rydych chi wedi ychwanegu {{totalDocuments}} o ddogfennau ar gyfer",
+  "editProductInformationMessage": "I olygu'r wybodaeth am y cynnyrch, pwyswch newid."
 }

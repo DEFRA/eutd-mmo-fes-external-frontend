@@ -49,6 +49,10 @@ declare module "routes-gen" {
     "/create-processing-statement/:documentNumber/what-exporters-address": { documentNumber: string };
     "/create-processing-statement/:documentNumber/what-processing-plant-address": { documentNumber: string };
     "/create-processing-statement/processing-statements": Record<string, never>;
+    "/create-processing-statement/:documentNumber/remove-product/:productId": {
+      documentNumber: string;
+      productId: string;
+    };
     "/create-storage-document/:documentNumber/add-exporter-details": { documentNumber: string };
     "/create-storage-document/:documentNumber/add-arrival-transportation-details-container-vessel": {
       documentNumber: string;
@@ -73,7 +77,6 @@ declare module "routes-gen" {
     "/create-storage-document/:documentNumber/void-this-storage-document": { documentNumber: string };
     "/create-storage-document/:documentNumber/what-exporters-address": { documentNumber: string };
     "/create-storage-document/:documentNumber/you-have-added-a-product": { documentNumber: string };
-    "/create-storage-document/:documentNumber/you-have-added-a-storage-facility": { documentNumber: string };
     "/create-storage-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk": { documentNumber: string };
     "/create-storage-document/storage-documents": Record<string, never>;
     "/dev/null": Record<string, never>;
@@ -219,6 +222,10 @@ declare module "routes-gen" {
           RouteParams["/create-processing-statement/:documentNumber/add-your-reference"],
         ]
       | [
+          "/create-processing-statement/:documentNumber/add-consignment-details/:productId",
+          RouteParams["/create-processing-statement/:documentNumber/add-consignment-details/:productId"],
+        ]
+      | [
           "/create-processing-statement/:documentNumber/catch-added",
           RouteParams["/create-processing-statement/:documentNumber/catch-added"],
         ]
@@ -263,6 +270,10 @@ declare module "routes-gen" {
           RouteParams["/create-processing-statement/:documentNumber/what-processing-plant-address"],
         ]
       | ["/create-processing-statement/processing-statements"]
+      | [
+          "/create-processing-statement/:documentNumber/remove-product/:productId",
+          RouteParams["/create-processing-statement/:documentNumber/remove-product/:productId"],
+        ]
       | [
           "/create-storage-document/:documentNumber/add-exporter-details",
           RouteParams["/create-storage-document/:documentNumber/add-exporter-details"],
@@ -320,10 +331,6 @@ declare module "routes-gen" {
           RouteParams["/create-storage-document/:documentNumber/delete-this-draft-storage-document"],
         ]
       | [
-          "/create-storage-document/:documentNumber/do-you-have-a-road-transport-document",
-          RouteParams["/create-storage-document/:documentNumber/do-you-have-a-road-transport-document"],
-        ]
-      | [
           "/create-storage-document/:documentNumber/how-does-the-export-leave-the-uk",
           RouteParams["/create-storage-document/:documentNumber/how-does-the-export-leave-the-uk"],
         ]
@@ -350,10 +357,6 @@ declare module "routes-gen" {
       | [
           "/create-storage-document/:documentNumber/you-have-added-a-product",
           RouteParams["/create-storage-document/:documentNumber/you-have-added-a-product"],
-        ]
-      | [
-          "/create-storage-document/:documentNumber/you-have-added-a-storage-facility",
-          RouteParams["/create-storage-document/:documentNumber/you-have-added-a-storage-facility"],
         ]
       | ["/create-storage-document/storage-documents"]
       | ["/dev/null"]

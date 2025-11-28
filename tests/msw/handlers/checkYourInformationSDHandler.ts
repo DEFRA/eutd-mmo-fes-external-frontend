@@ -6,14 +6,20 @@ import {
   mockDocumentUrl,
   mockAddExporterDetails,
   GET_STORAGE_DOCUMENT,
+  getProgressUrl,
+  getTransportDetailsUrl,
+  mockGetAllDocumentsUrl,
 } from "~/urls.server";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
 import storageDocumentMandatory from "@/fixtures/storageDocumentApi/storageDocumentMandatoryFieldsOnly.json";
 import sdExporterDetails from "@/fixtures/addExporterDetails/sdExporterDetails.json";
 import storageDocumentNoCatches from "@/fixtures/storageDocumentApi/storageDocumentNoCatches.json";
+import storageDocumentOneCatches from "@/fixtures/storageDocumentApi/storageDocumentOneCatchesTrain.json";
 import storageDocumentNoFacilities from "@/fixtures/storageDocumentApi/storageDocumentNoFacilities.json";
 import storageDocumenOneFacility from "@/fixtures/storageDocumentApi/storageDocumentOneFacility.json";
+import sdProgressIncomplete from "@/fixtures/progressApi/sdIncomplete.json";
 import sdCreated from "@/fixtures/documentsApi/sdCreated.json";
+import sdDocuments from "@/fixtures/dashboardApi/sdDocument.json";
 
 const documentNumber = "GBR-2023-SD-DE53D6E7C";
 
@@ -27,7 +33,7 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
   ],
   [TestCaseId.SDCheckYourInformationTrain]: () => [
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentNoCatches))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentOneCatches))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
   ],
   [TestCaseId.SDCheckYourInformationPlane]: () => [
@@ -36,6 +42,14 @@ const checkYourInformationSDHandler: ITestHandler = {
   ],
   [TestCaseId.SDCheckYourInformationTruckCmr]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumenOneFacility))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+  ],
+  [TestCaseId.SDCheckYourInformationTruckWithContainers]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumenOneFacility))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+  ],
+  [TestCaseId.SDCheckYourInformationTrainWithContainers]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentOneCatches))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
   ],
   [TestCaseId.SDCheckYourInformationValidationSuccess]: () => [
@@ -73,6 +87,16 @@ const checkYourInformationSDHandler: ITestHandler = {
       )
     ),
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json(sdCreated))),
+  ],
+  [TestCaseId.SDCheckYourInformationValidationGuard]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.status(403))),
+  ],
+  [TestCaseId.SDCheckYourInformationValidationProgress]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentNoCatches))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
+    rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
   ],
 };
 

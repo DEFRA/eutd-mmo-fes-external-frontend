@@ -1,0 +1,9 @@
+{
+  "_id": "63975c6f3fc11363b107125e",
+  "__t": "processingStatement",
+  "requestByAdmin": false,
+  "errors": {
+    "catches-0-issuingCountry": "psAddCatchDetailsErrorEnterIssuingCountry"
+  },
+  "errorsUrl": "/create-processing-statement/GBR-2022-PS-0D12ABA0A/add-catch-details"
+}

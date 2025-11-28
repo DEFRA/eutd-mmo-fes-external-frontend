@@ -15,16 +15,9 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   await CatchCertificateTransportationDocumentsAction(request, params);
 
 const TrainTransportDocumentsPage = () => {
-  const { documentNumber, nextUri, id, documents, displayOptionalSuffix, csrf, maximumTransportDocumentPerTransport } =
-    useLoaderData<
-      ITransport & {
-        documentNumber: string;
-        nextUri: string;
-        displayOptionalSuffix: boolean;
-        csrf: string;
-        maximumTransportDocumentPerTransport: number;
-      }
-    >();
+  const { documentNumber, nextUri, id, documents, displayOptionalSuffix, csrf } = useLoaderData<
+    ITransport & { documentNumber: string; nextUri: string; displayOptionalSuffix: boolean; csrf: string }
+  >();
   const actionData = useActionData<{ errors: any; additionalFormDocuments?: AdditionalDocumentsData[] }>() ?? {};
   const { errors = {}, additionalFormDocuments } = actionData;
 
@@ -35,7 +28,6 @@ const TrainTransportDocumentsPage = () => {
   return (
     <AddAdditionalTransportDocuments
       documents={Array.isArray(additionalFormDocuments) ? additionalFormDocuments : documents}
-      maximumTransportDocumentPerTransport={maximumTransportDocumentPerTransport}
       documentNumber={documentNumber}
       transportType={transportType}
       actionUrl={actionUrl}

@@ -10,6 +10,7 @@ import processingStatement from "@/fixtures/processingStatementApi/processingSta
 const addPSExporterDetailsHandler: ITestHandler = {
   [TestCaseId.PSAddExporterDetailsEmpty]: () => [
     rest.get(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) => res(ctx.json(empty))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
   ],
   [TestCaseId.PSAddExporterDetailsFull]: () => [
     rest.get(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) => res(ctx.json(empty))),
@@ -27,20 +28,24 @@ const addPSExporterDetailsHandler: ITestHandler = {
       res(ctx.json(psAddExporterDetailsFull))
     ),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDrafts))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
   ],
   [TestCaseId.PSAddExporterDetailsFailsWith403]: () => [
     rest.get(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) => res(ctx.json(empty))),
     rest.post(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) =>
       res(ctx.status(403), ctx.json(psAddExporterDetailsFull))
     ),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
   ],
   [TestCaseId.PSAddExporterDetails403]: () => [
     rest.get(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) =>
       res(ctx.status(403), ctx.json(psAddExporterDetailsFull))
     ),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
   ],
   [TestCaseId.PSAddExporterDetailsFailsWithErrors]: () => [
     rest.get(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) => res(ctx.json(empty))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.post(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(psExporterMissingNameErrorResponse))
     ),

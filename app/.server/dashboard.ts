@@ -53,11 +53,12 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
 
   const t = await i18next.getFixedT(request, ["title"]);
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
   if (journey === "catchCertificate") {
     clearSession(session);
   }
+
   return new Response(
     JSON.stringify({
       journey,

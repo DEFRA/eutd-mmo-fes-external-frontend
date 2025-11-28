@@ -24,6 +24,8 @@ import uploadLandingsMissingVesselPln from "@/fixtures/uploadLandingsApi/ccUploa
 import uploadLandingsInvalidVesselPln from "@/fixtures/uploadLandingsApi/ccUploadLandingInvalidVesselPln.json";
 import uploadLandingsProductErrors from "@/fixtures/uploadLandingsApi/ccUploadLandingProductErrors.json";
 import uploadLandingsGearCodeErrors from "@/fixtures/uploadLandingsApi/ccUploadLandingGearCodeErrors.json";
+import ccUploadEEZMaxErrorString from "@/fixtures/uploadLandingsApi/ccUploadEEZMaxErrorString.json";
+import ccUploadEEZMaxErrorObject from "@/fixtures/uploadLandingsApi/ccUploadEEZMaxErrorObject.json";
 import species from "@/fixtures/referenceDataApi/species.json";
 import favourites from "@/fixtures/whatAreYouExportingApi/favourites.json";
 import commodityCode from "@/fixtures/whatAreYouExportingApi/commodityCode.json";
@@ -162,6 +164,22 @@ const uploadLandingsHandler: ITestHandler = {
   [TestCaseId.CCSaveUploadLandingsClearForbidden]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
     rest.post(CLEAR_LANDINGS_URL, (req, res, ctx) => res(ctx.status(403))),
+  ],
+  [TestCaseId.CCUploadEEZMaxErrorString]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(UPLOAD_LANDINGS_URL, (req, res, ctx) => res(ctx.status(200), ctx.json(ccUploadEEZMaxErrorString))),
+  ],
+  [TestCaseId.CCUploadEEZMaxErrorObject]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(UPLOAD_LANDINGS_URL, (req, res, ctx) => res(ctx.status(200), ctx.json(ccUploadEEZMaxErrorObject))),
+  ],
+  [TestCaseId.CCUploadFileChangeHandler]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(UPLOAD_LANDINGS_URL, (req, res, ctx) => res(ctx.status(200), ctx.json(uploadLandingsSuccess))),
+  ],
+  [TestCaseId.CCUploadFileClearButton]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(UPLOAD_LANDINGS_URL, (req, res, ctx) => res(ctx.status(200), ctx.json(uploadLandingsSuccess))),
   ],
 };
 

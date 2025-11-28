@@ -1,5 +1,6 @@
 import type { ICountry } from "./common";
 import type { ErrorLookup, IError, IErrorsTransformed } from "./errors";
+import type { HighSeasAreaType } from "./exportPayload";
 
 export interface IVessel {
   pln?: string;
@@ -111,6 +112,10 @@ export type WeightInputProps = {
   key?: string;
   weightKey?: string;
   inputType?: string;
+  label?: string;
+  hint?: string;
+  inputName?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export interface IGearType {

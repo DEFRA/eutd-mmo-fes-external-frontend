@@ -108,6 +108,16 @@ export const autoEnrollUserForService = async (contactId: string, tokenSet: Toke
 export const onLoginReturnAuth = async (request: Request): Promise<CallbackParamsType> => {
   const data = await request.text();
 
+  if (data?.includes("error=")) {
+    const errorMatch = data.match(/error=([^&]*)/);
+    const errorDescMatch = data.match(/error_description=([^&]*)/);
+    const error = errorMatch ? decodeURIComponent(errorMatch[1]) : "Unknown error";
+    const errorDescription = errorDescMatch ? decodeURIComponent(errorDescMatch[1]) : "";
+
+    logger.error(`[IDM-V2][POST /login/return][ERROR][${error}][${errorDescription}]`);
+    throw new Response("Authentication service error. Please try again later.", { status: 500 });
+  }
+
   if (!data?.includes("code")) {
     throw new Response("Unauthorized", { status: 401 });
   }

@@ -12,6 +12,7 @@ import {
   validateCSRFToken,
   getCountries,
   handleFormEmptyStringValue,
+  extractContainerNumbers,
 } from "~/.server";
 import { scrollToId, TransportType } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
@@ -34,7 +35,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const nationalityOfVehicle = form.get("nationalityOfVehicle") as string;
   const registrationNumber = form.get("registrationNumber") as string;
   const departurePlace = form.get("departurePlace") as string;
-  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber");
+  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", false);
 
   const nextUri = form.get("nextUri") as string;
 
@@ -42,6 +43,9 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const exportedTo: ICountry | undefined = countries.find(
     (c: ICountry) => c.officialCountryName === consignmentDestination
   );
+
+  const values = Object.fromEntries(form);
+  const containerNumbers = extractContainerNumbers(values);
 
   const payload: ITransport = {
     vehicle: transport.vehicle,
@@ -52,6 +56,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     registrationNumber: registrationNumber,
     departurePlace: departurePlace,
     freightBillNumber: freightBillNumber,
+    containerNumbers,
     currentUri: "/create-storage-document/:documentNumber/add-transportation-details-truck",
     user_id: transport.user_id,
     journey: transport.journey,

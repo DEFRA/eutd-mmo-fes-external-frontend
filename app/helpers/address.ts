@@ -1,4 +1,5 @@
-import type { ILookUpAddressDetails } from "~/types";
+import type { ICountry, ILookUpAddressDetails } from "~/types";
+import isEmpty from "lodash/isEmpty";
 
 export const getPostcodeAddress = (postcodeaddress?: ILookUpAddressDetails) => postcodeaddress?.country ?? "";
 export const getSubBuildingName = (postcodeaddress?: ILookUpAddressDetails) => postcodeaddress?.sub_building_name ?? "";
@@ -8,3 +9,10 @@ export const getStreetName = (postcodeaddress?: ILookUpAddressDetails) => postco
 export const getCity = (postcodeaddress?: ILookUpAddressDetails) => postcodeaddress?.city ?? "";
 export const getCounty = (postcodeaddress?: ILookUpAddressDetails) => postcodeaddress?.county ?? "";
 export const getPostcode = (postcodeaddress?: ILookUpAddressDetails) => postcodeaddress?.postCode ?? "";
+export const getCountryData = (countries: ICountry[], selectedCountry: string) =>
+  countries.find(
+    (c: ICountry) =>
+      !isEmpty(c.officialCountryName) &&
+      !isEmpty(selectedCountry) &&
+      c.officialCountryName.toLowerCase() === selectedCountry.toLowerCase()
+  ) ?? { officialCountryName: "" };

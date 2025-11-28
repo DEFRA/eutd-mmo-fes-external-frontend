@@ -43,8 +43,16 @@ export const getDepartureCountry = (errors: any, actionData: any, departureCount
   !isEmpty(errors) || actionData?.departureCountry ? actionData?.departureCountry : departureCountry;
 export const getFreightBillNumber = (errors: any, actionData: any, freightBillNumber?: string | null | undefined) =>
   !isEmpty(errors) || actionData?.freightBillNumber ? actionData?.freightBillNumber : freightBillNumber;
+export const getFreightBillNumberLabel = (
+  displayOptionalSuffix: boolean | undefined,
+  addTransportationDetailsFreightBillNumberOptional: string,
+  addTransportationDetailsFreightBillNumber: string
+) =>
+  displayOptionalSuffix ? addTransportationDetailsFreightBillNumberOptional : addTransportationDetailsFreightBillNumber;
 export const getDeparturePort = (errors: any, actionData: any, departurePort?: string) =>
   !isEmpty(errors) || actionData?.departurePort ? actionData?.departurePort : departurePort;
+export const getPlaceOfUnloading = (errors: any, actionData: any, placeOfUnloading?: string) =>
+  !isEmpty(errors) || actionData?.placeOfUnloading ? actionData?.placeOfUnloading : placeOfUnloading;
 
 export enum TransportType {
   CONTAINER_VESSEL = "containerVessel",

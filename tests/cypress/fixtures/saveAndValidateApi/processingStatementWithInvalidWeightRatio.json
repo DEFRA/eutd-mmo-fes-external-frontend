@@ -1,0 +1,17 @@
+{
+  "errors": [
+    {
+      "targetName": "catches-0-exportWeightBeforeProcessing",
+      "text": "Export weight in kg (before processing) must be the same or less than the Total weight shown on catch certificate in kg"
+    }
+  ],
+  "catches": [
+    {
+      "species": "Atlantic cod (COD)",
+      "catchCertificateNumber": "GBR-2022-PS-F2D5CD656",
+      "totalWeightLanded": "50",
+      "exportWeightBeforeProcessing": "60",
+      "exportWeightAfterProcessing": "30"
+    }
+  ]
+}

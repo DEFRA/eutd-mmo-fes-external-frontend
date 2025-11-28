@@ -1,0 +1,10 @@
+{
+  "productDescription": "Disgrifiad o'r cynnyrch",
+  "catchDetailsTableHeader": "Rydych wedi ychwanegu {{uniqueSpeciesCount}} rhywogaeth a {{totalDocuments}} dogfen ar gyfer {{species}}",
+  "speciesNameFAO": "Enw'r rhywogaeth (FAO)",
+  "catchCertificateNumber": "Rhif y dystysgrif dalfa",
+  "catchCertificateWeight": "Pwysau'r dystysgrif dalfa",
+  "exportWeightBeforeProcessing": "Y pwysau allforio cyn prosesu",
+  "exportWeightAfterProcessing": "Y pwysau allforio ar ôl prosesu",
+  "action": "Camau i'w cymryd"
+}

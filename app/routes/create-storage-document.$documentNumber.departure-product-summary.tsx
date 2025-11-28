@@ -239,7 +239,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   // Get bearer token for API requests
   const bearerToken = await getBearerTokenForRequest(request);
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
   const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
 
@@ -282,6 +282,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const { _action, ...values } = Object.fromEntries(form);
   const saveToRedisIfErrors = true;
   const isDraft = form.get("_action") === "saveAsDraft";
+
   const isEdit = (_action as string)?.startsWith("edit-");
   const isRemove = (_action as string)?.startsWith("remove-");
 

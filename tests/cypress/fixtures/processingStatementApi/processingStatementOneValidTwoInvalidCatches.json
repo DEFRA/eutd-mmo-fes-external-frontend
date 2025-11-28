@@ -6,11 +6,17 @@
       "speciesCode": "ASD",
       "catchCertificateNumber": "QW",
       "catchCertificateType": "non_uk",
+      "issuingCountry": {
+        "isoCodeAlpha2": "FR",
+        "isoCodeAlpha3": "FRA",
+        "officialCountryName": "France"
+      },
       "totalWeightLanded": "5",
       "exportWeightBeforeProcessing": "5",
       "exportWeightAfterProcessing": "5",
       "id": "qw-1671018160",
-      "scientificName": "Alosa alosa"
+      "scientificName": "Alosa alosa",
+      "productDescription": "Battered Cod Fil"
     },
     {
       "_id": "639fc1b50bb7cf12b8947a51",
@@ -21,7 +27,8 @@
       "scientificName": "Xenodermichthys copei",
       "totalWeightLanded": "THIS IS AN INVALID FIGURE",
       "exportWeightBeforeProcessing": "THIS IS AN INVALID FIGURE",
-      "exportWeightAfterProcessing": "THIS IS AN INVALID FIGURE"
+      "exportWeightAfterProcessing": "THIS IS AN INVALID FIGURE",
+      "productDescription": "Battered Cod Fil"
     },
     {
       "_id": "639fc1b50bb7cf12b8947a52",
@@ -32,7 +39,8 @@
       "scientificName": "Chionoecetes bairdi",
       "totalWeightLanded": "THIS IS AN INVALID FIGURE",
       "exportWeightBeforeProcessing": "THIS IS AN INVALID FIGURE",
-      "exportWeightAfterProcessing": "THIS IS AN INVALID FIGURE"
+      "exportWeightAfterProcessing": "THIS IS AN INVALID FIGURE",
+      "productDescription": "Battered Cod Fil"
     }
   ],
   "validationErrors": [],

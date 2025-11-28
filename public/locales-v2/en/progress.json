@@ -22,6 +22,7 @@
   "ccProgressNotificationMsgIsNotVoided": "This draft was created by copying document {{documentNumber}}. You are reminded that you must not use a catch certificate or landing data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken.",
   "psProgressApplication": "Processing Statement application",
   "commonProgressSectionProducts": "Products",
+  "psProgressSectionProcessedProductsDetails": "Processed product details",
   "psProgressSectionProcessedProductDetails": "Processed product details",
   "psProgressSectionProcessingPlant": "Processing plant",
   "psProgressSectionTransportation": "Transportation & logistics",
@@ -42,10 +43,9 @@
   "sdProgressProductDetails": "Product details",
   "sdProgressArrivalFacility": "Arrival at storage facility",
   "sdProgressArrivalTransportDetails": "UK arrival transport details",
-  "sdProgressArrivalTransportDetailsOptional": "UK arrival transport details (optional)",
   "sdProgressDepartureFromStorageFacilty": "Departure from storage facility",
   "sdProgressDepartureFromStorageFaciltyDetails": "UK departure transport details",
-  "sdProgressStoragefacilities": "Storage facilities",
+  "sdProgressStoragefacilities": "Storage facility details",
   "sdProgressNotificationMsgIsNotVoided": "This draft was created by copying document {{c}}. You are reminded that you must not use a storage document or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken.",
   "sdProgressNotificationMsgIsVoided": "This draft was created by copying a document that has now been voided. You are reminded that you must not use a storage document or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
 }

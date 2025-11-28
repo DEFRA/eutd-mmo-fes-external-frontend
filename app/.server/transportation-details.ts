@@ -92,7 +92,7 @@ export const CatchCertificateTransportationDetailsLoader = async (
     const displayOptionalSuffix = getEnv().EU_CATCH_FIELDS_OPTIONAL === "true";
 
     const session = await getSessionFromRequest(request);
-    const csrf = createCSRFToken();
+    const csrf = await createCSRFToken(request);
     session.set("csrf", csrf);
     const hasActionExecuted = session.get("addAnotherDocument");
 
@@ -104,8 +104,6 @@ export const CatchCertificateTransportationDetailsLoader = async (
       });
     }
 
-    const maximumTransportDocumentPerTransport = parseInt(getEnv().EU_CATCH_MAX_TRANSPORT_DOCUMENTS, 10);
-
     return new Response(
       JSON.stringify({
         documentNumber,
@@ -116,7 +114,6 @@ export const CatchCertificateTransportationDetailsLoader = async (
         pageTitle,
         commonTitle,
         displayOptionalSuffix,
-        maximumTransportDocumentPerTransport,
       }),
       {
         status: 200,
@@ -163,10 +160,16 @@ export const CatchCertificateTransportationDetailsAction = async (
       case TransportType.TRUCK: {
         payload.nationalityOfVehicle = form.get("nationalityOfVehicle") as string;
         payload.registrationNumber = form.get("registrationNumber") as string;
+        payload.containerIdentificationNumber = !isEmpty(form.get("containerIdentificationNumber"))
+          ? (form.get("containerIdentificationNumber") as string)
+          : null;
         break;
       }
       case TransportType.TRAIN: {
         payload.railwayBillNumber = form.get("railwayBillNumber") as string;
+        payload.containerIdentificationNumber = !isEmpty(form.get("containerIdentificationNumber"))
+          ? (form.get("containerIdentificationNumber") as string)
+          : null;
         break;
       }
       case TransportType.PLANE: {
@@ -192,6 +195,7 @@ export const CatchCertificateTransportationDetailsAction = async (
       payload,
       saveDraft
     );
+
     const errors: IError[] | IErrorsTransformed = (postTransport.errors as IError[]) || [];
     const isUnauthorised = postTransport.unauthorised as boolean;
     if (isUnauthorised) {
@@ -223,7 +227,7 @@ export const TransportationDetailsLoaderFunction = async (
   const nextUri = url.searchParams.get("nextUri") ?? "";
   const bearerToken = await getBearerTokenForRequest(request);
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
   const transport: ITransport = await getTransportDetails(bearerToken, journey, documentNumber, arrival);
 
@@ -398,6 +402,8 @@ const checkRailwayBillNumber = (railwayBillNumber: string | undefined | null) =>
 const checkAirWayBillNumber = (airwayBillNumber: string | undefined | null) =>
   checkField(airwayBillNumber, 50, /^[a-zA-Z0-9-./]+$/);
 const checkFlightNumber = (flightNumber: string | undefined | null) => checkField(flightNumber, 50, /^[a-zA-Z0-9]+$/);
+const checkPlaceOfUnloading = (placeOfUnloading: string | undefined | null) =>
+  checkField(placeOfUnloading, 50, /^[a-zA-Z0-9]+$/);
 const checkContainerNumbers = (containerNumbers: string[] | undefined | null) => {
   if (!containerNumbers || containerNumbers.length === 0) return [];
   const validContainers = containerNumbers.map((cn) => {
@@ -418,6 +424,7 @@ const validatePayload = async (payload: ITransport, saveAsDraft: boolean) => {
     payload.departurePort = checkDeparturePort(payload.departurePort);
     payload.airwayBillNumber = checkAirWayBillNumber(payload.airwayBillNumber);
     payload.flightNumber = checkFlightNumber(payload.flightNumber);
+    payload.placeOfUnloading = checkPlaceOfUnloading(payload.placeOfUnloading);
     payload.containerNumbers = checkContainerNumbers(payload.containerNumbers).filter((cn) => cn !== undefined);
     return [] as IError[] | IErrorsTransformed;
   } else {
@@ -444,8 +451,14 @@ const validatePayload = async (payload: ITransport, saveAsDraft: boolean) => {
   }
 };
 
-export const handleFormEmptyStringValue = <T = string>(form: any, valueName: string): T | undefined =>
-  form.get(valueName) === "" ? undefined : (form.get(valueName) as T);
+export const handleFormEmptyStringValue = <T = string>(
+  form: any,
+  valueName: string,
+  saveAsDraft: boolean
+): T | undefined => {
+  if (saveAsDraft) return form.get(valueName) as T;
+  return form.get(valueName) === "" ? ("" as T) : (form.get(valueName) as T);
+};
 
 const sortErrors = (errors: IError[], payload: ITransport) =>
   errors.sort((a, b) => {
@@ -478,7 +491,7 @@ export const commonSaveTransportDetails = async (
 
   const saveAsDraftRoute = route("/create-storage-document/storage-documents");
   const progressRoute = payload.arrival
-    ? route("/create-storage-document/:documentNumber/you-have-added-a-storage-facility", { documentNumber })
+    ? route("/create-storage-document/:documentNumber/add-storage-facility-details", { documentNumber })
     : route("/create-storage-document/:documentNumber/departure-product-summary", { documentNumber });
 
   if (saveAsDraft) return redirect(saveAsDraftRoute);
@@ -494,8 +507,7 @@ export const commonSaveTransportDetails = async (
 export const extractContainerNumbers = (values: Record<string, any>): string[] =>
   Object.keys(values)
     .filter((key) => key.startsWith("containerNumbers."))
-    .map((key) => values[key] as string)
-    .filter((value) => value !== undefined && value !== null && value !== "");
+    .map((key) => values[key] as string);
 
 // Handle container button actions when JS is disabled
 export const handleContainerActions = async (request: Request, _action: string, values: Record<string, any>) => {

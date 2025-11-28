@@ -95,6 +95,7 @@
   "commonWhatExportDestinationHintSelectTheDestinationCountry": "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document.",
   "commonConfirmDocumentVoidPageHeader": "Are you sure you want to void this {{journeyText}}?",
   "commonNoResultsFound": "No results found",
+  "commonChangeLink": "Change",
   "commonEditLink": "Edit",
   "commonRemoveButton": "Remove",
   "commonImportant": "Important",
@@ -122,5 +123,6 @@
   "commonCalenderButtonLabel": "Choose Date",
   "commonSpeciesDetailsOpenInNewTab": "(opens in a new tab)",
   "commonStorageToNonManipulationMsg": "From January 2026, Storage Documents will change to Non-manipulation Documents",
-  "commonAddAnotherButtonText": "Add another"
+  "commonAddAnotherButtonText": "Add another",
+  "commonAddTripDetailsWarningContent": "From 10 January 2026, start date, catch area and gear type fields will be mandatory under new EU regulations."
 }

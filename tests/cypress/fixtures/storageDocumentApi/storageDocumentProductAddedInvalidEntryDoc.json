@@ -18,10 +18,8 @@
       "netWeightFisheryProductArrival": "20"
     }
   ],
-  "storageFacilities": [],
   "validationErrors": [],
   "addAnotherProduct": "No",
-  "addAnotherStorageFacility": "No",
   "errors": {
     "catches-0-certificateNumber": "sdAddUKEntryDocumentErrorUKDocumentNumberFormatInvalid"
   },

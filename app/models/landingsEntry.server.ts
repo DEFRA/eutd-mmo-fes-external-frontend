@@ -39,7 +39,7 @@ export const LandingEntryLoader = async (request: Request, params: Params) => {
   const nextUri = url.searchParams.get("nextUri") ?? "";
   const session = await getSessionFromRequest(request);
 
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   const copyDocumentAcknowledged = session.get(`copyDocumentAcknowledged-${documentNumber}`) === "Y";

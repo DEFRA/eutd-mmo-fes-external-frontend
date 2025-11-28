@@ -1,0 +1,13 @@
+{
+  "_id": "63975c6f3fc11363b107125e",
+  "__t": "processingStatement",
+  "requestByAdmin": false,
+  "errors": {
+    "catches-0-species-label": "psAddCatchDetailsErrorEnterTheFAOCodeOrSpeciesName",
+    "catches-0-catchCertificateNumber": "psAddCatchDetailsErrorEnterTheCatchCertificateNumber",
+    "catches-0-totalWeightLanded": "psAddCatchWeightsErrorEnterTotalWeightLandedInKG",
+    "catches-0-exportWeightBeforeProcessing": "psAddCatchWeightsErrorEnterExportWeightInKGBeforeProcessing",
+    "catches-0-exportWeightAfterProcessing": "psAddCatchWeightsErrorEnterExportWeightInKGAfterProcessing"
+  },
+  "errorsUrl": "/create-processing-statement/GBR-2022-PS-0D12ABA0A/add-catch-details"
+}

@@ -12,5 +12,7 @@
   "addConsignmentDetailsConsignmentDescriptionOverCount": "Mae gennych chi {{overLimitBy}} o gymeriadau yn ormod",
   "addConsignmentDetailsConsignmentDescriptionHeader": "Disgrifiad o'r cynnyrch",
   "addConsignmentDetailsConsignmentLinkLabel": "Tariff Ar-lein Integredig y DU: Chwilio am godau nwyddau a chyfraddau TAW - GOV.UK",
-  "addConsignmentDetailsWarningLabel": "Rhaid ichi ychwanegu un cynnyrch wedi'i brosesu ar y tro."
+  "addConsignmentDetailsWarningLabel": "Rhaid ichi ychwanegu un cynnyrch wedi'i brosesu ar y tro.",
+  "addConsignmentDetailsEditInfo": "I olygu neu dynnu rhywogaethau o'r cynnyrch hwn, pwyswch cadw a pharhau.",
+  "addConsignmentDetailsRemoveProduct": "Tynnwch y cynnyrch"
 }

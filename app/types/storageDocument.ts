@@ -10,6 +10,7 @@ export interface StorageDocumentCatch {
   transportUnloadedFrom: string;
   certificateNumber: string;
   certificateType?: CertificateType;
+  issuingCountry?: ICountry;
   weightOnCC: string;
   scientificName?: string;
   supportingDocuments?: string[];
@@ -54,6 +55,20 @@ export interface StorageDocument {
   errors?: {};
   errorsUrl?: string;
   isNonJs: boolean;
+  facilityName: string;
+  facilityAddressOne?: string;
+  facilityAddressTwo?: string;
+  facilityTownCity?: string;
+  facilityPostcode?: string;
+  facilitySubBuildingName?: string;
+  facilityBuildingNumber?: string;
+  facilityBuildingName?: string;
+  facilityStreetName?: string;
+  facilityCounty?: string;
+  facilityCountry?: string;
+  facilityApprovalNumber?: string;
+  facilityStorage?: string;
+  facilityArrivalDate?: string;
 }
 
 export type FacilitiesLoaderData = {
@@ -76,6 +91,7 @@ export type DocIssuedInUkRadioSelectOptionType = {
   value: DocIssuedInUkRadioSelectType;
   id: string;
 };
+
 export interface ContainerInput {
   id: string;
   value: string;

@@ -22,6 +22,7 @@ import {
   getRegistrationNumber,
   getAirwayBillNumber,
   getFlightNumber,
+  getPlaceOfUnloading,
 } from "~/helpers";
 import { TransportationArrivalDetails } from "./transportationArrivalDetails";
 
@@ -57,6 +58,7 @@ export const AddTransportationArrivalDetailsComponent = ({
     nextUri,
     csrf,
     displayOptionalSuffix,
+    placeOfUnloading,
   } = useLoaderData<
     ITransport & {
       documentNumber: string;
@@ -69,6 +71,7 @@ export const AddTransportationArrivalDetailsComponent = ({
 
   let componentAttributes: ITransport & {
     legendTitle?: string;
+    infoText?: string;
     countries: ICountry[];
     errors: IErrorsTransformed;
     displayOptionalSuffix: boolean;
@@ -82,6 +85,7 @@ export const AddTransportationArrivalDetailsComponent = ({
     departurePort: getDeparturePort(errors, actionData, departurePort ?? undefined),
     departureDate: getDepartureDate(departureDateFromAction, departureDate),
     containerNumbers: getContainerNumbers(errors, actionData, containerNumbers),
+    placeOfUnloading: getPlaceOfUnloading(errors, actionData, placeOfUnloading ?? undefined),
     countries: countries,
     errors: errors,
     displayOptionalSuffix,
@@ -144,6 +148,7 @@ export const AddTransportationArrivalDetailsComponent = ({
     "freightBillNumber",
     "departureCountry",
     "departurePort",
+    "placeOfUnloading",
     "departureDate",
   ];
 

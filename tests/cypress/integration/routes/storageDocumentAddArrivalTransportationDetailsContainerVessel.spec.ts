@@ -2,7 +2,7 @@ import { type ITestParams, TestCaseId } from "~/types";
 
 const documentNumber = "GBR-2022-SD-3FE1169D1";
 const createStorageDocumentUrl = `/create-storage-document/${documentNumber}`;
-const storageFacilityUrl = `${createStorageDocumentUrl}/you-have-added-a-storage-facility`;
+const storageFacilityUrl = `${createStorageDocumentUrl}/add-storage-facility-details`;
 const addArrivalTransportationDetailsContainerVesselUrl = `${createStorageDocumentUrl}/add-arrival-transportation-details-container-vessel`;
 
 describe("AddArrivalContainerVesselTransportSave scenarios", () => {
@@ -29,7 +29,8 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
         .should("be.visible")
         .should("have.attr", "href", `${createStorageDocumentUrl}/how-does-the-consignment-arrive-to-the-uk`);
       cy.get(".govuk-heading-xl").contains("Container Vessel arriving in the UK");
-      cy.contains("Container identification number (optional)").should("be.visible");
+      cy.get("#sdArrivalTransportInfoMessage").should("not.exist");
+      cy.contains("Container identification number").should("be.visible");
       cy.get("form").within(() => {
         cy.get('input[type="text"]').should("have.length.at.least", 6);
         cy.get("#vesselName").should("exist");
@@ -39,7 +40,10 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
         cy.get("#departureCountry").should("exist");
         cy.get("#departurePort").should("exist");
       });
-      cy.contains(".govuk-hint", "For example, Felicity Ace").should("be.visible");
+      cy.contains(
+        ".govuk-hint",
+        "For example, Felicity Ace. This field is required now to help prepare for new EU regulations coming into force on 10 January 2026."
+      ).should("be.visible");
       cy.contains(".govuk-hint", "For example, Greece").should("be.visible");
       cy.contains(".govuk-hint", "For example, ABCD1234567").should("be.visible");
       cy.contains(".govuk-hint", "For example, AA1234567").should("be.visible");
@@ -77,6 +81,21 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
 
     beforeEach(() => {
       cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
+    });
+
+    it("should display error when vessel name contains invalid characters", () => {
+      const testParams: ITestParams = { testCaseId: TestCaseId.ContainerVesselTransportSaveEmpty };
+      cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
+      cy.get("#vesselName").should("have.value", "");
+      cy.get("#flagState").type("Greece", { force: true });
+      cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
+      cy.get("#freightBillNumber").type("AA1234567", { force: true });
+      cy.get("#departureCountry").invoke("val", "France");
+      cy.get("#departurePort").type("Port of Calais", { force: true });
+      cy.get("[data-testid=save-and-continue]").click({ force: true });
+      cy.get("form").submit();
+      cy.contains("h2", /^There is a problem$/).should("be.visible");
+      cy.contains("a", /^Enter the vessel name$/).should("be.visible");
     });
 
     it("should display error when vessel name contains invalid characters", () => {
@@ -316,6 +335,102 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
   });
 });
 
+describe("Container Vessel Arrival Required Fields Validation", () => {
+  const testParams: ITestParams = { testCaseId: TestCaseId.AddArrivalContainerVesselTransportAllowed };
+
+  it("should display error when flag state is empty", () => {
+    cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
+    cy.get("#vesselName").type("Test Vessel", { force: true });
+    cy.get("#flagState").should("have.value", "");
+    cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get("#departureCountry").invoke("val", "France");
+    cy.get("#departurePort").type("Port of Calais", { force: true });
+    cy.get("#placeOfUnloading").type("Dover", { force: true });
+    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate-month").type("07", { force: true });
+    cy.get("#departureDate-year").type("2025", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Enter the flag state$/).should("be.visible");
+  });
+
+  it("should display error when container identification number is empty", () => {
+    cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
+    cy.get("#vesselName").type("Test Vessel", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get('[id="containerNumbers.0"]').should("have.value", "");
+    cy.get("#departureCountry").invoke("val", "France");
+    cy.get("#departurePort").type("Port of Calais", { force: true });
+    cy.get("#placeOfUnloading").type("Dover", { force: true });
+    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate-month").type("07", { force: true });
+    cy.get("#departureDate-year").type("2025", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
+  });
+
+  it("should display error when country of departure is empty", () => {
+    cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
+    cy.get("#vesselName").type("Test Vessel", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get("#departureCountry").should("have.value", "");
+    cy.get("#departurePort").type("Port of Calais", { force: true });
+    cy.get("#placeOfUnloading").type("Dover", { force: true });
+    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate-month").type("07", { force: true });
+    cy.get("#departureDate-year").type("2025", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Enter the country of departure$/).should("be.visible");
+  });
+
+  it("should display error when consignment departs from is empty", () => {
+    cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
+    cy.get("#vesselName").type("Test Vessel", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get("#departureCountry").invoke("val", "France");
+    cy.get("#departurePort").should("have.value", "");
+    cy.get("#placeOfUnloading").type("Dover", { force: true });
+    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate-month").type("07", { force: true });
+    cy.get("#departureDate-year").type("2025", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Enter where the consignment departs from$/).should("be.visible");
+  });
+
+  it("should display error when departure date is empty", () => {
+    cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
+    cy.get("#vesselName").type("Test Vessel", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get("#departureCountry").invoke("val", "France");
+    cy.get("#departurePort").type("Port of Calais", { force: true });
+    cy.get("#placeOfUnloading").type("Dover", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Enter the departure date$/).should("be.visible");
+  });
+
+  it("should navigate to storage facility page when all mandatory fields are populated", () => {
+    cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
+    cy.get("#vesselName").type("Test Vessel", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get("#departureCountry").invoke("val", "France");
+    cy.get("#departurePort").type("Port of Calais", { force: true });
+    cy.get("#placeOfUnloading").type("Dover", { force: true });
+    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate-month").type("07", { force: true });
+    cy.get("#departureDate-year").type("2025", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", storageFacilityUrl);
+  });
+});
+
 describe("AddArrivalContainerVesselTransport Save As Draft scenarios", () => {
   it("should navigate to sd dashboard page on click of save as draft button", () => {
     const testParams: ITestParams = {
@@ -344,14 +459,12 @@ describe("Container Number Validation page when javascript is disabled", () => {
     };
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
   });
-
   it("should not render add and remove buttons when JavaScript is disabled", () => {
     for (let i = 0; i < 5; i++) {
       cy.get(`[name="containerNumbers.${i}"]`).should("exist").and("be.visible");
     }
     cy.get('[data-testid="add-another-container"]').should("not.exist");
   });
-
   it("should show error when a container identification number exceeds 50 characters", () => {
     cy.get('[name="containerNumbers.0"]')
       .should("be.visible")
@@ -359,18 +472,8 @@ describe("Container Number Validation page when javascript is disabled", () => {
         force: true,
       });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
-    // cy.contains("Container identification number must not exceed 50 characters").should("be.visible");
-  });
-
-  it("should show error when a container input contains any special characters", () => {
-    cy.get('[name="containerNumbers.0"]').should("be.visible").type("AAAAA!@#", {
-      force: true,
-    });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    // cy.contains("Container identification number must only contain letters and numbers").should("be.visible");
   });
 });
-
 describe("Populate Container Number from getContainerInputData method", () => {
   beforeEach(() => {
     const testParams = {
@@ -379,12 +482,10 @@ describe("Populate Container Number from getContainerInputData method", () => {
     };
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
   });
-
   it("should populatte container numbers", () => {
     cy.get('[name="containerNumbers.0"]').should("have.value", "ABCD1234567");
     cy.get('[name="containerNumbers.1"]').should("have.value", "ABCD1234569");
     cy.get('[name="containerNumbers.2"]').should("have.value", "ABCD1234531");
-
     cy.get('[data-testid="add-another-container"]').should("not.exist");
   });
 });

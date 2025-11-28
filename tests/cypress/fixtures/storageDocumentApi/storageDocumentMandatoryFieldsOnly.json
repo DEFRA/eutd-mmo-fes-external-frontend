@@ -15,22 +15,17 @@
       "certificateType": "non_uk"
     }
   ],
-  "storageFacilities": [
-    {
-      "facilityName": "top",
-      "facilityAddressOne": "56, 3, Arc House, test",
-      "facilityBuildingName": "Arc House",
-      "facilityBuildingNumber": "56",
-      "facilitySubBuildingName": "3",
-      "facilityStreetName": "test",
-      "facilityTownCity": "Brussels",
-      "facilityCounty": "pre",
-      "facilityCountry": "Belgium",
-      "facilityPostcode": "sw11aa",
-      "_facilityUpdated": false,
-      "facilityArrivalDate": "12/03/2025"
-    }
-  ],
+  "facilityName": "top",
+  "facilityAddressOne": "56, 3, Arc House, test",
+  "facilityBuildingName": "Arc House",
+  "facilityBuildingNumber": "56",
+  "facilitySubBuildingName": "3",
+  "facilityStreetName": "test",
+  "facilityTownCity": "Brussels",
+  "facilityCounty": "pre",
+  "facilityCountry": "Belgium",
+  "facilityPostcode": "sw11aa",
+  "facilityArrivalDate": "12/03/2025",
   "validationErrors": [{}],
   "addAnotherProduct": "No",
   "addAnotherStorageFacility": "No",
@@ -53,5 +48,19 @@
     "isoCodeAlpha2": "IO",
     "isoCodeAlpha3": "IOT",
     "isoNumericCode": "086"
+  },
+  "arrivalTransport": {
+    "vehicle": "plane",
+    "vesselName": "gfs",
+    "flagState": "ghj",
+    "containerNumber": "56",
+    "departurePlace": "hull",
+    "departureDate": "09/1/2024",
+    "exportedTo": {
+      "officialCountryName": "British Indian Ocean Territory",
+      "isoCodeAlpha2": "IO",
+      "isoCodeAlpha3": "IOT",
+      "isoNumericCode": "086"
+    }
   }
 }

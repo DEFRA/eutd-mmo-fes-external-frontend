@@ -36,7 +36,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       documentNumber,
     }),
     saveAsDraftUrl: route("/create-storage-document/storage-documents"),
-    skipPageUrl: `/create-storage-document/${documentNumber}/you-have-added-a-storage-facility`,
     completedUrl: `/create-storage-document/${documentNumber}/${arrivalTransportForwardUri(vehicle)}`,
   });
 };

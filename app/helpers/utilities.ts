@@ -194,10 +194,6 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.VoidThisStorageDocument;
   }
 
-  if (pagePath.match(/^\/create-catch-certificate\/.*\/do-you-have-a-road-transport-document$/i)) {
-    pageName = Page.DoYouHaveARoadTransportDocument;
-  }
-
   if (pagePath.match(/^\/create-catch-certificate\/.*\/add-transportation-details-truck$/i)) {
     pageName = Page.AddTransportationDetailsTruck;
   }
@@ -228,9 +224,6 @@ export const getPageNameFromUrl = (url: string): string => {
 
   if (pagePath.match(/^\/create-catch-certificate\/.*\/add-additional-transport-documents-plane$/i)) {
     pageName = Page.AddAdditionalTransportationDocumentsPlane;
-  }
-  if (pagePath.match(/^\/create-storage-document\/.*\/do-you-have-a-road-transport-document$/i)) {
-    pageName = Page.StorageDocumentDoYouHaveARoadTransportDocument;
   }
 
   if (pagePath.match(/^\/create-storage-document\/.*\/add-arrival-transportation-details-truck$/i)) {
@@ -360,10 +353,6 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.StorageDocumentYouHaveAddedAProduct;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/you-have-added-a-storage-facility$/i)) {
-    pageName = Page.StorageDocumentYouHaveAddedAStorageFacility;
-  }
-
   if (pagePath.includes("/catch-added")) {
     pageName = Page.CatchAdded;
   }
@@ -386,6 +375,10 @@ export const getPageNameFromUrl = (url: string): string => {
 
   if (pagePath.match(/^\/create-storage-document\/.*\/how-does-the-consignment-arrive-to-the-uk$/i)) {
     pageName = Page.HowDoesTheConsignmentArriveAToTheUk;
+  }
+
+  if (pagePath.match(/^\/create-processing-statement\/.*\/remove-product\/.*$/i)) {
+    pageName = Page.ProcessingStatementRemoveProduct;
   }
 
   return pageName;

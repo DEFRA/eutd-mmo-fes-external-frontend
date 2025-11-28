@@ -12,6 +12,7 @@
   "sdNetFisheryWeightDeparture": "Fishery product weight on departure",
   "sdCheckYourInformationExportWeightLabel": "Export weight",
   "sdSummaryPageWasCCissued": "Entry document issued in the UK",
+  "sdCheckYourInformationIssuingCountry": "Issuing country",
   "sdCheckYourInformationProudcts": "Products",
   "sdCheckYourInformationProductsInsetTextUKIssued": "Issued or approved by a UK authority:",
   "sdCheckYourInformationProductsInsetTextThirdCountryIssued": "Issued or approved by a third country authority:",
@@ -60,6 +61,6 @@
   "sdTransportRailNumber": "Railway number",
   "sdCheckYourInformationVesselName": "Vessel name",
   "sdCheckYourInformationFlagState": "Flag state",
-  "sdCheckYourInformationContainer": "Container identification number or numbers",
+  "sdCheckYourInformationContainer": "Container identification number",
   "sdRailwayBillNumber": "Railway bill number"
 }

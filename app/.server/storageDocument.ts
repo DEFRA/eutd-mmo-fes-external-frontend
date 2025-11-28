@@ -14,10 +14,31 @@ import type {
   StorageDocumentCatch,
   CatchIndex,
   StorageFacility,
+  Exporter,
 } from "~/types";
 import { validateResponseData } from "./common";
 import { onGetResponse } from "~/helpers/http-utils";
 import { validateCSRFToken } from "./csrfToken";
+
+const hasExporterDetails = (exporter: Exporter | undefined): boolean =>
+  !isEmpty(exporter) &&
+  ["exporterCompanyName", "addressOne", "postcode"].every((prop: string) => !isEmpty(exporter[prop as keyof Exporter]));
+
+export const hasRequiredDataStorageDocumentSummary = (
+  exporter: Exporter | undefined,
+  storageDocument: StorageDocument
+): boolean => {
+  const hasExporter = hasExporterDetails(exporter);
+  const hasCatches =
+    !isEmpty(storageDocument.catches) &&
+    Array.isArray(storageDocument.catches) &&
+    storageDocument.catches.every((item: StorageDocumentCatch) => !isEmpty(item.product));
+  const hasArrivalTransport = !isEmpty(storageDocument.arrivalTransport);
+  const hasDepartureTransport = !isEmpty(storageDocument.transport);
+  const hasStorageFacility = !isEmpty(storageDocument.facilityName);
+
+  return hasExporter && hasCatches && hasArrivalTransport && hasDepartureTransport && hasStorageFacility;
+};
 
 export const getVisibleProducts = (
   catches: StorageDocumentCatch[] = [],
@@ -316,30 +337,13 @@ export const updateStorageDocumentCatchDepartureWeights = async (
   }
 };
 
-export const getStorageFacility = (
-  storageDocument: StorageDocument,
-  facilityIndex: number = 0
-): {
-  validFacilityIndex: number;
-  currentFacility: StorageFacility | undefined;
-} => {
-  const storageFacilities: StorageFacility[] = storageDocument?.storageFacilities ?? [];
-  const hasFacility = Array.isArray(storageFacilities) && storageFacilities.length > 0;
-  const isValidFacilityIndex = hasFacility && storageFacilities[facilityIndex];
-  const validFacilityIndex = isValidFacilityIndex ? facilityIndex : hasFacility ? storageFacilities.length : 0;
-  const currentFacility = isValidFacilityIndex ? storageFacilities[validFacilityIndex] : undefined;
-
-  return { validFacilityIndex, currentFacility };
-};
-
 export const updateStorageDocumentFacility = async (
   bearerToken: string,
   documentNumber: string | undefined,
-  storageFacility: Partial<StorageFacility | StorageDocument> = {},
   currentUrl: string,
-  faciltyIndex: number = NaN,
   saveToRedisIfErrors: boolean = false,
-  returnDataOnly?: boolean
+  returnDataOnly?: boolean,
+  storageFacility: Partial<StorageFacility | StorageDocument> = {}
 ): Promise<Response | ErrorResponse | undefined> => {
   const sdData: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
 
@@ -350,26 +354,10 @@ export const updateStorageDocumentFacility = async (
   }
 
   const currentStorageDocument = (sdData as StorageDocument) || {};
-  const isUpdating = faciltyIndex >= 0;
-
-  if (Array.isArray(currentStorageDocument?.storageFacilities)) {
-    if (isUpdating) {
-      if (currentStorageDocument.storageFacilities[faciltyIndex]) {
-        currentStorageDocument.storageFacilities[faciltyIndex] = {
-          ...currentStorageDocument.storageFacilities[faciltyIndex],
-          ...(storageFacility as StorageFacility),
-        };
-      } else {
-        currentStorageDocument.storageFacilities.push({ ...(storageFacility as StorageFacility) });
-      }
-    }
-  } else {
-    currentStorageDocument.storageFacilities = isUpdating ? [{ ...(storageFacility as StorageFacility) }] : [];
-  }
 
   const updatingStorageDocument: StorageDocument = {
     ...currentStorageDocument,
-    ...(!isUpdating && storageFacility),
+    ...storageFacility,
   };
   const updatedStorageDocument: StorageDocument | IUnauthorised = await addStorageDocument(
     bearerToken,
@@ -413,177 +401,93 @@ export const executeAction = async (request: Request, params: Params): Promise<R
 
   let errorData;
 
-  // you-have-added-a-storage-facility
-  if (request.url.includes("you-have-added-a-storage-facility")) {
-    const addAnotherFacility = values.addAnotherFacility === "Yes";
+  const addAnotherProduct = values.addAnotherProduct === "Yes";
+  const catchesToRemove = session.get("catchesToRemove") ?? "";
 
-    if (addAnotherFacility) {
-      return redirect(
-        `/create-storage-document/${documentNumber}/add-storage-facility-details/${
-          sdData?.storageFacilities ? sdData?.storageFacilities.length : 0
-        }`,
-        {
-          headers: {
-            "Set-Cookie": await commitSession(session),
-          },
-        }
-      );
-    }
-
-    if (isRemove) {
-      const facilityId = parseInt(values.facilityId as string);
-      sdData.storageFacilities?.splice(facilityId, 1);
-    }
-
-    errorData = await updateStorageDocumentFacility(
-      bearerToken,
-      documentNumber,
-      { storageFacilities: [...(Array.isArray(sdData.storageFacilities) ? sdData.storageFacilities : [])] },
-      `/create-storage-document/${documentNumber}/you-have-added-a-storage-facility`,
-      undefined,
-      isDraft,
-      true
-    );
-
-    if (isDraft) {
-      return redirect(route("/create-storage-document/storage-documents"), {
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      });
-    }
-
-    if (errorData && Array.isArray(sdData?.storageFacilities)) {
-      const { errors, ...payload } = errorData as ErrorResponse;
-      const transformedErrors = displayErrorTransformedMessages(!isEmpty(errors) ? errors : {});
-      const groupedErrors = [];
-
-      for (let index = 0; index < sdData.storageFacilities.length; index++) {
-        groupedErrors.push(transformedErrors.filter(({ key }) => key.includes(`${index}`)));
-      }
-
-      return new Response(
-        JSON.stringify({
-          groupedErrors,
-          ...payload,
-        }),
-        {
-          status: 400,
-          headers: {
-            "Content-Type": "application/json",
-            "Set-Cookie": await commitSession(session),
-          },
-        }
-      );
-    }
-
-    if (isRemove) {
-      return redirect(
-        route("/create-storage-document/:documentNumber/you-have-added-a-storage-facility", { documentNumber }),
-        {
-          headers: {
-            "Set-Cookie": await commitSession(session),
-          },
-        }
-      );
-    }
+  if (addAnotherProduct) {
     return redirect(
-      route("/create-storage-document/:documentNumber/how-does-the-export-leave-the-uk", { documentNumber }),
+      `/create-storage-document/${documentNumber}/add-product-to-this-consignment/${sdData.catches.length}`,
       {
         headers: {
           "Set-Cookie": await commitSession(session),
         },
       }
     );
-  } else {
-    const addAnotherProduct = values.addAnotherProduct === "Yes";
-    const catchesToRemove = session.get("catchesToRemove") ?? "";
+  }
 
-    if (addAnotherProduct) {
-      return redirect(
-        `/create-storage-document/${documentNumber}/add-product-to-this-consignment/${sdData.catches.length}`,
-        {
-          headers: {
-            "Set-Cookie": await commitSession(session),
-          },
-        }
-      );
-    }
+  // If isDraft or isSaveAndContinue check if there are catches to be removed
+  if (!isRemove && catchesToRemove) {
+    sdData.catches = getVisibleProducts(sdData.catches, catchesToRemove);
+  }
 
-    // If isDraft or isSaveAndContinue check if there are catches to be removed
-    if (!isRemove && catchesToRemove) {
-      sdData.catches = getVisibleProducts(sdData.catches, catchesToRemove);
-    }
+  // If isRemove, delete the catch from the array but without saving it to the backend
+  //   and store catch IDs to be removed in a cookie as a comma-separated list
+  if (isRemove) {
+    const catchId = values.productId as string;
+    const catchIdsToRemove: string[] = catchesToRemove?.split(",") ?? [];
 
-    // If isRemove, delete the catch from the array but without saving it to the backend
-    //   and store catch IDs to be removed in a cookie as a comma-separated list
-    if (isRemove) {
-      const catchId = values.productId as string;
-      const catchIdsToRemove: string[] = catchesToRemove?.split(",") ?? [];
+    catchIdsToRemove.push(catchId);
+    session.set("catchesToRemove", [...new Set(catchIdsToRemove)].join(","));
 
-      catchIdsToRemove.push(catchId);
-      session.set("catchesToRemove", [...new Set(catchIdsToRemove)].join(","));
-
-      return redirect(route("/create-storage-document/:documentNumber/you-have-added-a-product", { documentNumber }), {
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      });
-    }
-
-    if (isDraft || isSaveAndContinue) {
-      errorData = await updateStorageDocumentCatchDetails(
-        bearerToken,
-        documentNumber,
-        { catches: [...(Array.isArray(sdData.catches) ? sdData.catches : [])] },
-        `/create-storage-document/${documentNumber}/you-have-added-a-product`,
-        undefined,
-        isDraft,
-        true
-      );
-    }
-
-    if (isDraft) {
-      return redirect(route("/create-storage-document/storage-documents"), {
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      });
-    }
-
-    // If errors exist, group them by catch index and return
-    if (errorData && Array.isArray(sdData?.catches)) {
-      const { errors, ...payload } = errorData as ErrorResponse;
-      const transformedErrors = displayErrorTransformedMessages(!isEmpty(errors) ? errors : {});
-      const groupedErrors = [];
-
-      for (let index = 0; index < sdData.catches.length; index++) {
-        groupedErrors.push(transformedErrors.filter(({ key }) => key.includes(`${index}`)));
-      }
-
-      return new Response(
-        JSON.stringify({
-          groupedErrors,
-          ...payload,
-        }),
-        {
-          status: 400,
-          headers: {
-            "Content-Type": "application/json",
-            "Set-Cookie": await commitSession(session),
-          },
-        }
-      );
-    }
-
-    if (catchesToRemove) {
-      session.unset("catchesToRemove");
-    }
-
-    return redirect(`/create-storage-document/${documentNumber}/how-does-the-consignment-arrive-to-the-uk`, {
+    return redirect(route("/create-storage-document/:documentNumber/you-have-added-a-product", { documentNumber }), {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
     });
   }
+
+  if (isDraft || isSaveAndContinue) {
+    errorData = await updateStorageDocumentCatchDetails(
+      bearerToken,
+      documentNumber,
+      { catches: [...(Array.isArray(sdData.catches) ? sdData.catches : [])] },
+      `/create-storage-document/${documentNumber}/you-have-added-a-product`,
+      undefined,
+      isDraft,
+      true
+    );
+  }
+
+  if (isDraft) {
+    return redirect(route("/create-storage-document/storage-documents"), {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
+
+  // If errors exist, group them by catch index and return
+  if (errorData && Array.isArray(sdData?.catches)) {
+    const { errors, ...payload } = errorData as ErrorResponse;
+    const transformedErrors = displayErrorTransformedMessages(!isEmpty(errors) ? errors : {});
+    const groupedErrors = [];
+
+    for (let index = 0; index < sdData.catches.length; index++) {
+      groupedErrors.push(transformedErrors.filter(({ key }) => key.includes(`${index}`)));
+    }
+
+    return new Response(
+      JSON.stringify({
+        groupedErrors,
+        ...payload,
+      }),
+      {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+          "Set-Cookie": await commitSession(session),
+        },
+      }
+    );
+  }
+
+  if (catchesToRemove) {
+    session.unset("catchesToRemove");
+  }
+
+  return redirect(`/create-storage-document/${documentNumber}/how-does-the-consignment-arrive-to-the-uk`, {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 };

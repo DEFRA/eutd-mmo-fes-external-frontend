@@ -29,7 +29,7 @@ export const processingStatemenGenericLoader = async (request: Request, params: 
   session.unset(`copyDocumentAcknowledged-${documentNumber}`);
   session.unset(`copyDocument-${documentNumber}`);
 
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   if (instanceOfUnauthorised(processingStatement)) {

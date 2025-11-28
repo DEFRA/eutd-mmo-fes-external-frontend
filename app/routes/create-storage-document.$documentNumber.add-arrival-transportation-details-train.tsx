@@ -30,10 +30,12 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   if (!isValid) return redirect("/forbidden");
 
-  const railwayBillNumber = handleFormEmptyStringValue(form, "railwayBillNumber");
-  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber");
-  const departureCountry = handleFormEmptyStringValue(form, "departureCountry");
-  const departurePort = handleFormEmptyStringValue(form, "departurePort");
+  const saveAsDraft = form.get("_action") === "saveAsDraft";
+  const railwayBillNumber = handleFormEmptyStringValue(form, "railwayBillNumber", saveAsDraft);
+  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
+  const departureCountry = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
+  const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
+  const placeOfUnloading = handleFormEmptyStringValue(form, "placeOfUnloading", saveAsDraft);
 
   const nextUri = form.get("nextUri") as string;
 
@@ -42,12 +44,13 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       documentNumber,
     }),
     journey: transport.journey,
-    nextUri: route("/create-storage-document/:documentNumber/you-have-added-a-storage-facility", { documentNumber }),
+    nextUri: route("/create-storage-document/:documentNumber/add-storage-facility-details", { documentNumber }),
     railwayBillNumber,
     freightBillNumber,
     departureCountry,
     departurePort,
     departureDate: calculateDepartureDate(form),
+    placeOfUnloading,
     user_id: transport.user_id,
     vehicle: transport.vehicle,
     arrival: true,

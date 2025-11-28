@@ -29,10 +29,8 @@
       "certificateType": "non_uk"
     }
   ],
-  "storageFacilities": [],
   "validationErrors": [{}],
   "addAnotherProduct": "No",
-  "addAnotherStorageFacility": "No",
   "errors": {
     "catches-0-netWeightProductDeparture": "sdNetWeightProductDepartureErrorMax2DecimalLargerThan0"
   },

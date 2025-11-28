@@ -144,11 +144,25 @@ const addProductHandler = async (
   const addFishResponse: Product = await addFish(bearerToken, documentNumber, requestBody);
   const errors: IError[] = (addFishResponse.errors as IError[]) ?? [];
   if (!isEmpty(errors)) {
+    const { stateLookup, commodityCodes } = await getAddSpeciesLoaderData(
+      bearerToken,
+      documentNumber,
+      values.speciesCode ?? "",
+      requestBody.state ?? "",
+      requestBody.presentation ?? ""
+    );
+
     session.set("species", requestBody.species);
     session.set("state", requestBody.state);
     session.set("presentation", requestBody.presentation);
     session.set("commodityCode", requestBody.commodity_code);
     session.set("productId", values.productId);
+
+    values["stateLookup"] = stateLookup;
+    values["commodityCodes"] = commodityCodes;
+    values["presentation"] = requestBody.presentation ?? "";
+    values["state"] = requestBody.state ?? "";
+    values["commodityCode"] = requestBody.commodity_code ?? "";
     return apiCallFailed(errors, values, false, session);
   }
 
@@ -340,7 +354,7 @@ export const WhatAreYouExportingLoader = async (request: Request, params: Params
   let isProductAddFailure = false;
   let nextUri;
 
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   if (hasActionExecuted) {

@@ -111,6 +111,7 @@ export enum Page {
   StorageDocumentYouHaveAddedAStorageFacility = "storageDocumentYouHaveAddedAStorageFacility",
   StorageDocumentStorageFacilityApproval = "storageDocumentStorageFacilityApproval",
   HowDoesTheConsignmentArriveAToTheUk = "HowDoesTheConsignmentArriveAToTheUk",
+  ProcessingStatementRemoveProduct = "ProcessingStatementRemoveProduct",
 }
 
 export const pages: Pages = {
@@ -368,10 +369,6 @@ export const pages: Pages = {
     homeLink: "storage-document",
     hideFavouritesLink: true,
   },
-  [Page.DoYouHaveARoadTransportDocument]: {
-    path: "/create-catch-certificate/:documentNumber/do-you-have-a-road-transport-document",
-    title: "doYouHaveARoadTransportDocumentTitle",
-  },
   [Page.AddTransportationDetailsTruck]: {
     path: "/create-catch-certificate/:documentNumber/add-transportation-details-truck",
     title: "addTransportationDetailsTruck",
@@ -403,12 +400,6 @@ export const pages: Pages = {
   [Page.AddAdditionalTransportationDocumentsPlane]: {
     path: "/create-catch-certificate/:documentNumber/add-additional-transport-documents-plane",
     title: "addAdditionalTransportationDocumentsPlane",
-  },
-  [Page.StorageDocumentDoYouHaveARoadTransportDocument]: {
-    path: "/create-storage-document/:documentNumber/do-you-have-a-road-transport-document",
-    title: "sdDoYouHaveARoadTransportDocumentTitle",
-    homeLink: "storage-document",
-    hideFavouritesLink: true,
   },
   [Page.StorageDocumentAddTransportationDetailsTruck]: {
     path: "/create-storage-document/:documentNumber/add-transportation-details-truck",
@@ -494,12 +485,6 @@ export const pages: Pages = {
   },
   [Page.StorageDocumentYouHaveAddedAProduct]: {
     path: "/create-storage-document/:documentNumber/you-have-added-a-product",
-    title: "sdCommonTitle",
-    homeLink: "storage-document",
-    hideFavouritesLink: true,
-  },
-  [Page.StorageDocumentYouHaveAddedAStorageFacility]: {
-    path: "/create-storage-document/:documentNumber/you-have-added-a-storage-facility",
     title: "sdCommonTitle",
     homeLink: "storage-document",
     hideFavouritesLink: true,
@@ -598,6 +583,12 @@ export const pages: Pages = {
     path: "/create-storage-document/:documentNumber/departure-product-summary",
     title: "storageDocumentDepartureProductSummary",
     homeLink: "storage-document",
+    hideFavouritesLink: true,
+  },
+  [Page.ProcessingStatementRemoveProduct]: {
+    path: "/create-processing-statement/:documentNumber/remove-product/:productId",
+    title: "psRemoveProduct",
+    homeLink: "processing-statement",
     hideFavouritesLink: true,
   },
 };

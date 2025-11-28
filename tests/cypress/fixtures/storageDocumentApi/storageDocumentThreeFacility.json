@@ -1,47 +1,15 @@
 {
   "catches": [],
-  "storageFacilities": [
-    {
-      "facilityAddressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
-      "facilityBuildingName": "LANCASTER HOUSE",
-      "facilityBuildingNumber": "",
-      "facilitySubBuildingName": "MMO",
-      "facilityStreetName": "HAMPSHIRE COURT",
-      "facilityTownCity": "NEWCASTLE UPON TYNE",
-      "facilityCounty": "TYNESIDE",
-      "facilityCountry": "ENGLAND",
-      "facilityPostcode": "NE4 7YH",
-      "facilityName": "name",
-      "_facilityUpdated": false
-    },
-    {
-      "facilityAddressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
-      "facilityBuildingName": "LANCASTER HOUSE",
-      "facilityBuildingNumber": "",
-      "facilitySubBuildingName": "MMO",
-      "facilityStreetName": "HAMPSHIRE COURT",
-      "facilityTownCity": "NEWCASTLE UPON TYNE",
-      "facilityCounty": "TYNESIDE",
-      "facilityCountry": "Wales",
-      "facilityPostcode": "NE4 345",
-      "facilityName": "name",
-      "_facilityUpdated": false
-    },
-    {
-      "facilityName": "top",
-      "facilityAddressOne": "56, 3, Arc House, test",
-      "facilityBuildingName": "Arc House",
-      "facilityBuildingNumber": "56",
-      "facilitySubBuildingName": "3",
-      "facilityStreetName": "test",
-      "facilityTownCity": "Brussels",
-      "facilityCounty": "pre",
-      "facilityCountry": "Belgium",
-      "facilityPostcode": "sw11aa",
-      "_facilityUpdated": false
-    }
-  ],
+  "facilityAddressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
+  "facilityBuildingName": "LANCASTER HOUSE",
+  "facilityBuildingNumber": "",
+  "facilitySubBuildingName": "MMO",
+  "facilityStreetName": "HAMPSHIRE COURT",
+  "facilityTownCity": "NEWCASTLE UPON TYNE",
+  "facilityCounty": "TYNESIDE",
+  "facilityCountry": "ENGLAND",
+  "facilityPostcode": "NE4 7YH",
+  "facilityName": "name",
   "validationErrors": [{}],
-  "addAnotherProduct": "No",
-  "addAnotherStorageFacility": "No"
+  "addAnotherProduct": "No"
 }

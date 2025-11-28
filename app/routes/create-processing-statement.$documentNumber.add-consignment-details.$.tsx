@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Details, FormInput, ErrorPosition } from "@capgeminiuk/dcx-react-library";
+import { Details, FormInput, ErrorPosition, Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import { type LoaderFunction, redirect, type ActionFunction } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import isEmpty from "lodash/isEmpty";
@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { AutocompleteFormField, BackToProgressLink, ErrorSummary, Main, SecureForm, Title } from "~/components";
-import { scrollToId } from "~/helpers";
+import { displayErrorMessagesInOrder, scrollToId } from "~/helpers";
 import { getSessionFromRequest } from "~/sessions.server";
 import {
   getBearerTokenForRequest,
@@ -28,9 +28,11 @@ import { getEnv } from "~/env.server";
 import classNames from "classnames";
 import { useHydrated } from "remix-utils/use-hydrated";
 import { json } from "~/communication.server";
+import moment from "moment";
 
 type loaderConsignmentDetails = {
   documentNumber: string;
+  productId?: string;
   commodityCode?: string;
   description?: string;
   nextUri?: string;
@@ -38,7 +40,6 @@ type loaderConsignmentDetails = {
   commodityCodes: LabelAndValue[];
   productDescriptionMaxLength: number;
   isEditing?: boolean;
-  productIndex?: number;
   csrf: string;
 };
 
@@ -69,7 +70,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const ENV = getEnv();
 
   const { documentNumber } = params;
-  const productIndex = parseInt(params["*"] ?? "");
+  const productId = params["*"] ?? "";
   const bearerToken = await getBearerTokenForRequest(request);
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
@@ -84,7 +85,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   session.unset(`copyDocumentAcknowledged-${documentNumber}`);
   session.unset(`copyDocument-${documentNumber}`);
 
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   if (instanceOfUnauthorised(processingStatement)) {
@@ -95,16 +96,16 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const commodities: CodeAndDescription[] = await getCommodities();
 
-  const { currentProductDescription } = getProductDescription(processingStatement?.products, productIndex);
+  const { currentProductDescription } = getProductDescription(processingStatement?.products, productId);
   const productDescriptionMaxLength: number = parseInt(ENV.MAXIMUM_PRODUCT_DESCRIPTION_LENGTH);
 
   return json(
     {
       documentNumber,
+      productId: currentProductDescription?.id,
       commodityCode: currentProductDescription?.commodityCode,
       description: currentProductDescription?.description.replace(/\s+/g, " ").trim(),
       products: processingStatement?.products ?? [],
-      productIndex,
       nextUri,
       lang,
       commodityCodes: Array.isArray(commodities)
@@ -134,29 +135,40 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const nextUri = form.get("nextUri") as string;
   const isDraft = form.get("_action") === "saveAsDraft";
   const saveAndContinue = form.get("_action") === "saveAndContinue";
+  const isRemove = form.get("_action") === "remove";
+
   const saveToRedisIfErrors = false;
+  const productId = isEmpty(values["productId"])
+    ? documentNumber + "-" + moment.utc().unix()
+    : (values["productId"] as string);
   const commodityDescription = (values["consignmentDescription"] as string).replace(/\s+/g, " ").trim();
   const commodityCode = (values["commodityCode"] as string).split(" - ")[0];
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
-  if (saveAndContinue) {
-    const errorResponse = await updateProcessingStatementProducts(
-      bearerToken,
-      documentNumber,
-      {
-        commodityCode,
-        description: commodityDescription,
-      },
-      undefined,
-      saveToRedisIfErrors
-    );
 
+  if (isRemove) {
+    return redirect(`/create-processing-statement/${documentNumber}/remove-product/${productId}`);
+  }
+
+  const errorResponse = await updateProcessingStatementProducts(
+    bearerToken,
+    documentNumber,
+    {
+      id: productId,
+      commodityCode,
+      description: commodityDescription,
+    },
+    productId,
+    saveToRedisIfErrors
+  );
+
+  if (saveAndContinue) {
     if (errorResponse) {
       return errorResponse as Response;
     }
 
-    return redirect(`/create-processing-statement/${documentNumber}/add-catch-details`);
+    return redirect(`/create-processing-statement/${documentNumber}/add-catch-details/${productId}`);
   }
 
   if (isDraft) {
@@ -196,15 +208,17 @@ const AddConsignmentDetails = () => {
     lang,
     commodityCodes,
     productDescriptionMaxLength,
-    productIndex,
+    productId,
+    isEditing,
     csrf,
   } = useLoaderData<loaderConsignmentDetails>();
   const isHydrated = useHydrated();
-  const actionData = useActionData() ?? {};
+  const actionData = useActionData<{ errors?: any }>() ?? {};
   const { errors = {} } = actionData;
-  const [selectedCommodityCode, setSelectedCommodityCode] = useState<string | undefined>();
-
-  const [currentProductDescription, setCurrentProductDescription] = useState<string | undefined>("");
+  const [selectedCommodityCode, setSelectedCommodityCode] = useState<string | undefined>(
+    commodityCodes.find((autoCompleteOption) => autoCompleteOption.value === commodityCode)?.label ?? ""
+  );
+  const [currentProductDescription, setCurrentProductDescription] = useState<string | undefined>(description ?? "");
 
   useEffect(() => {
     if (isEmpty(errors) && lang === null) {
@@ -221,22 +235,25 @@ const AddConsignmentDetails = () => {
     }
   }, [errors]);
 
+  const errorKeysInOrder = ["consignmentDescription", "commodityCode"];
+  const errorMessagesForDisplay = displayErrorMessagesInOrder(errors, errorKeysInOrder);
+
   return (
     <Main backUrl={route("/create-processing-statement/:documentNumber/add-exporter-details", { documentNumber })}>
-      {!isEmpty(errors) && (
+      {!isEmpty(errorMessagesForDisplay) && (
         <ErrorSummary
-          errors={Object.keys(errors).map((key: string) => {
+          errors={Object.keys(errorMessagesForDisplay).map((key: any) => {
             if (key === "consignmentDescription") {
               return {
                 key,
-                message: errors[key].message,
+                message: errorMessagesForDisplay[key].message,
                 value: {
                   characterLimit: productDescriptionMaxLength,
                 },
               };
             }
 
-            return errors[key];
+            return errorMessagesForDisplay[key];
           })}
         />
       )}
@@ -249,14 +266,16 @@ const AddConsignmentDetails = () => {
               {" "}
               !{" "}
             </span>{" "}
-            <strong className="govuk-warning-text__text">{t("addConsignmentDetailsWarningLabel")} </strong>{" "}
+            <strong className="govuk-warning-text__text">
+              {t(`${isEditing ? "addConsignmentDetailsEditInfo" : "addConsignmentDetailsWarningLabel"}`)}
+            </strong>
           </div>
           <SecureForm
             method="post"
             action={
-              productIndex === undefined || productIndex === null
+              productId === undefined || productId === null
                 ? `/create-processing-statement/${documentNumber}/add-consignment-details`
-                : `/create-processing-statement/${documentNumber}/add-consignment-details/${productIndex}`
+                : `/create-processing-statement/${documentNumber}/add-consignment-details/${productId}`
             }
             csrf={csrf}
           >
@@ -264,7 +283,9 @@ const AddConsignmentDetails = () => {
               <div className="govuk-grid-column-two-thirds">
                 <div
                   className={
-                    isEmpty(errors?.commodityCode) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"
+                    isEmpty(errors?.consignmentDescription)
+                      ? "govuk-form-group"
+                      : "govuk-form-group govuk-form-group--error"
                   }
                 >
                   <FormInput
@@ -276,19 +297,21 @@ const AddConsignmentDetails = () => {
                       id: "consignmentDescription",
                       "aria-describedby": "hint-consignmentDescription",
                     }}
-                    value={currentProductDescription}
+                    value={currentProductDescription ?? description}
                     data-testid="consignmentDescription"
-                    inputClassName={isEmpty(errors) ? "govuk-input" : "govuk-input govuk-input--error"}
+                    inputClassName={
+                      isEmpty(errors?.consignmentDescription) ? "govuk-input" : "govuk-input govuk-input--error"
+                    }
                     hint={{
                       id: "hint-consignmentDescription",
                       position: "above",
                       text: t("addConsignmentDetailsConsignmentPageHint", { journeyText: t("processingStatement") }),
                       className: "govuk-hint",
                     }}
-                    errorProps={{ className: !isEmpty(errors) ? "govuk-error-message" : "" }}
+                    errorProps={{ className: !isEmpty(errors?.consignmentDescription) ? "govuk-error-message" : "" }}
                     staticErrorMessage={t(errors?.consignmentDescription?.message, { ns: "errorsText" })}
                     errorPosition={ErrorPosition.AFTER_LABEL}
-                    containerClassNameError={!isEmpty(errors) ? "govuk-form-group--error" : ""}
+                    containerClassNameError={!isEmpty(errors?.consignmentDescription) ? "govuk-form-group--error" : ""}
                     onChange={(e) => setCurrentProductDescription(e.currentTarget.value)}
                     hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                     hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
@@ -303,7 +326,7 @@ const AddConsignmentDetails = () => {
                     id="commodityCode"
                     name="commodityCode"
                     errorMessageText={t(errors?.commodityCode?.message, { ns: "errorsText" })}
-                    defaultValue={selectedCommodityCode ?? commodityCode ?? ""}
+                    defaultValue={selectedCommodityCode ?? ""}
                     options={
                       isHydrated
                         ? commodityCodes.map(({ label }) => label)
@@ -344,8 +367,21 @@ const AddConsignmentDetails = () => {
                 </Details>
               </div>
             </div>
+            {isEditing && (
+              <Button
+                id="remove-product"
+                label={t("addConsignmentDetailsRemoveProduct")}
+                className="govuk-button govuk-button--secondary"
+                type={BUTTON_TYPE.SUBMIT}
+                data-module="govuk-button"
+                name="_action"
+                value="remove"
+                data-testid="remove-product-button"
+              />
+            )}
             <ButtonGroup />
             <input type="hidden" name="nextUri" value={nextUri} />
+            <input type="hidden" name="productId" value={productId} />
           </SecureForm>
           <BackToProgressLink
             progressUri="/create-processing-statement/:documentNumber/progress"

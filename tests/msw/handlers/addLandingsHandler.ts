@@ -16,6 +16,7 @@ import {
   GET_GEAR_CATEGORIES_URL,
   mockGetGearTypesByCategoriesUrl,
   GET_RFMO_AREAS_URL,
+  COUNTRIES_URL,
 } from "~/urls.server";
 import speciesAddedPerUser from "@/fixtures/whatAreYouExportingApi/speciesAddedPerUser.json";
 import addLandings from "@/fixtures/addLandings/addLandings.json";
@@ -32,6 +33,7 @@ import addLandingsErrors from "@/fixtures/addLandings/addLandingErrors.json";
 import getGearCategories from "@/fixtures/addLandings/getGearCategories.json";
 import getGearTypesByCategory from "@/fixtures/addLandings/getGearTypesByCategory.json";
 import getRfmos from "@/fixtures/addLandings/getRfmos.json";
+import countries from "@/fixtures/referenceDataApi/countries.json";
 let isUnauthorised = false;
 const addLandingsHandler: ITestHandler = {
   [TestCaseId.AddLandingPageGuard]: () => [
@@ -57,9 +59,9 @@ const addLandingsHandler: ITestHandler = {
     rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json(favourites))),
     rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
-    rest.post(SAVE_AND_VALIDATE_EXPORT_URL, (req, res, ctx) => res.once(ctx.status(403))),
+    rest.post(SAVE_AND_VALIDATE_EXPORT_URL, (req, res, ctx) => res(ctx.status(403))),
     rest.get(CONSERVATION_URL, (req, res, ctx) => res(ctx.json(empty))),
-    rest.post(VALIDATE_LANDINGS_URL, (req, res, ctx) => res.once(ctx.status(403))),
+    rest.post(VALIDATE_LANDINGS_URL, (req, res, ctx) => res(ctx.status(403))),
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
@@ -91,9 +93,15 @@ const addLandingsHandler: ITestHandler = {
     rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json(addLandings))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(mannualLandingType))),
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json(favourites))),
+    rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
+    rest.get(CONSERVATION_URL, (req, res, ctx) => res(ctx.json(empty))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(mockSearchVesselName, (req, res, ctx) => res(ctx.json(getVessels))),
     rest.post(VALIDATE_LANDINGS_URL, (req, res, ctx) => res(ctx.status(400), ctx.json(addLandingsErrors))),
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
-    rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.status(500))),
+    rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
   ],
   [TestCaseId.AddLandingPageFailsWithMaxLandingExceededError]: () => [

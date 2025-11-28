@@ -16,6 +16,7 @@ import {
   getExportDateFromAction,
   getFlagState,
   getFlightNumber,
+  getFreightBillNumber,
   getNationalityOfVehicle,
   getRailwayBillNumber,
   getRegistrationNumber,
@@ -72,7 +73,7 @@ export const AddTransportationDetailsComponent = ({
     departurePlace: getDeparturePlace(errors, actionData, departurePlace),
     errors: errors,
     exportDate: getExportDate(exportDateFromAction, exportDate),
-    freightBillNumber,
+    freightBillNumber: getFreightBillNumber(errors, actionData, freightBillNumber),
     countries,
     formData,
     displayOptionalSuffix,
@@ -103,6 +104,7 @@ export const AddTransportationDetailsComponent = ({
     case TransportType.TRAIN:
       componentAttributes = {
         ...componentAttributes,
+        containerNumbers: getContainerNumbers(errors, actionData, containerNumbers),
         displayOptionalSuffix,
         railwayBillNumber: getRailwayBillNumber(errors, actionData, railwayBillNumber),
         legendTitle: t("addTrainTransportationDetailsTransportDetailsTitle", { ns: "transportation" }),
@@ -111,11 +113,12 @@ export const AddTransportationDetailsComponent = ({
     case TransportType.TRUCK:
       componentAttributes = {
         ...componentAttributes,
+        containerNumbers: getContainerNumbers(errors, actionData, containerNumbers),
         nationalityOfVehicle: getNationalityOfVehicle(errors, actionData, nationalityOfVehicle),
         registrationNumber: getRegistrationNumber(errors, actionData, registrationNumber),
         legendTitle: t("addTruckTransportationDetailsTransportDetailsTitle", { ns: "transportation" }),
       };
-      backUrl = route("/create-storage-document/:documentNumber/do-you-have-a-road-transport-document", {
+      backUrl = route("/create-storage-document/:documentNumber/how-does-the-export-leave-the-uk", {
         documentNumber,
       });
       break;

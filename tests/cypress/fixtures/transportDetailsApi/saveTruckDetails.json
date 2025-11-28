@@ -5,6 +5,7 @@
   "freightBillNumber": "AA1234567",
   "journey": "catchCertificate",
   "nationalityOfVehicle": "Truck",
+  "placeOfUnloading": "Place of unloading",
   "nextUri": "/create-catch-certificate/:documentNumber/check-your-information",
   "registrationNumber": "Registration",
   "user_id": "e9980bf3-0408-4255-9a4c-887bb268a2ad",

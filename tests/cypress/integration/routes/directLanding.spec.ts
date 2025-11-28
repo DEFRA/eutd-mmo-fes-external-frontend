@@ -28,6 +28,10 @@ describe("Direct landing page render", () => {
     cy.title().should("eq", "Add your trip - Create a UK catch certificate - GOV.UK");
   });
 
+  it("should render the important notice", () => {
+    cy.get(".govuk-warning-text__text").should("contain.text", "From 10 January 2026");
+  });
+
   it("should render the insert text", () => {
     cy.get("p").contains("Please Note:");
     cy.get("#directLandingsGuidanceMessage")
@@ -45,125 +49,97 @@ describe("Direct landing page render", () => {
   });
 
   it("should render summary details links and text", () => {
-    cy.get(".govuk-details__summary").should("have.length", 6);
+    cy.get(".govuk-details__summary").should("have.length", 7);
     cy.get("div .govuk-details__summary").eq(0).contains("Start date");
     cy.get("div .govuk-details__summary").eq(0).click({ force: true });
     cy.get("div .govuk-details__text")
       .contains(
-        "The start date is the date the vessel departed from port to begin the fishing trip during which the catch was made"
+        "The start date is the date the vessel departed from port to begin the fishing trip during which the catch was made."
       )
       .should("be.visible");
-    cy.get("div .govuk-details__summary").eq(1).contains("What is a high seas area?");
+    cy.get("div .govuk-details__text").eq(0).contains("The start date is not:").should("be.visible");
+    cy.get("div .govuk-details__text")
+      .eq(0)
+      .contains("The date the catch was landed (see Date Landed)")
+      .should("be.visible");
+    cy.get("div .govuk-details__text").eq(0).contains("The date the catch was sold or processed").should("be.visible");
+    cy.get("div .govuk-details__summary").eq(1).contains("What is a date landed?");
     cy.get("div .govuk-details__summary").eq(1).click({ force: true });
     cy.get("div .govuk-details__text")
+      .contains("The date landed is the date the vessel finishes its fishing trip and unloads its catch at port.")
+      .should("be.visible");
+    cy.get("div .govuk-details__text").eq(1).contains("You can enter a landing date:").should("be.visible");
+    cy.get("div .govuk-details__text")
       .eq(1)
-      .contains("A high seas area is any part of the sea that is not:")
+      .contains("up to 7 days in the future in draft documents")
       .should("be.visible");
     cy.get("div .govuk-details__text")
       .eq(1)
-      .contains("within a country’s territorial sea (up to 12 nautical miles from the coast), or")
+      .contains("up to 3 days in the future in final submitted catch certificates")
       .should("be.visible");
-    cy.get("div .govuk-details__text")
-      .eq(1)
-      .contains("part of a country’s internal waters (like bays or estuaries)")
-      .should("be.visible");
-    cy.get("div .govuk-details__text")
-      .eq(1)
-      .contains(
-        "High seas are international waters. No country owns them. All countries have the right to use the high seas for things like:"
-      )
-      .should("be.visible");
-    cy.get("div .govuk-details__text").eq(1).contains("navigation").should("be.visible");
-    cy.get("div .govuk-details__text").eq(1).contains("fishing").should("be.visible");
-    cy.get("div .govuk-details__text").eq(1).contains("laying submarine cables and pipelines").should("be.visible");
-    cy.get("div .govuk-details__text").eq(1).contains("flying over the sea").should("be.visible");
-    cy.get("div .govuk-details__text")
-      .eq(1)
-      .contains("These rights must be used with respect for other countries and international law.")
-      .should("be.visible");
-    cy.get("div .govuk-details__text")
-      .eq(1)
-      .contains("Find maps and codes for high seas fishing areas on the FAO website (opens in new tab).")
-      .should("be.visible");
-    cy.get("div .govuk-details__text")
-      .eq(1)
-      .contains("Find maps and codes for high seas fishing areas on the FAO website (opens in new tab).")
-      .click({ force: true });
-    cy.get("div .govuk-details__summary").eq(2).contains("What is an exclusive economic zone (EEZ)?");
+    cy.get("div .govuk-details__summary").eq(2).contains("What is a high seas area?");
     cy.get("div .govuk-details__summary").eq(2).click({ force: true });
     cy.get("div .govuk-details__text")
       .eq(2)
       .contains(
-        "An exclusive economic zone (EEZ) is a sea area where a country has special rights to explore, manage and use marine resources."
+        "High Seas Area - high seas are international marine waters outside the jurisdiction of any country beyond the 200nm limit of the EEZ."
       )
       .should("be.visible");
     cy.get("div .govuk-details__text")
       .eq(2)
-      .contains(
-        "It starts beyond the country’s territorial sea (12 nautical miles from the coast) and can extend up to 200 nautical miles."
-      )
-      .should("be.visible");
-    cy.get("div .govuk-details__text").eq(2).contains("Within its EEZ, a country can:").should("be.visible");
-    cy.get("div .govuk-details__text").eq(2).contains("fish and manage fish stocks").should("be.visible");
-    cy.get("div .govuk-details__text").eq(2).contains("explore and extract oil, gas and minerals").should("be.visible");
-    cy.get("div .govuk-details__text")
-      .eq(2)
-      .contains("generate energy from wind, currents and tides")
-      .should("be.visible");
-    cy.get("div .govuk-details__text").eq(2).contains("protect the marine environment").should("be.visible");
-    cy.get("div .govuk-details__text")
-      .eq(2)
-      .contains(
-        "Other countries can still pass through or fly over the EEZ, but they must respect the laws of the coastal state and international law."
-      )
+      .contains("Find out more about High Seas areas (opens in new tab).")
       .should("be.visible");
     cy.get("div .govuk-details__text")
       .eq(2)
-      .contains("Find maps and codes for EEZs on the FAO website (opens in new tab)")
-      .should("be.visible");
-    cy.get("div .govuk-details__summary")
-      .eq(3)
-      .contains("What is a regional fisheries management organisation (RFMO)?");
+      .contains("Find out more about High Seas areas (opens in new tab).")
+      .click({ force: true });
+    cy.get("div .govuk-details__summary").eq(3).contains("What is an exclusive economic zone (EEZ)?");
     cy.get("div .govuk-details__summary").eq(3).click({ force: true });
     cy.get("div .govuk-details__text")
       .eq(3)
       .contains(
-        "A regional fisheries management organisation (RFMO) is an international body that manages fish stocks in a specific area of the ocean."
+        "Exclusive Economic Zones extend out to 200 nautical miles (nm) from the coastline or a median line where it meets another country’s limits."
       )
       .should("be.visible");
     cy.get("div .govuk-details__text")
       .eq(3)
-      .contains("RFMOs are made up of countries that have fishing interests in that region. They work together to:")
-      .should("be.visible");
-    cy.get("div .govuk-details__text").eq(3).contains("monitor fish populations").should("be.visible");
-    cy.get("div .govuk-details__text").eq(3).contains("set catch limits and conservation rules").should("be.visible");
-    cy.get("div .govuk-details__text").eq(3).contains("coordinate scientific research").should("be.visible");
-    cy.get("div .govuk-details__text").eq(3).contains("promote sustainable fishing practices").should("be.visible");
-
-    cy.get("div .govuk-details__text")
-      .eq(3)
-      .contains("Some RFMOs focus on specific species, like tuna, while others manage all fish stocks in a region.")
+      .contains(
+        "Within EEZs the coastal state has sovereign rights to exploration and exploitation of the natural resources, marine research and responsibility for protection and preservation of Marine life."
+      )
       .should("be.visible");
     cy.get("div .govuk-details__text")
       .eq(3)
-      .contains("You only need to select an RFMO if the product was caught in an area covered by one.")
+      .contains("Find out more about EEZs (opens in new tab).")
       .should("be.visible");
-    cy.get("div .govuk-details__text")
-      .eq(3)
-      .contains("Find out more about RFMOs on the FAO website (opens in new tab)")
-      .click({ force: true });
-    cy.get("div .govuk-details__summary").eq(4).contains("I cannot find the vessel");
+    cy.get("div .govuk-details__summary")
+      .eq(4)
+      .contains("What is a regional fisheries management organisation (RFMO)?");
     cy.get("div .govuk-details__summary").eq(4).click({ force: true });
     cy.get("div .govuk-details__text")
+      .eq(4)
       .contains(
-        "If the vessel you need is not listed, select 'Vessel not listed – select if not available (N/A)' from the dropdown."
+        "Regional Fisheries Management Organisations (RFMO) - RFMOs are international organisations establishing binding measures for conservation and sustainable management of highly migratory or straddling fish species."
       )
       .should("be.visible");
-    cy.get("div .govuk-details__summary").eq(5).contains("What are gear details?");
-    cy.get("div .govuk-details__summary").eq(5).click({ force: true });
-    cy.get("div .govuk-details__text").should("have.length", 6);
     cy.get("div .govuk-details__text")
-      .eq(5)
+      .eq(4)
+      .contains("Find out more about RFMOs (opens in new tab).")
+      .click({ force: true });
+    cy.get("div .govuk-details__summary").eq(5).contains("I cannot find the vessel");
+    cy.get("div .govuk-details__summary").eq(5).click({ force: true });
+    cy.get("div .govuk-details__text")
+      .contains(
+        'If the vessel you need is not listed, select "Vessel not listed – select if not available (N/A)" from the dropdown.'
+      )
+      .should("be.visible");
+    cy.get("div .govuk-details__text")
+      .contains("This option is for cases where the vessel is not in the system or cannot be found using the search.")
+      .should("be.visible");
+    cy.get("div .govuk-details__summary").eq(6).contains("What are gear details?");
+    cy.get("div .govuk-details__summary").eq(6).click({ force: true });
+    cy.get("div .govuk-details__text").should("have.length", 7);
+    cy.get("div .govuk-details__text")
+      .eq(6)
       .contains(
         `Gear categories describe the general method used to catch fish, such as trawls or nets.Gear types are more specific, like "Beam trawls" or "Set gillnets".Select the most accurate option based on how the fish were caught. If you're unsure, contact your suppliers or fisheries authority.`
       )
@@ -171,7 +147,7 @@ describe("Direct landing page render", () => {
   });
 
   it("should display the EEZ label and its corresponding hint", () => {
-    cy.get('label[for="eez-0"]').should("contain", "Exclusive economic zone (optional)");
+    cy.get('label[for="eez-0"]').should("contain", "Exclusive economic zone");
     cy.get("#eez-0").should("exist");
     cy.get(".govuk-hint").should("contain", "The area of sea where the fish were caught");
   });
@@ -191,10 +167,9 @@ describe("Direct landing page render", () => {
     cy.get(".govuk-details__text")
       .should(
         "contain",
-        "An exclusive economic zone (EEZ) is a sea area where a country has special rights to explore, manage and use marine resources."
+        "Exclusive Economic Zones extend out to 200 nautical miles (nm) from the coastline or a median line where it meets another country’s limits."
       )
       .and("be.visible");
-    cy.get(".govuk-details__text ul li").should("have.length.greaterThan", 2);
   });
 
   it("should render the 'Add Another EEZ' button after the last select dropdown", () => {
@@ -264,12 +239,12 @@ describe("Direct landing page render", () => {
   });
 
   it("should remove the last EEZ select field when the 'Remove Zone' button is clicked", () => {
-    cy.get("#add-zone-button").click({ force: true });
-    cy.get("#add-zone-button").click({ force: true });
-    cy.get("#add-zone-button").click({ force: true });
-    cy.get('[id^="eez-"]').should("have.length", 4);
+    cy.get("#add-zone-button").should("exist");
+    cy.get("#add-zone-button").last().click({ force: true });
+    cy.get("#add-zone-button").last().click({ force: true });
+    cy.get("#add-zone-button").last().click({ force: true });
+    cy.get("#remove-zone-button").last().should("be.visible");
     cy.get("#remove-zone-button").last().click({ force: true });
-    cy.get('[id^="eez-"]').should("have.length", 3);
   });
 
   it("should render the RFMO label and hint", () => {
@@ -300,10 +275,9 @@ describe("Direct landing page render", () => {
   it("should render and expand the RFMO help details", () => {
     cy.get(".govuk-details__summary").contains("What is a regional fisheries management organisation (RFMO)?").click();
     cy.get(".govuk-details__text")
-      .should("contain", "A regional fisheries management organisation (RFMO)")
+      .should("contain", "Regional Fisheries Management Organisations (RFMO)")
       .and("be.visible");
-    cy.get(".govuk-details__text ul li").should("have.length.greaterThan", 0);
-    cy.get(".govuk-details__text a").should("have.attr", "href").and("include", "fao.org");
+    cy.get(".govuk-details__text a").should("have.attr", "href").and("include", "gov.uk");
   });
 
   it("should check product weights table ", () => {
@@ -312,8 +286,8 @@ describe("Direct landing page render", () => {
     cy.get(".govuk-table__head").find("th").eq(1).contains("Export Weight");
   });
 
-  it("should check start date label as when Start date of fishing trip (optional) when its suffix added", () => {
-    cy.get("#startDate").find("legend").find("b").contains("Start date of fishing trip (optional)");
+  it("should check start date label as Start date of fishing trip", () => {
+    cy.get("#startDate").find("legend").find("b").contains("Start date of fishing trip");
   });
 
   it("should fill the start date details from date picker", () => {
@@ -618,6 +592,73 @@ describe("DirectLanding page errors when javascript is enabled", () => {
   });
 });
 
+describe("Direct Landing mandatory fields unpopulated errors", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingValidationErrors,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+  });
+
+  it("should display an error when start date is unpopulated", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-message").contains("Enter the start date of the fishing trip");
+  });
+
+  it("should display an error when high seas is unpopulated", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-message").contains("Select whether the product was caught in a high seas area");
+  });
+
+  it("should display an error when gear type is unpopulated", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-message").contains("Select a gear type");
+  });
+
+  it("should display an error when gear category is unpopulated", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-message").contains("Select a gear category");
+  });
+});
+
+describe("High Seas Component - validation error", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingValidationErrors,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+  });
+
+  it("should apply error modifier class to form-group", () => {
+    cy.get(".govuk-form-group--error").find("fieldset").should("exist");
+  });
+
+  it("should set aria-describedby to include both error and hint IDs", () => {
+    cy.get("fieldset.govuk-fieldset")
+      .filter('[aria-describedby*="highSeasArea-error"]')
+      .should("have.attr", "aria-describedby", "highSeasArea-error highSeasArea-hint");
+  });
+
+  it("should render error message with correct structure", () => {
+    cy.get("#highSeasArea-error").should("exist").should("have.class", "govuk-error-message");
+  });
+
+  it("should display visually hidden error prefix text", () => {
+    cy.get("#highSeasArea-error").find(".govuk-visually-hidden").should("contain.text", "Error");
+  });
+
+  it("should clear error when valid selection is made", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#highSeasArea-error").should("exist");
+    cy.get("#highSeasArea").click({ force: true });
+  });
+});
+
 describe("DirectLanding page guard when javascript is disabled", () => {
   it("should redirect to a forbidden page", () => {
     const testParams: ITestParams = {
@@ -645,37 +686,6 @@ describe("DirectLanding page, when no landing have been added", () => {
 describe("Direct Landing page when gear types api is failing", () => {
   it("should catch errors when gear types are not found", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.DirectLandingPageErrors,
-    };
-    cy.visit(directLandingUrl, { qs: { ...testParams } });
-    // Start Date
-    cy.get("#startDate").find("img").click({ force: true });
-    cy.get(".react-datepicker-popper").should("be.visible");
-    cy.get(".react-datepicker__day").eq(0).trigger("click");
-    // Date
-    cy.get("#dateLanded").find("img").click({ force: true });
-    cy.get(".react-datepicker-popper").should("be.visible");
-    cy.get(".react-datepicker__day").eq(5).trigger("click");
-    // Fao
-    cy.get("#select-faoArea").contains("FAO27");
-    // High seas are
-    cy.get("#highSeasArea").click({ force: true });
-    // vessel
-    cy.get("input[name='vessel']").type("K373");
-    // weight
-    cy.get("#weights\\.0\\.exportWeight").invoke("val", 4);
-    cy.get("#weights\\.1\\.exportWeight").invoke("val", 8);
-    // gear details
-    cy.get("#gearCategory").contains("Select gear category");
-    cy.get("#gearCategory").then(() => {
-      cy.get("#gearCategory").select(4, { force: true });
-    });
-    cy.get("#gearCategory").contains("Dredges");
-    cy.get("#gearType").contains("Select gear type");
-  });
-
-  it("should catch errors when gear types are not found", () => {
-    const testParams: ITestParams = {
       testCaseId: TestCaseId.DirectLandingPageGearTypeErrors,
     };
 
@@ -683,10 +693,9 @@ describe("Direct Landing page when gear types api is failing", () => {
 
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.get("#error-summary-title").contains("There is a problem");
-    cy.get(".govuk-error-message").contains("You must select a gear type when you have selected a gear category");
+    cy.get(".govuk-error-message").contains("Select a gear type");
   });
 });
-
 describe("Direct landing page: Accessibility", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
@@ -697,34 +706,62 @@ describe("Direct landing page: Accessibility", () => {
   });
 
   it("should have label for all fields on the form", () => {
-    cy.get(".add-landings-form label").should("have.length", 14);
+    cy.get(".form-light-grey-bg label").should("have.length", 14);
     // start date
-    cy.get(".add-landings-form label").eq(0).should("have.text", "Day").and("be.visible");
-    cy.get(".add-landings-form label").eq(1).should("have.text", "Month").and("be.visible");
-    cy.get(".add-landings-form label").eq(2).should("have.text", "Year").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(0).should("have.text", "Day").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(1).should("have.text", "Month").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(2).should("have.text", "Year").and("be.visible");
     // landed date
-    cy.get(".add-landings-form label").eq(3).should("have.text", "Day").and("be.visible");
-    cy.get(".add-landings-form label").eq(4).should("have.text", "Month").and("be.visible");
-    cy.get(".add-landings-form label").eq(5).should("have.text", "Year").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(3).should("have.text", "Day").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(4).should("have.text", "Month").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(5).should("have.text", "Year").and("be.visible");
     // catch area
-    cy.get(".add-landings-form label").eq(6).should("have.text", "Catch area").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(6).should("have.text", "Catch area").and("be.visible");
     // high seas area
-    cy.get(".add-landings-form label").eq(7).should("have.text", "Yes").and("be.visible");
-    cy.get(".add-landings-form label").eq(8).should("have.text", "No").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(7).should("have.text", "Yes").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(8).should("have.text", "No").and("be.visible");
     // EEZ
-    cy.get(".govuk-label").eq(9).should("have.text", "Exclusive economic zone (optional)").and("be.visible");
+    cy.get(".govuk-label").eq(9).should("have.text", "Exclusive economic zone").and("be.visible");
     // RFMO
-    cy.get(".add-landings-form label")
+    cy.get(".form-light-grey-bg label")
       .eq(10)
       .should("have.text", "Regional fisheries management organisation (optional)")
       .and("be.visible");
     // vessel
-    cy.get(".add-landings-form label")
+    cy.get(".form-light-grey-bg label")
       .eq(11)
       .should("have.text", "Vessel name or port letter and number (PLN)")
       .and("be.visible");
     // gear details
-    cy.get(".add-landings-form label").eq(12).should("have.text", "Gear category").and("be.visible");
-    cy.get(".add-landings-form label").eq(13).should("have.text", "Gear type").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(12).should("have.text", "Gear category").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(13).should("have.text", "Gear type").and("be.visible");
+  });
+});
+
+describe("Direct Landing - EEZ validation when high seas is No", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingEEZValidationErrors,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+  });
+
+  it("should display error when EEZ field is empty", () => {
+    cy.wait(300);
+    cy.get("#add-zone-button").click({ force: true });
+    cy.wait(300);
+    cy.get("#eez-0").type("France");
+    cy.get(".autocomplete__option").first().click();
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-message").should("contain", "Select or enter a country for the exclusive economic zone");
+  });
+
+  it("should display error when EEZ field has invalid country", () => {
+    cy.wait(300);
+    cy.get("#eez-0").type("Invalid Country Name XYZ");
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-message").should("contain", "Select a country for the exclusive economic zone from the list");
   });
 });

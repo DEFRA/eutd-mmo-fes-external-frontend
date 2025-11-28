@@ -32,6 +32,7 @@ import {
   updateStorageDocumentCatchDetails,
   createCSRFToken,
   validateCSRFToken,
+  getCountries,
 } from "~/.server";
 import { useHydrated } from "remix-utils/use-hydrated";
 import type {
@@ -43,6 +44,7 @@ import type {
   StorageDocumentCatch,
   DocIssuedInUkRadioSelectOptionType,
   DocIssuedInUkRadioSelectType,
+  ICountry,
 } from "~/types";
 import { querySpecies, getCodeFromLabel, displayErrorMessages, scrollToId } from "~/helpers";
 import setApiMock from "tests/msw/helpers/setApiMock";
@@ -58,6 +60,7 @@ interface ILoaderData {
   speciesExemptLink: string;
   commodityCodeLink: string;
   species: Species[];
+  countries: ICountry[];
   commodityCodes: LabelAndValue[];
   productIndex?: number;
   catchDetails?: StorageDocumentCatch;
@@ -74,6 +77,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const { documentNumber } = params;
   const species = await getAllSpecies();
+  const countries = await getCountries();
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
   const productIndex = parseInt(params["*"] ?? "") || 0;
@@ -86,7 +90,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const maximumEntryDocsAllowed = getEnv().EU_SD_MAX_ENTRY_DOCS;
 
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   if (instanceOfUnauthorised(storageDocument)) {
@@ -117,6 +121,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       catchIndex: validCatchIndex,
       nextUri,
       species: Array.isArray(species) ? species : [],
+      countries: Array.isArray(countries) ? countries : [],
       commodityCodes: Array.isArray(commodities)
         ? commodities.map((commodityCode: CodeAndDescription) => ({
             label: `${commodityCode.code} - ${commodityCode.description}`,
@@ -138,23 +143,32 @@ const getUpdateStorageDocumentData = (
     [k: string]: FormDataEntryValue;
   },
   scientificName: string | undefined,
-  supportingDocumentsFromForm: string[]
-) => ({
-  commodityCode: commodityCode,
-  product: values.species as string,
-  scientificName: scientificName as string,
-  certificateNumber: values.entryDocument as string,
-  weightOnCC: values.weight as string,
-  certificateType: values.docIssuedInUk as DocIssuedInUkRadioSelectType,
-  supportingDocuments: supportingDocumentsFromForm.length > 0 ? supportingDocumentsFromForm : undefined,
-  productDescription: !isEmpty(values.productDescription) ? (values.productDescription as string) : undefined,
-  netWeightProductArrival: !isEmpty(values.netWeightProductArrival)
-    ? (values.netWeightProductArrival as string)
-    : undefined,
-  netWeightFisheryProductArrival: !isEmpty(values.netWeightFisheryProductArrival)
-    ? (values.netWeightFisheryProductArrival as string)
-    : undefined,
-});
+  supportingDocumentsFromForm: string[],
+  countries: ICountry[]
+) => {
+  let issuingCountry: ICountry | undefined = undefined;
+  if (values.docIssuedInUk === "non_uk" && values.issuingCountry) {
+    issuingCountry = countries.find((c) => c.officialCountryName === values.issuingCountry);
+  }
+
+  return {
+    commodityCode: commodityCode,
+    product: values.species as string,
+    scientificName: scientificName as string,
+    certificateNumber: values.entryDocument as string,
+    weightOnCC: values.weight as string,
+    certificateType: values.docIssuedInUk as DocIssuedInUkRadioSelectType,
+    issuingCountry,
+    supportingDocuments: supportingDocumentsFromForm.length > 0 ? supportingDocumentsFromForm : undefined,
+    productDescription: !isEmpty(values.productDescription) ? (values.productDescription as string) : undefined,
+    netWeightProductArrival: !isEmpty(values.netWeightProductArrival)
+      ? (values.netWeightProductArrival as string)
+      : undefined,
+    netWeightFisheryProductArrival: !isEmpty(values.netWeightFisheryProductArrival)
+      ? (values.netWeightFisheryProductArrival as string)
+      : undefined,
+  };
+};
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
@@ -189,13 +203,15 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     supportingDocumentsFromForm.splice(removeIndex, 1);
   }
 
+  const countries = await getCountries();
   const updateData: Partial<StorageDocument | StorageDocumentCatch> = getUpdateStorageDocumentData(
     commodityCode,
     values,
     scientificName,
-    supportingDocumentsFromForm
+    supportingDocumentsFromForm,
+    countries
   );
-  const saveToRedisIfErrors = true;
+  const saveToRedisIfErrors = false;
   const errorResponse = await updateStorageDocumentCatchDetails(
     bearerToken,
     documentNumber,
@@ -207,12 +223,11 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     isNonJs
   );
 
-  if (errorResponse) {
-    return errorResponse as Response;
-  }
-
   if (isDraft) {
     return redirect(route("/create-storage-document/storage-documents"));
+  }
+  if (errorResponse) {
+    return errorResponse as Response;
   }
 
   if (addSupportingDoc && isNonJs) {
@@ -239,11 +254,65 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   );
 };
 
-const getRemoveSupportingDoc = (form: FormData, action: string) =>
+const getRemoveSupportingDoc = (form: FormData, action: string): boolean =>
   form.get("_action") === null ? false : action.startsWith("removeSupportingDoc");
 
-const getRemoveIndex = (removeSupportingDoc: boolean, action: string) =>
+const getRemoveIndex = (removeSupportingDoc: boolean, action: string): number =>
   removeSupportingDoc ? parseInt(action.split("-")[1], 10) : -1;
+
+// Helper functions to reduce cognitive complexity
+const hasError = (errors: any, fieldKey: string): boolean => !!errors?.[fieldKey]?.message;
+
+const getErrorProps = (errors: any, fieldKey: string) =>
+  hasError(errors, fieldKey) ? { className: "govuk-error-message" } : {};
+
+const getErrorMessage = (errors: any, fieldKey: string, t: any) =>
+  hasError(errors, fieldKey) ? t(errors[fieldKey].message, { ns: "errorsText" }) : "";
+
+const getErrorClassName = (errors: any, fieldKey: string) =>
+  hasError(errors, fieldKey) ? "govuk-form-group--error" : "";
+
+const hasSpeciesError = (errors: any, speciesKey: string): boolean =>
+  Object.keys(errors).some((key) => key.startsWith(speciesKey));
+
+const getSpeciesErrorMessage = (
+  errors: any,
+  productKey: string,
+  speciesKey: string,
+  isHydrated: boolean,
+  t: any
+): string => {
+  if (isHydrated || (!isHydrated && errors?.[productKey]?.message)) {
+    return t(errors?.[productKey]?.message, { ns: "errorsText" });
+  }
+  const allErrors = transformedErrors(errors);
+  const keysAndValues = getKeysAndValues(allErrors, speciesKey);
+  return t(keysAndValues?.key, { dynamicValue: keysAndValues?.value, ns: "errorsText" });
+};
+
+// --- Helper functions extracted to reduce cognitive complexity ---
+const getSupportingDocumentsLabel = (displayOptionalSuffix: boolean, t: any) =>
+  t(displayOptionalSuffix ? "supportingDocumentsOptional" : "supportingDocuments", {
+    ns: "addProductToThisConsignment",
+  });
+
+const getProductDescriptionLabelKey = () => "productDescription";
+
+const getSpeciesOptions = (isHydrated: boolean, species: Species[]) =>
+  isHydrated ? species : ["", ...species.map((s: Species) => `${s.faoName} (${s.faoCode})`)];
+
+const getCountryOptions = (isHydrated: boolean, countries: ICountry[]) => {
+  // Filter out United Kingdom from the list of countries for issuing country selection as it's not applicable for non-UK documents
+  const filteredCountries = countries.filter(
+    (c: ICountry) => !c.officialCountryName.includes("United Kingdom of Great Britain and Northern Ireland")
+  );
+  return isHydrated
+    ? filteredCountries.map((c: ICountry) => c.officialCountryName)
+    : ["", ...filteredCountries.map((c: ICountry) => c.officialCountryName)];
+};
+
+const getCommodityOptions = (isHydrated: boolean, commodityCodes: LabelAndValue[]) =>
+  isHydrated ? commodityCodes.map(({ label }) => label) : ["", ...commodityCodes.map(({ label }) => label)];
 
 const AddProduct = () => {
   const {
@@ -251,6 +320,7 @@ const AddProduct = () => {
     speciesExemptLink,
     commodityCodeLink,
     species,
+    countries,
     commodityCodes,
     productIndex,
     catchDetails,
@@ -260,31 +330,24 @@ const AddProduct = () => {
     maximumEntryDocsAllowed,
     updatedSupportingDocuments,
   } = useLoaderData<ILoaderData>();
-  const { t } = useTranslation();
+  const { t } = useTranslation(["addProductToThisConsignment", "errorsText"]);
   const { errors = {} } = useActionData<{ errors: any }>() ?? {};
   const isHydrated = useHydrated();
   const [selectedCommodityCode, setSelectedCommodityCode] = useState<string | undefined>();
   const [isNonJs, setIsNonJs] = useState(true);
+  const [selectedCertificateType, setSelectedCertificateType] = useState<string>(catchDetails?.certificateType ?? "");
 
   const commodityCodeKey = `catches-${productIndex}-commodityCode`;
   const productKey = `catches-${productIndex}-product`;
   const speciesKey = "catches-species";
   const weightKey = `catches-${productIndex}-weightOnCC`;
   const certificateTypeKey = `catches-${productIndex}-certificateType`;
+  const issuingCountryKey = `catches-${productIndex}-issuingCountry`;
   const certKey = `catches-${productIndex}-certificateNumber`;
   const supportingDocumentsKey = `catches-${productIndex}-supportingDocuments`;
   const productDescriptionKey = `catches-${productIndex}-productDescription`;
   const netWeightProductArrivalKey = `catches-${productIndex}-netWeightProductArrival`;
   const netWeightFisheryProductArrivalKey = `catches-${productIndex}-netWeightFisheryProductArrival`;
-
-  const supportingDocumentsLabel = t(
-    `${displayOptionalSuffix ? "supportingDocumentsOptional" : "supportingDocuments"}`,
-    {
-      ns: "addProductToThisConsignment",
-    }
-  );
-
-  const hasCatchesSpeciesError = Object.keys(errors).some((key) => key.startsWith(speciesKey));
 
   useEffect(() => {
     if (!isEmpty(errors)) {
@@ -299,26 +362,23 @@ const AddProduct = () => {
   }, [isHydrated]);
 
   const allErrors = transformedErrors(errors);
-  const keysAndValues = getKeysAndValues(allErrors, speciesKey);
-
-  const getErrorMessageForSpecies = (): string => {
-    if (isHydrated || (!isHydrated && errors?.[productKey]?.message)) {
-      return t(errors?.[productKey]?.message, { ns: "errorsText" });
-    } else {
-      return t(keysAndValues?.key, { dynamicValue: keysAndValues?.value, ns: "errorsText" });
-    }
-  };
-
-  const constructErrorProps = (fieldKey: string) =>
-    errors?.[fieldKey]?.message ? { className: "govuk-error-message" } : {};
-  const constructStaticErrorMessage = (fieldKey: string) =>
-    errors?.[fieldKey]?.message ? t(errors?.[fieldKey]?.message, { ns: "errorsText" }) : "";
-  const constructContainerClassNameError = (fieldKey: string) =>
-    errors?.[fieldKey]?.message ? "govuk-form-group--error" : "";
+  const hasCatchesSpeciesError = hasSpeciesError(errors, speciesKey);
+  const getErrorMessageForSpecies = () => getSpeciesErrorMessage(errors, productKey, speciesKey, isHydrated, t);
 
   const [supportingDocuments, setSupportingDocuments] = useState<string[]>(
     updatedSupportingDocuments?.length ? [...updatedSupportingDocuments] : [""]
   );
+
+  const supportingDocumentsLabel = getSupportingDocumentsLabel(displayOptionalSuffix, t);
+  const productDescriptionLabelKey = getProductDescriptionLabelKey();
+  const netWeightProductLabelKey = "netWeightOfProductOnArrival";
+  const netWeightFisheryLabelKey = "netWeightOfFisheryProductOnArrival";
+
+  const speciesOptions = getSpeciesOptions(isHydrated, species);
+  const countryOptions = getCountryOptions(isHydrated, countries);
+  const commodityOptions = getCommodityOptions(isHydrated, commodityCodes);
+
+  const isNonUkCertificate = selectedCertificateType === "non_uk";
 
   const handleAddDoc = () => {
     if (supportingDocuments.length < maximumEntryDocsAllowed) {
@@ -339,7 +399,6 @@ const AddProduct = () => {
   const confirmTypeOptions = confirmDocIssuedInUkRadioSelectTypeOptions;
   const labelText = t("documentIssuedInTheUK", { ns: "addProductToThisConsignment" });
   const hintText = t("documentIssuedInTheUKHint", { ns: "addProductToThisConsignment" });
-  const value = catchDetails?.certificateType;
   const getOptionLabel = (option: DocIssuedInUkRadioSelectOptionType) => t(option.label, { ns: "common" });
 
   return (
@@ -402,8 +461,9 @@ const AddProduct = () => {
                           name="docIssuedInUk"
                           className="govuk-radios__input"
                           value={option.value}
-                          defaultChecked={option.value === value}
+                          checked={selectedCertificateType === option.value}
                           aria-describedby={`${certificateTypeKey}-hint`}
+                          onChange={(e) => setSelectedCertificateType(e.target.value)}
                         />
                         <label htmlFor={option.id} className="govuk-label govuk-radios__label">
                           {getOptionLabel(option)}
@@ -413,6 +473,37 @@ const AddProduct = () => {
                   </div>
                 </fieldset>
               </div>
+              {(!isHydrated || isNonUkCertificate) && (
+                <AutocompleteFormField
+                  id={issuingCountryKey}
+                  name="issuingCountry"
+                  labelText={t("issuingCountry", { ns: "addProductToThisConsignment" })}
+                  labelClassName="govuk-label govuk-!-font-weight-bold"
+                  hintText={t("issuingCountryHint", { ns: "addProductToThisConsignment" })}
+                  errorMessageText={
+                    errors?.[issuingCountryKey]?.message
+                      ? t(errors[issuingCountryKey].message, { ns: "errorsText" })
+                      : ""
+                  }
+                  defaultValue={catchDetails?.issuingCountry?.officialCountryName ?? ""}
+                  options={countryOptions}
+                  optionsId="issuing-country-option"
+                  containerClassName={classNames("govuk-form-group", {
+                    "govuk-form-group--error": errors?.[issuingCountryKey]?.message,
+                  })}
+                  selectProps={{
+                    selectClassName: classNames("govuk-select govuk-!-width-one-half", {
+                      "govuk-select--error": errors?.[issuingCountryKey]?.message,
+                    }),
+                  }}
+                  inputProps={{
+                    className: classNames("govuk-input govuk-!-width-one-half", {
+                      "govuk-input--error": errors?.[issuingCountryKey]?.message,
+                    }),
+                    "aria-describedby": `${issuingCountryKey}-hint`,
+                  }}
+                />
+              )}
               <FormInput
                 containerClassName="govuk-form-group"
                 label={t("entryDocument", { ns: "addProductToThisConsignment" })}
@@ -434,9 +525,9 @@ const AddProduct = () => {
                   className: "govuk-hint",
                 }}
                 errorPosition={ErrorPosition.AFTER_LABEL}
-                errorProps={constructErrorProps(certKey)}
-                staticErrorMessage={constructStaticErrorMessage(certKey)}
-                containerClassNameError={constructContainerClassNameError(certKey)}
+                errorProps={getErrorProps(errors, certKey)}
+                staticErrorMessage={getErrorMessage(errors, certKey, t)}
+                containerClassNameError={getErrorClassName(errors, certKey)}
                 hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
               />
@@ -459,10 +550,10 @@ const AddProduct = () => {
                   text: t("weightOnCcHint", { ns: "addProductToThisConsignment" }),
                   className: "govuk-hint",
                 }}
-                errorProps={constructErrorProps(weightKey)}
-                staticErrorMessage={constructStaticErrorMessage(weightKey)}
+                errorProps={getErrorProps(errors, weightKey)}
+                staticErrorMessage={getErrorMessage(errors, weightKey, t)}
                 errorPosition={ErrorPosition.AFTER_LABEL}
-                containerClassNameError={constructContainerClassNameError(weightKey)}
+                containerClassNameError={getErrorClassName(errors, weightKey)}
                 hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
                 labelClassName="govuk-!-font-weight-bold"
@@ -499,19 +590,9 @@ const AddProduct = () => {
                           : undefined
                       }
                       errorPosition={ErrorPosition.AFTER_LABEL}
-                      errorProps={
-                        errors?.[`${supportingDocumentsKey}-${index}`]?.message
-                          ? { className: "govuk-error-message" }
-                          : {}
-                      }
-                      staticErrorMessage={
-                        errors?.[`${supportingDocumentsKey}-${index}`]?.message
-                          ? t(errors[`${supportingDocumentsKey}-${index}`].message, { ns: "errorsText" })
-                          : ""
-                      }
-                      containerClassNameError={
-                        errors?.[`${supportingDocumentsKey}-${index}`]?.message ? "govuk-form-group--error" : ""
-                      }
+                      errorProps={getErrorProps(errors, `${supportingDocumentsKey}-${index}`)}
+                      staticErrorMessage={getErrorMessage(errors, `${supportingDocumentsKey}-${index}`, t)}
+                      containerClassNameError={getErrorClassName(errors, `${supportingDocumentsKey}-${index}`)}
                       hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                       hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
                     />
@@ -573,7 +654,7 @@ const AddProduct = () => {
               name="species"
               errorMessageText={getErrorMessageForSpecies()}
               defaultValue={catchDetails?.product ?? ""}
-              options={isHydrated ? species : ["", ...species.map((s: Species) => `${s.faoName} (${s.faoCode})`)]}
+              options={speciesOptions}
               optionsId="species-option"
               labelClassName="govuk-label govuk-!-font-weight-bold"
               labelText={t("speciesNameText", { ns: "addProductToThisConsignment" })}
@@ -624,11 +705,7 @@ const AddProduct = () => {
                 selectedCommodityCode ??
                 ""
               }
-              options={
-                isHydrated
-                  ? commodityCodes.map(({ label }) => label)
-                  : ["", ...commodityCodes.map(({ label }) => label)]
-              }
+              options={commodityOptions}
               optionsId="commodity-option"
               containerClassName={classNames("govuk-form-group", {
                 "govuk-form-group--error": errors?.[commodityCodeKey]?.message,
@@ -649,7 +726,7 @@ const AddProduct = () => {
             <ProductArrivalCommodityDetails commodityCodeLink={commodityCodeLink} />
             <FormInput
               containerClassName="govuk-form-group"
-              label={t(`${displayOptionalSuffix ? "productDescriptionOptional" : "productDescription"}`, {
+              label={t(productDescriptionLabelKey, {
                 ns: "addProductToThisConsignment",
               })}
               labelClassName="govuk-label govuk-!-font-weight-bold"
@@ -661,9 +738,9 @@ const AddProduct = () => {
                 "aria-describedby": `${productDescriptionKey}-hint`,
               }}
               data-testid="productDescription"
-              errorProps={constructErrorProps(productDescriptionKey)}
-              staticErrorMessage={constructStaticErrorMessage(productDescriptionKey)}
-              containerClassNameError={constructContainerClassNameError(productDescriptionKey)}
+              errorProps={getErrorProps(errors, productDescriptionKey)}
+              staticErrorMessage={getErrorMessage(errors, productDescriptionKey, t)}
+              containerClassNameError={getErrorClassName(errors, productDescriptionKey)}
               errorPosition={ErrorPosition.AFTER_LABEL}
               inputClassName={"govuk-input govuk-!-width-one-half"}
               hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
@@ -680,18 +757,23 @@ const AddProduct = () => {
                 "govuk-form-group--error": errors?.[netWeightProductArrivalKey]?.message,
               })}
               id={netWeightProductArrivalKey}
-              aria-describedby={`${netWeightProductArrivalKey}-hint`}
+              aria-describedby={
+                !isEmpty(errors?.[netWeightProductArrivalKey])
+                  ? "netWeightProductArrival-error"
+                  : `${netWeightProductArrivalKey}-hint`
+              }
             >
               <label className="govuk-label govuk-!-font-weight-bold" htmlFor="netWeightProductArrival">
-                {t(`${displayOptionalSuffix ? "netWeightOfProductOnArrivalOptional" : "netWeightOfProductOnArrival"}`, {
+                {t(netWeightProductLabelKey, {
                   ns: "addProductToThisConsignment",
                 })}
               </label>
-              {errors?.[netWeightProductArrivalKey] && (
-                <p id="netWeightProductArrival-error" className="govuk-error-message">
-                  <span className="govuk-visually-hidden">{t("commonErrorText", { ns: "errorsText" })}</span>{" "}
-                  {t(errors?.[netWeightProductArrivalKey].message, { ns: "errorsText" })}
-                </p>
+              {!isEmpty(errors?.[netWeightProductArrivalKey]) && (
+                <ErrorMessage
+                  id="netWeightProductArrival-error"
+                  text={t(errors?.[netWeightProductArrivalKey].message, { ns: "errorsText" })}
+                  visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                />
               )}
               <div id={`${netWeightProductArrivalKey}-hint`} className="govuk-hint">
                 {t("netWeightOfProductOnArrivalHint", { ns: "addProductToThisConsignment" })}
@@ -699,7 +781,7 @@ const AddProduct = () => {
               <div className="govuk-input__wrapper">
                 <input
                   className={classNames("govuk-input govuk-input--width-10", {
-                    "govuk-input--error": errors?.[netWeightProductArrivalKey],
+                    "govuk-input--error": errors?.[netWeightProductArrivalKey]?.message,
                   })}
                   id="netWeightProductArrival"
                   name="netWeightProductArrival"
@@ -720,21 +802,23 @@ const AddProduct = () => {
                 "govuk-form-group--error": errors?.[netWeightFisheryProductArrivalKey]?.message,
               })}
               id={netWeightFisheryProductArrivalKey}
-              aria-describedby={`${netWeightFisheryProductArrivalKey}-hint`}
+              aria-describedby={
+                !isEmpty(errors?.[netWeightFisheryProductArrivalKey])
+                  ? "netWeightFisheryProductArrival-error"
+                  : `${netWeightFisheryProductArrivalKey}-hint`
+              }
             >
               <label className="govuk-label govuk-!-font-weight-bold" htmlFor="netWeightFisheryProductArrival">
-                {t(
-                  `${displayOptionalSuffix ? "netWeightOfFisheryProductOnArrivalOptional" : "netWeightOfFisheryProductOnArrival"}`,
-                  {
-                    ns: "addProductToThisConsignment",
-                  }
-                )}
+                {t(netWeightFisheryLabelKey, {
+                  ns: "addProductToThisConsignment",
+                })}
               </label>
-              {errors?.[netWeightFisheryProductArrivalKey] && (
-                <p id="netWeightProductArrival-error" className="govuk-error-message">
-                  <span className="govuk-visually-hidden">{t("commonErrorText", { ns: "errorsText" })}</span>{" "}
-                  {t(errors?.[netWeightFisheryProductArrivalKey].message, { ns: "errorsText" })}
-                </p>
+              {!isEmpty(errors?.[netWeightFisheryProductArrivalKey]) && (
+                <ErrorMessage
+                  id="netWeightFisheryProductArrival-error"
+                  text={t(errors?.[netWeightFisheryProductArrivalKey].message, { ns: "errorsText" })}
+                  visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                />
               )}
               <div id={`${netWeightFisheryProductArrivalKey}-hint`} className="govuk-hint">
                 {t("netWeightOfFisheryProductOnArrivalHint", { ns: "addProductToThisConsignment" })}
@@ -742,7 +826,7 @@ const AddProduct = () => {
               <div className="govuk-input__wrapper">
                 <input
                   className={classNames("govuk-input govuk-input--width-10", {
-                    "govuk-input--error": errors?.[netWeightFisheryProductArrivalKey],
+                    "govuk-input--error": errors?.[netWeightFisheryProductArrivalKey]?.message,
                   })}
                   id="netWeightFisheryProductArrival"
                   name="netWeightFisheryProductArrival"
@@ -760,7 +844,7 @@ const AddProduct = () => {
             </div>
             <ButtonGroup />
             <input type="hidden" name="nextUri" value={nextUri} />
-            <input type="hidden" name="isNonJs" value={isNonJs} />
+            <input type="hidden" name="isNonJs" value={isNonJs.toString()} />
           </SecureForm>
           <BackToProgressLink
             progressUri="/create-storage-document/:documentNumber/progress"

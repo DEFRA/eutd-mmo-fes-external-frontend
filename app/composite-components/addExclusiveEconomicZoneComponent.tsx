@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
 import { Button, BUTTON_TYPE, Details } from "@capgeminiuk/dcx-react-library";
-import type { ICountry } from "~/types";
+import type { ICountry, IError, IErrorsTransformed } from "~/types";
+import { useEffect, useState } from "react";
 import { AutocompleteFormField } from "~/components";
 import classNames from "classnames";
+import isEmpty from "lodash/isEmpty";
+import { useTranslation } from "react-i18next";
 
 type ExclusiveEconomicZoneProps = {
   legendTitle: string;
@@ -11,19 +13,14 @@ type ExclusiveEconomicZoneProps = {
   eezHelpSectionLink: string;
   eezHelpSectionContentOne: string;
   eezHelpSectionContentTwo: string;
-  eezHelpSectionContentThree: string;
-  eezHelpSectionContentFour: string;
-  eezHelpSectionContentFive: string;
-  eezHelpSectionBulletOne: string;
-  eezHelpSectionBulletTwo: string;
-  eezHelpSectionBulletThree: string;
-  eezHelpSectionBulletFour: string;
+  eezHelpSectionContentThreeLink: string;
   eezHint: string;
   removeButtonText: string;
   preloadedZones?: string[];
   availableExclusiveEconomicZones: ICountry[];
   onExclusiveEconomicZonesChange: (zones: string[]) => void;
   maximumEezPerLanding: number;
+  errors?: IErrorsTransformed;
 };
 
 export const AddExclusiveEconomicZoneComponent = ({
@@ -33,20 +30,16 @@ export const AddExclusiveEconomicZoneComponent = ({
   eezHelpSectionLink,
   eezHelpSectionContentOne,
   eezHelpSectionContentTwo,
-  eezHelpSectionContentThree,
-  eezHelpSectionContentFour,
-  eezHelpSectionContentFive,
-  eezHelpSectionBulletOne,
-  eezHelpSectionBulletTwo,
-  eezHelpSectionBulletThree,
-  eezHelpSectionBulletFour,
+  eezHelpSectionContentThreeLink,
   eezHint,
   removeButtonText,
   availableExclusiveEconomicZones,
   preloadedZones,
   onExclusiveEconomicZonesChange,
   maximumEezPerLanding,
+  errors,
 }: ExclusiveEconomicZoneProps) => {
+  const { t } = useTranslation("errorsText");
   const mapPreloadedExclusiveEconomicZones = (zones?: string[]) => {
     if (!zones || zones.length === 0) return ["zone-1"];
     return zones.map((_, index) => `zone-${index + 1}`);
@@ -101,6 +94,7 @@ export const AddExclusiveEconomicZoneComponent = ({
       //@ts-ignore
       value={id}
       data-testid={`${buttonValue}-${id}`}
+      {...(id === "remove-zone-button" && { style: { top: "15px" } })}
       onClick={() => onClick(index)} // PLEASE REMOVE THIS AS IT WILL NOT WORK IN NO-JS
     />
   );
@@ -110,41 +104,65 @@ export const AddExclusiveEconomicZoneComponent = ({
       ? showButton("remove-zone-button", index, handleRemoveLastZone, removeButtonText)
       : null;
 
+  // Get error for a specific index
+  const getErrorForIndex = (index: number): IError | undefined => {
+    if (!errors) return undefined;
+
+    const eezErrorKey = `eez.${index}`;
+    if (errors[eezErrorKey]) {
+      return errors[eezErrorKey];
+    }
+
+    return undefined;
+  };
+
   return (
     <div>
-      {exclusiveEconomicZones.map((zone: string, index: number) => (
-        <>
-          <div className="govuk-button-group">
-            <AutocompleteFormField
-              containerClassName={classNames("govuk-!-width-one-half govuk-!-margin-right-3")}
-              options={[...availableExclusiveEconomicZones.map((c: ICountry) => c.officialCountryName)]}
-              optionsId="eez-option"
-              errorMessageText={""}
-              id={`eez-${index}`}
-              name={`eez-${index}`}
-              onSelected={(value) => {
-                setSelectedExclusiveEconomicZones({ ...selectedExclusiveEconomicZones, [zone]: value });
-              }}
-              defaultValue={selectedExclusiveEconomicZones[zone] ?? ""}
-              labelClassName="govuk-label govuk-!-font-weight-bold"
-              labelText={index === 0 ? legendTitle : undefined}
-              hintText={index === 0 ? eezHint : undefined}
-              selectProps={{
-                id: `eez-${index}`,
-                selectClassName: classNames("govuk-select"),
-              }}
-              inputProps={{
-                className: classNames("govuk-input"),
-                "aria-describedby": "eez-0-hint",
-                "aria-label": legendTitle,
-                placeholder: eezSelectEmptyHeader,
-              }}
-            />
-            {showRemoveZoneButton(exclusiveEconomicZones, index)}
-          </div>
-          {showAddZoneButton(exclusiveEconomicZones, index)}
-        </>
-      ))}
+      {exclusiveEconomicZones.map((zone: string, index: number) => {
+        const errorForIndex = getErrorForIndex(index);
+        return (
+          <>
+            <div
+              className={`${isEmpty(errorForIndex) ? "govuk-button-group" : "govuk-button-group govuk-form-group--error"}`}
+              style={{ display: "flex", alignItems: "flex-end", gap: "8px" }}
+            >
+              <AutocompleteFormField
+                containerClassName={classNames("govuk-!-width-one-half govuk-!-margin-right-3")}
+                options={[...availableExclusiveEconomicZones.map((c: ICountry) => c.officialCountryName)]}
+                optionsId="eez-option"
+                errorMessageText={
+                  errorForIndex ? t(errorForIndex.message, { ns: "errorsText", ...(errorForIndex.value ?? {}) }) : ""
+                }
+                id={`eez-${index}`}
+                name={`eez-${index}`}
+                onSelected={(value) => {
+                  setSelectedExclusiveEconomicZones({ ...selectedExclusiveEconomicZones, [zone]: value });
+                }}
+                defaultValue={selectedExclusiveEconomicZones[zone] ?? ""}
+                labelClassName="govuk-label govuk-!-font-weight-bold"
+                labelText={index === 0 ? legendTitle : undefined}
+                hintText={index === 0 ? eezHint : undefined}
+                selectProps={{
+                  id: `eez-${index}`,
+                  selectClassName: classNames("govuk-select", {
+                    "govuk-select--error": !isEmpty(errorForIndex),
+                  }),
+                }}
+                inputProps={{
+                  className: classNames("govuk-input", {
+                    "govuk-input--error": !isEmpty(errorForIndex),
+                  }),
+                  "aria-describedby": "eez-0-hint",
+                  "aria-label": legendTitle,
+                  placeholder: eezSelectEmptyHeader,
+                }}
+              />
+              {showRemoveZoneButton(exclusiveEconomicZones, index)}
+            </div>
+            {showAddZoneButton(exclusiveEconomicZones, index)}
+          </>
+        );
+      })}
       <Details
         summary={eezHelpSectionLink}
         detailsClassName="govuk-details"
@@ -154,22 +172,14 @@ export const AddExclusiveEconomicZoneComponent = ({
         <div>
           <p>{eezHelpSectionContentOne}</p>
           <p>{eezHelpSectionContentTwo}</p>
-          <p>{eezHelpSectionContentThree}</p>
-          <ul className="govuk-list govuk-list--bullet">
-            <li>{eezHelpSectionBulletOne}</li>
-            <li>{eezHelpSectionBulletTwo}</li>
-            <li>{eezHelpSectionBulletThree}</li>
-            <li>{eezHelpSectionBulletFour}</li>
-          </ul>
-          <p>{eezHelpSectionContentFour}</p>
           <p>
             <a
-              href="https://www.britannica.com/topic/exclusive-economic-zone"
+              href="https://www.gov.uk/government/publications/eu-iuu-regulation-2026-changes-guidance/fishing-area#exclusive-economic-zone-eez"
               target="_blank"
               rel="noopener noreferrer"
-              className="govuk-link"
+              className="govuk-link govuk-link--no-visited-state"
             >
-              {eezHelpSectionContentFive}
+              {eezHelpSectionContentThreeLink}
             </a>
           </p>
         </div>

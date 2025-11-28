@@ -10,5 +10,12 @@
   "psExportWeightAfterProcessing": "Export weight in kg (after processing)",
   "psAddedCatchesToConsignment": "Check the added catches to the consignment",
   "psAddAnotherSpecies": "Do you want to add another processed product?",
-  "CheckCatchesAddedConsignment": "Check the catch certificates added to the consignment"
+  "CheckCatchesAddedConsignment": "Check the catch certificates added to the consignment",
+  "psFilterLabel": "Find the documents for a processed product",
+  "psFilterHint": "You can search by product description, FAO code or species name",
+  "psFilterButtonLabel": "Search",
+  "psFilterResetButtonLabel": "Reset",
+  "catchDetailsHeading": "You have added {{totalDocuments}} document for",
+  "catchDetailsHeadingMultiple": "You have added {{totalDocuments}} documents for",
+  "editProductInformationMessage": "To edit product information, press change."
 }

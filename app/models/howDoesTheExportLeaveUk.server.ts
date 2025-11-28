@@ -23,7 +23,7 @@ export const HowDoesTheExportLeaveUkLoader = async (request: Request, params: Pa
   /* istanbul ignore next */
   setApiMock(request.url);
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
   const bearerToken = await getBearerTokenForRequest(request);
 

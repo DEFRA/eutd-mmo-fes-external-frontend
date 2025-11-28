@@ -38,12 +38,6 @@ const UploadGuidance = () => {
   return (
     <Main backUrl={route("/create-catch-certificate/:documentNumber/upload-file", { documentNumber })}>
       <Title title={t("ccUploadGuidanceHeader")} />
-      <div className="govuk-warning-text" data-testid="warning-message">
-        <span className="govuk-warning-text__icon" aria-hidden="true">
-          !
-        </span>
-        <strong className="govuk-warning-text__text">{t("ccUploadGuidanceMessage")} </strong>
-      </div>
       <table className="govuk-table">
         <caption className="govuk-table__caption govuk-table__caption--l" data-testid="data-general-label">
           {t("ccUploadGuidanceHeading")}
@@ -52,12 +46,7 @@ const UploadGuidance = () => {
         <tbody className="govuk-table__body">
           <tr className="govuk-table__row">
             <th scope="row" className="govuk-table__header">
-              <b>
-                {t("ccUploadGuidanceUpload")}
-                <br />
-                {t("ccUploadGuidanceProcess")}
-                <br />
-              </b>
+              {t("ccUploadGuidanceUploadProcess")}
             </th>
             <td className="govuk-table__cell">
               <ol className="govuk-list govuk-list--bullet">
@@ -153,26 +142,9 @@ const UploadGuidance = () => {
                   <b>{t("ccUploadGuidanceCsvDataStructureLineThreeBold")}</b>
                   <br />
                   <span className="example-data-structure-short">{t("ccUploadGuidanceCsvDataStructureLineFour")}</span>
-                  <br />
                 </div>
                 <li>{t("ccUploadGuidanceCsvDataStructureLineFive")}</li>
                 <li>{t("ccUploadGuidanceCsvDataStructureLineSix")}</li>
-                <li>{t("ccUploadGuidanceCsvDataStructureLineSeven")}</li>
-                <div className="govuk-inset-text">
-                  <b>{t("ccUploadGuidanceCsvDataStructureLineEightBold")}</b>
-                  <br />
-                  <span className="example-data-structure-full">{t("ccUploadGuidanceCsvDataStructureLineNine")}</span>
-                  <br />
-                </div>
-                <li>{t("ccUploadGuidanceCsvDataStructureLineTen")}</li>
-                <div className="govuk-inset-text">
-                  <b>{t("ccUploadGuidanceCsvDataStructureLineElevenBold")}</b>
-                  <br />
-                  <span className="example-data-structure-short">
-                    {t("ccUploadGuidanceCsvDataStructureLineTwelve")}
-                  </span>
-                  <br />
-                </div>
               </ol>
             </td>
           </tr>
@@ -220,7 +192,6 @@ const UploadGuidance = () => {
                 <li>{t("ccUploadGuidanceDataRequirmentStartDateLineOne")}</li>
                 <li>{t("ccUploadGuidanceDataRequirmentStartDateLineTwo")} </li>
                 <li>{t("ccUploadGuidanceDataRequirmentStartDateLineThree")}</li>
-                <li>{t("ccUploadGuidanceDataRequirmentStartDateLineFour")}</li>
               </ol>
             </td>
             <td className="govuk-table__cell td-width">01/01/2021</td>
@@ -268,7 +239,6 @@ const UploadGuidance = () => {
             <td className="govuk-table__cell td-width">
               <ol className="govuk-list govuk-list--bullet">
                 <li>{t("ccUploadGuidanceDataRequirmentHighSeasLineOne")}</li>
-                <li>{t("ccUploadGuidanceDataRequirmentHighSeasLineTwo")}</li>
               </ol>
             </td>
             <td className="govuk-table__cell td-width">Yes</td>
@@ -282,7 +252,6 @@ const UploadGuidance = () => {
               <ol className="govuk-list govuk-list--bullet">
                 <li>{t("ccUploadGuidanceDataRequirmentEEZLineOne")}</li>
                 <li>{t("ccUploadGuidanceDataRequirmentEEZLineTwo")}</li>
-                <li>{t("ccUploadGuidanceDataRequirmentEEZLineThree")}</li>
               </ol>
             </td>
             <td className="govuk-table__cell td-width">GBR</td>
@@ -332,7 +301,6 @@ const UploadGuidance = () => {
               <ol className="govuk-list govuk-list--bullet">
                 <li>{t("ccUploadGuidanceDataRequirmentGearTypeLineOne")}</li>
                 <li>{t("ccUploadGuidanceDataRequirmentGearTypeLineTwo")}</li>
-                <li>{t("ccUploadGuidanceDataRequirmentGearTypeLineThree")}</li>
               </ol>
             </td>
             <td className="govuk-table__cell td-width">PS</td>

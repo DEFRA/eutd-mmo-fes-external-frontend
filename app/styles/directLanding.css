@@ -1,8 +1,3 @@
-.add-landings-form {
-  background-color: rgba(245, 245, 245, 0.747);
-  padding: 15px;
-}
-
 .date-field-with-picker {
   display: flex;
   flex-direction: row;

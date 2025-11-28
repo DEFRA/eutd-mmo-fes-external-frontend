@@ -49,6 +49,9 @@ import ccValidationError from "@/fixtures/ccSummary/ccValidationErrors.json";
 import ccOnLoadValidationError from "@/fixtures/ccSummary/ccOnLoadValidationErrors.json";
 import ccNoLandingType from "@/fixtures/ccSummary/ccNoLandingType.json";
 import ccNoExporter from "@/fixtures/ccSummary/ccNoExporter.json";
+import ccManualLandingTruckContainerNumber from "@/fixtures/ccSummary/ccManualLandingTruckContainerNumber.json";
+import ccManualLandingTrainContainerNumber from "@/fixtures/ccSummary/ccManualLandingTrainContainerNumber.json";
+import ccManualLandingTrainContainerNumberNull from "@/fixtures/ccSummary/ccManualLandingTrainContainerNumberNull.json";
 import countries from "@/fixtures/whatExportJourneyApi/countries.json";
 import whoseWatersSuccess from "@/fixtures/whoseWatersApi/whoseWatersSuccess.json";
 import species from "@/fixtures/referenceDataApi/species.json";
@@ -138,6 +141,18 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json(ccCreatedDetails))),
+    rest.post(CREATE_EXPORT_CERTIFICATE, (req, res, ctx) =>
+      res(
+        ctx.status(200),
+        ctx.json({
+          offlineValidation: false,
+          documentNumber,
+          uri: "_382462d9-ea63-4125-9e11-bb1bc474d8a1.pdf",
+        })
+      )
+    ),
   ],
   [TestCaseId.CCCheckYourInformationManualLandingGearInfo]: () => [
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
@@ -146,6 +161,18 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(mannualLandingType))),
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
     rest.get(mockSearchVesselName, (req, res, ctx) => res(ctx.json(getVessels))),
+  ],
+  [TestCaseId.CCCheckYourInformationManualLandingTruckContainerNumber]: () => [
+    rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccManualLandingTruckContainerNumber))),
+  ],
+  [TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumber]: () => [
+    rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccManualLandingTrainContainerNumber))),
+  ],
+  [TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumberNull]: () => [
+    rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccManualLandingTrainContainerNumberNull))),
   ],
   [TestCaseId.CCCheckYourInformationVesselNotFound]: () => [
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),

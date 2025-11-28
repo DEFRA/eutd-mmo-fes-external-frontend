@@ -16,7 +16,7 @@ import { route } from "routes-gen";
 export const addYourReferenceLoader = async (request: Request, params: Params, journey: Journey) => {
   /* istanbul ignore next */
   setApiMock(request.url);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
 
   // Get bearer token for API requests
   const bearerToken = await getBearerTokenForRequest(request);

@@ -39,7 +39,6 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
     landingsEntryOption,
     csrf,
     transport,
-    displayOptionalSuffix,
     products,
   } = useLoaderData<ProgressLoaderProps>();
 
@@ -131,11 +130,7 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
     } else if (journey === "storageNotes") {
       return (
         <ProgressTable
-          progressData={sdProgressTableDataBuilder(
-            progress as IStorageDocumentProgressSteps,
-            errors,
-            displayOptionalSuffix
-          )}
+          progressData={sdProgressTableDataBuilder(progress as IStorageDocumentProgressSteps, errors)}
           documentNumber={documentNumber}
         />
       );

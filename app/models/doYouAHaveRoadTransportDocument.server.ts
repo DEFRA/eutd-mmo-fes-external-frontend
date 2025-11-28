@@ -27,7 +27,7 @@ export const DoYouAHaveRoadTransportDocumentLoader = async (request: Request, pa
   if (session.has("csrf")) {
     csrf = session.get("csrf");
   } else {
-    csrf = createCSRFToken();
+    csrf = await createCSRFToken(request);
     session.set("csrf", csrf);
   }
 

@@ -27,10 +27,12 @@
   "consignmentDescription": "Herring fillets (16041210) and Atlantic cod fishcakes (16041992)",
   "products": [
     {
-      "description": "consignment description",
-      "commodityCode": "012343533"
+      "id": "GBR-2023-PS-2305703F5-012345678",
+      "description": "Herring fillets and Atlantic cod fishcakes",
+      "commodityCode": "03026929"
     },
     {
+      "id": "GBR-2023-PS-2305703F5-987654321",
       "description": "consignment description",
       "commodityCode": "012343533"
     }

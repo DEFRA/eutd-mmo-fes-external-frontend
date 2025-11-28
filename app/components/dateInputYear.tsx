@@ -4,6 +4,7 @@ import type { IError } from "~/types";
 
 type DateInputYearProps = {
   id: string;
+  name: string;
   isHydrated: boolean;
   errors: IError;
   yearSelected: string;
@@ -14,6 +15,7 @@ type DateInputYearProps = {
 
 export const DateInputYear = ({
   id,
+  name,
   isHydrated,
   errors,
   yearSelected,
@@ -33,7 +35,7 @@ export const DateInputYear = ({
             : "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error"
         }
         id={`${id}-year`}
-        name={`${id}Year`}
+        name={`${name}Year`}
         type="number"
         defaultValue={yearSelected}
       />
@@ -45,7 +47,7 @@ export const DateInputYear = ({
             : "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error"
         }
         id={`${id}-year`}
-        name={`${id}Year`}
+        name={`${name}Year`}
         type="number"
         onChange={handleYearChange}
         inputMode="numeric"

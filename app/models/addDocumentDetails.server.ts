@@ -17,7 +17,7 @@ export const addDocumentDetailsLoader = async (request: Request, params: Params)
   setApiMock(request.url);
 
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   const { documentNumber } = params;

@@ -7,6 +7,5 @@
   "psAddCatchWeightsDetail": "Ensure total weight is correct",
   "psAddCatchWeightsConfirm": "Please confirm the total weight shown on the catch certificate in kg.",
   "psAddCatchWeightsIncorrect": "If the weight shown above is incorrect then please call {{telephoneNumber}}.",
-  "psAddCatchWeightsButtonLabel": "Add Catch Certificate",
   "psUpdateCatchWeightsButtonLabel": "Update Catch Certificate"
 }

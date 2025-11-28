@@ -43,7 +43,7 @@ export const WhatExportJourneyLoader = async (request: Request, params: Params) 
   const countries = await getCountries();
 
   const session = await getSessionFromRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   return new Response(

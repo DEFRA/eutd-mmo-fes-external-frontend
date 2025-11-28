@@ -8,8 +8,6 @@
       }
     ]
   ],
-  "storageFacilities": [],
   "validationErrors": [{}],
-  "addAnotherProduct": "No",
-  "addAnotherStorageFacility": "No"
+  "addAnotherProduct": "No"
 }

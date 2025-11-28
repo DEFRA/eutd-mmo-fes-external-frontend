@@ -11,6 +11,8 @@ import {
   HighSeasAreasDetails,
   RfmoSelector,
   FaoAreaSelector,
+  ImportantNotice,
+  AddLandingsVesselHelpContent,
 } from "~/components";
 import { route } from "routes-gen";
 import { useEffect, useState, useReducer } from "react";
@@ -26,6 +28,7 @@ import {
   DateFieldWithPicker,
   LandingProductTable,
   LandingsTable,
+  LandingHelpDetails,
 } from "~/composite-components";
 import { type ManualEntryLandingsData } from "~/.server";
 import isEmpty from "lodash/isEmpty";
@@ -337,6 +340,12 @@ const AddLandings = () => {
     "startDate",
     "dateLanded",
     "vessel.vesselName",
+    "highSeasArea",
+    "eez.0",
+    "eez.1",
+    "eez.2",
+    "eez.3",
+    "eez.4",
     "exportWeight",
     "gearCategory",
     "gearType",
@@ -374,10 +383,11 @@ const AddLandings = () => {
             </ul>
           </div>
           <Title title={t("ccAddLandingHeader")} />
+          <ImportantNotice messageKey="commonAddTripDetailsWarningContent" />
           <SecureForm method="post" key={renderCounter} csrf={csrf}>
             {isEditing && <input type="hidden" name="landingId" defaultValue={landingId} />}
             {disableProductSelection && <input type="hidden" name="product" defaultValue={initialProductValue} />}
-            <div className="add-landings-form">
+            <div className="form-light-grey-bg govuk-!-padding-5 govuk-!-margin-bottom-5">
               <div
                 className={classNames("govuk-form-group", {
                   "govuk-form-group--error": errors.product,
@@ -418,6 +428,7 @@ const AddLandings = () => {
               </div>
               <DateFieldWithPicker
                 id="startDate"
+                name="startDate"
                 getDateSelected={getStartDate}
                 dateSelected={buildSelectedDate(
                   values["startDateYear"],
@@ -427,28 +438,24 @@ const AddLandings = () => {
                   startDate
                 )}
                 errors={errors?.startDate}
-                label={displayOptionalSuffix ? "ccAddLandingStartDateOptionalLabel" : "ccAddLandingStartDateLabel"}
+                label="ccAddLandingStartDateLabel"
                 translationNs="addLandings"
                 hintText="ccAddLandingStartDateFieldHint"
                 hideAddDateButton={true}
               />
-              <Details
-                summary={t("ccAddLandingStartDateHelpSectionLinkText", { ns: "addLandings" })}
-                detailsClassName="govuk-details"
-                summaryClassName="govuk-details__summary"
-                detailsTextClassName="govuk-details__text"
-              >
-                <div>
-                  <p>{t("ccAddLandingStartDateHelpSectionContent", { ns: "addLandings" })}</p>
-                  <p>{t("ccAddLandingStartDateHelpSectionContentHeaderText")}</p>
-                  <List type={TYPE_LIST.UNORDERED} className="govuk-list govuk-list--bullet">
-                    <ListItem>{t("ccAddLandingStartDateHelpSectionGuidanceListItem1")}</ListItem>
-                    <ListItem>{t("ccAddLandingStartDateHelpSectionGuidanceListItem2")}</ListItem>
-                  </List>
-                </div>
-              </Details>
+              <LandingHelpDetails
+                namespace="addLandings"
+                headerKey="ccAddLandingStartDateHelpSectionLinkText"
+                firstLineKey="ccAddLandingStartDateHelpSectionContent"
+                secondLineKey="ccAddLandingStartDateHelpSectionContentHeaderText"
+                listItemKeys={[
+                  "ccAddLandingStartDateHelpSectionGuidanceListItem1",
+                  "ccAddLandingStartDateHelpSectionGuidanceListItem2",
+                ]}
+              />
               <DateFieldWithPicker
                 id="dateLanded"
+                name="dateLanded"
                 getDateSelected={getDateSelected}
                 dateSelected={buildSelectedDate(
                   values["dateLandedYear"],
@@ -462,23 +469,17 @@ const AddLandings = () => {
                 translationNs="directLandings"
                 hintText="psAddHealthCertificateDateFieldHint"
               />
-              <Details
-                summary={t("ccAddLandingDateLandedHelpSectionLinkText", { ns: "directLandings" })}
-                detailsClassName="govuk-details"
-                summaryClassName="govuk-details__summary"
-                detailsTextClassName="govuk-details__text"
+              <LandingHelpDetails
+                namespace="directLandings"
+                headerKey="ccAddLandingDateLandedHelpSectionLinkText"
+                firstLineKey="ccAddLandingDateLandedHelpSection"
+                secondLineKey="ccAddLandingDateLandedHelpSectionHeader1Text"
+                listItemKeys={[
+                  "ccAddLandingDateLandedHelpSectionGuidanceList1Item1",
+                  "ccAddLandingDateLandedHelpSectionGuidanceList1Item2",
+                ]}
               >
-                <div>
-                  <p>{t("ccAddLandingDateLandedHelpSection", { ns: "directLandings" })}</p>
-                  <p>{t("ccAddLandingDateLandedHelpSectionHeader1Text", { ns: "directLandings" })}</p>
-                  <List type={TYPE_LIST.UNORDERED} className="govuk-list govuk-list--bullet">
-                    <ListItem>
-                      {t("ccAddLandingDateLandedHelpSectionGuidanceList1Item1", { ns: "directLandings" })}
-                    </ListItem>
-                    <ListItem>
-                      {t("ccAddLandingDateLandedHelpSectionGuidanceList1Item2", { ns: "directLandings" })}
-                    </ListItem>
-                  </List>
+                <>
                   <p>{t("ccAddLandingDateLandedHelpSectionHeader2Text", { ns: "directLandings" })}</p>
                   <List type={TYPE_LIST.UNORDERED} className="govuk-list govuk-list--bullet">
                     <ListItem>
@@ -488,15 +489,15 @@ const AddLandings = () => {
                       {t("ccAddLandingDateLandedHelpSectionGuidanceList2Item2", { ns: "directLandings" })}
                     </ListItem>
                   </List>
-                </div>
-              </Details>
+                </>
+              </LandingHelpDetails>
               <FaoAreaSelector
                 legendTitle={t("ccAddLandingCatchAreaLabel", { ns: "directLandings" })}
                 defaultValue={values.faoArea ?? (selectedFaoArea || "FAO27")}
                 faoAreas={faoAreas}
               />
               <HighSeasAreasDetails
-                HSALabel={t(displayOptionalSuffix ? "ccAddLandingHSAOptionalLabel" : "ccAddLandingHSALabel", {
+                HSALabel={t("ccAddLandingHSALabel", {
                   ns: "directLandings",
                 })}
                 HSAHint={t("ccAddLandingHSAHint", { ns: "directLandings" })}
@@ -504,6 +505,7 @@ const AddLandings = () => {
                 highSeasArea={highSeasArea}
                 setHighSeasArea={setHighSeasArea}
                 getHSAOptionLabel={(option: HSAOptionType) => t(option.label, { ns: "common" })}
+                errors={errors?.highSeasArea}
               />
               <AddExclusiveEconomicZoneComponent
                 legendTitle={t("exclusiveZoneTitle", { ns: "addLandings" })}
@@ -514,28 +516,16 @@ const AddLandings = () => {
                 eezHelpSectionLink={t("ccEezHelpSectionLinkText", { ns: "addLandings" })}
                 eezHelpSectionContentOne={t("ccEezHelpSectionContentOne", { ns: "addLandings" })}
                 eezHelpSectionContentTwo={t("ccEezHelpSectionContentTwo", { ns: "addLandings" })}
-                eezHelpSectionContentThree={t("ccEezHelpSectionContentThree", { ns: "addLandings" })}
-                eezHelpSectionBulletOne={t("ccEezHelpSectionBulletOne", { ns: "addLandings" })}
-                eezHelpSectionBulletTwo={t("ccEezHelpSectionBulletTwo", { ns: "addLandings" })}
-                eezHelpSectionBulletThree={t("ccEezHelpSectionBulletThree", { ns: "addLandings" })}
-                eezHelpSectionBulletFour={t("ccEezHelpSectionBulletFour", { ns: "addLandings" })}
-                eezHelpSectionContentFour={t("ccEezHelpSectionContentFour", { ns: "addLandings" })}
-                eezHelpSectionContentFive={t("ccEezHelpSectionContentSix", { ns: "addLandings" })}
+                eezHelpSectionContentThreeLink={t("ccEezHelpSectionContentThreeLink", { ns: "addLandings" })}
                 availableExclusiveEconomicZones={availableExclusiveEconomicZones}
                 preloadedZones={exclusiveEconomicZones.length > 0 ? exclusiveEconomicZones : []}
                 onExclusiveEconomicZonesChange={handleExclusiveEconomicZonesChange}
                 maximumEezPerLanding={maximumEezPerLanding}
+                errors={errors}
               />
               <RfmoSelector
-                rfmoHelpSectionContentFive={t("ccRfmoHelpSectionContentFive")}
-                rfmoHelpSectionContentFour={t("ccRfmoHelpSectionContentFour")}
-                rfmoHelpSectionContentThree={t("ccRfmoHelpSectionContentThree")}
-                rfmoHelpSectionContentTwo={t("ccRfmoHelpSectionContentTwo")}
+                rfmoHelpSectionContentTwoLink={t("ccRfmoHelpSectionContentTwoLink")}
                 rfmoHelpSectionContentOne={t("ccRfmoHelpSectionContentOne")}
-                ccRfmoHelpSectionBulletOne={t("ccRfmoHelpSectionBulletOne")}
-                ccRfmoHelpSectionBulletTwo={t("ccRfmoHelpSectionBulletTwo")}
-                ccRfmoHelpSectionBulletThree={t("ccRfmoHelpSectionBulletThree")}
-                ccRfmoHelpSectionBulletFour={t("ccRfmoHelpSectionBulletFour")}
                 rfmoHelpSectionLink={t("ccRfmoHelpSectionLinkText")}
                 rfmoNullOption={t("ccRfmoNullOption")}
                 rfmoHintText={t("ccRfmoHintText")}
@@ -586,17 +576,7 @@ const AddLandings = () => {
                 onSelected={handleVesselSelected}
                 promptId="select-vessel-hint"
               />
-              <Details
-                summary={t("ccAddLandingHelpSectionLinkText", { ns: "directLandings" })}
-                detailsClassName="govuk-details"
-                summaryClassName="govuk-details__summary"
-                detailsTextClassName="govuk-details__text"
-              >
-                <>
-                  <p>{t("ccAddLandingHelpSectionContent", { ns: "directLandings" })}</p>
-                  <p>{t("ccAddLandingHelpSectionContent2", { ns: "directLandings" })}</p>
-                </>
-              </Details>
+              <AddLandingsVesselHelpContent />
               <div
                 className={classNames("govuk-form-group", {
                   "govuk-form-group--error": errors.exportWeight?.message,
@@ -642,9 +622,7 @@ const AddLandings = () => {
                 gearDetailsHint={t("ccAddLandingGearDetailsHint")}
                 visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                 landingGearCategoryLabel={t("ccAddLandingGearCategoryLabel")}
-                legendTitle={t(
-                  displayOptionalSuffix ? "ccAddLandingGearDetailsOptionalLabel" : "ccAddLandingGearDetailsLabel"
-                )}
+                legendTitle={t("ccAddLandingGearDetailsLabel")}
                 groupedErrorIds={groupedErrorIds}
                 addLandingGearTypeNullOption={t("ccAddLandingGearTypeNullOption")}
                 addLandingGearCategoryNullOption={t("ccAddLandingGearCategoryNullOption")}
@@ -669,10 +647,10 @@ const AddLandings = () => {
                   <p>{t("ccAddLandingGearDetailsHelpSectionContentThree", { ns: "addLandings" })}</p>
                   <p>
                     <a
-                      href="https://www.fao.org/cwp-on-fishery-statistics/handbook/capture-fisheries-statistics/fishing-gear-classification/en/"
+                      href="https://www.gov.uk/government/publications/eu-iuu-regulation-2026-changes-guidance/gear-type"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="govuk-link"
+                      className="govuk-link govuk-link--no-visited-state"
                     >
                       {t("ccAddLandingGearDetailsHelpSectionContentFour", { ns: "addLandings" })}
                     </a>

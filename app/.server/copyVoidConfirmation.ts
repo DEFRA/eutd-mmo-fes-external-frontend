@@ -23,7 +23,7 @@ export const copyVoidConfirmationLoader = async (request: Request, params: Param
     const bearerToken = await getBearerTokenForRequest(request);
     const { canCopy } = await checkCopyDocument(bearerToken, documentNumber);
     const session = await getSessionFromRequest(request);
-    const csrf = createCSRFToken();
+    const csrf = await createCSRFToken(request);
     session.set("csrf", csrf);
 
     if (!canCopy || !session.has(`copyDocumentAcknowledged-${documentNumber}`)) {

@@ -22,6 +22,7 @@
   "ccProgressNotificationMsgIsNotVoided": "Cafodd y drafft hwn ei greu drwy gopïo’r ddogfen {{documentNumber}}. Fe’ch atgoffir na chewch ddefnyddio tystysgrif dalfa na data glanio ar gyfer dalfeydd sydd eisoes wedi’u hallforio gan fod hyn yn drosedd ddifrifol a gall arwain at gymryd camau gorfodi.",
   "psProgressApplication": "Cais am Ddatganiad Prosesu",
   "commonProgressSectionProducts": "Cynnyrch/Glaniadau",
+  "psProgressSectionProcessedProductsDetails": "Manylion cynnyrch wedi'i brosesu",
   "psProgressSectionProcessedProductDetails": "Manylion cynnyrch wedi'i brosesu",
   "psProgressSectionProcessingPlant": "Offer prosesu",
   "psProgressSectionTransportation": "Cludiant a logisteg",
@@ -42,10 +43,9 @@
   "sdProgressProductDetails": "Manylion cynnyrch",
   "sdProgressArrivalFacility": "Cyrraedd cyfleuster storio",
   "sdProgressArrivalTransportDetails": "Manylion cludiant cyrraedd y DU",
-  "sdProgressArrivalTransportDetailsOptional": "Manylion cludiant cyrraedd y DU (dewisol)",
   "sdProgressDepartureFromStorageFacilty": "Ymadael â chyfleuster storio",
   "sdProgressDepartureFromStorageFaciltyDetails": "Manylion cludiant ymadael y DU",
-  "sdProgressStoragefacilities": "Cyfleusterau storio",
+  "sdProgressStoragefacilities": "Manylion y cyfleuster storio",
   "sdProgressNotificationMsgIsNotVoided": "Crëwyd y drafft hwn drwy gopïo dogfen {{c}}. Fe’ch atgoffir na chewch ddefnyddio data na dogfen storio ar gyfer dalfeydd sydd eisoes wedi’u hallforio gan fod hyn yn drosedd ddifrifol a gall arwain at gymryd camau gorfodi.",
   "sdProgressNotificationMsgIsVoided": "Cafodd y drafft hwn ei greu drwy gopïo dogfen sydd bellach wedi cael ei dirymu. Fe’ch atgoffir na ddylech ddefnyddio dogfen storio na data ar gyfer dalfeydd sydd eisoes wedi’u hallforio gan fod hyn yn drosedd ddifrifol a gall arwain at gymryd camau gorfodi."
 }

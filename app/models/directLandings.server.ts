@@ -19,6 +19,7 @@ import {
   validateDirectLandings,
   getRfmos,
   getCountries,
+  getSelectedEezInIcountryFormat,
 } from "~/.server";
 import { getEnv } from "~/env.server";
 import { getCodeFromLabel, getErrorMessage, getStartDate, getTransformedError, isValidDate } from "~/helpers";
@@ -41,17 +42,6 @@ function instanceOfUnauthorised(data: IDirectLandings | IUnauthorised): data is 
 function instanceOfIError(data: IDirectLandings | IError[]): data is IError[] {
   return Array.isArray(data) && "key" in data[0];
 }
-
-const getSelectedEezInIcountryFormat = async (values: any): Promise<ICountry[]> => {
-  const eezCountries = Object.keys(values)
-    .filter((key) => key.startsWith("eez"))
-    .map((key) => values[key]);
-
-  if (!eezCountries) return [];
-
-  const countries: ICountry[] = await getCountries();
-  return countries.filter((country: ICountry) => eezCountries.includes(country.officialCountryName));
-};
 
 const saveActionBase: any = async (values: any, landings: IDirectLandings, isNumeric: (i: any) => boolean) => {
   const filterWeights: { [key: string]: string } = Object.keys(values)
@@ -246,7 +236,7 @@ const addGearCategoryAction = async (values: any, session: any) => {
     const errors = getTransformedError([
       {
         key: "gearCategory",
-        message: getErrorMessage("error.gearCategory.string.empty"),
+        message: getErrorMessage("ccAddLandingGearCategoryAddButtonError"),
       },
     ]);
     return new Response(
@@ -299,7 +289,7 @@ export const DirectLandingsLoader = async (params: Params, request: Request) => 
   const session = await getSessionFromRequest(request);
   let selectedDate = session.get("selectedDate");
 
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
   const url = new URL(request.url);
@@ -445,7 +435,7 @@ export const DirectLandingsAction = async (params: Params, request: Request): Pr
   const selectedStartDate = `${startDateYear}-${startDateMonth}-${startDateDay}`;
 
   session.set("actionExecuted", true);
-  const nonJsActions = ["add-dateLanded", "addGearCategory", "add-zone-button"];
+  const nonJsActions = ["add-dateLanded", "add-startDate", "addGearCategory", "add-zone-button"];
 
   const isPartialSubmit = nonJsActions.includes(_action as string);
   if (isPartialSubmit) {
@@ -464,6 +454,19 @@ export const DirectLandingsAction = async (params: Params, request: Request): Pr
   }
   switch (_action) {
     // Used when JS is disabled
+    case "add-startDate": {
+      const result = await nonJsDateValidation(request, values, selectedStartDate, "startDate");
+      if (result !== null) {
+        return result;
+      }
+
+      session.set("selectedStartDate", selectedStartDate);
+      return redirect("?#dateLanded", {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
+    }
     case "add-dateLanded": {
       const result = await nonJsDateValidation(request, values, selectedDate, "dateLanded");
       if (result !== null) {

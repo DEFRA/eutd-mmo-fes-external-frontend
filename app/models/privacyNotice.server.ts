@@ -20,7 +20,7 @@ export const PrivacyNoticeLoader = async (request: Request, params: Params): Pro
   const bearerToken = await getBearerTokenForRequest(request);
   const userAttributes = await getAllUserAttributes(bearerToken);
 
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   const session = await getSessionFromRequest(request);
   session.set("csrf", csrf);
   if (isPrivacyAccepted(userAttributes)) {

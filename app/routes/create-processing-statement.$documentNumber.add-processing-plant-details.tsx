@@ -5,7 +5,7 @@ import { FormInput } from "@capgeminiuk/dcx-react-library";
 import { useLoaderData, useActionData } from "@remix-run/react";
 import { type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
 import { route } from "routes-gen";
-import { displayErrorTransformedMessages } from "~/helpers";
+import { displayErrorMessagesInOrder } from "~/helpers";
 import {
   getBearerTokenForRequest,
   updateProcessingStatement,
@@ -40,7 +40,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const nextUri = form.get("nextUri") as string;
   const { _action, ...values } = Object.fromEntries(form);
 
-  const isDraft = form.get("_action") === "saveAsDraft";
+  const isDraft = _action === "saveAsDraft";
   const saveToRedisIfErrors = true;
 
   const isValid = await validateCSRFToken(request, form);
@@ -56,14 +56,17 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     },
     route("/create-processing-statement/:documentNumber/add-processing-plant-details", { documentNumber }),
     undefined,
+    isDraft,
     saveToRedisIfErrors
   );
+
+  if (isDraft) {
+    return redirect(route("/create-processing-statement/processing-statements"));
+  }
 
   if (errorResponse) {
     return errorResponse as Response;
   }
-
-  if (isDraft) return redirect(route("/create-processing-statement/processing-statements"));
 
   return redirect(
     isEmpty(nextUri)
@@ -78,6 +81,7 @@ const AddProcessingPlantDetails = () => {
     useLoaderData<loaderPlantDetails>();
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
+  const errorKeysInOrder = ["plantName", "plantApprovalNumber", "personResponsibleForConsignment"];
 
   return (
     <Main
@@ -85,7 +89,7 @@ const AddProcessingPlantDetails = () => {
         documentNumber,
       })}
     >
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorTransformedMessages(errors)} />}
+      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" csrf={csrf}>

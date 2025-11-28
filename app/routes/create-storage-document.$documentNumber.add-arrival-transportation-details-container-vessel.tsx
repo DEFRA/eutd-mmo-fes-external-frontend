@@ -39,13 +39,16 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     isArrivalTransportation
   );
   const form = await request.formData();
+  const saveAsDraft = form.get("_action") === "saveAsDraft";
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
-  const vesselName = handleFormEmptyStringValue(form, "vesselName");
-  const flagState = handleFormEmptyStringValue(form, "flagState");
-  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber");
-  const departurePort = handleFormEmptyStringValue(form, "departurePort");
+  const vesselName = handleFormEmptyStringValue(form, "vesselName", saveAsDraft);
+  const flagState = handleFormEmptyStringValue(form, "flagState", saveAsDraft);
+  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
+  const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
+  const placeOfUnloading = handleFormEmptyStringValue(form, "placeOfUnloading", saveAsDraft);
+
   const nextUri = form.get("nextUri") as string;
   const values = Object.fromEntries(form);
   const containerNumbers = extractContainerNumbers(values);
@@ -54,7 +57,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     currentUri: route("/create-storage-document/:documentNumber/add-arrival-transportation-details-container-vessel", {
       documentNumber,
     }),
-    nextUri: route("/create-storage-document/:documentNumber/you-have-added-a-storage-facility", { documentNumber }),
+    nextUri: route("/create-storage-document/:documentNumber/add-storage-facility-details", { documentNumber }),
     journey: transport.journey,
     vesselName,
     flagState,
@@ -63,6 +66,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     departureCountry: form.get("departureCountry") as string,
     departurePort,
     departureDate: calculateDepartureDate(form),
+    placeOfUnloading,
     vehicle: transport.vehicle,
     user_id: transport.user_id,
     arrival: true,

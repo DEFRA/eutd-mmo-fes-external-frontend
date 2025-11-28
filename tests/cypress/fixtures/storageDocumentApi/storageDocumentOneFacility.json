@@ -2,7 +2,7 @@
   "catches": [
     {
       "_id": "63766b360a97db79348c153f",
-      "species": "Yellowback seabream (DTT)",
+      "product": "Yellowback seabream (DTT)",
       "catchCertificateNumber": "12",
       "totalWeightLanded": "9",
       "exportWeightBeforeProcessing": "2",
@@ -11,23 +11,19 @@
       "scientificName": "Dentex tumifrons"
     }
   ],
-  "storageFacilities": [
-    {
-      "facilityAddressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
-      "facilityBuildingName": "LANCASTER HOUSE",
-      "facilityBuildingNumber": "",
-      "facilitySubBuildingName": "MMO",
-      "facilityStreetName": "HAMPSHIRE COURT",
-      "facilityTownCity": "NEWCASTLE UPON TYNE",
-      "facilityCounty": "TYNESIDE",
-      "facilityCountry": "ENGLAND",
-      "facilityPostcode": "NE4 7YH",
-      "facilityName": "name",
-      "facilityApprovalNumber": "UK/ABC/001",
-      "facilityStorage": "frozen, other",
-      "_facilityUpdated": false
-    }
-  ],
+  "facilityAddressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
+  "facilityBuildingName": "LANCASTER HOUSE",
+  "facilityBuildingNumber": "",
+  "facilitySubBuildingName": "MMO",
+  "facilityStreetName": "HAMPSHIRE COURT",
+  "facilityTownCity": "NEWCASTLE UPON TYNE",
+  "facilityCounty": "TYNESIDE",
+  "facilityCountry": "ENGLAND",
+  "facilityPostcode": "NE4 7YH",
+  "facilityName": "name",
+  "facilityApprovalNumber": "UK/ABC/001",
+  "facilityArrivalDate": "10/10/2025",
+  "facilityStorage": "frozen, other",
   "validationErrors": [{}],
   "addAnotherProduct": "No",
   "addAnotherStorageFacility": "No",
@@ -37,11 +33,26 @@
     "nationalityOfVehicle": "Dakota Hill",
     "registrationNumber": "Vincent Nunez",
     "departurePlace": "Joelle Rhodes",
+    "containerNumbers": ["CONT123", "CONT456", "CONT789"],
     "exportedTo": {
       "officialCountryName": "Hungary",
       "isoCodeAlpha2": "HU",
       "isoCodeAlpha3": "HUN",
       "isoNumericCode": "348"
+    }
+  },
+  "arrivalTransport": {
+    "vehicle": "plane",
+    "vesselName": "gfs",
+    "flagState": "ghj",
+    "containerNumber": "56",
+    "departurePlace": "hull",
+    "departureDate": "09/1/2024",
+    "exportedTo": {
+      "officialCountryName": "British Indian Ocean Territory",
+      "isoCodeAlpha2": "IO",
+      "isoCodeAlpha3": "IOT",
+      "isoNumericCode": "086"
     }
   }
 }

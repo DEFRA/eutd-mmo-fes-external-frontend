@@ -1,14 +1,23 @@
 {
+  "products": [
+    {
+      "id": "GBR-2025-PS-FDC3D66E1-1760436601",
+      "description": "Description for Allis shad",
+      "commodityCode": "03021180"
+    }
+  ],
   "catches": [
     {
       "_id": "639760c33fc11363b1071295",
       "id": "1670865091",
+      "species": "Allis shad (ASD)",
       "catchCertificateType": "uk",
       "catchCertificateNumber": "QW",
       "totalWeightLanded": "5",
       "exportWeightBeforeProcessing": "5",
       "exportWeightAfterProcessing": "5",
-      "scientificName": "Alosa alosa"
+      "scientificName": "Alosa alosa",
+      "productId": "GBR-2025-PS-FDC3D66E1-1760436601"
     }
   ],
   "validationErrors": [],

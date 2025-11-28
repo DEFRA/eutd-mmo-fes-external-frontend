@@ -107,6 +107,27 @@ const howDoesTheExportLeaveTheUkHandler: ITestHandler = {
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
+  [TestCaseId.SaveTransportFailsWithErrorsArrival]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json({ arrival: true }))),
+    rest.post(SAVE_TRANSPORT_DETAILS_URL, (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          vehicle: "sdArrivalTransportTypeSelectionError",
+        })
+      )
+    ),
+    rest.post(ADD_TRANSPORT_DETAILS_URL, (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          vehicle: "sdArrivalTransportTypeSelectionError",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+  ],
 };
 
 export default howDoesTheExportLeaveTheUkHandler;

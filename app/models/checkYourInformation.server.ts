@@ -38,7 +38,7 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
 
   // Get bearer token for API requests
   const bearerToken = await getBearerTokenForRequest(request);
-  const csrf = createCSRFToken();
+  const csrf = await createCSRFToken(request);
   const session = await getSessionFromRequest(request);
   session.set("csrf", csrf);
 

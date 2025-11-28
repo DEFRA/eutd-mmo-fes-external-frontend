@@ -2,8 +2,7 @@ import type { IStorageDocumentProgressSteps, IProgressDataSection, IErrorsTransf
 
 export const sdProgressTableDataBuilder = (
   progress: IStorageDocumentProgressSteps,
-  errors?: IErrorsTransformed,
-  displayOptionalSuffix?: boolean
+  errors?: IErrorsTransformed
 ): Array<IProgressDataSection> => {
   const sdContext = "/create-storage-document/:documentNumber";
 
@@ -46,9 +45,7 @@ export const sdProgressTableDataBuilder = (
       testId: "storageArrivalTransportTitle",
       rows: [
         {
-          title: displayOptionalSuffix
-            ? "sdProgressArrivalTransportDetailsOptional"
-            : "sdProgressArrivalTransportDetails",
+          title: "sdProgressArrivalTransportDetails",
           status: progress?.arrivalTransportationDetails,
           testId: "arrivalTransportationDetails",
           url: `${sdContext}/how-does-the-consignment-arrive-to-the-uk`,
@@ -64,7 +61,7 @@ export const sdProgressTableDataBuilder = (
           title: "sdProgressStoragefacilities",
           status: progress?.storageFacilities,
           testId: "storageFacilities",
-          url: `${sdContext}/you-have-added-a-storage-facility`,
+          url: `${sdContext}/add-storage-facility-details`,
           error: errors?.storageFacilities,
         },
       ],

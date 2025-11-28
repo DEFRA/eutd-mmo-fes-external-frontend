@@ -56,9 +56,7 @@ const progressPageHandler: ITestHandler = {
     rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgressIncomplete))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocument))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementNoProducts))),
-    rest.get(mockCheckProgressUrl, (req, res, ctx) =>
-      res(ctx.status(400), ctx.json(psCheckProgessError))
-    ),
+    rest.get(mockCheckProgressUrl, (req, res, ctx) => res(ctx.status(400), ctx.json(psCheckProgessError))),
   ],
   [TestCaseId.PSCompleteProgress]: () => [
     rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgressComplete))),
