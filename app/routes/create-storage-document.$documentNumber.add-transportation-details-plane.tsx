@@ -3,7 +3,7 @@ import { useActionData, useLoaderData } from "@remix-run/react";
 import { type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
 import { useEffect } from "react";
 import { route } from "routes-gen";
-import type { ICountry, ITransport, Journey } from "~/types";
+import type { ICountry, ITransport, IUnauthorised, Journey, StorageDocument } from "~/types";
 import {
   getBearerTokenForRequest,
   getTransportDetails,
@@ -14,6 +14,7 @@ import {
   getCountries,
   extractContainerNumbers,
   handleFormEmptyStringValue,
+  getStorageDocument,
 } from "~/.server";
 import { scrollToId, TransportType } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
@@ -29,10 +30,13 @@ export const action: ActionFunction = async ({ request, params }) => {
   const { documentNumber } = params;
   const journey: Journey = "storageNotes";
   const transport: ITransport = await getTransportDetails(bearerToken, journey, documentNumber);
+  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
+
   const form = await request.formData();
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
   const consignmentDestination = form.get("exportedTo") as string;
+  const pointOfDestination = form.get("pointOfDestination") as string;
   const nextUri = form.get("nextUri") as string;
   const currentUri = route("/create-storage-document/:documentNumber/add-transportation-details-plane", {
     documentNumber,
@@ -48,6 +52,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const payload: ITransport = {
     exportedTo,
+    pointOfDestination,
     departurePlace: form.get("departurePlace") as string,
     flightNumber: form.get("flightNumber") as string,
     airwayBillNumber: handleFormEmptyStringValue(form, "airwayBillNumber"),
@@ -59,6 +64,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     journey: transport.journey,
     vehicle: transport.vehicle,
     currentUri,
+    facilityArrivalDate: "facilityArrivalDate" in storageDocument ? storageDocument.facilityArrivalDate : undefined,
   };
 
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);

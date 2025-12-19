@@ -18,6 +18,7 @@ import {
   getFlightNumber,
   getFreightBillNumber,
   getNationalityOfVehicle,
+  getPointOfDestination,
   getRailwayBillNumber,
   getRegistrationNumber,
   getVesselName,
@@ -55,6 +56,7 @@ export const AddTransportationDetailsComponent = ({
     nationalityOfVehicle,
     registrationNumber,
     departurePlace,
+    pointOfDestination,
     exportDate,
     nextUri,
     csrf,
@@ -69,6 +71,7 @@ export const AddTransportationDetailsComponent = ({
   } = {
     vehicle: vehicleType,
     exportedTo,
+    pointOfDestination: getPointOfDestination(errors, actionData, pointOfDestination),
     containerNumber: getContainerNumber(errors, actionData, containerNumber),
     departurePlace: getDeparturePlace(errors, actionData, departurePlace),
     errors: errors,
@@ -128,6 +131,7 @@ export const AddTransportationDetailsComponent = ({
 
   const errorKeysInOrder = [
     "exportedTo",
+    "pointOfDestination",
     "departurePlace",
     "exportDate",
     "airwayBillNumber",

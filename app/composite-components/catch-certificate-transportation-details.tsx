@@ -1,5 +1,5 @@
 import { TransportationModeDetails } from "./transportationDetails";
-import type { IErrorsTransformed, ITransport } from "~/types";
+import type { ICountry, IErrorsTransformed, ITransport } from "~/types";
 
 export const CatchCertificateTransportationDetails = ({
   vehicle,
@@ -16,7 +16,13 @@ export const CatchCertificateTransportationDetails = ({
   errors,
   legendTitle,
   displayOptionalSuffix,
-}: ITransport & { legendTitle?: string; errors: IErrorsTransformed; displayOptionalSuffix?: boolean }) => (
+  countries,
+}: ITransport & {
+  legendTitle?: string;
+  errors: IErrorsTransformed;
+  displayOptionalSuffix?: boolean;
+  countries?: ICountry[];
+}) => (
   <fieldset className="govuk-fieldset">
     <TransportationModeDetails
       legendTitle={legendTitle}
@@ -33,6 +39,7 @@ export const CatchCertificateTransportationDetails = ({
       containerIdentificationNumber={containerIdentificationNumber}
       displayOptionalSuffix={displayOptionalSuffix}
       errors={errors}
+      countries={countries ?? []}
     />
   </fieldset>
 );

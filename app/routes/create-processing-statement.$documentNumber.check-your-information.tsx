@@ -323,6 +323,29 @@ const CheckYourInformation = () => {
               }
             </dd>
           </div>
+          {processingStatement?.pointOfDestination && (
+            <div className="govuk-summary-list__row">
+              <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                {t("psPointOfDestination", { ns: "psCheckYourInformation" })}
+              </dt>
+              <dd className="govuk-summary-list__value">{processingStatement?.pointOfDestination}</dd>
+              <dd className="govuk-summary-list__actions">
+                {
+                  <a
+                    id="pointOfDestinationChangeLink"
+                    className="govuk-link"
+                    href={`${route("/create-processing-statement/:documentNumber/what-export-destination", {
+                      documentNumber,
+                    })}?nextUri=${route("/create-processing-statement/:documentNumber/check-your-information", {
+                      documentNumber,
+                    })}#pointOfDestination`}
+                  >
+                    {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
+                  </a>
+                }
+              </dd>
+            </div>
+          )}
         </dl>
 
         <div className="govuk-warning-text">

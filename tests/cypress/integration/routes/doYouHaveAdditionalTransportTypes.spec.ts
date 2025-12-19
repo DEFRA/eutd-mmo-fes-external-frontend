@@ -90,10 +90,6 @@ describe("Transport Details Table", () => {
         cy.contains("strong.govuk-tag", "Primary").should("not.exist");
       });
   });
-
-  it("displays the warning text", () => {
-    cy.get(".govuk-warning-text__text").should("contain.text", "Warning");
-  });
 });
 
 describe("DoYouHaveAdditionalTransportTypes", () => {

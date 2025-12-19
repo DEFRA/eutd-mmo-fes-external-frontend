@@ -19,7 +19,6 @@ export const ExporterPostcodeLookUp = ({ errors, postcode, actionUri, csrf }: Ex
       <div className="govuk-grid-column">
         <FormInput
           label={t("commonWhatExportersAddressEnterPostCode")}
-          labelClassName="govuk-!-font-weight-bold"
           containerClassName="govuk-form-group"
           inputClassName={classNames("govuk-input govuk-input--width-10", {
             "govuk-input--error": errors?.postcode,

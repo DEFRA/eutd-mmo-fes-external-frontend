@@ -17,7 +17,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get(".govuk-heading-xl").contains("Train departing the UK");
     cy.get("#exportDate").should("be.visible");
     cy.get("form").should(($form) => {
-      expect($form.find("input[type='text']")).to.have.lengthOf(5);
+      expect($form.find("input[type='text']")).to.have.lengthOf(6);
       const labelObjects = $form.find("label").map((i, el) => Cypress.$(el).text());
       const textObjects = $form.find("input[type='text']").map((i, el) => Cypress.$(el).val());
       const hintObjects = $form.find("div.govuk-hint").map((i, el) => Cypress.$(el).text());
@@ -25,12 +25,14 @@ describe("Add Transportation Details Train: Allowed", () => {
       const textinputs = textObjects.get();
       const hints = hintObjects.get();
 
-      expect(textinputs).to.have.length(5);
-      expect(labels).to.have.length(8);
+      expect(textinputs).to.have.length(6);
+      expect(labels).to.have.length(10);
       expect(labels).to.deep.eq([
         "Consignment destination",
+        "Point of destination",
         "Where the train departs from the UK",
         "Container identification number (optional)",
+        "Date the train departs the UK",
         "Day",
         "Month",
         "Year",
@@ -39,6 +41,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       ]);
       expect(hints).to.deep.eq([
         "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document.",
+        "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment.",
         "For example, Felixstowe Port, Dover Port, or the place the train departs from the UK",
         "Enter container or trailer identification number. For example, ABCD1234567.",
         "For example, 25 07 2025",
@@ -203,5 +206,43 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
 
     cy.get('[name^="containerNumbers."]').should("have.length", 1);
     cy.get('[name="containerNumbers.0"]').should("have.value", "ABCD1234567");
+  });
+});
+
+describe("Train Point of Destination - Validation Scenarios", () => {
+  it("should display error when point of destination is empty", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportPointOfDestinationRequired,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Enter the point of destination$/).should("be.visible");
+  });
+
+  it("should display error when point of destination exceeds 100 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportPointOfDestinationMaxLength,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    const longString = new Array(102).join("a");
+    cy.get("#pointOfDestination").type(longString, { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Point of destination must not exceed 100 characters$/).should("be.visible");
+  });
+
+  it("should display error when point of destination contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportPointOfDestinationInvalidCharacters,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.get("#pointOfDestination").type("Invalid@#$%", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
+    ).should("be.visible");
   });
 });

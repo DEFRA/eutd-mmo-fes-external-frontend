@@ -4,6 +4,7 @@
   "flagState": "Flag state",
   "containerNumber": "0123456789",
   "departurePlace": "Hull",
+  "pointOfDestination": "Rotterdam Port",
   "exportedTo": {
     "officialCountryName": "Afghanistan",
     "isoNumericCode": "004",

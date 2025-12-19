@@ -34,8 +34,10 @@ export interface ITransport extends IBase {
   exportDateTo?: string;
   exportedTo?: ICountry | null;
   placeOfUnloading?: string | null;
+  pointOfDestination?: string | null;
   documents?: AdditionalDocumentsData[];
   arrival?: boolean;
+  facilityArrivalDate?: string | null;
 }
 
 export type TransportOptionType = {

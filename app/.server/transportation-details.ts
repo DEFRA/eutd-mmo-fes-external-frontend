@@ -77,6 +77,8 @@ export const CatchCertificateTransportationDetailsLoader = async (
       return redirect("/forbidden");
     }
 
+    const countries: ICountry[] = await getCountries();
+
     // Dynamically set the page title using translation
     const pageTitle = t(transportTypeKey, { ns: "title" });
     const commonTitle = t("ccCommonTitle", { ns: "title" });
@@ -104,6 +106,8 @@ export const CatchCertificateTransportationDetailsLoader = async (
       });
     }
 
+    const maximumTransportDocumentPerTransport = parseInt(getEnv().EU_CATCH_MAX_TRANSPORT_DOCUMENTS, 10);
+
     return new Response(
       JSON.stringify({
         documentNumber,
@@ -114,6 +118,8 @@ export const CatchCertificateTransportationDetailsLoader = async (
         pageTitle,
         commonTitle,
         displayOptionalSuffix,
+        maximumTransportDocumentPerTransport,
+        countries,
       }),
       {
         status: 200,
@@ -404,6 +410,8 @@ const checkAirWayBillNumber = (airwayBillNumber: string | undefined | null) =>
 const checkFlightNumber = (flightNumber: string | undefined | null) => checkField(flightNumber, 50, /^[a-zA-Z0-9]+$/);
 const checkPlaceOfUnloading = (placeOfUnloading: string | undefined | null) =>
   checkField(placeOfUnloading, 50, /^[a-zA-Z0-9]+$/);
+const checkPointOfDestination = (pointOfDestination: string | undefined | null) =>
+  checkField(pointOfDestination, 100, /^[a-zA-Z0-9\-' /]+$/);
 const checkContainerNumbers = (containerNumbers: string[] | undefined | null) => {
   if (!containerNumbers || containerNumbers.length === 0) return [];
   const validContainers = containerNumbers.map((cn) => {
@@ -425,6 +433,7 @@ const validatePayload = async (payload: ITransport, saveAsDraft: boolean) => {
     payload.airwayBillNumber = checkAirWayBillNumber(payload.airwayBillNumber);
     payload.flightNumber = checkFlightNumber(payload.flightNumber);
     payload.placeOfUnloading = checkPlaceOfUnloading(payload.placeOfUnloading);
+    payload.pointOfDestination = checkPointOfDestination(payload.pointOfDestination);
     payload.containerNumbers = checkContainerNumbers(payload.containerNumbers).filter((cn) => cn !== undefined);
     return [] as IError[] | IErrorsTransformed;
   } else {
@@ -504,10 +513,16 @@ export const commonSaveTransportDetails = async (
   return redirect(isEmpty(nextUri) ? progressRoute : nextUri);
 };
 
-export const extractContainerNumbers = (values: Record<string, any>): string[] =>
-  Object.keys(values)
+export const extractContainerNumbers = (values: Record<string, any>): string[] => {
+  const containerKeys = Object.keys(values)
     .filter((key) => key.startsWith("containerNumbers."))
-    .map((key) => values[key] as string);
+    .sort((a, b) => {
+      const indexA = parseInt(a.split(".")[1], 10);
+      const indexB = parseInt(b.split(".")[1], 10);
+      return indexA - indexB;
+    });
+  return containerKeys.map((key) => values[key] as string);
+};
 
 // Handle container button actions when JS is disabled
 export const handleContainerActions = async (request: Request, _action: string, values: Record<string, any>) => {

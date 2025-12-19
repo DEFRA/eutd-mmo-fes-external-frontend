@@ -3,7 +3,7 @@ import { useActionData, useLoaderData } from "@remix-run/react";
 import { type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
 import { route } from "routes-gen";
 import { useEffect } from "react";
-import type { ITransport, Journey, ErrorResponse, ICountry } from "~/types";
+import type { ITransport, Journey, ErrorResponse, ICountry, IUnauthorised, StorageDocument } from "~/types";
 import { scrollToId, TransportType } from "~/helpers";
 import {
   getBearerTokenForRequest,
@@ -15,6 +15,7 @@ import {
   getCountries,
   handleFormEmptyStringValue,
   extractContainerNumbers,
+  getStorageDocument,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
@@ -29,10 +30,12 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const { documentNumber } = params;
   const journey: Journey = "storageNotes";
   const transport: ITransport = await getTransportDetails(bearerToken, journey, documentNumber);
+  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
   const form = await request.formData();
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
   const consignmentDestination = form.get("exportedTo") as string;
+  const pointOfDestination = form.get("pointOfDestination") as string;
   const railwayBillNumber = form.get("railwayBillNumber") as string;
   const departurePlace = form.get("departurePlace") as string;
   const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", false);
@@ -52,6 +55,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     departurePlace: departurePlace,
     journey: transport.journey,
     exportedTo,
+    pointOfDestination,
     nextUri: route("/create-storage-document/:documentNumber/progress", { documentNumber }),
     railwayBillNumber: railwayBillNumber,
     freightBillNumber: freightBillNumber,
@@ -60,8 +64,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     exportDate: calculateExportDate(form),
     exportDateTo: moment().startOf("day").add(1, "day").toISOString(),
     containerNumbers,
+    facilityArrivalDate: "facilityArrivalDate" in storageDocument ? storageDocument.facilityArrivalDate : null,
   };
-
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);
 };
 

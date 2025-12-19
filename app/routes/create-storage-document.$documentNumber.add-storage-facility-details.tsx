@@ -344,6 +344,7 @@ const AddStorageFacilityDetails = () => {
                 ns: "addStorageFacilityDetails",
                 defaultValue: "Arrival date",
               })}
+              labelStyle="normal"
               translationNs="addStorageFacilityDetails"
               hintText={t("sdStorageArrivalDateInfo", {
                 ns: "addStorageFacilityDetails",
@@ -387,7 +388,6 @@ const AddStorageFacilityDetails = () => {
                 ns: "errorsText",
               })}
               errorPosition={ErrorPosition.AFTER_LABEL}
-              labelClassName="govuk-!-font-weight-bold"
               inputProps={{
                 defaultValue: facilityName,
                 id: "storageFacilities-facilityName",

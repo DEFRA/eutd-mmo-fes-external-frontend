@@ -63,6 +63,7 @@ export const howDoesTheExportLeaveTheUkAction = async ({
           exportDate: transportDetails.exportDate ? null : undefined,
           exportedTo: transportDetails.exportedTo ? null : undefined,
           freightBillNumber: transportDetails.freightBillNumber ? null : undefined,
+          pointOfDestination: transportDetails.pointOfDestination ? null : undefined,
           containerNumbers: transportDetails.containerNumbers ? [] : undefined,
         }
       : { vehicle: vehicle };

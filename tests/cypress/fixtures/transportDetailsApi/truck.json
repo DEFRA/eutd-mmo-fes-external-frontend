@@ -4,6 +4,7 @@
   "nationalityOfVehicle": "Dakota Hill",
   "registrationNumber": "Vincent Nunez",
   "departurePlace": "Joelle Rhodes",
+  "pointOfDestination": "Brussels Central Station",
   "freightBillNumber": "AA1234567",
   "documents": [
     { "name": "Invoice 1", "reference": "INV00001" },

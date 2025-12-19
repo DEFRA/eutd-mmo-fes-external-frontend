@@ -198,7 +198,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     ({ scientificName } = allSpecies.find((s: Species) => s.faoCode === faoCode) ?? {});
   }
 
-  const supportingDocumentsFromForm = form.getAll("supportingDocuments").filter(Boolean) as string[];
+  const supportingDocumentsFromForm = form.getAll("supportingDocuments") as string[];
   if (isNonJs && removeSupportingDoc && removeIndex > -1) {
     supportingDocumentsFromForm.splice(removeIndex, 1);
   }
@@ -222,7 +222,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     false,
     isNonJs
   );
-
   if (isDraft) {
     return redirect(route("/create-storage-document/storage-documents"));
   }
@@ -556,7 +555,6 @@ const AddProduct = () => {
                 containerClassNameError={getErrorClassName(errors, weightKey)}
                 hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-                labelClassName="govuk-!-font-weight-bold"
               />
               <EntryDocumentGuidanceText />
               <fieldset className="govuk-fieldset" aria-describedby={`${supportingDocumentsKey}-0-hint`}>

@@ -16,7 +16,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get(".govuk-heading-xl").contains("Plane departing the UK");
     cy.get("#exportDate").should("be.visible");
     cy.get("form").should(($form) => {
-      expect($form.find("input[type='text']")).to.have.lengthOf(6);
+      expect($form.find("input[type='text']")).to.have.lengthOf(7);
 
       const labelObjects = $form.find("label").map((i, el) => Cypress.$(el).text());
       const textObjects = $form.find("input[type='text']").map((i, el) => Cypress.$(el).val());
@@ -25,11 +25,13 @@ describe("Add Transportation Details Plane: Allowed", () => {
       const textinputs = textObjects.get();
       const hints = hintObjects.get();
 
-      expect(textinputs).to.have.length(6);
-      expect(labels).to.have.length(9);
+      expect(textinputs).to.have.length(7);
+      expect(labels).to.have.length(11);
       expect(labels).to.deep.eq([
         "Consignment destination",
+        "Point of destination",
         "Where the plane departs from the UK",
+        "Date the plane departs the UK",
         "Day",
         "Month",
         "Year",
@@ -40,6 +42,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       ]);
       expect(hints).to.deep.eq([
         "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document.",
+        "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment.",
         "For example, London Heathrow Airport, East Midlands Airport, or the place the plane departs from the UK",
         "For example, 25 07 2025",
         "For example, 123-45678901",
@@ -143,5 +146,43 @@ describe("Add Transportation Details Plane: 403 on page load", () => {
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
     cy.url().should("include", "/forbidden");
+  });
+});
+
+describe("Plane Point of Destination - Validation Scenarios", () => {
+  it("should display error when point of destination is empty", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportPointOfDestinationRequired,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Enter the point of destination$/).should("be.visible");
+  });
+
+  it("should display error when point of destination exceeds 100 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportPointOfDestinationMaxLength,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    const longString = new Array(102).join("a");
+    cy.get("#pointOfDestination").type(longString, { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Point of destination must not exceed 100 characters$/).should("be.visible");
+  });
+
+  it("should display error when point of destination contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportPointOfDestinationInvalidCharacters,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("#pointOfDestination").type("Invalid@#$%", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
+    ).should("be.visible");
   });
 });

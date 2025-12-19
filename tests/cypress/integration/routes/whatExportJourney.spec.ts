@@ -18,14 +18,15 @@ describe("what export journey page for Direct Landing", () => {
       const radios = radioObjects.get();
       const text = textObject.get();
       expect(radios).to.have.length(4);
-      expect(labels).to.have.length(5);
-      expect(text).to.have.length(1);
+      expect(labels).to.have.length(6);
+      expect(text).to.have.length(2);
       expect(labels).to.deep.eq([
         "United Kingdom",
         "Guernsey",
         "Isle of Man",
         "Jersey",
         "Select the destination country",
+        "Point of destination",
       ]);
       expect($form.find("input[type='radio']")).to.have.lengthOf(4);
     });
@@ -110,14 +111,15 @@ describe("what export journey page for Manual Entry", () => {
       const radios = radioObjects.get();
       const text = textObject.get();
       expect(radios).to.have.length(4);
-      expect(labels).to.have.length(5);
-      expect(text).to.have.length(1);
+      expect(labels).to.have.length(6);
+      expect(text).to.have.length(2);
       expect(labels).to.deep.eq([
         "United Kingdom",
         "Guernsey",
         "Isle of Man",
         "Jersey",
         "Select the destination country",
+        "Point of destination",
       ]);
       expect($form.find("input[type='radio']")).to.have.lengthOf(4);
     });
@@ -181,5 +183,195 @@ describe("what export journey page for Manual Entry", () => {
     cy.get("#exportDestination").invoke("val", "Pakistan");
     cy.get('[data-testid="save-and-continue"]').click({ force: true });
     cy.url().should("include", "/how-does-the-export-leave-the-uk");
+  });
+});
+
+describe("Destination country field validation", () => {
+  it("should display the destination country field with correct label and hint", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatExportJourneyManualEntry,
+    };
+    cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+
+    cy.get("#exportDestination").should("exist");
+    cy.contains("label", "Select the destination country").should("be.visible");
+    cy.get("#exportDestination-hint").should("exist");
+    cy.get("#exportDestination").should("have.attr", "type", "text");
+  });
+
+  it("should display error when destination country is not selected and save and continue is clicked", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatExportJourneyDestinationCountryRequired,
+    };
+    cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+
+    cy.get("#exportedFromUK").check();
+    cy.get("#pointOfDestination").type("Calais Port");
+    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-error-summary__title").should("contain", "There is a problem");
+    cy.get(".govuk-list > li > a").should("contain", "Select a valid destination country");
+    cy.get(".govuk-error-message").should("contain", "Select a valid destination country");
+    cy.get("#exportDestination").should("have.class", "govuk-input--error");
+  });
+
+  it("should display error when destination country is empty string", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatExportJourneyDestinationCountryRequired,
+    };
+    cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+
+    cy.get("#exportedFromUK").check();
+    cy.get("#pointOfDestination").type("Calais Port");
+    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-list > li > a").should("contain", "Select a valid destination country");
+    cy.get(".govuk-error-message").should("contain", "Select a valid destination country");
+  });
+
+  it("should allow valid destination country selection", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatExportJourneyManualEntry,
+    };
+    cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+
+    cy.get("#exportedFromUK").check();
+    cy.get("#exportDestination").invoke("val", "France");
+    cy.get("#pointOfDestination").type("Calais Port");
+    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get(".govuk-error-summary").should("not.exist");
+  });
+
+  it("should not save when destination country is missing and save as draft is clicked", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatExportJourneyManualEntryDraft,
+    };
+    cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+
+    cy.get("#exportedFromUK").check();
+    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+    cy.url().should("include", "/catch-certificates");
+  });
+});
+
+describe("Point of destination field", () => {
+  it("should render the point of destination field with correct label and hint", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatExportJourneyManualEntry,
+    };
+    cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+
+    // Check field exists
+    cy.get("#pointOfDestination").should("exist");
+
+    // Check label
+    cy.get('label[for="pointOfDestination"]').should("contain", "Point of destination");
+
+    // Check hint text
+    cy.get("#pointOfDestination-hint").should(
+      "contain",
+      "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment."
+    );
+
+    // Verify it's a text input
+    cy.get("#pointOfDestination").should("have.attr", "type", "text");
+  });
+
+  it("should display error when point of destination is not provided", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatExportJourneyPointOfDestinationRequired,
+    };
+    cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+
+    cy.get("#exportedFromUK").check();
+    cy.get("#exportDestination").invoke("val", "France");
+    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+    // Check error summary
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-list > li > a").should("contain", "Enter the point of destination");
+
+    // Check inline error
+    cy.get("#pointOfDestination-error").should("contain", "Enter the point of destination");
+
+    // Check field has error styling
+    cy.get("#pointOfDestination").should("have.class", "govuk-input--error");
+  });
+
+  it("should display error when point of destination exceeds 100 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatExportJourneyPointOfDestinationTooLong,
+    };
+    cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+
+    const longDestination = new Array(102).join("A");
+    cy.get("#exportedFromUK").check();
+    cy.get("#exportDestination").invoke("val", "France");
+    cy.get("#pointOfDestination").type(longDestination);
+    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+    // Check error summary
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-list > li > a").should("contain", "Point of destination must not exceed 100 characters");
+
+    // Check inline error
+    cy.get("#pointOfDestination-error").should("contain", "Point of destination must not exceed 100 characters");
+  });
+
+  it("should display error when point of destination contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatExportJourneyPointOfDestinationInvalidChars,
+    };
+    cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+
+    cy.get("#exportedFromUK").check();
+    cy.get("#exportDestination").invoke("val", "France");
+    cy.get("#pointOfDestination").type("Calais port @ terminal 3");
+    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+    // Check error summary
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-list > li > a").should(
+      "contain",
+      "Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes"
+    );
+
+    // Check inline error
+    cy.get("#pointOfDestination-error").should(
+      "contain",
+      "Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes"
+    );
+  });
+
+  it("should accept valid point of destination with allowed characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatExportJourneyPointOfDestinationValid,
+    };
+    cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+
+    cy.get("#exportedFromUK").check();
+    cy.get("#exportDestination").invoke("val", "France");
+    cy.get("#pointOfDestination").type("Calais-Dunkerque A/B Terminal O'Hare 123");
+    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+    // Should not show errors
+    cy.get(".govuk-error-summary").should("not.exist");
+    cy.get("#pointOfDestination-error").should("not.exist");
+  });
+
+  it("should not save invalid point of destination when save as draft is clicked", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatExportJourneyPointOfDestinationDraftInvalid,
+    };
+    cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+
+    cy.get("#exportedFromUK").check();
+    cy.get("#exportDestination").invoke("val", "France");
+    cy.get("#pointOfDestination").type(new Array(102).join("A"));
+    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+
+    // Should redirect to dashboard without showing errors and without saving invalid data
+    cy.url().should("include", "/catch-certificates");
   });
 });

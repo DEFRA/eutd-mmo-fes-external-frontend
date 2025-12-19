@@ -69,21 +69,22 @@ const addConsignmentDetailsHandler: ITestHandler = {
   [TestCaseId.PSAddConsignmentDetailsSaveAndContinueUnauthorised]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => {
-      if (counter < 2) {
+      // First call: loader (return success)
+      if (counter === 0) {
         counter++;
         return res(ctx.json(processingStatement));
       }
+      // Second call: updateProcessingStatementProducts (return unauthorised)
+      if (counter === 1) {
+        counter = 0; // Reset for next test
+        return res(ctx.status(403));
+      }
+      // Fallback
+      return res(ctx.json(processingStatement));
     }),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.json(processingStatement))
     ),
-    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => {
-      // returning unauthorised when API is hit third time
-      if (counter === 2) {
-        counter = 0;
-        return res.once(ctx.status(403));
-      }
-    }),
   ],
 };
 

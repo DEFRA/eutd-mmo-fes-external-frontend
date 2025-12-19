@@ -35,6 +35,7 @@
   "sdCheckYourInformationFreightNumber": "Freight bill number",
   "sdCheckYourInformationAirWaybillNumber": "Air waybill number",
   "sdCheckYourInformationConsignmentDestination": "Consignment destination",
+  "sdCheckYourInformationPointOfDestination": "Point of destination",
   "sdCheckYourInformationStorageDetailsText": "Storage facility",
   "sdCommonFacilityNameTitle": "Storage facility name",
   "sdCommonFacilityFacilityArrivalDate": "Arrival date",

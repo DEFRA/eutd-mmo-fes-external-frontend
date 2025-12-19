@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect } from "react";
 import { useActionData, useLoaderData } from "@remix-run/react";
 import { type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
-import type { ITransport, Journey, ErrorResponse, ICountry } from "~/types";
+import type { ITransport, Journey, ErrorResponse, ICountry, IUnauthorised, StorageDocument } from "~/types";
 import {
   getBearerTokenForRequest,
   getTransportDetails,
@@ -13,6 +13,7 @@ import {
   getCountries,
   handleFormEmptyStringValue,
   extractContainerNumbers,
+  getStorageDocument,
 } from "~/.server";
 import { scrollToId, TransportType } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
@@ -28,10 +29,12 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const { documentNumber } = params;
   const journey: Journey = "storageNotes";
   const transport: ITransport = await getTransportDetails(bearerToken, journey, documentNumber);
+  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
   const form = await request.formData();
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
   const consignmentDestination = form.get("exportedTo") as string;
+  const pointOfDestination = form.get("pointOfDestination") as string;
   const nationalityOfVehicle = form.get("nationalityOfVehicle") as string;
   const registrationNumber = form.get("registrationNumber") as string;
   const departurePlace = form.get("departurePlace") as string;
@@ -51,6 +54,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     vehicle: transport.vehicle,
     cmr: transport.cmr,
     exportedTo,
+    pointOfDestination,
     nationalityOfVehicle: countries.find((c: ICountry) => c.officialCountryName === nationalityOfVehicle)
       ?.officialCountryName,
     registrationNumber: registrationNumber,
@@ -63,6 +67,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     nextUri: "/create-storage-document/:documentNumber/check-your-information",
     exportDate: calculateExportDate(form),
     exportDateTo: moment().startOf("day").add(1, "day").toISOString(),
+    facilityArrivalDate: "facilityArrivalDate" in storageDocument ? storageDocument.facilityArrivalDate : undefined,
   };
 
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);

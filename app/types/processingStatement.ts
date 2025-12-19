@@ -50,6 +50,7 @@ export interface ProcessingStatement {
   errors?: ErrorLookup | IError[];
   errorsUrl?: string;
   exportedTo: ICountry;
+  pointOfDestination?: string;
   _plantDetailsUpdated?: boolean;
   isNonJs: boolean;
 }

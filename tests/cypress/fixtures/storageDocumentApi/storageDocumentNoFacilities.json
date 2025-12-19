@@ -23,6 +23,7 @@
     "flagState": "ghj",
     "containerNumber": "56",
     "departurePlace": "hull",
+    "pointOfDestination": "Amsterdam Schiphol Airport",
     "exportedTo": {
       "officialCountryName": "British Indian Ocean Territory",
       "isoCodeAlpha2": "IO",

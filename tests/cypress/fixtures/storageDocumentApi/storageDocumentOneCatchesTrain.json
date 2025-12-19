@@ -35,6 +35,7 @@
     "containerNumber": "56",
     "containerNumbers": ["TRAIN001", "TRAIN002"],
     "departurePlace": "hull",
+    "pointOfDestination": "Paris Gare du Nord",
     "exportedTo": {
       "officialCountryName": "British Indian Ocean Territory",
       "isoCodeAlpha2": "IO",

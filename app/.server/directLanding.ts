@@ -150,11 +150,19 @@ const transformError = (
         params: [product],
       },
     };
-  } else if (errorKey === "dateLanded" || errorKey === "vessel.vesselName") {
+  } else if (errorKey === "dateLanded") {
+    // FIO-10474: Handle dateLanded errors separately with landing limit param
     return {
       [errorKey]: {
         key: errors[errorKey],
         params: [landingLimitDaysInTheFuture],
+      },
+    };
+  } else if (errorKey === "vessel.vesselName") {
+    // FIO-10474: Handle vessel errors separately without date-related params
+    return {
+      [errorKey]: {
+        key: errors[errorKey],
       },
     };
   } else if (errorKey.includes("exportWeight")) {

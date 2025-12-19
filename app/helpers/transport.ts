@@ -53,6 +53,8 @@ export const getDeparturePort = (errors: any, actionData: any, departurePort?: s
   !isEmpty(errors) || actionData?.departurePort ? actionData?.departurePort : departurePort;
 export const getPlaceOfUnloading = (errors: any, actionData: any, placeOfUnloading?: string) =>
   !isEmpty(errors) || actionData?.placeOfUnloading ? actionData?.placeOfUnloading : placeOfUnloading;
+export const getPointOfDestination = (errors: any, actionData: any, pointOfDestination?: string | null) =>
+  !isEmpty(errors) || actionData?.pointOfDestination ? actionData?.pointOfDestination : pointOfDestination;
 
 export enum TransportType {
   CONTAINER_VESSEL = "containerVessel",

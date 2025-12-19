@@ -23,6 +23,7 @@
   "ccSummaryPageTransportationDetails": "Transportation details",
   "commonTransportSummaryDepartureCountry": "Departure country",
   "TransportSummarySummaryCellKeyCCVersion": "Destination country",
+  "commonTransportSummaryPointOfDestination": "Point of destination",
   "commonTransportSummaryLeaveUKText": "How will the export leave the UK?",
   "commonTransportSummaryFishingVessel": "Fishing vessel",
   "commonAddTransportationDetailsExportDate": "Export date",

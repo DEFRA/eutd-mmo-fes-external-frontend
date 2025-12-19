@@ -80,18 +80,18 @@ export const LandingDetailsSummary = ({
         hasChangeLink: true,
         idAttribute: "highSeasArea-hint",
       },
-      model?.rfmo && {
-        label: t("ccRFMOlabel", { ns: "checkYourInformation" }),
-        value: model.rfmo,
-        hasChangeLink: true,
-        idAttribute: "rfmo",
-      },
       ...(model?.exclusiveEconomicZones?.map((c, i) => ({
         label: t("ccAddLandingExclusiveZoneLabel", { ns: "checkYourInformation" }),
         value: c.officialCountryName,
         hasChangeLink: true,
         idAttribute: `eez-${i}`,
       })) ?? []),
+      model?.rfmo && {
+        label: t("ccRFMOlabel", { ns: "checkYourInformation" }),
+        value: model.rfmo,
+        hasChangeLink: true,
+        idAttribute: "rfmo",
+      },
       {
         label: t("ccAddLandingDateLandedLabel", { ns: "checkYourInformation" }),
         value: moment(model.dateLanded).format("D MMMM YYYY"),

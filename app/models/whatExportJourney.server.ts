@@ -16,7 +16,7 @@ import {
 } from "~/.server";
 import { apiCallFailed } from "~/communication.server";
 import { getSessionFromRequest, commitSession } from "~/sessions.server";
-import type { IError, ITransport } from "~/types";
+import type { IError, ITransport, ErrorResponse } from "~/types";
 
 export const WhatExportJourneyLoader = async (request: Request, params: Params) => {
   /* istanbul ignore next */
@@ -65,13 +65,14 @@ export const WhatExportJourneyLoader = async (request: Request, params: Params) 
   );
 };
 
-export const WhatExportJourneyAction = async (request: Request, params: Params): Promise<Response> => {
+export const WhatExportJourneyAction = async (request: Request, params: Params): Promise<Response | ErrorResponse> => {
   const bearerToken = await getBearerTokenForRequest(request);
   const { documentNumber } = params;
   const countries = await getCountries();
   const body = await request.formData();
   const exportedFrom = (body.get("exportedFrom") as string) ?? "United Kingdom";
   const exportedTo = body.get("exportedTo");
+  const pointOfDestination = body.get("pointOfDestination");
   const landingsEntryOption = body.get("landingsEntryOption");
   const action = body.get("_action");
   const country = countries.filter((i) => i.officialCountryName === exportedTo)[0];
@@ -79,16 +80,14 @@ export const WhatExportJourneyAction = async (request: Request, params: Params):
     exportedFrom,
     // loaded: true, // TO DO: need to find out what this property does, when it should be true/false, and whether we actually need it.
     ...(country && { exportedTo: country }),
+    exportDestination: exportedTo ?? "",
+    pointOfDestination: pointOfDestination ?? "",
   };
 
   const isValid = await validateCSRFToken(request, body);
   if (!isValid) return redirect("/forbidden");
 
-  if (action === "saveAsDraft") {
-    await postDraftExportLocation(bearerToken, documentNumber, requestBody);
-    return redirect(route("/create-catch-certificate/catch-certificates"));
-  }
-
+  // Always validate the data first, regardless of save or draft action
   const response = await postExportLocation(bearerToken, documentNumber, requestBody);
   const errors: IError[] = response.errors ?? [];
 
@@ -97,6 +96,31 @@ export const WhatExportJourneyAction = async (request: Request, params: Params):
     return redirect("/forbidden");
   }
 
+  if (action === "saveAsDraft") {
+    // For saveAsDraft, save only the valid fields (fields without errors)
+    if (errors.length > 0) {
+      const errorFields = new Set(errors.map((error) => error.key));
+
+      const filteredRequestBody: any = {
+        exportedFrom: requestBody.exportedFrom,
+      };
+
+      if (!errorFields.has("exportedTo") && !errorFields.has("exportDestination") && requestBody.exportedTo) {
+        filteredRequestBody.exportedTo = requestBody.exportedTo;
+      }
+      if (!errorFields.has("pointOfDestination") && requestBody.pointOfDestination) {
+        filteredRequestBody.pointOfDestination = requestBody.pointOfDestination;
+      }
+
+      await postDraftExportLocation(bearerToken, documentNumber, filteredRequestBody);
+    } else {
+      await postDraftExportLocation(bearerToken, documentNumber, requestBody);
+    }
+
+    return redirect(route("/create-catch-certificate/catch-certificates"));
+  }
+
+  // for "saveAndContinue" action, show validation errors if any
   if (errors.length > 0) {
     const values = Object.fromEntries(body);
     return apiCallFailed(errors, values);

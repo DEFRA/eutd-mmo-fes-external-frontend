@@ -73,13 +73,33 @@ export const postDraftExportLocation = async (
 const onPostDraftExportLocationResponse = async (response: Response): Promise<IExportLocationResponse> => {
   switch (response.status) {
     case 200:
-    case 204:
+    case 204: {
       const exportLocation = await response.json();
       return exportLocation;
+    }
     case 403:
       return {
         unauthorised: true,
       };
+    case 400: {
+      const data = await response.json();
+      const errors = [];
+      if (data.exportDestination) {
+        errors.push({
+          key: "exportDestination",
+          message: getErrorMessage(data.exportDestination),
+        });
+      }
+      if (data.pointOfDestination) {
+        errors.push({
+          key: "pointOfDestination",
+          message: getErrorMessage(data.pointOfDestination),
+        });
+      }
+      return {
+        errors,
+      };
+    }
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -88,23 +108,33 @@ const onPostDraftExportLocationResponse = async (response: Response): Promise<IE
 const onExportLocationResponse = async (response: Response): Promise<IExportLocationResponse> => {
   switch (response.status) {
     case 200:
-    case 204:
+    case 204: {
       let exportLocation: IExportLocationResponse = {};
       const res = await response.text();
       if (res) {
         exportLocation = JSON.parse(res);
       }
       return exportLocation;
-    case 400:
+    }
+    case 400: {
       const data = await response.json();
+      const errors = [];
+      if (data.exportDestination) {
+        errors.push({
+          key: "exportDestination",
+          message: getErrorMessage(data.exportDestination),
+        });
+      }
+      if (data.pointOfDestination) {
+        errors.push({
+          key: "pointOfDestination",
+          message: getErrorMessage(data.pointOfDestination),
+        });
+      }
       return {
-        errors: [
-          {
-            key: "exportDestination",
-            message: getErrorMessage(data.exportDestination),
-          },
-        ],
+        errors,
       };
+    }
     case 403:
       return {
         unauthorised: true,

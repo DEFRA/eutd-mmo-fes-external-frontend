@@ -126,6 +126,12 @@ export const StorageDocumentTransportDisplay = ({
       backLinkId: "exportedTo",
     },
     {
+      label: t("sdCheckYourInformationPointOfDestination", { ns: "sdCheckYourInformation" }),
+      value: transport.pointOfDestination,
+      hasChangeLink: true,
+      backLinkId: "pointOfDestination",
+    },
+    {
       label: t(`sdCheckYourInformationVehicleDepartureFrom${capitalize(transport.vehicle)}`, {
         ns: "sdCheckYourInformation",
       }),

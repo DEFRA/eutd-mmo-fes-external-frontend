@@ -36,6 +36,7 @@ describe("Check Your Information (Summary) page: UI", () => {
     cy.contains("dt", "Processing plant name");
     cy.contains("dt", "Address");
     cy.contains("dt", "Destination country");
+    cy.contains("dt", "Point of destination");
   });
 
   it("should contain the required data", () => {
@@ -74,6 +75,22 @@ describe("Check Your Information (Summary) page: UI", () => {
       .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-health-certificate");
 
     cy.get("#exportToChangeLink")
+      .should("be.visible")
+      .should("have.attr", "href")
+      .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/what-export-destination");
+  });
+
+  it("should display point of destination data", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.contains("dt", "Point of destination").should("be.visible");
+    cy.contains("dd", "Calais port").should("be.visible");
+  });
+
+  it("should have point of destination change link", () => {
+    cy.get("#pointOfDestinationChangeLink")
       .should("be.visible")
       .should("have.attr", "href")
       .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/what-export-destination");

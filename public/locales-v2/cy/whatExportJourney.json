@@ -1,10 +1,14 @@
 {
-  "ccWhatExportJourneyExportJourneyHeader": "Pa daith mae’r broses allforio’n ei chymryd?",
+  "ccWhatExportJourneyExportJourneyHeader": "Pa daith mae'r broses allforio'n ei chymryd?",
   "ccWhatExportJourneyDepartureCountry": "Dewiswch wlad ymadael y ddalfa",
-  "ccWhatExportJourneyDepartureCountryHint": "Gelwir hon hefyd yn wlad sy’n allforio, neu’n wladwriaeth baner y llong (yn achos glaniadau uniongyrchol)",
+  "ccWhatExportJourneyDepartureCountryHint": "Gelwir hon hefyd yn wlad sy'n allforio, neu'n wladwriaeth baner y llong (yn achos glaniadau uniongyrchol)",
   "ccWhatExportJourneyCountryUnitedKingdom": "Y Deyrnas Unedig",
   "ccWhatExportJourneyCountryGuernsey": "Guernsey",
   "ccWhatExportJourneyCountryIsleOfMan": "Ynys Manaw",
   "ccWhatExportJourneyCountryJersey": "Jersey",
+  "ccWhatExportJourneyPointOfDestination": "Cyrchfan",
+  "ccWhatExportJourneyPointOfDestinationHint": "Er enghraifft, porthladd Calais, maes awyr Calais-Dunkerque neu gyrchfan y llwyth.",
+  "psPointOfDestination": "Cyrchfan",
+  "psPointOfDestinationHint": "Er enghraifft, porthladd Calais, maes awyr Calais-Dunkerque neu gyrchfan y llwyth.",
   "psWhatExportDestination": "I ble mae’n cael ei allforio?"
 }

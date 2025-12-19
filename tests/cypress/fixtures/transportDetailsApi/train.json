@@ -1,3 +1,4 @@
 {
-  "vehicle": "train"
+  "vehicle": "train",
+  "pointOfDestination": "Paris Gare du Nord"
 }

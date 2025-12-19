@@ -238,7 +238,18 @@ const transportDetailsHandler: ITestHandler = {
   [TestCaseId.TruckTransportErrors]: () => [
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
     rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          departurePlace: "error.departurePlace.any.required",
+          nationalityOfVehicle: "error.nationalityOfVehicle.any.required",
+          registrationNumber: "error.registrationNumber.any.required",
+        })
+      )
+    ),
+    rest.post(addTransportationDetailsUrl("truck", true), (req, res, ctx) =>
       res(
         ctx.status(400),
         ctx.json({
@@ -259,6 +270,44 @@ const transportDetailsHandler: ITestHandler = {
       )
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([catchCertificateTruckTransportAllowedDetails]))),
+  ],
+  [TestCaseId.TruckTransportInvalidNationality]: () => [
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          nationalityOfVehicle: "error.nationalityOfVehicle.any.invalid",
+        })
+      )
+    ),
+    rest.post(addTransportationDetailsUrl("truck", true), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          nationalityOfVehicle: "error.nationalityOfVehicle.any.invalid",
+        })
+      )
+    ),
+    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          nationalityOfVehicle: "error.nationalityOfVehicle.any.invalid",
+        })
+      )
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([catchCertificateTruckTransportAllowedDetails]))),
   ],
   [TestCaseId.TrainTransportSave]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
@@ -1331,7 +1380,16 @@ const transportDetailsHandler: ITestHandler = {
   [TestCaseId.TruckTransportSaveEmptyNationality]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
     rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          nationalityOfVehicle: "error.nationalityOfVehicle.any.required",
+        })
+      )
+    ),
+    rest.post(addTransportationDetailsUrl("truck", true), (req, res, ctx) =>
       res(
         ctx.status(400),
         ctx.json({
@@ -1348,10 +1406,15 @@ const transportDetailsHandler: ITestHandler = {
       )
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([catchCertificateTruckTransportAllowedDetails]))),
   ],
   [TestCaseId.TruckTransportSaveEmptyDepartureCountry]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
     rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) =>
       res(
         ctx.status(400),
@@ -1369,10 +1432,15 @@ const transportDetailsHandler: ITestHandler = {
       )
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([catchCertificateTruckTransportAllowedDetails]))),
   ],
   [TestCaseId.TruckTransportSaveEmptyConsignmentOrigin]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
     rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) =>
       res(
         ctx.status(400),
@@ -1390,10 +1458,15 @@ const transportDetailsHandler: ITestHandler = {
       )
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([catchCertificateTruckTransportAllowedDetails]))),
   ],
   [TestCaseId.TruckTransportSaveEmptyDepartureDate]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
     rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) =>
       res(
         ctx.status(400),
@@ -1411,10 +1484,15 @@ const transportDetailsHandler: ITestHandler = {
       )
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([catchCertificateTruckTransportAllowedDetails]))),
   ],
   [TestCaseId.TruckTransportContainerIdentificationNumberMaxLength]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
     rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) =>
       res(
         ctx.status(400),
@@ -1436,6 +1514,7 @@ const transportDetailsHandler: ITestHandler = {
   [TestCaseId.TruckTransportContainerIdentificationNumberInvalidCharacters]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
     rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) =>
       res(
         ctx.status(400),
@@ -1491,6 +1570,165 @@ const transportDetailsHandler: ITestHandler = {
         ctx.status(400),
         ctx.json({
           containerIdentificationNumber: "error.containerIdentificationNumber.string.pattern.base",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TruckTransportPointOfDestinationRequired]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+    rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          pointOfDestination: "error.pointOfDestination.any.required",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TruckTransportPointOfDestinationMaxLength]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+    rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          pointOfDestination: "error.pointOfDestination.string.max",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TruckTransportPointOfDestinationInvalidCharacters]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+    rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          pointOfDestination: "error.pointOfDestination.string.pattern.base",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TrainTransportPointOfDestinationRequired]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.post(addTransportationDetailsUrl("train"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          pointOfDestination: "error.pointOfDestination.any.required",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TrainTransportPointOfDestinationMaxLength]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.post(addTransportationDetailsUrl("train"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          pointOfDestination: "error.pointOfDestination.string.max",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TrainTransportPointOfDestinationInvalidCharacters]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.post(addTransportationDetailsUrl("train"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          pointOfDestination: "error.pointOfDestination.string.pattern.base",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.PlaneTransportPointOfDestinationRequired]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(planeTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
+    rest.post(addTransportationDetailsUrl("plane"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          pointOfDestination: "error.pointOfDestination.any.required",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.PlaneTransportPointOfDestinationMaxLength]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(planeTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
+    rest.post(addTransportationDetailsUrl("plane"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          pointOfDestination: "error.pointOfDestination.string.max",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.PlaneTransportPointOfDestinationInvalidCharacters]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(planeTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
+    rest.post(addTransportationDetailsUrl("plane"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          pointOfDestination: "error.pointOfDestination.string.pattern.base",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.VesselContainerTransportPointOfDestinationRequired]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(vesselTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
+    rest.post(addTransportationDetailsUrl("containerVessel"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          pointOfDestination: "error.pointOfDestination.any.required",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.VesselContainerTransportPointOfDestinationMaxLength]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(vesselTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
+    rest.post(addTransportationDetailsUrl("containerVessel"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          pointOfDestination: "error.pointOfDestination.string.max",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.VesselContainerTransportPointOfDestinationInvalidCharacters]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(vesselTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
+    rest.post(addTransportationDetailsUrl("containerVessel"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          pointOfDestination: "error.pointOfDestination.string.pattern.base",
         })
       )
     ),

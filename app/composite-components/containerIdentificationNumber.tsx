@@ -71,7 +71,7 @@ export const ContainerIdentificationNumber = ({
         <div key={input.id} className="govuk-button-group" style={{ display: "flex", alignItems: "flex-end" }}>
           <FormInput
             containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
-            labelClassName={index === 0 ? "govuk-label govuk-!-font-weight-bold" : "govuk-visually-hidden"}
+            labelClassName={index === 0 ? "govuk-label" : "govuk-visually-hidden"}
             label={containerIdentificationLabel}
             hint={
               index === 0
