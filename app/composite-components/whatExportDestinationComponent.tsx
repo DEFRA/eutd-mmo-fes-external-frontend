@@ -73,6 +73,36 @@ export const WhatExportDestinationComponent = ({ journey }: { journey: Journey }
                 "aria-describedby": "exportDestination-hint",
               }}
             />
+            <div
+              className={classNames("govuk-form-group govuk-!-width-two-thirds", {
+                "govuk-form-group--error": errors?.pointOfDestination,
+              })}
+            >
+              <label htmlFor="pointOfDestination" className="govuk-label">
+                {t("psPointOfDestination", { ns: "whatExportJourney" })}
+              </label>
+              <div className="govuk-hint" id="pointOfDestination-hint">
+                {t("psPointOfDestinationHint", { ns: "whatExportJourney" })}
+              </div>
+              {errors?.pointOfDestination && (
+                <p className="govuk-error-message" id="pointOfDestination-error">
+                  <span className="govuk-visually-hidden">Error:</span>{" "}
+                  {t(errors?.pointOfDestination?.message, { ns: "errorsText" })}
+                </p>
+              )}
+              <input
+                id="pointOfDestination"
+                name="pointOfDestination"
+                defaultValue={formData.pointOfDestination ?? exportLocation?.pointOfDestination ?? ""}
+                aria-describedby={classNames("pointOfDestination-hint", {
+                  "pointOfDestination-error": errors?.pointOfDestination,
+                })}
+                type="text"
+                className={classNames("govuk-input", {
+                  "govuk-input--error": errors?.pointOfDestination,
+                })}
+              />
+            </div>
             <ButtonGroup />
             <input type="hidden" name="nextUri" value={nextUri} />
           </SecureForm>

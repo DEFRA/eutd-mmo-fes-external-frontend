@@ -27,10 +27,10 @@ describe("what export destination page", () => {
     };
     cy.visit(whatExportDestinationUrl, { qs: { ...testParams } });
 
-    cy.get('input[type="text"]').eq(0).type("India");
-    cy.get(".autocomplete__option").eq(0).click({ force: true });
-
+    cy.get('input[id="exportDestination"]').type("France");
+    cy.get(".autocomplete__option").first().click();
     cy.get('[data-testid="save-draft-button"]').click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {

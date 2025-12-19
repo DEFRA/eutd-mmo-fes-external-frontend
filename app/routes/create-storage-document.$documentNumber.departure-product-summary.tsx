@@ -25,7 +25,6 @@ import {
 } from "~/.server";
 import { getSessionFromRequest } from "~/sessions.server";
 import { json } from "~/communication.server";
-import { getEnv } from "~/env.server";
 
 type DepartureProductSummaryProps = {
   key: number;
@@ -34,31 +33,21 @@ type DepartureProductSummaryProps = {
   transport: ITransport;
   defaultActiveTab?: string;
   csrf: string;
-  displayOptionalSuffix: boolean;
   nextUri: string;
 };
 
 type ConsignmentWeightTableFormProps = {
   catches: StorageDocumentCatch[] | undefined;
   transportType: "arrival" | "departure";
-  displayOptionalSuffix: boolean;
 };
 
-export const ConsignmentWeightTableForm = ({
-  catches,
-  transportType,
-  displayOptionalSuffix,
-}: ConsignmentWeightTableFormProps) => {
+export const ConsignmentWeightTableForm = ({ catches, transportType }: ConsignmentWeightTableFormProps) => {
   const { t } = useTranslation(["sdDepartureProductSummary", "common"]);
   const actionData = useActionData() as { errors?: Record<string, any> } | undefined;
   const errors = actionData?.errors ?? {};
   const isArrival = transportType === "arrival";
-  let sdDepartureProductSummaryNetWeightArrival = "sdDepartureProductSummaryNetWeightArrival";
-  let sdDepartureProductSummaryNetWeightDeparture = "sdDepartureProductSummaryNetWeightDeparture";
-  if (displayOptionalSuffix) {
-    sdDepartureProductSummaryNetWeightArrival = "sdDepartureProductSummaryNetWeightArrivalOptional";
-    sdDepartureProductSummaryNetWeightDeparture = "sdDepartureProductSummaryNetWeightDepartureOptional";
-  }
+  const sdDepartureProductSummaryNetWeightArrival = "sdDepartureProductSummaryNetWeightArrival";
+  const sdDepartureProductSummaryNetWeightDeparture = "sdDepartureProductSummaryNetWeightDeparture";
 
   const getNetProductWeightFromCatches = (catchItem: StorageDocumentCatch | undefined) => {
     if (isArrival) {
@@ -110,11 +99,7 @@ export const ConsignmentWeightTableForm = ({
             scope="col"
             className="govuk-table__header govuk-!-padding-0 govuk-!-padding-top-4 govuk-!-padding-bottom-4 govuk-!-width-one-quarter govuk-!-font-size-19 table-adjust-font"
           >
-            {t(
-              displayOptionalSuffix
-                ? "sdDepartureProductSummaryFisheryProductOptional"
-                : "sdDepartureroductSummaryFisheryProduct"
-            )}
+            {t("sdDepartureProductSummaryFisheryProduct")}
           </th>
           <th
             scope="col"
@@ -257,7 +242,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     return redirect(`/create-storage-document/${documentNumber}/add-product-to-this-consignment`);
   }
 
-  const displayOptionalSuffix = getEnv().EU_CATCH_FIELDS_OPTIONAL === "true";
   const nextUri = getFromSearchParams(new URL(request.url), "nextUri");
 
   return json(
@@ -266,7 +250,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       catches: storageDocument.catches,
       transport: storageDocument.transport,
       csrf,
-      displayOptionalSuffix,
       nextUri,
     },
     session

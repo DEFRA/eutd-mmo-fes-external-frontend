@@ -77,6 +77,7 @@ const whatExportJourneyHandler: ITestHandler = {
     rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json(exportLocation))),
     rest.post(EXPORT_LOCATION_DRAFT_URL, (req, res, ctx) => res(ctx.json(exportLocation))),
   ],
   [TestCaseId.WhatExportJourneyDirectLandingDraft]: () => [
@@ -84,7 +85,7 @@ const whatExportJourneyHandler: ITestHandler = {
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLanding))),
     rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
-
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json(exportLocation))),
     rest.post(EXPORT_LOCATION_DRAFT_URL, (req, res, ctx) => res(ctx.json(exportLocation))),
   ],
 
@@ -109,6 +110,10 @@ const whatExportJourneyHandler: ITestHandler = {
     rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntry))),
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json(exportLocation))),
+    rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressNotStarted))),
+    rest.get(getTransportDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([]))),
   ],
   [TestCaseId.WhatExportManualEntryJourneyBadRequest]: () => [
     rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
@@ -127,7 +132,7 @@ const whatExportJourneyHandler: ITestHandler = {
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntry))),
     rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
-
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json(exportLocation))),
     rest.post(EXPORT_LOCATION_DRAFT_URL, (req, res, ctx) => res(ctx.json(exportLocation))),
   ],
   [TestCaseId.WhatExportManualEntryJourneySaveAndContinue]: () => [
@@ -145,6 +150,93 @@ const whatExportJourneyHandler: ITestHandler = {
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json({}))),
     rest.get(getTransportDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json({}))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(nullLandingsType))),
+  ],
+  [TestCaseId.WhatExportJourneyPointOfDestinationRequired]: () => [
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLanding))),
+    rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json({ pointOfDestination: "error.pointOfDestination.any.required" }))
+    ),
+  ],
+  [TestCaseId.WhatExportJourneyPointOfDestinationTooLong]: () => [
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLanding))),
+    rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json({ pointOfDestination: "error.pointOfDestination.string.max" }))
+    ),
+  ],
+  [TestCaseId.WhatExportJourneyPointOfDestinationInvalidChars]: () => [
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLanding))),
+    rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json({ pointOfDestination: "error.pointOfDestination.string.pattern.base" }))
+    ),
+  ],
+  [TestCaseId.WhatExportJourneyPointOfDestinationValid]: () => [
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLanding))),
+    rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json(exportLocation))),
+    rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressNotStarted))),
+    rest.get(getTransportDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([]))),
+  ],
+  [TestCaseId.WhatExportJourneyPointOfDestinationDraftInvalid]: () => [
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLanding))),
+    rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json({ pointOfDestination: "error.pointOfDestination.string.max" }))
+    ),
+    rest.post(EXPORT_LOCATION_DRAFT_URL, (req, res, ctx) => res(ctx.status(200), ctx.json({}))),
+  ],
+
+  // FI0-10292: Processing Statement what-export-destination test cases
+  [TestCaseId.PSWhatExportDestination]: () => [
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(EXPORT_LOCATION_URL, (req, res, ctx) =>
+      res(ctx.json({ exportedTo: "France", pointOfDestination: "Calais port" }))
+    ),
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json(exportLocation))),
+    rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressNotStarted))),
+    rest.get(getTransportDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([]))),
+  ],
+
+  [TestCaseId.PSWhatExportDestinationWelsh]: () => [
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(EXPORT_LOCATION_URL, (req, res, ctx) =>
+      res(ctx.json({ exportedTo: "France", pointOfDestination: "Calais port" }))
+    ),
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json(exportLocation))),
+    rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressNotStarted))),
+    rest.get(getTransportDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([]))),
+  ],
+
+  [TestCaseId.PSWhatExportDestinationDraftInvalid]: () => [
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    // POST validation endpoint returns error (validation happens first)
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json({ pointOfDestination: "error.pointOfDestination.string.max" }))
+    ),
+    // Draft endpoint should not be called when validation fails
+  ],
+
+  // FI0-10570: Destination country validation test cases
+  [TestCaseId.WhatExportJourneyDestinationCountryRequired]: () => [
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntry))),
+    rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json({ exportDestination: "error.exportDestination.any.required" }))
+    ),
   ],
 };
 export default whatExportJourneyHandler;

@@ -8,6 +8,7 @@ import { DateFieldWithPicker } from "./dateFieldWithPicker";
 import { AutocompleteFormField, Title } from "~/components";
 import { getContainerErrorClassName, getErrorMessageClassName } from "~/helpers";
 import { ContainerIdentificationNumber } from "./containerIdentificationNumber";
+import { TruckNationalityField } from "~/composite-components";
 
 export const ArrivalTransportationModeDetails = ({
   legendTitle,
@@ -22,10 +23,12 @@ export const ArrivalTransportationModeDetails = ({
   registrationNumber,
   errors,
   countries,
+  displayOptionalSuffix,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
   countries: ICountry[];
+  displayOptionalSuffix: boolean;
 }) => {
   const { t } = useTranslation("transportation");
 
@@ -42,7 +45,6 @@ export const ArrivalTransportationModeDetails = ({
           label={t("addTransportationArrivalDetailsRailwayBillNumber")}
           name="railwayBillNumber"
           type="text"
-          labelClassName="govuk-!-font-weight-bold"
           inputClassName={classNames("govuk-input", {
             "govuk-input--error": errors?.railwayBillNumber,
           })}
@@ -71,7 +73,6 @@ export const ArrivalTransportationModeDetails = ({
             label={t("addTransportationArrivalDetailsVesselName")}
             name="vesselName"
             type="text"
-            labelClassName="govuk-!-font-weight-bold"
             inputClassName={classNames("govuk-input", {
               "govuk-input--error": errors?.vesselName,
             })}
@@ -98,7 +99,6 @@ export const ArrivalTransportationModeDetails = ({
             label={t("addTransportationArrivalDetailsFlagState")}
             name="flagState"
             type="text"
-            labelClassName="govuk-!-font-weight-bold"
             inputClassName={classNames("govuk-input", {
               "govuk-input--error": errors?.flagState,
             })}
@@ -122,41 +122,22 @@ export const ArrivalTransportationModeDetails = ({
           />
         </>
       )}
-
       {vehicle === "truck" && (
         <>
-          <AutocompleteFormField
-            containerClassName={classNames("govuk-form-group govuk-!-width-one-half", {
-              "govuk-form-group--error": errors?.nationalityOfVehicle,
-            })}
-            options={["", ...countries.map((c) => c.officialCountryName)]}
-            optionsId="country-option"
-            errorMessageText={t(errors?.nationalityOfVehicle?.message, { ns: "errorsText" })}
-            id="nationalityOfVehicle"
-            name="nationalityOfVehicle"
-            labelText={t("addTransportationArrivalDetailsTruckNationality")}
-            labelClassName="govuk-label govuk-!-font-weight-bold"
-            hintText={t("addTransportationArrivalDetailsTruckNationalityHint")}
-            defaultValue={nationalityOfVehicle ?? ""}
+          <TruckNationalityField
+            nationalityOfVehicle={nationalityOfVehicle}
+            errors={errors}
+            countries={countries}
+            t={t}
+            labelKey="addTransportationArrivalDetailsTruckNationality"
+            hintKey="addTransportationArrivalDetailsTruckNationalityHint"
             minCharsBeforeSearch={2}
-            selectProps={{
-              selectClassName: classNames("govuk-select", {
-                "govuk-select--error": errors?.nationalityOfVehicle,
-              }),
-            }}
-            inputProps={{
-              className: classNames("govuk-input", {
-                "govuk-input--error": errors?.nationalityOfVehicle,
-              }),
-              "aria-describedby": "nationalityOfVehicle-hint",
-            }}
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
             label={t("addTransportationArrivalDetailsRegistrationNumber")}
             name="registrationNumber"
             type="text"
-            labelClassName="govuk-!-font-weight-bold"
             inputClassName={classNames("govuk-input", {
               "govuk-input--error": errors?.registrationNumber,
             })}
@@ -183,10 +164,14 @@ export const ArrivalTransportationModeDetails = ({
         <>
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
-            label={t("addTransportationArrivalDetailsAirwayBillNumber")}
+            label={t(
+              displayOptionalSuffix
+                ? "addTransportationArrivalDetailsAirwayBillNumberOptional"
+                : "addTransportationArrivalDetailsAirwayBillNumber"
+            )}
             name="airwayBillNumber"
             type="text"
-            labelClassName="govuk-label govuk-!-font-weight-bold"
+            labelClassName="govuk-label"
             inputClassName={classNames("govuk-input", {
               "govuk-input--error": errors?.airwayBillNumber,
             })}
@@ -212,7 +197,6 @@ export const ArrivalTransportationModeDetails = ({
             label={t("addTransportationArrivalDetailsFlightNumber")}
             name="flightNumber"
             type="text"
-            labelClassName="govuk-!-font-weight-bold"
             inputClassName={classNames("govuk-input", {
               "govuk-input--error": errors?.flightNumber,
             })}
@@ -292,6 +276,7 @@ export const TransportationArrivalDetails = ({
         departurePort={departurePort}
         errors={errors}
         countries={countries}
+        displayOptionalSuffix={displayOptionalSuffix}
       />
       <FormInput
         name="freightBillNumber"
@@ -305,7 +290,6 @@ export const TransportationArrivalDetails = ({
           id: "freightBillNumber",
           "aria-describedby": "hint-freightBillNumber",
         }}
-        labelClassName="govuk-!-font-weight-bold"
         label={t(
           displayOptionalSuffix
             ? "addTransportationArrivalDetailsFreightBillNumberOptional"
@@ -338,7 +322,7 @@ export const TransportationArrivalDetails = ({
         id="departureCountry"
         name="departureCountry"
         labelText={t("addTransportationArrivalDetailsDepartureCountry")}
-        labelClassName="govuk-label govuk-!-font-weight-bold"
+        labelClassName="govuk-label"
         hintText={t(
           vehicle === "plane"
             ? "addTransportationArrivalDetailsDepartureCountryHintPlane"
@@ -362,7 +346,6 @@ export const TransportationArrivalDetails = ({
         containerClassName="govuk-form-group govuk-!-width-one-half"
         label={t("addTransportationArrivalDetailsConsignmentOrigin")}
         name="departurePort"
-        labelClassName="govuk-!-font-weight-bold"
         type="text"
         inputClassName={classNames("govuk-input", {
           "govuk-input--error": errors?.departurePort,
@@ -394,7 +377,6 @@ export const TransportationArrivalDetails = ({
         containerClassName="govuk-form-group govuk-!-width-one-half"
         label={t("addTransportationArrivalDetailsTruckPlaceOfUnloading")}
         name="placeOfUnloading"
-        labelClassName="govuk-!-font-weight-bold"
         type="text"
         inputClassName={classNames("govuk-input", {
           "govuk-input--error": errors?.placeOfUnloading,
@@ -429,6 +411,7 @@ export const TransportationArrivalDetails = ({
         dateSelected={moment(departureDate, ["DD/MM/YYYY", "YYYY-MM-DD", "D/M/YYYY", "YYYY-M-D"]).format("YYYY-MM-DD")}
         errors={errors?.departureDate}
         label={"addTransportationArrivalDetailsDepartureDate"}
+        labelStyle="normal"
         translationNs="transportation"
         hideAddDateButton={true}
         hintText="addTransportationArrivalDetailsDepartureDateHint"

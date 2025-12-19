@@ -6,5 +6,9 @@
   "ccWhatExportJourneyCountryGuernsey": "Guernsey",
   "ccWhatExportJourneyCountryIsleOfMan": "Isle of Man",
   "ccWhatExportJourneyCountryJersey": "Jersey",
+  "ccWhatExportJourneyPointOfDestination": "Point of destination",
+  "ccWhatExportJourneyPointOfDestinationHint": "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment.",
+  "psPointOfDestination": "Point of destination",
+  "psPointOfDestinationHint": "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment.",
   "psWhatExportDestination": "What is the export destination?"
 }

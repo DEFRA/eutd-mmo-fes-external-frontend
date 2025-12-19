@@ -127,6 +127,37 @@ const WhatExportJourney = () => {
                 "aria-describedby": "exportDestination-hint",
               }}
             />
+            <div
+              className={classNames("govuk-form-group govuk-!-width-two-thirds", {
+                "govuk-form-group--error": errors?.pointOfDestination,
+              })}
+            >
+              <label className="govuk-label" htmlFor="pointOfDestination">
+                {t("ccWhatExportJourneyPointOfDestination", { ns: "whatExportJourney" })}
+              </label>
+              <div id="pointOfDestination-hint" className="govuk-hint">
+                {t("ccWhatExportJourneyPointOfDestinationHint", { ns: "whatExportJourney" })}
+              </div>
+              {errors?.pointOfDestination && (
+                <p id="pointOfDestination-error" className="govuk-error-message">
+                  <span className="govuk-visually-hidden">Error:</span>{" "}
+                  {t(errors?.pointOfDestination?.message, { ns: "errorsText" })}
+                </p>
+              )}
+              <input
+                className={classNames("govuk-input", {
+                  "govuk-input--error": errors?.pointOfDestination,
+                })}
+                id="pointOfDestination"
+                name="pointOfDestination"
+                type="text"
+                defaultValue={formData.pointOfDestination ?? exportLocation?.pointOfDestination ?? ""}
+                aria-describedby={classNames({
+                  "pointOfDestination-hint": true,
+                  "pointOfDestination-error": errors?.pointOfDestination,
+                })}
+              />
+            </div>
             <ButtonGroup />
             <input type="hidden" name="landingsEntryOption" defaultValue={landingsEntryOption} />
             <input type="hidden" name="nextUri" defaultValue={nextUri} />

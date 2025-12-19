@@ -162,7 +162,7 @@ describe("Add consignment details: save consignment details", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").should("be.visible").click({ force: true });
     cy.url().should("include", "/forbidden");
   });
 

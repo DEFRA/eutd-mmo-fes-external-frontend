@@ -2,6 +2,7 @@ import { type Session, type SessionData, redirect } from "@remix-run/node";
 import type { Params } from "@remix-run/react";
 import isNumber from "lodash/isNumber";
 import isEmpty from "lodash/isEmpty";
+import moment from "moment";
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import {
@@ -62,7 +63,13 @@ const saveActionBase: any = async (values: any, landings: IDirectLandings, isNum
       ? gearTypes.find((gType: IGearType) => gearType === `${gType.gearName} (${gType.gearCode})`)
       : undefined;
   const rfmo = isEmpty(values["rfmo"]) ? undefined : values["rfmo"];
-  const vessels: IVessel[] = !isEmpty(pln) ? await getVessels(pln.toString(), date) : [];
+
+  // FIO-10474: Decouple vessel validation from date validation (matches add-landings pattern)
+  // Use the provided date if valid, otherwise use today's date for vessel lookup
+  // This prevents invalid date errors from causing spurious vessel errors
+  const isDateValid = isValidDate(date, ["YYYY-M-D", "YYYY-MM-DD"]);
+  const dateForVesselLookup = isDateValid ? date : moment().format("YYYY-MM-DD");
+  const vessels: IVessel[] = !isEmpty(pln) ? await getVessels(pln.toString(), dateForVesselLookup) : [];
   const selectedVessel: IVessel | undefined = vessels.find((_: IVessel) => _.pln === pln);
   const previousVessel: IVessel | undefined = {};
   let exclusiveEconomicZones: ICountry[] = [];
@@ -101,7 +108,7 @@ const saveActionBase: any = async (values: any, landings: IDirectLandings, isNum
   return {
     selectedVessel: selectedVessel ?? previousVessel,
     startDate,
-    date: isValidDate(date, ["YYYY-M-D", "YYYY-MM-DD"]) ? date : "",
+    date: isDateValid ? date : "",
     updatedWeights,
     gearCategory,
     gearType,

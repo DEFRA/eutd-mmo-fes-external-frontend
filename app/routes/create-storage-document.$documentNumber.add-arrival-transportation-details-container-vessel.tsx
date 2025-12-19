@@ -61,7 +61,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     journey: transport.journey,
     vesselName,
     flagState,
-    containerNumbers: containerNumbers.length > 0 ? containerNumbers : undefined,
+    containerNumbers,
     freightBillNumber,
     departureCountry: form.get("departureCountry") as string,
     departurePort,

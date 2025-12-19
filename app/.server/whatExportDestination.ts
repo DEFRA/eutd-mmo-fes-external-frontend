@@ -59,13 +59,34 @@ export const WhatExportDestinationAction = async (request: Request, params: Para
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
   const exportedTo = form.get("exportedTo");
+  const pointOfDestination = form.get("pointOfDestination") as string;
   const nextUri = form.get("nextUri") as string;
   const country: ICountry | undefined = countries.find((i: ICountry) => i.officialCountryName === exportedTo);
   const requestBody = {
-    ...{ exportedTo: country },
+    ...{ exportedTo: country, pointOfDestination },
+    exportDestination: exportedTo ?? "",
   };
 
+  const response = await postExportLocation(bearerToken, documentNumber, requestBody);
+  const errors: IError[] = response.errors ?? [];
+  const unauthorised = response.unauthorised;
+
+  if (unauthorised) {
+    return redirect("/forbidden");
+  }
+
   if (form.get("_action") === "saveAsDraft") {
+    // if there are validation errors, redirect to dashboard without saving or showing errors
+    if (errors.length > 0) {
+      return redirect(
+        route(
+          journey === "processingStatement"
+            ? "/create-processing-statement/processing-statements"
+            : "/create-storage-document/storage-documents"
+        )
+      );
+    }
+    // if data is valid, save as draft and redirect to dashboard
     await postDraftExportLocation(bearerToken, documentNumber, requestBody);
     return redirect(
       route(
@@ -76,14 +97,7 @@ export const WhatExportDestinationAction = async (request: Request, params: Para
     );
   }
 
-  const response = await postExportLocation(bearerToken, documentNumber, requestBody);
-  const errors: IError[] = response.errors ?? [];
-  const unauthorised = response.unauthorised;
-
-  if (unauthorised) {
-    return redirect("/forbidden");
-  }
-
+  // for "saveAndContinue" action, show validation errors if any
   if (errors.length > 0) {
     const values = Object.fromEntries(form);
     return apiCallFailed(errors, values);

@@ -129,15 +129,6 @@ const DoYouHaveAdditionalTransportTypes = () => {
               ))}
             </tbody>
           </table>
-          <div className="govuk-warning-text">
-            <span className="govuk-warning-text__icon" aria-hidden="true">
-              !
-            </span>
-            <strong className="govuk-warning-text__text">
-              <span className="govuk-visually-hidden">Warning</span>
-              {t("primaryTransportDetailsWarning", { ns: "transportation" })}
-            </strong>
-          </div>
           <br />
           <SecureForm method="post" className="govuk-form-group" csrf={csrf}>
             <div className={!isEmpty(errors) ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>

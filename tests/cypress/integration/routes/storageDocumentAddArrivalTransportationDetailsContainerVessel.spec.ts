@@ -17,6 +17,26 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     cy.get("[data-testid=save-and-continue]").click();
   });
 
+  it("should render error summary when action returns validation errors", () => {
+    // Use a test case that will cause the action to return validation errors
+    const errorTestParams: ITestParams = { testCaseId: TestCaseId.ContainerVesselTransportSaveEmpty };
+    cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...errorTestParams } });
+
+    // Fill other fields but leave the vessel name empty so the action returns validation errors
+    cy.get("#flagState").type("Greece", { force: true });
+    //cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get("#freightBillNumber").type("AA1234567", { force: true });
+    cy.get("#departureCountry").invoke("val", "France");
+    cy.get("#departurePort").type("Port of Calais", { force: true });
+
+    // Trigger the form submission which should produce validation errors
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("form").submit();
+
+    // The page should show the error summary rendered by the component
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+  });
+
   describe("AddArrivalContainerVesselTransportAllowed scenarios", () => {
     const testParams: ITestParams = { testCaseId: TestCaseId.AddArrivalContainerVesselTransportAllowed };
 

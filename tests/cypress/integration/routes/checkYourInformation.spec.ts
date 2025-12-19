@@ -92,6 +92,26 @@ describe("Check Your Information (Summary) page: UI", () => {
     cy.get('[data-testid="change-0-eez-1"]').should("have.attr", "href").and("include", "#eez-1");
   });
 
+  it("should render EEZ field after High Seas area and before RFMO", () => {
+    cy.get(".govuk-summary-list__key").then(($keys) => {
+      const keyTexts = $keys.toArray().map((el) => el.textContent?.trim());
+
+      // Find indices of the fields
+      const highSeasIndex = keyTexts.findIndex((text) => text?.includes("High seas area"));
+      const eezIndex = keyTexts.findIndex((text) => text?.includes("Exclusive economic zone"));
+      const rfmoIndex = keyTexts.findIndex((text) => text?.includes("RFMO"));
+
+      // Verify High Seas exists and comes before EEZ
+      expect(highSeasIndex, "High seas area should exist").to.be.greaterThan(-1);
+      expect(eezIndex, "EEZ should exist").to.be.greaterThan(-1);
+      expect(eezIndex, "EEZ should come after High seas area").to.be.greaterThan(highSeasIndex);
+
+      // Verify RFMO exists and comes after EEZ
+      expect(rfmoIndex, "RFMO should exist").to.be.greaterThan(-1);
+      expect(rfmoIndex, "RFMO should come after EEZ").to.be.greaterThan(eezIndex);
+    });
+  });
+
   describe("Welsh translations", () => {
     it("should render translated CMR field when set for transport", () => {
       cy.get('a[hreflang="cy"][lang="cy"]').click();
@@ -645,7 +665,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(8) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(9) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-additional-transport-documents-truck/1")
       .then((elem: JQuery<HTMLElement>) => {
@@ -662,7 +682,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(9) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(10) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-additional-transport-documents-truck/1")
       .then((elem: JQuery<HTMLElement>) => {
@@ -771,5 +791,69 @@ describe("Check Your Information (Summary) page: Manual Landing when JavaScript 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
     cy.get("[data-testid=create-cc-button]").click();
     cy.url().should("include", "catch-certificate-created");
+  });
+});
+
+describe("Check Your Information: Point of Destination", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationWithPointOfDestination,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render Point of destination field underneath Destination country", () => {
+    // Verify Destination country is present
+    cy.contains("dt.govuk-summary-list__key", "Destination country")
+      .should("be.visible")
+      .next("dd")
+      .should("have.text", "France");
+
+    // Verify Point of destination appears after Destination country
+    cy.contains("dt.govuk-summary-list__key", "Destination country")
+      .parent()
+      .next("div.govuk-summary-list__row")
+      .find("dt.govuk-summary-list__key")
+      .should("have.text", "Point of destination");
+  });
+
+  it("should display the Point of destination value", () => {
+    cy.contains("dt.govuk-summary-list__key", "Point of destination")
+      .next("dd.govuk-summary-list__value")
+      .should("have.text", "Calais Port");
+  });
+
+  it("should have a Change link for Point of destination", () => {
+    cy.contains("dt.govuk-summary-list__key", "Point of destination")
+      .parent()
+      .find("dd.govuk-summary-list__actions")
+      .find("a")
+      .should("contain", "Change")
+      .and("have.attr", "href");
+  });
+
+  it("should navigate to what-export-journey page when Change link is clicked", () => {
+    cy.contains("dt.govuk-summary-list__key", "Point of destination")
+      .parent()
+      .find("dd.govuk-summary-list__actions a")
+      .should("have.attr", "href")
+      .and("include", "/what-export-journey");
+  });
+
+  it("should include nextUri parameter in Change link to return to check-your-information", () => {
+    cy.contains("dt.govuk-summary-list__key", "Point of destination")
+      .parent()
+      .find("dd.govuk-summary-list__actions a")
+      .should("have.attr", "href")
+      .and("include", "nextUri=")
+      .and("include", "check-your-information");
+  });
+
+  it("should include anchor for Point of destination field in Change link", () => {
+    cy.contains("dt.govuk-summary-list__key", "Point of destination")
+      .parent()
+      .find("dd.govuk-summary-list__actions a")
+      .should("have.attr", "href")
+      .and("include", "#pointOfDestination");
   });
 });

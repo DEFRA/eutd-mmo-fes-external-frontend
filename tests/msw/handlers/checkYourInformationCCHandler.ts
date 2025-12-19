@@ -52,6 +52,7 @@ import ccNoExporter from "@/fixtures/ccSummary/ccNoExporter.json";
 import ccManualLandingTruckContainerNumber from "@/fixtures/ccSummary/ccManualLandingTruckContainerNumber.json";
 import ccManualLandingTrainContainerNumber from "@/fixtures/ccSummary/ccManualLandingTrainContainerNumber.json";
 import ccManualLandingTrainContainerNumberNull from "@/fixtures/ccSummary/ccManualLandingTrainContainerNumberNull.json";
+import ccWithPointOfDestination from "@/fixtures/ccSummary/ccWithPointOfDestination.json";
 import countries from "@/fixtures/whatExportJourneyApi/countries.json";
 import whoseWatersSuccess from "@/fixtures/whoseWatersApi/whoseWatersSuccess.json";
 import species from "@/fixtures/referenceDataApi/species.json";
@@ -173,6 +174,11 @@ const checkYourInformationCCHandler: ITestHandler = {
   [TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumberNull]: () => [
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccManualLandingTrainContainerNumberNull))),
+  ],
+  [TestCaseId.CCCheckYourInformationWithPointOfDestination]: () => [
+    rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccWithPointOfDestination))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
   ],
   [TestCaseId.CCCheckYourInformationVesselNotFound]: () => [
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),

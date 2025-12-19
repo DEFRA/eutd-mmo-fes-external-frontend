@@ -26,7 +26,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       const textinputs = textObjects.get();
       const hints = hintObjects.get();
       expect(textinputs).to.have.length(6);
-      expect(labels).to.have.length(9);
+      expect(labels).to.have.length(10);
       expect(labels).to.deep.eq([
         "Truck nationality",
         "Registration number",
@@ -34,6 +34,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
         "Country of departure",
         "Where the consignment departs from",
         "Place of unloading",
+        "Departure date",
         "Day",
         "Month",
         "Year",
@@ -214,7 +215,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("form").submit();
     cy.wait(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select a valid truck nationality$/).should("be.visible");
+    cy.contains("a", /^Select a truck nationality from the list$/).should("be.visible");
   });
 
   it("should display error when country of departure is empty", () => {

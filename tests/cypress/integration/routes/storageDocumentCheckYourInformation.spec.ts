@@ -26,6 +26,7 @@ describe("SD: check-your-information page", () => {
     cy.contains("dt", "Storage facility address");
     cy.contains("dt", "Transport type");
     cy.contains("dt", "Consignment destination");
+    cy.contains("dt", "Point of destination");
   });
 
   it("should contain the required data", () => {
@@ -37,6 +38,7 @@ describe("SD: check-your-information page", () => {
     cy.contains("dd", "dover");
     cy.contains("dd", "43");
     cy.contains("dd", "10");
+    cy.contains("dd", "Calais port");
   });
 
   it("should contain change links with href", () => {
@@ -267,5 +269,181 @@ describe("SD: check-your-information page - container numbers for train departur
       .find("a")
       .contains("Change")
       .should("have.attr", "href");
+  });
+});
+
+describe("SD: check-your-information page - Point of destination display", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformation,
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+  });
+
+  it("should display Point of destination label", () => {
+    cy.contains("dt", "Point of destination").should("be.visible");
+  });
+
+  it("should display Point of destination value", () => {
+    cy.contains("dd", "Calais port").should("be.visible");
+  });
+
+  it("should have change link for Point of destination", () => {
+    cy.contains("dt", "Point of destination")
+      .parent()
+      .find("a")
+      .contains("Change")
+      .should("be.visible")
+      .should("have.attr", "href")
+      .and("include", "/add-transportation-details-");
+  });
+
+  it("should have correct anchor in change link URL for Point of destination", () => {
+    cy.contains("dt", "Point of destination")
+      .parent()
+      .find("a")
+      .contains("Change")
+      .should("have.attr", "href")
+      .and("include", "#pointOfDestination");
+  });
+});
+
+describe("SD: Point of destination - Edit from check-your-information", () => {
+  describe("Truck transport - Point of destination edit flow", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDCheckYourInformationTruckEdit,
+      };
+      cy.visit(sdPageUrl, { qs: { ...testParams } });
+    });
+
+    it("should navigate to truck transport page when clicking point of destination change link", () => {
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+
+      cy.url().should("include", "/add-transportation-details-truck");
+      cy.url().should("include", "#pointOfDestination");
+    });
+
+    it("should pre-populate point of destination field with existing value", () => {
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+
+      cy.get("#pointOfDestination").should("have.value", "Brussels Central Station");
+    });
+  });
+
+  describe("Plane transport - Point of destination edit flow", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDCheckYourInformationPlaneEdit,
+      };
+      cy.visit(sdPageUrl, { qs: { ...testParams } });
+    });
+
+    it("should navigate to plane transport page when clicking point of destination change link", () => {
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+
+      cy.url().should("include", "/add-transportation-details-plane");
+      cy.url().should("include", "#pointOfDestination");
+    });
+
+    it("should pre-populate point of destination field with existing value", () => {
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+
+      cy.get("#pointOfDestination").should("have.value", "Amsterdam Schiphol Airport");
+    });
+  });
+
+  describe("Train transport - Point of destination edit flow", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDCheckYourInformationTrainEdit,
+      };
+      cy.visit(sdPageUrl, { qs: { ...testParams } });
+    });
+
+    it("should navigate to train transport page when clicking point of destination change link", () => {
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+
+      cy.url().should("include", "/add-transportation-details-train");
+      cy.url().should("include", "#pointOfDestination");
+    });
+
+    it("should pre-populate point of destination field with existing value", () => {
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+
+      cy.get("#pointOfDestination").should("have.value", "Paris Gare du Nord");
+    });
+  });
+
+  describe("Container Vessel transport - Point of destination edit flow", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDCheckYourInformationContainerVesselEdit,
+      };
+      cy.visit(sdPageUrl, { qs: { ...testParams } });
+    });
+
+    it("should navigate to container vessel transport page when clicking point of destination change link", () => {
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+
+      cy.url().should("include", "/add-transportation-details-container-vessel");
+      cy.url().should("include", "#pointOfDestination");
+    });
+
+    it("should pre-populate point of destination field with existing value", () => {
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+
+      cy.get("#pointOfDestination").should("have.value", "Rotterdam Port");
+    });
+  });
+});
+
+describe("SD: Point of destination - Field visibility on all transport types", () => {
+  const documentNumber = "GBR-2022-SD-F71D98A30";
+
+  it("should display Point of destination field on truck transport page", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportAllowed,
+    };
+    cy.visit(`create-storage-document/${documentNumber}/add-transportation-details-truck`, { qs: { ...testParams } });
+
+    cy.contains("label", "Point of destination").should("be.visible");
+    cy.get("#pointOfDestination").should("be.visible");
+    cy.contains(
+      ".govuk-hint",
+      "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment."
+    ).should("be.visible");
+  });
+
+  it("should display Point of destination field on plane transport page", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportAllowed,
+    };
+    cy.visit(`create-storage-document/${documentNumber}/add-transportation-details-plane`, { qs: { ...testParams } });
+
+    cy.contains("label", "Point of destination").should("be.visible");
+    cy.get("#pointOfDestination").should("be.visible");
+  });
+
+  it("should display Point of destination field on train transport page", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportAllowed,
+    };
+    cy.visit(`create-storage-document/${documentNumber}/add-transportation-details-train`, { qs: { ...testParams } });
+
+    cy.contains("label", "Point of destination").should("be.visible");
+    cy.get("#pointOfDestination").should("be.visible");
+  });
+
+  it("should display Point of destination field on container vessel transport page", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportAllowed,
+    };
+    cy.visit(`create-storage-document/${documentNumber}/add-transportation-details-container-vessel`, {
+      qs: { ...testParams },
+    });
+
+    cy.contains("label", "Point of destination").should("be.visible");
+    cy.get("#pointOfDestination").should("be.visible");
   });
 });

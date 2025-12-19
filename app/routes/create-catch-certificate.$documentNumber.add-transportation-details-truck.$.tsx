@@ -4,7 +4,7 @@ import { Main, BackToProgressLink, ErrorSummary, SecureForm } from "~/components
 import { ButtonGroup, CatchCertificateTransportationDetails } from "~/composite-components";
 import { useLoaderData, useActionData } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
-import type { ITransport, ErrorResponse } from "~/types";
+import type { ITransport, ErrorResponse, ICountry } from "~/types";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import { displayErrorMessages, getMeta, scrollToId, TransportType } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
@@ -31,10 +31,17 @@ const TruckTransportDetailsPage = () => {
     csrf,
     id,
     displayOptionalSuffix,
+    countries,
   } = useLoaderData<
-    ITransport & { documentNumber: string; nextUri: string; displayOptionalSuffix: boolean; csrf: string }
+    ITransport & {
+      documentNumber: string;
+      nextUri: string;
+      displayOptionalSuffix: boolean;
+      csrf: string;
+      countries: ICountry[];
+    }
   >();
-  const actionData = useActionData() ?? {};
+  const actionData = useActionData<any>() ?? {};
   const { errors = {} } = actionData;
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
@@ -68,6 +75,7 @@ const TruckTransportDetailsPage = () => {
                 !isEmpty(errors) ? actionData.containerIdentificationNumber : containerIdentificationNumber
               }
               displayOptionalSuffix={displayOptionalSuffix}
+              countries={countries}
             />
             <ButtonGroup />
             <input type="hidden" name="nextUri" value={nextUri} />

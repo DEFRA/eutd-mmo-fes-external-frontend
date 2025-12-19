@@ -13,8 +13,9 @@ import {
   extractContainerNumbers,
   getCountries,
   handleFormEmptyStringValue,
+  getStorageDocument,
 } from "~/.server";
-import type { ErrorResponse, ICountry, ITransport, Journey } from "~/types";
+import type { ErrorResponse, ICountry, ITransport, IUnauthorised, Journey, StorageDocument } from "~/types";
 import { scrollToId, TransportType } from "~/helpers";
 import { useScrollOnPageLoad } from "~/hooks";
 import { AddTransportationDetailsComponent } from "~/composite-components";
@@ -28,10 +29,12 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const { documentNumber } = params;
   const journey: Journey = "storageNotes";
   const transport: ITransport = await getTransportDetails(bearerToken, journey, documentNumber);
+  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
   const form = await request.formData();
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
   const vesselName = form.get("vesselName") as string;
+  const pointOfDestination = form.get("pointOfDestination") as string;
   const flagState = form.get("flagState") as string;
   const departurePlace = form.get("departurePlace") as string;
   const consignmentDestination = form.get("exportedTo") as string;
@@ -49,6 +52,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const payload: ITransport = {
     vehicle: transport.vehicle,
     vesselName,
+    pointOfDestination,
     flagState,
     departurePlace,
     containerNumbers,
@@ -60,6 +64,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     exportDate: calculateExportDate(form),
     exportDateTo: moment().startOf("day").add(1, "day").toISOString(),
     exportedTo,
+    facilityArrivalDate: "facilityArrivalDate" in storageDocument ? storageDocument.facilityArrivalDate : undefined,
   };
 
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);

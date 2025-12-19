@@ -35,7 +35,7 @@ describe("Add Transportation Details: Container Vessel", () => {
     cy.contains("label", "Vessel name");
     cy.contains("label", "Flag state");
     cy.contains("label", "Container identification number or numbers");
-    cy.contains("label", "Place export leaves the UK");
+    cy.contains("label", "Place export leaves the departure country");
     cy.contains("label", "Freight bill number (optional)");
     cy.get("div .govuk-hint").contains("For example, Hull.");
     cy.get("div .govuk-hint").contains("For example, BD51SMR");

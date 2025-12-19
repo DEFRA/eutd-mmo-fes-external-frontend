@@ -29,7 +29,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       expect(labels).to.deep.eq([
         "Flight number",
         "Container identification number or numbers",
-        "Place export leaves the UK",
+        "Place export leaves the departure country",
         "Freight bill number (optional)",
       ]);
       expect(hints).to.deep.eq(["For example, Hull.", "For example, BD51SMR"]);

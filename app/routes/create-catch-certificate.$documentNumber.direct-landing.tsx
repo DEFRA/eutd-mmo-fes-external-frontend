@@ -408,7 +408,6 @@ const DirectLanding = () => {
                 errorMessageText={getVesselErrorText()}
                 defaultValue={values?.vessels ?? vesselSelected ?? ""}
                 labelText={t("ccAddLandingVesselNameLabel")}
-                labelClassName="govuk-!-font-weight-bold"
                 hintText={t("ccAddLandingVesselNameHint", { ns: "directLandings" })}
                 options={getOptions()}
                 optionsId="vessel-name-option"

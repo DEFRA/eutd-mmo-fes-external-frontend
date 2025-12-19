@@ -60,3 +60,4 @@ export { ProductArrivalCommodityDetails } from "./productArrivalCommodityDetails
 export { EntryDocumentGuidanceText } from "./entryDocumentGuidanceText";
 export { CatchCertificateDetails } from "./catchCertificateDetails";
 export { LandingHelpDetails } from "./landingHelpDetails";
+export { TruckNationalityField } from "./truckNationalityField";

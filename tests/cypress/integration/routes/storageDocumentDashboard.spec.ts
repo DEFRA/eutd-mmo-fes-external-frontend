@@ -93,7 +93,7 @@ describe("Storage Document Dashboard page: rendering", () => {
   it("should display Storage To Non Manipulation Msg", () => {
     cy.get("div.govuk-\\!-display-inline-block.govuk-\\!-padding-left-2.govuk-phase-banner__text").should(
       "contain.text",
-      "From January 2026, Storage Documents will change to Non-manipulation Documents"
+      "From January 2026, Storage Documents will change to Non-manipulation Documents."
     );
   });
 });

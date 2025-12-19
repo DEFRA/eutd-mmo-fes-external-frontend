@@ -26,15 +26,16 @@ describe("Add Transportation Details Plane: Allowed", () => {
       const hints = hintObjects.get();
 
       expect(textinputs).to.have.length(7);
-      expect(labels).to.have.length(10);
+      expect(labels).to.have.length(11);
       expect(labels).to.deep.eq([
-        "Air waybill number",
+        "Air waybill number (optional)",
         "Flight number",
         "Container identification number",
         "Freight bill number (optional)",
         "Country of departure",
         "Where the consignment departs from",
         "Place of unloading",
+        "Departure date",
         "Day",
         "Month",
         "Year",

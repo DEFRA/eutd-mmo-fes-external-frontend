@@ -41,6 +41,7 @@
   "psSummaryPageConfirmationExportHealthCertificate": "Export health certificate",
   "psSummaryPageConfirmationIssueDate": "Issue date",
   "psSummaryPageConfirmationDestinationCountry": "Destination country",
+  "psPointOfDestination": "Point of destination",
   "psSummaryPageProcessingPlantName": "Processing plant name",
   "psSummaryPageProcessedProducts": "Processed products",
   "psSummaryPageProductDescription": "Product description",

@@ -6,7 +6,7 @@ import capitalize from "lodash/capitalize";
 import { useTranslation } from "react-i18next";
 import type { ICountry, IErrorsTransformed, ITransport } from "~/types";
 import { DateFieldWithPicker } from "./dateFieldWithPicker";
-import { ContainerIdentificationNumber } from "~/composite-components";
+import { ContainerIdentificationNumber, TruckNationalityField } from "~/composite-components";
 import { AutocompleteFormField, Title } from "~/components";
 import {
   getContainerErrorClassName,
@@ -69,7 +69,13 @@ export const TransportationModeDetails = ({
   containerIdentificationNumber,
   displayOptionalSuffix,
   errors,
-}: ITransport & { legendTitle?: string; errors: IErrorsTransformed; displayOptionalSuffix?: boolean }) => {
+  countries,
+}: ITransport & {
+  legendTitle?: string;
+  errors: IErrorsTransformed;
+  displayOptionalSuffix?: boolean;
+  countries: ICountry[];
+}) => {
   const { t } = useTranslation("transportation");
 
   return (
@@ -164,24 +170,12 @@ export const TransportationModeDetails = ({
         />
       )}
       {vehicle === "truck" && (
-        <FormInput
-          containerClassName="govuk-form-group  govuk-!-width-one-half"
-          label={t("addTransportationDetailsTruckNationality")}
-          name="nationalityOfVehicle"
-          type="text"
-          inputClassName={classNames("govuk-input", {
-            "govuk-input--error": errors?.nationalityOfVehicle,
-          })}
-          inputProps={{
-            defaultValue: nationalityOfVehicle,
-            id: "nationalityOfVehicle",
-          }}
-          errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.nationalityOfVehicle)) }}
-          staticErrorMessage={t(errors?.nationalityOfVehicle?.message, { ns: "errorsText" })}
-          errorPosition={ErrorPosition.AFTER_LABEL}
-          containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.nationalityOfVehicle))}
-          hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-          hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+        <TruckNationalityField
+          nationalityOfVehicle={nationalityOfVehicle}
+          errors={errors}
+          countries={countries}
+          t={t}
+          minCharsBeforeSearch={2}
         />
       )}
       {vehicle === "truck" && (
@@ -197,6 +191,13 @@ export const TransportationModeDetails = ({
             inputProps={{
               defaultValue: registrationNumber,
               id: "registrationNumber",
+              "aria-describedby": "hint-registrationNumber",
+            }}
+            hint={{
+              id: "hint-registrationNumber",
+              position: "above",
+              text: t("addTransportationDetailsRegistrationNumberHint"),
+              className: "govuk-hint govuk-!-margin-bottom-0",
             }}
             errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.registrationNumber)) }}
             staticErrorMessage={t(errors?.registrationNumber?.message, { ns: "errorsText" })}
@@ -235,7 +236,7 @@ export const TransportationModeDetails = ({
       )}
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
-        label={t("addTransportationDetailsPlaceExportLeavesUK")}
+        label={t("addTransportationDetailsPlaceExportLeavesDepartureCountry")}
         name="departurePlace"
         type="text"
         inputClassName={classNames("govuk-input", {
@@ -311,6 +312,7 @@ export const TransportationDetails = ({
   airwayBillNumber,
   railwayBillNumber,
   departurePlace,
+  pointOfDestination,
   exportedTo,
   freightBillNumber,
   errors,
@@ -359,7 +361,32 @@ export const TransportationDetails = ({
           }),
           "aria-describedby": "exportedTo-hint",
         }}
-        labelClassName="govuk-!-font-weight-bold"
+      />
+      <FormInput
+        containerClassName="govuk-form-group govuk-!-width-one-half"
+        label={t("addPointOfDestination")}
+        name="pointOfDestination"
+        type="text"
+        inputClassName={classNames("govuk-input", {
+          "govuk-input--error": errors?.pointOfDestination,
+        })}
+        inputProps={{
+          defaultValue: pointOfDestination ?? "",
+          id: "pointOfDestination",
+          "aria-describedby": "hint-pointOfDestination",
+        }}
+        hint={{
+          id: "hint-pointOfDestination",
+          position: "above",
+          text: t("addPointOfDestinationHint"),
+          className: "govuk-hint govuk-!-margin-bottom-0",
+        }}
+        errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.pointOfDestination)) }}
+        staticErrorMessage={t(errors?.pointOfDestination?.message, { ns: "errorsText" })}
+        errorPosition={ErrorPosition.AFTER_LABEL}
+        containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.pointOfDestination))}
+        hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+        hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
       />
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
@@ -386,7 +413,6 @@ export const TransportationDetails = ({
         containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.departurePlace))}
         hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
         hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-        labelClassName="govuk-!-font-weight-bold"
       />
       {(vehicle === "train" || vehicle === "truck") && (
         <ContainerIdentificationNumber
@@ -406,7 +432,7 @@ export const TransportationDetails = ({
         label={`addTransportationDetailsExportDate${capitalize(vehicle)}`}
         hintText="addTransportationArrivalDetailsDepartureDateHint"
         translationNs="transportation"
-        labelStyle="bold"
+        labelStyle="normal"
         hideAddDateButton={true}
       />
       {vehicle === "plane" && (
@@ -432,7 +458,6 @@ export const TransportationDetails = ({
             text: t("addTransportationDetailsAirwayBillNumberHint"),
             className: "govuk-hint govuk-!-margin-bottom-0",
           }}
-          labelClassName="govuk-!-font-weight-bold"
           staticErrorMessage={t(errors?.airwayBillNumber?.message, { ns: "errorsText" })}
           errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.airwayBillNumber)) }}
           containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.airwayBillNumber))}
@@ -445,7 +470,6 @@ export const TransportationDetails = ({
         <>
           <FormInput
             label={t("addTransportationDetailsVesselNameText")}
-            labelClassName="govuk-!-font-weight-bold"
             containerClassName="govuk-form-group govuk-!-width-one-half"
             type="text"
             hint={{
@@ -488,7 +512,6 @@ export const TransportationDetails = ({
               text: t("addTransportationDetailsFlagStateNumberHint"),
               className: "govuk-hint govuk-!-margin-bottom-0",
             }}
-            labelClassName="govuk-!-font-weight-bold"
             errorPosition={ErrorPosition.AFTER_LABEL}
             staticErrorMessage={t(errors?.flagState?.message, { ns: "errorsText" })}
             containerClassNameError={getFlagStateContainerClassName(errors)}
@@ -502,7 +525,6 @@ export const TransportationDetails = ({
           label={t("addTransportationDetailsFlightnumber")}
           containerClassName="govuk-form-group govuk-!-width-one-half"
           name="flightNumber"
-          labelClassName="govuk-!-font-weight-bold"
           type="text"
           inputClassName={classNames("govuk-input", {
             "govuk-input--error": errors?.flightNumber,
@@ -545,7 +567,7 @@ export const TransportationDetails = ({
             id="nationalityOfVehicle"
             name="nationalityOfVehicle"
             labelText={t("addTransportationDetailsTruckNationality")}
-            labelClassName="govuk-label govuk-!-font-weight-bold"
+            labelClassName="govuk-label"
             hintText={t("addTransportationArrivalDetailsTruckNationalityHint")}
             defaultValue={nationalityOfVehicle ?? ""}
             minCharsBeforeSearch={2}
@@ -579,7 +601,6 @@ export const TransportationDetails = ({
             hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
             hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
             containerClassName="govuk-form-group  govuk-!-width-one-half"
-            labelClassName="govuk-!-font-weight-bold"
             hint={{
               id: "hint-registrationNumber",
               position: "above",
@@ -607,7 +628,6 @@ export const TransportationDetails = ({
           errorPosition={ErrorPosition.AFTER_LABEL}
           hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
           containerClassName="govuk-form-group govuk-!-width-one-half"
-          labelClassName="govuk-!-font-weight-bold"
           hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
           hint={{
             id: "hint-railBillNumber",
@@ -646,7 +666,6 @@ export const TransportationDetails = ({
         containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.freightBillNumber))}
         hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
         hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-        labelClassName="govuk-!-font-weight-bold"
       />
     </fieldset>
   );

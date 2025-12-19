@@ -104,8 +104,8 @@ describe("Storage document departure summary: arrival tab", () => {
           cy.get("tr").should("have.length", 1);
           cy.get("th").should("have.length", 4);
           cy.get("th").eq(0).contains("Product");
-          cy.get("th").eq(1).contains("Net weight on arrival (optional)");
-          cy.get("th").eq(2).contains("Fishery product weight (optional)");
+          cy.get("th").eq(1).contains("Net weight on arrival");
+          cy.get("th").eq(2).contains("Fishery product weight");
           cy.get("th").eq(3).should("exist");
         });
         cy.get("tbody").within(() => {
@@ -150,8 +150,8 @@ describe("Storage document departure summary: arrival tab", () => {
           cy.get("tr").should("have.length", 1);
           cy.get("th").should("have.length", 4);
           cy.get("th").eq(0).contains("Product");
-          cy.get("th").eq(1).contains("Net weight on arrival (optional)");
-          cy.get("th").eq(2).contains("Fishery product weight (optional)");
+          cy.get("th").eq(1).contains("Net weight on arrival");
+          cy.get("th").eq(2).contains("Fishery product weight");
           cy.get("th").eq(3).should("exist");
         });
         cy.get("tbody").within(() => {
@@ -182,8 +182,8 @@ describe("Storage document departure summary: arrival tab", () => {
           cy.get("tr").should("have.length", 1);
           cy.get("th").should("have.length", 4);
           cy.get("th").eq(0).contains("Product");
-          cy.get("th").eq(1).contains("Net weight on arrival (optional)");
-          cy.get("th").eq(2).contains("Fishery product weight (optional)");
+          cy.get("th").eq(1).contains("Net weight on arrival");
+          cy.get("th").eq(2).contains("Fishery product weight");
           cy.get("th").eq(3).should("exist");
         });
         cy.get("tbody").within(() => {
@@ -219,8 +219,8 @@ describe("Storage document departure summary: arrival tab with one catch", () =>
           cy.get("tr").should("have.length", 1);
           cy.get("th").should("have.length", 4);
           cy.get("th").eq(0).contains("Product");
-          cy.get("th").eq(1).contains("Net weight on arrival (optional)");
-          cy.get("th").eq(2).contains("Fishery product weight (optional)");
+          cy.get("th").eq(1).contains("Net weight on arrival");
+          cy.get("th").eq(2).contains("Fishery product weight");
           cy.get("th").eq(3).should("exist");
         });
         cy.get("tbody").within(() => {
@@ -258,8 +258,8 @@ describe("Storage document departure summary: departure tab", () => {
           cy.get("tr").should("have.length", 1);
           cy.get("th").should("have.length", 4);
           cy.get("th").eq(0).contains("Product");
-          cy.get("th").eq(1).contains("Net weight on departure (optional)");
-          cy.get("th").eq(2).contains("Fishery product weight (optional)");
+          cy.get("th").eq(1).contains("Net weight on departure");
+          cy.get("th").eq(2).contains("Fishery product weight");
           cy.get("th").eq(3).should("exist");
         });
         cy.get("tbody").within(() => {
@@ -378,8 +378,8 @@ describe("Storage document departure summary: tab with empty departure and load 
           cy.get("tr").should("have.length", 1);
           cy.get("th").should("have.length", 4);
           cy.get("th").eq(0).contains("Product");
-          cy.get("th").eq(1).contains("Net weight on departure (optional)");
-          cy.get("th").eq(2).contains("Fishery product weight (optional)");
+          cy.get("th").eq(1).contains("Net weight on departure");
+          cy.get("th").eq(2).contains("Fishery product weight");
           cy.get("th").eq(3).should("exist");
         });
         cy.get("tbody").within(() => {

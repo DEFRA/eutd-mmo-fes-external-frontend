@@ -104,3 +104,41 @@ describe("Add Transportation Details Container Vessel:  403 on page load", () =>
     cy.url().should("include", "/forbidden");
   });
 });
+
+describe("Container Vessel Point of Destination - Validation Scenarios", () => {
+  it("should display error when point of destination is empty", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportPointOfDestinationRequired,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Enter the point of destination$/).should("be.visible");
+  });
+
+  it("should display error when point of destination exceeds 100 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportPointOfDestinationMaxLength,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    const longString = new Array(102).join("a");
+    cy.get("#pointOfDestination").type(longString, { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Point of destination must not exceed 100 characters$/).should("be.visible");
+  });
+
+  it("should display error when point of destination contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportPointOfDestinationInvalidCharacters,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("#pointOfDestination").type("Invalid@#$%", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
+    ).should("be.visible");
+  });
+});

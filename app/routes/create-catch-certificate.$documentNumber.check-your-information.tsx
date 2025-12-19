@@ -476,6 +476,21 @@ const TransportationDetailsSummary = ({
             t
           )}
         />
+        <SummaryListRow
+          keyText={t("commonTransportSummaryPointOfDestination", { ns: "checkYourInformation" })}
+          value={exportLocation.pointOfDestination}
+          actions={generateActions(
+            isLocked,
+            `${route("/create-catch-certificate/:documentNumber/what-export-journey", {
+              documentNumber,
+            })}?nextUri=${route("/create-catch-certificate/:documentNumber/check-your-information", {
+              documentNumber,
+            })}#pointOfDestination`,
+            "commonTransportSummaryPointOfDestination",
+            "checkYourInformation",
+            t
+          )}
+        />
         <br />
         {Array.isArray(transportations) && transportations.length > 0
           ? transportations.map((transport: ITransport) =>

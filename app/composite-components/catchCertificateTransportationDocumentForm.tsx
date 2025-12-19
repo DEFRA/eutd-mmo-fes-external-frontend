@@ -34,7 +34,6 @@ export const CatchCertificateTransportationDocumentForm = ({
             ? t(`addAdditionalTransportDocuments${translationsKey}DocumentNameOptional`)
             : t(`addAdditionalTransportDocuments${translationsKey}DocumentName`)
         }
-        labelClassName="govuk-!-font-weight-bold"
         name={`documentName${Number(index) + 1}`}
         type="text"
         inputClassName={classNames("govuk-input", {
@@ -65,7 +64,6 @@ export const CatchCertificateTransportationDocumentForm = ({
             ? t(`addAdditionalTransportDocuments${translationsKey}DocumentReferenceOptional`)
             : t(`addAdditionalTransportDocuments${translationsKey}DocumentReference`)
         }
-        labelClassName="govuk-!-font-weight-bold"
         name={`documentReference${Number(index) + 1}`}
         type="text"
         inputClassName={classNames("govuk-input", {

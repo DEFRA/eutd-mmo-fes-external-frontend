@@ -20,6 +20,10 @@ import storageDocumenOneFacility from "@/fixtures/storageDocumentApi/storageDocu
 import sdProgressIncomplete from "@/fixtures/progressApi/sdIncomplete.json";
 import sdCreated from "@/fixtures/documentsApi/sdCreated.json";
 import sdDocuments from "@/fixtures/dashboardApi/sdDocument.json";
+import truckTransport from "@/fixtures/transportDetailsApi/truck.json";
+import planeTransport from "@/fixtures/transportDetailsApi/plane.json";
+import trainTransport from "@/fixtures/transportDetailsApi/train.json";
+import containerVesselTransport from "@/fixtures/transportDetailsApi/containerVessel.json";
 
 const documentNumber = "GBR-2023-SD-DE53D6E7C";
 
@@ -97,6 +101,30 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
+  ],
+  [TestCaseId.SDCheckYourInformationTruckEdit]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumenOneFacility))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(truckTransport))),
+    rest.post(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
+  ],
+  [TestCaseId.SDCheckYourInformationPlaneEdit]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentNoFacilities))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(planeTransport))),
+    rest.post(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
+  ],
+  [TestCaseId.SDCheckYourInformationTrainEdit]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentOneCatches))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(trainTransport))),
+    rest.post(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
+  ],
+  [TestCaseId.SDCheckYourInformationContainerVesselEdit]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(containerVesselTransport))),
+    rest.post(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
   ],
 };
 

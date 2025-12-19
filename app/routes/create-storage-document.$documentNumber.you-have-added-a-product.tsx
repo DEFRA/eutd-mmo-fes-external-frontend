@@ -197,7 +197,7 @@ const YouHaveAddedAProduct = () => {
           <SecureForm method="post" csrf={csrf}>
             <div id="radioButtons" className={`govuk-form-group`}>
               <fieldset className="govuk-fieldset">
-                <legend className="govuk-fieldset__legend govuk-fieldset__legend--s">
+                <legend className="govuk-fieldset__legend govuk-fieldset__legend--l">
                   <h2 className="govuk-fieldset__heading">
                     {t("sdYouAddedProductNeedToAddProductTitle", { ns: "sdYouHaveAddedAProduct" })}
                   </h2>

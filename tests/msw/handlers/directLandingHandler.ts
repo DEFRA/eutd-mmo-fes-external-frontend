@@ -30,6 +30,8 @@ import directLandingsWithErrors from "@/fixtures/directLanding/directLandingsWit
 import directLandingsMissingFields from "@/fixtures/directLanding/directLandingsMissingFields.json";
 import directLandingValidationErrors from "@/fixtures/directLanding/directLandingValidationErrors.json";
 import directLandingEEZValidationErrors from "@/fixtures/directLanding/directLandingEEZValidationErrors.json";
+import directLandingWithInvalidDates from "@/fixtures/directLanding/directLandingWithInvalidDates.json";
+import directLandingInvalidDatesNoVesselError from "@/fixtures/directLanding/directLandingInvalidDatesNoVesselError.json";
 import species from "@/fixtures/referenceDataApi/species.json";
 import favourites from "@/fixtures/whatAreYouExportingApi/favourites.json";
 import commodityCode from "@/fixtures/whatAreYouExportingApi/commodityCode.json";
@@ -210,6 +212,25 @@ const directLandingHandler: ITestHandler = {
     rest.get(mockSearchVesselName, (req, res, ctx) => res(ctx.json(getVessels))),
     rest.post(VALIDATE_DIRECT_LANDINGS_URL, (req, res, ctx) =>
       res(ctx.status(400), ctx.json(directLandingEEZValidationErrors))
+    ),
+    rest.get(CONSERVATION_URL, (req, res, ctx) => res(ctx.json(empty))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json(favourites))),
+    rest.get(SPECIES_STATE_LOOK_UP, (req, res, ctx) => res(ctx.json(speciesStateLookup))),
+    rest.get(COMMODITY_CODE_LOOK_UP, (req, res, ctx) => res(ctx.json(commodityCode))),
+    rest.post(ADD_SPECIES_URL, (req, res, ctx) => res(ctx.json(addOrUpdateResponse))),
+    rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
+    rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
+    rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+  ],
+  [TestCaseId.DirectLandingInvalidDatesNoVesselError]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingType))),
+    rest.get(GET_DIRECT_LANDINGS_URL, (req, res, ctx) => res(ctx.json(directLandingWithInvalidDates))),
+    rest.get(mockSearchVesselName, (req, res, ctx) => res(ctx.json(getVessels))),
+    rest.post(VALIDATE_DIRECT_LANDINGS_URL, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(directLandingInvalidDatesNoVesselError))
     ),
     rest.get(CONSERVATION_URL, (req, res, ctx) => res(ctx.json(empty))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),

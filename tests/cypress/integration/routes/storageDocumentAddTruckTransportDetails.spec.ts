@@ -16,7 +16,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get(".govuk-heading-xl").contains("Truck departing the UK");
     cy.get("#exportDate").should("be.visible");
     cy.get("form").should(($form) => {
-      expect($form.find("input[type='text']")).to.have.lengthOf(6);
+      expect($form.find("input[type='text']")).to.have.lengthOf(7);
       const labelObjects = $form.find("label").map((i, el) => Cypress.$(el).text());
       const textObjects = $form.find("input[type='text']").map((i, el) => Cypress.$(el).val());
       const hintObjects = $form.find("div.govuk-hint").map((i, el) => Cypress.$(el).text());
@@ -24,12 +24,14 @@ describe("Add Transportation Details Truck: Allowed", () => {
       const textinputs = textObjects.get();
       const hints = hintObjects.get();
 
-      expect(textinputs).to.have.length(6);
-      expect(labels).to.have.length(9);
+      expect(textinputs).to.have.length(7);
+      expect(labels).to.have.length(11);
       expect(labels).to.deep.eq([
         "Consignment destination",
+        "Point of destination",
         "Where the truck departs from the UK",
         "Container identification number (optional)",
+        "Date the truck departs the UK",
         "Day",
         "Month",
         "Year",
@@ -39,6 +41,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       ]);
       expect(hints).to.deep.eq([
         "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document.",
+        "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment.",
         "For example, Dover port, the Eurotunnel, or the place the truck departs from the UK",
         "Enter container or trailer identification number. For example, ABCD1234567.",
         "For example, 25 07 2025",
@@ -97,9 +100,8 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select a valid truck nationality$/).should("be.visible");
+    cy.contains("a", /^Select a truck nationality from the list$/).should("be.visible");
     cy.contains("a", /^Enter the registration number$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
   });
@@ -110,7 +112,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
-    cy.get("#nationalityOfVehicle").type("Truck", { force: true });
+    cy.get("#nationalityOfVehicle").type("France", { force: true });
     cy.get("#registrationNumber").type("Registration", { force: true });
     cy.get("#departurePlace").type("Hull", { force: true });
     cy.get("[data-testid=save-draft-button").click({ force: true });
@@ -122,7 +124,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       testCaseId: TestCaseId.TruckTransportSave,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("#nationalityOfVehicle").type("Truck", { force: true });
+    cy.get("#nationalityOfVehicle").type("France", { force: true });
     cy.get("#registrationNumber").type("Registration", { force: true });
     cy.get("#departurePlace").type("Hull", { force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
@@ -213,6 +215,44 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
   });
 });
 
+describe("Truck Point of Destination - Validation Scenarios", () => {
+  it("should display error when point of destination is empty", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportPointOfDestinationRequired,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Enter the point of destination$/).should("be.visible");
+  });
+
+  it("should display error when point of destination exceeds 100 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportPointOfDestinationMaxLength,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    const longString = new Array(102).join("a");
+    cy.get("#pointOfDestination").type(longString, { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Point of destination must not exceed 100 characters$/).should("be.visible");
+  });
+
+  it("should display error when point of destination contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportPointOfDestinationInvalidCharacters,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get("#pointOfDestination").type("Invalid@#$%", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
+    ).should("be.visible");
+  });
+});
+
 describe("AutocompleteFormField: minCharsBeforeSearch validation", () => {
   const testParams: ITestParams = {
     testCaseId: TestCaseId.TruckTransportAllowed,
@@ -233,17 +273,13 @@ describe("AutocompleteFormField: minCharsBeforeSearch validation", () => {
 
     describe("Truck nationality field with minCharsBeforeSearch=2", () => {
       it("should not show dropdown when typing 1 character in nationality field", () => {
-        cy.get("#nationalityOfVehicle").focus({ force: true }).type("U", { force: true });
+        cy.get("#nationalityOfVehicle").focus().type("U", { force: true });
         cy.wait(500);
         cy.get(".autocomplete__menu").should("not.exist");
       });
 
       it("should show dropdown when typing 2 or more characters in nationality field", () => {
-        cy.get("#nationalityOfVehicle")
-          .parent()
-          .find('input[type="text"]')
-          .focus({ force: true })
-          .type("Un", { force: true });
+        cy.get("#nationalityOfVehicle").parent().find('input[type="text"]').focus().type("Un", { force: true });
         cy.wait(1000);
         cy.get('[class*="autocomplete"]').should("be.visible");
         cy.get('[role="listbox"]').should("be.visible");
