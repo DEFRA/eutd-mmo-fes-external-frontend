@@ -2,8 +2,6 @@
   "sdYouAddedProductProductStoredTitle": "Product stored",
   "commonAddYourReferenceForThisExport": "Add your reference for this export",
   "commonAddYourReferenceOptionalText": "Your reference (optional)",
-  "storageDocumentInformationNotice": "This information will not appear on the non-manipulation document.",
-  "storageAddYourReferenceHint": "This reference is for your own records. For example, you might use an internal tracking number, project code, or any label that makes sense for your organisation.",
   "commonAddYourReferenceHint": "Enter a reference to help you identify this {{journeyText}} within the service. This reference is for your own use and will not appear on the final certificate. For example, you could choose a reference number from your organisation.",
   "commonSaveAsDraftButtonSaveAsDraftText": "Save as draft",
   "commonContinueButtonSaveAndContinueButton": "Save and continue",
@@ -128,7 +126,7 @@
   "commonAddAnotherButtonText": "Add another",
   "commonAddTripDetailsWarningContent": "From 10 January 2026 the start date, catch area and gear type fields will be mandatory under new EU regulations.",
   "getHelpHeading": "Get help with your application",
-  "getHelpBody": "If you have a {{documentName}} unique reference number, have it with you when you call.",
+  "getHelpBody": "If you have a {{documentNumber}} unique reference number, have it with you when you call.",
   "getHelpPhone": "Phone: 0330 159 1989",
   "getHelpHours": "Monday to Friday, 9am to 5pm (except public holidays)",
   "getHelpReadGuidance": "Read the guidance on",
@@ -152,6 +150,5 @@
   "euIntegrationFailedMeansText2Start": "Your catch certificate is still valid and ready to use.",
   "euIntegrationFailedMeansText2Link": "You can view or download it from your dashboard.",
   "euIntegrationIfYouNeedToSpeak": "If you need to speak to someone",
-  "euIntegrationContactHelpline": "Contact the helpline if you're exporting soon and need more information.",
-  "commonNoCatchesAdded": "No catches added for this product"
+  "euIntegrationContactHelpline": "Contact the helpline if you're exporting soon and need more information."
 }

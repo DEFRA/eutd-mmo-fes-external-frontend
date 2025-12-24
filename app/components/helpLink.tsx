@@ -6,16 +6,16 @@ import type { ProgressLoaderProps } from "~/types";
 export const HelpLink = () => {
   const { t } = useTranslation();
 
-  const { documentName } = useLoaderData<ProgressLoaderProps>();
+  const { documentNumber } = useLoaderData<ProgressLoaderProps>();
 
   return (
-    <div className="govuk-!-margin-bottom-6 govuk-!-margin-top-8" data-testid="help-section">
+    <div className="govuk-!-margin-bottom-6 govuk-!-margin-top-8 govuk-!-margin-bottom-6" data-testid="help-section">
       <hr className="horizontal-line" />
       <h2 className="govuk-heading-l" data-test-id="get-help-heading">
         {t("getHelpHeading")}
       </h2>
       <p className="govuk-body" data-test-id="get-help-body">
-        {t("getHelpBody", { documentName })}
+        {t("getHelpBody", { documentNumber })}
       </p>
       <p className="govuk-body">
         <span data-test-id="get-help-phone">{t("getHelpPhone")}</span>

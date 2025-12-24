@@ -2,8 +2,6 @@
   "sdYouAddedProductProductStoredTitle": "Cynnyrch wedi’i storio",
   "commonAddYourReferenceForThisExport": "Ychwanegwch eich cyfeirnod allforio",
   "commonAddYourReferenceOptionalText": "Eich cyfeirnod (dewisol)",
-  "storageDocumentInformationNotice": "Fydd yr wybodaeth yma ddim yn ymddangos ar y ddogfen dim triniaeth.",
-  "storageAddYourReferenceHint": "Cyfeiriad ar gyfer eich cofnodion chi’ch hun yw hwn. Er enghraifft, fe allech chi ddefnyddio rhif olrhain mewnol, cod prosiect, neu unrhyw label sy'n gwneud synnwyr i'ch sefydliad chi.",
   "commonAddYourReferenceHint": "Rhowch gyfeirnod i’ch helpu i adnabod {{journeyText}} o fewn y gwasanaeth. At eich defnydd chi mae’r cyfeirnod hwn. Ni fydd yn ymddangos ar y dystysgrif derfynol. Er enghraifft, gallech ddewis cyfeirnod eich sefydliad.",
   "commonSaveAsDraftButtonSaveAsDraftText": "Cadw fel drafft",
   "commonContinueButtonSaveAndContinueButton": "Cadw a bwrw ymlaen",
@@ -128,7 +126,7 @@
   "commonAddAnotherButtonText": "Ychwanegu un arall",
   "commonAddTripDetailsWarningContent": "O 10 Ionawr 2026 ymlaen, bydd meysydd dyddiad dechrau, ardal y ddalfa a math o gêr yn orfodol o dan reoliadau newydd yr UE.",
   "getHelpHeading": "Cael help gyda'ch cais",
-  "getHelpBody": "Os oes gennych rif cyfeirnod unigryw {{documentName}}, gofalwch fod hwnnw gennych pan fyddwch chi'n ffonio.",
+  "getHelpBody": "Os oes gennych rif cyfeirnod unigryw {{documentNumber}}, gofalwch fod hwnnw gennych pan fyddwch chi'n ffonio.",
   "getHelpPhone": "Ffôn: 0330 159 1989",
   "getHelpHours": "Dydd Llun i ddydd Gwener, 9am i 5pm (ac eithrio gwyliau'r banc)",
   "callChargesText": "Darganfod am gostau galwadau",
@@ -152,6 +150,5 @@
   "euIntegrationFailedMeansText2Start": "Mae eich tystysgrif dalfa yn dal yn ddilys ac yn barod i'w defnyddio.",
   "euIntegrationFailedMeansText2Link": "Gallwch ei gweld neu ei lawrlwytho o'ch dangosfwrdd.",
   "euIntegrationIfYouNeedToSpeak": "Os oes angen ichi siarad â rhywun",
-  "euIntegrationContactHelpline": "Cysylltwch â'r llinell gymorth os ydych chi'n allforio'n fuan ac angen mwy o wybodaeth.",
-  "commonNoCatchesAdded": "Dim dalfeydd wedi'u hychwanegu ar gyfer y cynnyrch hwn"
+  "euIntegrationContactHelpline": "Cysylltwch â'r llinell gymorth os ydych chi'n allforio'n fuan ac angen rhagor o wybodaeth."
 }
