@@ -22,6 +22,11 @@ trigger:
       - 'hotfix/*'
       - 'feature/*'
       - 'epic/*'
+pr:
+  branches:
+    include:
+      - "main"
+      - "develop"
 
 resources:
   repositories:
@@ -39,4 +44,5 @@ extends:
     runCypressTests: true
     deployFromFeature: ${{ parameters.deployFromFeature }}
     deployToSecondaryRegion: ${{ parameters.deployToSecondaryRegion }}
+
     skipPRE1: ${{ parameters.skipPRE1 }}
