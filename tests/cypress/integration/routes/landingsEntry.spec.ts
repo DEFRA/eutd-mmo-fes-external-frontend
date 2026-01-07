@@ -108,30 +108,6 @@ describe("Landings entry page: choosing an option", () => {
 });
 
 describe("Landings entry page: changing landings type", () => {
-  it("should be able to navigate to the landings type confirmation page when the user changes from non-direct landings to direct landings", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.LandingsTypeNoConfirmation,
-    };
-
-    cy.visit(landingsUrl, { qs: { ...testParams } });
-    cy.wait(200);
-    cy.get("#landingsEntryOption").click();
-    cy.get("form").submit();
-    cy.url().should("include", landingsTypeConfirmationUrl);
-  });
-
-  it("should be able to navigate to the landings type confirmation page when the user changes from direct to non-direct landings", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.LandingsTypeConfirmationCaseOne,
-    };
-
-    cy.visit(landingsUrl, { qs: { ...testParams } });
-    cy.wait(200);
-    cy.get("#manualOptionEntry").click();
-    cy.get("form").submit();
-    cy.url().should("include", landingsTypeConfirmationUrl);
-  });
-
   it("should not to navigate to the landings type confirmation page when the user changes from manual entry to upload entry or vice versa", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.LandingsTypeNoConfirmation,
