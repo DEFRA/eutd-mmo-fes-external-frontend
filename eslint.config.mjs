@@ -17,7 +17,15 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([
-  globalIgnores(["**/node_modues", "**/build", "**/build-v2", "**/public"]),
+  globalIgnores([
+    "**/node_modues",
+    "**/build",
+    "**/build-v2",
+    "**/public",
+    "**/routes.d.ts",
+    "**/instrumented",
+    "**/.react-router/**",
+  ]),
   {
     files: ["**/*.{ts,tsx,mts}"],
   },

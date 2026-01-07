@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction } from "react-router";
 import { DocumentCreatedComponent } from "~/composite-components";
 import { documentCreatedLoader } from "~/.server";
 

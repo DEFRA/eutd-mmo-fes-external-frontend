@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button, BUTTON_TYPE, Tab, TabGroup } from "@capgeminiuk/dcx-react-library";
-import { type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
-import { useActionData, useLoaderData } from "@remix-run/react";
+import { redirect, useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
+
 import { Main, Title, BackToProgressLink, SecureForm } from "~/components";
 import { route } from "routes-gen";
 import { Trans, useTranslation } from "react-i18next";
@@ -23,8 +23,7 @@ import {
   updateStorageDocumentCatchDepartureWeights,
   validateCSRFToken,
 } from "~/.server";
-import { getSessionFromRequest } from "~/sessions.server";
-import { json } from "~/communication.server";
+import { getSessionFromRequest, commitSession } from "~/sessions.server";
 
 type DepartureProductSummaryProps = {
   key: number;
@@ -43,7 +42,7 @@ type ConsignmentWeightTableFormProps = {
 
 export const ConsignmentWeightTableForm = ({ catches, transportType }: ConsignmentWeightTableFormProps) => {
   const { t } = useTranslation(["sdDepartureProductSummary", "common"]);
-  const actionData = useActionData() as { errors?: Record<string, any> } | undefined;
+  const actionData = useActionData();
   const errors = actionData?.errors ?? {};
   const isArrival = transportType === "arrival";
   const sdDepartureProductSummaryNetWeightArrival = "sdDepartureProductSummaryNetWeightArrival";
@@ -244,15 +243,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const nextUri = getFromSearchParams(new URL(request.url), "nextUri");
 
-  return json(
-    {
+  return new Response(
+    JSON.stringify({
       documentNumber,
       catches: storageDocument.catches,
       transport: storageDocument.transport,
       csrf,
       nextUri,
-    },
-    session
+    }),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Set-Cookie": await commitSession(session),
+      },
+    }
   );
 };
 
@@ -330,7 +334,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 const DepartureProductSummary = () => {
   const { documentNumber, catches, csrf, displayOptionalSuffix, transport, nextUri } =
     useLoaderData<DepartureProductSummaryProps>();
-  const actionData = useActionData() as { errors?: Record<string, unknown> } | undefined;
+  const actionData = useActionData();
   const errors = actionData?.errors ?? {};
   const { t } = useTranslation(["sdDepartureProductSummary", "common"]);
   const tabRef = useRef<{ updateActiveTab: (id: string) => boolean } | null>();

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "@remix-run/react";
+import { Link } from "react-router-dom";
 import type { ILanguageToggleProps } from "~/types";
 
 export const LanguageToggle = ({ languages, locale, params }: ILanguageToggleProps) => {

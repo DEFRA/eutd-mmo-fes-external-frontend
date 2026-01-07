@@ -86,11 +86,13 @@ describe("SD: you-have-added-product page", () => {
       testCaseId: TestCaseId.SDYouHaveAddedAProduct,
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
-    // eslint-disable-next-line
+    cy.wait(500);
+    cy.get('[type="radio"]').first().should("exist");
+    cy.get('[type="radio"]').first().check({ force: true });
+    cy.get('[type="radio"]').first().should("be.checked");
     cy.wait(200);
-    cy.get('[type="radio"]').first().check();
     cy.contains("button", "Save and continue").click({ force: true });
-    cy.url().should("include", "/add-product-to-this-consignment");
+    cy.url({ timeout: 10000 }).should("include", "/add-product-to-this-consignment");
   });
 
   it("should allow continuing if the catch is valid", () => {

@@ -4,7 +4,7 @@ import {
   unstable_createMemoryUploadHandler,
   unstable_parseMultipartFormData,
 } from "@remix-run/node";
-import type { Params } from "@remix-run/react";
+import type { Params } from "react-router";
 import isEmpty from "lodash/isEmpty";
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";

@@ -1,4 +1,4 @@
-import { type Params } from "@remix-run/react";
+import { redirect, type Params } from "react-router";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import {
   createCSRFToken,
@@ -11,7 +11,6 @@ import {
 import { getDashboardName } from "~/helpers";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import type { UserAttributePayload } from "~/types";
-import { redirect } from "@remix-run/node";
 
 export const PrivacyNoticeLoader = async (request: Request, params: Params): Promise<Response> => {
   const { journey } = params;

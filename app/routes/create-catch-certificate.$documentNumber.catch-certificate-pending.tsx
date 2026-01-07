@@ -1,9 +1,9 @@
 import * as React from "react";
 import { route } from "routes-gen";
 import { Main } from "~/components";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { type LoaderFunction } from "@remix-run/node";
+import { type LoaderFunction } from "react-router";
 import { useScrollOnPageLoad } from "~/hooks";
 import { CatchCertificatePendingLoader } from "~/models";
 

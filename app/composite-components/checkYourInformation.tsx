@@ -132,6 +132,12 @@ export const StorageDocumentTransportDisplay = ({
       backLinkId: "pointOfDestination",
     },
     {
+      label: t("sdCheckYourInformationDepartureDate", { ns: "sdCheckYourInformation" }),
+      value: transport.exportDate,
+      hasChangeLink: true,
+      backLinkId: "exportDate-day",
+    },
+    {
       label: t(`sdCheckYourInformationVehicleDepartureFrom${capitalize(transport.vehicle)}`, {
         ns: "sdCheckYourInformation",
       }),
@@ -140,7 +146,7 @@ export const StorageDocumentTransportDisplay = ({
       backLinkId: "departurePlace",
     },
     {
-      label: t(`sdCheckYourInformationVehicleDepartureFrom${capitalize(transport.vehicle)}`, {
+      label: t(`sdCheckYourInformationVehicleDepartureNewFrom${capitalize(transport.vehicle)}`, {
         ns: "sdCheckYourInformation",
       }),
       value: transport.departurePort,
@@ -152,6 +158,16 @@ export const StorageDocumentTransportDisplay = ({
       value: transport.containerNumber,
       hasChangeLink: true,
     },
+
+    {
+      label: t("sdCheckYourInformationDepartureDate", { ns: "sdCheckYourInformation" }),
+      value: transport.departureDate,
+      hasChangeLink: true,
+      backLinkId: "departureDate-day",
+    },
+  ];
+
+  const sharedFreightBillNumberDepartureCountry = [
     {
       label: t("sdCheckYourInformationContainer", { ns: "sdCheckYourInformation" }),
       value: transport.containerNumbers?.join(", "),
@@ -159,23 +175,11 @@ export const StorageDocumentTransportDisplay = ({
       backLinkId: "containerNumbers.0",
     },
     {
-      label: t("sdCheckYourInformationDepartureDate", { ns: "sdCheckYourInformation" }),
-      value: transport.departureDate,
-      hasChangeLink: true,
-      backLinkId: "departureDate-day",
-    },
-    {
-      label: t("sdCheckYourInformationDepartureDate", { ns: "sdCheckYourInformation" }),
-      value: transport.exportDate,
-      hasChangeLink: true,
-      backLinkId: "exportDate-day",
-    },
-  ];
-
-  const sharedFreightBillNumberDepartureCountry = [
-    {
       label: t("sdCheckYourInformationFreightNumber", { ns: "sdCheckYourInformation" }),
-      value: transport.freightBillNumber,
+      value:
+        typeof transport.freightBillNumber === "string" && transport.freightBillNumber.trim() !== ""
+          ? transport.freightBillNumber
+          : t("sdNotProvided", { ns: "sdCheckYourInformation" }),
       hasChangeLink: true,
       backLinkId: "freightBillNumber",
     },
@@ -207,7 +211,10 @@ export const StorageDocumentTransportDisplay = ({
     planeArrival: [
       {
         label: t("sdCheckYourInformationAirWaybillNumber", { ns: "sdCheckYourInformation" }),
-        value: transport.airwayBillNumber,
+        value:
+          typeof transport.airwayBillNumber === "string" && transport.airwayBillNumber.trim() !== ""
+            ? transport.airwayBillNumber
+            : t("sdNotProvided", { ns: "sdCheckYourInformation" }),
         hasChangeLink: true,
         backLinkId: "airwayBillNumber",
       },
@@ -266,7 +273,10 @@ export const StorageDocumentTransportDisplay = ({
       ...commonFields,
       {
         label: t("sdCheckYourInformationAirWaybillNumber", { ns: "sdCheckYourInformation" }),
-        value: transport.airwayBillNumber,
+        value:
+          typeof transport.airwayBillNumber === "string" && transport.airwayBillNumber.trim() !== ""
+            ? transport.airwayBillNumber
+            : t("sdNotProvided", { ns: "sdCheckYourInformation" }),
         hasChangeLink: true,
         backLinkId: "airwayBillNumber",
       },
@@ -529,13 +539,18 @@ export const CheckYourInformationProductLayout = ({
             t={t}
           />
         )}
-        {Array.isArray(ctch.supportingDocuments) && ctch.supportingDocuments.length > 0 && (
-          <CheckYourInformationRow
-            label={t("sdSupportingDocuments", { ns: "sdCheckYourInformation" })}
-            value={ctch.supportingDocuments.join(", ")}
-            t={t}
-          />
-        )}
+        {(() => {
+          const docs = Array.isArray(ctch.supportingDocuments)
+            ? ctch.supportingDocuments.filter((d) => d && d.trim() !== "")
+            : [];
+          return (
+            <CheckYourInformationRow
+              label={t("sdSupportingDocuments", { ns: "sdCheckYourInformation" })}
+              value={docs.length > 0 ? docs.join(", ") : t("sdNotProvided", { ns: "sdCheckYourInformation" })}
+              t={t}
+            />
+          );
+        })()}
         {ctch.netWeightProductArrival && (
           <CheckYourInformationRow
             label={t("sdNetWeightArrival", { ns: "sdCheckYourInformation" })}

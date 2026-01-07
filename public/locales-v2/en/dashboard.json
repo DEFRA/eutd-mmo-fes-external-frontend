@@ -5,6 +5,7 @@
   "catchCertificateDashboardCreateANewJourney": "Create a new {{key}}",
   "storageNotesDashboardCreateANewJourney": "Create a new {{key}}",
   "ccStatusDraft": "Draft",
+  "ccStatusCompleted": "Completed",
   "ccStatusPending": "Pending",
   "ccStatusFailed": "Failed",
   "ccStatusLocked": "Locked",

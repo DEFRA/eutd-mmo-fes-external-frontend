@@ -2,9 +2,9 @@ import * as React from "react";
 import { Main, SecureForm } from "~/components";
 import { PrivacyNotice } from "~/composite-components";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
-import { type ActionFunction, type LoaderFunction } from "@remix-run/node";
-import { useActionData, useLoaderData } from "@remix-run/react";
-import { useHydrated } from "remix-utils/use-hydrated";
+import { useActionData, useLoaderData, type ActionFunction, type LoaderFunction } from "react-router";
+
+import { useIsHydrated } from "~/hooks";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import isEmpty from "lodash/isEmpty";
@@ -17,7 +17,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
 const Privacy = () => {
   const actionData = useActionData() ?? {};
-  const isHydrated = useHydrated();
+  const isHydrated = useIsHydrated();
   const csrf = useLoaderData<{ csrf: string }>().csrf;
 
   useEffect(() => {

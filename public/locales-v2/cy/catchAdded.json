@@ -17,5 +17,7 @@
   "psFilterResetButtonLabel": "Ailosod",
   "catchDetailsHeading": "Rydych chi wedi ychwanegu {{totalDocuments}} o ddogfennau ar gyfer",
   "catchDetailsHeadingMultiple": "Rydych chi wedi ychwanegu {{totalDocuments}} o ddogfennau ar gyfer",
-  "editProductInformationMessage": "I olygu'r wybodaeth am y cynnyrch, pwyswch newid."
+  "editProductInformationMessage": "I olygu gwybodaeth cynnyrch, pwyswch newid.",
+  "productsTableHeading": "Cynhyrchion wedi'u prosesu",
+  "numberOfCatches": "Nifer y dalfeydd"
 }

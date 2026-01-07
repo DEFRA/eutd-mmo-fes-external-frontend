@@ -61,6 +61,7 @@ export interface IStorageDocumentProgressSteps extends IBaseProgressSteps {
 
 export interface ProgressLoaderProps {
   documentNumber: string;
+  documentName?: DocumentName;
   progress?: IStorageDocumentProgressSteps | ICatchCertificateProgressSteps | IProcessingStatementProgressSteps;
   requiredSections: number;
   completedSections: number;

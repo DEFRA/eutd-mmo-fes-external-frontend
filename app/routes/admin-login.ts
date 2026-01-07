@@ -1,4 +1,4 @@
-import { redirect, type LoaderFunction } from "@remix-run/node";
+import { redirect, type LoaderFunction } from "react-router";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { getEnv } from "~/env.server";
 import { getClient } from "~/.server";

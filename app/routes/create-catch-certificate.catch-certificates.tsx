@@ -1,7 +1,7 @@
 import * as React from "react";
 import isEmpty from "lodash/isEmpty";
-import { Link, PrefetchPageLinks, useLoaderData, useSearchParams } from "@remix-run/react";
-import { type MetaFunction, type ActionFunction, type LoaderFunction, redirect } from "@remix-run/node";
+import { Link, PrefetchPageLinks, useLoaderData, useSearchParams } from "react-router-dom";
+import { type MetaFunction, type ActionFunction, type LoaderFunction, redirect } from "react-router";
 import type { DashboardLinks, IDashboardData, IGetAllDocumentsData } from "~/types";
 import { Main } from "~/components";
 import { getBearerTokenForRequest, createDocument, getDashboardLoader } from "~/.server";
@@ -22,7 +22,7 @@ import classNames from "classnames/bind";
 import { useScrollOnPageLoad } from "~/hooks";
 import { useMemo } from "react";
 
-export const meta: MetaFunction = ({ data }) => getDashboardMeta(data);
+export const meta: MetaFunction = (args) => getDashboardMeta(args);
 
 export const loader: LoaderFunction = async ({ request }) =>
   getDashboardLoader(request, "catchCertificate", "dashboardTitle");
@@ -231,7 +231,7 @@ const CatchCertificates = () => {
   const [searchParams] = useSearchParams();
 
   // Memoize expensive operations
-  const refinedDocuments = useMemo(() => populateRecordLinks(documents as IGetAllDocumentsData, t), [documents, t]);
+  const refinedDocuments = useMemo(() => populateRecordLinks(documents, t), [documents, t]);
 
   const navigationLinks = useMemo(() => populateNavigationLinks(t, searchParams), [t, searchParams]);
 

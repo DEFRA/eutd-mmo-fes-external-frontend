@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 import { getBearerTokenForRequest, getTransportById, updateTransportDocuments, validateCSRFToken } from "~/.server";
 import type { ITransport, IError, IErrorsTransformed, AdditionalDocumentsData } from "~/types";
 import { route } from "routes-gen";

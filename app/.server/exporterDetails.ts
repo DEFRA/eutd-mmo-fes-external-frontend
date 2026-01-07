@@ -1,6 +1,15 @@
 import jwt from "jsonwebtoken";
 import isEmpty from "lodash/isEmpty";
 import { getEnv } from "~/env.server";
+
+// Import cross-fetch for test mode (MSW v1.3.1 cannot intercept Node 18+ native fetch)
+/* istanbul ignore next */
+import crossFetch from "cross-fetch";
+
+// Use cross-fetch in test mode, native fetch otherwise
+/* istanbul ignore next */
+const fetchImpl = process.env.NODE_ENV === "test" ? crossFetch : fetch;
+
 import type {
   AddressDetails,
   ErrorResponse,
@@ -27,11 +36,10 @@ import {
 import { getIdmUserDetailsUrl, getIdmAddressDetailsUrl, getAddExporterDetailsUrl } from "~/urls.server";
 import { apiCallFailed, get, post } from "~/communication.server";
 import serverLogger from "~/logger.server";
-import { redirect } from "@remix-run/node";
+import { redirect, type Params } from "react-router";
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
-import type { Params } from "@remix-run/react";
 import { getErrorMessage } from "~/helpers";
 import { loadIdmData } from "~/loadIdmData.server";
 
@@ -65,11 +73,11 @@ export const getExporterDetailsFromMongo = async (
 
 export const getUserDetails = async (bearerToken: string): Promise<IExporter> => {
   if (ENV.DISABLE_IDM) {
-    return await onGetIDMUserDetailsResponse(await fetch(`${ENV.STUB_URL}/dynamix/user-details`));
+    return await onGetIDMUserDetailsResponse(await fetchImpl(`${ENV.STUB_URL}/dynamix/user-details`));
   }
 
   const dynamicsToken = await getDynamicsToken();
-  const response: Response = await fetch(
+  const response: Response = await fetchImpl(
     getIdmUserDetailsUrl(jwt.decode(bearerToken)),
     getDynamicsHeader(dynamicsToken)
   );
@@ -92,7 +100,7 @@ export const getAccountDetailsFromClaims = (claims: any) => {
 
 export const getAddresses = async (bearerToken: string): Promise<IExporter> => {
   if (ENV.DISABLE_IDM) {
-    return await onGetIDMAddressDetailsResponse(await fetch(`${ENV.STUB_URL}/dynamix/addresses`));
+    return await onGetIDMAddressDetailsResponse(await fetchImpl(`${ENV.STUB_URL}/dynamix/addresses`));
   }
 
   const claims: any = jwt.decode(bearerToken);
@@ -101,7 +109,7 @@ export const getAddresses = async (bearerToken: string): Promise<IExporter> => {
   const { accountId } = getAccountDetailsFromClaims(claims);
 
   const dynamicsToken = await getDynamicsToken();
-  const response: Response = await fetch(
+  const response: Response = await fetchImpl(
     getIdmAddressDetailsUrl(contactId, accountId),
     getDynamicsHeader(dynamicsToken)
   );

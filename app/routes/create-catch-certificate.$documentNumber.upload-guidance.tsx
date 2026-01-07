@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "react-router-dom";
 import { Main, Title } from "~/components";
 import { route } from "routes-gen";
-import { type LoaderFunction } from "@remix-run/node";
+import { type LoaderFunction } from "react-router";
 import setApiMock from "tests/msw/helpers/setApiMock";
 
 export const loader: LoaderFunction = async ({ request, params }) => {

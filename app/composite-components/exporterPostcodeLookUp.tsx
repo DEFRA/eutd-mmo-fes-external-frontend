@@ -77,7 +77,6 @@ export const ExporterPostcodeLookUp = ({ errors, postcode, actionUri, csrf }: Ex
             //@ts-ignore
             value="navigateToManualAddress"
             className="govuk-button govuk-button--secondary"
-            data-testid="manualAddress"
           />
         </div>
       </div>

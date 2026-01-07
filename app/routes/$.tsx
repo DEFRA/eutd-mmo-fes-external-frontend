@@ -1,14 +1,13 @@
 import * as React from "react";
 import { route } from "routes-gen";
 import { Main } from "~/components";
-import { Link, useMatches } from "@remix-run/react";
+import { Link, useMatches } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useIdleTimerContext } from "react-idle-timer";
 
 const PageNotFound = () => {
   const { t } = useTranslation("pageNotFound");
   const [rootData] = useMatches();
-  const { headerTitleTo } = rootData?.data ?? {};
   const idleTimer = useIdleTimerContext();
   idleTimer.pause();
 
@@ -21,7 +20,10 @@ const PageNotFound = () => {
         {t("pageNotFound_second_line")}
         <p></p>
         {t("pageNotFound_3rd_line")}
-        <Link className=" govuk-link" to={headerTitleTo ?? route("/create-catch-certificate/catch-certificates")}>
+        <Link
+          className=" govuk-link"
+          to={rootData?.loaderData?.headerTitleTo ?? route("/create-catch-certificate/catch-certificates")}
+        >
           {t("pageNotFound_check_document_progress")}
         </Link>
         {". "}

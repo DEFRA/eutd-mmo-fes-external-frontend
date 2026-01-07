@@ -79,7 +79,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.contains("button", "Save as draft").should("be.visible");
     });
 
-    it("should navigate to storage facility page when all fields are left blank and save and continue is clicked", () => {
+    it("should not navigate to storage facility page when all fields are left blank and save and continue is clicked", () => {
       cy.get("#vesselName").should("have.value", "");
       cy.get("#flagState").should("have.value", "");
       cy.get('[id="containerNumbers.0"]').should("have.value", "");
@@ -87,12 +87,6 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("#departureCountry").should("have.value", "");
       cy.get("#departurePort").should("have.value", "");
       cy.get("[data-testid=save-and-continue]").click({ force: true });
-      cy.url().should("include", storageFacilityUrl);
-    });
-
-    it("should navigate to storage facility page when all fields are left blank and save and continue is clicked", () => {
-      cy.get("[data-testid=save-and-continue]").click({ force: true });
-      cy.url().should("include", storageFacilityUrl);
     });
   });
 

@@ -1,4 +1,4 @@
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import type { Journey } from "~/types";
 import type { reduxRequestParams } from "~/types/reduxRequestParam";

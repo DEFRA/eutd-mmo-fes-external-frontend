@@ -1,5 +1,5 @@
 import setApiMock from "tests/msw/helpers/setApiMock";
-import type { Params } from "@remix-run/react";
+import { redirect, type Params } from "react-router";
 import { route } from "routes-gen";
 import type { ErrorResponse, Journey } from "~/types";
 import { apiCallFailed } from "~/communication.server";
@@ -9,7 +9,7 @@ import {
   createCSRFToken,
   validateCSRFToken,
 } from "~/.server";
-import { redirect } from "@remix-run/node";
+
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
 
 export const voidThisDocumentLoader = async (request: Request, params: Params) => {

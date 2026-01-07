@@ -2,7 +2,7 @@ import * as React from "react";
 import type { ErrorResponse } from "~/types";
 import { CopyVoidDocumentComponent } from "~/composite-components";
 import { copyVoidConfirmationLoader, copyVoidConfirmationAction } from "~/.server";
-import { type LoaderFunction, type ActionFunction } from "@remix-run/node";
+import { type LoaderFunction, type ActionFunction } from "react-router";
 
 export const loader: LoaderFunction = async ({ request, params }) =>
   copyVoidConfirmationLoader(request, params, "processing statement");

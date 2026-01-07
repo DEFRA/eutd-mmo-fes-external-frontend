@@ -17,6 +17,8 @@ export function getJourneyHeader(journey: string, t: any) {
 export function getStatusClassName(status: any, isFailed: any) {
   if (isFailed) return "red";
 
+  if (status === "SUCCESS") return "green";
+
   if (status === "PENDING") return "blue";
 
   if (status === "LOCKED") return "yellow";
@@ -26,6 +28,8 @@ export function getStatusClassName(status: any, isFailed: any) {
 
 export function getStatusName(status: any, isFailed: any, t: any) {
   if (isFailed) return t("ccStatusFailed", { ns: "dashboard" });
+
+  if (status === "SUCCESS") return t("ccStatusCompleted", { ns: "dashboard" });
 
   if (status === "PENDING") return t("ccStatusPending", { ns: "dashboard" });
 

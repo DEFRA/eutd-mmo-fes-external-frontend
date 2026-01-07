@@ -80,9 +80,13 @@ describe("Add Transportation Documents Train", () => {
       testCaseId: TestCaseId.TrainTransportDocumentsAddAnotherDocument,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Verify previously entered values are displayed
+    cy.get("input[name=documentName1]").should("have.value", "Invoice");
+    cy.get("input[name=documentReference1]").should("have.value", "INV0001");
+
+    // Add another document
     cy.get("[data-testid=add-another-document-button]").click();
-    cy.get("input[name=documentName1]").type("Invoice 2");
-    cy.get("input[name=documentReference1]").type("INV0002");
 
     cy.get('a[hreflang="cy"][lang="cy"]').click();
     cy.get('label[for="documents.0.name"]').should("have.text", "Enw'r ddogfen drên (dewisol)");
@@ -153,5 +157,13 @@ describe("Add Transportation Documents Train", () => {
         "For example, INV00001",
       ]);
     });
+  });
+
+  it("should not display the Add another document button when 5 transport documents have been added", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportDocumentsRestrictAddAnotherDocument,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.contains("button", "Add another document").should("not.exist");
   });
 });

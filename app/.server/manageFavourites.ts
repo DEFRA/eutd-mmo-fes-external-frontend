@@ -6,7 +6,7 @@ import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import { getCodeFromLabel } from "~/helpers";
 import { apiCallFailed } from "~/communication.server";
 import { addProductFavourites, deleteProductFavourites, getAllProductFavourites } from "./favourites";
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 import isEmpty from "lodash/isEmpty";
 import type { CommodityCode, ErrorResponse, IError, Species } from "~/types";
 import { getCommodityCode, validateValues } from "./whatAreYouExporting";

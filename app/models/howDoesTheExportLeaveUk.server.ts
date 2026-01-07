@@ -1,5 +1,5 @@
-import { redirect } from "@remix-run/node";
-import type { Params } from "@remix-run/react";
+import { redirect, type Params } from "react-router";
+
 import i18next from "~/i18next.server";
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";

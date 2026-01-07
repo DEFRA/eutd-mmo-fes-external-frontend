@@ -22,7 +22,7 @@
   "ccAddLandingExportWeightFieldLabel": "Export Weight",
   "psAddHealthCertificateDateFieldHint": "For example, 31 03 1980",
   "ccAddLandingHelpSectionLinkText": "I cannot find the vessel",
-  "ccAddLandingHelpSectionContent": "If the vessel you need is not listed, select \"Vessel not listed – select if not available (N/A)\" from the dropdown.",
+  "ccAddLandingHelpSectionContent": "If the vessel you need is not listed, select \"Vessel not found - N/A\" from the dropdown.",
   "ccAddLandingHelpSectionContent2": "This option is for cases where the vessel is not in the system or cannot be found using the search.",
   "ccAddLandingTotalExportWeight": "Total export weight",
   "ccAddVesselFormVesselQueryPrompt": "Type at least 2 characters to load list",

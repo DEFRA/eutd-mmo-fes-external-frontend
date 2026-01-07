@@ -16,8 +16,8 @@ import {
 import { CHECK_COPY_URL, CONFIRM_COPY_URL, GET_CLIENT_IP_URL } from "~/urls.server";
 import { get, post, apiCallFailed } from "~/communication.server";
 import { route } from "routes-gen";
-import type { Params } from "@remix-run/react";
-import { redirect } from "@remix-run/node";
+import { redirect, type Params } from "react-router";
+
 import { getSessionFromRequest, commitSession } from "~/sessions.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { createCSRFToken, getBearerTokenForRequest, validateCSRFToken } from "~/.server";

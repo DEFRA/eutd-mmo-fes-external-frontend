@@ -5,7 +5,7 @@ import isEmpty from "lodash/isEmpty";
 import { Main, ErrorSummary, SecureForm } from "~/components";
 import { VoidCertificateConfirm } from "./voidCertificateConfirm";
 import { displayErrorMessages } from "~/helpers";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 
 type VoidThisDocumentProps = {
   actionData: any;
@@ -15,7 +15,7 @@ type VoidThisDocumentProps = {
 
 export const VoidthisDocumentComponent = ({ journey, actionData, backUrl }: VoidThisDocumentProps) => {
   const { t } = useTranslation(["common"]);
-  const { csrf } = useLoaderData() as { csrf: string };
+  const { csrf } = useLoaderData();
   const { errors = {}, confirmDocumentVoid } = actionData;
 
   return (

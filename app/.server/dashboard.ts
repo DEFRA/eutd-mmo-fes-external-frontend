@@ -7,7 +7,7 @@ import { getBearerTokenForRequest, isAdminUser } from "./auth";
 import { getEnv } from "~/env.server";
 import { getAllUserAttributes, isAcceptedCookiesAvailable, isPrivacyAccepted } from "./userAttributes";
 import { getAccounts, getUserDetails } from "./exporterDetails";
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 import { route } from "routes-gen";
 import isEmpty from "lodash/isEmpty";
 import { createCSRFToken } from ".";
@@ -37,7 +37,6 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
   if (!isPrivacyAccepted(userAttributes)) {
     return redirect(route("/:journey/privacy-notice", { journey: getPrivacyNoticeJourney(journey) }));
   }
-
   const documents = await getAllDocuments(bearerToken, journey, year, month);
   const isAdminSupport: boolean = isAdminUser(bearerToken);
   const emptyExporterFromIdm: IExporter = { error: "", errors: [] };
@@ -58,28 +57,28 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
   if (journey === "catchCertificate") {
     clearSession(session);
   }
+  const notification = await getNotification(bearerToken);
+  const responseData = {
+    journey,
+    documents: documents,
+    notification: notification,
+    hasDrafts: documents["inProgress"].length > 0,
+    showStartButton: documents["inProgress"].length < maximumConcurrentDrafts,
+    maximumDrafts: maximumConcurrentDrafts,
+    heading: name,
+    pageTitle: isEmpty(name) ? t(title, { ns: "title" }) : `${name}: ${t(title, { ns: "title" })}`,
+    dashboardFeedbackURL: getEnv().DASHBOARD_FEEDBACK_URL,
+    csrf,
+  };
+  const sessionCookie = await commitSession(session);
 
-  return new Response(
-    JSON.stringify({
-      journey,
-      documents: documents,
-      notification: await getNotification(bearerToken),
-      hasDrafts: documents["inProgress"].length > 0,
-      showStartButton: documents["inProgress"].length < maximumConcurrentDrafts,
-      maximumDrafts: maximumConcurrentDrafts,
-      heading: name,
-      pageTitle: isEmpty(name) ? t(title, { ns: "title" }) : `${name}: ${t(title, { ns: "title" })}`,
-      dashboardFeedbackURL: getEnv().DASHBOARD_FEEDBACK_URL,
-      csrf,
-    }),
-    {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Set-Cookie": await commitSession(session),
-      },
-    }
-  );
+  // Return Response with JSON and Set-Cookie header
+  return new Response(JSON.stringify(responseData), {
+    headers: {
+      "Content-Type": "application/json",
+      "Set-Cookie": sessionCookie,
+    },
+  });
 };
 
 export const getAllDocuments = async (

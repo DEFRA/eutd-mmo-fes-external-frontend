@@ -102,15 +102,13 @@ export const PrivacyNotice = () => {
         <p>{t("privacyPageProtectionMarineFisheriesAuthorities")}</p>
         <p>{t("privacyPageProtectionAddressDataProtectionTeam")}</p>
         <p>
-          Data Protection Team
+          Tyneside House
           <br />
-          Lancaster House
+          Skinnerburn Rd
           <br />
-          Hampshire Court
+          Newcastle upon Tyne
           <br />
-          Newcastle Upon Tyne
-          <br />
-          NE4 7YH
+          NE4 7AR
           <br />
           <a className="govuk-link" href="mailto:data.protection@marinemanagement.org.uk">
             dataprotection@marinemanagement.org.uk
@@ -252,17 +250,13 @@ export const PrivacyNotice = () => {
         <p>{t("HowDoIContactDesc1")}</p>
         <p>{t("HowDoIContactDesc2")}</p>
         <p>
-          Data Protection Team,
+          Tyneside House
           <br />
-          Marine Management Organisation,
+          Skinnerburn Rd
           <br />
-          Lancaster House,
+          Newcastle upon Tyne
           <br />
-          Hampshire Court,
-          <br />
-          Monarch Road,
-          <br />
-          Newcastle upon Tyne, NE4 7YH
+          NE4 7AR
         </p>
         <p>
           {t("email")}:{" "}

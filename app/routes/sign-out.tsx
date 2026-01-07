@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useLoaderData, useNavigate } from "@remix-run/react";
-import { type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import { type LoaderFunction, type ActionFunction, redirect } from "react-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import setApiMock from "tests/msw/helpers/setApiMock";
@@ -9,8 +9,7 @@ import { getEnv } from "~/env.server";
 import { route } from "routes-gen";
 import { BUTTON_TYPE, Button } from "@capgeminiuk/dcx-react-library";
 import { createCSRFToken, validateCSRFToken } from "~/.server";
-import { getSessionFromRequest } from "~/sessions.server";
-import { json } from "~/communication.server";
+import { getSessionFromRequest, commitSession } from "~/sessions.server";
 
 type signOutLoaderData = {
   warningTime: number;
@@ -30,14 +29,19 @@ export const loader: LoaderFunction = async ({ request }) => {
   const csrf = await createCSRFToken(request);
   const session = await getSessionFromRequest(request);
   session.set("csrf", csrf);
-  return json(
-    {
+  return new Response(
+    JSON.stringify({
       warningTime,
       secondInMilliseconds,
       csrf,
       minuteInMilliseconds,
-    },
-    session
+    }),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Set-Cookie": await commitSession(session),
+      },
+    }
   );
 };
 

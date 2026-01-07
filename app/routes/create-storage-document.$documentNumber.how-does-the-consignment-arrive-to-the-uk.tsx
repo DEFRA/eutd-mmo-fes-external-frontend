@@ -1,5 +1,5 @@
 import * as React from "react";
-import { type ActionFunction, type LoaderFunction } from "@remix-run/node";
+import { type ActionFunction, type LoaderFunction } from "react-router";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import {
   getBearerTokenForRequest,

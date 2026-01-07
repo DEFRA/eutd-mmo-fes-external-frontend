@@ -114,9 +114,8 @@ describe("Landings entry page: changing landings type", () => {
     };
 
     cy.visit(landingsUrl, { qs: { ...testParams } });
-    // eslint-disable-next-line
     cy.wait(200);
-    cy.get("#landingsEntryOption").click({ force: true });
+    cy.get("#landingsEntryOption").click();
     cy.get("form").submit();
     cy.url().should("include", landingsTypeConfirmationUrl);
   });
@@ -127,9 +126,8 @@ describe("Landings entry page: changing landings type", () => {
     };
 
     cy.visit(landingsUrl, { qs: { ...testParams } });
-    // eslint-disable-next-line
     cy.wait(200);
-    cy.get("#manualOptionEntry").click({ force: true });
+    cy.get("#manualOptionEntry").click();
     cy.get("form").submit();
     cy.url().should("include", landingsTypeConfirmationUrl);
   });

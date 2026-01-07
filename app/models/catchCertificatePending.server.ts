@@ -1,4 +1,4 @@
-import type { Params } from "@remix-run/react";
+import type { Params } from "react-router";
 import { getEnv } from "~/env.server";
 
 export const CatchCertificatePendingLoader = async (params: Params): Promise<Response> => {

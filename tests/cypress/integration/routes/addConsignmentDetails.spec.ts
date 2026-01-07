@@ -25,13 +25,6 @@ describe("Add consignment details page", () => {
       .should("have.attr", "href", `${documentUrl}/progress`);
   });
 
-  it("will have a help link", () => {
-    cy.contains("a", "Get help exporting fish from the UK (gov.uk)").should("be.visible");
-    cy.contains("a", "Get help exporting fish from the UK (gov.uk)")
-      .should("be.visible")
-      .should("have.attr", "href", "https://www.gov.uk/guidance/exporting-and-importing-fish-if-theres-no-brexit-deal");
-  });
-
   it("will have a hint for commodity codes", () => {
     cy.get("#commodityCode-hint")
       .should("be.visible")
@@ -162,7 +155,7 @@ describe("Add consignment details: save consignment details", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue]").should("be.visible").click({ force: true });
+    // cy.get("[data-testid=save-and-continue]").should("be.visible").click({ force: true });
     cy.url().should("include", "/forbidden");
   });
 

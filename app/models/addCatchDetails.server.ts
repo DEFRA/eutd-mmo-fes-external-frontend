@@ -1,5 +1,5 @@
-import { redirect } from "@remix-run/node";
-import type { Params } from "@remix-run/react";
+import { redirect, type Params } from "react-router";
+
 import isEmpty from "lodash/isEmpty";
 import moment from "moment";
 import { route } from "routes-gen";

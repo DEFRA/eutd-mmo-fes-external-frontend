@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 const documentUrl = "/create-storage-document/GBR-2023-SD-83552D3E5";
-const pageUrl = `${documentUrl}/add-product-to-this-consignment`;
+const pageUrl = `${documentUrl}/add-product-to-this-consignment/0`;
 
 describe("Add product to this consignment  page", () => {
   beforeEach(() => {
@@ -487,7 +487,7 @@ describe("Add product to this consignment page: form submission and interaction"
       .should("be.visible");
 
     // Check error appears at the issuing country field
-    cy.contains(".govuk-error-message", "Enter the country that issued the entry document").should("be.visible");
+    cy.contains(".govuk-error-summary__body", "Enter the country that issued the entry document").should("be.visible");
   });
 
   it("should show error message above net weight of product on arrival when not populated", () => {
@@ -707,20 +707,24 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     cy.get("input[name='csrf']").should("exist");
   });
 
-  it("should check that maximum entry docs limit is enforced", () => {
+  it("should allow adding multiple supporting documents", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    // Add supporting docs until the limit
-    for (let i = 0; i < 4; i++) {
-      cy.get("#add-supporting-doc-button").click({ force: true });
-      cy.wait(100);
-    }
+    cy.get("#add-supporting-doc-button").should("be.visible");
+    cy.wait(300);
 
-    // Try to add one more (should not be possible if limit is 5)
-    cy.get("#add-supporting-doc-button").should("not.exist");
+    cy.get('[id^="catches-0-supportingDocuments-"]')
+      .its("length")
+      .then((initialCount) => {
+        cy.get("#add-supporting-doc-button").click({ force: true });
+        cy.wait(300);
+        cy.get("#add-supporting-doc-button").click({ force: true });
+        cy.wait(300);
+        cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", initialCount + 2);
+      });
   });
 
   it("should display correct hint for certificate type field", () => {
@@ -828,5 +832,97 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
 
     cy.get(".govuk-details__summary").eq(1).click({ force: true });
     cy.get(".govuk-details__text").should("be.visible");
+  });
+
+  describe("Supporting documents without JavaScript", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+        disableScripts: true,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+    });
+
+    it("should display 5 empty supporting document input fields when JavaScript is disabled", () => {
+      // Count only the supporting document fields in the current form
+
+      cy.get("#catches-0-supportingDocuments-0").should("exist").and("have.value", "");
+      cy.get("#catches-0-supportingDocuments-4").should("exist").and("have.value", "");
+    });
+
+    it("should not display Add button when JavaScript is disabled", () => {
+      cy.get("#add-supporting-doc-button").should("not.exist");
+    });
+
+    it("should not display Remove buttons when JavaScript is disabled", () => {
+      cy.get("[id^=remove-supporting-doc-button]").should("not.exist");
+    });
+
+    it("should allow filling in all 5 supporting document fields when JavaScript is disabled", () => {
+      cy.get("#catches-0-supportingDocuments-0").type("Doc 1");
+      cy.get("#catches-0-supportingDocuments-1").type("Doc 2");
+      cy.get("#catches-0-supportingDocuments-2").type("Doc 3");
+      cy.get("#catches-0-supportingDocuments-3").type("Doc 4");
+      cy.get("#catches-0-supportingDocuments-4").type("Doc 5");
+
+      cy.get("#catches-0-supportingDocuments-0").should("have.value", "Doc 1");
+      cy.get("#catches-0-supportingDocuments-1").should("have.value", "Doc 2");
+      cy.get("#catches-0-supportingDocuments-2").should("have.value", "Doc 3");
+      cy.get("#catches-0-supportingDocuments-3").should("have.value", "Doc 4");
+      cy.get("#catches-0-supportingDocuments-4").should("have.value", "Doc 5");
+    });
+
+    it("should submit supporting documents correctly when JavaScript is disabled", () => {
+      cy.get("#catches-0-supportingDocuments-0").type("Supporting Doc 1");
+      cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+      cy.url().should("include", "/you-have-added-a-product");
+    });
+  });
+
+  describe("Supporting documents with JavaScript enabled", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+    });
+
+    it("should display 1 empty supporting document input field when JavaScript is enabled", () => {
+      cy.get("fieldset [id^=catches-0-supportingDocuments]").should("have.length", 2);
+      cy.get("#catches-0-supportingDocuments-0").should("exist").and("have.value", "");
+    });
+
+    it("should display Add button when JavaScript is enabled", () => {
+      cy.get("#add-supporting-doc-button").should("exist").and("be.visible");
+    });
+
+    it("should not display Remove button when there is only 1 supporting document field", () => {
+      cy.get("[id^=remove-supporting-doc-button]").should("not.exist");
+    });
+
+    it("should display Remove button after adding a second supporting document field", () => {
+      cy.get("#add-supporting-doc-button").click({ force: true });
+
+      cy.get("#remove-supporting-doc-button-0").should("exist").and("be.visible");
+      cy.get("#remove-supporting-doc-button-1").should("exist").and("be.visible");
+    });
+
+    it("should hide Add button when maximum 5 supporting documents are reached", () => {
+      // Keep clicking Add button until it disappears (indicating max reached)
+      // Try clicking up to 10 times, but stop if button doesn't exist
+      cy.get("#add-supporting-doc-button").should("exist");
+
+      for (let i = 0; i < 4; i++) {
+        cy.get("#add-supporting-doc-button")
+          .click({ force: true })
+          .then(() => {
+            cy.wait(100);
+          });
+      }
+
+      // Verify Add button is hidden when max 5 is reached
+      cy.get("#add-supporting-doc-button").should("not.exist");
+    });
   });
 });

@@ -11,11 +11,14 @@ describe("Landings confirmation page: user Interface", () => {
       testCaseId: TestCaseId.LandingsTypeConfirmationCaseTwo,
     };
     cy.visit(landingsUrl, { qs: { ...testParams } });
-    // eslint-disable-next-line
+    cy.wait(500); // Wait for hydration
+    // GOV.UK radios have opacity:0, use check() and verify
+    cy.get("#manualOptionEntry").should("exist");
+    cy.get("#manualOptionEntry").check({ force: true });
+    cy.get("#manualOptionEntry").should("be.checked");
     cy.wait(200);
-    cy.get("#manualOptionEntry").click({ force: true });
     cy.get("form").submit();
-    cy.url().should("include", landingsTypeConfirmationUrl);
+    cy.url({ timeout: 10000 }).should("include", landingsTypeConfirmationUrl);
   });
 
   it("should render back button", () => {
@@ -66,11 +69,14 @@ describe("Landings confirmation page: Error summary", () => {
       testCaseId: TestCaseId.LandingsTypeConfirmationCaseTwo,
     };
     cy.visit(landingsUrl, { qs: { ...testParams } });
-    // eslint-disable-next-line
+    cy.wait(500); // Wait for hydration
+    // GOV.UK radios have opacity:0, use check() and verify
+    cy.get("#manualOptionEntry").should("exist");
+    cy.get("#manualOptionEntry").check({ force: true });
+    cy.get("#manualOptionEntry").should("be.checked");
     cy.wait(200);
-    cy.get("#manualOptionEntry").click({ force: true });
     cy.get("form").submit();
-    cy.url().should("include", landingsTypeConfirmationUrl);
+    cy.url({ timeout: 10000 }).should("include", landingsTypeConfirmationUrl);
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {
@@ -88,31 +94,41 @@ describe("Landings confirmation page: buttons functionality", () => {
       testCaseId: TestCaseId.LandingsTypeConfirmation,
     };
     cy.visit(landingsUrl, { qs: { ...testParams } });
-    // eslint-disable-next-line
+    cy.wait(500); // Wait for hydration
+    // GOV.UK radios have opacity:0, use check() and verify
+    cy.get("#manualOptionEntry").should("exist");
+    cy.get("#manualOptionEntry").check({ force: true });
+    cy.get("#manualOptionEntry").should("be.checked");
     cy.wait(200);
-    cy.get("#manualOptionEntry").click({ force: true });
     cy.get("form").submit();
-    cy.url().should("include", landingsTypeConfirmationUrl);
+    cy.url({ timeout: 10000 }).should("include", landingsTypeConfirmationUrl);
   });
 
   it("should be able to navigate to the progress page when the user selects Yes and clicks continue button", () => {
-    cy.get("#confirmLandingsTypes").click({ force: true });
+    cy.wait(200); // Allow any client-side state updates
+    cy.get("#confirmLandingsTypes").should("exist");
+    cy.get("#confirmLandingsTypes").check({ force: true });
+    cy.get("#confirmLandingsTypes").should("be.checked");
     cy.get("[data-testid=continue]").click({ force: true });
-    cy.url().should("include", progressUrl);
+    cy.url({ timeout: 10000 }).should("include", progressUrl);
   });
 
   it("should be able to navigate to landings entry page when the user selects No and clicks continue button", () => {
     // eslint-disable-next-line
     cy.wait(200);
-    cy.get("#landingsTypeNo").click({ force: true });
+    cy.get("#landingsTypeNo").check({ force: true });
+    cy.get("#landingsTypeNo").should("be.checked");
     cy.get("[data-testid=continue]").click({ force: true });
     cy.url().should("include", landingsUrl);
   });
 
   it("should be able to navigate to landings entry page when the user clicks cancel button", () => {
-    cy.get("#landingsTypeNo").click({ force: true });
+    cy.wait(200);
+    cy.get("#landingsTypeNo").should("exist");
+    cy.get("#landingsTypeNo").check({ force: true });
+    cy.get("#landingsTypeNo").should("be.checked");
     cy.get("[data-testid=cancel]").click({ force: true });
-    cy.url().should("include", landingsUrl);
+    cy.url({ timeout: 10000 }).should("include", landingsUrl);
   });
 });
 
@@ -135,11 +151,13 @@ describe("Landings confirmation page: redirect to forbidden page", () => {
       testCaseId: TestCaseId.LandingsTypeConfirmationCaseOne,
     };
     cy.visit(landingsUrl, { qs: { ...testParams } });
-    // eslint-disable-next-line
+    cy.wait(500); // Wait for hydration
+    cy.get("#manualOptionEntry").should("exist");
+    cy.get("#manualOptionEntry").check({ force: true });
+    cy.get("#manualOptionEntry").should("be.checked");
     cy.wait(200);
-    cy.get("#manualOptionEntry").click({ force: true });
     cy.get("form").submit();
-    cy.url().should("include", landingsTypeConfirmationUrl);
+    cy.url({ timeout: 10000 }).should("include", landingsTypeConfirmationUrl);
   });
 
   it("should redirect to the forbidden page when unauthorised is true", () => {

@@ -1,7 +1,7 @@
-import { redirect } from "@remix-run/node";
+import { redirect, type Params } from "react-router";
 import type { IUnauthorised, ProcessingStatement } from "~/types";
 import setApiMock from "tests/msw/helpers/setApiMock";
-import type { Params } from "@remix-run/react";
+
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import {
   getBearerTokenForRequest,

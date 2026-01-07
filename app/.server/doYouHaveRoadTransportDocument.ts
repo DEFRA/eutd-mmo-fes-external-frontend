@@ -1,4 +1,4 @@
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 import { route } from "routes-gen";
 import type { Cmr, IBase, IError, ITransport, Journey, Vehicle } from "~/types";
 import type { reduxRequestParams } from "~/types/reduxRequestParam";

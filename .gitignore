@@ -22,3 +22,4 @@ __azurite_db_blob_extent__.json
 /.vscode
 .idea
 /.agents
+/.react-router

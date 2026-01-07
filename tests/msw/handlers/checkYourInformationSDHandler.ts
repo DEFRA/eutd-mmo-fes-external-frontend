@@ -24,10 +24,15 @@ import truckTransport from "@/fixtures/transportDetailsApi/truck.json";
 import planeTransport from "@/fixtures/transportDetailsApi/plane.json";
 import trainTransport from "@/fixtures/transportDetailsApi/train.json";
 import containerVesselTransport from "@/fixtures/transportDetailsApi/containerVessel.json";
+import checkYourInformationAllFieldsNotProvided from "@/fixtures/storageDocumentApi/storageDocumentsFieldsNotProvided.json";
 
 const documentNumber = "GBR-2023-SD-DE53D6E7C";
 
 const checkYourInformationSDHandler: ITestHandler = {
+  [TestCaseId.SDCheckYourInformationAllFieldsNotProvided]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(checkYourInformationAllFieldsNotProvided))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+  ],
   [TestCaseId.SDCheckYourInformation]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),

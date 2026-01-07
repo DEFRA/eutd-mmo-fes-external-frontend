@@ -5,6 +5,7 @@
   "catchCertificateDashboardCreateANewJourney": "Creu {{key}} newydd",
   "storageNotesDashboardCreateANewJourney": "Creu {{key}} newydd",
   "ccStatusDraft": "Drafft",
+  "ccStatusCompleted": "Cwblhawyd",
   "ccStatusPending": "Yn aros",
   "ccStatusFailed": "Wedi methu",
   "ccStatusLocked": "Wedi Cloi",

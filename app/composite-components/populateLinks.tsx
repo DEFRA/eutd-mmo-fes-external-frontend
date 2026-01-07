@@ -1,7 +1,7 @@
 import type { ICompletedDocumentData, IGetAllDocumentsData, IProgressDocumentData, Journey } from "~/types";
 import { type TFunction } from "react-i18next";
 import { route } from "routes-gen";
-import { Link } from "@remix-run/react";
+import { Link } from "react-router-dom";
 
 const getInProgressLinks = (
   journey: Journey,

@@ -17,8 +17,15 @@ import {
 import { route } from "routes-gen";
 import { useEffect, useState, useReducer } from "react";
 import type { Navigation } from "@remix-run/router";
-import { type LoaderFunction, type ActionFunction } from "@remix-run/node";
-import { useLoaderData, useActionData, useNavigation, useSubmit } from "@remix-run/react";
+import {
+  useLoaderData,
+  useActionData,
+  useNavigation,
+  useSubmit,
+  type LoaderFunction,
+  type ActionFunction,
+} from "react-router";
+
 import { Button, BUTTON_TYPE, Details, List, ListItem, TYPE_LIST } from "@capgeminiuk/dcx-react-library";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
@@ -32,7 +39,7 @@ import {
 } from "~/composite-components";
 import { type ManualEntryLandingsData } from "~/.server";
 import isEmpty from "lodash/isEmpty";
-import { useHydrated } from "remix-utils/use-hydrated";
+import { useIsHydrated } from "~/hooks";
 import logger from "~/logger";
 import { AddLandingsAction, AddLandingsLoader } from "~/models";
 import type { ErrorResponse, IGearType, HSAOptionType, HighSeasAreaType, ICountry } from "~/types";
@@ -117,7 +124,7 @@ const intialProcessedValues = (
 });
 
 const AddLandings = () => {
-  const isHydrated = useHydrated();
+  const isHydrated = useIsHydrated();
 
   const { t } = useTranslation(["addLandings", "uploadFile", "errorsText"]);
   const addVesselFormVesselDateQueryPrompt: string = t("ccAddVesselFormVesselDateQueryPrompt", {

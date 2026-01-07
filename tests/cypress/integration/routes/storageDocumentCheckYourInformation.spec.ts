@@ -447,3 +447,20 @@ describe("SD: Point of destination - Field visibility on all transport types", (
     cy.get("#pointOfDestination").should("be.visible");
   });
 });
+
+describe("SD: check-your-information page - Not Provided fallback", () => {
+  it("should display 'Not provided' for airwayBillNumber, freightBillNumber, supportingDocuments and facilityApprovalNumber", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationAllFieldsNotProvided,
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    cy.contains("dt.govuk-summary-list__key", "Supporting document")
+      .parent()
+      .find("dd.govuk-summary-list__value")
+      .should("have.text", "Not provided");
+    cy.contains("dt.govuk-summary-list__key", "Freight bill number").next("dd").should("have.text", "Not provided");
+    cy.contains("dt.govuk-summary-list__key", "Air waybill number").next("dd").should("have.text", "Not provided");
+    cy.contains("dt.govuk-summary-list__key", "Approval number").next("dd").should("have.text", "Not provided");
+  });
+});

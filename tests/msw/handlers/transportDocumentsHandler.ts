@@ -24,6 +24,10 @@ import catchCertificateAdditionalTruckDocument from "@/fixtures/transportDetails
 import catchCertificateAdditionalTrainDocument from "@/fixtures/transportDetailsApi/catchCertificateTrainDocument.json";
 import catchCertificateAdditionalPlaneDocument from "@/fixtures/transportDetailsApi/catchCertificatePlaneDocument.json";
 import catchCertificateAdditionalContainerVesselDocument from "@/fixtures/transportDetailsApi/catchCertificateContainerVesselDocument.json";
+import catchCertificateAdditionalTruckRestrictDocument from "@/fixtures/transportDetailsApi/catchCertificateTruckDocumentRestrict.json";
+import catchCertificateAdditionalContainerVesselRestrictDocument from "@/fixtures/transportDetailsApi/catchCertificateContainerVesselDocumentRestrict.json";
+import catchCertificateAdditionalTrainRestrictDocument from "@/fixtures/transportDetailsApi/catchCertificateTrainDocumentRestrict.json";
+import catchCertificateAdditionalPlaneRestrictDocument from "@/fixtures/transportDetailsApi/catchCertificatePlaneDocumentRestrict.json";
 
 const transportDetailsHandler: ITestHandler = {
   [TestCaseId.TruckTransportDocuments]: () => [
@@ -37,6 +41,11 @@ const transportDetailsHandler: ITestHandler = {
     ),
     rest.post(mockUpdateTransportDocumentsByIdUrl("0"), (req, res, ctx) =>
       res(ctx.json(catchCertificateDocumentsError))
+    ),
+  ],
+  [TestCaseId.TruckTransportDocumentsRestrictAddAnotherDocument]: () => [
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) =>
+      res(ctx.json(catchCertificateAdditionalTruckRestrictDocument))
     ),
   ],
   [TestCaseId.TruckTransportDocumentsFailsWith403]: () => [
@@ -100,6 +109,11 @@ const transportDetailsHandler: ITestHandler = {
     ),
     rest.post(mockUpdateTransportDocumentsByIdUrl("0"), (req, res, ctx) =>
       res(ctx.json(catchCertificateDocumentsError))
+    ),
+  ],
+  [TestCaseId.ContainerVesselTransportDocumentsRestrictAddAnotherDocument]: () => [
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) =>
+      res(ctx.json(catchCertificateAdditionalContainerVesselRestrictDocument))
     ),
   ],
   [TestCaseId.ContainerVesselTransportDocumentsFailsWith403]: () => [
@@ -173,6 +187,11 @@ const transportDetailsHandler: ITestHandler = {
       res(ctx.json(catchCertificateDocumentsError))
     ),
   ],
+  [TestCaseId.PlaneTransportDocumentsRestrictAddAnotherDocument]: () => [
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) =>
+      res(ctx.json(catchCertificateAdditionalPlaneRestrictDocument))
+    ),
+  ],
   [TestCaseId.PlaneTransportDocumentsFailsWith403]: () => [
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDashboard))),
     rest.get(NOTIFICATION_URL, (req, res, ctx) => res(ctx.json(notification))),
@@ -232,6 +251,11 @@ const transportDetailsHandler: ITestHandler = {
     ),
     rest.post(mockUpdateTransportDocumentsByIdUrl("0"), (req, res, ctx) =>
       res(ctx.json(catchCertificateDocumentsError))
+    ),
+  ],
+  [TestCaseId.TrainTransportDocumentsRestrictAddAnotherDocument]: () => [
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) =>
+      res(ctx.json(catchCertificateAdditionalTrainRestrictDocument))
     ),
   ],
   [TestCaseId.TrainTransportDocumentsFailsWith403]: () => [

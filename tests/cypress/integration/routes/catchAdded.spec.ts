@@ -93,10 +93,12 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.wait(200);
-    cy.get('[type="radio"]').first().check();
+    cy.wait(500); // Wait for hydration
+    cy.get('[type="radio"]').first().should("exist");
+    cy.get('[type="radio"]').first().check({ force: true });
+    cy.wait(200); // Allow React to process the state change
     cy.contains("button", "Save and continue").click({ force: true });
-    cy.url().should("include", "/add-consignment-details");
+    cy.url({ timeout: 10000 }).should("include", "/add-consignment-details");
   });
 
   it("should prevent continuing and display errors if one or more catches are invalid", () => {

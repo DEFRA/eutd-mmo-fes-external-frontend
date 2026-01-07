@@ -86,3 +86,4 @@ export interface CatchIndex {
 export type ActionDataWithErrors = {
   groupedErrors: IError[][];
 };
+export type DocumentName = "Catch Certificate" | "Processing Statement" | "Non-Manipulation Document";

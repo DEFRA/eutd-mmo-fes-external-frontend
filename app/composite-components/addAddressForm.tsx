@@ -35,7 +35,7 @@ export const AddAddressForm = ({
   const { t } = useTranslation("common");
   const selectedCountry = getPostcodeAddress(postcodeaddress);
   return (
-    <SecureForm method="post" action={actionUri} csrf={csrf}>
+    <SecureForm method="post" action={actionUri} csrf={csrf} data-testid="manualAddress">
       <div className="govuk-grid-row govuk-!-margin-bottom-6">
         <div className="govuk-grid-column-full">
           <FormInput
@@ -218,7 +218,7 @@ export const AddAddressForm = ({
             containerClassName={classNames("govuk-form-group govuk-input--width-20", {
               "govuk-form-group--error": errors?.country,
             })}
-            options={[selectedCountry, ...countries.map((c) => c.officialCountryName)]}
+            options={[selectedCountry, ...(countries || []).map((c) => c.officialCountryName)]}
             errorMessageText={t(errors?.country?.message, { ns: "errorsText" })}
             id="country"
             name="country"

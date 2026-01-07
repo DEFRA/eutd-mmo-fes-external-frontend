@@ -1,7 +1,7 @@
 import isEmpty from "lodash/isEmpty";
 import { route } from "routes-gen";
-import type { Params } from "@remix-run/react";
-import { redirect } from "@remix-run/node";
+import { redirect, type Params } from "react-router";
+
 import { get, post } from "~/communication.server";
 import { GET_STORAGE_DOCUMENT, getAddStorageDocumentUrl } from "~/urls.server";
 import { displayErrorTransformedMessages } from "~/helpers";

@@ -5,6 +5,7 @@ import {
   LANDINGS_TYPE_URL,
   NOTIFICATION_URL,
   mockGetIdmUserDetails,
+  mockEuCatchStatus,
 } from "~/urls.server";
 import { type ITestHandler, TestCaseId, type Journey } from "~/types";
 
@@ -18,14 +19,54 @@ const dashboardHandler: ITestHandler = {
   [TestCaseId.CCDashboard]: () => [
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDashboard))),
     rest.get(NOTIFICATION_URL, (req, res, ctx) => res(ctx.json(notification))),
+    rest.get(mockEuCatchStatus, (req, res, ctx) =>
+      res(
+        ctx.json({
+          reference: "GBR-2022-CC-REF123",
+          status: "SUCCESS",
+        })
+      )
+    ),
   ],
   [TestCaseId.CCCopyDashboard]: () => [
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccCopyDashboard))),
     rest.get(NOTIFICATION_URL, (req, res, ctx) => res(ctx.json(notification))),
+    rest.get(mockEuCatchStatus, (req, res, ctx) =>
+      res(
+        ctx.json({
+          reference: "GBR-2022-CC-REF123",
+          status: "SUCCESS",
+        })
+      )
+    ),
   ],
   [TestCaseId.CCDashboardNoCompleted]: () => [
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDashboardNoCompleted))),
     rest.get(NOTIFICATION_URL, (req, res, ctx) => res(ctx.json(notification))),
+  ],
+  [TestCaseId.CCDashboardWithPendingEUStatus]: () => [
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDashboard))),
+    rest.get(NOTIFICATION_URL, (req, res, ctx) => res(ctx.json(notification))),
+    rest.get(mockEuCatchStatus, (req, res, ctx) =>
+      res(
+        ctx.json({
+          reference: "GBR-2022-CC-REF123",
+          status: "IN_PROGRESS",
+        })
+      )
+    ),
+  ],
+  [TestCaseId.CCDashboardWithFailedEUStatus]: () => [
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDashboard))),
+    rest.get(NOTIFICATION_URL, (req, res, ctx) => res(ctx.json(notification))),
+    rest.get(mockEuCatchStatus, (req, res, ctx) =>
+      res(
+        ctx.json({
+          reference: "GBR-2022-CC-REF123",
+          status: "FAILURE",
+        })
+      )
+    ),
   ],
   [TestCaseId.CCDashboardUserDetails]: (journey: Journey) => [
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json({ inProgress: [], completed: [] }))),

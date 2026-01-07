@@ -83,9 +83,16 @@ describe("Add Transportation Documents Container Vessel", () => {
       testCaseId: TestCaseId.ContainerVesselTransportDocumentsAddAnotherDocument,
     };
     cy.visit(containerVesselPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=add-another-document-button]").click();
-    cy.get("input[name=documentName1]").type("Invoice 2");
-    cy.get("input[name=documentReference1]").type("INV0002");
+
+    // Verify previously entered values are displayed
+    cy.get("input[name=documentName1]").type("Invoice");
+    cy.get("input[name=documentName1]").should("have.value", "Invoice");
+    cy.get("input[name=documentReference1]").should("have.value", "INV0001");
+
+    // Add another document
+    cy.get("[data-testid=add-another-document-button]").click({ force: true });
+    cy.get("input[name=documentName2]").type("Invoice 2");
+    cy.get("input[name=documentReference2]").type("INV0002");
 
     cy.get('a[hreflang="cy"][lang="cy"]').click();
     cy.get('label[for="documents.0.name"]').should("have.text", "Enw'r ddogfen llong cynwysyddion (dewisol)");
@@ -159,5 +166,13 @@ describe("Add Transportation Documents Container Vessel", () => {
         "For example, INV00001",
       ]);
     });
+  });
+
+  it("should not display the Add another document button when 5 transport documents have been added", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportDocumentsRestrictAddAnotherDocument,
+    };
+    cy.visit(containerVesselPageUrl, { qs: { ...testParams } });
+    cy.contains("button", "Add another document").should("not.exist");
   });
 });

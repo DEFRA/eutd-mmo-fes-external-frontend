@@ -2,14 +2,14 @@ import * as React from "react";
 import { Main } from "~/components";
 import { getJourneyHeader } from "~/helpers/dashboard";
 import { useTranslation } from "react-i18next";
-import { useLoaderData, useSearchParams } from "@remix-run/react";
-import { type MetaFunction, type LoaderFunction, type ActionFunction } from "@remix-run/node";
+import { useLoaderData, useSearchParams } from "react-router-dom";
+import { type MetaFunction, type LoaderFunction, type ActionFunction } from "react-router";
 import type { ErrorResponse, IDashboardData, IGetAllDocumentsData } from "~/types";
 import { getDashboardLoader, dashboardAction } from "~/.server";
 import { Dashboard, PageNavigationLinks, PopulateLinks } from "~/composite-components";
 import { getDashboardMeta } from "~/helpers";
 
-export const meta: MetaFunction = ({ data }) => getDashboardMeta(data);
+export const meta: MetaFunction = (args) => getDashboardMeta(args);
 
 export const loader: LoaderFunction = async ({ request }) =>
   getDashboardLoader(request, "processingStatement", "dashboardProcessingStatementTitle");

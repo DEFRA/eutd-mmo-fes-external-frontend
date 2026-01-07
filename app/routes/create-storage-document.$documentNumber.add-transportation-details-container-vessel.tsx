@@ -1,7 +1,7 @@
 import * as React from "react";
 import isEmpty from "lodash/isEmpty";
-import { useActionData, useLoaderData } from "@remix-run/react";
-import { type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
+import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
+
 import { useEffect } from "react";
 import {
   getBearerTokenForRequest,

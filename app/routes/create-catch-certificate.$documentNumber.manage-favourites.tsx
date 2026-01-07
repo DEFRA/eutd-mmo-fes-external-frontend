@@ -1,9 +1,8 @@
 import * as React from "react";
 import { ManageFavouritesHomeComponent } from "~/composite-components";
-import { type LoaderFunction, type ActionFunction } from "@remix-run/node";
+import { useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
 import { manageFavouritesLoader, manageFavouritesAction } from "~/.server";
 import type { ErrorResponse, ManageFavouritesProps } from "~/types";
-import { useLoaderData } from "@remix-run/react";
 
 export const loader: LoaderFunction = async ({ request, params }) => await manageFavouritesLoader(request, params);
 

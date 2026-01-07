@@ -1,9 +1,9 @@
 import * as React from "react";
 import { WhatExportersAddress } from "~/composite-components";
-import { type ActionFunction, type LoaderFunction, redirect } from "@remix-run/node";
+import { type ActionFunction, type LoaderFunction, redirect } from "react-router";
 import { useTranslation } from "react-i18next";
 import { route } from "routes-gen";
-import { apiCallFailed, json } from "~/communication.server";
+import { apiCallFailed } from "~/communication.server";
 import { getAddressOne, getCountryData } from "~/helpers";
 import {
   getBearerTokenForRequest,
@@ -72,8 +72,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     );
 
     if (shouldUpdateSession) {
-      return json(
-        {
+      return new Response(
+        JSON.stringify({
           documentNumber,
           currentStep,
           postcode,
@@ -81,8 +81,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
           postcodeaddresses,
           countries,
           csrf: session.get("csrf"),
-        },
-        session
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Set-Cookie": await commitSession(session),
+          },
+        }
       );
     }
 
@@ -106,14 +111,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
 
   if (shouldUpdateSession) {
-    return json(
-      {
+    return new Response(
+      JSON.stringify({
         documentNumber,
         currentStep,
         countries,
         csrf: session.get("csrf"),
-      },
-      session
+      }),
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Set-Cookie": await commitSession(session),
+        },
+      }
     );
   }
 

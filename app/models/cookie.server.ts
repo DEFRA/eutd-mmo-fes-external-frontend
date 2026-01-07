@@ -1,4 +1,4 @@
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import {

@@ -2,8 +2,8 @@ import * as React from "react";
 import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
 import { useTranslation } from "react-i18next";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
-import { useActionData, useLoaderData } from "@remix-run/react";
-import { type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
+import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
+
 import { route } from "routes-gen";
 import {
   getBearerTokenForRequest,
@@ -24,7 +24,7 @@ import isEmpty from "lodash/isEmpty";
 import { displayErrorTransformedMessages, getAddressOne, getCountryData } from "~/helpers";
 import { ButtonGroup, WhatExportersAddress } from "~/composite-components";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
-import { apiCallFailed, json } from "~/communication.server";
+import { apiCallFailed } from "~/communication.server";
 import type {
   ErrorResponse,
   ExporterAddressButtonType,
@@ -40,7 +40,6 @@ import type {
   Exporter,
 } from "~/types";
 import setApiMock from "tests/msw/helpers/setApiMock";
-import { ensureCSRFInSession } from "~/helpers/session";
 import { createResponseData } from "~/helpers/addressLookup";
 
 type loaderPlantAddress = {
@@ -78,11 +77,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   validateResponseData(processingStatement);
 
   const session = await getSessionFromRequest(request);
-  const updateSession = !session.has("csrf");
-  const csrf = await createCSRFToken(request);
-  ensureCSRFInSession(session, updateSession, csrf);
+  const shouldUpdateSession = !session.has("csrf");
 
-  if (updateSession) {
+  if (shouldUpdateSession) {
     session.set("csrf", await createCSRFToken(request));
   }
 
@@ -111,12 +108,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     responseData = createResponseData(documentNumber!, session, countries, processingStatementData);
   }
 
-  return updateSession
-    ? json(responseData, session)
-    : new Response(JSON.stringify(responseData), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      });
+  if (shouldUpdateSession) {
+    return new Response(JSON.stringify(responseData), {
+      headers: {
+        "Content-Type": "application/json",
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  }
+
+  return new Response(JSON.stringify(responseData), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
 };
 
 export const action: ActionFunction = async ({ request, params }): Promise<Response | ErrorResponse> => {
@@ -161,7 +165,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     return createJsonResponse(
       {
         postcodeaddresses,
-        plantAddressCurrentStep,
+        currentStep: plantAddressCurrentStep,
         postcode: plantAddressFormData.plantPostcode,
         csrf,
       },
@@ -189,7 +193,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     return createJsonResponse(
       {
         errors,
-        plantAddressCurrentStep,
+        currentStep: plantAddressCurrentStep,
         postcode: plantAddressFormData.plantPostcode,
         postcodeaddresses,
         csrf,
@@ -220,7 +224,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
     return createJsonResponse(
       {
-        plantAddressCurrentStep,
+        currentStep: plantAddressCurrentStep,
         postcode: plantAddressFormData.plantAddressOne,
         postcodeaddress,
         countries,
@@ -241,7 +245,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     return createJsonResponse(
       {
         postcode: plantAddressFormData.plantPostcode,
-        plantAddressCurrentStep,
+        currentStep: plantAddressCurrentStep,
       },
       { "Set-Cookie": updatedSession }
     );
@@ -268,9 +272,10 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     const countries: ICountry[] = await getCountries();
     return createJsonResponse(
       {
-        plantAddressCurrentStep,
+        currentStep: plantAddressCurrentStep,
         postcodeaddress: {},
         countries,
+        csrf,
       },
       { "Set-Cookie": updatedSession }
     );
@@ -467,9 +472,9 @@ const AddProcessingPlantAddress = () => {
   const { t } = useTranslation(["addProcessingPlantAddress", "common"]);
   const { documentNumber, plantAddressOne, plantTownCity, plantPostcode, nextUri, csrf } =
     useLoaderData<loaderPlantAddress>();
-  const actionData = useActionData<{ errors: any }>() ?? {};
+  const actionData = useActionData<{ errors?: any }>();
 
-  const { errors = {} } = actionData;
+  const { errors = {} } = actionData ?? {};
   const hasAddress = !isEmpty(plantAddressOne) && !isEmpty(plantPostcode);
 
   return hasAddress ? (

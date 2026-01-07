@@ -1,5 +1,5 @@
 import * as React from "react";
-import { type LoaderFunction, type ActionFunction } from "@remix-run/node";
+import { type LoaderFunction, type ActionFunction } from "react-router";
 import {
   doYouHaveRoadTransportDocumentAction,
   doYouHaveRoadTransportDocumentLoader,

@@ -1,11 +1,11 @@
 import * as React from "react";
 import { useEffect } from "react";
 import { Main, SecureForm, Title } from "~/components";
-import { useLoaderData } from "@remix-run/react";
-import { type ActionFunction, type LoaderFunction } from "@remix-run/node";
+import { useLoaderData, type ActionFunction, type LoaderFunction } from "react-router";
+
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import { useTranslation } from "react-i18next";
-import { useHydrated } from "remix-utils/use-hydrated";
+import { useIsHydrated } from "~/hooks";
 import { CookieAction, CookieLoader } from "~/models/cookie.server";
 
 const cookiePreferenceField = "saveCookiePreference";
@@ -24,7 +24,7 @@ const Cookies = () => {
   const { analyticsAccepted, showSuccessBanner, csrf } = useLoaderData<cookieLoaderDataType>();
   const { t } = useTranslation("cookies");
 
-  const isHydrated = useHydrated();
+  const isHydrated = useIsHydrated();
   const GoogleAnalyticsTable: Object[] = t("GoogleAnalyticsTable.tableContent", { returnObjects: true });
   const MSClarityTable: Object[] = t("MSClarityTable.tableContent", { returnObjects: true });
 

@@ -50,6 +50,61 @@ describe("Catch certificate completed links", () => {
     cy.get('[data-testid="catchCertificate-copycompleted"]').contains("Copy");
     cy.contains("a", "Copy").should("be.visible");
   });
+
+  it("should render EU CATCH integration column with check status links", () => {
+    cy.get("table[data-testid='catchCertificate-completed-table']")
+      .find("thead th")
+      .contains("EU CATCH integration")
+      .should("be.visible");
+
+    cy.get('[data-testid="catchCertificate-check-eu-catch-status"]').should("have.length.at.least", 1);
+  });
+
+  it("should render check status links with correct href patterns for different statuses", () => {
+    cy.get('[data-testid="catchCertificate-check-eu-catch-status"]').each(($link) => {
+      cy.wrap($link)
+        .should("have.attr", "href")
+        .and("match", /\/create-catch-certificate\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/);
+    });
+  });
+
+  it("should render visually hidden context for screen readers on check status links", () => {
+    cy.get('[data-testid="catchCertificate-check-eu-catch-status"]')
+      .first()
+      .find(".govuk-visually-hidden")
+      .should("exist")
+      .and("include.text", "for document");
+  });
+
+  it("should render Status column in completed documents table", () => {
+    cy.get("table[data-testid='catchCertificate-completed-table']")
+      .find("thead th")
+      .contains("Status")
+      .should("be.visible");
+  });
+
+  it("should display 'Completed' status with green tag styling for all documents", () => {
+    // All completed documents should show 'Completed' status with green tag
+    cy.get("table[data-testid='catchCertificate-completed-table'] tbody tr").each(($row) => {
+      cy.wrap($row).within(() => {
+        cy.get(".govuk-tag").should("have.class", "govuk-tag--green");
+        cy.get(".govuk-tag").should("contain.text", "Completed");
+      });
+    });
+  });
+
+  it("should verify column order: Document Number, Reference, Date, Status, EU CATCH Integration, Action", () => {
+    cy.get("table[data-testid='catchCertificate-completed-table'] thead tr th").then(($headers) => {
+      const headerTexts = $headers.toArray().map((el) => el.textContent?.trim());
+
+      expect(headerTexts[0]).to.include("Document number");
+      expect(headerTexts[1]).to.include("Your reference");
+      expect(headerTexts[2]).to.include("Date Created");
+      expect(headerTexts[3]).to.equal("Status");
+      expect(headerTexts[4]).to.equal("EU CATCH integration");
+      expect(headerTexts[5]).to.equal("Action");
+    });
+  });
 });
 
 describe("Catch certificate dashboard", () => {

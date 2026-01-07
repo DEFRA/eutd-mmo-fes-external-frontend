@@ -9,7 +9,7 @@ import {
   getBearerTokenForRequest,
   isAdminUser,
 } from "~/.server";
-import { type LoaderFunction } from "@remix-run/node";
+import { type LoaderFunction } from "react-router";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { monitoringController } from "~/controller/monitoring-controller";
 import { getServiceNameFromDocumentNumber } from "~/helpers";

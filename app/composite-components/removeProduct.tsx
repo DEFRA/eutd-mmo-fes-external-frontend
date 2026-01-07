@@ -1,9 +1,8 @@
 import { useTranslation } from "react-i18next";
 import isEmpty from "lodash/isEmpty";
 import type { IErrorsTransformed } from "~/types";
-import { ErrorMessage, SecureForm } from "~/components";
+import { ErrorMessage, SecureForm, BackToProgressLink } from "~/components";
 import { ButtonGroup } from "~/composite-components";
-import { BackToProgressLink } from "~/components";
 
 interface Props {
   errors: IErrorsTransformed;

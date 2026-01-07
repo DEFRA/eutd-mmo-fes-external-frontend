@@ -1,6 +1,6 @@
 import * as React from "react";
-import { type LoaderFunction, redirect, type ActionFunction } from "@remix-run/node";
-import { useActionData, useLoaderData } from "@remix-run/react";
+import { redirect, useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
+
 import { route } from "routes-gen";
 import { useEffect } from "react";
 import setApiMock from "tests/msw/helpers/setApiMock";
@@ -20,9 +20,12 @@ import isEmpty from "lodash/isEmpty";
 import { useTranslation } from "react-i18next";
 import { useScrollOnPageLoad } from "~/hooks";
 import { useNavigation } from "react-router-dom";
-import { CheckInfoExporterDetails, CheckYourInformationLayout } from "~/composite-components";
-import { getSessionFromRequest } from "~/sessions.server";
-import { json } from "~/communication.server";
+import {
+  CheckInfoExporterDetails,
+  CheckYourInformationLayout,
+  CheckYourInformationDocumentNumber,
+} from "~/composite-components";
+import { getSessionFromRequest, commitSession } from "~/sessions.server";
 import { CheckYourInformationPSSDAction } from "~/models";
 
 type loaderDataProps = {
@@ -57,14 +60,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     return redirect(`/create-processing-statement/${documentNumber}/progress`);
   }
 
-  return json(
-    {
+  return new Response(
+    JSON.stringify({
       documentNumber,
       processingStatement,
       exporter,
       csrf,
-    },
-    session
+    }),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Set-Cookie": await commitSession(session),
+      },
+    }
   );
 };
 
@@ -122,6 +130,11 @@ const CheckYourInformation = () => {
       journey="processingStatement"
     >
       <>
+        <CheckYourInformationDocumentNumber
+          checkInformationHeader={t("psSummaryPageDocumentDetailsHeader", { ns: "psCheckYourInformation" })}
+          documentNumberTitle={t("commonDocumentNumber", { ns: "common" })}
+          documentNumber={documentNumber}
+        />
         <CheckInfoExporterDetails
           checkExporterDetailsHeader={t("psProgressPageExporterDetails", { ns: "psCheckYourInformation" })}
           exporterDetails={exporterDetails}

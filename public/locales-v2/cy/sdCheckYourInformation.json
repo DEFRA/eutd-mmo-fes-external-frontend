@@ -63,5 +63,10 @@
   "sdTransportPlaneFlightNumber": "Rhif yr awyren",
   "sdTransportRailNumber": "Rhif y rheilffordd",
   "sdTransportPlaneContainerNumber": "Rhif neu rifau adnabod y cynhwysydd",
-  "sdTransportLeavePlace": "Lle mae’r allforion yn gadael y DU"
+  "sdTransportLeavePlace": "Lle mae’r allforion yn gadael y DU",
+  "sdCheckYourInformationVehicleDepartureNewFromTruck": "Lori’n ymadael o",
+  "sdCheckYourInformationVehicleDepartureNewFromTrain": "Trên yn ymadael o",
+  "sdCheckYourInformationVehicleDepartureNewFromContainervessel": "Llong cynwysyddion yn ymadael o",
+  "sdCheckYourInformationVehicleDepartureNewFromPlane": "Awyren yn ymadael o",
+  "sdNotProvided": "Heb ei ddarparu"
 }

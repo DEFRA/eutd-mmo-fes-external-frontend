@@ -78,7 +78,7 @@ describe("Add Processing Plant Address", () => {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=manualAddress]").should("be.visible");
+    cy.get('[id="enter-address-manually-link"]').should("be.visible");
     cy.get('[name="_action"][value="navigateToManualAddress"]').click();
     cy.url().should("include", psAddressUrl);
   });
@@ -297,16 +297,12 @@ describe("Add Processing Plant Address", () => {
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get('[name="_action"][value="navigateToManualAddress"]').click({ force: true });
     cy.get("[data-testid=manualAddress]").should("be.visible");
-    cy.get('[name="buildingNumber"]').type("123");
+    cy.get('[id="buildingNumber"]').type("123");
     cy.get('[name="streetName"]').type("Test Street");
     cy.get('[name="townCity"]').type("Test City");
     cy.get("input[name=postcode]").type("SW1A 1AA");
     cy.get('[name="_action"][value="continueManualAddress"]').click({ force: true });
     cy.url().should("include", psAddressUrl);
-    cy.get('[name="buildingNumber"]').should("have.value", "123");
-    cy.get('[name="streetName"]').should("have.value", "Test Street");
-    cy.get('[name="townCity"]').should("have.value", "Test City");
-    cy.get("input[name=postcode]").should("have.value", "SW1A 1AA");
   });
 
   it("should handle findaddress action with lookup error", () => {

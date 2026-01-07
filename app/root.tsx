@@ -3,21 +3,24 @@ import * as GovUKFrontEnd from "govuk-frontend";
 import { useTranslation } from "react-i18next";
 import { applicationinsights, getApplicationInsights } from "~/applicationInsightsService";
 import { serverApplicationinsights } from "./applicationInsightsService.server";
-import { type LinksFunction, type LoaderFunction, type MetaFunction } from "@remix-run/node";
 import {
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  type ShouldRevalidateFunction,
   isRouteErrorResponse,
   useRouteError,
   useLoaderData,
   useLocation,
   useMatches,
   useRevalidator,
-} from "@remix-run/react";
+  type LinksFunction,
+  type LoaderFunction,
+  type MetaFunction,
+  type ShouldRevalidateFunction,
+} from "react-router";
+
 import { useChangeLanguage } from "remix-i18next/react";
 import { IdleTimerProvider } from "react-idle-timer";
 import { shouldRenderGA, isProdEnv } from "./helpers";
@@ -281,6 +284,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const { documentNumber } = params;
   const analyticsCookie = (await parseCookie(analyticsAcceptedCookie, request)) as IAnalyticsAcceptedCookie;
 
+  // Response objects with Set-Cookie headers work with v3_singleFetch
+  // Single fetch will unwrap the response and preserve headers
   return new Response(
     JSON.stringify({
       ...data,

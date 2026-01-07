@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import querystring from "querystring";
 import * as https from "https";
 import crypto from "crypto";
-import { type TypedResponse, redirect, type Session } from "@remix-run/node";
+import { type TypedResponse, redirect, type Session } from "react-router";
 import { getEnv } from "~/env.server";
 import { type CallbackParamsType, Issuer, type TokenSet, type BaseClient, custom } from "openid-client";
 import { commitSession, destroySession, getSessionFromRequest } from "~/sessions.server";

@@ -1,4 +1,4 @@
-import { useLoaderData, useActionData } from "@remix-run/react";
+import { useLoaderData, useActionData } from "react-router";
 import { FormInput, ErrorPosition, Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import isEmpty from "lodash/isEmpty";
 import { useEffect } from "react";

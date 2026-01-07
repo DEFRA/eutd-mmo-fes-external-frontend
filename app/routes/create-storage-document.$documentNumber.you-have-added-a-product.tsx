@@ -1,9 +1,16 @@
 import * as React from "react";
 import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm, TableHeader } from "~/components";
-import { useLoaderData, useActionData } from "@remix-run/react";
+import {
+  useLoaderData,
+  useActionData,
+  redirect,
+  type MetaFunction,
+  type LoaderFunction,
+  type ActionFunction,
+} from "react-router";
 import { useTranslation } from "react-i18next";
 import { Button, BUTTON_TYPE, Details } from "@capgeminiuk/dcx-react-library";
-import { type MetaFunction, type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
+
 import type {
   IUnauthorised,
   StorageDocument,
@@ -13,7 +20,7 @@ import type {
   LinkData,
   CatchesLoaderData,
 } from "~/types";
-import { getSessionFromRequest } from "~/sessions.server";
+import { getSessionFromRequest, commitSession } from "~/sessions.server";
 import { getMeta, scrollToId } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
 import { useEffect } from "react";
@@ -28,9 +35,8 @@ import {
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { ButtonGroup } from "~/composite-components";
 import i18next from "~/i18next.server";
-import { json } from "~/communication.server";
 
-export const meta: MetaFunction = ({ data }) => getMeta(data);
+export const meta: MetaFunction = (args) => getMeta(args);
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   /* istanbul ignore next */
@@ -81,16 +87,21 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const t = await i18next.getFixedT(request, ["sdYouHaveAddedAProduct", "title"]);
   const titleKey = sdData.catches.length === 1 ? "sdYouAddedSingleProductsTitle" : "sdYouAddedMultiProductsTitle";
-  return json(
-    {
+  return new Response(
+    JSON.stringify({
       documentNumber,
       catches: sdData.catches || [],
       isFromCatchWeightsRoute,
       pageTitle: t(titleKey, { count: sdData.catches.length, ns: "sdYouHaveAddedAProduct" }),
       commonTitle: t("sdCommonTitle", { ns: "title" }),
       csrf,
-    },
-    session
+    }),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Set-Cookie": await commitSession(session),
+      },
+    }
   );
 };
 

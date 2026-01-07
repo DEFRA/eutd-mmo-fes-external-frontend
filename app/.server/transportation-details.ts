@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import {
   createCSRFToken,
@@ -306,7 +306,7 @@ export const jsDisabledValidation = async (request: Request, values: any) => {
   }
 
   if (!isValidDate(selectedDate, "YYYY-MM-DD")) {
-    const t = i18next.getFixedT(request, ["transportation"]);
+    const t = await i18next.getFixedT(request, ["transportation"]);
 
     return new Response(
       JSON.stringify({
@@ -334,7 +334,7 @@ export const jsDisabledValidation = async (request: Request, values: any) => {
   const diffInDays = enteredDate.diff(maxDate, "days");
 
   if (diffInDays > 0) {
-    const t = i18next.getFixedT(request, ["transportation"]);
+    const t = await i18next.getFixedT(request, ["transportation"]);
 
     return new Response(
       JSON.stringify({
@@ -374,7 +374,10 @@ export const calculateDepartureDate = (form: any): string | undefined => {
   const day = form.get("departureDateDay") as string;
   const month = form.get("departureDateMonth") as string;
   const year = form.get("departureDateYear") as string;
-  return !day && !month && !year ? undefined : `${day}/${month}/${year}`;
+  // If all parts are empty, return an explicit empty string so the payload contains a clear marker
+  // (JSON.stringify will include the key with an empty string value). This allows the server
+  // to distinguish "user cleared this field" from "field not supplied" and overwrite stored values.
+  return !day && !month && !year ? "" : `${day}/${month}/${year}`;
 };
 const returnValidCountryName = async (countryName: string | undefined | null) => {
   if (countryName === "") return "";
@@ -485,7 +488,9 @@ export const commonSaveTransportDetails = async (
 ) => {
   const saveAsDraft = form.get("_action") === "saveAsDraft";
   let errors: IError[] | IErrorsTransformed = payload?.arrival ? await validatePayload(payload, saveAsDraft) : [];
-  const postTransport: IBase = await saveTransportDetails(bearerToken, documentNumber, payload, saveAsDraft);
+  let postTransport: IBase;
+  postTransport = await saveTransportDetails(bearerToken, documentNumber, payload, saveAsDraft);
+
   const sortedErrors = sortErrors(
     [...(Array.isArray(errors) ? errors : []), ...(postTransport.errors as IError[])],
     payload
@@ -521,7 +526,7 @@ export const extractContainerNumbers = (values: Record<string, any>): string[] =
       const indexB = parseInt(b.split(".")[1], 10);
       return indexA - indexB;
     });
-  return containerKeys.map((key) => values[key] as string);
+  return containerKeys.map((key) => values[key] as string).filter((num) => num && num.trim() !== "");
 };
 
 // Handle container button actions when JS is disabled

@@ -1,4 +1,4 @@
-import type { Params } from "@remix-run/react";
+import type { Params } from "react-router";
 
 export type reduxRequestParams = {
   request: Request;

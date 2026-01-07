@@ -95,6 +95,12 @@ describe("Check Your Information (Summary) page: UI", () => {
       .should("have.attr", "href")
       .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/what-export-destination");
   });
+
+  it("should display the document number in the Document details section", () => {
+    cy.contains("h2", "Document details").should("be.visible");
+    cy.contains("dt", "Document number").should("be.visible");
+    cy.contains("dt", "Document number").next("dd").should("contain.text", "GBR-2023-PS-DE53D6E7C");
+  });
 });
 
 describe("Check Your Information page: updated exporter", () => {

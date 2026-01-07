@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useActionData, useLoaderData } from "@remix-run/react";
-import { type LoaderFunction, type ActionFunction } from "@remix-run/node";
+import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
+
 import type { ILandingsEntryOptionGet, LandingsEntryOptionType } from "~/types";
 import { displayErrorMessages, landingsEntryOptions } from "~/helpers";
 import { Details, Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";

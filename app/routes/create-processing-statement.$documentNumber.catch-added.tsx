@@ -8,9 +8,9 @@ import {
   SecureForm,
   FilterSearch,
 } from "~/components";
-import { useLoaderData, useActionData, Link } from "@remix-run/react";
+import { useLoaderData, useActionData, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { type MetaFunction, type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
+import { type MetaFunction, type LoaderFunction, type ActionFunction, redirect } from "react-router";
 import type {
   IUnauthorised,
   ProcessingStatement,
@@ -45,7 +45,6 @@ import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import { useEffect } from "react";
 import { ButtonGroup } from "~/composite-components";
 import i18next from "~/i18next.server";
-import { json } from "~/communication.server";
 import type { TFunction } from "i18next";
 
 type ILoaderData = {
@@ -131,7 +130,7 @@ const handleFilterAction = async (
   return null;
 };
 
-export const meta: MetaFunction = ({ data }) => getMeta(data);
+export const meta: MetaFunction = (args) => getMeta(args);
 
 const hasNoAddedProducts = (psData: ProcessingStatement) =>
   !Array.isArray(psData.products) || (Array.isArray(psData.products) && psData.products.length < 1);
@@ -201,8 +200,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const productDescription = psData.products?.length === 1 ? psData.products[0].description : undefined;
   const totalDocuments = countUniqueDocumentByCatchCertificateNumber(psData.catches);
 
-  return json(
-    {
+  return new Response(
+    JSON.stringify({
       documentNumber,
       products: psData.products,
       catches: getCatchesWithTags(psData.catches),
@@ -214,8 +213,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       productDescription,
       totalDocuments,
       initialPageNo: pageNo,
-    },
-    session
+    }),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Set-Cookie": await commitSession(session),
+      },
+    }
   );
 };
 

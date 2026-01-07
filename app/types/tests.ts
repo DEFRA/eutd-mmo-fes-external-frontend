@@ -29,6 +29,8 @@ export enum TestCaseId {
   CCDashboardNoCompleted = "ccDashboardNoCompleted",
   CCDashboardUserDetails = "ccDashboardUserDetails",
   CCDashboardAdminLogin = "ccDashboardAdminLogin",
+  CCDashboardWithPendingEUStatus = "ccDashboardWithPendingEUStatus",
+  CCDashboardWithFailedEUStatus = "ccDashboardWithFailedEUStatus",
 
   CCUploadEntryIncompleteProgress = "ccUploadEntryIncompleteProgress",
   PSIncompleteProgress = "psIncompleteProgress",
@@ -37,6 +39,11 @@ export enum TestCaseId {
   CCManualEntryCompleteProgress = "ccManualEntryCompleteProgress",
   PSCompleteProgress = "psCompleteProgress",
   PSCompleteProgressUnauthorised = "psCompleteProgressUnauthorised",
+
+  // FI0-10647: Block description-only products
+  PSProgressWithDescriptionOnlyProduct = "psProgressWithDescriptionOnlyProduct",
+  PSProgressWithMixedProducts = "psProgressWithMixedProducts",
+  PSProgressWithValidProducts = "psProgressWithValidProducts",
 
   CCLandingsTypeNull = "ccLandingsTypeNull",
   CCLandingsTypeUnauthorised = "ccLandingsTypeUnauthorised",
@@ -174,12 +181,14 @@ export enum TestCaseId {
   MannualLandingEmpty = "mannualLandingEmpty",
   MannulLandingErrors = "mannulLandingErrors",
   MannualEditLanding = "mannualEditLanding",
+  MannualEditLandingUnauthorised = "mannualEditLandingUnauthorised",
   MannualLandingPageGuard = "mannualLandingPageGuard",
   AddLandingPageFailsWithErrors = "addLandingPageFailsWithErrors",
   AddLandingPageFailsWithMaxLandingExceededError = "addLandingPageFailsWithMaxLandingExceededError",
   AddLandingPageFailsWithErrorsOnSaveAndContinue = "AddLandingPageFailsWithErrorsOnSaveAndContinue",
   AddLandingPageFailsWhenGearTypeEmpty = "AddLandingPageFailsWhenGearTypeEmpty",
   AddLandingPageFailsWithForbiddenOnSaveAndContinue = "AddLandingPageFailsWithForbiddenOnSaveAndContinue",
+  AddLandingGearTypesAPIError = "AddLandingGearTypesAPIError",
   MannualLandingDeleteProduct = "mannualLandingDeleteProduct",
   MannuaLandingPageGuardForbidden = "mannualLandingPageGuardForbidden",
   MannualLandingDeleteLandingProduct = "mannualLandingDeleteLandingProduct",
@@ -339,6 +348,7 @@ export enum TestCaseId {
   ArrivalPlaneTransportDepartureCountryEmpty = "ArrivalPlaneTransportDepartureCountryEmpty",
   ArrivalPlaneTransportDeparturePortEmpty = "ArrivalPlaneTransportDeparturePortEmpty",
   ArrivalPlaneTransportDepartureDateEmpty = "ArrivalPlaneTransportDepartureDateEmpty",
+  SDCheckYourInformationAllFieldsNotProvided = "SDCheckYourInformationAllFieldsNotProvided",
 
   TruckTransportDocuments = "truckTransportDocuments",
   TruckTransportDocumentsFailsWith403 = "truckTransportDocumentsFailsWith403",
@@ -690,4 +700,8 @@ export enum TestCaseId {
   PSWhatExportDestination = "psWhatExportDestination",
   PSWhatExportDestinationWelsh = "psWhatExportDestinationWelsh",
   PSWhatExportDestinationDraftInvalid = "psWhatExportDestinationDraftInvalid",
+
+  // FI0-10517: EU Data Integration Successful Page
+  EuDataIntegrationSuccessful = "euDataIntegrationSuccessful",
+  EuDataIntegrationUnauthorised = "euDataIntegrationUnauthorised",
 }

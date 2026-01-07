@@ -1,5 +1,5 @@
-import type { Params } from "@remix-run/react";
-import { redirect } from "@remix-run/node";
+import { redirect, type Params } from "react-router";
+
 import {
   createCSRFToken,
   getBearerTokenForRequest,
