@@ -17,11 +17,11 @@ parameters:
 trigger:
   branches:
     include:
-      - 'main'
-      - 'develop'
-      - 'hotfix/*'
-      - 'feature/*'
-      - 'epic/*'
+      - "main"
+      - "develop"
+      - "hotfix/*"
+      - "feature/*"
+      - "epic/*"
 pr:
   branches:
     include:
@@ -39,10 +39,9 @@ resources:
 extends:
   template: /includes/app-deployment.yaml@MMOPipelineCommon
   parameters:
-    appName: 'mmo-fes-external-fe'
+    appName: "mmo-fes-external-fe"
     npmAuthenticate: false
     runCypressTests: true
     deployFromFeature: ${{ parameters.deployFromFeature }}
     deployToSecondaryRegion: ${{ parameters.deployToSecondaryRegion }}
-
     skipPRE1: ${{ parameters.skipPRE1 }}
