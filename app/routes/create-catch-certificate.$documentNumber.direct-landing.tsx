@@ -15,9 +15,9 @@ import {
 } from "~/components";
 import { route } from "routes-gen";
 import { useEffect, useState } from "react";
-import { useHydrated } from "remix-utils/use-hydrated";
-import { type LoaderFunction, type ActionFunction } from "@remix-run/node";
-import { useActionData, useLoaderData } from "@remix-run/react";
+import { useIsHydrated, useScrollOnPageLoad } from "~/hooks";
+import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
+
 import { Details } from "@capgeminiuk/dcx-react-library";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
@@ -30,7 +30,6 @@ import {
 } from "~/composite-components";
 
 import isEmpty from "lodash/isEmpty";
-import { useScrollOnPageLoad } from "~/hooks";
 import logger from "~/logger";
 import { DirectLandingsAction, DirectLandingsLoader } from "~/models";
 import { faoAreas, scrollToId, isValidDate, confirmHSATypeOptions, displayErrorMessagesInOrder } from "~/helpers";
@@ -120,16 +119,17 @@ const DirectLanding = () => {
   const [exportWeights, setExportWeights] = useState<{ exportWeight: number }[]>(
     Array.isArray(directLandings?.weights)
       ? directLandings?.weights.map((weight: IDirectLandingsDetails) => ({
-          exportWeight:
-            weight.exportWeight !== undefined && weight.exportWeight !== null && !isNaN(parseFloat(weight.exportWeight))
-              ? weight.exportWeight
-              : 0,
+          exportWeight: (() => {
+            const val = weight.exportWeight;
+            const parsed = typeof val === "number" ? val : parseFloat(String(val));
+            return !isNaN(parsed) && parsed !== null ? parsed : 0;
+          })(),
         }))
       : []
   );
 
   const { t } = useTranslation("directLandings");
-  const isHydrated = useHydrated();
+  const isHydrated = useIsHydrated();
   const [promptText, setPromptText] = useState<string | undefined>(t("ccAddVesselFormVesselDateQueryPrompt"));
   const [showPrompt, setShowPrompt] = useState<boolean>(false);
   const [calculatedWeight, setCalculatedWeight] = useState(totalWeight);
@@ -217,7 +217,10 @@ const DirectLanding = () => {
             }
 
             return {
-              exportWeight: weight.exportWeight,
+              exportWeight:
+                typeof weight.exportWeight === "number"
+                  ? weight.exportWeight
+                  : parseFloat(String(weight.exportWeight)) ?? 0,
             };
           })
         : [];

@@ -6,8 +6,8 @@ import isEmpty from "lodash/isEmpty";
 import { getContainerErrorClassName, getContainerInputData, getErrorMessageClassName } from "~/helpers";
 import type { ContainerInput, IErrorsTransformed } from "~/types";
 import { v4 as uuidv4 } from "uuid";
-import { useHydrated } from "remix-utils/use-hydrated";
-import { useActionData } from "@remix-run/react";
+import { useIsHydrated } from "~/hooks";
+import { useActionData } from "react-router";
 
 const generateId = () => uuidv4();
 
@@ -28,7 +28,7 @@ export const ContainerIdentificationNumber = ({
 }: ContainerIdentificationNumberProps) => {
   const { t } = useTranslation("transportation");
   const actionData = useActionData() ?? {};
-  const isHydrated = useHydrated();
+  const isHydrated = useIsHydrated();
 
   const [containerInputs, setContainerInputs] = useState<ContainerInput[]>(
     containers && containers.length > 0
@@ -89,7 +89,7 @@ export const ContainerIdentificationNumber = ({
               "govuk-input--error": errors?.[`containerNumbers.${index}`],
             })}
             inputProps={{
-              value: !isHydrated ? (actionData as any)[`containerNumbers.${index}`] ?? input.value : input.value,
+              value: !isHydrated ? actionData[`containerNumbers.${index}`] ?? input.value : input.value,
               id: `containerNumbers.${index}`,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(input.id, e.target.value),
             }}

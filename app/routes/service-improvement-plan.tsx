@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Main, Title } from "~/components";
 import { useTranslation } from "react-i18next";
-import { type LoaderFunction } from "@remix-run/node";
+import { type LoaderFunction } from "react-router";
 import { getBearerTokenForRequest } from "~/.server";
 
 export const loader: LoaderFunction = async ({ request }) => await getBearerTokenForRequest(request);

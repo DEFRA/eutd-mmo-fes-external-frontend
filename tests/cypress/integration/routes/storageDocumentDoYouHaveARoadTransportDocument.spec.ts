@@ -70,12 +70,14 @@ describe("DoYouHaveARoadTransportDocument", () => {
     };
 
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
-    // eslint-disable-next-line
+    cy.wait(500);
+    cy.get("#cmr").should("exist");
+    cy.get("#cmr").check({ force: true });
+    cy.get("#cmr").should("be.checked");
     cy.wait(200);
-    cy.get("#cmr").click({ force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
 
-    cy.url().should("include", "/departure-product-summary");
+    cy.url({ timeout: 10000 }).should("include", "/departure-product-summary");
   });
 
   it("should redirect user to truck transportation details page when user selects and submits NO", () => {
@@ -84,11 +86,14 @@ describe("DoYouHaveARoadTransportDocument", () => {
     };
 
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
-
-    cy.get("#separateCmrFalse").click({ force: true });
+    cy.wait(500); // Wait for hydration
+    cy.get("#separateCmrFalse").should("exist");
+    cy.get("#separateCmrFalse").check({ force: true });
+    cy.get("#separateCmrFalse").should("be.checked");
+    cy.wait(200); // Allow React to process state change
     cy.get("[data-testid=save-and-continue").click({ force: true });
 
-    cy.url().should("include", "/add-transportation-details-truck");
+    cy.url({ timeout: 10000 }).should("include", "/add-transportation-details-truck");
   });
 
   it("should redirect user to forbidden page when saveTruckCMR fails with a 403 error", () => {
@@ -97,10 +102,14 @@ describe("DoYouHaveARoadTransportDocument", () => {
     };
 
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
-    cy.get("#cmr").click({ force: true });
+    cy.wait(500); // Wait for hydration
+    cy.get("#cmr").should("exist");
+    cy.get("#cmr").check({ force: true });
+    cy.get("#cmr").should("be.checked");
+    cy.wait(200);
     cy.get("[data-testid=save-and-continue").click({ force: true });
 
-    cy.url().should("include", "/forbidden");
+    cy.url({ timeout: 10000 }).should("include", "/forbidden");
   });
 
   it("should display error summary and inline error message when saving fails with an error", () => {

@@ -48,6 +48,7 @@ export * from "./nonJsDateValidation";
 export * from "./addLanding";
 export * from "./doYouHaveRoadTransportDocument";
 export * from "./transportation-details";
+export * from "./eu-data-integration";
 export * from "./transportation-documents";
 export * from "./deleteDraftForm";
 export * from "./howDoesTheConsignmentArriveToTheUk";

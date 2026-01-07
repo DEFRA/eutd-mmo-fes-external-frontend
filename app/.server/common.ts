@@ -1,4 +1,4 @@
-import { redirect, type TypedResponse } from "@remix-run/node";
+import { redirect, type TypedResponse } from "react-router";
 import { apiCallFailed, get, getReferenceData } from "~/communication.server";
 import {
   COMMODITY_CODES,

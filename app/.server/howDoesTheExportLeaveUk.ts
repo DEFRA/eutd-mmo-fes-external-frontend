@@ -1,6 +1,6 @@
 import type { ErrorResponse, IBase, IError, IErrorsTransformed, ITransport, Journey, Vehicle } from "~/types";
 import { getTransportDetails, saveTransport } from "./transport";
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 import type { reduxRequestParams } from "~/types/reduxRequestParam";
 import { getBearerTokenForRequest } from "./auth";
 import { apiCallFailed } from "~/communication.server";

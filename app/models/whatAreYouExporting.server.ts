@@ -1,5 +1,5 @@
-import { redirect, type Session, type SessionData } from "@remix-run/node";
-import type { Params } from "@remix-run/react";
+import { redirect, type Session, type SessionData, type Params } from "react-router";
+
 import isEmpty from "lodash/isEmpty";
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";

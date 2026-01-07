@@ -1,7 +1,7 @@
 import { route } from "routes-gen";
 import { useTranslation } from "react-i18next";
 import { Main, Title, ErrorSummary, NotificationBanner, SecureForm } from "~/components";
-import { useLoaderData, useActionData } from "@remix-run/react";
+import { useLoaderData, useActionData } from "react-router";
 import type {
   IProgress,
   IErrorsTransformed,

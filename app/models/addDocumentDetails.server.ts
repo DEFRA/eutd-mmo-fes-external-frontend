@@ -1,7 +1,7 @@
-import type { Params } from "@remix-run/react";
+import { redirect, type Params } from "react-router";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import type { IUnauthorised, StorageDocument, StorageDocumentCatch } from "~/types";
-import { redirect } from "@remix-run/node";
+
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import {
   createCSRFToken,

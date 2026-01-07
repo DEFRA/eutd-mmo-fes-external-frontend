@@ -80,7 +80,7 @@ describe("Add Transportation Documents Plane", () => {
       testCaseId: TestCaseId.PlaneTransportDocumentsAddAnotherDocument,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=add-another-document-button]").click();
+    cy.get("[data-testid=add-another-document-button]").click({ force: true });
     cy.get("input[name=documentName1]").type("Invoice 2");
     cy.get("input[name=documentReference1]").type("INV0002");
 
@@ -153,5 +153,13 @@ describe("Add Transportation Documents Plane", () => {
         "For example, INV00001",
       ]);
     });
+  });
+
+  it("should not display the Add another document button when 5 transport documents have been added", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportDocumentsRestrictAddAnotherDocument,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.contains("button", "Add another document").should("not.exist");
   });
 });

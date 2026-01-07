@@ -22,7 +22,7 @@
   "ccAddLandingExportWeightFieldLabel": "Pwysau Allforio",
   "psAddHealthCertificateDateFieldHint": "Er enghraifft, 31 03 1980",
   "ccAddLandingHelpSectionLinkText": "Dydw i ddim yn gallu dod o hyd i’r cwch",
-  "ccAddLandingHelpSectionContent": "Os nad yw'r llong neu’r cwch sydd eu hangen arnoch wedi'u rhestru, dewiswch \"Y llong neu’r cwch heb eu rhestru – dewiswch os nad yw ar gael (D/G)\" o'r gwymplen.",
+  "ccAddLandingHelpSectionContent": "Os nad yw'r llong neu’r cwch sydd eu hangen arnoch wedi'u rhestru, dewiswch \"Vessel not found - N/A\" o'r gwymplen.",
   "ccAddLandingHelpSectionContent2": "Mae'r opsiwn hwn ar gyfer achosion lle nad yw'r llong neu’r cwch yn y system neu nad oes modd dod o hyd iddyn nhw drwy ddefnyddio'r chwiliad.",
   "ccAddLandingTotalExportWeight": "Cyfanswm y pwysau allforio",
   "ccAddVesselFormVesselQueryPrompt": "Teipiwch o leiaf 2 nod i lwytho’r rhestr",

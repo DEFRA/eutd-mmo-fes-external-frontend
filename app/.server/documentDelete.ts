@@ -1,6 +1,6 @@
 import type { ConfirmDocumentDelete, Journey } from "~/types";
 import { deleteDraft, validateResponseData } from "~/.server";
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 
 export const deleteDocument = async (
   journey: Journey,

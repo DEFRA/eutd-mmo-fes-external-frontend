@@ -1,4 +1,4 @@
-import { Form } from "@remix-run/react";
+import { Form } from "react-router-dom";
 
 type SecureFormProps = React.ComponentProps<typeof Form> & {
   csrf: string;

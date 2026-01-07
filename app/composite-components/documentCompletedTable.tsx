@@ -1,10 +1,11 @@
-import { Link, useSearchParams } from "@remix-run/react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import type { IGetAllDocumentsData, ICompletedDocumentData, DashboardLinks } from "~/types";
+import type { IGetAllDocumentsData, ICompletedDocumentData, DashboardLinks, ICatchStatus, Journey } from "~/types";
 import moment from "moment";
 import { camelCaseToSpacedLowerCase } from "~/helpers/string";
 import last from "lodash/last";
 import { format, subMonths, addMonths, compareAsc, parse } from "date-fns";
+import { getPrivacyNoticeJourney, getStatusClassName, getStatusName } from "~/helpers/dashboard";
 
 type DocumentCompletedTableProps = {
   journey: string;
@@ -72,6 +73,7 @@ export const DocumentCompletedTable = ({
 }: DocumentCompletedTableProps) => {
   const { t } = useTranslation(["common"]);
   const [searchParams] = useSearchParams();
+
   const disableNext = compareAsc(new Date(paginationPreviousLinkDate(searchParams)), new Date());
 
   return (
@@ -92,6 +94,16 @@ export const DocumentCompletedTable = ({
               <th scope="col" className="govuk-table__header">
                 {t("commonDashboardDateCreated")}
               </th>
+              {journey === "catchCertificate" && (
+                <>
+                  <th scope="col" className="govuk-table__header">
+                    {t("commonDashboardStatus")}
+                  </th>
+                  <th scope="col" className="govuk-table__header">
+                    {t("commonEuCatchIntegration")}
+                  </th>
+                </>
+              )}
               <th scope="col" className="govuk-table__header govuk-table__header--numeric">
                 {t("commonDashboardAction")}
               </th>
@@ -99,36 +111,82 @@ export const DocumentCompletedTable = ({
           </thead>
           <tbody className="govuk-table__body">
             {Array.isArray(documents?.completed) &&
-              documents.completed.map((document: ICompletedDocumentData) => (
-                <tr className="govuk-table__row" key={document.documentNumber}>
-                  <td scope="row" className="govuk-table__cell govuk-!-width-one-quarter">
-                    {document.documentNumber}
-                  </td>
-                  <td scope="row" className="govuk-table__cell tablerowuserref">
-                    {document.userReference}
-                  </td>
-                  <td scope="row" className="govuk-table__cell">
-                    {moment(document.createdAt).format("DD MMM YYYY") || "Unknown"}
-                  </td>
-                  <td scope="row" className="govuk-table__cell govuk-table__cell--numeric">
-                    <Link
-                      data-testid={`${journey}-viewcompleted`}
-                      reloadDocument
-                      to={`/pdf/export-certificates/${document.documentUri}`}
-                      className="govuk-link"
-                    >
-                      {t("commonDashboardView", { ns: "common" })}
-                      <span className="govuk-visually-hidden">
-                        {`${t(journey)} ${document.documentNumber} ${document.userReference ? document.userReference : ""}`}
-                      </span>
-                    </Link>
-                    <br />
-                    {document.links?.voidLink()}
-                    <br />
-                    {showCopyButton && document.links?.copyLink()}
-                  </td>
-                </tr>
-              ))}
+              documents.completed.map((document: ICompletedDocumentData) => {
+                const getEuCatchStatusRoute = (documentNumber: string, euCatchStatus?: ICatchStatus) => {
+                  const prefix = `/${getPrivacyNoticeJourney(journey as Journey)}/${documentNumber}/`;
+                  switch (euCatchStatus?.status?.toUpperCase()) {
+                    case "SUCCESS":
+                      return `${prefix}eu-data-integration-successful`;
+                    case "IN_PROGRESS":
+                      return `${prefix}eu-data-integration-pending`;
+                    case "FAILURE":
+                      return `${prefix}eu-data-integration-failed`;
+                  }
+                };
+
+                return (
+                  <tr className="govuk-table__row" key={document.documentNumber}>
+                    <td scope="row" className="govuk-table__cell govuk-!-width-one-quarter">
+                      {document.documentNumber}
+                    </td>
+                    <td scope="row" className="govuk-table__cell tablerowuserref">
+                      {document.userReference}
+                    </td>
+                    <td scope="row" className="govuk-table__cell">
+                      {moment(document.createdAt).format("DD MMM YYYY") || "Unknown"}
+                    </td>
+
+                    {journey === "catchCertificate" && (
+                      <>
+                        <td scope="row" className="govuk-table__cell">
+                          <span
+                            className={
+                              document.catchSubmission?.status
+                                ? `govuk-tag govuk-tag--${getStatusClassName("SUCCESS", false)}`
+                                : ""
+                            }
+                          >
+                            {document.catchSubmission?.status ? getStatusName("SUCCESS", false, t) : "-"}
+                          </span>
+                        </td>
+                        <td scope="row" className="govuk-table__cell">
+                          {!document.catchSubmission ? (
+                            "-"
+                          ) : (
+                            <a
+                              href={getEuCatchStatusRoute(document.documentNumber, document.catchSubmission)}
+                              className="govuk-link"
+                              data-testid={`${journey}-check-eu-catch-status`}
+                            >
+                              {t("commonCheckStatus")}
+                              <span className="govuk-visually-hidden">
+                                {` ${t("commonForDocument")} ${document.documentNumber}`}
+                              </span>
+                            </a>
+                          )}
+                        </td>
+                      </>
+                    )}
+                    <td scope="row" className="govuk-table__cell govuk-table__cell--numeric">
+                      <Link
+                        data-testid={`${journey}-viewcompleted`}
+                        reloadDocument
+                        to={`/pdf/export-certificates/${document.documentUri}`}
+                        className="govuk-link"
+                      >
+                        {t("commonDashboardView", { ns: "common" })}
+                        <span className="govuk-visually-hidden">
+                          {`${t(journey)} ${document.documentNumber} ${document.userReference ? document.userReference : ""}`}
+                        </span>
+                      </Link>
+                      <br />
+                      {document.links?.voidLink?.()}
+                      <br />
+                      {showCopyButton && document.links?.copyLink?.()}
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       ) : (
@@ -142,6 +200,12 @@ export const DocumentCompletedTable = ({
               })}
             </div>
           </div>
+        </div>
+      )}
+
+      {journey === "catchCertificate" && Array.isArray(documents?.completed) && documents.completed.length > 0 && (
+        <div className="govuk-inset-text">
+          <p className="govuk-body">{t("commonRefreshPageForUpdates")}</p>
         </div>
       )}
 

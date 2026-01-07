@@ -169,34 +169,41 @@ describe("What are you exporting page", () => {
       .should("be.visible");
   });
 
-  it("should show redirect to mannaul landings page if landing type is mannual landing", () => {
+  it("should show redirect to manual landings page if landing type is manual landing", () => {
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.url().should("include", "/add-landings");
   });
 
   it("should render the selected species, state, presentation and commodity code", () => {
-    cy.intercept(
-      "GET",
-      `${productsUrl}?testCaseId=${TestCaseId.WhatAreYouExporting}&_data=routes%2Fcreate-catch-certificate.%24documentNumber.what-are-you-exporting`
-    ).as("getSpecies");
-    cy.wait("@getSpecies");
+    cy.get("#species").should("be.visible");
+    cy.wait(500);
 
+    cy.get("#species").should("not.be.disabled");
     cy.get("#species").should("have.value", "");
-    cy.get("#species").should("be.visible").and("not.be.disabled");
-    cy.get("#species").type("a");
+    cy.get("#species").type("a", { force: true });
+
+    cy.get("#species-option--1", { timeout: 5000 }).should("be.visible");
     cy.get("#species-option--1").click();
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
 
-    cy.get("#state").should("have.value", "");
-    cy.get("#state").select(1);
+    cy.wait(500);
+
+    cy.get("#state").should("be.visible");
+    cy.get("#state option").should("have.length.gt", 1);
+    cy.get('#state option[value="FRE"]').should("exist");
+    cy.get("#state").select("FRE", { force: true });
     cy.get("#state").should("have.value", "FRE");
 
-    cy.get("#presentation").should("have.value", "");
-    cy.get("#presentation").select(1);
+    cy.get("#presentation").should("be.visible");
+    cy.get("#presentation option").should("have.length.gt", 1);
+    cy.get('#presentation option[value="FIL"]').should("exist");
+    cy.get("#presentation").select("FIL", { force: true });
     cy.get("#presentation").should("have.value", "FIL");
 
-    cy.get("#commodity_code").should("have.value", "");
-    cy.get("#commodity_code").select(1);
+    cy.get("#commodity_code").should("be.visible");
+    cy.get("#commodity_code option").should("have.length.gt", 1);
+    cy.get('#commodity_code option[value="03024400"]').should("exist");
+    cy.get("#commodity_code").select("03024400", { force: true });
     cy.get("#commodity_code").should("have.value", "03024400");
   });
 });

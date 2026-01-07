@@ -1,6 +1,6 @@
 import * as React from "react";
 import { route } from "routes-gen";
-import { type ActionFunction, type LoaderFunction, type TypedResponse } from "@remix-run/node";
+import { type ActionFunction, type LoaderFunction, type TypedResponse } from "react-router";
 import type { ErrorResponse } from "~/types";
 import { DeleteDraftForm } from "~/composite-components";
 import { deleteDraftFormAction, deleteDraftFormLoader } from "~/.server";

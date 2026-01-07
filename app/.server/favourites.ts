@@ -10,7 +10,7 @@ import {
   searchStateLookup,
 } from "~/.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
-import { type Params } from "@remix-run/react";
+import { type Params } from "react-router";
 import { getEnv } from "~/env.server";
 import { getSessionFromRequest } from "~/sessions.server";
 import isEmpty from "lodash/isEmpty";

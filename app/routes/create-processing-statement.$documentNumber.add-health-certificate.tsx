@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useLoaderData, useActionData } from "@remix-run/react";
-import { type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
+import { useLoaderData, useActionData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
+
 import { useTranslation } from "react-i18next";
 import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
 import { ErrorPosition, FormInput } from "@capgeminiuk/dcx-react-library";

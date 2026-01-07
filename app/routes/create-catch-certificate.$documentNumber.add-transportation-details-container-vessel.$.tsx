@@ -2,15 +2,21 @@ import * as React from "react";
 import isEmpty from "lodash/isEmpty";
 import { Main, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
 import { ButtonGroup, CatchCertificateTransportationDetails } from "~/composite-components";
-import { useActionData, useLoaderData } from "@remix-run/react";
+import {
+  useActionData,
+  useLoaderData,
+  type LoaderFunction,
+  type ActionFunction,
+  type MetaFunction,
+} from "react-router";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import type { ErrorResponse, ITransport } from "~/types";
 import { displayErrorMessages, getMeta, scrollToId, TransportType } from "~/helpers";
 import { useScrollOnPageLoad } from "~/hooks";
-import type { LoaderFunction, ActionFunction, MetaFunction } from "@remix-run/node";
-export const meta: MetaFunction = ({ data }) => getMeta(data);
+
+export const meta: MetaFunction = (args) => getMeta(args);
 export const loader: LoaderFunction = async ({ request, params }) =>
   await CatchCertificateTransportationDetailsLoader(request, params, TransportType.CONTAINER_VESSEL);
 

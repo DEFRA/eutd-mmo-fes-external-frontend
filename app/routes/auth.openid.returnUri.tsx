@@ -1,4 +1,4 @@
-import { type ActionFunction } from "@remix-run/node";
+import { type ActionFunction } from "react-router";
 import { onLoginAdminReturnHandler } from "~/.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import logger from "~/logger.server";

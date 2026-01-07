@@ -13,9 +13,9 @@ import type {
   IUnauthorised,
 } from "~/types";
 import serverLogger from "~/logger.server";
-import type { Params } from "@remix-run/react";
+import { redirect, type Params } from "react-router";
 import { getSessionFromRequest, commitSession, clearSession } from "~/sessions.server";
-import { redirect } from "@remix-run/node";
+
 import setApiMock from "tests/msw/helpers/setApiMock";
 import {
   getBearerTokenForRequest,
@@ -201,6 +201,17 @@ export const progressPageLoader = async (request: Request, params: Params, journ
       products,
     };
   }
+
+  const documentNameMapping: Record<string, string> = {
+    catchCertificate: "Catch Certificate",
+    processingStatement: "Processing Statement",
+    storageNotes: "Non-Manipulation Document",
+  };
+
+  objectToReturn = {
+    ...objectToReturn,
+    documentName: documentNameMapping[journey] ?? "none",
+  };
 
   const displayOptionalSuffix = getEnv().EU_CATCH_FIELDS_OPTIONAL === "true";
 

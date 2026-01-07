@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { useNavigation } from "@remix-run/react";
-import { useHydrated } from "remix-utils/use-hydrated";
+import { useNavigation } from "react-router";
+import { useIsHydrated } from "~/hooks";
 import { type Navigation } from "@remix-run/router";
 import type { IErrorsTransformed, LabelAndValue, SearchState, Species } from "~/types";
 import { AddProductsComponent } from "./addProductsComponent";
@@ -99,7 +99,7 @@ export const AddProducts = ({
   addToFavourites,
   showFavouriteCheckbox,
 }: AddProductsProps) => {
-  const isHydrated = useHydrated();
+  const isHydrated = useIsHydrated();
 
   const [commonSpecies, setCommonSpecies] = useState<string>(selectedSpecies || "");
   const [currentStateLabel, setCurrentStateLabel] = useState<string>("");

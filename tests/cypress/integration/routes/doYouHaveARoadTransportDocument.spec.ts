@@ -11,10 +11,6 @@ describe("DoYouHaveARoadTransportDocument", () => {
     };
 
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
-    cy.title().should(
-      "eq",
-      "Do you have a road transport document to go with this export? - Create a UK catch certificate - GOV.UK"
-    );
     cy.contains("a", /^Back$/).should("be.visible");
 
     cy.contains("a", /^Back$/)

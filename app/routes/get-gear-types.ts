@@ -1,4 +1,4 @@
-import { type LoaderFunction } from "@remix-run/node";
+import { type LoaderFunction } from "react-router";
 import { getAllGearTypesByCategory } from "~/.server";
 import type { IGearType } from "~/types";
 import serverLogger from "~/logger.server";

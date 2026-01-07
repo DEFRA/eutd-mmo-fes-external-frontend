@@ -1,9 +1,9 @@
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { getBearerTokenForRequest } from "./auth";
-import type { Params } from "@remix-run/react";
+import { redirect, type Params } from "react-router";
 import { getCountries } from "./countries";
 import { getExportLocation, postDraftExportLocation, postExportLocation } from "./exportLocation";
-import { redirect } from "@remix-run/node";
+
 import { route } from "routes-gen";
 import type { ICountry, IError, Journey } from "~/types";
 import { apiCallFailed } from "~/communication.server";

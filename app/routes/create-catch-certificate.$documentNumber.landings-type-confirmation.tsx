@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
-import { type ActionFunction, type LoaderFunction } from "@remix-run/node";
+import { useActionData, useLoaderData, type ActionFunction, type LoaderFunction } from "react-router";
 import { route } from "routes-gen";
-import { useActionData, useLoaderData } from "@remix-run/react";
+
 import { confirmLandingsEntryOptions, displayErrorMessages } from "~/helpers";
 import { Main, ErrorSummary, ErrorMessage, SecureForm } from "~/components";
 import isEmpty from "lodash/isEmpty";

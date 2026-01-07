@@ -1,15 +1,15 @@
 import * as React from "react";
 import { Dashboard, PageNavigationLinks, PopulateLinks } from "~/composite-components";
-import type { LoaderFunction, ActionFunction, MetaFunction } from "@remix-run/node";
+import type { LoaderFunction, ActionFunction, MetaFunction } from "react-router";
 import { Main } from "~/components";
 import { getJourneyHeader } from "~/helpers/dashboard";
 import { useTranslation } from "react-i18next";
 import type { ErrorResponse, IDashboardData, IGetAllDocumentsData } from "~/types";
-import { useLoaderData, useSearchParams } from "@remix-run/react";
+import { useLoaderData, useSearchParams } from "react-router-dom";
 import { dashboardAction, getDashboardLoader } from "~/.server";
 import { getDashboardMeta } from "~/helpers";
 
-export const meta: MetaFunction = ({ data }) => getDashboardMeta(data);
+export const meta: MetaFunction = (args) => getDashboardMeta(args);
 
 export const loader: LoaderFunction = async ({ request }) =>
   getDashboardLoader(request, "storageNotes", "dashboardStorageDocumentTitle");

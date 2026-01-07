@@ -131,3 +131,93 @@ describe("should display the notificationBanner", () => {
     );
   });
 });
+
+// FI0-10647: Prevent description-only products in Processing Statements
+describe("ProgressPage - FI0-10647 - Description-only Products Validation", () => {
+  const certificateUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
+  const progressUrl = `${certificateUrl}/progress`;
+
+  describe("Scenario 1: Block submission with description-only products", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.PSProgressWithDescriptionOnlyProduct,
+      };
+      cy.visit(progressUrl, { qs: { ...testParams } });
+    });
+
+    it("should display application completed status", () => {
+      cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
+    });
+
+    it("should display error when attempting to continue with description-only products", () => {
+      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.url().should("include", "/progress");
+
+      // Check for error summary
+      cy.contains("h2", /^There is a problem$/).should("be.visible");
+
+      // Check for specific product validation error
+      cy.contains("a", /product details section/).should("be.visible");
+    });
+
+    it("should remain on progress page after validation error", () => {
+      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.url().should("include", "/progress");
+      cy.url().should("not.include", "/check-your-information");
+    });
+  });
+
+  describe("Scenario 2: Block submission with mixed products (one valid, one description-only)", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.PSProgressWithMixedProducts,
+      };
+      cy.visit(progressUrl, { qs: { ...testParams } });
+    });
+
+    it("should display application completed status", () => {
+      cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
+    });
+
+    it("should display error when attempting to continue with mixed products", () => {
+      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.url().should("include", "/progress");
+
+      // Check for error summary
+      cy.contains("h2", /^There is a problem$/).should("be.visible");
+
+      // Check for specific product validation error
+      cy.contains("a", /product details section/).should("be.visible");
+    });
+
+    it("should remain on progress page after validation error", () => {
+      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.url().should("include", "/progress");
+      cy.url().should("not.include", "/check-your-information");
+    });
+  });
+
+  describe("Scenario 3: Allow submission with all valid products (have catches)", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.PSProgressWithValidProducts,
+      };
+      cy.visit(progressUrl, { qs: { ...testParams } });
+    });
+
+    it("should display application completed status", () => {
+      cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
+    });
+
+    it("should allow progression to check-your-information when all products have catches", () => {
+      cy.get('[data-testid="continue-button"]').click({ force: true });
+      // Should redirect successfully (no error)
+      cy.url().should("not.include", "/progress");
+    });
+
+    it("should not display validation errors", () => {
+      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.contains("h2", /^There is a problem$/).should("not.exist");
+    });
+  });
+});

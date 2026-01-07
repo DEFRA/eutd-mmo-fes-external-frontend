@@ -1,0 +1,9 @@
+{
+  "euDataIntegrationSuccessful": "EU data integration successful",
+  "yourReferenceNumber": "Your reference number",
+  "dataTransferredMessage": "Your catch certificate data has been sent to the EU CATCH system.",
+  "euReceivedInformation": "The EU has received your information.",
+  "whatHappensNext": "What happens next",
+  "certificateReadyMessage": "Your catch certificate is ready to use. You can",
+  "viewOrDownloadLink": "view or download it from your dashboard"
+}

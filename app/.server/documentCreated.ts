@@ -1,6 +1,6 @@
-import type { Params } from "@remix-run/react";
+import { redirect, type Params } from "react-router";
 import type { Journey, CompletedDocument } from "~/types";
-import { redirect } from "@remix-run/node";
+
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { getBearerTokenForRequest, getCompletedDocument } from "~/.server";

@@ -1,13 +1,13 @@
 import * as React from "react";
-import { type ActionFunction, redirect, type LoaderFunction } from "@remix-run/node";
-import { useActionData, useLoaderData } from "@remix-run/react";
+import { redirect, useActionData, useLoaderData, type ActionFunction, type LoaderFunction } from "react-router";
+
 import isEmpty from "lodash/isEmpty";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { BackToProgressLink, ErrorSummary, Main, Title } from "~/components";
 import { AddAddressForm, ExporterPostcodeLookUp, SelectAddress } from "~/composite-components";
-import { apiCallFailed, json } from "~/communication.server";
+import { apiCallFailed } from "~/communication.server";
 import { displayErrorTransformedMessages, getStorageFacilityAddressOne, scrollToId } from "~/helpers";
 import { useScrollOnPageLoad } from "~/hooks";
 import {
@@ -73,8 +73,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     );
 
     if (shouldUpdateSession) {
-      return json(
-        {
+      return new Response(
+        JSON.stringify({
           documentNumber,
           currentStep,
           postcode,
@@ -83,8 +83,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
           countries,
           actionUri,
           csrf: session.get("csrf"),
-        },
-        session
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Set-Cookie": await commitSession(session),
+          },
+        }
       );
     }
 
@@ -109,15 +114,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
 
   if (shouldUpdateSession) {
-    return json(
-      {
+    return new Response(
+      JSON.stringify({
         documentNumber,
         csrf: session.get("csrf"),
         currentStep,
         countries,
         actionUri,
-      },
-      session
+      }),
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Set-Cookie": await commitSession(session),
+        },
+      }
     );
   }
 

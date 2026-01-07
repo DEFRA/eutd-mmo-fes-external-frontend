@@ -2,8 +2,8 @@ import * as React from "react";
 import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
 import { useTranslation } from "react-i18next";
 import { Button, BUTTON_TYPE, ErrorPosition, FormInput } from "@capgeminiuk/dcx-react-library";
-import { useActionData, useLoaderData } from "@remix-run/react";
-import { type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
+import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
+
 import { route } from "routes-gen";
 import type { StorageDocument, IUnauthorised, IErrorsTransformed } from "~/types";
 import {
@@ -28,7 +28,6 @@ import setApiMock from "tests/msw/helpers/setApiMock";
 import { DateFieldWithPicker } from "~/composite-components";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import classNames from "classnames/bind";
-import { json } from "~/communication.server";
 import { useScrollOnPageError } from "~/hooks";
 import i18next from "~/i18next.server";
 
@@ -75,8 +74,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const hasFacility =
     storageDocument?.facilityAddressOne !== undefined && storageDocument?.facilityPostcode !== undefined;
 
-  return json(
-    {
+  return new Response(
+    JSON.stringify({
       documentNumber,
       facilityAddressOne: storageDocument?.facilityAddressOne,
       facilityTownCity: storageDocument?.facilityTownCity,
@@ -86,8 +85,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       hasFacility,
       csrf,
       selectedArrivalDate: storageDocument?.facilityArrivalDate,
-    },
-    session
+    }),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Set-Cookie": await commitSession(session),
+      },
+    }
   );
 };
 

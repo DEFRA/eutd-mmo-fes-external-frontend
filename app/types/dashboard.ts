@@ -49,12 +49,19 @@ export interface pageLinks {
   nextLink: () => ReactElement<any, string | JSXElementConstructor<any>>;
 }
 
+export type EuStatus = "SUCCESS" | "FAILURE" | "IN_PROGRESS";
+
+export interface ICatchStatus {
+  status: EuStatus;
+  reference?: string;
+}
 export interface ICompletedDocumentData {
   documentNumber: string;
   createdAt: string;
   userReference: string;
   documentUri: string;
   links: DashboardCompletedRecordLinks;
+  catchSubmission?: ICatchStatus;
 }
 
 export interface IGetAllDocumentsData {

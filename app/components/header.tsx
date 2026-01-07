@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
-import { Link } from "@remix-run/react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useHydrated } from "remix-utils/use-hydrated";
+import { useIsHydrated } from "~/hooks";
 import { route } from "routes-gen";
 
 type headerProps = {
@@ -25,7 +25,7 @@ export const Header = ({
   identityAppLogoutURL,
 }: headerProps) => {
   const { t } = useTranslation("header");
-  const isHydrated = useHydrated();
+  const isHydrated = useIsHydrated();
 
   return (
     <header className="govuk-header" role="banner" data-module="govuk-header">

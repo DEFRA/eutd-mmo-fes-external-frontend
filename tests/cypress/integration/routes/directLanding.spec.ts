@@ -128,9 +128,7 @@ describe("Direct landing page render", () => {
     cy.get("div .govuk-details__summary").eq(5).contains("I cannot find the vessel");
     cy.get("div .govuk-details__summary").eq(5).click({ force: true });
     cy.get("div .govuk-details__text")
-      .contains(
-        'If the vessel you need is not listed, select "Vessel not listed – select if not available (N/A)" from the dropdown.'
-      )
+      .contains('If the vessel you need is not listed, select "Vessel not found - N/A" from the dropdown.')
       .should("be.visible");
     cy.get("div .govuk-details__text")
       .contains("This option is for cases where the vessel is not in the system or cannot be found using the search.")
@@ -239,12 +237,27 @@ describe("Direct landing page render", () => {
   });
 
   it("should remove the last EEZ select field when the 'Remove Zone' button is clicked", () => {
-    cy.get("#add-zone-button").should("exist");
-    cy.get("#add-zone-button").last().click({ force: true });
-    cy.get("#add-zone-button").last().click({ force: true });
-    cy.get("#add-zone-button").last().click({ force: true });
-    cy.get("#remove-zone-button").last().should("be.visible");
-    cy.get("#remove-zone-button").last().click({ force: true });
+    waitForHydration();
+    cy.wait(300);
+
+    cy.get('[id^="eez-"]').then(($eez) => {
+      const initialCount = $eez.length;
+
+      if (initialCount >= 3) {
+        cy.get("#remove-zone-button").last().should("be.visible");
+        cy.get("#remove-zone-button").last().click({ force: true });
+        cy.wait(200);
+      }
+
+      cy.get("#add-zone-button").should("be.visible");
+      cy.get("#add-zone-button").click({ force: true });
+      cy.wait(200);
+      cy.get("#add-zone-button").click({ force: true });
+      cy.wait(200);
+
+      cy.get("#remove-zone-button").last().should("be.visible");
+      cy.get("#remove-zone-button").last().click({ force: true });
+    });
   });
 
   it("should render the RFMO label and hint", () => {
@@ -582,13 +595,27 @@ describe("DirectLanding page errors when javascript is enabled", () => {
   });
 
   it("should calculate total weight when individual product weights are changed", () => {
+    waitForHydration();
+    cy.wait(300);
+
+    cy.contains(".govuk-table__cell", "Total export weight").should("be.visible");
     cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "5.00kg");
-    cy.get('input[id="weights.0.exportWeight"]').clear();
-    cy.get('input[id="weights.0.exportWeight"]').type("2");
-    cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "25.00kg");
-    cy.get('input[id="weights.1.exportWeight"]').clear();
-    cy.get('input[id="weights.1.exportWeight"]').type("2");
-    cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "24.00kg");
+
+    cy.get('input[id="weights.0.exportWeight"]').clear({ force: true });
+    cy.wait(100);
+    cy.get('input[id="weights.0.exportWeight"]').type("20", { force: true });
+    cy.get('input[id="weights.0.exportWeight"]').blur();
+
+    cy.wait(500);
+    cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "23.00kg");
+
+    cy.get('input[id="weights.1.exportWeight"]').clear({ force: true });
+    cy.wait(100);
+    cy.get('input[id="weights.1.exportWeight"]').type("10", { force: true });
+    cy.get('input[id="weights.1.exportWeight"]').blur();
+
+    cy.wait(500);
+    cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "30.00kg");
   });
 });
 

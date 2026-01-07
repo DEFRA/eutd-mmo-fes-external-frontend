@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link } from "react-router-dom";
 import { route } from "routes-gen";
 import { useTranslation } from "react-i18next";
 

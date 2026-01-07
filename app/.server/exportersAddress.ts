@@ -12,7 +12,7 @@ import type {
   IError,
 } from "~/types";
 import setApiMock from "tests/msw/helpers/setApiMock";
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 import { route } from "routes-gen";
 import {
   getBearerTokenForRequest,

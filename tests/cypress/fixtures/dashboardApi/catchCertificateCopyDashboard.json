@@ -15,7 +15,10 @@
       "_id": "636a5ad22d94fe0827c4460d",
       "status": "COMPLETE",
       "documentNumber": "GBR-2022-CC-45A276B54",
-      "documentUri": "_c4a1c8d2-e6d9-4705-9c18-58d8a505acc4.pdf"
+      "documentUri": "_c4a1c8d2-e6d9-4705-9c18-58d8a505acc4.pdf",
+      "catchSubmission": {
+        "status": "IN_PROGRESS"
+      }
     },
     {
       "createdAt": "2022-11-08T13:35:02.000Z",
@@ -24,7 +27,22 @@
       "status": "COMPLETE",
       "documentNumber": "GBR-2022-CC-45A276B54",
       "documentUri": "_c4a1c8d2-e6d9-4705-9c18-58d8a505acc4.pdf",
-      "userReference": "completed document"
+      "userReference": "completed document",
+      "catchSubmission": {
+        "status": "FAILURE"
+      }
+    },
+    {
+      "createdAt": "2022-11-08T13:35:02.000Z",
+      "__t": "catchCert",
+      "_id": "636a5ad22d94fe0827c4460d",
+      "status": "COMPLETE",
+      "documentNumber": "GBR-2022-CC-45A276B54",
+      "documentUri": "_c4a1c8d2-e6d9-4705-9c18-58d8a505acc4.pdf",
+      "userReference": "completed document",
+      "catchSubmission": {
+        "status": "SUCCESS"
+      }
     }
   ]
 }

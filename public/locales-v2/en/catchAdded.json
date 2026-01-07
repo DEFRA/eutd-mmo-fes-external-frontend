@@ -17,5 +17,7 @@
   "psFilterResetButtonLabel": "Reset",
   "catchDetailsHeading": "You have added {{totalDocuments}} document for",
   "catchDetailsHeadingMultiple": "You have added {{totalDocuments}} documents for",
-  "editProductInformationMessage": "To edit product information, press change."
+  "editProductInformationMessage": "To edit product information, press change.",
+  "productsTableHeading": "Processed products",
+  "numberOfCatches": "Number of catches"
 }

@@ -36,6 +36,9 @@ import sdCheckProgressError from "@/fixtures/progressApi/sdCheckProgessError.jso
 import psDocument from "@/fixtures/dashboardApi/psDocument.json";
 import processingStatement from "@/fixtures/processingStatementApi/processingStatement.json";
 import processingStatementNoProducts from "@/fixtures/processingStatementApi/processingStatementNoProducts.json";
+import processingStatementDescriptionOnlyProducts from "@/fixtures/processingStatementApi/processingStatementDescriptionOnlyProducts.json";
+import processingStatementMixedProducts from "@/fixtures/processingStatementApi/processingStatementMixedProducts.json";
+import processingStatementValidProducts from "@/fixtures/processingStatementApi/processingStatementValidProducts.json";
 import exporterDetails from "@/fixtures/addExporterDetails/exporterDetails.json";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
 import sdDocuments from "@/fixtures/dashboardApi/sdDocument.json";
@@ -72,6 +75,34 @@ const progressPageHandler: ITestHandler = {
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
   ],
+
+  // FI0-10647: Block description-only products
+  [TestCaseId.PSProgressWithDescriptionOnlyProduct]: () => [
+    rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgressComplete))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocument))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementDescriptionOnlyProducts))),
+    rest.get(mockCheckProgressUrl, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json({ processedProductDetails: "error.processedProductDetails.incomplete" }))
+    ),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+  ],
+  [TestCaseId.PSProgressWithMixedProducts]: () => [
+    rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgressComplete))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocument))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementMixedProducts))),
+    rest.get(mockCheckProgressUrl, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json({ processedProductDetails: "error.processedProductDetails.incomplete" }))
+    ),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+  ],
+  [TestCaseId.PSProgressWithValidProducts]: () => [
+    rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgressComplete))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocument))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementValidProducts))),
+    rest.get(mockCheckProgressUrl, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+  ],
+
   [TestCaseId.CCUploadEntryCompleteProgress]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),

@@ -1,11 +1,10 @@
 import * as React from "react";
-import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { useScrollOnPageLoad } from "~/hooks";
 import isEmpty from "lodash/isEmpty";
 import { useEffect } from "react";
-import { type LoaderFunction, type ActionFunction, redirect } from "@remix-run/node";
-import { useActionData, useLoaderData } from "@remix-run/react";
+import { redirect, useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
+
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { formatAddress } from "~/components";
@@ -36,8 +35,7 @@ import {
   CheckYourInformationProductLayout,
   CheckYourInformationRow,
 } from "~/composite-components";
-import { getSessionFromRequest } from "~/sessions.server";
-import { json } from "~/communication.server";
+import { getSessionFromRequest, commitSession } from "~/sessions.server";
 import { CheckYourInformationPSSDAction } from "~/models";
 
 type loaderProps = {
@@ -69,14 +67,19 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     return redirect(`/create-storage-document/${documentNumber}/progress`);
   }
 
-  return json(
-    {
+  return new Response(
+    JSON.stringify({
       documentNumber,
       storageDocument,
       exporter,
       csrf,
-    },
-    session
+    }),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Set-Cookie": await commitSession(session),
+      },
+    }
   );
 };
 
@@ -223,9 +226,7 @@ const CheckYourInformation = () => {
               <dt className="govuk-summary-list__key govuk-!-width-one-half">
                 {t("sdCommonFacilityFacilityArrivalDate", { ns: "sdCheckYourInformation" })}
               </dt>
-              <dd className="govuk-summary-list__value">
-                {moment(storageDocument.facilityArrivalDate, "DD/MM/YYYY").format("D MMMM YYYY")}
-              </dd>
+              <dd className="govuk-summary-list__value">{storageDocument.facilityArrivalDate}</dd>
             </div>
           )}
           <div className="govuk-summary-list__row">
@@ -259,26 +260,29 @@ const CheckYourInformation = () => {
               )}
             </dd>
           </div>
-          {storageDocument.facilityApprovalNumber && (
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                {t("sdCheckYourInformationApprovalNumber", { ns: "sdCheckYourInformation" })}
-              </dt>
-              <dd className="govuk-summary-list__value">{storageDocument.facilityApprovalNumber}</dd>
-              <dd className="govuk-summary-list__actions">
-                <a
-                  aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
-                  className="govuk-link"
-                  href={`/create-storage-document/${documentNumber}/add-storage-facility-approval?nextUri=${route(
-                    "/create-storage-document/:documentNumber/check-your-information",
-                    { documentNumber }
-                  )}`}
-                >
-                  {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
-                </a>
-              </dd>
-            </div>
-          )}
+          <div className="govuk-summary-list__row">
+            <dt className="govuk-summary-list__key govuk-!-width-one-half">
+              {t("sdCheckYourInformationApprovalNumber", { ns: "sdCheckYourInformation" })}
+            </dt>
+            <dd className="govuk-summary-list__value">
+              {typeof storageDocument.facilityApprovalNumber === "string" &&
+              storageDocument.facilityApprovalNumber.trim() !== ""
+                ? storageDocument.facilityApprovalNumber
+                : t("sdNotProvided", { ns: "sdCheckYourInformation" })}
+            </dd>
+            <dd className="govuk-summary-list__actions">
+              <a
+                aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                className="govuk-link"
+                href={`/create-storage-document/${documentNumber}/add-storage-facility-approval?nextUri=${route(
+                  "/create-storage-document/:documentNumber/check-your-information",
+                  { documentNumber }
+                )}`}
+              >
+                {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+              </a>
+            </dd>
+          </div>
           {storageDocument.facilityStorage && (
             <div className="govuk-summary-list__row">
               <dt className="govuk-summary-list__key govuk-!-width-one-half">

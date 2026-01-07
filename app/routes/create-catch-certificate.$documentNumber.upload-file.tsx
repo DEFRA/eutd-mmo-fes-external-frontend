@@ -1,16 +1,15 @@
 import * as React from "react";
 import { useEffect, type FormEventHandler, type MouseEventHandler } from "react";
-import { Link, useActionData, useLoaderData, useSubmit, useNavigation } from "@remix-run/react";
+import { Link, useActionData, useLoaderData, useSubmit, useNavigation } from "react-router-dom";
 import { BackToProgressLink, Main, Title, NotificationBanner, ErrorSummary, SecureForm } from "~/components";
 import { route } from "routes-gen";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
-import { useHydrated } from "remix-utils/use-hydrated";
-import { type LoaderFunction, type ActionFunction } from "@remix-run/node";
+import { useIsHydrated, useScrollOnPageLoad } from "~/hooks";
+import { type LoaderFunction, type ActionFunction } from "react-router";
 import { useTranslation } from "react-i18next";
 import isEmpty from "lodash/isEmpty";
 import { displayErrorTransformedMessages, getErrorMessage, scrollToId } from "~/helpers";
 import type { ErrorObject, ErrorResponse, IErrorsTransformed, IUploadedLanding } from "~/types";
-import { useScrollOnPageLoad } from "~/hooks";
 import { UploadFileAction, UploadFileLoader } from "~/models";
 import { RenderUploadFileLandingsData } from "~/composite-components/renderUploadFileLandingsData";
 
@@ -32,7 +31,7 @@ const UploadFile = () => {
     successfullyUploadedRows?: number;
     errors: IErrorsTransformed;
   }>() ?? { errors: {} };
-  const isHydrated = useHydrated();
+  const isHydrated = useIsHydrated();
   const { t } = useTranslation(["uploadFile", "common"]);
   const submit = useSubmit();
   const navigation = useNavigation();

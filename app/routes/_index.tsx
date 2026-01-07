@@ -1,4 +1,3 @@
-import * as React from "react";
 import { analyticsAcceptedCookie } from "~/cookies.server";
 import type { UserAttribute, IError } from "~/types";
 import {
@@ -10,14 +9,14 @@ import {
   validateCSRFToken,
 } from "~/.server";
 import { route } from "routes-gen";
-import { type ActionFunction, type LoaderFunction, redirect } from "@remix-run/node";
-import { apiCallFailed, json } from "~/communication.server";
+import { redirect, useLoaderData, type ActionFunction, type LoaderFunction } from "react-router";
+import { apiCallFailed } from "~/communication.server";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import { useTranslation } from "react-i18next";
 import { Main, SecureForm } from "~/components";
 import setApiMock from "tests/msw/helpers/setApiMock";
-import { getSessionFromRequest } from "~/sessions.server";
-import { useLoaderData } from "@remix-run/react";
+import { getSessionFromRequest, commitSession } from "~/sessions.server";
+import * as React from "react";
 
 /* istanbul ignore next */
 export const loader: LoaderFunction = async ({ request }) => {
@@ -37,7 +36,12 @@ export const loader: LoaderFunction = async ({ request }) => {
     await getBearerTokenForRequest(request);
   }
 
-  return json({ csrf }, session);
+  return new Response(JSON.stringify({ csrf }), {
+    headers: {
+      "Content-Type": "application/json",
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 };
 
 export const action: ActionFunction = async ({ request }) => {

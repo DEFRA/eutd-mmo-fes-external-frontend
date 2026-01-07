@@ -26,18 +26,22 @@ const verifyLandingFormIsReset = (isProductEmpty: boolean) => {
 };
 
 const populateLandingForm = () => {
+  // Wait for hydration - date pickers are a good indicator
+  cy.get("#startDate").find("button.date-picker").should("be.visible");
+  cy.wait(300); // Allow hydration to complete
+
   // product
   cy.get("select#product").select(1).invoke("val").should("not.eq", "");
   // start date
   cy.get("#startDate").find("button.date-picker").click({ force: true });
-  cy.get(".react-datepicker-popper").should("be.visible");
+  cy.get(".react-datepicker-popper", { timeout: 5000 }).should("be.visible");
   cy.get(".react-datepicker__day").eq(0).trigger("click");
   cy.get("#startDate-day").should("have.prop", "value").and("not.be.empty");
   cy.get("#startDate-month").should("have.prop", "value").and("not.be.empty");
   cy.get("#startDate-year").should("have.prop", "value").and("not.be.empty");
   // date landed
   cy.get("#dateLanded").find("button.date-picker").click({ force: true });
-  cy.get(".react-datepicker-popper").should("be.visible");
+  cy.get(".react-datepicker-popper", { timeout: 5000 }).should("be.visible");
   cy.get(".react-datepicker__day").eq(10).trigger("click");
   cy.get("#dateLanded-day").should("have.prop", "value").and("not.be.empty");
   cy.get("#dateLanded-month").should("have.prop", "value").and("not.be.empty");
@@ -167,9 +171,7 @@ describe("Manual landing page render with page guard", () => {
     cy.get("div .govuk-details__summary").eq(5).click({ force: true });
     cy.get("div .govuk-details__text")
       .eq(5)
-      .contains(
-        'If the vessel you need is not listed, select "Vessel not listed – select if not available (N/A)" from the dropdown.'
-      )
+      .contains('If the vessel you need is not listed, select "Vessel not found - N/A" from the dropdown.')
       .should("be.visible");
     cy.get("div .govuk-details__summary").eq(6).contains("What are gear details?");
     cy.get("div .govuk-details__summary").eq(6).click({ force: true });
@@ -712,12 +714,13 @@ describe("Manual landing page when javascript is disabled", () => {
     // select a gear category
     cy.get("select#gearCategory").select("Surrounding nets", { force: true });
     cy.get("[data-testid='add-gear-category']").click({ force: true });
-    // workaround for Remix hydration issues, if we don't wait the UI simply isn't ready
-    cy.wait(250);
+    // Wait for the server-side action to complete and page to reload
+    cy.wait(500);
     // check the gear type combo now has additional options
     cy.get("select#gearType option:selected").should("have.text", "Select gear type");
     cy.get("select#gearType option").should("have.length", 6);
     cy.get("select#gearType").select("Purse seines (PS)", { force: true });
+    // Re-query to avoid detachment after selection
     cy.get("select#gearType").should("have.value", "Purse seines (PS)");
   });
 
@@ -1152,7 +1155,8 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
     cy.get("#dateLanded-month").type(pad2(today.getMonth() + 1));
     cy.get("#dateLanded-year").type(today.getFullYear().toString());
     cy.get("input[name='vessel']").type("CARINA (BF803)");
-    cy.get("#dateLanded-day").clear().type("99");
+    cy.get("#dateLanded-day").clear({ force: true });
+    cy.get("#dateLanded-day").type("99", { force: true });
     cy.get("input[name='vessel']").should("have.value", "");
   });
 
@@ -1195,9 +1199,12 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when High Seas Area is not selected", () => {
-    cy.get("input#startDate-day").clear().type("01");
-    cy.get("input#startDate-month").clear().type("09");
-    cy.get("input#startDate-year").clear().type("2020");
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
 
     cy.get("[data-testid=submit]").click({ force: true });
 
@@ -1209,9 +1216,12 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when Exclusive Economic Zone is not provided", () => {
-    cy.get("input#startDate-day").clear().type("01");
-    cy.get("input#startDate-month").clear().type("09");
-    cy.get("input#startDate-year").clear().type("2020");
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
 
     cy.get("input#separateHighSeasAreaFalse").check({ force: true });
 
@@ -1231,9 +1241,12 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when Gear Category is not selected", () => {
-    cy.get("input#startDate-day").clear().type("01");
-    cy.get("input#startDate-month").clear().type("09");
-    cy.get("input#startDate-year").clear().type("2020");
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
 
     cy.get("input#highSeasArea").check({ force: true });
 
@@ -1247,9 +1260,12 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when Gear Type is not selected", () => {
-    cy.get("input#startDate-day").clear().type("01");
-    cy.get("input#startDate-month").clear().type("09");
-    cy.get("input#startDate-year").clear().type("2020");
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
 
     cy.get("input#highSeasArea").check({ force: true });
 
@@ -1277,9 +1293,12 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display error when EEZ is selected as 'No' but no country is provided", () => {
-    cy.get("input#startDate-day").clear().type("01");
-    cy.get("input#startDate-month").clear().type("09");
-    cy.get("input#startDate-year").clear().type("2020");
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
 
     cy.get("input#separateHighSeasAreaFalse").check({ force: true });
 
@@ -1293,16 +1312,30 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should apply correct CSS classes to EEZ fields based on error state", () => {
-    cy.get("input#startDate-day").clear().type("01");
-    cy.get("input#startDate-month").clear().type("09");
-    cy.get("input#startDate-year").clear().type("2020");
+    // Wait for form to hydrate
+    cy.get("input#startDate-day").should("be.visible");
+    cy.wait(200);
+
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
 
     cy.get("input#separateHighSeasAreaFalse").check({ force: true });
 
-    cy.get("#eez-0").should("be.visible");
+    // Re-query the DOM after interactions to avoid detachment
+    cy.get("body").then(() => {
+      cy.get("#eez-0").should("be.visible");
+    });
 
     cy.get("[data-testid=submit]").click({ force: true });
-    cy.get(".govuk-error-message").should("contain", "Select or enter a country for the exclusive economic zone");
+
+    // Wait for error to appear and re-query DOM
+    cy.get("body").then(() => {
+      cy.get(".govuk-error-message").should("contain", "Select or enter a country for the exclusive economic zone");
+    });
   });
 
   it("should handle gear types API error gracefully", () => {

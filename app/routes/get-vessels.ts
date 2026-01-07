@@ -1,4 +1,4 @@
-import { type LoaderFunction } from "@remix-run/node";
+import { type LoaderFunction } from "react-router";
 import { getVessels } from "~/.server";
 import type { IVessel } from "~/types";
 import serverLogger from "~/logger.server";

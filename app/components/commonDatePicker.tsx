@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { isValidDate } from "~/helpers/utilities";
 import moment from "moment";
 import DatePicker from "react-datepicker";
-import { useHydrated } from "remix-utils/use-hydrated";
+import { useIsHydrated } from "~/hooks";
 import { errorMessageText } from "~/helpers/errorUtilities";
 
 type DatePickerProps = {
@@ -37,7 +37,7 @@ export const CommonDatePicker = ({
 }: DatePickerProps) => {
   const { t } = useTranslation(["errorsText", "common"]);
   const dateFormat = "YYYY-MM-DD";
-  const isHydrated = useHydrated();
+  const isHydrated = useIsHydrated();
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     isValidDate(dateSelected) ? new Date(dateSelected) : new Date()
   );

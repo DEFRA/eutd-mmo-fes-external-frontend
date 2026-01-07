@@ -1,5 +1,4 @@
-import { vitePlugin as remix } from "@remix-run/dev";
-import { installGlobals } from "@remix-run/node";
+import { reactRouter } from "@react-router/dev/vite";
 import path from "path";
 import { defineConfig, transformWithEsbuild } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
@@ -7,9 +6,6 @@ import babel from 'vite-plugin-babel';
 import istanbul from 'vite-plugin-istanbul';
 
 const port = process.env.PORT ?? 3000;
-
-// This installs globals such as "fetch", "Response", "Request" and "Headers".
-installGlobals();
 
 export default defineConfig({
   server: {
@@ -51,11 +47,7 @@ export default defineConfig({
         });
       },
     },
-    remix({
-      appDirectory: process.env.NODE_ENV === "test" ? "instrumented" : "app",
-      ignoredRouteFiles: process.env.NODE_ENV === "test" ? ["**/.*", "**/*.test.{js,ts}"] : ["**/.*", "**/*.test.{js,ts}", "coverage.tsx"],
-      buildDirectory: "build",
-    }),
+    reactRouter(),
     tsconfigPaths(),
   ],
   optimizeDeps: {
@@ -66,14 +58,29 @@ export default defineConfig({
       },
     },
   },
+  ssr: {
+    noExternal: ['react-idle-timer', 'react-router', 'react-router-dom'],
+  },
   resolve: {
     alias: {
-      '~': path.resolve(__dirname, 'app/'),
+      '~': path.resolve(__dirname, process.env.NODE_ENV === "test" ? 'instrumented/' : 'app/'),
       "@/fixtures/*": path.resolve(__dirname, "tests/cypress/fixtures/"),
       'tests': path.resolve(__dirname, 'tests/'),
+      // React Router v7 doesn't have /server exports - redirect to main package
+      'react-router-dom/server': 'react-router',
+      'react-router/server': 'react-router',
     },
   },
   build: {
-    sourcemap: process.env.NODE_ENV !== "production"
+    sourcemap: process.env.NODE_ENV !== "production",
+    rollupOptions: {
+      onwarn(warning, warn) {
+        // Suppress sourcemap warnings for node_modules
+        if (warning.code === 'SOURCEMAP_ERROR' && warning.message.includes('node_modules')) {
+          return;
+        }
+        warn(warning);
+      }
+    }
   }
 });

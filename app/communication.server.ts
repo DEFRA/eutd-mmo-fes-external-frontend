@@ -3,7 +3,15 @@ import type { ErrorResponse, IError } from "~/types";
 import { getTransformedError } from "~/helpers";
 import { getEnv } from "~/env.server";
 import { commitSession } from "~/sessions.server";
-import { type Session, type SessionData } from "@remix-run/node";
+import { type Session, type SessionData } from "react-router";
+
+// Import cross-fetch for test mode (MSW v1.3.1 cannot intercept Node 18+ native fetch)
+/* istanbul ignore next */
+import crossFetch from "cross-fetch";
+
+// Use cross-fetch in test mode, native fetch otherwise
+/* istanbul ignore next */
+const fetchImpl = process.env.NODE_ENV === "test" ? crossFetch : fetch;
 
 const commonRequestHeaders = (bearerToken: string) => ({
   "Content-Type": "application/json",
@@ -20,7 +28,7 @@ type Delete = (bearerToken: string, url: string, requestHeaders?: HeadersInit) =
 export const getReferenceData = async (url: string, requestHeaders: HeadersInit = {}): Promise<Response> => {
   const credentials = btoa(`${ENV.REF_SERVICE_BASIC_AUTH_USER}:${ENV.REF_SERVICE_BASIC_AUTH_PASSWORD}`);
 
-  const response = await fetch(url, {
+  const response = await fetchImpl(url, {
     method: "GET",
     headers: {
       ...requestHeaders,
@@ -36,7 +44,7 @@ export const get: Get = async (
   url: string,
   requestHeaders: HeadersInit = {}
 ): Promise<Response> => {
-  const response = await fetch(url, {
+  const response = await fetchImpl(url, {
     method: "GET",
     headers: {
       ...requestHeaders,
@@ -47,7 +55,6 @@ export const get: Get = async (
   if (!response.ok && ![400, 403, 404].includes(response.status)) {
     throw new Response(response.statusText, response);
   }
-
   return response;
 };
 
@@ -57,7 +64,7 @@ export const post: Post = async (
   requestHeaders: HeadersInit = {},
   requestBody: any = {}
 ): Promise<Response> => {
-  const response = await fetch(url, {
+  const response = await fetchImpl(url, {
     method: "POST",
     headers: {
       ...requestHeaders,
@@ -79,7 +86,7 @@ export const put: Put = async (
   requestHeaders: HeadersInit = {},
   requestBody: any = {}
 ): Promise<Response> => {
-  const response = await fetch(url, {
+  const response = await fetchImpl(url, {
     method: "PUT",
     headers: {
       ...requestHeaders,
@@ -100,7 +107,7 @@ export const deleteRequest: Delete = async (
   url: string,
   requestHeaders: HeadersInit = {}
 ): Promise<Response> => {
-  const response = await fetch(url, {
+  const response = await fetchImpl(url, {
     method: "DELETE",
     headers: {
       ...requestHeaders,
@@ -152,6 +159,15 @@ export const apiCallFailed: (
   });
 };
 
+/**
+ * Custom json() helper that returns Response with session cookie.
+ * Compatible with v3_singleFetch - Single Fetch unwraps Response objects
+ * and preserves Set-Cookie headers automatically.
+ *
+ * Note: While raw objects can be returned with single fetch, Response objects
+ * with headers (especially Set-Cookie) are still the recommended approach
+ * for managing sessions until full Remix v3 migration.
+ */
 export const json: (payload: any, session: Session<SessionData, SessionData>) => Promise<Response> = async (
   payload,
   session

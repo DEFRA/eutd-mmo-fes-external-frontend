@@ -1,4 +1,4 @@
-import type { Params } from "@remix-run/react";
+import { redirect, type Params } from "react-router";
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import {
@@ -8,7 +8,7 @@ import {
   submitCopyDocument,
   validateCSRFToken,
 } from "~/.server";
-import { redirect } from "@remix-run/node";
+
 import { apiCallFailed } from "~/communication.server";
 import type { CopyCertificateDocument, ErrorResponse, IError, Journey } from "~/types";
 import { getSessionFromRequest, commitSession } from "~/sessions.server";

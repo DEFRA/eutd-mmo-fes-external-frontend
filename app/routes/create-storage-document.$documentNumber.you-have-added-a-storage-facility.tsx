@@ -1,9 +1,16 @@
 import * as React from "react";
 import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
-import { useActionData, useLoaderData } from "@remix-run/react";
+import {
+  useActionData,
+  useLoaderData,
+  redirect,
+  type MetaFunction,
+  type LoaderFunction,
+  type ActionFunction,
+} from "react-router";
 import { useTranslation } from "react-i18next";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
-import { type MetaFunction, type LoaderFunction, redirect, type ActionFunction } from "@remix-run/node";
+
 import type {
   IUnauthorised,
   StorageDocument,
@@ -28,7 +35,7 @@ import isEmpty from "lodash/isEmpty";
 import { Fragment, useEffect } from "react";
 import i18next from "~/i18next.server";
 
-export const meta: MetaFunction = ({ data }) => getMeta(data);
+export const meta: MetaFunction = (args) => getMeta(args);
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   /* istanbul ignore next */

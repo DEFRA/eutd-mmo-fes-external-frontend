@@ -237,6 +237,21 @@ const addLandingsHandler: ITestHandler = {
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.status(500))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
   ],
+  [TestCaseId.AddLandingGearTypesAPIError]: () => [
+    rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json(addLandings))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(mannualLandingType))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(mockSearchVesselName, (req, res, ctx) => res(ctx.json(getVessels))),
+    rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json(favourites))),
+    rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.post(SAVE_AND_VALIDATE_EXPORT_URL, (req, res, ctx) => res(ctx.json(addOrUpdateResponse))),
+    rest.get(CONSERVATION_URL, (req, res, ctx) => res(ctx.json(empty))),
+    rest.post(VALIDATE_LANDINGS_URL, (req, res, ctx) => res(ctx.json(addOrUpdateResponse))),
+    rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
+    rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.status(500))),
+    rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+  ],
 };
 
 export default addLandingsHandler;

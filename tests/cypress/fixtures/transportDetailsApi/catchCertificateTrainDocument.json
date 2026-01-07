@@ -4,6 +4,7 @@
   "departurePlace": "Hull",
   "documents": [
     {
+      "id": "existing-doc-id",
       "name": "Invoice",
       "reference": "INV0001"
     }

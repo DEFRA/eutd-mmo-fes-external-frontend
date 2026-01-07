@@ -154,4 +154,12 @@ describe("Add Transportation Documents Truck", () => {
       ]);
     });
   });
+
+  it("should not display the Add another document button when 5 transport documents have been added", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportDocumentsRestrictAddAnotherDocument,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.contains("button", "Add another document").should("not.exist");
+  });
 });

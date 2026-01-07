@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button, BUTTON_TYPE, Tab, TabGroup } from "@capgeminiuk/dcx-react-library";
-import { type LoaderFunction, type ActionFunction } from "@remix-run/node";
-import { useActionData, useLoaderData } from "@remix-run/react";
+import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
+
 import {
   Main,
   Title,

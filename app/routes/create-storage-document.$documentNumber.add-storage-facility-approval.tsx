@@ -2,8 +2,8 @@ import * as React from "react";
 import { Main, Title, BackToProgressLink, SecureForm, ErrorSummary, ErrorMessage } from "~/components";
 import { useTranslation } from "react-i18next";
 import { FormInput } from "@capgeminiuk/dcx-react-library";
-import { useActionData, useLoaderData } from "@remix-run/react";
-import { type ActionFunction, type LoaderFunction, redirect } from "@remix-run/node";
+import { useActionData, useLoaderData, redirect, type ActionFunction, type LoaderFunction } from "react-router";
+
 import type { StorageDocument, IUnauthorised, IErrorsTransformed } from "~/types";
 import {
   getBearerTokenForRequest,
@@ -17,7 +17,6 @@ import setApiMock from "tests/msw/helpers/setApiMock";
 import { ButtonGroup } from "~/composite-components";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import classNames from "classnames/bind";
-import { json } from "~/communication.server";
 import { getEnv } from "~/env.server";
 import isEmpty from "lodash/isEmpty";
 import { route } from "routes-gen";
@@ -53,16 +52,21 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   validateResponseData(storageDocumentDetails);
 
-  return json(
-    {
+  return new Response(
+    JSON.stringify({
       documentNumber,
       nextUri,
       displayOptionalSuffix,
       approvalNumber: storageDocumentDetails?.facilityApprovalNumber,
       facilityStorage: storageDocumentDetails?.facilityStorage,
       csrf,
-    },
-    session
+    }),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Set-Cookie": await commitSession(session),
+      },
+    }
   );
 };
 

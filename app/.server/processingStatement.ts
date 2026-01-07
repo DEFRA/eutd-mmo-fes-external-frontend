@@ -16,7 +16,7 @@ import type { Params } from "@remix-run/router/dist/utils";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { getBearerTokenForRequest } from "./auth";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
-import { redirect } from "@remix-run/node";
+import { redirect } from "react-router";
 
 export const getProcessingStatement = async (
   bearerToken: string,

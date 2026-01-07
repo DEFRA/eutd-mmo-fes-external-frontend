@@ -1,4 +1,4 @@
-import { useActionData, useLoaderData } from "@remix-run/react";
+import { useActionData, useLoaderData } from "react-router";
 import { useTranslation } from "react-i18next";
 import type { ManageFavouritesProps } from "~/types";
 import { ManageFavouritesComponent } from "./manageFavouritesComponent";

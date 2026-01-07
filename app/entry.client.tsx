@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RemixBrowser } from "@remix-run/react";
+import { HydratedRouter } from "react-router-dom";
 import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import Backend from "i18next-http-backend";
@@ -23,11 +23,11 @@ i18next
       caches: [],
     },
   })
-  .then(() =>
+  .then(() => {
     hydrateRoot(
       document,
       <I18nextProvider i18n={i18next}>
-        <RemixBrowser />
+        <HydratedRouter />
       </I18nextProvider>
-    )
-  );
+    );
+  });

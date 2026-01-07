@@ -1,0 +1,65 @@
+{
+  "catches": [
+    {
+      "_id": "1",
+      "product": "Test Product",
+      "commodityCode": "00000000",
+      "certificateNumber": "GBR-2022-SD-F71D98A30",
+      "productWeight": "0",
+      "weightOnCC": "0",
+      "placeOfUnloading": "",
+      "dateOfUnloading": "",
+      "transportUnloadedFrom": "",
+      "id": "test-1",
+      "scientificName": "Testus productus",
+      "certificateType": "non_uk",
+      "issuingCountry": {
+        "officialCountryName": "Testland",
+        "isoCodeAlpha2": "TL",
+        "isoCodeAlpha3": "TST",
+        "isoNumericCode": "999"
+      },
+      "supportingDocuments": [],
+      "productDescription": "",
+      "netWeightProductArrival": "",
+      "netWeightFisheryProductArrival": "",
+      "netWeightProductDeparture": "",
+      "netWeightFisheryProductDeparture": ""
+    }
+  ],
+  "facilityName": "Test Facility",
+  "facilityAddressOne": "",
+  "facilityBuildingName": "",
+  "facilityBuildingNumber": "",
+  "facilitySubBuildingName": "",
+  "facilityStreetName": "",
+  "facilityTownCity": "",
+  "facilityCounty": "",
+  "facilityCountry": "",
+  "facilityPostcode": "",
+  "facilityArrivalDate": "",
+  "facilityApprovalNumber": "",
+  "validationErrors": [{}],
+  "addAnotherProduct": "No",
+  "addAnotherStorageFacility": "No",
+  "transport": {
+    "vehicle": "plane",
+    "airwayBillNumber": "",
+    "freightBillNumber": "",
+    "containerNumber": "",
+    "departurePlace": "",
+    "pointOfDestination": "",
+    "exportDate": "",
+    "exportedTo": { "officialCountryName": "", "isoCodeAlpha2": "", "isoCodeAlpha3": "", "isoNumericCode": "" }
+  },
+  "exportedTo": { "officialCountryName": "", "isoCodeAlpha2": "", "isoCodeAlpha3": "", "isoNumericCode": "" },
+  "arrivalTransport": {
+    "vehicle": "plane",
+    "airwayBillNumber": "",
+    "freightBillNumber": "",
+    "containerNumber": "",
+    "departurePlace": "",
+    "departureDate": "",
+    "exportedTo": { "officialCountryName": "", "isoCodeAlpha2": "", "isoCodeAlpha3": "", "isoNumericCode": "" }
+  }
+}

@@ -2,6 +2,14 @@ import * as msal from "@azure/msal-node";
 import querystring from "querystring";
 import { getEnv } from "~/env.server";
 
+// Import cross-fetch for test mode (MSW v1.3.1 cannot intercept Node 18+ native fetch)
+/* istanbul ignore next */
+import crossFetch from "cross-fetch";
+
+// Use cross-fetch in test mode, native fetch otherwise
+/* istanbul ignore next */
+const fetchImpl = process.env.NODE_ENV === "test" ? crossFetch : fetch;
+
 const ENV = getEnv();
 
 export const enrolmentStatus = {
@@ -133,7 +141,7 @@ export const getDynamicsToken = (): Promise<string> =>
 
 export const getDynamicsContactAccountLinks = async (contactId: string, dynamicsToken: string): Promise<any[]> => {
   const url = getDynamicsContactAccountUrl(contactId);
-  const response: Response = await fetch(url, getDynamicsHeader(dynamicsToken));
+  const response: Response = await fetchImpl(url, getDynamicsHeader(dynamicsToken));
   const data = await response.json();
   return parseContactAccountLinksResponse(data);
 };
@@ -144,7 +152,7 @@ export const getEnrolmentRequests = async (
   dynamicsToken: string
 ): Promise<any[]> => {
   const url = getEnrolmentsRequestsUrl(serviceId, contactId);
-  const response: Response = await fetch(url, getDynamicsHeader(dynamicsToken));
+  const response: Response = await fetchImpl(url, getDynamicsHeader(dynamicsToken));
   const data = await response.json();
   return parseEnrolmentsRequestResponse(data);
 };
@@ -183,7 +191,7 @@ export const createEnrolment = async (
   }
 
   const url = getCreateEnrolmentUrl();
-  const response: Response = await fetch(url, {
+  const response: Response = await fetchImpl(url, {
     method: "POST",
     headers: {
       Authorization: "Bearer " + dynamicsToken,

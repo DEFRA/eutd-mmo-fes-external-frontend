@@ -1,6 +1,6 @@
 import { Main, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
 import { useTranslation } from "react-i18next";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "react-router";
 import { ButtonGroup } from "./buttonGroup";
 import type { ITransport, IErrorsTransformed, Vehicle, ICountry } from "~/types";
 import { route } from "routes-gen";

@@ -7,6 +7,7 @@ export interface IVessel {
   vesselName?: string;
   flag?: string;
   cfr?: string;
+  ircs?: string | null;
   homePort?: string;
   licenceNumber?: string;
   imoNumber?: number | null;

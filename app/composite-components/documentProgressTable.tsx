@@ -69,12 +69,7 @@ export const DocumentProgressTable = ({
                   </td>
                   {journey === "catchCertificate" && (
                     <td scope="row" className="govuk-table__cell">
-                      <div
-                        className={`govuk-!-font-weight-bold govuk-tag govuk-tag--${getStatusClassName(
-                          document.status,
-                          document.isFailed
-                        )}`}
-                      >
+                      <div className={`govuk-tag govuk-tag--${getStatusClassName(document.status, document.isFailed)}`}>
                         {getStatusName(document.status, document.isFailed, t)}
                       </div>
                     </td>

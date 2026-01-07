@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LoaderFunction, ActionFunction } from "@remix-run/node";
+import type { LoaderFunction, ActionFunction } from "react-router";
 import { progressAction, progressPageLoader } from "~/.server";
 import type { ErrorResponse } from "~/types";
 import { ProgressPageComponent } from "~/composite-components";
