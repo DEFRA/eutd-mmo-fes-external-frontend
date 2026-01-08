@@ -194,7 +194,34 @@ describe("Add Your Reference - Storage Document", () => {
   const documentUrl = "/create-storage-document/GBR-2021-SD-8EEB7E123";
   const pageUrl = `${documentUrl}/add-your-reference`;
 
-  it("should render a valid hint message", () => {
+  it("should render the information notice about non-manipulation document", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddReference,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get(".govuk-warning-text").should("exist");
+    cy.get(".govuk-warning-text__icon").should("contain", "!");
+    cy.get(".govuk-warning-text__text").should(
+      "contain",
+      "This information will not appear on the non-manipulation document."
+    );
+  });
+
+  it("should render a bold field label", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddReference,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("label[for='userReference']")
+      .should("have.class", "govuk-!-font-weight-bold")
+      .should("contain", "Your reference (optional)");
+  });
+
+  it("should render the updated hint message", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddReference,
     };
@@ -203,7 +230,37 @@ describe("Add Your Reference - Storage Document", () => {
 
     cy.get(".govuk-hint").should(
       "have.text",
-      "Enter a reference to help you identify this storage document within the service. This reference is for your own use and will not appear on the final certificate. For example, you could choose a reference number from your organisation."
+      "This reference is for your own records. For example, you might use an internal tracking number, project code, or any label that makes sense for your organisation."
+    );
+  });
+
+  it("should render the Welsh translation of the information notice", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddReference,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("a[hreflang='cy']").click();
+
+    cy.get(".govuk-warning-text__text").should(
+      "contain",
+      "Fydd yr wybodaeth yma ddim yn ymddangos ar y ddogfen dim triniaeth."
+    );
+  });
+
+  it("should render the Welsh translation of the hint text", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddReference,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("a[hreflang='cy']").click();
+
+    cy.get(".govuk-hint").should(
+      "contain",
+      "Cyfeiriad ar gyfer eich cofnodion chi'ch hun yw hwn. Er enghraifft, fe allech chi ddefnyddio rhif olrhain mewnol, cod prosiect, neu unrhyw label sy'n gwneud synnwyr i'ch sefydliad chi."
     );
   });
 
