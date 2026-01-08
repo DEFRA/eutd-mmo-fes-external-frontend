@@ -36,7 +36,7 @@ describe("HelpSection", () => {
     });
   });
 
-  it("does not display on the following types of pages", () => {
+  it("does not display on the create pages ore the manage pages", () => {
     const urls = [
       "/create-catch-certificate/catch-certificates",
       "/create-processing-statement/processing-statements",
@@ -44,15 +44,13 @@ describe("HelpSection", () => {
       "/manage-favourites",
     ];
 
-    urls.forEach((url) => {
-      it(`Should not display the help section on ${url}`, () => {
-        cy.visit(url);
-        cy.get("[data-testid=help-section]").should("exist");
-      });
+    urls.forEach(({ url, testCaseId }) => {
+      cy.visit(url, { qs: { testCaseId } });
+      cy.get("[data-testid=help-section]").should("not.exist");
     });
   });
 
-  it("displays help section contents", () => {
+  it("displays help section contents in English", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadEntryCompleteProgress,
     };
@@ -85,7 +83,7 @@ describe("HelpSection", () => {
       .should("match", /exporting or moving fish from the UK\s*\(opens in new tab\)\.?/i);
   });
 
-  it.skip("should render the Welsh translation of the Help Link contents", () => {
+  it("displays help section contents in Welsh", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadEntryCompleteProgress,
     };
@@ -111,6 +109,6 @@ describe("HelpSection", () => {
 
     cy.get("[data-test-id='exporting-link']")
       .invoke("text")
-      .should("match", /allforio neu symud pysgod o'r DU \(yn agor mewn tab newydd\)\.?/i); // normalise whitespace
+      .should("match", /allforio neu symud pysgod o['’]r DU\s*\(yn agor mewn tab newydd\)\.?/i); // normalise whitespace and apostrophe variants
   });
 });
