@@ -260,7 +260,7 @@ describe("Add Your Reference - Storage Document", () => {
 
     cy.get(".govuk-hint").should(
       "contain",
-      "Cyfeiriad ar gyfer eich cofnodion chi’ch hun yw hwn. Er enghraifft, fe allech chi ddefnyddio rhif olrhain mewnol, cod prosiect, neu unrhyw label sy'n gwneud synnwyr i'ch sefydliad chi."
+      "Cyfeiriad ar gyfer eich cofnodion chi'ch hun yw hwn. Er enghraifft, fe allech chi ddefnyddio rhif olrhain mewnol, cod prosiect, neu unrhyw label sy'n gwneud synnwyr i'ch sefydliad chi."
     );
   });
 
