@@ -450,15 +450,15 @@ const AddProductIndex = () => {
               <div
                 id={certificateTypeKey}
                 className={
-                  !isEmpty(errors?.[certificateTypeKey])
-                    ? "govuk-form-group govuk-form-group--error"
-                    : "govuk-form-group"
+                  isEmpty(errors?.[certificateTypeKey])
+                    ? "govuk-form-group"
+                    : "govuk-form-group govuk-form-group--error"
                 }
               >
                 <fieldset
                   className="govuk-fieldset"
                   aria-describedby={
-                    !isEmpty(errors?.[certificateTypeKey]) ? "certificateType-error" : `${certificateTypeKey}-hint`
+                    isEmpty(errors?.[certificateTypeKey]) ? `${certificateTypeKey}-hint` : "certificateType-error"
                   }
                 >
                   <label className="govuk-label govuk-!-font-weight-bold" htmlFor={certificateTypeKey}>
@@ -820,9 +820,9 @@ const AddProductIndex = () => {
               })}
               id={netWeightFisheryProductArrivalKey}
               aria-describedby={
-                !isEmpty(errors?.[netWeightFisheryProductArrivalKey])
-                  ? "netWeightFisheryProductArrival-error"
-                  : `${netWeightFisheryProductArrivalKey}-hint`
+                isEmpty(errors?.[netWeightFisheryProductArrivalKey])
+                  ? `${netWeightFisheryProductArrivalKey}-hint`
+                  : "netWeightFisheryProductArrival-error"
               }
             >
               <label className="govuk-label govuk-!-font-weight-bold" htmlFor="netWeightFisheryProductArrival">

@@ -36,7 +36,7 @@ const StorageDocuments = () => {
     voidLink: "/create-storage-document/:documentNumber/void-this-storage-document",
     copyLink: "/create-storage-document/:documentNumber/copy-this-storage-document",
   };
-  const refinedDocuments = PopulateLinks(journey, documents as IGetAllDocumentsData, t, linksToPopulate);
+  const refinedDocuments = PopulateLinks(journey, documents, t, linksToPopulate);
   const [searchParams] = useSearchParams();
   const journeyLink = "/create-storage-document/storage-documents";
   const journeyName = "storageDocument";
