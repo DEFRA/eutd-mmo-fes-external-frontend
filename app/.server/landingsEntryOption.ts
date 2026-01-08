@@ -50,7 +50,7 @@ const onAddLandingsEntryOptionResponse = async (
         landingsEntryOption: landingsEntryOption as LandingEntryType,
         errors: [],
       };
-    case 400:
+    case 400: {
       const data = await response.json();
       return {
         landingsEntryOption: landingsEntryOption as LandingEntryType,
@@ -61,6 +61,7 @@ const onAddLandingsEntryOptionResponse = async (
           },
         ],
       };
+    }
     case 403:
       return {
         errors: [],
@@ -74,9 +75,10 @@ const onAddLandingsEntryOptionResponse = async (
 const onGetLandingsEntryOptionResponse = async (response: Response): Promise<ILandingsEntryOptionGet> => {
   switch (response.status) {
     case 200:
-    case 204:
-      const landingsEntryOption: ILandingsEntryOptionGet = await response.json();
+    case 204: {
+      const landingsEntryOption = (await response.json()) as ILandingsEntryOptionGet;
       return landingsEntryOption;
+    }
     case 403:
       return {
         unauthorised: true,
