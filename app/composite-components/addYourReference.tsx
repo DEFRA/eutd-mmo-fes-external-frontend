@@ -45,6 +45,7 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
             <FormInput
               containerClassName="govuk-form-group"
               label={t("commonAddYourReferenceOptionalText")}
+              labelClassName="govuk-label govuk-!-font-weight-bold"
               name="userReference"
               type="text"
               inputClassName={isEmpty(errors) ? "govuk-input" : "govuk-input govuk-input--error"}
