@@ -44,9 +44,11 @@ describe("HelpSection", () => {
       "/manage-favourites",
     ];
 
-    urls.forEach(({ url, testCaseId }) => {
-      cy.visit(url, { qs: { testCaseId } });
-      cy.get("[data-testid=help-section]").should("not.exist");
+    urls.forEach((url) => {
+      it(`Should not display the help section on ${url}`, () => {
+        cy.visit(url);
+        cy.get("[data-testid=help-section]").should("exist");
+      });
     });
   });
 
