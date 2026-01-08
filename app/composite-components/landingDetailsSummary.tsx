@@ -80,8 +80,8 @@ export const LandingDetailsSummary = ({
         hasChangeLink: true,
         idAttribute: "highSeasArea-hint",
       },
-      ...(model?.exclusiveEconomicZones && model?.exclusiveEconomicZones.length > 0
-        ? model?.exclusiveEconomicZones.map((c, i) => ({
+      ...(model?.exclusiveEconomicZones && model.exclusiveEconomicZones.length > 0
+        ? model.exclusiveEconomicZones.map((c, i) => ({
             label: t("ccAddLandingExclusiveZoneLabel", { ns: "checkYourInformation" }),
             value: c.officialCountryName,
             hasChangeLink: true,
