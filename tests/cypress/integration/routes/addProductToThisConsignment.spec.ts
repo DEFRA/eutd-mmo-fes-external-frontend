@@ -320,6 +320,41 @@ describe("Add product to this consignment  page", () => {
     cy.get('[id^="remove-supporting-doc-button"]').should("not.exist");
   });
 
+  it("should test the negative case of getRemoveIndex when removeSupportingDoc is false", () => {
+    // This tests the fallback case in line 260: removeSupportingDoc ? Number.parseInt(action.split("-")[1], 10) : -1
+    // When removeSupportingDoc is false, getRemoveIndex should return -1 (tested implicitly in the action handler)
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.wait(500);
+
+    // Add supporting documents
+    cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.wait(100);
+
+    // Fill in some values
+    cy.get("#catches-0-supportingDocuments-0").clear().type("First Document");
+    cy.get("#catches-0-supportingDocuments-1").clear().type("Second Document");
+
+    // Fill in required fields to submit the form
+    cy.get("#catches-0-certificateType").should("exist");
+    cy.get('input[value="uk"]').check({ force: true });
+    cy.get("#catches-0-certificateNumber").type("TEST123");
+    cy.get("#catches-0-weightOnCC").type("100");
+    cy.get("#catches-0-product").type("COD");
+    cy.wait(300);
+    cy.get("#catches-0-commodityCode").type("03");
+
+    // Submit form with "Save and continue" (not a remove action)
+    // This ensures the form submission doesn't trigger getRemoveIndex with removeSupportingDoc=true
+    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+    // Should successfully navigate away (the action didn't try to remove anything)
+    cy.url().should("include", "/you-have-added-a-product");
+  });
+
   describe("Accessibility", () => {
     it("should have label for all fields on the form", () => {
       cy.get("form label").should("have.length", 12);
