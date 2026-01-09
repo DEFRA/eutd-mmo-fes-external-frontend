@@ -699,9 +699,9 @@ describe("PS: Add catch details - Weight Input Validation", () => {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-totalWeightLanded").should("be.visible");
-    cy.get("#catches-0-totalWeightLanded").clear();
-    cy.get("#catches-0-totalWeightLanded").type("50");
+    cy.get("#catches-0-totalWeightLanded").should("be.visible").and("be.enabled");
+    cy.get("#catches-0-totalWeightLanded").clear({ force: true });
+    cy.get("#catches-0-totalWeightLanded").type("50", { force: true });
     cy.get("#catches-0-totalWeightLanded").should("have.value", "50");
   });
 
@@ -796,9 +796,9 @@ describe("PS: Add catch details - Weight Input Validation", () => {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-exportWeightAfterProcessing").should("be.visible");
-    cy.get("#catches-0-exportWeightAfterProcessing").clear();
-    cy.get("#catches-0-exportWeightAfterProcessing").type("25");
+    cy.get("#catches-0-exportWeightAfterProcessing").should("be.visible").and("be.enabled");
+    cy.get("#catches-0-exportWeightAfterProcessing").clear({ force: true });
+    cy.get("#catches-0-exportWeightAfterProcessing").type("25", { force: true });
     cy.get("#catches-0-exportWeightAfterProcessing").should("have.value", "25");
     cy.get("#cancel").click({ force: true });
     cy.get("#catches-0-exportWeightAfterProcessing").should("be.visible");
