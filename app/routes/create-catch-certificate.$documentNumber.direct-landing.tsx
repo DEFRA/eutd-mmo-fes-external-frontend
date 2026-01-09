@@ -122,7 +122,7 @@ const DirectLanding = () => {
           exportWeight: (() => {
             const val = weight.exportWeight;
             const parsed = typeof val === "number" ? val : parseFloat(String(val));
-            return !isNaN(parsed) && parsed !== null ? parsed : 0;
+            return !Number.isNaN(parsed) && parsed !== null ? parsed : 0;
           })(),
         }))
       : []
@@ -411,6 +411,7 @@ const DirectLanding = () => {
                 errorMessageText={getVesselErrorText()}
                 defaultValue={values?.vessels ?? vesselSelected ?? ""}
                 labelText={t("ccAddLandingVesselNameLabel")}
+                labelClassName="govuk-label govuk-!-font-weight-bold"
                 hintText={t("ccAddLandingVesselNameHint", { ns: "directLandings" })}
                 options={getOptions()}
                 optionsId="vessel-name-option"
