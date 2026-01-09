@@ -10,7 +10,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     };
 
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.title().should("eq", "Train departing the UK - Create a UK non-manipulation document - GOV.UK");cy.title().should("eq", "Train departing the UK - Create a UK storage document - GOV.UK");
+    cy.title().should("eq", "Train departing the UK - Create a UK non-manipulation document - GOV.UK");
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-export-leave-the-uk`);
