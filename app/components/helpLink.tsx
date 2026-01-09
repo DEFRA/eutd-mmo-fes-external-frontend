@@ -51,7 +51,7 @@ export const HelpLink = () => {
         >
           {t("getHelpMovingFish")}&nbsp;
           {t("commonHelpLinkOpenInNewTab")}
-        </a> .
+        </a>.
       </p>
     </div>
   );
