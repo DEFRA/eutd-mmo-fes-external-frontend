@@ -30,6 +30,10 @@ export const HowDoesTheExportLeaveUkLoader = async (request: Request, params: Pa
   const { documentNumber } = params;
   const splitParams = params["*"]?.split("/");
   const transportId = splitParams?.[0];
+  
+  // Extract nextUri from query parameters
+  const url = new URL(request.url);
+  const nextUri = url.searchParams.get("nextUri") || "";
   const t = await i18next.getFixedT(request, ["title"]);
   const pageTitle = t("ccTransportSelectionPageTitle", { ns: "title" });
   const commonTitle = t("ccCommonTitle", { ns: "title" });
@@ -51,6 +55,7 @@ export const HowDoesTheExportLeaveUkLoader = async (request: Request, params: Pa
         documentNumber,
         vehicle,
         transportId,
+        nextUri,
         pageTitle,
         commonTitle,
         csrf,
@@ -68,6 +73,7 @@ export const HowDoesTheExportLeaveUkLoader = async (request: Request, params: Pa
   return new Response(
     JSON.stringify({
       documentNumber,
+      nextUri,
       pageTitle,
       commonTitle,
       csrf,
@@ -95,11 +101,16 @@ export const HowDoesTheExportLeaveUkAction = async (
   const splitParams = params["*"]?.split("/");
   const transportId = splitParams?.[0];
   const vehicle = form.get("vehicle") as Vehicle;
+  const nextUri = (form.get("nextUri") as string) ?? "";
+  
   let payload: ITransport = {
     vehicle: vehicle,
   };
 
   const bearerToken = await getBearerTokenForRequest(request);
+
+  // Track whether vehicle was unchanged
+  let vehicleUnchanged = false;
 
   if (transportId) {
     const transport: ITransport = await getTransportById(bearerToken, documentNumber, transportId).catch((e) => {
@@ -107,7 +118,10 @@ export const HowDoesTheExportLeaveUkAction = async (
       return payload;
     });
 
-    if (transport.vehicle === payload.vehicle) {
+    // Check if vehicle is unchanged
+    vehicleUnchanged = transport.vehicle === payload.vehicle;
+
+    if (vehicleUnchanged) {
       payload = {
         ...payload,
         ...transport,
@@ -137,5 +151,12 @@ export const HowDoesTheExportLeaveUkAction = async (
     return apiCallFailed(errors, values);
   }
 
-  return redirect(`/create-catch-certificate/${documentNumber}/${forwardUri(response.vehicle)}/${response.id}`);
+  // UAT-472 FIX: If vehicle unchanged and nextUri exists, redirect back to check-your-information
+  if (transportId && vehicleUnchanged && !isEmpty(nextUri)) {
+    return redirect(nextUri);
+  }
+  
+  // Vehicle was changed OR no nextUri - redirect to transportation details
+  const redirectUrl = `/create-catch-certificate/${documentNumber}/${forwardUri(response.vehicle)}/${response.id}`;
+  return redirect(redirectUrl);
 };
