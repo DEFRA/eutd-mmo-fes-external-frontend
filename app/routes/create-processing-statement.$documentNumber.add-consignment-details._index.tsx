@@ -97,7 +97,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const commodities: CodeAndDescription[] = await getCommodities();
 
   const { currentProductDescription } = getProductDescription(processingStatement?.products, productId);
-  const productDescriptionMaxLength: number = parseInt(ENV.MAXIMUM_PRODUCT_DESCRIPTION_LENGTH);
+  const productDescriptionMaxLength: number = Number.parseInt(ENV.MAXIMUM_PRODUCT_DESCRIPTION_LENGTH);
 
   return json(
     {
