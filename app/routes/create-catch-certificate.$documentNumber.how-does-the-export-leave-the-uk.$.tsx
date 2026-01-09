@@ -23,6 +23,7 @@ type loaderDataProps = {
   documentNumber: string;
   vehicle: Vehicle;
   transportId?: string;
+  nextUri?: string;
   csrf: string;
 };
 
@@ -33,8 +34,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   HowDoesTheExportLeaveUkAction(request, params);
 
 const HowDoesTheExportLeaveTheUk = () => {
-  const { documentNumber, vehicle, transportId, csrf } = useLoaderData<loaderDataProps>();
-
+  const { documentNumber, vehicle, transportId, nextUri, csrf } = useLoaderData<loaderDataProps>();
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
   const { t } = useTranslation(["common", "transportation", "errorsText"]);
@@ -95,6 +95,7 @@ const HowDoesTheExportLeaveTheUk = () => {
             </div>
             <ButtonGroup />
             <input type="hidden" name="transportId" value={transportId} />
+            {nextUri && <input type="hidden" name="nextUri" value={nextUri} />}
           </SecureForm>
           <BackToProgressLink
             progressUri={"/create-catch-certificate/:documentNumber/progress"}

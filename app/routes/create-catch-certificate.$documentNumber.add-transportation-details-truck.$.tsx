@@ -47,6 +47,7 @@ const TruckTransportDetailsPage = () => {
       countries: ICountry[];
     }
   >();
+
   const actionData = useActionData<any>() ?? {};
   const { errors = {} } = actionData;
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${id}`;
