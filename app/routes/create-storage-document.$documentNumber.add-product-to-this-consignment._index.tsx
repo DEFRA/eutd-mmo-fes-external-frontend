@@ -172,7 +172,7 @@ const getUpdateStorageDocumentData = (
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
-  const productIndex = Number.parseInt(params["*"] ?? "") || 0;
+  const productIndex = params["*"] ? Number.parseInt(params["*"]) : 0;
   const productIndexUrlFragment = productIndex >= 0 ? `/${productIndex}` : "";
   const form = await request.formData();
   const isNonJs = form.get("isNonJs") === "true";

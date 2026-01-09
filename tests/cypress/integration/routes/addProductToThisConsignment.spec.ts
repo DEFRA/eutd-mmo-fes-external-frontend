@@ -204,15 +204,15 @@ describe("Add product to this consignment  page", () => {
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    
+
     cy.wait(500);
-    
+
     // Add supporting documents up to the maximum
     for (let i = 0; i < 4; i++) {
       cy.get("#add-supporting-doc-button").should("exist").click({ force: true });
       cy.wait(100);
     }
-    
+
     // Verify we now have exactly 5 supporting document fields (0-4 indices)
     cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", 6);
     cy.get("#catches-0-supportingDocuments-0").should("exist");
@@ -220,38 +220,55 @@ describe("Add product to this consignment  page", () => {
     cy.get("#catches-0-supportingDocuments-2").should("exist");
     cy.get("#catches-0-supportingDocuments-3").should("exist");
     cy.get("#catches-0-supportingDocuments-4").should("exist");
-    
+
     // The Add button should no longer be visible at the maximum
     cy.get("#add-supporting-doc-button").should("not.exist");
   });
 
   it("should correctly parse productIndex from URL params for different product indices", () => {
-    // This tests line 175: const productIndex = Number.parseInt(params["*"] ?? "") || 0;
+    // This tests line 175: const productIndex = params["*"] ? Number.parseInt(params["*"]) : 0;
     // The action parses the product index from the URL path parameter
-    
-    // Test with productIndex = 0
+
+    // Test with productIndex = 0 (explicit 0)
     const testParams0: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
     cy.visit(`${documentUrl}/add-product-to-this-consignment/0`, { qs: { ...testParams0 } });
     cy.url().should("include", "/add-product-to-this-consignment/0");
-    
+
     // Verify the form fields use index 0
     cy.get("#catches-0-certificateType").should("exist");
     cy.get("#catches-0-certificateNumber").should("exist");
     cy.get("#catches-0-weightOnCC").should("exist");
-    
+
     // Test with productIndex = 1
     const testParams1: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentDataProductIndex1,
     };
     cy.visit(`${documentUrl}/add-product-to-this-consignment/1`, { qs: { ...testParams1 } });
     cy.url().should("include", "/add-product-to-this-consignment/1");
-    
+
     // Verify the form fields use index 1
     cy.get("#catches-1-certificateType").should("exist");
     cy.get("#catches-1-certificateNumber").should("exist");
     cy.get("#catches-1-weightOnCC").should("exist");
+  });
+
+  it("should default productIndex to 0 when URL parameter is missing or empty", () => {
+    // This tests the fallback case in line 175: params["*"] ? Number.parseInt(params["*"]) : 0
+    // When params["*"] is undefined/empty, it should default to 0
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+
+    // Visit without any productIndex in URL (tests the : 0 fallback)
+    cy.visit(`${documentUrl}/add-product-to-this-consignment/`, { qs: { ...testParams } });
+
+    // Should still render with index 0 as default
+    cy.get("#catches-0-certificateType").should("exist");
+    cy.get("#catches-0-certificateNumber").should("exist");
+    cy.get("#catches-0-weightOnCC").should("exist");
+    cy.get("#catches-0-product").should("exist");
   });
 
   it("should correctly remove supporting document by parsing index from action string", () => {
@@ -261,44 +278,44 @@ describe("Add product to this consignment  page", () => {
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    
+
     cy.wait(500);
-    
+
     // Add 3 supporting documents
     cy.get("#add-supporting-doc-button").click({ force: true });
     cy.wait(100);
     cy.get("#add-supporting-doc-button").click({ force: true });
     cy.wait(100);
-    
+
     // We should now have 3 fields (indices 0, 1, 2)
     cy.get("#catches-0-supportingDocuments-0").should("exist");
     cy.get("#catches-0-supportingDocuments-1").should("exist");
     cy.get("#catches-0-supportingDocuments-2").should("exist");
-    
+
     // Fill them with different values to verify correct removal
     cy.get("#catches-0-supportingDocuments-0").clear().type("First Document");
     cy.get("#catches-0-supportingDocuments-1").clear().type("Second Document");
     cy.get("#catches-0-supportingDocuments-2").clear().type("Third Document");
-    
+
     // Remove the middle one (index 1) - this triggers getRemoveIndex which parses "removeSupportingDoc-1"
     cy.get("#remove-supporting-doc-button-1").should("exist").click({ force: true });
     cy.wait(200);
-    
+
     // Now we should have 2 fields remaining
     cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", 3);
-    
+
     // Verify the correct document was removed (middle one)
     cy.get("#catches-0-supportingDocuments-0").should("have.value", "First Document");
     cy.get("#catches-0-supportingDocuments-1").should("have.value", "Third Document");
-    
+
     // Remove another one by index (index 0)
     cy.get("#remove-supporting-doc-button-0").should("exist").click({ force: true });
     cy.wait(200);
-    
+
     // Now only 1 field should remain
     cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", 2);
     cy.get("#catches-0-supportingDocuments-0").should("have.value", "Third Document");
-    
+
     // Remove button should not exist when there's only one field
     cy.get('[id^="remove-supporting-doc-button"]').should("not.exist");
   });
@@ -890,7 +907,9 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
 
     // Verify issuing country error appears in error summary
     cy.get(".govuk-error-summary__list").should("exist");
-    cy.get(".govuk-error-summary__list").contains("Enter the country that issued the entry document").should("be.visible");
+    cy.get(".govuk-error-summary__list")
+      .contains("Enter the country that issued the entry document")
+      .should("be.visible");
   });
 
   it("should handle default values for all fields from catchDetails", () => {
