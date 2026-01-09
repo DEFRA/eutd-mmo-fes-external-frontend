@@ -47,7 +47,10 @@ describe("Storage Document Dashboard page: rendering", () => {
   });
 
   it("should render a valid page title", () => {
-    cy.title().should("eq", "Automation Testing Ltd: storage documents - Create a UK storage document - GOV.UK");
+    cy.title().should(
+      "eq",
+      "Automation Testing Ltd: storage documents - Create a UK non-manipulation document - GOV.UK"
+    );
   });
 
   it("should redirect to the dashboard page if didn't got expected response", () => {

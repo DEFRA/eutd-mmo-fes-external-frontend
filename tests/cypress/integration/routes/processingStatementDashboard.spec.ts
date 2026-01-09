@@ -64,7 +64,7 @@ describe("Processing Statement Landing page: rendering", () => {
     cy.contains("a", "Create a UK catch certificate")
       .should("be.visible")
       .should("have.attr", "href", "https://www.gov.uk/guidance/create-a-uk-catch-certificate");
-    cy.contains("a", "Create a UK storage document")
+    cy.contains("a", "Create a UK non-manipulation document")
       .should("be.visible")
       .should("have.attr", "href", "https://www.gov.uk/guidance/create-a-uk-storage-document");
   });
