@@ -661,6 +661,7 @@ export enum TestCaseId {
   SDAddProductConsignmentInvalidEntryDocError = "SDAddProductConsignmentInvalidEntryDocError",
   SDAddProductConsignmentIssuingCountryRequired = "SDAddProductConsignmentIssuingCountryRequired",
   SDAddProductConsignmentProductDescriptionRequired = "SDAddProductConsignmentProductDescriptionRequired",
+  SDAddProductConsignmentDataProductIndex1 = "sdAddProductConsignmentDataProductIndex1",
   SDFacilityTwoFacilities = "sdFacilityTwoFacilities",
   SDFacilityTwoFacilitiesDetails = "sdFacilityTwoFacilitiesDetails",
   SDAddUKEntryDocumentNoCatches = "sdAddUKEntryDocumentNoCatches",

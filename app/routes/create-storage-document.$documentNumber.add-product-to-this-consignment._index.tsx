@@ -80,7 +80,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const countries = await getCountries();
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
-  const productIndex = parseInt(params["*"] ?? "") || 0;
+  const productIndex = Number.parseInt(params["*"] ?? "") || 0;
   const commodities: CodeAndDescription[] = await getCommodities();
   const speciesExemptLink = getEnv().SPECIES_EXEMPT_LINK;
   const commodityCodeLink = getEnv().COMMODITY_CODE_LINK;
@@ -131,7 +131,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         : [],
       csrf,
       displayOptionalSuffix,
-      maximumEntryDocsAllowed: parseInt(maximumEntryDocsAllowed, 10),
+      maximumEntryDocsAllowed: Number.parseInt(maximumEntryDocsAllowed, 10),
     },
     session
   );
@@ -172,7 +172,7 @@ const getUpdateStorageDocumentData = (
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
-  const productIndex = parseInt(params["*"] ?? "") || 0;
+  const productIndex = params["*"] ? Number.parseInt(params["*"]) : 0;
   const productIndexUrlFragment = productIndex >= 0 ? `/${productIndex}` : "";
   const form = await request.formData();
   const isNonJs = form.get("isNonJs") === "true";
