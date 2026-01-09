@@ -33,7 +33,7 @@ export const HowDoesTheExportLeaveUkLoader = async (request: Request, params: Pa
   
   // Extract nextUri from query parameters
   const url = new URL(request.url);
-  const nextUri = url.searchParams.get("nextUri") || "";
+  const nextUri = url.searchParams.get("nextUri") ?? "";
   const t = await i18next.getFixedT(request, ["title"]);
   const pageTitle = t("ccTransportSelectionPageTitle", { ns: "title" });
   const commonTitle = t("ccCommonTitle", { ns: "title" });
