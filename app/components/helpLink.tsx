@@ -1,12 +1,27 @@
 import { useTranslation } from "react-i18next";
 import { useLoaderData } from "react-router";
 
-import type { ProgressLoaderProps } from "~/types";
+const inferredDocumentName = (documentNumber: string | undefined) => {
+  if (documentNumber && documentNumber.length > 11) {
+    switch (documentNumber.substring(9, 11)) {
+      case "CC":
+        return "catch certificate";
+      case "PS":
+        return "processing statement";
+      case "SD":
+        return "non-manipulation document";
+      default:
+        return "";
+    }
+  }
+  return "";
+};
 
 export const HelpLink = () => {
   const { t } = useTranslation();
 
-  const { documentName } = useLoaderData<ProgressLoaderProps>();
+  const { documentNumber } = useLoaderData<string>();
+  const documentName = inferredDocumentName(documentNumber);
 
   return (
     <div className="govuk-!-margin-bottom-6 govuk-!-margin-top-8" data-testid="help-section">
@@ -36,7 +51,7 @@ export const HelpLink = () => {
         >
           {t("getHelpMovingFish")}&nbsp;
           {t("commonHelpLinkOpenInNewTab")}
-        </a>
+        </a>.
       </p>
     </div>
   );
