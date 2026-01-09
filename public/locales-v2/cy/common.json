@@ -152,6 +152,7 @@
   "euIntegrationFailedMeansText1": "Bydd angen i'r mewnforiwr yn yr UE fewnbynnu data'r dystysgrif dalfa i'r system CATCH â llaw.",
   "euIntegrationFailedMeansText2Start": "Mae eich tystysgrif dalfa yn dal yn ddilys ac yn barod i'w defnyddio.",
   "euIntegrationFailedMeansText2Link": "Gallwch ei gweld neu ei lawrlwytho o'ch dangosfwrdd.",
+  "euIntegrationIfYouNeedToSpeak": "Os oes angen ichi siarad â rhywun",
   "euIntegrationContactHelpline": "Cysylltwch â'r llinell gymorth os ydych chi'n allforio'n fuan ac angen mwy o wybodaeth.",
   "commonNoCatchesAdded": "Dim dalfeydd wedi'u hychwanegu ar gyfer y cynnyrch hwn"
 }
