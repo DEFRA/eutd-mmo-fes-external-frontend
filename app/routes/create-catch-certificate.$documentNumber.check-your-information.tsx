@@ -493,9 +493,11 @@ const TransportationDetailsSummary = ({
         />
         <br />
         {Array.isArray(transportations) && transportations.length > 0
-          ? transportations.map((transport: ITransport) =>
-              getTransportationDetailsSummary(documentNumber, isLocked, transport, t)
-            )
+          ? transportations.map((transport: ITransport) => (
+              <Fragment key={transport.id}>
+                {getTransportationDetailsSummary(documentNumber, isLocked, transport, t)}
+              </Fragment>
+            ))
           : getTransportationDetailsSummary(documentNumber, isLocked, transportation, t)}
       </dl>
     </>
