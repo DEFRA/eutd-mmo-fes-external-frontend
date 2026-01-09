@@ -22,6 +22,23 @@ describe("Add exporter details page", () => {
     cy.contains("h1", "Add exporter details");
   });
 
+  it("should display non-manipulation document warning message", () => {
+    cy.contains("This information will appear on the non-manipulation document.").should("be.visible");
+  });
+
+  it("should display warning with icon using GOV.UK warning component", () => {
+    cy.get(".govuk-warning-text").should("exist");
+    cy.get(".govuk-warning-text__icon").should("contain", "!");
+    cy.get(".govuk-warning-text__text").should(
+      "contain",
+      "This information will appear on the non-manipulation document."
+    );
+  });
+
+  it("should have bold Company name label", () => {
+    cy.get('label[for="exporterCompanyName"]').should("have.class", "govuk-!-font-weight-bold");
+  });
+
   it("should check for input fields for storage document journey", () => {
     cy.get("form").should(($form) => {
       expect($form.find("input[type='text']")).to.have.lengthOf(1);
