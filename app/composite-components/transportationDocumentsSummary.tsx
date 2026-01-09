@@ -69,43 +69,48 @@ export const TransportationDocumentsSummary = ({
   transport,
   isLocked,
   t,
-}: TransportationDocumentsSummaryProps) => (
-  <>
-    {transport.documents?.map((document: AdditionalDocumentsData, index: number) => (
-      <>
-        <SummaryListRow
-          keyText={t(transportFields[transport.vehicle as TransportType].docName, { ns: "transportation" })}
-          value={document.name}
-          actions={generateActions(
-            isLocked,
-            `/create-catch-certificate/${documentNumber}/add-additional-transport-documents-${transportFields[transport.vehicle as TransportType].subUrl}/${transport.id}?nextUri=${route(
-              "/create-catch-certificate/:documentNumber/check-your-information",
-              {
-                documentNumber,
-              }
-            )}#documentName${index + 1}`,
-            transportFields[transport.vehicle as TransportType].title,
-            transportFields[transport.vehicle as TransportType].namespace,
-            t
-          )}
-        />
-        <SummaryListRow
-          keyText={t(transportFields[transport.vehicle as TransportType].docRef, { ns: "transportation" })}
-          value={document.reference}
-          actions={generateActions(
-            isLocked,
-            `/create-catch-certificate/${documentNumber}/add-additional-transport-documents-${transportFields[transport.vehicle as TransportType].subUrl}/${transport.id}?nextUri=${route(
-              "/create-catch-certificate/:documentNumber/check-your-information",
-              {
-                documentNumber,
-              }
-            )}#documentReference${index + 1}`,
-            transportFields[transport.vehicle as TransportType].title,
-            transportFields[transport.vehicle as TransportType].namespace,
-            t
-          )}
-        />
-      </>
-    ))}
-  </>
-);
+}: TransportationDocumentsSummaryProps) => {
+  const documents =
+    transport.documents && transport.documents.length > 0 ? transport.documents : [{ name: "", reference: "" }]; // Show empty fields with "Not provided"
+
+  return (
+    <>
+      {documents.map((document: AdditionalDocumentsData, index: number) => (
+        <>
+          <SummaryListRow
+            keyText={t(transportFields[transport.vehicle as TransportType].docName, { ns: "transportation" })}
+            value={document.name || t("commonNotProvided", { ns: "common" })}
+            actions={generateActions(
+              isLocked,
+              `/create-catch-certificate/${documentNumber}/add-additional-transport-documents-${transportFields[transport.vehicle as TransportType].subUrl}/${transport.id}?nextUri=${route(
+                "/create-catch-certificate/:documentNumber/check-your-information",
+                {
+                  documentNumber,
+                }
+              )}#documentName${index + 1}`,
+              transportFields[transport.vehicle as TransportType].title,
+              transportFields[transport.vehicle as TransportType].namespace,
+              t
+            )}
+          />
+          <SummaryListRow
+            keyText={t(transportFields[transport.vehicle as TransportType].docRef, { ns: "transportation" })}
+            value={document.reference || t("commonNotProvided", { ns: "common" })}
+            actions={generateActions(
+              isLocked,
+              `/create-catch-certificate/${documentNumber}/add-additional-transport-documents-${transportFields[transport.vehicle as TransportType].subUrl}/${transport.id}?nextUri=${route(
+                "/create-catch-certificate/:documentNumber/check-your-information",
+                {
+                  documentNumber,
+                }
+              )}#documentReference${index + 1}`,
+              transportFields[transport.vehicle as TransportType].title,
+              transportFields[transport.vehicle as TransportType].namespace,
+              t
+            )}
+          />
+        </>
+      ))}
+    </>
+  );
+};

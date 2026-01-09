@@ -253,6 +253,7 @@ export enum TestCaseId {
   CCCheckYourInformationManualLandingTrainContainerNumber = "CCCheckYourInformationManualLandingTrainContainerNumber",
   CCCheckYourInformationManualLandingTrainContainerNumberNull = "CCCheckYourInformationManualLandingTrainContainerNumberNull",
   CCCheckYourInformationWithPointOfDestination = "CCCheckYourInformationWithPointOfDestination",
+  CCCheckYourInformationNotProvidedFields = "CCCheckYourInformationNotProvidedFields",
 
   TransportAllowedUnauthorised = "TransportAllowedUnauthorised",
   TrainTransportSave = "TrainTransportSave",
@@ -660,6 +661,7 @@ export enum TestCaseId {
   SDAddProductConsignmentInvalidEntryDocError = "SDAddProductConsignmentInvalidEntryDocError",
   SDAddProductConsignmentIssuingCountryRequired = "SDAddProductConsignmentIssuingCountryRequired",
   SDAddProductConsignmentProductDescriptionRequired = "SDAddProductConsignmentProductDescriptionRequired",
+  SDAddProductConsignmentDataProductIndex1 = "sdAddProductConsignmentDataProductIndex1",
   SDFacilityTwoFacilities = "sdFacilityTwoFacilities",
   SDFacilityTwoFacilitiesDetails = "sdFacilityTwoFacilitiesDetails",
   SDAddUKEntryDocumentNoCatches = "sdAddUKEntryDocumentNoCatches",

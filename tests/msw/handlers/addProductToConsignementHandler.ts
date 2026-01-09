@@ -119,6 +119,14 @@ const addProductConsignementHandler: ITestHandler = {
       res(ctx.status(400), ctx.json(sdAddProductConsignmentProductDescriptionRequired))
     ),
   ],
+  [TestCaseId.SDAddProductConsignmentDataProductIndex1]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
+  ],
 };
 
 export default addProductConsignementHandler;
