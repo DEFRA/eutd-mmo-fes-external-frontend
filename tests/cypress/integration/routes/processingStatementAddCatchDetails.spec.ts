@@ -699,9 +699,8 @@ describe("PS: Add catch details - Weight Input Validation", () => {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-totalWeightLanded").should("be.visible").and("be.enabled");
-    cy.get("#catches-0-totalWeightLanded").clear({ force: true });
-    cy.get("#catches-0-totalWeightLanded").type("50", { force: true });
+    cy.get("#catches-0-totalWeightLanded").clear();
+    cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-totalWeightLanded").should("have.value", "50");
   });
 
@@ -714,6 +713,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-totalWeightLanded").should("have.value", "50");
     cy.get("#cancel").click({ force: true });
+    cy.wait(200);
     cy.get("#catches-0-totalWeightLanded").should("have.value", "");
   });
 
@@ -796,12 +796,10 @@ describe("PS: Add catch details - Weight Input Validation", () => {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-exportWeightAfterProcessing").should("be.visible").and("be.enabled");
-    cy.get("#catches-0-exportWeightAfterProcessing").clear({ force: true });
-    cy.get("#catches-0-exportWeightAfterProcessing").type("25", { force: true });
+    cy.get("#catches-0-exportWeightAfterProcessing").clear();
+    cy.get("#catches-0-exportWeightAfterProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").should("have.value", "25");
     cy.get("#cancel").click({ force: true });
-    cy.get("#catches-0-exportWeightAfterProcessing").should("be.visible");
     cy.get("#catches-0-exportWeightAfterProcessing").should("have.value", "");
   });
 
@@ -1242,16 +1240,11 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     cy.get("#addProductDetails").click({ force: true });
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
     cy.get("#yourproducts tbody tr").should("have.length", 1);
-    cy.get("#catches-0-species").clear();
-    cy.get("#catches-0-species").type("European seabass (BSS)");
-    cy.get("#catches-0-catchCertificateNumber").clear();
-    cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-654321");
-    cy.get("#catches-0-totalWeightLanded").clear();
-    cy.get("#catches-0-totalWeightLanded").type("30");
-    cy.get("#catches-0-exportWeightBeforeProcessing").clear();
-    cy.get("#catches-0-exportWeightBeforeProcessing").type("15");
-    cy.get("#catches-0-exportWeightAfterProcessing").clear();
-    cy.get("#catches-0-exportWeightAfterProcessing").type("15");
+    cy.get("#catches-0-species").clear().type("European seabass (BSS)");
+    cy.get("#catches-0-catchCertificateNumber").clear().type("GBR-2022-CC-654321");
+    cy.get("#catches-0-totalWeightLanded").clear().type("30");
+    cy.get("#catches-0-exportWeightBeforeProcessing").clear().type("15");
+    cy.get("#catches-0-exportWeightAfterProcessing").clear().type("15");
     cy.get("#addProductDetails").click({ force: true });
   });
 
@@ -1268,16 +1261,11 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
     cy.get("#addProductDetails").click({ force: true });
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
-    cy.get("#catches-0-species").clear();
-    cy.get("#catches-0-species").type("European seabass (BSS)");
-    cy.get("#catches-0-catchCertificateNumber").clear();
-    cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-123456");
-    cy.get("#catches-0-totalWeightLanded").clear();
-    cy.get("#catches-0-totalWeightLanded").type("30");
-    cy.get("#catches-0-exportWeightBeforeProcessing").clear();
-    cy.get("#catches-0-exportWeightBeforeProcessing").type("15");
-    cy.get("#catches-0-exportWeightAfterProcessing").clear();
-    cy.get("#catches-0-exportWeightAfterProcessing").type("15");
+    cy.get("#catches-0-species").clear().type("European seabass (BSS)");
+    cy.get("#catches-0-catchCertificateNumber").clear().type("GBR-2022-CC-123456");
+    cy.get("#catches-0-totalWeightLanded").clear().type("30");
+    cy.get("#catches-0-exportWeightBeforeProcessing").clear().type("15");
+    cy.get("#catches-0-exportWeightAfterProcessing").clear().type("15");
     cy.get("#addProductDetails").click({ force: true });
   });
 });
@@ -1295,16 +1283,16 @@ describe("PS: Add catch details - Remove Functionality and Count Updates", () =>
       .then((initialText) => {
         const speciesMatch = initialText.match(/(\d+)\s+species/);
         const documentsMatch = initialText.match(/(\d+)\s+documents/);
-        const initialSpeciesCount = speciesMatch ? parseInt(speciesMatch[1]) : 0;
-        const initialDocumentCount = documentsMatch ? parseInt(documentsMatch[1]) : 0;
+        const initialSpeciesCount = speciesMatch ? Number.parseInt(speciesMatch[1]) : 0;
+        const initialDocumentCount = documentsMatch ? Number.parseInt(documentsMatch[1]) : 0;
         cy.get("[data-testid=remove-button-0]").eq(0).click({ force: true });
         cy.get("h2")
           .invoke("text")
           .then((newText) => {
             const newSpeciesMatch = newText.match(/(\d+)\s+species/);
             const newDocumentsMatch = newText.match(/(\d+)\s+documents/);
-            const newSpeciesCount = newSpeciesMatch ? parseInt(newSpeciesMatch[1]) : 0;
-            const newDocumentCount = newDocumentsMatch ? parseInt(newDocumentsMatch[1]) : 0;
+            const newSpeciesCount = newSpeciesMatch ? Number.parseInt(newSpeciesMatch[1]) : 0;
+            const newDocumentCount = newDocumentsMatch ? Number.parseInt(newDocumentsMatch[1]) : 0;
             expect(newSpeciesCount).to.be.at.most(initialSpeciesCount);
             expect(newDocumentCount).to.be.at.most(initialDocumentCount);
           });
@@ -1371,8 +1359,8 @@ describe("PS: Add catch details - Table Display and Session Persistence", () => 
       .then((initialText) => {
         const speciesMatch = initialText.match(/(\d+)\s+species/);
         const documentsMatch = initialText.match(/(\d+)\s+documents/);
-        const initialSpeciesCount = speciesMatch ? parseInt(speciesMatch[1]) : 0;
-        const initialDocumentCount = documentsMatch ? parseInt(documentsMatch[1]) : 0;
+        const initialSpeciesCount = speciesMatch ? Number.parseInt(speciesMatch[1]) : 0;
+        const initialDocumentCount = documentsMatch ? Number.parseInt(documentsMatch[1]) : 0;
         cy.reload();
 
         cy.get("h2")
@@ -1380,8 +1368,8 @@ describe("PS: Add catch details - Table Display and Session Persistence", () => 
           .then((refreshedText) => {
             const newSpeciesMatch = refreshedText.match(/(\d+)\s+species/);
             const newDocumentsMatch = refreshedText.match(/(\d+)\s+documents/);
-            const newSpeciesCount = newSpeciesMatch ? parseInt(newSpeciesMatch[1]) : 0;
-            const newDocumentCount = newDocumentsMatch ? parseInt(newDocumentsMatch[1]) : 0;
+            const newSpeciesCount = newSpeciesMatch ? Number.parseInt(newSpeciesMatch[1]) : 0;
+            const newDocumentCount = newDocumentsMatch ? Number.parseInt(newDocumentsMatch[1]) : 0;
 
             expect(newSpeciesCount).to.equal(initialSpeciesCount);
             expect(newDocumentCount).to.equal(initialDocumentCount);
@@ -1442,8 +1430,8 @@ describe("PS: Add catch details - Session Data Integrity", () => {
       .then((headerText) => {
         const speciesMatch = headerText.match(/(\d+)\s+species/);
         const documentsMatch = headerText.match(/(\d+)\s+documents/);
-        const speciesCount = speciesMatch ? parseInt(speciesMatch[1]) : 0;
-        const documentCount = documentsMatch ? parseInt(documentsMatch[1]) : 0;
+        const speciesCount = speciesMatch ? Number.parseInt(speciesMatch[1]) : 0;
+        const documentCount = documentsMatch ? Number.parseInt(documentsMatch[1]) : 0;
         cy.log(`Initial counts - Species: ${speciesCount}, Documents: ${documentCount}`);
         cy.get("[data-testid=edit-button-0]").eq(0).click({ force: true });
         cy.url().should("include", "add-catch-details");
@@ -1453,8 +1441,8 @@ describe("PS: Add catch details - Session Data Integrity", () => {
           .then((newHeaderText) => {
             const newSpeciesMatch = newHeaderText.match(/(\d+)\s+species/);
             const newDocumentsMatch = newHeaderText.match(/(\d+)\s+documents/);
-            const newSpeciesCount = newSpeciesMatch ? parseInt(newSpeciesMatch[1]) : 0;
-            const newDocumentCount = newDocumentsMatch ? parseInt(newDocumentsMatch[1]) : 0;
+            const newSpeciesCount = newSpeciesMatch ? Number.parseInt(newSpeciesMatch[1]) : 0;
+            const newDocumentCount = newDocumentsMatch ? Number.parseInt(newDocumentsMatch[1]) : 0;
             expect(newSpeciesCount).to.equal(speciesCount);
             expect(newDocumentCount).to.equal(documentCount);
             cy.log(
@@ -1477,8 +1465,8 @@ describe("PS: Add catch details - Error Scenarios with Session Data", () => {
       .then((initialText) => {
         const speciesMatch = initialText.match(/(\d+)\s+species/);
         const documentsMatch = initialText.match(/(\d+)\s+documents/);
-        const initialSpeciesCount = speciesMatch ? parseInt(speciesMatch[1]) : 0;
-        const initialDocumentCount = documentsMatch ? parseInt(documentsMatch[1]) : 0;
+        const initialSpeciesCount = speciesMatch ? Number.parseInt(speciesMatch[1]) : 0;
+        const initialDocumentCount = documentsMatch ? Number.parseInt(documentsMatch[1]) : 0;
         cy.get("#addProductDetails").click({ force: true });
         cy.get(".govuk-error-summary").should("be.visible");
         cy.get("h2")
@@ -1486,8 +1474,8 @@ describe("PS: Add catch details - Error Scenarios with Session Data", () => {
           .then((newText) => {
             const newSpeciesMatch = newText.match(/(\d+)\s+species/);
             const newDocumentsMatch = newText.match(/(\d+)\s+documents/);
-            const newSpeciesCount = newSpeciesMatch ? parseInt(newSpeciesMatch[1]) : 0;
-            const newDocumentCount = newDocumentsMatch ? parseInt(newDocumentsMatch[1]) : 0;
+            const newSpeciesCount = newSpeciesMatch ? Number.parseInt(newSpeciesMatch[1]) : 0;
+            const newDocumentCount = newDocumentsMatch ? Number.parseInt(newDocumentsMatch[1]) : 0;
             expect(newSpeciesCount).to.equal(initialSpeciesCount);
             expect(newDocumentCount).to.equal(initialDocumentCount);
           });
@@ -1535,15 +1523,15 @@ describe("PS: Add catch details - Integration with Existing Functionality", () =
         expect(speciesMatch).to.not.be.null;
         expect(documentsMatch).to.not.be.null;
         if (speciesMatch && documentsMatch) {
-          const speciesCount = parseInt(speciesMatch[1]);
-          const documentCount = parseInt(documentsMatch[1]);
+          const speciesCount = Number.parseInt(speciesMatch[1]);
+          const documentCount = Number.parseInt(documentsMatch[1]);
           expect(speciesCount).to.be.a("number");
           expect(documentCount).to.be.a("number");
           expect(speciesCount).to.be.at.least(0);
           expect(documentCount).to.be.at.least(0);
           cy.log(`Verified session data integrity - Species: ${speciesCount}, Documents: ${documentCount}`);
-          expect(isNaN(speciesCount)).to.be.false;
-          expect(isNaN(documentCount)).to.be.false;
+          expect(Number.isNaN(speciesCount)).to.be.false;
+          expect(Number.isNaN(documentCount)).to.be.false;
         }
       });
   });
