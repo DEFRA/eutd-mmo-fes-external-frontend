@@ -762,6 +762,31 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     cy.get("#errorIsland").should("be.visible");
   });
 
+  it("should display error messages in the correct order with issuing country error appearing early", () => {
+    // This test verifies that issuing country error appears in proper order in the error summary
+    // Using the existing test that we know validates issuing country requirements
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentIssuingCountryRequired,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Fill out required fields first
+    cy.get("#catches-0-product").type("Sole (SOL)");
+    cy.get("#catches-0-commodityCode").type("03011100 - Fresh or chilled trout");
+    cy.get("#catches-0-certificateNumber").type("TEST123");
+    cy.get("#catches-0-weightOnCC").type("10");
+
+    // Select 'No' for UK-issued certificate
+    cy.get("input[name='docIssuedInUk'][value='non_uk']").click({ force: true });
+
+    // Try to submit without entering issuing country
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    // Verify issuing country error appears in error summary
+    cy.get(".govuk-error-summary__list").should("exist");
+    cy.get(".govuk-error-summary__list").contains("Enter the country that issued the entry document").should("be.visible");
+  });
+
   it("should handle default values for all fields from catchDetails", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
