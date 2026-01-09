@@ -50,9 +50,8 @@ export const HelpLink = () => {
           href="https://www.gov.uk/guidance/exporting-or-moving-fish-from-the-uk#get-help-with-fish-export-documents"
         >
           {t("getHelpMovingFish")}&nbsp;
-          {t("commonHelpLinkOpenInNewTab")}
+          {t("commonHelpLinkOpenInNewTab")}.
         </a>
-        .
       </p>
     </div>
   );
