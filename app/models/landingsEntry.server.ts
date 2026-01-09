@@ -44,15 +44,17 @@ export const LandingEntryLoader = async (request: Request, params: Params) => {
 
   const copyDocumentAcknowledged = session.get(`copyDocumentAcknowledged-${documentNumber}`) === "Y";
   const copyDocumentNumber = session.get(`documentNumber-${documentNumber}`);
-  const voidDocumentConfirm = session.get(`voidOriginal-${documentNumber}`)
-    ? session.get(`voidOriginal-${documentNumber}`) == true
+  const voidOriginalVal = session.get(`voidOriginal-${documentNumber}`);
+  const voidDocumentConfirm = voidOriginalVal
+    ? Boolean(voidOriginalVal)
     : session.get(`copyVoidDocument-${documentNumber}`) === "voidDocumentConfirm";
 
   return new Response(
     JSON.stringify({
       landingsEntryOption,
       generatedByContent,
-      documentNumber: copyDocumentNumber,
+      copyDocumentNumber: copyDocumentNumber,
+      documentNumber: documentNumber,
       copyDocumentAcknowledged,
       voidDocumentConfirm,
       nextUri,
