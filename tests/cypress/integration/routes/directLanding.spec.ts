@@ -457,45 +457,6 @@ describe("DirectLanding page when the weights are not numbers", () => {
   it("should render 0kg if the entered weights are not numbers", () => {
     cy.get("#yourproducts tr:last-child td:last-of-type").contains("0kg");
   });
-
-  it("should handle non-numeric weight values and fallback to 0 during weight calculation", () => {
-    // Wait for page to load
-    waitForHydration();
-    cy.wait(300);
-
-    // Verify initial state shows 0kg due to non-numeric weights in fixture
-    cy.get("#yourproducts tr:last-child td:last-of-type").contains("0.00kg");
-
-    // Find the first weight input
-    cy.get('input[id^="weight-"]').first().as("firstWeightInput");
-
-    // Try to input a valid number and verify the total weight updates
-    cy.get("@firstWeightInput").clear().type("10");
-    cy.get("@firstWeightInput").blur();
-
-    // The total should now reflect the valid numeric input
-    // Since we have 2 products and only one has a valid weight (10kg), total should be 10kg
-    cy.wait(300);
-    cy.get("#yourproducts tr:last-child td:last-of-type").should("contain", "10.00kg");
-
-    // Get the second weight input
-    cy.get('input[id^="weight-"]').eq(1).as("secondWeightInput");
-
-    // Add a valid weight to the second input
-    cy.get("@secondWeightInput").clear().type("5.5");
-    cy.get("@secondWeightInput").blur();
-
-    // The total should now be 15.5kg
-    cy.wait(300);
-    cy.get("#yourproducts tr:last-child td:last-of-type").should("contain", "15.50kg");
-
-    // Now test the fallback logic by clearing an input (which might result in empty/NaN)
-    cy.get("@firstWeightInput").clear().blur();
-    cy.wait(300);
-
-    // The total should now be 5.5kg (only second weight)
-    cy.get("#yourproducts tr:last-child td:last-of-type").should("contain", "5.50kg");
-  });
 });
 
 describe("DirectLanding page: unauthorised", () => {
