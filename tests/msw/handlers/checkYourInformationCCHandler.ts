@@ -26,7 +26,6 @@ import {
   GET_GEAR_CATEGORIES_URL,
   mockGetGearTypesByCategoriesUrl,
   GET_RFMO_AREAS_URL,
-  SAVE_TRANSPORT_DETAILS_URL,
 } from "~/urls.server";
 
 import ccCreatedDetails from "@/fixtures/documentsApi/catchCertificate.json";
@@ -34,7 +33,6 @@ import nullLandingsType from "@/fixtures/landingsTypeApi/null.json";
 import uploadEntryLandingsType from "@/fixtures/landingsTypeApi/uploadEntry.json";
 import directLandingLandingsType from "@/fixtures/landingsTypeApi/directLanding.json";
 import truckTransportDetails from "@/fixtures/transportDetailsApi/truck.json";
-import planeTransportDetails from "@/fixtures/transportDetailsApi/plane.json";
 import progressIncomplete from "@/fixtures/progressApi/ccIncomplete.json";
 import progressComplete from "@/fixtures/progressApi/ccComplete.json";
 import ccTruck from "@/fixtures/ccSummary/ccTruck.json";
@@ -54,8 +52,6 @@ import ccNoExporter from "@/fixtures/ccSummary/ccNoExporter.json";
 import ccManualLandingTruckContainerNumber from "@/fixtures/ccSummary/ccManualLandingTruckContainerNumber.json";
 import ccManualLandingTrainContainerNumber from "@/fixtures/ccSummary/ccManualLandingTrainContainerNumber.json";
 import ccManualLandingTrainContainerNumberNull from "@/fixtures/ccSummary/ccManualLandingTrainContainerNumberNull.json";
-import ccPlaneNoFreightBillNumber from "@/fixtures/ccSummary/ccPlaneNoFreightBillNumber.json";
-import ccContainerVesselNoFreightBillNumber from "@/fixtures/ccSummary/ccContainerVesselNoFreightBillNumber.json";
 import ccWithPointOfDestination from "@/fixtures/ccSummary/ccWithPointOfDestination.json";
 import ccNotProvidedFields from "@/fixtures/ccSummary/ccNotProvidedFields.json";
 import countries from "@/fixtures/whatExportJourneyApi/countries.json";
@@ -179,26 +175,6 @@ const checkYourInformationCCHandler: ITestHandler = {
   [TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumberNull]: () => [
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccManualLandingTrainContainerNumberNull))),
-  ],
-  [TestCaseId.CCCheckYourInformationPlaneNoFreightBillNumber]: () => [
-    rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
-    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccPlaneNoFreightBillNumber))),
-    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
-    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
-    rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
-    rest.get(CONSERVATION_URL, (req, res, ctx) => res(ctx.json(whoseWatersSuccess))),
-    rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
-    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
-    rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json(favourites))),
-    rest.get(SPECIES_STATE_LOOK_UP, (req, res, ctx) => res(ctx.json(speciesStateLookup))),
-    rest.get(COMMODITY_CODE_LOOK_UP, (req, res, ctx) => res(ctx.json(commodityCode))),
-    rest.post(ADD_SPECIES_URL, (req, res, ctx) => res(ctx.json(addOrUpdateResponse))),
-    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(planeTransportDetails))),
-  ],
-  [TestCaseId.CCCheckYourInformationContainerVesselNoFreightBillNumber]: () => [
-    rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
-    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccContainerVesselNoFreightBillNumber))),
-    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
   ],
   [TestCaseId.CCCheckYourInformationWithPointOfDestination]: () => [
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
@@ -370,43 +346,6 @@ const checkYourInformationCCHandler: ITestHandler = {
       )
     ),
   ],
-  [TestCaseId.CCCheckYourInformationChangeTransportModeNoChange]: () => [
-    rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
-    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccTruck))),
-    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
-    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(truckTransportDetails))),
-    rest.put(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(truckTransportDetails))),
-  ],
-  [TestCaseId.CCCheckYourInformationChangeTransportMode]: () => {
-    let postCallCount = 0;
-    return [
-      rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
-      rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccTruck))),
-      rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
-      // Return truck before POST, plane after POST
-      rest.get(getTransportDetailsUrl("catchCertificate", false), (req, res, ctx) => {
-        const response = postCallCount > 0 ? planeTransportDetails : truckTransportDetails;
-        return res(ctx.json(response));
-      }),
-      rest.get(mockGetTransportByIdUrl, (req, res, ctx) => {
-        const response = postCallCount > 0 ? planeTransportDetails : truckTransportDetails;
-        return res(ctx.json(response));
-      }),
-      // POST when user changes transport mode - try both endpoints
-      rest.post(getTransportDetailsUrl("catchCertificate", false), (req, res, ctx) => {
-        postCallCount++;
-        return res(ctx.json(planeTransportDetails));
-      }),
-      rest.post(SAVE_TRANSPORT_DETAILS_URL, (req, res, ctx) => {
-        postCallCount++;
-        return res(ctx.json(planeTransportDetails));
-      }),
-      rest.put(mockGetTransportByIdUrl, (req, res, ctx) => {
-        postCallCount++;
-        return res(ctx.json(planeTransportDetails));
-      }),
-    ];
-  },
 };
 
 export default checkYourInformationCCHandler;

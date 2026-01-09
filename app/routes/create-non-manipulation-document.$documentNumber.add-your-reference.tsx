@@ -11,8 +11,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   addYourReferenceAction(
     request,
     params,
-    "/create-non-manipulation-document/non-manipulation-documents",
-    "/create-non-manipulation-document/:documentNumber/add-exporter-details"
+    "/create-storage-document/storage-documents",
+    "/create-storage-document/:documentNumber/add-exporter-details"
   );
 
 const AddYourReference = () => {
@@ -20,9 +20,9 @@ const AddYourReference = () => {
 
   return (
     <AddYourReferenceCommon
-      backUrl="/create-non-manipulation-document/:documentNumber/progress"
+      backUrl="/create-storage-document/:documentNumber/progress"
       hintText={t("storageAddYourReferenceHint")}
-      progressLink="/create-non-manipulation-document/:documentNumber/progress"
+      progressLink="/create-storage-document/:documentNumber/progress"
       showInfoNotice={true}
     />
   );
