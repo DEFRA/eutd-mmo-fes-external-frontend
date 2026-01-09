@@ -257,7 +257,7 @@ const getRemoveSupportingDoc = (form: FormData, action: string): boolean =>
   form.get("_action") === null ? false : action.startsWith("removeSupportingDoc");
 
 const getRemoveIndex = (removeSupportingDoc: boolean, action: string): number =>
-  removeSupportingDoc ? parseInt(action.split("-")[1], 10) : -1;
+  removeSupportingDoc ? Number.parseInt(action.split("-")[1], 10) : -1;
 
 // Helper functions to reduce cognitive complexity
 const hasError = (errors: any, fieldKey: string): boolean => !!errors?.[fieldKey]?.message;
