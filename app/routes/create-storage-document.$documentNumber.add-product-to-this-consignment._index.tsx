@@ -46,7 +46,7 @@ import type {
   DocIssuedInUkRadioSelectType,
   ICountry,
 } from "~/types";
-import { querySpecies, getCodeFromLabel, displayErrorMessages, scrollToId } from "~/helpers";
+import { querySpecies, getCodeFromLabel, displayErrorMessagesInOrder, scrollToId } from "~/helpers";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { route } from "routes-gen";
 import isEmpty from "lodash/isEmpty";
@@ -423,9 +423,23 @@ const AddProductIndex = () => {
   const hintText = t("documentIssuedInTheUKHint", { ns: "addProductToThisConsignment" });
   const getOptionLabel = (option: DocIssuedInUkRadioSelectOptionType) => t(option.label, { ns: "common" });
 
+  const errorKeysInOrder = [
+    certificateTypeKey,
+    issuingCountryKey,
+    certKey,
+    weightKey,
+    supportingDocumentsKey,
+    productKey,
+    commodityCodeKey,
+    productDescriptionKey,
+    netWeightProductArrivalKey,
+    netWeightFisheryProductArrivalKey,
+  ];
+  const errorMessagesForDisplay = displayErrorMessagesInOrder(allErrors, errorKeysInOrder);
+
   return (
     <Main backUrl={route("/create-storage-document/:documentNumber/add-exporter-details", { documentNumber })}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(allErrors)} />}
+      {!isEmpty(errors) && <ErrorSummary errors={errorMessagesForDisplay} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <Title title={t("productDetails", { ns: "addProductToThisConsignment" })} />
