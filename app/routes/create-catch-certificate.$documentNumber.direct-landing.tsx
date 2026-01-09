@@ -220,7 +220,7 @@ const DirectLanding = () => {
               exportWeight:
                 typeof weight.exportWeight === "number"
                   ? weight.exportWeight
-                  : Number.parseFloat(String(weight.exportWeight)) ?? 0,
+                  : parseFloat(String(weight.exportWeight)) ?? 0,
             };
           })
         : [];
