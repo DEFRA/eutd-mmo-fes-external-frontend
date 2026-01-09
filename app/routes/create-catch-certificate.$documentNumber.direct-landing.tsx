@@ -122,7 +122,7 @@ const DirectLanding = () => {
           exportWeight: (() => {
             const val = weight.exportWeight;
             const parsed = typeof val === "number" ? val : parseFloat(String(val));
-            return !isNaN(parsed) && parsed !== null ? parsed : 0;
+            return !Number.isNaN(parsed) && parsed !== null ? parsed : 0;
           })(),
         }))
       : []
@@ -220,7 +220,7 @@ const DirectLanding = () => {
               exportWeight:
                 typeof weight.exportWeight === "number"
                   ? weight.exportWeight
-                  : parseFloat(String(weight.exportWeight)) ?? 0,
+                  : Number.parseFloat(String(weight.exportWeight)) ?? 0,
             };
           })
         : [];

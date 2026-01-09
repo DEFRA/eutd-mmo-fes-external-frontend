@@ -596,26 +596,89 @@ describe("DirectLanding page errors when javascript is enabled", () => {
 
   it("should calculate total weight when individual product weights are changed", () => {
     waitForHydration();
-    cy.wait(300);
 
     cy.contains(".govuk-table__cell", "Total export weight").should("be.visible");
     cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "5.00kg");
 
     cy.get('input[id="weights.0.exportWeight"]').clear({ force: true });
-    cy.wait(100);
     cy.get('input[id="weights.0.exportWeight"]').type("20", { force: true });
     cy.get('input[id="weights.0.exportWeight"]').blur();
 
-    cy.wait(500);
     cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "23.00kg");
 
     cy.get('input[id="weights.1.exportWeight"]').clear({ force: true });
-    cy.wait(100);
     cy.get('input[id="weights.1.exportWeight"]').type("10", { force: true });
     cy.get('input[id="weights.1.exportWeight"]').blur();
 
-    cy.wait(500);
     cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "30.00kg");
+  });
+
+  it("should handle NaN values correctly and default to 0 using Number.isNaN()", () => {
+    waitForHydration();
+
+    cy.contains(".govuk-table__cell", "Total export weight").should("be.visible");
+
+    // Enter invalid text that would result in NaN
+    cy.get('input[id="weights.0.exportWeight"]').clear({ force: true });
+    cy.get('input[id="weights.0.exportWeight"]').type("abc", { force: true });
+    cy.get('input[id="weights.0.exportWeight"]').blur();
+
+    // Total weight should remain valid (excluding NaN values)
+    cy.contains(".govuk-table__cell", "Total export weight")
+      .next(".govuk-table__cell")
+      .invoke("text")
+      .should("match", /^\d+\.\d{2}kg$/);
+  });
+
+  it("should correctly calculate total weight when some weights are empty or invalid", () => {
+    waitForHydration();
+
+    cy.contains(".govuk-table__cell", "Total export weight").should("be.visible");
+
+    // Clear first weight (should default to 0)
+    cy.get('input[id="weights.0.exportWeight"]').clear({ force: true });
+    cy.get('input[id="weights.0.exportWeight"]').blur();
+
+    // Set second weight to valid number
+    cy.get('input[id="weights.1.exportWeight"]').clear({ force: true });
+    cy.get('input[id="weights.1.exportWeight"]').type("15", { force: true });
+    cy.get('input[id="weights.1.exportWeight"]').blur();
+
+    cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "15.00kg");
+  });
+
+  it("should handle zero values correctly without treating them as NaN", () => {
+    waitForHydration();
+
+    cy.contains(".govuk-table__cell", "Total export weight").should("be.visible");
+
+    // Set weights to 0
+    cy.get('input[id="weights.0.exportWeight"]').clear({ force: true });
+    cy.get('input[id="weights.0.exportWeight"]').type("0", { force: true });
+    cy.get('input[id="weights.0.exportWeight"]').blur();
+
+    cy.get('input[id="weights.1.exportWeight"]').clear({ force: true });
+    cy.get('input[id="weights.1.exportWeight"]').type("0", { force: true });
+    cy.get('input[id="weights.1.exportWeight"]').blur();
+
+    cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "0.00kg");
+  });
+
+  it("should handle decimal values correctly without NaN issues", () => {
+    waitForHydration();
+
+    cy.contains(".govuk-table__cell", "Total export weight").should("be.visible");
+
+    // Set decimal weights
+    cy.get('input[id="weights.0.exportWeight"]').clear({ force: true });
+    cy.get('input[id="weights.0.exportWeight"]').type("5.5", { force: true });
+    cy.get('input[id="weights.0.exportWeight"]').blur();
+
+    cy.get('input[id="weights.1.exportWeight"]').clear({ force: true });
+    cy.get('input[id="weights.1.exportWeight"]').type("4.25", { force: true });
+    cy.get('input[id="weights.1.exportWeight"]').blur();
+
+    cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "9.75kg");
   });
 });
 
