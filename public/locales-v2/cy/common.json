@@ -2,6 +2,8 @@
   "sdYouAddedProductProductStoredTitle": "Cynnyrch wedi’i storio",
   "commonAddYourReferenceForThisExport": "Ychwanegwch eich cyfeirnod allforio",
   "commonAddYourReferenceOptionalText": "Eich cyfeirnod (dewisol)",
+  "storageDocumentInformationNotice": "Fydd yr wybodaeth yma ddim yn ymddangos ar y ddogfen dim triniaeth.",
+  "storageAddYourReferenceHint": "Cyfeiriad ar gyfer eich cofnodion chi’ch hun yw hwn. Er enghraifft, fe allech chi ddefnyddio rhif olrhain mewnol, cod prosiect, neu unrhyw label sy'n gwneud synnwyr i'ch sefydliad chi.",
   "commonAddYourReferenceHint": "Rhowch gyfeirnod i’ch helpu i adnabod {{journeyText}} o fewn y gwasanaeth. At eich defnydd chi mae’r cyfeirnod hwn. Ni fydd yn ymddangos ar y dystysgrif derfynol. Er enghraifft, gallech ddewis cyfeirnod eich sefydliad.",
   "commonSaveAsDraftButtonSaveAsDraftText": "Cadw fel drafft",
   "commonContinueButtonSaveAndContinueButton": "Cadw a bwrw ymlaen",
