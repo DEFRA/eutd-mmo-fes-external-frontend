@@ -2,12 +2,12 @@
   "sdCreatedPanelTitle": "The non-manipulation document has been created",
   "sdCreatedPanelBody": "Non-manipulation document number",
   "sdCreatedNextStepsHeader": "What you need to do next",
-  "sdCreatedDownloadLink": "Download the non-manipulation document",
-  "sdCreatedDownloadDocumentNotesSubHeading": "Do not amend the non-manipulation document.",
+  "sdCreatedDownloadLink": "Download the storage document",
+  "sdCreatedDownloadDocumentNotesSubHeading": "Do not amend the storage document.",
   "sdCreatedDownloadDocumentNotesFirefox": "If you are using Firefox as an internet browser, please ensure JavaScript is enabled in order to view and download the certificate.",
   "sdCreatedDownloadDocumentNotesMobile": "If you are using a mobile device, please ensure you have installed a PDF viewer.",
-  "sdCreatedEmailToImporter": "Email the non-manipulation document to the importer.",
+  "sdCreatedEmailToImporter": "Email the storage document to the importer.",
   "commonDocumentCreatedImportersResponsibility": "It is the importer’s responsibility to submit it to the import control authority where your export will enter the EU.",
   "commonDocumentCreatedImportersResponsibilityBIP": "The importing authority will complete and sign their section of the document at the Border Inspection Post (BIP).",
-  "sdCreatedViewOrCreateNewLink": "View completed non-manipulation documents or create a new export document"
+  "sdCreatedViewOrCreateNewLink": "View completed storage document or create a new export document"
 }
