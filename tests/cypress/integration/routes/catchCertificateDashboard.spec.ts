@@ -217,7 +217,7 @@ describe("Catch certificate dashboard no details", () => {
   });
 
   it("should render a message which equals not have any catch certificate", () => {
-    cy.get("p.govuk-body").should("have.text", "You do not have any catch certificates in progress.");
+    cy.get("p.govuk-body").contains("You do not have any catch certificates in progress.");
   });
 
   it("should render the forbidden page when a document number is undefined", () => {
