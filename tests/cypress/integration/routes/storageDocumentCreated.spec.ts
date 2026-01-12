@@ -26,7 +26,10 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render the correct page title and subtitle", () => {
-    cy.title().should("eq", "The non-manipulation document has been created - Create a UK storage document - GOV.UK");
+    cy.title().should(
+      "eq",
+      "The non-manipulation document has been created - Create a UK non-manipulation document - GOV.UK"
+    );
     cy.findByRole("heading", { name: "The non-manipulation document has been created", level: 1 });
     cy.get(".govuk-panel__body").contains("Non-manipulation document number");
     cy.get(".govuk-panel__body").contains(documentNumber);
