@@ -54,7 +54,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       plantApprovalNumber: values["plantApprovalNumber"] as string,
       personResponsibleForConsignment: values["personResponsibleForConsignment"] as string,
     },
-    route("/create-processing-statement/:documentNumber/add-processing-plant-details", { documentNumber }),
+    "/create-processing-statement/:documentNumber/add-processing-plant-details",
     undefined,
     isDraft,
     saveToRedisIfErrors
