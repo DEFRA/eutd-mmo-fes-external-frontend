@@ -10,7 +10,7 @@ describe("void this draft storage document page", () => {
     cy.visit(voidThisProcessingStatementUrl, { qs: { ...testParams } });
     cy.title().should(
       "eq",
-      "Are you sure you want to void this storage document? - Create a UK storage document - GOV.UK"
+      "Are you sure you want to void this storage document? - Create a UK non-manipulation document - GOV.UK"
     );
     cy.contains("h1", "Are you sure you want to void this storage document?").should("be.visible");
   });
