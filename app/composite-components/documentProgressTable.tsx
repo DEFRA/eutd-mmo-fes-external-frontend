@@ -20,19 +20,19 @@ export const DocumentProgressTable = ({
   return (
     <>
       <h2 className="govuk-heading-l">{t("commonDashboardInProgress")}</h2>
+      <p className="govuk-body" style={journey === "storageNotes" ? { whiteSpace: "pre-line" } : undefined}>
+        {t(`${journey}DashboardGuidance`, { maximumConcurrentDrafts: maximumDraftsLength, ns: "dashboard" })}
+        {journey === "catchCertificate" && (
+          <>
+            <br />
+            {t(`${journey}DashboardGuidanceForPendingSubmission`, { ns: "dashboard" })}
+            <br />
+            {t(`${journey}DashboardGuidanceForFailedSubmission`, { ns: "dashboard" })}
+          </>
+        )}
+      </p>
       {hasDrafts ? (
         <>
-          <p className="govuk-body">
-            {t(`${journey}DashboardGuidance`, { maximumConcurrentDrafts: maximumDraftsLength, ns: "dashboard" })}
-            {journey === "catchCertificate" && (
-              <>
-                <br />
-                {t(`${journey}DashboardGuidanceForPendingSubmission`, { ns: "dashboard" })}
-                <br />
-                {t(`${journey}DashboardGuidanceForFailedSubmission`, { ns: "dashboard" })}
-              </>
-            )}
-          </p>
           <table className="govuk-table" data-testid={`${journey}-inprogress-table`}>
             <thead className="govuk-table__head">
               <tr className="govuk-table__row">
@@ -89,7 +89,11 @@ export const DocumentProgressTable = ({
           </table>
         </>
       ) : (
-        <p className="govuk-body">{t(`${journey}DashboardNoAnyDocInProgress`, { ns: "dashboard" })}</p>
+        <>
+            {journey === "storageNotes" && <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />}
+            <p className="govuk-body">{t(`${journey}DashboardNoAnyDocInProgress`, { ns: "dashboard" })}</p>
+            {journey === "storageNotes" && <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />}
+        </>
       )}
     </>
   );
