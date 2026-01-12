@@ -133,9 +133,7 @@ export const DocumentCompletedTable = ({
 
                     {journey === "catchCertificate" && (
                       <td scope="row" className="govuk-table__cell">
-                        {!document.catchSubmission ? (
-                          "-"
-                        ) : (
+                        {document.catchSubmission ? (
                           <a
                             href={getEuCatchStatusRoute(document.documentNumber, document.catchSubmission)}
                             className="govuk-link"
@@ -146,6 +144,8 @@ export const DocumentCompletedTable = ({
                               {` ${t("commonForDocument")} ${document.documentNumber}`}
                             </span>
                           </a>
+                        ) : (
+                          "-"
                         )}
                       </td>
                     )}
