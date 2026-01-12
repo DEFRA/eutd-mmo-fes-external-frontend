@@ -1,6 +1,6 @@
 {
-  "sdCreatedPanelTitle": "The storage document has been created",
-  "sdCreatedPanelBody": "Storage document number",
+  "sdCreatedPanelTitle": "The non-manipulation document has been created",
+  "sdCreatedPanelBody": "Non-manipulation document number",
   "sdCreatedNextStepsHeader": "What you need to do next",
   "sdCreatedDownloadLink": "Download the storage document",
   "sdCreatedDownloadDocumentNotesSubHeading": "Do not amend the storage document.",
