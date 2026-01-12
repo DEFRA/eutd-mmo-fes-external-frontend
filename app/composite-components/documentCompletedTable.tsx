@@ -5,7 +5,7 @@ import moment from "moment";
 import { camelCaseToSpacedLowerCase } from "~/helpers/string";
 import last from "lodash/last";
 import { format, subMonths, addMonths, compareAsc, parse } from "date-fns";
-import { getPrivacyNoticeJourney, getStatusClassName, getStatusName } from "~/helpers/dashboard";
+import { getPrivacyNoticeJourney } from "~/helpers/dashboard";
 
 type DocumentCompletedTableProps = {
   journey: string;
@@ -95,14 +95,9 @@ export const DocumentCompletedTable = ({
                 {t("commonDashboardDateCreated")}
               </th>
               {journey === "catchCertificate" && (
-                <>
-                  <th scope="col" className="govuk-table__header">
-                    {t("commonDashboardStatus")}
-                  </th>
-                  <th scope="col" className="govuk-table__header">
-                    {t("commonEuCatchIntegration")}
-                  </th>
-                </>
+                <th scope="col" className="govuk-table__header">
+                  {t("commonEuCatchIntegration")}
+                </th>
               )}
               <th scope="col" className="govuk-table__header govuk-table__header--numeric">
                 {t("commonDashboardAction")}
@@ -137,35 +132,22 @@ export const DocumentCompletedTable = ({
                     </td>
 
                     {journey === "catchCertificate" && (
-                      <>
-                        <td scope="row" className="govuk-table__cell">
-                          <span
-                            className={
-                              document.catchSubmission?.status
-                                ? `govuk-tag govuk-tag--${getStatusClassName("SUCCESS", false)}`
-                                : ""
-                            }
+                      <td scope="row" className="govuk-table__cell">
+                        {!document.catchSubmission ? (
+                          "-"
+                        ) : (
+                          <a
+                            href={getEuCatchStatusRoute(document.documentNumber, document.catchSubmission)}
+                            className="govuk-link"
+                            data-testid={`${journey}-check-eu-catch-status`}
                           >
-                            {document.catchSubmission?.status ? getStatusName("SUCCESS", false, t) : "-"}
-                          </span>
-                        </td>
-                        <td scope="row" className="govuk-table__cell">
-                          {!document.catchSubmission ? (
-                            "-"
-                          ) : (
-                            <a
-                              href={getEuCatchStatusRoute(document.documentNumber, document.catchSubmission)}
-                              className="govuk-link"
-                              data-testid={`${journey}-check-eu-catch-status`}
-                            >
-                              {t("commonCheckStatus")}
-                              <span className="govuk-visually-hidden">
-                                {` ${t("commonForDocument")} ${document.documentNumber}`}
-                              </span>
-                            </a>
-                          )}
-                        </td>
-                      </>
+                            {t("commonCheckStatus")}
+                            <span className="govuk-visually-hidden">
+                              {` ${t("commonForDocument")} ${document.documentNumber}`}
+                            </span>
+                          </a>
+                        )}
+                      </td>
                     )}
                     <td scope="row" className="govuk-table__cell govuk-table__cell--numeric">
                       <Link

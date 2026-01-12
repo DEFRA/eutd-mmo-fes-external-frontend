@@ -149,6 +149,7 @@
   "psCatchCertificateDescription": "Add at least one species to your processed product",
   "psAddProcessingPDErrorPersonResponsibleForConsignment": "Enter the name of the person responsible for this consignment",
   "psAddProcessingPDErrorPlantApprovalNumber": "Enter the plant approval number",
+  "psAddProcessingPDFormatErrorPlantApprovalNumber": "Enter the plant approval number in the correct format",
   "psAddProcessingPDErrorPersonResponsibleForConsignmentLength": "Person responsible for this consignment must not exceed 50 characters",
   "psAddProcessingPDErrorResponsibleValidation": "Person responsible must only contain letters, hyphens, spaces, and single quotes",
   "psAddProcessingPlantAddressErrorMaxLimitPlantName": "Processing plant name must not exceed 54 characters",
