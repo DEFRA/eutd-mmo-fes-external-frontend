@@ -595,13 +595,13 @@ const AddCatchDetailsIndex = () => {
                   }
                 }}
                 errorProps={{
-                  className: !isEmpty(errors?.[ccNumberKey]) ? "govuk-error-message" : "",
+                  className: isEmpty(errors?.[ccNumberKey]) ? "" : "govuk-error-message",
                 }}
                 staticErrorMessage={
-                  !isEmpty(errors?.[ccNumberKey]) ? t(errors[ccNumberKey]?.message, { ns: "errorsText" }) : ""
+                  isEmpty(errors?.[ccNumberKey]) ? "" : t(errors[ccNumberKey]?.message, { ns: "errorsText" })
                 }
                 errorPosition={ErrorPosition.AFTER_LABEL}
-                containerClassNameError={!isEmpty(errors?.[ccNumberKey]) ? "govuk-form-group--error" : ""}
+                containerClassNameError={isEmpty(errors?.[ccNumberKey]) ? "" : "govuk-form-group--error"}
                 hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
               />
