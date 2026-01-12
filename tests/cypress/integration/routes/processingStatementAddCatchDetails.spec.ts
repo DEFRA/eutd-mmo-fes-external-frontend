@@ -713,6 +713,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-totalWeightLanded").should("have.value", "50");
     cy.get("#cancel").click({ force: true });
+    cy.wait(200);
     cy.get("#catches-0-totalWeightLanded").should("have.value", "");
   });
 

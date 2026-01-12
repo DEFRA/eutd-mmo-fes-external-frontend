@@ -46,7 +46,7 @@ import type {
   DocIssuedInUkRadioSelectType,
   ICountry,
 } from "~/types";
-import { querySpecies, getCodeFromLabel, displayErrorMessages, scrollToId } from "~/helpers";
+import { querySpecies, getCodeFromLabel, displayErrorMessagesInOrder, scrollToId } from "~/helpers";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { route } from "routes-gen";
 import isEmpty from "lodash/isEmpty";
@@ -172,7 +172,7 @@ const getUpdateStorageDocumentData = (
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
-  const productIndex = Number.parseInt(params["*"] ?? "") || 0;
+  const productIndex = params["*"] ? Number.parseInt(params["*"]) : 0;
   const productIndexUrlFragment = productIndex >= 0 ? `/${productIndex}` : "";
   const form = await request.formData();
   const isNonJs = form.get("isNonJs") === "true";
@@ -423,9 +423,23 @@ const AddProductIndex = () => {
   const hintText = t("documentIssuedInTheUKHint", { ns: "addProductToThisConsignment" });
   const getOptionLabel = (option: DocIssuedInUkRadioSelectOptionType) => t(option.label, { ns: "common" });
 
+  const errorKeysInOrder = [
+    certificateTypeKey,
+    issuingCountryKey,
+    certKey,
+    weightKey,
+    supportingDocumentsKey,
+    productKey,
+    commodityCodeKey,
+    productDescriptionKey,
+    netWeightProductArrivalKey,
+    netWeightFisheryProductArrivalKey,
+  ];
+  const errorMessagesForDisplay = displayErrorMessagesInOrder(allErrors, errorKeysInOrder);
+
   return (
     <Main backUrl={route("/create-storage-document/:documentNumber/add-exporter-details", { documentNumber })}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(allErrors)} />}
+      {!isEmpty(errors) && <ErrorSummary errors={errorMessagesForDisplay} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <Title title={t("productDetails", { ns: "addProductToThisConsignment" })} />
@@ -450,15 +464,15 @@ const AddProductIndex = () => {
               <div
                 id={certificateTypeKey}
                 className={
-                  !isEmpty(errors?.[certificateTypeKey])
-                    ? "govuk-form-group govuk-form-group--error"
-                    : "govuk-form-group"
+                  isEmpty(errors?.[certificateTypeKey])
+                    ? "govuk-form-group"
+                    : "govuk-form-group govuk-form-group--error"
                 }
               >
                 <fieldset
                   className="govuk-fieldset"
                   aria-describedby={
-                    !isEmpty(errors?.[certificateTypeKey]) ? "certificateType-error" : `${certificateTypeKey}-hint`
+                    isEmpty(errors?.[certificateTypeKey]) ? `${certificateTypeKey}-hint` : "certificateType-error"
                   }
                 >
                   <label className="govuk-label govuk-!-font-weight-bold" htmlFor={certificateTypeKey}>
@@ -820,9 +834,9 @@ const AddProductIndex = () => {
               })}
               id={netWeightFisheryProductArrivalKey}
               aria-describedby={
-                !isEmpty(errors?.[netWeightFisheryProductArrivalKey])
-                  ? "netWeightFisheryProductArrival-error"
-                  : `${netWeightFisheryProductArrivalKey}-hint`
+                isEmpty(errors?.[netWeightFisheryProductArrivalKey])
+                  ? `${netWeightFisheryProductArrivalKey}-hint`
+                  : "netWeightFisheryProductArrival-error"
               }
             >
               <label className="govuk-label govuk-!-font-weight-bold" htmlFor="netWeightFisheryProductArrival">

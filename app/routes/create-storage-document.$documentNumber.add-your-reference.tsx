@@ -21,8 +21,9 @@ const AddYourReference = () => {
   return (
     <AddYourReferenceCommon
       backUrl="/create-storage-document/:documentNumber/progress"
-      hintText={t("commonAddYourReferenceHint", { journeyText: t("storageNotes") })}
+      hintText={t("storageAddYourReferenceHint")}
       progressLink="/create-storage-document/:documentNumber/progress"
+      showInfoNotice={true}
     />
   );
 };

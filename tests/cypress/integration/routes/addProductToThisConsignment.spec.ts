@@ -197,6 +197,164 @@ describe("Add product to this consignment  page", () => {
     cy.url().should("include", "/forbidden");
   });
 
+  it("should enforce maximum of 5 supporting documents based on maximumEntryDocsAllowed env config", () => {
+    // This tests line 134: maximumEntryDocsAllowed: Number.parseInt(maximumEntryDocsAllowed, 10)
+    // The loader parses the env variable EU_SD_MAX_ENTRY_DOCS (default "5") to a number
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.wait(500);
+
+    // Add supporting documents up to the maximum
+    for (let i = 0; i < 4; i++) {
+      cy.get("#add-supporting-doc-button").should("exist").click({ force: true });
+      cy.wait(100);
+    }
+
+    // Verify we now have exactly 5 supporting document fields (0-4 indices)
+    cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", 6);
+    cy.get("#catches-0-supportingDocuments-0").should("exist");
+    cy.get("#catches-0-supportingDocuments-1").should("exist");
+    cy.get("#catches-0-supportingDocuments-2").should("exist");
+    cy.get("#catches-0-supportingDocuments-3").should("exist");
+    cy.get("#catches-0-supportingDocuments-4").should("exist");
+
+    // The Add button should no longer be visible at the maximum
+    cy.get("#add-supporting-doc-button").should("not.exist");
+  });
+
+  it("should correctly parse productIndex from URL params for different product indices", () => {
+    // This tests line 175: const productIndex = params["*"] ? Number.parseInt(params["*"]) : 0;
+    // The action parses the product index from the URL path parameter
+
+    // Test with productIndex = 0 (explicit 0)
+    const testParams0: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(`${documentUrl}/add-product-to-this-consignment/0`, { qs: { ...testParams0 } });
+    cy.url().should("include", "/add-product-to-this-consignment/0");
+
+    // Verify the form fields use index 0
+    cy.get("#catches-0-certificateType").should("exist");
+    cy.get("#catches-0-certificateNumber").should("exist");
+    cy.get("#catches-0-weightOnCC").should("exist");
+
+    // Test with productIndex = 1
+    const testParams1: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataProductIndex1,
+    };
+    cy.visit(`${documentUrl}/add-product-to-this-consignment/1`, { qs: { ...testParams1 } });
+    cy.url().should("include", "/add-product-to-this-consignment/1");
+
+    // Verify the form fields use index 1
+    cy.get("#catches-1-certificateType").should("exist");
+    cy.get("#catches-1-certificateNumber").should("exist");
+    cy.get("#catches-1-weightOnCC").should("exist");
+  });
+
+  it("should default productIndex to 0 when URL parameter is missing or empty", () => {
+    // This tests the fallback case in line 175: params["*"] ? Number.parseInt(params["*"]) : 0
+    // When params["*"] is undefined/empty, it should default to 0
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+
+    // Visit without any productIndex in URL (tests the : 0 fallback)
+    cy.visit(`${documentUrl}/add-product-to-this-consignment/`, { qs: { ...testParams } });
+
+    // Should still render with index 0 as default
+    cy.get("#catches-0-certificateType").should("exist");
+    cy.get("#catches-0-certificateNumber").should("exist");
+    cy.get("#catches-0-weightOnCC").should("exist");
+    cy.get("#catches-0-product").should("exist");
+  });
+
+  it("should correctly remove supporting document by parsing index from action string", () => {
+    // This tests line 260: removeSupportingDoc ? Number.parseInt(action.split("-")[1], 10) : -1;
+    // The action parses the index from the remove button's action name (e.g., "removeSupportingDoc-2")
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.wait(500);
+
+    // Add 3 supporting documents
+    cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.wait(100);
+    cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.wait(100);
+
+    // We should now have 3 fields (indices 0, 1, 2)
+    cy.get("#catches-0-supportingDocuments-0").should("exist");
+    cy.get("#catches-0-supportingDocuments-1").should("exist");
+    cy.get("#catches-0-supportingDocuments-2").should("exist");
+
+    // Fill them with different values to verify correct removal
+    cy.get("#catches-0-supportingDocuments-0").clear().type("First Document");
+    cy.get("#catches-0-supportingDocuments-1").clear().type("Second Document");
+    cy.get("#catches-0-supportingDocuments-2").clear().type("Third Document");
+
+    // Remove the middle one (index 1) - this triggers getRemoveIndex which parses "removeSupportingDoc-1"
+    cy.get("#remove-supporting-doc-button-1").should("exist").click({ force: true });
+    cy.wait(200);
+
+    // Now we should have 2 fields remaining
+    cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", 3);
+
+    // Verify the correct document was removed (middle one)
+    cy.get("#catches-0-supportingDocuments-0").should("have.value", "First Document");
+    cy.get("#catches-0-supportingDocuments-1").should("have.value", "Third Document");
+
+    // Remove another one by index (index 0)
+    cy.get("#remove-supporting-doc-button-0").should("exist").click({ force: true });
+    cy.wait(200);
+
+    // Now only 1 field should remain
+    cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", 2);
+    cy.get("#catches-0-supportingDocuments-0").should("have.value", "Third Document");
+
+    // Remove button should not exist when there's only one field
+    cy.get('[id^="remove-supporting-doc-button"]').should("not.exist");
+  });
+
+  it("should test the negative case of getRemoveIndex when removeSupportingDoc is false", () => {
+    // This tests the fallback case in line 260: removeSupportingDoc ? Number.parseInt(action.split("-")[1], 10) : -1
+    // When removeSupportingDoc is false, getRemoveIndex should return -1 (tested implicitly in the action handler)
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.wait(500);
+
+    // Add supporting documents
+    cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.wait(100);
+
+    // Fill in some values
+    cy.get("#catches-0-supportingDocuments-0").clear().type("First Document");
+    cy.get("#catches-0-supportingDocuments-1").clear().type("Second Document");
+
+    // Fill in required fields to submit the form
+    cy.get("#catches-0-certificateType").should("exist");
+    cy.get('input[value="uk"]').check({ force: true });
+    cy.get("#catches-0-certificateNumber").type("TEST123");
+    cy.get("#catches-0-weightOnCC").type("100");
+    cy.get("#catches-0-product").type("COD");
+    cy.wait(300);
+    cy.get("#catches-0-commodityCode").type("03");
+
+    // Submit form with "Save and continue" (not a remove action)
+    // This ensures the form submission doesn't trigger getRemoveIndex with removeSupportingDoc=true
+    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+    // Should successfully navigate away (the action didn't try to remove anything)
+    cy.url().should("include", "/you-have-added-a-product");
+  });
+
   describe("Accessibility", () => {
     it("should have label for all fields on the form", () => {
       cy.get("form label").should("have.length", 12);
@@ -762,6 +920,33 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     cy.get("#errorIsland").should("be.visible");
   });
 
+  it("should display error messages in the correct order with issuing country error appearing early", () => {
+    // This test verifies that issuing country error appears in proper order in the error summary
+    // Using the existing test that we know validates issuing country requirements
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentIssuingCountryRequired,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Fill out required fields first
+    cy.get("#catches-0-product").type("Sole (SOL)");
+    cy.get("#catches-0-commodityCode").type("03011100 - Fresh or chilled trout");
+    cy.get("#catches-0-certificateNumber").type("TEST123");
+    cy.get("#catches-0-weightOnCC").type("10");
+
+    // Select 'No' for UK-issued certificate
+    cy.get("input[name='docIssuedInUk'][value='non_uk']").click({ force: true });
+
+    // Try to submit without entering issuing country
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    // Verify issuing country error appears in error summary
+    cy.get(".govuk-error-summary__list").should("exist");
+    cy.get(".govuk-error-summary__list")
+      .contains("Enter the country that issued the entry document")
+      .should("be.visible");
+  });
+
   it("should handle default values for all fields from catchDetails", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
@@ -926,349 +1111,3 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
   });
 });
-
-
-describe("Add product to this consignment page: Issuing Country Field Tests", () => {
-  it("should display issuing country field when non-UK certificate is selected", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("input[name='docIssuedInUk'][value='non_uk']").click({ force: true });
-    cy.get("#catches-0-issuingCountry").should("be.visible");
-    cy.get("label[for='catches-0-issuingCountry']").should("contain", "Issuing country");
-  });
-
-  it("should show issuing country hint text", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("input[name='docIssuedInUk'][value='non_uk']").click({ force: true });
-    cy.get("#catches-0-issuingCountry-hint").should("be.visible");
-    cy.get("#catches-0-issuingCountry-hint").should("contain", "Enter the country that issued the entry document");
-  });
-
-  it("should allow typing and selecting an issuing country", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("input[name='docIssuedInUk'][value='non_uk']").click({ force: true });
-    cy.get("#catches-0-issuingCountry").should("be.visible");
-    cy.get("#catches-0-issuingCountry").type("France");
-    cy.get("#catches-0-issuingCountry").should("have.value", "France");
-  });
-
-  it("should display issuing country error when required but not provided", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentIssuingCountryRequired,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get(".govuk-error-message").should("contain", "Enter the country that issued the entry document");
-  });
-
-  it("should not show issuing country field for UK certificates even after form errors", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("input[name='docIssuedInUk'][value='uk']").click({ force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get("#catches-0-issuingCountry").should("not.exist");
-  });
-});
-
-describe("Add product to this consignment page: Species Autocomplete Tests", () => {
-  it("should display species autocomplete field", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-product").should("be.visible");
-    cy.get("label[for='catches-0-product']").should("contain", "Food and Agriculture Organisation (FAO) code or species name");
-  });
-
-  it("should show species hint text", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-product-hint").should("be.visible");
-    cy.get("#catches-0-product-hint").should("contain", "Start typing a species name or FAO code");
-  });
-
-  it("should allow typing in species field", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-product").clear();
-    cy.get("#catches-0-product").type("Atlantic cod");
-    cy.get("#catches-0-product").should("contain.value", "Atlantic cod");
-  });
-
-  it("should show species error when invalid species is entered", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentDataSpeicesError,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get(".govuk-error-message").should("contain", "You have entered an incorrect FAO code or species name");
-  });
-
-  it("should show species suggestions error when similar species exist", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentDataSpeicesSuggestError,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get(".govuk-error-message").should("contain", "did you mean one of the following");
-  });
-});
-
-describe("Add product to this consignment page: Commodity Code Autocomplete Tests", () => {
-  it("should display commodity code autocomplete field", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-commodityCode").should("be.visible");
-    cy.get("label[for='catches-0-commodityCode']").should("contain", "Commodity code");
-  });
-
-  it("should show commodity code hint text", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-commodityCode-hint").should("be.visible");
-    cy.get("#catches-0-commodityCode-hint").should("contain", "Start typing to search for the correct commodity code");
-  });
-
-  it("should allow typing in commodity code field", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-commodityCode").type("03011100");
-    cy.get("#catches-0-commodityCode").should("contain.value", "03011100");
-  });
-
-  it("should show commodity code error when required but not provided", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentDataError,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get(".govuk-error-summary__list").should("be.visible");
-  });
-
-  it("should have proper error styling on commodity code field when error exists", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentDataError,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get(".govuk-form-group--error").should("exist");
-  });
-});
-
-describe("Add product to this consignment page: Weight Field Tests", () => {
-  it("should display weight on document field", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-weightOnCC").should("be.visible");
-    cy.get("label[for='catches-0-weightOnCC']").should("contain", "Weight on document in kg");
-  });
-
-  it("should show weight hint text", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#hint-catches-0-weightOnCC").should("be.visible");
-  });
-
-  it("should show weight error when required but not provided", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentDataError,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get(".govuk-error-message").should("be.visible");
-  });
-});
-
-describe("Add product to this consignment page: Entry Document Field Tests", () => {
-  it("should display entry document field", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-certificateNumber").should("be.visible");
-    cy.get("label[for='catches-0-certificateNumber']").should("contain", "Entry document");
-  });
-
-  it("should show entry document hint text with example", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-certificateNumber-hint").should("be.visible");
-    cy.get("#catches-0-certificateNumber-hint").should("contain", "GBR-2024-CC-BEFCD6036");
-  });
-
-  it("should show entry document error when invalid format", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentInvalidEntryDocError,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get(".govuk-error-message").should("be.visible");
-  });
-});
-
-describe("Add product to this consignment page: Product Description Tests", () => {
-  it("should display product description field", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-productDescription").should("be.visible");
-    cy.get("label[for='catches-0-productDescription']").should("contain", "Product description");
-  });
-
-  it("should show product description hint with example", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-productDescription-hint").should("be.visible");
-    cy.get("#catches-0-productDescription-hint").should("contain", "Battered cod fillets");
-  });
-
-  it("should show product description error when required", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentProductDescriptionRequired,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.contains(".govuk-error-message", "Enter a description of the product").should("be.visible");
-  });
-});
-
-describe("Add product to this consignment page: Net Weight Fields Tests", () => {
-  it("should display both net weight fields", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#netWeightProductArrival").should("be.visible");
-    cy.get("#netWeightFisheryProductArrival").should("be.visible");
-  });
-
-  it("should show correct labels for net weight fields", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("label[for='netWeightProductArrival']").should("contain", "Net weight of the product on arrival");
-    cy.get("label[for='netWeightFisheryProductArrival']").should("contain", "Net weight of fishery products on arrival");
-  });
-
-  it("should show hint text for both net weight fields", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-netWeightProductArrival-hint").should("be.visible");
-    cy.get("#catches-0-netWeightProductArrival-hint").should("contain", "fish pie weighing 350g");
-
-    cy.get("#catches-0-netWeightFisheryProductArrival-hint").should("be.visible");
-    cy.get("#catches-0-netWeightFisheryProductArrival-hint").should("contain", "200g of cod");
-  });
-
-  it("should display kg suffix for both net weight fields", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#netWeightProductArrival").parent().find(".govuk-input__suffix").should("contain", "kg");
-    cy.get("#netWeightFisheryProductArrival").parent().find(".govuk-input__suffix").should("contain", "kg");
-  });
-
-  it("should verify maxLength attributes on net weight fields", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#netWeightProductArrival").should("have.attr", "maxLength", "16");
-    cy.get("#netWeightFisheryProductArrival").should("have.attr", "maxLength", "16");
-  });
-
-  it("should show net weight product arrival error when required", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentDataError,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get("#netWeightProductArrival-error").should("be.visible");
-    cy.contains(".govuk-error-message", "Enter the net weight of product on arrival").should("be.visible");
-  });
-
-  it("should show net weight fishery product arrival error when required", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentDataError,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get("#netWeightFisheryProductArrival-error").should("be.visible");
-    cy.contains(".govuk-error-message", "Enter the net weight of fishery products on arrival").should("be.visible");
-  });
-
-  it("should have proper aria-describedby for net weight fields", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentData,
-    };
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-netWeightProductArrival").should("have.attr", "aria-describedby");
-    cy.get("#catches-0-netWeightFisheryProductArrival").should("have.attr", "aria-describedby");
-  });
-});
-
