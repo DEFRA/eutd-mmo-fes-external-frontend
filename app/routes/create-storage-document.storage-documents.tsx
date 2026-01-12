@@ -4,7 +4,7 @@ import type { LoaderFunction, ActionFunction, MetaFunction } from "react-router"
 import { Main } from "~/components";
 import { getJourneyHeader } from "~/helpers/dashboard";
 import { useTranslation } from "react-i18next";
-import type { ErrorResponse, IDashboardData, IGetAllDocumentsData } from "~/types";
+import type { ErrorResponse, IDashboardData } from "~/types";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 import { dashboardAction, getDashboardLoader } from "~/.server";
 import { getDashboardMeta } from "~/helpers";
@@ -36,7 +36,7 @@ const StorageDocuments = () => {
     voidLink: "/create-storage-document/:documentNumber/void-this-storage-document",
     copyLink: "/create-storage-document/:documentNumber/copy-this-storage-document",
   };
-  const refinedDocuments = PopulateLinks(journey, documents as IGetAllDocumentsData, t, linksToPopulate);
+  const refinedDocuments = PopulateLinks(journey, documents, t, linksToPopulate);
   const [searchParams] = useSearchParams();
   const journeyLink = "/create-storage-document/storage-documents";
   const journeyName = "storageDocument";

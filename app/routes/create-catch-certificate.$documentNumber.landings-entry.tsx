@@ -26,13 +26,13 @@ const LandingsEntry = () => {
   const {
     landingsEntryOption,
     generatedByContent,
-    documentNumber,
+    copyDocumentNumber: documentNumber,
     copyDocumentAcknowledged,
     voidDocumentConfirm,
     nextUri,
   } = useLoaderData<
     ILandingsEntryOptionGet & {
-      documentNumber: string;
+      copyDocumentNumber: string;
       copyDocumentAcknowledged: boolean;
       voidDocumentConfirm: boolean;
       nextUri: string;
@@ -55,7 +55,7 @@ const LandingsEntry = () => {
 
   return (
     <Main backUrl={route("/create-catch-certificate/catch-certificates")}>
-      {(generatedByContent || copyDocumentAcknowledged) && (
+      {(generatedByContent ?? copyDocumentAcknowledged) && (
         <NotificationBanner
           header={t("commonImportant", { ns: "common" })}
           messages={getNotificationMsg(generatedByContent)}

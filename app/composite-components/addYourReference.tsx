@@ -57,8 +57,8 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
               hiddenErrorText=""
               hint={{
                 id: "hint-userReference",
-                position:"above",                
-                className:"govuk-hint",
+                position: "above",
+                className: "govuk-hint",
                 text: hintText,
               }}
             />
