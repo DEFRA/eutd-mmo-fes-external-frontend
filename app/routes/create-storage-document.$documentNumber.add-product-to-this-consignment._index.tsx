@@ -160,13 +160,15 @@ const getUpdateStorageDocumentData = (
     certificateType: values.docIssuedInUk as DocIssuedInUkRadioSelectType,
     issuingCountry,
     supportingDocuments: supportingDocumentsFromForm.length > 0 ? supportingDocumentsFromForm : undefined,
-    productDescription: !isEmpty(values.productDescription) ? (values.productDescription as string) : undefined,
-    netWeightProductArrival: !isEmpty(values.netWeightProductArrival)
-      ? (values.netWeightProductArrival as string)
-      : undefined,
-    netWeightFisheryProductArrival: !isEmpty(values.netWeightFisheryProductArrival)
-      ? (values.netWeightFisheryProductArrival as string)
-      : undefined,
+    productDescription: isEmpty(values.productDescription) ? undefined : (values.productDescription as string),
+    netWeightProductArrival:
+      values.netWeightProductArrival && !isEmpty(values.netWeightProductArrival)
+        ? (values.netWeightProductArrival as string)
+        : undefined,
+    netWeightFisheryProductArrival:
+      values.netWeightFisheryProductArrival && !isEmpty(values.netWeightFisheryProductArrival)
+        ? (values.netWeightFisheryProductArrival as string)
+        : undefined,
   };
 };
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
@@ -326,7 +328,7 @@ const functionToGetInitialState = (
     return [""];
   }
 
-  return Array(maximumEntryDocsAllowed).fill("");
+  return new Array(maximumEntryDocsAllowed).fill("");
 };
 
 const AddProductIndex = () => {
@@ -789,9 +791,9 @@ const AddProductIndex = () => {
               })}
               id={netWeightProductArrivalKey}
               aria-describedby={
-                !isEmpty(errors?.[netWeightProductArrivalKey])
-                  ? "netWeightProductArrival-error"
-                  : `${netWeightProductArrivalKey}-hint`
+                isEmpty(errors?.[netWeightProductArrivalKey])
+                  ? `${netWeightProductArrivalKey}-hint`
+                  : "netWeightProductArrival-error"
               }
             >
               <label className="govuk-label govuk-!-font-weight-bold" htmlFor="netWeightProductArrival">
