@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const sdPageUrl = "create-non-manipulation-document/GBR-2022-SD-F71D98A30/you-have-added-a-product";
+const sdPageUrl = "create-storage-document/GBR-2022-SD-F71D98A30/you-have-added-a-product";
 
 describe("SD: you-have-added-product page", () => {
   it("should render the page", () => {
@@ -15,7 +15,7 @@ describe("SD: you-have-added-product page", () => {
     cy.get("#errorIsland").should("not.exist");
 
     cy.contains("button", "Save as draft").click({ force: true });
-    cy.url().should("include", "/non-manipulation-documents");
+    cy.url().should("include", "/storage-documents");
   });
 
   it("renders the table with correct headers", () => {
@@ -77,7 +77,7 @@ describe("SD: you-have-added-product page", () => {
     cy.contains("button", "Edit").click({ force: true });
     cy.url().should(
       "eq",
-      "http://localhost:3000/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/0"
+      "http://localhost:3000/create-storage-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/0"
     );
   });
 

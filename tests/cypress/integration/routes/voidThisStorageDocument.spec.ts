@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
-const documentUrl = "/create-non-manipulation-document/GBR-2022-SD-F0285BD8A";
-const voidThisProcessingStatementUrl = `${documentUrl}/void-this-non-manipulation-document`;
+const documentUrl = "/create-storage-document/GBR-2022-SD-F0285BD8A";
+const voidThisProcessingStatementUrl = `${documentUrl}/void-this-storage-document`;
 
 describe("void this draft storage document page", () => {
   it("should render the correct h1 title", () => {
@@ -12,7 +12,7 @@ describe("void this draft storage document page", () => {
       "eq",
       "Are you sure you want to void this storage document? - Create a UK non-manipulation document - GOV.UK"
     );
-    cy.contains("h1", "Are you sure you want to void this non-manipulation document?").should("be.visible");
+    cy.contains("h1", "Are you sure you want to void this storage document?").should("be.visible");
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {
@@ -22,7 +22,7 @@ describe("void this draft storage document page", () => {
     cy.visit(voidThisProcessingStatementUrl, { qs: { ...testParams } });
 
     cy.get('[data-testid="void-certificate-confirm"]')
-      .contains("Are you sure you want to void this non-manipulation document?")
+      .contains("Are you sure you want to void this storage document?")
       .should("be.visible");
     cy.get('[data-testid="continue"]').click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");

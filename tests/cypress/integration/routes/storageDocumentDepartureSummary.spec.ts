@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 const documentNumber = "GBR-2023-SD-97DA962EC";
-const storageDocumentUrl = `/create-non-manipulation-document/${documentNumber}/departure-product-summary`;
+const storageDocumentUrl = `/create-storage-document/${documentNumber}/departure-product-summary`;
 
 describe("Storage document departure summary: rendering", () => {
   beforeEach(() => {
@@ -14,12 +14,12 @@ describe("Storage document departure summary: rendering", () => {
     cy.findByRole("link", { name: "Back" }).click({ force: true });
     cy.url().should(
       "eq",
-      `http://localhost:3000/create-non-manipulation-document/${documentNumber}/add-transportation-details-plane`
+      `http://localhost:3000/create-storage-document/${documentNumber}/add-transportation-details-plane`
     );
   });
 
   it("should render the correct page title", () => {
-    cy.title().should(
+     cy.title().should(
       "eq",
       "Check and confirm your consignment weight - Create a UK non-manipulation document - GOV.UK"
     );
@@ -56,10 +56,7 @@ describe("Storage document departure summary: pageguard", () => {
       testCaseId: TestCaseId.SDDepartureSummaryNoTransport,
     };
     cy.visit(storageDocumentUrl, { failOnStatusCode: false, qs: { ...testParams } });
-    cy.url().should(
-      "include",
-      `/create-non-manipulation-document/${documentNumber}/how-does-the-consignment-leave-the-uk`
-    );
+    cy.url().should("include", `/create-storage-document/${documentNumber}/how-does-the-export-leave-the-uk`);
   });
 
   it("should redirect to the forbidden page", () => {
@@ -120,8 +117,8 @@ describe("Storage document departure summary: arrival tab", () => {
             .eq(0)
             .within(() => {
               cy.get("td").eq(0).contains("Golden damselfish (ADH)");
-              cy.get("td").eq(1).find("input").should("have.value", "100.00");
-              cy.get("td").eq(2).find("input").should("have.value", "100.00");
+              cy.get("td").eq(1).find("input").should("have.value", "100");
+              cy.get("td").eq(2).find("input").should("have.value", "100");
 
               cy.get("td").eq(3).find("button").eq(0).contains("Edit");
               cy.get("td").eq(3).find("button").eq(1).contains("Remove");
@@ -130,8 +127,8 @@ describe("Storage document departure summary: arrival tab", () => {
             .eq(1)
             .within(() => {
               cy.get("td").eq(0).contains("Peacock sole (ADJ)");
-              cy.get("td").eq(1).find("input").should("have.value", "50.00");
-              cy.get("td").eq(2).find("input").should("have.value", "50.00");
+              cy.get("td").eq(1).find("input").should("have.value", "50");
+              cy.get("td").eq(2).find("input").should("have.value", "50");
 
               cy.get("td").eq(3).find("button").eq(0).contains("Edit");
 
@@ -171,7 +168,7 @@ describe("Storage document departure summary: arrival tab", () => {
       });
     });
 
-    cy.url().should("include", `create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment`);
+    cy.url().should("include", `create-storage-document/${documentNumber}/add-product-to-this-consignment`);
   });
 
   it("should remove catch", () => {
@@ -274,8 +271,8 @@ describe("Storage document departure summary: departure tab", () => {
             .eq(0)
             .within(() => {
               cy.get("td").eq(0).contains("Golden damselfish (ADH)");
-              cy.get("td").eq(1).find("input").should("have.value", "100.00");
-              cy.get("td").eq(2).find("input").should("have.value", "100.00");
+              cy.get("td").eq(1).find("input").should("have.value", "100");
+              cy.get("td").eq(2).find("input").should("have.value", "100");
 
               cy.get("td").eq(3).should("exist");
             });
@@ -283,8 +280,8 @@ describe("Storage document departure summary: departure tab", () => {
             .eq(1)
             .within(() => {
               cy.get("td").eq(0).contains("Peacock sole (ADJ)");
-              cy.get("td").eq(1).find("input").should("have.value", "50.00");
-              cy.get("td").eq(2).find("input").should("have.value", "50.00");
+              cy.get("td").eq(1).find("input").should("have.value", "50");
+              cy.get("td").eq(2).find("input").should("have.value", "50");
 
               cy.get("td").eq(3).should("exist");
             });
@@ -353,7 +350,7 @@ describe("Storage document departure summary: departure tab", () => {
   it("should render the  save as draft button", () => {
     cy.findByRole("button", { name: "Save as draft" });
     cy.get("#saveAsDraft").click({ force: true });
-    cy.url().should("include", "/create-non-manipulation-document");
+    cy.url().should("include", "/create-storage-document");
   });
 
   it("should render the  save as draft button", () => {
@@ -394,8 +391,8 @@ describe("Storage document departure summary: tab with empty departure and load 
             .eq(0)
             .within(() => {
               cy.get("td").eq(0).contains("Golden damselfish (ADH)");
-              cy.get("td").eq(1).find("input").should("have.value", "100.00");
-              cy.get("td").eq(2).find("input").should("have.value", "100.00");
+              cy.get("td").eq(1).find("input").should("have.value", "100");
+              cy.get("td").eq(2).find("input").should("have.value", "100");
 
               cy.get("td").eq(3).should("exist");
             });
@@ -403,8 +400,8 @@ describe("Storage document departure summary: tab with empty departure and load 
             .eq(1)
             .within(() => {
               cy.get("td").eq(0).contains("Peacock sole (ADJ)");
-              cy.get("td").eq(1).find("input").should("have.value", "50.00");
-              cy.get("td").eq(2).find("input").should("have.value", "50.00");
+              cy.get("td").eq(1).find("input").should("have.value", "50");
+              cy.get("td").eq(2).find("input").should("have.value", "50");
 
               cy.get("td").eq(3).should("exist");
             });
@@ -473,7 +470,7 @@ describe("Storage document departure summary: tab with empty departure and load 
   it("should render the  save as draft button", () => {
     cy.findByRole("button", { name: "Save as draft" });
     cy.get("#saveAsDraft").click({ force: true });
-    cy.url().should("include", "/create-non-manipulation-document");
+    cy.url().should("include", "/create-storage-document");
   });
 
   it("should render the  save as draft button", () => {

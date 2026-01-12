@@ -50,7 +50,7 @@ describe("PageNotFound", () => {
   });
 
   it("SD: should render as expected for an unknown route that begins with a known route", () => {
-    const dashboardLink = "/create-non-manipulation-document/non-manipulation-documents";
+    const dashboardLink = "/create-storage-document/storage-documents";
 
     cy.visit(`${dashboardLink}qwekjhzxc`);
 

@@ -1,7 +1,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 const documentNumber = "GBR-2022-SD-3FE1169D1";
-const certificateUrl = `/create-non-manipulation-document/${documentNumber}`;
-const planePageUrl = `create-non-manipulation-document/${documentNumber}/add-transportation-details-plane`;
+const certificateUrl = `/create-storage-document/${documentNumber}`;
+const planePageUrl = `create-storage-document/${documentNumber}/add-transportation-details-plane`;
 
 describe("Add Transportation Details Plane: Allowed", () => {
   it("should render plane transport details page", () => {
@@ -12,7 +12,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.title().should("eq", "Plane departing the UK - Create a UK non-manipulation document - GOV.UK");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-leave-the-uk`);
+      .should("have.attr", "href", `${certificateUrl}/how-does-the-export-leave-the-uk`);
     cy.get(".govuk-heading-xl").contains("Plane departing the UK");
     cy.get("#exportDate").should("be.visible");
     cy.get("form").should(($form) => {
@@ -114,7 +114,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
     cy.get("#departurePlace").type("Hull", { force: true });
     cy.get("[data-testid=save-draft-button").click({ force: true });
-    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+    cy.url().should("include", "/create-storage-document/storage-documents");
   });
   it("should navigate to departure summary page on click of save and continue button", () => {
     const testParams: ITestParams = {

@@ -127,7 +127,7 @@ describe("Header", () => {
     cy.get("#createStorageDocument").check("storageNotes");
     cy.get("form").submit();
 
-    const homeLink = "/create-non-manipulation-document/non-manipulation-documents";
+    const homeLink = "/create-storage-document/storage-documents";
 
     cy.contains("a", /^Create a UK non-manipulation document$/)
       .should("be.visible")
