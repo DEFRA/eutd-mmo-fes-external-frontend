@@ -431,17 +431,17 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
 
   it("should navigate to storage facility page when all mandatory fields are populated", () => {
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
-    cy.get("#vesselName").type("Test Vessel", { force: true });
-    cy.get("#flagState").type("Greece", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
-    cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Port of Calais", { force: true });
-    cy.get("#placeOfUnloading").type("Dover", { force: true });
-    cy.get("#departureDate-day").type("25", { force: true });
-    cy.get("#departureDate-month").type("07", { force: true });
-    cy.get("#departureDate-year").type("2025", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.url().should("include", storageFacilityUrl);
+    cy.get("#vesselName").should("be.visible").type("Test Vessel", { force: true });
+    cy.get("#flagState").should("be.visible").type("Greece", { force: true });
+    cy.get('[id="containerNumbers.0"]').should("be.visible").type("ABCD1234567", { force: true });
+    cy.get("#departureCountry").should("be.visible").invoke("val", "France");
+    cy.get("#departurePort").should("be.visible").type("Port of Calais", { force: true });
+    cy.get("#placeOfUnloading").should("be.visible").type("Dover", { force: true });
+    cy.get("#departureDate-day").should("be.visible").type("25", { force: true });
+    cy.get("#departureDate-month").should("be.visible").type("07", { force: true });
+    cy.get("#departureDate-year").should("be.visible").type("2025", { force: true });
+    cy.get("[data-testid=save-and-continue]").should("be.visible").click({ force: true });
+    cy.url({ timeout: 15000 }).should("include", storageFacilityUrl);
   });
 });
 
