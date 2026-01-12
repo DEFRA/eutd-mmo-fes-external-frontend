@@ -100,7 +100,10 @@ describe("SD: you-have-added-product page", () => {
       testCaseId: TestCaseId.SDProductAddedValid,
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
-    cy.title().should("eq", "You have added 1 product to this consignment - Create a UK storage document - GOV.UK");
+    cy.title().should(
+      "eq",
+      "You have added 1 product to this consignment - Create a UK non-manipulation document - GOV.UK"
+    );
     cy.contains("button", "Save and continue").click({ force: true });
     cy.url().should("include", "/how-does-the-consignment-arrive-to-the-uk");
   });

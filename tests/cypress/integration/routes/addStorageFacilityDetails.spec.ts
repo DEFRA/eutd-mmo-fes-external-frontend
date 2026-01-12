@@ -14,7 +14,7 @@ describe("Add Storage Facility Address", () => {
   });
 
   it("should render Storage Facility Address page", () => {
-    cy.contains("a", /^Create a UK storage document$/)
+    cy.contains("a", /^Create a UK non-manipulation document$/)
       .should("be.visible")
       .should("have.attr", "href", "/create-storage-document/storage-documents");
 
