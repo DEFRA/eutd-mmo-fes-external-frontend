@@ -1,7 +1,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 const documentNumber = "GBR-2022-SD-3FE1169D1";
-const createStorageDocumentUrl = `/create-non-manipulation-document/${documentNumber}`;
+const createStorageDocumentUrl = `/create-storage-document/${documentNumber}`;
 const storageFacilityUrl = `${createStorageDocumentUrl}/add-storage-facility-details`;
 const addArrivalTransportationDetailsContainerVesselUrl = `${createStorageDocumentUrl}/add-arrival-transportation-details-container-vessel`;
 
@@ -351,6 +351,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
 
 describe("Container Vessel Arrival Required Fields Validation", () => {
   const testParams: ITestParams = { testCaseId: TestCaseId.AddArrivalContainerVesselTransportAllowed };
+
   it("should display error when flag state is empty", () => {
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
     cy.get("#vesselName").type("Test Vessel", { force: true });
@@ -440,7 +441,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureDate-month").should("be.visible").type("07", { force: true });
     cy.get("#departureDate-year").should("be.visible").type("2025", { force: true });
     cy.get("[data-testid=save-and-continue]").should("be.visible").click({ force: true });
-    cy.url({ timeout: 20000 }).should("include", storageFacilityUrl);
+    cy.url({ timeout: 15000 }).should("include", storageFacilityUrl);
   });
 });
 
@@ -460,7 +461,7 @@ describe("AddArrivalContainerVesselTransport Save As Draft scenarios", () => {
     cy.get("#departureDate-month").type("07", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
     cy.get("[data-testid=save-draft-button").click({ force: true });
-    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+    cy.url().should("include", "/create-storage-document/storage-documents");
   });
 });
 

@@ -37,8 +37,8 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
       progressUri: "/create-processing-statement/:documentNumber/progress",
     },
     storageNotes: {
-      backUri: route("/create-non-manipulation-document/:documentNumber/add-your-reference", { documentNumber }),
-      progressUri: "/create-non-manipulation-document/:documentNumber/progress",
+      backUri: route("/create-storage-document/:documentNumber/add-your-reference", { documentNumber }),
+      progressUri: "/create-storage-document/:documentNumber/progress",
     },
   };
 
@@ -126,9 +126,7 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
               hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
             />
 
-            <label className="govuk-label govuk-!-font-weight-bold">
-              {t("commonAddExporterDetailsAddressContent")}
-            </label>
+            <h2 className="govuk-label--m">{t("commonAddExporterDetailsAddressContent")}</h2>
             {hasAddress ? (
               <>
                 <p>
