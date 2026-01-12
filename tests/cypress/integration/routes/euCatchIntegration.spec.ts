@@ -20,7 +20,7 @@ describe("EU CATCH Integration - Completed Documents Table", () => {
   it("should render EU CATCH integration column in correct position (after Date Created, before Action)", () => {
     cy.get("table[data-testid='catchCertificate-completed-table'] thead tr th").then(($headers) => {
       const headerTexts = $headers.toArray().map((el) => el.textContent?.trim());
-      const dateCreatedIndex = headerTexts.findIndex((text) => text?.includes("Date Created"));
+      const dateCreatedIndex = headerTexts.map((text) => text?.includes("Date Created")).indexOf(true);
       const euCatchIndex = headerTexts.indexOf("EU CATCH integration");
       const actionIndex = headerTexts.indexOf("Action");
 
