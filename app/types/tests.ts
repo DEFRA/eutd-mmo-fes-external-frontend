@@ -253,6 +253,8 @@ export enum TestCaseId {
   CCCheckYourInformationManualLandingTruckContainerNumber = "CCCheckYourInformationManualLandingTruckContainerNumber",
   CCCheckYourInformationManualLandingTrainContainerNumber = "CCCheckYourInformationManualLandingTrainContainerNumber",
   CCCheckYourInformationManualLandingTrainContainerNumberNull = "CCCheckYourInformationManualLandingTrainContainerNumberNull",
+  CCCheckYourInformationPlaneNoFreightBillNumber = "CCCheckYourInformationPlaneNoFreightBillNumber",
+  CCCheckYourInformationContainerVesselNoFreightBillNumber = "CCCheckYourInformationContainerVesselNoFreightBillNumber",
   CCCheckYourInformationWithPointOfDestination = "CCCheckYourInformationWithPointOfDestination",
   CCCheckYourInformationNotProvidedFields = "CCCheckYourInformationNotProvidedFields",
 
