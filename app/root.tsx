@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import * as GovUKFrontEnd from "govuk-frontend";
 import { useTranslation } from "react-i18next";
 import { applicationinsights, getApplicationInsights } from "~/applicationInsightsService";
 import { serverApplicationinsights } from "./applicationInsightsService.server";
@@ -175,7 +174,7 @@ const Template = ({
   const location = useLocation();
 
   return (
-    <html className="govuk-template" lang={locale} dir={i18n.dir()}>
+    <html className="govuk-template govuk-template--rebranded" lang={locale} dir={i18n.dir()}>
       <head>
         <Meta />
         <Links />
@@ -312,7 +311,9 @@ export default function App() {
   const { revalidate } = useRevalidator();
 
   // invoke the loader function to revalidate page data
-  useEffect(() => revalidate(), [revalidate]);
+  useEffect(() => {
+    revalidate();
+  }, [revalidate]);
 
   useEffect(() => {
     const htmlScriptPrototype = "noModule" in HTMLScriptElement.prototype ? "govuk-frontend-supported" : "";
@@ -320,17 +321,22 @@ export default function App() {
       ? `${document.body.className} js-enabled ${htmlScriptPrototype}`
       : `js-enabled ${htmlScriptPrototype}`;
 
-    if (GovUKFrontEnd) {
-      const header = document.querySelector('[data-module="govuk-header"]');
-      if (header) {
-        const govuk = new GovUKFrontEnd.Header(header);
-        if (govuk) {
-          clientLogger.info(`using GOVUKFrontend, ${JSON.stringify(GovUKFrontEnd)}`);
+    // Dynamic import to avoid SSR issues with govuk-frontend
+    import("govuk-frontend")
+      .then((GovUKFrontEnd) => {
+        if (GovUKFrontEnd) {
+          const header = document.querySelector('[data-module="govuk-header"]');
+          if (header) {
+            const govuk = new GovUKFrontEnd.Header(header);
+            if (govuk) {
+              clientLogger.info(`using GOVUKFrontend, ${JSON.stringify(GovUKFrontEnd)}`);
+            }
+          }
         }
-      }
-    } else {
-      clientLogger.info("GOVUKFrontend or GOVUKFrontend.Header is not defined");
-    }
+      })
+      .catch((error) => {
+        clientLogger.info("GOVUKFrontend or GOVUKFrontend.Header is not defined", error);
+      });
   }, []);
 
   // ensures app insights is initialized once
