@@ -280,5 +280,6 @@
   "ccCommonGearCategoryUnpopulatedError": "Dewiswch gategori gêr",
   "ccCommonGearTypeUnpopulatedError": "Dewiswch fath o gêr",
   "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError": "Rhaid i rif y cynhwysydd gynnwys dim ond llythrennau a rhifau",
-  "removeProductErrorNoSelection": "Dewiswch 'ydw' os hoffech chi dynnu'r cynnyrch hwn a'r holl rywogaethau cysylltiedig"
+  "removeProductErrorNoSelection": "Dewiswch 'ydw' os hoffech chi dynnu'r cynnyrch hwn a'r holl rywogaethau cysylltiedig",
+  "sdArrivalDatenotMorethanOneDay": "Ni chaiff y dyddiad cyrraedd fod fwy nag 1 diwrnod yn y dyfodol"
 }
