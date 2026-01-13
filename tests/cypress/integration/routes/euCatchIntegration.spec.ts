@@ -70,6 +70,24 @@ describe("EU CATCH Integration - Completed Documents Table", () => {
   });
 });
 
+describe("EU CATCH Integration - Missing catchSubmission", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCDashboardNoCatchSubmission,
+    };
+    cy.visit(catchCertificateUrl, { qs: { ...testParams } });
+  });
+
+  it("should display '-' when catchSubmission is missing", () => {
+    cy.get("table[data-testid='catchCertificate-completed-table'] tbody tr")
+      .first()
+      .within(() => {
+        // Find the EU CATCH integration column cell (4th cell after Document Number, Reference, Date)
+        cy.get("td").eq(3).should("contain.text", "-").and("not.contain", "Check status");
+      });
+  });
+});
+
 describe("EU CATCH Integration - Welsh Translation", () => {
   beforeEach(() => {
     const testParams: ITestParams = {

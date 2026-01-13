@@ -308,10 +308,10 @@ const AddConsignmentDetailsIndex = () => {
                       text: t("addConsignmentDetailsConsignmentPageHint", { journeyText: t("processingStatement") }),
                       className: "govuk-hint",
                     }}
-                    errorProps={{ className: !isEmpty(errors?.consignmentDescription) ? "govuk-error-message" : "" }}
+                    errorProps={{ className: isEmpty(errors?.consignmentDescription) ? "" : "govuk-error-message" }}
                     staticErrorMessage={t(errors?.consignmentDescription?.message, { ns: "errorsText" })}
                     errorPosition={ErrorPosition.AFTER_LABEL}
-                    containerClassNameError={!isEmpty(errors?.consignmentDescription) ? "govuk-form-group--error" : ""}
+                    containerClassNameError={isEmpty(errors?.consignmentDescription) ? "" : "govuk-form-group--error"}
                     onChange={(e) => setCurrentProductDescription(e.currentTarget.value)}
                     hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                     hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}

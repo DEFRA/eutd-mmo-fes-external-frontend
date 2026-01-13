@@ -22,5 +22,6 @@
   "sdStorageArrivalDateGuidanceTitle": "What is the arrival date?",
   "sdStorageArrivalDateGuidanceText": "This is the date the product arrives at the storage facility and is unloaded. If unloading happens later, enter the date the product was physically removed from the transport and received into storage.",
   "sdArrivalDateValidationError": "Arrival date must be a real date",
-  "sdArrivalDateSameOrOneDayBeforeDepartureDateValidationError": "Please enter an arrival date that is on or before the departure date from the UK storage facility"
+  "sdArrivalDateSameOrOneDayBeforeDepartureDateValidationError": "Please enter an arrival date that is on or before the departure date from the UK storage facility",
+  "sdArrivalDatenotMorethanOneDay": "Arrival date must not be more than 1 day in the future"
 }
