@@ -1,7 +1,5 @@
 import AddConsignmentDetailsIndex from "~/routes/create-processing-statement.$documentNumber.add-consignment-details._index";
-import { loader, action } from "./create-processing-statement.$documentNumber.add-consignment-details._index";
-export { loader };
-export { action };
+export { loader, action } from "./create-processing-statement.$documentNumber.add-consignment-details._index";
 
 /* istanbul ignore next */
 export default function AddConsignmentDetails() {

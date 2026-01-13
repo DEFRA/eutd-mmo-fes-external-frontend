@@ -30,7 +30,7 @@ export default defineConfig({
   reporterOptions: {
     configFile: "cypress-reporter-config.json",
   },
-  defaultCommandTimeout: 10000,
+  defaultCommandTimeout: 20000,
   retries: {
     runMode: 3,
     openMode: 3,

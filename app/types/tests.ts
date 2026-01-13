@@ -27,6 +27,7 @@ export enum TestCaseId {
   CCDashboard = "ccDashboard",
   CCCopyDashboard = "ccCopyDashboard",
   CCDashboardNoCompleted = "ccDashboardNoCompleted",
+  CCDashboardNoCatchSubmission = "ccDashboardNoCatchSubmission",
   CCDashboardUserDetails = "ccDashboardUserDetails",
   CCDashboardAdminLogin = "ccDashboardAdminLogin",
   CCDashboardWithPendingEUStatus = "ccDashboardWithPendingEUStatus",
@@ -252,6 +253,8 @@ export enum TestCaseId {
   CCCheckYourInformationManualLandingTruckContainerNumber = "CCCheckYourInformationManualLandingTruckContainerNumber",
   CCCheckYourInformationManualLandingTrainContainerNumber = "CCCheckYourInformationManualLandingTrainContainerNumber",
   CCCheckYourInformationManualLandingTrainContainerNumberNull = "CCCheckYourInformationManualLandingTrainContainerNumberNull",
+  CCCheckYourInformationPlaneNoFreightBillNumber = "CCCheckYourInformationPlaneNoFreightBillNumber",
+  CCCheckYourInformationContainerVesselNoFreightBillNumber = "CCCheckYourInformationContainerVesselNoFreightBillNumber",
   CCCheckYourInformationWithPointOfDestination = "CCCheckYourInformationWithPointOfDestination",
   CCCheckYourInformationNotProvidedFields = "CCCheckYourInformationNotProvidedFields",
 
