@@ -89,7 +89,7 @@ export const DocumentCompletedTable = ({
             {Array.isArray(documents?.completed) &&
               documents.completed.map((document: ICompletedDocumentData) => {
                 const getEuCatchStatusRoute = (documentNumber: string, euCatchStatus?: ICatchStatus) => {
-                  const prefix = `/${getPrivacyNoticeJourney(journey as Journey)}/${documentNumber}/`;
+                  const prefix = `/${getPrivacyNoticeJourney(journey)}/${documentNumber}/`;
                   switch (euCatchStatus?.status?.toUpperCase()) {
                     case "SUCCESS":
                       return `${prefix}eu-data-integration-successful`;
@@ -156,14 +156,18 @@ export const DocumentCompletedTable = ({
         <div className="govuk-grid-row">
           <div className="govuk-grid-column">
             <h2 className="govuk-heading-l">{t("completed")}</h2>
-             {journey === "storageNotes" && <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />}
+            {journey === "storageNotes" && (
+              <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+            )}
             <div data-testid={`no-${camelCaseToSpacedLowerCase(journey)}-created-this-month`}>
               {t(`${journey}DashboardCompleteSubtitleText`, {
                 journey: camelCaseToSpacedLowerCase(journey),
                 ns: "dashboard",
               })}
             </div>
-            {journey === "storageNotes" && <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />}
+            {journey === "storageNotes" && (
+              <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+            )}
           </div>
         </div>
       )}
@@ -178,7 +182,9 @@ export const DocumentCompletedTable = ({
         <div className="govuk-grid-row">
           <div className="govuk-grid-column">
             <div className="govuk-inset-text">
-              <p className="govuk-body" style={{ whiteSpace: "pre-line" }}>{t("commonRefreshPageForUpdatesStorageNotes")}</p>
+              <p className="govuk-body" style={{ whiteSpace: "pre-line" }}>
+                {t("commonRefreshPageForUpdatesStorageNotes")}
+              </p>
             </div>
           </div>
         </div>
