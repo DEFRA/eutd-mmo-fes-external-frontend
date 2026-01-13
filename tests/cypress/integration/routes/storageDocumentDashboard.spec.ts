@@ -47,10 +47,7 @@ describe("Storage Document Dashboard page: rendering", () => {
   });
 
   it("should render a valid page title", () => {
-    cy.title().should(
-      "eq",
-      "Automation Testing Ltd: storage documents - Create a UK non-manipulation document - GOV.UK"
-    );
+    cy.title().should("eq", "Automation Testing Ltd: non-manipulation documents - Create a UK storage document - GOV.UK");
   });
 
   it("should redirect to the dashboard page if didn't got expected response", () => {
@@ -67,8 +64,9 @@ describe("Storage Document Dashboard page: rendering", () => {
   });
 
   it("should render the correct page title and subtitle", () => {
-    cy.get(".govuk-heading-xl").contains("storage documents");
-    cy.get(".govuk-body").contains("A maximum of 5 draft storage documents is allowed at any time.");
+    cy.get(".govuk-heading-xl").contains("non-manipulation documents");
+    cy.get(".govuk-body").contains("You can create up to 5 draft non-manipulation documents.");
+    cy.get(".govuk-body").contains("When you reach the limit, you'll need to delete a draft before you can start a new one.");
   });
 
   it("should render dashboard headers", () => {
@@ -90,14 +88,7 @@ describe("Storage Document Dashboard page: rendering", () => {
   it("should render dashboard with create button and no warning message", () => {
     cy.get(".govuk-notification-banner__heading").should("not.exist");
 
-    cy.contains("button", "Create a new storage document").should("be.visible");
-  });
-
-  it("should display Storage To Non Manipulation Msg", () => {
-    cy.get("div.govuk-\\!-display-inline-block.govuk-\\!-padding-left-2.govuk-phase-banner__text").should(
-      "contain.text",
-      "From January 2026, Storage Documents will change to Non-manipulation Documents."
-    );
+    cy.contains("button", "Create a new non-manipulation document").should("be.visible");
   });
 });
 
@@ -114,9 +105,18 @@ describe("Storage Document Dashboard page for in progress table: rendering", () 
     cy.get(".govuk-table__header").contains("Your reference");
     cy.get(".govuk-table__header").contains("Date started");
     cy.get(".govuk-table__header").contains("Action");
-    cy.get(".govuk-grid-column-two-thirds").contains("No storage notes documents were created this month");
+    cy.get(".govuk-body").contains("Your non-manipulation documents will appear here when you've submitted them.");
 
     cy.get(".govuk-table__cell").contains("GBR-2022-SD-407EAA477");
+  });
+
+  it("should display guidance text for in progress section", () => {
+    cy.get(".govuk-body").contains("You can create up to 5 draft non-manipulation documents.");
+    cy.get(".govuk-body").contains("When you reach the limit, you'll need to delete a draft before you can start a new one.");
+  });
+
+  it("should display horizontal separator line after guidance", () => {
+    cy.get(".govuk-section-break").should("exist");
   });
 });
 
@@ -133,9 +133,24 @@ describe("Storage Document Dashboard page for completed table: rendering", () =>
     cy.get(".govuk-table__header").contains("Your reference");
     cy.get(".govuk-table__header").contains("Date Created");
     cy.get(".govuk-table__header").contains("Action");
-    cy.get(".govuk-grid-column-two-thirds").contains("You do not have any storage documents in progress.");
+    cy.get(".govuk-body").contains("Your draft non-manipulation documents will appear here when you've created them.");
 
     cy.get(".govuk-table__cell").contains("GBR-2022-SD-1C9833456");
+  });
+
+  it("should display guidance text in inset box for completed section", () => {
+    cy.get(".govuk-inset-text").should("exist");
+    cy.get(".govuk-inset-text .govuk-body").contains("Refresh this page to see the latest updates to your non-manipulation documents.");
+    cy.get(".govuk-inset-text .govuk-body").contains("If a submission fails, open it to find out how to fix the problem.");
+  });
+
+  it("should always display guidance text even when no drafts exist", () => {
+    cy.get(".govuk-body").contains("You can create up to 5 draft non-manipulation documents.");
+    cy.get(".govuk-body").contains("When you reach the limit, you'll need to delete a draft before you can start a new one.");
+  });
+
+  it("should display horizontal separator lines around no drafts message", () => {
+    cy.get(".govuk-section-break").should("have.length.at.least", 1);
   });
 });
 
@@ -149,7 +164,7 @@ describe("Storage Document Dashboard page for 50 or more draft documents: render
 
   it("should render notifcation with warning message and hide the create document button", () => {
     cy.get(".govuk-notification-banner__heading").contains(
-      "You have reached the maximum limit allowed for draft storage documents."
+      "You have reached the maximum limit allowed for draft non-manipulation documents."
     );
     cy.get(".govuk-button").should("not.exist");
   });
@@ -252,7 +267,7 @@ describe("Storage document dashboard with user details", () => {
   it("should render a header with user details", () => {
     cy.get(".govuk-notification-banner .govuk-heading-l").should("have.text", "Title");
 
-    cy.get("h1.govuk-heading-xl").should("have.text", "Automation Testing Ltd: storage documents");
+    cy.get("h1.govuk-heading-xl").should("have.text", "Automation Testing Ltd: non-manipulation documents");
   });
 
   it("should render the progress page after creating a document", () => {
@@ -273,6 +288,6 @@ describe("Storage document dashboard with account details", () => {
   it("should render a header with account details", () => {
     cy.get(".govuk-notification-banner .govuk-heading-l").should("have.text", "Title");
 
-    cy.get("h1.govuk-heading-xl").should("have.text", "Automation Testing Ltd: storage documents");
+    cy.get("h1.govuk-heading-xl").should("have.text", "Automation Testing Ltd: non-manipulation documents");
   });
 });
