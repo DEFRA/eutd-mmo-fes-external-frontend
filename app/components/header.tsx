@@ -85,7 +85,7 @@ export const Header = ({
               >
                 {t("menuLink")}
               </button>
-              <ul className="govuk-service-navigation__list" id="navigation">
+              <ul className="govuk-service-navigation__list" id="navigation" data-testid="navigation">
                 {!hideHomeLink && (
                   <li className="govuk-service-navigation__item">
                     <a className="govuk-service-navigation__link" href={route("/")}>

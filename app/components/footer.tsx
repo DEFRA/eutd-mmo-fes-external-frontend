@@ -33,7 +33,7 @@ export const Footer = () => {
         <div className="govuk-footer__meta">
           <div className="govuk-footer__meta-item govuk-footer__meta-item--grow">
             <h2 className="govuk-visually-hidden">Support links</h2>
-            <ul className="govuk-footer__inline-list">
+            <ul className="govuk-footer__inline-list" data-testid="footer">
               <li className="govuk-footer__inline-list-item">
                 <Link className="govuk-footer__link" to="/accessibility" reloadDocument>
                   {t("accessibilityLink")}
