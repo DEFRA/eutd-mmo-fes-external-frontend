@@ -955,3 +955,77 @@ describe("Check Your Information: Not provided fields (Welsh)", () => {
     cy.contains("dt.govuk-summary-list__key", "Parth economaidd").next("dd").should("have.text", "Heb ei ddarparu");
   });
 });
+
+describe("Check Your Information (Summary) page: Plane transport with no freight bill number", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationPlaneNoFreightBillNumber,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render plane transport section", () => {
+    cy.contains("dt.govuk-summary-list__key", "How will the export leave the UK?")
+      .next("dd")
+      .should("have.text", "Plane");
+  });
+
+  it("should render flight number", () => {
+    cy.contains("dt.govuk-summary-list__key", "Flight number").next("dd").should("have.text", "AA1234567");
+  });
+
+  it("should render container identification number", () => {
+    cy.contains("dt.govuk-summary-list__key", "Container identification number")
+      .next("dd")
+      .should("have.text", "CONT1234");
+  });
+
+  it("should render departure place", () => {
+    cy.contains("dt.govuk-summary-list__key", "Place export leaves the UK")
+      .next("dd")
+      .should("have.text", "Joelle Rhodes");
+  });
+
+  it("should render 'Not provided' when freight bill number is missing", () => {
+    cy.contains("dt.govuk-summary-list__key", "Freight bill number").next("dd").should("have.text", "Not provided");
+  });
+});
+
+describe("Check Your Information (Summary) page: Container vessel transport with no freight bill number", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationContainerVesselNoFreightBillNumber,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render container vessel transport section", () => {
+    cy.contains("dt.govuk-summary-list__key", "How will the export leave the UK?")
+      .next("dd")
+      .should("have.text", "Container vessel");
+  });
+
+  it("should render vessel name", () => {
+    cy.contains("dt.govuk-summary-list__key", "Vessel name").next("dd").should("have.text", "SYLVIES GRACE (J11)");
+  });
+
+  it("should render flag state", () => {
+    cy.contains("dt.govuk-summary-list__key", "Flag state").next("dd").should("have.text", "Panama");
+  });
+
+  it("should render container identification number", () => {
+    cy.contains("dt.govuk-summary-list__key", "Container identification number")
+      .next("dd")
+      .should("have.text", "CONT5678");
+  });
+
+  it("should render departure place", () => {
+    cy.contains("dt.govuk-summary-list__key", "Place export leaves the UK")
+      .next("dd")
+      .should("have.text", "Port of Southampton");
+  });
+
+  it("should render 'Not provided' when freight bill number is missing", () => {
+    cy.contains("dt.govuk-summary-list__key", "Freight bill number").next("dd").should("have.text", "Not provided");
+  });
+});
