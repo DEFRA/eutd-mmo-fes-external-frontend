@@ -32,7 +32,7 @@ export const Header = ({
             <a href="https://www.gov.uk/" className="govuk-header__link govuk-header__link--homepage">
               <svg
                 focusable="false"
-                role="img"
+                aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 324 60"
                 height="30"

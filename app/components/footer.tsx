@@ -10,7 +10,7 @@ export const Footer = () => {
       <div className="govuk-width-container">
         <svg
           focusable="false"
-          role="presentation"
+          aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 64 60"
           height="30"
