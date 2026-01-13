@@ -71,7 +71,7 @@ export const action: ActionFunction = async ({ request }) => {
           headers: { "Set-Cookie": await analyticsAcceptedCookie.serialize({ analyticsAccepted: hasAcceptedCookies }) },
         });
       case "storageNotes":
-        return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
+        return redirect(route("/create-storage-document/storage-documents"), {
           headers: { "Set-Cookie": await analyticsAcceptedCookie.serialize({ analyticsAccepted: hasAcceptedCookies }) },
         });
     }
