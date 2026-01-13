@@ -34,53 +34,44 @@ export const DocumentProgressTable = ({
       </p>
       {hasDrafts ? (
         <table className="govuk-table" data-testid={`${journey}-inprogress-table`}>
-          <DocumentTableHeader
-            journey={journey}
-            showDateStarted={true}
-            showStatus={journey === "catchCertificate"}
-            showEuCatchIntegration={false}
-          />
+          <DocumentTableHeader journey={journey} showDateStarted={true} showStatus={journey === "catchCertificate"} />
           <tbody className="govuk-table__body">
             {documents.inProgress.map((document: IProgressDocumentData) => (
-              <tr className="govuk-table__row" key={document.documentNumber}>
-                <td scope="row" className="govuk-table__cell govuk-!-width-one-quarter">
-                  {document.documentNumber}
-                </td>
-                <td scope="row" className="govuk-table__cell tablerowuserref">
-                  {document.userReference}
-                </td>
-                <td scope="row" className="govuk-table__cell">
-                  {document.startedAt || "Unknown"}
-                </td>
-                {journey === "catchCertificate" && (
-                  <td scope="row" className="govuk-table__cell">
-                    <div className={`govuk-tag govuk-tag--${getStatusClassName(document.status, document.isFailed)}`}>
-                      {getStatusName(document.status, document.isFailed, t)}
-                    </div>
+                <tr className="govuk-table__row" key={document.documentNumber}>
+                  <td scope="row" className="govuk-table__cell govuk-!-width-one-quarter">
+                    {document.documentNumber}
                   </td>
-                )}
-                <td scope="row" className="govuk-table__cell govuk-table__cell--numeric">
-                  {document.status !== "PENDING" && (
-                    <>
-                      {document?.links?.continueLink()}
-                      <br />
-                      {document.status !== "LOCKED" && document?.links?.deleteLink()}
-                    </>
+                  <td scope="row" className="govuk-table__cell tablerowuserref">
+                    {document.userReference}
+                  </td>
+                  <td scope="row" className="govuk-table__cell">
+                    {document.startedAt || "Unknown"}
+                  </td>
+                  {journey === "catchCertificate" && (
+                    <td scope="row" className="govuk-table__cell">
+                      <div className={`govuk-tag govuk-tag--${getStatusClassName(document.status, document.isFailed)}`}>
+                        {getStatusName(document.status, document.isFailed, t)}
+                      </div>
+                    </td>
                   )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <td scope="row" className="govuk-table__cell govuk-table__cell--numeric">
+                    {document.status !== "PENDING" && (
+                      <>
+                        {document?.links?.continueLink()}
+                        <br />
+                        {document.status !== "LOCKED" && document?.links?.deleteLink()}
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
       ) : (
         <>
-          {journey === "storageNotes" && (
-            <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-          )}
-          <p className="govuk-body">{t(`${journey}DashboardNoAnyDocInProgress`, { ns: "dashboard" })}</p>
-          {journey === "storageNotes" && (
-            <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-          )}
+            {journey === "storageNotes" && <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />}
+            <p className="govuk-body">{t(`${journey}DashboardNoAnyDocInProgress`, { ns: "dashboard" })}</p>
+            {journey === "storageNotes" && <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />}
         </>
       )}
     </>

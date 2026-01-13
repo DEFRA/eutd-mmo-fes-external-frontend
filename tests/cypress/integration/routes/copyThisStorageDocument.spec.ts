@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const pageUrl = "create-non-manipulation-document/GBR-2022-SD-F71D98A30/copy-this-non-manipulation-document";
+const pageUrl = "create-storage-document/GBR-2022-SD-F71D98A30/copy-this-storage-document";
 
 describe("Copy this storage document address page: Allowed", () => {
   beforeEach(() => {
@@ -14,9 +14,9 @@ describe("Copy this storage document address page: Allowed", () => {
   it("should render back button when on click should to navigate to storage document dashboard page", () => {
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", "/create-non-manipulation-document/non-manipulation-documents");
+      .should("have.attr", "href", "/create-storage-document/storage-documents");
     cy.findByRole("link", { name: "Back" }).click({ force: true });
-    cy.url().should("include", "/non-manipulation-documents");
+    cy.url().should("include", "/storage-documents");
   });
 
   it("should render Acknowledgement text", () => {
@@ -33,7 +33,7 @@ describe("Copy this storage document address page: Allowed", () => {
   it("should render the  cancel button and on click should navigate to cc dashboard page", () => {
     cy.contains("button", "Cancel").should("be.visible");
     cy.get("[data-testid=cancel]").click({ force: true });
-    cy.url().should("include", "/non-manipulation-documents");
+    cy.url().should("include", "/storage-documents");
   });
 
   it("should render the  Create draft non-manipulation document button", () => {
