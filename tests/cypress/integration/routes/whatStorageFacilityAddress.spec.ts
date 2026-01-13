@@ -12,7 +12,7 @@ describe("SD: What storage facility address page", () => {
   });
 
   it("should render the expected header", () => {
-    cy.contains("a", /^Create a UK storage document$/)
+    cy.contains("a", /^Create a UK non-manipulation document$/)
       .should("be.visible")
       .should("have.attr", "href", "/create-storage-document/storage-documents");
 

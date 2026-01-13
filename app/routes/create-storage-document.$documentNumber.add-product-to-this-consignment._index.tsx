@@ -80,7 +80,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const countries = await getCountries();
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
-  const productIndex = parseInt(params["*"] ?? "") || 0;
+  const productIndex = Number.parseInt(params["*"] ?? "") || 0;
   const commodities: CodeAndDescription[] = await getCommodities();
   const speciesExemptLink = getEnv().SPECIES_EXEMPT_LINK;
   const commodityCodeLink = getEnv().COMMODITY_CODE_LINK;
@@ -131,7 +131,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         : [],
       csrf,
       displayOptionalSuffix,
-      maximumEntryDocsAllowed: parseInt(maximumEntryDocsAllowed, 10),
+      maximumEntryDocsAllowed: Number.parseInt(maximumEntryDocsAllowed, 10),
     },
     session
   );
@@ -160,19 +160,21 @@ const getUpdateStorageDocumentData = (
     certificateType: values.docIssuedInUk as DocIssuedInUkRadioSelectType,
     issuingCountry,
     supportingDocuments: supportingDocumentsFromForm.length > 0 ? supportingDocumentsFromForm : undefined,
-    productDescription: !isEmpty(values.productDescription) ? (values.productDescription as string) : undefined,
-    netWeightProductArrival: !isEmpty(values.netWeightProductArrival)
-      ? (values.netWeightProductArrival as string)
-      : undefined,
-    netWeightFisheryProductArrival: !isEmpty(values.netWeightFisheryProductArrival)
-      ? (values.netWeightFisheryProductArrival as string)
-      : undefined,
+    productDescription: isEmpty(values.productDescription) ? undefined : (values.productDescription as string),
+    netWeightProductArrival:
+      values.netWeightProductArrival && !isEmpty(values.netWeightProductArrival)
+        ? (values.netWeightProductArrival as string)
+        : undefined,
+    netWeightFisheryProductArrival:
+      values.netWeightFisheryProductArrival && !isEmpty(values.netWeightFisheryProductArrival)
+        ? (values.netWeightFisheryProductArrival as string)
+        : undefined,
   };
 };
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
-  const productIndex = parseInt(params["*"] ?? "") || 0;
+  const productIndex = params["*"] ? Number.parseInt(params["*"]) : 0;
   const productIndexUrlFragment = productIndex >= 0 ? `/${productIndex}` : "";
   const form = await request.formData();
   const isNonJs = form.get("isNonJs") === "true";
@@ -257,7 +259,7 @@ const getRemoveSupportingDoc = (form: FormData, action: string): boolean =>
   form.get("_action") === null ? false : action.startsWith("removeSupportingDoc");
 
 const getRemoveIndex = (removeSupportingDoc: boolean, action: string): number =>
-  removeSupportingDoc ? parseInt(action.split("-")[1], 10) : -1;
+  removeSupportingDoc ? Number.parseInt(action.split("-")[1], 10) : -1;
 
 // Helper functions to reduce cognitive complexity
 const hasError = (errors: any, fieldKey: string): boolean => !!errors?.[fieldKey]?.message;
@@ -326,7 +328,7 @@ const functionToGetInitialState = (
     return [""];
   }
 
-  return Array(maximumEntryDocsAllowed).fill("");
+  return new Array(maximumEntryDocsAllowed).fill("");
 };
 
 const AddProductIndex = () => {
@@ -789,9 +791,9 @@ const AddProductIndex = () => {
               })}
               id={netWeightProductArrivalKey}
               aria-describedby={
-                !isEmpty(errors?.[netWeightProductArrivalKey])
-                  ? "netWeightProductArrival-error"
-                  : `${netWeightProductArrivalKey}-hint`
+                isEmpty(errors?.[netWeightProductArrivalKey])
+                  ? `${netWeightProductArrivalKey}-hint`
+                  : "netWeightProductArrival-error"
               }
             >
               <label className="govuk-label govuk-!-font-weight-bold" htmlFor="netWeightProductArrival">

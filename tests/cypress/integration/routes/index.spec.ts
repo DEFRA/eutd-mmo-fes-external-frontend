@@ -17,7 +17,7 @@ describe("JourneySelection", () => {
       expect(labels).to.deep.eq([
         "Create a UK catch certificate (Including links to direct landing documents)",
         "Create a UK processing statement",
-        "Create a UK storage document",
+        "Create a UK non-manipulation document",
       ]);
     });
   });

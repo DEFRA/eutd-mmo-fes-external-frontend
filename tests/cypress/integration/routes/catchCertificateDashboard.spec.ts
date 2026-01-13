@@ -76,33 +76,15 @@ describe("Catch certificate completed links", () => {
       .and("include.text", "for document");
   });
 
-  it("should render Status column in completed documents table", () => {
-    cy.get("table[data-testid='catchCertificate-completed-table']")
-      .find("thead th")
-      .contains("Status")
-      .should("be.visible");
-  });
-
-  it("should display 'Completed' status with green tag styling for all documents", () => {
-    // All completed documents should show 'Completed' status with green tag
-    cy.get("table[data-testid='catchCertificate-completed-table'] tbody tr").each(($row) => {
-      cy.wrap($row).within(() => {
-        cy.get(".govuk-tag").should("have.class", "govuk-tag--green");
-        cy.get(".govuk-tag").should("contain.text", "Completed");
-      });
-    });
-  });
-
-  it("should verify column order: Document Number, Reference, Date, Status, EU CATCH Integration, Action", () => {
+  it("should verify column order: Document Number, Reference, Date, EU CATCH Integration, Action", () => {
     cy.get("table[data-testid='catchCertificate-completed-table'] thead tr th").then(($headers) => {
       const headerTexts = $headers.toArray().map((el) => el.textContent?.trim());
 
       expect(headerTexts[0]).to.include("Document number");
       expect(headerTexts[1]).to.include("Your reference");
       expect(headerTexts[2]).to.include("Date Created");
-      expect(headerTexts[3]).to.equal("Status");
-      expect(headerTexts[4]).to.equal("EU CATCH integration");
-      expect(headerTexts[5]).to.equal("Action");
+      expect(headerTexts[3]).to.equal("EU CATCH integration");
+      expect(headerTexts[4]).to.equal("Action");
     });
   });
 });
@@ -217,7 +199,7 @@ describe("Catch certificate dashboard no details", () => {
   });
 
   it("should render a message which equals not have any catch certificate", () => {
-    cy.get("p.govuk-body").should("have.text", "You do not have any catch certificates in progress.");
+    cy.get("p.govuk-body").contains("You do not have any catch certificates in progress.");
   });
 
   it("should render the forbidden page when a document number is undefined", () => {

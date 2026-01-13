@@ -17,15 +17,15 @@ describe("EU CATCH Integration - Completed Documents Table", () => {
       .should("be.visible");
   });
 
-  it("should render EU CATCH integration column in correct position (after Status, before Action)", () => {
+  it("should render EU CATCH integration column in correct position (after Date Created, before Action)", () => {
     cy.get("table[data-testid='catchCertificate-completed-table'] thead tr th").then(($headers) => {
       const headerTexts = $headers.toArray().map((el) => el.textContent?.trim());
-      const statusIndex = headerTexts.indexOf("Status");
+      const dateCreatedIndex = headerTexts.map((text) => text?.includes("Date Created")).indexOf(true);
       const euCatchIndex = headerTexts.indexOf("EU CATCH integration");
       const actionIndex = headerTexts.indexOf("Action");
 
-      expect(statusIndex).to.be.greaterThan(-1);
-      expect(euCatchIndex).to.be.greaterThan(statusIndex);
+      expect(dateCreatedIndex).to.be.greaterThan(-1);
+      expect(euCatchIndex).to.be.greaterThan(dateCreatedIndex);
       expect(actionIndex).to.be.greaterThan(euCatchIndex);
     });
   });
@@ -67,6 +67,24 @@ describe("EU CATCH Integration - Completed Documents Table", () => {
       .first()
       .should("have.prop", "tagName", "A")
       .and("not.have.attr", "data-discover");
+  });
+});
+
+describe("EU CATCH Integration - Missing catchSubmission", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCDashboardNoCatchSubmission,
+    };
+    cy.visit(catchCertificateUrl, { qs: { ...testParams } });
+  });
+
+  it("should display '-' when catchSubmission is missing", () => {
+    cy.get("table[data-testid='catchCertificate-completed-table'] tbody tr")
+      .first()
+      .within(() => {
+        // Find the EU CATCH integration column cell (4th cell after Document Number, Reference, Date)
+        cy.get("td").eq(3).should("contain.text", "-").and("not.contain", "Check status");
+      });
   });
 });
 

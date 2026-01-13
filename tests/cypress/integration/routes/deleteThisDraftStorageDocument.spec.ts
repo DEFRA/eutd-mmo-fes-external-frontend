@@ -9,7 +9,7 @@ describe("Delete this draft storage document page", () => {
     };
     cy.visit(deleteThisStorageDocumentUrl, { qs: { ...testParams } });
 
-    cy.contains("h1", "Are you sure you want to delete this storage document?").should("be.visible");
+    cy.contains("h1", "Are you sure you want to delete this non-manipulation document?").should("be.visible");
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {

@@ -32,8 +32,8 @@ describe("Copy void confirmation page", () => {
       expect(radios).to.have.length(2);
       expect(labels).to.have.length(2);
       expect(labels).to.deep.eq([
-        "Yes, create a copy of the storage document then void the original",
-        "No, create a copy of the storage document only",
+        "Yes, create a copy of the non-manipulation document then void the original",
+        "No, create a copy of the non-manipulation document only",
       ]);
     });
     cy.get("[data-testid=cancel]").click({ force: true });
@@ -46,7 +46,7 @@ describe("Copy void confirmation page", () => {
       disableScripts: true,
     };
     copyvoidpage(testParams);
-    cy.contains("h1", "Are you sure you want to void the original storage document?");
+    cy.contains("h1", "Are you sure you want to void the original non-manipulation document?");
     cy.get("[data-testid=continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select an option to continue$/).should("be.visible");

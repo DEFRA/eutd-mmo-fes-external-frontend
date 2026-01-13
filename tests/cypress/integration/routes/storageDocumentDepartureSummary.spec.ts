@@ -19,7 +19,10 @@ describe("Storage document departure summary: rendering", () => {
   });
 
   it("should render the correct page title", () => {
-    cy.title().should("eq", "Check and confirm your consignment weight - Create a UK storage document - GOV.UK");
+    cy.title().should(
+      "eq",
+      "Check and confirm your consignment weight - Create a UK non-manipulation document - GOV.UK"
+    );
   });
 
   it("should render the correct content", () => {

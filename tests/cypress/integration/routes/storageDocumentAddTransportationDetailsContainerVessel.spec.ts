@@ -13,7 +13,7 @@ describe("Add Transportation Details: Container Vessel", () => {
 
   it("should render the expected header", () => {
     cy.get(".govuk-heading-xl").contains("Container vessel departing the UK");
-    cy.title().should("eq", "Container vessel departing the UK - Create a UK storage document - GOV.UK");
+    cy.title().should("eq", "Container vessel departing the UK - Create a UK non-manipulation document - GOV.UK");
   });
 
   it("should render back link", () => {

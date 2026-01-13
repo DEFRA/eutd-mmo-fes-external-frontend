@@ -5,10 +5,11 @@ import moment from "moment";
 import { camelCaseToSpacedLowerCase } from "~/helpers/string";
 import last from "lodash/last";
 import { format, subMonths, addMonths, compareAsc, parse } from "date-fns";
-import { getPrivacyNoticeJourney, getStatusClassName, getStatusName } from "~/helpers/dashboard";
+import { getPrivacyNoticeJourney } from "~/helpers/dashboard";
+import { DocumentTableHeader } from "./DocumentTableHeader";
 
 type DocumentCompletedTableProps = {
-  journey: string;
+  journey: Journey;
   documents: IGetAllDocumentsData;
   showCopyButton: boolean;
   dashboardLinks: DashboardLinks;
@@ -83,37 +84,12 @@ export const DocumentCompletedTable = ({
           <caption className="tablecaption">
             <h2 className="govuk-heading-l">{t("completed")}</h2>
           </caption>
-          <thead className="govuk-table__head">
-            <tr className="govuk-table__row">
-              <th scope="col" className="govuk-table__header">
-                {t("commonDocumentNumber")}
-              </th>
-              <th scope="col" className="govuk-table__header">
-                {t("commonDashboardYourReference")}
-              </th>
-              <th scope="col" className="govuk-table__header">
-                {t("commonDashboardDateCreated")}
-              </th>
-              {journey === "catchCertificate" && (
-                <>
-                  <th scope="col" className="govuk-table__header">
-                    {t("commonDashboardStatus")}
-                  </th>
-                  <th scope="col" className="govuk-table__header">
-                    {t("commonEuCatchIntegration")}
-                  </th>
-                </>
-              )}
-              <th scope="col" className="govuk-table__header govuk-table__header--numeric">
-                {t("commonDashboardAction")}
-              </th>
-            </tr>
-          </thead>
+          <DocumentTableHeader journey={journey} showEuCatchIntegration={journey === "catchCertificate"} />
           <tbody className="govuk-table__body">
             {Array.isArray(documents?.completed) &&
               documents.completed.map((document: ICompletedDocumentData) => {
                 const getEuCatchStatusRoute = (documentNumber: string, euCatchStatus?: ICatchStatus) => {
-                  const prefix = `/${getPrivacyNoticeJourney(journey as Journey)}/${documentNumber}/`;
+                  const prefix = `/${getPrivacyNoticeJourney(journey)}/${documentNumber}/`;
                   switch (euCatchStatus?.status?.toUpperCase()) {
                     case "SUCCESS":
                       return `${prefix}eu-data-integration-successful`;
@@ -137,35 +113,22 @@ export const DocumentCompletedTable = ({
                     </td>
 
                     {journey === "catchCertificate" && (
-                      <>
-                        <td scope="row" className="govuk-table__cell">
-                          <span
-                            className={
-                              document.catchSubmission?.status
-                                ? `govuk-tag govuk-tag--${getStatusClassName("SUCCESS", false)}`
-                                : ""
-                            }
+                      <td scope="row" className="govuk-table__cell">
+                        {document.catchSubmission ? (
+                          <a
+                            href={getEuCatchStatusRoute(document.documentNumber, document.catchSubmission)}
+                            className="govuk-link"
+                            data-testid={`${journey}-check-eu-catch-status`}
                           >
-                            {document.catchSubmission?.status ? getStatusName("SUCCESS", false, t) : "-"}
-                          </span>
-                        </td>
-                        <td scope="row" className="govuk-table__cell">
-                          {!document.catchSubmission ? (
-                            "-"
-                          ) : (
-                            <a
-                              href={getEuCatchStatusRoute(document.documentNumber, document.catchSubmission)}
-                              className="govuk-link"
-                              data-testid={`${journey}-check-eu-catch-status`}
-                            >
-                              {t("commonCheckStatus")}
-                              <span className="govuk-visually-hidden">
-                                {` ${t("commonForDocument")} ${document.documentNumber}`}
-                              </span>
-                            </a>
-                          )}
-                        </td>
-                      </>
+                            {t("commonCheckStatus")}
+                            <span className="govuk-visually-hidden">
+                              {` ${t("commonForDocument")} ${document.documentNumber}`}
+                            </span>
+                          </a>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
                     )}
                     <td scope="row" className="govuk-table__cell govuk-table__cell--numeric">
                       <Link
@@ -191,14 +154,20 @@ export const DocumentCompletedTable = ({
         </table>
       ) : (
         <div className="govuk-grid-row">
-          <div className="govuk-grid-column-two-thirds">
+          <div className="govuk-grid-column">
             <h2 className="govuk-heading-l">{t("completed")}</h2>
+            {journey === "storageNotes" && (
+              <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+            )}
             <div data-testid={`no-${camelCaseToSpacedLowerCase(journey)}-created-this-month`}>
               {t(`${journey}DashboardCompleteSubtitleText`, {
                 journey: camelCaseToSpacedLowerCase(journey),
                 ns: "dashboard",
               })}
             </div>
+            {journey === "storageNotes" && (
+              <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+            )}
           </div>
         </div>
       )}
@@ -206,6 +175,18 @@ export const DocumentCompletedTable = ({
       {journey === "catchCertificate" && Array.isArray(documents?.completed) && documents.completed.length > 0 && (
         <div className="govuk-inset-text">
           <p className="govuk-body">{t("commonRefreshPageForUpdates")}</p>
+        </div>
+      )}
+
+      {journey === "storageNotes" && (
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column">
+            <div className="govuk-inset-text">
+              <p className="govuk-body" style={{ whiteSpace: "pre-line" }}>
+                {t("commonRefreshPageForUpdatesStorageNotes")}
+              </p>
+            </div>
+          </div>
         </div>
       )}
 

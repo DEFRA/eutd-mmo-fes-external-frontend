@@ -104,7 +104,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       documentNumber,
       productId: currentProductDescription?.id,
       commodityCode: currentProductDescription?.commodityCode,
-      description: currentProductDescription?.description.replace(/\s+/g, " ").trim(),
+      description: currentProductDescription?.description.replaceAll(/\s+/g, " ").trim(),
       products: processingStatement?.products ?? [],
       nextUri,
       lang,
@@ -141,7 +141,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const productId = isEmpty(values["productId"])
     ? documentNumber + "-" + moment.utc().unix()
     : (values["productId"] as string);
-  const commodityDescription = (values["consignmentDescription"] as string).replace(/\s+/g, " ").trim();
+  const commodityDescription = (values["consignmentDescription"] as string).replaceAll(/\s+/g, " ").trim();
   const commodityCode = (values["commodityCode"] as string).split(" - ")[0];
 
   const isValid = await validateCSRFToken(request, form);
@@ -308,10 +308,10 @@ const AddConsignmentDetailsIndex = () => {
                       text: t("addConsignmentDetailsConsignmentPageHint", { journeyText: t("processingStatement") }),
                       className: "govuk-hint",
                     }}
-                    errorProps={{ className: !isEmpty(errors?.consignmentDescription) ? "govuk-error-message" : "" }}
+                    errorProps={{ className: isEmpty(errors?.consignmentDescription) ? "" : "govuk-error-message" }}
                     staticErrorMessage={t(errors?.consignmentDescription?.message, { ns: "errorsText" })}
                     errorPosition={ErrorPosition.AFTER_LABEL}
-                    containerClassNameError={!isEmpty(errors?.consignmentDescription) ? "govuk-form-group--error" : ""}
+                    containerClassNameError={isEmpty(errors?.consignmentDescription) ? "" : "govuk-form-group--error"}
                     onChange={(e) => setCurrentProductDescription(e.currentTarget.value)}
                     hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                     hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}

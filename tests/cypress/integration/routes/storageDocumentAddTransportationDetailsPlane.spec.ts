@@ -9,7 +9,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.PlaneTransportAllowed,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.title().should("eq", "Plane departing the UK - Create a UK storage document - GOV.UK");
+    cy.title().should("eq", "Plane departing the UK - Create a UK non-manipulation document - GOV.UK");
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-export-leave-the-uk`);

@@ -60,7 +60,7 @@ describe("PageNotFound", () => {
       .should("be.visible")
       .should("have.attr", "href", dashboardLink);
 
-    cy.contains("a", /^Create a UK storage document$/)
+    cy.contains("a", /^Create a UK non-manipulation document$/)
       .should("be.visible")
       .should("have.attr", "href", dashboardLink);
   });

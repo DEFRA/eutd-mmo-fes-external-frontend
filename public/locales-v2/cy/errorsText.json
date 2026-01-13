@@ -147,6 +147,7 @@
   "psCatchCertificateDescription": "Ychwanegwch o leiaf un rhywogaeth i'ch cynnyrch wedi'i brosesu",
   "psAddProcessingPDErrorPersonResponsibleForConsignment": "Rhowch enw’r person sy'n gyfrifol am y llwyth hwn",
   "psAddProcessingPDErrorPlantApprovalNumber": "Rhowch rif cymeradwyo’r safle",
+  "psAddProcessingPDFormatErrorPlantApprovalNumber": "Rhowch rif cymeradwyo'r safle yn y fformat cywir",
   "psAddProcessingPDErrorPersonResponsibleForConsignmentLength": "Does dim modd i’r person sy’n gyfrifol am y llwyth hwn fod yn fwy na 50 o nodau ",
   "psAddProcessingPDErrorResponsibleValidation": "Rhaid i enw’r person cyfrifol gynnwys llythrennau, cysylltnodau, bylchau a dyfynodau sengl yn unig",
   "psAddProcessingPlantAddressErrorMaxLimitPlantName": "Ni chaiff enw’r safle fod yn fwy na 54 nod",
@@ -279,5 +280,6 @@
   "ccCommonGearCategoryUnpopulatedError": "Dewiswch gategori gêr",
   "ccCommonGearTypeUnpopulatedError": "Dewiswch fath o gêr",
   "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError": "Rhaid i rif y cynhwysydd gynnwys dim ond llythrennau a rhifau",
-  "removeProductErrorNoSelection": "Dewiswch 'ydw' os hoffech chi dynnu'r cynnyrch hwn a'r holl rywogaethau cysylltiedig"
+  "removeProductErrorNoSelection": "Dewiswch 'ydw' os hoffech chi dynnu'r cynnyrch hwn a'r holl rywogaethau cysylltiedig",
+  "sdArrivalDatenotMorethanOneDay": "Ni chaiff y dyddiad cyrraedd fod fwy nag 1 diwrnod yn y dyfodol"
 }

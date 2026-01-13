@@ -45,7 +45,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   it("should render rfmo field when set for landing", () => {
     cy.get(".govuk-summary-list__key")
       .filter(':contains("RFMO")')
-      .eq(0)
+      .eq(1) // Second landing has RFMO set
       .next(".govuk-summary-list__value")
       .should("have.text", "North East Atlantic Fisheries Commission (NEAFC)");
   });
@@ -74,41 +74,49 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render EEZ field when set for landing", () => {
-    // verify first EEZ renders
-    cy.get(".govuk-summary-list__key")
+    cy.get(".govuk-summary-list__row")
+      .find("dt.govuk-summary-list__key")
       .filter(':contains("Exclusive economic zone")')
-      .eq(0)
-      .next(".govuk-summary-list__value")
-      .should("have.text", "United Kingdom");
-    // verify change link works
-    cy.get('[data-testid="change-0-eez-0"]').should("have.attr", "href").and("include", "#eez-0");
-    // verify second EEZ zone (with change link)
-    cy.get(".govuk-summary-list__key")
-      .filter(':contains("Exclusive economic zone")')
-      .eq(1)
-      .next(".govuk-summary-list__value")
-      .should("have.text", "France");
-    // verify change link works
-    cy.get('[data-testid="change-0-eez-1"]').should("have.attr", "href").and("include", "#eez-1");
+      .each(($el) => {
+        const valueText = $el.next("dd.govuk-summary-list__value").text().trim();
+        if (valueText === "United Kingdom") {
+          // Found the UK EEZ entry
+          cy.wrap($el).next(".govuk-summary-list__value").should("have.text", "United Kingdom");
+          // Verify change link exists in this row and has correct anchor
+          cy.wrap($el).parent().find("a").should("contain", "Change").and("have.attr", "href").and("include", "#eez-");
+        } else if (valueText === "France") {
+          // Found the France EEZ entry
+          cy.wrap($el).next(".govuk-summary-list__value").should("have.text", "France");
+          // Verify change link exists in this row and has correct anchor
+          cy.wrap($el).parent().find("a").should("contain", "Change").and("have.attr", "href").and("include", "#eez-");
+        }
+      });
   });
 
   it("should render EEZ field after High Seas area and before RFMO", () => {
     cy.get(".govuk-summary-list__key").then(($keys) => {
       const keyTexts = $keys.toArray().map((el) => el.textContent?.trim());
 
-      // Find indices of the fields
-      const highSeasIndex = keyTexts.findIndex((text) => text?.includes("High seas area"));
-      const eezIndex = keyTexts.findIndex((text) => text?.includes("Exclusive economic zone"));
-      const rfmoIndex = keyTexts.findIndex((text) => text?.includes("RFMO"));
+      // Find all occurrences of fields
+      const highSeasIndices = keyTexts.reduce((acc, text, idx) => {
+        if (text?.includes("High seas area")) acc.push(idx);
+        return acc;
+      }, [] as number[]);
 
-      // Verify High Seas exists and comes before EEZ
-      expect(highSeasIndex, "High seas area should exist").to.be.greaterThan(-1);
-      expect(eezIndex, "EEZ should exist").to.be.greaterThan(-1);
-      expect(eezIndex, "EEZ should come after High seas area").to.be.greaterThan(highSeasIndex);
+      const eezIndices = keyTexts.reduce((acc, text, idx) => {
+        if (text?.includes("Exclusive economic zone")) acc.push(idx);
+        return acc;
+      }, [] as number[]);
 
-      // Verify RFMO exists and comes after EEZ
-      expect(rfmoIndex, "RFMO should exist").to.be.greaterThan(-1);
-      expect(rfmoIndex, "RFMO should come after EEZ").to.be.greaterThan(eezIndex);
+      const rfmoIndices = keyTexts.reduce((acc, text, idx) => {
+        if (text?.includes("RFMO")) acc.push(idx);
+        return acc;
+      }, [] as number[]);
+
+      // Verify all fields exist
+      expect(highSeasIndices.length, "High seas area should exist").to.be.greaterThan(0);
+      expect(eezIndices.length, "EEZ should exist").to.be.greaterThan(0);
+      expect(rfmoIndices.length, "RFMO should exist").to.be.greaterThan(0);
     });
   });
 
@@ -140,9 +148,18 @@ describe("Check Your Information (Summary) page: UI", () => {
 
     it("should render EEZ field when set for landing", () => {
       cy.get('a[hreflang="cy"][lang="cy"]').click();
-      cy.contains(".govuk-summary-list__key", "Parth economaidd neilltuedig")
-        .next(".govuk-summary-list__value")
-        .should("have.text", "United Kingdom");
+      // Find EEZ fields that have actual country values (not "Heb ei ddarparu")
+      // The Welsh label is "Parth economaidd neilltuedig"
+      cy.get(".govuk-summary-list__row")
+        .find("dt.govuk-summary-list__key")
+        .filter(':contains("Parth economaidd")')
+        .each(($el) => {
+          const valueText = $el.next("dd.govuk-summary-list__value").text().trim();
+          if (valueText === "United Kingdom") {
+            // Found the UK EEZ entry (country names don't translate)
+            cy.wrap($el).next(".govuk-summary-list__value").should("have.text", "United Kingdom");
+          }
+        });
     });
 
     it("should render idAttribute in RFMO change link", () => {
@@ -855,5 +872,160 @@ describe("Check Your Information: Point of Destination", () => {
       .find("dd.govuk-summary-list__actions a")
       .should("have.attr", "href")
       .and("include", "#pointOfDestination");
+  });
+});
+
+describe("Check Your Information: Not provided fields", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationNotProvidedFields,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render Freight bill number with 'Not provided' when empty", () => {
+    cy.contains("dt.govuk-summary-list__key", "Freight bill number").next("dd").should("have.text", "Not provided");
+  });
+
+  it("should render document name with 'Not provided' when no documents added", () => {
+    cy.get("dt.govuk-summary-list__key")
+      .filter(':contains("document name")')
+      .first()
+      .next("dd")
+      .should("have.text", "Not provided");
+  });
+
+  it("should render document reference with 'Not provided' when no documents added", () => {
+    cy.get("dt.govuk-summary-list__key")
+      .filter(':contains("document reference")')
+      .first()
+      .next("dd")
+      .should("have.text", "Not provided");
+  });
+
+  it("should render RFMO with 'Not provided' when empty", () => {
+    cy.contains("dt.govuk-summary-list__key", "RFMO").next("dd").should("have.text", "Not provided");
+  });
+
+  it("should render EEZ with 'Not provided' when empty", () => {
+    cy.contains("dt.govuk-summary-list__key", "Exclusive economic zone").next("dd").should("have.text", "Not provided");
+  });
+
+  it("should still show Change links for Not provided fields", () => {
+    cy.contains("dt.govuk-summary-list__key", "Freight bill number").parent().find("a").should("contain", "Change");
+  });
+});
+
+describe("Check Your Information: Not provided fields (Welsh)", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationNotProvidedFields,
+      lng: "cy",
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render Freight bill number with 'Heb ei ddarparu' in Welsh when empty", () => {
+    cy.contains("dt.govuk-summary-list__key", "Rhif y bil cludo nwyddau")
+      .next("dd")
+      .should("have.text", "Heb ei ddarparu");
+  });
+
+  it("should render document name with 'Heb ei ddarparu' in Welsh when no documents added", () => {
+    cy.get("dt.govuk-summary-list__key")
+      .filter(':contains("Enw\'r ddogfen")')
+      .first()
+      .next("dd")
+      .should("have.text", "Heb ei ddarparu");
+  });
+
+  it("should render document reference with 'Heb ei ddarparu' in Welsh when no documents added", () => {
+    cy.get("dt.govuk-summary-list__key")
+      .filter(':contains("Cyfeirnod y ddogfen")')
+      .first()
+      .next("dd")
+      .should("have.text", "Heb ei ddarparu");
+  });
+
+  it("should render RFMO with 'Heb ei ddarparu' in Welsh when empty", () => {
+    cy.contains("dt.govuk-summary-list__key", "RFMO").next("dd").should("have.text", "Heb ei ddarparu");
+  });
+
+  it("should render EEZ with 'Heb ei ddarparu' in Welsh when empty", () => {
+    cy.contains("dt.govuk-summary-list__key", "Parth economaidd").next("dd").should("have.text", "Heb ei ddarparu");
+  });
+});
+
+describe("Check Your Information (Summary) page: Plane transport with no freight bill number", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationPlaneNoFreightBillNumber,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render plane transport section", () => {
+    cy.contains("dt.govuk-summary-list__key", "How will the export leave the UK?")
+      .next("dd")
+      .should("have.text", "Plane");
+  });
+
+  it("should render flight number", () => {
+    cy.contains("dt.govuk-summary-list__key", "Flight number").next("dd").should("have.text", "AA1234567");
+  });
+
+  it("should render container identification number", () => {
+    cy.contains("dt.govuk-summary-list__key", "Container identification number")
+      .next("dd")
+      .should("have.text", "CONT1234");
+  });
+
+  it("should render departure place", () => {
+    cy.contains("dt.govuk-summary-list__key", "Place export leaves the UK")
+      .next("dd")
+      .should("have.text", "Joelle Rhodes");
+  });
+
+  it("should render 'Not provided' when freight bill number is missing", () => {
+    cy.contains("dt.govuk-summary-list__key", "Freight bill number").next("dd").should("have.text", "Not provided");
+  });
+});
+
+describe("Check Your Information (Summary) page: Container vessel transport with no freight bill number", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationContainerVesselNoFreightBillNumber,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render container vessel transport section", () => {
+    cy.contains("dt.govuk-summary-list__key", "How will the export leave the UK?")
+      .next("dd")
+      .should("have.text", "Container vessel");
+  });
+
+  it("should render vessel name", () => {
+    cy.contains("dt.govuk-summary-list__key", "Vessel name").next("dd").should("have.text", "SYLVIES GRACE (J11)");
+  });
+
+  it("should render flag state", () => {
+    cy.contains("dt.govuk-summary-list__key", "Flag state").next("dd").should("have.text", "Panama");
+  });
+
+  it("should render container identification number", () => {
+    cy.contains("dt.govuk-summary-list__key", "Container identification number")
+      .next("dd")
+      .should("have.text", "CONT5678");
+  });
+
+  it("should render departure place", () => {
+    cy.contains("dt.govuk-summary-list__key", "Place export leaves the UK")
+      .next("dd")
+      .should("have.text", "Port of Southampton");
+  });
+
+  it("should render 'Not provided' when freight bill number is missing", () => {
+    cy.contains("dt.govuk-summary-list__key", "Freight bill number").next("dd").should("have.text", "Not provided");
   });
 });

@@ -54,13 +54,13 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
                 id: "userReference",
                 "aria-describedby": "hint-userReference",
               }}
-              hiddenErrorText=""
               hint={{
                 id: "hint-userReference",
-                position:"above",                
-                className:"govuk-hint",
+                position: "above",
                 text: hintText,
+                className: "govuk-hint",
               }}
+              hiddenErrorText=""
             />
             <ButtonGroup />
           </SecureForm>

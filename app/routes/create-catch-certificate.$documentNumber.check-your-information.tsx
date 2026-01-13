@@ -178,24 +178,22 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
               />
             </>
           )}
-          {transport.freightBillNumber && (
-            <SummaryListRow
-              keyText={t("addTransportationDetailsFreightBillNumber", { ns: "transportation" })}
-              value={transport.freightBillNumber}
-              actions={generateActions(
-                isLocked,
-                `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${transport.id}?nextUri=${route(
-                  "/create-catch-certificate/:documentNumber/check-your-information",
-                  {
-                    documentNumber,
-                  }
-                )}#freightBillNumber`,
-                "ccSummaryPageTransportationDetails",
-                "checkYourInformation",
-                t
-              )}
-            />
-          )}
+          <SummaryListRow
+            keyText={t("addTransportationDetailsFreightBillNumber", { ns: "transportation" })}
+            value={transport.freightBillNumber ?? t("commonNotProvided", { ns: "common" })}
+            actions={generateActions(
+              isLocked,
+              `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${transport.id}?nextUri=${route(
+                "/create-catch-certificate/:documentNumber/check-your-information",
+                {
+                  documentNumber,
+                }
+              )}#freightBillNumber`,
+              "ccSummaryPageTransportationDetails",
+              "checkYourInformation",
+              t
+            )}
+          />
         </>
       )}
       {transport.vehicle === "plane" && (
@@ -248,24 +246,22 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
               t
             )}
           />
-          {transport.freightBillNumber && (
-            <SummaryListRow
-              keyText={t("addTransportationDetailsFreightBillNumber", { ns: "transportation" })}
-              value={transport.freightBillNumber}
-              actions={generateActions(
-                isLocked,
-                `/create-catch-certificate/${documentNumber}/add-transportation-details-plane/${transport.id}?nextUri=${route(
-                  "/create-catch-certificate/:documentNumber/check-your-information",
-                  {
-                    documentNumber,
-                  }
-                )}#freightBillNumber`,
-                "addTransportationDetailsFlightnumber",
-                "transportation",
-                t
-              )}
-            />
-          )}
+          <SummaryListRow
+            keyText={t("addTransportationDetailsFreightBillNumber", { ns: "transportation" })}
+            value={transport.freightBillNumber ?? t("commonNotProvided", { ns: "common" })}
+            actions={generateActions(
+              isLocked,
+              `/create-catch-certificate/${documentNumber}/add-transportation-details-plane/${transport.id}?nextUri=${route(
+                "/create-catch-certificate/:documentNumber/check-your-information",
+                {
+                  documentNumber,
+                }
+              )}#freightBillNumber`,
+              "addTransportationDetailsFlightnumber",
+              "transportation",
+              t
+            )}
+          />
         </>
       )}
       {transport.vehicle === "train" && (
@@ -321,24 +317,22 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
               )}
             />
           )}
-          {transport.freightBillNumber && (
-            <SummaryListRow
-              keyText={t("addTransportationDetailsFreightBillNumber", { ns: "transportation" })}
-              value={transport.freightBillNumber}
-              actions={generateActions(
-                isLocked,
-                `/create-catch-certificate/${documentNumber}/add-transportation-details-train/${transport.id}?nextUri=${route(
-                  "/create-catch-certificate/:documentNumber/check-your-information",
-                  {
-                    documentNumber,
-                  }
-                )}#freightBillNumber`,
-                "addTransportationDetailsRailwayBillNumber",
-                "transportation",
-                t
-              )}
-            />
-          )}
+          <SummaryListRow
+            keyText={t("addTransportationDetailsFreightBillNumber", { ns: "transportation" })}
+            value={transport.freightBillNumber ?? t("commonNotProvided", { ns: "common" })}
+            actions={generateActions(
+              isLocked,
+              `/create-catch-certificate/${documentNumber}/add-transportation-details-train/${transport.id}?nextUri=${route(
+                "/create-catch-certificate/:documentNumber/check-your-information",
+                {
+                  documentNumber,
+                }
+              )}#freightBillNumber`,
+              "addTransportationDetailsRailwayBillNumber",
+              "transportation",
+              t
+            )}
+          />
         </>
       )}
       {transport.vehicle === "containerVessel" && (
@@ -407,24 +401,22 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
               t
             )}
           />
-          {transport.freightBillNumber && (
-            <SummaryListRow
-              keyText={t("addTransportationDetailsFreightBillNumber", { ns: "transportation" })}
-              value={transport.freightBillNumber}
-              actions={generateActions(
-                isLocked,
-                `/create-catch-certificate/${documentNumber}/add-transportation-details-container-vessel/${transport.id}?nextUri=${route(
-                  "/create-catch-certificate/:documentNumber/check-your-information",
-                  {
-                    documentNumber,
-                  }
-                )}#freightBillNumber`,
-                "addTransportationDetailsVesselNameText",
-                "transportation",
-                t
-              )}
-            />
-          )}
+          <SummaryListRow
+            keyText={t("addTransportationDetailsFreightBillNumber", { ns: "transportation" })}
+            value={transport.freightBillNumber ?? t("commonNotProvided", { ns: "common" })}
+            actions={generateActions(
+              isLocked,
+              `/create-catch-certificate/${documentNumber}/add-transportation-details-container-vessel/${transport.id}?nextUri=${route(
+                "/create-catch-certificate/:documentNumber/check-your-information",
+                {
+                  documentNumber,
+                }
+              )}#freightBillNumber`,
+              "addTransportationDetailsVesselNameText",
+              "transportation",
+              t
+            )}
+          />
         </>
       )}
       <TransportationDocumentsSummary documentNumber={documentNumber} transport={transport} isLocked={isLocked} t={t} />
@@ -493,11 +485,9 @@ const TransportationDetailsSummary = ({
         />
         <br />
         {Array.isArray(transportations) && transportations.length > 0
-          ? transportations.map((transport: ITransport) => (
-              <Fragment key={transport.id}>
-                {getTransportationDetailsSummary(documentNumber, isLocked, transport, t)}
-              </Fragment>
-            ))
+          ? transportations.map((transport: ITransport) =>
+              getTransportationDetailsSummary(documentNumber, isLocked, transport, t)
+            )
           : getTransportationDetailsSummary(documentNumber, isLocked, transportation, t)}
       </dl>
     </>

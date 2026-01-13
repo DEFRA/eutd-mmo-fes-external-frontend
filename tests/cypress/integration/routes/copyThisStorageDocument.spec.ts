@@ -26,7 +26,7 @@ describe("Copy this storage document address page: Allowed", () => {
   it("should render the correct warning text", () => {
     cy.contains(
       "div > strong",
-      "You must not use a storage document or data for catches that have already been exported. Knowingly reusing storage documents or using data that relate to a previous export is a serious offence and may result in enforcement action being taken."
+      "You must not use a non-manipulation document or data for catches that have already been exported. Knowingly reusing non-manipulation documents or using data that relate to a previous export is a serious offence and may result in enforcement action being taken."
     );
   });
 
@@ -36,8 +36,8 @@ describe("Copy this storage document address page: Allowed", () => {
     cy.url().should("include", "/storage-documents");
   });
 
-  it("should render the  Create draft storage document button", () => {
-    cy.contains("button", "Create draft storage document").should("be.visible");
+  it("should render the  Create draft non-manipulation document button", () => {
+    cy.contains("button", "Create draft non-manipulation document").should("be.visible");
   });
 
   it("should render the radio and check box copy options and labels ", () => {
@@ -55,7 +55,7 @@ describe("Copy this storage document address page: Allowed", () => {
       expect(labels).to.deep.eq([
         "Copy all document data",
         "Copy all document data AND void the original",
-        "I understand I must not reuse the same storage document or data for catches that have already been exported",
+        "I understand I must not reuse the same non-manipulation document or data for catches that have already been exported",
       ]);
     });
   });
