@@ -22,5 +22,6 @@
   "sdStorageArrivalDateGuidanceTitle": "Beth yw'r dyddiad cyrraedd?",
   "sdStorageArrivalDateGuidanceText": "Dyma'r dyddiad y mae'r cynnyrch yn cyrraedd y cyfleuster storio ac yn cael ei ddadlwytho. Os bydd y dadlwytho’n digwydd yn ddiweddarach, rhowch y dyddiad y cafodd y cynnyrch ei dynnu'n gorfforol o'r cludiant a'i dderbyn i'r storfa.",
   "sdArrivalDateValidationError": "Rhaid i'r dyddiad cyrraedd fod yn ddyddiad go iawn",
-  "sdArrivalDateSameOrOneDayBeforeDepartureDateValidationError": "Ni chaiff y dyddiad allforio fod fwy nag 1 diwrnod yn y dyfodol"
+  "sdArrivalDateSameOrOneDayBeforeDepartureDateValidationError": "Ni chaiff y dyddiad allforio fod fwy nag 1 diwrnod yn y dyfodol",
+  "sdArrivalDatenotMorethanOneDay": "Ni chaiff y dyddiad cyrraedd fod fwy nag 1 diwrnod yn y dyfodol"
 }
