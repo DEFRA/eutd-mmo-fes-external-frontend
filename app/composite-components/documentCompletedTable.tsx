@@ -6,9 +6,10 @@ import { camelCaseToSpacedLowerCase } from "~/helpers/string";
 import last from "lodash/last";
 import { format, subMonths, addMonths, compareAsc, parse } from "date-fns";
 import { getPrivacyNoticeJourney } from "~/helpers/dashboard";
+import { DocumentTableHeader } from "./DocumentTableHeader";
 
 type DocumentCompletedTableProps = {
-  journey: string;
+  journey: Journey;
   documents: IGetAllDocumentsData;
   showCopyButton: boolean;
   dashboardLinks: DashboardLinks;
@@ -83,27 +84,7 @@ export const DocumentCompletedTable = ({
           <caption className="tablecaption">
             <h2 className="govuk-heading-l">{t("completed")}</h2>
           </caption>
-          <thead className="govuk-table__head">
-            <tr className="govuk-table__row">
-              <th scope="col" className="govuk-table__header">
-                {t("commonDocumentNumber")}
-              </th>
-              <th scope="col" className="govuk-table__header">
-                {t("commonDashboardYourReference")}
-              </th>
-              <th scope="col" className="govuk-table__header">
-                {t("commonDashboardDateCreated")}
-              </th>
-              {journey === "catchCertificate" && (
-                <th scope="col" className="govuk-table__header">
-                  {t("commonEuCatchIntegration")}
-                </th>
-              )}
-              <th scope="col" className="govuk-table__header govuk-table__header--numeric">
-                {t("commonDashboardAction")}
-              </th>
-            </tr>
-          </thead>
+          <DocumentTableHeader journey={journey} showEuCatchIntegration={journey === "catchCertificate"} />
           <tbody className="govuk-table__body">
             {Array.isArray(documents?.completed) &&
               documents.completed.map((document: ICompletedDocumentData) => {
