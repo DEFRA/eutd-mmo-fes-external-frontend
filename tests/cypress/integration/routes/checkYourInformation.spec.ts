@@ -961,7 +961,7 @@ describe("Check Your Information (Summary) page: Plane transport with no freight
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationPlaneNoFreightBillNumber,
     };
-    cy.visit(checkYourInformationUrl, { qs: { ...testParams }, failOnStatusCode: false });
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
   });
 
   it("should render plane transport section", () => {
@@ -971,7 +971,7 @@ describe("Check Your Information (Summary) page: Plane transport with no freight
   });
 
   it("should render flight number", () => {
-    cy.contains("dt.govuk-summary-list__key", "Flight number").next("dd").should("have.text", "BA123");
+    cy.contains("dt.govuk-summary-list__key", "Flight number").next("dd").should("have.text", "AA1234567");
   });
 
   it("should render container identification number", () => {
@@ -983,7 +983,7 @@ describe("Check Your Information (Summary) page: Plane transport with no freight
   it("should render departure place", () => {
     cy.contains("dt.govuk-summary-list__key", "Place export leaves the UK")
       .next("dd")
-      .should("have.text", "London Heathrow Airport");
+      .should("have.text", "Joelle Rhodes");
   });
 
   it("should render 'Not provided' when freight bill number is missing", () => {
@@ -1006,7 +1006,7 @@ describe("Check Your Information (Summary) page: Container vessel transport with
   });
 
   it("should render vessel name", () => {
-    cy.contains("dt.govuk-summary-list__key", "Vessel name").next("dd").should("have.text", "MV Test Vessel");
+    cy.contains("dt.govuk-summary-list__key", "Vessel name").next("dd").should("have.text", "SYLVIES GRACE (J11)");
   });
 
   it("should render flag state", () => {
