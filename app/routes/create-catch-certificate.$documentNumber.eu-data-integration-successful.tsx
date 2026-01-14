@@ -10,8 +10,8 @@ export const meta: MetaFunction<typeof loader> = (args) => getMeta(args);
 type LoaderData = {
   status: string;
   documentNumber: string;
-  feedbackURL: string;
   catchReferenceNumber: string;
+  feedbackURL: string;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) =>
