@@ -5,14 +5,12 @@ type DocumentTableHeaderProps = {
   journey: Journey;
   showDateStarted?: boolean;
   showStatus?: boolean;
-  showEuCatchIntegration?: boolean;
 };
 
 export const DocumentTableHeader = ({
   journey,
   showDateStarted = false,
   showStatus = false,
-  showEuCatchIntegration = false,
 }: DocumentTableHeaderProps) => {
   const { t } = useTranslation(["common"]);
 
@@ -33,11 +31,9 @@ export const DocumentTableHeader = ({
             {t("commonDashboardStatus")}
           </th>
         )}
-        {showEuCatchIntegration && journey === "catchCertificate" && (
-          <th scope="col" className="govuk-table__header">
-            {t("commonEuCatchIntegration")}
-          </th>
-        )}
+        <th scope="col" className="govuk-table__header">
+          {t("commonEuCatchIntegration")}
+        </th>
         <th scope="col" className="govuk-table__header govuk-table__header--numeric">
           {t("commonDashboardAction")}
         </th>

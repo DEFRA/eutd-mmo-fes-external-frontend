@@ -19,14 +19,14 @@ export const loader: LoaderFunction = async ({ request, params }) =>
 
 const EuDataIntegrationSuccessfulPage = () => {
   const { catchReferenceNumber, feedbackURL } = useLoaderData<LoaderData>();
-  const dashboardUrl = route("/create-catch-certificate/catch-certificates");
+  const dashboardUrl = route("/create-processing-statement/processing-statements");
 
   return (
     <EuDataIntegrationSuccessful
       dashboardUrl={dashboardUrl}
       catchReferenceNumber={catchReferenceNumber}
       feedbackURL={feedbackURL}
-      journey="catchCertificate"
+      journey="processingStatement"
     />
   );
 };
