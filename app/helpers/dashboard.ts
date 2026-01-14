@@ -60,3 +60,20 @@ export function getPrivacyNoticeJourney(journey: Journey): string {
       return "create-catch-certificate";
   }
 }
+
+export function getJourneyFromPath(path: string): Journey {
+  if (path.includes("create-catch-certificate")) {
+    return "catchCertificate";
+  } else if (path.includes("create-processing-statement")) {
+    return "processingStatement";
+  } else if (path.includes("create-storage-document")) {
+    return "storageNotes";
+  }
+  return "catchCertificate";
+}
+
+export function getDashboardUrlForJourney(journey: Journey): string {
+  const privacyJourney = getPrivacyNoticeJourney(journey);
+  const dashboardName = getDashboardName(privacyJourney);
+  return `/${privacyJourney}/${dashboardName}`;
+}

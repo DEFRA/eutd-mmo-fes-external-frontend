@@ -44,11 +44,13 @@ export const EuDataIntegrationLoader = async (request: Request, params: Params, 
     case 200:
     case 204: {
       const data: ICatchStatus = await response.json();
+      const url = new URL(request.url);
       return {
         ...data,
         catchReferenceNumber: data.reference ?? "",
         pageTitle: pageTitleMap[euStatus],
         commonTitle: t(`${getServiceNameFromDocumentNumber(documentNumber)?.toLowerCase()}CommonTitle`),
+        pathname: url.pathname,
       };
     }
     case 403:

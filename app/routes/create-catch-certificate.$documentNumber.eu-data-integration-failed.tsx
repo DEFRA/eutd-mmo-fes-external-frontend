@@ -1,7 +1,6 @@
 import { type LoaderFunction, type MetaFunction, useLoaderData } from "react-router";
-import { route } from "routes-gen";
 import { EuDataIntegrationLoader } from "~/.server/eu-data-integration";
-import { getMeta } from "~/helpers";
+import { getMeta, getDashboardUrlForJourney, getJourneyFromPath } from "~/helpers";
 import { EuDataIntegrationFailed } from "~/composite-components/euDataIntegrationFailed";
 import * as React from "react";
 
@@ -10,6 +9,7 @@ type LoaderData = {
   catchReferenceNumber: string;
   status: string;
   feedbackURL: string;
+  pathname: string;
 };
 
 export const meta: MetaFunction<typeof loader> = (args) => getMeta(args);
@@ -18,10 +18,11 @@ export const loader: LoaderFunction = async ({ request, params }) =>
   EuDataIntegrationLoader(request, params, "FAILURE");
 
 const EuDataIntegrationFailedPage = () => {
-  const { feedbackURL } = useLoaderData<LoaderData>();
-  const dashboardUrl = route("/create-catch-certificate/catch-certificates");
+  const { feedbackURL, pathname } = useLoaderData<LoaderData>();
+  const journey = getJourneyFromPath(pathname);
+  const dashboardUrl = getDashboardUrlForJourney(journey);
 
-  return <EuDataIntegrationFailed dashboardUrl={dashboardUrl} feedbackURL={feedbackURL} journey="catchCertificate" />;
+  return <EuDataIntegrationFailed dashboardUrl={dashboardUrl} feedbackURL={feedbackURL} journey={journey} />;
 };
 
 export default EuDataIntegrationFailedPage;
