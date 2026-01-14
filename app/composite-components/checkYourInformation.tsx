@@ -3,7 +3,6 @@ import { changeLinkUri } from "~/helpers";
 import { route } from "routes-gen";
 import { useTranslation } from "react-i18next";
 import lowerCase from "lodash/lowerCase";
-import isEmpty from "lodash/isEmpty";
 import { Main, NotificationBanner, ErrorSummary, Title, SecureForm, formatAddress, ErrorMessage } from "~/components";
 import * as React from "react";
 import moment from "moment";
@@ -41,10 +40,6 @@ type CheckInfoExporterDetailsProps = {
   checkInfoRoute: any;
   summaryPageChangeText?: string;
   documentNumber: string;
-  userReference?: string;
-  userReferenceLabel?: string;
-  userReferenceChangeRoute?: string;
-  notProvidedText?: string;
 };
 
 export const CheckInfoExporterDetails = ({
@@ -57,28 +52,10 @@ export const CheckInfoExporterDetails = ({
   checkInfoRoute,
   summaryPageChangeText,
   documentNumber,
-  userReference,
-  userReferenceLabel,
-  userReferenceChangeRoute,
-  notProvidedText,
 }: CheckInfoExporterDetailsProps) => (
   <>
     <h2 className="govuk-heading-l">{checkExporterDetailsHeader}</h2>
     <dl className="govuk-summary-list govuk-!-margin-bottom-5">
-      {userReferenceLabel && (
-        <div className="govuk-summary-list__row">
-          <dt className="govuk-summary-list__key govuk-!-width-one-half">{userReferenceLabel}</dt>
-          <dd className="govuk-summary-list__value">{!isEmpty(userReference) ? userReference : notProvidedText}</dd>
-          {userReferenceChangeRoute && (
-            <dd className="govuk-summary-list__actions">
-              <a id="yourReferenceChangeLink" className="govuk-link" href={userReferenceChangeRoute}>
-                {changeLinkText}
-                <span className="govuk-visually-hidden"> {lowerCase(userReferenceLabel)}</span>
-              </a>
-            </dd>
-          )}
-        </div>
-      )}
       <div className="govuk-summary-list__row">
         <dt className="govuk-summary-list__key govuk-!-width-one-half">{companyNameTitle}</dt>
         <dd className="govuk-summary-list__value">{exporterDetails?.exporterCompanyName}</dd>
@@ -353,8 +330,8 @@ export const StorageDocumentTransportDisplay = ({
                 <a
                   aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
                   className="govuk-link"
-                  href={`/create-non-manipulation-document/${documentNumber}/${changeLinkUri(transportType, transport)}?nextUri=${route(
-                    "/create-non-manipulation-document/:documentNumber/check-your-information",
+                  href={`/create-storage-document/${documentNumber}/${changeLinkUri(transportType, transport)}?nextUri=${route(
+                    "/create-storage-document/:documentNumber/check-your-information",
                     {
                       documentNumber,
                     }
@@ -504,8 +481,8 @@ export const CheckYourInformationProductLayout = ({
           label={t("sdSummaryPageWasCCissued", { ns: "sdCheckYourInformation" })}
           value={ctch.certificateType === "uk" ? t("commonYesLabel") : t("commonNoLabel")}
           isActionEnabled={true}
-          actionURL={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${index}?nextUri=${route(
-            "/create-non-manipulation-document/:documentNumber/check-your-information",
+          actionURL={`/create-storage-document/${documentNumber}/add-product-to-this-consignment/${index}?nextUri=${route(
+            "/create-storage-document/:documentNumber/check-your-information",
             { documentNumber: documentNumber }
           )}`}
           t={t}
@@ -515,8 +492,8 @@ export const CheckYourInformationProductLayout = ({
             label={t("sdCheckYourInformationIssuingCountry", { ns: "sdCheckYourInformation" })}
             value={ctch.issuingCountry.officialCountryName}
             isActionEnabled={true}
-            actionURL={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${index}#catches-${index}-issuingCountry?nextUri=${route(
-              "/create-non-manipulation-document/:documentNumber/check-your-information",
+            actionURL={`/create-storage-document/${documentNumber}/add-product-to-this-consignment/${index}#catches-${index}-issuingCountry?nextUri=${route(
+              "/create-storage-document/:documentNumber/check-your-information",
               { documentNumber }
             )}`}
             t={t}
@@ -526,8 +503,8 @@ export const CheckYourInformationProductLayout = ({
           label={t("sdCheckYourInformationUkentryDocumentNumber", { ns: "sdCheckYourInformation" })}
           value={ctch.certificateNumber}
           isActionEnabled={true}
-          actionURL={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${index}?nextUri=${route(
-            "/create-non-manipulation-document/:documentNumber/check-your-information",
+          actionURL={`/create-storage-document/${documentNumber}/add-product-to-this-consignment/${index}?nextUri=${route(
+            "/create-storage-document/:documentNumber/check-your-information",
             { documentNumber }
           )}`}
           t={t}
@@ -544,8 +521,8 @@ export const CheckYourInformationProductLayout = ({
           label={t("sdSpeciesLabel", { ns: "sdCheckYourInformation" })}
           value={ctch.product}
           isActionEnabled={true}
-          actionURL={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${index}?nextUri=${route(
-            "/create-non-manipulation-document/:documentNumber/check-your-information",
+          actionURL={`/create-storage-document/${documentNumber}/add-product-to-this-consignment/${index}?nextUri=${route(
+            "/create-storage-document/:documentNumber/check-your-information",
             { documentNumber }
           )}`}
           t={t}
@@ -593,8 +570,8 @@ export const CheckYourInformationProductLayout = ({
             label={t("sdNetWeightDeparture", { ns: "sdCheckYourInformation" })}
             value={`${Number(ctch.netWeightProductDeparture).toFixed(2)}kg`}
             isActionEnabled={true}
-            actionURL={`/create-non-manipulation-document/${documentNumber}/departure-product-summary?nextUri=${route(
-              "/create-non-manipulation-document/:documentNumber/check-your-information",
+            actionURL={`/create-storage-document/${documentNumber}/departure-product-summary?nextUri=${route(
+              "/create-storage-document/:documentNumber/check-your-information",
               { documentNumber }
             )}`}
             t={t}
@@ -605,8 +582,8 @@ export const CheckYourInformationProductLayout = ({
             label={t("sdNetFisheryWeightDeparture", { ns: "sdCheckYourInformation" })}
             value={`${Number(ctch.netWeightFisheryProductDeparture).toFixed(2)}kg`}
             isActionEnabled={true}
-            actionURL={`/create-non-manipulation-document/${documentNumber}/departure-product-summary?nextUri=${route(
-              "/create-non-manipulation-document/:documentNumber/check-your-information",
+            actionURL={`/create-storage-document/${documentNumber}/departure-product-summary?nextUri=${route(
+              "/create-storage-document/:documentNumber/check-your-information",
               { documentNumber }
             )}`}
             t={t}
