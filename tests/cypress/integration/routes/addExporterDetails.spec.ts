@@ -10,7 +10,7 @@ describe("Add exporter details page", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
   });
 
-  it("addexporter details back link check", () => {
+  it("add exporter details back link check", () => {
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
