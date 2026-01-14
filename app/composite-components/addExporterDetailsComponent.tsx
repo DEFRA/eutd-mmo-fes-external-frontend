@@ -126,7 +126,9 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
               hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
             />
 
-            <h2 className="govuk-label--m">{t("commonAddExporterDetailsAddressContent")}</h2>
+            <label className="govuk-label govuk-!-font-weight-bold">
+              {t("commonAddExporterDetailsAddressContent")}
+            </label>
             {hasAddress ? (
               <>
                 <p>
