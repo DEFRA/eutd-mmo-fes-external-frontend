@@ -16,6 +16,12 @@ const getServiceNameFromDocumentNumber = (documentNumber: string) => {
   return null;
 };
 
+export const EuDataIntegrationLoader = async (request: Request, params: Params, euStatus: EuStatus) => {
+  setApiMock(request.url);
+
+  return null;
+};
+
 export const getEuDataIntegration = async (
   bearerToken: string,
   documentNumber: string,
@@ -71,17 +77,20 @@ export const EuDataIntegrationLoader = async (request: Request, params: Params, 
     FAILURE: t("euIntegrationFailedTitle"),
   };
 
-  return new Response(
-    JSON.stringify({
-      ...euIntegrationResponse,
-      pageTitle: pageTitleMap[euStatus],
-      commonTitle: t(`${getServiceNameFromDocumentNumber(documentNumber)?.toLowerCase()}CommonTitle`),
-    }),
-    {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
+  switch (response.status) {
+    case 200:
+    case 204: {
+      const data: ICatchStatus = await response.json();
+      return {
+        ...data,
+        catchReferenceNumber: data.reference ?? "",
+        pageTitle: pageTitleMap[euStatus],
+        commonTitle: t(`${getServiceNameFromDocumentNumber(documentNumber)?.toLowerCase()}CommonTitle`),
+      };
     }
-  );
+    case 403:
+      return redirect("/forbidden");
+    default:
+      throw new Error(`Unexpected error: ${response.status}`);
+  }
 };
