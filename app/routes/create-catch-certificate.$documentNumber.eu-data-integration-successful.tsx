@@ -5,14 +5,14 @@ import { getMeta } from "~/helpers";
 import { EuDataIntegrationSuccessful } from "~/composite-components/euDataIntegrationSuccessful";
 import * as React from "react";
 
+export const meta: MetaFunction<typeof loader> = (args) => getMeta(args);
+
 type LoaderData = {
   status: string;
   documentNumber: string;
-  catchReferenceNumber: string;
   feedbackURL: string;
+  catchReferenceNumber: string;
 };
-
-export const meta: MetaFunction<typeof loader> = (args) => getMeta(args);
 
 export const loader: LoaderFunction = async ({ request, params }) =>
   EuDataIntegrationLoader(request, params, "SUCCESS");
