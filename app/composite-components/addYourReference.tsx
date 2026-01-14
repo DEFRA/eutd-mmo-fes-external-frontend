@@ -31,8 +31,9 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
 
   useScrollOnPageLoad();
 
-  const currentValue = actionData.userReference ?? userReference;
-  const userReferenceError = currentValue && errors?.userReference ? errors?.userReference?.message : undefined;
+  // Show error if field has value (validation error) OR if there's any error from server
+  const userReferenceError = errors?.userReference ? errors?.userReference?.message : undefined;
+  const hasError = !isEmpty(userReferenceError);
 
   return (
     <Main backUrl={route(backUrl, { documentNumber })}>
@@ -46,10 +47,8 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
         <div className="govuk-grid-column-two-thirds">
           {showInfoNotice && <ImportantNotice messageKey="storageDocumentInformationNotice" />}
           <SecureForm method="post" csrf={csrf}>
-            <div
-              className={isEmpty(userReferenceError) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"}
-            >
-              {!isEmpty(userReferenceError) ? (
+            <div className={hasError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
+              {hasError ? (
                 <ErrorMessage
                   text={t(userReferenceError, { ns: "errorsText" })}
                   visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
@@ -61,7 +60,7 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
                 labelClassName="govuk-label govuk-!-font-weight-bold"
                 name="userReference"
                 type="text"
-                inputClassName={classNames("govuk-input")}
+                inputClassName={classNames("govuk-input", { "govuk-input--error": hasError })}
                 inputProps={{
                   defaultValue: actionData.userReference ?? userReference,
                   id: "userReference",
