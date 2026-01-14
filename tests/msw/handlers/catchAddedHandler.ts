@@ -56,7 +56,6 @@ const catchAddedHandler: ITestHandler = {
   ],
   [TestCaseId.PSCatchAddedTwoCatches]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(twoValidCatchesOneEmpty))),
-    rest.post(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(twoValidCatchesOneEmpty))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) => res(ctx.json(oneValidCatch))),
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
   ],
@@ -110,10 +109,6 @@ const catchAddedHandler: ITestHandler = {
   ],
   [TestCaseId.PSCatchAddedTwoProductsOnlyOneWithCatches]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(twoProductsOneWithoutCatches))),
-    rest.post(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(twoProductsOneWithoutCatches))),
-    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
-      res(ctx.json(twoProductsOneWithoutCatches))
-    ),
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
   ],
 };
