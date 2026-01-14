@@ -1,0 +1,65 @@
+{
+  "catches": [
+    {
+      "_id": "639fc1b50bb7cf12b8947a50",
+      "species": "Allis shad (ASD)",
+      "speciesCode": "ASD",
+      "catchCertificateNumber": "GBR-2025-CC-TEST001",
+      "catchCertificateType": "uk",
+      "totalWeightLanded": "50",
+      "exportWeightBeforeProcessing": "40",
+      "exportWeightAfterProcessing": "35",
+      "id": "test-catch-1",
+      "scientificName": "Alosa alosa",
+      "productId": "GBR-2025-PS-TEST-PRODUCT-001"
+    },
+    {
+      "_id": "639fc1b50bb7cf12b8947a51",
+      "species": "Atlantic cod (COD)",
+      "speciesCode": "COD",
+      "catchCertificateNumber": "GBR-2025-CC-TEST002",
+      "catchCertificateType": "uk",
+      "totalWeightLanded": "100",
+      "exportWeightBeforeProcessing": "80",
+      "exportWeightAfterProcessing": "70",
+      "id": "test-catch-2",
+      "scientificName": "Gadus morhua",
+      "productId": "GBR-2025-PS-TEST-PRODUCT-001"
+    }
+  ],
+  "validationErrors": [],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": "Mixed fish products",
+  "products": [
+    {
+      "id": "GBR-2025-PS-TEST-PRODUCT-001",
+      "description": "Processed shad and cod fillets",
+      "commodityCode": "03026929"
+    },
+    {
+      "id": "GBR-2025-PS-TEST-PRODUCT-002",
+      "description": "Salmon steaks",
+      "commodityCode": "03044990"
+    }
+  ],
+  "healthCertificateDate": "15/01/2025",
+  "healthCertificateNumber": "HC-2025-001",
+  "personResponsibleForConsignment": "Test Processor",
+  "plantApprovalNumber": "UK-PLANT-001",
+  "plantName": "Test Processing Plant",
+  "plantAddressOne": "123 Industrial Estate",
+  "plantBuildingName": "Processing Unit A",
+  "plantBuildingNumber": "123",
+  "plantSubBuildingName": null,
+  "plantStreetName": "Factory Road",
+  "plantCounty": "Cornwall",
+  "plantCountry": "United Kingdom",
+  "plantTownCity": "Newlyn",
+  "plantPostcode": "TR18 5HE",
+  "dateOfAcceptance": "15/01/2025",
+  "exportedTo": {
+    "officialCountryName": "France"
+  },
+  "_plantDetailsUpdated": false
+}

@@ -588,6 +588,7 @@ export enum TestCaseId {
   PSCatchAddedFromProgressNoCatchDetails = "psCatchAddedFromProgressNoCatchDetails",
   PSCatchAddedFromProgressNoCatchDetails1 = "psCatchAddedFromProgressNoCatchDetails1",
   PSCatchAddedFromProgressNoCatchWeights = "psCatchAddedFromProgressNoCatchWeights",
+  PSCatchAddedTwoProductsOnlyOneWithCatches = "psCatchAddedTwoProductsOnlyOneWithCatches",
   PSCatchAddedBlankOneCatch = "psCatchAddedBlankOneCatch",
   PSCatchAddedNoCatches = "psCatchAddedNoCatches",
   PSCatchAddedTwoCatches = "psCatchAddedTwoCatches",
