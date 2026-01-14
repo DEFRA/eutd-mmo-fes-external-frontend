@@ -155,5 +155,11 @@
   "euIntegrationFailedMeansText2Link": "Gallwch ei gweld neu ei lawrlwytho o'ch dangosfwrdd.",
   "euIntegrationIfYouNeedToSpeak": "Os oes angen ichi siarad â rhywun",
   "euIntegrationContactHelpline": "Cysylltwch â'r llinell gymorth os ydych chi'n allforio'n fuan ac angen mwy o wybodaeth.",
-  "commonNoCatchesAdded": "Dim dalfeydd wedi'u hychwanegu ar gyfer y cynnyrch hwn"
+  "commonNoCatchesAdded": "Dim dalfeydd wedi'u hychwanegu ar gyfer y cynnyrch hwn",
+  "catchCertificateDeleteConfirmation": "Ydych chi’n siŵr eich bod chi eisiau dileu’r dystysgrif dalfa hon?",
+  "processingStatementDeleteConfirmation": "Ydych chi’n siŵr eich bod chi eisiau dileu’r datganiad prosesu?",
+  "storageNotesDeleteConfirmation": "Ydych chi'n siŵr eich bod am ddileu'r ddogfen dim triniaeth yma?",
+  "catchCertificateVoidConfirmation": "Ydych chi’n siŵr eich bod am ddirymu’r dystysgrif dalfa hon?",
+  "processingStatementVoidConfirmation": "Ydych chi’n siŵr eich bod am ddirymu’r datganiad prosesu?",
+  "storageNotesVoidConfirmation": "Ydych chi'n siŵr eich bod am ddiddymu’r ddogfen dim triniaeth yma?"
 }
