@@ -26,9 +26,11 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
   const actionData = useActionData<{ errors?: any; userReference?: string }>() ?? {};
   const { errors = {} } = actionData;
   const { documentNumber, userReference, csrf } = useLoaderData<AddYourReferenceLoaderProps>();
-  const { t } = useTranslation(["common"]);
+  const { t } = useTranslation(["common", "errorsText"]);
 
   useScrollOnPageLoad();
+
+  const userReferenceError = errors?.userReference;
 
   return (
     <Main backUrl={route(backUrl, { documentNumber })}>
@@ -48,7 +50,7 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
               labelClassName="govuk-label govuk-!-font-weight-bold"
               name="userReference"
               type="text"
-              inputClassName={isEmpty(errors) ? "govuk-input" : "govuk-input govuk-input--error"}
+              inputClassName={userReferenceError ? "govuk-input govuk-input--error" : "govuk-input"}
               inputProps={{
                 defaultValue: actionData.userReference ?? userReference,
                 id: "userReference",
@@ -60,7 +62,9 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
                 text: hintText,
                 className: "govuk-hint",
               }}
-              hiddenErrorText=""
+              hiddenErrorText={
+                userReferenceError ? t(`errorsText:${userReferenceError}`, { defaultValue: userReferenceError }) : ""
+              }
             />
             <ButtonGroup />
           </SecureForm>
