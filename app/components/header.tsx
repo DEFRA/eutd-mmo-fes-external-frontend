@@ -58,7 +58,6 @@ export const Header = ({
               </svg>
             </a>
           </div>
-          <div className="govuk-header__content"></div>
         </div>
       </header>
       <div className="govuk-service-navigation" data-module="govuk-service-navigation">
