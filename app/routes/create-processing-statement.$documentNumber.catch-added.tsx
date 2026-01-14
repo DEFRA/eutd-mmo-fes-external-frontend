@@ -61,7 +61,11 @@ type ILoaderData = {
   initialPageNo?: number;
 };
 
-const applyMatchedFromSession = (session: any, psData: ProcessingStatement) => {
+const applyMatchedFromSession = (session: any, psData: ProcessingStatement, hasActiveQuery: boolean) => {
+  // Only apply filtering if there's an active search query
+  if (!hasActiveQuery) {
+    return;
+  }
   const matchedFromSession = session.get("matchCatches");
   if (Array.isArray(matchedFromSession)) {
     const matchingCatches: (Catch & CatchIndex)[] = matchedFromSession as (Catch & CatchIndex)[];
@@ -164,13 +168,17 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const psData = processingStatement as ProcessingStatement;
 
-  applyMatchedFromSession(session, psData);
+  // Check if there's an active search query before applying session filtering
+  const url = new URL(request.url);
+  const urlQuery = url.searchParams.get("q");
+  const sessionQuery = session.get("matchQuery");
+  const hasActiveQuery = !!(urlQuery ?? sessionQuery);
+
+  applyMatchedFromSession(session, psData, hasActiveQuery);
 
   // If the user navigates to the catch-added page without a search query (no `q`),
   // treat this as a fresh navigation back to the page and clear transient
   // match/search session state so previous search/filter values do not persist.
-  const url = new URL(request.url);
-  const urlQuery = url.searchParams.get("q");
   if (!urlQuery && session.get("matchQuery")) {
     session.unset("actionExecuted");
     session.unset("matchQuery");
@@ -194,7 +202,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const product = psData.products?.findLast((p: ProcessingStatementProduct) => p.id);
 
-  const sessionQuery = session.get("matchQuery");
   const pageNo = parseInt(url.searchParams.get("pageNo") ?? "1", 10);
   const q = typeof sessionQuery === "string" ? sessionQuery : url.searchParams.get("q") ?? undefined;
   const productDescription = psData.products?.length === 1 ? psData.products[0].description : undefined;
@@ -406,8 +413,14 @@ const CatchAdded = () => {
     useLoaderData<ILoaderData>();
   const actionData = useActionData<ActionDataWithErrors>();
   const groupedErrors: IError[] = ((actionData?.groupedErrors ?? []) as unknown as IError[][]).flat();
-  const { t } = useTranslation(["catchDetailsTableHeader", "common"]);
+  const { t } = useTranslation(["catchDetailsTableHeader", "common", "catchAdded"]);
   const count = products.length;
+
+  // Group catches by product for display
+  const catchesByProduct = products.map((product: ProcessingStatementProduct) => ({
+    product,
+    catches: catches.filter((c: Catch) => c.productId === product.id),
+  }));
 
   const itemsPerPage = 15;
   const shouldShowPagination = catches.length > itemsPerPage;
@@ -482,55 +495,94 @@ const CatchAdded = () => {
                   </td>
                 </tr>
               ) : (
-                paginatedCatches.map((item: Catch & CatchIndex & { tagClass?: string }, index: number) => {
-                  const actualIndex = startIndex + index;
-
-                  return (
-                    <tr className="govuk-table__row" key={`catches-data-${item._id}`}>
-                      <td className="govuk-table__cell" id={`catches-${actualIndex}-productDescription`}>
-                        <strong
-                          className={`govuk-tag ${item.tagClass} govuk-!-margin-bottom-2`}
-                          data-testid={`catches-${actualIndex}-tag`}
-                          style={{ display: "block" }}
-                        >
-                          {item.productDescription}
-                        </strong>
-                        <div className="govuk-!-margin-top-2">
-                          <SecureForm method="post" className="govuk-!-display-inline" csrf={csrf}>
-                            <input
-                              type="hidden"
-                              name="url"
-                              value={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
-                            />
-                            <Link
-                              id="change-link"
-                              className="govuk-link"
-                              to={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
-                              data-testid="change-link"
+                <>
+                  {catchesByProduct.map(({ product, catches: productCatches }) => {
+                    if (productCatches.length === 0) {
+                      // Product has no catches - show "No catches added" row
+                      return (
+                        <tr className="govuk-table__row" key={`product-${product.id}`}>
+                          <td className="govuk-table__cell">
+                            <strong
+                              className="govuk-tag govuk-tag--grey govuk-!-margin-bottom-2"
+                              style={{ display: "block" }}
                             >
-                              {t("commonChangeLink", { ns: "common" })}
-                            </Link>
-                          </SecureForm>
-                        </div>
-                      </td>
-                      <td className="govuk-table__cell" id={`catches-${actualIndex}-species`}>
-                        {item.species}
-                      </td>
-                      <td className="govuk-table__cell" id={`catches-${actualIndex}-catchCertificateNumber`}>
-                        {item.catchCertificateNumber}
-                      </td>
-                      <td className="govuk-table__cell" id={`catches-${actualIndex}-totalWeightLanded`}>
-                        {item.totalWeightLanded}kg
-                      </td>
-                      <td className="govuk-table__cell" id={`catches-${actualIndex}-exportWeightBeforeProcessing`}>
-                        {item.exportWeightBeforeProcessing}kg
-                      </td>
-                      <td className="govuk-table__cell" id={`catches-${actualIndex}-exportWeightAfterProcessing`}>
-                        {item.exportWeightAfterProcessing}kg
-                      </td>
-                    </tr>
-                  );
-                })
+                              {product.description}
+                            </strong>
+                            <div className="govuk-!-margin-top-2">
+                              <Link
+                                id="change-link"
+                                className="govuk-link"
+                                to={`/create-processing-statement/${documentNumber}/add-consignment-details/${product.id}`}
+                                data-testid="change-link"
+                              >
+                                {t("commonChangeLink", { ns: "common" })}
+                              </Link>
+                            </div>
+                          </td>
+                          <td colSpan={5} className="govuk-table__cell">
+                            {t("commonNoCatchesAdded", { ns: "common" })}
+                          </td>
+                        </tr>
+                      );
+                    }
+
+                    // Product has catches - show all catches for this product (with pagination)
+                    return productCatches
+                      .filter((catch_: Catch & CatchIndex) => paginatedCatches.some((pc) => pc._id === catch_._id))
+                      .map((item: Catch & CatchIndex & { tagClass?: string }) => {
+                        const actualIndex = catches.findIndex((c) => c._id === item._id);
+
+                        return (
+                          <tr className="govuk-table__row" key={`catches-data-${item._id}`}>
+                            <td className="govuk-table__cell" id={`catches-${actualIndex}-productDescription`}>
+                              <strong
+                                className={`govuk-tag ${item.tagClass} govuk-!-margin-bottom-2`}
+                                data-testid={`catches-${actualIndex}-tag`}
+                                style={{ display: "block" }}
+                              >
+                                {item.productDescription}
+                              </strong>
+                              <div className="govuk-!-margin-top-2">
+                                <SecureForm method="post" className="govuk-!-display-inline" csrf={csrf}>
+                                  <input
+                                    type="hidden"
+                                    name="url"
+                                    value={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
+                                  />
+                                  <Link
+                                    id="change-link"
+                                    className="govuk-link"
+                                    to={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
+                                    data-testid="change-link"
+                                  >
+                                    {t("commonChangeLink", { ns: "common" })}
+                                  </Link>
+                                </SecureForm>
+                              </div>
+                            </td>
+                            <td className="govuk-table__cell" id={`catches-${actualIndex}-species`}>
+                              {item.species}
+                            </td>
+                            <td className="govuk-table__cell" id={`catches-${actualIndex}-catchCertificateNumber`}>
+                              {item.catchCertificateNumber}
+                            </td>
+                            <td className="govuk-table__cell" id={`catches-${actualIndex}-totalWeightLanded`}>
+                              {item.totalWeightLanded}kg
+                            </td>
+                            <td
+                              className="govuk-table__cell"
+                              id={`catches-${actualIndex}-exportWeightBeforeProcessing`}
+                            >
+                              {item.exportWeightBeforeProcessing}kg
+                            </td>
+                            <td className="govuk-table__cell" id={`catches-${actualIndex}-exportWeightAfterProcessing`}>
+                              {item.exportWeightAfterProcessing}kg
+                            </td>
+                          </tr>
+                        );
+                      });
+                  })}
+                </>
               )}
             </tbody>
           </table>
