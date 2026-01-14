@@ -3,7 +3,6 @@ import { route } from "routes-gen";
 import { EuDataIntegrationLoader } from "~/.server/eu-data-integration";
 import { getMeta } from "~/helpers";
 import { EuDataIntegrationSuccessful } from "~/composite-components/euDataIntegrationSuccessful";
-import * as React from "react";
 
 type LoaderData = {
   documentNumber: string;
@@ -19,14 +18,14 @@ export const loader: LoaderFunction = async ({ request, params }) =>
 
 const EuDataIntegrationSuccessfulPage = () => {
   const { catchReferenceNumber, feedbackURL } = useLoaderData<LoaderData>();
-  const dashboardUrl = route("/create-catch-certificate/catch-certificates");
+  const dashboardUrl = route("/create-storage-document/storage-documents");
 
   return (
     <EuDataIntegrationSuccessful
       dashboardUrl={dashboardUrl}
       catchReferenceNumber={catchReferenceNumber}
       feedbackURL={feedbackURL}
-      journey="catchCertificate"
+      journey="storageNotes"
     />
   );
 };

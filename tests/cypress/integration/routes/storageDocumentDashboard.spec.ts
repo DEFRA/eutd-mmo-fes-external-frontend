@@ -47,7 +47,10 @@ describe("Storage Document Dashboard page: rendering", () => {
   });
 
   it("should render a valid page title", () => {
-    cy.title().should("eq", "Automation Testing Ltd: non-manipulation documents - Create a UK storage document - GOV.UK");
+    cy.title().should(
+      "eq",
+      "Automation Testing Ltd: non-manipulation documents - Create a UK storage document - GOV.UK"
+    );
   });
 
   it("should redirect to the dashboard page if didn't got expected response", () => {
@@ -66,7 +69,9 @@ describe("Storage Document Dashboard page: rendering", () => {
   it("should render the correct page title and subtitle", () => {
     cy.get(".govuk-heading-xl").contains("non-manipulation documents");
     cy.get(".govuk-body").contains("You can create up to 5 draft non-manipulation documents.");
-    cy.get(".govuk-body").contains("When you reach the limit, you'll need to delete a draft before you can start a new one.");
+    cy.get(".govuk-body").contains(
+      "When you reach the limit, you'll need to delete a draft before you can start a new one."
+    );
   });
 
   it("should render dashboard headers", () => {
@@ -112,7 +117,9 @@ describe("Storage Document Dashboard page for in progress table: rendering", () 
 
   it("should display guidance text for in progress section", () => {
     cy.get(".govuk-body").contains("You can create up to 5 draft non-manipulation documents.");
-    cy.get(".govuk-body").contains("When you reach the limit, you'll need to delete a draft before you can start a new one.");
+    cy.get(".govuk-body").contains(
+      "When you reach the limit, you'll need to delete a draft before you can start a new one."
+    );
   });
 
   it("should display horizontal separator line after guidance", () => {
@@ -138,15 +145,53 @@ describe("Storage Document Dashboard page for completed table: rendering", () =>
     cy.get(".govuk-table__cell").contains("GBR-2022-SD-1C9833456");
   });
 
+  it("should render EU CATCH integration column with check status links", () => {
+    cy.get("table[data-testid='storageNotes-completed-table']")
+      .find("thead th")
+      .contains("EU CATCH integration")
+      .should("be.visible");
+  });
+
+  it("should render check status links with correct href patterns for different statuses", () => {
+    cy.get('[data-testid="storageNotes-check-eu-catch-status"]').each(($link) => {
+      cy.wrap($link)
+        .should("have.attr", "href")
+        .and("match", /\/create-storage-document\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/);
+    });
+  });
+
+  it("should render visually hidden context for screen readers on check status links", () => {
+    cy.get('[data-testid="storageNotes-check-eu-catch-status"]')
+      .first()
+      .find(".govuk-visually-hidden")
+      .should("exist")
+      .and("include.text", "for document");
+  });
+
+  it("should verify column order: Document Number, Reference, Date, EU CATCH Integration, Action", () => {
+    cy.get("table[data-testid='storageNotes-completed-table'] thead tr th").then(($headers) => {
+      const headerTexts = $headers.toArray().map((el) => el.textContent?.trim());
+
+      expect(headerTexts[0]).to.include("Document number");
+      expect(headerTexts[1]).to.include("Your reference");
+      expect(headerTexts[2]).to.include("Date Created");
+      expect(headerTexts[3]).to.equal("EU CATCH integration");
+      expect(headerTexts[4]).to.equal("Action");
+    });
+  });
+
   it("should display guidance text in inset box for completed section", () => {
     cy.get(".govuk-inset-text").should("exist");
-    cy.get(".govuk-inset-text .govuk-body").contains("Refresh this page to see the latest updates to your non-manipulation documents.");
-    cy.get(".govuk-inset-text .govuk-body").contains("If a submission fails, open it to find out how to fix the problem.");
+    cy.get(".govuk-inset-text .govuk-body").contains(
+      "Refresh the page to check for updates to your non-manipulation documents. Open failed submissions to find out how to fix the problem."
+    );
   });
 
   it("should always display guidance text even when no drafts exist", () => {
     cy.get(".govuk-body").contains("You can create up to 5 draft non-manipulation documents.");
-    cy.get(".govuk-body").contains("When you reach the limit, you'll need to delete a draft before you can start a new one.");
+    cy.get(".govuk-body").contains(
+      "When you reach the limit, you'll need to delete a draft before you can start a new one."
+    );
   });
 
   it("should display horizontal separator lines around no drafts message", () => {

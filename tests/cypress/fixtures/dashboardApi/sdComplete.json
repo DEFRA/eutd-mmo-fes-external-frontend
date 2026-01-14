@@ -5,14 +5,31 @@
       "documentNumber": "GBR-2022-SD-1C9833456",
       "documentStatus": "COMPLETE",
       "documentUri": "_ce5a5ac6-6480-4583-9a66-265250b752b0.pdf",
-      "userReference": "Test FI0-4567"
+      "userReference": "Test FI0-4567",
+      "catchSubmission": {
+        "status": "FAILURE"
+      }
     },
     {
       "createdAt": "2022-08-19T11:57:36.000Z",
       "documentNumber": "GBR-2022-SD-1C9833123",
       "documentStatus": "COMPLETE",
       "documentUri": "_ce5a5ac6-6480-4583-9a66-265250b752b0.pdf",
-      "userReference": "Test FI0-1234"
+      "userReference": "Test FI0-1234",
+      "catchSubmission": {
+        "status": "SUCCESS",
+        "reference": "EU-CATCH-REF-1234567890"
+      }
+    },
+    {
+      "createdAt": "2022-08-19T11:57:36.000Z",
+      "documentNumber": "GBR-2022-SD-1C9833124",
+      "documentStatus": "COMPLETE",
+      "documentUri": "_ce5a5ac6-6480-4583-9a66-265250b752b0.pdf",
+      "userReference": "Test FI0-1234",
+      "catchSubmission": {
+        "status": "IN_PROGRESS"
+      }
     }
   ],
   "inProgress": []

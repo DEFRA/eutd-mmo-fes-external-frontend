@@ -7,6 +7,7 @@ import {
   CHECK_COPY_URL,
   NOTIFICATION_URL,
   mockGetIdmUserDetails,
+  mockEuCatchStatus,
 } from "~/urls.server";
 import { type ITestHandler, TestCaseId } from "~/types";
 import sdDraft from "@/fixtures/dashboardApi/sdDrafts.json";
@@ -59,6 +60,39 @@ const storageDocumentDashboardHandler: ITestHandler = {
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
     rest.get(NOTIFICATION_URL, (req, res, ctx) => res(ctx.json(notification))),
+  ],
+  [TestCaseId.SDDashboardWithPendingEUStatus]: () => [
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdCompleted))),
+    rest.get(mockEuCatchStatus, (req, res, ctx) =>
+      res(
+        ctx.json({
+          reference: "GBR-2022-SD-REF123",
+          status: "IN_PROGRESS",
+        })
+      )
+    ),
+  ],
+  [TestCaseId.SDDashboardWithFailedEUStatus]: () => [
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdCompleted))),
+    rest.get(mockEuCatchStatus, (req, res, ctx) =>
+      res(
+        ctx.json({
+          reference: "GBR-2022-SD-REF123",
+          status: "FAILURE",
+        })
+      )
+    ),
+  ],
+  [TestCaseId.SDDashboardWithSuccessEUStatus]: () => [
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdCompleted))),
+    rest.get(mockEuCatchStatus, (req, res, ctx) =>
+      res(
+        ctx.json({
+          reference: "GBR-2022-SD-REF123",
+          status: "SUCCESS",
+        })
+      )
+    ),
   ],
 };
 
