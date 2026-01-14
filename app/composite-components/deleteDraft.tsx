@@ -19,7 +19,7 @@ export const DeleteDraft = ({ errors, journey, csrf }: Props) => {
         <fieldset className="govuk-fieldset" aria-describedby={hasErrors ? "documentDelete" : undefined}>
           <legend className="govuk-fieldset__legend govuk-fieldset__legend">
             <h1 className="govuk-heading-xl">
-              {t("commonDeleteDocumentDraftDeleteConfirmationText", { journeyText: t(journey) })}
+              {t(`${journey}DeleteConfirmation`, { ns: "common" })}
             </h1>
           </legend>
           {hasErrors && (
