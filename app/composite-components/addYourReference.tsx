@@ -1,5 +1,5 @@
 import { useActionData, useLoaderData } from "react-router";
-import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
+import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm, ErrorMessage } from "~/components";
 import ImportantNotice from "~/components/importantNotice";
 import { ButtonGroup } from "./buttonGroup";
 import { displayErrorMessages } from "~/helpers";
@@ -8,6 +8,7 @@ import isEmpty from "lodash/isEmpty";
 import { route } from "routes-gen";
 import { useTranslation } from "react-i18next";
 import { useScrollOnPageLoad } from "~/hooks";
+import classNames from "classnames";
 
 type AddYourReferenceLoaderProps = {
   documentNumber: string;
@@ -30,7 +31,8 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
 
   useScrollOnPageLoad();
 
-  const userReferenceError = errors?.userReference;
+  const currentValue = actionData.userReference ?? userReference;
+  const userReferenceError = currentValue && errors?.userReference ? errors?.userReference?.message : undefined;
 
   return (
     <Main backUrl={route(backUrl, { documentNumber })}>
@@ -44,28 +46,36 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
         <div className="govuk-grid-column-two-thirds">
           {showInfoNotice && <ImportantNotice messageKey="storageDocumentInformationNotice" />}
           <SecureForm method="post" csrf={csrf}>
-            <FormInput
-              containerClassName="govuk-form-group"
-              label={t("commonAddYourReferenceOptionalText")}
-              labelClassName="govuk-label govuk-!-font-weight-bold"
-              name="userReference"
-              type="text"
-              inputClassName={userReferenceError ? "govuk-input govuk-input--error" : "govuk-input"}
-              inputProps={{
-                defaultValue: actionData.userReference ?? userReference,
-                id: "userReference",
-                "aria-describedby": "hint-userReference",
-              }}
-              hint={{
-                id: "hint-userReference",
-                position: "above",
-                text: hintText,
-                className: "govuk-hint",
-              }}
-              hiddenErrorText={
-                userReferenceError ? t(`errorsText:${userReferenceError}`, { defaultValue: userReferenceError }) : ""
-              }
-            />
+            <div
+              className={isEmpty(userReferenceError) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"}
+            >
+              {!isEmpty(userReferenceError) ? (
+                <ErrorMessage
+                  text={t(userReferenceError, { ns: "errorsText" })}
+                  visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                />
+              ) : null}
+              <FormInput
+                containerClassName="govuk-form-group"
+                label={t("commonAddYourReferenceOptionalText")}
+                labelClassName="govuk-label govuk-!-font-weight-bold"
+                name="userReference"
+                type="text"
+                inputClassName={classNames("govuk-input")}
+                inputProps={{
+                  defaultValue: actionData.userReference ?? userReference,
+                  id: "userReference",
+                  "aria-describedby": "hint-userReference",
+                }}
+                hint={{
+                  id: "hint-userReference",
+                  position: "above",
+                  text: hintText,
+                  className: "govuk-hint",
+                }}
+                hiddenErrorText=""
+              />
+            </div>
             <ButtonGroup />
           </SecureForm>
           <BackToProgressLink progressUri={progressLink} documentNumber={documentNumber} />
