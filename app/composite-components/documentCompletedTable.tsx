@@ -77,6 +77,17 @@ export const DocumentCompletedTable = ({
 
   const disableNext = compareAsc(new Date(paginationPreviousLinkDate(searchParams)), new Date());
 
+  const getCompletedTableRefreshText = (journey: Journey) => {
+    switch (journey) {
+      case "catchCertificate":
+        return t("commonRefreshPageForUpdates");
+      case "processingStatement":
+        return t("commonRefreshPageForUpdatesProcessingStatement");
+      case "storageNotes":
+      default:
+        return t("commonRefreshPageForUpdatesStorageNotes");
+    }
+  };
   return (
     <>
       {Array.isArray(documents?.completed) && documents.completed.length > 0 ? (
@@ -84,7 +95,7 @@ export const DocumentCompletedTable = ({
           <caption className="tablecaption">
             <h2 className="govuk-heading-l">{t("completed")}</h2>
           </caption>
-          <DocumentTableHeader journey={journey} showEuCatchIntegration={journey === "catchCertificate"} />
+          <DocumentTableHeader journey={journey} />
           <tbody className="govuk-table__body">
             {Array.isArray(documents?.completed) &&
               documents.completed.map((document: ICompletedDocumentData) => {
@@ -112,24 +123,22 @@ export const DocumentCompletedTable = ({
                       {moment(document.createdAt).format("DD MMM YYYY") || "Unknown"}
                     </td>
 
-                    {journey === "catchCertificate" && (
-                      <td scope="row" className="govuk-table__cell">
-                        {document.catchSubmission ? (
-                          <a
-                            href={getEuCatchStatusRoute(document.documentNumber, document.catchSubmission)}
-                            className="govuk-link"
-                            data-testid={`${journey}-check-eu-catch-status`}
-                          >
-                            {t("commonCheckStatus")}
-                            <span className="govuk-visually-hidden">
-                              {` ${t("commonForDocument")} ${document.documentNumber}`}
-                            </span>
-                          </a>
-                        ) : (
-                          "-"
-                        )}
-                      </td>
-                    )}
+                    <td scope="row" className="govuk-table__cell">
+                      {document.catchSubmission ? (
+                        <a
+                          href={getEuCatchStatusRoute(document.documentNumber, document.catchSubmission)}
+                          className="govuk-link"
+                          data-testid={`${journey}-check-eu-catch-status`}
+                        >
+                          {t("commonCheckStatus")}
+                          <span className="govuk-visually-hidden">
+                            {` ${t("commonForDocument")} ${document.documentNumber}`}
+                          </span>
+                        </a>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
                     <td scope="row" className="govuk-table__cell govuk-table__cell--numeric">
                       <Link
                         data-testid={`${journey}-viewcompleted`}
@@ -172,21 +181,9 @@ export const DocumentCompletedTable = ({
         </div>
       )}
 
-      {journey === "catchCertificate" && Array.isArray(documents?.completed) && documents.completed.length > 0 && (
+      {Array.isArray(documents?.completed) && documents.completed.length > 0 && (
         <div className="govuk-inset-text">
-          <p className="govuk-body">{t("commonRefreshPageForUpdates")}</p>
-        </div>
-      )}
-
-      {journey === "storageNotes" && (
-        <div className="govuk-grid-row">
-          <div className="govuk-grid-column">
-            <div className="govuk-inset-text">
-              <p className="govuk-body" style={{ whiteSpace: "pre-line" }}>
-                {t("commonRefreshPageForUpdatesStorageNotes")}
-              </p>
-            </div>
-          </div>
+          <p className="govuk-body">{getCompletedTableRefreshText(journey)}</p>
         </div>
       )}
 
