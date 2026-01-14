@@ -61,3 +61,6 @@ export { EntryDocumentGuidanceText } from "./entryDocumentGuidanceText";
 export { CatchCertificateDetails } from "./catchCertificateDetails";
 export { LandingHelpDetails } from "./landingHelpDetails";
 export { TruckNationalityField } from "./truckNationalityField";
+export { EuDataIntegrationSuccessful } from "./euDataIntegrationSuccessful";
+export { EuDataIntegrationPending } from "./euDataIntegrationPending";
+export { EuDataIntegrationFailed } from "./euDataIntegrationFailed";
