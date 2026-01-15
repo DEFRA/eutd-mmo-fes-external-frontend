@@ -5,6 +5,7 @@ type DocumentTableHeaderProps = {
   journey: Journey;
   showDateStarted?: boolean;
   showStatus?: boolean;
+  showEuCatchIntegration?: boolean;
 };
 
 export const DocumentTableHeader = ({
