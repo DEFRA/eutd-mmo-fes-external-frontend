@@ -36,6 +36,22 @@ describe("Catch certificate dashboard sidebar links", () => {
   it("should display feedback headings", () => {
     cy.contains("h3", "Send feedback");
   });
+
+  it("should render progress table without EU CATCH integration column", () => {
+    cy.get("table[data-testid='catchCertificate-inprogress-table'] thead tr th").then(($headers) => {
+      const headerTexts = $headers.toArray().map((el) => el.textContent?.trim());
+
+      expect(headerTexts).to.include("Document number");
+      expect(headerTexts).to.include("Your reference");
+      expect(headerTexts).to.include("Status");
+      expect(headerTexts).to.not.include("EU CATCH integration");
+      expect(headerTexts).to.include("Action");
+    });
+  });
+
+  it("should verify progress table has correct number of columns without EU CATCH integration", () => {
+    cy.get("table[data-testid='catchCertificate-inprogress-table']").find("thead th").should("have.length", 5);
+  });
 });
 
 describe("Catch certificate completed links", () => {
@@ -87,6 +103,28 @@ describe("Catch certificate completed links", () => {
       expect(headerTexts[4]).to.equal("Action");
     });
   });
+
+  it("should render completed table with EU CATCH integration column by default", () => {
+    cy.get("table[data-testid='catchCertificate-completed-table'] thead tr th").then(($headers) => {
+      const headerTexts = $headers.toArray().map((el) => el.textContent?.trim());
+
+      expect(headerTexts).to.include("Document number");
+      expect(headerTexts).to.include("Your reference");
+      expect(headerTexts).to.include("Date Created");
+      expect(headerTexts).to.include("EU CATCH integration");
+      expect(headerTexts).to.include("Action");
+    });
+  });
+
+  it("should verify completed table has correct number of columns with EU CATCH integration", () => {
+    cy.get("table[data-testid='catchCertificate-completed-table']").find("thead th").should("have.length", 5); // Document Number, Reference, Date Created, EU CATCH Integration, Action
+  });
+
+  it("should render EU CATCH integration column in correct position", () => {
+    cy.get("table[data-testid='catchCertificate-completed-table'] thead tr th")
+      .eq(3)
+      .should("contain.text", "EU CATCH integration");
+  });
 });
 
 describe("Catch certificate dashboard", () => {
@@ -136,6 +174,21 @@ describe("Catch certificate dashboard", () => {
         .contains("Continue")
         .should("have.attr", "href", `/create-catch-certificate/${documentNumbers[index]}/${slugs[index]}`);
     });
+  });
+
+  it("should render the progress table with correct columns", () => {
+    cy.get("table[data-testid='catchCertificate-inprogress-table']")
+      .should("be.visible")
+      .find("thead th")
+      .should("have.length.at.least", 1);
+  });
+
+  it("should display document numbers in progress table", () => {
+    cy.get("table[data-testid='catchCertificate-inprogress-table']").find("tbody tr").should("have.length.at.least", 1);
+  });
+
+  it("should render action links in progress table", () => {
+    cy.get("table[data-testid='catchCertificate-inprogress-table']").find("tbody tr").first().find("a").should("exist");
   });
 });
 
