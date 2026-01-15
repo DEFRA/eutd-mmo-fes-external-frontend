@@ -12,8 +12,8 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render links", () => {
-    cy.contains("strong", /^Download the storage document$/).should("be.visible");
-    cy.contains("a", /^View completed storage document or create a new export document$/)
+    cy.contains("strong", /^Download the non-manipulation document$/).should("be.visible");
+    cy.contains("a", /^View completed non-manipulation document or create a new export document$/)
       .should("be.visible")
       .should("have.attr", "href", "/create-storage-document/storage-documents");
   });
@@ -37,7 +37,7 @@ describe("Storage document created page: rendering", () => {
 
   it("should render all step-by-step instructions with correct text", () => {
     cy.get(".govuk-heading-m").contains("What you need to do next").should("be.visible");
-    cy.contains("strong", "Download the storage document").should("be.visible");
+    cy.contains("strong", "Download the non-manipulation document").should("be.visible");
     cy.contains(
       "li",
       "If you are using Firefox as an internet browser, please ensure JavaScript is enabled in order to view and download the certificate"
@@ -45,7 +45,7 @@ describe("Storage document created page: rendering", () => {
     cy.contains("li", "If you are using a mobile device, please ensure you have installed a PDF viewer").should(
       "be.visible"
     );
-    cy.contains("strong", "Email the storage document to the importer.").should("be.visible");
+    cy.contains("strong", "Email the non-manipulation document to the importer.").should("be.visible");
     cy.contains(
       "li",
       "It is the importer’s responsibility to submit it to the import control authority where your export will enter the EU."
@@ -54,18 +54,18 @@ describe("Storage document created page: rendering", () => {
       "li",
       "The importing authority will complete and sign their section of the document at the Border Inspection Post (BIP)."
     ).should("be.visible");
-    cy.contains("View completed storage document or create a new export document").should("be.visible");
+    cy.contains("View completed non-manipulation document or create a new export document").should("be.visible");
   });
 
   it("should render important notice with exclamation icon", () => {
     cy.get('svg[viewBox="0 0 35.000000 35.000000"]').should("be.visible");
     cy.get("svg title").contains("icon important").should("exist");
-    cy.contains("strong", "Do not amend the storage document.").should("be.visible");
+    cy.contains("strong", "Do not amend the non-manipulation document.").should("be.visible");
   });
 
   it("should link to the storage document dashboard", () => {
     cy.findByRole("link", {
-      name: "View completed storage document or create a new export document",
+      name: "View completed non-manipulation document or create a new export document",
     }).click({ force: true });
     cy.url().should("include", "/create-storage-document/storage-documents");
   });

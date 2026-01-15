@@ -1,9 +1,13 @@
 {
   "euDataIntegrationSuccessful": "EU data integration successful",
   "yourReferenceNumber": "Your reference number",
-  "dataTransferredMessage": "Your catch certificate data has been sent to the EU CATCH system.",
+  "dataTransferredMessagecatchCertificate": "Your catch certificate data has been sent to the EU CATCH system.",
+  "dataTransferredMessagestorageNotes": "Your non-manipulation document data has been sent to the EU CATCH system.",
+  "dataTransferredMessageprocessingStatement": "Your processing statement data has been sent to the EU CATCH system.",
   "euReceivedInformation": "The EU has received your information.",
   "whatHappensNext": "What happens next",
-  "certificateReadyMessage": "Your catch certificate is ready to use. You can",
-  "viewOrDownloadLink": "view or download it from your dashboard"
+  "certificateReadyMessagecatchCertificate": "Your catch certificate is ready to use. You can",
+  "certificateReadyMessagestorageNotes": "Your non-manipulation document is ready to use. You can",
+  "certificateReadyMessageprocessingStatement": "Your processing statement is ready to use. You can",
+  "viewOrDownloadLink": "view or download it from your dashboard."
 }

@@ -7,6 +7,14 @@ import logger from "~/logger";
 import type { ICatchStatus, EuStatus } from "~/types";
 import i18next from "~/i18next.server";
 
+const getServiceNameFromDocumentNumber = (documentNumber: string) => {
+  if (documentNumber && documentNumber.length > 11) {
+    return documentNumber.substring(9, 11);
+  }
+
+  return null;
+};
+
 export const EuDataIntegrationLoader = async (request: Request, params: Params, euStatus: EuStatus) => {
   setApiMock(request.url);
 
@@ -34,14 +42,15 @@ export const EuDataIntegrationLoader = async (request: Request, params: Params, 
 
   switch (response.status) {
     case 200:
-    case 204:
+    case 204: {
       const data: ICatchStatus = await response.json();
       return {
         ...data,
         catchReferenceNumber: data.reference ?? "",
         pageTitle: pageTitleMap[euStatus],
-        commonTitle: t("ccCommonTitle"),
+        commonTitle: t(`${getServiceNameFromDocumentNumber(documentNumber)?.toLowerCase()}CommonTitle`),
       };
+    }
     case 403:
       return redirect("/forbidden");
     default:

@@ -554,21 +554,21 @@ export const CheckYourInformationProductLayout = ({
         {ctch.netWeightProductArrival && (
           <CheckYourInformationRow
             label={t("sdNetWeightArrival", { ns: "sdCheckYourInformation" })}
-            value={ctch.netWeightProductArrival + "kg"}
+            value={`${Number(ctch.netWeightProductArrival).toFixed(2)}kg`}
             t={t}
           />
         )}
         {ctch.netWeightFisheryProductArrival && (
           <CheckYourInformationRow
             label={t("sdNetFisheryWeightArrival", { ns: "sdCheckYourInformation" })}
-            value={ctch.netWeightFisheryProductArrival + "kg"}
+            value={`${Number(ctch.netWeightFisheryProductArrival).toFixed(2)}kg`}
             t={t}
           />
         )}
         {ctch.netWeightProductDeparture && (
           <CheckYourInformationRow
             label={t("sdNetWeightDeparture", { ns: "sdCheckYourInformation" })}
-            value={ctch.netWeightProductDeparture + "kg"}
+            value={`${Number(ctch.netWeightProductDeparture).toFixed(2)}kg`}
             isActionEnabled={true}
             actionURL={`/create-storage-document/${documentNumber}/departure-product-summary?nextUri=${route(
               "/create-storage-document/:documentNumber/check-your-information",
@@ -580,7 +580,7 @@ export const CheckYourInformationProductLayout = ({
         {ctch.netWeightFisheryProductDeparture && (
           <CheckYourInformationRow
             label={t("sdNetFisheryWeightDeparture", { ns: "sdCheckYourInformation" })}
-            value={ctch.netWeightFisheryProductDeparture + "kg"}
+            value={`${Number(ctch.netWeightFisheryProductDeparture).toFixed(2)}kg`}
             isActionEnabled={true}
             actionURL={`/create-storage-document/${documentNumber}/departure-product-summary?nextUri=${route(
               "/create-storage-document/:documentNumber/check-your-information",
@@ -589,10 +589,10 @@ export const CheckYourInformationProductLayout = ({
             t={t}
           />
         )}
-        {!ctch.netWeightProductDeparture && !ctch.netWeightFisheryProductDeparture && (
+        {!ctch.netWeightProductDeparture && !ctch.netWeightFisheryProductDeparture && ctch.productWeight && (
           <CheckYourInformationRow
             label={t("sdCheckYourInformationExportWeightLabel", { ns: "sdCheckYourInformation" })}
-            value={ctch.productWeight + "kg"}
+            value={`${Number(ctch.productWeight).toFixed(2)}kg`}
             t={t}
           />
         )}
@@ -619,7 +619,7 @@ export const CheckYourInformationProductLayout = ({
         )}
         <CheckYourInformationRow
           label={t("sdCheckYourInformationUkentryWeightOnDocument", { ns: "sdCheckYourInformation" })}
-          value={ctch.weightOnCC + "kg"}
+          value={`${Number(ctch.weightOnCC).toFixed(2)}kg`}
           t={t}
         />
       </dl>

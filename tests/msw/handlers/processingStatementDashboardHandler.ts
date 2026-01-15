@@ -1,5 +1,5 @@
 import { rest } from "msw";
-import { mockGetAllDocumentsUrl, mockCreateDocumentUrl, mockGetProgress } from "~/urls.server";
+import { mockGetAllDocumentsUrl, mockCreateDocumentUrl, mockGetProgress, mockEuCatchStatus } from "~/urls.server";
 import { type ITestHandler, TestCaseId } from "~/types";
 import psDraft from "@/fixtures/dashboardApi/psDrafts.json";
 import psCompleted from "@/fixtures/dashboardApi/psComplete.json";
@@ -17,6 +17,9 @@ const processingStatementDashboardHandler: ITestHandler = {
   [TestCaseId.PSLoadDasboardWithCompletedAndEmptyInProgress]: () => [
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psCompleted))),
   ],
+  [TestCaseId.PSLoadDashboardWithCompletedAndEmptyInProgress]: () => [
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psCompleted))),
+  ],
   [TestCaseId.PSLoadDashboardMaxDraftLimitReached]: () => [
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDraftLimitExceeded))),
   ],
@@ -29,6 +32,39 @@ const processingStatementDashboardHandler: ITestHandler = {
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocument))),
     rest.post(mockCreateDocumentUrl, (req, res, ctx) => res(ctx.status(403))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(psProgressIncomplete))),
+  ],
+  [TestCaseId.PSDashboardWithPendingEUStatus]: () => [
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psCompleted))),
+    rest.get(mockEuCatchStatus, (req, res, ctx) =>
+      res(
+        ctx.json({
+          reference: "GBR-2022-PS-REF123",
+          status: "IN_PROGRESS",
+        })
+      )
+    ),
+  ],
+  [TestCaseId.PSDashboardWithFailedEUStatus]: () => [
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psCompleted))),
+    rest.get(mockEuCatchStatus, (req, res, ctx) =>
+      res(
+        ctx.json({
+          reference: "GBR-2022-PS-REF123",
+          status: "FAILURE",
+        })
+      )
+    ),
+  ],
+  [TestCaseId.PSDashboardWithSuccessEUStatus]: () => [
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psCompleted))),
+    rest.get(mockEuCatchStatus, (req, res, ctx) =>
+      res(
+        ctx.json({
+          reference: "GBR-2022-PS-REF123",
+          status: "SUCCESS",
+        })
+      )
+    ),
   ],
 };
 

@@ -22,7 +22,7 @@ export const VoidCertificateConfirm = ({ errors, confirmDocumentVoid, journey }:
           <fieldset className="govuk-fieldset" aria-describedby={isEmpty(errors) ? undefined : "documentVoid-error"}>
             <legend className="govuk-fieldset__legend govuk-fieldset__legend govuk-!-margin-bottom-0">
               <h1 className="govuk-heading-xl" data-testid="void-certificate-confirm">
-                {t("commonConfirmDocumentVoidPageHeader", { journeyText: t(journey), ns: "common" })}
+                {t(`${journey}VoidConfirmation`, { ns: "common" })}
               </h1>
             </legend>
             {!isEmpty(errors) && (
