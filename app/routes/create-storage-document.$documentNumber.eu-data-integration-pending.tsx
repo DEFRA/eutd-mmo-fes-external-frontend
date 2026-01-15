@@ -2,7 +2,7 @@ import { type LoaderFunction, type MetaFunction, useLoaderData } from "react-rou
 import { route } from "routes-gen";
 import { EuDataIntegrationLoader } from "~/.server/eu-data-integration";
 import { getMeta } from "~/helpers";
-import { EuDataIntegrationFailed } from "~/composite-components/euDataIntegrationFailed";
+import { EuDataIntegrationPending } from "~/composite-components/euDataIntegrationPending";
 import * as React from "react";
 
 type LoaderData = {
@@ -15,13 +15,13 @@ type LoaderData = {
 export const meta: MetaFunction<typeof loader> = (args) => getMeta(args);
 
 export const loader: LoaderFunction = async ({ request, params }) =>
-  EuDataIntegrationLoader(request, params, "FAILURE");
+  EuDataIntegrationLoader(request, params, "IN_PROGRESS");
 
-const EuDataIntegrationFailedPage = () => {
+const EuDataIntegrationPendingPage = () => {
   const { feedbackURL } = useLoaderData<LoaderData>();
-  const dashboardUrl = route("/create-catch-certificate/catch-certificates");
+  const dashboardUrl = route("/create-storage-document/storage-documents");
 
-  return <EuDataIntegrationFailed dashboardUrl={dashboardUrl} feedbackURL={feedbackURL} journey="catchCertificate" />;
+  return <EuDataIntegrationPending dashboardUrl={dashboardUrl} feedbackURL={feedbackURL} journey="storageNotes" />;
 };
 
-export default EuDataIntegrationFailedPage;
+export default EuDataIntegrationPendingPage;
