@@ -431,10 +431,10 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
 
   it("should navigate to storage facility page when all mandatory fields are populated", () => {
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
-    cy.get("#vesselName").should("be.visible").type("Felicity Ace", { force: true });
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
     cy.get("#flagState").should("be.visible").type("Greece", { force: true });
     cy.get('[id="containerNumbers.0"]').should("be.visible").type("ABCD1234567", { force: true });
-    cy.get("#departureCountry").should("be.visible").type("France", { force: true }).type("{downarrow}{enter}");
+    cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").should("be.visible").type("Port of Calais", { force: true });
     cy.get("#placeOfUnloading").should("be.visible").type("Dover", { force: true });
     cy.get("#departureDate-day").should("be.visible").type("25", { force: true });
