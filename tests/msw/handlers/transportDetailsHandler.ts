@@ -732,6 +732,9 @@ const transportDetailsHandler: ITestHandler = {
 
       // Validate required fields for arrival transport
       if (body.arrival) {
+        if (!body.vesselName || body.vesselName === "") {
+          errors.vesselName = "error.vesselName.any.required";
+        }
         if (!body.flagState || body.flagState === "") {
           errors.flagState = "error.flagState.any.required";
         }
@@ -743,6 +746,9 @@ const transportDetailsHandler: ITestHandler = {
         }
         if (!body.departurePort || body.departurePort === "") {
           errors.departurePort = "error.departurePort.any.required";
+        }
+        if (!body.placeOfUnloading || body.placeOfUnloading === "") {
+          errors.placeOfUnloading = "error.placeOfUnloading.any.required";
         }
         if (!body.departureDate || body.departureDate === "") {
           errors.departureDate = "error.departureDate.any.required";
