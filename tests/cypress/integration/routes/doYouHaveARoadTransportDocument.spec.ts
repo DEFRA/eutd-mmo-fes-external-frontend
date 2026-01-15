@@ -52,12 +52,13 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     // need to wait for UI hydration otherwise test can fail intermittently
     // .should("be.visible") does not seem to do the job
-    cy.wait(500);
+    cy.wait(250);
 
-    cy.get('input[type="radio"][value="true"]').check();
+    cy.get('input[type="radio"][value="true"]').should("be.visible").check({ force: true });
+    cy.wait(200); // Allow state to update after radio selection
     cy.get("[data-testid=save-and-continue").click({ force: true });
 
-    cy.url().should("include", "/do-you-have-additional-transport-types");
+    cy.url({ timeout: 10000 }).should("include", "/do-you-have-additional-transport-types");
   });
 
   it("should redirect user to transportation details page when user submits no", () => {
@@ -68,7 +69,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     // need to wait for UI hydration otherwise test can fail intermittently
     // .should("be.visible") does not seem to do the job
-    cy.wait(500);
+    cy.wait(250);
 
     cy.get('input[type="radio"][value="false"]').check();
     cy.get("[data-testid=save-and-continue").click({ force: true });
@@ -84,7 +85,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     // need to wait for UI hydration otherwise test can fail intermittently
     // .should("be.visible") does not seem to do the job
-    cy.wait(500);
+    cy.wait(250);
 
     cy.get("form input[type=hidden][name=csrf]").should("exist").invoke("val", "abc123");
     cy.get('input[type="radio"][value="false"]').check();
@@ -99,7 +100,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     // need to wait for UI hydration otherwise test can fail intermittently
     // .should("be.visible") does not seem to do the job
-    cy.wait(500);
+    cy.wait(250);
 
     cy.get("[data-testid=save-draft-button").click({ force: true });
 

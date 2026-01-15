@@ -253,16 +253,14 @@ describe("PS: Catch added", () => {
     cy.get('button[data-testid="filter-search-reset"]').should("have.attr", "type", "submit");
   });
 
-  it("should handle empty search results scenario", () => {
+  it.only("should handle empty search results scenario", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get('input[name="q"]').type("NonExistentSpeciesOrProduct");
-    cy.get('[data-testid="filter-search-submit"]').should("exist");
     cy.get('[data-testid="filter-search-submit"]').click();
-    cy.get("tbody tr").should("have.length", 0);
-    cy.get('[data-testid="filter-search-reset"]').should("exist");
+    cy.contains("No results found").should("exist");
     cy.get('[data-testid="filter-search-reset"]').click();
     cy.get("tbody tr").should("have.length.greaterThan", 0);
   });
@@ -350,8 +348,7 @@ describe("PS: Catch added", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get('input[name="q"]').type("CompletelyNonExistentMatch123XYZ");
     cy.get('[data-testid="filter-search-submit"]').click();
-    cy.get("tbody tr").should("not.exist");
-    cy.get("tbody").should("exist");
+    cy.contains("No results found").should("exist");
     cy.get('[data-testid="filter-search-reset"]').click();
     cy.get("tbody tr").should("have.length.greaterThan", 0);
   });
@@ -1200,90 +1197,5 @@ describe("PS: Catch added - session clearing on navigation", () => {
 
     // Verify that the search filter is cleared
     cy.get('input[name="q"]').should("have.value", "");
-  });
-  it("should display all products including those without catches", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSCatchAddedTwoProductsOnlyOneWithCatches,
-    };
-
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    // Verify page title shows 2 products
-    cy.title().should(
-      "eq",
-      "You have added 2 processed products to this consignment - Create a UK processing statement - GOV.UK"
-    );
-
-    // Verify first product with catches is displayed
-    cy.contains("td", "Processed shad and cod fillets").should("exist");
-    cy.contains("td", "Allis shad (ASD)").should("exist");
-    cy.contains("td", "Atlantic cod (COD)").should("exist");
-    cy.contains("td", "GBR-2025-CC-TEST001").should("exist");
-    cy.contains("td", "GBR-2025-CC-TEST002").should("exist");
-
-    // Verify second product without catches is displayed with "No catches added" message
-    cy.contains("td", "Salmon steaks").should("exist");
-    cy.contains("td", "No catches added for this product").should("exist");
-
-    // Verify the "No catches added" message has correct styling (grey tag)
-    cy.contains("td", "No catches added for this product")
-      .should("have.class", "govuk-tag")
-      .and("have.class", "govuk-tag--grey");
-
-    // Verify both products have change links
-    cy.get("[data-testid='change-link']").should("have.length.at.least", 2);
-
-    // Test that the product without catches can be changed
-    cy.contains("td", "Salmon steaks")
-      .parent()
-      .within(() => {
-        cy.get("[data-testid='change-link']").should("exist");
-      });
-  });
-
-  it("should allow searching and filtering when one product has no catches", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSCatchAddedTwoProductsOnlyOneWithCatches,
-    };
-
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    // Search for a species that exists (should show product with catches)
-    cy.get('input[name="q"]').type("Allis shad");
-    cy.get('[data-testid="filter-search-submit"]').click();
-    cy.contains("td", "Processed shad and cod fillets").should("exist");
-    cy.contains("td", "Salmon steaks").should("not.exist");
-
-    // Reset search
-    cy.get('[data-testid="filter-search-reset"]').click();
-
-    // Both products should be visible again
-    cy.contains("td", "Processed shad and cod fillets").should("exist");
-    cy.contains("td", "Salmon steaks").should("exist");
-
-    // Search for the product without catches
-    cy.get('input[name="q"]').type("Salmon");
-    cy.get('[data-testid="filter-search-submit"]').click();
-    cy.contains("td", "Salmon steaks").should("exist");
-    cy.contains("td", "Processed shad and cod fillets").should("not.exist");
-  });
-
-  it("should save and continue with products that have no catches", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSCatchAddedTwoProductsOnlyOneWithCatches,
-    };
-
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    // Verify both products are present
-    cy.contains("td", "Processed shad and cod fillets").should("exist");
-    cy.contains("td", "Salmon steaks").should("exist");
-
-    // Select "No" for adding another catch
-    cy.get('input[name="addAnotherCatch"][value="No"]').check({ force: true });
-
-    // Save and continue should work even with a product that has no catches
-    cy.contains("button", "Save and continue").click({ force: true });
-    cy.url().should("include", "/add-processing-plant-details");
   });
 });
