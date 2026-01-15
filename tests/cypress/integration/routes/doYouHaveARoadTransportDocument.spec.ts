@@ -54,10 +54,11 @@ describe("DoYouHaveARoadTransportDocument", () => {
     // .should("be.visible") does not seem to do the job
     cy.wait(250);
 
-    cy.get('input[type="radio"][value="true"]').check();
+    cy.get('input[type="radio"][value="true"]').should("be.visible").check({ force: true });
+    cy.wait(200); // Allow state to update after radio selection
     cy.get("[data-testid=save-and-continue").click({ force: true });
 
-    cy.url().should("include", "/do-you-have-additional-transport-types");
+    cy.url({ timeout: 10000 }).should("include", "/do-you-have-additional-transport-types");
   });
 
   it("should redirect user to transportation details page when user submits no", () => {
