@@ -188,6 +188,7 @@ const onUpdateTransport = async (response: Response): Promise<ITransport> => {
       return {
         id: data.id,
         vehicle: data.vehicle,
+        cmr: data.cmr,
         errors: [],
       };
 
