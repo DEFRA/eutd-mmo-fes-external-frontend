@@ -83,7 +83,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     //   one catch without checking if the catch data is complete; Validation will happen later with save-and-continue;
     //   If there are no catches, redirect to create a new one
     if (!Array.isArray(sdData.catches) || (Array.isArray(sdData.catches) && sdData.catches.length === 0)) {
-      return redirect(`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment`);
+      return redirect(`/create-storage-document/${documentNumber}/add-product-to-this-consignment`);
     }
   }
 
@@ -126,7 +126,7 @@ const YouHaveAddedAProduct = () => {
   const renderErrorSummary = (index: number) => {
     if (!isEmpty(groupedErrors) && !isEmpty(groupedErrors[index])) {
       const linkData: LinkData[] = groupedErrors[index].map(() => ({
-        href: `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${index}`,
+        href: `/create-storage-document/${documentNumber}/add-product-to-this-consignment/${index}`,
       }));
 
       return (
@@ -138,7 +138,7 @@ const YouHaveAddedAProduct = () => {
   };
 
   return (
-    <Main backUrl={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment`}>
+    <Main backUrl={`/create-storage-document/${documentNumber}/add-product-to-this-consignment`}>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           {catches.length > 1 ? (
@@ -167,7 +167,7 @@ const YouHaveAddedAProduct = () => {
                         <input
                           type="hidden"
                           name="url"
-                          value={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${validCatchIndex}`}
+                          value={`/create-storage-document/${documentNumber}/add-product-to-this-consignment/${validCatchIndex}`}
                         />
                         <input type="hidden" name="productId" value={item._id} />
                         <Button
@@ -260,7 +260,7 @@ const YouHaveAddedAProduct = () => {
             <ButtonGroup />
           </SecureForm>
           <BackToProgressLink
-            progressUri="/create-non-manipulation-document/:documentNumber/progress"
+            progressUri="/create-storage-document/:documentNumber/progress"
             documentNumber={documentNumber}
           />
         </div>

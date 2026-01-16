@@ -13,8 +13,6 @@ import {
   mockGetAddStoargaDocumentUrl,
   mockGetProgress,
   mockTransportDetailsUrl,
-  SAVE_TRANSPORT_DETAILS_URL,
-  mockSaveAndValidateDocument,
 } from "~/urls.server";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
 import storageDocumentMandatory from "@/fixtures/storageDocumentApi/storageDocumentMandatoryFieldsOnly.json";
@@ -24,7 +22,6 @@ import storageDocumentOneCatches from "@/fixtures/storageDocumentApi/storageDocu
 import storageDocumentNoFacilities from "@/fixtures/storageDocumentApi/storageDocumentNoFacilities.json";
 import storageDocumenOneFacility from "@/fixtures/storageDocumentApi/storageDocumentOneFacility.json";
 import sdProgressIncomplete from "@/fixtures/progressApi/sdIncomplete.json";
-import sdProgressComplete from "@/fixtures/progressApi/sdCompleted.json";
 import sdCreated from "@/fixtures/documentsApi/sdCreated.json";
 import sdDocuments from "@/fixtures/dashboardApi/sdDocument.json";
 import truckTransport from "@/fixtures/transportDetailsApi/truck.json";
@@ -140,98 +137,17 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.post(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
   ],
   [TestCaseId.SDCheckYourInformationChangeProductNoChange]: () => [
-    // Check your information page - need complete progress to avoid redirect
+    // Check your information page
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
+    rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
     // Add product page
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
-    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(sdProgressComplete))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransport))),
     // Save product (POST)
     rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
-  ],
-  [TestCaseId.SDCheckYourInformationChangeArrivalTransportMode]: () => {
-    let postCallCount = 0;
-    return [
-      // Check your information page - need complete progress to avoid redirect
-      rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
-      rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-      rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
-      // Transport details endpoint - return truck before POST, plane after POST
-      rest.get(getTransportDetailsUrl("storageNotes", true), (req, res, ctx) => {
-        // If POST has been called (transport created), return plane; otherwise return truck
-        const response = postCallCount > 0 ? planeTransport : truckTransport;
-        return res(ctx.json(response));
-      }),
-      // POST to /v1/transport/add when user changes transport mode (creates new transport)
-      rest.post(SAVE_TRANSPORT_DETAILS_URL, (req, res, ctx) => {
-        postCallCount++;
-        return res(ctx.json(planeTransport));
-      }),
-    ];
-  },
-  [TestCaseId.SDCheckYourInformationChangeArrivalTransportModeNoChange]: () => [
-    // Check your information page - need complete progress to avoid redirect
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
-    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
-    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
-    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(sdProgressComplete))),
-    // Transport details endpoint - return truck (no change)
-    rest.get(getTransportDetailsUrl("storageNotes", true), (req, res, ctx) => res(ctx.json(truckTransport))),
-    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransport))),
-    // POST to save transport (no change scenario)
-    rest.post(SAVE_TRANSPORT_DETAILS_URL, (req, res, ctx) => res(ctx.json(truckTransport))),
-  ],
-  [TestCaseId.SDCheckYourInformationChangeDepartureTransportMode]: () => {
-    let postCallCount = 0;
-    return [
-      // Check your information page - need complete progress to avoid redirect
-      rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
-      rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-      rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
-      // Transport details endpoint - return truck before POST, plane after POST
-      rest.get(getTransportDetailsUrl("storageNotes", false), (req, res, ctx) => {
-        // If POST has been called (transport created), return plane; otherwise return truck
-        const response = postCallCount > 0 ? planeTransport : truckTransport;
-        return res(ctx.json(response));
-      }),
-      // POST to /v1/transport/add when user changes transport mode (creates new transport)
-      rest.post(SAVE_TRANSPORT_DETAILS_URL, (req, res, ctx) => {
-        postCallCount++;
-        return res(ctx.json(planeTransport));
-      }),
-    ];
-  },
-  [TestCaseId.SDCheckYourInformationChangeDepartureTransportModeNoChange]: () => [
-    // Check your information page - need complete progress to avoid redirect
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
-    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
-    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
-    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(sdProgressComplete))),
-    // Transport details endpoint - match both arrival=false and arrival=undefined for departure
-    rest.get(getTransportDetailsUrl("storageNotes", false), (req, res, ctx) => res(ctx.json(containerVesselTransport))),
-    rest.get(getTransportDetailsUrl("storageNotes", undefined), (req, res, ctx) =>
-      res(ctx.json(containerVesselTransport))
-    ),
-    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(containerVesselTransport))),
-    // POST to save transport (no change scenario)
-    rest.post(SAVE_TRANSPORT_DETAILS_URL, (req, res, ctx) => res(ctx.json(containerVesselTransport))),
-  ],
-  [TestCaseId.SDCheckYourInformationChangeFacilityNoChange]: () => [
-    // Check your information page - use complete storageDocument so guard allows access
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
-    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
-    // Add storage facility page (when editing)
-    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
-    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(sdProgressComplete))),
-    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransport))),
-    // Save facility (POST)
-    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
 };
 
