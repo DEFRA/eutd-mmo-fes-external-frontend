@@ -1081,7 +1081,7 @@ describe("Check Your Information (Summary) page: NMD - Change product - no chang
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
 
-    // Click the change link for a product's species name
+    // Click the change link for a product field (species, document details, etc.)
     cy.get('[href*="add-product-to-this-consignment"]').first().click();
 
     // Verify we're on the add-product page
@@ -1103,5 +1103,45 @@ describe("Check Your Information (Summary) page: NMD - Change product - no chang
     // Should be redirected back to check-your-information
     cy.url().should("include", "/check-your-information");
     cy.url().should("not.include", "/you-have-added-a-product");
+  });
+});
+
+describe("Check Your Information (Summary) page: NMD - Change arrival transport mode", () => {
+  const documentNumber = "GBR-2023-SD-DE53D6E7C";
+  const documentUrl = `/create-storage-document/${documentNumber}`;
+  const checkYourInformationUrl = `${documentUrl}/check-your-information`;
+
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationChangeArrivalTransportMode,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should navigate to plane transport details page when changing arrival transport mode to plane", () => {
+    // Verify we're on check-your-information page
+    cy.url().should("include", "/check-your-information");
+
+    // Click the change link for arrival transport mode
+    cy.get('[href*="how-does-the-consignment-arrive-to-the-uk"]').first().click();
+
+    // Verify we're on the transport selection page
+    cy.url().should("include", "/how-does-the-consignment-arrive-to-the-uk");
+
+    // Wait for the form to be fully loaded
+    cy.get('input[name="vehicle"]').should("exist");
+
+    // Change the mode to Plane by clicking the label (more reliable than .check())
+    cy.get('label[for="plane"]').click();
+
+    // Verify plane is selected
+    cy.get('input[name="vehicle"][value="plane"]').should("be.checked");
+
+    // Click Save and continue
+    cy.get('button[type="submit"]').contains("Save and continue").click();
+
+    // Should be navigated to the plane transport details page
+    cy.url().should("include", "/add-arrival-transportation-details-plane");
+    cy.url().should("not.include", "/check-your-information");
   });
 });
