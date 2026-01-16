@@ -19,9 +19,11 @@ export const loader: LoaderFunction = async ({ request, params }) =>
 
 const EuDataIntegrationFailedPage = () => {
   const { feedbackURL } = useLoaderData<LoaderData>();
-  const dashboardUrl = route("/create-catch-certificate/catch-certificates");
+  const dashboardUrl = route("/create-processing-statement/processing-statements");
 
-  return <EuDataIntegrationFailed dashboardUrl={dashboardUrl} feedbackURL={feedbackURL} journey="catchCertificate" />;
+  return (
+    <EuDataIntegrationFailed dashboardUrl={dashboardUrl} feedbackURL={feedbackURL} journey="processingStatement" />
+  );
 };
 
 export default EuDataIntegrationFailedPage;

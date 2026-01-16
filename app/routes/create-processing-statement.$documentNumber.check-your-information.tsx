@@ -218,19 +218,19 @@ const CheckYourInformation = () => {
                   <dt className="govuk-summary-list__key govuk-!-width-one-half">
                     {t("psSummaryPageCatchCertificateWeight", { ns: "psCheckYourInformation" })}
                   </dt>
-                  <dd className="govuk-summary-list__value">{`${catchItem.totalWeightLanded}kg`}</dd>
+                  <dd className="govuk-summary-list__value">{`${Number(catchItem.totalWeightLanded).toFixed(2)}kg`}</dd>
                 </div>
                 <div className="govuk-summary-list__row">
                   <dt className="govuk-summary-list__key govuk-!-width-one-half">
                     {t("psSummaryPageExportWeightBeforeProcessing", { ns: "psCheckYourInformation" })}
                   </dt>
-                  <dd className="govuk-summary-list__value">{`${catchItem.exportWeightBeforeProcessing}kg`}</dd>
+                  <dd className="govuk-summary-list__value">{`${Number(catchItem.exportWeightBeforeProcessing).toFixed(2)}kg`}</dd>
                 </div>
                 <div className="govuk-summary-list__row">
                   <dt className="govuk-summary-list__key govuk-!-width-one-half">
                     {t("psSummaryPageExportWeightAfterProcessing", { ns: "psCheckYourInformation" })}
                   </dt>
-                  <dd className="govuk-summary-list__value">{`${catchItem.exportWeightAfterProcessing}kg`}</dd>
+                  <dd className="govuk-summary-list__value">{`${Number(catchItem.exportWeightAfterProcessing).toFixed(2)}kg`}</dd>
                 </div>
                 <div className="govuk-!-margin-bottom-5"></div>
               </dl>

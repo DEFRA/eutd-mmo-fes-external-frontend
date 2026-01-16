@@ -105,7 +105,11 @@ export const AutocompleteFormField = ({
       hintClass={hintClass ?? "govuk-hint"}
       hintId={`${id}-hint`}
       selectProps={selectProps}
-      inputProps={inputProps}
+      inputProps={{
+        // Ensure tests and controlled inputs always have a defined value/defaultValue
+        defaultValue: inputProps?.defaultValue ?? inputProps?.value ?? defaultValue ?? "",
+        ...inputProps,
+      }}
       resultUlClass={resultUlClass ?? "autocomplete__menu"}
       resultlLiClass={resultlLiClass ?? "autocomplete__option"}
       resultNoOptionClass={resultNoOptionClass ?? "autocomplete__option--no-results"}
