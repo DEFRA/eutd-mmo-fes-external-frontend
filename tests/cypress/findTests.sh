@@ -5,22 +5,18 @@ start_dir="$1"
 
 # Number of equal batches to create (passed as argument)
 num_lists="$2"
-
 # Validate arguments
 if [ -z "$start_dir" ] || [ -z "$num_lists" ]; then
   echo "Error: Missing required arguments" >&2
   echo "Usage: $0 <directory> <number_of_batches>" >&2
   exit 1
 fi
-
 if ! [[ "$num_lists" =~ ^[0-9]+$ ]] || [ "$num_lists" -lt 1 ]; then
   echo "Error: Number of batches must be a positive integer" >&2
   exit 1
 fi
-
 # Associative array to store file paths with their test case counts
 declare -A file_test_counts
-
 # Function to count test cases in a file
 count_test_cases() {
   local file="$1"
@@ -29,7 +25,6 @@ count_test_cases() {
   local count_only=$(grep -oE '\bit\.only\s*\(' "$file" | wc -l)
   echo $((count + count_only))
 }
-
 # Function to recursively find all files and count their test cases
 find_files_with_counts() {
   local dir="$1"
@@ -41,23 +36,19 @@ find_files_with_counts() {
   done < <(find "$dir" -type f -name "*.spec.ts" -print0 | sort)
   echo "" >&2
 }
-
 # Call the function with the starting directory
 find_files_with_counts "$start_dir"
-
 # Check if any files were found
 if [ ${#file_test_counts[@]} -eq 0 ]; then
   echo "Error: No .spec.ts files found in $start_dir" >&2
   exit 1
 fi
-
 # Adjust num_lists if more batches than files
 total_files=${#file_test_counts[@]}
 if [ "$num_lists" -gt "$total_files" ]; then
   echo "Warning: Requested $num_lists batches but only $total_files files found. Adjusting to $total_files batches." >&2
   num_lists=$total_files
 fi
-
 # Sort files by test count (descending) for better load balancing
 # Store in array: file_path:test_count
 sorted_files=()
@@ -68,7 +59,6 @@ done < <(
     echo "$file:${file_test_counts[$file]}"
   done | sort -t: -k2 -rn
 )
-
 # Initialize batches with empty arrays and counters
 declare -a batches
 declare -a batch_counts
@@ -76,7 +66,6 @@ for ((i = 0; i < num_lists; i++)); do
   batches[$i]=""
   batch_counts[$i]=0
 done
-
 # Greedy algorithm: assign each file to the batch with the smallest current count
 # This provides best-fit approximation for load balancing
 for entry in "${sorted_files[@]}"; do
@@ -105,7 +94,6 @@ for entry in "${sorted_files[@]}"; do
   fi
   batch_counts[$min_batch]=$((batch_counts[$min_batch] + count))
 done
-
 # Print debug information about batches
 echo "=== Batch Distribution Summary ===" >&2
 total_tests=0
@@ -126,7 +114,6 @@ echo "Total test cases across all batches: $total_tests" >&2
 echo "Average per batch: $((total_tests / num_lists))" >&2
 echo "================================" >&2
 echo "" >&2
-
 # Print the comma-separated batches (stdout for actual usage)
 for ((i = 0; i < num_lists; i++)); do
   # Only print non-empty batches
