@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const sdPageUrl = "create-storage-document/GBR-2022-SD-F71D98A30/check-your-information";
+const sdPageUrl = "create-non-manipulation-document/GBR-2022-SD-F71D98A30/check-your-information";
 
 describe("SD: check-your-information page", () => {
   beforeEach(() => {
@@ -131,7 +131,7 @@ describe("Check Your Information (Summary) page: document submission", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
     cy.get("[data-testid=create-sd-button]").click({ force: true });
-    cy.url().should("include", "/storage-document-created");
+    cy.url().should("include", "/non-manipulation-document-created");
   });
 });
 
@@ -405,7 +405,9 @@ describe("SD: Point of destination - Field visibility on all transport types", (
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
-    cy.visit(`create-storage-document/${documentNumber}/add-transportation-details-truck`, { qs: { ...testParams } });
+    cy.visit(`create-non-manipulation-document/${documentNumber}/add-transportation-details-truck`, {
+      qs: { ...testParams },
+    });
 
     cy.contains("label", "Point of destination").should("be.visible");
     cy.get("#pointOfDestination").should("be.visible");
@@ -419,7 +421,9 @@ describe("SD: Point of destination - Field visibility on all transport types", (
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportAllowed,
     };
-    cy.visit(`create-storage-document/${documentNumber}/add-transportation-details-plane`, { qs: { ...testParams } });
+    cy.visit(`create-non-manipulation-document/${documentNumber}/add-transportation-details-plane`, {
+      qs: { ...testParams },
+    });
 
     cy.contains("label", "Point of destination").should("be.visible");
     cy.get("#pointOfDestination").should("be.visible");
@@ -429,7 +433,9 @@ describe("SD: Point of destination - Field visibility on all transport types", (
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
     };
-    cy.visit(`create-storage-document/${documentNumber}/add-transportation-details-train`, { qs: { ...testParams } });
+    cy.visit(`create-non-manipulation-document/${documentNumber}/add-transportation-details-train`, {
+      qs: { ...testParams },
+    });
 
     cy.contains("label", "Point of destination").should("be.visible");
     cy.get("#pointOfDestination").should("be.visible");
@@ -439,7 +445,7 @@ describe("SD: Point of destination - Field visibility on all transport types", (
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportAllowed,
     };
-    cy.visit(`create-storage-document/${documentNumber}/add-transportation-details-container-vessel`, {
+    cy.visit(`create-non-manipulation-document/${documentNumber}/add-transportation-details-container-vessel`, {
       qs: { ...testParams },
     });
 

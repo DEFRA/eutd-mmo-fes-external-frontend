@@ -2,7 +2,7 @@ import { TestCaseId, type ITestParams } from "~/types";
 
 const ccDashboardUrl = "/create-catch-certificate/catch-certificates";
 const psDashboardUrl = "/create-processing-statement/processing-statements";
-const sdDashboardUrl = "/create-storage-document/storage-documents";
+const sdDashboardUrl = "/create-non-manipulation-document/non-manipulation-documents";
 const cookieUrl = "/cookies";
 
 describe("Cookie Policy page", () => {

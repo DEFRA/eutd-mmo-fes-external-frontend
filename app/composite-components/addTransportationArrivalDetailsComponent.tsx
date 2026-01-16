@@ -90,9 +90,12 @@ export const AddTransportationArrivalDetailsComponent = ({
     errors: errors,
     displayOptionalSuffix,
   };
-  const backUrl: string = route("/create-storage-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
-    documentNumber,
-  });
+  const backUrl: string = route(
+    "/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk",
+    {
+      documentNumber,
+    }
+  );
 
   switch (vehicleType) {
     case TransportType.TRAIN:
@@ -164,7 +167,7 @@ export const AddTransportationArrivalDetailsComponent = ({
             <input type="hidden" name="nextUri" value={nextUri} />
           </SecureForm>
           <BackToProgressLink
-            progressUri="/create-storage-document/:documentNumber/progress"
+            progressUri="/create-non-manipulation-document/:documentNumber/progress"
             documentNumber={documentNumber}
           />
         </div>

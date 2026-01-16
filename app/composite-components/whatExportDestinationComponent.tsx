@@ -37,7 +37,7 @@ export const WhatExportDestinationComponent = ({ journey }: { journey: Journey }
       backUrl={route(
         journey === "processingStatement"
           ? "/create-processing-statement/:documentNumber/add-health-certificate"
-          : "/create-storage-document/:documentNumber/add-storage-facility-details",
+          : "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
         {
           documentNumber,
         }
@@ -110,7 +110,7 @@ export const WhatExportDestinationComponent = ({ journey }: { journey: Journey }
             progressUri={
               journey === "processingStatement"
                 ? "/create-processing-statement/:documentNumber/progress"
-                : "/create-storage-document/:documentNumber/progress"
+                : "/create-non-manipulation-document/:documentNumber/progress"
             }
             documentNumber={documentNumber}
           />

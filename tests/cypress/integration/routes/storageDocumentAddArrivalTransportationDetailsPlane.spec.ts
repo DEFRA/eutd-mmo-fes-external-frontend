@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 const documentNumber = "GBR-2022-SD-3FE1169D1";
-const certificateUrl = `/create-storage-document/${documentNumber}`;
+const certificateUrl = `/create-non-manipulation-document/${documentNumber}`;
 const planePageUrl = `${certificateUrl}/add-arrival-transportation-details-plane`;
 const storageFacilityUrl = `${certificateUrl}/add-storage-facility-details`;
 
@@ -66,7 +66,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
     cy.get("[data-testid=save-draft-button").click({ force: true });
-    cy.url().should("include", "/create-storage-document/storage-documents");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should navigate to storage facility page on click of save and continue button", () => {

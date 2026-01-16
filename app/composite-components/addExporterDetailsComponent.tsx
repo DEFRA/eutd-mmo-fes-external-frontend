@@ -37,8 +37,8 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
       progressUri: "/create-processing-statement/:documentNumber/progress",
     },
     storageNotes: {
-      backUri: route("/create-storage-document/:documentNumber/add-your-reference", { documentNumber }),
-      progressUri: "/create-storage-document/:documentNumber/progress",
+      backUri: route("/create-non-manipulation-document/:documentNumber/add-your-reference", { documentNumber }),
+      progressUri: "/create-non-manipulation-document/:documentNumber/progress",
     },
   };
 

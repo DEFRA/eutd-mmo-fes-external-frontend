@@ -2,7 +2,7 @@ import { type ITestParams, TestCaseId } from "~/types";
 
 const ccDashboardUrl = "/create-catch-certificate/catch-certificates";
 const psDashboardUrl = "/create-processing-statement/processing-statements";
-const sdDashboardUrl = "/create-storage-document/storage-documents";
+const sdDashboardUrl = "/create-non-manipulation-document/non-manipulation-documents";
 
 describe("Privacy page for cc journey", () => {
   describe("Privacy Page when user accepted privacy notice", () => {
@@ -68,8 +68,8 @@ describe("Privacy page for sd journey", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyAccepted,
       };
-      cy.visit("/create-storage-document/privacy-notice", { qs: { ...testParams } });
-      cy.url().should("include", "/create-storage-document/storage-documents");
+      cy.visit("/create-non-manipulation-document/privacy-notice", { qs: { ...testParams } });
+      cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
     });
   });
 
@@ -78,7 +78,7 @@ describe("Privacy page for sd journey", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };
-      cy.visit("/create-storage-document/privacy-notice", { qs: { ...testParams } });
+      cy.visit("/create-non-manipulation-document/privacy-notice", { qs: { ...testParams } });
       cy.contains("a", /^Back$/)
         .should("be.visible")
         .should("have.attr", "href", "/");

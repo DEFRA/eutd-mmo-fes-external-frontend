@@ -1,7 +1,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 describe("Add exporter details page", () => {
-  const documentUrl = "/create-storage-document/GBR-2021-SD-8EEB7E123";
+  const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   beforeEach(() => {
@@ -52,7 +52,7 @@ describe("Add exporter details page", () => {
 });
 
 describe("Add exporter details: Idm", () => {
-  const documentUrl = "/create-storage-document/GBR-2021-SD-8EEB7E123";
+  const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   beforeEach(() => {
@@ -68,7 +68,7 @@ describe("Add exporter details: Idm", () => {
 });
 
 describe("Add exporter details on save with idm", () => {
-  const documentUrl = "/create-storage-document/GBR-2021-SD-8EEB7E123";
+  const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   it("should trigger submit and navigate to what are you exporting page", () => {
@@ -82,7 +82,7 @@ describe("Add exporter details on save with idm", () => {
 });
 
 describe("Add exporter details on save as draft clicking", () => {
-  const documentUrl = "/create-storage-document/GBR-2021-SD-8EEB7E123";
+  const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   beforeEach(() => {
@@ -94,12 +94,12 @@ describe("Add exporter details on save as draft clicking", () => {
 
   it("should click on save as draft and should navigate to catch certificates page", () => {
     cy.get("[data-testid='save-draft-button']").click({ force: true });
-    cy.url().should("include", "/create-storage-document/storage-document");
+    cy.url().should("include", "/create-non-manipulation-document/storage-document");
   });
 });
 
 describe("Add exporter details: page guard", () => {
-  const documentUrl = "/create-storage-document/GBR-2021-SD-8EEB7E123";
+  const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
   const pageUrl = `${documentUrl}/add-exporter-details`;
   beforeEach(() => {
     const testParams: ITestParams = {
@@ -115,7 +115,7 @@ describe("Add exporter details: page guard", () => {
 });
 
 describe("Add exporter details: unauthorised access", () => {
-  const documentUrl = "/create-storage-document/GBR-2021-SD-8EEB7E123";
+  const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   it("should redirect to the forbidden page", () => {

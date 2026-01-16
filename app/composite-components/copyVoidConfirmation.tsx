@@ -27,7 +27,7 @@ export const CopyVoidDocumentComponent = ({ journey }: CopyVoidDocumentProps) =>
       backUrl = "/create-processing-statement/:documentNumber/copy-this-processing-statement";
       break;
     case "storageNotes":
-      backUrl = "/create-storage-document/:documentNumber/copy-this-storage-document";
+      backUrl = "/create-non-manipulation-document/:documentNumber/copy-this-non-manipulation-document";
       break;
   }
 

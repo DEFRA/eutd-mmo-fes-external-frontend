@@ -1,7 +1,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 describe("DoYouHaveARoadTransportDocument", () => {
-  const certificateUrl = "/create-storage-document/GBR-2021-SD-8EEB7E123";
+  const certificateUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
   const doYouHaveARoadTransportDocumentUrl = `${certificateUrl}/do-you-have-a-road-transport-document`;
 
   it("should render page", () => {
@@ -15,7 +15,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
 
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/how-does-the-export-leave-the-uk`);
+      .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-leave-the-uk`);
 
     cy.get(".govuk-fieldset__heading")
       .contains("Do you have a road transport document to go with this export?")
@@ -60,7 +60,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
 
     cy.get("[data-testid=save-draft-button").click({ force: true });
 
-    cy.url().should("include", "/create-storage-document/storage-documents");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should redirect user to departure summary page when user selects and submits YES", () => {

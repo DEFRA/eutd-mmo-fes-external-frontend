@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
-const documentUrl = "/create-storage-document/GBR-2022-SD-F0285BD8A";
-const voidThisProcessingStatementUrl = `${documentUrl}/void-this-storage-document`;
+const documentUrl = "/create-non-manipulation-document/GBR-2022-SD-F0285BD8A";
+const voidThisProcessingStatementUrl = `${documentUrl}/void-this-non-manipulation-document`;
 
 describe("void this draft storage document page", () => {
   it("should render the correct h1 title", () => {
