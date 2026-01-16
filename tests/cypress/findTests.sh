@@ -3,7 +3,7 @@
 # Directory to start searching from (passed as argument)
 start_dir="$1"
 
-# Number of equal batches to create (passed as argument)
+# Number of equal lists to create (passed as argument)
 num_lists="$2"
 
 # Validate arguments
@@ -36,16 +36,12 @@ count_test_cases() {
 # Function to recursively find all files and count their test cases
 find_files_with_counts() {
   local dir="$1"
-  echo "=== Scanning files for test cases ===" >&2
+  local file
   while IFS= read -r -d '' file; do
-    local test_count
-    test_count=$(count_test_cases "$file")
-    file_test_counts["$file"]=$test_count
-    echo "  $(basename "$file"): $test_count test(s)" >&2
-  done < <(find "$dir" -type f -name "*.spec.ts" -print0 | sort -z)
-  echo "" >&2
-  return 0
+    files+=("$file")
+  done < <(find "$dir" -type f -print0 | sort)
 }
+
 # Call the function with the starting directory
 find_files_with_counts "$start_dir"
 
@@ -90,40 +86,17 @@ for entry in "${sorted_files[@]}"; do
   if [[ "${count:-0}" -eq 0 ]]; then
     continue
   fi
-  
-  # Find batch with minimum test count
-  min_batch=0
-  min_count=${batch_counts[0]}
-  for ((i = 1; i < num_lists; i++)); do
-    if ((batch_counts[i] < min_count)); then
-      min_count=${batch_counts[i]}
-      min_batch=$i
-    fi
-  done
-  
-  # Add file to the batch with minimum count
-  if [[ -z "${batches[$min_batch]}" ]]; then
-    batches[$min_batch]="$file"
-  else
-    batches[$min_batch]="${batches[$min_batch]},$file"
-  fi
-  batch_counts[$min_batch]=$((batch_counts[$min_batch] + count))
+  start_index=$((i * files_per_list + ((i < remainder) ? i : remainder)))
+  list=$(printf "%s," "${files[@]:$start_index:$((files_per_list+offset))}")
+  list=${list%,} # Remove trailing comma from list
+  lists+=("$list")
 done
 
 # Print debug information about batches
 echo "=== Batch Distribution Summary ===" >&2
 total_tests=0
 for ((i = 0; i < num_lists; i++)); do
-  if [[ -n "${batches[i]}" ]]; then
-    echo "" >&2
-    echo "Batch $((i + 1)): ${batch_counts[i]} test cases" >&2
-    IFS=',' read -ra files <<< "${batches[i]}"
-    for file in "${files[@]}"; do
-      test_count=${file_test_counts["$file"]}
-      echo "  - $(basename "$file"): $test_count test(s)" >&2
-    done
-    total_tests=$((total_tests + batch_counts[i]))
-  fi
+  echo "${lists[i]}"
 done
 echo "" >&2
 echo "Total test cases across all batches: $total_tests" >&2
