@@ -41,7 +41,6 @@ find_files_with_counts() {
   done < <(find "$dir" -type f -name "*.spec.ts" -print0 | sort)
   echo "" >&2
 }
-
 # Call the function with the starting directory
 find_files_with_counts "$start_dir"
 
