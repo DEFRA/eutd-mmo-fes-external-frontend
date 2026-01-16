@@ -120,7 +120,7 @@ export const DoYouAHaveRoadTransportDocumentAction = async (
     return apiCallFailed(errors, values);
   }
 
-  if (response.cmr === "true") {
+  if (payload.cmr === "true") {
     return redirect(
       route("/create-catch-certificate/:documentNumber/do-you-have-additional-transport-types", { documentNumber })
     );
