@@ -54,7 +54,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     // .should("be.visible") does not seem to do the job
     cy.wait(500);
 
-    cy.get('input[type="radio"][value="true"]').check({ force: true });
+    cy.get('input[type="radio"][value="true"]').check();
     cy.get("[data-testid=save-and-continue").click({ force: true });
 
     cy.url().should("include", "/do-you-have-additional-transport-types");
