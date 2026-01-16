@@ -43,8 +43,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   setApiMock(request.url);
 
   const { documentNumber } = params;
-  const url = new URL(request.url);
-  const nextUri = url.searchParams.get("nextUri") ?? "";
   const bearerToken = await getBearerTokenForRequest(request);
   const session = await getSessionFromRequest(request);
   session.unset(`documentNumber-${documentNumber}`);
@@ -83,7 +81,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     //   one catch without checking if the catch data is complete; Validation will happen later with save-and-continue;
     //   If there are no catches, redirect to create a new one
     if (!Array.isArray(sdData.catches) || (Array.isArray(sdData.catches) && sdData.catches.length === 0)) {
-      return redirect(`/create-storage-document/${documentNumber}/add-product-to-this-consignment`);
+      return redirect(`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment`);
     }
   }
 
@@ -96,7 +94,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       isFromCatchWeightsRoute,
       pageTitle: t(titleKey, { count: sdData.catches.length, ns: "sdYouHaveAddedAProduct" }),
       commonTitle: t("sdCommonTitle", { ns: "title" }),
-      nextUri,
       csrf,
     }),
     {
@@ -111,7 +108,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => executeAction(request, params);
 
 const YouHaveAddedAProduct = () => {
-  const { documentNumber, catches, nextUri, csrf } = useLoaderData<CatchesLoaderData>();
+  const { documentNumber, catches, csrf } = useLoaderData<CatchesLoaderData>();
   const { groupedErrors = [] } = useActionData<ActionDataWithErrors>() ?? {};
 
   const { t } = useTranslation("common");
@@ -126,7 +123,7 @@ const YouHaveAddedAProduct = () => {
   const renderErrorSummary = (index: number) => {
     if (!isEmpty(groupedErrors) && !isEmpty(groupedErrors[index])) {
       const linkData: LinkData[] = groupedErrors[index].map(() => ({
-        href: `/create-storage-document/${documentNumber}/add-product-to-this-consignment/${index}`,
+        href: `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${index}`,
       }));
 
       return (
@@ -138,7 +135,7 @@ const YouHaveAddedAProduct = () => {
   };
 
   return (
-    <Main backUrl={`/create-storage-document/${documentNumber}/add-product-to-this-consignment`}>
+    <Main backUrl={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment`}>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           {catches.length > 1 ? (
@@ -167,7 +164,7 @@ const YouHaveAddedAProduct = () => {
                         <input
                           type="hidden"
                           name="url"
-                          value={`/create-storage-document/${documentNumber}/add-product-to-this-consignment/${validCatchIndex}`}
+                          value={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${validCatchIndex}`}
                         />
                         <input type="hidden" name="productId" value={item._id} />
                         <Button
@@ -209,7 +206,6 @@ const YouHaveAddedAProduct = () => {
           </table>
           <br />
           <SecureForm method="post" csrf={csrf}>
-            <input type="hidden" name="nextUri" value={nextUri} />
             <div id="radioButtons" className={`govuk-form-group`}>
               <fieldset className="govuk-fieldset">
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -260,7 +256,7 @@ const YouHaveAddedAProduct = () => {
             <ButtonGroup />
           </SecureForm>
           <BackToProgressLink
-            progressUri="/create-storage-document/:documentNumber/progress"
+            progressUri="/create-non-manipulation-document/:documentNumber/progress"
             documentNumber={documentNumber}
           />
         </div>

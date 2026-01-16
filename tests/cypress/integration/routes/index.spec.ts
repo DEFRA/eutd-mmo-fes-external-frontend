@@ -72,7 +72,7 @@ describe("JourneySelection", () => {
 
     cy.get("#createStorageDocument").check();
     cy.get("form").submit();
-    cy.url().should("include", "create-storage-document");
+    cy.url().should("include", "create-non-manipulation-document");
   });
 
   it("should display an error when there is a server error with an array of error messages", () => {

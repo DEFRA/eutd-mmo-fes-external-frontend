@@ -386,7 +386,6 @@ export const executeAction = async (request: Request, params: Params): Promise<R
   const sdData = (storageDocument as StorageDocument) || {};
   const form = await request.formData();
   const { _action, ...values } = Object.fromEntries(form);
-  const nextUri = (form.get("nextUri") as string) ?? "";
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
@@ -407,7 +406,7 @@ export const executeAction = async (request: Request, params: Params): Promise<R
 
   if (addAnotherProduct) {
     return redirect(
-      `/create-storage-document/${documentNumber}/add-product-to-this-consignment/${sdData.catches.length}`,
+      `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${sdData.catches.length}`,
       {
         headers: {
           "Set-Cookie": await commitSession(session),
@@ -430,11 +429,14 @@ export const executeAction = async (request: Request, params: Params): Promise<R
     catchIdsToRemove.push(catchId);
     session.set("catchesToRemove", [...new Set(catchIdsToRemove)].join(","));
 
-    return redirect(route("/create-storage-document/:documentNumber/you-have-added-a-product", { documentNumber }), {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    });
+    return redirect(
+      route("/create-non-manipulation-document/:documentNumber/you-have-added-a-product", { documentNumber }),
+      {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      }
+    );
   }
 
   if (isDraft || isSaveAndContinue) {
@@ -442,7 +444,7 @@ export const executeAction = async (request: Request, params: Params): Promise<R
       bearerToken,
       documentNumber,
       { catches: [...(Array.isArray(sdData.catches) ? sdData.catches : [])] },
-      `/create-storage-document/${documentNumber}/you-have-added-a-product`,
+      `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product`,
       undefined,
       isDraft,
       true
@@ -450,7 +452,7 @@ export const executeAction = async (request: Request, params: Params): Promise<R
   }
 
   if (isDraft) {
-    return redirect(route("/create-storage-document/storage-documents"), {
+    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
@@ -486,16 +488,7 @@ export const executeAction = async (request: Request, params: Params): Promise<R
     session.unset("catchesToRemove");
   }
 
-  // If nextUri is provided (user came from check-your-information), redirect back there
-  if (nextUri) {
-    return redirect(nextUri, {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    });
-  }
-
-  return redirect(`/create-storage-document/${documentNumber}/how-does-the-consignment-arrive-to-the-uk`, {
+  return redirect(`/create-non-manipulation-document/${documentNumber}/how-does-the-consignment-arrive-to-the-uk`, {
     headers: {
       "Set-Cookie": await commitSession(session),
     },

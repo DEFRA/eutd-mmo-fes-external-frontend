@@ -54,8 +54,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const sdData = storageDocument as StorageDocument;
   const isFromStorageFacilityDetails = session.get("backLinkForFacilityAdded");
-  const url = new URL(request.url);
-  const nextUri = url.searchParams.get("nextUri") ?? "";
 
   if (Array.isArray(sdData?.storageFacilities) && sdData?.storageFacilities.length === 0) {
     return redirect(`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details`);
@@ -71,7 +69,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       documentNumber,
       facilities: sdData.storageFacilities ?? [],
       isFromStorageFacilityDetails,
-      nextUri,
       pageTitle: t(titleKey, {
         count: Array.isArray(sdData?.storageFacilities) ? sdData?.storageFacilities.length : 0,
         ns: "youAddedStorageFacility",
@@ -92,8 +89,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => executeAction(request, params);
 
 const YouHaveAddedAStorageFacility = () => {
-  const { documentNumber, facilities, isFromStorageFacilityDetails, nextUri, csrf } =
-    useLoaderData<FacilitiesLoaderData>();
+  const { documentNumber, facilities, isFromStorageFacilityDetails, csrf } = useLoaderData<FacilitiesLoaderData>();
   const { groupedErrors = [] } = useActionData<ActionDataWithErrors>() ?? {};
   const { t } = useTranslation("common");
   const count = facilities.length;
@@ -193,7 +189,6 @@ const YouHaveAddedAStorageFacility = () => {
           })}
           <br />
           <SecureForm method="post" csrf={csrf}>
-            {nextUri && <input type="hidden" name="nextUri" value={nextUri} />}
             <div id="radioButtons" className={`govuk-form-group`}>
               <fieldset className="govuk-fieldset">
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--l">

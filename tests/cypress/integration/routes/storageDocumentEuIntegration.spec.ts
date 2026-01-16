@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const storageDocumentUrl = "/create-storage-document/storage-documents";
+const storageDocumentUrl = "/create-non-manipulation-document/non-manipulation-documents";
 
 describe("EU CATCH Integration - Storage Document Completed Documents Table", () => {
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe("EU CATCH Integration - Storage Document Completed Documents Table", ()
     cy.get('[data-testid="storageNotes-check-eu-catch-status"]')
       .first()
       .should("have.attr", "href")
-      .and("match", /\/create-storage-document\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/);
+      .and("match", /\/create-non-manipulation-document\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/);
   });
 
   it("should have accessible hidden text for screen readers on check status link", () => {
@@ -105,7 +105,7 @@ describe("EU CATCH Integration - Storage Document Status Pages", () => {
       testCaseId: TestCaseId.SDDashboardWithSuccessEUStatus,
     };
     cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.visit("/create-storage-document/GBR-2022-SD-1C9833123/eu-data-integration-successful");
+    cy.visit("/create-non-manipulation-document/GBR-2022-SD-1C9833123/eu-data-integration-successful");
     cy.url().should("include", "/eu-data-integration-successful");
     cy.contains("p", "Your non-manipulation document data has been sent to the EU CATCH system.").should("be.visible");
     cy.title().should(
@@ -119,7 +119,7 @@ describe("EU CATCH Integration - Storage Document Status Pages", () => {
       testCaseId: TestCaseId.SDDashboardWithPendingEUStatus,
     };
     cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.visit("/create-storage-document/GBR-2022-SD-1C9833456/eu-data-integration-pending");
+    cy.visit("/create-non-manipulation-document/GBR-2022-SD-1C9833456/eu-data-integration-pending");
     cy.url().should("include", "/eu-data-integration-pending");
     cy.contains("h1", "Sending your data for EU integration").should("be.visible");
     cy.title().should("eq", "Sending your data for EU integration - Create a UK non-manipulation document - GOV.UK");
@@ -130,7 +130,7 @@ describe("EU CATCH Integration - Storage Document Status Pages", () => {
       testCaseId: TestCaseId.SDDashboardWithFailedEUStatus,
     };
     cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.visit("/create-storage-document/GBR-2022-SD-1C9833456/eu-data-integration-failed");
+    cy.visit("/create-non-manipulation-document/GBR-2022-SD-1C9833456/eu-data-integration-failed");
     cy.url().should("include", "/eu-data-integration-failed");
     cy.contains("h1", "There is a problem with EU data integration").should("be.visible");
     cy.title().should(
@@ -144,10 +144,10 @@ describe("EU CATCH Integration - Storage Document Status Pages", () => {
       testCaseId: TestCaseId.SDDashboardWithSuccessEUStatus,
     };
     cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.visit("/create-storage-document/GBR-2022-SD-1C9833456/eu-data-integration-successful");
+    cy.visit("/create-non-manipulation-document/GBR-2022-SD-1C9833456/eu-data-integration-successful");
     cy.get(".govuk-back-link")
       .should("be.visible")
-      .and("have.attr", "href", "/create-storage-document/storage-documents");
+      .and("have.attr", "href", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should have back link on pending status page", () => {
@@ -155,10 +155,10 @@ describe("EU CATCH Integration - Storage Document Status Pages", () => {
       testCaseId: TestCaseId.SDDashboardWithPendingEUStatus,
     };
     cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.visit("/create-storage-document/GBR-2022-SD-1C9833456/eu-data-integration-pending");
+    cy.visit("/create-non-manipulation-document/GBR-2022-SD-1C9833456/eu-data-integration-pending");
     cy.get(".govuk-back-link")
       .should("be.visible")
-      .and("have.attr", "href", "/create-storage-document/storage-documents");
+      .and("have.attr", "href", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should have back link on failed status page", () => {
@@ -166,10 +166,10 @@ describe("EU CATCH Integration - Storage Document Status Pages", () => {
       testCaseId: TestCaseId.SDDashboardWithFailedEUStatus,
     };
     cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.visit("/create-storage-document/GBR-2022-SD-1C9833456/eu-data-integration-failed");
+    cy.visit("/create-non-manipulation-document/GBR-2022-SD-1C9833456/eu-data-integration-failed");
     cy.get(".govuk-back-link")
       .should("be.visible")
-      .and("have.attr", "href", "/create-storage-document/storage-documents");
+      .and("have.attr", "href", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should display pending page content correctly", () => {
@@ -177,7 +177,7 @@ describe("EU CATCH Integration - Storage Document Status Pages", () => {
       testCaseId: TestCaseId.SDDashboardWithPendingEUStatus,
     };
     cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.visit("/create-storage-document/GBR-2022-SD-1C9833456/eu-data-integration-pending");
+    cy.visit("/create-non-manipulation-document/GBR-2022-SD-1C9833456/eu-data-integration-pending");
     cy.contains("h1", "Sending your data for EU integration").should("be.visible");
     cy.contains("Your non-manipulation document data is being sent to the EU CATCH system").should("be.visible");
     cy.contains("This can take a few minutes").should("be.visible");
@@ -190,7 +190,7 @@ describe("EU CATCH Integration - Storage Document Status Pages", () => {
       testCaseId: TestCaseId.SDDashboardWithFailedEUStatus,
     };
     cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.visit("/create-storage-document/GBR-2022-SD-1C9833456/eu-data-integration-failed");
+    cy.visit("/create-non-manipulation-document/GBR-2022-SD-1C9833456/eu-data-integration-failed");
     cy.contains("h1", "There is a problem with EU data integration").should("be.visible");
     cy.contains("h2", "What this means").should("be.visible");
     cy.contains("h2", "If you need to speak to someone").should("be.visible");
@@ -203,7 +203,7 @@ describe("EU CATCH Integration - Storage Document Welsh Translation for Status P
       testCaseId: TestCaseId.SDDashboardWithPendingEUStatus,
     };
     cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.visit("/create-storage-document/GBR-2022-SD-1C9833456/eu-data-integration-pending?lng=cy");
+    cy.visit("/create-non-manipulation-document/GBR-2022-SD-1C9833456/eu-data-integration-pending?lng=cy");
     cy.contains("h1", "Anfon eich data i'w integreiddio â system yr UE").should("be.visible");
     cy.contains("h2", "Beth gallwch chi ei wneud nawr").should("be.visible");
     cy.contains("Mae eich dogfen dim triniaeth yn dal yn ddilys ac yn barod i'w defnyddio.").should("be.visible");
@@ -214,7 +214,7 @@ describe("EU CATCH Integration - Storage Document Welsh Translation for Status P
       testCaseId: TestCaseId.SDDashboardWithFailedEUStatus,
     };
     cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.visit("/create-storage-document/GBR-2022-SD-1C9833456/eu-data-integration-failed?lng=cy");
+    cy.visit("/create-non-manipulation-document/GBR-2022-SD-1C9833456/eu-data-integration-failed?lng=cy");
     cy.contains("h1", "Mae yna broblem wrth integreiddio â data'r UE").should("be.visible");
   });
 });
