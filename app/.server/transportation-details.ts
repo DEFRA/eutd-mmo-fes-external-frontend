@@ -503,10 +503,10 @@ export const commonSaveTransportDetails = async (
     return redirect("/forbidden");
   }
 
-  const saveAsDraftRoute = route("/create-storage-document/storage-documents");
+  const saveAsDraftRoute = route("/create-non-manipulation-document/non-manipulation-documents");
   const progressRoute = payload.arrival
-    ? route("/create-storage-document/:documentNumber/add-storage-facility-details", { documentNumber })
-    : route("/create-storage-document/:documentNumber/departure-product-summary", { documentNumber });
+    ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", { documentNumber })
+    : route("/create-non-manipulation-document/:documentNumber/departure-product-summary", { documentNumber });
 
   if (saveAsDraft) return redirect(saveAsDraftRoute);
 

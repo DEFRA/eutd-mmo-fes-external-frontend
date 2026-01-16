@@ -83,7 +83,7 @@ export const backUri = (transport: ITransport, journey: Journey) => {
           : "add-transportation-details-container-vessel";
       break;
     case "directLanding":
-      backUri = "how-does-the-export-leave-the-uk";
+      backUri = "how-does-the-consignment-leave-the-uk";
       break;
   }
 

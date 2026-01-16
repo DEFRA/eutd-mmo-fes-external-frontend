@@ -82,8 +82,8 @@ export const copyVoidConfirmationAction = async (
       completeUrl = "/create-processing-statement/:documentNumber/progress";
       break;
     case "storageNotes":
-      cancelButtonUrl = "/create-storage-document/storage-documents";
-      completeUrl = "/create-storage-document/:documentNumber/progress";
+      cancelButtonUrl = "/create-non-manipulation-document/non-manipulation-documents";
+      completeUrl = "/create-non-manipulation-document/:documentNumber/progress";
       break;
   }
 

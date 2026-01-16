@@ -127,7 +127,7 @@ export const dashboardAction = async (request: Request, journey: Journey): Promi
   if (journey === "processingStatement") {
     return redirect(route("/create-processing-statement/:documentNumber/progress", { documentNumber }));
   }
-  return redirect(route("/create-storage-document/:documentNumber/progress", { documentNumber }));
+  return redirect(route("/create-non-manipulation-document/:documentNumber/progress", { documentNumber }));
 };
 
 const onCreateDocumentResponse = async (response: Response): Promise<CreateDocumentType> => {

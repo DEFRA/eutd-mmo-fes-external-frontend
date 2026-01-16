@@ -82,7 +82,7 @@ export const WhatExportDestinationAction = async (request: Request, params: Para
         route(
           journey === "processingStatement"
             ? "/create-processing-statement/processing-statements"
-            : "/create-storage-document/storage-documents"
+            : "/create-non-manipulation-document/non-manipulation-documents"
         )
       );
     }
@@ -92,7 +92,7 @@ export const WhatExportDestinationAction = async (request: Request, params: Para
       route(
         journey === "processingStatement"
           ? "/create-processing-statement/processing-statements"
-          : "/create-storage-document/storage-documents"
+          : "/create-non-manipulation-document/non-manipulation-documents"
       )
     );
   }
@@ -108,7 +108,7 @@ export const WhatExportDestinationAction = async (request: Request, params: Para
       ? route(
           journey === "processingStatement"
             ? "/create-processing-statement/:documentNumber/progress"
-            : "/create-storage-document/:documentNumber/how-does-the-export-leave-the-uk",
+            : "/create-non-manipulation-document/:documentNumber/how-does-the-consignment-leave-the-uk",
           {
             documentNumber: documentNumber,
           }

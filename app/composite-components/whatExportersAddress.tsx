@@ -80,7 +80,7 @@ export const WhatExportersAddress = ({ title, journey }: WhatExportersAddressPro
   const progressRoutes = {
     catchCertificate: "/create-catch-certificate/:documentNumber/progress",
     processingStatement: "/create-processing-statement/:documentNumber/progress",
-    storageNotes: "/create-storage-document/:documentNumber/progress",
+    storageNotes: "/create-non-manipulation-document/:documentNumber/progress",
   };
 
   return (

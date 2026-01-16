@@ -34,7 +34,7 @@ export const addDocumentDetailsLoader = async (request: Request, params: Params)
   }
 
   if (!Array.isArray(storageDocument?.catches)) {
-    return redirect(`/create-storage-document/${documentNumber}/add-product-to-this-consignment`);
+    return redirect(`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment`);
   }
 
   validateResponseData(storageDocument);
@@ -48,7 +48,7 @@ export const addDocumentDetailsLoader = async (request: Request, params: Params)
   } = getStorageDocumentCatchDetails(storageDocument, catchIndex);
 
   if (storageDocument.catches && catchIndex > storageDocument.catches.length) {
-    return redirect(`/create-storage-document/${documentNumber}/you-have-added-a-product`);
+    return redirect(`/create-non-manipulation-document/${documentNumber}/you-have-added-a-product`);
   }
   return new Response(
     JSON.stringify({ documentNumber, catchDetails: currentCatchDetails, catchIndex: validCatchIndex, nextUri, csrf }),

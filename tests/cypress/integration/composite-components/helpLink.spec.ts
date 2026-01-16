@@ -17,15 +17,15 @@ describe("HelpSection", () => {
       "/create-processing-statement/GBR-2022-CC-488FE89C1/add-consignment-details",
       "/create-processing-statement/GBR-2022-CC-488FE89C1/add-processing-plant-address",
       "/create-processing-statement/GBR-2022-CC-488FE89C1/add-health-certificate",
-      "/create-processing-statement/GBR-2022-CC-488FE89C1/what-export-destination",
+      "/create-processing-statement/GBR-2022-CC-488FE89C1/what-consignment-destination",
       "/create-processing-statement/GBR-2022-CC-488FE89C1/delete-this-draft-processing-statement",
-      "/create-storage-document/GBR-2022-CC-488FE89C1/progress",
-      "/create-storage-document/GBR-2022-CC-488FE89C1/add-your-reference",
-      "/create-storage-document/GBR-2022-CC-488FE89C1/add-exporter-details",
-      "/create-storage-document/GBR-2022-CC-488FE89C1/add-product-to-this-consignment",
-      "/create-storage-document/GBR-2022-CC-488FE89C1/how-does-the-consignment-arrive-to-the-uk",
-      "/create-storage-document/GBR-2022-CC-488FE89C1/add-storage-facility-details",
-      "/create-storage-document/GBR-2022-CC-488FE89C1/delete-this-draft-storage-document",
+      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/progress",
+      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/add-your-reference",
+      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/add-exporter-details",
+      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/add-product-to-this-consignment",
+      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/how-does-the-consignment-arrive-to-the-uk",
+      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/add-storage-facility-details",
+      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/delete-this-draft-non-manipulation-document",
     ];
 
     urls.forEach((url) => {
@@ -40,7 +40,7 @@ describe("HelpSection", () => {
     const urls = [
       "/create-catch-certificate/catch-certificates",
       "/create-processing-statement/processing-statements",
-      "/create-storage-document/storage-documents",
+      "/create-non-manipulation-document/non-manipulation-documents",
       "/manage-favourites",
     ];
 

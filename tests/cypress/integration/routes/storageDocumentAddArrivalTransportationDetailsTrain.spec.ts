@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 const documentNumber = "GBR-2022-SD-3FE1169D1";
-const certificateUrl = `/create-storage-document/${documentNumber}`;
+const certificateUrl = `/create-non-manipulation-document/${documentNumber}`;
 const storageFacilityUrl = `${certificateUrl}/add-storage-facility-details`;
 const trainPageUrl = `${certificateUrl}/add-arrival-transportation-details-train`;
 
@@ -165,7 +165,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#departureCountry").invoke("val", "Ireland");
     cy.get("#departurePort").type("Where the consignment departs from", { force: true });
     cy.get("[data-testid=save-draft-button").click({ force: true });
-    cy.url().should("include", "/create-storage-document/storage-documents");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should navigate to storage facility page on click of save and continue button", () => {

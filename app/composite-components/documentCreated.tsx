@@ -70,7 +70,7 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
     case "storageNotes":
       translationFile = "storageDocumentCreated";
       gtagName = "completedStorageDocs";
-      createLink = route("/create-storage-document/storage-documents");
+      createLink = route("/create-non-manipulation-document/non-manipulation-documents");
       break;
   }
 

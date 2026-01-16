@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const certificateUrl = "/create-storage-document/GBR-2021-SD-8EEB7E123";
+const certificateUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
 const progressUrl = `${certificateUrl}/progress`;
 
 describe("ProgressPage - Incomplete Application", () => {
@@ -16,7 +16,7 @@ describe("ProgressPage - Incomplete Application", () => {
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", "/create-storage-document/storage-documents");
+      .should("have.attr", "href", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should display the correct headings", () => {
@@ -47,7 +47,7 @@ describe("ProgressPage - Incomplete Application", () => {
 
   it("should redirect to the exporter Storage Document dashboard", () => {
     cy.get("[data-testid=return-to-dashboard-button]").click({ force: true });
-    cy.url().should("include", "/storage-documents");
+    cy.url().should("include", "/non-manipulation-documents");
   });
 
   it("should display errors", () => {
@@ -190,7 +190,7 @@ describe("ProgressPage - Links with transport selected - truck - No CMR", () => 
   it("should display correct links", () => {
     cy.contains("a", "UK departure transport details")
       .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/how-does-the-export-leave-the-uk`);
+      .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-leave-the-uk`);
   });
 });
 
@@ -206,7 +206,7 @@ describe("ProgressPage - Links with transport selected - train", () => {
   it("should display correct links", () => {
     cy.contains("a", "UK departure transport details")
       .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/how-does-the-export-leave-the-uk`);
+      .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-leave-the-uk`);
   });
 });
 
@@ -222,7 +222,7 @@ describe("ProgressPage - Links with transport selected - container vessel", () =
   it("should display correct links", () => {
     cy.contains("a", "UK departure transport details")
       .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/how-does-the-export-leave-the-uk`);
+      .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-leave-the-uk`);
   });
 });
 
@@ -232,7 +232,7 @@ describe("should display the notificationBanner", () => {
       testCaseId: TestCaseId.PSSDCopyAllData,
       disableScripts: true,
     };
-    cy.visit("create-storage-document/GBR-2022-SD-F71D98A30/copy-this-storage-document", {
+    cy.visit("create-non-manipulation-document/GBR-2022-SD-F71D98A30/copy-this-non-manipulation-document", {
       qs: { ...testParams },
     });
     cy.wait(250);
