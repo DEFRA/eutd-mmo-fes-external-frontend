@@ -9,5 +9,5 @@
   "sdCreatedEmailToImporter": "Email the non-manipulation document to the importer.",
   "commonDocumentCreatedImportersResponsibility": "It is the importer’s responsibility to submit it to the import control authority where your export will enter the EU.",
   "commonDocumentCreatedImportersResponsibilityBIP": "The importing authority will complete and sign their section of the document at the Border Inspection Post (BIP).",
-  "sdCreatedViewOrCreateNewLink": "View completed non-manipulation document or create a new export document"
+  "sdCreatedViewOrCreateNewLink": "View completed non-manipulation documents or create a new export document"
 }
