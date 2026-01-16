@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 const documentUrl = "/create-non-manipulation-document/GBR-2022-SD-F0285BD8A";
-const deleteThisStorageDocumentUrl = `${documentUrl}/delete-this-draft-non-manipulation-document`;
+const deleteThisStorageDocumentUrl = `${documentUrl}/delete-this-non-manipulation-document`;
 
 describe("Delete this draft storage document page", () => {
   it("should render the correct h1 title", () => {

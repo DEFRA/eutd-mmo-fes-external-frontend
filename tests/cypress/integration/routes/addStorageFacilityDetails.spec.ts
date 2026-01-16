@@ -188,7 +188,7 @@ describe("Add Storage Facility page when javascript is disabled", () => {
     it("should not show validation errors when clicking on draft", () => {
       cy.wait(5000);
       cy.get("[data-testid=save-draft-button]").click({ force: true });
-      cy.url().should("include", "create-non-manipulation-document/storage-document");
+      cy.url().should("include", "create-non-manipulation-document/non-manipulation-documents");
     });
   });
 });

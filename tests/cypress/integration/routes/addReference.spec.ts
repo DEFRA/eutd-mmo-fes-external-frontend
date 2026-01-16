@@ -287,7 +287,7 @@ describe("Add Your Reference - Storage Document", () => {
     cy.get("#userReference").type("qwerty");
     cy.get("[data-testid=save-draft-button").click({ force: true });
 
-    cy.url().should("include", "/create-non-manipulation-document/storage-document");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should redirect to the forbidden page if the user is unauthorised", () => {
@@ -325,7 +325,7 @@ describe("Add Your Reference - Storage Document", () => {
     cy.get("#userReference").type("qwerty");
     cy.get("[data-testid=save-draft-button").click({ force: true });
 
-    cy.url().should("contain", "/create-non-manipulation-document/storage-document");
+    cy.url().should("contain", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should redirect to the forbidden page if the user is unauthorised but tries to save a reference", () => {

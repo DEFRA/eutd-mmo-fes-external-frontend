@@ -94,7 +94,7 @@ describe("Add exporter details on save as draft clicking", () => {
 
   it("should click on save as draft and should navigate to catch certificates page", () => {
     cy.get("[data-testid='save-draft-button']").click({ force: true });
-    cy.url().should("include", "/create-non-manipulation-document/storage-document");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 });
 
