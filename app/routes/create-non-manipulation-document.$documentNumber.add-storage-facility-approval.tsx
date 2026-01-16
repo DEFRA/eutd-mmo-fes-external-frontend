@@ -148,14 +148,14 @@ const AddStorageFacilityApproval = () => {
                   : "govuk-form-group govuk-form-group--error"
               }
             >
-              {!isEmpty(errors?.["storageFacilities-facilityApproval"]) ? (
+              {isEmpty(errors?.["storageFacilities-facilityApproval"]) ? null : (
                 <ErrorMessage
                   text={t(errors?.["storageFacilities-facilityApproval"]?.message, {
                     ns: "errorsText",
                   })}
                   visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                 />
-              ) : null}
+              )}
               <FormInput
                 containerClassName="govuk-form-group  govuk-!-width-two-thirds"
                 label={t("productStorageApprovalNumberLabel", { ns: "addStorageFacilityDetails" })}
@@ -197,7 +197,7 @@ const AddStorageFacilityApproval = () => {
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--s">
                   {t("productStorageLegend", { ns: "addStorageFacilityDetails" })}{" "}
                 </legend>
-                {!isEmpty(errors?.["storageFacilities-facilityStorage"]) ? (
+                {isEmpty(errors?.["storageFacilities-facilityStorage"]) ? null : (
                   <ErrorMessage
                     id="storageFacilities-facilityStorage-error"
                     text={t(errors?.["storageFacilities-facilityStorage"]?.message, {
@@ -205,7 +205,7 @@ const AddStorageFacilityApproval = () => {
                     })}
                     visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                   />
-                ) : null}
+                )}
                 <div id="product-storage-hint" className="govuk-hint">
                   {t("productStorageHint", { ns: "addStorageFacilityDetails" })}
                 </div>
