@@ -13,6 +13,7 @@ import {
   mockGetAddStoargaDocumentUrl,
   mockGetProgress,
   mockTransportDetailsUrl,
+  SAVE_TRANSPORT_DETAILS_URL,
 } from "~/urls.server";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
 import storageDocumentMandatory from "@/fixtures/storageDocumentApi/storageDocumentMandatoryFieldsOnly.json";
@@ -149,6 +150,26 @@ const checkYourInformationSDHandler: ITestHandler = {
     // Save product (POST)
     rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
+  [TestCaseId.SDCheckYourInformationChangeArrivalTransportMode]: () => {
+    let postCallCount = 0;
+    return [
+      // Check your information page
+      rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+      rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+      rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
+      // Transport details endpoint - return truck before POST, plane after POST
+      rest.get(getTransportDetailsUrl("storageNotes", true), (req, res, ctx) => {
+        // If POST has been called (transport created), return plane; otherwise return truck
+        const response = postCallCount > 0 ? planeTransport : truckTransport;
+        return res(ctx.json(response));
+      }),
+      // POST to /v1/transport/add when user changes transport mode (creates new transport)
+      rest.post(SAVE_TRANSPORT_DETAILS_URL, (req, res, ctx) => {
+        postCallCount++;
+        return res(ctx.json(planeTransport));
+      }),
+    ];
+  },
 };
 
 export default checkYourInformationSDHandler;
