@@ -262,13 +262,13 @@ describe("Storage Document Dashboard page: delete a document", () => {
     cy.visit(storageDocumentDashboardUrl, { qs: { ...testParams } });
 
     cy.get(
-      "a#delete[href='/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/delete-this-draft-non-manipulation-document']"
+      "a#delete[href='/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/delete-this-non-manipulation-document']"
     ).click({
       force: true,
     });
     cy.url().should(
       "include",
-      "/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/delete-this-draft-non-manipulation-document"
+      "/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/delete-this-non-manipulation-document"
     );
   });
 });

@@ -74,7 +74,7 @@ describe("Add Storage Facility Approval - Error", () => {
 
   it("should not show validation errors when clicking on draft", () => {
     cy.get("[data-testid=save-draft-button]").click({ force: true });
-    cy.url().should("include", "create-non-manipulation-document/storage-document");
+    cy.url().should("include", "create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should show facility name validation error", () => {
