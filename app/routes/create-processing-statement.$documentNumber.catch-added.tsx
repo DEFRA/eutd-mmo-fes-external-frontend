@@ -122,8 +122,10 @@ const handleFilterAction = async (
       session.set("matchQuery", "");
     }
 
+    const searchParams = q ? `?q=${encodeURIComponent(q)}` : "";
     return redirect(
-      route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }),
+      route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }) +
+        searchParams,
       {
         headers: {
           "Set-Cookie": await commitSession(session),
@@ -187,7 +189,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   applyMatchedFromSession(session, psData, hasActiveQuery);
 
-  if (!hasActionExecuted) {
+  if (!hasActionExecuted && !hasActiveQuery) {
     if (hasNoAddedProducts(psData)) {
       return redirect(`/create-processing-statement/${documentNumber}/add-consignment-details`);
     } else if (hasNoAddedCatches(psData)) {
@@ -205,7 +207,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const product = psData.products?.findLast((p: ProcessingStatementProduct) => p.id);
 
   const pageNo = parseInt(url.searchParams.get("pageNo") ?? "1", 10);
-  const q = typeof sessionQuery === "string" ? sessionQuery : url.searchParams.get("q") ?? undefined;
+  const q = urlQuery ?? (typeof sessionQuery === "string" ? sessionQuery : undefined);
   const nextUri = url.searchParams.get("nextUri") ?? "";
   const productDescription = psData.products?.length === 1 ? psData.products[0].description : undefined;
   const totalDocuments = countUniqueDocumentByCatchCertificateNumber(psData.catches);
@@ -522,7 +524,7 @@ const CatchAdded = () => {
               )}
             />
             <tbody className="govuk-table__body">
-              {!isEmpty(q) && paginatedCatches.length === 0 ? (
+              {!isEmpty(q) && catches.length === 0 ? (
                 <tr className="govuk-table__row">
                   <td colSpan={6} className="govuk-table__cell">
                     {t("commonNoResultsFound", { ns: "common" })}
