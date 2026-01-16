@@ -1064,3 +1064,44 @@ describe("Check Your Information (Summary) page: Change transport mode - no chan
       .should("have.text", "Truck");
   });
 });
+
+describe("Check Your Information (Summary) page: NMD - Change product - no change scenario", () => {
+  const documentNumber = "GBR-2023-SD-DE53D6E7C";
+  const documentUrl = `/create-storage-document/${documentNumber}`;
+  const checkYourInformationUrl = `${documentUrl}/check-your-information`;
+
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationChangeProductNoChange,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should navigate through product change flow and return to check-your-information when no changes are made", () => {
+    // Verify we're on check-your-information page
+    cy.url().should("include", "/check-your-information");
+
+    // Click the change link for a product's species name
+    cy.get('[href*="add-product-to-this-consignment"]').first().click();
+
+    // Verify we're on the add-product page
+    cy.url().should("include", "/add-product-to-this-consignment");
+
+    // Click Save and continue without changing any product details
+    cy.get('button[type="submit"]').contains("Save and continue").click();
+
+    // Should be redirected to you-have-added-a-product page
+    cy.url().should("include", "/you-have-added-a-product");
+    cy.url().should("not.include", "add-product-to-this-consignment");
+
+    // Verify the "No" option is selected for adding another product
+    cy.get('input[name="addAnotherProduct"][value="No"]').should("be.checked");
+
+    // Click Save and continue to return to check-your-information
+    cy.get('button[type="submit"]').contains("Save and continue").click();
+
+    // Should be redirected back to check-your-information
+    cy.url().should("include", "/check-your-information");
+    cy.url().should("not.include", "/you-have-added-a-product");
+  });
+});

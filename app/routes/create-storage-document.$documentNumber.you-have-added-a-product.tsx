@@ -43,6 +43,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   setApiMock(request.url);
 
   const { documentNumber } = params;
+  const url = new URL(request.url);
+  const nextUri = url.searchParams.get("nextUri") ?? "";
   const bearerToken = await getBearerTokenForRequest(request);
   const session = await getSessionFromRequest(request);
   session.unset(`documentNumber-${documentNumber}`);
@@ -94,6 +96,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       isFromCatchWeightsRoute,
       pageTitle: t(titleKey, { count: sdData.catches.length, ns: "sdYouHaveAddedAProduct" }),
       commonTitle: t("sdCommonTitle", { ns: "title" }),
+      nextUri,
       csrf,
     }),
     {
@@ -108,7 +111,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => executeAction(request, params);
 
 const YouHaveAddedAProduct = () => {
-  const { documentNumber, catches, csrf } = useLoaderData<CatchesLoaderData>();
+  const { documentNumber, catches, nextUri, csrf } = useLoaderData<CatchesLoaderData>();
   const { groupedErrors = [] } = useActionData<ActionDataWithErrors>() ?? {};
 
   const { t } = useTranslation("common");
@@ -206,6 +209,7 @@ const YouHaveAddedAProduct = () => {
           </table>
           <br />
           <SecureForm method="post" csrf={csrf}>
+            <input type="hidden" name="nextUri" value={nextUri} />
             <div id="radioButtons" className={`govuk-form-group`}>
               <fieldset className="govuk-fieldset">
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--l">

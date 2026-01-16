@@ -81,6 +81,7 @@ export type FacilitiesLoaderData = {
 export type CatchesLoaderData = {
   documentNumber: string;
   catches: (StorageDocumentCatch & CatchIndex)[];
+  nextUri?: string;
   csrf: string;
 };
 
