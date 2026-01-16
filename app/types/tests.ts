@@ -148,6 +148,7 @@ export enum TestCaseId {
   SaveTransportFailsWith403 = "saveTransportFailsWith403",
   SaveTransportFailsWithErrors = "saveTransportFailsWithErrors",
   SaveTransportFailsWithErrorsArrival = "saveTransportFailsWithErrorsArrival",
+  CCCheckYourInformationChangeTransportModeNoChange = "CCCheckYourInformationChangeTransportModeNoChange",
 
   WhatAreYouExporting = "whatAreYouExporting",
   WhatAreYouExportingNoFavourite = "whatAreYouExportingNoFavourite",
