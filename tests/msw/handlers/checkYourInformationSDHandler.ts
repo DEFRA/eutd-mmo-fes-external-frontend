@@ -9,6 +9,10 @@ import {
   getProgressUrl,
   getTransportDetailsUrl,
   mockGetAllDocumentsUrl,
+  SPECIES_URL,
+  mockGetAddStoargaDocumentUrl,
+  mockGetProgress,
+  mockTransportDetailsUrl,
 } from "~/urls.server";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
 import storageDocumentMandatory from "@/fixtures/storageDocumentApi/storageDocumentMandatoryFieldsOnly.json";
@@ -25,6 +29,7 @@ import planeTransport from "@/fixtures/transportDetailsApi/plane.json";
 import trainTransport from "@/fixtures/transportDetailsApi/train.json";
 import containerVesselTransport from "@/fixtures/transportDetailsApi/containerVessel.json";
 import checkYourInformationAllFieldsNotProvided from "@/fixtures/storageDocumentApi/storageDocumentsFieldsNotProvided.json";
+import species from "@/fixtures/referenceDataApi/species.json";
 
 const documentNumber = "GBR-2023-SD-DE53D6E7C";
 
@@ -130,6 +135,19 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(containerVesselTransport))),
     rest.post(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
+  ],
+  [TestCaseId.SDCheckYourInformationChangeProductNoChange]: () => [
+    // Check your information page
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
+    // Add product page
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransport))),
+    // Save product (POST)
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
 };
 

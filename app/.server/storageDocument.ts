@@ -386,6 +386,7 @@ export const executeAction = async (request: Request, params: Params): Promise<R
   const sdData = (storageDocument as StorageDocument) || {};
   const form = await request.formData();
   const { _action, ...values } = Object.fromEntries(form);
+  const nextUri = (form.get("nextUri") as string) ?? "";
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
@@ -483,6 +484,15 @@ export const executeAction = async (request: Request, params: Params): Promise<R
 
   if (catchesToRemove) {
     session.unset("catchesToRemove");
+  }
+
+  // If nextUri is provided (user came from check-your-information), redirect back there
+  if (nextUri) {
+    return redirect(nextUri, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   }
 
   return redirect(`/create-storage-document/${documentNumber}/how-does-the-consignment-arrive-to-the-uk`, {
