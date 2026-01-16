@@ -369,6 +369,13 @@ const checkYourInformationCCHandler: ITestHandler = {
       )
     ),
   ],
+  [TestCaseId.CCCheckYourInformationChangeTransportModeNoChange]: () => [
+    rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccTruck))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(truckTransportDetails))),
+    rest.put(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(truckTransportDetails))),
+  ],
 };
 
 export default checkYourInformationCCHandler;

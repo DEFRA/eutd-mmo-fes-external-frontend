@@ -30,6 +30,8 @@ export const HowDoesTheExportLeaveUkLoader = async (request: Request, params: Pa
   const { documentNumber } = params;
   const splitParams = params["*"]?.split("/");
   const transportId = splitParams?.[0];
+  const url = new URL(request.url);
+  const nextUri = url.searchParams.get("nextUri") ?? "";
   const t = await i18next.getFixedT(request, ["title"]);
   const pageTitle = t("ccTransportSelectionPageTitle", { ns: "title" });
   const commonTitle = t("ccCommonTitle", { ns: "title" });
@@ -51,6 +53,7 @@ export const HowDoesTheExportLeaveUkLoader = async (request: Request, params: Pa
         documentNumber,
         vehicle,
         transportId,
+        nextUri,
         pageTitle,
         commonTitle,
         csrf,
@@ -68,6 +71,7 @@ export const HowDoesTheExportLeaveUkLoader = async (request: Request, params: Pa
   return new Response(
     JSON.stringify({
       documentNumber,
+      nextUri,
       pageTitle,
       commonTitle,
       csrf,
@@ -100,6 +104,8 @@ export const HowDoesTheExportLeaveUkAction = async (
   };
 
   const bearerToken = await getBearerTokenForRequest(request);
+  const nextUri = (form.get("nextUri") as string) ?? "";
+  let vehicleChanged = false;
 
   if (transportId) {
     const transport: ITransport = await getTransportById(bearerToken, documentNumber, transportId).catch((e) => {
@@ -112,6 +118,8 @@ export const HowDoesTheExportLeaveUkAction = async (
         ...payload,
         ...transport,
       };
+    } else {
+      vehicleChanged = true;
     }
   }
 
@@ -135,6 +143,12 @@ export const HowDoesTheExportLeaveUkAction = async (
   if (errors.length > 0) {
     const values = Object.fromEntries(form);
     return apiCallFailed(errors, values);
+  }
+
+  // If vehicle hasn't changed and nextUri is provided (e.g., from check-your-information change link),
+  // redirect back to that page instead of the transport details form
+  if (!vehicleChanged && nextUri && transportId) {
+    return redirect(nextUri);
   }
 
   return redirect(`/create-catch-certificate/${documentNumber}/${forwardUri(response.vehicle)}/${response.id}`);
