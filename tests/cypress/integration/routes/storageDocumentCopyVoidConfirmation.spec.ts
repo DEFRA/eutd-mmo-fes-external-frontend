@@ -1,8 +1,8 @@
 import { type ITestParams, TestCaseId } from "~/types";
-const sdPageUrl = "create-storage-document/GBR-2022-SD-F71D98A30/copy-void-confirmation";
+const sdPageUrl = "create-non-manipulation-document/GBR-2022-SD-F71D98A30/copy-void-confirmation";
 
 function copyvoidpage(testParams) {
-  cy.visit("create-storage-document/GBR-2022-SD-F71D98A30/copy-this-storage-document", {
+  cy.visit("create-non-manipulation-document/GBR-2022-SD-F71D98A30/copy-this-non-manipulation-document", {
     qs: { ...testParams },
   });
   cy.get("#voidDocumentConfirm").invoke("prop", "checked", true).trigger("change");
@@ -21,7 +21,11 @@ describe("Copy void confirmation page", () => {
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", "/create-storage-document/GBR-2022-SD-F71D98A30/copy-this-storage-document");
+      .should(
+        "have.attr",
+        "href",
+        "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/copy-this-non-manipulation-document"
+      );
     cy.contains("button", "Cancel").should("be.visible");
     cy.get("form").should(($form) => {
       expect($form.find("input[type='radio']")).to.have.lengthOf(2);
@@ -37,7 +41,7 @@ describe("Copy void confirmation page", () => {
       ]);
     });
     cy.get("[data-testid=cancel]").click({ force: true });
-    cy.url().should("include", "/storage-documents");
+    cy.url().should("include", "/non-manipulation-documents");
   });
 
   it("Should display errors", () => {

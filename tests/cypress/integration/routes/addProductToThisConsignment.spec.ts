@@ -1,5 +1,5 @@
 import { type ITestParams, TestCaseId } from "~/types";
-const documentUrl = "/create-storage-document/GBR-2023-SD-83552D3E5";
+const documentUrl = "/create-non-manipulation-document/GBR-2023-SD-83552D3E5";
 const pageUrl = `${documentUrl}/add-product-to-this-consignment/0`;
 
 describe("Add product to this consignment  page", () => {
@@ -69,7 +69,7 @@ describe("Add product to this consignment  page", () => {
   it("shows an error when product description is missing on Save and continue", () => {
     const testParams = { testCaseId: TestCaseId.SDAddProductConsignmentProductDescriptionRequired };
 
-    cy.visit(`/create-storage-document/123/add-product-to-this-consignment/0`, { qs: { ...testParams } });
+    cy.visit(`/create-non-manipulation-document/123/add-product-to-this-consignment/0`, { qs: { ...testParams } });
 
     cy.get("#catches-0-productDescription", { timeout: 10000 }).should("exist").clear();
 
@@ -82,7 +82,7 @@ describe("Add product to this consignment  page", () => {
 
   it("should redirect to dashboard on click of save as draft button", () => {
     cy.get("[data-testid=save-draft-button]").click({ force: true });
-    cy.url().should("include", "/create-storage-document/storage-documents");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should redirect to progress page", () => {
@@ -571,7 +571,7 @@ describe("Add product to this consignment page: form submission and interaction"
     const testParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
-    const nextUri = "?nextUri=/create-storage-document/GBR-2023-SD-9F893164C/check-your-information";
+    const nextUri = "?nextUri=/create-non-manipulation-document/GBR-2023-SD-9F893164C/check-your-information";
     cy.visit(pageUrl + nextUri, { qs: { ...testParams } });
 
     cy.get("[data-testid=save-and-continue]").click();

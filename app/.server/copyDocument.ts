@@ -169,7 +169,7 @@ export const copyDocumentLoader = async (request: Request, params: Params) => {
       copyOptions = psSdCopyCertificateOptions;
       break;
     case "SD":
-      backUrl = route("/create-storage-document/storage-documents");
+      backUrl = route("/create-non-manipulation-document/non-manipulation-documents");
       copyDocumentLabel = "pssdCopyDocumentAcknowledgedMessage";
       copyOptions = sdCopyCertificateOptions;
       break;
@@ -207,8 +207,8 @@ export const copyDocumentAction = async (request: Request, params: Params): Prom
       voidRoute = route("/create-processing-statement/:documentNumber/copy-void-confirmation", { documentNumber });
       break;
     case "storageNotes":
-      cancelRoute = route("/create-storage-document/storage-documents");
-      voidRoute = route("/create-storage-document/:documentNumber/copy-void-confirmation", { documentNumber });
+      cancelRoute = route("/create-non-manipulation-document/non-manipulation-documents");
+      voidRoute = route("/create-non-manipulation-document/:documentNumber/copy-void-confirmation", { documentNumber });
   }
 
   if (form.get("_action") === "cancel") {
@@ -303,7 +303,7 @@ export const copyDocumentAction = async (request: Request, params: Params): Prom
         });
         break;
       case "storageNotes":
-        progressRoute = route("/create-storage-document/:documentNumber/progress", {
+        progressRoute = route("/create-non-manipulation-document/:documentNumber/progress", {
           documentNumber: newDocumentNumber,
         });
         break;

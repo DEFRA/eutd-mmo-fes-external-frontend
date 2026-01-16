@@ -1,7 +1,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 describe("HowDoesTheConsignmentArriveToUk", () => {
-  const certificateUrl = "/create-storage-document/GBR-2021-SD-8EEB7E123";
+  const certificateUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
   const howDoesTheConsignmentArriveToUkUrl = `${certificateUrl}/how-does-the-consignment-arrive-to-the-uk`;
 
   it("storage document - should render page", () => {
@@ -38,7 +38,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
 
     cy.get("#backToProgress")
       .should("have.attr", "href")
-      .and("include", "/create-storage-document/GBR-2021-SD-8EEB7E123/progress");
+      .and("include", "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123/progress");
   });
 
   it("should navigate to truck transport details page when user selects and submits truck transport type", () => {
@@ -102,7 +102,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
     cy.get("#train").click({ force: true });
     cy.get("[data-testid=save-draft-button").click({ force: true });
 
-    cy.url().should("include", "/create-storage-document/storage-documents");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should redirect user to add product page when user clicks on Save as Draft button without selecting any options", () => {
@@ -113,7 +113,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
     cy.visit(howDoesTheConsignmentArriveToUkUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-draft-button").click({ force: true });
 
-    cy.url().should("include", "/create-storage-document/storage-documents");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should show validation error when user clicks on Save and Continue button without selecting any options", () => {

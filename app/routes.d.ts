@@ -53,32 +53,48 @@ declare module "routes-gen" {
       documentNumber: string;
       productId: string;
     };
-    "/create-storage-document/:documentNumber/add-exporter-details": { documentNumber: string };
-    "/create-storage-document/:documentNumber/add-arrival-transportation-details-container-vessel": {
+    "/create-non-manipulation-document/:documentNumber/add-exporter-details": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-container-vessel": {
       documentNumber: string;
     };
-    "/create-storage-document/:documentNumber/add-arrival-transportation-details-plane": { documentNumber: string };
-    "/create-storage-document/:documentNumber/add-arrival-transportation-details-train": { documentNumber: string };
-    "/create-storage-document/:documentNumber/add-arrival-transportation-details-truck": { documentNumber: string };
-    "/create-storage-document/:documentNumber/add-transportation-details-container-vessel": { documentNumber: string };
-    "/create-storage-document/:documentNumber/add-transportation-details-plane": { documentNumber: string };
-    "/create-storage-document/:documentNumber/add-transportation-details-train": { documentNumber: string };
-    "/create-storage-document/:documentNumber/add-transportation-details-truck": { documentNumber: string };
-    "/create-storage-document/:documentNumber/departure-product-summary": { documentNumber: string };
-    "/create-storage-document/:documentNumber/add-your-reference": { documentNumber: string };
-    "/create-storage-document/:documentNumber/check-your-information": { documentNumber: string };
-    "/create-storage-document/:documentNumber/copy-this-storage-document": { documentNumber: string };
-    "/create-storage-document/:documentNumber/copy-void-confirmation": { documentNumber: string };
-    "/create-storage-document/:documentNumber/delete-this-draft-storage-document": { documentNumber: string };
-    "/create-storage-document/:documentNumber/do-you-have-a-road-transport-document": { documentNumber: string };
-    "/create-storage-document/:documentNumber/how-does-the-export-leave-the-uk": { documentNumber: string };
-    "/create-storage-document/:documentNumber/progress": { documentNumber: string };
-    "/create-storage-document/:documentNumber/storage-document-created": { documentNumber: string };
-    "/create-storage-document/:documentNumber/void-this-storage-document": { documentNumber: string };
-    "/create-storage-document/:documentNumber/what-exporters-address": { documentNumber: string };
-    "/create-storage-document/:documentNumber/you-have-added-a-product": { documentNumber: string };
-    "/create-storage-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk": { documentNumber: string };
-    "/create-storage-document/storage-documents": Record<string, never>;
+    "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-plane": {
+      documentNumber: string;
+    };
+    "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-train": {
+      documentNumber: string;
+    };
+    "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-truck": {
+      documentNumber: string;
+    };
+    "/create-non-manipulation-document/:documentNumber/add-transportation-details-container-vessel": {
+      documentNumber: string;
+    };
+    "/create-non-manipulation-document/:documentNumber/add-transportation-details-plane": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/add-transportation-details-train": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/add-transportation-details-truck": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/departure-product-summary": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/add-your-reference": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/check-your-information": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/copy-this-non-manipulation-document": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/copy-void-confirmation": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/delete-this-non-manipulation-document": {
+      documentNumber: string;
+    };
+    "/create-non-manipulation-document/:documentNumber/do-you-have-a-road-transport-document": {
+      documentNumber: string;
+    };
+    "/create-non-manipulation-document/:documentNumber/how-does-the-consignment-leave-the-uk": {
+      documentNumber: string;
+    };
+    "/create-non-manipulation-document/:documentNumber/progress": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/non-manipulation-document-created": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/void-this-non-manipulation-document": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/what-exporters-address": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/you-have-added-a-product": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk": {
+      documentNumber: string;
+    };
+    "/create-non-manipulation-document/non-manipulation-documents": Record<string, never>;
     "/dev/null": Record<string, never>;
     "/forbidden/index": Record<string, never>;
     "/get-commodity-codes": Record<string, never>;
@@ -275,90 +291,90 @@ declare module "routes-gen" {
           RouteParams["/create-processing-statement/:documentNumber/remove-product/:productId"],
         ]
       | [
-          "/create-storage-document/:documentNumber/add-exporter-details",
-          RouteParams["/create-storage-document/:documentNumber/add-exporter-details"],
+          "/create-non-manipulation-document/:documentNumber/add-exporter-details",
+          RouteParams["/create-non-manipulation-document/:documentNumber/add-exporter-details"],
         ]
       | [
-          "/create-storage-document/:documentNumber/add-arrival-transportation-details-container-vessel",
-          RouteParams["/create-storage-document/:documentNumber/add-arrival-transportation-details-container-vessel"],
+          "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-container-vessel",
+          RouteParams["/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-container-vessel"],
         ]
       | [
-          "/create-storage-document/:documentNumber/add-arrival-transportation-details-plane",
-          RouteParams["/create-storage-document/:documentNumber/add-arrival-transportation-details-plane"],
+          "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-plane",
+          RouteParams["/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-plane"],
         ]
       | [
-          "/create-storage-document/:documentNumber/add-arrival-transportation-details-train",
-          RouteParams["/create-storage-document/:documentNumber/add-arrival-transportation-details-train"],
+          "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-train",
+          RouteParams["/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-train"],
         ]
       | [
-          "/create-storage-document/:documentNumber/add-arrival-transportation-details-truck",
-          RouteParams["/create-storage-document/:documentNumber/add-arrival-transportation-details-truck"],
+          "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-truck",
+          RouteParams["/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-truck"],
         ]
       | [
-          "/create-storage-document/:documentNumber/add-transportation-details-container-vessel",
-          RouteParams["/create-storage-document/:documentNumber/add-transportation-details-container-vessel"],
+          "/create-non-manipulation-document/:documentNumber/add-transportation-details-container-vessel",
+          RouteParams["/create-non-manipulation-document/:documentNumber/add-transportation-details-container-vessel"],
         ]
       | [
-          "/create-storage-document/:documentNumber/add-transportation-details-plane",
-          RouteParams["/create-storage-document/:documentNumber/add-transportation-details-plane"],
+          "/create-non-manipulation-document/:documentNumber/add-transportation-details-plane",
+          RouteParams["/create-non-manipulation-document/:documentNumber/add-transportation-details-plane"],
         ]
       | [
-          "/create-storage-document/:documentNumber/add-transportation-details-train",
-          RouteParams["/create-storage-document/:documentNumber/add-transportation-details-train"],
+          "/create-non-manipulation-document/:documentNumber/add-transportation-details-train",
+          RouteParams["/create-non-manipulation-document/:documentNumber/add-transportation-details-train"],
         ]
       | [
-          "/create-storage-document/:documentNumber/add-transportation-details-truck",
-          RouteParams["/create-storage-document/:documentNumber/add-transportation-details-truck"],
+          "/create-non-manipulation-document/:documentNumber/add-transportation-details-truck",
+          RouteParams["/create-non-manipulation-document/:documentNumber/add-transportation-details-truck"],
         ]
       | [
-          "/create-storage-document/:documentNumber/add-your-reference",
-          RouteParams["/create-storage-document/:documentNumber/add-your-reference"],
+          "/create-non-manipulation-document/:documentNumber/add-your-reference",
+          RouteParams["/create-non-manipulation-document/:documentNumber/add-your-reference"],
         ]
       | [
-          "/create-storage-document/:documentNumber/check-your-information",
-          RouteParams["/create-storage-document/:documentNumber/check-your-information"],
+          "/create-non-manipulation-document/:documentNumber/check-your-information",
+          RouteParams["/create-non-manipulation-document/:documentNumber/check-your-information"],
         ]
       | [
-          "/create-storage-document/:documentNumber/copy-this-storage-document",
-          RouteParams["/create-storage-document/:documentNumber/copy-this-storage-document"],
+          "/create-non-manipulation-document/:documentNumber/copy-this-non-manipulation-document",
+          RouteParams["/create-non-manipulation-document/:documentNumber/copy-this-non-manipulation-document"],
         ]
       | [
-          "/create-storage-document/:documentNumber/copy-void-confirmation",
-          RouteParams["/create-storage-document/:documentNumber/copy-void-confirmation"],
+          "/create-non-manipulation-document/:documentNumber/copy-void-confirmation",
+          RouteParams["/create-non-manipulation-document/:documentNumber/copy-void-confirmation"],
         ]
       | [
-          "/create-storage-document/:documentNumber/delete-this-draft-storage-document",
-          RouteParams["/create-storage-document/:documentNumber/delete-this-draft-storage-document"],
+          "/create-non-manipulation-document/:documentNumber/delete-this-non-manipulation-document",
+          RouteParams["/create-non-manipulation-document/:documentNumber/delete-this-non-manipulation-document"],
         ]
       | [
-          "/create-storage-document/:documentNumber/how-does-the-export-leave-the-uk",
-          RouteParams["/create-storage-document/:documentNumber/how-does-the-export-leave-the-uk"],
+          "/create-non-manipulation-document/:documentNumber/how-does-the-consignment-leave-the-uk",
+          RouteParams["/create-non-manipulation-document/:documentNumber/how-does-the-consignment-leave-the-uk"],
         ]
       | [
-          "/create-storage-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk",
-          RouteParams["/create-storage-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk"],
+          "/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk",
+          RouteParams["/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk"],
         ]
       | [
-          "/create-storage-document/:documentNumber/progress",
-          RouteParams["/create-storage-document/:documentNumber/progress"],
+          "/create-non-manipulation-document/:documentNumber/progress",
+          RouteParams["/create-non-manipulation-document/:documentNumber/progress"],
         ]
       | [
-          "/create-storage-document/:documentNumber/storage-document-created",
-          RouteParams["/create-storage-document/:documentNumber/storage-document-created"],
+          "/create-non-manipulation-document/:documentNumber/non-manipulation-document-created",
+          RouteParams["/create-non-manipulation-document/:documentNumber/non-manipulation-document-created"],
         ]
       | [
-          "/create-storage-document/:documentNumber/void-this-storage-document",
-          RouteParams["/create-storage-document/:documentNumber/void-this-storage-document"],
+          "/create-non-manipulation-document/:documentNumber/void-this-non-manipulation-document",
+          RouteParams["/create-non-manipulation-document/:documentNumber/void-this-non-manipulation-document"],
         ]
       | [
-          "/create-storage-document/:documentNumber/what-exporters-address",
-          RouteParams["/create-storage-document/:documentNumber/what-exporters-address"],
+          "/create-non-manipulation-document/:documentNumber/what-exporters-address",
+          RouteParams["/create-non-manipulation-document/:documentNumber/what-exporters-address"],
         ]
       | [
-          "/create-storage-document/:documentNumber/you-have-added-a-product",
-          RouteParams["/create-storage-document/:documentNumber/you-have-added-a-product"],
+          "/create-non-manipulation-document/:documentNumber/you-have-added-a-product",
+          RouteParams["/create-non-manipulation-document/:documentNumber/you-have-added-a-product"],
         ]
-      | ["/create-storage-document/storage-documents"]
+      | ["/create-non-manipulation-document/non-manipulation-documents"]
       | ["/dev/null"]
       | ["/forbidden/index"]
       | ["/get-commodity-codes"]

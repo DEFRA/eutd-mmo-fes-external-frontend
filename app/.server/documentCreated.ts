@@ -42,7 +42,7 @@ export const documentCreatedLoader = async (request: Request, params: Params, jo
       documentNumberInclude = "-PS-";
       break;
     case "storageNotes":
-      hasIncorrectDataRoute = route("/create-storage-document/storage-documents");
+      hasIncorrectDataRoute = route("/create-non-manipulation-document/non-manipulation-documents");
       documentNumberInclude = "-SD-";
       break;
   }
