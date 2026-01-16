@@ -1029,3 +1029,38 @@ describe("Check Your Information (Summary) page: Container vessel transport with
     cy.contains("dt.govuk-summary-list__key", "Freight bill number").next("dd").should("have.text", "Not provided");
   });
 });
+
+describe("Check Your Information (Summary) page: Change transport mode - no change scenario", () => {
+  const documentUrl = "/create-catch-certificate/GBR-2022-CC-24F279E85";
+  const checkYourInformationUrl = `${documentUrl}/check-your-information`;
+
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationChangeTransportModeNoChange,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should navigate back to check-your-information when transport mode is not changed", () => {
+    // Click the change link for transport mode
+    cy.get('[href*="how-does-the-export-leave-the-uk"]').first().click();
+
+    // Verify we're on the transport selection page
+    cy.url().should("include", "/how-does-the-export-leave-the-uk");
+
+    // Verify the truck option is already selected
+    cy.get('input[name="vehicle"][value="truck"]').should("be.checked");
+
+    // Click Save and continue without changing anything
+    cy.get('button[type="submit"]').contains("Save and continue").click();
+
+    // Should be redirected back to check-your-information
+    cy.url().should("include", "/check-your-information");
+    cy.url().should("not.include", "/add-transportation-details-truck");
+
+    // Verify transport mode is still truck
+    cy.contains("dt.govuk-summary-list__key", "How will the export leave the UK?")
+      .next("dd")
+      .should("have.text", "Truck");
+  });
+});
