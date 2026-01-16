@@ -7,7 +7,7 @@ start_dir="$1"
 num_lists="$2"
 
 # Validate arguments
-if [ -z "$start_dir" ] || [ -z "$num_lists" ]; then
+if [[ -z "${start_dir}" ]] || [[ -z "${num_lists}" ]]; then
   echo "Error: Missing required arguments" >&2
   echo "Usage: $0 <directory> <number_of_batches>" >&2
   exit 1
@@ -25,9 +25,11 @@ declare -A file_test_counts
 count_test_cases() {
   local file="$1"
   # Count occurrences of it( and it.only( patterns
-  local count=$(grep -oE '\bit\s*\(' "$file" | wc -l)
-  local count_only=$(grep -oE '\bit\.only\s*\(' "$file" | wc -l)
-  echo $((count + count_only))
+  local count
+  local count_only
+  count=$(grep -oE '\bit\s*\(' "$file" 2>/dev/null | wc -l | tr -d ' ')
+  count_only=$(grep -oE '\bit\.only\s*\(' "$file" 2>/dev/null | wc -l | tr -d ' ')
+  echo "$((count + count_only))"
 }
 
 # Function to recursively find all files and count their test cases
@@ -35,10 +37,11 @@ find_files_with_counts() {
   local dir="$1"
   echo "=== Scanning files for test cases ===" >&2
   while IFS= read -r -d '' file; do
-    local test_count=$(count_test_cases "$file")
+    local test_count
+    test_count=$(count_test_cases "$file")
     file_test_counts["$file"]=$test_count
     echo "  $(basename "$file"): $test_count test(s)" >&2
-  done < <(find "$dir" -type f -name "*.spec.ts" -print0 | sort)
+  done < <(find "$dir" -type f -name "*.spec.ts" -print0 | sort -z)
   echo "" >&2
 }
 # Call the function with the starting directory
@@ -61,10 +64,10 @@ fi
 # Store in array: file_path:test_count
 sorted_files=()
 while IFS= read -r line; do
-  sorted_files+=("$line")
+  [ -n "$line" ] && sorted_files+=("$line")
 done < <(
   for file in "${!file_test_counts[@]}"; do
-    echo "$file:${file_test_counts[$file]}"
+    printf '%s:%s\n' "$file" "${file_test_counts[$file]}"
   done | sort -t: -k2 -rn
 )
 
@@ -82,7 +85,7 @@ for entry in "${sorted_files[@]}"; do
   IFS=: read -r file count <<< "$entry"
   
   # Skip files with no test cases (edge case)
-  if [ "$count" -eq 0 ]; then
+  if [ "${count:-0}" -eq 0 ]; then
     continue
   fi
   
