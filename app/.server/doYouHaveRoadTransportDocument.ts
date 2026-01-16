@@ -57,11 +57,13 @@ export const doYouHaveRoadTransportDocumentAction = async ({
 
   switch (journey) {
     case "storageNotes":
-      currentUri = route(`/create-storage-document/:documentNumber/do-you-have-a-road-transport-document`, {
+      currentUri = route(`/create-non-manipulation-document/:documentNumber/do-you-have-a-road-transport-document`, {
         documentNumber,
       });
-      progressUrl = route(`/create-storage-document/:documentNumber/departure-product-summary`, { documentNumber });
-      addTruckDetailsUrl = route(`/create-storage-document/:documentNumber/add-transportation-details-truck`, {
+      progressUrl = route(`/create-non-manipulation-document/:documentNumber/departure-product-summary`, {
+        documentNumber,
+      });
+      addTruckDetailsUrl = route(`/create-non-manipulation-document/:documentNumber/add-transportation-details-truck`, {
         documentNumber,
       });
       break;

@@ -274,7 +274,7 @@ export const exportersAddressAction = async (request: Request, params: Params, j
     catchCertificate: route("/create-catch-certificate/:documentNumber/add-exporter-details", {
       documentNumber,
     }),
-    storageNotes: route("/create-storage-document/:documentNumber/add-exporter-details", {
+    storageNotes: route("/create-non-manipulation-document/:documentNumber/add-exporter-details", {
       documentNumber,
     }),
     processingStatement: route("/create-processing-statement/:documentNumber/add-exporter-details", {

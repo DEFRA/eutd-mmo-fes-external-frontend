@@ -1,10 +1,11 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const addStorageFacilityUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/add-storage-facility-details";
-const addStorageApprovalUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/add-storage-facility-approval";
-const progressUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/progress";
-const storageFacilityUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/how-does-the-export-leave-the-uk";
-const checkYourInformationUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/check-your-information";
+const addStorageFacilityUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility-details";
+const addStorageApprovalUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility-approval";
+const progressUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/progress";
+const storageFacilityUrl =
+  "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/how-does-the-consignment-leave-the-uk";
+const checkYourInformationUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/check-your-information";
 
 describe("Add Storage Facility Approval", () => {
   beforeEach(() => {
@@ -73,7 +74,7 @@ describe("Add Storage Facility Approval - Error", () => {
 
   it("should not show validation errors when clicking on draft", () => {
     cy.get("[data-testid=save-draft-button]").click({ force: true });
-    cy.url().should("include", "create-storage-document/storage-document");
+    cy.url().should("include", "create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should show facility name validation error", () => {

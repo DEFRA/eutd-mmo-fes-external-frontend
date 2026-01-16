@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const sdPageUrl = "create-storage-document/GBR-2022-SD-F71D98A30/what-exporters-address";
+const sdPageUrl = "create-non-manipulation-document/GBR-2022-SD-F71D98A30/what-exporters-address";
 
 describe("SD: Exporter address page", () => {
   beforeEach(() => {

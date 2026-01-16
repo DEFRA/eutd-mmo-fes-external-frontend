@@ -258,8 +258,10 @@ export const progressAction = async (
       headers = { "Set-Cookie": await commitSession(session) };
       break;
     case "storageNotes":
-      returnToDashboardRoute = route("/create-storage-document/storage-documents");
-      checkInfoRoute = route("/create-storage-document/:documentNumber/check-your-information", { documentNumber });
+      returnToDashboardRoute = route("/create-non-manipulation-document/non-manipulation-documents");
+      checkInfoRoute = route("/create-non-manipulation-document/:documentNumber/check-your-information", {
+        documentNumber,
+      });
       break;
   }
 

@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 const documentNumber = "GBR-2022-SD-3FE1169D1";
-const certificateUrl = `/create-storage-document/${documentNumber}`;
+const certificateUrl = `/create-non-manipulation-document/${documentNumber}`;
 const trainPageUrl = `${certificateUrl}/add-transportation-details-train`;
 
 describe("Add Transportation Details Train: Allowed", () => {
@@ -13,7 +13,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.title().should("eq", "Train departing the UK - Create a UK non-manipulation document - GOV.UK");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/how-does-the-export-leave-the-uk`);
+      .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-leave-the-uk`);
     cy.get(".govuk-heading-xl").contains("Train departing the UK");
     cy.get("#exportDate").should("be.visible");
     cy.get("form").should(($form) => {
@@ -111,7 +111,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#railwayBillNumber").type("Railbill", { force: true });
     cy.get("#departurePlace").type("Hull", { force: true });
     cy.get("[data-testid=save-draft-button").click({ force: true });
-    cy.url().should("include", "/create-storage-document/storage-documents");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should navigate to departure summary page on click of save and continue button", () => {

@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const storageDocumentDashboardUrl = "/create-storage-document/storage-documents";
+const storageDocumentDashboardUrl = "/create-non-manipulation-document/non-manipulation-documents";
 
 describe("Storage Document dashboard sidebar links", () => {
   beforeEach(() => {
@@ -54,7 +54,7 @@ describe("Storage Document Dashboard page: rendering", () => {
   });
 
   it("should redirect to the dashboard page if didn't got expected response", () => {
-    cy.url().should("include", "/create-storage-document/storage-documents");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should render links catch certificate link", () => {
@@ -156,7 +156,10 @@ describe("Storage Document Dashboard page for completed table: rendering", () =>
     cy.get('[data-testid="storageNotes-check-eu-catch-status"]').each(($link) => {
       cy.wrap($link)
         .should("have.attr", "href")
-        .and("match", /\/create-storage-document\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/);
+        .and(
+          "match",
+          /\/create-non-manipulation-document\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/
+        );
     });
   });
 
@@ -223,7 +226,7 @@ describe("Storage Document Dashboard page: create a new document", () => {
     cy.visit(storageDocumentDashboardUrl, { qs: { ...testParams } });
 
     cy.get("#create-export-document").click({ force: true });
-    cy.url().should("include", "/create-storage-document/GBR-2022-SD-0123456789/progress");
+    cy.url().should("include", "/create-non-manipulation-document/GBR-2022-SD-0123456789/progress");
   });
 
   it("will redirect to the forbidden page", () => {
@@ -244,8 +247,10 @@ describe("Storage Document Dashboard page: continue a document", () => {
     };
     cy.visit(storageDocumentDashboardUrl, { qs: { ...testParams } });
 
-    cy.get("a#continue[href='/create-storage-document/GBR-2022-SD-F0285BD8A/progress']").click({ force: true });
-    cy.url().should("include", "/create-storage-document/GBR-2022-SD-F0285BD8A/progress");
+    cy.get("a#continue[href='/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/progress']").click({
+      force: true,
+    });
+    cy.url().should("include", "/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/progress");
   });
 });
 
@@ -256,10 +261,15 @@ describe("Storage Document Dashboard page: delete a document", () => {
     };
     cy.visit(storageDocumentDashboardUrl, { qs: { ...testParams } });
 
-    cy.get("a#delete[href='/create-storage-document/GBR-2022-SD-F0285BD8A/delete-this-draft-storage-document']").click({
+    cy.get(
+      "a#delete[href='/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/delete-this-non-manipulation-document']"
+    ).click({
       force: true,
     });
-    cy.url().should("include", "/create-storage-document/GBR-2022-SD-F0285BD8A/delete-this-draft-storage-document");
+    cy.url().should(
+      "include",
+      "/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/delete-this-non-manipulation-document"
+    );
   });
 });
 
@@ -270,10 +280,15 @@ describe("Storage Document Dashboard page: void a document", () => {
     };
     cy.visit(storageDocumentDashboardUrl, { qs: { ...testParams } });
 
-    cy.get("a[href='/create-storage-document/GBR-2022-SD-1C9833456/void-this-storage-document']").click({
+    cy.get(
+      "a[href='/create-non-manipulation-document/GBR-2022-SD-1C9833456/void-this-non-manipulation-document']"
+    ).click({
       force: true,
     });
-    cy.url().should("include", "/create-storage-document/GBR-2022-SD-1C9833456/void-this-storage-document");
+    cy.url().should(
+      "include",
+      "/create-non-manipulation-document/GBR-2022-SD-1C9833456/void-this-non-manipulation-document"
+    );
   });
 });
 
@@ -284,10 +299,15 @@ describe("Storage Document Dashboard page: copy a document", () => {
     };
     cy.visit(storageDocumentDashboardUrl, { qs: { ...testParams } });
 
-    cy.get("a[href='/create-storage-document/GBR-2022-SD-1C9833456/copy-this-storage-document']").click({
+    cy.get(
+      "a[href='/create-non-manipulation-document/GBR-2022-SD-1C9833456/copy-this-non-manipulation-document']"
+    ).click({
       force: true,
     });
-    cy.url().should("include", "/create-storage-document/GBR-2022-SD-1C9833456/copy-this-storage-document");
+    cy.url().should(
+      "include",
+      "/create-non-manipulation-document/GBR-2022-SD-1C9833456/copy-this-non-manipulation-document"
+    );
   });
 });
 

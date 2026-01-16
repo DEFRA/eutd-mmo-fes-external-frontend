@@ -42,7 +42,7 @@ export function getDashboardName(journey: string | undefined): string {
   const names: { [key: string]: string } = {
     "create-catch-certificate": "catch-certificates",
     "create-processing-statement": "processing-statements",
-    "create-storage-document": "storage-documents",
+    "create-non-manipulation-document": "non-manipulation-documents",
   };
 
   return journey === undefined ? "catch-certificates" : names[journey];
@@ -55,7 +55,7 @@ export function getPrivacyNoticeJourney(journey: Journey): string {
     case "processingStatement":
       return "create-processing-statement";
     case "storageNotes":
-      return "create-storage-document";
+      return "create-non-manipulation-document";
     default:
       return "create-catch-certificate";
   }
