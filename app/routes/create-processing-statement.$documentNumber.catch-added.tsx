@@ -173,10 +173,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   // Check if there's an active search query before applying session filtering
   const url = new URL(request.url);
   const urlQuery = url.searchParams.get("q");
-  const sessionQuery = session.get("matchQuery");
-  const hasActiveQuery = !!(urlQuery ?? sessionQuery);
-
-  applyMatchedFromSession(session, psData, hasActiveQuery);
 
   // If the user navigates to the catch-added page without a search query (no `q`),
   // treat this as a fresh navigation back to the page and clear transient
@@ -186,6 +182,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     session.unset("matchQuery");
     session.unset("matchCatches");
   }
+
+  const sessionQuery = session.get("matchQuery");
+  const hasActiveQuery = !!(urlQuery ?? sessionQuery);
+
+  applyMatchedFromSession(session, psData, hasActiveQuery);
 
   if (!hasActionExecuted && !hasActiveQuery) {
     if (hasNoAddedProducts(psData)) {
