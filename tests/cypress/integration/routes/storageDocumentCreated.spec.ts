@@ -13,7 +13,7 @@ describe("Storage document created page: rendering", () => {
 
   it("should render links", () => {
     cy.contains("strong", /^Download the non-manipulation document$/).should("be.visible");
-    cy.contains("a", /^View completed non-manipulation document or create a new export document$/)
+    cy.contains("a", /^View completed non-manipulation documents or create a new export document$/)
       .should("be.visible")
       .should("have.attr", "href", "/create-storage-document/storage-documents");
   });
@@ -54,7 +54,7 @@ describe("Storage document created page: rendering", () => {
       "li",
       "The importing authority will complete and sign their section of the document at the Border Inspection Post (BIP)."
     ).should("be.visible");
-    cy.contains("View completed non-manipulation document or create a new export document").should("be.visible");
+    cy.contains("View completed non-manipulation documents or create a new export document").should("be.visible");
   });
 
   it("should render important notice with exclamation icon", () => {
@@ -65,7 +65,7 @@ describe("Storage document created page: rendering", () => {
 
   it("should link to the storage document dashboard", () => {
     cy.findByRole("link", {
-      name: "View completed non-manipulation document or create a new export document",
+      name: "View completed non-manipulation documents or create a new export document",
     }).click({ force: true });
     cy.url().should("include", "/create-storage-document/storage-documents");
   });
