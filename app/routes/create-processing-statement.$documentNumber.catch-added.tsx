@@ -86,16 +86,32 @@ const handleFilterAction = async (
   values: Record<string, unknown>,
   session: any,
   psData: ProcessingStatement,
-  documentNumber?: string
+  documentNumber?: string,
+  request?: Request
 ): Promise<Response | null> => {
   const q = (values.q as string) ?? "";
   const actionType = (values.actionType as string) ?? "";
 
+  // Preserve existing query parameters from the original request
+  const url = request ? new URL(request.url) : null;
+  const existingParams = new URLSearchParams();
+
+  if (url) {
+    // Preserve all existing params except 'q' and 'pageNo' (which we'll set explicitly)
+    url.searchParams.forEach((value, key) => {
+      if (key !== "q" && key !== "pageNo") {
+        existingParams.set(key, value);
+      }
+    });
+  }
+
   if (actionType === "reset") {
     session.unset("matchCatches");
     session.unset("matchQuery");
+    const resetParams = existingParams.toString();
     return redirect(
-      route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }),
+      route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }) +
+        (resetParams ? `?${resetParams}` : ""),
       {
         headers: {
           "Set-Cookie": await commitSession(session),
@@ -121,10 +137,15 @@ const handleFilterAction = async (
       session.set("matchQuery", "");
     }
 
-    const searchParams = q ? `?q=${encodeURIComponent(q)}` : "";
+    // Build final query string with search param and preserved params
+    if (q) {
+      existingParams.set("q", q);
+    }
+    const searchParams = existingParams.toString();
+
     return redirect(
       route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }) +
-        searchParams,
+        (searchParams ? `?${searchParams}` : ""),
       {
         headers: {
           "Set-Cookie": await commitSession(session),
@@ -253,7 +274,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   const { _action, ...values } = Object.fromEntries(form);
 
-  const maybeHandled = await handleFilterAction(values, session, psData, documentNumber as string);
+  const maybeHandled = await handleFilterAction(values, session, psData, documentNumber as string, request);
   if (maybeHandled) return maybeHandled;
   const isDraft = _action === "saveAsDraft";
   const isSaveAndContinue = _action === "saveAndContinue";
