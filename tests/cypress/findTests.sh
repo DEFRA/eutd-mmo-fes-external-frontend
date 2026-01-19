@@ -3,7 +3,7 @@
 # Directory to start searching from (passed as argument)
 start_dir="$1"
 
-# Number of equal lists to create (passed as argument)
+# Number of equal batches to create (passed as argument)
 num_lists="$2"
 
 # Validate arguments
@@ -33,7 +33,7 @@ count_test_cases() {
 # Function to recursively find all files and count their test cases
 find_files_with_counts() {
   local dir="$1"
-  local file
+  echo "=== Scanning files for test cases ===" >&2
   while IFS= read -r -d '' file; do
     files+=("$file")
   done < <(find "$dir" -type f -print0 | sort)
