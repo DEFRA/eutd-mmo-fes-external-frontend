@@ -14,6 +14,9 @@ node_modules
 /.nyc_output
 /tests/cypress/screenshots
 /tests/cypress/downloads
+/tests/cypress/.nyc_output
+/tests/cypress/coverage
+/tests/cypress/test-results
 /false
 /dump.rdb
 /__blobstorage__

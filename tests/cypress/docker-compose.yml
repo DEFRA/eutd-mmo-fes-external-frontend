@@ -1,26 +1,34 @@
-version: '3.6'
-
 networks:
   cypress:
-    external: true
+    driver: bridge
 
 services:
   frontend:
-    image: ${IMAGE}
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+      target: test
+    image: mmo-fes-external-frontend:test
     hostname: ${FRONTEND_HOSTNAME:-frontend1}
     environment:
-      - PORT=${FRONTEND_PORT:-3001}
+      - PORT=3000
       - HOSTNAME=${FRONTEND_HOSTNAME:-frontend1}
     ports:
       - ${FRONTEND_PORT:-3001}:3000
     networks:
       - cypress
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 60s
 
   cypress:
-    image: ${IMAGE}
+    image: mmo-fes-external-frontend:test
     command: "npm run :test:ci -- --spec=${TEST_PATH:-./tests/cypress/integration}"
     environment:
-      - PORT=${FRONTEND_PORT:-3001}
+      - PORT=3000
       - HOSTNAME=${FRONTEND_HOSTNAME:-frontend1}
       - TEST_PATH=${TEST_PATH-./tests/cypress/integration/}
     networks:
@@ -30,4 +38,5 @@ services:
       - ./.nyc_output:/app/.nyc_output
       - ./coverage:/app/coverage
     depends_on:
-      - frontend
+      frontend:
+        condition: service_healthy
