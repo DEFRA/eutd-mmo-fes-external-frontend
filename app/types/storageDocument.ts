@@ -55,6 +55,7 @@ export interface StorageDocument {
   errors?: {};
   errorsUrl?: string;
   isNonJs: boolean;
+  userReference?: string;
   facilityName: string;
   facilityAddressOne?: string;
   facilityAddressTwo?: string;

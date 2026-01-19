@@ -29,6 +29,7 @@
   "validationErrors": [{}],
   "addAnotherProduct": "No",
   "addAnotherStorageFacility": "No",
+  "userReference": "TEST-REF-456",
   "transport": {
     "vehicle": "containerVessel",
     "vesselName": "gfs",

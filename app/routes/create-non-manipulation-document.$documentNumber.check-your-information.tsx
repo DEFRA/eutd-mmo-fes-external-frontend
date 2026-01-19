@@ -87,7 +87,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   CheckYourInformationPSSDAction(request, params, "storageNotes");
 
 const CheckYourInformation = () => {
-  const { t } = useTranslation(["common", "sdCheckYourInformation", "transportation"]);
+  const { t } = useTranslation(["common", "sdCheckYourInformation", "transportation", "progress"]);
   const { documentNumber, storageDocument, exporter, csrf } = useLoaderData<loaderProps>();
   const errors: IValidationError[] = useActionData<IValidationError[]>() ?? [];
   const hasErrors: boolean = Array.isArray(errors) && errors?.length > 0;
@@ -145,6 +145,13 @@ const CheckYourInformation = () => {
           exporterDetailsRoute="/create-non-manipulation-document/:documentNumber/add-exporter-details"
           checkInfoRoute="/create-non-manipulation-document/:documentNumber/check-your-information"
           documentNumber={documentNumber}
+          userReference={storageDocument.userReference}
+          userReferenceLabel={t("commonProgressPageExporterYourReference", { ns: "progress" })}
+          userReferenceChangeRoute={`/create-non-manipulation-document/${documentNumber}/add-your-reference?nextUri=${route(
+            "/create-non-manipulation-document/:documentNumber/check-your-information",
+            { documentNumber }
+          )}`}
+          notProvidedText={t("sdNotProvided", { ns: "sdCheckYourInformation" })}
         />
 
         <h2 className="govuk-heading-l">{t("sdCheckYourInformationProudcts", { ns: "sdCheckYourInformation" })}</h2>
