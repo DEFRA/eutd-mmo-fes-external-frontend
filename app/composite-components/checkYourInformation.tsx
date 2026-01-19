@@ -3,6 +3,7 @@ import { changeLinkUri } from "~/helpers";
 import { route } from "routes-gen";
 import { useTranslation } from "react-i18next";
 import lowerCase from "lodash/lowerCase";
+import isEmpty from "lodash/isEmpty";
 import { Main, NotificationBanner, ErrorSummary, Title, SecureForm, formatAddress, ErrorMessage } from "~/components";
 import * as React from "react";
 import moment from "moment";
@@ -40,6 +41,10 @@ type CheckInfoExporterDetailsProps = {
   checkInfoRoute: any;
   summaryPageChangeText?: string;
   documentNumber: string;
+  userReference?: string;
+  userReferenceLabel?: string;
+  userReferenceChangeRoute?: string;
+  notProvidedText?: string;
 };
 
 export const CheckInfoExporterDetails = ({
@@ -52,10 +57,28 @@ export const CheckInfoExporterDetails = ({
   checkInfoRoute,
   summaryPageChangeText,
   documentNumber,
+  userReference,
+  userReferenceLabel,
+  userReferenceChangeRoute,
+  notProvidedText,
 }: CheckInfoExporterDetailsProps) => (
   <>
     <h2 className="govuk-heading-l">{checkExporterDetailsHeader}</h2>
     <dl className="govuk-summary-list govuk-!-margin-bottom-5">
+      {userReferenceLabel && (
+        <div className="govuk-summary-list__row">
+          <dt className="govuk-summary-list__key govuk-!-width-one-half">{userReferenceLabel}</dt>
+          <dd className="govuk-summary-list__value">{!isEmpty(userReference) ? userReference : notProvidedText}</dd>
+          {userReferenceChangeRoute && (
+            <dd className="govuk-summary-list__actions">
+              <a id="yourReferenceChangeLink" className="govuk-link" href={userReferenceChangeRoute}>
+                {changeLinkText}
+                <span className="govuk-visually-hidden"> {lowerCase(userReferenceLabel)}</span>
+              </a>
+            </dd>
+          )}
+        </div>
+      )}
       <div className="govuk-summary-list__row">
         <dt className="govuk-summary-list__key govuk-!-width-one-half">{companyNameTitle}</dt>
         <dd className="govuk-summary-list__value">{exporterDetails?.exporterCompanyName}</dd>

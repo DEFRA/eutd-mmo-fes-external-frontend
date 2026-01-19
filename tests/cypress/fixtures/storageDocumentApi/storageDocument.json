@@ -76,6 +76,7 @@
   "validationErrors": [{}],
   "addAnotherProduct": "No",
   "addAnotherStorageFacility": "No",
+  "userReference": "MY-REF-12345",
   "transport": {
     "vehicle": "containerVessel",
     "vesselName": "gfs",
