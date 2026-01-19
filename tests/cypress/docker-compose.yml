@@ -1,7 +1,3 @@
-networks:
-  cypress:
-    driver: bridge
-
 services:
   frontend:
     build:
@@ -15,8 +11,6 @@ services:
       - HOSTNAME=${FRONTEND_HOSTNAME:-frontend1}
     ports:
       - ${FRONTEND_PORT:-3001}:3000
-    networks:
-      - cypress
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/"]
       interval: 10s
@@ -29,10 +23,9 @@ services:
     command: /bin/sh -c "npm run :test:ci -- --spec=${TEST_PATH:-./tests/cypress/integration} && npm run :report:coverage"
     environment:
       - PORT=3000
-      - TEST_HOSTNAME=${FRONTEND_HOSTNAME:-frontend1}
+      - HOSTNAME=localhost
       - TEST_PATH=${TEST_PATH-./tests/cypress/integration/}
-    networks:
-      - cypress
+    network_mode: "service:frontend"
     volumes:
       - ./test-results:/app/test-results
       - ./.nyc_output:/app/.nyc_output
