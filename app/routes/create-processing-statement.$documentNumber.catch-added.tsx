@@ -512,7 +512,7 @@ const CatchAdded = () => {
               )}
             />
             <tbody className="govuk-table__body">
-              {!isEmpty(q) && catches.length === 0 ? (
+              {!isEmpty(q) && catches.length === 0 && products.length === 0 ? (
                 <tr className="govuk-table__row">
                   <td colSpan={6} className="govuk-table__cell">
                     {t("commonNoResultsFound", { ns: "common" })}
