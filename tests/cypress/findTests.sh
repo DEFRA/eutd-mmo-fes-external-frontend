@@ -7,7 +7,7 @@ start_dir="$1"
 num_lists="$2"
 
 # Validate arguments
-if [[ -z "$start_dir" ]] || [[ -z "$num_lists" ]]; then
+if [ -z "$start_dir" ] || [ -z "$num_lists" ]; then
   echo "Error: Missing required arguments" >&2
   echo "Usage: $0 <directory> <number_of_batches>" >&2
   exit 1
@@ -25,12 +25,9 @@ declare -A file_test_counts
 count_test_cases() {
   local file="$1"
   # Count occurrences of it( and it.only( patterns
-  local count
-  local count_only
-  count=$(grep -oE '\bit\s*\(' "$file" 2>/dev/null | wc -l | tr -d ' ')
-  count_only=$(grep -oE '\bit\.only\s*\(' "$file" 2>/dev/null | wc -l | tr -d ' ')
-  echo "$((count + count_only))"
-  return 0
+  local count=$(grep -oE '\bit\s*\(' "$file" | wc -l)
+  local count_only=$(grep -oE '\bit\.only\s*\(' "$file" | wc -l)
+  echo $((count + count_only))
 }
 
 # Function to recursively find all files and count their test cases
@@ -46,14 +43,14 @@ find_files_with_counts() {
 find_files_with_counts "$start_dir"
 
 # Check if any files were found
-if [[ ${#file_test_counts[@]} -eq 0 ]]; then
+if [ ${#file_test_counts[@]} -eq 0 ]; then
   echo "Error: No .spec.ts files found in $start_dir" >&2
   exit 1
 fi
 
 # Adjust num_lists if more batches than files
 total_files=${#file_test_counts[@]}
-if [[ "$num_lists" -gt "$total_files" ]]; then
+if [ "$num_lists" -gt "$total_files" ]; then
   echo "Warning: Requested $num_lists batches but only $total_files files found. Adjusting to $total_files batches." >&2
   num_lists=$total_files
 fi
@@ -62,10 +59,10 @@ fi
 # Store in array: file_path:test_count
 sorted_files=()
 while IFS= read -r line; do
-  [ -n "$line" ] && sorted_files+=("$line")
+  sorted_files+=("$line")
 done < <(
   for file in "${!file_test_counts[@]}"; do
-    printf '%s:%s\n' "$file" "${file_test_counts[$file]}"
+    echo "$file:${file_test_counts[$file]}"
   done | sort -t: -k2 -rn
 )
 
@@ -83,7 +80,7 @@ for entry in "${sorted_files[@]}"; do
   IFS=: read -r file count <<< "$entry"
   
   # Skip files with no test cases (edge case)
-  if [[ "${count:-0}" -eq 0 ]]; then
+  if [ "$count" -eq 0 ]; then
     continue
   fi
   start_index=$((i * files_per_list + ((i < remainder) ? i : remainder)))
@@ -107,7 +104,7 @@ echo "" >&2
 # Print the comma-separated batches (stdout for actual usage)
 for ((i = 0; i < num_lists; i++)); do
   # Only print non-empty batches
-  if [[ -n "${batches[i]}" ]]; then
+  if [ -n "${batches[i]}" ]; then
     echo "${batches[i]}"
   fi
 done
