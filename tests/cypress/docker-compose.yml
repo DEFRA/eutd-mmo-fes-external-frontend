@@ -26,10 +26,10 @@ services:
 
   cypress:
     image: mmo-fes-external-frontend:test
-    command: "npm run :test:ci -- --spec=${TEST_PATH:-./tests/cypress/integration}"
+    command: /bin/sh -c "npm run :test:ci -- --spec=${TEST_PATH:-./tests/cypress/integration} && npm run :report:coverage"
     environment:
       - PORT=3000
-      - HOSTNAME=${FRONTEND_HOSTNAME:-frontend1}
+      - TEST_HOSTNAME=${FRONTEND_HOSTNAME:-frontend1}
       - TEST_PATH=${TEST_PATH-./tests/cypress/integration/}
     networks:
       - cypress

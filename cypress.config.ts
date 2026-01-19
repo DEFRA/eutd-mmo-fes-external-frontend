@@ -2,7 +2,7 @@ import { defineConfig } from "cypress";
 import registerCodeCoverageTasks from "@cypress/code-coverage/task";
 
 const port = process.env.PORT ?? 3000;
-const hostname = process.env.HOSTNAME ?? "localhost";
+const hostname = process.env.TEST_HOSTNAME ?? "localhost";
 const url = `http://${hostname}:${port}`;
 
 export default defineConfig({
