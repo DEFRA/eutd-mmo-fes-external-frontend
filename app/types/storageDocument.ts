@@ -55,6 +55,7 @@ export interface StorageDocument {
   errors?: {};
   errorsUrl?: string;
   isNonJs: boolean;
+  userReference?: string;
   facilityName: string;
   facilityAddressOne?: string;
   facilityAddressTwo?: string;
@@ -81,7 +82,6 @@ export type FacilitiesLoaderData = {
 export type CatchesLoaderData = {
   documentNumber: string;
   catches: (StorageDocumentCatch & CatchIndex)[];
-  nextUri?: string;
   csrf: string;
 };
 
