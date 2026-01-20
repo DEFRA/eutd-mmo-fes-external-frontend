@@ -1293,9 +1293,12 @@ describe("NMD - scenario 3 - Change arrival transport mode - no change scenario"
       const links = $body.find('[href*="how-does-the-consignment-arrive-to-the-uk"]');
       cy.log(`STEP #2A - Found ${links.length} links`);
     });
+
+    cy.log("STEP #3 - Clicking change link for arrival transport mode");
     // Click the change link for arrival transport mode
     cy.get('[href*="how-does-the-consignment-arrive-to-the-uk"]').first().click();
 
+    cy.log("STEP #4 - Verifying navigation to transport selection page");
     // Verify we're on the transport selection page
     cy.url().should("include", "/how-does-the-consignment-arrive-to-the-uk");
 
@@ -1418,12 +1421,28 @@ describe("NMD - scenario 6 - Change departure transport mode", () => {
     // Change the mode to Plane using cy.check()
     cy.get('input[name="vehicle"][value="plane"]').check({ force: true });
 
+    cy.log("STEP #7 - Verifying plane is selected");
     // Verify plane is selected
     cy.get('input[name="vehicle"][value="plane"]').should("be.checked");
 
+    cy.log("STEP #8 - Looking for submit button");
+    cy.get('button[type="submit"]').then(($buttons) => {
+      cy.log(`STEP #8A - Found ${$buttons.length} submit buttons`);
+      $buttons.each((index, btn) => {
+        cy.log(`STEP #8B - Button ${index}: text="${btn.textContent}"`);
+      });
+    });
+
+    cy.log("STEP #9 - Clicking Save and continue button");
     // Click Save and continue
     cy.get('button[type="submit"]').contains("Save and continue").click();
 
+    cy.log("STEP #10 - Checking URL after submit");
+    cy.url().then((url) => {
+      cy.log(`STEP #10A - Current URL: ${url}`);
+    });
+
+    cy.log("STEP #11 - Expecting navigation to plane transport details page");
     // Should be navigated to the plane transport details page
     cy.url().should("include", "/add-transportation-details-plane");
     cy.url().should("not.include", "/check-your-information");
