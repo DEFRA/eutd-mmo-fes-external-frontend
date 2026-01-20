@@ -1067,7 +1067,7 @@ describe("Check Your Information (Summary) page: Change transport mode - no chan
 
 describe("Check Your Information (Summary) page: NMD - Change product - no change scenario", () => {
   const documentNumber = "GBR-2023-SD-DE53D6E7C";
-  const documentUrl = `/create-storage-document/${documentNumber}`;
+  const documentUrl = `/create-non-manipulation-document/${documentNumber}`;
   const checkYourInformationUrl = `${documentUrl}/check-your-information`;
 
   beforeEach(() => {
@@ -1078,9 +1078,15 @@ describe("Check Your Information (Summary) page: NMD - Change product - no chang
   });
 
   it("should navigate through product change flow and return to check-your-information when no changes are made", () => {
+    cy.log("STEP #1 - Verifying we are on check-your-information page");
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
 
+    cy.log("STEP #2 - Looking for change link with href containing add-product-to-this-consignment");
+    cy.get("body").then(($body) => {
+      const links = $body.find('[href*="add-product-to-this-consignment"]');
+      cy.log(`STEP #2A - Found ${links.length} links`);
+    });
     // Click the change link for a product field (species, document details, etc.)
     cy.get('[href*="add-product-to-this-consignment"]').first().click();
 
@@ -1108,7 +1114,7 @@ describe("Check Your Information (Summary) page: NMD - Change product - no chang
 
 describe("Check Your Information (Summary) page: NMD - Change arrival transport mode", () => {
   const documentNumber = "GBR-2023-SD-DE53D6E7C";
-  const documentUrl = `/create-storage-document/${documentNumber}`;
+  const documentUrl = `/create-non-manipulation-document/${documentNumber}`;
   const checkYourInformationUrl = `${documentUrl}/check-your-information`;
 
   beforeEach(() => {
@@ -1119,9 +1125,15 @@ describe("Check Your Information (Summary) page: NMD - Change arrival transport 
   });
 
   it("should navigate to plane transport details page when changing arrival transport mode to plane", () => {
+    cy.log("STEP #1 - Verifying we are on check-your-information page");
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
 
+    cy.log("STEP #2 - Looking for change link with href containing how-does-the-consignment-arrive-to-the-uk");
+    cy.get("body").then(($body) => {
+      const links = $body.find('[href*="how-does-the-consignment-arrive-to-the-uk"]');
+      cy.log(`STEP #2A - Found ${links.length} links`);
+    });
     // Click the change link for arrival transport mode
     cy.get('[href*="how-does-the-consignment-arrive-to-the-uk"]').first().click();
 

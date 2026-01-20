@@ -200,14 +200,7 @@ describe("What are you exporting page", () => {
     cy.get("#state").should("be.visible");
 
     cy.log("STEP #8 - Checking state dropdown has options");
-    cy.get("#state option", { timeout: 10000 })
-      .then(($options) => {
-        cy.log(`STEP #8 - Found ${$options.length} state options`);
-        $options.each((index, option) => {
-          cy.log(`  Option ${index}: value="${option.value}" label="${option.textContent}"`);
-        });
-      })
-      .should("have.length.gt", 1);
+    cy.get("#state option", { timeout: 10000 }).should("have.length.gt", 1);
 
     cy.log("STEP #9 - Looking for FRE option in state dropdown");
     cy.get('#state option[value="FRE"]', { timeout: 5000 }).should("exist");
