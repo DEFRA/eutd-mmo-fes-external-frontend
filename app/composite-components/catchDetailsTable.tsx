@@ -6,7 +6,7 @@ import { CatchDetailsTableHeader } from "~/components";
 import { getCatchDetailsHeaders } from "~/helpers";
 
 const formatWeight = (weight: number | string | undefined): string =>
-  weight !== undefined ? Number(weight).toFixed(2) : "0.00";
+  weight == null ? "0.00" : Number(weight).toFixed(2);
 
 type ProductTableRowProps = {
   productId: string;
