@@ -591,35 +591,38 @@ const CatchAdded = () => {
                               {item.catchCertificateNumber}
                             </td>
                             <td className="govuk-table__cell" id={`catches-${actualIndex}-totalWeightLanded`}>
-                              {item.totalWeightLanded}kg
+                              {Number(item.totalWeightLanded).toFixed(2)}kg
                             </td>
                             <td
                               className="govuk-table__cell"
                               id={`catches-${actualIndex}-exportWeightBeforeProcessing`}
                             >
-                              {t("commonChangeLink", { ns: "common" })}
-                            </Link>
-                          </SecureForm>
-                        </div>
-                      </td>
-                      <td className="govuk-table__cell" id={`catches-${actualIndex}-species`}>
-                        {item.species}
-                      </td>
-                      <td className="govuk-table__cell" id={`catches-${actualIndex}-catchCertificateNumber`}>
-                        {item.catchCertificateNumber}
-                      </td>
-                      <td className="govuk-table__cell" id={`catches-${actualIndex}-totalWeightLanded`}>
-                        {Number(item.totalWeightLanded).toFixed(2)}kg
-                      </td>
-                      <td className="govuk-table__cell" id={`catches-${actualIndex}-exportWeightBeforeProcessing`}>
-                        {Number(item.exportWeightBeforeProcessing).toFixed(2)}kg
-                      </td>
-                      <td className="govuk-table__cell" id={`catches-${actualIndex}-exportWeightAfterProcessing`}>
-                        {Number(item.exportWeightAfterProcessing).toFixed(2)}kg
-                      </td>
-                    </tr>
-                  );
-                })
+                              <div>
+                                <SecureForm method="post" className="govuk-!-display-inline" csrf={csrf}>
+                                  <input
+                                    type="hidden"
+                                    name="url"
+                                    value={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
+                                  />
+                                  <Link
+                                    id="change-link"
+                                    className="govuk-link"
+                                    to={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
+                                    data-testid="change-link"
+                                  >
+                                    {t("commonChangeLink", { ns: "common" })}
+                                  </Link>
+                                </SecureForm>
+                              </div>
+                            </td>
+                            <td className="govuk-table__cell" id={`catches-${actualIndex}-exportWeightAfterProcessing`}>
+                              {Number(item.exportWeightAfterProcessing).toFixed(2)}kg
+                            </td>
+                          </tr>
+                        );
+                      });
+                  })}
+                </>
               )}
             </tbody>
           </table>
