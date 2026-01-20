@@ -56,6 +56,7 @@ type ILoaderData = {
   csrf: string;
   productId?: string;
   q?: string;
+  nextUri?: string;
   productDescription: string;
   totalDocuments: number;
   initialPageNo?: number;
@@ -197,6 +198,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const sessionQuery = session.get("matchQuery");
   const pageNo = parseInt(url.searchParams.get("pageNo") ?? "1", 10);
   const q = typeof sessionQuery === "string" ? sessionQuery : url.searchParams.get("q") ?? undefined;
+  const nextUri = url.searchParams.get("nextUri") ?? "";
   const productDescription = psData.products?.length === 1 ? psData.products[0].description : undefined;
   const totalDocuments = countUniqueDocumentByCatchCertificateNumber(psData.catches);
 
@@ -210,6 +212,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       csrf,
       productId: product?.id,
       q,
+      nextUri,
       productDescription,
       totalDocuments,
       initialPageNo: pageNo,
@@ -242,6 +245,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (!isValid) return redirect("/forbidden");
 
   const { _action, ...values } = Object.fromEntries(form);
+  const nextUri = (form.get("nextUri") as string) || "";
 
   const maybeHandled = await handleFilterAction(values, session, psData, documentNumber as string);
   if (maybeHandled) return maybeHandled;
@@ -312,7 +316,26 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   session.unset("actionExecuted");
   session.unset("matchQuery");
   session.unset("matchCatches");
-  return redirect(`/create-processing-statement/${documentNumber}/add-processing-plant-details`, {
+
+  // Check if plant details are already filled
+  const hasPlantDetails = psData.plantName && psData.plantApprovalNumber && psData.personResponsibleForConsignment;
+
+  let redirectUrl: string;
+  if (!nextUri || isEmpty(nextUri)) {
+    // If no nextUri, check if plant details exist
+    if (hasPlantDetails) {
+      // Skip plant details page and go directly to check-your-information
+      redirectUrl = `/create-processing-statement/${documentNumber}/check-your-information`;
+    } else {
+      // Plant details not filled, go to plant details page
+      redirectUrl = `/create-processing-statement/${documentNumber}/add-processing-plant-details`;
+    }
+  } else {
+    // Use the provided nextUri
+    redirectUrl = nextUri;
+  }
+
+  return redirect(redirectUrl, {
     headers: {
       "Set-Cookie": await commitSession(session),
     },
@@ -402,8 +425,18 @@ const populateNavigationLinks = (
 });
 
 const CatchAdded = () => {
-  const { documentNumber, products, catches, csrf, productId, productDescription, totalDocuments, q, initialPageNo } =
-    useLoaderData<ILoaderData>();
+  const {
+    documentNumber,
+    products,
+    catches,
+    csrf,
+    productId,
+    productDescription,
+    totalDocuments,
+    q,
+    nextUri,
+    initialPageNo,
+  } = useLoaderData<ILoaderData>();
   const actionData = useActionData<ActionDataWithErrors>();
   const groupedErrors: IError[] = ((actionData?.groupedErrors ?? []) as unknown as IError[][]).flat();
   const { t } = useTranslation(["catchDetailsTableHeader", "common"]);
@@ -618,6 +651,7 @@ const CatchAdded = () => {
                 </div>
               </fieldset>
             </div>
+            <input type="hidden" name="nextUri" value={nextUri ?? ""} />
             <br />
             <ButtonGroup />
           </SecureForm>
