@@ -10,7 +10,7 @@ import {
 } from "~/components";
 import { useLoaderData, useActionData, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { type MetaFunction, type LoaderFunction, type ActionFunction, redirect } from "react-router";
+import { type LoaderFunction, type ActionFunction, redirect } from "react-router";
 import type {
   IUnauthorised,
   ProcessingStatement,
@@ -157,7 +157,7 @@ const handleFilterAction = async (
   return null;
 };
 
-export const meta: MetaFunction = (args) => getMeta(args);
+export const meta = (args: any) => getMeta(args);
 
 const hasNoAddedProducts = (psData: ProcessingStatement) =>
   !Array.isArray(psData.products) || (Array.isArray(psData.products) && psData.products.length < 1);
