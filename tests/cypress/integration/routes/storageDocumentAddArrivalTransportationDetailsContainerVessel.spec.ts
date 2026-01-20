@@ -351,7 +351,6 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
 
 describe("Container Vessel Arrival Required Fields Validation", () => {
   const testParams: ITestParams = { testCaseId: TestCaseId.AddArrivalContainerVesselTransportAllowed };
-
   it("should display error when flag state is empty", () => {
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
     cy.get("#vesselName").type("Test Vessel", { force: true });
