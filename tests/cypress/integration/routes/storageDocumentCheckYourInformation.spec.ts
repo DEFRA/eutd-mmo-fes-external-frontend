@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const sdPageUrl = "create-storage-document/GBR-2022-SD-F71D98A30/check-your-information";
+const sdPageUrl = "create-non-manipulation-document/GBR-2022-SD-F71D98A30/check-your-information";
 
 describe("SD: check-your-information page", () => {
   beforeEach(() => {
@@ -13,6 +13,7 @@ describe("SD: check-your-information page", () => {
   it("should contain the required heading", () => {
     cy.contains("dt", "Company name");
     cy.contains("dt", "Company address");
+    cy.contains("dt", "Your reference");
     cy.contains("div", "Consignment item");
     cy.contains("dt", "Species");
     cy.contains("dt", "Commodity code");
@@ -27,6 +28,26 @@ describe("SD: check-your-information page", () => {
     cy.contains("dt", "Transport type");
     cy.contains("dt", "Consignment destination");
     cy.contains("dt", "Point of destination");
+  });
+
+  it("should display user reference value", () => {
+    cy.contains("dt", "Your reference").next("dd").should("contain", "MY-REF-12345");
+  });
+
+  it("should have a change link for user reference with correct href", () => {
+    cy.get("#yourReferenceChangeLink")
+      .should("exist")
+      .should("have.attr", "href")
+      .and("include", "/add-your-reference")
+      .and("include", "nextUri")
+      .and("include", "check-your-information");
+  });
+
+  it("should have visually-hidden text for accessibility on reference change link", () => {
+    cy.get("#yourReferenceChangeLink")
+      .find(".govuk-visually-hidden")
+      .should("exist")
+      .should("contain", "your reference");
   });
 
   it("should contain the required data", () => {
@@ -69,6 +90,7 @@ describe("SD: check-your-information page mandetory", () => {
   it("should contain the required heading", () => {
     cy.contains("dt", "Company name");
     cy.contains("dt", "Company address");
+    cy.contains("dt", "Your reference");
     cy.contains("div", "Consignment item");
     cy.contains("dt", "Species");
     cy.contains("dt", "Commodity code");
@@ -83,6 +105,10 @@ describe("SD: check-your-information page mandetory", () => {
     cy.contains("dt", "Storage facility address");
     cy.contains("dt", "Transport type");
     cy.contains("dt", "Consignment destination");
+  });
+
+  it("should display user reference value for mandatory fields test", () => {
+    cy.contains("dt", "Your reference").next("dd").should("contain", "TEST-REF-456");
   });
 
   it("should contain the required data", () => {
@@ -122,6 +148,26 @@ describe("SD: check-your-information page transport", () => {
   });
 });
 
+describe("SD: check-your-information page with user reference not provided", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationAllFieldsNotProvided,
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+  });
+
+  it("should display 'Not provided' when user reference is empty", () => {
+    cy.contains("dt", "Your reference").next("dd").should("contain", "Not provided");
+  });
+
+  it("should still have change link for user reference when not provided", () => {
+    cy.get("#yourReferenceChangeLink")
+      .should("exist")
+      .should("have.attr", "href")
+      .and("include", "/add-your-reference");
+  });
+});
+
 describe("Check Your Information (Summary) page: document submission", () => {
   it("should redirect user to storage document created page", () => {
     const testParams: ITestParams = {
@@ -131,7 +177,7 @@ describe("Check Your Information (Summary) page: document submission", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
     cy.get("[data-testid=create-sd-button]").click({ force: true });
-    cy.url().should("include", "/storage-document-created");
+    cy.url().should("include", "/non-manipulation-document-created");
   });
 });
 
@@ -405,7 +451,9 @@ describe("SD: Point of destination - Field visibility on all transport types", (
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
-    cy.visit(`create-storage-document/${documentNumber}/add-transportation-details-truck`, { qs: { ...testParams } });
+    cy.visit(`create-non-manipulation-document/${documentNumber}/add-transportation-details-truck`, {
+      qs: { ...testParams },
+    });
 
     cy.contains("label", "Point of destination").should("be.visible");
     cy.get("#pointOfDestination").should("be.visible");
@@ -419,7 +467,9 @@ describe("SD: Point of destination - Field visibility on all transport types", (
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportAllowed,
     };
-    cy.visit(`create-storage-document/${documentNumber}/add-transportation-details-plane`, { qs: { ...testParams } });
+    cy.visit(`create-non-manipulation-document/${documentNumber}/add-transportation-details-plane`, {
+      qs: { ...testParams },
+    });
 
     cy.contains("label", "Point of destination").should("be.visible");
     cy.get("#pointOfDestination").should("be.visible");
@@ -429,7 +479,9 @@ describe("SD: Point of destination - Field visibility on all transport types", (
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
     };
-    cy.visit(`create-storage-document/${documentNumber}/add-transportation-details-train`, { qs: { ...testParams } });
+    cy.visit(`create-non-manipulation-document/${documentNumber}/add-transportation-details-train`, {
+      qs: { ...testParams },
+    });
 
     cy.contains("label", "Point of destination").should("be.visible");
     cy.get("#pointOfDestination").should("be.visible");
@@ -439,7 +491,7 @@ describe("SD: Point of destination - Field visibility on all transport types", (
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportAllowed,
     };
-    cy.visit(`create-storage-document/${documentNumber}/add-transportation-details-container-vessel`, {
+    cy.visit(`create-non-manipulation-document/${documentNumber}/add-transportation-details-container-vessel`, {
       qs: { ...testParams },
     });
 

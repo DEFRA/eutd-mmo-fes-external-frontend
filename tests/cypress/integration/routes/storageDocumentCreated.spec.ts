@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 const documentNumber = "GBR-2023-SD-97DA962EC";
-const storageDocumentUrl = `/create-storage-document/${documentNumber}/storage-document-created`;
+const storageDocumentUrl = `/create-non-manipulation-document/${documentNumber}/non-manipulation-document-created`;
 
 describe("Storage document created page: rendering", () => {
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe("Storage document created page: rendering", () => {
     cy.contains("strong", /^Download the non-manipulation document$/).should("be.visible");
     cy.contains("a", /^View completed non-manipulation documents or create a new export document$/)
       .should("be.visible")
-      .should("have.attr", "href", "/create-storage-document/storage-documents");
+      .should("have.attr", "href", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should render links for user satisfaction survey feedback link for storage document", () => {
@@ -67,7 +67,7 @@ describe("Storage document created page: rendering", () => {
     cy.findByRole("link", {
       name: "View completed non-manipulation documents or create a new export document",
     }).click({ force: true });
-    cy.url().should("include", "/create-storage-document/storage-documents");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should render survey component", () => {
@@ -82,6 +82,6 @@ describe("Storage document created page: pageguard", () => {
       args: [documentNumber],
     };
     cy.visit(storageDocumentUrl, { failOnStatusCode: false, qs: { ...testParams } });
-    cy.url().should("include", "/create-storage-document/storage-documents");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 });

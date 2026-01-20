@@ -81,7 +81,7 @@ export const AddTransportationDetailsComponent = ({
     formData,
     displayOptionalSuffix,
   };
-  let backUrl: any = route("/create-storage-document/:documentNumber/how-does-the-export-leave-the-uk", {
+  let backUrl: any = route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-leave-the-uk", {
     documentNumber,
   });
 
@@ -121,7 +121,7 @@ export const AddTransportationDetailsComponent = ({
         registrationNumber: getRegistrationNumber(errors, actionData, registrationNumber),
         legendTitle: t("addTruckTransportationDetailsTransportDetailsTitle", { ns: "transportation" }),
       };
-      backUrl = route("/create-storage-document/:documentNumber/how-does-the-export-leave-the-uk", {
+      backUrl = route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-leave-the-uk", {
         documentNumber,
       });
       break;
@@ -161,7 +161,7 @@ export const AddTransportationDetailsComponent = ({
             <input type="hidden" name="nextUri" value={nextUri} />
           </SecureForm>
           <BackToProgressLink
-            progressUri="/create-storage-document/:documentNumber/progress"
+            progressUri="/create-non-manipulation-document/:documentNumber/progress"
             documentNumber={documentNumber}
           />
         </div>

@@ -1,8 +1,8 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 describe("HowDoesTheExportLeaveTheUk", () => {
-  const certificateUrl = "/create-storage-document/GBR-2021-SD-8EEB7E123";
-  const howDoesTheExportLeaveUrl = `${certificateUrl}/how-does-the-export-leave-the-uk`;
+  const certificateUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
+  const howDoesTheExportLeaveUrl = `${certificateUrl}/how-does-the-consignment-leave-the-uk`;
 
   it("storage document - should render page", () => {
     const testParams: ITestParams = {
@@ -35,7 +35,7 @@ describe("HowDoesTheExportLeaveTheUk", () => {
 
     cy.get("#backToProgress")
       .should("have.attr", "href")
-      .and("include", "/create-storage-document/GBR-2021-SD-8EEB7E123/progress");
+      .and("include", "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123/progress");
   });
 
   it("should navigate to truck transport details page when user selects and submits truck transport type", () => {
@@ -99,7 +99,7 @@ describe("HowDoesTheExportLeaveTheUk", () => {
     cy.get("#train").click({ force: true });
     cy.get("[data-testid=save-draft-button").click({ force: true });
 
-    cy.url().should("include", "/create-storage-document/storage-documents");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {

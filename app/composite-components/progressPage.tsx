@@ -71,7 +71,7 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
       progressHeadingTestId = "ps-progress-heading";
       break;
     case "storageNotes":
-      backUrl = route("/create-storage-document/storage-documents");
+      backUrl = route("/create-non-manipulation-document/non-manipulation-documents");
       notificationDataTestId = "storageDocument-CopyVoid";
       titleTestId = "sd-progress-titling";
       progressHeadingTestId = "sd-progress-heading";

@@ -581,10 +581,10 @@ export const exporterDetailsAction = async (
       saveAsDraft: route("/create-processing-statement/processing-statements"),
     },
     storageNotes: {
-      change: route("/create-storage-document/:documentNumber/what-exporters-address", { documentNumber }),
-      currentUri: route("/create-storage-document/:documentNumber/add-exporter-details", { documentNumber }),
-      nextUri: `/create-storage-document/${documentNumber}/add-product-to-this-consignment`,
-      saveAsDraft: route("/create-storage-document/storage-documents"),
+      change: route("/create-non-manipulation-document/:documentNumber/what-exporters-address", { documentNumber }),
+      currentUri: route("/create-non-manipulation-document/:documentNumber/add-exporter-details", { documentNumber }),
+      nextUri: `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment`,
+      saveAsDraft: route("/create-non-manipulation-document/non-manipulation-documents"),
     },
   };
 
