@@ -61,7 +61,11 @@ type ILoaderData = {
   initialPageNo?: number;
 };
 
-const applyMatchedFromSession = (session: any, psData: ProcessingStatement) => {
+const applyMatchedFromSession = (session: any, psData: ProcessingStatement, hasActiveQuery: boolean) => {
+  // Only apply filtering if there's an active search query
+  if (!hasActiveQuery) {
+    return;
+  }
   const matchedFromSession = session.get("matchCatches");
   if (Array.isArray(matchedFromSession)) {
     const matchingCatches: (Catch & CatchIndex)[] = matchedFromSession as (Catch & CatchIndex)[];
@@ -82,16 +86,32 @@ const handleFilterAction = async (
   values: Record<string, unknown>,
   session: any,
   psData: ProcessingStatement,
-  documentNumber?: string
+  documentNumber?: string,
+  request?: Request
 ): Promise<Response | null> => {
   const q = (values.q as string) ?? "";
   const actionType = (values.actionType as string) ?? "";
 
+  // Preserve existing query parameters from the original request
+  const url = request ? new URL(request.url) : null;
+  const existingParams = new URLSearchParams();
+
+  if (url) {
+    // Preserve all existing params except 'q' and 'pageNo' (which we'll set explicitly)
+    url.searchParams.forEach((value, key) => {
+      if (key !== "q" && key !== "pageNo") {
+        existingParams.set(key, value);
+      }
+    });
+  }
+
   if (actionType === "reset") {
     session.unset("matchCatches");
     session.unset("matchQuery");
+    const resetParams = existingParams.toString();
     return redirect(
-      route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }),
+      route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }) +
+        (resetParams ? `?${resetParams}` : ""),
       {
         headers: {
           "Set-Cookie": await commitSession(session),
@@ -117,8 +137,15 @@ const handleFilterAction = async (
       session.set("matchQuery", "");
     }
 
+    // Build final query string with search param and preserved params
+    if (q) {
+      existingParams.set("q", q);
+    }
+    const searchParams = existingParams.toString();
+
     return redirect(
-      route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }),
+      route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }) +
+        (searchParams ? `?${searchParams}` : ""),
       {
         headers: {
           "Set-Cookie": await commitSession(session),
@@ -164,20 +191,25 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const psData = processingStatement as ProcessingStatement;
 
-  applyMatchedFromSession(session, psData);
+  // Check if there's an active search query before applying session filtering
+  const url = new URL(request.url);
+  const urlQuery = url.searchParams.get("q");
 
   // If the user navigates to the catch-added page without a search query (no `q`),
   // treat this as a fresh navigation back to the page and clear transient
   // match/search session state so previous search/filter values do not persist.
-  const url = new URL(request.url);
-  const urlQuery = url.searchParams.get("q");
   if (!urlQuery && session.get("matchQuery")) {
     session.unset("actionExecuted");
     session.unset("matchQuery");
     session.unset("matchCatches");
   }
 
-  if (!hasActionExecuted) {
+  const sessionQuery = session.get("matchQuery");
+  const hasActiveQuery = !!(urlQuery ?? sessionQuery);
+
+  applyMatchedFromSession(session, psData, hasActiveQuery);
+
+  if (!hasActionExecuted && !hasActiveQuery) {
     if (hasNoAddedProducts(psData)) {
       return redirect(`/create-processing-statement/${documentNumber}/add-consignment-details`);
     } else if (hasNoAddedCatches(psData)) {
@@ -194,9 +226,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const product = psData.products?.findLast((p: ProcessingStatementProduct) => p.id);
 
-  const sessionQuery = session.get("matchQuery");
   const pageNo = parseInt(url.searchParams.get("pageNo") ?? "1", 10);
-  const q = typeof sessionQuery === "string" ? sessionQuery : url.searchParams.get("q") ?? undefined;
+  const q = urlQuery ?? (typeof sessionQuery === "string" ? sessionQuery : undefined);
   const productDescription = psData.products?.length === 1 ? psData.products[0].description : undefined;
   const totalDocuments = countUniqueDocumentByCatchCertificateNumber(psData.catches);
 
@@ -243,7 +274,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   const { _action, ...values } = Object.fromEntries(form);
 
-  const maybeHandled = await handleFilterAction(values, session, psData, documentNumber as string);
+  const maybeHandled = await handleFilterAction(values, session, psData, documentNumber as string, request);
   if (maybeHandled) return maybeHandled;
   const isDraft = _action === "saveAsDraft";
   const isSaveAndContinue = _action === "saveAndContinue";
@@ -406,8 +437,14 @@ const CatchAdded = () => {
     useLoaderData<ILoaderData>();
   const actionData = useActionData<ActionDataWithErrors>();
   const groupedErrors: IError[] = ((actionData?.groupedErrors ?? []) as unknown as IError[][]).flat();
-  const { t } = useTranslation(["catchDetailsTableHeader", "common"]);
+  const { t } = useTranslation(["catchDetailsTableHeader", "common", "catchAdded"]);
   const count = products.length;
+
+  // Group catches by product for display
+  const catchesByProduct = products.map((product: ProcessingStatementProduct) => ({
+    product,
+    catches: catches.filter((c: Catch) => c.productId === product.id),
+  }));
 
   const itemsPerPage = 15;
   const shouldShowPagination = catches.length > itemsPerPage;
@@ -475,38 +512,90 @@ const CatchAdded = () => {
               )}
             />
             <tbody className="govuk-table__body">
-              {!isEmpty(q) && paginatedCatches.length === 0 ? (
+              {!isEmpty(q) && catches.length === 0 && products.length === 0 ? (
                 <tr className="govuk-table__row">
                   <td colSpan={6} className="govuk-table__cell">
                     {t("commonNoResultsFound", { ns: "common" })}
                   </td>
                 </tr>
               ) : (
-                paginatedCatches.map((item: Catch & CatchIndex & { tagClass?: string }, index: number) => {
-                  const actualIndex = startIndex + index;
+                <>
+                  {catchesByProduct.map(({ product, catches: productCatches }) => {
+                    if (productCatches.length === 0) {
+                      // Product has no catches - show "No catches added" row
+                      return (
+                        <tr className="govuk-table__row" key={`product-${product.id}`}>
+                          <td className="govuk-table__cell">
+                            <strong
+                              className="govuk-tag govuk-tag--grey govuk-!-margin-bottom-2"
+                              style={{ display: "block" }}
+                            >
+                              {product.description}
+                            </strong>
+                            <div className="govuk-!-margin-top-2">
+                              <Link
+                                id="change-link"
+                                className="govuk-link"
+                                to={`/create-processing-statement/${documentNumber}/add-consignment-details/${product.id}`}
+                                data-testid="change-link"
+                              >
+                                {t("commonChangeLink", { ns: "common" })}
+                              </Link>
+                            </div>
+                          </td>
+                          <td colSpan={5} className="govuk-table__cell">
+                            {t("commonNoCatchesAdded", { ns: "common" })}
+                          </td>
+                        </tr>
+                      );
+                    }
 
-                  return (
-                    <tr className="govuk-table__row" key={`catches-data-${item._id}`}>
-                      <td className="govuk-table__cell" id={`catches-${actualIndex}-productDescription`}>
-                        <strong
-                          className={`govuk-tag ${item.tagClass} govuk-!-margin-bottom-2`}
-                          data-testid={`catches-${actualIndex}-tag`}
-                          style={{ display: "block" }}
-                        >
-                          {item.productDescription}
-                        </strong>
-                        <div className="govuk-!-margin-top-2">
-                          <SecureForm method="post" className="govuk-!-display-inline" csrf={csrf}>
-                            <input
-                              type="hidden"
-                              name="url"
-                              value={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
-                            />
-                            <Link
-                              id="change-link"
-                              className="govuk-link"
-                              to={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
-                              data-testid="change-link"
+                    // Product has catches - show all catches for this product (with pagination)
+                    return productCatches
+                      .filter((catch_: Catch & CatchIndex) => paginatedCatches.some((pc) => pc._id === catch_._id))
+                      .map((item: Catch & CatchIndex & { tagClass?: string }) => {
+                        const actualIndex = catches.findIndex((c) => c._id === item._id);
+
+                        return (
+                          <tr className="govuk-table__row" key={`catches-data-${item._id}`}>
+                            <td className="govuk-table__cell" id={`catches-${actualIndex}-productDescription`}>
+                              <strong
+                                className={`govuk-tag ${item.tagClass} govuk-!-margin-bottom-2`}
+                                data-testid={`catches-${actualIndex}-tag`}
+                                style={{ display: "block" }}
+                              >
+                                {item.productDescription}
+                              </strong>
+                              <div className="govuk-!-margin-top-2">
+                                <SecureForm method="post" className="govuk-!-display-inline" csrf={csrf}>
+                                  <input
+                                    type="hidden"
+                                    name="url"
+                                    value={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
+                                  />
+                                  <Link
+                                    id="change-link"
+                                    className="govuk-link"
+                                    to={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
+                                    data-testid="change-link"
+                                  >
+                                    {t("commonChangeLink", { ns: "common" })}
+                                  </Link>
+                                </SecureForm>
+                              </div>
+                            </td>
+                            <td className="govuk-table__cell" id={`catches-${actualIndex}-species`}>
+                              {item.species}
+                            </td>
+                            <td className="govuk-table__cell" id={`catches-${actualIndex}-catchCertificateNumber`}>
+                              {item.catchCertificateNumber}
+                            </td>
+                            <td className="govuk-table__cell" id={`catches-${actualIndex}-totalWeightLanded`}>
+                              {item.totalWeightLanded}kg
+                            </td>
+                            <td
+                              className="govuk-table__cell"
+                              id={`catches-${actualIndex}-exportWeightBeforeProcessing`}
                             >
                               {t("commonChangeLink", { ns: "common" })}
                             </Link>
