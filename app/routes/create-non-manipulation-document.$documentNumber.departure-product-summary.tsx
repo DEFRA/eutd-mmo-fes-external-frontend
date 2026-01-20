@@ -49,33 +49,39 @@ export const ConsignmentWeightTableForm = ({ catches, transportType }: Consignme
   const sdDepartureProductSummaryNetWeightDeparture = "sdDepartureProductSummaryNetWeightDeparture";
 
   const getNetProductWeightFromCatches = (catchItem: StorageDocumentCatch | undefined) => {
+    let weight: string | number | undefined;
     if (isArrival) {
-      return catchItem?.netWeightProductArrival?.toString();
+      weight = catchItem?.netWeightProductArrival;
     } else {
       if (
         !catchItem?.netWeightProductDeparture &&
         !catchItem?.netWeightFisheryProductDeparture &&
         catchItem?.netWeightProductArrival
       ) {
-        return catchItem.netWeightProductArrival.toString();
+        weight = catchItem.netWeightProductArrival;
+      } else {
+        weight = catchItem?.netWeightProductDeparture;
       }
-      return catchItem?.netWeightProductDeparture?.toString();
     }
+    return weight !== undefined ? Number(weight).toFixed(2) : undefined;
   };
 
   const getNetFisheryWeightFromCatches = (catchItem: StorageDocumentCatch | undefined) => {
+    let weight: string | number | undefined;
     if (isArrival) {
-      return catchItem?.netWeightFisheryProductArrival?.toString();
+      weight = catchItem?.netWeightFisheryProductArrival;
     } else {
       if (
         !catchItem?.netWeightProductDeparture &&
         !catchItem?.netWeightFisheryProductDeparture &&
         catchItem?.netWeightFisheryProductArrival
       ) {
-        return catchItem.netWeightFisheryProductArrival.toString();
+        weight = catchItem.netWeightFisheryProductArrival;
+      } else {
+        weight = catchItem?.netWeightFisheryProductDeparture;
       }
-      return catchItem?.netWeightFisheryProductDeparture?.toString();
     }
+    return weight !== undefined ? Number(weight).toFixed(2) : undefined;
   };
 
   return (
