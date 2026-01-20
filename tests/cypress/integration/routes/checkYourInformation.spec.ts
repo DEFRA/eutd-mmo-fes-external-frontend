@@ -1288,6 +1288,11 @@ describe("NMD - scenario 3 - Change arrival transport mode - no change scenario"
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
 
+    cy.log("STEP #2 - Looking for change link with href containing how-does-the-consignment-arrive-to-the-uk");
+    cy.get("body").then(($body) => {
+      const links = $body.find('[href*="how-does-the-consignment-arrive-to-the-uk"]');
+      cy.log(`STEP #2A - Found ${links.length} links`);
+    });
     // Click the change link for arrival transport mode
     cy.get('[href*="how-does-the-consignment-arrive-to-the-uk"]').first().click();
 
