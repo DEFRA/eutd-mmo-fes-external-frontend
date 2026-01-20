@@ -738,7 +738,7 @@ const AddCatchDetailsIndex = () => {
                 />
               </div>
               <ButtonGroup />
-              <input type="hidden" name="nextUri" value={nextUri} />
+              <input type="hidden" name="nextUri" value={nextUri ?? ""} />
               <input type="hidden" name="catchId" value={catchId} />
               <input type="hidden" name="pageNo" value={pageNo} />
               <input type="hidden" name="speciesCode" value={selectedSpeciesCode} />

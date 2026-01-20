@@ -7,6 +7,7 @@ import {
   FAVOURITES_URL,
   SPECIES_STATE_LOOK_UP,
   SPECIES_URL,
+  COUNTRIES_URL,
   ADD_SPECIES_URL,
   EXPORT_PAYLOAD_URL,
   mockGetAllDocumentsUrl,
@@ -23,6 +24,7 @@ import manualEntryLandingsType from "@/fixtures/landingsTypeApi/manualEntry.json
 import directLandings from "@/fixtures/directLanding/directLandings.json";
 import directLandingType from "@/fixtures/landingsTypeApi/directLanding.json";
 import species from "@/fixtures/referenceDataApi/species.json";
+import countries from "@/fixtures/referenceDataApi/countries.json";
 import favourites from "@/fixtures/whatAreYouExportingApi/favourites.json";
 import commodityCode from "@/fixtures/whatAreYouExportingApi/commodityCode.json";
 import speciesStateLookup from "@/fixtures/whatAreYouExportingApi/speciesStateLookup.json";
@@ -44,8 +46,32 @@ const whatAreYouExportingHandler: ITestHandler = {
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
     rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json(favourites))),
-    rest.get(SPECIES_STATE_LOOK_UP, (req, res, ctx) => res(ctx.json(speciesStateLookup))),
+    rest.get(SPECIES_STATE_LOOK_UP, (req, res, ctx) => {
+      const faoCode = req.url.searchParams.get("faoCode");
+
+      if (faoCode) {
+        // Find the species by faoCode in the species fixture
+        const speciesData = species.find((s: any) => s.faoCode === faoCode);
+
+        if (speciesData?.scientificName) {
+          // Filter speciesStateLookup to return only data matching this species' scientificName
+          // This prevents duplicate state/presentation options when multiple species share the same values
+          const filtered = speciesStateLookup.filter(
+            (lookup: any) => lookup.scientificName === speciesData.scientificName
+          );
+
+          // Return filtered data if matches found, otherwise fall back to all data
+          if (filtered.length > 0) {
+            return res(ctx.json(filtered));
+          }
+        }
+      }
+
+      // Fallback: return all data if no faoCode parameter or no matching species found
+      return res(ctx.json(speciesStateLookup));
+    }),
     rest.get(COMMODITY_CODE_LOOK_UP, (req, res, ctx) => res(ctx.json(commodityCode))),
     rest.post(ADD_SPECIES_URL, (req, res, ctx) => res(ctx.json(addOrUpdateResponse))),
     rest.post(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),

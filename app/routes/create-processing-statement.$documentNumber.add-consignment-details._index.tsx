@@ -57,9 +57,10 @@ const addConsignmentDetailsActionHandler = (
       ? processingStatement.catches[0]._id
       : "";
 
-  const redirectUri = isEmpty(nextUri)
-    ? `/create-processing-statement/${documentNumber}/add-catch-details/${id}`
-    : nextUri;
+  // Build redirect URL with nextUri parameter if provided
+  const baseUrl = `/create-processing-statement/${documentNumber}/add-catch-details/${id}`;
+  const redirectUri = isEmpty(nextUri) ? baseUrl : `${baseUrl}?nextUri=${encodeURIComponent(nextUri)}`;
+
   return redirect(redirectUri);
 };
 
@@ -380,7 +381,7 @@ const AddConsignmentDetailsIndex = () => {
               />
             )}
             <ButtonGroup />
-            <input type="hidden" name="nextUri" value={nextUri} />
+            <input type="hidden" name="nextUri" value={nextUri ?? ""} />
             <input type="hidden" name="productId" value={productId} />
           </SecureForm>
           <BackToProgressLink

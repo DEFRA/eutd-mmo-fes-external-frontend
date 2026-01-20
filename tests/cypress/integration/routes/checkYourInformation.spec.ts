@@ -1145,3 +1145,109 @@ describe("Check Your Information (Summary) page: NMD - Change arrival transport 
     cy.url().should("not.include", "/check-your-information");
   });
 });
+
+describe("Check Your Information (Summary) page: PS - Change product details", () => {
+  const documentNumber = "GBR-2023-PS-DE53D6E7C";
+  const documentUrl = `/create-processing-statement/${documentNumber}`;
+  const checkYourInformationUrl = `${documentUrl}/check-your-information`;
+
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformationChangeProductDetails,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should navigate through full flow when changing product details and return to check-your-information", () => {
+    // Verify we're on check-your-information page
+    cy.url().should("include", "/check-your-information");
+    cy.url().then((url) => cy.log(`Current URL: ${url}`));
+
+    // Wait for page to fully load
+    cy.get("h1").should("exist");
+
+    // Take screenshot and log page content
+    cy.screenshot("ps-check-your-info-page");
+
+    // Check if the link exists, if not fail with helpful message
+    cy.get("#consignmentDescriptionChangeLink", { timeout: 10000 }).should(
+      "exist",
+      "Product change link should exist on page"
+    );
+
+    // Click the change link for product
+    cy.get("#consignmentDescriptionChangeLink").click();
+
+    // Verify we're on add-consignment-details page with product ID and nextUri
+    cy.url().then((url) => cy.log(`After click URL: ${url}`));
+    cy.url().should("include", "/add-consignment-details/");
+    cy.url().should("include", "nextUri");
+
+    // Click Save and continue without making changes
+    cy.get('button[type="submit"]').contains("Save and continue").click();
+
+    // Should be navigated to add-catch-details page
+    cy.url().should("include", "/add-catch-details");
+
+    // Don't fill in the form - catch data is already present from existing product
+    // Just click Save and continue to proceed
+    cy.get('button[type="submit"]').contains("Save and continue").click();
+
+    // Should be navigated to catch-added page
+    cy.url().should("include", "/catch-added");
+
+    // Verify "No" is selected for adding another species
+    cy.get('input[name="addAnotherCatch"][value="No"]').should("be.checked");
+
+    // Click Save and continue
+    cy.get('button[type="submit"]').contains("Save and continue").click();
+
+    // Should be redirected back to check-your-information
+    cy.url().should("include", "/check-your-information");
+    cy.url().should("not.include", "nextUri");
+    cy.url().should("not.include", "/add-processing-plant-details");
+  });
+});
+
+describe("Check Your Information (Summary) page: PS - Change plant address", () => {
+  const documentNumber = "GBR-2023-PS-DE53D6E7C";
+  const documentUrl = `/create-processing-statement/${documentNumber}`;
+  const checkYourInformationUrl = `${documentUrl}/check-your-information`;
+
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformationChangePlantAddress,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should have a change link for plant address and navigate correctly", () => {
+    // Verify we're on check-your-information page
+    cy.url().should("include", "/check-your-information");
+    cy.url().then((url) => cy.log(`Current URL: ${url}`));
+
+    // Wait for page to fully load
+    cy.get("h1").should("exist");
+
+    // Take screenshot
+    cy.screenshot("ps-plant-address-page");
+
+    // Find plant address change link - be more specific about which Address field
+    cy.get('a[href*="add-processing-plant-address"]', { timeout: 10000 })
+      .should("exist", "Plant address change link should exist")
+      .first()
+      .click();
+
+    // Verify we're on add-processing-plant-address page with nextUri
+    cy.url().should("include", "/add-processing-plant-address");
+    cy.url().should("include", "nextUri");
+
+    // Click Save and continue without making changes
+    cy.get('button[type="submit"]').contains("Save and continue").click();
+
+    // Should be redirected back to check-your-information
+    cy.url().should("include", "/check-your-information");
+    cy.url().should("not.include", "nextUri");
+    cy.url().should("not.include", "/add-health-certificate");
+  });
+});

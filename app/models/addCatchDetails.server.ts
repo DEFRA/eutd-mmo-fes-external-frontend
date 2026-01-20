@@ -81,8 +81,10 @@ const getUpdatedCatches: (updatedProcessingStatement: ProcessingStatement, produ
 const getCurrentUrl = (documentNumber: string | undefined, productId: string, goToPage: number, totalPages: number) =>
   `/create-processing-statement/${documentNumber}/add-catch-details/${productId}?pageNo=${goToPage > totalPages ? goToPage - 1 : goToPage}`;
 
-const getRedirectUrl = (nextUri: string, documentNumber?: string) =>
-  isEmpty(nextUri) ? `/create-processing-statement/${documentNumber}/catch-added` : nextUri;
+const getRedirectUrl = (nextUri: string, documentNumber?: string) => {
+  const baseUrl = `/create-processing-statement/${documentNumber}/catch-added`;
+  return isEmpty(nextUri) ? baseUrl : `${baseUrl}?nextUri=${encodeURIComponent(nextUri)}`;
+};
 
 const getGoToPage = (pageNumber: string) => (!isMissing(pageNumber) ? parseInt(pageNumber) : 1);
 const getScientificName = (allSpecies: Species[], faoCode: string): string | undefined =>

@@ -595,6 +595,8 @@ export enum TestCaseId {
   PSCheckYourInformationPageGuardCase = "psCheckYourInformationPageGuardCase",
   PSCheckYourInformationPageGuardCaseNoExporter = "psCheckYourInformationPageGuardCaseNoExporter",
   PSCheckYourInformationPageGuardProductDescriptions = "psCheckYourInformationPageGuardProductDescriptions",
+  PSCheckYourInformationChangeProductDetails = "psCheckYourInformationChangeProductDetails",
+  PSCheckYourInformationChangePlantAddress = "psCheckYourInformationChangePlantAddress",
   PSCatchEdit = "psCatchEdit",
   PSCatchRestoreRemovedLines = "psCatchRestoreRemovedLines",
   PSRemoveAllLines = "psRemoveAllLines",
