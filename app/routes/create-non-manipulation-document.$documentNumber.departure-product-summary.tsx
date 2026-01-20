@@ -52,36 +52,32 @@ export const ConsignmentWeightTableForm = ({ catches, transportType }: Consignme
     let weight: string | number | undefined;
     if (isArrival) {
       weight = catchItem?.netWeightProductArrival;
+    } else if (
+      !catchItem?.netWeightProductDeparture &&
+      !catchItem?.netWeightFisheryProductDeparture &&
+      catchItem?.netWeightProductArrival
+    ) {
+      weight = catchItem.netWeightProductArrival;
     } else {
-      if (
-        !catchItem?.netWeightProductDeparture &&
-        !catchItem?.netWeightFisheryProductDeparture &&
-        catchItem?.netWeightProductArrival
-      ) {
-        weight = catchItem.netWeightProductArrival;
-      } else {
-        weight = catchItem?.netWeightProductDeparture;
-      }
+      weight = catchItem?.netWeightProductDeparture;
     }
-    return weight !== undefined ? Number(weight).toFixed(2) : undefined;
+    return weight === undefined ? undefined : Number(weight).toFixed(2);
   };
 
   const getNetFisheryWeightFromCatches = (catchItem: StorageDocumentCatch | undefined) => {
     let weight: string | number | undefined;
     if (isArrival) {
       weight = catchItem?.netWeightFisheryProductArrival;
+    } else if (
+      !catchItem?.netWeightProductDeparture &&
+      !catchItem?.netWeightFisheryProductDeparture &&
+      catchItem?.netWeightFisheryProductArrival
+    ) {
+      weight = catchItem.netWeightFisheryProductArrival;
     } else {
-      if (
-        !catchItem?.netWeightProductDeparture &&
-        !catchItem?.netWeightFisheryProductDeparture &&
-        catchItem?.netWeightFisheryProductArrival
-      ) {
-        weight = catchItem.netWeightFisheryProductArrival;
-      } else {
-        weight = catchItem?.netWeightFisheryProductDeparture;
-      }
+      weight = catchItem?.netWeightFisheryProductDeparture;
     }
-    return weight !== undefined ? Number(weight).toFixed(2) : undefined;
+    return weight === undefined ? undefined : Number(weight).toFixed(2);
   };
 
   return (

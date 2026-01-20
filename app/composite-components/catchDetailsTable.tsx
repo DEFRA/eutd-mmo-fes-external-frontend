@@ -5,6 +5,9 @@ import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import { CatchDetailsTableHeader } from "~/components";
 import { getCatchDetailsHeaders } from "~/helpers";
 
+const formatWeight = (weight: number | string | undefined): string =>
+  weight !== undefined ? Number(weight).toFixed(2) : "0.00";
+
 type ProductTableRowProps = {
   productId: string;
   catches: Catch[];
@@ -61,9 +64,9 @@ export const CatchDetailsTable = ({
               <td className="govuk-table__cell">
                 <p className="govuk-!-margin-0">{ctch.species}</p>
               </td>
-              <td className="govuk-table__cell">{Number(ctch.totalWeightLanded).toFixed(2)}</td>
-              <td className="govuk-table__cell">{Number(ctch.exportWeightBeforeProcessing).toFixed(2)}</td>
-              <td className="govuk-table__cell">{Number(ctch.exportWeightAfterProcessing).toFixed(2)}</td>
+              <td className="govuk-table__cell">{formatWeight(ctch.totalWeightLanded)}</td>
+              <td className="govuk-table__cell">{formatWeight(ctch.exportWeightBeforeProcessing)}</td>
+              <td className="govuk-table__cell">{formatWeight(ctch.exportWeightAfterProcessing)}</td>
               <td className="govuk-table__cell govuk-!-text-align-right">
                 <Button
                   label={t("commonEditLink", { ns: "common" })}
