@@ -49,33 +49,34 @@ export const ConsignmentWeightTableForm = ({ catches, transportType }: Consignme
   const sdDepartureProductSummaryNetWeightDeparture = "sdDepartureProductSummaryNetWeightDeparture";
 
   const getNetProductWeightFromCatches = (catchItem: StorageDocumentCatch | undefined) => {
+    let weight: string | number | undefined;
     if (isArrival) {
-      return catchItem?.netWeightProductArrival?.toString();
+      weight = catchItem?.netWeightProductArrival;
+    } else if (
+      !catchItem?.netWeightProductDeparture &&
+      !catchItem?.netWeightFisheryProductDeparture &&
+      catchItem?.netWeightProductArrival
+    ) {
+      weight = catchItem.netWeightProductArrival;
     } else {
-      if (
-        !catchItem?.netWeightProductDeparture &&
-        !catchItem?.netWeightFisheryProductDeparture &&
-        catchItem?.netWeightProductArrival
-      ) {
-        return catchItem.netWeightProductArrival.toString();
-      }
-      return catchItem?.netWeightProductDeparture?.toString();
+      weight = catchItem?.netWeightProductDeparture;
     }
+    return weight === undefined ? undefined : Number(weight).toFixed(2);
   };
-
   const getNetFisheryWeightFromCatches = (catchItem: StorageDocumentCatch | undefined) => {
+    let weight: string | number | undefined;
     if (isArrival) {
-      return catchItem?.netWeightFisheryProductArrival?.toString();
+      weight = catchItem?.netWeightFisheryProductArrival;
+    } else if (
+      !catchItem?.netWeightProductDeparture &&
+      !catchItem?.netWeightFisheryProductDeparture &&
+      catchItem?.netWeightFisheryProductArrival
+    ) {
+      weight = catchItem.netWeightFisheryProductArrival;
     } else {
-      if (
-        !catchItem?.netWeightProductDeparture &&
-        !catchItem?.netWeightFisheryProductDeparture &&
-        catchItem?.netWeightFisheryProductArrival
-      ) {
-        return catchItem.netWeightFisheryProductArrival.toString();
-      }
-      return catchItem?.netWeightFisheryProductDeparture?.toString();
+      weight = catchItem?.netWeightFisheryProductDeparture;
     }
+    return weight === undefined ? undefined : Number(weight).toFixed(2);
   };
 
   return (

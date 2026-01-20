@@ -570,16 +570,16 @@ const CatchAdded = () => {
                               {item.catchCertificateNumber}
                             </td>
                             <td className="govuk-table__cell" id={`catches-${actualIndex}-totalWeightLanded`}>
-                              {item.totalWeightLanded}kg
+                              {Number(item.totalWeightLanded).toFixed(2)}kg
                             </td>
                             <td
                               className="govuk-table__cell"
                               id={`catches-${actualIndex}-exportWeightBeforeProcessing`}
                             >
-                              {item.exportWeightBeforeProcessing}kg
+                              {Number(item.exportWeightBeforeProcessing).toFixed(2)}kg
                             </td>
                             <td className="govuk-table__cell" id={`catches-${actualIndex}-exportWeightAfterProcessing`}>
-                              {item.exportWeightAfterProcessing}kg
+                              {Number(item.exportWeightAfterProcessing).toFixed(2)}kg
                             </td>
                           </tr>
                         );
