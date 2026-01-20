@@ -253,7 +253,7 @@ describe("PS: Catch added", () => {
     cy.get('button[data-testid="filter-search-reset"]').should("have.attr", "type", "submit");
   });
 
-  it.only("should handle empty search results scenario", () => {
+  it("should handle empty search results scenario", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
