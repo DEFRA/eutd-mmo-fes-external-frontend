@@ -1133,25 +1133,57 @@ describe("Check Your Information (Summary) page: NMD - Change arrival transport 
     cy.get("body").then(($body) => {
       const links = $body.find('[href*="how-does-the-consignment-arrive-to-the-uk"]');
       cy.log(`STEP #2A - Found ${links.length} links`);
+      links.each((index, link) => {
+        cy.log(`STEP #2B - Link ${index}: href="${link.getAttribute("href")}"`);
+      });
     });
+
+    cy.log("STEP #3 - Clicking change link for arrival transport mode");
     // Click the change link for arrival transport mode
     cy.get('[href*="how-does-the-consignment-arrive-to-the-uk"]').first().click();
 
+    cy.log("STEP #4 - Verifying navigation to transport selection page");
     // Verify we're on the transport selection page
     cy.url().should("include", "/how-does-the-consignment-arrive-to-the-uk");
 
+    cy.log("STEP #5 - Checking form elements exist");
     // Wait for the form to be fully loaded
     cy.get('input[name="vehicle"]').should("exist");
 
+    cy.log("STEP #5A - Logging all available radio buttons");
+    cy.get('input[name="vehicle"]').then(($inputs) => {
+      cy.log(`STEP #5B - Found ${$inputs.length} vehicle radio buttons`);
+      $inputs.each((index, input) => {
+        cy.log(`STEP #5C - Radio ${index}: value="${input.value}" checked=${input.checked}`);
+      });
+    });
+
+    cy.log("STEP #6 - Clicking plane label to select plane");
     // Change the mode to Plane by clicking the label (more reliable than .check())
     cy.get('label[for="plane"]').click();
 
+    cy.log("STEP #7 - Verifying plane is selected");
     // Verify plane is selected
     cy.get('input[name="vehicle"][value="plane"]').should("be.checked");
 
+    cy.log("STEP #8 - Looking for submit button");
+    cy.get('button[type="submit"]').then(($buttons) => {
+      cy.log(`STEP #8A - Found ${$buttons.length} submit buttons`);
+      $buttons.each((index, btn) => {
+        cy.log(`STEP #8B - Button ${index}: text="${btn.textContent}"`);
+      });
+    });
+
+    cy.log("STEP #9 - Clicking Save and continue button");
     // Click Save and continue
     cy.get('button[type="submit"]').contains("Save and continue").click();
 
+    cy.log("STEP #10 - Checking URL after submit");
+    cy.url().then((url) => {
+      cy.log(`STEP #10A - Current URL: ${url}`);
+    });
+
+    cy.log("STEP #11 - Expecting navigation to plane transport details page");
     // Should be navigated to the plane transport details page
     cy.url().should("include", "/add-arrival-transportation-details-plane");
     cy.url().should("not.include", "/check-your-information");

@@ -109,6 +109,7 @@
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
     "babel-plugin-istanbul": "^6.1.1",
+    "baseline-browser-mapping": "^2.9.15",
     "concurrently": "8.2.2",
     "cross-env": "^7.0.3",
     "cypress-file-upload": "^5.0.8",
