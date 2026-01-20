@@ -1,5 +1,5 @@
 import * as React from "react";
-import { redirect, useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
+import { redirect, useActionData, useLoaderData, type LoaderFunction, type ActionFunction, Link } from "react-router";
 
 import { route } from "routes-gen";
 import { useEffect } from "react";
@@ -162,11 +162,10 @@ const CheckYourInformation = () => {
                     <a
                       id="consignmentDescriptionChangeLink"
                       className="govuk-link"
-                      href={`/create-processing-statement/${documentNumber}/add-consignment-details/${product.id}?nextUri=${route(
-                        "/create-processing-statement/:documentNumber/check-your-information",
-                        {
+                      href={`/create-processing-statement/${documentNumber}/add-consignment-details/${product.id}?nextUri=${encodeURIComponent(
+                        route("/create-processing-statement/:documentNumber/check-your-information", {
                           documentNumber,
-                        }
+                        })
                       )}`}
                     >
                       {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
@@ -283,6 +282,14 @@ const CheckYourInformation = () => {
                 processingStatement?.plantTownCity,
                 processingStatement?.plantPostcode
               )}
+            </dd>
+            <dd className="govuk-summary-list__actions">
+              <Link
+                className="govuk-link"
+                to={`/create-processing-statement/${documentNumber}/add-processing-plant-address?nextUri=${encodeURIComponent(`/create-processing-statement/${documentNumber}/check-your-information`)}`}
+              >
+                {t("commonChangeLink", { ns: "common" })}
+              </Link>
             </dd>
           </div>
         </dl>
