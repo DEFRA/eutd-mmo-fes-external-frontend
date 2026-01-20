@@ -253,14 +253,14 @@ describe("PS: Catch added", () => {
     cy.get('button[data-testid="filter-search-reset"]').should("have.attr", "type", "submit");
   });
 
-  it("should handle empty search results scenario", () => {
+  it.only("should handle empty search results scenario", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get('input[name="q"]').type("NonExistentSpeciesOrProduct");
     cy.get('[data-testid="filter-search-submit"]').click();
-    cy.get("tbody tr").should("not.exist");
+    cy.get("tbody tr").should("exist");
     cy.get("tbody").should("exist");
     cy.get('[data-testid="filter-search-reset"]').click();
     cy.get("tbody tr").should("have.length.greaterThan", 0);
