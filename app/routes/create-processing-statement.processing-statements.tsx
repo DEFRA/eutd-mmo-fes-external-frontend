@@ -9,7 +9,7 @@ import { getDashboardLoader, dashboardAction } from "~/.server";
 import { Dashboard, PageNavigationLinks, PopulateLinks } from "~/composite-components";
 import { getDashboardMeta } from "~/helpers";
 
-export const meta: MetaFunction = (args) => getDashboardMeta(args);
+export const meta: MetaFunction = (args: any) => getDashboardMeta(args);
 
 export const loader: LoaderFunction = async ({ request }) =>
   getDashboardLoader(request, "processingStatement", "dashboardProcessingStatementTitle");
