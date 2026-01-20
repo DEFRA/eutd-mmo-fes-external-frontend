@@ -63,7 +63,6 @@ export const ConsignmentWeightTableForm = ({ catches, transportType }: Consignme
     }
     return weight === undefined ? undefined : Number(weight).toFixed(2);
   };
-
   const getNetFisheryWeightFromCatches = (catchItem: StorageDocumentCatch | undefined) => {
     let weight: string | number | undefined;
     if (isArrival) {
