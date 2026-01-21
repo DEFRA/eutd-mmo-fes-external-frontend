@@ -403,6 +403,7 @@ export const executeAction = async (request: Request, params: Params): Promise<R
   let errorData;
 
   const addAnotherProduct = values.addAnotherProduct === "Yes";
+  const addAnotherFacility = values.addAnotherFacility === "Yes";
   const catchesToRemove = session.get("catchesToRemove") ?? "";
 
   if (addAnotherProduct) {
@@ -414,6 +415,14 @@ export const executeAction = async (request: Request, params: Params): Promise<R
         },
       }
     );
+  }
+
+  if (addAnotherFacility) {
+    return redirect(`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details`, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   }
 
   // If isDraft or isSaveAndContinue check if there are catches to be removed
