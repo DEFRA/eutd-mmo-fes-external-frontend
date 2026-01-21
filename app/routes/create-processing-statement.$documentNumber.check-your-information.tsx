@@ -286,7 +286,12 @@ const CheckYourInformation = () => {
             <dd className="govuk-summary-list__actions">
               <Link
                 className="govuk-link"
-                to={`/create-processing-statement/${documentNumber}/add-processing-plant-address?nextUri=${encodeURIComponent(`/create-processing-statement/${documentNumber}/check-your-information`)}`}
+                to={
+                  "/create-processing-statement/" +
+                  documentNumber +
+                  "/add-processing-plant-address?nextUri=" +
+                  encodeURIComponent("/create-processing-statement/" + documentNumber + "/check-your-information")
+                }
               >
                 {t("commonChangeLink", { ns: "common" })}
               </Link>
