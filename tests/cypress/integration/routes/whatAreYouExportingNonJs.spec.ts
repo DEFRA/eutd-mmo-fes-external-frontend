@@ -101,9 +101,10 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   it("should set the selected input value when 'Add state' button is clicked", () => {
     cy.get("#species").invoke("val", "Atlantic bluefin tuna (BFT)").trigger("change");
     cy.get("[data-testid='add-species']").click({ force: true });
-    cy.get("#state").then(() => {
-      cy.get("#state").select(1, { force: true });
-    });
+    // Wait for page to reload and state dropdown to be populated
+    cy.get("#state", { timeout: 10000 }).should("exist");
+    cy.get("#state option", { timeout: 5000 }).should("have.length.greaterThan", 1);
+    cy.get("#state").select(1, { force: true });
   });
 
   it("should show state hint when JavaScript is disabled", () => {

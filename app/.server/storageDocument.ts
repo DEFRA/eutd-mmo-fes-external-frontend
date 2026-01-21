@@ -386,6 +386,7 @@ export const executeAction = async (request: Request, params: Params): Promise<R
   const sdData = (storageDocument as StorageDocument) || {};
   const form = await request.formData();
   const { _action, ...values } = Object.fromEntries(form);
+  const nextUri = (form.get("nextUri") as string) ?? "";
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
@@ -402,6 +403,7 @@ export const executeAction = async (request: Request, params: Params): Promise<R
   let errorData;
 
   const addAnotherProduct = values.addAnotherProduct === "Yes";
+  const addAnotherFacility = values.addAnotherFacility === "Yes";
   const catchesToRemove = session.get("catchesToRemove") ?? "";
 
   if (addAnotherProduct) {
@@ -413,6 +415,14 @@ export const executeAction = async (request: Request, params: Params): Promise<R
         },
       }
     );
+  }
+
+  if (addAnotherFacility) {
+    return redirect(`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details`, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   }
 
   // If isDraft or isSaveAndContinue check if there are catches to be removed
@@ -486,6 +496,15 @@ export const executeAction = async (request: Request, params: Params): Promise<R
 
   if (catchesToRemove) {
     session.unset("catchesToRemove");
+  }
+
+  // If nextUri is provided (user came from check-your-information), redirect back there
+  if (nextUri) {
+    return redirect(nextUri, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   }
 
   return redirect(`/create-non-manipulation-document/${documentNumber}/how-does-the-consignment-arrive-to-the-uk`, {

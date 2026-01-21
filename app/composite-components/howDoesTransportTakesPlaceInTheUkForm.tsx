@@ -13,6 +13,7 @@ type loaderDataProps = {
   documentNumber: string;
   vehicle: Vehicle;
   journey: Journey;
+  nextUri?: string;
   csrf: string;
 };
 
@@ -61,7 +62,7 @@ export const HowDoesTransportTakesPlaceInTheUkForm = ({
   backUrl,
   progressUri,
 }: howDoesTransportTakesPlaceInTheUkFormProps) => {
-  const { documentNumber, vehicle, journey, csrf } = useLoaderData<loaderDataProps>();
+  const { documentNumber, vehicle, journey, nextUri, csrf } = useLoaderData<loaderDataProps>();
   const actionData = useActionData<{ errors: any }>() ?? {};
   const { errors = {} } = actionData;
   const { t } = useTranslation(["common", "transportation", "errorsText"]);
@@ -108,6 +109,7 @@ export const HowDoesTransportTakesPlaceInTheUkForm = ({
             </div>
             <ButtonGroup />
             <input type="hidden" name="journey" value={journey} />
+            <input type="hidden" name="nextUri" value={nextUri} />
           </SecureForm>
           <BackToProgressLink progressUri={progressUri} documentNumber={documentNumber} />
         </div>

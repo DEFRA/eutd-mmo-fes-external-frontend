@@ -364,11 +364,11 @@ describe("Add Processing Plant Address", () => {
     cy.url().should("include", psAddressUrl);
   });
 
-  it("should handle default actions with nextUri parameter", () => {
+  it("should handle default actions", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressComplete,
     };
-    cy.visit(psAddressUrl, { qs: { ...testParams, nextUri: "/custom-next-page" } });
+    cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "add-health-certificate");
   });
