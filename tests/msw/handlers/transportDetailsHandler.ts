@@ -747,6 +747,9 @@ const transportDetailsHandler: ITestHandler = {
         if (!body.departureDate || body.departureDate === "") {
           errors.departureDate = "error.departureDate.any.required";
         }
+        if (!body.placeOfUnloading || body.placeOfUnloading === "") {
+          errors.placeOfUnloading = "error.placeOfUnloading.any.required";
+        }
       }
 
       if (Object.keys(errors).length > 0) {

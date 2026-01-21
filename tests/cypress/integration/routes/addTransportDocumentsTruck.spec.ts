@@ -81,8 +81,8 @@ describe("Add Transportation Documents Truck", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=add-another-document-button]").click();
-    cy.get("input[name=documentName1]").type("Invoice 2");
-    cy.get("input[name=documentReference1]").type("INV0002");
+    cy.get("input[name=documentName1]").type("Invoice 2", { force: true });
+    cy.get("input[name=documentReference1]").type("INV0002", { force: true });
 
     cy.get('a[hreflang="cy"][lang="cy"]').click();
     cy.get('label[for="documents.0.name"]').should("have.text", "Enw'r ddogfen lori (dewisol)");
