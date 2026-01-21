@@ -149,10 +149,13 @@ export enum TestCaseId {
   SaveTransportFailsWithErrors = "saveTransportFailsWithErrors",
   SaveTransportFailsWithErrorsArrival = "saveTransportFailsWithErrorsArrival",
   CCCheckYourInformationChangeTransportModeNoChange = "CCCheckYourInformationChangeTransportModeNoChange",
+  CCCheckYourInformationChangeTransportMode = "CCCheckYourInformationChangeTransportMode",
   SDCheckYourInformationChangeArrivalTransportMode = "SDCheckYourInformationChangeArrivalTransportMode",
   SDCheckYourInformationChangeArrivalTransportModeNoChange = "SDCheckYourInformationChangeArrivalTransportModeNoChange",
+  SDCheckYourInformationChangeDepartureTransportMode = "SDCheckYourInformationChangeDepartureTransportMode",
   SDCheckYourInformationChangeDepartureTransportModeNoChange = "SDCheckYourInformationChangeDepartureTransportModeNoChange",
   SDCheckYourInformationChangeProductNoChange = "SDCheckYourInformationChangeProductNoChange",
+  SDCheckYourInformationChangeFacilityNoChange = "SDCheckYourInformationChangeFacilityNoChange",
 
   WhatAreYouExporting = "whatAreYouExporting",
   WhatAreYouExportingNoFavourite = "whatAreYouExportingNoFavourite",

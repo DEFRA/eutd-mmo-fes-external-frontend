@@ -26,6 +26,7 @@ import {
   GET_GEAR_CATEGORIES_URL,
   mockGetGearTypesByCategoriesUrl,
   GET_RFMO_AREAS_URL,
+  SAVE_TRANSPORT_DETAILS_URL,
 } from "~/urls.server";
 
 import ccCreatedDetails from "@/fixtures/documentsApi/catchCertificate.json";
@@ -376,6 +377,36 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(truckTransportDetails))),
     rest.put(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(truckTransportDetails))),
   ],
+  [TestCaseId.CCCheckYourInformationChangeTransportMode]: () => {
+    let postCallCount = 0;
+    return [
+      rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
+      rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccTruck))),
+      rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
+      // Return truck before POST, plane after POST
+      rest.get(getTransportDetailsUrl("catchCertificate", false), (req, res, ctx) => {
+        const response = postCallCount > 0 ? planeTransportDetails : truckTransportDetails;
+        return res(ctx.json(response));
+      }),
+      rest.get(mockGetTransportByIdUrl, (req, res, ctx) => {
+        const response = postCallCount > 0 ? planeTransportDetails : truckTransportDetails;
+        return res(ctx.json(response));
+      }),
+      // POST when user changes transport mode - try both endpoints
+      rest.post(getTransportDetailsUrl("catchCertificate", false), (req, res, ctx) => {
+        postCallCount++;
+        return res(ctx.json(planeTransportDetails));
+      }),
+      rest.post(SAVE_TRANSPORT_DETAILS_URL, (req, res, ctx) => {
+        postCallCount++;
+        return res(ctx.json(planeTransportDetails));
+      }),
+      rest.put(mockGetTransportByIdUrl, (req, res, ctx) => {
+        postCallCount++;
+        return res(ctx.json(planeTransportDetails));
+      }),
+    ];
+  },
 };
 
 export default checkYourInformationCCHandler;
