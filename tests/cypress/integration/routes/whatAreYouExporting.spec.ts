@@ -175,6 +175,9 @@ describe("What are you exporting page", () => {
   });
 
   it("should render the selected species, state, presentation and commodity code", () => {
+    // Intercept the state lookup API call - the actual endpoint is /get-species-state
+    cy.intercept("GET", "**/get-species-state?*").as("stateLookup");
+
     cy.log("STEP #1 - Checking species dropdown is visible");
     cy.get("#species").should("be.visible");
     cy.wait(500);
@@ -191,16 +194,39 @@ describe("What are you exporting page", () => {
 
     cy.log("STEP #5 - Clicking Aesop shrimp option");
     cy.get("#species-option--1").click();
+
+    cy.log("STEP #5A - Triggering change and blur events on species input");
+    cy.get("#species").trigger("change").trigger("blur");
+
+    cy.log("STEP #5B - Verifying species value");
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
 
-    cy.log("STEP #6 - Waiting 2000ms for API call to complete");
-    cy.wait(2000);
+    cy.log("STEP #6 - Waiting for stateLookup API call");
+    cy.wait("@stateLookup", { timeout: 10000 }).then((interception) => {
+      cy.log("✅ API called with URL: " + interception.request.url);
+      cy.log("   Response status: " + interception.response.statusCode);
+      cy.log("   Response body: " + JSON.stringify(interception.response.body));
+    });
 
-    cy.log("STEP #7 - Checking state dropdown is visible");
-    cy.get("#state").should("be.visible");
+    cy.log("STEP #7 - Waiting for state dropdown to populate");
+    cy.wait(1000);
 
-    cy.log("STEP #8 - Checking state dropdown has options");
-    cy.get("#state option", { timeout: 10000 }).should("have.length.gt", 1);
+    cy.log("STEP #8 - Checking state dropdown options in detail");
+    cy.get("#state option").then(($options) => {
+      cy.log("Number of state options: " + $options.length);
+      if ($options.length === 1) {
+        cy.log("⚠️ ONLY DEFAULT OPTION FOUND - State dropdown not populated!");
+        cy.log("Default option text: '" + $options.eq(0).text() + "'");
+        cy.log("Default option value: '" + $options.eq(0).val() + "'");
+      } else {
+        $options.each((i, opt) => {
+          cy.log(`Option ${i}: value="${opt.value}" text="${opt.text}"`);
+        });
+      }
+    });
+
+    cy.log("STEP #9 - Checking state dropdown has more than 1 option");
+    cy.get("#state option", { timeout: 15000 }).should("have.length.gt", 1);
 
     cy.log("STEP #9 - Looking for FRE option in state dropdown");
     cy.get('#state option[value="FRE"]', { timeout: 5000 }).should("exist");
