@@ -1030,7 +1030,7 @@ describe("Check Your Information (Summary) page: Container vessel transport with
   });
 });
 
-describe("Check Your Information (Summary) page: Change transport mode - no change scenario", () => {
+describe("CC - scenario 1 - Change transport mode - no change scenario", () => {
   const documentUrl = "/create-catch-certificate/GBR-2022-CC-24F279E85";
   const checkYourInformationUrl = `${documentUrl}/check-your-information`;
 
@@ -1065,7 +1065,79 @@ describe("Check Your Information (Summary) page: Change transport mode - no chan
   });
 });
 
-describe("Check Your Information (Summary) page: NMD - Change product - no change scenario", () => {
+describe("CC - scenario 2 - Change transport mode", () => {
+  const documentUrl = "/create-catch-certificate/GBR-2022-CC-24F279E85";
+  const checkYourInformationUrl = `${documentUrl}/check-your-information`;
+
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationChangeTransportMode,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should navigate to plane transport details page when changing transport mode to plane", () => {
+    cy.log("STEP #1 - Verify we're on check-your-information page");
+    cy.url().should("include", "/check-your-information");
+    cy.url().then((url) => cy.log(`STEP #1A - Current URL: ${url}`));
+
+    cy.log("STEP #2 - Looking for transport mode change link");
+    cy.get("body").then(($body) => {
+      const links = $body.find('[href*="how-does-the-export-leave-the-uk"]');
+      cy.log(`STEP #2A - Found ${links.length} transport links`);
+      links.each((idx, link) => cy.log(`STEP #2B - Link ${idx}: ${link.getAttribute("href")}`));
+    });
+
+    cy.log("STEP #3 - Click the change link for transport mode");
+    cy.get('[href*="how-does-the-export-leave-the-uk"]').first().click();
+
+    cy.log("STEP #4 - Verify we're on the transport selection page");
+    cy.url().should("include", "/how-does-the-export-leave-the-uk");
+    cy.url().then((url) => cy.log(`STEP #4A - Current URL: ${url}`));
+
+    cy.log("STEP #5 - Wait for client-side data fetch to complete");
+    cy.intercept("GET", "**/how-does-the-export-leave-the-uk/1.data*").as("dataFetch");
+    cy.wait("@dataFetch");
+    cy.log("STEP #5A - Data fetch completed");
+
+    cy.log("STEP #6 - Wait for the form to be fully loaded and stable");
+    cy.get('input[name="vehicle"]').should("exist");
+    cy.wait(200); // Let any hydration settle
+
+    cy.log("STEP #6A - Log all available radio buttons");
+    cy.get('input[name="vehicle"]').then(($inputs) => {
+      cy.log(`STEP #6B - Found ${$inputs.length} vehicle radio buttons`);
+      $inputs.each((idx, input) => {
+        cy.log(`STEP #6C - Radio ${idx}: value="${input.value}" checked=${input.checked} id="${input.id}"`);
+      });
+    });
+
+    cy.log("STEP #7 - Check if plane radio button exists");
+    cy.get('input[name="vehicle"][value="plane"]').should("exist");
+    cy.get('input[name="vehicle"][value="plane"]').then(($input) => {
+      cy.log(`STEP #7A - Plane radio exists: ${$input.length > 0}, id="${$input.attr("id")}"`);
+    });
+
+    cy.log("STEP #8 - Change the mode to Plane using cy.check()");
+    cy.get('input[name="vehicle"][value="plane"]').check({ force: true });
+
+    cy.log("STEP #9 - Verify plane is selected");
+    cy.get('input[name="vehicle"][value="plane"]').should("be.checked");
+    cy.get('input[name="vehicle"][value="plane"]').then(($input) => {
+      cy.log(`STEP #9A - Plane radio checked status: ${$input.prop("checked")}`);
+    });
+
+    cy.log("STEP #10 - Click Save and continue");
+    cy.get('button[type="submit"]').contains("Save and continue").click();
+
+    cy.log("STEP #11 - Verify navigation to plane transport details page");
+    cy.url().then((url) => cy.log(`STEP #11A - Final URL: ${url}`));
+    cy.url().should("include", "/add-transportation-details-plane");
+    cy.url().should("not.include", "/check-your-information");
+  });
+});
+
+describe("NMD - scenario 1 - Change product - no change scenario", () => {
   const documentNumber = "GBR-2023-SD-DE53D6E7C";
   const documentUrl = `/create-non-manipulation-document/${documentNumber}`;
   const checkYourInformationUrl = `${documentUrl}/check-your-information`;
@@ -1112,7 +1184,7 @@ describe("Check Your Information (Summary) page: NMD - Change product - no chang
   });
 });
 
-describe("Check Your Information (Summary) page: NMD - Change arrival transport mode", () => {
+describe("NMD - scenario 4 - Change arrival transport mode", () => {
   const documentNumber = "GBR-2023-SD-DE53D6E7C";
   const documentUrl = `/create-non-manipulation-document/${documentNumber}`;
   const checkYourInformationUrl = `${documentUrl}/check-your-information`;
@@ -1138,13 +1210,22 @@ describe("Check Your Information (Summary) page: NMD - Change arrival transport 
       });
     });
 
-    cy.log("STEP #3 - Clicking change link for arrival transport mode");
+    cy.log("STEP #3 - Setting up intercept for data fetch BEFORE clicking");
+    // Set up intercept BEFORE clicking to catch the .data request
+    cy.intercept("GET", "**/*.data*").as("dataFetch");
+
+    cy.log("STEP #3A - Clicking change link for arrival transport mode");
     // Click the change link for arrival transport mode
     cy.get('[href*="how-does-the-consignment-arrive-to-the-uk"]').first().click();
 
     cy.log("STEP #4 - Verifying navigation to transport selection page");
     // Verify we're on the transport selection page
     cy.url().should("include", "/how-does-the-consignment-arrive-to-the-uk");
+
+    cy.log("STEP #4A - Waiting for data fetch to complete");
+    // Wait for the client-side data fetch that re-renders the form
+    cy.wait("@dataFetch");
+    cy.wait(500); // Additional wait for form stability
 
     cy.log("STEP #5 - Checking form elements exist");
     // Wait for the form to be fully loaded
@@ -1158,9 +1239,10 @@ describe("Check Your Information (Summary) page: NMD - Change arrival transport 
       });
     });
 
-    cy.log("STEP #6 - Clicking plane label to select plane");
-    // Change the mode to Plane by clicking the label (more reliable than .check())
-    cy.get('label[for="plane"]').click();
+    cy.log("STEP #6 - Using .check() to select and verify plane radio button");
+    // Use .check({ force: true }) to actively check the radio button
+    // This handles GOVUK's opacity: 0 styling and form resets from data fetch
+    cy.get('input[name="vehicle"][value="plane"]').check({ force: true });
 
     cy.log("STEP #7 - Verifying plane is selected");
     // Verify plane is selected
@@ -1190,7 +1272,160 @@ describe("Check Your Information (Summary) page: NMD - Change arrival transport 
   });
 });
 
-describe("Check Your Information (Summary) page: PS - Change product details", () => {
+describe("NMD - scenario 3 - Change arrival transport mode - no change scenario", () => {
+  const documentNumber = "GBR-2023-SD-DE53D6E7C";
+  const documentUrl = `/create-non-manipulation-document/${documentNumber}`;
+  const checkYourInformationUrl = `${documentUrl}/check-your-information`;
+
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationChangeArrivalTransportModeNoChange,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should navigate through arrival transport change flow and return to check-your-information when no changes are made", () => {
+    // Verify we're on check-your-information page
+    cy.url().should("include", "/check-your-information");
+
+    // Click the change link for arrival transport mode
+    cy.get('[href*="how-does-the-consignment-arrive-to-the-uk"]').first().click();
+
+    // Verify we're on the transport selection page
+    cy.url().should("include", "/how-does-the-consignment-arrive-to-the-uk");
+
+    // Verify current selection is Truck (pre-filled)
+    cy.get('input[name="vehicle"][value="truck"]').should("be.checked");
+
+    // Click Save and continue without changing
+    cy.get('button[type="submit"]').contains("Save and continue").click();
+
+    // Should be redirected back to check-your-information
+    cy.url().should("include", "/check-your-information");
+    cy.url().should("not.include", "/how-does-the-consignment-arrive-to-the-uk");
+    cy.url().should("not.include", "/add-arrival-transportation-details");
+  });
+});
+
+describe("NMD - scenario 5 - Change departure transport mode - no change scenario", () => {
+  const documentNumber = "GBR-2023-SD-DE53D6E7C";
+  const documentUrl = `/create-non-manipulation-document/${documentNumber}`;
+  const checkYourInformationUrl = `${documentUrl}/check-your-information`;
+
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationChangeDepartureTransportModeNoChange,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should navigate through departure transport change flow and return to check-your-information when no changes are made", () => {
+    cy.log("STEP #1 - Verify we're on check-your-information page");
+    cy.url().should("include", "/check-your-information");
+    cy.url().then((url) => cy.log(`STEP #1A - Current URL: ${url}`));
+
+    cy.log("STEP #2 - Debug: Find ALL links on the page");
+    cy.get("body").then(($body) => {
+      const allLinks = $body.find("a[href]");
+      cy.log(`STEP #2A - Total links found: ${allLinks.length}`);
+      const transportLinks = $body.find('[href*="transport"]');
+      cy.log(`STEP #2B - Transport-related links: ${transportLinks.length}`);
+      transportLinks.each((idx, link) => {
+        cy.log(`STEP #2C - Transport link ${idx}: ${link.getAttribute("href")}`);
+      });
+      const departureLinks = $body.find('[href*="how-does-the-consignment-leave-the-uk"]');
+      cy.log(`STEP #2D - Departure transport links found: ${departureLinks.length}`);
+    });
+
+    // Set up intercept BEFORE clicking
+    cy.intercept("GET", "**/how-does-the-consignment-leave-the-uk.data*").as("dataFetch");
+
+    cy.log("STEP #3 - Click the change link for departure transport mode");
+    cy.get('[href*="how-does-the-consignment-leave-the-uk"]').first().click();
+
+    // Verify we're on the transport selection page
+    cy.url().should("include", "/how-does-the-consignment-leave-the-uk");
+
+    // Wait for client-side data fetch
+    cy.wait("@dataFetch");
+    cy.log("STEP #4 - Data fetch completed");
+
+    // Wait for form to be stable (radio buttons exist, even if opacity:0 per GOVUK styling)
+    cy.get('input[name="vehicle"]').should("exist");
+    cy.wait(500); // Increased wait for form stability
+
+    cy.log("STEP #5 - Check all radio button states");
+    cy.get('input[name="vehicle"]').each(($radio) => {
+      const value = $radio.val();
+      const checked = $radio.prop("checked");
+      cy.log(`Radio button ${value}: checked=${checked}`);
+    });
+
+    cy.log("STEP #6 - Ensure containerVessel is checked using .check()");
+    // Use .check() to ensure it's checked, even if it should already be pre-filled
+    cy.get('input[name="vehicle"][value="containerVessel"]').check({ force: true });
+
+    // Verify it's now checked
+    cy.get('input[name="vehicle"][value="containerVessel"]').should("be.checked");
+
+    // Click Save and continue without changing
+    cy.get('button[type="submit"]').contains("Save and continue").click();
+
+    // Should be redirected back to check-your-information
+    cy.url().should("include", "/check-your-information");
+    cy.url().should("not.include", "/how-does-the-consignment-leave-the-uk");
+    cy.url().should("not.include", "/add-transportation-details");
+  });
+});
+
+describe("NMD - scenario 6 - Change departure transport mode", () => {
+  const documentNumber = "GBR-2023-SD-DE53D6E7C";
+  const documentUrl = `/create-non-manipulation-document/${documentNumber}`;
+  const checkYourInformationUrl = `${documentUrl}/check-your-information`;
+
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationChangeDepartureTransportMode,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should navigate to plane transport details page when changing departure transport mode to plane", () => {
+    // Verify we're on check-your-information page
+    cy.url().should("include", "/check-your-information");
+
+    // Set up intercept BEFORE clicking
+    cy.intercept("GET", "**/how-does-the-consignment-leave-the-uk.data*").as("dataFetch");
+
+    // Click the change link for departure transport mode (use correct NMD URL)
+    cy.get('[href*="how-does-the-consignment-leave-the-uk"]').first().click();
+
+    // Verify we're on the transport selection page
+    cy.url().should("include", "/how-does-the-consignment-leave-the-uk");
+
+    // Wait for client-side data fetch
+    cy.wait("@dataFetch");
+
+    // Wait for the form to be fully loaded and stable
+    cy.get('input[name="vehicle"]').should("exist");
+    cy.wait(200);
+
+    // Change the mode to Plane using cy.check()
+    cy.get('input[name="vehicle"][value="plane"]').check({ force: true });
+
+    // Verify plane is selected
+    cy.get('input[name="vehicle"][value="plane"]').should("be.checked");
+
+    // Click Save and continue
+    cy.get('button[type="submit"]').contains("Save and continue").click();
+
+    // Should be navigated to the plane transport details page
+    cy.url().should("include", "/add-transportation-details-plane");
+    cy.url().should("not.include", "/check-your-information");
+  });
+});
+
+describe("PS - scenario 1 - Change product details", () => {
   const documentNumber = "GBR-2023-PS-DE53D6E7C";
   const documentUrl = `/create-processing-statement/${documentNumber}`;
   const checkYourInformationUrl = `${documentUrl}/check-your-information`;
@@ -1253,7 +1488,7 @@ describe("Check Your Information (Summary) page: PS - Change product details", (
   });
 });
 
-describe("Check Your Information (Summary) page: PS - Change plant address", () => {
+describe("PS - scenario 2 - Change plant address", () => {
   const documentNumber = "GBR-2023-PS-DE53D6E7C";
   const documentUrl = `/create-processing-statement/${documentNumber}`;
   const checkYourInformationUrl = `${documentUrl}/check-your-information`;

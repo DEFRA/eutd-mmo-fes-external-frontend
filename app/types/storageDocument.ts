@@ -76,6 +76,7 @@ export type FacilitiesLoaderData = {
   documentNumber: string;
   facilities: (StorageFacility & FacilityIndex)[];
   isFromStorageFacilityDetails: string;
+  nextUri?: string;
   csrf: string;
 };
 
