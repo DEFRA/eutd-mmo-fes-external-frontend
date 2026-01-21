@@ -1,0 +1,78 @@
+{
+  "catches": [
+    {
+      "_id": "63766b360a97db79348c153f",
+      "product": "Yellowback seabream (DTT)",
+      "catchCertificateNumber": "12",
+      "totalWeightLanded": "9",
+      "exportWeightBeforeProcessing": "2",
+      "exportWeightAfterProcessing": "2",
+      "id": "12-3996489220",
+      "scientificName": "Dentex tumifrons"
+    }
+  ],
+  "storageFacilities": [
+    {
+      "facilityName": "First Storage Facility",
+      "facilityAddressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
+      "facilityBuildingName": "LANCASTER HOUSE",
+      "facilityBuildingNumber": "",
+      "facilitySubBuildingName": "MMO",
+      "facilityStreetName": "HAMPSHIRE COURT",
+      "facilityTownCity": "NEWCASTLE UPON TYNE",
+      "facilityCounty": "TYNESIDE",
+      "facilityCountry": "ENGLAND",
+      "facilityPostcode": "NE4 7YH",
+      "facilityApprovalNumber": "UK/ABC/001",
+      "facilityArrivalDate": "10/10/2025",
+      "facilityStorage": "frozen, other"
+    },
+    {
+      "facilityName": "Second Storage Facility",
+      "facilityAddressOne": "123 Main Street",
+      "facilityBuildingName": "Main Building",
+      "facilityBuildingNumber": "123",
+      "facilitySubBuildingName": "",
+      "facilityStreetName": "Main Street",
+      "facilityTownCity": "London",
+      "facilityCounty": "Greater London",
+      "facilityCountry": "ENGLAND",
+      "facilityPostcode": "SW1A 1AA",
+      "facilityApprovalNumber": "UK/DEF/002",
+      "facilityArrivalDate": "15/11/2025",
+      "facilityStorage": "chilled"
+    }
+  ],
+  "validationErrors": [{}],
+  "addAnotherProduct": "No",
+  "addAnotherStorageFacility": "No",
+  "transport": {
+    "vehicle": "truck",
+    "cmr": "false",
+    "nationalityOfVehicle": "Dakota Hill",
+    "registrationNumber": "Vincent Nunez",
+    "departurePlace": "Joelle Rhodes",
+    "pointOfDestination": "Brussels Central Station",
+    "containerNumbers": ["CONT123", "CONT456", "CONT789"],
+    "exportedTo": {
+      "officialCountryName": "Hungary",
+      "isoCodeAlpha2": "HU",
+      "isoCodeAlpha3": "HUN",
+      "isoNumericCode": "348"
+    }
+  },
+  "arrivalTransport": {
+    "vehicle": "plane",
+    "vesselName": "gfs",
+    "flagState": "ghj",
+    "containerNumber": "56",
+    "departurePlace": "hull",
+    "departureDate": "09/1/2024",
+    "exportedTo": {
+      "officialCountryName": "British Indian Ocean Territory",
+      "isoCodeAlpha2": "IO",
+      "isoCodeAlpha3": "IOT",
+      "isoNumericCode": "086"
+    }
+  }
+}

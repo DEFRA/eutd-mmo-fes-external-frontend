@@ -230,6 +230,11 @@ export enum TestCaseId {
   SDProductAddedInvalid = "SDProductAddedInvalid",
   SDProductAddedNoCatches = "sdProductAddedNoCatches",
 
+  SDYouHaveAddedAStorageFacility = "sdYouHaveAddedAStorageFacility",
+  SDYouHaveAddedMultipleStorageFacilities = "sdYouHaveAddedMultipleStorageFacilities",
+  SDStorageFacilityAddedValid = "sdStorageFacilityAddedValid",
+  SDStorageFacilityAddedNoFacilities = "sdStorageFacilityAddedNoFacilities",
+
   CCCopyAllowed = "ccCopyAllowed",
   CCCopyDisallowed = "ccCopyDisallowed",
   CCCopyThisCatchCertfifcateSave = "ccCopyThisCatchCertfifcateSave",
