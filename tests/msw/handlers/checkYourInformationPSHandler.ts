@@ -11,6 +11,7 @@ import {
   mockSaveAndValidateDocument,
   SPECIES_URL,
   COUNTRIES_URL,
+  MANUAL_EXPORTER_ADDRESS_URL,
 } from "~/urls.server";
 import processingStatement from "@/fixtures/processingStatementApi/processingStatement.json";
 import processingStatementProductDescriptions from "@/fixtures/processingStatementApi/processingStatementProductDescription.json";
@@ -170,6 +171,7 @@ const checkYourInformationPSHandler: ITestHandler = {
   [TestCaseId.PSCheckYourInformationChangePlantAddress]: () => {
     let postCallCount = 0;
 
+    // Base fixture with all sections complete (including health certificate)
     const addressBeforeChange = {
       ...processingStatement,
       plantAddressOne: "123 Old Street",
@@ -177,11 +179,14 @@ const checkYourInformationPSHandler: ITestHandler = {
       plantPostcode: "SW1A 1AA",
     };
 
+    // Updated address while keeping all other sections complete
     const addressAfterChange = {
       ...processingStatement,
-      plantAddressOne: "456 New Avenue",
+      plantAddressOne: "456",
+      plantStreetName: "New Avenue",
       plantTownCity: "Manchester",
       plantPostcode: "M1 1AA",
+      plantCountry: "United Kingdom",
     };
 
     return [
@@ -197,6 +202,8 @@ const checkYourInformationPSHandler: ITestHandler = {
         res(ctx.json({ validationErrors: [] }))
       ),
       rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+      rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+      rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) => res(ctx.json({}))),
     ];
   },
 };
