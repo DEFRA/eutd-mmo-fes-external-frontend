@@ -149,6 +149,11 @@ export const action: ActionFunction = async ({ request, params }) => {
   const { documentNumber } = params;
   const buttonClicked = form.get("_action") as ExporterAddressButtonType;
   const session = await getSessionFromRequest(request);
+
+  // Preserve nextUri from the request URL
+  const url = new URL(request.url);
+  const nextUri = url.searchParams.get("nextUri") ?? "";
+
   const formData = {
     plantAddressOne: form.get("selectaddress") as string,
     plantBuildingNumber: form.get("buildingNumber") as string,
@@ -301,6 +306,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     session.unset("postcode");
     session.set("currentStep", currentStep);
     session.set("csrf", csrf);
+
     const selectedCountry = form.get("country") as string;
     const countries: ICountry[] = await getCountries();
     const countryData: ICountry = getCountryData(countries, selectedCountry);
@@ -358,14 +364,18 @@ export const action: ActionFunction = async ({ request, params }) => {
     session.unset("currentStep");
     const updatedSession = await commitSession(session);
 
-    return redirect(
-      route("/create-processing-statement/:documentNumber/add-processing-plant-address", {
-        documentNumber,
-      }),
-      {
-        headers: { "Set-Cookie": updatedSession },
-      }
-    );
+    // Preserve nextUri when redirecting back to add-processing-plant-address
+    const redirectUrl = !isEmpty(nextUri)
+      ? `${route("/create-processing-statement/:documentNumber/add-processing-plant-address", {
+          documentNumber,
+        })}?nextUri=${encodeURIComponent(nextUri)}`
+      : route("/create-processing-statement/:documentNumber/add-processing-plant-address", {
+          documentNumber,
+        });
+
+    return redirect(redirectUrl, {
+      headers: { "Set-Cookie": updatedSession },
+    });
   }
 };
 
