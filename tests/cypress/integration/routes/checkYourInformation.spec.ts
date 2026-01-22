@@ -1554,3 +1554,43 @@ describe("PS - scenario 2 - Change plant address", () => {
     cy.url().should("not.include", "/add-health-certificate");
   });
 });
+
+describe("PS - Species display format", () => {
+  const documentNumber = "GBR-2023-PS-DE53D6E7C";
+  const documentUrl = `/create-processing-statement/${documentNumber}`;
+  const checkYourInformationUrl = `${documentUrl}/check-your-information`;
+
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformationChangeProductDetails,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should display species without duplicating FAO code", () => {
+    // Verify we're on check-your-information page
+    cy.url().should("include", "/check-your-information");
+
+    // Find all species fields in the summary list
+    cy.get(".govuk-summary-list__key")
+      .filter(':contains("Species")')
+      .each(($speciesKey) => {
+        // Get the corresponding value
+        cy.wrap($speciesKey)
+          .next(".govuk-summary-list__value")
+          .invoke("text")
+          .then((speciesText) => {
+            // Ensure the species text is not empty
+            expect(speciesText.trim()).to.not.equal("");
+
+            // If the species contains FAO codes in parentheses,
+            // verify there is exactly ONE code, not duplicated
+            // This prevents the bug where "Pollack (POL) (POL)" would appear
+            const codeMatches = speciesText.match(/\([A-Z]{3}\)/g);
+            if (codeMatches) {
+              expect(codeMatches).to.have.length(1, `Species should not have duplicated FAO codes: "${speciesText}"`);
+            }
+          });
+      });
+  });
+});
