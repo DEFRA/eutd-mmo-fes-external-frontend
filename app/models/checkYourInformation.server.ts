@@ -53,6 +53,7 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
     conservation,
     validationErrors,
     landingsEntryOption,
+    userReference,
   }: ICatchCertificateSummary = (await getCatchCertificateSummary(bearerToken, documentNumber)) ?? {};
 
   if (
@@ -111,6 +112,7 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
       hasSystemFailure,
       validationErrors: filterValidationErrors.length > 0 ? transformError(filterValidationErrors) : undefined,
       csrf,
+      userReference,
     }),
     {
       status: 200,
