@@ -188,7 +188,7 @@ const CheckYourInformation = () => {
                     {" "}
                     {t("psSummaryPageSpecies", { ns: "psCheckYourInformation" })}
                   </dt>
-                  <dd className="govuk-summary-list__value">{`${catchItem.species} (${catchItem.speciesCode})`}</dd>
+                  <dd className="govuk-summary-list__value">{catchItem.species}</dd>
                 </div>
                 <div className="govuk-summary-list__row">
                   <dt className="govuk-summary-list__key govuk-!-width-one-half">
