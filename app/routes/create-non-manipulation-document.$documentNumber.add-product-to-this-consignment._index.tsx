@@ -224,9 +224,13 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     false,
     isNonJs
   );
+  
+  // For saveAsDraft: if validation passed (no errors), data is already saved; if errors exist, don't save
   if (isDraft) {
     return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
   }
+  
+  // For saveAndContinue: show validation errors
   if (errorResponse) {
     return errorResponse as Response;
   }

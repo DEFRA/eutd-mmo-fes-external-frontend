@@ -627,6 +627,8 @@ export const exporterDetailsAction = async (
   payload.nextUri = routes[journey]["nextUri"];
 
   const isSaveAsDraft: boolean = form.get("_action") === "saveAsDraft";
+
+  // First validate by calling the API
   const response: IExporter = await addExporterDetails(bearerToken, documentNumber, payload, journey);
   const unauthorised = response.unauthorised;
 
@@ -634,7 +636,34 @@ export const exporterDetailsAction = async (
     return redirect("/forbidden");
   }
 
+  const errors: IError[] = (response.errors as IError[]) || [];
+
   if (isSaveAsDraft) {
+    // For saveAsDraft with CC journey, save only valid fields (fields without errors)
+    if (isCatchCertificate && errors.length > 0) {
+      const errorFields = new Set(errors.map((error) => error.key));
+
+      // Build a filtered payload that only includes valid fields
+      const filteredPayload: Exporter = {
+        ...payload,
+        journey: journey,
+        currentUri: routes[journey]["currentUri"],
+        nextUri: routes[journey]["nextUri"],
+      };
+
+      if (errorFields.has("exporterFullName")) {
+        // Use existing value or clear it
+        filteredPayload.exporterFullName = exporter.model?.exporterFullName ?? "";
+      }
+      if (errorFields.has("exporterCompanyName")) {
+        // Use existing value or clear it
+        filteredPayload.exporterCompanyName = exporter.model?.exporterCompanyName ?? "";
+      }
+
+      // Save the filtered payload (only valid fields)
+      await addExporterDetails(bearerToken, documentNumber, filteredPayload, journey);
+    }
+
     if (isCatchCertificate) session.unset("exporterFullName");
     session.unset("exporterCompanyName");
     return redirect(routes[journey]["saveAsDraft"], {
@@ -642,7 +671,6 @@ export const exporterDetailsAction = async (
     });
   }
 
-  const errors: IError[] = (response.errors as IError[]) || [];
   if (errors.length > 0) {
     return apiCallFailed(errors, {
       model: response.model,

@@ -75,13 +75,15 @@ export const CatchCertificateTransportationDocumentsAction = async (request: Req
       vehicle: transport.vehicle,
       documents: additionalDocuments,
     };
+
+    // First validate by calling the API
     const postTransport: ITransport = await updateTransportDocuments(
       bearerToken,
       documentNumber,
       transportId,
       payload,
       saveAndContinue,
-      saveDraft || remove
+      remove // Only pass true for remove actions initially for validation
     );
     const errors: IError[] | IErrorsTransformed = (postTransport.errors as IError[]) || [];
 
@@ -92,6 +94,41 @@ export const CatchCertificateTransportationDocumentsAction = async (request: Req
     }
 
     if (saveDraft) {
+      // For saveAsDraft, save only the valid documents (documents without errors)
+      if (errors.length > 0) {
+        const errorDocumentIndices = new Set(
+          (errors as IError[])
+            .filter((error) => error.key.includes("documents."))
+            .map((error) => parseInt(error.key.split(".")[1]))
+        );
+
+        // Filter out documents with errors
+        const filteredDocuments = additionalDocuments.filter((_, index) => !errorDocumentIndices.has(index));
+
+        const filteredPayload: ITransport = {
+          vehicle: transport.vehicle,
+          documents: filteredDocuments,
+        };
+
+        await updateTransportDocuments(
+          bearerToken,
+          documentNumber,
+          transportId,
+          filteredPayload,
+          false, // not saveAndContinue
+          true // save as draft
+        );
+      } else {
+        await updateTransportDocuments(
+          bearerToken,
+          documentNumber,
+          transportId,
+          payload,
+          false, // not saveAndContinue
+          true // save as draft
+        );
+      }
+
       return redirect(route("/create-catch-certificate/catch-certificates"));
     }
 

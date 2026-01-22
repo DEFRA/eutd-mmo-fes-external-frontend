@@ -156,7 +156,58 @@ const saveAsDraftAction = async (
     exclusiveEconomicZones,
   };
 
-  await validateDirectLandings(bearerToken, documentNumber, responseBody);
+  // First validate to get errors
+  const validationResult = await validateDirectLandings(bearerToken, documentNumber, responseBody);
+
+  // For saveAsDraft, save only valid fields (fields without errors)
+  if (Array.isArray(validationResult) && validationResult.length > 0) {
+    const errorFields = new Set(validationResult.map((error: IError) => error.key));
+
+    // Build a filtered request body that only includes valid fields
+    const filteredResponseBody: any = {};
+
+    if (!errorFields.has("vessel") && selectedVessel?.pln) {
+      filteredResponseBody.vessel = selectedVessel;
+    }
+    if (!errorFields.has("startDate") && startDate) {
+      filteredResponseBody.startDate = startDate;
+    }
+    if (!errorFields.has("dateLanded") && date) {
+      filteredResponseBody.dateLanded = date;
+    }
+    if (!errorFields.has("faoArea") && values["faoArea"]) {
+      filteredResponseBody.faoArea = values["faoArea"];
+    }
+    if (!errorFields.has("highSeasArea") && values["highSeasArea"]) {
+      filteredResponseBody.highSeasArea = values["highSeasArea"];
+    }
+    if (!errorFields.has("gearCategory") && gearCategory) {
+      filteredResponseBody.gearCategory = gearCategory;
+    }
+    if (!errorFields.has("gearType") && gearType) {
+      filteredResponseBody.gearType = gearType;
+      filteredResponseBody.gearCode = gearCode;
+    }
+    if (!errorFields.has("rfmo") && rfmo) {
+      filteredResponseBody.rfmo = rfmo;
+    }
+    if (!errorFields.has("exclusiveEconomicZones") && exclusiveEconomicZones?.length > 0) {
+      filteredResponseBody.exclusiveEconomicZones = exclusiveEconomicZones;
+    }
+    // Filter out weights with errors
+    if (updatedWeights?.length > 0) {
+      const validWeights = updatedWeights.filter((weight: IDirectLandingsDetails) => {
+        return !Array.from(errorFields).some((errorKey: string) => errorKey.includes("weights") && errorKey.includes(String(weight.speciesId)));
+      });
+      if (validWeights.length > 0) {
+        filteredResponseBody.weights = validWeights;
+      }
+    }
+
+    await validateDirectLandings(bearerToken, documentNumber, filteredResponseBody);
+  } else {
+    await validateDirectLandings(bearerToken, documentNumber, responseBody);
+  }
 
   session.unset("selectedDate");
 

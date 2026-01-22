@@ -125,19 +125,28 @@ export const HowDoesTheExportLeaveUkAction = async (
 
   const buttonClicked = form.get("_action") as string;
   const isSavedAsDraft: boolean = buttonClicked === "saveAsDraft";
+
+  // First validate by calling the API
   const response: ITransport = isEmpty(transportId)
     ? await addTransport(bearerToken, documentNumber, payload)
     : await updateTransport(bearerToken, documentNumber, transportId, payload);
-
-  if (isSavedAsDraft) {
-    return redirect(route("/create-catch-certificate/catch-certificates"));
-  }
 
   const errors: IError[] | IErrorsTransformed = (response.errors as IError[]) || [];
   const isUnauthorised = response.unauthorised as boolean;
 
   if (isUnauthorised) {
     return redirect("/forbidden");
+  }
+
+  if (isSavedAsDraft) {
+    // For saveAsDraft, if there are errors, don't save the invalid vehicle value
+    // Simply redirect to dashboard without saving the invalid data
+    if (errors.length > 0) {
+      // Don't save the invalid vehicle, just redirect
+      return redirect(route("/create-catch-certificate/catch-certificates"));
+    }
+    // If no errors, the data was already saved, just redirect
+    return redirect(route("/create-catch-certificate/catch-certificates"));
   }
 
   if (errors.length > 0) {

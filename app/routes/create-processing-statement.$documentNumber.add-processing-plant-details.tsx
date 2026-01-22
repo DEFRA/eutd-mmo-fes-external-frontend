@@ -41,7 +41,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const { _action, ...values } = Object.fromEntries(form);
 
   const isDraft = _action === "saveAsDraft";
-  const saveToRedisIfErrors = true;
+  const saveToRedisIfErrors = false;
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
@@ -56,14 +56,15 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     },
     "/create-processing-statement/:documentNumber/add-processing-plant-details",
     undefined,
-    isDraft,
     saveToRedisIfErrors
   );
 
+  // For saveAsDraft: if validation passed (no errors), data is already saved; if errors exist, don't save
   if (isDraft) {
     return redirect(route("/create-processing-statement/processing-statements"));
   }
 
+  // For saveAndContinue: show validation errors
   if (errorResponse) {
     return errorResponse as Response;
   }

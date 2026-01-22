@@ -194,21 +194,91 @@ export const CatchCertificateTransportationDetailsAction = async (
       }
     }
 
+    // First validate by calling the API without draft mode
     const postTransport: ITransport = await updateTransportDetails(
       bearerToken,
       documentNumber,
       transportId,
       payload,
-      saveDraft
+      false // Validate first without draft mode
     );
 
     const errors: IError[] | IErrorsTransformed = (postTransport.errors as IError[]) || [];
     const isUnauthorised = postTransport.unauthorised as boolean;
     if (isUnauthorised) {
       return redirect("/forbidden");
-    } else if (saveDraft) {
+    }
+    
+    if (saveDraft) {
+      // For saveAsDraft, save only the valid fields (fields without errors)
+      if (errors.length > 0) {
+        const errorFields = new Set((errors as IError[]).map((error) => error.key));
+
+        const filteredPayload: ITransport = {
+          vehicle: transportType,
+        };
+
+        if (!errorFields.has("departurePlace") && departurePlace) {
+          filteredPayload.departurePlace = departurePlace;
+        }
+        if (!errorFields.has("freightBillNumber") && freightBillNumber) {
+          filteredPayload.freightBillNumber = freightBillNumber;
+        }
+
+        switch (payload.vehicle) {
+          case TransportType.TRUCK: {
+            if (!errorFields.has("nationalityOfVehicle") && payload.nationalityOfVehicle) {
+              filteredPayload.nationalityOfVehicle = payload.nationalityOfVehicle;
+            }
+            if (!errorFields.has("registrationNumber") && payload.registrationNumber) {
+              filteredPayload.registrationNumber = payload.registrationNumber;
+            }
+            if (!errorFields.has("containerIdentificationNumber") && payload.containerIdentificationNumber) {
+              filteredPayload.containerIdentificationNumber = payload.containerIdentificationNumber;
+            }
+            break;
+          }
+          case TransportType.TRAIN: {
+            if (!errorFields.has("railwayBillNumber") && payload.railwayBillNumber) {
+              filteredPayload.railwayBillNumber = payload.railwayBillNumber;
+            }
+            if (!errorFields.has("containerIdentificationNumber") && payload.containerIdentificationNumber) {
+              filteredPayload.containerIdentificationNumber = payload.containerIdentificationNumber;
+            }
+            break;
+          }
+          case TransportType.PLANE: {
+            if (!errorFields.has("flightNumber") && payload.flightNumber) {
+              filteredPayload.flightNumber = payload.flightNumber;
+            }
+            if (!errorFields.has("containerNumber") && payload.containerNumber) {
+              filteredPayload.containerNumber = payload.containerNumber;
+            }
+            break;
+          }
+          case TransportType.CONTAINER_VESSEL: {
+            if (!errorFields.has("vesselName") && payload.vesselName) {
+              filteredPayload.vesselName = payload.vesselName;
+            }
+            if (!errorFields.has("flagState") && payload.flagState) {
+              filteredPayload.flagState = payload.flagState;
+            }
+            if (!errorFields.has("containerNumber") && payload.containerNumber) {
+              filteredPayload.containerNumber = payload.containerNumber;
+            }
+            break;
+          }
+        }
+
+        await updateTransportDetails(bearerToken, documentNumber, transportId, filteredPayload, true);
+      } else {
+        await updateTransportDetails(bearerToken, documentNumber, transportId, payload, true);
+      }
+
       return redirect(route("/create-catch-certificate/catch-certificates"));
-    } else if (errors.length > 0) {
+    }
+    
+    if (errors.length > 0) {
       const values = Object.fromEntries(form);
       return apiCallFailed(errors, values);
     }

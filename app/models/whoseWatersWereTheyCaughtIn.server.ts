@@ -94,25 +94,67 @@ export const WhoseWatersWereTheyCaughtInAction = async (
   const nextUri = isEmpty(form.get("nextUri"))
     ? route("/create-catch-certificate/:documentNumber/what-export-journey", { documentNumber })
     : (form.get("nextUri") as string);
-  const isConservationSavedAsDraft: boolean = buttonClicked === "saveAsDraft";
+
+  const isValid = await validateCSRFToken(request, form);
+  if (!isValid) return redirect("/forbidden");
 
   if (buttonClicked === "saveAndContinue" || buttonClicked === "saveAsDraft") {
+    // First validate with saveAsDraft=false to get validation errors
     const conservationResponse: IBase = await saveConservation(
       bearerToken,
       documentNumber,
       { ...conservation },
       currentUri,
       nextUri,
-      isConservationSavedAsDraft
+      false
     );
     const errors: IError[] | IErrorsTransformed = (conservationResponse.errors as IError[]) || [];
     const unauthorised = conservationResponse.unauthorised as boolean;
 
-    const isValid = await validateCSRFToken(request, form);
-    if (!isValid) return redirect("/forbidden");
-
     if (unauthorised) {
       return redirect("/forbidden");
+    }
+
+    if (buttonClicked === "saveAsDraft") {
+      // For saveAsDraft, save only the valid fields (fields without errors)
+      if (errors.length > 0) {
+        const errorFields = new Set((errors as IError[]).map((error) => error.key));
+
+        const filteredConservation: conservationProps = {};
+
+        if (!errorFields.has("watersCaughtIn") && !errorFields.has("caughtInUKWaters") && caughtInUKWaters === "Y") {
+          filteredConservation.caughtInUKWaters = caughtInUKWaters;
+        }
+        if (!errorFields.has("watersCaughtIn") && !errorFields.has("caughtInEUWaters") && caughtInEUWaters === "Y") {
+          filteredConservation.caughtInEUWaters = caughtInEUWaters;
+        }
+        if (!errorFields.has("watersCaughtIn") && !errorFields.has("caughtInOtherWaters") && caughtInOtherWaters === "Y") {
+          filteredConservation.caughtInOtherWaters = caughtInOtherWaters;
+          if (!errorFields.has("otherWaters") && otherWaters) {
+            filteredConservation.otherWaters = otherWaters;
+          }
+        }
+
+        await saveConservation(
+          bearerToken,
+          documentNumber,
+          filteredConservation,
+          currentUri,
+          nextUri,
+          true
+        );
+      } else {
+        await saveConservation(
+          bearerToken,
+          documentNumber,
+          { ...conservation },
+          currentUri,
+          nextUri,
+          true
+        );
+      }
+
+      return redirect(route("/create-catch-certificate/catch-certificates"));
     }
 
     if (buttonClicked === "saveAndContinue" && errors.length > 0) {
@@ -121,7 +163,5 @@ export const WhoseWatersWereTheyCaughtInAction = async (
     }
   }
 
-  return buttonClicked === "saveAsDraft"
-    ? redirect(route("/create-catch-certificate/catch-certificates"))
-    : redirect(nextUri);
+  return redirect(nextUri);
 };

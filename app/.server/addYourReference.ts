@@ -63,15 +63,31 @@ export const addYourReferenceAction = async (
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
+  const userReferenceValue = form.get("userReference") as string;
+  const isSaveAsDraft = form.get("_action") === "saveAsDraft";
+
+  // First validate by calling the API
   const userReference: UserReference = await addUserReference(
     bearerToken,
     documentNumber,
-    form.get("userReference") as string
+    userReferenceValue
   );
 
   const errorResponse = validateResponseData(userReference, form);
 
-  if (form.get("_action") === "saveAsDraft") return redirect(route(saveAsDraftLink));
+  if (isSaveAsDraft) {
+    // For saveAsDraft, if there are errors, don't save the invalid value
+    // The API already saved it, so we need to save an empty value or the previous valid value
+    if (
+      errorResponse &&
+      Array.isArray(userReference.errors) &&
+      userReference.errors.length > 0
+    ) {
+      // Clear the invalid value by saving empty string
+      await addUserReference(bearerToken, documentNumber, "");
+    }
+    return redirect(route(saveAsDraftLink));
+  }
 
   if (errorResponse) {
     return errorResponse as Response;

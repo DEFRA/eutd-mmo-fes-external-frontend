@@ -76,18 +76,27 @@ export const WhatExportDestinationAction = async (request: Request, params: Para
   }
 
   if (form.get("_action") === "saveAsDraft") {
-    // if there are validation errors, redirect to dashboard without saving or showing errors
+    // if there are validation errors, filter out invalid fields and only save valid ones
     if (errors.length > 0) {
-      return redirect(
-        route(
-          journey === "processingStatement"
-            ? "/create-processing-statement/processing-statements"
-            : "/create-non-manipulation-document/non-manipulation-documents"
-        )
-      );
+      const errorFields = new Set(errors.map((error) => error.key));
+      const filteredRequestBody: any = {};
+      
+      if (!errorFields.has("exportedTo") && country) {
+        filteredRequestBody.exportedTo = country;
+      }
+      if (!errorFields.has("exportDestination") && exportedTo) {
+        filteredRequestBody.exportDestination = exportedTo;
+      }
+      if (!errorFields.has("pointOfDestination") && pointOfDestination) {
+        filteredRequestBody.pointOfDestination = pointOfDestination;
+      }
+      
+      await postDraftExportLocation(bearerToken, documentNumber, filteredRequestBody);
+    } else {
+      // if data is valid, save as draft
+      await postDraftExportLocation(bearerToken, documentNumber, requestBody);
     }
-    // if data is valid, save as draft and redirect to dashboard
-    await postDraftExportLocation(bearerToken, documentNumber, requestBody);
+    
     return redirect(
       route(
         journey === "processingStatement"

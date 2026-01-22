@@ -90,10 +90,6 @@ export const DoYouHaveAddtionalTransportTypesAction = async (
     return redirect("/forbidden");
   }
 
-  if (_action === "saveAsDraft") {
-    return redirect("/create-catch-certificate/catch-certificates");
-  }
-
   const transportId = form.get("transportId") as string;
 
   if (_action === "edit") {
@@ -103,6 +99,12 @@ export const DoYouHaveAddtionalTransportTypesAction = async (
   if (_action === "remove") {
     await deleteTransport(bearerToken, documentNumber, transportId);
     return redirect(`/create-catch-certificate/${documentNumber}/do-you-have-additional-transport-types`);
+  }
+
+  if (_action === "saveAsDraft") {
+    // For saveAsDraft, if there are errors, don't save the invalid value
+    // Simply redirect to dashboard without saving invalid data
+    return redirect("/create-catch-certificate/catch-certificates");
   }
 
   if (Array.isArray(errors) && errors.length > 0) {
