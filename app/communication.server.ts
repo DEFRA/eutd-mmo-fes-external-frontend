@@ -21,6 +21,10 @@ const commonRequestHeaders = (bearerToken: string) => ({
 
 const ENV = getEnv();
 
+type Get = (bearerToken: string, url: string, requestHeaders?: HeadersInit) => Promise<Response>;
+type Post = (bearerToken: string, url: string, requestHeaders?: HeadersInit, requestBody?: any) => Promise<Response>;
+type Put = (bearerToken: string, url: string, requestHeaders?: HeadersInit, requestBody?: any) => Promise<Response>;
+type Delete = (bearerToken: string, url: string, requestHeaders?: HeadersInit) => Promise<Response>;
 // Helper to detect WAF blocks
 const isWafBlock = async (response: Response): Promise<boolean> => {
   if (response.status !== 403) return false;
@@ -32,12 +36,6 @@ const isWafBlock = async (response: Response): Promise<boolean> => {
     return false;
   }
 };
-
-type Get = (bearerToken: string, url: string, requestHeaders?: HeadersInit) => Promise<Response>;
-type Post = (bearerToken: string, url: string, requestHeaders?: HeadersInit, requestBody?: any) => Promise<Response>;
-type Put = (bearerToken: string, url: string, requestHeaders?: HeadersInit, requestBody?: any) => Promise<Response>;
-type Delete = (bearerToken: string, url: string, requestHeaders?: HeadersInit) => Promise<Response>;
-
 export const getReferenceData = async (url: string, requestHeaders: HeadersInit = {}): Promise<Response> => {
   const credentials = btoa(`${ENV.REF_SERVICE_BASIC_AUTH_USER}:${ENV.REF_SERVICE_BASIC_AUTH_PASSWORD}`);
 
