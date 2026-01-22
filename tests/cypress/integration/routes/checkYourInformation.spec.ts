@@ -545,7 +545,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("#userReferenceChangeLink").should("have.attr", "href").and("include", "add-your-reference");
+    cy.get("#yourReferenceChangeLink").should("have.attr", "href").and("include", "add-your-reference");
   });
 
   it("should link to the exporter details page to change the exporter name", () => {

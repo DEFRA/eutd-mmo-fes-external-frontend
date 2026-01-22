@@ -73,7 +73,7 @@ export const CheckInfoExporterDetails = ({
           </dd>
           {userReferenceChangeRoute && (
             <dd className="govuk-summary-list__actions">
-              <a id="userReferenceChangeLink" className="govuk-link" href={userReferenceChangeRoute}>
+              <a id="yourReferenceChangeLink" className="govuk-link" href={userReferenceChangeRoute}>
                 {changeLinkText}
                 <span className="govuk-visually-hidden"> {lowerCase(userReferenceLabel)}</span>
               </a>
