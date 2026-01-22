@@ -653,7 +653,9 @@ const CheckYourInformation = () => {
                   {t("commonProgressPageExporterYourReference", { ns: "progress" })}
                 </dt>
                 <dd className="govuk-summary-list__value">
-                  {userReference ?? t("commonNotProvided", { ns: "common" })}
+                  {userReference && userReference.trim() !== ""
+                    ? userReference
+                    : t("commonNotProvided", { ns: "common" })}
                 </dd>
                 <dd className="govuk-summary-list__actions">
                   {!isLocked && (
