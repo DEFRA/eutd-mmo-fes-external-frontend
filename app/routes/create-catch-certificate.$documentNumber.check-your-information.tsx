@@ -660,7 +660,7 @@ const CheckYourInformation = () => {
                 <dd className="govuk-summary-list__actions">
                   {!isLocked && (
                     <a
-                      id="userReferenceChangeLink"
+                      id="yourReferenceChangeLink"
                       className="govuk-link"
                       href={`/create-catch-certificate/${documentNumber}/add-your-reference?nextUri=${route(
                         "/create-catch-certificate/:documentNumber/check-your-information",
