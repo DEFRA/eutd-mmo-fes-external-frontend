@@ -10,6 +10,22 @@ describe("SD: check-your-information page", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
   });
 
+  it("should display the correct page heading", () => {
+    cy.contains("h1", "Check your information before you create the non-manipulation document").should("be.visible");
+  });
+
+  it("should display the document creation header", () => {
+    cy.contains("h2", "Now create your non-manipulation document").should("be.visible");
+  });
+
+  it("should display the document submission confirmation text", () => {
+    cy.contains("By submitting this non-manipulation document, you confirm that:").should("be.visible");
+  });
+
+  it("should display the accept and create button with correct text", () => {
+    cy.contains("button", "Accept and create non-manipulation document").should("be.visible");
+  });
+
   it("should contain the required heading", () => {
     cy.contains("dt", "Company name");
     cy.contains("dt", "Company address");
