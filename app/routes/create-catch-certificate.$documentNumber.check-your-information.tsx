@@ -516,6 +516,7 @@ const CheckYourInformation = () => {
     hasSystemFailure,
     validationErrors,
     csrf,
+    userReference,
   } = useLoaderData();
   const exporterDetails: Exporter = exporter.model;
 
@@ -647,6 +648,34 @@ const CheckYourInformation = () => {
             />
             <h2 className="govuk-heading-l">{t("commonProgressPageExporterDetails", { ns: "progress" })}</h2>
             <dl className="govuk-summary-list govuk-!-margin-bottom-5">
+              <div className="govuk-summary-list__row">
+                <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                  {t("commonProgressPageExporterYourReference", { ns: "progress" })}
+                </dt>
+                <dd className="govuk-summary-list__value">
+                  {userReference && userReference.trim() !== ""
+                    ? userReference
+                    : t("commonNotProvided", { ns: "common" })}
+                </dd>
+                <dd className="govuk-summary-list__actions">
+                  {!isLocked && (
+                    <a
+                      id="yourReferenceChangeLink"
+                      className="govuk-link"
+                      href={`/create-catch-certificate/${documentNumber}/add-your-reference?nextUri=${route(
+                        "/create-catch-certificate/:documentNumber/check-your-information",
+                        { documentNumber }
+                      )}`}
+                    >
+                      {t("commonWhatExportersAddressChangeLink", { ns: "common" })}
+                      <span className="govuk-visually-hidden">
+                        {" "}
+                        {lowerCase(t("commonProgressPageExporterYourReference", { ns: "progress" }))}
+                      </span>
+                    </a>
+                  )}
+                </dd>
+              </div>
               <div className="govuk-summary-list__row">
                 <dt className="govuk-summary-list__key govuk-!-width-one-half">
                   {t("ccAddExporterDetailsExporterNameOfPersonResponsible", { ns: "common" })}
