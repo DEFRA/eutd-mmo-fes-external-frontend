@@ -51,6 +51,7 @@ export interface ICatchCertificateSummary {
   exportLocation?: IExportLocation;
   landingsEntryOption?: LandingEntryType;
   validationErrors?: (ValidationFailure | SystemFailure)[];
+  userReference?: string;
 }
 
 export interface SystemFailure {

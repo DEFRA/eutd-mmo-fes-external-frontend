@@ -539,13 +539,22 @@ describe("Check Your Information (Summary) page: page guard", () => {
 });
 
 describe("Check Your Information (Summary) page: change links", () => {
+  it("should link to the your reference page to change the user reference", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformation,
+    };
+
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.get("#userReferenceChangeLink").should("have.attr", "href").and("include", "add-your-reference");
+  });
+
   it("should link to the exporter details page to change the exporter name", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(1) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(2) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-exporter-details")
       .then((elem: JQuery<HTMLElement>) => {
@@ -563,7 +572,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(2) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(3) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-exporter-details")
       .then((elem: JQuery<HTMLElement>) => {
@@ -581,7 +590,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(3) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(4) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-exporter-details")
       .then((elem: JQuery<HTMLElement>) => {

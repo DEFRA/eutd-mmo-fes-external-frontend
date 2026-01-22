@@ -20,6 +20,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should contain the required heading", () => {
+    cy.contains("dt", "Your reference");
     cy.contains("dt", "Company name");
     cy.contains("dt", "Company address");
     cy.contains("dt", "Commodity code");
@@ -59,6 +60,11 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should contain all the required change tags and urls", () => {
+    cy.get("#userReferenceChangeLink")
+      .should("be.visible")
+      .should("have.attr", "href")
+      .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-your-reference");
+
     cy.get("#exporterCompanyNameChangeLink")
       .should("be.visible")
       .should("have.attr", "href")
