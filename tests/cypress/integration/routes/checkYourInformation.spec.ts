@@ -1645,7 +1645,7 @@ describe("Check Your Information: Truck transport without CMR (false)", () => {
   });
 
   it("should render truck nationality when CMR is false", () => {
-    cy.contains("dt", "Nationality of vehicle").should("be.visible");
+    cy.contains("dt", "Truck nationality").should("be.visible");
   });
 
   it("should render truck registration number when CMR is false", () => {
@@ -1849,7 +1849,7 @@ describe("Check Your Information: Warning text", () => {
   });
 
   it("should display the full warning message", () => {
-    cy.get(".govuk-warning-text__text").should("contain", "only accept the information");
+    cy.get(".govuk-warning-text__text").should("contain", "In submitting the information in this catch certificate");
   });
 });
 
@@ -1866,7 +1866,7 @@ describe("Check Your Information: Exporter details section", () => {
   });
 
   it("should render exporter full name field", () => {
-    cy.contains("dt", "Name of person responsible for the export").should("be.visible");
+    cy.contains("dt", "Name of person responsible for this export").should("be.visible");
   });
 
   it("should render company name field", () => {
@@ -1874,7 +1874,7 @@ describe("Check Your Information: Exporter details section", () => {
   });
 
   it("should render company address field", () => {
-    cy.contains("dt", "Address").should("be.visible");
+    cy.contains("dt", "Company address").should("be.visible");
   });
 
   it("should have change links for all exporter fields when not locked", () => {
