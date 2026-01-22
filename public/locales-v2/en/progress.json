@@ -46,6 +46,6 @@
   "sdProgressDepartureFromStorageFacilty": "Departure from storage facility",
   "sdProgressDepartureFromStorageFaciltyDetails": "UK departure transport details",
   "sdProgressStoragefacilities": "Storage facility details",
-  "sdProgressNotificationMsgIsNotVoided": "This draft was created by copying document {{c}}. You are reminded that you must not use a storage document or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken.",
+  "sdProgressNotificationMsgIsNotVoided": "This draft was created by copying document {{c}}. You are reminded that you must not use a non-manipulation document or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken.",
   "sdProgressNotificationMsgIsVoided": "This draft was created by copying a document that has now been voided. You are reminded that you must not use a storage document or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
 }
