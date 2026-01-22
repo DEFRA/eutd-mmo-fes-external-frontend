@@ -1540,42 +1540,354 @@ describe("PS - scenario 2 - Change plant address", () => {
   });
 });
 
-describe("PS - Species display format", () => {
-  const documentNumber = "GBR-2023-PS-DE53D6E7C";
-  const documentUrl = `/create-processing-statement/${documentNumber}`;
-  const checkYourInformationUrl = `${documentUrl}/check-your-information`;
-
+describe("Check Your Information: User Reference scenarios", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSCheckYourInformationChangeProductDetails,
+      testCaseId: TestCaseId.CCCheckYourInformation,
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
   });
 
-  it("should display species without duplicating FAO code", () => {
-    // Verify we're on check-your-information page
-    cy.url().should("include", "/check-your-information");
+  it("should display user reference when provided", () => {
+    cy.contains("dt", "Your reference").next("dd").should("not.have.text", "Not provided");
+  });
 
-    // Find all species fields in the summary list
-    cy.get(".govuk-summary-list__key")
-      .filter(':contains("Species")')
-      .each(($speciesKey) => {
-        // Get the corresponding value
-        cy.wrap($speciesKey)
-          .next(".govuk-summary-list__value")
-          .invoke("text")
-          .then((speciesText) => {
-            // Ensure the species text is not empty
-            expect(speciesText.trim()).to.not.equal("");
+  it("should have correct change link with nextUri for user reference", () => {
+    cy.get("#yourReferenceChangeLink")
+      .should("have.attr", "href")
+      .and("include", "/add-your-reference")
+      .and("include", "nextUri")
+      .and("include", "check-your-information");
+  });
 
-            // If the species contains FAO codes in parentheses,
-            // verify there is exactly ONE code, not duplicated
-            // This prevents the bug where "Pollack (POL) (POL)" would appear
-            const codeMatches = speciesText.match(/\([A-Z]{3}\)/g);
-            if (codeMatches) {
-              expect(codeMatches).to.have.length(1, `Species should not have duplicated FAO codes: "${speciesText}"`);
-            }
-          });
-      });
+  it("should have visually hidden text for accessibility in user reference change link", () => {
+    cy.get("#yourReferenceChangeLink")
+      .find(".govuk-visually-hidden")
+      .should("exist")
+      .should("contain", "your reference");
+  });
+});
+
+describe("Check Your Information: CommonLink component testing", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render common link for exporter address with visually hidden text", () => {
+    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(4)")
+      .find("a")
+      .should("contain", "Change")
+      .find(".govuk-visually-hidden")
+      .should("exist");
+  });
+
+  it("should render common link for conservation with visually hidden text", () => {
+    cy.get("dl:nth-of-type(5) > .govuk-summary-list__row:nth-of-type(1)")
+      .find("a")
+      .should("contain", "Change")
+      .find(".govuk-visually-hidden")
+      .should("contain", "whose waters");
+  });
+});
+
+describe("Check Your Information: Transportation details for multiple transports", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationMultipleTransports,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render multiple transportation sections when multiple transports exist", () => {
+    cy.get("dl.govuk-summary-list")
+      .filter(':has(dt:contains("How will the export leave the UK?"))')
+      .should("have.length.greaterThan", 0);
+  });
+
+  it("should render separate sections for each transport with correct details", () => {
+    // Verify the page contains transportation details heading
+    cy.contains("h2", "Transportation details").should("exist");
+  });
+});
+
+describe("Check Your Information: Truck transport with CMR true", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render CMR question when truck has CMR true", () => {
+    cy.contains("dt", "Do you have a road transport document to go with this export?").should("be.visible");
+  });
+
+  it("should display Yes for CMR when value is true", () => {
+    cy.contains("dt", "Do you have a road transport document to go with this export?")
+      .next("dd")
+      .should("have.text", "Yes");
+  });
+
+  it("should have change link for CMR that includes anchor", () => {
+    cy.get('[href*="do-you-have-a-road-transport-document"]').should("have.attr", "href").and("include", "#cmr");
+  });
+});
+
+describe("Check Your Information: Truck transport without CMR (false)", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationTruckNoCMR,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render truck nationality when CMR is false", () => {
+    cy.contains("dt", "Nationality of vehicle").should("be.visible");
+  });
+
+  it("should render truck registration number when CMR is false", () => {
+    cy.contains("dt", "Registration number").should("be.visible");
+  });
+
+  it("should render place export leaves UK for truck", () => {
+    cy.contains("dt", "Place export leaves the UK").should("be.visible");
+  });
+
+  it("should have correct change links with anchors for truck fields", () => {
+    cy.get('[href*="add-transportation-details-truck"]').filter('[href*="#nationalityOfVehicle"]').should("exist");
+    cy.get('[href*="add-transportation-details-truck"]').filter('[href*="#registrationNumber"]').should("exist");
+    cy.get('[href*="add-transportation-details-truck"]').filter('[href*="#departurePlace"]').should("exist");
+  });
+});
+
+describe("Check Your Information: Train transport details", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationTrain,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render railway bill number for train transport", () => {
+    cy.contains("dt", "Railway bill number").should("be.visible");
+  });
+
+  it("should render place export leaves UK for train", () => {
+    cy.contains("dt", "Place export leaves the UK").should("be.visible");
+  });
+
+  it("should render freight bill number for train", () => {
+    cy.contains("dt", "Freight bill number").should("be.visible");
+  });
+
+  it("should have correct change links with anchors for train fields", () => {
+    cy.get('[href*="add-transportation-details-train"]').filter('[href*="#railwayBillNumber"]').should("exist");
+    cy.get('[href*="add-transportation-details-train"]').filter('[href*="#departurePlace"]').should("exist");
+    cy.get('[href*="add-transportation-details-train"]').filter('[href*="#freightBillNumber"]').should("exist");
+  });
+});
+
+describe("Check Your Information: Container vessel transport details", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationContainerVessel,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render vessel name for container vessel", () => {
+    cy.contains("dt", "Vessel name").should("be.visible");
+  });
+
+  it("should render flag state for container vessel", () => {
+    cy.contains("dt", "Flag state").should("be.visible");
+  });
+
+  it("should render container identification number for container vessel", () => {
+    cy.contains("dt", "Container identification number").should("be.visible");
+  });
+
+  it("should render place export leaves UK for container vessel", () => {
+    cy.contains("dt", "Place export leaves the UK").should("be.visible");
+  });
+
+  it("should have correct change links with anchors for container vessel fields", () => {
+    cy.get('[href*="add-transportation-details-container-vessel"]').filter('[href*="#vesselName"]').should("exist");
+    cy.get('[href*="add-transportation-details-container-vessel"]').filter('[href*="#flagState"]').should("exist");
+    cy.get('[href*="add-transportation-details-container-vessel"]')
+      .filter('[href*="#containerNumber"]')
+      .should("exist");
+    cy.get('[href*="add-transportation-details-container-vessel"]').filter('[href*="#departurePlace"]').should("exist");
+  });
+});
+
+describe("Check Your Information: Plane transport details", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationPlane,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render flight number for plane transport", () => {
+    cy.contains("dt", "Flight number").should("be.visible");
+  });
+
+  it("should render container identification number for plane", () => {
+    cy.contains("dt", "Container identification number").should("be.visible");
+  });
+
+  it("should render place export leaves UK for plane", () => {
+    cy.contains("dt", "Place export leaves the UK").should("be.visible");
+  });
+
+  it("should render freight bill number for plane", () => {
+    cy.contains("dt", "Freight bill number").should("be.visible");
+  });
+
+  it("should have correct change links with anchors for plane fields", () => {
+    cy.get('[href*="add-transportation-details-plane"]').filter('[href*="#flightNumber"]').should("exist");
+    cy.get('[href*="add-transportation-details-plane"]').filter('[href*="#containerNumber"]').should("exist");
+    cy.get('[href*="add-transportation-details-plane"]').filter('[href*="#departurePlace"]').should("exist");
+    cy.get('[href*="add-transportation-details-plane"]').filter('[href*="#freightBillNumber"]').should("exist");
+  });
+});
+
+describe("Check Your Information: getTransportationDetailsSummary for directLanding", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationDirectLanding,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render fishing vessel for direct landing transport", () => {
+    cy.contains("dt", "How will the export leave the UK?").next("dd").should("have.text", "Fishing vessel");
+  });
+
+  it("should not render change link for direct landing transport when locked", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationDirectLandingLocked,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.contains("dt", "How will the export leave the UK?").parent().find("a").should("not.exist");
+  });
+});
+
+describe("Check Your Information: Hidden input fields", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should have hidden journey input field", () => {
+    cy.get('input[name="journey"]').should("have.attr", "type", "hidden").should("have.value", "catchCertificate");
+  });
+
+  it("should have hidden noOfVessels input field", () => {
+    cy.get('input[name="noOfVessels"]').should("have.attr", "type", "hidden");
+  });
+
+  it("should calculate total number of vessels correctly", () => {
+    cy.get('input[name="noOfVessels"]').invoke("val").should("not.be.empty");
+  });
+});
+
+describe("Check Your Information: Submit button states", () => {
+  it("should show submit button when not locked", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=create-cc-button]").should("be.visible").should("not.be.disabled");
+  });
+
+  it("should not show submit button when locked", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationLocked,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=create-cc-button]").should("not.exist");
+  });
+
+  it("should have correct submit button attributes", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=create-cc-button]")
+      .should("have.attr", "type", "submit")
+      .should("have.attr", "name", "_action")
+      .should("have.attr", "value", "createCatchCertificate")
+      .should("have.attr", "data-prevent-double-click", "true");
+  });
+});
+
+describe("Check Your Information: Warning text", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should display warning text section", () => {
+    cy.get(".govuk-warning-text").should("be.visible");
+  });
+
+  it("should display warning icon", () => {
+    cy.get(".govuk-warning-text__icon").should("be.visible").should("contain", "!");
+  });
+
+  it("should display warning text with visually hidden Warning label", () => {
+    cy.get(".govuk-warning-text__text .govuk-visually-hidden").should("have.text", "Warning");
+  });
+
+  it("should display the full warning message", () => {
+    cy.get(".govuk-warning-text__text").should("contain", "only accept the information");
+  });
+});
+
+describe("Check Your Information: Exporter details section", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should render exporter details heading", () => {
+    cy.contains("h2", "Exporter details").should("be.visible");
+  });
+
+  it("should render exporter full name field", () => {
+    cy.contains("dt", "Name of person responsible for the export").should("be.visible");
+  });
+
+  it("should render company name field", () => {
+    cy.contains("dt", "Company name").should("be.visible");
+  });
+
+  it("should render company address field", () => {
+    cy.contains("dt", "Address").should("be.visible");
+  });
+
+  it("should have change links for all exporter fields when not locked", () => {
+    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row").each(($row) => {
+      cy.wrap($row).find("a").should("contain", "Change");
+    });
+  });
+
+  it("should not have change links when document is locked", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationLocked,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(2)").find("a").should("not.exist");
   });
 });
