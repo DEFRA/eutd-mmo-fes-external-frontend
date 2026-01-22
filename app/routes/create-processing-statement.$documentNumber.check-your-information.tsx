@@ -92,7 +92,7 @@ const getProcessedProducts = (processingStatement: ProcessingStatement) => {
 };
 
 const CheckYourInformation = () => {
-  const { t } = useTranslation(["common", "pscheckYourInformation"]);
+  const { t } = useTranslation(["common", "psCheckYourInformation", "progress"]);
   const { documentNumber, processingStatement, exporter, csrf } = useLoaderData<loaderDataProps>();
 
   const processedProducts = getProcessedProducts(processingStatement);
@@ -144,6 +144,13 @@ const CheckYourInformation = () => {
           exporterDetailsRoute="/create-processing-statement/:documentNumber/add-exporter-details"
           checkInfoRoute="/create-processing-statement/:documentNumber/check-your-information"
           documentNumber={documentNumber}
+          userReference={processingStatement.userReference}
+          userReferenceLabel={t("commonProgressPageExporterYourReference", { ns: "progress" })}
+          userReferenceChangeRoute={`/create-processing-statement/${documentNumber}/add-your-reference?nextUri=${route(
+            "/create-processing-statement/:documentNumber/check-your-information",
+            { documentNumber }
+          )}`}
+          notProvidedText={t("psSummaryPageNotProvided", { ns: "psCheckYourInformation" })}
         />
         <h2 className="govuk-heading-l">{t("psSummaryPageProcessedProducts", { ns: "psCheckYourInformation" })}</h2>
         {processedProducts?.map((product, index) => (
