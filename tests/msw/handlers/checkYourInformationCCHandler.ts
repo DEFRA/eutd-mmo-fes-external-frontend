@@ -425,7 +425,16 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) =>
       res(
-        ctx.json({ ...ccTruck, transport: { ...ccTruck.transport, vehicle: "train", railwayBillNumber: "RB123456" } })
+        ctx.json({
+          ...ccTruck,
+          transport: {
+            ...ccTruck.transport,
+            vehicle: "train",
+            railwayBillNumber: "RB123456",
+            departurePlace: "London St Pancras",
+            freightBillNumber: "FB789012",
+          },
+        })
       )
     ),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
