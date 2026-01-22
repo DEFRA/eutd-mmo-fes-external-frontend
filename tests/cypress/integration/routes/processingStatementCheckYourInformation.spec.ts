@@ -60,7 +60,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should contain all the required change tags and urls", () => {
-    cy.get("#userReferenceChangeLink")
+    cy.get("#yourReferenceChangeLink")
       .should("be.visible")
       .should("have.attr", "href")
       .and("include", "/create-processing-statement/GBR-2023-PS-DE53D6E7C/add-your-reference");
