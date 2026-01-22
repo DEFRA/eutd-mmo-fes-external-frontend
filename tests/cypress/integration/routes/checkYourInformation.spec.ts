@@ -1497,7 +1497,7 @@ describe("PS - scenario 1 - Change product details", () => {
   });
 });
 
-describe.only("PS - scenario 2 - Change plant address", () => {
+describe("PS - scenario 2 - Change plant address", () => {
   const documentNumber = "GBR-2023-PS-DE53D6E7C";
   const documentUrl = `/create-processing-statement/${documentNumber}`;
   const checkYourInformationUrl = `${documentUrl}/check-your-information`;
