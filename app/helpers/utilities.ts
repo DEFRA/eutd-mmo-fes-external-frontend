@@ -158,7 +158,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.HowDoesTheExportLeaveTheUk;
   }
 
-  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/how-does-the-export-leave-the-uk$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/how-does-the-consignment-leave-the-uk$/i)) {
     pageName = Page.StorageDocumentHowDoesTheExportLeaveTheUk;
   }
 
