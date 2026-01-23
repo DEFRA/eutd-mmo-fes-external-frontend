@@ -1,7 +1,7 @@
 {
   "ccCopyAllCertificateData": "Copy all certificate data",
   "commonCopyThisProcessingStatementCopyAllCertificateData": "Copy all document data",
-  "sdCopyThisStorageDocumentCopyAllCertificateDataHint": "Enables you to quickly create a new draft storage document from a previously submitted document with similar data",
+  "sdCopyThisStorageDocumentCopyAllCertificateDataHint": "Enables you to quickly create a new draft non-manipulation document from a previously submitted document with similar data",
   "commonCopyThisProcessingStatementCopyAllCertificateDataHint": "Enables you to quickly create a new draft processing statement from a previously submitted document with similar data",
   "commonCopyThisStorageDocumentCopyAllCertificateDataHint": "Enables you to quickly create a new draft storage document from a previously submitted document with similar data",
   "commonCopyThisDocumentVoidDocumentConfirm": "Copy all document data AND void the original",

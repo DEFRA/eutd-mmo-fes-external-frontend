@@ -53,5 +53,6 @@
   "psSummaryPageCatchCertificateWeight": "Pwysau’r dystysgrif dalfa",
   "psSummaryPageExportWeightBeforeProcessing": "Y pwysau allforio cyn prosesu",
   "psSummaryPageExportWeightAfterProcessing": "Y pwysau allforio ar ôl prosesu",
-  "psSummaryPageConsignmentItem": "Eitem yn y llwyth"
+  "psSummaryPageConsignmentItem": "Eitem yn y llwyth",
+  "psSummaryPageNotProvided": "Heb ei ddarparu"
 }
