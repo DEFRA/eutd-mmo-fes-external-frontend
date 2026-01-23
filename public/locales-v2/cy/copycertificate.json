@@ -1,7 +1,7 @@
 {
   "ccCopyAllCertificateData": "Copïo holl ddata’r dystysgrif",
   "ccCopyAllCertificateDataExceptTheLandings": "Copïo holl ddata'r dystysgrif AC EITHRIO y glanio",
-  "sdCopyThisStorageDocumentCopyAllCertificateDataHint": "Yn eich galluogi i greu dogfen storio drafft newydd yn gyflym o ddogfen a gyflwynwyd yn flaenorol gyda data tebyg",
+  "sdCopyThisStorageDocumentCopyAllCertificateDataHint": "Yn eich galluogi i greu dogfen dim triniaeth ddrafft newydd yn gyflym ar sail dogfen a gyflwynwyd yn flaenorol gyda data tebyg",
   "commonCopyThisProcessingStatementCopyAllCertificateData": "Copïo holl ddata'r ddogfen",
   "commonCopyThisProcessingStatementCopyAllCertificateDataHint": "Yn eich galluogi i greu datganiad prosesu drafft newydd yn gyflym o ddogfen a gyflwynwyd yn flaenorol gyda data tebyg",
   "commonCopyThisStorageDocumentCopyAllCertificateDataHint": "Yn eich galluogi i greu dogfen storio drafft newydd yn gyflym o ddogfen a gyflwynwyd yn flaenorol gyda data tebyg",

@@ -30,6 +30,12 @@ describe("Copy this storage document address page: Allowed", () => {
     );
   });
 
+  it("should render the hint text for copying non-manipulation document", () => {
+    cy.contains(
+      "Enables you to quickly create a new draft non-manipulation document from a previously submitted document with similar data"
+    ).should("be.visible");
+  });
+
   it("should render the  cancel button and on click should navigate to cc dashboard page", () => {
     cy.contains("button", "Cancel").should("be.visible");
     cy.get("[data-testid=cancel]").click({ force: true });
