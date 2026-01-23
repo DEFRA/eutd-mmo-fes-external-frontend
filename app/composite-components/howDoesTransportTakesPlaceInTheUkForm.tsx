@@ -18,7 +18,7 @@ type loaderDataProps = {
 };
 
 type howDoesTransportTakesPlaceInTheUkFormProps = {
-  type: Page.HowDoesTheConsignmentArriveAToTheUk | Page.HowDoesTheExportLeaveTheUk;
+  type: Page.HowDoesTheConsignmentArriveAToTheUk | Page.HowDoesTheExportLeaveTheUk | Page.StorageDocumentHowDoesTheExportLeaveTheUk;
   backUrl:
     | "/create-non-manipulation-document/:documentNumber/add-storage-facility-approval"
     | "/create-non-manipulation-document/:documentNumber/add-product-to-this-consignment"
@@ -39,7 +39,7 @@ export const HowDoesTransportTakesPlaceInTheUkSubComponent = ({
     <legend className="govuk-fieldset_legend govuk-fieldset__legend--xl">
       <h1 className="govuk-fieldset__heading">
         {t(
-          `${type === Page.HowDoesTheExportLeaveTheUk ? "transportSelectionPageTitle" : "arrivalTransportSelectionPageTitle"}`,
+          `${type === Page.HowDoesTheExportLeaveTheUk || type === Page.StorageDocumentHowDoesTheExportLeaveTheUk ? "transportSelectionPageTitle" : "arrivalTransportSelectionPageTitle"}`,
           { ns: "transportation" }
         )}
       </h1>
