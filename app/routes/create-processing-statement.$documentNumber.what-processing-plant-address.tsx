@@ -143,12 +143,111 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   );
 };
 
+const handleContinueManualAddress = async (
+  bearerToken: string,
+  documentNumber: string,
+  formData: {
+    plantAddressOne: string;
+    plantBuildingNumber: string;
+    plantSubBuildingName: string;
+    plantBuildingName: string;
+    plantStreetName: string;
+    plantCounty: string;
+    plantCountry: string;
+    plantTownCity: string;
+    plantPostcode: string;
+  },
+  form: FormData,
+  session: any,
+  csrf: string,
+  nextUri: string
+) => {
+  const currentStep: ExporterAddressStep = "manualAddress";
+  session.unset("postcode");
+  session.set("currentStep", currentStep);
+  session.set("csrf", csrf);
+
+  const selectedCountry = form.get("country") as string;
+  const countries: ICountry[] = await getCountries();
+  const countryData: ICountry = getCountryData(countries, selectedCountry);
+
+  const lookUpAddress: ILookUpAddressDetails = {
+    building_number: formData.plantBuildingNumber,
+    sub_building_name: formData.plantSubBuildingName,
+    building_name: formData.plantBuildingName,
+    street_name: formData.plantStreetName,
+    city: formData.plantTownCity,
+  };
+
+  formData["plantAddressOne"] = getAddressOne(lookUpAddress) ?? "";
+
+  const payload: Exporter = {
+    addressOne: formData.plantAddressOne,
+    buildingName: formData.plantBuildingName,
+    buildingNumber: formData.plantBuildingNumber,
+    country: formData.plantCountry,
+    county: formData.plantCounty,
+    streetName: formData.plantStreetName,
+    subBuildingName: formData.plantSubBuildingName,
+    townCity: formData.plantTownCity,
+    postcode: formData.plantPostcode,
+  };
+
+  const manualAddress: IExporter = await addManualExporterAddress(bearerToken, documentNumber, payload, countryData);
+  const errors: IError[] = manualAddress.errors as IError[];
+  const unauthorised = manualAddress.unauthorised as boolean;
+
+  if (unauthorised) {
+    session.unset("currentStep");
+    session.unset("postcode");
+    session.unset("csrf");
+
+    return redirect("/forbidden", {
+      headers: { "Set-Cookie": await commitSession(session) },
+    });
+  }
+
+  const errorResponse = await handleManualAddressErrors(errors, currentStep, lookUpAddress, csrf, session);
+  if (errorResponse) return errorResponse;
+
+  await updateProcessingStatement(
+    bearerToken,
+    documentNumber,
+    {
+      ...formData,
+    },
+    route("/create-processing-statement/:documentNumber/what-processing-plant-address", { documentNumber }),
+    undefined,
+    false
+  );
+
+  session.unset("currentStep");
+  const updatedSession = await commitSession(session);
+
+  const redirectUrl = !isEmpty(nextUri)
+    ? `${route("/create-processing-statement/:documentNumber/add-processing-plant-address", {
+        documentNumber,
+      })}?nextUri=${encodeURIComponent(nextUri)}`
+    : route("/create-processing-statement/:documentNumber/add-processing-plant-address", {
+        documentNumber,
+      });
+
+  return redirect(redirectUrl, {
+    headers: { "Set-Cookie": updatedSession },
+  });
+};
+
 export const action: ActionFunction = async ({ request, params }) => {
   const bearerToken = await getBearerTokenForRequest(request);
   const form = await request.formData();
   const { documentNumber } = params;
   const buttonClicked = form.get("_action") as ExporterAddressButtonType;
   const session = await getSessionFromRequest(request);
+
+  // Preserve nextUri from the request URL
+  const url = new URL(request.url);
+  const nextUri = url.searchParams.get("nextUri") ?? "";
+
   const formData = {
     plantAddressOne: form.get("selectaddress") as string,
     plantBuildingNumber: form.get("buildingNumber") as string,
@@ -297,75 +396,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
 
   if (buttonClicked === "continueManualAddress") {
-    currentStep = "manualAddress";
-    session.unset("postcode");
-    session.set("currentStep", currentStep);
-    session.set("csrf", csrf);
-    const selectedCountry = form.get("country") as string;
-    const countries: ICountry[] = await getCountries();
-    const countryData: ICountry = getCountryData(countries, selectedCountry);
-
-    const lookUpAddress: ILookUpAddressDetails = {
-      building_number: formData.plantBuildingNumber,
-      sub_building_name: formData.plantSubBuildingName,
-      building_name: formData.plantBuildingName,
-      street_name: formData.plantStreetName,
-      city: formData.plantTownCity,
-    };
-
-    formData["plantAddressOne"] = getAddressOne(lookUpAddress) ?? "";
-
-    const payload: Exporter = {
-      addressOne: formData.plantAddressOne,
-      buildingName: formData.plantBuildingName,
-      buildingNumber: formData.plantBuildingNumber,
-      country: formData.plantCountry,
-      county: formData.plantCounty,
-      streetName: formData.plantStreetName,
-      subBuildingName: formData.plantSubBuildingName,
-      townCity: formData.plantTownCity,
-      postcode: formData.plantPostcode,
-    };
-
-    const manualAddress: IExporter = await addManualExporterAddress(bearerToken, documentNumber, payload, countryData);
-    const errors: IError[] = manualAddress.errors as IError[];
-    const unauthorised = manualAddress.unauthorised as boolean;
-
-    if (unauthorised) {
-      session.unset("currentStep");
-      session.unset("postcode");
-      session.unset("csrf");
-
-      return redirect("/forbidden", {
-        headers: { "Set-Cookie": await commitSession(session) },
-      });
-    }
-
-    const errorResponse = await handleManualAddressErrors(errors, currentStep, lookUpAddress, csrf, session);
-    if (errorResponse) return errorResponse;
-
-    await updateProcessingStatement(
-      bearerToken,
-      documentNumber,
-      {
-        ...formData,
-      },
-      route("/create-processing-statement/:documentNumber/what-processing-plant-address", { documentNumber }),
-      undefined,
-      false
-    );
-
-    session.unset("currentStep");
-    const updatedSession = await commitSession(session);
-
-    return redirect(
-      route("/create-processing-statement/:documentNumber/add-processing-plant-address", {
-        documentNumber,
-      }),
-      {
-        headers: { "Set-Cookie": updatedSession },
-      }
-    );
+    return handleContinueManualAddress(bearerToken, documentNumber, formData, form, session, csrf, nextUri);
   }
 };
 

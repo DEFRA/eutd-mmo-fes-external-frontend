@@ -1509,31 +1509,101 @@ describe("PS - scenario 2 - Change plant address", () => {
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
   });
 
-  it("should have a change link for plant address and navigate correctly", () => {
+  it("should display Change link next to Address for Processing plant", () => {
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
-    cy.url().then((url) => cy.log(`Current URL: ${url}`));
 
     // Wait for page to fully load
     cy.get("h1").should("exist");
 
-    // Take screenshot
-    cy.screenshot("ps-plant-address-page");
+    // Verify the Address field exists for Processing plant
+    cy.get(".govuk-summary-list__key").filter(':contains("Address")').should("exist", "Address field should exist");
 
-    // Find plant address change link - be more specific about which Address field
+    // Verify Change link exists next to the Address field
     cy.get('a[href*="add-processing-plant-address"]', { timeout: 10000 })
-      .should("exist", "Plant address change link should exist")
-      .first()
-      .click();
+      .should("exist", "Change link for Address should exist")
+      .should("contain", "Change");
+  });
 
-    // Verify we're on add-processing-plant-address page with nextUri
+  it("should navigate to add-processing-plant-address when Change link is clicked", () => {
+    // Click the change link for plant address
+    cy.get('a[href*="add-processing-plant-address"]').click();
+
+    // Verify navigation to add-processing-plant-address page
     cy.url().should("include", "/add-processing-plant-address");
     cy.url().should("include", "nextUri");
 
-    // Click Save and continue without making changes
+    // Verify page content loaded
+    cy.get("h1").should("exist");
+  });
+
+  it("should return to check-your-information after completing updates and pressing Save and continue", () => {
+    cy.log("=== TEST START ===");
+
+    // Click the change link for plant address
+    cy.log("TEST STEP 1: Click change link");
+    cy.get('a[href*="add-processing-plant-address"]').click();
+
+    // Verify we're on add-processing-plant-address page (summary view)
+    cy.log("TEST STEP 2: Verify on add-processing-plant-address");
+    cy.url().should("include", "/add-processing-plant-address");
+    cy.url().should("include", "nextUri");
+
+    // Verify the hidden input has the nextUri value
+    cy.log("TEST STEP 2A: Verify hidden nextUri input");
+    cy.get('input[name="nextUri"]')
+      .should("exist")
+      .invoke("val")
+      .then((val) => {
+        cy.log("TEST STEP 2B: Hidden input value = " + val);
+        expect(val).to.include("/check-your-information");
+      });
+
+    // Click the "Change" button to open the address form
+    cy.log("TEST STEP 3: Click Change button (goToAddAddress)");
+    cy.get('button[id="goToAddAddress"]').click();
+
+    // Now we're on the address entry form (WhatExportersAddress component)
+    cy.log("TEST STEP 4: Verify on what-processing-plant-address");
+    cy.url().should("include", "/what-processing-plant-address");
+    cy.url().should("include", "nextUri");
+
+    // Click "Enter the address manually" to use manual address entry
+    cy.log("TEST STEP 5: Click Enter the address manually");
+    cy.contains("button", "Enter the address manually").click();
+
+    // Fill in manual address fields
+    cy.log("TEST STEP 6: Fill in address fields");
+    cy.get('input[name="buildingNumber"]').clear();
+    cy.get('input[name="buildingNumber"]').type("456");
+
+    cy.get('input[name="streetName"]').clear();
+    cy.get('input[name="streetName"]').type("New Avenue");
+
+    cy.get('input[name="townCity"]').clear();
+    cy.get('input[name="townCity"]').type("Manchester");
+
+    cy.get('input[name="postcode"]').clear();
+    cy.get('input[name="postcode"]').type("M1 1AA");
+
+    cy.get('input[id="country"]').type("United Kingdom{enter}");
+
+    // Click Continue with the new address
+    cy.log("TEST STEP 7: Click Continue");
+    cy.get('button[type="submit"]').contains("Continue").click();
+
+    // Should return to add-processing-plant-address page with updated address (summary view)
+    cy.log("TEST STEP 8: Verify returned to add-processing-plant-address");
+    cy.url().should("include", "/add-processing-plant-address");
+    cy.url().should("include", "nextUri");
+
+    // Click Save and continue from the summary page
+    cy.log("TEST STEP 9: Click Save and continue from summary page");
     cy.get('button[type="submit"]').contains("Save and continue").click();
 
-    // Should be redirected back to check-your-information
+    // Health certificate section is already complete, so should skip /add-health-certificate
+    // and navigate directly back to check-your-information
+    cy.log("TEST STEP 10: Verify final navigation to check-your-information");
     cy.url().should("include", "/check-your-information");
     cy.url().should("not.include", "nextUri");
     cy.url().should("not.include", "/add-health-certificate");
