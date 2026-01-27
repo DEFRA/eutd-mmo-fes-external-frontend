@@ -7,7 +7,15 @@ import istanbul from 'vite-plugin-istanbul';
 
 const port = process.env.PORT ?? 3000;
 
+// Build ID for cache-busting locale JSON files
+// Uses BUILD_ID env var from Docker build, commit SHA, or timestamp as fallback
+const BUILD_ID = process.env.BUILD_ID || process.env.GIT_COMMIT || Date.now().toString();
+
 export default defineConfig({
+  define: {
+    // Inject BUILD_ID as a global constant for runtime cache-busting
+    __BUILD_ID__: JSON.stringify(BUILD_ID),
+  },
   server: {
     // Use the same port as the Remix dev server.
     port: Number(port),
