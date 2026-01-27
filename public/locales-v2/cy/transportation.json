@@ -142,5 +142,9 @@
   "addTransportationDetailsExportDateTruck": "Y dyddiad y mae'r lori yn ymadael â'r DU",
   "addTransportationDetailsExportDateTrain": "Y dyddiad y mae'r trên yn ymadael â'r DU",
   "addTransportationDetailsExportDatePlane": "Y dyddiad y mae'r awyren yn ymadael â'r DU",
-  "addTransportationDetailsExportDateContainervessel": "Y dyddiad y mae'r llong cynwysyddion yn ymadael â'r DU"
+  "addTransportationDetailsExportDateContainervessel": "Y dyddiad y mae'r llong cynwysyddion yn ymadael â'r DU",
+  "errorTruckDepartureDateAnyMax": "Rhaid i'r dyddiad ymadael fod ar neu cyn dyddiad cyrraedd y cyfleuster storio",
+  "errorPlaneDepartureDateAnyMax": "Rhaid i'r dyddiad ymadael fod ar neu cyn dyddiad cyrraedd y cyfleuster storio",
+  "errorTrainDepartureDateAnyMax": "Rhaid i'r dyddiad ymadael fod ar neu cyn dyddiad cyrraedd y cyfleuster storio",
+  "errorContainerVesselDepartureDateAnyMax": "Rhaid i'r dyddiad ymadael fod ar neu cyn dyddiad cyrraedd y cyfleuster storio"
 }
