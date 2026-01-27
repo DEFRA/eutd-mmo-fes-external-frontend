@@ -186,7 +186,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const nextUri = form.get("nextUri") as string;
   const session = await getSessionFromRequest(request);
 
-  let faoCode = getCodeFromLabel(values?.species as string);
+  const faoCode = getCodeFromLabel(values?.species as string);
   const commodityCode = (values["commodityCode"] as string).split(" - ")[0];
 
   let scientificName;
@@ -195,15 +195,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
-
-  // If faoCode is empty, check if the input is directly a FAO code
-  if (!faoCode && values.species) {
-    const trimmedInput = (values.species as string).trim();
-    const foundSpecies = allSpecies.find((s: Species) => s.faoCode === trimmedInput);
-    if (foundSpecies) {
-      faoCode = trimmedInput;
-    }
-  }
 
   if (Array.isArray(allSpecies)) {
     ({ scientificName } = allSpecies.find((s: Species) => s.faoCode === faoCode) ?? {});
