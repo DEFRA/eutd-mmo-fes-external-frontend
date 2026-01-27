@@ -1,9 +1,13 @@
 {
   "euDataIntegrationSuccessful": "Integreiddio â data'r UE wedi llwyddo",
   "yourReferenceNumber": "Eich rhif cyfeirnod",
-  "dataTransferredMessage": "Mae data'ch tystysgrif dalfa wedi'i anfon i system CATCH yr UE.",
+  "dataTransferredMessagecatchCertificate": "Mae data'ch tystysgrif dalfa wedi'i anfon i system CATCH yr UE.",
+  "dataTransferredMessagestorageNotes": "Mae data’ch dogfen dim triniaeth wedi'i anfon at system CATCH yr UE.",
+  "dataTransferredMessageprocessingStatement": "Mae data’ch datganiad prosesu wedi'i anfon at system CATCH yr UE.",
   "euReceivedInformation": "Mae'r UE wedi cael eich gwybodaeth.",
   "whatHappensNext": "Beth sy'n digwydd nesaf",
-  "certificateReadyMessage": "Mae'ch tystysgrif dalfa yn barod i'w defnyddio. Gallwch",
-  "viewOrDownloadLink": "ei gweld neu ei lawrlwytho o'ch dangosfwrdd"
+  "certificateReadyMessagecatchCertificate": "Mae'ch tystysgrif dalfa yn barod i'w defnyddio. Gallwch",
+  "certificateReadyMessagestorageNotes": "Mae eich dogfen dim triniaeth yn barod i'w defnyddio. Gallwch",
+  "certificateReadyMessageprocessingStatement": "Mae eich datganiad prosesu yn barod i'w ddefnyddio. Gallwch",
+  "viewOrDownloadLink": "ei gweld neu ei lawrlwytho o'ch dangosfwrdd."
 }

@@ -27,6 +27,7 @@ export enum TestCaseId {
   CCDashboard = "ccDashboard",
   CCCopyDashboard = "ccCopyDashboard",
   CCDashboardNoCompleted = "ccDashboardNoCompleted",
+  CCDashboardNoCatchSubmission = "ccDashboardNoCatchSubmission",
   CCDashboardUserDetails = "ccDashboardUserDetails",
   CCDashboardAdminLogin = "ccDashboardAdminLogin",
   CCDashboardWithPendingEUStatus = "ccDashboardWithPendingEUStatus",
@@ -147,6 +148,14 @@ export enum TestCaseId {
   SaveTransportFailsWith403 = "saveTransportFailsWith403",
   SaveTransportFailsWithErrors = "saveTransportFailsWithErrors",
   SaveTransportFailsWithErrorsArrival = "saveTransportFailsWithErrorsArrival",
+  CCCheckYourInformationChangeTransportModeNoChange = "CCCheckYourInformationChangeTransportModeNoChange",
+  CCCheckYourInformationChangeTransportMode = "CCCheckYourInformationChangeTransportMode",
+  SDCheckYourInformationChangeArrivalTransportMode = "SDCheckYourInformationChangeArrivalTransportMode",
+  SDCheckYourInformationChangeArrivalTransportModeNoChange = "SDCheckYourInformationChangeArrivalTransportModeNoChange",
+  SDCheckYourInformationChangeDepartureTransportMode = "SDCheckYourInformationChangeDepartureTransportMode",
+  SDCheckYourInformationChangeDepartureTransportModeNoChange = "SDCheckYourInformationChangeDepartureTransportModeNoChange",
+  SDCheckYourInformationChangeProductNoChange = "SDCheckYourInformationChangeProductNoChange",
+  SDCheckYourInformationChangeFacilityNoChange = "SDCheckYourInformationChangeFacilityNoChange",
 
   WhatAreYouExporting = "whatAreYouExporting",
   WhatAreYouExportingNoFavourite = "whatAreYouExportingNoFavourite",
@@ -221,6 +230,11 @@ export enum TestCaseId {
   SDProductAddedInvalid = "SDProductAddedInvalid",
   SDProductAddedNoCatches = "sdProductAddedNoCatches",
 
+  SDYouHaveAddedAStorageFacility = "sdYouHaveAddedAStorageFacility",
+  SDYouHaveAddedMultipleStorageFacilities = "sdYouHaveAddedMultipleStorageFacilities",
+  SDStorageFacilityAddedValid = "sdStorageFacilityAddedValid",
+  SDStorageFacilityAddedNoFacilities = "sdStorageFacilityAddedNoFacilities",
+
   CCCopyAllowed = "ccCopyAllowed",
   CCCopyDisallowed = "ccCopyDisallowed",
   CCCopyThisCatchCertfifcateSave = "ccCopyThisCatchCertfifcateSave",
@@ -252,7 +266,10 @@ export enum TestCaseId {
   CCCheckYourInformationManualLandingTruckContainerNumber = "CCCheckYourInformationManualLandingTruckContainerNumber",
   CCCheckYourInformationManualLandingTrainContainerNumber = "CCCheckYourInformationManualLandingTrainContainerNumber",
   CCCheckYourInformationManualLandingTrainContainerNumberNull = "CCCheckYourInformationManualLandingTrainContainerNumberNull",
+  CCCheckYourInformationPlaneNoFreightBillNumber = "CCCheckYourInformationPlaneNoFreightBillNumber",
+  CCCheckYourInformationContainerVesselNoFreightBillNumber = "CCCheckYourInformationContainerVesselNoFreightBillNumber",
   CCCheckYourInformationWithPointOfDestination = "CCCheckYourInformationWithPointOfDestination",
+  CCCheckYourInformationNotProvidedFields = "CCCheckYourInformationNotProvidedFields",
 
   TransportAllowedUnauthorised = "TransportAllowedUnauthorised",
   TrainTransportSave = "TrainTransportSave",
@@ -508,6 +525,7 @@ export enum TestCaseId {
   PSLoadDasboardWithInProgressAndEmptyCompleted = "psLoadDasboardWithInProgressAndEmptyCompleted",
   PSLoadDasboardWithCompletedAndEmptyInProgress = "psLoadDasboardWithCompletedAndEmptyInProgress",
   PSLoadDasboardWithCompletedAndInProgress = "psLoadDasboardWithCompletedAndInProgress",
+  PSLoadDashboardWithCompletedAndEmptyInProgress = "psLoadDashboardWithCompletedAndEmptyInProgress",
   PSLoadDashboardMaxDraftLimitReached = "psLoadDashboardMaxDraftLimitReached",
   PSCreateProcessingStatementSuccess = "psCreateProcessingStatementSuccess",
   PSCreateProcessingStatementFailure = "psCreateProcessingStatementFailure",
@@ -575,6 +593,7 @@ export enum TestCaseId {
   PSCatchAddedFromProgressNoCatchDetails = "psCatchAddedFromProgressNoCatchDetails",
   PSCatchAddedFromProgressNoCatchDetails1 = "psCatchAddedFromProgressNoCatchDetails1",
   PSCatchAddedFromProgressNoCatchWeights = "psCatchAddedFromProgressNoCatchWeights",
+  PSCatchAddedTwoProductsOnlyOneWithCatches = "psCatchAddedTwoProductsOnlyOneWithCatches",
   PSCatchAddedBlankOneCatch = "psCatchAddedBlankOneCatch",
   PSCatchAddedNoCatches = "psCatchAddedNoCatches",
   PSCatchAddedTwoCatches = "psCatchAddedTwoCatches",
@@ -585,6 +604,8 @@ export enum TestCaseId {
   PSCheckYourInformationPageGuardCase = "psCheckYourInformationPageGuardCase",
   PSCheckYourInformationPageGuardCaseNoExporter = "psCheckYourInformationPageGuardCaseNoExporter",
   PSCheckYourInformationPageGuardProductDescriptions = "psCheckYourInformationPageGuardProductDescriptions",
+  PSCheckYourInformationChangeProductDetails = "psCheckYourInformationChangeProductDetails",
+  PSCheckYourInformationChangePlantAddress = "psCheckYourInformationChangePlantAddress",
   PSCatchEdit = "psCatchEdit",
   PSCatchRestoreRemovedLines = "psCatchRestoreRemovedLines",
   PSRemoveAllLines = "psRemoveAllLines",
@@ -660,6 +681,7 @@ export enum TestCaseId {
   SDAddProductConsignmentInvalidEntryDocError = "SDAddProductConsignmentInvalidEntryDocError",
   SDAddProductConsignmentIssuingCountryRequired = "SDAddProductConsignmentIssuingCountryRequired",
   SDAddProductConsignmentProductDescriptionRequired = "SDAddProductConsignmentProductDescriptionRequired",
+  SDAddProductConsignmentDataProductIndex1 = "sdAddProductConsignmentDataProductIndex1",
   SDFacilityTwoFacilities = "sdFacilityTwoFacilities",
   SDFacilityTwoFacilitiesDetails = "sdFacilityTwoFacilitiesDetails",
   SDAddUKEntryDocumentNoCatches = "sdAddUKEntryDocumentNoCatches",
@@ -704,4 +726,14 @@ export enum TestCaseId {
   // FI0-10517: EU Data Integration Successful Page
   EuDataIntegrationSuccessful = "euDataIntegrationSuccessful",
   EuDataIntegrationUnauthorised = "euDataIntegrationUnauthorised",
+
+  // FI0-10691: Processing Statement EU CATCH Integration
+  PSDashboardWithPendingEUStatus = "psDashboardWithPendingEUStatus",
+  PSDashboardWithFailedEUStatus = "psDashboardWithFailedEUStatus",
+  PSDashboardWithSuccessEUStatus = "psDashboardWithSuccessEUStatus",
+
+  // FI0-10692: Storage Document EU CATCH Integration
+  SDDashboardWithPendingEUStatus = "sdDashboardWithPendingEUStatus",
+  SDDashboardWithFailedEUStatus = "sdDashboardWithFailedEUStatus",
+  SDDashboardWithSuccessEUStatus = "sdDashboardWithSuccessEUStatus",
 }

@@ -4,21 +4,32 @@
 
 Frontend for the Fish Export Service (FES), using Remix (React-based web framework). This project supercedes https://dev.azure.com/defragovuk/DEFRA-MMO-FES/_git/mmo-fes-external-fe.
 
-- [Explore the folder structure](#explore-the-folder-structure)
-- [Environment Variables](#environment-variables)
-  - [Start the application](#start-the-application)
-- [Development](#development)
-- [Deployment](#deployment)
-- [Testing approach](#testing-approach)
-  - [Cypress](#Cypress)
-- [Testing steps](#testing-steps)
-  - [Cypress](#Cypress)
-    - [Disabling JavaScript](#disabling-javascript)
-    - [Important notes](#important-notes)
-    - [Useful links](#useful-links)
-  - [Code coverage](#code-coverage)
-- [Notes on Remix](#notes-on-remix)
-  - [Loading and refreshing data](#loading-and-refreshing-data)
+- [mmo-fes-external-fe](#mmo-fes-external-fe)
+  - [Contents](#contents)
+  - [Explore the folder structure](#explore-the-folder-structure)
+  - [Environment Variables](#environment-variables)
+    - [Start the application](#start-the-application)
+  - [Development](#development)
+  - [Deployment](#deployment)
+  - [Testing approach](#testing-approach)
+    - [Cypress](#cypress)
+  - [Testing steps](#testing-steps)
+    - [Cypress](#cypress-1)
+      - [**Overview**](#overview)
+      - [**Individual Tests**](#individual-tests)
+      - [**Docker-Based Testing**](#docker-based-testing)
+      - [**Note**](#note)
+      - [**Detailed instructions**](#detailed-instructions)
+      - [**Disabling JavaScript**](#disabling-javascript)
+      - [Important notes](#important-notes)
+      - [Useful links](#useful-links)
+    - [Running all tests](#running-all-tests)
+    - [Code coverage](#code-coverage)
+    - [Continuous Integration (CI)](#continuous-integration-ci)
+- [Things to Consider](#things-to-consider)
+  - [Notes on Remix](#notes-on-remix)
+    - [Loading and refreshing data](#loading-and-refreshing-data)
+      - [Useful links](#useful-links-1)
 
 ## Explore the folder structure
 
@@ -185,6 +196,90 @@ it.only('only run this one', () => {
 
 it('not this one', () => {
 })
+
+#### **Docker-Based Testing**
+
+You can run Cypress tests in an isolated Docker environment using Docker Compose. This method:
+
+- Eliminates the need to run `npm run :test:start` manually
+- Automatically builds the test image with all dependencies
+- Creates an isolated network for testing
+- Generates test results and coverage reports
+
+**Prerequisites:**
+
+- Docker and Docker Compose installed on your system
+
+**Running Tests with Docker:**
+
+From the project root directory:
+
+```bash
+docker compose -f tests/cypress/docker-compose.yml up --build
+```
+
+Or navigate to the tests directory:
+
+```bash
+cd tests/cypress
+docker compose up --build
+```
+
+**Note:** The `--build` flag rebuilds the Docker image. If you haven't made any code changes since the last build, you can omit `--build` to speed up the startup process:
+
+```bash
+docker compose -f tests/cypress/docker-compose.yml up
+```
+
+**What it does:**
+
+1. Builds the Docker image with the `test` target from the Dockerfile
+2. Creates a dedicated `cypress` network
+3. Starts a frontend service container running the application
+4. Runs Cypress tests in a separate container against the frontend
+5. Outputs results to `./tests/cypress/test-results/`
+6. Generates coverage reports in `./tests/cypress/coverage/`
+
+**Optional Environment Variables:**
+
+You can customize the test run with environment variables:
+
+```bash
+# Run tests on a different port
+export FRONTEND_PORT=3002
+docker compose -f tests/cypress/docker-compose.yml up --build
+
+# Run a specific test file
+export TEST_PATH=./tests/cypress/integration/routes/specific-test.spec.ts
+docker compose -f tests/cypress/docker-compose.yml up --build
+
+# Run multiple specific test files (comma-separated)
+export TEST_PATH="./tests/cypress/integration/routes/test1.spec.ts,./tests/cypress/integration/routes/test2.spec.ts"
+docker compose -f tests/cypress/docker-compose.yml up --build
+
+# Run all tests in a specific folder
+export TEST_PATH="./tests/cypress/integration/routes/**/*.spec.ts"
+docker compose -f tests/cypress/docker-compose.yml up --build
+
+# Change the hostname
+export FRONTEND_HOSTNAME=frontend-test
+docker compose -f tests/cypress/docker-compose.yml up --build
+```
+
+**Clean up:**
+
+After testing, remove the containers and network:
+
+```bash
+docker compose -f tests/cypress/docker-compose.yml down
+```
+
+**Benefits:**
+
+- Consistent test environment across different machines
+- No need to manage Node.js versions or dependencies locally
+- Easy integration with CI/CD pipelines
+- Isolated testing environment prevents conflicts with local setup
 
 #### **Note**
 

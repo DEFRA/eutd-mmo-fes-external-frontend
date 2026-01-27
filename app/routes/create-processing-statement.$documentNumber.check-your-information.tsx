@@ -1,5 +1,5 @@
 import * as React from "react";
-import { redirect, useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
+import { redirect, useActionData, useLoaderData, type LoaderFunction, type ActionFunction, Link } from "react-router";
 
 import { route } from "routes-gen";
 import { useEffect } from "react";
@@ -162,11 +162,10 @@ const CheckYourInformation = () => {
                     <a
                       id="consignmentDescriptionChangeLink"
                       className="govuk-link"
-                      href={`/create-processing-statement/${documentNumber}/add-consignment-details/${product.id}?nextUri=${route(
-                        "/create-processing-statement/:documentNumber/check-your-information",
-                        {
+                      href={`/create-processing-statement/${documentNumber}/add-consignment-details/${product.id}?nextUri=${encodeURIComponent(
+                        route("/create-processing-statement/:documentNumber/check-your-information", {
                           documentNumber,
-                        }
+                        })
                       )}`}
                     >
                       {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
@@ -218,19 +217,19 @@ const CheckYourInformation = () => {
                   <dt className="govuk-summary-list__key govuk-!-width-one-half">
                     {t("psSummaryPageCatchCertificateWeight", { ns: "psCheckYourInformation" })}
                   </dt>
-                  <dd className="govuk-summary-list__value">{`${catchItem.totalWeightLanded}kg`}</dd>
+                  <dd className="govuk-summary-list__value">{`${Number(catchItem.totalWeightLanded).toFixed(2)}kg`}</dd>
                 </div>
                 <div className="govuk-summary-list__row">
                   <dt className="govuk-summary-list__key govuk-!-width-one-half">
                     {t("psSummaryPageExportWeightBeforeProcessing", { ns: "psCheckYourInformation" })}
                   </dt>
-                  <dd className="govuk-summary-list__value">{`${catchItem.exportWeightBeforeProcessing}kg`}</dd>
+                  <dd className="govuk-summary-list__value">{`${Number(catchItem.exportWeightBeforeProcessing).toFixed(2)}kg`}</dd>
                 </div>
                 <div className="govuk-summary-list__row">
                   <dt className="govuk-summary-list__key govuk-!-width-one-half">
                     {t("psSummaryPageExportWeightAfterProcessing", { ns: "psCheckYourInformation" })}
                   </dt>
-                  <dd className="govuk-summary-list__value">{`${catchItem.exportWeightAfterProcessing}kg`}</dd>
+                  <dd className="govuk-summary-list__value">{`${Number(catchItem.exportWeightAfterProcessing).toFixed(2)}kg`}</dd>
                 </div>
                 <div className="govuk-!-margin-bottom-5"></div>
               </dl>
@@ -283,6 +282,19 @@ const CheckYourInformation = () => {
                 processingStatement?.plantTownCity,
                 processingStatement?.plantPostcode
               )}
+            </dd>
+            <dd className="govuk-summary-list__actions">
+              <Link
+                className="govuk-link"
+                to={
+                  "/create-processing-statement/" +
+                  documentNumber +
+                  "/add-processing-plant-address?nextUri=" +
+                  encodeURIComponent("/create-processing-statement/" + documentNumber + "/check-your-information")
+                }
+              >
+                {t("commonChangeLink", { ns: "common" })}
+              </Link>
             </dd>
           </div>
         </dl>

@@ -18,5 +18,17 @@
       { "value": "WHL", "label": "Whole" }
     ],
     "scientificName": "Gadus morhua"
+  },
+  {
+    "state": { "value": "FRE", "label": "Fresh" },
+    "presentations": [
+      { "value": "FIL", "label": "Filleted" },
+      { "value": "GUT", "label": "Gutted" },
+      { "value": "WHL", "label": "Whole" }
+    ],
+    "scientificName": "Aesop shrimp",
+    "commodityCodes": [
+      { "value": "03024400", "label": "Fresh or chilled shrimps and prawns (excl. cold-water varieties)" }
+    ]
   }
 ]

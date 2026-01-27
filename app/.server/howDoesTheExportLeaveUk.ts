@@ -22,8 +22,10 @@ export const howDoesTheExportLeaveTheUkLoader = async ({
   const session = await getSessionFromRequest(request);
   const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
+  const url = new URL(request.url);
+  const nextUri = url.searchParams.get("nextUri") ?? "";
 
-  return new Response(JSON.stringify({ documentNumber, vehicle, journey, csrf }), {
+  return new Response(JSON.stringify({ documentNumber, vehicle, journey, nextUri, csrf }), {
     status: 200,
     headers: {
       "Content-Type": "application/json",
@@ -53,20 +55,21 @@ export const howDoesTheExportLeaveTheUkAction = async ({
   const bearerToken = await getBearerTokenForRequest(request);
   const buttonClicked = form.get("_action") as string;
   const journey = form.get("journey") as Journey;
+  const nextUri = (form.get("nextUri") as string) ?? "";
 
   const transportDetails = await getTransportDetails(bearerToken, journey, documentNumber);
-  const transport: ITransport =
-    transportDetails.vehicle && transportDetails.vehicle !== vehicle
-      ? {
-          vehicle: vehicle,
-          departurePlace: transportDetails.departurePlace ? null : undefined,
-          exportDate: transportDetails.exportDate ? null : undefined,
-          exportedTo: transportDetails.exportedTo ? null : undefined,
-          freightBillNumber: transportDetails.freightBillNumber ? null : undefined,
-          pointOfDestination: transportDetails.pointOfDestination ? null : undefined,
-          containerNumbers: transportDetails.containerNumbers ? [] : undefined,
-        }
-      : { vehicle: vehicle };
+  const vehicleChanged = transportDetails.vehicle && transportDetails.vehicle !== vehicle;
+  const transport: ITransport = vehicleChanged
+    ? {
+        vehicle: vehicle,
+        departurePlace: transportDetails.departurePlace ? null : undefined,
+        exportDate: transportDetails.exportDate ? null : undefined,
+        exportedTo: transportDetails.exportedTo ? null : undefined,
+        freightBillNumber: transportDetails.freightBillNumber ? null : undefined,
+        pointOfDestination: transportDetails.pointOfDestination ? null : undefined,
+        containerNumbers: transportDetails.containerNumbers ? [] : undefined,
+      }
+    : { vehicle: vehicle };
 
   const isSavedAsDraft: boolean = buttonClicked === "saveAsDraft";
   const transportDetailsResponse: IBase = await saveTransport(
@@ -90,6 +93,12 @@ export const howDoesTheExportLeaveTheUkAction = async ({
       const values = Object.fromEntries(form);
       return apiCallFailed(errors, values);
     }
+  }
+
+  // If vehicle hasn't changed and nextUri is provided (e.g., from check-your-information change link),
+  // redirect back to that page instead of the transport details form
+  if (!vehicleChanged && nextUri && transportDetails.vehicle) {
+    return redirect(nextUri);
   }
 
   return buttonClicked === "saveAsDraft" ? redirect(saveAsDraftUrl) : redirect(completedUrl);

@@ -67,6 +67,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   setApiMock(request.url);
 
   const { documentNumber } = params;
+  const url = new URL(request.url);
+  const nextUri = url.searchParams.get("nextUri") ?? "";
 
   const plantAddressBearerToken = await getBearerTokenForRequest(request);
   const processingStatement: ProcessingStatement | IUnauthorised = await getProcessingStatement(
@@ -98,14 +100,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       (address: ILookUpAddressDetails) => address.address_line === addressOne
     );
 
-    responseData = createResponseData(documentNumber!, session, countries, processingStatementData, {
-      postcode,
-      currentStep,
-      postcodeaddress,
-      postcodeaddresses,
-    });
+    responseData = {
+      ...createResponseData(documentNumber!, session, countries, processingStatementData, {
+        postcode,
+        currentStep,
+        postcodeaddress,
+        postcodeaddresses,
+      }),
+      nextUri,
+    };
   } else {
-    responseData = createResponseData(documentNumber!, session, countries, processingStatementData);
+    responseData = {
+      ...createResponseData(documentNumber!, session, countries, processingStatementData),
+      nextUri,
+    };
   }
 
   if (shouldUpdateSession) {

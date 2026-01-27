@@ -50,7 +50,7 @@ describe("PageNotFound", () => {
   });
 
   it("SD: should render as expected for an unknown route that begins with a known route", () => {
-    const dashboardLink = "/create-storage-document/storage-documents";
+    const dashboardLink = "/create-non-manipulation-document/non-manipulation-documents";
 
     cy.visit(`${dashboardLink}qwekjhzxc`);
 
@@ -60,7 +60,7 @@ describe("PageNotFound", () => {
       .should("be.visible")
       .should("have.attr", "href", dashboardLink);
 
-    cy.contains("a", /^Create a UK storage document$/)
+    cy.contains("a", /^Create a UK non-manipulation document$/)
       .should("be.visible")
       .should("have.attr", "href", dashboardLink);
   });

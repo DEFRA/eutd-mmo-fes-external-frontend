@@ -71,7 +71,7 @@ export const action: ActionFunction = async ({ request }) => {
           headers: { "Set-Cookie": await analyticsAcceptedCookie.serialize({ analyticsAccepted: hasAcceptedCookies }) },
         });
       case "storageNotes":
-        return redirect(route("/create-storage-document/storage-documents"), {
+        return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
           headers: { "Set-Cookie": await analyticsAcceptedCookie.serialize({ analyticsAccepted: hasAcceptedCookies }) },
         });
     }
@@ -105,6 +105,7 @@ const Home = () => {
                   type="radio"
                   value="catchCertificate"
                   defaultChecked={true}
+                  aria-describedby="createCatchCertificate-hint"
                 />
                 <label
                   id="label-createCatchCertificate"
@@ -113,6 +114,9 @@ const Home = () => {
                 >
                   {t("commonDashboardCreateAUkCatchCertificate")}
                 </label>
+                <div id="createCatchCertificate-hint" className="govuk-hint govuk-radios__hint">
+                  {t("commonDashboardCreateAUkCatchCertificateHint")}
+                </div>
               </div>
               <div className="govuk-radios__item">
                 <input
@@ -137,6 +141,7 @@ const Home = () => {
                   name="journeySelection"
                   type="radio"
                   value="storageNotes"
+                  aria-describedby="createStorageDocument-hint"
                 />
                 <label
                   id="label-createStorageDocument"
@@ -145,6 +150,9 @@ const Home = () => {
                 >
                   {t("commonDashboardCreateaUkStorageDocument")}
                 </label>
+                <div id="createStorageDocument-hint" className="govuk-hint govuk-radios__hint">
+                  {t("commonDashboardCreateaUkStorageDocumentHint")}
+                </div>
               </div>
             </fieldset>
             <br />

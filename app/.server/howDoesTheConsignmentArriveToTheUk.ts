@@ -23,8 +23,10 @@ export const HowDoesTheConsignmentArriveToTheUkLoader = async ({
   const session = await getSessionFromRequest(request);
   const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
+  const url = new URL(request.url);
+  const nextUri = url.searchParams.get("nextUri") ?? "";
 
-  return new Response(JSON.stringify({ documentNumber, vehicle, journey, csrf }), {
+  return new Response(JSON.stringify({ documentNumber, vehicle, journey, nextUri, csrf }), {
     status: 200,
     headers: {
       "Content-Type": "application/json",
@@ -54,24 +56,25 @@ export const HowDoesTheConsignmentArriveToTheUkAction = async ({
   const bearerToken = await getBearerTokenForRequest(request);
   const buttonClicked = form.get("_action") as string;
   const journey = form.get("journey") as Journey;
+  const nextUri = (form.get("nextUri") as string) ?? "";
   const isArrivalTransportation = true;
 
   const transportDetails = await getTransportDetails(bearerToken, journey, documentNumber, isArrivalTransportation);
-  const transport: ITransport =
-    transportDetails.vehicle && vehicle !== transportDetails.vehicle
-      ? {
-          vehicle: vehicle,
-          departurePlace: isArrivalTransportation ? undefined : null,
-          exportDate: isArrivalTransportation ? undefined : null,
-          freightBillNumber: isArrivalTransportation ? null : undefined,
-          departureCountry: isArrivalTransportation ? null : undefined,
-          departurePort: isArrivalTransportation ? null : undefined,
-          departureDate: isArrivalTransportation ? null : undefined,
-          placeOfUnloading: isArrivalTransportation ? null : undefined,
-          arrival: isArrivalTransportation,
-          containerNumbers: [],
-        }
-      : { vehicle: vehicle, arrival: isArrivalTransportation };
+  const vehicleChanged = transportDetails.vehicle && vehicle !== transportDetails.vehicle;
+  const transport: ITransport = vehicleChanged
+    ? {
+        vehicle: vehicle,
+        departurePlace: isArrivalTransportation ? undefined : null,
+        exportDate: isArrivalTransportation ? undefined : null,
+        freightBillNumber: isArrivalTransportation ? null : undefined,
+        departureCountry: isArrivalTransportation ? null : undefined,
+        departurePort: isArrivalTransportation ? null : undefined,
+        departureDate: isArrivalTransportation ? null : undefined,
+        placeOfUnloading: isArrivalTransportation ? null : undefined,
+        arrival: isArrivalTransportation,
+        containerNumbers: [],
+      }
+    : { vehicle: vehicle, arrival: isArrivalTransportation };
 
   const isSavedAsDraft: boolean = buttonClicked === "saveAsDraft";
   const transportDetailsResponse: IBase = await saveTransport(
@@ -92,6 +95,12 @@ export const HowDoesTheConsignmentArriveToTheUkAction = async ({
       const values = Object.fromEntries(form);
       return apiCallFailed(errors, values);
     }
+  }
+
+  // If vehicle hasn't changed and nextUri is provided (e.g., from check-your-information change link),
+  // redirect back to that page instead of the transport details form
+  if (!vehicleChanged && nextUri && transportDetails.vehicle) {
+    return redirect(nextUri);
   }
 
   return isSavedAsDraft ? redirect(saveAsDraftUrl) : redirect(completedUrl);

@@ -1,6 +1,8 @@
 {
   "commonHomePageWhatDoYouWant": "Beth ydych chi am ei wneud?",
-  "commonDashboardCreateAUkCatchCertificate": "Creu tystysgrif dalfa yn y DU (Gan gynnwys dolenni at ddogfennau glanio uniongyrchol)",
+  "commonDashboardCreateAUkCatchCertificate": "Creu tystysgrif dalfa yn y DU",
+  "commonDashboardCreateAUkCatchCertificateHint": "Gan gynnwys dolenni at ddogfennau glanio uniongyrchol",
   "processingStatementRendererHeaderSectionTitle": "Creu datganiad prosesu yn y DU",
-  "commonDashboardCreateaUkStorageDocument": "Creu dogfen storio yn y DU"
+  "commonDashboardCreateaUkStorageDocument": "Creu dogfen dim triniaeth ar gyfer y DU",
+  "commonDashboardCreateaUkStorageDocumentHint": "Roedd yn cael ei galw'n 'ddogfen storio' o'r blaen"
 }

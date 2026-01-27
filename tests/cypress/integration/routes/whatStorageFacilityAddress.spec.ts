@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const sdPageUrl = "create-storage-document/GBR-2022-SD-F71D98A30/what-storage-facility-address";
+const sdPageUrl = "create-non-manipulation-document/GBR-2022-SD-F71D98A30/what-storage-facility-address";
 
 describe("SD: What storage facility address page", () => {
   beforeEach(() => {
@@ -12,9 +12,9 @@ describe("SD: What storage facility address page", () => {
   });
 
   it("should render the expected header", () => {
-    cy.contains("a", /^Create a UK storage document$/)
+    cy.contains("a", /^Create a UK non-manipulation document$/)
       .should("be.visible")
-      .should("have.attr", "href", "/create-storage-document/storage-documents");
+      .should("have.attr", "href", "/create-non-manipulation-document/non-manipulation-documents");
 
     cy.get(".govuk-heading-xl").contains("What is the storage facility address?");
   });

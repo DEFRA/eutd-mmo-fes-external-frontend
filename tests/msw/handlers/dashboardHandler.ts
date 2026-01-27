@@ -12,6 +12,7 @@ import { type ITestHandler, TestCaseId, type Journey } from "~/types";
 import ccDashboard from "@/fixtures/dashboardApi/catchCertificateDashboard.json";
 import ccCopyDashboard from "@/fixtures/dashboardApi/catchCertificateCopyDashboard.json";
 import ccDashboardNoCompleted from "@/fixtures/dashboardApi/catchCertificateNoCompleted.json";
+import ccDashboardNoCatchSubmission from "@/fixtures/dashboardApi/catchCertificateNoCatchSubmission.json";
 import directLandingLandingsType from "@/fixtures/landingsTypeApi/directLanding.json";
 import notification from "@/fixtures/dashboardApi/notification.json";
 
@@ -42,6 +43,10 @@ const dashboardHandler: ITestHandler = {
   ],
   [TestCaseId.CCDashboardNoCompleted]: () => [
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDashboardNoCompleted))),
+    rest.get(NOTIFICATION_URL, (req, res, ctx) => res(ctx.json(notification))),
+  ],
+  [TestCaseId.CCDashboardNoCatchSubmission]: () => [
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDashboardNoCatchSubmission))),
     rest.get(NOTIFICATION_URL, (req, res, ctx) => res(ctx.json(notification))),
   ],
   [TestCaseId.CCDashboardWithPendingEUStatus]: () => [

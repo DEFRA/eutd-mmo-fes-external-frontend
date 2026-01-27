@@ -9,9 +9,9 @@ import {
   mockGetAddStoargaDocumentUrl,
   EXPORT_LOCATION_URL,
 } from "~/urls.server";
-import oneValidFacility from "@/fixtures/storageDocumentApi/storageDocumentOneFacility.json";
-import twoValidFacilities from "@/fixtures/storageDocumentApi/storageDocumentTwoFacility.json";
-import threeValidFacilities from "@/fixtures/storageDocumentApi/storageDocumentThreeFacility.json";
+import oneValidFacility from "@/fixtures/storageDocumentApi/storageDocumentWithOneFacility.json";
+import twoValidFacilities from "@/fixtures/storageDocumentApi/storageDocumentWithTwoFacilities.json";
+import threeValidFacilities from "@/fixtures/storageDocumentApi/storageDocumentWithThreeFacilities.json";
 import sdProgressIncomplete from "@/fixtures/progressApi/sdIncomplete.json";
 import sdDocuments from "@/fixtures/dashboardApi/sdDocument.json";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
@@ -66,6 +66,23 @@ const youHaveAddedStorageFacilityHandler: ITestHandler = {
     rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
       res(ctx.json(storageDocumentFacilityNameError))
     ),
+  ],
+  [TestCaseId.SDYouHaveAddedAStorageFacility]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
+  ],
+  [TestCaseId.SDYouHaveAddedMultipleStorageFacilities]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(twoValidFacilities))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
+  ],
+  [TestCaseId.SDStorageFacilityAddedValid]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.SDStorageFacilityAddedNoFacilities]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(noFacilities))),
   ],
 };
 

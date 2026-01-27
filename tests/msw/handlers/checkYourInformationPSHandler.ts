@@ -8,6 +8,9 @@ import {
   mockAddExporterDetails,
   mockDocumentUrl,
   mockGetAllDocumentsUrl,
+  mockSaveAndValidateDocument,
+  SPECIES_URL,
+  COUNTRIES_URL,
 } from "~/urls.server";
 import processingStatement from "@/fixtures/processingStatementApi/processingStatement.json";
 import processingStatementProductDescriptions from "@/fixtures/processingStatementApi/processingStatementProductDescription.json";
@@ -19,6 +22,8 @@ import processingStatementSummary from "@/fixtures/processingStatementApi/proces
 import exporterDetails from "@/fixtures/addExporterDetails/exporterDetails.json";
 import exporterDetailsUpdated from "@/fixtures/addExporterDetails/exporterDetailsUpdated.json";
 import psDashboard from "@/fixtures/dashboardApi/psDocument.json";
+import species from "@/fixtures/referenceDataApi/species.json";
+import countries from "@/fixtures/referenceDataApi/countries.json";
 import psCreated from "@/fixtures/documentsApi/psCreated.json";
 import psProgress from "@/fixtures/progressApi/psIncomplete.json";
 
@@ -92,6 +97,108 @@ const checkYourInformationPSHandler: ITestHandler = {
   [TestCaseId.PSCheckYourInformationUnauthorised]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res.once(ctx.status(403))),
   ],
+  [TestCaseId.PSCheckYourInformationChangeProductDetails]: () => {
+    let postCallCount = 0;
+
+    const productBeforeChange = {
+      ...processingStatement,
+      products: [
+        {
+          id: "GBR-2023-PS-DE53D6E7C-1",
+          commodityCode: "03044410",
+          description: "Frozen fish fillets - COD",
+        },
+      ],
+      catches: [
+        {
+          _id: "catch-1",
+          productId: "GBR-2023-PS-DE53D6E7C-1",
+          species: "Atlantic cod",
+          speciesCode: "COD",
+          catchCertificateNumber: "GBR-2023-CC-123",
+          totalWeightLanded: "100",
+          exportWeightBeforeProcessing: "90",
+          exportWeightAfterProcessing: "80",
+          catchCertificateType: "uk",
+        },
+      ],
+      addAnotherCatch: "No",
+    };
+
+    const productAfterChange = {
+      ...processingStatement,
+      products: [
+        {
+          id: "GBR-2023-PS-DE53D6E7C-1",
+          commodityCode: "03044410",
+          description: "Frozen fish fillets - COD Updated",
+        },
+      ],
+      catches: [
+        {
+          _id: "catch-1",
+          productId: "GBR-2023-PS-DE53D6E7C-1",
+          species: "Atlantic cod",
+          speciesCode: "COD",
+          catchCertificateNumber: "GBR-2023-CC-123",
+          totalWeightLanded: "100",
+          exportWeightBeforeProcessing: "90",
+          exportWeightAfterProcessing: "80",
+          catchCertificateType: "uk",
+        },
+      ],
+      addAnotherCatch: "No",
+    };
+
+    return [
+      rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+      rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+      rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => {
+        const response = postCallCount > 0 ? productAfterChange : productBeforeChange;
+        return res(ctx.json(response));
+      }),
+      rest.post(GET_PROCESSING_STATEMENT, (req, res, ctx) => {
+        postCallCount++;
+        return res(ctx.json(productAfterChange));
+      }),
+      rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+        res(ctx.json({ validationErrors: [] }))
+      ),
+      rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+    ];
+  },
+  [TestCaseId.PSCheckYourInformationChangePlantAddress]: () => {
+    let postCallCount = 0;
+
+    const addressBeforeChange = {
+      ...processingStatement,
+      plantAddressOne: "123 Old Street",
+      plantTownCity: "London",
+      plantPostcode: "SW1A 1AA",
+    };
+
+    const addressAfterChange = {
+      ...processingStatement,
+      plantAddressOne: "456 New Avenue",
+      plantTownCity: "Manchester",
+      plantPostcode: "M1 1AA",
+    };
+
+    return [
+      rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => {
+        const response = postCallCount > 0 ? addressAfterChange : addressBeforeChange;
+        return res(ctx.json(response));
+      }),
+      rest.post(GET_PROCESSING_STATEMENT, (req, res, ctx) => {
+        postCallCount++;
+        return res(ctx.json(addressAfterChange));
+      }),
+      rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+        res(ctx.json({ validationErrors: [] }))
+      ),
+      rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+    ];
+  },
 };
 
 export default checkYourInformationPSHandler;

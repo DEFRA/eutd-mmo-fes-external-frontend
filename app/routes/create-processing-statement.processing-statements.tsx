@@ -4,12 +4,12 @@ import { getJourneyHeader } from "~/helpers/dashboard";
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 import { type MetaFunction, type LoaderFunction, type ActionFunction } from "react-router";
-import type { ErrorResponse, IDashboardData, IGetAllDocumentsData } from "~/types";
+import type { ErrorResponse, IDashboardData } from "~/types";
 import { getDashboardLoader, dashboardAction } from "~/.server";
 import { Dashboard, PageNavigationLinks, PopulateLinks } from "~/composite-components";
 import { getDashboardMeta } from "~/helpers";
 
-export const meta: MetaFunction = (args) => getDashboardMeta(args);
+export const meta: MetaFunction = (args: any) => getDashboardMeta(args);
 
 export const loader: LoaderFunction = async ({ request }) =>
   getDashboardLoader(request, "processingStatement", "dashboardProcessingStatementTitle");
@@ -36,7 +36,7 @@ const ProcessingStatements = () => {
     voidLink: "/create-processing-statement/:documentNumber/void-this-processing-statement",
     copyLink: "/create-processing-statement/:documentNumber/copy-this-processing-statement",
   };
-  const refinedDocuments = PopulateLinks(journey, documents as IGetAllDocumentsData, t, linksToPopulate);
+  const refinedDocuments = PopulateLinks(journey, documents, t, linksToPopulate);
   const [searchParams] = useSearchParams();
   const journeyLink = "/create-processing-statement/processing-statements";
   const navigationLinks = PageNavigationLinks(t, searchParams, journeyLink, journey);

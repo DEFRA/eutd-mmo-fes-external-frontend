@@ -13,10 +13,10 @@
   "delete": "Delete",
   "ccFavouritesDetailsExemptFromCatchCertificate": "Catch certificates",
   "psAddCatchDetailsExemptFromProcessingStatements": "Processing statements",
-  "sdAddProductToConsignmenStorageDocument": "Storage documents",
+  "sdAddProductToConsignmenStorageDocument": "Non-manipulation documents",
   "catchCertificateDashboardGuidance": "A maximum of {{maximumConcurrentDrafts}} draft catch certificates is allowed at any time.",
   "processingStatementDashboardGuidance": "A maximum of {{maximumConcurrentDrafts}} draft processing statements is allowed at any time.",
-  "storageNotesDashboardGuidance": "A maximum of {{maximumConcurrentDrafts}} draft storage documents is allowed at any time.",
+  "storageNotesDashboardGuidance": "You can create up to {{maximumConcurrentDrafts}} draft non-manipulation documents.\n\nWhen you reach the limit, you'll need to delete a draft before you can start a new one.",
   "processingStatementDashboardGuidanceForPendingSubmission": "For pending submissions, refresh regularly to see updates.",
   "catchCertificateDashboardGuidanceForPendingSubmission": "For pending submissions, refresh regularly to see updates.",
   "storageNotesDashboardGuidanceForPendingSubmission": "For pending submissions, refresh regularly to see updates.",
@@ -25,11 +25,11 @@
   "storageNotesDashboardGuidanceForFailedSubmission": "For failed submissions, continue the document to view resolution instructions.",
   "catchCertificateDashboardNoAnyDocInProgress": "You do not have any catch certificates in progress.",
   "processingStatementDashboardNoAnyDocInProgress": "You do not have any processing statements in progress.",
-  "storageNotesDashboardNoAnyDocInProgress": "You do not have any storage documents in progress.",
+  "storageNotesDashboardNoAnyDocInProgress": "Your draft non-manipulation documents will appear here when you've created them.",
   "catchCertificateDashboardNotificationOfMaximumDrafts": "You have reached the maximum limit allowed for draft catch certificates.",
   "processingStatementDashboardNotificationOfMaximumDrafts": "You have reached the maximum limit allowed for draft processing statements.",
-  "storageNotesDashboardNotificationOfMaximumDrafts": "You have reached the maximum limit allowed for draft storage documents.",
+  "storageNotesDashboardNotificationOfMaximumDrafts": "You have reached the maximum limit allowed for draft non-manipulation documents.",
   "processingStatementDashboardCompleteSubtitleText": "No {{journey}} documents were created this month",
   "catchCertificateDashboardCompleteSubtitleText": "No {{journey}} documents were created this month",
-  "storageNotesDashboardCompleteSubtitleText": "No {{journey}} documents were created this month"
+  "storageNotesDashboardCompleteSubtitleText": "Your non-manipulation documents will appear here when you've submitted them."
 }

@@ -16,6 +16,7 @@
     }
   ],
   "validationErrors": [{}],
+  "storageFacilities": [],
   "addAnotherProduct": "No",
   "transport": {
     "vehicle": "plane",

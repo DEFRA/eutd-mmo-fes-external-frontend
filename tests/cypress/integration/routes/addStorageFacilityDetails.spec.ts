@@ -1,9 +1,9 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const addStorageFacilityUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/add-storage-facility-details";
-const progressUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/progress";
-const storageFacilityUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/add-storage-facility-approval";
-const checkYourInformationUrl = "/create-storage-document/GBR-2022-SD-3FE1169D1/check-your-information";
+const addStorageFacilityUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility-details";
+const progressUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/progress";
+const storageFacilityUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility-approval";
+const checkYourInformationUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/check-your-information";
 
 describe("Add Storage Facility Address", () => {
   beforeEach(() => {
@@ -14,16 +14,16 @@ describe("Add Storage Facility Address", () => {
   });
 
   it("should render Storage Facility Address page", () => {
-    cy.contains("a", /^Create a UK storage document$/)
+    cy.contains("a", /^Create a UK non-manipulation document$/)
       .should("be.visible")
-      .should("have.attr", "href", "/create-storage-document/storage-documents");
+      .should("have.attr", "href", "/create-non-manipulation-document/non-manipulation-documents");
 
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should(
         "have.attr",
         "href",
-        "/create-storage-document/GBR-2022-SD-3FE1169D1/how-does-the-consignment-arrive-to-the-uk"
+        "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/how-does-the-consignment-arrive-to-the-uk"
       );
 
     cy.get(".govuk-heading-xl").contains("Add storage facility details");
@@ -188,7 +188,7 @@ describe("Add Storage Facility page when javascript is disabled", () => {
     it("should not show validation errors when clicking on draft", () => {
       cy.wait(5000);
       cy.get("[data-testid=save-draft-button]").click({ force: true });
-      cy.url().should("include", "create-storage-document/storage-document");
+      cy.url().should("include", "create-non-manipulation-document/non-manipulation-documents");
     });
   });
 });

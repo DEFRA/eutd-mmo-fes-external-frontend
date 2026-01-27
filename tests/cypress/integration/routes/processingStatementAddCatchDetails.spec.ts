@@ -699,8 +699,9 @@ describe("PS: Add catch details - Weight Input Validation", () => {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-totalWeightLanded").clear();
-    cy.get("#catches-0-totalWeightLanded").type("50");
+    cy.get("#catches-0-totalWeightLanded").should("be.visible").and("be.enabled");
+    cy.get("#catches-0-totalWeightLanded").clear({ force: true });
+    cy.get("#catches-0-totalWeightLanded").type("50", { force: true });
     cy.get("#catches-0-totalWeightLanded").should("have.value", "50");
   });
 
@@ -795,10 +796,12 @@ describe("PS: Add catch details - Weight Input Validation", () => {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-exportWeightAfterProcessing").clear();
-    cy.get("#catches-0-exportWeightAfterProcessing").type("25");
+    cy.get("#catches-0-exportWeightAfterProcessing").should("be.visible").and("be.enabled");
+    cy.get("#catches-0-exportWeightAfterProcessing").clear({ force: true });
+    cy.get("#catches-0-exportWeightAfterProcessing").type("25", { force: true });
     cy.get("#catches-0-exportWeightAfterProcessing").should("have.value", "25");
     cy.get("#cancel").click({ force: true });
+    cy.get("#catches-0-exportWeightAfterProcessing").should("be.visible");
     cy.get("#catches-0-exportWeightAfterProcessing").should("have.value", "");
   });
 
@@ -1239,11 +1242,16 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     cy.get("#addProductDetails").click({ force: true });
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
     cy.get("#yourproducts tbody tr").should("have.length", 1);
-    cy.get("#catches-0-species").clear().type("European seabass (BSS)");
-    cy.get("#catches-0-catchCertificateNumber").clear().type("GBR-2022-CC-654321");
-    cy.get("#catches-0-totalWeightLanded").clear().type("30");
-    cy.get("#catches-0-exportWeightBeforeProcessing").clear().type("15");
-    cy.get("#catches-0-exportWeightAfterProcessing").clear().type("15");
+    cy.get("#catches-0-species").clear();
+    cy.get("#catches-0-species").type("European seabass (BSS)");
+    cy.get("#catches-0-catchCertificateNumber").clear();
+    cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-654321");
+    cy.get("#catches-0-totalWeightLanded").clear();
+    cy.get("#catches-0-totalWeightLanded").type("30");
+    cy.get("#catches-0-exportWeightBeforeProcessing").clear();
+    cy.get("#catches-0-exportWeightBeforeProcessing").type("15");
+    cy.get("#catches-0-exportWeightAfterProcessing").clear();
+    cy.get("#catches-0-exportWeightAfterProcessing").type("15");
     cy.get("#addProductDetails").click({ force: true });
   });
 
@@ -1260,11 +1268,16 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
     cy.get("#addProductDetails").click({ force: true });
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
-    cy.get("#catches-0-species").clear().type("European seabass (BSS)");
-    cy.get("#catches-0-catchCertificateNumber").clear().type("GBR-2022-CC-123456");
-    cy.get("#catches-0-totalWeightLanded").clear().type("30");
-    cy.get("#catches-0-exportWeightBeforeProcessing").clear().type("15");
-    cy.get("#catches-0-exportWeightAfterProcessing").clear().type("15");
+    cy.get("#catches-0-species").clear();
+    cy.get("#catches-0-species").type("European seabass (BSS)");
+    cy.get("#catches-0-catchCertificateNumber").clear();
+    cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-123456");
+    cy.get("#catches-0-totalWeightLanded").clear();
+    cy.get("#catches-0-totalWeightLanded").type("30");
+    cy.get("#catches-0-exportWeightBeforeProcessing").clear();
+    cy.get("#catches-0-exportWeightBeforeProcessing").type("15");
+    cy.get("#catches-0-exportWeightAfterProcessing").clear();
+    cy.get("#catches-0-exportWeightAfterProcessing").type("15");
     cy.get("#addProductDetails").click({ force: true });
   });
 });

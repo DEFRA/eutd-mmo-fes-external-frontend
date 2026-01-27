@@ -242,6 +242,7 @@ const IssuingCountryField: React.FC<{
   setSelectedIssuingCountry: (value: string) => void;
 }> = ({ catchIndex, isReset, selectedIssuingCountry, isHydrated, countries, errors, t, setSelectedIssuingCountry }) => {
   const fieldKey = `catches-${catchIndex}-issuingCountry`;
+  const defaultValue = isReset ? "" : selectedIssuingCountry;
   const errorMessage = getErrorMessage(errors, fieldKey, t);
   const countryOptions = isHydrated
     ? countries.map((c: ICountry) => c.officialCountryName)
@@ -256,7 +257,7 @@ const IssuingCountryField: React.FC<{
       labelClassName="govuk-label govuk-!-font-weight-bold"
       hintText={t("issuingCountryHint", { ns: "psAddCatchDetails" })}
       errorMessageText={errorMessage}
-      defaultValue={isReset ? "" : selectedIssuingCountry}
+      defaultValue={defaultValue}
       options={countryOptions}
       onSelected={(country) => setSelectedIssuingCountry(country)}
       optionsId="issuing-country-option"
@@ -273,6 +274,7 @@ const IssuingCountryField: React.FC<{
           "govuk-input--error": hasError(errors, fieldKey),
         }),
         "aria-describedby": `${fieldKey}-hint`,
+        "data-testid": `issuing-country-${catchIndex}`,
       }}
     />
   );
@@ -508,6 +510,7 @@ const AddCatchDetailsIndex = () => {
     setCurrentCatchCertificateNumber("");
     setCurrentCatchCertificateType("");
     setSelectedSpeciesCode("");
+    setSelectedIssuingCountry("");
     setIsReset(true);
   };
 
@@ -595,13 +598,13 @@ const AddCatchDetailsIndex = () => {
                   }
                 }}
                 errorProps={{
-                  className: !isEmpty(errors?.[ccNumberKey]) ? "govuk-error-message" : "",
+                  className: isEmpty(errors?.[ccNumberKey]) ? "" : "govuk-error-message",
                 }}
                 staticErrorMessage={
-                  !isEmpty(errors?.[ccNumberKey]) ? t(errors[ccNumberKey]?.message, { ns: "errorsText" }) : ""
+                  isEmpty(errors?.[ccNumberKey]) ? "" : t(errors[ccNumberKey]?.message, { ns: "errorsText" })
                 }
                 errorPosition={ErrorPosition.AFTER_LABEL}
-                containerClassNameError={!isEmpty(errors?.[ccNumberKey]) ? "govuk-form-group--error" : ""}
+                containerClassNameError={isEmpty(errors?.[ccNumberKey]) ? "" : "govuk-form-group--error"}
                 hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
               />
@@ -735,7 +738,7 @@ const AddCatchDetailsIndex = () => {
                 />
               </div>
               <ButtonGroup />
-              <input type="hidden" name="nextUri" value={nextUri} />
+              <input type="hidden" name="nextUri" value={nextUri ?? ""} />
               <input type="hidden" name="catchId" value={catchId} />
               <input type="hidden" name="pageNo" value={pageNo} />
               <input type="hidden" name="speciesCode" value={selectedSpeciesCode} />

@@ -2,7 +2,7 @@ import { useLoaderData, useActionData } from "react-router";
 import { FormInput, ErrorPosition, Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import isEmpty from "lodash/isEmpty";
 import { useEffect } from "react";
-import { useTranslation, Trans } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { route } from "routes-gen";
 import { Main, ErrorSummary, Title, BackToProgressLink, SecureForm } from "~/components";
 import { scrollToId, displayErrorTransformedMessages } from "~/helpers";
@@ -37,8 +37,8 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
       progressUri: "/create-processing-statement/:documentNumber/progress",
     },
     storageNotes: {
-      backUri: route("/create-storage-document/:documentNumber/add-your-reference", { documentNumber }),
-      progressUri: "/create-storage-document/:documentNumber/progress",
+      backUri: route("/create-non-manipulation-document/:documentNumber/add-your-reference", { documentNumber }),
+      progressUri: "/create-non-manipulation-document/:documentNumber/progress",
     },
   };
 
@@ -57,34 +57,17 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
         <div className="govuk-grid-column-full">
           <Title title={t("commonAddExporterDetailsText")} />
         </div>
-        <div className="govuk-!-display-inline-block govuk-!-margin-bottom-9">
-          <svg
-            version="1.1"
-            fill="currentColor"
-            width="35"
-            height="35"
-            viewBox="0 0 35.000000 35.000000"
-            preserveAspectRatio="xMidYMid meet"
-          >
-            <title>icon important</title>
-            <g transform="translate(0.000000,35.000000) scale(0.100000,-0.100000)">
-              <path
-                d="M100 332 c-87 -48 -125 -155 -82 -232 48 -87 155 -125 232 -82 87 48
-  125 155 82 232 -48 87 -155 125 -232 82z m100 -122 c0 -53 -2 -60 -20 -60 -18
-  0 -20 7 -20 60 0 53 2 60 20 60 18 0 20 -7 20 -60z m0 -111 c0 -12 -7 -19 -20
-  -19 -19 0 -28 28 -14 43 11 11 34 -5 34 -24z"
-              ></path>
-            </g>
-          </svg>
-        </div>
-        <div
-          className="govuk-!-display-inline-block govuk-!-padding-left-2 govuk-phase-banner__text"
-          style={{ width: "90%" }}
-        >
-          <Trans i18nKey="multiline">
-            <strong>{t("commonAddExporterDetailsWarningContent", { journeyText: t(journey) })}</strong>
-          </Trans>
-        </div>
+      </div>
+      <div className="govuk-warning-text">
+        <span className="govuk-warning-text__icon" aria-hidden="true">
+          !
+        </span>
+        <strong className="govuk-warning-text__text">
+          <span className="govuk-visually-hidden">{t("commonWarning")}</span>
+          {journey === "storageNotes"
+            ? t("commonAddExporterDetailsStorageNotesWarningContent")
+            : t("commonAddExporterDetailsWarningContent", { journeyText: t(journey) })}
+        </strong>
       </div>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-two-thirds">
@@ -115,6 +98,7 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
             <FormInput
               containerClassName="govuk-form-group"
               label={t("commonAddExporterDetailsCompanyName")}
+              labelClassName="govuk-!-font-weight-bold"
               name="exporterCompanyName"
               type="text"
               inputClassName={
@@ -142,7 +126,9 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
               hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
             />
 
-            <h2>{t("commonAddExporterDetailsAddressContent")}</h2>
+            <label className="govuk-label govuk-!-font-weight-bold">
+              {t("commonAddExporterDetailsAddressContent")}
+            </label>
             {hasAddress ? (
               <>
                 <p>

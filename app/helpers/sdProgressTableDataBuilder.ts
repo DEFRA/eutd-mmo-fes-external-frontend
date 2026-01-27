@@ -4,7 +4,7 @@ export const sdProgressTableDataBuilder = (
   progress: IStorageDocumentProgressSteps,
   errors?: IErrorsTransformed
 ): Array<IProgressDataSection> => {
-  const sdContext = "/create-storage-document/:documentNumber";
+  const sdContext = "/create-non-manipulation-document/:documentNumber";
 
   return [
     {
@@ -74,7 +74,7 @@ export const sdProgressTableDataBuilder = (
           title: "sdProgressDepartureFromStorageFaciltyDetails",
           status: progress.transportDetails,
           testId: "transportDetails",
-          url: `${sdContext}/how-does-the-export-leave-the-uk`,
+          url: `${sdContext}/how-does-the-consignment-leave-the-uk`,
           error: errors?.transportDetails,
         },
       ],

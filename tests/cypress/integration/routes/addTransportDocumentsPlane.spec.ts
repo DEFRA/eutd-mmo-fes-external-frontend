@@ -81,7 +81,11 @@ describe("Add Transportation Documents Plane", () => {
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=add-another-document-button]").click({ force: true });
+    cy.get("input[name=documentName1]").should("be.visible");
+    cy.get("input[name=documentName1]").clear();
     cy.get("input[name=documentName1]").type("Invoice 2");
+    cy.get("input[name=documentReference1]").should("not.be.disabled");
+    cy.get("input[name=documentReference1]").clear();
     cy.get("input[name=documentReference1]").type("INV0002");
 
     cy.get('a[hreflang="cy"][lang="cy"]').click();

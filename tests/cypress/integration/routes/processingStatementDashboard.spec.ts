@@ -64,7 +64,7 @@ describe("Processing Statement Landing page: rendering", () => {
     cy.contains("a", "Create a UK catch certificate")
       .should("be.visible")
       .should("have.attr", "href", "https://www.gov.uk/guidance/create-a-uk-catch-certificate");
-    cy.contains("a", "Create a UK storage document")
+    cy.contains("a", "Create a UK non-manipulation document")
       .should("be.visible")
       .should("have.attr", "href", "https://www.gov.uk/guidance/create-a-uk-storage-document");
   });
@@ -148,6 +148,60 @@ describe("PS dashboard with user details", () => {
 });
 
 describe("Processing Statement Landing page for completed table: rendering", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSLoadDasboardWithCompletedAndInProgress,
+    };
+    cy.visit(processingStatementLandingUrl, { qs: { ...testParams } });
+  });
+
+  it("should render EU CATCH integration column with check status links", () => {
+    cy.get("table[data-testid='processingStatement-completed-table']")
+      .find("thead th")
+      .contains("EU CATCH integration")
+      .should("be.visible");
+
+    cy.get('[data-testid="processingStatement-check-eu-catch-status"]').should("have.length.at.least", 1);
+  });
+
+  it("should render check status links with correct href patterns for different statuses", () => {
+    cy.get('[data-testid="processingStatement-check-eu-catch-status"]').each(($link) => {
+      cy.wrap($link)
+        .should("have.attr", "href")
+        .and("match", /\/create-processing-statement\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/);
+    });
+  });
+
+  it("should render visually hidden context for screen readers on check status links", () => {
+    cy.get('[data-testid="processingStatement-check-eu-catch-status"]')
+      .first()
+      .find(".govuk-visually-hidden")
+      .should("exist")
+      .and("include.text", "for document");
+  });
+
+  it("should verify column order: Document Number, Reference, Date, EU CATCH Integration, Action", () => {
+    cy.get("table[data-testid='processingStatement-completed-table'] thead tr th").then(($headers) => {
+      const headerTexts = $headers.toArray().map((el) => el.textContent?.trim());
+
+      expect(headerTexts[0]).to.include("Document number");
+      expect(headerTexts[1]).to.include("Your reference");
+      expect(headerTexts[2]).to.include("Date Created");
+      expect(headerTexts[3]).to.equal("EU CATCH integration");
+      expect(headerTexts[4]).to.equal("Action");
+    });
+  });
+
+  it("should display refresh guidance text for processing statements", () => {
+    cy.get(".govuk-inset-text")
+      .contains(
+        "Refresh the page to check for updates to your processing statements. Open failed submissions to find out how to fix the problem."
+      )
+      .should("be.visible");
+  });
+});
+
+describe("Processing Statement Landing page for completed table with empty in progress: rendering", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSLoadDasboardWithCompletedAndEmptyInProgress,

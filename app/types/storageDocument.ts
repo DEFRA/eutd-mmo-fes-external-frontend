@@ -55,6 +55,7 @@ export interface StorageDocument {
   errors?: {};
   errorsUrl?: string;
   isNonJs: boolean;
+  userReference?: string;
   facilityName: string;
   facilityAddressOne?: string;
   facilityAddressTwo?: string;
@@ -75,12 +76,14 @@ export type FacilitiesLoaderData = {
   documentNumber: string;
   facilities: (StorageFacility & FacilityIndex)[];
   isFromStorageFacilityDetails: string;
+  nextUri?: string;
   csrf: string;
 };
 
 export type CatchesLoaderData = {
   documentNumber: string;
   catches: (StorageDocumentCatch & CatchIndex)[];
+  nextUri?: string;
   csrf: string;
 };
 

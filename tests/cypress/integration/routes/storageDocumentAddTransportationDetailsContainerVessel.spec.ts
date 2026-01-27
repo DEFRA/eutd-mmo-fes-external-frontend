@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 const documentNumber = "GBR-2022-SD-4ED8CAE79";
-const certificateUrl = `/create-storage-document/${documentNumber}`;
+const certificateUrl = `/create-non-manipulation-document/${documentNumber}`;
 const pageUrl = `${certificateUrl}/add-transportation-details-container-vessel`;
 
 describe("Add Transportation Details: Container Vessel", () => {
@@ -13,13 +13,13 @@ describe("Add Transportation Details: Container Vessel", () => {
 
   it("should render the expected header", () => {
     cy.get(".govuk-heading-xl").contains("Container vessel departing the UK");
-    cy.title().should("eq", "Container vessel departing the UK - Create a UK storage document - GOV.UK");
+    cy.title().should("eq", "Container vessel departing the UK - Create a UK non-manipulation document - GOV.UK");
   });
 
   it("should render back link", () => {
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/how-does-the-export-leave-the-uk`);
+      .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-leave-the-uk`);
   });
 
   it("should render the buttons texts", () => {
@@ -91,7 +91,7 @@ describe("Save and Continue button - Happy path", () => {
     cy.get("#flagState").type("flag State", { force: true });
     cy.get("#departurePlace").type("Place export", { force: true });
     cy.get("[data-testid=save-draft-button").click({ force: true });
-    cy.url().should("include", "/create-storage-document/storage-documents");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 });
 

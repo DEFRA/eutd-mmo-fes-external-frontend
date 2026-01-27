@@ -34,7 +34,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.CreateProcessingStatement;
   }
 
-  if (pagePath.match(/\/create-storage-document\/storage-documents/i)) {
+  if (pagePath.match(/\/create-non-manipulation-document\/non-manipulation-documents/i)) {
     pageName = Page.CreateStorageDocument;
   }
 
@@ -42,7 +42,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.CreateProcessingStatementPrivacyNotice;
   }
 
-  if (pagePath.match(/\/create-storage-document\/privacy-notice/i)) {
+  if (pagePath.match(/\/create-non-manipulation-document\/privacy-notice/i)) {
     pageName = Page.CreateStorageDocumentPrivacyNotice;
   }
 
@@ -86,7 +86,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.ProgressProcessingStatement;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/progress$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/progress$/i)) {
     pageName = Page.ProgressStorageDocument;
   }
 
@@ -98,7 +98,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.DeleteProcessingStatement;
   }
 
-  if (pagePath.includes("/delete-this-draft-storage-document")) {
+  if (pagePath.includes("/delete-this-draft-non-manipulation-document")) {
     pageName = Page.DeleteStorageDocument;
   }
 
@@ -134,7 +134,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.ProcessingStatementAddExporterDetails;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/add-exporter-details$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/add-exporter-details$/i)) {
     pageName = Page.StorageDocumentAddExporterDetails;
   }
 
@@ -146,7 +146,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.ProcessingStatementAddYourReference;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/add-your-reference$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/add-your-reference$/i)) {
     pageName = Page.StorageDocumentAddYourReference;
   }
 
@@ -158,7 +158,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.HowDoesTheExportLeaveTheUk;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/how-does-the-export-leave-the-uk$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/how-does-the-consignment-leave-the-uk$/i)) {
     pageName = Page.StorageDocumentHowDoesTheExportLeaveTheUk;
   }
 
@@ -170,7 +170,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.PsCopyVoidConfirmation;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/copy-void-confirmation$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/copy-void-confirmation$/i)) {
     pageName = Page.SdCopyVoidConfirmation;
   }
 
@@ -190,7 +190,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.VoidThisProcessingStatement;
   }
 
-  if (pagePath.includes("/void-this-storage-document")) {
+  if (pagePath.includes("/void-this-non-manipulation-document")) {
     pageName = Page.VoidThisStorageDocument;
   }
 
@@ -226,39 +226,41 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.AddAdditionalTransportationDocumentsPlane;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/add-arrival-transportation-details-truck$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/add-arrival-transportation-details-truck$/i)) {
     pageName = Page.AddArrivalTransportationDetailsTruck;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/add-arrival-transportation-details-container-vessel$/i)) {
+  if (
+    pagePath.match(/^\/create-non-manipulation-document\/.*\/add-arrival-transportation-details-container-vessel$/i)
+  ) {
     pageName = Page.AddArrivalTransportationDetailsContainerVessel;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/add-arrival-transportation-details-train$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/add-arrival-transportation-details-train$/i)) {
     pageName = Page.AddArrivalTransportationDetailsTrain;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/add-arrival-transportation-details-plane$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/add-arrival-transportation-details-plane$/i)) {
     pageName = Page.AddArrivalTransportationDetailsPlane;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/add-transportation-details-truck$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/add-transportation-details-truck$/i)) {
     pageName = Page.StorageDocumentAddTransportationDetailsTruck;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/add-transportation-details-container-vessel$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/add-transportation-details-container-vessel$/i)) {
     pageName = Page.StorageDocumentAddTransportationDetailsContainerVessel;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/add-transportation-details-train$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/add-transportation-details-train$/i)) {
     pageName = Page.StorageDocumentAddTransportationDetailsContainerTrain;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/add-transportation-details-plane$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/add-transportation-details-plane$/i)) {
     pageName = Page.StorageDocumentAddTransportationDetailsPlane;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/departure-product-summary$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/departure-product-summary$/i)) {
     pageName = Page.StorageDocumentDepartureProductSummary;
   }
 
@@ -298,7 +300,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.CopyThisProcessingStatement;
   }
 
-  if (pagePath.includes("/copy-this-storage-document")) {
+  if (pagePath.includes("/copy-this-non-manipulation-document")) {
     pageName = Page.CopyThisStorageDocument;
   }
 
@@ -314,7 +316,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.ProcessingStatementCreated;
   }
 
-  if (pagePath.includes("/storage-document-created")) {
+  if (pagePath.includes("/non-manipulation-document-created")) {
     pageName = Page.StorageDocumentCreated;
   }
 
@@ -329,7 +331,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.ProcessingStatementWhatExporterPageAddress;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/what-exporters-address$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/what-exporters-address$/i)) {
     pageName = Page.StorageDocumentWhatExporterPageAddress;
   }
 
@@ -337,7 +339,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.ProcessingStatementCheckYourInformation;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/check-your-information$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/check-your-information$/i)) {
     pageName = Page.StorageDocumentCheckYourInformation;
   }
 
@@ -349,7 +351,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.AddProductToThisConsignment;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/you-have-added-a-product$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/you-have-added-a-product$/i)) {
     pageName = Page.StorageDocumentYouHaveAddedAProduct;
   }
 
@@ -373,7 +375,7 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.WhatStorageFacility;
   }
 
-  if (pagePath.match(/^\/create-storage-document\/.*\/how-does-the-consignment-arrive-to-the-uk$/i)) {
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/how-does-the-consignment-arrive-to-the-uk$/i)) {
     pageName = Page.HowDoesTheConsignmentArriveAToTheUk;
   }
 

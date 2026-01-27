@@ -197,6 +197,6 @@ export const CheckYourInformationPSSDAction = async (
     : redirect(
         journey === "processingStatement"
           ? `/create-processing-statement/${documentNumber}/processing-statement-created`
-          : `/create-storage-document/${documentNumber}/storage-document-created`
+          : `/create-non-manipulation-document/${documentNumber}/non-manipulation-document-created`
       );
 };
