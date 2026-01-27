@@ -23,6 +23,7 @@ import {
   getStrOrDefault,
   getTransformedError,
   toISODateFormat,
+  toDDMMYYYYFormat,
 } from "~/helpers";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { DateFieldWithPicker } from "~/composite-components";
@@ -219,7 +220,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const facilityArrivalDateDay = form.get("facilityArrivalDateDay") as string;
   const selectedDate =
     facilityArrivalDateDay || facilityArrivalDateMonth || facilityArrivalDateYear
-      ? `${facilityArrivalDateDay}/${facilityArrivalDateMonth}/${facilityArrivalDateYear}`
+      ? toDDMMYYYYFormat(facilityArrivalDateDay, facilityArrivalDateMonth, facilityArrivalDateYear)
       : undefined;
   const selectedDateInISOFormat = toISODateFormat(
     getStrOrDefault(facilityArrivalDateDay),
