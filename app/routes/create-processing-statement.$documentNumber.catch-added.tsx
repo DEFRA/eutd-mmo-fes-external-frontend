@@ -298,7 +298,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const bearerToken = await getBearerTokenForRequest(request);
   const session = await getSessionFromRequest(request);
   session.set("actionExecuted", true);
-
   const processingStatement: ProcessingStatement | IUnauthorised = await getProcessingStatement(
     bearerToken,
     documentNumber

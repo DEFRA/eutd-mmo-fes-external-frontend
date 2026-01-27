@@ -347,7 +347,6 @@ export const getPageNameFromUrl = (url: string): string => {
   if (pagePath.includes("/add-processing-plant-address")) {
     pageName = Page.AddProcessingPlantAddress;
   }
-
   if (pagePath.match(/^\/create-catch-certificate\/.*\/what-exporters-address$/i)) {
     pageName = Page.WhatExporterPageAddress;
   }

@@ -24,7 +24,6 @@ type Get = (bearerToken: string, url: string, requestHeaders?: HeadersInit) => P
 type Post = (bearerToken: string, url: string, requestHeaders?: HeadersInit, requestBody?: any) => Promise<Response>;
 type Put = (bearerToken: string, url: string, requestHeaders?: HeadersInit, requestBody?: any) => Promise<Response>;
 type Delete = (bearerToken: string, url: string, requestHeaders?: HeadersInit) => Promise<Response>;
-
 export const getReferenceData = async (url: string, requestHeaders: HeadersInit = {}): Promise<Response> => {
   const credentials = btoa(`${ENV.REF_SERVICE_BASIC_AUTH_USER}:${ENV.REF_SERVICE_BASIC_AUTH_PASSWORD}`);
 
