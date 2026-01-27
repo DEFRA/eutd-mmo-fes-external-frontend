@@ -186,7 +186,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const nextUri = form.get("nextUri") as string;
   const session = await getSessionFromRequest(request);
 
-  const faoCode = getCodeFromLabel(values?.species as string);
+  const faoCode = getCodeFromLabel(values?.species as string) || (values?.species as string);
   const commodityCode = (values["commodityCode"] as string).split(" - ")[0];
 
   let scientificName;

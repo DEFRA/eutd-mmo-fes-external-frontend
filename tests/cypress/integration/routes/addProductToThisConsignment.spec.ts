@@ -343,7 +343,7 @@ describe("Add product to this consignment  page", () => {
     cy.get('input[value="uk"]').check({ force: true });
     cy.get("#catches-0-certificateNumber").type("TEST123");
     cy.get("#catches-0-weightOnCC").type("100");
-    cy.get("#catches-0-product").type("COD");
+    cy.get("#catches-0-product").clear().type("COD");
     cy.wait(300);
     cy.get("#catches-0-commodityCode").type("03");
 
@@ -664,6 +664,27 @@ describe("Add product to this consignment page: form submission and interaction"
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains(".govuk-error-message", "Enter the net weight of fishery products on arrival");
+  });
+
+  it("should accept direct FAO code input in non-JS mode", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Clear the default species value and enter direct FAO code
+    cy.get("#catches-0-product").clear().type("SOL");
+
+    // Fill in other required fields
+    cy.get("#catches-0-commodityCode").type("03011100 - Fresh or chilled trout");
+    cy.get("#catches-0-certificateNumber").type("TEST123");
+    cy.get("#catches-0-weightOnCC").type("10");
+
+    // Submit the form
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    // Should successfully navigate (indicating the direct FAO code was accepted)
+    cy.url().should("include", "/you-have-added-a-product");
   });
 });
 
