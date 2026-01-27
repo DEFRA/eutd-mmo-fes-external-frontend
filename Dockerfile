@@ -29,6 +29,9 @@ HEALTHCHECK --interval=10s --start-period=60s \
 
 # Production stage exposes service port, copies in app code, creates a production build, and declares the Node app as the default command
 FROM defradigital/node:$DEFRA_BASE_IMAGE_TAG as production
+# Accept BUILD_ID from build pipeline for cache-busting locale JSON files
+ARG BUILD_ID=""
+ENV BUILD_ID=${BUILD_ID}
 COPY --chown=node:node . /app
 WORKDIR /app
 USER node
