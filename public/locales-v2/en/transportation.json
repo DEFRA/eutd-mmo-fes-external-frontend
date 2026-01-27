@@ -142,5 +142,9 @@
   "addTransportationDetailsExportDateTruck": "Date the truck departs the UK",
   "addTransportationDetailsExportDateTrain": "Date the train departs the UK",
   "addTransportationDetailsExportDatePlane": "Date the plane departs the UK",
-  "addTransportationDetailsExportDateContainervessel": "Date the container vessel departs the UK"
+  "addTransportationDetailsExportDateContainervessel": "Date the container vessel departs the UK",
+  "errorTruckDepartureDateAnyMax": "Departure date must be on or before the storage facility arrival date",
+  "errorPlaneDepartureDateAnyMax": "Departure date must be on or before the storage facility arrival date",
+  "errorTrainDepartureDateAnyMax": "Departure date must be on or before the storage facility arrival date",
+  "errorContainerVesselDepartureDateAnyMax": "Departure date must be on or before the storage facility arrival date"
 }
