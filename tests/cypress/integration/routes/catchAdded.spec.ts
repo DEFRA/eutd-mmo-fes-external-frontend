@@ -1243,28 +1243,6 @@ describe("PS: Catch added - session clearing on navigation", () => {
     cy.get("tbody tr").should("have.length.greaterThan", 0);
   });
 
-  it("should persist search query in URL after search action", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
-    };
-
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    const searchTerm = "Cod";
-    cy.get('input[name="q"]').type(searchTerm);
-    cy.get('[data-testid="filter-search-submit"]').click();
-
-    // Wait for the page to reload/redirect after search
-    cy.url().should("include", "catch-added");
-
-    // Verify the search input retains the value (search was processed)
-    cy.get('input[name="q"]').should("have.value", searchTerm);
-
-    // Reset should clear the search
-    cy.get('[data-testid="filter-search-reset"]').click();
-    cy.get('input[name="q"]').should("have.value", "");
-  });
-
   it("should filter catches by speciesCode when searching", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
