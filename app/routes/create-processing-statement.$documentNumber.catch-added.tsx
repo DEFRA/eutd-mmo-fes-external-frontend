@@ -46,6 +46,7 @@ import { useEffect } from "react";
 import { ButtonGroup } from "~/composite-components";
 import i18next from "~/i18next.server";
 import type { TFunction } from "i18next";
+import serverLogger from "~/logger.server";
 
 type ILoaderData = {
   documentNumber: string;
@@ -67,19 +68,49 @@ const applyMatchedFromSession = (session: any, psData: ProcessingStatement, hasA
   if (!hasActiveQuery) {
     return;
   }
-  const matchedFromSession = session.get("matchCatches");
-  if (Array.isArray(matchedFromSession)) {
-    const matchingCatches: (Catch & CatchIndex)[] = matchedFromSession as (Catch & CatchIndex)[];
-    if (matchingCatches.length > 0) {
-      const matchingProductIds = new Set(matchingCatches.map((c) => c.productId));
-      psData.catches = matchingCatches;
-      if (Array.isArray(psData.products))
-        psData.products = psData.products.filter((p: ProcessingStatementProduct) => matchingProductIds.has(p.id));
-    } else {
-      psData.catches = [];
-      psData.products = [];
+
+  try {
+    const matchedCatchIds = session.get("matchCatchIds");
+
+    // Handle the case where we have catch IDs stored (new approach - stores only IDs to avoid cookie size issues)
+    if (Array.isArray(matchedCatchIds) && Array.isArray(psData.catches)) {
+      if (matchedCatchIds.length > 0) {
+        const matchedIdSet = new Set(matchedCatchIds);
+        const matchingCatches = psData.catches.filter((c: Catch) => matchedIdSet.has(c._id));
+        const matchingProductIds = new Set(matchingCatches.map((c: Catch) => c.productId));
+        psData.catches = matchingCatches;
+        if (Array.isArray(psData.products)) {
+          psData.products = psData.products.filter((p: ProcessingStatementProduct) => matchingProductIds.has(p.id));
+        }
+      } else {
+        psData.catches = [];
+        psData.products = [];
+      }
+      session.unset("matchCatchIds");
+      return;
     }
+
+    // Legacy fallback: handle old session data format (full catch objects)
+    const matchedFromSession = session.get("matchCatches");
+    if (Array.isArray(matchedFromSession)) {
+      const matchingCatches: (Catch & CatchIndex)[] = matchedFromSession as (Catch & CatchIndex)[];
+      if (matchingCatches.length > 0) {
+        const matchingProductIds = new Set(matchingCatches.map((c) => c.productId));
+        psData.catches = matchingCatches;
+        if (Array.isArray(psData.products))
+          psData.products = psData.products.filter((p: ProcessingStatementProduct) => matchingProductIds.has(p.id));
+      } else {
+        psData.catches = [];
+        psData.products = [];
+      }
+      session.unset("matchCatches");
+    }
+  } catch (error) {
+    // If session data is corrupted, clear it and continue with unfiltered data
+    serverLogger.error(`[catch-added] Error applying session filter, clearing session data: ${error}`);
+    session.unset("matchCatchIds");
     session.unset("matchCatches");
+    session.unset("matchQuery");
   }
 };
 
@@ -107,6 +138,7 @@ const handleFilterAction = async (
   }
 
   if (actionType === "reset") {
+    session.unset("matchCatchIds");
     session.unset("matchCatches");
     session.unset("matchQuery");
     const resetParams = existingParams.toString();
@@ -131,10 +163,13 @@ const handleFilterAction = async (
         return species.includes(qLower) || speciesCode.includes(qLower) || productDescription.includes(qLower);
       });
 
-      session.set("matchCatches", matchingCatches);
+      // Store only catch IDs to avoid cookie size limit issues (4KB max)
+      // Full catch objects can easily exceed this limit with many catches
+      const matchingCatchIds = matchingCatches.map((c: Catch) => c._id).filter(Boolean);
+      session.set("matchCatchIds", matchingCatchIds);
       session.set("matchQuery", q);
     } else {
-      session.set("matchCatches", []);
+      session.set("matchCatchIds", []);
       session.set("matchQuery", "");
     }
 
@@ -202,6 +237,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (!urlQuery && session.get("matchQuery")) {
     session.unset("actionExecuted");
     session.unset("matchQuery");
+    session.unset("matchCatchIds");
     session.unset("matchCatches");
   }
 
@@ -307,6 +343,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (isDraft) {
     session.unset("actionExecuted");
     session.unset("matchQuery");
+    session.unset("matchCatchIds");
     session.unset("matchCatches");
     return redirect(route("/create-processing-statement/processing-statements"), {
       headers: {
@@ -336,6 +373,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (addAnotherCatch) {
     session.unset("actionExecuted");
     session.unset("matchQuery");
+    session.unset("matchCatchIds");
     session.unset("matchCatches");
     return redirect(`/create-processing-statement/${documentNumber}/add-consignment-details`, {
       headers: {
@@ -346,6 +384,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   session.unset("actionExecuted");
   session.unset("matchQuery");
+  session.unset("matchCatchIds");
   session.unset("matchCatches");
 
   // Check if plant details are already filled
