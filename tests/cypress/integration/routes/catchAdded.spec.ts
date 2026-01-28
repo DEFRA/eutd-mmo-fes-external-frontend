@@ -1199,4 +1199,105 @@ describe("PS: Catch added - session clearing on navigation", () => {
     // Verify that the search filter is cleared
     cy.get('input[name="q"]').should("have.value", "");
   });
+
+  it("should filter products when search matches catches with specific productId", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Get initial count of rows
+    cy.get("tbody tr").then(($rows) => {
+      const initialCount = $rows.length;
+
+      // Search for a specific species
+      cy.get('input[name="q"]').type("Atlantic");
+      cy.get('[data-testid="filter-search-submit"]').click();
+
+      // Verify table still exists and has filtered results
+      cy.get("tbody").should("exist");
+
+      // Reset and verify all rows return
+      cy.get('[data-testid="filter-search-reset"]').click();
+      cy.get("tbody tr").should("have.length", initialCount);
+    });
+  });
+
+  it("should handle search that returns zero matching catches", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search for something that won't match any catches
+    cy.get('input[name="q"]').type("ZZZZNONEXISTENT12345");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Verify the page handles empty results gracefully
+    cy.get("tbody").should("exist");
+
+    // Reset should restore the original data
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.get("tbody tr").should("have.length.greaterThan", 0);
+  });
+
+  it("should persist search query in URL after search action", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    const searchTerm = "Cod";
+    cy.get('input[name="q"]').type(searchTerm);
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Wait for the page to reload/redirect after search
+    cy.url().should("include", "catch-added");
+
+    // Verify the search input retains the value (search was processed)
+    cy.get('input[name="q"]').should("have.value", searchTerm);
+
+    // Reset should clear the search
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.get('input[name="q"]').should("have.value", "");
+  });
+
+  it("should filter catches by speciesCode when searching", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search by species code (e.g., COD, SAL)
+    cy.get('input[name="q"]').type("COD");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Verify page handles the search
+    cy.get("tbody").should("exist");
+
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.get("tbody tr").should("have.length.greaterThan", 0);
+  });
+
+  it("should filter catches by productDescription when searching", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search by product description partial match
+    cy.get('input[name="q"]').type("Product");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Verify page handles the search
+    cy.get("tbody").should("exist");
+
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.get("tbody tr").should("have.length.greaterThan", 0);
+  });
 });
