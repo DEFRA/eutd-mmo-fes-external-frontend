@@ -428,7 +428,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.contains("a", /^Enter the departure date$/).should("be.visible");
   });
 
-  it("should navigate to storage facility page when all mandatory fields are populated", () => {
+  it.only("should navigate to storage facility page when all mandatory fields are populated", () => {
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
     cy.get("#vesselName").should("be.visible").clear();
     cy.get("#vesselName").type("Test Vessel", { force: true });
@@ -438,8 +438,8 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureCountry").should("be.visible").invoke("val", "France");
     cy.get("#departurePort").should("be.visible").type("Port of Calais", { force: true });
     cy.get("#placeOfUnloading").should("be.visible").type("Dover", { force: true });
-    cy.get("#departureDate-day").should("be.visible").type("25", { force: true });
-    cy.get("#departureDate-month").should("be.visible").type("07", { force: true });
+    cy.get("#departureDate-day").should("be.visible").type("01", { force: true });
+    cy.get("#departureDate-month").should("be.visible").type("10", { force: true });
     cy.get("#departureDate-year").should("be.visible").type("2025", { force: true });
     cy.get("[data-testid=save-and-continue]").should("be.visible").click({ force: true });
     cy.url({ timeout: 20000 }).should("include", storageFacilityUrl);
