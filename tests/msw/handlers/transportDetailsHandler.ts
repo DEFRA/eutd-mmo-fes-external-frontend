@@ -726,12 +726,16 @@ const transportDetailsHandler: ITestHandler = {
   [TestCaseId.AddArrivalContainerVesselTransportAllowed]: () => [
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(saveAddArrivalContainerVesselDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
     rest.post(addTransportationDetailsUrl("containerVessel"), async (req, res, ctx) => {
       const body = await req.json();
       const errors: Record<string, string> = {};
 
       // Validate required fields for arrival transport
-      if (body.arrival) {
+      if (body.arrival === true) {
+        if (!body.vesselName || body.vesselName === "") {
+          errors.vesselName = "error.vesselName.any.required";
+        }
         if (!body.flagState || body.flagState === "") {
           errors.flagState = "error.flagState.any.required";
         }
@@ -756,7 +760,7 @@ const transportDetailsHandler: ITestHandler = {
         return res(ctx.status(400), ctx.json(errors));
       }
 
-      return res(ctx.json(empty));
+      return res(ctx.json(saveAddArrivalContainerVesselDetails));
     }),
     rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
