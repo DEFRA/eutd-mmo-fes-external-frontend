@@ -160,6 +160,13 @@ export const TransportationModeDetails = ({
           inputProps={{
             defaultValue: containerNumber,
             id: "containerNumber",
+            "aria-describedby": "hint-containerNumber",
+          }}
+          hint={{
+            id: "hint-containerNumber",
+            position: "above",
+            text: t("addTransportationDetailsContainerIdentificationHint"),
+            className: "govuk-hint govuk-!-margin-bottom-0",
           }}
           errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.containerNumber)) }}
           staticErrorMessage={t(errors?.containerNumber?.message, { ns: "errorsText" })}

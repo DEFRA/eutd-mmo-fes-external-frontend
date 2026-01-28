@@ -87,6 +87,7 @@
   "commonAddTransportationDetailsVesselFlagMaxCharError": "Flag state must not exceed 50 characters",
   "commonAddTransportationDetailsVesselFlagBasePatternError": "Flag state must only contain letters, numbers, apostrophes, hyphens and spaces",
   "commonAddTransportationDetailsPlaneContainerNumberLabelError": "Enter the container identification number or numbers",
+  "ccAddTransportationDetailsContainerVesselNumberLabelError": "Enter the shipping container identification number",
   "commonAddTransportationDetailsPlaneContainerMaxCharError": "Container identification number must not exceed 50 characters",
   "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError": "Container identification number must only contain letters, numbers and spaces.",
   "commonRoadTransportDocumentError": "Select yes if you have a road transport document to go with this export",
