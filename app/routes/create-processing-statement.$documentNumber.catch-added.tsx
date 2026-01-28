@@ -46,7 +46,6 @@ import { useEffect } from "react";
 import { ButtonGroup } from "~/composite-components";
 import i18next from "~/i18next.server";
 import type { TFunction } from "i18next";
-import serverLogger from "~/logger.server";
 
 type ILoaderData = {
   documentNumber: string;
@@ -62,55 +61,29 @@ type ILoaderData = {
   initialPageNo?: number;
 };
 
-const filterProductsByMatchingCatches = (psData: ProcessingStatement, matchingProductIds: Set<string | undefined>) => {
-  if (Array.isArray(psData.products)) {
-    psData.products = psData.products.filter((p: ProcessingStatementProduct) => matchingProductIds.has(p.id));
-  }
-};
-
-const applyMatchingCatches = (psData: ProcessingStatement, matchingCatches: (Catch | (Catch & CatchIndex))[]) => {
-  if (matchingCatches.length > 0) {
-    const matchingProductIds = new Set(matchingCatches.map((c) => c.productId));
-    psData.catches = matchingCatches;
-    filterProductsByMatchingCatches(psData, matchingProductIds);
-  } else {
-    psData.catches = [];
-    psData.products = [];
-  }
-};
-
-const clearSessionFilterData = (session: any) => {
-  session.unset("matchCatchIds");
-  session.unset("matchCatches");
-  session.unset("matchQuery");
-};
-
 const applyMatchedFromSession = (session: any, psData: ProcessingStatement, hasActiveQuery: boolean) => {
   if (!hasActiveQuery) {
     return;
   }
 
-  try {
-    const matchedCatchIds = session.get("matchCatchIds");
+  const matchedCatchIds = session.get("matchCatchIds");
 
-    // Handle the case where we have catch IDs stored (new approach - stores only IDs to avoid cookie size issues)
-    if (Array.isArray(matchedCatchIds) && Array.isArray(psData.catches)) {
-      const matchedIdSet = new Set(matchedCatchIds);
-      const matchingCatches = psData.catches.filter((c: Catch) => matchedIdSet.has(c._id));
-      applyMatchingCatches(psData, matchingCatches);
-      session.unset("matchCatchIds");
-      return;
-    }
+  // Handle the case where we have catch IDs stored (new approach - stores only IDs to avoid cookie size issues)
+  if (Array.isArray(matchedCatchIds) && Array.isArray(psData.catches)) {
+    const matchedIdSet = new Set(matchedCatchIds);
+    const matchingCatches = psData.catches.filter((c: Catch) => matchedIdSet.has(c._id));
 
-    // Legacy fallback: handle old session data format (full catch objects)
-    const matchedFromSession = session.get("matchCatches");
-    if (Array.isArray(matchedFromSession)) {
-      applyMatchingCatches(psData, matchedFromSession as (Catch & CatchIndex)[]);
-      session.unset("matchCatches");
+    if (matchingCatches.length > 0) {
+      const matchingProductIds = new Set(matchingCatches.map((c: Catch) => c.productId));
+      psData.catches = matchingCatches;
+      if (Array.isArray(psData.products)) {
+        psData.products = psData.products.filter((p: ProcessingStatementProduct) => matchingProductIds.has(p.id));
+      }
+    } else {
+      psData.catches = [];
+      psData.products = [];
     }
-  } catch (error) {
-    serverLogger.error(`[catch-added] Error applying session filter, clearing session data: ${error}`);
-    clearSessionFilterData(session);
+    session.unset("matchCatchIds");
   }
 };
 
