@@ -62,8 +62,30 @@ type ILoaderData = {
   initialPageNo?: number;
 };
 
+const filterProductsByMatchingCatches = (psData: ProcessingStatement, matchingProductIds: Set<string | undefined>) => {
+  if (Array.isArray(psData.products)) {
+    psData.products = psData.products.filter((p: ProcessingStatementProduct) => matchingProductIds.has(p.id));
+  }
+};
+
+const applyMatchingCatches = (psData: ProcessingStatement, matchingCatches: (Catch | (Catch & CatchIndex))[]) => {
+  if (matchingCatches.length > 0) {
+    const matchingProductIds = new Set(matchingCatches.map((c) => c.productId));
+    psData.catches = matchingCatches;
+    filterProductsByMatchingCatches(psData, matchingProductIds);
+  } else {
+    psData.catches = [];
+    psData.products = [];
+  }
+};
+
+const clearSessionFilterData = (session: any) => {
+  session.unset("matchCatchIds");
+  session.unset("matchCatches");
+  session.unset("matchQuery");
+};
+
 const applyMatchedFromSession = (session: any, psData: ProcessingStatement, hasActiveQuery: boolean) => {
-  // Only apply filtering if there's an active search query
   if (!hasActiveQuery) {
     return;
   }
@@ -73,18 +95,9 @@ const applyMatchedFromSession = (session: any, psData: ProcessingStatement, hasA
 
     // Handle the case where we have catch IDs stored (new approach - stores only IDs to avoid cookie size issues)
     if (Array.isArray(matchedCatchIds) && Array.isArray(psData.catches)) {
-      if (matchedCatchIds.length > 0) {
-        const matchedIdSet = new Set(matchedCatchIds);
-        const matchingCatches = psData.catches.filter((c: Catch) => matchedIdSet.has(c._id));
-        const matchingProductIds = new Set(matchingCatches.map((c: Catch) => c.productId));
-        psData.catches = matchingCatches;
-        if (Array.isArray(psData.products)) {
-          psData.products = psData.products.filter((p: ProcessingStatementProduct) => matchingProductIds.has(p.id));
-        }
-      } else {
-        psData.catches = [];
-        psData.products = [];
-      }
+      const matchedIdSet = new Set(matchedCatchIds);
+      const matchingCatches = psData.catches.filter((c: Catch) => matchedIdSet.has(c._id));
+      applyMatchingCatches(psData, matchingCatches);
       session.unset("matchCatchIds");
       return;
     }
@@ -92,24 +105,12 @@ const applyMatchedFromSession = (session: any, psData: ProcessingStatement, hasA
     // Legacy fallback: handle old session data format (full catch objects)
     const matchedFromSession = session.get("matchCatches");
     if (Array.isArray(matchedFromSession)) {
-      const matchingCatches: (Catch & CatchIndex)[] = matchedFromSession as (Catch & CatchIndex)[];
-      if (matchingCatches.length > 0) {
-        const matchingProductIds = new Set(matchingCatches.map((c) => c.productId));
-        psData.catches = matchingCatches;
-        if (Array.isArray(psData.products))
-          psData.products = psData.products.filter((p: ProcessingStatementProduct) => matchingProductIds.has(p.id));
-      } else {
-        psData.catches = [];
-        psData.products = [];
-      }
+      applyMatchingCatches(psData, matchedFromSession as (Catch & CatchIndex)[]);
       session.unset("matchCatches");
     }
   } catch (error) {
-    // If session data is corrupted, clear it and continue with unfiltered data
     serverLogger.error(`[catch-added] Error applying session filter, clearing session data: ${error}`);
-    session.unset("matchCatchIds");
-    session.unset("matchCatches");
-    session.unset("matchQuery");
+    clearSessionFilterData(session);
   }
 };
 
