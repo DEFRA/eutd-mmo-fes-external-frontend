@@ -428,7 +428,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.contains("a", /^Enter the departure date$/).should("be.visible");
   });
 
-  it.only("should navigate to storage facility page when all mandatory fields are populated", () => {
+  it("should navigate to storage facility page when all mandatory fields are populated", () => {
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
     cy.get("#vesselName").should("be.visible").type("Test Vessel", { force: true });
     cy.get("#flagState").should("be.visible").type("Greece", { force: true });
