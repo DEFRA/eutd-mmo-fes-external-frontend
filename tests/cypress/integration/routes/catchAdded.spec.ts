@@ -266,6 +266,50 @@ describe("PS: Catch added", () => {
     cy.get("tbody tr").should("have.length.greaterThan", 0);
   });
 
+  it("should filter catches when searching for existing species code AGH", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Get initial count of rows
+    cy.get("tbody tr").its("length").as("initialRowCount");
+
+    // Search for AGH species code which exists in the fixture
+    cy.get('input[name="q"]').type("AGH");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Verify the search returns at least one matching catch
+    cy.get("tbody tr").should("have.length.greaterThan", 0);
+
+    // Verify that at least one row contains AGH
+    cy.get('td[id$="-species"]').should("contain.text", "AGH");
+
+    // Reset and verify all catches are shown again
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.get("@initialRowCount").then((initialCount) => {
+      cy.get("tbody tr").should("have.length", Number(initialCount));
+    });
+  });
+
+  it("should filter catches and products when search matches", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search for species that exists in fixture (Gymnotus pantherinus)
+    cy.get('input[name="q"]').type("Gymnotus");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Should show filtered results
+    cy.get("tbody tr").should("have.length.greaterThan", 0);
+
+    // Reset to show all
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.get("tbody tr").should("have.length.greaterThan", 0);
+  });
+
   it("should handle edge cases with null/undefined values in search", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
