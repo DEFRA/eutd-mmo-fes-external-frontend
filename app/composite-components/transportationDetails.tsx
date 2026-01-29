@@ -21,14 +21,18 @@ const ContainerIdentificationNumberField = ({
   containerIdentificationNumber,
   errors,
   t,
+  labelKey,
+  hintKey,
 }: {
   containerIdentificationNumber?: string | null;
   errors: IErrorsTransformed;
   t: (key: string, options?: any) => string;
+  labelKey?: string;
+  hintKey?: string;
 }) => (
   <FormInput
     containerClassName="govuk-form-group govuk-!-width-one-half"
-    label={t("addTransportationDetailsContainerIdentificationNumber")}
+    label={labelKey ? t(labelKey) : t("addTransportationDetailsContainerIdentificationNumber")}
     name="containerIdentificationNumber"
     type="text"
     inputClassName={classNames("govuk-input", {
@@ -42,7 +46,7 @@ const ContainerIdentificationNumberField = ({
     hint={{
       id: "hint-containerIdentificationNumber",
       position: "above",
-      text: t("addTransportationDetailsContainerIdentificationNumberHintTruckTrain"),
+      text: hintKey ? t(hintKey) : t("addTransportationDetailsContainerIdentificationNumberHintTruckTrain"),
       className: "govuk-hint govuk-!-margin-bottom-0",
     }}
     errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.containerIdentificationNumber)) }}
@@ -215,6 +219,8 @@ export const TransportationModeDetails = ({
             containerIdentificationNumber={containerIdentificationNumber ?? undefined}
             errors={errors}
             t={t}
+            labelKey={"addTransportationDetailsContainerIdentificationNumberTruck"}
+            hintKey={"addTransportationDetailsContainerIdentificationNumberHintTruck"}
           />
         </>
       )}
@@ -270,6 +276,8 @@ export const TransportationModeDetails = ({
           containerIdentificationNumber={containerIdentificationNumber ?? undefined}
           errors={errors}
           t={t}
+          labelKey={"addTransportationDetailsContainerIdentificationNumberTrain"}
+          hintKey={"addTransportationDetailsContainerIdentificationNumberTrainHint"}
         />
       )}
       <FormInput
