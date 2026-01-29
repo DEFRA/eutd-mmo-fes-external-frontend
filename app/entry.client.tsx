@@ -8,6 +8,9 @@ import { I18nextProvider, initReactI18next } from "react-i18next";
 import { getInitialNamespaces } from "remix-i18next/client";
 import { initLanguages } from "./i18n";
 
+// Global BUILD_ID injected by Vite define config
+declare const __BUILD_ID__: string;
+
 i18next
   .use(initReactI18next)
   .use(LanguageDetector)
@@ -16,7 +19,8 @@ i18next
     ...initLanguages(),
     ns: getInitialNamespaces(),
     backend: {
-      loadPath: "/locales-v2/{{lng}}/{{ns}}.json",
+      // Cache-bust locale JSON URLs with build ID to ensure fresh translations after deploy
+      loadPath: `/locales-v2/{{lng}}/{{ns}}.json?v=${__BUILD_ID__}`,
     },
     detection: {
       order: ["htmlTag"],

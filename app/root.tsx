@@ -34,6 +34,9 @@ import clientLogger from "./logger";
 import { allNamespaces, supportedLanguages } from "./i18n";
 
 declare global {
+  // Injected by Vite define config for cache-busting
+  const __BUILD_ID__: string;
+
   interface Window {
     gtag: any;
   }
