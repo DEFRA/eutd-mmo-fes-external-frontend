@@ -29,14 +29,14 @@ describe("Add Transportation Details Truck: Allowed", () => {
       expect(labels).to.deep.eq([
         "Truck nationality",
         "Registration number",
-        "Container identification number (optional)",
+        "Shipping container identification number (optional)",
         "Place export leaves the departure country",
         "Freight bill number (optional)",
       ]);
       expect(hints).to.deep.eq([
         "For example, United Kingdom",
         "For example, A123 4567 or BD51SMR",
-        "Enter container or trailer identification number. For example, ABCD1234567.",
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
         "For example, Hull.",
         "For example, BD51SMR",
       ]);
@@ -98,11 +98,17 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get("label[for='containerIdentificationNumber']").should("contain.text", "Container identification number");
+    cy.get("label[for='containerIdentificationNumber']").should(
+      "contain.text",
+      "Shipping container identification number"
+    );
 
     cy.get("#hint-containerIdentificationNumber")
       .should("be.visible")
-      .should("contain.text", "Enter container or trailer identification number. For example, ABCD1234567.");
+      .should(
+        "contain.text",
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456"
+      );
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
