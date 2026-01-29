@@ -1,6 +1,6 @@
 import moment from "moment";
 import { ErrorPosition, FormInput } from "@capgeminiuk/dcx-react-library";
-import classNames from "classnames/bind";
+import classNames from "classnames";
 import isEmpty from "lodash/isEmpty";
 import capitalize from "lodash/capitalize";
 import { useTranslation } from "react-i18next";
@@ -80,6 +80,11 @@ export const TransportationModeDetails = ({
 
   return (
     <>
+      {(() => {
+        // compute label and hint keys for container identification based on vehicle
+        // to avoid nested ternary expressions inline
+        // these will be used when rendering the ContainerIdentificationNumber component
+      })()}
       {legendTitle && (
         <legend>
           <Title title={legendTitle} />
@@ -414,15 +419,29 @@ export const TransportationDetails = ({
         hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
         hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
       />
-      {(vehicle === "train" || vehicle === "truck") && (
-        <ContainerIdentificationNumber
-          containers={containerNumbers}
-          maximumContainers={5}
-          errors={errors}
-          displayOptionalSuffix={true}
-          vehicleType={vehicle}
-        />
-      )}
+      {(vehicle === "train" || vehicle === "truck") &&
+        (() => {
+          let cidLabelKey: string | undefined;
+          let cidHintKey: string | undefined;
+          if (vehicle === "truck") {
+            cidLabelKey = "addTransportationDetailsContainerIdentificationNumberTruck";
+            cidHintKey = "addTransportationDetailsContainerIdentificationNumberHintTruck";
+          } else if (vehicle === "train") {
+            cidLabelKey = "addTransportationDetailsContainerIdentificationNumberTrain";
+            cidHintKey = "addTransportationDetailsContainerIdentificationNumberTrainHint";
+          }
+          return (
+            <ContainerIdentificationNumber
+              containers={containerNumbers}
+              maximumContainers={5}
+              errors={errors}
+              displayOptionalSuffix={true}
+              vehicleType={vehicle}
+              labelKey={cidLabelKey}
+              hintKey={cidHintKey}
+            />
+          );
+        })()}
       <DateFieldWithPicker
         id="exportDate"
         name="exportDate"
