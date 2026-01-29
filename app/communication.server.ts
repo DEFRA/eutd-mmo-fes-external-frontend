@@ -16,22 +16,9 @@ const fetchImpl = process.env.NODE_ENV === "test" ? crossFetch : fetch;
 const commonRequestHeaders = (bearerToken: string) => ({
   "Content-Type": "application/json",
   Authorization: `Bearer ${bearerToken}`,
-  "User-Agent": "Mozilla/5.0 (compatible; MMO-FES-External-Frontend/1.0)",
 });
 
 const ENV = getEnv();
-
-// Helper to detect WAF blocks
-const isWafBlock = async (response: Response): Promise<boolean> => {
-  if (response.status !== 403) return false;
-
-  try {
-    const text = await response.clone().text();
-    return text.includes("The request is blocked") || text.includes("<!DOCTYPE html PUBLIC");
-  } catch {
-    return false;
-  }
-};
 
 type Get = (bearerToken: string, url: string, requestHeaders?: HeadersInit) => Promise<Response>;
 type Post = (bearerToken: string, url: string, requestHeaders?: HeadersInit, requestBody?: any) => Promise<Response>;
@@ -46,15 +33,8 @@ export const getReferenceData = async (url: string, requestHeaders: HeadersInit 
     headers: {
       ...requestHeaders,
       Authorization: `Basic ${credentials}`,
-      "User-Agent": "Mozilla/5.0 (compatible; MMO-FES-External-Frontend/1.0)",
     },
   });
-
-  // Check for WAF block and throw error for ErrorBoundary to catch
-  if (await isWafBlock(response)) {
-    const htmlText = await response.text();
-    throw new Error(htmlText);
-  }
 
   return response;
 };
@@ -71,12 +51,6 @@ export const get: Get = async (
       ...commonRequestHeaders(bearerToken),
     },
   });
-
-  // Check for WAF block and throw error for ErrorBoundary to catch
-  if (await isWafBlock(response)) {
-    const htmlText = await response.text();
-    throw new Error(htmlText);
-  }
 
   if (!response.ok && ![400, 403, 404].includes(response.status)) {
     throw new Response(response.statusText, response);
@@ -98,12 +72,6 @@ export const post: Post = async (
     },
     body: !isEmpty(requestBody) ? JSON.stringify({ ...requestBody }) : undefined,
   });
-
-  // Check for WAF block and throw error for ErrorBoundary to catch
-  if (await isWafBlock(response)) {
-    const htmlText = await response.text();
-    throw new Error(htmlText);
-  }
 
   if (!response.ok && ![400, 403, 404].includes(response.status)) {
     throw new Response(response.statusText, response);
@@ -127,12 +95,6 @@ export const put: Put = async (
     body: !isEmpty(requestBody) ? JSON.stringify({ ...requestBody }) : undefined,
   });
 
-  // Check for WAF block and throw error for ErrorBoundary to catch
-  if (await isWafBlock(response)) {
-    const htmlText = await response.text();
-    throw new Error(htmlText);
-  }
-
   if (!response.ok && ![400, 403].includes(response.status)) {
     throw new Response(response.statusText, response);
   }
@@ -152,12 +114,6 @@ export const deleteRequest: Delete = async (
       ...commonRequestHeaders(bearerToken),
     },
   });
-
-  // Check for WAF block and throw error for ErrorBoundary to catch
-  if (await isWafBlock(response)) {
-    const htmlText = await response.text();
-    throw new Error(htmlText);
-  }
 
   if (!response.ok && ![400, 403].includes(response.status)) {
     throw new Response(response.statusText, response);
