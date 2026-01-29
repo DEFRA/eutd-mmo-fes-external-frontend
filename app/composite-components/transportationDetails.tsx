@@ -151,7 +151,11 @@ export const TransportationModeDetails = ({
       {(vehicle === "containerVessel" || vehicle === "plane") && (
         <FormInput
           containerClassName="govuk-form-group"
-          label={t("addTransportationDetailsContainerIdentificationText")}
+          label={
+            vehicle === "containerVessel"
+              ? t("addTransportationDetailsContainerIdentificationText")
+              : t("addTransportationDetailsContainerIdentificationNumberText")
+          }
           name="containerNumber"
           type="text"
           inputClassName={classNames("govuk-input", {
@@ -165,7 +169,10 @@ export const TransportationModeDetails = ({
           hint={{
             id: "hint-containerNumber",
             position: "above",
-            text: t("addTransportationDetailsContainerIdentificationHint"),
+            text:
+              vehicle === "containerVessel"
+                ? t("addTransportationDetailsContainerIdentificationHint")
+                : t("addTransportationDetailsContainerIdentificationNumberHint"),
             className: "govuk-hint govuk-!-margin-bottom-0",
           }}
           errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.containerNumber)) }}

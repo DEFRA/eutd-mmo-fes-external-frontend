@@ -28,7 +28,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       expect(labels).to.have.length(4);
       expect(labels).to.deep.eq([
         "Flight number",
-        "Container identification number or numbers",
+        "Container identification number",
         "Place export leaves the departure country",
         "Freight bill number (optional)",
       ]);
@@ -84,7 +84,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the flight number$/).should("be.visible");
-    cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
+    cy.contains("a", /^Enter the container identification number$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
   });
 

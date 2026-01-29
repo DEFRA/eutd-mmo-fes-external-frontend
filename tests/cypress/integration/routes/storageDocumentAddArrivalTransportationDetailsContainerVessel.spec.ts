@@ -24,7 +24,6 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
 
     // Fill other fields but leave the vessel name empty so the action returns validation errors
     cy.get("#flagState").type("Greece", { force: true });
-    //cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
     cy.get("#freightBillNumber").type("AA1234567", { force: true });
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").type("Port of Calais", { force: true });

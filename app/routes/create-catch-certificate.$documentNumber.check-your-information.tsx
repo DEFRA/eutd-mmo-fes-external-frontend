@@ -143,7 +143,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
               />
               {transport.containerIdentificationNumber && (
                 <SummaryListRow
-                  keyText={t("addTransportationDetailsContainerIdentificationNumberText", { ns: "transportation" })}
+                  keyText={t("addTransportationDetailsContainerIdentificationText", { ns: "transportation" })}
                   value={transport.containerIdentificationNumber}
                   actions={generateActions(
                     isLocked,
@@ -153,7 +153,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                         documentNumber,
                       }
                     )}#containerIdentificationNumber`,
-                    "addTransportationDetailsContainerIdentificationNumberText",
+                    "addTransportationDetailsContainerIdentificationText",
                     "transportation",
                     t,
                     "change-container-truck"
@@ -215,7 +215,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
             )}
           />
           <SummaryListRow
-            keyText={t("addTransportationDetailsContainerIdentificationText", { ns: "transportation" })}
+            keyText={t("addTransportationDetailsContainerIdentificationNumberText", { ns: "transportation" })}
             value={transport.containerNumber}
             actions={generateActions(
               isLocked,
@@ -300,7 +300,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
           />
           {transport.containerIdentificationNumber && (
             <SummaryListRow
-              keyText={t("addTransportationDetailsContainerIdentificationNumberText", { ns: "transportation" })}
+              keyText={t("addTransportationDetailsContainerIdentificationText", { ns: "transportation" })}
               value={transport.containerIdentificationNumber}
               actions={generateActions(
                 isLocked,
@@ -310,7 +310,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                     documentNumber,
                   }
                 )}#containerIdentificationNumber`,
-                "addTransportationDetailsContainerIdentificationNumberText",
+                "addTransportationDetailsContainerIdentificationText",
                 "transportation",
                 t,
                 "change-container-train"
