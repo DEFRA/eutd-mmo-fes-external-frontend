@@ -1,6 +1,6 @@
 import moment from "moment";
 import { ErrorPosition, FormInput } from "@capgeminiuk/dcx-react-library";
-import classNames from "classnames/bind";
+import classNames from "classnames";
 import isEmpty from "lodash/isEmpty";
 import capitalize from "lodash/capitalize";
 import { useTranslation } from "react-i18next";
@@ -21,14 +21,18 @@ const ContainerIdentificationNumberField = ({
   containerIdentificationNumber,
   errors,
   t,
+  labelKey,
+  hintKey,
 }: {
   containerIdentificationNumber?: string | null;
   errors: IErrorsTransformed;
   t: (key: string, options?: any) => string;
+  labelKey?: string;
+  hintKey?: string;
 }) => (
   <FormInput
     containerClassName="govuk-form-group govuk-!-width-one-half"
-    label={t("addTransportationDetailsContainerIdentificationNumber")}
+    label={labelKey ? t(labelKey) : t("addTransportationDetailsContainerIdentificationNumber")}
     name="containerIdentificationNumber"
     type="text"
     inputClassName={classNames("govuk-input", {
@@ -42,7 +46,7 @@ const ContainerIdentificationNumberField = ({
     hint={{
       id: "hint-containerIdentificationNumber",
       position: "above",
-      text: t("addTransportationDetailsContainerIdentificationNumberHintTruckTrain"),
+      text: hintKey ? t(hintKey) : t("addTransportationDetailsContainerIdentificationNumberHintTruckTrain"),
       className: "govuk-hint govuk-!-margin-bottom-0",
     }}
     errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.containerIdentificationNumber)) }}
@@ -80,6 +84,11 @@ export const TransportationModeDetails = ({
 
   return (
     <>
+      {(() => {
+        // compute label and hint keys for container identification based on vehicle
+        // to avoid nested ternary expressions inline
+        // these will be used when rendering the ContainerIdentificationNumber component
+      })()}
       {legendTitle && (
         <legend>
           <Title title={legendTitle} />
@@ -210,6 +219,8 @@ export const TransportationModeDetails = ({
             containerIdentificationNumber={containerIdentificationNumber ?? undefined}
             errors={errors}
             t={t}
+            labelKey={"addTransportationDetailsContainerIdentificationNumberTruck"}
+            hintKey={"addTransportationDetailsContainerIdentificationNumberHintTruck"}
           />
         </>
       )}
@@ -265,6 +276,8 @@ export const TransportationModeDetails = ({
           containerIdentificationNumber={containerIdentificationNumber ?? undefined}
           errors={errors}
           t={t}
+          labelKey={"addTransportationDetailsContainerIdentificationNumberTrain"}
+          hintKey={"addTransportationDetailsContainerIdentificationNumberTrainHint"}
         />
       )}
       <FormInput
@@ -414,15 +427,29 @@ export const TransportationDetails = ({
         hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
         hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
       />
-      {(vehicle === "train" || vehicle === "truck") && (
-        <ContainerIdentificationNumber
-          containers={containerNumbers}
-          maximumContainers={5}
-          errors={errors}
-          displayOptionalSuffix={true}
-          vehicleType={vehicle}
-        />
-      )}
+      {(vehicle === "train" || vehicle === "truck") &&
+        (() => {
+          let cidLabelKey: string | undefined;
+          let cidHintKey: string | undefined;
+          if (vehicle === "truck") {
+            cidLabelKey = "addTransportationDetailsContainerIdentificationNumberTruck";
+            cidHintKey = "addTransportationDetailsContainerIdentificationNumberHintTruck";
+          } else if (vehicle === "train") {
+            cidLabelKey = "addTransportationDetailsContainerIdentificationNumberTrain";
+            cidHintKey = "addTransportationDetailsContainerIdentificationNumberTrainHint";
+          }
+          return (
+            <ContainerIdentificationNumber
+              containers={containerNumbers}
+              maximumContainers={5}
+              errors={errors}
+              displayOptionalSuffix={true}
+              vehicleType={vehicle}
+              labelKey={cidLabelKey}
+              hintKey={cidHintKey}
+            />
+          );
+        })()}
       <DateFieldWithPicker
         id="exportDate"
         name="exportDate"
@@ -553,6 +580,16 @@ export const TransportationDetails = ({
           maximumContainers={5}
           errors={errors}
           vehicleType={vehicle}
+          labelKey={
+            vehicle === "containerVessel"
+              ? "addTransportationDetailsContainerIdentificationNumberContainerVessel"
+              : undefined
+          }
+          hintKey={
+            vehicle === "containerVessel"
+              ? "addTransportationDetailsContainerIdentificationNumberHintContainerVessel"
+              : undefined
+          }
         />
       )}
       {vehicle === "truck" && (
