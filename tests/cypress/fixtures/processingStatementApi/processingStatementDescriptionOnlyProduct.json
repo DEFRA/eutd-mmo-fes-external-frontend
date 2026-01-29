@@ -1,0 +1,27 @@
+{
+  "catches": [],
+  "validationErrors": [],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": "",
+  "products": [
+    {
+      "id": "_product_id_0",
+      "description": "Test Product Description",
+      "commodityCode": "16041210"
+    }
+  ],
+  "healthCertificateDate": "30/06/2022",
+  "healthCertificateNumber": "20/2/123456",
+  "personResponsibleForConsignment": "Test Person",
+  "plantApprovalNumber": "TEST123",
+  "plantName": "Test Plant",
+  "plantAddressOne": "Test Address",
+  "plantTownCity": "Test City",
+  "plantPostcode": "TE5 T12",
+  "dateOfAcceptance": "21/11/2022",
+  "exportedTo": {
+    "officialCountryName": "France"
+  },
+  "_plantDetailsUpdated": false
+}
