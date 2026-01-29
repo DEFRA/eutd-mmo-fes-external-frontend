@@ -36,7 +36,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       ]);
       expect(hints).to.deep.eq([
         "For example, Hull.",
-        "Enter container or trailer identification number. For example, ABCD1234567.",
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
         "For example, BD51SMR",
       ]);
     });
