@@ -23,6 +23,7 @@ import postOneValidTwoInvalidCatches from "@/fixtures/saveAndValidateApi/process
 import productWithNoCatches from "@/fixtures/processingStatementApi/processingStatementWithProductsNoCatches.json";
 import manyMockCatches from "@/fixtures/processingStatementApi/processingStatementManyMockCatches.json";
 import twoProductsOneWithoutCatches from "@/fixtures/processingStatementApi/processingStatementTwoProductsOneWithoutCatches.json";
+import descriptionOnlyProduct from "@/fixtures/processingStatementApi/processingStatementDescriptionOnlyProduct.json";
 import psDocuments from "@/fixtures/dashboardApi/psDocument.json";
 import species from "@/fixtures/referenceDataApi/species.json";
 
@@ -113,6 +114,14 @@ const catchAddedHandler: ITestHandler = {
     rest.post(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(twoProductsOneWithoutCatches))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.json(twoProductsOneWithoutCatches))
+    ),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+  ],
+  // FI0-10647: Block submission with description-only product on catch-added page
+  [TestCaseId.PSCatchAddedWithDescriptionOnlyProduct]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(descriptionOnlyProduct))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(descriptionOnlyProduct))
     ),
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
   ],
