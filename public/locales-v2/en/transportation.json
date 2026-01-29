@@ -12,11 +12,17 @@
   "addTransportationDetailsContainerIdentificationText": "Container identification number or numbers",
   "addTransportationDetailsContainerIdentificationNumberText": "Container identification number",
   "addTransportationDetailsContainerIdentificationNumberHint": "For example, ABCD1234567",
+  "addTransportationDetailsContainerIdentificationNumberTruck": "Shipping container identification number (optional)",
+  "addTransportationDetailsContainerIdentificationNumberHintTruck": "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
   "addTransportationDetailsTruckNationality": "Truck nationality",
   "addTransportationDetailsTruckNationalityHint": "For example, United Kingdom",
   "addTransportationDetailsRegistrationNumber": "Registration number",
   "addTransportationDetailsPlaceExportLeavesDepartureCountry": "Place export leaves the departure country",
   "addTransportationDetailsContainerIdentificationNumber": "Container identification number (optional)",
+  "addTransportationDetailsContainerIdentificationNumberTrain": "Shipping container identification number (optional)",
+  "addTransportationDetailsContainerIdentificationNumberTrainHint": "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
+  "addTransportationDetailsContainerIdentificationNumberContainerVessel": "Shipping container identification number",
+  "addTransportationDetailsContainerIdentificationNumberHintContainerVessel": "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
   "addTransportationDetailsRailwayBillNumber": "Railway bill number",
   "addTransportationDetailsPlaceExportLeavesUK": "Place export leaves the UK",
   "addTransportationDetailsPlaceExportLeavesUKTruck": "Where the truck departs from the UK",
@@ -142,5 +148,9 @@
   "addTransportationDetailsExportDateTruck": "Date the truck departs the UK",
   "addTransportationDetailsExportDateTrain": "Date the train departs the UK",
   "addTransportationDetailsExportDatePlane": "Date the plane departs the UK",
-  "addTransportationDetailsExportDateContainervessel": "Date the container vessel departs the UK"
+  "addTransportationDetailsExportDateContainervessel": "Date the container vessel departs the UK",
+  "errorTruckDepartureDateAnyMax": "Departure date must be on or before the storage facility arrival date",
+  "errorPlaneDepartureDateAnyMax": "Departure date must be on or before the storage facility arrival date",
+  "errorTrainDepartureDateAnyMax": "Departure date must be on or before the storage facility arrival date",
+  "errorContainerVesselDepartureDateAnyMax": "Departure date must be on or before the storage facility arrival date"
 }
