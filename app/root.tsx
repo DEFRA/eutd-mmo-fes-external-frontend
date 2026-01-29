@@ -229,7 +229,6 @@ export function ErrorBoundary() {
 
   const substring = "The request is blocked.";
   const isWAFError = isError && error?.message.includes(substring);
-
   if (isWAFError) {
     return (
       <Template {...templateProps} disableScripts>
