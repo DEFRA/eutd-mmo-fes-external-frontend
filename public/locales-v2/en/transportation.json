@@ -17,6 +17,8 @@
   "addTransportationDetailsRegistrationNumber": "Registration number",
   "addTransportationDetailsPlaceExportLeavesDepartureCountry": "Place export leaves the departure country",
   "addTransportationDetailsContainerIdentificationNumber": "Container identification number (optional)",
+  "addTransportationDetailsContainerIdentificationNumberTrain": "Shipping container identification number (optional)",
+  "addTransportationDetailsContainerIdentificationNumberTrainHint": "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
   "addTransportationDetailsRailwayBillNumber": "Railway bill number",
   "addTransportationDetailsPlaceExportLeavesUK": "Place export leaves the UK",
   "addTransportationDetailsPlaceExportLeavesUKTruck": "Where the truck departs from the UK",
