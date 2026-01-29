@@ -218,19 +218,12 @@ export function ErrorBoundary() {
   useChangeLanguage(rootData?.data?.locale ?? "en");
   const templateProps = (rootData?.data as IMainAppProps) || {};
 
-  // Don't forget to typecheck with your own logic.
-  // Any value can be thrown, not just errors!
-  let errorMessage = "Unknown error";
-  const isError = error instanceof Error;
-  if (isError) {
-    errorMessage = error.message;
-    clientLogger.error(error);
-  }
+  // when true, this is what used to go to `CatchBoundary`
+  if (isRouteErrorResponse(error)) {
+    const substring = "The request is blocked.";
+    const isWAFError = error?.data.includes(substring);
 
-  const substring = "The request is blocked.";
-  const isWAFError = isError && error?.message.includes(substring);
-  if (isWAFError) {
-    return (
+    return isWAFError ? (
       <Template {...templateProps} disableScripts>
         <Main showHelpLink={false}>
           <div className="govuk-grid-row">
@@ -242,12 +235,7 @@ export function ErrorBoundary() {
           </div>
         </Main>
       </Template>
-    );
-  }
-
-  // when true, this is what used to go to `CatchBoundary`
-  if (isRouteErrorResponse(error)) {
-    return (
+    ) : (
       <Template {...templateProps} disableScripts>
         <>
           <h1>{t("commonErrorPageTitle")}</h1>
@@ -260,6 +248,15 @@ export function ErrorBoundary() {
         </>
       </Template>
     );
+  }
+
+  // Don't forget to typecheck with your own logic.
+  // Any value can be thrown, not just errors!
+  let errorMessage = "Unknown error";
+  const isError = error instanceof Error;
+  if (isError) {
+    errorMessage = error.message;
+    clientLogger.error(error);
   }
 
   return (
