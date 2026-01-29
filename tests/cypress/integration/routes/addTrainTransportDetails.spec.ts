@@ -31,7 +31,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       expect(labels).to.deep.eq([
         "Railway bill number",
         "Place export leaves the departure country",
-        "Container identification number (optional)",
+        "Shipping container identification number (optional)",
         "Freight bill number (optional)",
       ]);
       expect(hints).to.deep.eq([
