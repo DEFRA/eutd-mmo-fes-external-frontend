@@ -299,11 +299,11 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const bearerToken = await getBearerTokenForRequest(request);
   const session = await getSessionFromRequest(request);
   session.set("actionExecuted", true);
+
   const processingStatement: ProcessingStatement | IUnauthorised = await getProcessingStatement(
     bearerToken,
     documentNumber
   );
-
   validateResponseData(processingStatement);
 
   const psData = processingStatement as ProcessingStatement;
@@ -317,63 +317,31 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   const maybeHandled = await handleFilterAction(values, session, psData, documentNumber as string);
   if (maybeHandled) return maybeHandled;
+
   const isDraft = _action === "saveAsDraft";
   const isSaveAndContinue = _action === "saveAndContinue";
   const isEdit = _action === "edit";
+  const addAnotherCatch = values.addAnotherCatch === "Yes";
 
   if (isEdit) {
     return redirect(values["url"] as string);
   }
 
-  const addAnotherCatch = values.addAnotherCatch === "Yes";
-
-  let errorData;
-
-  // Validate that all products have catches, not just description
+  // Validate products have catches when saving and continuing
   if (isSaveAndContinue) {
-    const products = psData.products ?? [];
-    const catches = psData.catches ?? [];
-
-    const hasDescriptionOnlyProduct = products.some((product: ProcessingStatementProduct) => {
-      if (!product || typeof product !== "object") return false;
-
-      // Check if product has a description
-      const hasDescription = product.description;
-
-      // Check if product has catches by looking for catches with matching productId
-      const productCatches = catches.filter((c: Catch) => c.productId === product.id);
-      const hasCatches = productCatches.length > 0;
-
-      // Product is invalid if it has description but no catches
-      return hasDescription && !hasCatches;
-    });
-
-    if (hasDescriptionOnlyProduct) {
-      // Return error in same format as backend errors (line 381)
-      const errors: IErrorsTransformed = {
-        processedProductDetails: {
-          key: "processedProductDetails",
-          message: "commonProgressProductDetailsRequiredError",
+    const validationError = validateProductsHaveCatches(psData, documentNumber as string);
+    if (validationError) {
+      return new Response(validationError.body, {
+        ...validationError,
+        headers: {
+          ...validationError.headers,
+          "Set-Cookie": await commitSession(session),
         },
-      };
-      const transformedErrors: IError[] = displayErrorTransformedMessages(errors);
-
-      return new Response(
-        JSON.stringify({
-          groupedErrors: transformedErrors,
-          errorsUrl: `/create-processing-statement/${documentNumber}/catch-added`,
-        }),
-        {
-          status: 400,
-          headers: {
-            "Content-Type": "application/json",
-            "Set-Cookie": await commitSession(session),
-          },
-        }
-      );
+      });
     }
   }
 
+  let errorData;
   if (isDraft || isSaveAndContinue) {
     errorData = await updateProcessingStatement(
       bearerToken,
@@ -387,10 +355,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   }
 
   if (isDraft) {
-    session.unset("actionExecuted");
-    session.unset("matchQuery");
-    session.unset("matchCatchIds");
-    session.unset("matchCatches");
+    cleanupSession(session);
     return redirect(route("/create-processing-statement/processing-statements"), {
       headers: {
         "Set-Cookie": await commitSession(session),
@@ -399,28 +364,11 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   }
 
   if (errorData && Array.isArray(psData?.catches)) {
-    const { errors, ...data } = errorData as ErrorResponse;
-    const transformedErrors: IError[] = displayErrorTransformedMessages(errors);
-
-    return new Response(
-      JSON.stringify({
-        groupedErrors: transformedErrors,
-        ...data,
-      }),
-      {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json",
-          "Set-Cookie": await commitSession(session),
-        },
-      }
-    );
+    return createErrorResponse(errorData as ErrorResponse, session);
   }
+
   if (addAnotherCatch) {
-    session.unset("actionExecuted");
-    session.unset("matchQuery");
-    session.unset("matchCatchIds");
-    session.unset("matchCatches");
+    cleanupSession(session);
     return redirect(`/create-processing-statement/${documentNumber}/add-consignment-details`, {
       headers: {
         "Set-Cookie": await commitSession(session),
@@ -428,34 +376,92 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     });
   }
 
-  session.unset("actionExecuted");
-  session.unset("matchQuery");
-  session.unset("matchCatchIds");
-  session.unset("matchCatches");
-
-  // Check if plant details are already filled
-  const hasPlantDetails = psData.plantName && psData.plantApprovalNumber && psData.personResponsibleForConsignment;
-
-  let redirectUrl: string;
-  if (!nextUri || isEmpty(nextUri)) {
-    // If no nextUri, check if plant details exist
-    if (hasPlantDetails) {
-      // Skip plant details page and go directly to check-your-information
-      redirectUrl = `/create-processing-statement/${documentNumber}/check-your-information`;
-    } else {
-      // Plant details not filled, go to plant details page
-      redirectUrl = `/create-processing-statement/${documentNumber}/add-processing-plant-details`;
-    }
-  } else {
-    // Use the provided nextUri
-    redirectUrl = nextUri;
-  }
+  cleanupSession(session);
+  const redirectUrl = determineRedirectUrl(nextUri, psData, documentNumber as string);
 
   return redirect(redirectUrl, {
     headers: {
       "Set-Cookie": await commitSession(session),
     },
   });
+};
+
+const cleanupSession = (session: any) => {
+  session.unset("actionExecuted");
+  session.unset("matchQuery");
+  session.unset("matchCatchIds");
+  session.unset("matchCatches");
+};
+
+const validateProductsHaveCatches = (psData: ProcessingStatement, documentNumber: string): Response | null => {
+  const products = psData.products ?? [];
+  const catches = psData.catches ?? [];
+
+  const hasDescriptionOnlyProduct = products.some((product: ProcessingStatementProduct) => {
+    if (!product || typeof product !== "object") return false;
+
+    const hasDescription = product.description;
+    const productCatches = catches.filter((c: Catch) => c.productId === product.id);
+    const hasCatches = productCatches.length > 0;
+
+    return hasDescription && !hasCatches;
+  });
+
+  if (hasDescriptionOnlyProduct) {
+    const errors: IErrorsTransformed = {
+      processedProductDetails: {
+        key: "processedProductDetails",
+        message: "commonProgressProductDetailsRequiredError",
+      },
+    };
+    const transformedErrors: IError[] = displayErrorTransformedMessages(errors);
+
+    return new Response(
+      JSON.stringify({
+        groupedErrors: transformedErrors,
+        errorsUrl: `/create-processing-statement/${documentNumber}/catch-added`,
+      }),
+      {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+
+  return null;
+};
+
+const createErrorResponse = async (errorData: ErrorResponse, session: any): Promise<Response> => {
+  const { errors, ...data } = errorData;
+  const transformedErrors: IError[] = displayErrorTransformedMessages(errors);
+
+  return new Response(
+    JSON.stringify({
+      groupedErrors: transformedErrors,
+      ...data,
+    }),
+    {
+      status: 400,
+      headers: {
+        "Content-Type": "application/json",
+        "Set-Cookie": await commitSession(session),
+      },
+    }
+  );
+};
+
+const determineRedirectUrl = (nextUri: string, psData: ProcessingStatement, documentNumber: string): string => {
+  if (!nextUri || isEmpty(nextUri)) {
+    const hasPlantDetails = psData.plantName && psData.plantApprovalNumber && psData.personResponsibleForConsignment;
+
+    return hasPlantDetails
+      ? `/create-processing-statement/${documentNumber}/check-your-information`
+      : `/create-processing-statement/${documentNumber}/add-processing-plant-details`;
+  }
+
+  return nextUri;
 };
 
 const populateNavigationLinks = (
