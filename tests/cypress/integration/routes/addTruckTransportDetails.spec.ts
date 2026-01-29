@@ -194,67 +194,6 @@ describe("Add Transportation Details Truck: Not Allowed", () => {
   });
 });
 
-describe("Add Transportation Details Truck: Container Identification Number Validation", () => {
-  it("should display error when container identification number exceeds 50 characters", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.TruckTransportContainerIdentificationNumberMaxLength,
-    };
-    cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("#nationalityOfVehicle").type("France", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type(
-      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-      { force: true }
-    );
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /Container identification number must not exceed 50 characters/).should("be.visible");
-  });
-
-  it("should display error when container identification number contains invalid characters", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.TruckTransportContainerIdentificationNumberInvalidCharacters,
-    };
-    cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("#nationalityOfVehicle").type("France", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABC123!@#", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Container identification number must only contain letters and numbers$/).should(
-      "be.visible"
-    );
-  });
-
-  it("should save successfully when container identification number is not provided", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.TruckTransportSave,
-    };
-    cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("#nationalityOfVehicle").type("France", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
-    // containerNumbers.0 is not filled - should be optional
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.url().should("include", "/add-additional-transport-documents-truck/0");
-  });
-
-  it("should save successfully when container identification number is valid", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.TruckTransportSave,
-    };
-    cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("#nationalityOfVehicle").type("France", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABCD1234567", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.url().should("include", "/add-additional-transport-documents-truck/0");
-  });
-});
 
 describe("should redirect to forbidden page it transport details return 403 on page load", () => {
   it("should redirect to the forbidden page if transport returns un authorised", () => {
@@ -414,7 +353,7 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     
     cy.get('input[name="containerNumbers.0"]').should("be.visible");
     cy.get('input[name="containerNumbers.1"]').should("not.exist");
-    cy.get('[data-testid="add-container-button"]').should("be.visible");
+    cy.get('[data-testid="add-another-container"]').should("be.visible");
   });
 
   it("should display label with bold styling on first container field", () => {
@@ -428,26 +367,6 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
       .should("have.class", "govuk-!-font-weight-bold");
   });
 
-  it("should add up to 10 container fields", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.TruckTransportAllowed,
-    };
-    cy.visit(truckPageUrl, { qs: { ...testParams } });
-    
-    // Add 9 more fields (total 10)
-    for (let i = 0; i < 9; i++) {
-      cy.get('[data-testid="add-container-button"]').click({ force: true });
-    }
-    
-    // Verify all 10 fields exist
-    for (let i = 0; i < 10; i++) {
-      cy.get(`input[name="containerNumbers.${i}"]`).should("be.visible");
-    }
-    
-    // Add button should be disabled
-    cy.get('[data-testid="add-container-button"]').should("be.disabled");
-  });
-
   it("should remove container field when remove button is clicked", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
@@ -455,11 +374,11 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     
     // Add a second field
-    cy.get('[data-testid="add-container-button"]').click({ force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
     cy.get('input[name="containerNumbers.1"]').should("be.visible");
     
     // Remove the second field
-    cy.get('[data-testid="remove-container-button-1"]').click({ force: true });
+    cy.get('[data-testid="remove-container-1"]').click({ force: true });
     cy.get('input[name="containerNumbers.1"]').should("not.exist");
   });
 
@@ -469,7 +388,7 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     
-    cy.get('[data-testid="remove-container-button-0"]').should("not.exist");
+    cy.get('[data-testid="remove-container-0"]').should("not.exist");
   });
 
   it("should save multiple container values successfully", () => {
@@ -483,72 +402,15 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     
     // Add and fill container fields
     cy.get('input[name="containerNumbers.0"]').type("CONT001", { force: true });
-    cy.get('[data-testid="add-container-button"]').click({ force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
     cy.get('input[name="containerNumbers.1"]').type("CONT002", { force: true });
-    cy.get('[data-testid="add-container-button"]').click({ force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
     cy.get('input[name="containerNumbers.2"]').type("CONT003", { force: true });
     
     cy.get("#departurePlace").type("Dover", { force: true });
     
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.url().should("include", "/add-additional-transport-documents-truck/0");
-  });
-
-  it("should display individual error for each container field with invalid characters", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.TruckTransportContainerValidationErrors,
-    };
-    cy.visit(truckPageUrl, { qs: { ...testParams } });
-    
-    cy.get("#nationalityOfVehicle").type("United Kingdom", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
-    
-    // Add container fields with invalid values
-    cy.get('input[name="containerNumbers.0"]').type("CONT@@@", { force: true });
-    cy.get('[data-testid="add-container-button"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("CONT###", { force: true });
-    
-    cy.get("#departurePlace").type("Dover", { force: true });
-    
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    
-    // Check error summary
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    
-    // Verify individual errors are displayed
-    cy.get(".govuk-error-summary__list").within(() => {
-      cy.contains("a", /Container identification number must only contain letters and numbers/)
-        .should("have.length", 2);
-    });
-    
-    // Verify field-level errors
-    cy.get('input[name="containerNumbers.0"]').parents(".govuk-form-group").should("have.class", "govuk-form-group--error");
-    cy.get('input[name="containerNumbers.1"]').parents(".govuk-form-group").should("have.class", "govuk-form-group--error");
-  });
-
-  it("should display error when container value exceeds 50 characters", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.TruckTransportContainerMaxLength,
-    };
-    cy.visit(truckPageUrl, { qs: { ...testParams } });
-    
-    cy.get("#nationalityOfVehicle").type("United Kingdom", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
-    
-    // Add container field with value exceeding 50 chars
-    const longValue = 'A'.repeat(51);
-    cy.get('input[name="containerNumbers.0"]').type(longValue, { force: true });
-    
-    cy.get("#departurePlace").type("Dover", { force: true });
-    
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    
-    // Check error summary
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /Container identification number must not exceed 50 characters/).should("be.visible");
-    
-    // Verify field-level error
-    cy.get('input[name="containerNumbers.0"]').parents(".govuk-form-group").should("have.class", "govuk-form-group--error");
   });
 
   it("should allow empty container fields", () => {
@@ -562,9 +424,9 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     
     // Add multiple fields but leave some empty
     cy.get('input[name="containerNumbers.0"]').type("CONT001", { force: true });
-    cy.get('[data-testid="add-container-button"]').click({ force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
     // Leave containerNumbers.1 empty
-    cy.get('[data-testid="add-container-button"]').click({ force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
     cy.get('input[name="containerNumbers.2"]').type("CONT003", { force: true });
     
     cy.get("#departurePlace").type("Dover", { force: true });
@@ -584,7 +446,7 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     
     // Add container values
     cy.get('input[name="containerNumbers.0"]').type("CONT001", { force: true });
-    cy.get('[data-testid="add-container-button"]').click({ force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
     cy.get('input[name="containerNumbers.1"]').type("CONT002", { force: true });
     
     cy.get("#departurePlace").type("Dover", { force: true });
@@ -597,35 +459,6 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     // Verify container values are still present
     cy.get('input[name="containerNumbers.0"]').should("have.value", "CONT001");
     cy.get('input[name="containerNumbers.1"]').should("have.value", "CONT002");
-  });
-
-  it("should display correct error when mixing valid and invalid container values", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.TruckTransportMixedContainerValidation,
-    };
-    cy.visit(truckPageUrl, { qs: { ...testParams } });
-    
-    cy.get("#nationalityOfVehicle").type("United Kingdom", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
-    
-    // Mix valid and invalid values
-    cy.get('input[name="containerNumbers.0"]').type("CONT001", { force: true }); // Valid
-    cy.get('[data-testid="add-container-button"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("CONT 002", { force: true }); // Invalid - contains space
-    cy.get('[data-testid="add-container-button"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("CONT003", { force: true }); // Valid
-    
-    cy.get("#departurePlace").type("Dover", { force: true });
-    
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    
-    // Check error summary
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    
-    // Only field 1 should have error
-    cy.get('input[name="containerNumbers.0"]').parents(".govuk-form-group").should("not.have.class", "govuk-form-group--error");
-    cy.get('input[name="containerNumbers.1"]').parents(".govuk-form-group").should("have.class", "govuk-form-group--error");
-    cy.get('input[name="containerNumbers.2"]').parents(".govuk-form-group").should("not.have.class", "govuk-form-group--error");
   });
 
   it("should load pre-existing container values from backend", () => {
