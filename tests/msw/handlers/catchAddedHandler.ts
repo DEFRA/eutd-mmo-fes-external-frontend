@@ -117,12 +117,8 @@ const catchAddedHandler: ITestHandler = {
     ),
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
   ],
-  // FI0-10647: Block submission with description-only product on catch-added page
   [TestCaseId.PSCatchAddedWithDescriptionOnlyProduct]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(descriptionOnlyProduct))),
-    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
-      res(ctx.json(descriptionOnlyProduct))
-    ),
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
   ],
 };

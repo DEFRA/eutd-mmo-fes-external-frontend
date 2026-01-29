@@ -20,6 +20,7 @@ import type {
   IError,
   ActionDataWithErrors,
   ProcessingStatementProduct,
+  IErrorsTransformed,
 } from "~/types";
 import {
   updateProcessingStatement,
@@ -348,17 +349,19 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     });
 
     if (hasDescriptionOnlyProduct) {
-      // Build transformed errors object matching IErrorsTransformed shape
-      const transformedErrors: IError[] = displayErrorTransformedMessages({
+      // Return error in same format as backend errors (line 381)
+      const errors: IErrorsTransformed = {
         processedProductDetails: {
           key: "processedProductDetails",
-          message: "error.processedProductDetails.incomplete",
+          message: "commonProgressProductDetailsRequiredError",
         },
-      });
+      };
+      const transformedErrors: IError[] = displayErrorTransformedMessages(errors);
 
       return new Response(
         JSON.stringify({
           groupedErrors: transformedErrors,
+          errorsUrl: `/create-processing-statement/${documentNumber}/catch-added`,
         }),
         {
           status: 400,
