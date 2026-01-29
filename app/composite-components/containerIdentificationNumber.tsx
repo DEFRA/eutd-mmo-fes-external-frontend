@@ -17,6 +17,8 @@ interface ContainerIdentificationNumberProps {
   errors?: IErrorsTransformed;
   displayOptionalSuffix?: boolean;
   vehicleType?: "truck" | "train" | "containerVessel" | "plane";
+  labelKey?: string;
+  hintKey?: string;
 }
 
 export const ContainerIdentificationNumber = ({
@@ -25,6 +27,8 @@ export const ContainerIdentificationNumber = ({
   errors,
   displayOptionalSuffix,
   vehicleType,
+  labelKey,
+  hintKey,
 }: ContainerIdentificationNumberProps) => {
   const { t } = useTranslation("transportation");
   const actionData = useActionData() ?? {};
@@ -54,14 +58,19 @@ export const ContainerIdentificationNumber = ({
 
   const containerInputData = getContainerInputData(isHydrated, maximumContainers, containerInputs);
 
-  const containerIdentificationLabel = displayOptionalSuffix
-    ? t("addTransportationArrivalDetailsContainerIdentificationNumberOptional")
-    : t("addTransportationArrivalDetailsContainerIdentificationNumber");
+  let containerIdentificationLabel = "";
+  if (labelKey) {
+    containerIdentificationLabel = t(labelKey);
+  } else if (displayOptionalSuffix) {
+    containerIdentificationLabel = t("addTransportationArrivalDetailsContainerIdentificationNumberOptional");
+  } else {
+    containerIdentificationLabel = t("addTransportationArrivalDetailsContainerIdentificationNumber");
+  }
 
   const getHintText = () => {
-    if (vehicleType === "truck" || vehicleType === "train") {
-      return t("addTransportationDetailsContainerIdentificationNumberHintTruckTrain");
-    }
+    if (hintKey) return t(hintKey);
+    if (vehicleType === "truck") return t("addTransportationDetailsContainerIdentificationNumberHintTruck");
+    if (vehicleType === "train") return t("addTransportationDetailsContainerIdentificationNumberTrainHint");
     return t("addTransportationArrivalDetailsContainerIdentificationNumberHint");
   };
 
@@ -89,7 +98,7 @@ export const ContainerIdentificationNumber = ({
               "govuk-input--error": errors?.[`containerNumbers.${index}`],
             })}
             inputProps={{
-              value: !isHydrated ? actionData[`containerNumbers.${index}`] ?? input.value : input.value,
+              value: (isHydrated ? input.value : actionData[`containerNumbers.${index}`] ?? input.value) as string,
               id: `containerNumbers.${index}`,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(input.id, e.target.value),
             }}
