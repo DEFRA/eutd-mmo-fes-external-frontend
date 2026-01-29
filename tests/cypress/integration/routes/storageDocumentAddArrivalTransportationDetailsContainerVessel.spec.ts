@@ -430,9 +430,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
 
   it("should navigate to storage facility page when all mandatory fields are populated", () => {
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
-    cy.get("#vesselName").should("be.visible").clear();
-    cy.get("#vesselName").type("Test Vessel", { force: true });
-    cy.get("#vesselName").should("have.value", "Test Vessel");
+    cy.get("#vesselName").should("be.visible").type("Test Vessel", { force: true });
     cy.get("#flagState").should("be.visible").type("Greece", { force: true });
     cy.get('[id="containerNumbers.0"]').should("be.visible").type("ABCD1234567", { force: true });
     cy.get("#departureCountry").should("be.visible").type("France", { force: true });
