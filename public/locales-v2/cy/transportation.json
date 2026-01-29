@@ -12,6 +12,8 @@
   "addTransportationDetailsContainerIdentificationText": "Rhif neu rifau adnabod y cynhwysydd",
   "addTransportationDetailsContainerIdentificationNumberText": "Rhif adnabod y cynhwysydd",
   "addTransportationDetailsContainerIdentificationNumberHint": "Er enghraifft, ABCD1234567",
+  "addTransportationDetailsContainerIdentificationNumberTruck": "Rhif adnabod cynhwysydd llong (dewisol)",
+  "addTransportationDetailsContainerIdentificationNumberHintTruck": "Rhowch y rhif adnabod a ddangosir ar y cynhwysydd llong. Er enghraifft ABCJ0123456",
   "addTransportationDetailsTruckNationality": "Cenedligrwydd y lori",
   "addTransportationDetailsTruckNationalityHint": "Er enghraifft, United Kingdom",
   "addTransportationDetailsRegistrationNumber": "Rhif cofrestru",
