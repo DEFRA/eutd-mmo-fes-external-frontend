@@ -31,12 +31,12 @@ describe("Add Transportation Details Train: Allowed", () => {
       expect(labels).to.deep.eq([
         "Railway bill number",
         "Place export leaves the departure country",
-        "Container identification number (optional)",
+        "Shipping container identification number (optional)",
         "Freight bill number (optional)",
       ]);
       expect(hints).to.deep.eq([
         "For example, Hull.",
-        "Enter container or trailer identification number. For example, ABCD1234567.",
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
         "For example, BD51SMR",
       ]);
     });
