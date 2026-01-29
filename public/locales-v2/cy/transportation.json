@@ -21,6 +21,8 @@
   "addTransportationDetailsContainerIdentificationNumber": "Rhif adnabod y cynhwysydd (dewisol)",
   "addTransportationDetailsContainerIdentificationNumberTrain": "Rhif adnabod cynhwysydd llong (dewisol)",
   "addTransportationDetailsContainerIdentificationNumberTrainHint": "Rhowch y rhif adnabod a ddangosir ar y cynhwysydd llong. Er enghraifft ABCJ0123456",
+  "addTransportationDetailsContainerIdentificationNumberContainerVessel": "Rhif adnabod cynhwysydd llong",
+  "addTransportationDetailsContainerIdentificationNumberHintContainerVessel": "Rhowch y rhif adnabod a ddangosir ar y cynhwysydd llong. Er enghraifft ABCJ0123456",
   "addTransportationDetailsRailwayBillNumber": "Rhif y bil rheilffordd",
   "addTransportationDetailsPlaceExportLeavesUK": "Lle mae'r allforion yn gadael y DU",
   "addTransportationDetailsPlaceExportLeavesUKTruck": "O ble mae'r lori yn ymadael â'r DU",

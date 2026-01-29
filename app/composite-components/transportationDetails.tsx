@@ -572,6 +572,16 @@ export const TransportationDetails = ({
           maximumContainers={5}
           errors={errors}
           vehicleType={vehicle}
+          labelKey={
+            vehicle === "containerVessel"
+              ? "addTransportationDetailsContainerIdentificationNumberContainerVessel"
+              : undefined
+          }
+          hintKey={
+            vehicle === "containerVessel"
+              ? "addTransportationDetailsContainerIdentificationNumberHintContainerVessel"
+              : undefined
+          }
         />
       )}
       {vehicle === "truck" && (
