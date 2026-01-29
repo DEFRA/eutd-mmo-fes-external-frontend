@@ -218,6 +218,34 @@ export function ErrorBoundary() {
   useChangeLanguage(rootData?.data?.locale ?? "en");
   const templateProps = (rootData?.data as IMainAppProps) || {};
 
+  // Don't forget to typecheck with your own logic.
+  // Any value can be thrown, not just errors!
+  let errorMessage = "Unknown error";
+  const isError = error instanceof Error;
+  if (isError) {
+    errorMessage = error.message;
+    clientLogger.error(error);
+  }
+
+  const substring = "The request is blocked.";
+  const isWAFError = isError && error?.message.includes(substring);
+
+  if (isWAFError) {
+    return (
+      <Template {...templateProps} disableScripts>
+        <Main showHelpLink={false}>
+          <div className="govuk-grid-row">
+            <div className="govuk-grid-column-two-thirds">
+              <Title title={t("forbiddenH1Text", { ns: "forbidden" })} />
+              <p data-testid="no-permission">{t("forbiddenPageP1Text", { ns: "forbidden" })}</p>
+              <p data-testid="navigate-back">{t("forbiddenPageP2Text", { ns: "forbidden" })}</p>
+            </div>
+          </div>
+        </Main>
+      </Template>
+    );
+  }
+
   // when true, this is what used to go to `CatchBoundary`
   if (isRouteErrorResponse(error)) {
     return (
@@ -235,43 +263,19 @@ export function ErrorBoundary() {
     );
   }
 
-  // Don't forget to typecheck with your own logic.
-  // Any value can be thrown, not just errors!
-  let errorMessage = "Unknown error";
-  const isError = error instanceof Error;
-  if (isError) {
-    errorMessage = error.message;
-    clientLogger.error(error);
-  }
-
-  const substring = "The request is blocked.";
-  const isWAFError = isError && error?.message.includes(substring);
-
   return (
     <Template {...templateProps} disableScripts>
-      {isWAFError ? (
-        <Main showHelpLink={false}>
-          <div className="govuk-grid-row">
-            <div className="govuk-grid-column-two-thirds">
-              <Title title={t("forbiddenH1Text", { ns: "forbidden" })} />
-              <p data-testid="no-permission">{t("forbiddenPageP1Text", { ns: "forbidden" })}</p>
-              <p data-testid="navigate-back">{t("forbiddenPageP2Text", { ns: "forbidden" })}</p>
-            </div>
-          </div>
-        </Main>
-      ) : (
-        <Main showHelpLink={false}>
-          <h1>{t("commonErrorPageTitle")}</h1>
-          <p>{t("commonErrorPageTryagainText")}</p>
-          <p>{t("commonErrorPagesaveText")}</p>
-          {!isProdEnv() && (
-            <>
-              <p>{errorMessage}</p>
-              {isError && <pre style={{ overflowY: "scroll" }}>{error.stack}</pre>}
-            </>
-          )}
-        </Main>
-      )}
+      <Main showHelpLink={false}>
+        <h1>{t("commonErrorPageTitle")}</h1>
+        <p>{t("commonErrorPageTryagainText")}</p>
+        <p>{t("commonErrorPagesaveText")}</p>
+        {!isProdEnv() && (
+          <>
+            <p>{errorMessage}</p>
+            {isError && <pre style={{ overflowY: "scroll" }}>{error.stack}</pre>}
+          </>
+        )}
+      </Main>
     </Template>
   );
 }
