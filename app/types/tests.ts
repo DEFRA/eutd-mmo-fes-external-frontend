@@ -607,6 +607,7 @@ export enum TestCaseId {
   PSCatchAddedTwoCatchesSameSpecies = "psCatchAddedTwoCatchesSameSpecies",
   PSCatchAddedOneValidTwoInvalidCatches = "psCatchAddedOneValidTwoInvalidCatches",
   PSCatchAddedManyMockCatches = "psCatchAddedManyMockCatches",
+  PSCatchAddedHasPlantDetails = "psCatchAddedHasPlantDetails",
   PSCheckYourInformationProductDescriptions = "psCheckYourInformationProductDescriptions",
   PSCheckYourInformationPageGuardCase = "psCheckYourInformationPageGuardCase",
   PSCheckYourInformationPageGuardCaseNoExporter = "psCheckYourInformationPageGuardCaseNoExporter",
