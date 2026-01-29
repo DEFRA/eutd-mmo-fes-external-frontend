@@ -98,11 +98,17 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get("label[for='containerIdentificationNumber']").should("contain.text", "Container identification number");
+    cy.get("label[for='containerIdentificationNumber']").should(
+      "contain.text",
+      "Shipping container identification number"
+    );
 
     cy.get("#hint-containerIdentificationNumber")
       .should("be.visible")
-      .should("contain.text", "Enter container or trailer identification number. For example, ABCD1234567.");
+      .should(
+        "contain.text",
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456"
+      );
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
