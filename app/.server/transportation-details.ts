@@ -108,11 +108,17 @@ export const CatchCertificateTransportationDetailsLoader = async (
 
     const maximumTransportDocumentPerTransport = parseInt(getEnv().EU_CATCH_MAX_TRANSPORT_DOCUMENTS, 10);
 
+    let containerNumbers: string[] = transport.containerNumbers || [];
+    if (transportType === TransportType.TRUCK && containerNumbers.length === 0) {
+      containerNumbers = [""];
+    }
+
     return new Response(
       JSON.stringify({
         documentNumber,
         csrf,
         ...transport,
+        containerNumbers,
         documents,
         nextUri,
         pageTitle,
@@ -166,9 +172,9 @@ export const CatchCertificateTransportationDetailsAction = async (
       case TransportType.TRUCK: {
         payload.nationalityOfVehicle = form.get("nationalityOfVehicle") as string;
         payload.registrationNumber = form.get("registrationNumber") as string;
-        payload.containerIdentificationNumber = !isEmpty(form.get("containerIdentificationNumber"))
-          ? (form.get("containerIdentificationNumber") as string)
-          : null;
+        // Extract containerNumbers array from form - backend will validate each individually
+        const values = Object.fromEntries(form);
+        payload.containerNumbers = extractContainerNumbers(values);
         break;
       }
       case TransportType.TRAIN: {
