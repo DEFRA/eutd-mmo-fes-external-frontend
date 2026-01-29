@@ -302,6 +302,49 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   let errorData;
 
+  // Validate that all products have catches, not just description
+  if (isSaveAndContinue) {
+    const products = psData.products ?? [];
+    const catches = psData.catches ?? [];
+
+    const hasDescriptionOnlyProduct = products.some((product: ProcessingStatementProduct) => {
+      if (!product || typeof product !== "object") return false;
+
+      // Check if product has a description
+      const hasDescription = product.description;
+
+      // Check if product has catches by looking for catches with matching productId
+      const productCatches = catches.filter((c: Catch) => c.productId === product.id);
+      const hasCatches = productCatches.length > 0;
+
+      // Product is invalid if it has description but no catches
+      return hasDescription && !hasCatches;
+    });
+
+    if (hasDescriptionOnlyProduct) {
+      // Build transformed errors object matching IErrorsTransformed shape
+      const transformedErrors: IError[] = displayErrorTransformedMessages({
+        processedProductDetails: {
+          key: "processedProductDetails",
+          message: "error.processedProductDetails.incomplete",
+        },
+      });
+
+      return new Response(
+        JSON.stringify({
+          groupedErrors: transformedErrors,
+        }),
+        {
+          status: 400,
+          headers: {
+            "Content-Type": "application/json",
+            "Set-Cookie": await commitSession(session),
+          },
+        }
+      );
+    }
+  }
+
   if (isDraft || isSaveAndContinue) {
     errorData = await updateProcessingStatement(
       bearerToken,

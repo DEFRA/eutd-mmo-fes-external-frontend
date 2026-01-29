@@ -1323,3 +1323,34 @@ describe("PS: Catch added - session clearing on navigation", () => {
     cy.get("tbody tr").should("have.length.greaterThan", 0);
   });
 });
+
+// Scenario 4 - Validate description-only products on catch-added page
+describe("PS: Catch Added - FI0-10647 - Validation on catch-added page", () => {
+  it("should block submission and display error when product has only description and no catches", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedWithDescriptionOnlyProduct,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Verify page loads with product that has no catches
+    cy.title().should("include", "You have added 1 processed product to this consignment");
+
+    // Verify the product row is displayed with "No catches added" message
+    cy.get("tbody tr").should("have.length", 1);
+    cy.contains("Test Product Description").should("exist");
+    cy.contains("No catches added to this product").should("exist");
+
+    // Click "Save and continue" button
+    cy.contains("button", "Save and continue").click({ force: true });
+    cy.get(".govuk-error-summary").should("exist");
+    cy.get(".govuk-error-summary__title").should("contain", "There is a problem");
+    cy.get(".govuk-error-summary__list").should(
+      "contain",
+      "You must complete the product details section before being able to continue"
+    );
+
+    // Verify still on catch-added page (not redirected)
+    cy.url().should("include", "/catch-added");
+  });
+});

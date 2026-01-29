@@ -45,6 +45,7 @@ export enum TestCaseId {
   PSProgressWithDescriptionOnlyProduct = "psProgressWithDescriptionOnlyProduct",
   PSProgressWithMixedProducts = "psProgressWithMixedProducts",
   PSProgressWithValidProducts = "psProgressWithValidProducts",
+  PSCatchAddedWithDescriptionOnlyProduct = "psCatchAddedWithDescriptionOnlyProduct",
 
   CCLandingsTypeNull = "ccLandingsTypeNull",
   CCLandingsTypeUnauthorised = "ccLandingsTypeUnauthorised",
