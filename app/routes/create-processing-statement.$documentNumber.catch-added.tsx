@@ -330,10 +330,10 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (isSaveAndContinue) {
     const validationError = validateProductsHaveCatches(psData, documentNumber as string);
     if (validationError) {
-      return new Response(validationError.body, {
-        ...validationError,
+      return new Response(JSON.stringify(validationError), {
+        status: 400,
         headers: {
-          ...validationError.headers,
+          "Content-Type": "application/json",
           "Set-Cookie": await commitSession(session),
         },
       });
@@ -392,7 +392,10 @@ const cleanupSession = (session: any) => {
   session.unset("matchCatches");
 };
 
-const validateProductsHaveCatches = (psData: ProcessingStatement, documentNumber: string): Response | null => {
+const validateProductsHaveCatches = (
+  psData: ProcessingStatement,
+  documentNumber: string
+): { groupedErrors: IError[]; errorsUrl: string } | null => {
   const products = psData.products ?? [];
   const catches = psData.catches ?? [];
 
@@ -415,18 +418,10 @@ const validateProductsHaveCatches = (psData: ProcessingStatement, documentNumber
     };
     const transformedErrors: IError[] = displayErrorTransformedMessages(errors);
 
-    return new Response(
-      JSON.stringify({
-        groupedErrors: transformedErrors,
-        errorsUrl: `/create-processing-statement/${documentNumber}/catch-added`,
-      }),
-      {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    return {
+      groupedErrors: transformedErrors,
+      errorsUrl: `/create-processing-statement/${documentNumber}/catch-added`,
+    };
   }
 
   return null;
