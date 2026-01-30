@@ -2,7 +2,7 @@ import { type ITestParams, TestCaseId } from "~/types";
 
 const ccPageUrl = "create-catch-certificate/GBR-2022-CC-F71D98A30/what-exporters-address";
 
-describe.skip("CC: Exporter address page", () => {
+describe("CC: Exporter address page", () => {
   beforeEach(() => {
     cy.visit(ccPageUrl);
   });
@@ -23,7 +23,7 @@ describe.skip("CC: Exporter address page", () => {
   });
 });
 
-describe.skip("CC: Entering the address manually", () => {
+describe("CC: Entering the address manually", () => {
   beforeEach(() => {
     cy.visit(ccPageUrl);
     cy.findByText(/^Enter the address manually$/).click({ force: true });
@@ -53,14 +53,13 @@ describe.skip("CC: Entering the address manually", () => {
 describe("CC: Entering the address manually with errors", () => {
   it("should display errors on empty form submitted", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.CCExporterManualAddressWithErrors,
+      testCaseId: TestCaseId.CCExporterManualAddressWithErrorsArray,
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
     cy.findByText(/^Enter the address manually$/).click({ force: true });
 
     cy.get("[data-testid=continue]").click({ force: true });
-
     cy.url().should("include", "what-exporters-address");
     cy.get(".govuk-error-summary").should("be.visible");
   });
@@ -98,6 +97,114 @@ describe("CC: Entering the address manually with errors", () => {
     cy.get(".govuk-error-summary").contains("Enter the town or city");
     cy.get(".govuk-error-summary").contains("Select a country from the list");
     cy.get(".govuk-error-summary").contains("Enter a postcode");
+  });
+
+  it("should display error when all address fields are blank", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCExporterManualAddressWithAddressFirstPartError,
+    };
+
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+    cy.findByText(/^Enter the address manually$/).click({ force: true });
+
+    // Leave all address fields blank but fill in required fields
+    cy.get("#townCity").type("Test City", { force: true });
+    cy.get("#postcode").type("12345", { force: true });
+    cy.get("#country").type("Albania");
+    cy.get("[id^='country-option']").contains("Albania").click();
+    cy.get("#country").should("have.value", "Albania");
+
+    cy.get("[data-testid=continue]").click({ force: true });
+
+    // Should display the address first part error
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-error-summary").contains(
+      "Enter a sub-building name, building number, a building name or street name"
+    );
+  });
+
+  it("should not display error when sub-building name is populated", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCExporterManualAddressValid,
+    };
+
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+    cy.findByText(/^Enter the address manually$/).click({ force: true });
+
+    // Only populate sub-building name (other address fields blank)
+    cy.get("#subBuildingName").type("Flat 1", { force: true });
+    cy.get("#townCity").type("Test City", { force: true });
+    cy.get("#postcode").type("12345", { force: true });
+    cy.get("#country").type("Albania", { force: true });
+
+    cy.get("[data-testid=continue]").click({ force: true });
+
+    // Should not display address first part error
+    cy.get(".govuk-error-summary").should("not.exist");
+    cy.url().should("include", "/add-exporter-details");
+  });
+
+  it("should not display error when building number is populated", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCExporterManualAddressValid,
+    };
+
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+    cy.findByText(/^Enter the address manually$/).click({ force: true });
+
+    // Only populate building number (other address fields blank)
+    cy.get("#buildingNumber").type("123", { force: true });
+    cy.get("#townCity").type("Test City", { force: true });
+    cy.get("#postcode").type("12345", { force: true });
+    cy.get("#country").type("Albania", { force: true });
+
+    cy.get("[data-testid=continue]").click({ force: true });
+
+    // Should not display address first part error
+    cy.get(".govuk-error-summary").should("not.exist");
+    cy.url().should("include", "/add-exporter-details");
+  });
+
+  it("should not display error when building name is populated", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCExporterManualAddressValid,
+    };
+
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+    cy.findByText(/^Enter the address manually$/).click({ force: true });
+
+    // Only populate building name (other address fields blank)
+    cy.get("#buildingName").type("Test Villa", { force: true });
+    cy.get("#townCity").type("Test City", { force: true });
+    cy.get("#postcode").type("12345", { force: true });
+    cy.get("#country").type("Albania", { force: true });
+
+    cy.get("[data-testid=continue]").click({ force: true });
+
+    // Should not display address first part error
+    cy.get(".govuk-error-summary").should("not.exist");
+    cy.url().should("include", "/add-exporter-details");
+  });
+
+  it("should not display error when street name is populated", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCExporterManualAddressValid,
+    };
+
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+    cy.findByText(/^Enter the address manually$/).click({ force: true });
+
+    // Only populate street name (other address fields blank)
+    cy.get("#streetName").type("Main Street", { force: true });
+    cy.get("#townCity").type("Test City", { force: true });
+    cy.get("#postcode").type("12345", { force: true });
+    cy.get("#country").type("Albania", { force: true });
+
+    cy.get("[data-testid=continue]").click({ force: true });
+
+    // Should not display address first part error
+    cy.get(".govuk-error-summary").should("not.exist");
+    cy.url().should("include", "/add-exporter-details");
   });
 
   it("should not display errors on validation passed", () => {
@@ -142,7 +249,7 @@ describe("CC: Entering the address manually with errors", () => {
     cy.url().should("include", "/forbidden");
   });
 });
-
+//I skipped these tests as they are flaky in CI/CD
 describe("CC: On Selected Address", () => {
   it("should populate selected address into form", () => {
     const testParams: ITestParams = {
