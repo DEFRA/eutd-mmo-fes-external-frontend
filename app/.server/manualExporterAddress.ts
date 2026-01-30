@@ -29,31 +29,40 @@ export const addManualExporterAddress = async (
   return await onAddManualExporterAddress(response, exporter);
 };
 
+const getFieldFromErrorKey = (errorKey: string): string => {
+  const parts = errorKey.split(".");
+  if (parts[0] === "error" && parts.length > 1) {
+    return parts[1];
+  }
+  return errorKey;
+};
+
 const onAddManualExporterAddress = async (response: Response, formData: Exporter): Promise<IExporter> => {
+  const data = await response.json();
   switch (response.status) {
     case 200:
     case 204:
-      return {
-        model: formData,
-        error: "",
-        errors: {},
-      };
-    case 400:
-      const data = await response.json();
-      return {
-        model: formData,
-        error: "invalid",
-        errors: Object.keys(data).map((key: string) => ({
-          key: key,
-          message: getErrorMessage(data[key]),
-        })),
-      };
-    case 403:
-      return {
-        ...(await response.json()),
-        unauthorised: true,
-      };
+      if (Array.isArray(data)) {
+        // New way: errors as array of strings
+        const errors = data.map((errorKey: string) => ({
+          key: getFieldFromErrorKey(errorKey),
+          message: getErrorMessage(errorKey),
+        }));
+        return {
+          model: formData,
+          error: "invalid",
+          errors,
+        };
+      } else {
+        // Success: object
+        return {
+          model: data,
+          error: "",
+          errors: [],
+        };
+      }
     default:
-      throw new Error(`Unexpected error: ${response.status}`);
+      // For 400, 403, etc., throw with status and data
+      throw { status: response.status, data };
   }
 };
