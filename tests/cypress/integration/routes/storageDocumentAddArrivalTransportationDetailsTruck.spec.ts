@@ -17,7 +17,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get(".govuk-heading-xl").contains("Truck arriving in the UK");
     cy.wait(250);
     cy.get("form").should(($form) => {
-      expect($form.find("input[type='text']")).to.have.lengthOf(6);
+      expect($form.find("input[type='text']")).to.have.lengthOf(7);
 
       const labelObjects = $form.find("label").map((i, el) => Cypress.$(el).text());
       const textObjects = $form.find("input[type='text']").map((i, el) => Cypress.$(el).val());
@@ -26,7 +26,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       const textinputs = textObjects.get();
       const hints = hintObjects.get();
       expect(textinputs).to.have.length(6);
-      expect(labels).to.have.length(10);
+      expect(labels).to.have.length(11);
       expect(labels).to.deep.eq([
         "Truck nationality",
         "Registration number",
@@ -35,6 +35,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
         "Where the consignment departs from",
         "Place of unloading",
         "Departure date",
+        "Container identification number (optional)",
         "Day",
         "Month",
         "Year",
@@ -47,6 +48,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
         "For example, Calais port, Calais-Dunkerque airport or the place the truck started its journey",
         "This is where the consignment was unloaded from the truck when arriving in the UK",
         "For example, 25 07 2025",
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
       ]);
     });
     cy.contains("button", "Save and continue").should("be.visible");
@@ -299,6 +301,43 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
     cy.url().should("include", storageFacilityUrl);
+  });
+
+  it("should allow adding and removing container fields up to 5", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportAllowed,
+    };
+
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+
+    // Add up to 4 additional containers (total 5)
+    for (let i = 0; i < 4; i++) {
+      cy.get('[data-testid="add-another-container"]').click({ force: true });
+    }
+
+    cy.get('input[name^="containerNumbers"]').should("have.length", 5);
+
+    // Add button should be hidden
+    cy.get('[data-testid="add-another-container"]').should("not.exist");
+
+    // Remove one
+    cy.get('[data-testid="remove-container-0"]').click({ force: true });
+    cy.get('input[name^="containerNumbers"]').should("have.length", 4);
+  });
+
+  it("should show client-side error for invalid truck container format", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportAllowed,
+    };
+
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+
+    // Type an invalid container identification and blur to trigger client-side validation
+    cy.get("input[name='containerNumbers.0']").type("ABC123", { force: true }).blur();
+
+    // Error should be visible in the error summary and next to the field
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Enter a shipping container number in the correct format/).should("be.visible");
   });
 });
 

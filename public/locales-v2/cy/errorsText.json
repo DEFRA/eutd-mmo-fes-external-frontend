@@ -68,6 +68,7 @@
   "ccAddTransportationDetailsDeparturePortOnlyNumLettersError": "Rhaid i O ble mae'r llwyth yn ymadael gynnwys llythrennau, rhifau, collnodau, cysylltnodau a bylchau yn unig",
   "ccContainerIdentificationNumberMaxLength": "Does dim modd i rif y cynhwysydd fod yn fwy na 150 nod",
   "ccContainerIdentificationNumberInvalidCharacters": "Rhaid i rif y cynhwysydd gynnwys dim ond llythrennau, rhifau a bylchau",
+  "ccShippingContainerInvalidFormat": "Rhowch rif cynhwysydd mewn fformat cywir. Rhaid iddo fod yn 11 nod: 3 llythyren, yna U, J, Z neu R, yna 7 rhif.",
   "sdTransportDepatureDateInvalidError": "Rhaid i'r dyddiad ymadael fod yn ddyddiad go iawn",
   "sdTransportDepatureDateRequiredError": "Rhowch y dyddiad ymadael",
   "sdTransportDepatureDateMaxError": "Rhaid i'r dyddiad ymadael fod ar neu cyn dyddiad heddiw",
