@@ -61,6 +61,10 @@ export const ContainerIdentificationNumber = ({
   let containerIdentificationLabel = "";
   if (labelKey) {
     containerIdentificationLabel = t(labelKey);
+  } else if (vehicleType === "containerVessel") {
+    containerIdentificationLabel = displayOptionalSuffix
+      ? t("addTransportationArrivalDetailsContainerIdentificationNumberOptional")
+      : t("addTransportationArrivalDetailsContainerIdentificationNumberContainerVessel");
   } else if (displayOptionalSuffix) {
     containerIdentificationLabel = t("addTransportationArrivalDetailsContainerIdentificationNumberOptional");
   } else {
@@ -71,6 +75,8 @@ export const ContainerIdentificationNumber = ({
     if (hintKey) return t(hintKey);
     if (vehicleType === "truck") return t("addTransportationDetailsContainerIdentificationNumberHintTruck");
     if (vehicleType === "train") return t("addTransportationDetailsContainerIdentificationNumberTrainHint");
+    if (vehicleType === "containerVessel")
+      return t("addTransportationArrivalDetailsContainerIdentificationNumberHintContainerVessel");
     return t("addTransportationArrivalDetailsContainerIdentificationNumberHint");
   };
 
@@ -80,7 +86,7 @@ export const ContainerIdentificationNumber = ({
         <div key={input.id} className="govuk-button-group" style={{ display: "flex", alignItems: "flex-end" }}>
           <FormInput
             containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
-            labelClassName={index === 0 ? "govuk-label" : "govuk-visually-hidden"}
+            labelClassName={index === 0 ? "govuk-label govuk-!-font-weight-bold" : "govuk-visually-hidden"}
             label={containerIdentificationLabel}
             hint={
               index === 0
