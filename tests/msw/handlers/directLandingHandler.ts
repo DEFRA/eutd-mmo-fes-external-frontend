@@ -16,6 +16,7 @@ import {
   GET_GEAR_CATEGORIES_URL,
   mockGetGearTypesByCategoriesUrl,
   GET_RFMO_AREAS_URL,
+  mockCountriesUrl,
 } from "~/urls.server";
 import directLandingType from "@/fixtures/landingsTypeApi/directLanding.json";
 import manualLandingType from "@/fixtures/landingsTypeApi/manualEntry.json";
@@ -43,6 +44,7 @@ import empty from "@/fixtures/empty.json";
 import getGearCategories from "@/fixtures/addLandings/getGearCategories.json";
 import getGearTypesByCategory from "@/fixtures/addLandings/getGearTypesByCategory.json";
 import getRfmos from "@/fixtures/directLanding/getRfmos.json";
+import countries from "@/fixtures/referenceDataApi/countries.json";
 
 let unauthorised = false;
 
@@ -63,6 +65,7 @@ const directLandingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.DirectLandingNoVessels]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingType))),
@@ -80,6 +83,7 @@ const directLandingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.DirectLandingUnauthorised]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingType))),
@@ -97,6 +101,7 @@ const directLandingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.DirectLandingEmpty]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingType))),
@@ -108,6 +113,7 @@ const directLandingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.DirectLandingErrors]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingType))),
@@ -119,6 +125,7 @@ const directLandingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.DirectLandingPageGuard]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualLandingType))),
@@ -128,6 +135,7 @@ const directLandingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.DirectLandingPageAllowed]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingType))),
@@ -150,6 +158,7 @@ const directLandingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.DirectLandingPageErrors]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingType))),
@@ -167,6 +176,7 @@ const directLandingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.status(500))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.DirectLandingPageGearTypeErrors]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingType))),
@@ -186,6 +196,7 @@ const directLandingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.DirectLandingValidationErrors]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingType))),
@@ -205,6 +216,7 @@ const directLandingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.DirectLandingEEZValidationErrors]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingType))),
@@ -224,6 +236,7 @@ const directLandingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.DirectLandingInvalidDatesNoVesselError]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingType))),
@@ -243,6 +256,7 @@ const directLandingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
 };
 
