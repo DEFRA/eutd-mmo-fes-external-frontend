@@ -64,9 +64,15 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
         </span>
         <strong className="govuk-warning-text__text">
           <span className="govuk-visually-hidden">{t("commonWarning")}</span>
-          {journey === "storageNotes"
-            ? t("commonAddExporterDetailsStorageNotesWarningContent")
-            : t("commonAddExporterDetailsWarningContent", { journeyText: t(journey) })}
+          {journey === "storageNotes" ? (
+            t("commonAddExporterDetailsStorageNotesWarningContent")
+          ) : (
+            <>
+              {t("commonAddExporterDetailsWarningContentLine1")}
+              <br />
+              {t("commonAddExporterDetailsWarningContentLine2", { journeyText: t(journey) })}
+            </>
+          )}
         </strong>
       </div>
       <div className="govuk-grid-row">
