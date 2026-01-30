@@ -12,7 +12,7 @@ import {
 import { useTranslation } from "react-i18next";
 import type { ITransport, ErrorResponse, ICountry } from "~/types";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
-import { displayErrorMessages, getMeta, scrollToId, TransportType } from "~/helpers";
+import { displayErrorMessagesInOrder, getMeta, scrollToId, TransportType, getContainerNumbers } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
 
@@ -32,7 +32,7 @@ const TruckTransportDetailsPage = () => {
     registrationNumber,
     departurePlace,
     freightBillNumber,
-    containerIdentificationNumber,
+    containerNumbers,
     nextUri,
     csrf,
     id,
@@ -52,6 +52,23 @@ const TruckTransportDetailsPage = () => {
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
+  const errorKeysInOrder = [
+    "nationalityOfVehicle",
+    "registrationNumber",
+    "containerNumbers.0",
+    "containerNumbers.1",
+    "containerNumbers.2",
+    "containerNumbers.3",
+    "containerNumbers.4",
+    "containerNumbers.5",
+    "containerNumbers.6",
+    "containerNumbers.7",
+    "containerNumbers.8",
+    "containerNumbers.9",
+    "departurePlace",
+    "freightBillNumber",
+  ];
+
   useEffect(() => {
     if (!isEmpty(errors)) {
       scrollToId("errorIsland");
@@ -62,7 +79,7 @@ const TruckTransportDetailsPage = () => {
 
   return (
     <Main backUrl={backUrl}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
+      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" action={actionUrl} csrf={csrf}>
@@ -77,9 +94,7 @@ const TruckTransportDetailsPage = () => {
               registrationNumber={!isEmpty(errors) ? actionData.registrationNumber : registrationNumber}
               departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
-              containerIdentificationNumber={
-                !isEmpty(errors) ? actionData.containerIdentificationNumber : containerIdentificationNumber
-              }
+              containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
               displayOptionalSuffix={displayOptionalSuffix}
               countries={countries}
             />
