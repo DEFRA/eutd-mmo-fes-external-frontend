@@ -138,7 +138,7 @@ const performProductSearch = (q: string, psData: ProcessingStatement): string[] 
 
 const buildRedirectUrl = (documentNumber: string, params: URLSearchParams): string => {
   const baseUrl = route("/create-processing-statement/:documentNumber/catch-added", {
-    documentNumber: documentNumber as string,
+    documentNumber,
   });
   const queryString = params.toString();
   return baseUrl + (queryString ? `?${queryString}` : "");
