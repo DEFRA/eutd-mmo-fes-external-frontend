@@ -69,12 +69,10 @@ describe("Add Transportation Details Train: Allowed", () => {
 
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
-    // Type an invalid container identification and blur to trigger client-side validation
-    cy.get("input[name='containerNumbers.0']").type("ABC123", { force: true }).blur();
-
-    // Error should be visible in the error summary and next to the field
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter a container identification number in the correct format/).should("be.visible");
+    // Client-side validation removed — ensure the input exists and no immediate error is shown
+    cy.get("input[name='containerNumbers.0']").should("exist").type("ABC123", { force: true }).blur();
+    cy.contains("h2", /^There is a problem$/).should("not.exist");
+    cy.contains("a", /^Enter a container identification number in the correct format/).should("not.exist");
   });
   it("should display error when railway bill number exceeds 15 chars", () => {
     const testParams: ITestParams = {
