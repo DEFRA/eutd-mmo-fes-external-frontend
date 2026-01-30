@@ -61,10 +61,9 @@ export const LandingDetailsSummary = ({
         idAttribute: "startDate-hint",
       },
       {
-        label: t("ccAddLandingVesselNameLabel", { ns: "checkYourInformation" }),
-        value: model?.vessel?.label,
-        hasChangeLink: true,
-        idAttribute: "vessel-label",
+        label: t("ccAddLandingDateLandedLabel", { ns: "checkYourInformation" }),
+        value: moment(model.dateLanded).format("D MMMM YYYY"),
+        idAttribute: "date-landed",
       },
       {
         label: t("ccAddLandingCatchAreaLabel", { ns: "checkYourInformation" }),
@@ -102,14 +101,10 @@ export const LandingDetailsSummary = ({
         idAttribute: "rfmo",
       },
       {
-        label: t("ccAddLandingDateLandedLabel", { ns: "checkYourInformation" }),
-        value: moment(model.dateLanded).format("D MMMM YYYY"),
-        idAttribute: "date-landed",
-      },
-      {
-        label: t("ccAddLandingExportWeightFieldLabel", { ns: "checkYourInformation" }),
-        value: `${model.exportWeight?.toFixed(2)}kg`,
-        idAttribute: "export-weight",
+        label: t("ccAddLandingVesselNameLabel", { ns: "checkYourInformation" }),
+        value: model?.vessel?.label,
+        hasChangeLink: true,
+        idAttribute: "vessel-label",
       },
       model?.gearCategory && {
         label: t("ccAddLandingGearCategoryFieldLabel", { ns: "checkYourInformation" }),
@@ -121,6 +116,11 @@ export const LandingDetailsSummary = ({
         label: t("ccAddLandingGearTypeFieldLabel", { ns: "checkYourInformation" }),
         value: model.gearType,
         idAttribute: "gear-type",
+      },
+      {
+        label: t("ccAddLandingExportWeightFieldLabel", { ns: "checkYourInformation" }),
+        value: `${model.exportWeight?.toFixed(2)}kg`,
+        idAttribute: "export-weight",
       },
     ].filter(Boolean);
 
