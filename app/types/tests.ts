@@ -45,6 +45,7 @@ export enum TestCaseId {
   PSProgressWithDescriptionOnlyProduct = "psProgressWithDescriptionOnlyProduct",
   PSProgressWithMixedProducts = "psProgressWithMixedProducts",
   PSProgressWithValidProducts = "psProgressWithValidProducts",
+  PSCatchAddedWithDescriptionOnlyProduct = "psCatchAddedWithDescriptionOnlyProduct",
 
   CCLandingsTypeNull = "ccLandingsTypeNull",
   CCLandingsTypeUnauthorised = "ccLandingsTypeUnauthorised",
@@ -606,6 +607,7 @@ export enum TestCaseId {
   PSCatchAddedTwoCatchesSameSpecies = "psCatchAddedTwoCatchesSameSpecies",
   PSCatchAddedOneValidTwoInvalidCatches = "psCatchAddedOneValidTwoInvalidCatches",
   PSCatchAddedManyMockCatches = "psCatchAddedManyMockCatches",
+  PSCatchAddedHasPlantDetails = "psCatchAddedHasPlantDetails",
   PSCheckYourInformationProductDescriptions = "psCheckYourInformationProductDescriptions",
   PSCheckYourInformationPageGuardCase = "psCheckYourInformationPageGuardCase",
   PSCheckYourInformationPageGuardCaseNoExporter = "psCheckYourInformationPageGuardCaseNoExporter",

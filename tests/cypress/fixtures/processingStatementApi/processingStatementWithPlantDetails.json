@@ -1,0 +1,44 @@
+{
+  "catches": [
+    {
+      "_id": "6094c7ddb8eca50013adf120",
+      "species": "Atlantic cod",
+      "speciesCode": "COD",
+      "state": "FRE",
+      "presentation": "WHL",
+      "catchCertificateNumber": "GBR-2023-CC-12EE387DB",
+      "totalWeightLanded": 120.5,
+      "exportWeightBeforeProcessing": 100.0,
+      "exportWeightAfterProcessing": 85.0,
+      "productDescription": "Frozen whole cod",
+      "productId": "product-1"
+    }
+  ],
+  "products": [
+    {
+      "id": "product-1",
+      "description": "Processed cod fillets"
+    }
+  ],
+  "validationErrors": [],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": "Processed cod products",
+  "healthCertificateDate": null,
+  "healthCertificateNumber": null,
+  "personResponsibleForConsignment": "John Doe",
+  "plantApprovalNumber": "UK-12345-EC",
+  "plantName": "North Sea Processing Plant",
+  "plantAddressOne": "123 Harbor Street",
+  "plantBuildingName": "",
+  "plantBuildingNumber": "",
+  "plantSubBuildingName": "",
+  "plantStreetName": "Harbor Street",
+  "plantCounty": "Yorkshire",
+  "plantCountry": "United Kingdom",
+  "plantTownCity": "Hull",
+  "plantPostcode": "HU1 2AB",
+  "dateOfAcceptance": null,
+  "exportedTo": null,
+  "_plantDetailsUpdated": false
+}

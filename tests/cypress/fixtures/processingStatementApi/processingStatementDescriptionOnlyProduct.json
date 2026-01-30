@@ -1,0 +1,45 @@
+{
+  "catches": [
+    {
+      "_id": "63979a023fc11363b1071358",
+      "species": "Atlantic cod (COD)",
+      "speciesCode": "COD",
+      "catchCertificateNumber": "GBR-2022-CC-VALID123",
+      "id": "CC-1-1670865091",
+      "scientificName": "Gadus morhua",
+      "totalWeightLanded": "100",
+      "exportWeightBeforeProcessing": "90",
+      "exportWeightAfterProcessing": "80",
+      "productId": "GBR-2023-PS-VALID-PRODUCT"
+    }
+  ],
+  "validationErrors": [],
+  "error": "",
+  "addAnotherCatch": "No",
+  "consignmentDescription": "",
+  "products": [
+    {
+      "id": "GBR-2023-PS-VALID-PRODUCT",
+      "description": "Valid Product",
+      "commodityCode": "03011100"
+    },
+    {
+      "id": "_product_id_0",
+      "description": "Description Only Product",
+      "commodityCode": "16041210"
+    }
+  ],
+  "healthCertificateDate": "30/06/2022",
+  "healthCertificateNumber": "20/2/123456",
+  "personResponsibleForConsignment": "Test Person",
+  "plantApprovalNumber": "TEST123",
+  "plantName": "Test Plant",
+  "plantAddressOne": "Test Address",
+  "plantTownCity": "Test City",
+  "plantPostcode": "TE5 T12",
+  "dateOfAcceptance": "21/11/2022",
+  "exportedTo": {
+    "officialCountryName": "France"
+  },
+  "_plantDetailsUpdated": false
+}
