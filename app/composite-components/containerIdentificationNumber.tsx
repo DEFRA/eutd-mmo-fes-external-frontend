@@ -40,47 +40,7 @@ export const ContainerIdentificationNumber = ({
       : [{ id: generateId(), value: "" }]
   );
 
-  const [clientErrors, setClientErrors] = useState<Record<string, string>>({});
-
-  const TRAIN_REGEX = /^[A-Z]{4}\d{7}$/i;
-  const TRUCK_REGEX = /^[A-Z]{3}[UJZR]\d{7}$/i;
-
-  const validateContainerValue = (id: string, value: string) => {
-    const trimmed = value?.trim() ?? "";
-    if (trimmed.length === 0) {
-      // clear any existing client-side error for this id
-      setClientErrors((prev) => {
-        if (!prev[id]) return prev;
-        const copy = { ...prev };
-        delete copy[id];
-        return copy;
-      });
-      return true;
-    }
-
-    if (vehicleType === "train") {
-      if (!TRAIN_REGEX.test(trimmed)) {
-        setClientErrors((prev) => ({ ...prev, [id]: "ccContainerIdentificationNumberInvalidFormat" }));
-        return false;
-      }
-    }
-
-    if (vehicleType === "truck") {
-      if (!TRUCK_REGEX.test(trimmed)) {
-        setClientErrors((prev) => ({ ...prev, [id]: "ccShippingContainerInvalidFormat" }));
-        return false;
-      }
-    }
-
-    // clear any existing client-side error for this id
-    setClientErrors((prev) => {
-      if (!prev[id]) return prev;
-      const copy = { ...prev };
-      delete copy[id];
-      return copy;
-    });
-    return true;
-  };
+  // client-side regex validation removed — rely on server-side validation
 
   const handleAddContainer = () => {
     if (containerInputs.length < maximumContainers) {
@@ -149,18 +109,15 @@ export const ContainerIdentificationNumber = ({
               value: (isHydrated ? input.value : actionData[`containerNumbers.${index}`] ?? input.value) as string,
               id: `containerNumbers.${index}`,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(input.id, e.target.value),
-              onBlur: (e: React.FocusEvent<HTMLInputElement>) =>
-                validateContainerValue(input.id, e.target.value as string),
+              onBlur: undefined,
             }}
             errorProps={{
               className: getErrorMessageClassName(!isEmpty(errors?.[`containerNumbers.${index}`])),
             }}
             staticErrorMessage={
-              clientErrors[input.id]
-                ? t(clientErrors[input.id], { ns: "errorsText" })
-                : errors?.[`containerNumbers.${index}`]?.message
-                  ? t(errors[`containerNumbers.${index}`].message, { ns: "errorsText" })
-                  : undefined
+              errors?.[`containerNumbers.${index}`]?.message
+                ? t(errors[`containerNumbers.${index}`].message, { ns: "errorsText" })
+                : undefined
             }
             errorPosition={ErrorPosition.AFTER_LABEL}
             containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.[`containerNumbers.${index}`]))}
