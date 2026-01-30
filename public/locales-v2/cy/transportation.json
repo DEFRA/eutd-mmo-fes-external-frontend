@@ -88,6 +88,8 @@
   "addTransportationArrivalDetailsContainerIdentificationNumberOptional": "Rhif adnabod y cynhwysydd (dewisol)",
   "addTransportationArrivalDetailsContainerIdentificationNumber": "Rhif adnabod y cynhwysydd",
   "addTransportationArrivalDetailsContainerIdentificationNumberHint": "Er enghraifft, ABCD1234567",
+  "addTransportationArrivalDetailsContainerIdentificationNumberContainerVessel": "Rhif adnabod cynhwysydd llong",
+  "addTransportationArrivalDetailsContainerIdentificationNumberHintContainerVessel": "Rhowch y rhif adnabod a ddangosir ar y cynhwysydd llong. Er enghraifft ABCJ0123456",
   "addTransportationDetailsContainerIdentificationNumberHintTruckTrain": "Nodwch rif adnabod y cynhwysydd neu'r trelar. Er enghraifft, ABCD1234567.",
   "addTransportationArrivalDetailsTruckPlaceOfUnloading": "Man dadlwytho",
   "addTransportationArrivalDetailsTruckPlaceOfUnloadingHint": "Dyma lle cafodd y llwyth ei ddadlwytho o'r {{vehicle}} wrth gyrraedd y DU.",
