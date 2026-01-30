@@ -35,6 +35,7 @@ describe("Add Transportation Details Train: Allowed", () => {
         "Where the consignment departs from",
         "Place of unloading",
         "Departure date",
+        "Shipping container identification number (optional)",
         "Day",
         "Month",
         "Year",
@@ -46,6 +47,7 @@ describe("Add Transportation Details Train: Allowed", () => {
         "For example, Calais port, Calais-Dunkerque airport or the place the train started its journey",
         "This is where the consignment was unloaded from the train when arriving in the UK",
         "For example, 25 07 2025",
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456"
       ]);
     });
     cy.contains("button", "Save and continue").should("be.visible");
