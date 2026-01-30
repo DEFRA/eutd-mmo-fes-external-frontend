@@ -72,7 +72,7 @@ describe("Save and Continue button - Happy path", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
+    cy.get('input[name="containerNumber"]').type("Container", { force: true });
     cy.get("#vesselName").type("Vessel", { force: true });
     cy.get("#flagState").type("flag State", { force: true });
     cy.get("#departurePlace").type("Place export", { force: true });
@@ -86,7 +86,7 @@ describe("Save and Continue button - Happy path", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
+    cy.get('input[name="containerNumber"]').type("Container", { force: true });
     cy.get("#vesselName").type("Vessel", { force: true });
     cy.get("#flagState").type("flag State", { force: true });
     cy.get("#departurePlace").type("Place export", { force: true });
