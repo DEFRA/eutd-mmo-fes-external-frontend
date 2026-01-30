@@ -71,6 +71,7 @@ export const TransportationModeDetails = ({
   departurePlace,
   freightBillNumber,
   containerIdentificationNumber,
+  containerNumbers,
   displayOptionalSuffix,
   errors,
   countries,
@@ -185,12 +186,14 @@ export const TransportationModeDetails = ({
           countries={countries}
           t={t}
           minCharsBeforeSearch={2}
+          labelClassName="govuk-label govuk-!-font-weight-bold"
         />
       )}
       {vehicle === "truck" && (
         <>
           <FormInput
             containerClassName="govuk-form-group  govuk-!-width-one-half"
+            labelClassName="govuk-label govuk-!-font-weight-bold"
             label={t("addTransportationDetailsRegistrationNumber")}
             name="registrationNumber"
             type="text"
@@ -215,10 +218,12 @@ export const TransportationModeDetails = ({
             hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
             hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
           />
-          <ContainerIdentificationNumberField
-            containerIdentificationNumber={containerIdentificationNumber ?? undefined}
+          <ContainerIdentificationNumber
+            containers={containerNumbers}
+            maximumContainers={10}
             errors={errors}
-            t={t}
+            displayOptionalSuffix={displayOptionalSuffix}
+            vehicleType="truck"
             labelKey={"addTransportationDetailsContainerIdentificationNumberTruck"}
             hintKey={"addTransportationDetailsContainerIdentificationNumberHintTruck"}
           />
@@ -247,6 +252,7 @@ export const TransportationModeDetails = ({
       )}
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
+        labelClassName="govuk-label govuk-!-font-weight-bold"
         label={t("addTransportationDetailsPlaceExportLeavesDepartureCountry")}
         name="departurePlace"
         type="text"
@@ -298,6 +304,7 @@ export const TransportationModeDetails = ({
         hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
         hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
         containerClassName="govuk-form-group govuk-!-width-one-half"
+        labelClassName="govuk-label govuk-!-font-weight-bold"
         label={
           displayOptionalSuffix
             ? t("addTransportationDetailsFreightBillNumberOptional")
