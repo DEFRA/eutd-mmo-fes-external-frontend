@@ -120,6 +120,119 @@ describe("Check Your Information (Summary) page: UI", () => {
     });
   });
 
+  it("should render landings section fields in the expected order", () => {
+    cy.get("dl")
+      .eq(2)
+      .find("dt.govuk-summary-list__key")
+      .then(($keys) => {
+        const texts = $keys.toArray().map((el) => (el.textContent ?? "").trim().toLowerCase());
+
+        const productHeaderFields = ["species", "state", "presentation", "commodity code"];
+        const landingFieldOrder = [
+          "start date",
+          "date landed",
+          "catch area",
+          "high seas area",
+          "exclusive economic zone",
+          "rfmo",
+          "vessel name",
+          "gear category",
+          "gear type",
+          "export weight",
+        ];
+
+        // Find indices of each product (by 'species') to split per-product sections
+        const speciesIndices: number[] = [];
+        texts.forEach((t, i) => {
+          if (t.includes("species")) speciesIndices.push(i);
+        });
+
+        // Also find the index of the total export weight to bound the last product
+        const totalIndex = texts.findIndex((t) => t.includes("total export weight"));
+
+        // For each product section, validate header order exists and then validate each landing group
+        speciesIndices.forEach((startIdx, prodIdx) => {
+          const endIdx =
+            prodIdx + 1 < speciesIndices.length
+              ? speciesIndices[prodIdx + 1]
+              : totalIndex > -1
+                ? totalIndex
+                : texts.length;
+          const section = texts.slice(startIdx, endIdx);
+
+          // Check product header fields exist in order within section
+          let lastH = -1;
+          productHeaderFields.forEach((h) => {
+            const idx = section.findIndex((s) => s.includes(h));
+            expect(idx, `${h} should exist in product section`).to.be.greaterThan(-1);
+            expect(idx, `${h} should come after previous header`).to.be.greaterThan(lastH);
+            lastH = idx;
+          });
+
+          // Landing rows start after the commodity code header
+          const commodityIdx = section.findIndex((s) => s.includes("commodity code"));
+          if (commodityIdx === -1) return; // nothing to check
+
+          const landingRows = section.slice(commodityIdx + 1);
+          if (landingRows.length === 0) return; // no landings for this product
+
+          // Split landingRows into groups using 'export weight' as landing delimiter
+          const landingGroups: string[][] = [];
+          let currentGroup: string[] = [];
+          landingRows.forEach((label) => {
+            currentGroup.push(label);
+            if (label.includes("export weight")) {
+              landingGroups.push(currentGroup);
+              currentGroup = [];
+            }
+          });
+          if (currentGroup.length > 0) landingGroups.push(currentGroup);
+
+          // For each landing group, assert the relative order of landing fields present
+          landingGroups.forEach((group, lgIndex) => {
+            const present = landingFieldOrder.filter((f) => group.some((g) => g.includes(f)));
+            let last = -1;
+            present.forEach((f) => {
+              const idx = group.findIndex((g) => g.includes(f));
+              expect(idx, `product ${prodIdx} landing ${lgIndex} ${f} should be present`).to.be.greaterThan(-1);
+              expect(idx, `product ${prodIdx} landing ${lgIndex} ${f} should come after previous`).to.be.greaterThan(
+                last
+              );
+              last = idx;
+            });
+          });
+        });
+      });
+  });
+
+  it("should show transport warning with icon and correct text", () => {
+    const warning =
+      "You may be liable to investigation and enforcement action, including prosecution, if you knowingly submit false, misleading, or otherwise inaccurate data.";
+
+    cy.get(".govuk-warning-text")
+      .should("be.visible")
+      .within(() => {
+        cy.get(".govuk-warning-text__icon").should("be.visible");
+        cy.contains(warning).should("be.visible");
+      });
+  });
+
+  it("should display 'Now create your catch certificate' guidance and Accept button", () => {
+    cy.contains("h2", "Now create your catch certificate").should("be.visible");
+    cy.contains("By submitting this catch certificate, you confirm that").should("be.visible");
+    cy.contains(
+      "you understand that you are under a duty not to knowingly submit information that is false or otherwise inaccurate"
+    ).should("be.visible");
+    cy.contains("the fisheries administrations may undertake checks on the accuracy and validity of the data").should(
+      "be.visible"
+    );
+    cy.contains(
+      "you understand that you may be liable to investigation and potentially to enforcement action, including prosecution, if you knowingly submit false, misleading, or otherwise inaccurate data"
+    ).should("be.visible");
+
+    cy.get("[data-testid=create-cc-button]").should("contain", "Accept and create catch certificate");
+  });
+
   describe("Welsh translations", () => {
     it("should render translated CMR field when set for transport", () => {
       cy.get('a[hreflang="cy"][lang="cy"]').click();
@@ -190,6 +303,36 @@ describe("Check Your Information (Summary) page: UI", () => {
         .find('a:contains("Change")')
         .should("have.attr", "href")
         .and("include", "#highSeasArea-hint");
+    });
+
+    it("translates the warning text to Welsh", () => {
+      const welshWarning =
+        "Efallai y byddwch chi'n agored i ymchwilio a chamau gorfodi, gan gynnwys eich erlyn, os byddwch chi'n fwriadol yn cyflwyno data sy'n ffug, yn gamarweiniol neu'n anghywir fel arall.";
+      cy.get(".govuk-warning-text").within(() => {
+        cy.contains(welshWarning).should("be.visible");
+      });
+    });
+
+    it("renders the 'Now create your catch certificate' section in Welsh", () => {
+      cy.contains("h2", "Nawr lluniwch eich tystysgrif dalfa").should("be.visible");
+      cy.contains("Drwy gyflwyno'r dystysgrif dalfa yma, rydych chi'n cadarnhau").should("be.visible");
+    });
+
+    it("renders the renamed 'Place export leaves the departure country' label in Welsh", () => {
+      const welshLabel = "Y fan lle mae'r allforion yn gadael y wlad ymadael";
+      const normalize = (s: string) =>
+        s
+          .toLowerCase()
+          .replace(/["'’`]/g, "")
+          .replace(/\s+/g, " ")
+          .trim();
+      const expected = normalize(welshLabel);
+
+      cy.get("dt.govuk-summary-list__key").then(($keys) => {
+        const texts = $keys.toArray().map((el) => normalize((el.textContent ?? "").trim()));
+
+        expect(texts.some((t) => t.includes(expected))).to.equal(true);
+      });
     });
   });
 });
@@ -990,7 +1133,7 @@ describe("Check Your Information (Summary) page: Plane transport with no freight
   });
 
   it("should render departure place", () => {
-    cy.contains("dt.govuk-summary-list__key", "Place export leaves the UK")
+    cy.contains("dt.govuk-summary-list__key", "Place export leaves the departure country")
       .next("dd")
       .should("have.text", "Joelle Rhodes");
   });
@@ -1029,7 +1172,7 @@ describe("Check Your Information (Summary) page: Container vessel transport with
   });
 
   it("should render departure place", () => {
-    cy.contains("dt.govuk-summary-list__key", "Place export leaves the UK")
+    cy.contains("dt.govuk-summary-list__key", "Place export leaves the departure country")
       .next("dd")
       .should("have.text", "Port of Southampton");
   });
