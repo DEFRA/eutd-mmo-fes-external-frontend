@@ -85,11 +85,6 @@ export const TransportationModeDetails = ({
 
   return (
     <>
-      {(() => {
-        // compute label and hint keys for container identification based on vehicle
-        // to avoid nested ternary expressions inline
-        // these will be used when rendering the ContainerIdentificationNumber component
-      })()}
       {legendTitle && (
         <legend>
           <Title title={legendTitle} />
@@ -161,7 +156,11 @@ export const TransportationModeDetails = ({
       {(vehicle === "containerVessel" || vehicle === "plane") && (
         <FormInput
           containerClassName="govuk-form-group"
-          label={t("addTransportationDetailsContainerIdentificationText")}
+          label={
+            vehicle === "containerVessel"
+              ? t("addTransportationDetailsContainerIdentificationText")
+              : t("addTransportationDetailsContainerIdentificationNumberText")
+          }
           name="containerNumber"
           type="text"
           inputClassName={classNames("govuk-input", {
@@ -170,6 +169,16 @@ export const TransportationModeDetails = ({
           inputProps={{
             defaultValue: containerNumber,
             id: "containerNumber",
+            "aria-describedby": "hint-containerNumber",
+          }}
+          hint={{
+            id: "hint-containerNumber",
+            position: "above",
+            text:
+              vehicle === "containerVessel"
+                ? t("addTransportationDetailsContainerIdentificationHint")
+                : t("addTransportationDetailsContainerIdentificationNumberHint"),
+            className: "govuk-hint govuk-!-margin-bottom-0",
           }}
           errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.containerNumber)) }}
           staticErrorMessage={t(errors?.containerNumber?.message, { ns: "errorsText" })}

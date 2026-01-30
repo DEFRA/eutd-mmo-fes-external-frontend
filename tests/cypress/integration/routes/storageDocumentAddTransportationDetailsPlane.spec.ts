@@ -102,7 +102,6 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the flight number$/).should("be.visible");
-    // cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
   });
   it("should navigate to sd dashboard page on click of save as draft button", () => {
