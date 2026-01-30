@@ -161,7 +161,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                 />
               )}
               <SummaryListRow
-                keyText={t("addTransportationDetailsPlaceExportLeavesUK", { ns: "transportation" })}
+                keyText={t("addTransportationDetailsPlaceExportLeavesDepartureCountry", { ns: "transportation" })}
                 value={transport.departurePlace}
                 actions={generateActions(
                   isLocked,
@@ -231,7 +231,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
             )}
           />
           <SummaryListRow
-            keyText={t("addTransportationDetailsPlaceExportLeavesUK", { ns: "transportation" })}
+            keyText={t("addTransportationDetailsPlaceExportLeavesDepartureCountry", { ns: "transportation" })}
             value={transport.departurePlace}
             actions={generateActions(
               isLocked,
@@ -283,7 +283,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
             )}
           />
           <SummaryListRow
-            keyText={t("addTransportationDetailsPlaceExportLeavesUK", { ns: "transportation" })}
+            keyText={t("addTransportationDetailsPlaceExportLeavesDepartureCountry", { ns: "transportation" })}
             value={transport.departurePlace}
             actions={generateActions(
               isLocked,
@@ -388,7 +388,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
             )}
           />
           <SummaryListRow
-            keyText={t("addTransportationDetailsPlaceExportLeavesUK", { ns: "transportation" })}
+            keyText={t("addTransportationDetailsPlaceExportLeavesDepartureCountry", { ns: "transportation" })}
             value={transport.departurePlace}
             actions={generateActions(
               isLocked,
@@ -803,6 +803,15 @@ const CheckYourInformation = () => {
             <span className="govuk-visually-hidden">Warning</span>
             {t("ccSummaryPageWarning", { ns: "checkYourInformation" })}
           </strong>
+        </div>
+        <div className="govuk-!-margin-top-6">
+          <h2 className="govuk-heading-l">{t("ccCreateCertificateHeader", { ns: "checkYourInformation" })}</h2>
+          <p>{t("ccCreateCertificateIntro", { ns: "checkYourInformation" })}</p>
+          <ul className="govuk-list govuk-list--bullet">
+            <li>{t("ccCreateCertificateListOne", { ns: "checkYourInformation" })}</li>
+            <li>{t("ccCreateCertificateListTwo", { ns: "checkYourInformation" })}</li>
+            <li>{t("ccCreateCertificateListThree", { ns: "checkYourInformation" })}</li>
+          </ul>
         </div>
         <input type="hidden" name="journey" value={journey} />
         <input type="hidden" name="noOfVessels" value={totalNumberOfVessels} />

@@ -59,7 +59,7 @@
   "sdTransportPlaneFlightNumber": "Flight number",
   "sdTransportPlaneContainerNumber": "Container identification number (can be multiple, up to 5)",
   "sdNotProvided": "Not provided",
-  "sdTransportLeavePlace": "Place export leaves the UK",
+  "sdTransportLeavePlace": "Place export leaves the departure country",
   "sdTransportRailNumber": "Railway number",
   "sdCheckYourInformationVesselName": "Vessel name",
   "sdCheckYourInformationFlagState": "Flag state",
