@@ -137,7 +137,7 @@ const performProductSearch = (q: string, psData: ProcessingStatement): string[] 
 
 const buildRedirectUrl = (documentNumber: string, params: URLSearchParams): string => {
   const baseUrl = route("/create-processing-statement/:documentNumber/catch-added", {
-    documentNumber: documentNumber as string,
+    documentNumber,
   });
   const queryString = params.toString();
   return baseUrl + (queryString ? `?${queryString}` : "");
@@ -181,7 +181,7 @@ const handleFilterAction = async (
     if (q) {
       existingParams.set("q", q);
     }
-    return redirect(buildRedirectUrl(documentNumber as string, existingParams), {
+    return redirect(buildRedirectUrl(documentNumber!, existingParams), {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
