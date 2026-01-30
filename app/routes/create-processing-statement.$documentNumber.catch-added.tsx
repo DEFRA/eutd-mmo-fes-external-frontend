@@ -98,6 +98,50 @@ const applyMatchedFromSession = (session: any, psData: ProcessingStatement, hasA
   }
 };
 
+const getExistingParams = (url: URL | null): URLSearchParams => {
+  const existingParams = new URLSearchParams();
+  if (!url) return existingParams;
+
+  url.searchParams.forEach((value, key) => {
+    if (key !== "q" && key !== "pageNo") {
+      existingParams.set(key, value);
+    }
+  });
+  return existingParams;
+};
+
+const performCatchSearch = (q: string, psData: ProcessingStatement): string[] => {
+  if (!q || !Array.isArray(psData.catches)) return [];
+
+  const qLower = q.toLowerCase();
+  const matchingCatches = psData.catches.filter((ctch: Catch) => {
+    const species = (ctch.species ?? "").toString().toLowerCase();
+    const speciesCode = (ctch.speciesCode ?? "").toString().toLowerCase();
+    const productDescription = (ctch.productDescription ?? "").toString().toLowerCase();
+    return species.includes(qLower) || speciesCode.includes(qLower) || productDescription.includes(qLower);
+  });
+  return matchingCatches.map((c: Catch) => c._id).filter((id): id is string => Boolean(id));
+};
+
+const performProductSearch = (q: string, psData: ProcessingStatement): string[] => {
+  if (!q || !Array.isArray(psData.products)) return [];
+
+  const qLower = q.toLowerCase();
+  const matchingProducts = psData.products.filter((product: ProcessingStatementProduct) => {
+    const productDesc = (product.description ?? "").toString().toLowerCase();
+    return productDesc.includes(qLower);
+  });
+  return matchingProducts.map((p: ProcessingStatementProduct) => p.id).filter((id): id is string => Boolean(id));
+};
+
+const buildRedirectUrl = (documentNumber: string, params: URLSearchParams): string => {
+  const baseUrl = route("/create-processing-statement/:documentNumber/catch-added", {
+    documentNumber: documentNumber as string,
+  });
+  const queryString = params.toString();
+  return baseUrl + (queryString ? `?${queryString}` : "");
+};
+
 const handleFilterAction = async (
   values: Record<string, unknown>,
   session: any,
@@ -106,51 +150,25 @@ const handleFilterAction = async (
 ): Promise<Response | null> => {
   const q = (values.q as string) ?? "";
   const actionType = (values.actionType as string) ?? "";
+  const url = request ? new URL(request.url) : null;
+  const existingParams = getExistingParams(url);
 
   if (actionType === "reset") {
     session.unset("matchCatchIds");
     session.unset("matchCatches");
     session.unset("matchQuery");
     session.unset("matchProductIds");
-    const resetParams = existingParams.toString();
-    return redirect(
-      route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }),
-      {
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      }
-    );
+    return redirect(buildRedirectUrl(documentNumber as string, existingParams), {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   }
 
   if (actionType === "search") {
-    const qLower = q.toLowerCase();
-    const matchingCatchIds: string[] = [];
-    const matchingProductIds: string[] = [];
+    const matchingCatchIds = performCatchSearch(q, psData);
+    const matchingProductIds = performProductSearch(q, psData);
 
-    // Search in catches if they exist
-    if (q && Array.isArray(psData.catches)) {
-      const matchingCatches = psData.catches.filter((ctch: Catch) => {
-        const species = (ctch.species ?? "").toString().toLowerCase();
-        const speciesCode = (ctch.speciesCode ?? "").toString().toLowerCase();
-        const productDescription = (ctch.productDescription ?? "").toString().toLowerCase();
-        return species.includes(qLower) || speciesCode.includes(qLower) || productDescription.includes(qLower);
-      });
-      matchingCatchIds.push(...matchingCatches.map((c: Catch) => c._id).filter((id): id is string => Boolean(id)));
-    }
-
-    // Also search in product descriptions
-    if (q && Array.isArray(psData.products)) {
-      const matchingProducts = psData.products.filter((product: ProcessingStatementProduct) => {
-        const productDesc = (product.description ?? "").toString().toLowerCase();
-        return productDesc.includes(qLower);
-      });
-      matchingProductIds.push(
-        ...matchingProducts.map((p: ProcessingStatementProduct) => p.id).filter((id): id is string => Boolean(id))
-      );
-    }
-
-    // Store results
     session.set("matchCatchIds", matchingCatchIds);
     session.set("matchQuery", q);
     if (matchingProductIds.length > 0) {
@@ -159,16 +177,14 @@ const handleFilterAction = async (
       session.unset("matchProductIds");
     }
 
-    const searchParams = q ? `?q=${encodeURIComponent(q)}` : "";
-    return redirect(
-      route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }) +
-        searchParams,
-      {
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      }
-    );
+    if (q) {
+      existingParams.set("q", q);
+    }
+    return redirect(buildRedirectUrl(documentNumber as string, existingParams), {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
   }
 
   return null;
