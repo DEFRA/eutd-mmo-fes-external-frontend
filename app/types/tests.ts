@@ -76,6 +76,7 @@ export enum TestCaseId {
   CCAddExporterDetailsSaveAsDraft = "CCAddExporterDetailsSaveAsDraft",
   CCAddExporterDetailsFailsWith403 = "CCAddExporterDetailsFailsWith403",
   CCAddExporterDetailsFailsWithErrors = "CCAddExporterDetailsFailsWithErrors",
+  CCAddExporterDetailsFailsWithExporterFullNameError = "CCAddExporterDetailsFailsWithExporterFullNameError",
   CCAddExporterDetails403 = "CCAddExporterDetails403",
 
   PSAddExporterDetailsEmpty = "psAddExporterDetailsEmpty",
