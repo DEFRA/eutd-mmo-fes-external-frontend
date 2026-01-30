@@ -727,8 +727,8 @@ describe("Check Your Information (Summary) page: Manual Landing render container
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.contains("dt", "Container identification number").should("be.visible");
-    cy.contains("dt", "Container identification number").next("dd").should("contain", "CONTAINER123");
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
+    cy.contains("dt", "Shipping container identification number").next("dd").should("contain", "CONTAINER123");
   });
 
   it("should link to the truck transportation page to change the container identification number", () => {
@@ -750,8 +750,8 @@ describe("Check Your Information (Summary) page: Manual Landing render container
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.contains("dt", "Container identification number").should("be.visible");
-    cy.contains("dt", "Container identification number").next("dd").should("contain", "CONTAINER123");
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
+    cy.contains("dt", "Shipping container identification number").next("dd").should("contain", "CONTAINER123");
   });
 
   it("should link to the train transportation page to change the container identification number", () => {
@@ -773,7 +773,7 @@ describe("Check Your Information (Summary) page: Manual Landing render container
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.contains("dt", "Container identification number").should("not.exist");
+    cy.contains("dt", "Shipping container identification number").should("not.exist");
   });
 });
 
@@ -785,8 +785,8 @@ describe("Check Your Information (Summary) page: Manual Landing when JavaScript 
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
 
-    cy.contains("dt", "Container identification number").should("be.visible");
-    cy.contains("dt", "Container identification number").next("dd").should("contain", "CONTAINER123");
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
+    cy.contains("dt", "Shipping container identification number").next("dd").should("contain", "CONTAINER123");
     cy.get('[data-testid="change-container-truck"]')
       .should("have.attr", "href")
       .and("include", "/add-transportation-details-truck")
@@ -800,8 +800,8 @@ describe("Check Your Information (Summary) page: Manual Landing when JavaScript 
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
 
-    cy.contains("dt", "Container identification number").should("be.visible");
-    cy.contains("dt", "Container identification number").next("dd").should("contain", "CONTAINER123");
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
+    cy.contains("dt", "Shipping container identification number").next("dd").should("contain", "CONTAINER123");
     cy.get('[data-testid="change-container-train"]')
       .should("have.attr", "href")
       .and("include", "/add-transportation-details-train")
@@ -1023,7 +1023,7 @@ describe("Check Your Information (Summary) page: Container vessel transport with
   });
 
   it("should render container identification number", () => {
-    cy.contains("dt.govuk-summary-list__key", "Container identification number")
+    cy.contains("dt.govuk-summary-list__key", "Shipping container identification number")
       .next("dd")
       .should("have.text", "CONT5678");
   });
@@ -1817,7 +1817,7 @@ describe("Check Your Information: Container vessel transport details", () => {
   });
 
   it("should render container identification number for container vessel", () => {
-    cy.contains("dt", "Container identification number").should("be.visible");
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
   });
 
   it("should render place export leaves UK for container vessel", () => {
