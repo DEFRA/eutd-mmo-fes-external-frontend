@@ -6,14 +6,16 @@ export interface IErrorSummaryProps {
   errors: IError[];
   containerClassName?: string;
   linkData?: LinkData[];
+  translationNs?: string;
 }
 
 export const ErrorSummary = ({
   errors = [],
   containerClassName = "",
   linkData,
+  translationNs = "errorsText",
 }: React.PropsWithChildren<IErrorSummaryProps>) => {
-  const { t } = useTranslation(["errorsText", "common"]);
+  const { t } = useTranslation(["errorsText", "common", translationNs]);
 
   const onChangeHandler: (e: React.FormEvent<HTMLAnchorElement>) => void = (e: React.FormEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -46,8 +48,8 @@ export const ErrorSummary = ({
                   {...(!hasLinkData && { onClick: onChangeHandler })}
                 >
                   {error.value
-                    ? t(error.message, { ...error.value, interpolation: { escapeValue: false } })
-                    : t(error.message)}
+                    ? t(error.message, { ns: translationNs, ...error.value, interpolation: { escapeValue: false } })
+                    : t(error.message, { ns: translationNs })}
                 </a>
               </li>
             );
