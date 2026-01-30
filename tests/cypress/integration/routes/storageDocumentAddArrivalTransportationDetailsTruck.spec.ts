@@ -17,7 +17,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get(".govuk-heading-xl").contains("Truck arriving in the UK");
     cy.wait(250);
     cy.get("form").should(($form) => {
-      expect($form.find("input[type='text']")).to.have.lengthOf(7);
+      expect($form.find("input[type='text']")).to.have.lengthOf(6);
 
       const labelObjects = $form.find("label").map((i, el) => Cypress.$(el).text());
       const textObjects = $form.find("input[type='text']").map((i, el) => Cypress.$(el).val());
@@ -332,12 +332,13 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    // Type an invalid container identification and blur to trigger client-side validation
+    // Type an invalid container identification and blur — client-side validation removed,
+    // so there should be no immediate error summary shown.
     cy.get("input[name='containerNumbers.0']").type("ABC123", { force: true }).blur();
 
-    // Error should be visible in the error summary and next to the field
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter a shipping container number in the correct format/).should("be.visible");
+    // No client-side error summary should be shown
+    cy.contains("h2", /^There is a problem$/).should("not.exist");
+    cy.contains("a", /^Enter a shipping container number in the correct format/).should("not.exist");
   });
 });
 
