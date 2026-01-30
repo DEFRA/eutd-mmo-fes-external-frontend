@@ -62,6 +62,20 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.url().should("include", "/forbidden");
   });
 
+  it("should show client-side error for invalid train container format", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportAllowed,
+    };
+
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Type an invalid container identification and blur to trigger client-side validation
+    cy.get("input[name='containerNumbers.0']").type("ABC123", { force: true }).blur();
+
+    // Error should be visible in the error summary and next to the field
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Enter a container identification number in the correct format/).should("be.visible");
+  });
   it("should display error when railway bill number exceeds 15 chars", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsRailwayBillNumber,

@@ -40,6 +40,26 @@ export const ContainerIdentificationNumber = ({
       : [{ id: generateId(), value: "" }]
   );
 
+  const [clientErrors, setClientErrors] = useState<Record<string, string>>({});
+
+  const CONTAINER_REGEX = /^[A-Z]{4}\d{7}$/i;
+
+  const validateContainerValue = (id: string, value: string) => {
+    const trimmed = value?.trim() ?? "";
+    if (vehicleType === "train" && trimmed.length > 0 && !CONTAINER_REGEX.test(trimmed)) {
+      setClientErrors((prev) => ({ ...prev, [id]: "ccContainerIdentificationNumberInvalidFormat" }));
+      return false;
+    }
+    // clear any existing client-side error for this id
+    setClientErrors((prev) => {
+      if (!prev[id]) return prev;
+      const copy = { ...prev };
+      delete copy[id];
+      return copy;
+    });
+    return true;
+  };
+
   const handleAddContainer = () => {
     if (containerInputs.length < maximumContainers) {
       setContainerInputs((prev) => [...prev, { id: generateId(), value: "" }]);
@@ -107,14 +127,18 @@ export const ContainerIdentificationNumber = ({
               value: (isHydrated ? input.value : actionData[`containerNumbers.${index}`] ?? input.value) as string,
               id: `containerNumbers.${index}`,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(input.id, e.target.value),
+              onBlur: (e: React.FocusEvent<HTMLInputElement>) =>
+                validateContainerValue(input.id, e.target.value as string),
             }}
             errorProps={{
               className: getErrorMessageClassName(!isEmpty(errors?.[`containerNumbers.${index}`])),
             }}
             staticErrorMessage={
-              errors?.[`containerNumbers.${index}`]?.message
-                ? t(errors[`containerNumbers.${index}`].message, { ns: "errorsText" })
-                : undefined
+              clientErrors[input.id]
+                ? t(clientErrors[input.id], { ns: "errorsText" })
+                : errors?.[`containerNumbers.${index}`]?.message
+                  ? t(errors[`containerNumbers.${index}`].message, { ns: "errorsText" })
+                  : undefined
             }
             errorPosition={ErrorPosition.AFTER_LABEL}
             containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.[`containerNumbers.${index}`]))}

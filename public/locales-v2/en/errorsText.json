@@ -61,6 +61,7 @@
   "ccAddTransportationDetailsFreightBillNumberError": "Enter the Freight Bill Number",
   "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError": "Container identification number must not exceed 50 characters",
   "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersError": "Container identification number must only contain letters and numbers",
+  "ccContainerIdentificationNumberInvalidFormat": "Enter a container identification number in the correct format, for example ABCJ0123456",
   "ccAddTransportationDetailsFreightBillNumberCharExceedError": "Freight bill number must not exceed 60 characters",
   "ccAddTransportationDetailsFreightBillNumberOnlyNumLettersError": "Freight bill number must only contain letters, numbers, hyphens, full stops and forward slashes",
   "ccContainerIdentificationNumberMaxLength": "Container identification number must not exceed 150 characters",
