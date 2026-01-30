@@ -84,71 +84,112 @@ export const ContainerIdentificationNumber = ({
 
   return (
     <div>
-      {containerInputData.map((input, index) => (
-        <div key={input.id} className="govuk-button-group" style={{ display: "flex", alignItems: "flex-end" }}>
+      {vehicleType === 'containerVessel' ? (
+        // container vessel uses a single `containerNumber` field
+        <div className="govuk-button-group" style={{ display: "flex", alignItems: "flex-end" }}>
           <FormInput
             containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
-            labelClassName={index === 0 ? "govuk-label govuk-!-font-weight-bold" : "govuk-visually-hidden"}
+            labelClassName={"govuk-label govuk-!-font-weight-bold"}
             label={containerIdentificationLabel}
-            hint={
-              index === 0
-                ? {
-                    id: "hint-containerIdentificationNumber",
-                    position: "above",
-                    text: getHintText(),
-                    className: "govuk-hint govuk-!-margin-bottom-0",
-                  }
-                : undefined
-            }
-            name={`containerNumbers.${index}`}
+            hint={{
+              id: "hint-containerIdentificationNumber",
+              position: "above",
+              text: getHintText(),
+              className: "govuk-hint govuk-!-margin-bottom-0",
+            }}
+            name={`containerNumber`}
             type="text"
             inputClassName={classNames("govuk-input", {
-              "govuk-input--error": errors?.[`containerNumbers.${index}`],
+              "govuk-input--error": errors?.[`containerNumber`],
             })}
             inputProps={{
-              value: (isHydrated ? input.value : actionData[`containerNumbers.${index}`] ?? input.value) as string,
-              id: `containerNumbers.${index}`,
-              onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(input.id, e.target.value),
-              onBlur: undefined,
+              value: (isHydrated ? containerInputs[0]?.value ?? '' : actionData[`containerNumber`] ?? containerInputs[0]?.value ?? '') as string,
+              id: `containerNumber`,
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(containerInputs[0].id, e.target.value),
             }}
             errorProps={{
-              className: getErrorMessageClassName(!isEmpty(errors?.[`containerNumbers.${index}`])),
+              className: getErrorMessageClassName(!isEmpty(errors?.[`containerNumber`])),
             }}
             staticErrorMessage={
-              errors?.[`containerNumbers.${index}`]?.message
-                ? t(errors[`containerNumbers.${index}`].message, { ns: "errorsText" })
+              errors?.[`containerNumber`]?.message
+                ? t(errors[`containerNumber`].message, { ns: "errorsText" })
                 : undefined
             }
             errorPosition={ErrorPosition.AFTER_LABEL}
-            containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.[`containerNumbers.${index}`]))}
+            containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.[`containerNumber`]))}
             hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
             hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
           />
-          {isHydrated && containerInputs.length > 1 && (
+        </div>
+      ) : (
+        // train and truck (and others) use `containerNumbers` array inputs
+        <>
+          {containerInputData.map((input, index) => (
+            <div key={input.id} className="govuk-button-group" style={{ display: "flex", alignItems: "flex-end" }}>
+              <FormInput
+                containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
+                labelClassName={index === 0 ? "govuk-label govuk-!-font-weight-bold" : "govuk-visually-hidden"}
+                label={containerIdentificationLabel}
+                hint={
+                  index === 0
+                    ? {
+                        id: "hint-containerIdentificationNumber",
+                        position: "above",
+                        text: getHintText(),
+                        className: "govuk-hint govuk-!-margin-bottom-0",
+                      }
+                    : undefined
+                }
+                name={`containerNumbers.${index}`}
+                type="text"
+                inputClassName={classNames("govuk-input", {
+                  "govuk-input--error": errors?.[`containerNumbers.${index}`],
+                })}
+                inputProps={{
+                  value: (isHydrated ? input.value : actionData[`containerNumbers.${index}`] ?? input.value) as string,
+                  id: `containerNumbers.${index}`,
+                  onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(input.id, e.target.value),
+                }}
+                errorProps={{
+                  className: getErrorMessageClassName(!isEmpty(errors?.[`containerNumbers.${index}`])),
+                }}
+                staticErrorMessage={
+                  errors?.[`containerNumbers.${index}`]?.message
+                    ? t(errors[`containerNumbers.${index}`].message, { ns: "errorsText" })
+                    : undefined
+                }
+                errorPosition={ErrorPosition.AFTER_LABEL}
+                containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.[`containerNumbers.${index}`]))}
+                hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+                hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+              />
+              {isHydrated && containerInputs.length > 1 && (
+                <Button
+                  key={`remove-container-${input.id}`}
+                  id={`remove-container-button-${index}`}
+                  data-testid={`remove-container-${index}`}
+                  label={t("removeContainerButton")}
+                  className="govuk-button govuk-button--secondary govuk-!-margin-left-2"
+                  type={BUTTON_TYPE.BUTTON}
+                  data-module="govuk-button"
+                  onClick={() => handleRemoveContainer(input.id)}
+                  style={{ top: "15px" }}
+                />
+              )}
+            </div>
+          ))}
+          {isHydrated && containerInputs.length < maximumContainers && (
             <Button
-              key={`remove-container-${input.id}`}
-              id={`remove-container-button-${index}`}
-              data-testid={`remove-container-${index}`}
-              label={t("removeContainerButton")}
-              className="govuk-button govuk-button--secondary govuk-!-margin-left-2"
+              id="add-container-button"
+              data-testid="add-another-container"
+              label={t("addAnotherContainerButton")}
+              className="govuk-button govuk-button--secondary govuk-!-margin-top-2"
               type={BUTTON_TYPE.BUTTON}
               data-module="govuk-button"
-              onClick={() => handleRemoveContainer(input.id)}
-              style={{ top: "15px" }}
+              onClick={handleAddContainer}
             />
           )}
-        </div>
-      ))}
-      {isHydrated && containerInputs.length < maximumContainers && (
-        <Button
-          id="add-container-button"
-          data-testid="add-another-container"
-          label={t("addAnotherContainerButton")}
-          className="govuk-button govuk-button--secondary govuk-!-margin-top-2"
-          type={BUTTON_TYPE.BUTTON}
-          data-module="govuk-button"
-          onClick={handleAddContainer}
-        />
+        </>
       )}
     </div>
   );
