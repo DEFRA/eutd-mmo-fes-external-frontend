@@ -32,7 +32,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
         "Place export leaves the departure country",
         "Freight bill number (optional)",
       ]);
-      expect(hints).to.deep.eq(["For example, Hull.", "For example, BD51SMR"]);
+      expect(hints).to.deep.eq(["For example, ABCD1234567", "For example, Hull.", "For example, BD51SMR"]);
     });
     cy.contains("button", "Save and continue").should("be.visible");
     cy.contains("button", "Save as draft").should("be.visible");
@@ -84,7 +84,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the flight number$/).should("be.visible");
-    cy.contains("a", /^Enter the container identification number$/).should("be.visible");
+    cy.contains("a", /^Enter the shipping container identification number$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
   });
 
