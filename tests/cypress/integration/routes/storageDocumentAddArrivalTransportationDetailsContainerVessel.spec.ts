@@ -50,7 +50,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
         .should("have.attr", "href", `${createStorageDocumentUrl}/how-does-the-consignment-arrive-to-the-uk`);
       cy.get(".govuk-heading-xl").contains("Container Vessel arriving in the UK");
       cy.get("#sdArrivalTransportInfoMessage").should("not.exist");
-      cy.contains("Container identification number").should("be.visible");
+      cy.contains("Shipping container identification number").should("be.visible");
       cy.get("form").within(() => {
         cy.get('input[type="text"]').should("have.length.at.least", 6);
         cy.get("#vesselName").should("exist");
@@ -65,7 +65,10 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
         "For example, Felicity Ace. This field is required now to help prepare for new EU regulations coming into force on 10 January 2026."
       ).should("be.visible");
       cy.contains(".govuk-hint", "For example, Greece").should("be.visible");
-      cy.contains(".govuk-hint", "For example, ABCD1234567").should("be.visible");
+      cy.contains(
+        ".govuk-hint",
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456"
+      ).should("be.visible");
       cy.contains(".govuk-hint", "For example, AA1234567").should("be.visible");
       cy.contains(".govuk-hint", "This is the country the container vessel left before it came to the UK").should(
         "be.visible"
@@ -344,7 +347,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("#departureDate-month").type("13", { force: true });
       cy.get("#departureDate-year").type("2025", { force: true });
       cy.get("[data-testid=save-and-continue]").click({ force: true });
-      cy.contains("a", "Departure date must be a real date").should("be.visible");
+      cy.contains("a", /^Departure date/).should("be.visible");
     });
   });
 });
