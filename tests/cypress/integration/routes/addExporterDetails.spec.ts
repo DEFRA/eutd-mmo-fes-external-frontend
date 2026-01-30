@@ -634,3 +634,33 @@ describe("Add exporter details: branch coverage - conditional rendering branches
     cy.get("#exporterCompanyName").closest(".govuk-form-group").should("exist");
   });
 });
+
+describe("Add exporter details: errorsTransformed?.exporterFullName not empty", () => {
+  it("should apply error styling when errorsTransformed?.exporterFullName has error (line 98)", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameError,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Submit form to trigger errors from server
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    // This covers line 98: isEmpty(errorsTransformed?.exporterFullName) = FALSE
+    // So the input gets: "govuk-input govuk-input--error"
+    cy.get("#exporterFullName").should("have.class", "govuk-input--error");
+  });
+
+  it("should display error message for exporterFullName field when error exists", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameError,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Submit to trigger error
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    // Verify error styling and message are applied
+    cy.get("#exporterFullName").closest(".govuk-form-group--error").should("exist");
+    cy.get(".govuk-error-message").should("be.visible");
+  });
+});
