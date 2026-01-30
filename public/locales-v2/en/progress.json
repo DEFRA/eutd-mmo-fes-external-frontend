@@ -39,7 +39,7 @@
   "optional": "Optional",
   "cannot_start_yet": "Cannot start yet",
   "submission_failed": "Submission failed",
-  "storageNotesApplication": "Storage Document application",
+  "storageNotesApplication": "Non-manipulation Document application",
   "sdProgressProductDetails": "Product details",
   "sdProgressArrivalFacility": "Arrival at storage facility",
   "sdProgressArrivalTransportDetails": "UK arrival transport details",
