@@ -8,7 +8,7 @@ type AddLandingsVesselHelpContent = {
 
 export const AddLandingsVesselHelpContent = ({ namespace = "directLandings" }: AddLandingsVesselHelpContent) => {
   const { t } = useTranslation(namespace);
-  // testing
+  // testing 01
   return (
     <Details
       summary={t("ccAddLandingHelpSectionLinkText")}
