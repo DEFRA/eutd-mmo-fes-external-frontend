@@ -17,46 +17,7 @@ import {
   getVesselNameContainerClassName,
 } from "~/helpers";
 
-const ContainerIdentificationNumberField = ({
-  containerIdentificationNumber,
-  errors,
-  t,
-  labelKey,
-  hintKey,
-}: {
-  containerIdentificationNumber?: string | null;
-  errors: IErrorsTransformed;
-  t: (key: string, options?: any) => string;
-  labelKey?: string;
-  hintKey?: string;
-}) => (
-  <FormInput
-    containerClassName="govuk-form-group govuk-!-width-one-half"
-    label={labelKey ? t(labelKey) : t("addTransportationDetailsContainerIdentificationNumber")}
-    name="containerIdentificationNumber"
-    type="text"
-    inputClassName={classNames("govuk-input", {
-      "govuk-input--error": errors?.containerIdentificationNumber,
-    })}
-    inputProps={{
-      defaultValue: containerIdentificationNumber ?? "",
-      id: "containerIdentificationNumber",
-      "aria-describedby": "hint-containerIdentificationNumber",
-    }}
-    hint={{
-      id: "hint-containerIdentificationNumber",
-      position: "above",
-      text: hintKey ? t(hintKey) : t("addTransportationDetailsContainerIdentificationNumberHintTruckTrain"),
-      className: "govuk-hint govuk-!-margin-bottom-0",
-    }}
-    errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.containerIdentificationNumber)) }}
-    staticErrorMessage={t(errors?.containerIdentificationNumber?.message, { ns: "errorsText" })}
-    errorPosition={ErrorPosition.AFTER_LABEL}
-    containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.containerIdentificationNumber))}
-    hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-    hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-  />
-);
+// ContainerIdentificationNumberField removed — replaced with dynamic ContainerIdentificationNumber component for train arrival
 
 export const TransportationModeDetails = ({
   legendTitle,
@@ -70,7 +31,7 @@ export const TransportationModeDetails = ({
   railwayBillNumber,
   departurePlace,
   freightBillNumber,
-  containerIdentificationNumber,
+  containerIdentificationNumber: _containerIdentificationNumber,
   containerNumbers,
   displayOptionalSuffix,
   errors,
@@ -82,6 +43,8 @@ export const TransportationModeDetails = ({
   countries: ICountry[];
 }) => {
   const { t } = useTranslation("transportation");
+  // preserve prop to avoid changing component API (silence unused variable lint)
+  void _containerIdentificationNumber;
 
   return (
     <>
@@ -293,10 +256,12 @@ export const TransportationModeDetails = ({
         hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
       />
       {vehicle === "train" && (
-        <ContainerIdentificationNumberField
-          containerIdentificationNumber={containerIdentificationNumber ?? undefined}
+        <ContainerIdentificationNumber
+          containers={containerNumbers}
+          maximumContainers={5}
           errors={errors}
-          t={t}
+          displayOptionalSuffix={displayOptionalSuffix}
+          vehicleType="train"
           labelKey={"addTransportationDetailsContainerIdentificationNumberTrain"}
           hintKey={"addTransportationDetailsContainerIdentificationNumberTrainHint"}
         />
