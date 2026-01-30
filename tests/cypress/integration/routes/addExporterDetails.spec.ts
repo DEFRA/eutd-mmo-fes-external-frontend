@@ -160,3 +160,24 @@ describe("Add exporter details: unauthorised access", () => {
     cy.url().should("include", "/forbidden");
   });
 });
+
+describe("Add exporter details: with errors", () => {
+  const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+  });
+
+  it("should display error summary when validation fails", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").should("be.visible");
+  });
+
+  it("should display error messages with error styling", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get(".govuk-form-group--error").should("exist");
+  });
+});
