@@ -103,7 +103,7 @@ export const CommonDatePicker = ({
           <ErrorMessage
             id="error-message"
             text={t(typeof errors === "string" ? errors : errors?.message, {
-              ns: translationNs,
+              ns: "errorsText",
               ...(typeof errors === "string" ? {} : errors?.value),
             })}
             visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
