@@ -60,7 +60,7 @@
   "sdAddTransportationDetailsPointOfDestinationErrorInvalidCharacters": "Rhaid i'r gyrchfan gynnwys llythrennau, rhifau, cysylltnodau, collnodau, bylchau a blaenslaesau yn unig",
   "ccAddTransportationDetailsFreightBillNumberError": "Rowch Rif y Bil Cludo Nwyddau",
   "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError": "Does dim modd i rif y cynhwysydd fod yn fwy na 50 nod",
-  "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersError": "Rhaid i rif y cynhwysydd gynnwys dim ond llythrennau, rhifau a bylchau",
+  "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersError": "Rhaid i rif y cynhwysydd gynnwys dim ond llythrennau a rhifau",
   "ccAddTransportationDetailsFreightBillNumberCharExceedError": "Rhaid i rif y bil cludo nwyddau fod yn llai na 60 o nodau",
   "ccAddTransportationDetailsFreightBillNumberOnlyNumLettersError": "Rhaid i rif bil cludo nwyddau gynnwys llythrennau, rhifau, cysylltnodau, atalnodau llawn a blaenslaesau yn unig",
   "ccAddTransportationDetailsDeparturePortCharExceedError": "Rhaid i O ble mae'r llwyth yn ymadael fod yn llai na 50 o nodau",

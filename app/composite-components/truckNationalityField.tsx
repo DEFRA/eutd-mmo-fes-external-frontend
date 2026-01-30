@@ -12,6 +12,7 @@ interface TruckNationalityFieldProps {
   labelKey?: string;
   hintKey?: string;
   minCharsBeforeSearch?: number;
+  labelClassName?: string;
 }
 
 export const TruckNationalityField = ({
@@ -23,6 +24,7 @@ export const TruckNationalityField = ({
   labelKey = "addTransportationDetailsTruckNationality",
   hintKey = "addTransportationDetailsTruckNationalityHint",
   minCharsBeforeSearch,
+  labelClassName,
 }: TruckNationalityFieldProps) => (
   <AutocompleteFormField
     containerClassName={classNames("govuk-form-group govuk-!-width-one-half", {
@@ -34,6 +36,7 @@ export const TruckNationalityField = ({
     name="nationalityOfVehicle"
     defaultValue={nationalityOfVehicle ?? ""}
     labelText={t(labelKey)}
+    labelClassName={labelClassName}
     errorPosition={AutoCompleteErrorPosition.AFTER_LABEL}
     errorMessageText={t(errors?.nationalityOfVehicle?.message, { ns: "errorsText" })}
     hintText={t(hintKey)}
