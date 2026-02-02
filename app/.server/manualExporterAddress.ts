@@ -38,7 +38,14 @@ const getFieldFromErrorKey = (errorKey: string): string => {
 };
 
 const onAddManualExporterAddress = async (response: Response, formData: Exporter): Promise<IExporter> => {
-  const data = await response.json();
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    // If JSON parsing fails (e.g., empty response), use empty object
+    data = {};
+  }
+
   switch (response.status) {
     case 200:
     case 204:
@@ -53,6 +60,14 @@ const onAddManualExporterAddress = async (response: Response, formData: Exporter
           error: "invalid",
           errors,
         };
+      } else if (data.unauthorised) {
+        // Handle unauthorised flag in 200 response
+        return {
+          model: formData,
+          error: "",
+          errors: [],
+          unauthorised: true,
+        };
       } else {
         // Success: object
         return {
@@ -61,8 +76,26 @@ const onAddManualExporterAddress = async (response: Response, formData: Exporter
           errors: [],
         };
       }
+    case 400:
+      // Old way: errors as object with field names as keys
+      return {
+        model: formData,
+        error: "invalid",
+        errors: Object.keys(data).map((key: string) => ({
+          key: key,
+          message: getErrorMessage(data[key]),
+        })),
+      };
+    case 403:
+      // Handle 403 Forbidden - return with unauthorised flag
+      return {
+        model: formData,
+        error: "",
+        errors: [],
+        unauthorised: true,
+      };
     default:
-      // For 400, 403, etc., throw with status and data
+      // For other error status codes, throw with status and data
       throw { status: response.status, data };
   }
 };
