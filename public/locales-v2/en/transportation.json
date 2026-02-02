@@ -88,6 +88,8 @@
   "addTransportationArrivalDetailsContainerIdentificationNumberOptional": "Container identification number (optional)",
   "addTransportationArrivalDetailsContainerIdentificationNumber": "Container identification number",
   "addTransportationArrivalDetailsContainerIdentificationNumberHint": "For example, ABCD1234567",
+  "addTransportationArrivalDetailsContainerIdentificationNumberContainerVessel": "Shipping container identification number",
+  "addTransportationArrivalDetailsContainerIdentificationNumberHintContainerVessel": "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
   "addTransportationDetailsContainerIdentificationNumberHintTruckTrain": "Enter container or trailer identification number. For example, ABCD1234567.",
   "addTransportationArrivalDetailsTruckPlaceOfUnloading": "Place of unloading",
   "addTransportationArrivalDetailsTruckPlaceOfUnloadingHint": "This is where the consignment was unloaded from the {{vehicle}} when arriving in the UK",

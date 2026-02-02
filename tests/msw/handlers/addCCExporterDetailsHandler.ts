@@ -15,6 +15,7 @@ import {
 import exporterDetails from "@/fixtures/addExporterDetails/exporterDetails.json";
 import exporterResponse from "@/fixtures/addExporterDetails/exporterResponse.json";
 import exporterErrorResponse from "@/fixtures/addExporterDetails/exporterErrorResponse.json";
+import exporterFullNameErrorResponse from "@/fixtures/addExporterDetails/exporterFullNameErrorResponse.json";
 import addedSpecies from "@/fixtures/addExporterDetails/addedSpecies.json";
 import manualEntryLandingsType from "@/fixtures/landingsTypeApi/manualEntry.json";
 import uploadEntry from "@/fixtures/landingsTypeApi/uploadEntry.json";
@@ -99,6 +100,13 @@ const addCCExporterDetailsHandler: ITestHandler = {
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLanding))),
     rest.post(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(exporterErrorResponse))
+    ),
+  ],
+  [TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameError]: () => [
+    rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(exporterDetails))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(exporterFullNameErrorResponse))
     ),
   ],
   [TestCaseId.CCAddExporterDetails403]: () => [

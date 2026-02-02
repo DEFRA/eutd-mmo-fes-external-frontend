@@ -264,7 +264,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click({ force: true });
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
+    cy.contains("a", /^Enter the shipping container identification number$/).should("be.visible");
   });
 
   it("should display error when country of departure is not populated", () => {
