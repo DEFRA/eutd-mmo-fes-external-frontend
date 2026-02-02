@@ -99,6 +99,7 @@ export const TransportationModeDetails = ({
         <FormInput
           containerClassName="govuk-form-group govuk-!-width-one-half"
           label={t("addTransportationDetailsVesselNameText")}
+          labelClassName="govuk-label govuk-!-font-weight-bold"
           name="vesselName"
           type="text"
           inputClassName={classNames("govuk-input", {
@@ -120,6 +121,7 @@ export const TransportationModeDetails = ({
         <FormInput
           containerClassName="govuk-form-group govuk-!-width-one-half"
           label={t("addTransportationDetailsFlagStateText")}
+          labelClassName="govuk-label govuk-!-font-weight-bold"
           name="flagState"
           type="text"
           inputClassName={classNames("govuk-input", {
@@ -141,6 +143,7 @@ export const TransportationModeDetails = ({
         <FormInput
           containerClassName="govuk-form-group govuk-!-width-one-half"
           label={t("addTransportationDetailsFlightnumber")}
+          labelClassName="govuk-label govuk-!-font-weight-bold"
           name="flightNumber"
           type="text"
           inputClassName={classNames("govuk-input", {
@@ -166,6 +169,7 @@ export const TransportationModeDetails = ({
               ? t("addTransportationDetailsContainerIdentificationNumberContainerVessel")
               : t("addTransportationDetailsContainerIdentificationText")
           }
+          labelClassName="govuk-label govuk-!-font-weight-bold"
           name="containerNumber"
           type="text"
           inputClassName={classNames("govuk-input", {
@@ -248,6 +252,7 @@ export const TransportationModeDetails = ({
         <FormInput
           containerClassName="govuk-form-group govuk-!-width-one-half"
           label={t("addTransportationDetailsRailwayBillNumber")}
+          labelClassName="govuk-label govuk-!-font-weight-bold"
           name="railwayBillNumber"
           type="text"
           inputClassName={classNames("govuk-input", {
@@ -383,6 +388,7 @@ export const TransportationDetails = ({
         name="exportedTo"
         defaultValue={formData.exportedTo ?? exportedTo?.officialCountryName ?? ""}
         labelText={t("addConsignmentDestination")}
+        labelClassName="govuk-label govuk-!-font-weight-bold"
         hintText={t("addConsignmentDestinationHint")}
         selectProps={{
           id: "consignmentDestination",
@@ -400,6 +406,7 @@ export const TransportationDetails = ({
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
         label={t("addPointOfDestination")}
+        labelClassName="govuk-label govuk-!-font-weight-bold"
         name="pointOfDestination"
         type="text"
         inputClassName={classNames("govuk-input", {
@@ -426,6 +433,7 @@ export const TransportationDetails = ({
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
         label={t(`addTransportationDetailsPlaceExportLeavesUK${capitalize(vehicle)}`)}
+        labelClassName="govuk-label govuk-!-font-weight-bold"
         name="departurePlace"
         type="text"
         inputClassName={classNames("govuk-input", {
@@ -481,7 +489,7 @@ export const TransportationDetails = ({
         label={`addTransportationDetailsExportDate${capitalize(vehicle)}`}
         hintText="addTransportationArrivalDetailsDepartureDateHint"
         translationNs="transportation"
-        labelStyle="normal"
+        labelStyle="bold"
         hideAddDateButton={true}
       />
       {vehicle === "plane" && (
@@ -492,6 +500,7 @@ export const TransportationDetails = ({
               ? t("addTransportationDetailsAirwayBillNumberOptional")
               : t("addTransportationDetailsAirwayBillNumber")
           }
+          labelClassName="govuk-label govuk-!-font-weight-bold"
           name="airwayBillNumber"
           type="text"
           inputClassName={classNames("govuk-input", {
@@ -519,6 +528,7 @@ export const TransportationDetails = ({
         <>
           <FormInput
             label={t("addTransportationDetailsVesselNameText")}
+            labelClassName="govuk-label govuk-!-font-weight-bold"
             containerClassName="govuk-form-group govuk-!-width-one-half"
             type="text"
             hint={{
@@ -544,6 +554,7 @@ export const TransportationDetails = ({
           />
           <FormInput
             label={t("addTransportationDetailsFlagStateText")}
+            labelClassName="govuk-label govuk-!-font-weight-bold"
             containerClassName="govuk-form-group govuk-!-width-one-half"
             name="flagState"
             type="text"
@@ -572,6 +583,7 @@ export const TransportationDetails = ({
       {vehicle === "plane" && (
         <FormInput
           label={t("addTransportationDetailsFlightnumber")}
+          labelClassName="govuk-label govuk-!-font-weight-bold"
           containerClassName="govuk-form-group govuk-!-width-one-half"
           name="flightNumber"
           type="text"
@@ -626,7 +638,7 @@ export const TransportationDetails = ({
             id="nationalityOfVehicle"
             name="nationalityOfVehicle"
             labelText={t("addTransportationDetailsTruckNationality")}
-            labelClassName="govuk-label"
+            labelClassName="govuk-label govuk-!-font-weight-bold"
             hintText={t("addTransportationArrivalDetailsTruckNationalityHint")}
             defaultValue={nationalityOfVehicle ?? ""}
             minCharsBeforeSearch={2}
@@ -645,6 +657,7 @@ export const TransportationDetails = ({
           <FormInput
             type="text"
             label={t("addTransportationDetailsRegistrationNumber")}
+            labelClassName="govuk-label govuk-!-font-weight-bold"
             name="registrationNumber"
             inputProps={{
               defaultValue: registrationNumber,
@@ -673,6 +686,7 @@ export const TransportationDetails = ({
         <FormInput
           name="railwayBillNumber"
           label={t("addTransportationDetailsRailwayBillNumber")}
+          labelClassName="govuk-label govuk-!-font-weight-bold"
           type="text"
           inputClassName={classNames("govuk-input", {
             "govuk-input--error": errors?.railwayBillNumber,
@@ -698,6 +712,7 @@ export const TransportationDetails = ({
       )}
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
+        labelClassName="govuk-label govuk-!-font-weight-bold"
         name="freightBillNumber"
         type="text"
         inputClassName={classNames("govuk-input", {
