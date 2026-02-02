@@ -143,7 +143,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
               />
               {transport.containerIdentificationNumber && (
                 <SummaryListRow
-                  keyText={t("addTransportationDetailsContainerIdentificationNumberText", { ns: "transportation" })}
+                  keyText={t("addTransportationDetailsContainerIdentificationNumberTruck", { ns: "transportation" })}
                   value={transport.containerIdentificationNumber}
                   actions={generateActions(
                     isLocked,
@@ -153,7 +153,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                         documentNumber,
                       }
                     )}#containerIdentificationNumber`,
-                    "addTransportationDetailsContainerIdentificationNumberText",
+                    "addTransportationDetailsContainerIdentificationNumberTruck",
                     "transportation",
                     t,
                     "change-container-truck"
@@ -225,7 +225,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                   documentNumber,
                 }
               )}#containerNumber`,
-              "addTransportationDetailsFlightnumber",
+              "addTransportationDetailsContainerIdentificationText",
               "transportation",
               t
             )}
@@ -300,7 +300,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
           />
           {transport.containerIdentificationNumber && (
             <SummaryListRow
-              keyText={t("addTransportationDetailsContainerIdentificationNumberText", { ns: "transportation" })}
+              keyText={t("addTransportationDetailsContainerIdentificationNumberTrain", { ns: "transportation" })}
               value={transport.containerIdentificationNumber}
               actions={generateActions(
                 isLocked,
@@ -310,7 +310,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                     documentNumber,
                   }
                 )}#containerIdentificationNumber`,
-                "addTransportationDetailsContainerIdentificationNumberText",
+                "addTransportationDetailsContainerIdentificationNumberTrain",
                 "transportation",
                 t,
                 "change-container-train"
@@ -370,7 +370,9 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
             )}
           />
           <SummaryListRow
-            keyText={t("addTransportationDetailsContainerIdentificationText", { ns: "transportation" })}
+            keyText={t("addTransportationDetailsContainerIdentificationNumberContainerVessel", {
+              ns: "transportation",
+            })}
             value={transport.containerNumber}
             actions={generateActions(
               isLocked,
@@ -380,7 +382,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                   documentNumber,
                 }
               )}#containerNumber`,
-              "addTransportationDetailsVesselNameText",
+              "addTransportationDetailsContainerIdentificationNumberContainerVessel",
               "transportation",
               t
             )}

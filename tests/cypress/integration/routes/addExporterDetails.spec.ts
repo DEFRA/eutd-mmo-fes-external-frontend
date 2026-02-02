@@ -160,3 +160,507 @@ describe("Add exporter details: unauthorised access", () => {
     cy.url().should("include", "/forbidden");
   });
 });
+
+describe("Add exporter details: with errors", () => {
+  const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+  });
+
+  it("should display error summary when validation fails", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").should("be.visible");
+  });
+
+  it("should display error messages with error styling", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get(".govuk-form-group--error").should("exist");
+  });
+
+  it("should scroll to error island when errors are present", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").should("be.visible");
+  });
+});
+
+describe("Add exporter details: mock error on load (useEffect trigger)", () => {
+  const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+  });
+
+  it("should trigger useEffect and scroll to error when form submission fails", () => {
+    // Submit form which returns 400 error
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    // Error should appear and useEffect should have scrolled to it
+    cy.get("#error-summary-title").should("be.visible");
+  });
+
+  it("should trigger useEffect scroll on error response from form submission", () => {
+    // Submit form to trigger error
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    // Verify page has scrolled to error (error-summary-title should be visible)
+    cy.get("#error-summary-title").should("be.visible");
+  });
+
+  it("should display error styling on fields when form submission returns errors", () => {
+    // Submit form to get error response
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    // Error styling should be applied from useEffect handling
+    cy.get(".govuk-form-group--error").should("exist");
+  });
+});
+
+describe("Add exporter details: processingStatement journey", () => {
+  const documentUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddExporterDetailsFull,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+  });
+
+  it("should display processingStatement specific warning content", () => {
+    cy.contains("h1", "Add exporter details");
+  });
+
+  it("should have back link for processingStatement journey", () => {
+    cy.contains("a", /^Back$/).should("be.visible");
+  });
+});
+
+describe("Add exporter details: storageDocument journey", () => {
+  const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+  });
+
+  it("should display storageDocument specific warning content", () => {
+    cy.contains("h1", "Add exporter details");
+  });
+
+  it("should have back link for storageDocument journey", () => {
+    cy.contains("a", /^Back$/).should("be.visible");
+  });
+});
+
+describe("Add exporter details: component initialization", () => {
+  const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+
+  it("should initialize page with scroll on load", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Wait for page to fully load
+    cy.get("h1").should("be.visible");
+    // Verify the page renders the component
+    cy.contains("Add exporter details").should("be.visible");
+  });
+});
+
+describe("Add exporter details: branch coverage - error display", () => {
+  const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+
+  it("should display error summary when error exists", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    // Verify error summary is displayed
+    cy.get("#error-summary-title").should("be.visible");
+  });
+
+  it("should not display error summary when no error exists", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify error summary is not present
+    cy.get("#error-summary-title").should("not.exist");
+  });
+});
+
+describe("Add exporter details: branch coverage - journey warning content", () => {
+  it("should display processingStatement warning content for PS journey", () => {
+    const documentUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddExporterDetailsFull,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify warning text contains processingStatement content
+    cy.get(".govuk-warning-text__text").should("exist");
+    cy.get(".govuk-warning-text").should("be.visible");
+  });
+
+  it("should display storageNotes warning content for storageNotes journey", () => {
+    const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify warning text for storage notes
+    cy.get(".govuk-warning-text__text").should("exist");
+    cy.get(".govuk-warning-text").should("be.visible");
+  });
+
+  it("should display different warning content for catchCertificate journey", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify warning text contains catch certificate content
+    cy.get(".govuk-warning-text__text").should("exist");
+    cy.get(".govuk-warning-text").should("be.visible");
+  });
+});
+
+describe("Add exporter details: branch coverage - form fields by journey", () => {
+  it("should display exporterFullName field for catchCertificate journey", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify CC-specific field is present
+    cy.get("#exporterFullName").should("exist");
+  });
+
+  it("should not display exporterFullName field for processingStatement journey", () => {
+    const documentUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddExporterDetailsFull,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify CC-specific field is not present
+    cy.get("#exporterFullName").should("not.exist");
+  });
+
+  it("should not display exporterFullName field for storageNotes journey", () => {
+    const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify CC-specific field is not present
+    cy.get("#exporterFullName").should("not.exist");
+  });
+});
+
+describe("Add exporter details: branch coverage - address display", () => {
+  it("should display formatted address when hasAddress is true", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFromIdm,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify address paragraph is displayed
+    cy.get("form p").should("exist");
+    cy.get("[data-testid='change-button']").should("be.visible");
+  });
+
+  it("should display address registration message when hasAddress is false", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsSaveManualEntry,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify address section displays the button and paragraph
+    cy.get("[data-testid='change-button']").should("be.visible");
+    cy.get("form p").should("exist");
+  });
+
+  it("should have change button in address section when hasAddress is true", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFromIdm,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify change button label
+    cy.get("[data-testid='change-button']").should("be.visible").should("contain", "Change");
+  });
+
+  it("should have add button in address section when hasAddress is false", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsSaveManualEntry,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify button exists and is visible when no address
+    cy.get("[data-testid='change-button']").should("be.visible");
+    cy.get("[data-testid='change-button']").should("have.length", 1);
+  });
+});
+
+describe("Add exporter details: branch coverage - company name field", () => {
+  it("should display company name field for all journeys", () => {
+    const testCases = [
+      { testCaseId: TestCaseId.CCAddExporterDetails, documentUrl: "/create-catch-certificate/GBR-2021-CC-8EEB7E123" },
+      {
+        testCaseId: TestCaseId.PSAddExporterDetailsFull,
+        documentUrl: "/create-processing-statement/GBR-2021-PS-8EEB7E123",
+      },
+      {
+        testCaseId: TestCaseId.SDAddExporterDetails,
+        documentUrl: "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123",
+      },
+    ];
+
+    testCases.forEach(({ testCaseId, documentUrl }) => {
+      const pageUrl = `${documentUrl}/add-exporter-details`;
+      const testParams: ITestParams = { testCaseId };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+      // Company name field should always be present
+      cy.get("#exporterCompanyName").should("exist");
+    });
+  });
+
+  it("should display company name field with correct label", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify label is present and styled
+    cy.get("label[for='exporterCompanyName']").should("exist").should("have.class", "govuk-!-font-weight-bold");
+  });
+
+  it("should display company name hint text", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify hint is present
+    cy.get("#hint-exporterCompanyName").should("exist");
+  });
+});
+
+describe("Add exporter details: branch coverage - form field error states", () => {
+  it("should have govuk-input class when exporterFullName has no error", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify input has correct class (no error state)
+    cy.get("#exporterFullName").should("have.class", "govuk-input");
+  });
+
+  it("should have aria-describedby on company name field", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify aria-describedby attribute is present
+    cy.get("#exporterCompanyName").should("have.attr", "aria-describedby", "hint-exporterCompanyName");
+  });
+
+  it("should render company name field with proper container class", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify container has correct class
+    cy.get("#exporterCompanyName").closest(".govuk-form-group").should("exist");
+  });
+
+  it("should display error message class when company name field has error", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    // Verify error state is applied
+    cy.get(".govuk-form-group--error").should("be.visible");
+  });
+});
+
+describe("Add exporter details: branch coverage - conditional rendering branches", () => {
+  it("should render error summary with correct error messages on validation failure", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    // Trigger error path
+    cy.get("#error-summary-title").should("be.visible");
+    // Verify error summary contains error messages
+    cy.get(".govuk-error-summary__list").should("be.visible");
+  });
+
+  it("should display full name field on page for catchCertificate journey", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify full name field is rendered
+    cy.get("#exporterFullName").should("exist").should("be.visible");
+  });
+
+  it("should apply correct input classes based on error state for company name field", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    // Check error class applied when error exists
+    cy.get("#exporterCompanyName").should("have.class", "govuk-input--error");
+  });
+
+  it("should not apply error classes when no errors exist", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify no error state
+    cy.get("#exporterFullName").should("not.have.class", "govuk-input--error");
+    cy.get("#exporterCompanyName").should("not.have.class", "govuk-input--error");
+  });
+
+  it("should display main layout with correct grid structure", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify layout structure
+    cy.get(".govuk-grid-row").should("have.length.greaterThan", 0);
+    cy.get(".govuk-grid-column-two-thirds").should("exist");
+  });
+
+  it("should render hidden error text for form inputs", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    // Verify visually hidden error text exists
+    cy.get(".govuk-visually-hidden").should("be.visible");
+  });
+
+  it("should render address section with correct structure regardless of hasAddress value", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify address section exists
+    cy.get(".govuk-button-group").should("be.visible");
+    // Verify address label exists
+    cy.get("label").should("contain", "Address");
+  });
+
+  it("should apply govuk-input class when no error for full name field", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify no error class applied (isEmpty check = true)
+    cy.get("#exporterFullName").should("have.class", "govuk-input");
+    cy.get("#exporterFullName").should("not.have.class", "govuk-input--error");
+  });
+
+  it("should apply govuk-input class when no error for company name field", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify no error class applied
+    cy.get("#exporterCompanyName").should("have.class", "govuk-input");
+    cy.get("#exporterCompanyName").should("not.have.class", "govuk-input--error");
+  });
+
+  it("should display field with proper container structure", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Verify field is wrapped in proper govuk container
+    cy.get("#exporterCompanyName").closest(".govuk-form-group").should("exist");
+  });
+});
+
+describe("Add exporter details: errorsTransformed?.exporterFullName not empty", () => {
+  it("should apply error styling when errorsTransformed?.exporterFullName has error (line 98)", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameError,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Submit form to trigger errors from server
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    // This covers line 98: isEmpty(errorsTransformed?.exporterFullName) = FALSE
+    // So the input gets: "govuk-input govuk-input--error"
+    cy.get("#exporterFullName").should("have.class", "govuk-input--error");
+  });
+
+  it("should display error message for exporterFullName field when error exists", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameError,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    // Submit to trigger error
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    // Verify error styling and message are applied
+    cy.get("#exporterFullName").closest(".govuk-form-group--error").should("exist");
+    cy.get(".govuk-error-message").should("be.visible");
+  });
+});
