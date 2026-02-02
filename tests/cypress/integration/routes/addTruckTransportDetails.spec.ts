@@ -102,10 +102,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
     cy.get("#hint-containerIdentificationNumber")
       .should("be.visible")
-      .should(
-        "contain.text",
-        "Enter the identification number shown on the shipping container. For example, ABCJ0123456"
-      );
+      .should("contain.text", "Enter container or trailer identification number. For example, ABCD1234567");
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
