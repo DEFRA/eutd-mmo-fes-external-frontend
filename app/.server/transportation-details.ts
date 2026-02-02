@@ -50,6 +50,7 @@ const buildTransportPayload = (transportType: TransportType, form: FormData): Pa
     case TransportType.TRAIN:
       return {
         railwayBillNumber: form.get("railwayBillNumber") as string,
+        containerNumbers: extractContainerNumbers(values),
         containerIdentificationNumber: !isEmpty(form.get("containerIdentificationNumber"))
           ? (form.get("containerIdentificationNumber") as string)
           : null,

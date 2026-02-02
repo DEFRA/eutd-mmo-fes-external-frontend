@@ -193,7 +193,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     cy.get("#railwayBillNumber").type("RB123456", { force: true });
     cy.get("#departurePlace").type("Dover", { force: true });
-    cy.get("#containerIdentificationNumber-0").type(
+    cy.get("input[name='containerNumbers.0']").type(
       "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
       { force: true }
     );
