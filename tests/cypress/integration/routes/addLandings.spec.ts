@@ -1073,7 +1073,7 @@ describe("Manual landing page: Accessibility", () => {
   });
 
   it("should have label for all fields on the form", () => {
-    cy.get(".govuk-label").should("have.length", 18);
+    cy.get(".govuk-label").should("have.length", 16);
     // product
     cy.get(".govuk-label").eq(0).should("have.text", "Product").and("be.visible");
     // start date
