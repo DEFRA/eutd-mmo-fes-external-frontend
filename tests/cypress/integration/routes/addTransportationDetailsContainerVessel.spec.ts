@@ -34,11 +34,14 @@ describe("Add Transportation Details: Container Vessel", () => {
   it("should render the input label and hint text", () => {
     cy.contains("label", "Vessel name");
     cy.contains("label", "Flag state");
-    cy.contains("label", "Container identification number or numbers");
+    cy.contains("label", "Shipping container identification number");
     cy.contains("label", "Place export leaves the departure country");
     cy.contains("label", "Freight bill number (optional)");
     cy.get("div .govuk-hint").contains("For example, Hull.");
     cy.get("div .govuk-hint").contains("For example, BD51SMR");
+    cy.get("div .govuk-hint").contains(
+      "Enter the identification number shown on the shipping container. For example, ABCJ0123456"
+    );
   });
 });
 
@@ -62,7 +65,7 @@ describe("Save and Continue button - UnHappy path", () => {
     cy.get("[data-testid=save-and-continue").click({ force: true });
     cy.get(".govuk-error-summary__list").contains("Enter the vessel name");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
+    cy.contains("a", /^Enter the shipping container identification number$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
     cy.contains("a", /^Enter the flag state$/).should("be.visible");
     cy.contains("a", /^Enter the vessel name$/).should("be.visible");
