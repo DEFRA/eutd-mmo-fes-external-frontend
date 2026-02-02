@@ -156,7 +156,12 @@ const whatAreYouExportingHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          message: "ccWhatExportingFromSelectProductFavouriteListError",
+          errors: [
+            {
+              key: "product",
+              message: "ccWhatExportingFromSelectProductFavouriteListError",
+            },
+          ],
         })
       )
     ),
