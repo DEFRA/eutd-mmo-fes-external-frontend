@@ -14,6 +14,7 @@ export interface ITestParams {
 }
 
 export enum TestCaseId {
+  PSAddProcessingPlantAddressWithErrorsArray = "psAddProcessingPlantAddressWithErrorsArray",
   // New error array-based test cases for exporter manual address
   CCExporterManualAddressWithErrorsArray = "CCExporterManualAddressWithErrorsArray",
   CCExporterManualAddressWithSubBuildingErrorArray = "CCExporterManualAddressWithSubBuildingErrorArray",
