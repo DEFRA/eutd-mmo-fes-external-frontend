@@ -27,7 +27,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       const hints = hintObjects.get();
 
       expect(textinputs).to.have.length(6);
-      expect(labels).to.have.length(9);
+      expect(labels).to.have.length(10);
       expect(labels).to.deep.eq([
         "Railway bill number",
         "Freight bill number (optional)",
@@ -35,10 +35,10 @@ describe("Add Transportation Details Train: Allowed", () => {
         "Where the consignment departs from",
         "Place of unloading",
         "Departure date",
-        "Shipping container identification number (optional)",
         "Day",
         "Month",
         "Year",
+        "Shipping container identification number (optional)",
       ]);
       expect(hints).to.deep.eq([
         "For example, AB12345C. This field is required now to help prepare for new EU regulations coming into force on 10 January 2026",

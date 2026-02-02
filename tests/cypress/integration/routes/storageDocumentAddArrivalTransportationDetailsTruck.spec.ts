@@ -35,10 +35,10 @@ describe("Add Transportation Details Truck: Allowed", () => {
         "Where the consignment departs from",
         "Place of unloading",
         "Departure date",
-        "Shipping container identification number (optional)",
         "Day",
         "Month",
         "Year",
+        "Shipping container identification number (optional)",
       ]);
       expect(hints).to.deep.eq([
         "Type at least two characters to load the list. For example, United Kingdom",

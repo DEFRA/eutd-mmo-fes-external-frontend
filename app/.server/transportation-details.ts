@@ -164,7 +164,10 @@ export const CatchCertificateTransportationDetailsLoader = async (
     const maximumTransportDocumentPerTransport = parseInt(getEnv().EU_CATCH_MAX_TRANSPORT_DOCUMENTS, 10);
 
     let containerNumbers: string[] = transport.containerNumbers ?? [];
-    if (transportType === TransportType.TRUCK && containerNumbers.length === 0) {
+    if (
+      (transportType === TransportType.TRUCK || transportType === TransportType.TRAIN) &&
+      containerNumbers.length === 0
+    ) {
       containerNumbers = [""];
     }
 
