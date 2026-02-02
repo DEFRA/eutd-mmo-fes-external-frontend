@@ -443,3 +443,52 @@ describe("What are you exporting page: CSV upload journey back button", () => {
     cy.url().should("eq", `http://localhost:3000${documentUrl}/upload-file`);
   });
 });
+
+describe("What are you exporting page: Product add to favourites notifications", () => {
+  it("should display success notification when product is added to favourites", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingProductAddedToFavouritesSuccess,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    cy.get("#species").type("Aesop shrimp", { force: true });
+    cy.get("#species-option--1").click();
+    cy.get("#state").select("FRE", { force: true });
+    cy.get("#presentation").select("FIL", { force: true });
+    cy.get("#commodity_code").select("03024400", { force: true });
+    cy.get("#addToFavourites").check();
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+
+    cy.get(".govuk-notification-banner").should("be.visible");
+    cy.get(".govuk-notification-banner__content").should("contain", "has been added to your product favourites");
+  });
+
+  it("should display failure notification when product already exists in favourites", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingProductAddedToFavouritesFailure,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    cy.get("#species").type("Aesop shrimp", { force: true });
+    cy.get("#species-option--1").click();
+    cy.get("#state").select("FRE", { force: true });
+    cy.get("#presentation").select("FIL", { force: true });
+    cy.get("#commodity_code").select("03024400", { force: true });
+    cy.get("#addToFavourites").check();
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+
+    cy.get(".govuk-notification-banner").should("be.visible");
+    cy.get(".govuk-notification-banner__content").should("contain", "already exists in your product favourites");
+  });
+});
+
+describe("What are you exporting page: Favourites tab with product limit", () => {
+  it("should not render add product button in favourites tab when limit reached", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-testid='add-product']").should("not.exist");
+  });
+});

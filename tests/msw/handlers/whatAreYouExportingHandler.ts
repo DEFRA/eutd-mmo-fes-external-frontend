@@ -268,6 +268,12 @@ const whatAreYouExportingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
   ],
+  [TestCaseId.WhatAreYouExportingProductAddedToFavouritesSuccess]: () => [
+    ...whatAreYouExportingHandler[TestCaseId.WhatAreYouExporting](),
+  ],
+  [TestCaseId.WhatAreYouExportingProductAddedToFavouritesFailure]: () => [
+    ...whatAreYouExportingHandler[TestCaseId.WhatAreYouExportingNoFavourite](),
+  ],
 };
 
 export default whatAreYouExportingHandler;
