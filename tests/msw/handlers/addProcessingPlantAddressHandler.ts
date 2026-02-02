@@ -24,6 +24,22 @@ import postcodeEmptyError from "@/fixtures/exporterApi/postcodeEmptyError.json";
 import manualAddressErrors from "@/fixtures/exporterApi/manualAddressErrors.json";
 
 const addProcessingPlantAddressHandler: ITestHandler = {
+  [TestCaseId.PSAddProcessingPlantAddressWithErrorsArray]: () => [
+    // Match the working test pattern exactly - use the same fixture
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(prcessingStatementAddPlantAddress))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(prcessingStatementAddPlantAddress))),
+    rest.get(mockFindExporterAddressUrl, (req, res, ctx) => res(ctx.json(addressSearchValid))),
+    // POST: when manual address is submitted, return array-based errors
+    rest.post(mockValidateExporterAddressUrl, (req, res, ctx) =>
+      res(
+        ctx.status(200),
+        ctx.json(["error.townCity.string.empty", "error.postcode.string.empty", "error.country.string.empty"])
+      )
+    ),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(processingStatementComplete))
+    ),
+  ],
   [TestCaseId.PSAddProcessingPlantAddress]: () => [
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(prcessingStatementAddPlantAddress))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(prcessingStatementAddPlantAddress))),
