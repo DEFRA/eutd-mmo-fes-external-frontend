@@ -4,7 +4,7 @@ const certificateUrl = `/create-catch-certificate/${documentNumber}`;
 const truckPageUrl = `create-catch-certificate/${documentNumber}/add-transportation-details-truck/0`;
 
 describe("Add Transportation Details Truck: Allowed", () => {
-  it("should render truck transport details page", () => {
+  it.only("should render truck transport details page", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -29,14 +29,14 @@ describe("Add Transportation Details Truck: Allowed", () => {
       expect(labels).to.deep.eq([
         "Truck nationality",
         "Registration number",
-        "Shipping container identification number (optional)",
+        "Container identification number",
         "Place export leaves the departure country",
         "Freight bill number (optional)",
       ]);
       expect(hints).to.deep.eq([
         "For example, United Kingdom",
         "For example, A123 4567 or BD51SMR",
-        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
+        "Enter container or trailer identification number. For example, ABCD1234567",
         "For example, Hull.",
         "For example, BD51SMR",
       ]);
