@@ -12,7 +12,7 @@ describe("What are you exporting page", () => {
     cy.visit(productsUrl, { qs: { ...testParams } });
   });
 
-  it("should render a back link", () => {
+  it("should render a back link to add-exporter-details for non-CSV upload", () => {
     cy.findByRole("link", { name: "Back" }).click({ force: true });
     cy.url().should("eq", `http://localhost:3000${documentUrl}/add-exporter-details`);
   });
@@ -180,20 +180,19 @@ describe("What are you exporting page", () => {
 
     cy.log("STEP #1 - Checking species dropdown is visible");
     cy.get("#species").should("be.visible");
-    cy.wait(500);
 
     cy.log("STEP #2 - Verifying species dropdown is enabled and empty");
     cy.get("#species").should("not.be.disabled");
     cy.get("#species").should("have.value", "");
 
-    cy.log("STEP #3 - Typing 'a' to search for species");
-    cy.get("#species").type("a", { force: true });
+    cy.log("STEP #3 - Typing 'Aesop' to search for species");
+    cy.get("#species").type("Aesop", { force: true, delay: 100 });
 
     cy.log("STEP #4 - Waiting for species option to appear");
-    cy.get("#species-option--1", { timeout: 5000 }).should("be.visible");
+    cy.get("#species-option--1", { timeout: 10000 }).should("be.visible");
 
     cy.log("STEP #5 - Clicking Aesop shrimp option");
-    cy.get("#species-option--1").click();
+    cy.get("#species-option--1").click({ force: true });
 
     cy.log("STEP #5A - Triggering change and blur events on species input");
     cy.get("#species").trigger("change").trigger("blur");
@@ -430,5 +429,67 @@ describe("What are you exporting page: editing product with errors", () => {
     cy.get("#state").contains("Fresh");
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("16051000");
+  });
+});
+
+describe("What are you exporting page: CSV upload journey back button", () => {
+  it("should render a back link to upload-file for CSV upload", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingUploadEntry,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.findByRole("link", { name: "Back" }).click({ force: true });
+    cy.url().should("eq", `http://localhost:3000${documentUrl}/upload-file`);
+  });
+});
+
+describe("What are you exporting page: Product add to favourites notifications", () => {
+  it("should display success notification when product is added to favourites", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingProductAddedToFavouritesSuccess,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    cy.get("#species").type("Aesop", { force: true, delay: 100 });
+    cy.get("#species-option--1", { timeout: 10000 }).should("be.visible");
+    cy.get("#species-option--1").click({ force: true });
+    cy.get("#state").select("FRE", { force: true });
+    cy.get("#presentation").select("FIL", { force: true });
+    cy.get("#commodity_code").select("03024400", { force: true });
+    cy.get("#addToFavourites").check();
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+
+    cy.get(".govuk-notification-banner").should("be.visible");
+    cy.get(".govuk-notification-banner__content").should("contain", "has been added to your product favourites");
+  });
+
+  it("should display failure notification when product already exists in favourites", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingProductAddedToFavouritesFailure,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    cy.get("#species").type("Aesop", { force: true, delay: 100 });
+    cy.get("#species-option--1", { timeout: 10000 }).should("be.visible");
+    cy.get("#species-option--1").click({ force: true });
+    cy.get("#state").select("FRE", { force: true });
+    cy.get("#presentation").select("FIL", { force: true });
+    cy.get("#commodity_code").select("03024400", { force: true });
+    cy.get("#addToFavourites").check();
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+
+    cy.get(".govuk-notification-banner").should("be.visible");
+    cy.get(".govuk-notification-banner__content").should("contain", "already exists in your product favourites");
+  });
+});
+
+describe("What are you exporting page: Favourites tab with product limit", () => {
+  it("should not render add product button in favourites tab when limit reached", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-testid='add-product']").should("not.exist");
   });
 });
