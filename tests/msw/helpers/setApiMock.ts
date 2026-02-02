@@ -8,10 +8,10 @@ import setupDefaultMocks from "./defaultMocks";
  *
  * @param requestUrl - URL containing query-string parameters "testCaseId" and "args"
  */
-const setApiMock = (requestUrl: string) => {
+const setApiMock = (requestUrl: string, testCaseId?: string) => {
   if (isTestEnv() && server.instance) {
     const params = new URL(requestUrl).searchParams;
-    const key = params.get("testCaseId");
+    const key = testCaseId ?? params.get("testCaseId");
     const additionalArgs = params.get("args") ?? "";
 
     const mockFn: HandlerFunction = handlers[key];
@@ -21,7 +21,9 @@ const setApiMock = (requestUrl: string) => {
       setupDefaultMocks();
       mockFn(...decodeURIComponent(additionalArgs).split(",")).forEach((mock) => server.instance.use(mock));
     }
+    return key;
   }
+  return null;
 };
 
 export default setApiMock;

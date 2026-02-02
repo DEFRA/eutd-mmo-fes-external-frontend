@@ -29,17 +29,55 @@ export const addManualExporterAddress = async (
   return await onAddManualExporterAddress(response, exporter);
 };
 
+const getFieldFromErrorKey = (errorKey: string): string => {
+  const parts = errorKey.split(".");
+  if (parts[0] === "error" && parts.length > 1) {
+    return parts[1];
+  }
+  return errorKey;
+};
+
 const onAddManualExporterAddress = async (response: Response, formData: Exporter): Promise<IExporter> => {
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    // If JSON parsing fails (e.g., empty response), use empty object
+    data = {};
+  }
+
   switch (response.status) {
     case 200:
     case 204:
-      return {
-        model: formData,
-        error: "",
-        errors: {},
-      };
+      if (Array.isArray(data)) {
+        // New way: errors as array of strings
+        const errors = data.map((errorKey: string) => ({
+          key: getFieldFromErrorKey(errorKey),
+          message: getErrorMessage(errorKey),
+        }));
+        return {
+          model: formData,
+          error: "invalid",
+          errors,
+        };
+      } else if (data.unauthorised) {
+        // Handle unauthorised flag in 200 response
+        return {
+          model: formData,
+          error: "",
+          errors: [],
+          unauthorised: true,
+        };
+      } else {
+        // Success: object
+        return {
+          model: data,
+          error: "",
+          errors: [],
+        };
+      }
     case 400:
-      const data = await response.json();
+      // Old way: errors as object with field names as keys
       return {
         model: formData,
         error: "invalid",
@@ -49,11 +87,15 @@ const onAddManualExporterAddress = async (response: Response, formData: Exporter
         })),
       };
     case 403:
+      // Handle 403 Forbidden - return with unauthorised flag
       return {
-        ...(await response.json()),
+        model: formData,
+        error: "",
+        errors: [],
         unauthorised: true,
       };
     default:
-      throw new Error(`Unexpected error: ${response.status}`);
+      // For other error status codes, throw with status and data
+      throw { status: response.status, data };
   }
 };

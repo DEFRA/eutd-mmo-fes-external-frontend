@@ -14,6 +14,11 @@ export interface ITestParams {
 }
 
 export enum TestCaseId {
+  PSAddProcessingPlantAddressWithErrorsArray = "psAddProcessingPlantAddressWithErrorsArray",
+  // New error array-based test cases for exporter manual address
+  CCExporterManualAddressWithErrorsArray = "CCExporterManualAddressWithErrorsArray",
+  CCExporterManualAddressWithSubBuildingErrorArray = "CCExporterManualAddressWithSubBuildingErrorArray",
+  CCExporterManualAddressWithOnlyRequiredArray = "CCExporterManualAddressWithOnlyRequiredArray",
   StartJourney = "startJourney",
   StartJourneyFailed = "startJourneyFailed",
   StartJourneyFailedNoErrors = "startJourneyFailedNoErrors",
@@ -210,6 +215,7 @@ export enum TestCaseId {
 
   CCExporterManualAddressValid = "ccExporterManualAddressValid",
   CCExporterManualAddressWithErrors = "ccExporterManualAddressWithErrors",
+  CCExporterManualAddressWithAddressFirstPartError = "ccExporterManualAddressWithAddressFirstPartError",
   CCExporterManualAddressWithSubBuildingError = "ccExporterManualAddressWithSubBuildingError",
   CCExporterManualAddressWith403 = "ccExporterManualAddressWith403",
   CCExporterSelectAddress = "ccExporterSelectAddress",
@@ -349,6 +355,13 @@ export enum TestCaseId {
   TruckTransportPointOfDestinationInvalidCharacters = "TruckTransportPointOfDestinationInvalidCharacters",
   TrainTransportContainerIdentificationNumberMaxLength = "TrainTransportContainerIdentificationNumberMaxLength",
   TrainTransportContainerIdentificationNumberInvalidCharacters = "TrainTransportContainerIdentificationNumberInvalidCharacters",
+  TrainTransportMultipleContainers = "TrainTransportMultipleContainers",
+  TrainTransportContainerValidationErrors = "TrainTransportContainerValidationErrors",
+  TrainTransportContainerMaxLength = "TrainTransportContainerMaxLength",
+  TrainTransportEmptyContainers = "TrainTransportEmptyContainers",
+  TrainTransportContainerPersistence = "TrainTransportContainerPersistence",
+  TrainTransportMixedContainerValidation = "TrainTransportMixedContainerValidation",
+  TrainTransportEditWithContainers = "TrainTransportEditWithContainers",
   TrainTransportPointOfDestinationRequired = "TrainTransportPointOfDestinationRequired",
   TrainTransportPointOfDestinationMaxLength = "TrainTransportPointOfDestinationMaxLength",
   TrainTransportPointOfDestinationInvalidCharacters = "TrainTransportPointOfDestinationInvalidCharacters",

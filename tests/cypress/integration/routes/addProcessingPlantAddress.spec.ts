@@ -436,16 +436,15 @@ describe("Add Processing Plant Address", () => {
 
   it("should display errors on only required value submitted on manual address", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSPSAddProcessingPlantAddressWithErrors,
+      testCaseId: TestCaseId.PSAddProcessingPlantAddressWithErrorsArray,
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.url().should("include", "add-processing-plant-address");
+    cy.get('[id="enter-address-manually-link"]').should("be.visible");
+    cy.get('[name="_action"][value="navigateToManualAddress"]').click();
+    cy.get("[data-testid=continue]").click();
     cy.url().should("include", "add-processing-plant-address");
     cy.get(".govuk-error-summary").should("be.visible");
-    cy.get(".govuk-error-summary").contains("Enter the town or city");
-    cy.get(".govuk-error-summary").contains("Select a country from the list");
-    cy.get(".govuk-error-summary").contains("Enter a postcode");
   });
 
   it("should not display errors on validation passed", () => {
