@@ -7,6 +7,14 @@ export const getExportDateFromAction = (day: string, month: string, year: string
   isValidDate(`${year}-${month}-${day}`) ? `${year}-${month}-${day}` : undefined;
 export const getContainerNumber = (errors: any, actionData: any, containerNumber?: string) =>
   !isEmpty(errors) || actionData?.containerNumber ? actionData?.containerNumber : containerNumber;
+export const getContainerIdentificationNumber = (
+  errors: any,
+  actionData: any,
+  containerIdentificationNumber?: string | null
+) =>
+  !isEmpty(errors) || actionData?.containerIdentificationNumber
+    ? actionData?.containerIdentificationNumber
+    : containerIdentificationNumber;
 export const getDeparturePlace = (errors: any, actionData: any, departurePlace?: string | null) =>
   !isEmpty(errors) || actionData?.departurePlace ? actionData?.departurePlace : departurePlace;
 export const getVesselName = (errors: any, actionData: any, vesselName?: string) =>

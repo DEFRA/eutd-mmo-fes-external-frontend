@@ -1620,6 +1620,83 @@ const transportDetailsHandler: ITestHandler = {
     rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
+  [TestCaseId.TrainTransportMultipleContainers]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) => res(ctx.json(saveTrainDetails))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TrainTransportContainerValidationErrors]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          "containerNumbers.0": "Container identification number must only contain letters and numbers",
+          containerIdentificationNumber: "Container identification number must only contain letters and numbers",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TrainTransportContainerMaxLength]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          "containerNumbers.0": "Container identification number must not exceed 50 characters",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TrainTransportEmptyContainers]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) => res(ctx.json(saveTrainDetails))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TrainTransportContainerPersistence]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          railwayBillNumber: "error.railwayBillNumber.any.required",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TrainTransportMixedContainerValidation]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          "containerNumbers.1": "Container identification number must only contain letters and numbers",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TrainTransportEditWithContainers]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) =>
+      res(
+        ctx.json({
+          ...catchCertificateTrain,
+          containerNumbers: ["EXISTING001", "EXISTING002", "EXISTING003"],
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
   [TestCaseId.TrainTransportContainerIdentificationNumberMaxLength]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
@@ -1627,7 +1704,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          containerIdentificationNumber: "error.containerIdentificationNumber.string.max",
+          "containerNumbers.0": "error.containerNumbers.0.string.max",
         })
       )
     ),
@@ -1635,7 +1712,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          containerIdentificationNumber: "error.containerIdentificationNumber.string.max",
+          "containerNumbers.0": "error.containerNumbers.0.string.max",
         })
       )
     ),
@@ -1648,7 +1725,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          containerIdentificationNumber: "error.containerIdentificationNumber.string.pattern.base",
+          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
         })
       )
     ),
@@ -1656,7 +1733,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          containerIdentificationNumber: "error.containerIdentificationNumber.string.pattern.base",
+          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
         })
       )
     ),
