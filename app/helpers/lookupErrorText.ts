@@ -104,6 +104,36 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.4.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
     "error.containerNumbers.4.string.pattern.base":
       "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError",
+    "error.containerNumbers.5.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.5.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.5.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.5.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumbers.5.string.pattern.base":
+      "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError",
+    "error.containerNumbers.6.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.6.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.6.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.6.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumbers.6.string.pattern.base":
+      "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError",
+    "error.containerNumbers.7.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.7.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.7.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.7.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumbers.7.string.pattern.base":
+      "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError",
+    "error.containerNumbers.8.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.8.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.8.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.8.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumbers.8.string.pattern.base":
+      "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError",
+    "error.containerNumbers.9.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.9.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.9.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.9.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumbers.9.string.pattern.base":
+      "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError",
     "error.nationalityOfVehicle.any.required": "commonTransportationDetailsTruckNationalityError",
     "error.nationalityOfVehicle.any.empty": "commonTransportationDetailsTruckNationalityError",
     "error.nationalityOfVehicle.string.empty": "commonTransportationDetailsTruckNationalityError",
@@ -284,6 +314,9 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.array.min": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.array.max": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.array.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumbers.string.pattern.base":
+      "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError",
     "error.dateLanded.string.empty": "ccCommonDateLandedRequiredError",
     "error.placeOfUnloading.string.pattern.base": "sdAddTransportationDetailsTruckPlaceOfUnloadingAsACombination",
     "validation.eezCode.string.max": "ccUploadFilePageTableEEZMaxCharError",
