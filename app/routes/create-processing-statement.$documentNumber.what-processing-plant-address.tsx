@@ -39,7 +39,7 @@ import setApiMock from "tests/msw/helpers/setApiMock";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   /* istanbul ignore next */
-  setApiMock(request.url);
+  const testCaseId = setApiMock(request.url);
 
   const { documentNumber } = params;
 
@@ -52,10 +52,16 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   validateResponseData(processingStatement);
 
   const session = await getSessionFromRequest(request);
-  const shouldUpdateSession = !session.has("csrf");
+  let shouldUpdateSession = !session.has("csrf");
 
   if (shouldUpdateSession) {
     session.set("csrf", await createCSRFToken(request));
+  }
+
+  // Save testCaseId to session for use in action
+  if (testCaseId && !session.has("testCaseId")) {
+    session.set("testCaseId", testCaseId);
+    shouldUpdateSession = true; // Need to commit session to save testCaseId
   }
 
   const currentStep = session.get("currentStep");
@@ -238,11 +244,18 @@ const handleContinueManualAddress = async (
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
+  const session = await getSessionFromRequest(request);
+  const testCaseId = session.get("testCaseId");
+
+  /* istanbul ignore next */
+  if (testCaseId) {
+    setApiMock(request.url, testCaseId);
+  }
+
   const bearerToken = await getBearerTokenForRequest(request);
   const form = await request.formData();
   const { documentNumber } = params;
   const buttonClicked = form.get("_action") as ExporterAddressButtonType;
-  const session = await getSessionFromRequest(request);
 
   // Preserve nextUri from the request URL
   const url = new URL(request.url);
