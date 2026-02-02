@@ -12,7 +12,7 @@ describe("What are you exporting page", () => {
     cy.visit(productsUrl, { qs: { ...testParams } });
   });
 
-  it("should render a back link", () => {
+  it("should render a back link to add-exporter-details for non-CSV upload", () => {
     cy.findByRole("link", { name: "Back" }).click({ force: true });
     cy.url().should("eq", `http://localhost:3000${documentUrl}/add-exporter-details`);
   });
@@ -430,5 +430,16 @@ describe("What are you exporting page: editing product with errors", () => {
     cy.get("#state").contains("Fresh");
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("16051000");
+  });
+});
+
+describe("What are you exporting page: CSV upload journey back button", () => {
+  it("should render a back link to upload-file for CSV upload", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingUploadEntry,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.findByRole("link", { name: "Back" }).click({ force: true });
+    cy.url().should("eq", `http://localhost:3000${documentUrl}/upload-file`);
   });
 });
