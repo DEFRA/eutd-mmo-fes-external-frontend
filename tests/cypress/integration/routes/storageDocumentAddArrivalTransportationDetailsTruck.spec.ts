@@ -17,7 +17,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get(".govuk-heading-xl").contains("Truck arriving in the UK");
     cy.wait(250);
     cy.get("form").should(($form) => {
-      expect($form.find("input[type='text']")).to.have.lengthOf(6);
+      expect($form.find("input[type='text']")).to.have.lengthOf(7);
 
       const labelObjects = $form.find("label").map((i, el) => Cypress.$(el).text());
       const textObjects = $form.find("input[type='text']").map((i, el) => Cypress.$(el).val());
@@ -25,7 +25,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       const labels = labelObjects.get();
       const textinputs = textObjects.get();
       const hints = hintObjects.get();
-      expect(textinputs).to.have.length(6);
+      expect(textinputs).to.have.length(7);
       expect(labels).to.have.length(11);
       expect(labels).to.deep.eq([
         "Truck nationality",

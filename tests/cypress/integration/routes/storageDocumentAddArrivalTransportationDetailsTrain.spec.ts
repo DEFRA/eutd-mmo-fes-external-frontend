@@ -17,7 +17,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get(".govuk-heading-xl").contains("Train arriving in the UK");
     cy.wait(250);
     cy.get("form").should(($form) => {
-      expect($form.find("input[type='text']")).to.have.lengthOf(5);
+      expect($form.find("input[type='text']")).to.have.lengthOf(6);
 
       const labelObjects = $form.find("label").map((i, el) => Cypress.$(el).text());
       const textObjects = $form.find("input[type='text']").map((i, el) => Cypress.$(el).val());
@@ -26,7 +26,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       const textinputs = textObjects.get();
       const hints = hintObjects.get();
 
-      expect(textinputs).to.have.length(5);
+      expect(textinputs).to.have.length(6);
       expect(labels).to.have.length(9);
       expect(labels).to.deep.eq([
         "Railway bill number",
@@ -47,7 +47,7 @@ describe("Add Transportation Details Train: Allowed", () => {
         "For example, Calais port, Calais-Dunkerque airport or the place the train started its journey",
         "This is where the consignment was unloaded from the train when arriving in the UK",
         "For example, 25 07 2025",
-        "Enter the identification number shown on the shipping container. For example, ABCJ0123456"
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
       ]);
     });
     cy.contains("button", "Save and continue").should("be.visible");
