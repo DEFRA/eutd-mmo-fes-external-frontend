@@ -88,6 +88,10 @@ export const exportersAddressLoader = async (request: Request, params: Params, j
     );
   }
 
+  // Commit session if we modified it (added csrf or testCaseId) OR if currentStep exists
+  // (which means we're in a multi-step flow after an action that modified the session)
+  const shouldCommit = shouldUpdateSession ?? testCaseId ?? currentStep;
+
   return new Response(
     JSON.stringify({
       documentNumber,
@@ -99,7 +103,7 @@ export const exportersAddressLoader = async (request: Request, params: Params, j
       status: 200,
       headers: {
         "Content-Type": "application/json",
-        "Set-Cookie": await commitSession(session),
+        ...(shouldCommit && { "Set-Cookie": await commitSession(session) }),
       },
     }
   );
