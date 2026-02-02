@@ -95,6 +95,19 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.url().should("include", progressUrl);
   });
 
+  it("should display railway bill number label and hint text", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportSave,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Check railway bill number label is displayed and bold
+    cy.get('label[for="railwayBillNumber"]').should("be.visible").and("contain", "Railway bill number");
+
+    // Check hint text is displayed
+    cy.get("#hint-railwayBillNumber").should("be.visible").and("contain", "For example, AB12345C");
+  });
+
   it("should clear departurePlace and exportDate when vehicle changes from previous selection", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportVehicleChanged,
