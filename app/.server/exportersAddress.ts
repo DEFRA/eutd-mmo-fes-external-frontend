@@ -68,27 +68,6 @@ export const exportersAddressLoader = async (request: Request, params: Params, j
       (address: ILookUpAddressDetails) => address.address_line === addressOne
     );
 
-    if (shouldUpdateSession) {
-      return new Response(
-        JSON.stringify({
-          documentNumber,
-          currentStep,
-          postcode,
-          postcodeaddress,
-          postcodeaddresses,
-          countries,
-          csrf: session.get("csrf"),
-        }),
-        {
-          status: 200,
-          headers: {
-            "Content-Type": "application/json",
-            "Set-Cookie": await commitSession(session),
-          },
-        }
-      );
-    }
-
     return new Response(
       JSON.stringify({
         documentNumber,
@@ -96,24 +75,6 @@ export const exportersAddressLoader = async (request: Request, params: Params, j
         postcode,
         postcodeaddress,
         postcodeaddresses,
-        countries,
-        csrf: session.get("csrf"),
-      }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Set-Cookie": await commitSession(session),
-        },
-      }
-    );
-  }
-
-  if (shouldUpdateSession) {
-    return new Response(
-      JSON.stringify({
-        documentNumber,
-        currentStep,
         countries,
         csrf: session.get("csrf"),
       }),
@@ -138,6 +99,7 @@ export const exportersAddressLoader = async (request: Request, params: Params, j
       status: 200,
       headers: {
         "Content-Type": "application/json",
+        "Set-Cookie": await commitSession(session),
       },
     }
   );
