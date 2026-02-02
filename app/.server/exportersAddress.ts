@@ -61,6 +61,12 @@ export const exportersAddressLoader = async (request: Request, params: Params, j
   const addressOne = session.get("addressOne");
   const countries: ICountry[] = await getCountries();
 
+  // Commit session if:
+  // 1. We added a new CSRF token (shouldUpdateSession)
+  // 2. We have currentStep which means we're in a multi-step flow
+  // This ensures session state persists to the browser, especially critical for non-JS journeys
+  const shouldCommit = shouldUpdateSession || currentStep != null;
+
   if (!isEmpty(postcode)) {
     const response: ILookUpAddress = await postCodeLookUp(postcode);
     const postcodeaddresses: ILookUpAddressDetails[] = response.data;
@@ -82,15 +88,11 @@ export const exportersAddressLoader = async (request: Request, params: Params, j
         status: 200,
         headers: {
           "Content-Type": "application/json",
-          "Set-Cookie": await commitSession(session),
+          ...(shouldCommit && { "Set-Cookie": await commitSession(session) }),
         },
       }
     );
   }
-
-  // Commit session if we modified it (added csrf or testCaseId) OR if currentStep exists
-  // (which means we're in a multi-step flow after an action that modified the session)
-  const shouldCommit = shouldUpdateSession || !!testCaseId || !!currentStep;
 
   return new Response(
     JSON.stringify({
