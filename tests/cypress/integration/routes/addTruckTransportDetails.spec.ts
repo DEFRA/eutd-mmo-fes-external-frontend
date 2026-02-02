@@ -98,7 +98,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get("label[for='containerNumbers.0']").should("contain.text", "Shipping container identification number");
+    cy.get("label[for='containerNumbers.0']").should("contain.text", "Container identification number");
 
     cy.get("#hint-containerIdentificationNumber")
       .should("be.visible")
@@ -364,7 +364,7 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
     cy.get('label[for="containerNumbers.0"]')
-      .should("contain.text", "Shipping container identification number")
+      .should("contain.text", "Container identification number")
       .should("have.class", "govuk-!-font-weight-bold");
   });
 

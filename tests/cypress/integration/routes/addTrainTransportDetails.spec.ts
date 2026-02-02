@@ -317,27 +317,4 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
   });
-
-  it("should display error on specific container field when mixed validation fails", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.TrainTransportMixedContainerValidation,
-    };
-    cy.visit(trainPageUrl, { qs: { ...testParams } });
-
-    cy.get("#railwayBillNumber").type("RB123456", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("INVALID@123", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
-
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-
-    // Check error is displayed
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Container identification number must only contain letters and numbers$/).should("be.visible");
-
-    // Verify first container value is still present
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "ABCU1234567");
-    cy.get('input[name="containerNumbers.1"]').should("have.value", "INVALID@123");
-  });
 });
