@@ -41,6 +41,36 @@ export const TransportationModeDetails = ({
 }) => {
   const { t } = useTranslation("transportation");
 
+  const renderDeparturePlaceField = () => (
+    <FormInput
+      containerClassName="govuk-form-group govuk-!-width-one-half"
+      labelClassName="govuk-label govuk-!-font-weight-bold"
+      label={t("addTransportationDetailsPlaceExportLeavesDepartureCountry")}
+      name="departurePlace"
+      type="text"
+      inputClassName={classNames("govuk-input", {
+        "govuk-input--error": errors?.departurePlace,
+      })}
+      inputProps={{
+        defaultValue: departurePlace ?? "",
+        id: "departurePlace",
+        "aria-describedby": "hint-departurePlace",
+      }}
+      hint={{
+        id: "hint-departurePlace",
+        position: "above",
+        text: t("addTransportationDetailsForExampleHint"),
+        className: "govuk-hint govuk-!-margin-bottom-0",
+      }}
+      errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.departurePlace)) }}
+      staticErrorMessage={t(errors?.departurePlace?.message, { ns: "errorsText" })}
+      errorPosition={ErrorPosition.AFTER_LABEL}
+      containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.departurePlace))}
+      hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+      hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+    />
+  );
+
   return (
     <>
       {(() => {
@@ -191,6 +221,7 @@ export const TransportationModeDetails = ({
             hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
             hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
           />
+          {renderDeparturePlaceField()}
           <ContainerIdentificationNumber
             containers={containerNumbers}
             maximumContainers={10}
@@ -206,6 +237,7 @@ export const TransportationModeDetails = ({
         <>
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
+            labelClassName="govuk-label govuk-!-font-weight-bold"
             label={t("addTransportationDetailsRailwayBillNumber")}
             name="railwayBillNumber"
             type="text"
@@ -215,6 +247,13 @@ export const TransportationModeDetails = ({
             inputProps={{
               defaultValue: railwayBillNumber,
               id: "railwayBillNumber",
+              "aria-describedby": "hint-railwayBillNumber",
+            }}
+            hint={{
+              id: "hint-railwayBillNumber",
+              position: "above",
+              text: t("addTransportationDetailsRailwayBillNumberHint"),
+              className: "govuk-hint govuk-!-margin-bottom-0",
             }}
             errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.railwayBillNumber)) }}
             staticErrorMessage={t(errors?.railwayBillNumber?.message, { ns: "errorsText" })}
@@ -223,33 +262,7 @@ export const TransportationModeDetails = ({
             hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
             hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
           />
-          <FormInput
-            containerClassName="govuk-form-group govuk-!-width-one-half"
-            labelClassName="govuk-label govuk-!-font-weight-bold"
-            label={t("addTransportationDetailsPlaceExportLeavesDepartureCountry")}
-            name="departurePlace"
-            type="text"
-            inputClassName={classNames("govuk-input", {
-              "govuk-input--error": errors?.departurePlace,
-            })}
-            inputProps={{
-              defaultValue: departurePlace ?? "",
-              id: "departurePlace",
-              "aria-describedby": "hint-departurePlace",
-            }}
-            hint={{
-              id: "hint-departurePlace",
-              position: "above",
-              text: t("addTransportationDetailsForExampleHint"),
-              className: "govuk-hint govuk-!-margin-bottom-0",
-            }}
-            errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.departurePlace)) }}
-            staticErrorMessage={t(errors?.departurePlace?.message, { ns: "errorsText" })}
-            errorPosition={ErrorPosition.AFTER_LABEL}
-            containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.departurePlace))}
-            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-            hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-          />
+          {renderDeparturePlaceField()}
           <ContainerIdentificationNumber
             containers={containerNumbers}
             maximumContainers={10}
@@ -261,35 +274,7 @@ export const TransportationModeDetails = ({
           />
         </>
       )}
-      {vehicle !== "train" && (
-        <FormInput
-          containerClassName="govuk-form-group govuk-!-width-one-half"
-          labelClassName="govuk-label govuk-!-font-weight-bold"
-          label={t("addTransportationDetailsPlaceExportLeavesDepartureCountry")}
-          name="departurePlace"
-          type="text"
-          inputClassName={classNames("govuk-input", {
-            "govuk-input--error": errors?.departurePlace,
-          })}
-          inputProps={{
-            defaultValue: departurePlace ?? "",
-            id: "departurePlace",
-            "aria-describedby": "hint-departurePlace",
-          }}
-          hint={{
-            id: "hint-departurePlace",
-            position: "above",
-            text: t("addTransportationDetailsForExampleHint"),
-            className: "govuk-hint govuk-!-margin-bottom-0",
-          }}
-          errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.departurePlace)) }}
-          staticErrorMessage={t(errors?.departurePlace?.message, { ns: "errorsText" })}
-          errorPosition={ErrorPosition.AFTER_LABEL}
-          containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.departurePlace))}
-          hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-          hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-        />
-      )}
+      {vehicle !== "train" && vehicle !== "truck" && renderDeparturePlaceField()}
       <FormInput
         name="freightBillNumber"
         type="text"
