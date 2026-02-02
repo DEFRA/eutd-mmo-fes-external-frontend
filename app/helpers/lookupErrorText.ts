@@ -285,6 +285,9 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.array.min": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.array.max": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.array.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumbers.string.pattern.base":
+      "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError",
     "error.dateLanded.string.empty": "ccCommonDateLandedRequiredError",
     "error.placeOfUnloading.string.pattern.base": "sdAddTransportationDetailsTruckPlaceOfUnloadingAsACombination",
     "validation.eezCode.string.max": "ccUploadFilePageTableEEZMaxCharError",

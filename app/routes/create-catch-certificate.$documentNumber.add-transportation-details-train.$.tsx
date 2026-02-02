@@ -10,8 +10,8 @@ import {
 } from "react-router";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import type { ITransport, ErrorResponse } from "~/types";
-import { displayErrorMessages, getMeta, scrollToId, TransportType } from "~/helpers";
+import type { ITransport, ErrorResponse, ICountry } from "~/types";
+import { displayErrorMessagesInOrder, getMeta, scrollToId, TransportType, getContainerNumbers } from "~/helpers";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
@@ -30,19 +30,43 @@ const TrainTransportDetailsPage = () => {
     railwayBillNumber,
     departurePlace,
     freightBillNumber,
-    containerIdentificationNumber,
+    containerNumbers,
     vehicle,
     nextUri,
     csrf,
     id,
     displayOptionalSuffix,
+    countries,
   } = useLoaderData<
-    ITransport & { documentNumber: string; nextUri: string; displayOptionalSuffix: boolean; csrf: string }
+    ITransport & {
+      documentNumber: string;
+      nextUri: string;
+      displayOptionalSuffix: boolean;
+      csrf: string;
+      countries?: ICountry[];
+    }
   >();
   const actionData = useActionData() ?? {};
+
   const { errors = {} } = actionData;
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-train/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
+
+  const errorKeysInOrder = [
+    "railwayBillNumber",
+    "containerNumbers.0",
+    "containerNumbers.1",
+    "containerNumbers.2",
+    "containerNumbers.3",
+    "containerNumbers.4",
+    "containerNumbers.5",
+    "containerNumbers.6",
+    "containerNumbers.7",
+    "containerNumbers.8",
+    "containerNumbers.9",
+    "departurePlace",
+    "freightBillNumber",
+  ];
 
   useScrollOnPageLoad();
 
@@ -54,7 +78,7 @@ const TrainTransportDetailsPage = () => {
 
   return (
     <Main backUrl={backUrl}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
+      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" action={actionUrl} csrf={csrf}>
@@ -67,11 +91,10 @@ const TrainTransportDetailsPage = () => {
               railwayBillNumber={!isEmpty(errors) ? actionData.railwayBillNumber : railwayBillNumber}
               departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
-              containerIdentificationNumber={
-                !isEmpty(errors) ? actionData.containerIdentificationNumber : containerIdentificationNumber
-              }
+              containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
               errors={errors}
               displayOptionalSuffix={displayOptionalSuffix}
+              countries={countries}
             />
             <ButtonGroup />
             <input type="hidden" name="nextUri" value={nextUri} />
