@@ -29,15 +29,15 @@ describe("Add Transportation Details Truck: Allowed", () => {
       expect(labels).to.deep.eq([
         "Truck nationality",
         "Registration number",
-        "Container identification number",
         "Place export leaves the departure country",
+        "Container identification number",
         "Freight bill number (optional)",
       ]);
       expect(hints).to.deep.eq([
         "For example, United Kingdom",
         "For example, A123 4567 or BD51SMR",
-        "Enter container or trailer identification number. For example, ABCD1234567",
         "For example, Hull.",
+        "Enter container or trailer identification number. For example, ABCD1234567",
         "For example, BD51SMR",
       ]);
     });
