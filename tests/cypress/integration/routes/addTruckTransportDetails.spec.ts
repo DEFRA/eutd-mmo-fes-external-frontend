@@ -4,7 +4,7 @@ const certificateUrl = `/create-catch-certificate/${documentNumber}`;
 const truckPageUrl = `create-catch-certificate/${documentNumber}/add-transportation-details-truck/0`;
 
 describe("Add Transportation Details Truck: Allowed", () => {
-  it.only("should render truck transport details page", () => {
+  it("should render truck transport details page", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
