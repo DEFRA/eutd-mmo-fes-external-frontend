@@ -171,6 +171,9 @@ export enum TestCaseId {
   WhatAreYouExportingErrorsOnSaveFromEmptyFavourites = "WhatAreYouExportingErrorsOnSaveFromEmptyFavourites",
   WhatAreYouExportingErrorsOnProductSave = "WhatAreYouExportingErrorsOnProductSave",
   WhatAreYouExportingProductAddedToFavourites = "whatAreYouExportingProductAddedToFavourites",
+  WhatAreYouExportingProductAddedToFavouritesSuccess = "whatAreYouExportingProductAddedToFavouritesSuccess",
+  WhatAreYouExportingProductAddedToFavouritesFailure = "whatAreYouExportingProductAddedToFavouritesFailure",
+  WhatAreYouExportingUploadEntry = "whatAreYouExportingUploadEntry",
 
   DirectLanding = "directLanding",
   DirectLandingNoVessels = "directLandingNoVessels",

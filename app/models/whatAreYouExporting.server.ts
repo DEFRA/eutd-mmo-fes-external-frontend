@@ -439,6 +439,7 @@ export const WhatAreYouExportingLoader = async (request: Request, params: Params
       commodityCode: selectedCommodityCode,
       loaderSpecies: !isEmpty(faoName) && !isEmpty(faoCode) ? `${faoName} (${faoCode})` : undefined,
       nextUri,
+      landingsEntryOption,
       csrf,
     }),
     {
