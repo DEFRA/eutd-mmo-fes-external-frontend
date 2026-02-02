@@ -29,7 +29,10 @@ describe("PS: What processing plant address page", () => {
 
 describe("PS: Entering the address manually", () => {
   beforeEach(() => {
-    cy.visit(psPageUrl);
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSExporterManualAddressValid,
+    };
+    cy.visit(psPageUrl, { qs: { ...testParams } });
     cy.findByText(/^Enter the address manually$/).click({ force: true });
   });
 
@@ -62,9 +65,7 @@ describe("PS: Entering the address manually with errors", () => {
 
     cy.visit(psPageUrl, { qs: { ...testParams } });
     cy.findByText(/^Enter the address manually$/).click({ force: true });
-
     cy.get("[data-testid=continue]").click({ force: true });
-
     cy.url().should("include", "what-processing-plant-address");
     cy.get(".govuk-error-summary").should("be.visible");
   });
