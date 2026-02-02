@@ -22,7 +22,7 @@ export const DateFieldWithPicker = ({
   errors,
   hideAddDateButton = false,
   label,
-  labelStyle = "bold",
+  labelStyle,
   translationNs,
   hintText,
 }: Props) => (
