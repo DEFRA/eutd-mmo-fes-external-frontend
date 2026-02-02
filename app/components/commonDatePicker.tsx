@@ -88,11 +88,9 @@ export const CommonDatePicker = ({
     <div id={id} className={isEmpty(errors) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"}>
       <fieldset className="govuk-fieldset" role="group" aria-describedby={errorMessageText(hintText, errors)}>
         <legend className="govuk-fieldset__legend govuk-fieldset__legend">
-          {labelStyle === "bold" ? (
-            <b>{t(label, { ns: translationNs })}</b>
-          ) : (
-            <label>{t(label, { ns: translationNs })}</label>
-          )}
+          <label className={labelStyle === "bold" ? "govuk-label govuk-!-font-weight-bold" : ""}>
+            {t(label, { ns: translationNs })}
+          </label>
         </legend>
         {hintText && (
           <div id="date-hint" className="govuk-hint">
