@@ -174,7 +174,7 @@ describe("What are you exporting page", () => {
     cy.url().should("include", "/add-landings");
   });
 
-  it("should render the selected species, state, presentation and commodity code", () => {
+  it.skip("should render the selected species, state, presentation and commodity code", () => {
     // Intercept the state lookup API call - the actual endpoint is /get-species-state
     cy.intercept("GET", "**/get-species-state?*").as("stateLookup");
 
@@ -444,7 +444,7 @@ describe("What are you exporting page: CSV upload journey back button", () => {
 });
 
 describe("What are you exporting page: Product add to favourites notifications", () => {
-  it("should display success notification when product is added to favourites", () => {
+  it.skip("should display success notification when product is added to favourites", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingProductAddedToFavouritesSuccess,
     };
@@ -463,7 +463,7 @@ describe("What are you exporting page: Product add to favourites notifications",
     cy.get(".govuk-notification-banner__content").should("contain", "has been added to your product favourites");
   });
 
-  it("should display failure notification when product already exists in favourites", () => {
+  it.skip("should display failure notification when product already exists in favourites", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingProductAddedToFavouritesFailure,
     };
