@@ -63,6 +63,8 @@ export const ContainerIdentificationNumber = ({
   let containerIdentificationLabel = "";
   if (labelKey) {
     containerIdentificationLabel = t(labelKey);
+  } else if (vehicleType === "train") {
+    containerIdentificationLabel = t("addTransportationDetailsContainerIdentificationNumberTrain");
   } else if (vehicleType === "containerVessel") {
     containerIdentificationLabel = displayOptionalSuffix
       ? t("addTransportationArrivalDetailsContainerIdentificationNumberOptional")
@@ -84,7 +86,7 @@ export const ContainerIdentificationNumber = ({
 
   return (
     <div>
-      {vehicleType === 'containerVessel' ? (
+      {vehicleType === "containerVessel" ? (
         // container vessel uses a single `containerNumber` field
         <div className="govuk-button-group" style={{ display: "flex", alignItems: "flex-end" }}>
           <FormInput
@@ -103,9 +105,12 @@ export const ContainerIdentificationNumber = ({
               "govuk-input--error": errors?.[`containerNumber`],
             })}
             inputProps={{
-              value: (isHydrated ? containerInputs[0]?.value ?? '' : actionData[`containerNumber`] ?? containerInputs[0]?.value ?? '') as string,
+              value: (isHydrated
+                ? containerInputs[0]?.value ?? ""
+                : actionData[`containerNumber`] ?? containerInputs[0]?.value ?? "") as string,
               id: `containerNumber`,
-              onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(containerInputs[0].id, e.target.value),
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                handleInputChange(containerInputs[0].id, e.target.value),
             }}
             errorProps={{
               className: getErrorMessageClassName(!isEmpty(errors?.[`containerNumber`])),

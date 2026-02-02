@@ -14,6 +14,7 @@ import {
   calculateDepartureDate,
   handleFormEmptyStringValue,
   getCountries,
+  extractContainerNumbers,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
@@ -45,6 +46,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const countries: ICountry[] = await getCountries();
 
   const saveAsDraft = form.get("_action") === "saveAsDraft";
+  const values = Object.fromEntries(form);
   const nationalityOfVehicleForm = handleFormEmptyStringValue(form, "nationalityOfVehicle", saveAsDraft);
   const nationalityOfVehicle = countries.find(
     (c: ICountry) => c.officialCountryName === nationalityOfVehicleForm
@@ -54,6 +56,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const departureCountry = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
   const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
   const placeOfUnloading = handleFormEmptyStringValue(form, "placeOfUnloading", saveAsDraft);
+  const containerNumbers = extractContainerNumbers(values);
   const nextUri = form.get("nextUri") as string;
 
   const payload: ITransport = {
@@ -71,6 +74,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     departureDate: calculateDepartureDate(form),
     departureCountry,
     placeOfUnloading,
+    containerNumbers,
     vehicle: transport.vehicle,
     user_id: transport.user_id,
     arrival: true,

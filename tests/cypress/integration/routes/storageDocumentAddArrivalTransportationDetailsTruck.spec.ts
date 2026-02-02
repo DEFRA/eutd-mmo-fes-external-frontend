@@ -35,7 +35,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
         "Where the consignment departs from",
         "Place of unloading",
         "Departure date",
-        "Container identification number (optional)",
+        "Shipping container identification number (optional)",
         "Day",
         "Month",
         "Year",

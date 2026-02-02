@@ -13,6 +13,7 @@ import {
   TransportationDetailsLoaderFunction,
   calculateDepartureDate,
   handleFormEmptyStringValue,
+  extractContainerNumbers,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
@@ -31,11 +32,13 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (!isValid) return redirect("/forbidden");
 
   const saveAsDraft = form.get("_action") === "saveAsDraft";
+  const values = Object.fromEntries(form);
   const railwayBillNumber = handleFormEmptyStringValue(form, "railwayBillNumber", saveAsDraft);
   const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
   const departureCountry = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
   const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
   const placeOfUnloading = handleFormEmptyStringValue(form, "placeOfUnloading", saveAsDraft);
+  const containerNumbers = extractContainerNumbers(values);
 
   const nextUri = form.get("nextUri") as string;
 
@@ -53,6 +56,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     departurePort,
     departureDate: calculateDepartureDate(form),
     placeOfUnloading,
+    containerNumbers,
     user_id: transport.user_id,
     vehicle: transport.vehicle,
     arrival: true,
