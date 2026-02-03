@@ -157,7 +157,7 @@ export const AddTransportationDetailsComponent = ({
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" csrf={csrf}>
-            <TransportationDetails {...componentAttributes} />
+            <TransportationDetails {...componentAttributes} useBoldLabels={true} />
             <ButtonGroup />
             <input type="hidden" name="vehicle" value={vehicle} />
             <input type="hidden" name="nextUri" value={nextUri} />
