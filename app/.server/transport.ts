@@ -166,16 +166,18 @@ export const updateTransportDetails = async (
 ): Promise<ITransport> => {
   if (!documentNumber || !transportId) throw new Error("Document number or transport id is required");
 
+  const requestPayload = {
+    ...payload,
+    id: transportId,
+  };
+
   const response: Response = await put(
     bearerToken,
     updateTransportDetailsByIdUrl(transportId, isDraft),
     {
       documentnumber: documentNumber,
     },
-    {
-      ...payload,
-      id: transportId,
-    }
+    requestPayload
   );
 
   return onUpdateTransport(response, payload.vehicle);

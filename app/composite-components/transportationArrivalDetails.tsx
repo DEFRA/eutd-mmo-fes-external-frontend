@@ -40,31 +40,33 @@ export const ArrivalTransportationModeDetails = ({
         </legend>
       )}
       {vehicle === "train" && (
-        <FormInput
-          containerClassName="govuk-form-group govuk-!-width-one-half"
-          label={t("addTransportationArrivalDetailsRailwayBillNumber")}
-          name="railwayBillNumber"
-          type="text"
-          inputClassName={classNames("govuk-input", {
-            "govuk-input--error": errors?.railwayBillNumber,
-          })}
-          inputProps={{
-            defaultValue: railwayBillNumber,
-            id: "railwayBillNumber",
-          }}
-          hint={{
-            id: "hint-railwayBillNumber",
-            position: "above",
-            text: t("addTransportationArrivalDetailsRailwayBillNumberHint"),
-            className: "govuk-hint govuk-!-margin-bottom-0",
-          }}
-          errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.railwayBillNumber)) }}
-          staticErrorMessage={t(errors?.railwayBillNumber?.message, { ns: "errorsText" })}
-          errorPosition={ErrorPosition.AFTER_LABEL}
-          containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.railwayBillNumber))}
-          hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-          hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-        />
+        <>
+          <FormInput
+            containerClassName="govuk-form-group govuk-!-width-one-half"
+            label={t("addTransportationArrivalDetailsRailwayBillNumber")}
+            name="railwayBillNumber"
+            type="text"
+            inputClassName={classNames("govuk-input", {
+              "govuk-input--error": errors?.railwayBillNumber,
+            })}
+            inputProps={{
+              defaultValue: railwayBillNumber,
+              id: "railwayBillNumber",
+            }}
+            hint={{
+              id: "hint-railwayBillNumber",
+              position: "above",
+              text: t("addTransportationArrivalDetailsRailwayBillNumberHint"),
+              className: "govuk-hint govuk-!-margin-bottom-0",
+            }}
+            errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.railwayBillNumber)) }}
+            staticErrorMessage={t(errors?.railwayBillNumber?.message, { ns: "errorsText" })}
+            errorPosition={ErrorPosition.AFTER_LABEL}
+            containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.railwayBillNumber))}
+            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+            hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+          />
+        </>
       )}
       {vehicle === "containerVessel" && (
         <>
@@ -219,13 +221,15 @@ export const ArrivalTransportationModeDetails = ({
           />
         </>
       )}
-      {(vehicle === "plane" || vehicle === "containerVessel") && (
+      {(vehicle === "plane" || vehicle === "containerVessel" || vehicle === "truck") && (
         <ContainerIdentificationNumber
           containers={containerNumbers}
           maximumContainers={5}
           errors={errors}
-          displayOptionalSuffix={false}
+          displayOptionalSuffix={vehicle === "truck"}
           vehicleType={vehicle}
+          labelKey={vehicle === "truck" ? "addTransportationDetailsContainerIdentificationNumberTruck" : undefined}
+          hintKey={vehicle === "truck" ? "addTransportationDetailsContainerIdentificationNumberHintTruck" : undefined}
         />
       )}
     </>
@@ -416,6 +420,17 @@ export const TransportationArrivalDetails = ({
         hideAddDateButton={true}
         hintText="addTransportationArrivalDetailsDepartureDateHint"
       />
+      {vehicle === "train" && (
+        <ContainerIdentificationNumber
+          containers={containerNumbers}
+          maximumContainers={5}
+          errors={errors}
+          displayOptionalSuffix={true}
+          vehicleType={vehicle}
+          labelKey="addTransportationDetailsContainerIdentificationNumberTrain"
+          hintKey="addTransportationDetailsContainerIdentificationNumberTrainHint"
+        />
+      )}
     </fieldset>
   );
 };

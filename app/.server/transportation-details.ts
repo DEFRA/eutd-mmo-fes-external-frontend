@@ -53,17 +53,19 @@ const buildTransportPayload = (transportType: TransportType, form: FormData): Pa
         containerIdentificationNumber: !isEmpty(form.get("containerIdentificationNumber"))
           ? (form.get("containerIdentificationNumber") as string)
           : null,
+        containerNumbers: extractContainerNumbers(values),
       };
     case TransportType.PLANE:
       return {
         flightNumber: form.get("flightNumber") as string,
-        containerNumber: form.get("containerNumber") as string,
+        airwayBillNumber: !isEmpty(form.get("airwayBillNumber")) ? (form.get("airwayBillNumber") as string) : undefined,
+        containerNumbers: extractContainerNumbers(values),
       };
     case TransportType.CONTAINER_VESSEL:
       return {
         vesselName: form.get("vesselName") as string,
         flagState: form.get("flagState") as string,
-        containerNumber: form.get("containerNumber") as string,
+        containerNumbers: extractContainerNumbers(values),
       };
     default:
       throw new Error("Unknown Transportation Type");
@@ -88,7 +90,10 @@ const handleTransportResponse = (
     return apiCallFailed(errors, values);
   }
 
-  const progressUrl = `/create-catch-certificate/${documentNumber}/add-additional-transport-documents-${transportType === TransportType.CONTAINER_VESSEL ? "container-vessel" : transportType}/${form.get("transportId") ?? "0"}`;
+  // Use the transport ID from the response
+  const transportId = postTransport.id;
+
+  const progressUrl = `/create-catch-certificate/${documentNumber}/add-additional-transport-documents-${transportType === TransportType.CONTAINER_VESSEL ? "container-vessel" : transportType}/${transportId ?? "0"}`;
   return redirect(isEmpty(nextUri) ? progressUrl : nextUri);
 };
 
@@ -164,7 +169,13 @@ export const CatchCertificateTransportationDetailsLoader = async (
     const maximumTransportDocumentPerTransport = parseInt(getEnv().EU_CATCH_MAX_TRANSPORT_DOCUMENTS, 10);
 
     let containerNumbers: string[] = transport.containerNumbers ?? [];
-    if (transportType === TransportType.TRUCK && containerNumbers.length === 0) {
+    // Initialize with empty string for all transport types that support containerNumbers
+    if (
+      [TransportType.TRUCK, TransportType.TRAIN, TransportType.PLANE, TransportType.CONTAINER_VESSEL].includes(
+        transportType
+      ) &&
+      containerNumbers.length === 0
+    ) {
       containerNumbers = [""];
     }
 
@@ -437,7 +448,10 @@ const checkContainerNumbers = (containerNumbers: string[] | undefined | null) =>
   if (!containerNumbers || containerNumbers.length === 0) return [];
   const validContainers = containerNumbers.map((cn) => {
     const trimmed = cn.trim();
-    if (trimmed.length > 50 || !trimmed.match(/^[a-zA-Z0-9]+$/)) return undefined;
+    // ISO 6346 format: 3 uppercase letters + owner category letter (U/J/Z/R) + 7 digits
+    // Allow empty strings as well
+    if (trimmed === "") return trimmed;
+    if (trimmed.length > 50 || !trimmed.match(/^[A-Z]{3}[UJZR]\d{7}$/)) return undefined;
     return trimmed;
   });
   return validContainers;
@@ -537,14 +551,12 @@ export const commonSaveTransportDetails = async (
 };
 
 export const extractContainerNumbers = (values: Record<string, any>): string[] => {
-  const containerKeys = Object.keys(values)
-    .filter((key) => key.startsWith("containerNumbers."))
-    .sort((a, b) => {
-      const indexA = parseInt(a.split(".")[1], 10);
-      const indexB = parseInt(b.split(".")[1], 10);
-      return indexA - indexB;
-    });
-  return containerKeys.map((key) => values[key] as string).filter((num) => num && num.trim() !== "");
+  const containerNumbers: string[] = [];
+  for (let i = 0; i < 10; i++) {
+    const key = `containerNumbers.${i}`;
+    containerNumbers[i] = values[key] ?? "";
+  }
+  return containerNumbers;
 };
 
 // Handle container button actions when JS is disabled
