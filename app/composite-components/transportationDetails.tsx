@@ -17,6 +17,21 @@ import {
   getVesselNameContainerClassName,
 } from "~/helpers";
 
+const getCommonInputProps = (fieldName: string, errors: IErrorsTransformed, t: any) => ({
+  hint: {
+    id: `hint-${fieldName}`,
+    position: "above" as const,
+    text: t(`addTransportationDetails${capitalize(fieldName)}Hint`),
+    className: "govuk-hint govuk-!-margin-bottom-0",
+  },
+  errorProps: { className: getErrorMessageClassName(!isEmpty(errors?.[fieldName])) },
+  staticErrorMessage: t(errors?.[fieldName]?.message, { ns: "errorsText" }),
+  errorPosition: ErrorPosition.AFTER_LABEL,
+  containerClassNameError: getContainerErrorClassName(!isEmpty(errors?.[fieldName])),
+  hiddenErrorText: t("commonErrorText", { ns: "errorsText" }),
+  hiddenErrorTextProps: { className: "govuk-visually-hidden" },
+});
+
 export const TransportationModeDetails = ({
   legendTitle,
   vehicle,
@@ -201,18 +216,7 @@ export const TransportationModeDetails = ({
               id: "airwayBillNumber",
               "aria-describedby": "hint-airwayBillNumber",
             }}
-            hint={{
-              id: "hint-airwayBillNumber",
-              position: "above",
-              text: t("addTransportationDetailsAirwayBillNumberHint"),
-              className: "govuk-hint govuk-!-margin-bottom-0",
-            }}
-            errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.airwayBillNumber)) }}
-            staticErrorMessage={t(errors?.airwayBillNumber?.message, { ns: "errorsText" })}
-            errorPosition={ErrorPosition.AFTER_LABEL}
-            containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.airwayBillNumber))}
-            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-            hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+            {...getCommonInputProps("airwayBillNumber", errors, t)}
           />
         </>
       )}
@@ -242,18 +246,7 @@ export const TransportationModeDetails = ({
               id: "registrationNumber",
               "aria-describedby": "hint-registrationNumber",
             }}
-            hint={{
-              id: "hint-registrationNumber",
-              position: "above",
-              text: t("addTransportationDetailsRegistrationNumberHint"),
-              className: "govuk-hint govuk-!-margin-bottom-0",
-            }}
-            errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.registrationNumber)) }}
-            staticErrorMessage={t(errors?.registrationNumber?.message, { ns: "errorsText" })}
-            errorPosition={ErrorPosition.AFTER_LABEL}
-            containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.registrationNumber))}
-            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-            hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+            {...getCommonInputProps("registrationNumber", errors, t)}
           />
           {renderDeparturePlaceField()}
           <ContainerIdentificationNumber
@@ -283,18 +276,7 @@ export const TransportationModeDetails = ({
               id: "railwayBillNumber",
               "aria-describedby": "hint-railwayBillNumber",
             }}
-            hint={{
-              id: "hint-railwayBillNumber",
-              position: "above",
-              text: t("addTransportationDetailsRailwayBillNumberHint"),
-              className: "govuk-hint govuk-!-margin-bottom-0",
-            }}
-            errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.railwayBillNumber)) }}
-            staticErrorMessage={t(errors?.railwayBillNumber?.message, { ns: "errorsText" })}
-            errorPosition={ErrorPosition.AFTER_LABEL}
-            containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.railwayBillNumber))}
-            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-            hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+            {...getCommonInputProps("railwayBillNumber", errors, t)}
           />
           {renderDeparturePlaceField()}
           <ContainerIdentificationNumber

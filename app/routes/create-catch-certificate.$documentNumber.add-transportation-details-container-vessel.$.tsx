@@ -13,7 +13,14 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import type { ErrorResponse, ITransport } from "~/types";
-import { displayErrorMessagesInOrder, getMeta, scrollToId, TransportType, getContainerNumbers } from "~/helpers";
+import {
+  displayErrorMessagesInOrder,
+  getMeta,
+  scrollToId,
+  TransportType,
+  getContainerNumbers,
+  generateTransportErrorKeys,
+} from "~/helpers";
 import { useScrollOnPageLoad } from "~/hooks";
 
 export const meta: MetaFunction = (args) => getMeta(args);
@@ -50,34 +57,23 @@ const ContainerVesselTransportDetailsPage = () => {
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-container-vessel/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
-  const errorKeysInOrder = [
-    "vesselName",
-    "flagState",
-    "containerNumbers.0",
-    "containerNumbers.1",
-    "containerNumbers.2",
-    "containerNumbers.3",
-    "containerNumbers.4",
-    "containerNumbers.5",
-    "containerNumbers.6",
-    "containerNumbers.7",
-    "containerNumbers.8",
-    "containerNumbers.9",
-    "departurePlace",
-    "freightBillNumber",
-  ];
+  const errorKeysInOrder = generateTransportErrorKeys(
+    ["vesselName", "flagState"],
+    ["departurePlace", "freightBillNumber"]
+  );
 
   useScrollOnPageLoad();
 
   useEffect(() => {
-    if (!isEmpty(errors)) {
-      scrollToId("errorIsland");
+    if (isEmpty(errors)) {
+      return;
     }
+    scrollToId("errorIsland");
   }, [errors]);
 
   return (
     <Main backUrl={backUrl}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} />}
+      {isEmpty(errors) ? null : <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" action={actionUrl} csrf={csrf}>
@@ -85,11 +81,11 @@ const ContainerVesselTransportDetailsPage = () => {
               legendTitle={`${t("addTransportationDetailsTransportDetailsTitle", { ns: "transportation" })} 
                 ${t("addTransportationDetailsContainerVessel", { ns: "transportation" })}`}
               vehicle={vehicle}
-              vesselName={!isEmpty(errors) ? actionData.vesselName : vesselName}
-              flagState={!isEmpty(errors) ? actionData.flagState : flagState}
+              vesselName={isEmpty(errors) ? vesselName : actionData.vesselName}
+              flagState={isEmpty(errors) ? flagState : actionData.flagState}
               containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
-              departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
-              freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
+              departurePlace={isEmpty(errors) ? departurePlace : actionData.departurePlace}
+              freightBillNumber={isEmpty(errors) ? freightBillNumber : actionData.freightBillNumber}
               errors={errors}
               displayOptionalSuffix={displayOptionalSuffix}
             />

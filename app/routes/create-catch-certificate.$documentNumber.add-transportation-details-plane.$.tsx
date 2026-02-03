@@ -12,7 +12,14 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import type { ErrorResponse, IErrorsTransformed, ITransport } from "~/types";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
-import { displayErrorMessagesInOrder, getMeta, scrollToId, TransportType, getContainerNumbers } from "~/helpers";
+import {
+  displayErrorMessagesInOrder,
+  getMeta,
+  scrollToId,
+  TransportType,
+  getContainerNumbers,
+  generateTransportErrorKeys,
+} from "~/helpers";
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
 
@@ -59,22 +66,10 @@ const AddTransportationDetailsPlane = () => {
     }
   }, [errors]);
 
-  const errorKeysInOrder = [
-    "flightNumber",
-    "containerNumbers.0",
-    "containerNumbers.1",
-    "containerNumbers.2",
-    "containerNumbers.3",
-    "containerNumbers.4",
-    "containerNumbers.5",
-    "containerNumbers.6",
-    "containerNumbers.7",
-    "containerNumbers.8",
-    "containerNumbers.9",
-    "airwayBillNumber",
-    "departurePlace",
-    "freightBillNumber",
-  ];
+  const errorKeysInOrder = generateTransportErrorKeys(
+    ["flightNumber"],
+    ["airwayBillNumber", "departurePlace", "freightBillNumber"]
+  );
   const errorMessagesForDisplay = displayErrorMessagesInOrder(errors, errorKeysInOrder);
 
   return (
@@ -90,11 +85,11 @@ const AddTransportationDetailsPlane = () => {
               )}`}
               vehicle="plane"
               errors={errorsTransformed}
-              flightNumber={!isEmpty(errors) ? actionData.flightNumber : flightNumber}
-              airwayBillNumber={!isEmpty(errors) ? actionData.airwayBillNumber : airwayBillNumber}
+              flightNumber={isEmpty(errors) ? flightNumber : actionData.flightNumber}
+              airwayBillNumber={isEmpty(errors) ? airwayBillNumber : actionData.airwayBillNumber}
               containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
-              departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
-              freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
+              departurePlace={isEmpty(errors) ? departurePlace : actionData.departurePlace}
+              freightBillNumber={isEmpty(errors) ? freightBillNumber : actionData.freightBillNumber}
               displayOptionalSuffix={displayOptionalSuffix}
             />
             <ButtonGroup />

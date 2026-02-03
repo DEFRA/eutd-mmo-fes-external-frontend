@@ -490,3 +490,19 @@ export const getGroupedValues = <T>(
   });
   return result;
 };
+
+/**
+ * Generate error keys order array for transportation forms with container numbers
+ * @param fieldsBeforeContainers Array of field names that come before container numbers
+ * @param fieldsAfterContainers Array of field names that come after container numbers
+ * @param maxContainers Maximum number of container number fields to include (default: 10)
+ * @returns Array of error keys with container number fields inserted in the correct position
+ */
+export const generateTransportErrorKeys = (
+  fieldsBeforeContainers: string[],
+  fieldsAfterContainers: string[],
+  maxContainers: number = 10
+): string[] => {
+  const containerKeys = Array.from({ length: maxContainers }, (_, i) => `containerNumbers.${i}`);
+  return [...fieldsBeforeContainers, ...containerKeys, ...fieldsAfterContainers];
+};
