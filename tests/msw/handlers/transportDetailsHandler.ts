@@ -2035,12 +2035,14 @@ const transportDetailsHandler: ITestHandler = {
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
     rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) => res(ctx.json(saveVesselContainerDetails))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.ContainerVesselTransportEmptyContainers]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(vesselTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
     rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) => res(ctx.json(saveVesselContainerDetails))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.ContainerVesselTransportContainerPersistence]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(vesselTransportAllowedDetails))),
@@ -2054,6 +2056,7 @@ const transportDetailsHandler: ITestHandler = {
       )
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.ContainerVesselTransportEditWithContainers]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(vesselTransportAllowedDetails))),
@@ -2066,10 +2069,12 @@ const transportDetailsHandler: ITestHandler = {
       )
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.ContainerVesselTransportContainerValidationErrors]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(vesselTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
     rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) =>
       res(
         ctx.status(400),
