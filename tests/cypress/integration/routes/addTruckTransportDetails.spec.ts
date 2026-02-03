@@ -30,7 +30,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
         "Truck nationality",
         "Registration number",
         "Place export leaves the departure country",
-        "Container identification number",
+        "Shipping container identification number",
         "Freight bill number (optional)",
       ]);
       expect(hints).to.deep.eq([
@@ -98,7 +98,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get("label[for='containerNumbers.0']").should("contain.text", "Container identification number");
+    cy.get("label[for='containerNumbers.0']").should("contain.text", "Shipping container identification number");
 
     cy.get("#hint-containerIdentificationNumber")
       .should("be.visible")
@@ -361,7 +361,7 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
     cy.get('label[for="containerNumbers.0"]')
-      .should("contain.text", "Container identification number")
+      .should("contain.text", "Shipping container identification number")
       .should("have.class", "govuk-!-font-weight-bold");
   });
 
