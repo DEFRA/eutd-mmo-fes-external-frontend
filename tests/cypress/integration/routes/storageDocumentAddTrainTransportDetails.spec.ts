@@ -84,6 +84,47 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#exportDate-year").should("exist");
   });
 
+  it("should render error summary when validation errors occur", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportAllowed,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Submit form without filling required fields to trigger validation errors
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    // Verify ErrorSummary component is rendered
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.contains("h2", "There is a problem").should("be.visible");
+
+    // Verify error messages are displayed
+    cy.get(".govuk-error-summary__list").should("be.visible");
+  });
+
+  it("should render all imported components and helper functions", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportAllowed,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Verify Main component is rendered
+    cy.get("main").should("be.visible");
+
+    // Verify BackToProgressLink is rendered
+    cy.contains("a", "Back to your progress").should("be.visible");
+
+    // Verify SecureForm is rendered
+    cy.get("form").should("be.visible");
+
+    // Verify ButtonGroup is rendered
+    cy.get("[data-testid=save-and-continue]").should("be.visible");
+    cy.get("[data-testid=save-draft-button]").should("be.visible");
+
+    // Verify hidden inputs are present
+    cy.get('input[name="vehicle"]').should("exist");
+    cy.get('input[name="nextUri"]').should("exist");
+  });
+
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SaveTransportDetailsFailsWith403,
