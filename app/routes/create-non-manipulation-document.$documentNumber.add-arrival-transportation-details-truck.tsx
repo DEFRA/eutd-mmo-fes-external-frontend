@@ -14,6 +14,7 @@ import {
   calculateDepartureDate,
   handleFormEmptyStringValue,
   getCountries,
+  extractContainerNumbers,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
@@ -55,6 +56,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
   const placeOfUnloading = handleFormEmptyStringValue(form, "placeOfUnloading", saveAsDraft);
   const nextUri = form.get("nextUri") as string;
+  const values = Object.fromEntries(form);
+  const containerNumbers = extractContainerNumbers(values);
 
   const payload: ITransport = {
     currentUri: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-truck", {
@@ -71,6 +74,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     departureDate: calculateDepartureDate(form),
     departureCountry,
     placeOfUnloading,
+    containerNumbers,
     vehicle: transport.vehicle,
     user_id: transport.user_id,
     arrival: true,
