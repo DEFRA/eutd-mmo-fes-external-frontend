@@ -13,6 +13,7 @@ import {
   TransportationDetailsLoaderFunction,
   calculateDepartureDate,
   handleFormEmptyStringValue,
+  extractContainerNumbers,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
@@ -38,6 +39,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const placeOfUnloading = handleFormEmptyStringValue(form, "placeOfUnloading", saveAsDraft);
 
   const nextUri = form.get("nextUri") as string;
+  const values = Object.fromEntries(form);
+  const containerNumbers = extractContainerNumbers(values);
 
   const payload: ITransport = {
     currentUri: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-train", {
@@ -53,6 +56,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     departurePort,
     departureDate: calculateDepartureDate(form),
     placeOfUnloading,
+    containerNumbers,
     user_id: transport.user_id,
     vehicle: transport.vehicle,
     arrival: true,
