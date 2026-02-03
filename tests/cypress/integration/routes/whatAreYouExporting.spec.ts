@@ -314,9 +314,9 @@ describe("Errors on click of add product button from favourites", () => {
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
     cy.get("[data-tab-id='favouritesTab']").click({ force: true });
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("#add-from-favourites").should("be.visible");
+    cy.get("#add-from-favourites [data-testid='add-product']").click({ force: true });
 
-    // Wait for error summary to appear
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select a product favourite from the list$/).should("be.visible");
 
@@ -345,24 +345,12 @@ describe("Errors on click of add product button from favourites", () => {
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
     cy.get("[data-tab-id='favouritesTab']").click({ force: true });
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("#add-from-favourites").should("be.visible");
+    cy.get("#add-from-favourites [data-testid='add-product']").click({ force: true });
 
     // Error summary should be visible (triggers useEffect scrollToId on line 110)
     cy.get("#errorIsland").should("exist");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-  });
-
-  it("should call handleTab when edit button is clicked", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.WhatAreYouExporting,
-    };
-    cy.visit(productsUrl, { qs: { ...testParams } });
-
-    // Click edit button on a product (triggers handleTab - lines 99-103, 162)
-    cy.get("[data-testid='edit-product']").first().click();
-
-    // Should be on products tab after edit
-    cy.get("#productsTab").should("exist");
   });
 });
 

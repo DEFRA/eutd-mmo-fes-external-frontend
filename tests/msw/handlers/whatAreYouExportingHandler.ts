@@ -152,16 +152,14 @@ const whatAreYouExportingHandler: ITestHandler = {
     rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json(favourites))),
     rest.get(SPECIES_STATE_LOOK_UP, (req, res, ctx) => res(ctx.json(speciesStateLookup))),
     rest.get(COMMODITY_CODE_LOOK_UP, (req, res, ctx) => res(ctx.json([]))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
     rest.post(ADD_SPECIES_URL, (req, res, ctx) =>
       res(
         ctx.status(400),
         ctx.json({
-          errors: [
-            {
-              key: "product",
-              message: "ccWhatExportingFromSelectProductFavouriteListError",
-            },
-          ],
+          product: "ccWhatExportingFromSelectProductFavouriteListError",
         })
       )
     ),
