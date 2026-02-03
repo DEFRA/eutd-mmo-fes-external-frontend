@@ -53,7 +53,20 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.contains("button", "Save and continue").should("be.visible");
     cy.contains("button", "Save as draft").should("be.visible");
   });
+  it("should render labels with bold font weight for NMD arrival transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportAllowed,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
 
+    // Verify that labels have bold font weight class for NMD arrival transport
+    cy.get('label[for="airwayBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="flightNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departureCountry"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departurePort"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="placeOfUnloading"]').should("have.class", "govuk-!-font-weight-bold");
+  });
   it("should navigate to sd dashboard page on click of save as draft button", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
