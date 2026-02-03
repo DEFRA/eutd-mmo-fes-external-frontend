@@ -425,6 +425,15 @@ export const TransportationArrivalDetails = ({
         hideAddDateButton={true}
         hintText="addTransportationArrivalDetailsDepartureDateHint"
       />
+      {(vehicle === "train" || vehicle === "truck") && (
+        <ContainerIdentificationNumber
+          containers={containerNumbers}
+          maximumContainers={5}
+          errors={errors}
+          displayOptionalSuffix={true}
+          vehicleType={vehicle}
+        />
+      )}
     </fieldset>
   );
 };
