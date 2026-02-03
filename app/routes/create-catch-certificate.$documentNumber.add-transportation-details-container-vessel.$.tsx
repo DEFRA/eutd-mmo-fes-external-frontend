@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import type { ErrorResponse, ITransport } from "~/types";
-import { displayErrorMessages, getMeta, scrollToId, TransportType } from "~/helpers";
+import { displayErrorMessagesInOrder, getMeta, scrollToId, TransportType, getContainerNumbers } from "~/helpers";
 import { useScrollOnPageLoad } from "~/hooks";
 
 export const meta: MetaFunction = (args) => getMeta(args);
@@ -30,7 +30,7 @@ const ContainerVesselTransportDetailsPage = () => {
     vehicle,
     vesselName,
     flagState,
-    containerNumber,
+    containerNumbers,
     departurePlace,
     freightBillNumber,
     nextUri,
@@ -38,12 +38,34 @@ const ContainerVesselTransportDetailsPage = () => {
     id,
     displayOptionalSuffix,
   } = useLoaderData<
-    ITransport & { documentNumber: string; nextUri: string; displayOptionalSuffix: boolean; csrf: string }
+    ITransport & {
+      documentNumber: string;
+      nextUri: string;
+      displayOptionalSuffix: boolean;
+      csrf: string;
+    }
   >();
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-container-vessel/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
+
+  const errorKeysInOrder = [
+    "vesselName",
+    "flagState",
+    "containerNumbers.0",
+    "containerNumbers.1",
+    "containerNumbers.2",
+    "containerNumbers.3",
+    "containerNumbers.4",
+    "containerNumbers.5",
+    "containerNumbers.6",
+    "containerNumbers.7",
+    "containerNumbers.8",
+    "containerNumbers.9",
+    "departurePlace",
+    "freightBillNumber",
+  ];
 
   useScrollOnPageLoad();
 
@@ -55,7 +77,7 @@ const ContainerVesselTransportDetailsPage = () => {
 
   return (
     <Main backUrl={backUrl}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
+      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" action={actionUrl} csrf={csrf}>
@@ -65,7 +87,7 @@ const ContainerVesselTransportDetailsPage = () => {
               vehicle={vehicle}
               vesselName={!isEmpty(errors) ? actionData.vesselName : vesselName}
               flagState={!isEmpty(errors) ? actionData.flagState : flagState}
-              containerNumber={!isEmpty(errors) ? actionData.containerNumber : containerNumber}
+              containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
               departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
               errors={errors}
