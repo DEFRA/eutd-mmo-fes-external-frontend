@@ -360,6 +360,39 @@ describe("Add Transportation Details Train: Welsh Translations", () => {
     cy.contains("a", /^Rhowch y dyddiad ymadael$/).should("be.visible");
   });
 
+  it("should handle adding and removing containers", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportAllowed,
+    };
+
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Verify initial container field and add button
+    cy.get('input[name="containerNumbers.0"]').should("be.visible");
+    cy.get("#add-container-button").should("be.visible");
+    cy.get("#add-container-button").should("be.visible").should("contain.text", "Add another container");
+    cy.get("#remove-container-button-0").should("not.exist");
+
+    // Add another container
+    cy.get("#add-container-button").click({ force: true });
+    cy.get('input[name="containerNumbers.1"]').should("be.visible");
+    cy.get("#remove-container-button-0").should("be.visible");
+    cy.get("#remove-container-button-0").should("be.visible").should("contain.text", "Remove");
+
+    // Fill in container values
+    cy.get('[id="containerNumbers.0"]').type("ABCJ0123456", { force: true });
+    cy.get('[id="containerNumbers.1"]').type("XYZU9876543", { force: true });
+    cy.get('[id="containerNumbers.0"]').should("exist");
+    cy.get('[id="containerNumbers.1"]').should("exist");
+
+    // Remove one container
+    cy.get("#remove-container-button-0").click({ force: true });
+    cy.get('input[name="containerNumbers.1"]').should("not.exist");
+
+    // Verify the remaining container still exists
+    cy.get('input[name="containerNumbers.0"]').should("exist");
+  });
+
   it("should display field labels in Welsh", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
