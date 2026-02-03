@@ -1,7 +1,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 const documentNumber = "GBR-2022-CC-3FE1169D1";
 const certificateUrl = `/create-catch-certificate/${documentNumber}`;
-const planePageUrl = `create-catch-certificate/${documentNumber}/add-transportation-details-plane/0`;
+const planePageUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-plane/0`;
 
 describe("Add Transportation Details Plane: Allowed", () => {
   it("should render plane transport details page", () => {
