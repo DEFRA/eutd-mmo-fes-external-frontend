@@ -33,7 +33,7 @@ export const TransportationModeDetails = ({
   displayOptionalSuffix,
   errors,
   countries,
-  useBoldLabels,
+  useBoldLabels = false,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
