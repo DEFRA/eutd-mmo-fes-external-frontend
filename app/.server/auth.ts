@@ -2,11 +2,11 @@ import jwt from "jsonwebtoken";
 import querystring from "querystring";
 import * as https from "https";
 import crypto from "crypto";
-import { type TypedResponse, redirect, type Session } from "react-router";
+import { redirect, type Session } from "react-router";
 import { getEnv } from "~/env.server";
 import { type CallbackParamsType, Issuer, type TokenSet, type BaseClient, custom } from "openid-client";
 import { commitSession, destroySession, getSessionFromRequest } from "~/sessions.server";
-import { createEnrolment, enrolmentStatus, getDynamicsToken, getEnrolmentRequests } from "~/.server";
+import { createEnrolment, enrolmentStatus, getDynamicsToken, getEnrolmentRequests } from "~/.server/dynamics";
 
 import logger from "~/logger.server";
 import type { IExporter } from "~/types";
@@ -254,7 +254,7 @@ export const refreshToken = async (refreshToken: TokenSet): Promise<TokenSet> =>
   return await cl.refresh(refreshToken);
 };
 
-export const logout = async (request: Request): Promise<TypedResponse<never>> => {
+export const logout = async (request: Request): Promise<Response> => {
   if (ENV.DISABLE_IDM) {
     return redirect("/server-logout");
   }
