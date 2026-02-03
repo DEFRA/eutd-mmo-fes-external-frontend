@@ -228,6 +228,20 @@ export const ArrivalTransportationModeDetails = ({
           errors={errors}
           displayOptionalSuffix={vehicle === "train" || vehicle === "truck"}
           vehicleType={vehicle}
+          labelKey={
+            vehicle === "train"
+              ? "addTransportationDetailsContainerIdentificationNumberTrain"
+              : vehicle === "truck"
+                ? "addTransportationDetailsContainerIdentificationNumberTruck"
+                : undefined
+          }
+          hintKey={
+            vehicle === "train"
+              ? "addTransportationDetailsContainerIdentificationNumberTrainHint"
+              : vehicle === "truck"
+                ? "addTransportationDetailsContainerIdentificationNumberHintTruck"
+                : undefined
+          }
         />
       )}
     </>
