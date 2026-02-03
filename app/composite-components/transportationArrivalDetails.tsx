@@ -221,27 +221,15 @@ export const ArrivalTransportationModeDetails = ({
           />
         </>
       )}
-      {(vehicle === "plane" || vehicle === "containerVessel" || vehicle === "train" || vehicle === "truck") && (
+      {(vehicle === "plane" || vehicle === "containerVessel" || vehicle === "truck") && (
         <ContainerIdentificationNumber
           containers={containerNumbers}
           maximumContainers={5}
           errors={errors}
-          displayOptionalSuffix={vehicle === "train" || vehicle === "truck"}
+          displayOptionalSuffix={vehicle === "truck"}
           vehicleType={vehicle}
-          labelKey={
-            vehicle === "train"
-              ? "addTransportationDetailsContainerIdentificationNumberTrain"
-              : vehicle === "truck"
-                ? "addTransportationDetailsContainerIdentificationNumberTruck"
-                : undefined
-          }
-          hintKey={
-            vehicle === "train"
-              ? "addTransportationDetailsContainerIdentificationNumberTrainHint"
-              : vehicle === "truck"
-                ? "addTransportationDetailsContainerIdentificationNumberHintTruck"
-                : undefined
-          }
+          labelKey={vehicle === "truck" ? "addTransportationDetailsContainerIdentificationNumberTruck" : undefined}
+          hintKey={vehicle === "truck" ? "addTransportationDetailsContainerIdentificationNumberHintTruck" : undefined}
         />
       )}
     </>
@@ -432,6 +420,17 @@ export const TransportationArrivalDetails = ({
         hideAddDateButton={true}
         hintText="addTransportationArrivalDetailsDepartureDateHint"
       />
+      {vehicle === "train" && (
+        <ContainerIdentificationNumber
+          containers={containerNumbers}
+          maximumContainers={5}
+          errors={errors}
+          displayOptionalSuffix={true}
+          vehicleType={vehicle}
+          labelKey="addTransportationDetailsContainerIdentificationNumberTrain"
+          hintKey="addTransportationDetailsContainerIdentificationNumberTrainHint"
+        />
+      )}
     </fieldset>
   );
 };
