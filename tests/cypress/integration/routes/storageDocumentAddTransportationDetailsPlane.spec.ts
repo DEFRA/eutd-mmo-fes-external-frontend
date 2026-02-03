@@ -26,12 +26,11 @@ describe("Add Transportation Details Plane: Allowed", () => {
       const hints = hintObjects.get();
 
       expect(textinputs).to.have.length(7);
-      expect(labels).to.have.length(11);
+      expect(labels).to.have.length(10);
       expect(labels).to.deep.eq([
         "Consignment destination",
         "Point of destination",
         "Where the plane departs from the UK",
-        "Date the plane departs the UK",
         "Day",
         "Month",
         "Year",

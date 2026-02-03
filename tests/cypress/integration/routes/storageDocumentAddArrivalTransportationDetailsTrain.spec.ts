@@ -27,14 +27,13 @@ describe("Add Transportation Details Train: Allowed", () => {
       const hints = hintObjects.get();
 
       expect(textinputs).to.have.length(6);
-      expect(labels).to.have.length(10);
+      expect(labels).to.have.length(9);
       expect(labels).to.deep.eq([
         "Railway bill number",
         "Freight bill number (optional)",
         "Country of departure",
         "Where the consignment departs from",
         "Place of unloading",
-        "Departure date",
         "Day",
         "Month",
         "Year",
