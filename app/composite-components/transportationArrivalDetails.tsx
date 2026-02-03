@@ -415,22 +415,11 @@ export const TransportationArrivalDetails = ({
         dateSelected={moment(departureDate, ["DD/MM/YYYY", "YYYY-MM-DD", "D/M/YYYY", "YYYY-M-D"]).format("YYYY-MM-DD")}
         errors={errors?.departureDate}
         label={"addTransportationArrivalDetailsDepartureDate"}
-        labelStyle="normal"
+        labelStyle="bold"
         translationNs="transportation"
         hideAddDateButton={true}
         hintText="addTransportationArrivalDetailsDepartureDateHint"
       />
-      {vehicle === "train" && (
-        <ContainerIdentificationNumber
-          containers={containerNumbers}
-          maximumContainers={5}
-          errors={errors}
-          displayOptionalSuffix={true}
-          vehicleType={vehicle}
-          labelKey="addTransportationDetailsContainerIdentificationNumberTrain"
-          hintKey="addTransportationDetailsContainerIdentificationNumberTrainHint"
-        />
-      )}
     </fieldset>
   );
 };
