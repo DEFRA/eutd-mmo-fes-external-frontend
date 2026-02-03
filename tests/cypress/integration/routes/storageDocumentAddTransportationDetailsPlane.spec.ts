@@ -62,7 +62,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.visit(planePageUrl, { qs: { ...testParams } });
 
     // Verify that labels have bold font weight class for NMD departure transport
-    cy.get('label[for="exportedTo"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[id="exportedTo-label"]').should("have.class", "govuk-!-font-weight-bold");
     cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-!-font-weight-bold");
     cy.get('label[for="departurePlace"]').should("have.class", "govuk-!-font-weight-bold");
     cy.get('label[for="flightNumber"]').should("have.class", "govuk-!-font-weight-bold");
