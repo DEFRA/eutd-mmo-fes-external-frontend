@@ -174,7 +174,7 @@ describe("What are you exporting page", () => {
     cy.url().should("include", "/add-landings");
   });
 
-  it.skip("should render the selected species, state, presentation and commodity code", () => {
+  it("should render the selected species, state, presentation and commodity code", () => {
     // Intercept the state lookup API call - the actual endpoint is /get-species-state
     cy.intercept("GET", "**/get-species-state?*").as("stateLookup");
 
