@@ -58,14 +58,13 @@ const buildTransportPayload = (transportType: TransportType, form: FormData): Pa
     case TransportType.PLANE:
       return {
         flightNumber: form.get("flightNumber") as string,
-        containerNumber: form.get("containerNumber") as string,
+        airwayBillNumber: !isEmpty(form.get("airwayBillNumber")) ? (form.get("airwayBillNumber") as string) : undefined,
         containerNumbers: extractContainerNumbers(values),
       };
     case TransportType.CONTAINER_VESSEL:
       return {
         vesselName: form.get("vesselName") as string,
         flagState: form.get("flagState") as string,
-        containerNumber: form.get("containerNumber") as string,
         containerNumbers: extractContainerNumbers(values),
       };
     default:
