@@ -710,6 +710,7 @@ const transportDetailsHandler: ITestHandler = {
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.AddArrivalContainerVesselTransportSave]: () => [
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
@@ -1198,6 +1199,7 @@ const transportDetailsHandler: ITestHandler = {
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.PlaneTransportSaveAsDraft]: () => [
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
