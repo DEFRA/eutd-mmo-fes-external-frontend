@@ -42,6 +42,19 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.contains("button", "Save as draft").should("be.visible");
   });
 
+  it("should render labels WITHOUT bold font weight for catch certificate transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportAllowed,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    // Verify that labels do NOT have bold font weight for catch certificate transport
+    cy.get('label[for="flightNumber"]').should("have.class", "govuk-label");
+    cy.get('label[for="flightNumber"]').should("not.have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departurePlace"]').should("have.class", "govuk-label");
+    cy.get('label[for="departurePlace"]').should("not.have.class", "govuk-!-font-weight-bold");
+  });
+
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SavePlaneTransportDetailsFailsWith403,
