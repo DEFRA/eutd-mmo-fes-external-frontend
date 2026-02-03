@@ -36,6 +36,27 @@ describe("Add Transportation Details: Container Vessel", () => {
       "For example, Felixstowe Port, London Gateway, or the place the container vessel departs from the UK"
     );
   });
+
+  it("should render labels with bold font weight for NMD departure transport", () => {
+    cy.get('label[id="exportedTo-label"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="vesselName"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="flagState"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departurePlace"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+  });
+
+  it("should render all required fields for container vessel departure transport", () => {
+    cy.get("#exportedTo").should("exist");
+    cy.get("#pointOfDestination").should("exist");
+    cy.get("#vesselName").should("exist");
+    cy.get("#flagState").should("exist");
+    cy.get("#departurePlace").should("exist");
+    cy.get("#freightBillNumber").should("exist");
+    cy.get("#exportDate-day").should("exist");
+    cy.get("#exportDate-month").should("exist");
+    cy.get("#exportDate-year").should("exist");
+  });
 });
 
 describe("Save and Continue button - UnHappy path", () => {

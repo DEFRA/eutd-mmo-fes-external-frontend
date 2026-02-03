@@ -90,6 +90,27 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("#departurePort").should("have.value", "");
       cy.get("[data-testid=save-and-continue]").click({ force: true });
     });
+
+    it("should render labels with bold font weight for NMD arrival transport", () => {
+      cy.get('label[for="vesselName"]').should("have.class", "govuk-!-font-weight-bold");
+      cy.get('label[for="flagState"]').should("have.class", "govuk-!-font-weight-bold");
+      cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+      cy.get('label[for="departureCountry"]').should("have.class", "govuk-!-font-weight-bold");
+      cy.get('label[for="departurePort"]').should("have.class", "govuk-!-font-weight-bold");
+      cy.get('label[for="placeOfUnloading"]').should("have.class", "govuk-!-font-weight-bold");
+    });
+
+    it("should render all required fields for container vessel arrival transport", () => {
+      cy.get("#vesselName").should("exist");
+      cy.get("#flagState").should("exist");
+      cy.get("#freightBillNumber").should("exist");
+      cy.get("#departureCountry").should("exist");
+      cy.get("#departurePort").should("exist");
+      cy.get("#placeOfUnloading").should("exist");
+      cy.get("#departureDate-day").should("exist");
+      cy.get("#departureDate-month").should("exist");
+      cy.get("#departureDate-year").should("exist");
+    });
   });
 
   describe("ContainerVesselSaveInvalidCharsVesselName scenarios", () => {
