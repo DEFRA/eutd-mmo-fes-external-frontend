@@ -39,7 +39,9 @@ describe("Add Transportation Details: Container Vessel", () => {
     cy.contains("label", "Freight bill number (optional)");
     cy.get("div .govuk-hint").contains("For example, Hull.");
     cy.get("div .govuk-hint").contains("For example, BD51SMR");
-    cy.get("div .govuk-hint").contains("For example, ABCD1234567");
+    cy.get("div .govuk-hint").contains(
+      "Enter the identification number shown on the shipping container. For example, ABCJ0123456"
+    );
   });
 });
 
@@ -269,7 +271,9 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
       .and("contain", "Shipping container identification number");
 
     // Check hint text is displayed
-    cy.get("#hint-containerIdentificationNumber").should("be.visible").and("contain", "For example, ABCD1234567");
+    cy.get("#hint-containerIdentificationNumber")
+      .should("be.visible")
+      .and("contain", "Enter the identification number shown on the shipping container. For example, ABCJ0123456");
   });
 
   it("should limit to maximum 10 containers", () => {

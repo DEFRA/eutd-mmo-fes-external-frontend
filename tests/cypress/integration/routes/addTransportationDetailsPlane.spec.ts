@@ -33,7 +33,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       ]);
       expect(hints).to.deep.eq([
         "For example, Hull.",
-        "For example, ABCD1234567",
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
         "For example, 123-45678901",
         "For example, BD51SMR",
       ]);
@@ -339,7 +339,9 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
       .and("contain", "Shipping container identification number");
 
     // Check hint text is displayed
-    cy.get("#hint-containerIdentificationNumber").should("be.visible").and("contain", "For example, ABCD1234567");
+    cy.get("#hint-containerIdentificationNumber")
+      .should("be.visible")
+      .and("contain", "Enter the identification number shown on the shipping container. For example, ABCJ0123456");
   });
 
   it("should limit to maximum 10 containers", () => {
