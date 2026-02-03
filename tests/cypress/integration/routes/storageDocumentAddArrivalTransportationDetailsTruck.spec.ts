@@ -102,7 +102,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departurePort").type("Where the consignment departs from", { force: true });
     cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Registration number must not exceed 50 characters$/).should("be.visible");
   });
