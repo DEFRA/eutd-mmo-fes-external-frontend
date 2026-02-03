@@ -10,7 +10,7 @@
   "addTransportationDetailsFlightnumber": "Flight number",
   "addTransportationDetailsFlightNumberHint": "For example, AF296Q",
   "addTransportationDetailsContainerIdentificationText": "Container identification number or numbers",
-  "addTransportationDetailsContainerIdentificationNumberText": "Container identification number",
+  "addTransportationDetailsContainerIdentificationNumberText": "Shipping container identification number",
   "addTransportationDetailsContainerIdentificationNumberHint": "For example, ABCD1234567",
   "addTransportationDetailsContainerIdentificationNumberTruck": "Shipping container identification number (optional)",
   "addTransportationDetailsContainerIdentificationNumberHintTruck": "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
