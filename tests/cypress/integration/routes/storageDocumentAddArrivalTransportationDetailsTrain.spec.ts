@@ -30,7 +30,6 @@ describe("Add Transportation Details Train: Allowed", () => {
       expect(labels).to.have.length(10);
       expect(labels).to.deep.eq([
         "Railway bill number",
-        "Shipping container identification number (optional)",
         "Freight bill number (optional)",
         "Country of departure",
         "Where the consignment departs from",
@@ -39,15 +38,16 @@ describe("Add Transportation Details Train: Allowed", () => {
         "Day",
         "Month",
         "Year",
+        "Shipping container identification number (optional)",
       ]);
       expect(hints).to.deep.eq([
         "For example, AB12345C. This field is required now to help prepare for new EU regulations coming into force on 10 January 2026",
-        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
         "For example, AA1234567",
         "This is the country the train left before it came to the UK",
         "For example, Calais port, Calais-Dunkerque airport or the place the train started its journey",
         "This is where the consignment was unloaded from the train when arriving in the UK",
         "For example, 25 07 2025",
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
       ]);
     });
     cy.contains("button", "Save and continue").should("be.visible");
