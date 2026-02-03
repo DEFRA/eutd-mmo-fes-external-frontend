@@ -53,6 +53,20 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.contains("a", "Back to your progress").should("be.visible");
   });
 
+  it("should render labels with bold font weight for NMD departure transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportAllowed,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Verify that labels have bold font weight class for NMD departure transport
+    cy.get('label[for="exportedTo"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departurePlace"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="railwayBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+  });
+
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SaveTransportDetailsFailsWith403,

@@ -54,6 +54,21 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.contains("button", "Save as draft").should("be.visible");
   });
 
+  it("should render labels with bold font weight for NMD arrival transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportAllowed,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+
+    // Verify that labels have bold font weight class for NMD arrival transport
+    cy.get('label[for="nationalityOfVehicle"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="registrationNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departureCountry"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departurePort"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="placeOfUnloading"]').should("have.class", "govuk-!-font-weight-bold");
+  });
+
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SaveTruckTransportDetailsFailsWith403,
