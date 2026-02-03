@@ -725,6 +725,7 @@ export const TransportationDetails = ({
       )}
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
+        labelClassName={labelClassName}
         name="freightBillNumber"
         type="text"
         inputClassName={classNames("govuk-input", {

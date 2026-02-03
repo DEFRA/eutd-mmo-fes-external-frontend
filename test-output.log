@@ -1,0 +1,9 @@
+npm error Missing script: "test:all"
+npm error
+npm error Did you mean one of these?
+npm error   npm install # Install a package
+npm error   npm run :test:all # run the ":test:all" package script
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run
+npm error A complete log of this run can be found in: /Users/maneeshkumaryadav/.npm/_logs/2026-02-03T14_00_56_763Z-debug-0.log
