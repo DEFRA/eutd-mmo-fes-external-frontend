@@ -34,7 +34,7 @@ describe("Add Transportation Details: Container Vessel", () => {
   it("should render the input label and hint text", () => {
     cy.contains("label", "Vessel name");
     cy.contains("label", "Flag state");
-    cy.contains("label", "Container identification number");
+    cy.contains("label", "Shipping container identification number");
     cy.contains("label", "Place export leaves the departure country");
     cy.contains("label", "Freight bill number (optional)");
     cy.get("div .govuk-hint").contains("For example, Hull.");
@@ -264,7 +264,9 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
     // Check container identification number label is displayed
-    cy.get('label[for="containerNumbers.0"]').should("be.visible").and("contain", "Container identification number");
+    cy.get('label[for="containerNumbers.0"]')
+      .should("be.visible")
+      .and("contain", "Shipping container identification number");
 
     // Check hint text is displayed
     cy.get("#hint-containerIdentificationNumber").should("be.visible").and("contain", "For example, ABCD1234567");

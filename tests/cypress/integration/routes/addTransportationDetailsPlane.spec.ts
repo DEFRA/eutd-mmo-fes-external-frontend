@@ -27,7 +27,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       expect(labels).to.deep.eq([
         "Flight number",
         "Place export leaves the departure country",
-        "Container identification number",
+        "Shipping container identification number",
         "Air waybill number (optional)",
         "Freight bill number (optional)",
       ]);
@@ -334,7 +334,9 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
     cy.visit(planePageUrl, { qs: { ...testParams } });
 
     // Check container identification number label is displayed
-    cy.get('label[for="containerNumbers.0"]').should("be.visible").and("contain", "Container identification number");
+    cy.get('label[for="containerNumbers.0"]')
+      .should("be.visible")
+      .and("contain", "Shipping container identification number");
 
     // Check hint text is displayed
     cy.get("#hint-containerIdentificationNumber").should("be.visible").and("contain", "For example, ABCD1234567");
