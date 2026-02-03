@@ -93,6 +93,8 @@
   "addTransportationDetailsContainerIdentificationNumberHintTruckTrain": "Enter container or trailer identification number. For example, ABCD1234567.",
   "addTransportationDetailsContainerNumberHintTruck": "Enter container or trailer identification number. For example, ABCD1234567",
   "addTransportationDetailsContainerNumberHintTrain": "For example, ABCD1234567",
+  "addTransportationDetailsContainerNumberHintPlane": "For example, ABCD1234567",
+  "addTransportationDetailsContainerNumberHintContainerVessel": "For example, ABCD1234567",
   "addTransportationArrivalDetailsTruckPlaceOfUnloading": "Place of unloading",
   "addTransportationArrivalDetailsTruckPlaceOfUnloadingHint": "This is where the consignment was unloaded from the {{vehicle}} when arriving in the UK",
   "addTransportationArrivalDetailsVesselPlaceOfUnloadingHint": "This is where the consignment was unloaded from the container vessel when arriving in the UK.",
