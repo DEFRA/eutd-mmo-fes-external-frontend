@@ -67,6 +67,23 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
   });
 
+  it("should render all required fields for train departure transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportAllowed,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Verify all fields are present
+    cy.get("#exportedTo").should("exist");
+    cy.get("#pointOfDestination").should("exist");
+    cy.get("#departurePlace").should("exist");
+    cy.get("#railwayBillNumber").should("exist");
+    cy.get("#freightBillNumber").should("exist");
+    cy.get("#exportDate-day").should("exist");
+    cy.get("#exportDate-month").should("exist");
+    cy.get("#exportDate-year").should("exist");
+  });
+
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SaveTransportDetailsFailsWith403,
