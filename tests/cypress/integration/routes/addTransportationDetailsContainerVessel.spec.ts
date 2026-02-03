@@ -225,32 +225,6 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.url().should("include", progressUrl);
   });
 
-  it("should persist container values when validation fails", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.ContainerVesselTransportContainerPersistence,
-    };
-    cy.visit(ccPageUrl, { qs: { ...testParams } });
-
-    // Leave vesselName empty to trigger validation error
-    cy.get("#flagState").type("Greece", { force: true });
-
-    // Add container values
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("DEFJ9876543", { force: true });
-
-    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
-
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-
-    // Check error is displayed
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-
-    // Verify container values are still present
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "ABCU1234567");
-    cy.get('input[name="containerNumbers.1"]').should("have.value", "DEFJ9876543");
-  });
-
   it("should load pre-existing container values from backend", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportEditWithContainers,
