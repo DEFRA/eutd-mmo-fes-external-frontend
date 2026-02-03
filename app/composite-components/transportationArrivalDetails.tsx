@@ -40,39 +40,39 @@ export const ArrivalTransportationModeDetails = ({
         </legend>
       )}
       {vehicle === "train" && (
-        <>
-          <FormInput
-            containerClassName="govuk-form-group govuk-!-width-one-half"
-            label={t("addTransportationArrivalDetailsRailwayBillNumber")}
-            name="railwayBillNumber"
-            type="text"
-            inputClassName={classNames("govuk-input", {
-              "govuk-input--error": errors?.railwayBillNumber,
-            })}
-            inputProps={{
-              defaultValue: railwayBillNumber,
-              id: "railwayBillNumber",
-            }}
-            hint={{
-              id: "hint-railwayBillNumber",
-              position: "above",
-              text: t("addTransportationArrivalDetailsRailwayBillNumberHint"),
-              className: "govuk-hint govuk-!-margin-bottom-0",
-            }}
-            errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.railwayBillNumber)) }}
-            staticErrorMessage={t(errors?.railwayBillNumber?.message, { ns: "errorsText" })}
-            errorPosition={ErrorPosition.AFTER_LABEL}
-            containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.railwayBillNumber))}
-            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-            hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-          />
-        </>
+        <FormInput
+          containerClassName="govuk-form-group govuk-!-width-one-half"
+          label={t("addTransportationArrivalDetailsRailwayBillNumber")}
+          labelClassName="govuk-label govuk-!-font-weight-bold"
+          name="railwayBillNumber"
+          type="text"
+          inputClassName={classNames("govuk-input", {
+            "govuk-input--error": errors?.railwayBillNumber,
+          })}
+          inputProps={{
+            defaultValue: railwayBillNumber,
+            id: "railwayBillNumber",
+          }}
+          hint={{
+            id: "hint-railwayBillNumber",
+            position: "above",
+            text: t("addTransportationArrivalDetailsRailwayBillNumberHint"),
+            className: "govuk-hint govuk-!-margin-bottom-0",
+          }}
+          errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.railwayBillNumber)) }}
+          staticErrorMessage={t(errors?.railwayBillNumber?.message, { ns: "errorsText" })}
+          errorPosition={ErrorPosition.AFTER_LABEL}
+          containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.railwayBillNumber))}
+          hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+          hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+        />
       )}
       {vehicle === "containerVessel" && (
         <>
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
             label={t("addTransportationArrivalDetailsVesselName")}
+            labelClassName="govuk-label govuk-!-font-weight-bold"
             name="vesselName"
             type="text"
             inputClassName={classNames("govuk-input", {
@@ -99,6 +99,7 @@ export const ArrivalTransportationModeDetails = ({
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
             label={t("addTransportationArrivalDetailsFlagState")}
+            labelClassName="govuk-label govuk-!-font-weight-bold"
             name="flagState"
             type="text"
             inputClassName={classNames("govuk-input", {
@@ -134,10 +135,12 @@ export const ArrivalTransportationModeDetails = ({
             labelKey="addTransportationArrivalDetailsTruckNationality"
             hintKey="addTransportationArrivalDetailsTruckNationalityHint"
             minCharsBeforeSearch={2}
+            labelClassName="govuk-label govuk-!-font-weight-bold"
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
             label={t("addTransportationArrivalDetailsRegistrationNumber")}
+            labelClassName="govuk-label govuk-!-font-weight-bold"
             name="registrationNumber"
             type="text"
             inputClassName={classNames("govuk-input", {
@@ -173,7 +176,7 @@ export const ArrivalTransportationModeDetails = ({
             )}
             name="airwayBillNumber"
             type="text"
-            labelClassName="govuk-label"
+            labelClassName="govuk-label govuk-!-font-weight-bold"
             inputClassName={classNames("govuk-input", {
               "govuk-input--error": errors?.airwayBillNumber,
             })}
@@ -197,6 +200,7 @@ export const ArrivalTransportationModeDetails = ({
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
             label={t("addTransportationArrivalDetailsFlightNumber")}
+            labelClassName="govuk-label govuk-!-font-weight-bold"
             name="flightNumber"
             type="text"
             inputClassName={classNames("govuk-input", {
@@ -221,15 +225,13 @@ export const ArrivalTransportationModeDetails = ({
           />
         </>
       )}
-      {(vehicle === "plane" || vehicle === "containerVessel" || vehicle === "truck") && (
+      {(vehicle === "plane" || vehicle === "containerVessel") && (
         <ContainerIdentificationNumber
           containers={containerNumbers}
           maximumContainers={5}
           errors={errors}
-          displayOptionalSuffix={vehicle === "truck"}
+          displayOptionalSuffix={false}
           vehicleType={vehicle}
-          labelKey={vehicle === "truck" ? "addTransportationDetailsContainerIdentificationNumberTruck" : undefined}
-          hintKey={vehicle === "truck" ? "addTransportationDetailsContainerIdentificationNumberHintTruck" : undefined}
         />
       )}
     </>
@@ -285,6 +287,7 @@ export const TransportationArrivalDetails = ({
       <FormInput
         name="freightBillNumber"
         containerClassName="govuk-form-group govuk-!-width-one-half"
+        labelClassName="govuk-label govuk-!-font-weight-bold"
         inputClassName={classNames("govuk-input", {
           "govuk-input--error": errors?.freightBillNumber,
         })}
@@ -326,7 +329,7 @@ export const TransportationArrivalDetails = ({
         id="departureCountry"
         name="departureCountry"
         labelText={t("addTransportationArrivalDetailsDepartureCountry")}
-        labelClassName="govuk-label"
+        labelClassName="govuk-label govuk-!-font-weight-bold"
         hintText={t(
           vehicle === "plane"
             ? "addTransportationArrivalDetailsDepartureCountryHintPlane"
@@ -349,6 +352,7 @@ export const TransportationArrivalDetails = ({
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
         label={t("addTransportationArrivalDetailsConsignmentOrigin")}
+        labelClassName="govuk-label govuk-!-font-weight-bold"
         name="departurePort"
         type="text"
         inputClassName={classNames("govuk-input", {
@@ -380,6 +384,7 @@ export const TransportationArrivalDetails = ({
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
         label={t("addTransportationArrivalDetailsTruckPlaceOfUnloading")}
+        labelClassName="govuk-label govuk-!-font-weight-bold"
         name="placeOfUnloading"
         type="text"
         inputClassName={classNames("govuk-input", {
@@ -415,22 +420,11 @@ export const TransportationArrivalDetails = ({
         dateSelected={moment(departureDate, ["DD/MM/YYYY", "YYYY-MM-DD", "D/M/YYYY", "YYYY-M-D"]).format("YYYY-MM-DD")}
         errors={errors?.departureDate}
         label={"addTransportationArrivalDetailsDepartureDate"}
-        labelStyle="normal"
+        labelStyle="bold"
         translationNs="transportation"
         hideAddDateButton={true}
         hintText="addTransportationArrivalDetailsDepartureDateHint"
       />
-      {vehicle === "train" && (
-        <ContainerIdentificationNumber
-          containers={containerNumbers}
-          maximumContainers={5}
-          errors={errors}
-          displayOptionalSuffix={true}
-          vehicleType={vehicle}
-          labelKey="addTransportationDetailsContainerIdentificationNumberTrain"
-          hintKey="addTransportationDetailsContainerIdentificationNumberTrainHint"
-        />
-      )}
     </fieldset>
   );
 };
