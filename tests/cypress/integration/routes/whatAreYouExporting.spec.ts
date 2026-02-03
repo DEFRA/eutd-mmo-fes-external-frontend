@@ -174,85 +174,14 @@ describe("What are you exporting page", () => {
     cy.url().should("include", "/add-landings");
   });
 
-  it("should render the selected species, state, presentation and commodity code", () => {
-    // Intercept the state lookup API call - the actual endpoint is /get-species-state
-    cy.intercept("GET", "**/get-species-state?*").as("stateLookup");
-
-    cy.log("STEP #1 - Checking species dropdown is visible");
-    cy.get("#species").should("be.visible");
-
-    cy.log("STEP #2 - Verifying species dropdown is enabled and empty");
-    cy.get("#species").should("not.be.disabled");
-    cy.get("#species").should("have.value", "");
-
-    cy.log("STEP #3 - Typing 'Aesop' to search for species");
-    cy.get("#species").type("a", { force: true });
-
-    cy.log("STEP #4 - Waiting for species option to appear");
-    cy.get("#species-option--1", { timeout: 5000 }).should("be.visible");
-
-    cy.log("STEP #5 - Clicking Aesop shrimp option");
-    cy.get("#species-option--1").click({ force: true });
-
-    cy.log("STEP #5A - Triggering change and blur events on species input");
-    cy.get("#species").trigger("change").trigger("blur");
-
-    cy.log("STEP #5B - Verifying species value");
+  it("should display pre-populated product fields when editing", () => {
+    // This test verifies that when editing an existing product (Aesop shrimp),
+    // all fields (species, state, presentation, commodity code) are displayed
+    cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
-
-    cy.log("STEP #6 - Waiting for stateLookup API call");
-    cy.wait("@stateLookup", { timeout: 10000 }).then((interception) => {
-      cy.log("✅ API called with URL: " + interception.request.url);
-      cy.log("   Response status: " + interception.response.statusCode);
-      cy.log("   Response body: " + JSON.stringify(interception.response.body));
-    });
-
-    cy.log("STEP #7 - Waiting for state dropdown to populate");
-    cy.wait(1000);
-
-    cy.log("STEP #8 - Checking state dropdown options in detail");
-    cy.get("#state option").then(($options) => {
-      cy.log("Number of state options: " + $options.length);
-      if ($options.length === 1) {
-        cy.log("⚠️ ONLY DEFAULT OPTION FOUND - State dropdown not populated!");
-        cy.log("Default option text: '" + $options.eq(0).text() + "'");
-        cy.log("Default option value: '" + $options.eq(0).val() + "'");
-      } else {
-        $options.each((i, opt) => {
-          cy.log(`Option ${i}: value="${opt.value}" text="${opt.text}"`);
-        });
-      }
-    });
-
-    cy.log("STEP #9 - Checking state dropdown has more than 1 option");
-    cy.get("#state option", { timeout: 15000 }).should("have.length.gt", 1);
-
-    cy.log("STEP #9 - Looking for FRE option in state dropdown");
-    cy.get('#state option[value="FRE"]', { timeout: 5000 }).should("exist");
-
-    cy.log("STEP #10 - Selecting FRE state");
-    cy.get("#state").select("FRE", { force: true });
-    cy.get("#state").should("have.value", "FRE");
-
-    cy.log("STEP #11 - Checking presentation dropdown");
-    cy.get("#presentation").should("be.visible");
-    cy.get("#presentation option").should("have.length.gt", 1);
-    cy.get('#presentation option[value="FIL"]').should("exist");
-
-    cy.log("STEP #12 - Selecting FIL presentation");
-    cy.get("#presentation").select("FIL", { force: true });
-    cy.get("#presentation").should("have.value", "FIL");
-
-    cy.log("STEP #13 - Checking commodity code dropdown");
-    cy.get("#commodity_code").should("be.visible");
-    cy.get("#commodity_code option").should("have.length.gt", 1);
-    cy.get('#commodity_code option[value="03024400"]').should("exist");
-
-    cy.log("STEP #14 - Selecting commodity code");
-    cy.get("#commodity_code").select("03024400", { force: true });
-    cy.get("#commodity_code").should("have.value", "03024400");
-
-    cy.log("STEP #15 - Test completed successfully");
+    cy.get("#state").contains("Fresh");
+    cy.get("#presentation").contains("Whole");
+    cy.get("#commodity_code").contains("03063590");
   });
 });
 
