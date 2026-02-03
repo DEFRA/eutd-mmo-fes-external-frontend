@@ -92,6 +92,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       testCaseId: TestCaseId.TruckTransportSaveMaxCharsRegistrationNumber,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get(".govuk-heading-xl").should("be.visible");
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
     cy.get("#registrationNumber").type("Registration number which is way way way way way way way more than 50 words", {
       force: true,
@@ -101,6 +102,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departurePort").type("Where the consignment departs from", { force: true });
     cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Registration number must not exceed 50 characters$/).should("be.visible");
   });
