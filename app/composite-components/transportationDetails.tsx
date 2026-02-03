@@ -146,8 +146,8 @@ export const TransportationModeDetails = ({
             errors={errors}
             displayOptionalSuffix={displayOptionalSuffix}
             vehicleType="containerVessel"
-            labelKey={"addTransportationDetailsContainerIdentificationNumberText"}
-            hintKey={"addTransportationDetailsContainerNumberHintContainerVessel"}
+            labelKey={"addTransportationDetailsContainerIdentificationNumberContainerVessel"}
+            hintKey={"addTransportationDetailsContainerIdentificationNumberHintCommon"}
           />
         </>
       )}
@@ -181,7 +181,7 @@ export const TransportationModeDetails = ({
             displayOptionalSuffix={displayOptionalSuffix}
             vehicleType="plane"
             labelKey={"addTransportationDetailsContainerIdentificationNumberText"}
-            hintKey={"addTransportationDetailsContainerNumberHintPlane"}
+            hintKey={"addTransportationDetailsContainerIdentificationNumberHintCommon"}
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
@@ -262,8 +262,8 @@ export const TransportationModeDetails = ({
             errors={errors}
             displayOptionalSuffix={displayOptionalSuffix}
             vehicleType="truck"
-            labelKey={"addTransportationDetailsContainerIdentificationNumberText"}
-            hintKey={"addTransportationDetailsContainerNumberHintTruck"}
+            labelKey={"addTransportationDetailsContainerIdentificationNumberTruck"}
+            hintKey={"addTransportationDetailsContainerIdentificationNumberHintCommon"}
           />
         </>
       )}
@@ -303,8 +303,8 @@ export const TransportationModeDetails = ({
             errors={errors}
             displayOptionalSuffix={displayOptionalSuffix}
             vehicleType="train"
-            labelKey={"addTransportationDetailsContainerIdentificationNumberText"}
-            hintKey={"addTransportationDetailsContainerNumberHintTrain"}
+            labelKey={"addTransportationDetailsContainerIdentificationNumberTrain"}
+            hintKey={"addTransportationDetailsContainerIdentificationNumberHintCommon"}
           />
         </>
       )}
