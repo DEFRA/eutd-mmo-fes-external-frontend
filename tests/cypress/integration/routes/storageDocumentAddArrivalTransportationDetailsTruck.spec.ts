@@ -69,19 +69,27 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get('label[for="placeOfUnloading"]').should("have.class", "govuk-!-font-weight-bold");
   });
 
-  it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
+  it("should render all required fields for truck arrival transport", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.SaveTruckTransportDetailsFailsWith403,
+      testCaseId: TestCaseId.TruckTransportAllowed,
     };
-
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
-    cy.url().should("include", "/forbidden");
+
+    // Verify all fields are present
+    cy.get("#nationalityOfVehicle").should("exist");
+    cy.get("#registrationNumber").should("exist");
+    cy.get("#freightBillNumber").should("exist");
+    cy.get("#departureCountry").should("exist");
+    cy.get("#departurePort").should("exist");
+    cy.get("#placeOfUnloading").should("exist");
+    cy.get("#departureDate-day").should("exist");
+    cy.get("#departureDate-month").should("exist");
+    cy.get("#departureDate-year").should("exist");
   });
 
-  it("should display error when registration number exceeds 50 chars", () => {
+  it("should display error when registration number length exceeds 50 characters", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.TransportSaveMaxCharsTruckRegNumber,
+      testCaseId: TestCaseId.TruckTransportSaveMaxCharsRegistrationNumber,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");

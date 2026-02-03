@@ -67,6 +67,24 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get('label[for="departurePort"]').should("have.class", "govuk-!-font-weight-bold");
     cy.get('label[for="placeOfUnloading"]').should("have.class", "govuk-!-font-weight-bold");
   });
+
+  it("should render all required fields for plane arrival transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportAllowed,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    // Verify all fields are present
+    cy.get("#airwayBillNumber").should("exist");
+    cy.get("#flightNumber").should("exist");
+    cy.get("#freightBillNumber").should("exist");
+    cy.get("#departureCountry").should("exist");
+    cy.get("#departurePort").should("exist");
+    cy.get("#placeOfUnloading").should("exist");
+    cy.get("#departureDate-day").should("exist");
+    cy.get("#departureDate-month").should("exist");
+    cy.get("#departureDate-year").should("exist");
+  });
   it("should navigate to sd dashboard page on click of save as draft button", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
