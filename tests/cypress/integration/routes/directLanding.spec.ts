@@ -796,7 +796,7 @@ describe("Direct landing page: Accessibility", () => {
   });
 
   it("should have label for all fields on the form", () => {
-    cy.get(".form-light-grey-bg label").should("have.length", 14);
+    cy.get(".form-light-grey-bg label").should("have.length", 16);
     // start date
     cy.get(".form-light-grey-bg label").eq(0).should("have.text", "Day").and("be.visible");
     cy.get(".form-light-grey-bg label").eq(1).should("have.text", "Month").and("be.visible");
