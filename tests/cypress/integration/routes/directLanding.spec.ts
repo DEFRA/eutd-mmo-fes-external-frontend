@@ -796,35 +796,35 @@ describe("Direct landing page: Accessibility", () => {
   });
 
   it("should have label for all fields on the form", () => {
-    cy.get(".form-light-grey-bg label").should("have.length", 14);
-    // start date
-    cy.get(".form-light-grey-bg label").eq(0).should("have.text", "Day").and("be.visible");
-    cy.get(".form-light-grey-bg label").eq(1).should("have.text", "Month").and("be.visible");
-    cy.get(".form-light-grey-bg label").eq(2).should("have.text", "Year").and("be.visible");
-    // landed date
-    cy.get(".form-light-grey-bg label").eq(3).should("have.text", "Day").and("be.visible");
-    cy.get(".form-light-grey-bg label").eq(4).should("have.text", "Month").and("be.visible");
-    cy.get(".form-light-grey-bg label").eq(5).should("have.text", "Year").and("be.visible");
+    cy.get(".form-light-grey-bg label").should("have.length", 16);
+    // start date (index 0 is now "Start date of fishing trip" label)
+    cy.get(".form-light-grey-bg label").eq(1).should("have.text", "Day").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(2).should("have.text", "Month").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(3).should("have.text", "Year").and("be.visible");
+    // landed date (index 4 is now "Date the product was landed" label)
+    cy.get(".form-light-grey-bg label").eq(5).should("have.text", "Day").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(6).should("have.text", "Month").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(7).should("have.text", "Year").and("be.visible");
     // catch area
-    cy.get(".form-light-grey-bg label").eq(6).should("have.text", "Catch area").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(8).should("have.text", "Catch area").and("be.visible");
     // high seas area
-    cy.get(".form-light-grey-bg label").eq(7).should("have.text", "Yes").and("be.visible");
-    cy.get(".form-light-grey-bg label").eq(8).should("have.text", "No").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(9).should("have.text", "Yes").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(10).should("have.text", "No").and("be.visible");
     // EEZ
-    cy.get(".govuk-label").eq(9).should("have.text", "Exclusive economic zone").and("be.visible");
+    cy.get(".govuk-label").eq(11).should("have.text", "Exclusive economic zone").and("be.visible");
     // RFMO
     cy.get(".form-light-grey-bg label")
-      .eq(10)
+      .eq(12)
       .should("have.text", "Regional fisheries management organisation (optional)")
       .and("be.visible");
     // vessel
     cy.get(".form-light-grey-bg label")
-      .eq(11)
+      .eq(13)
       .should("have.text", "Vessel name or port letter and number (PLN)")
       .and("be.visible");
     // gear details
-    cy.get(".form-light-grey-bg label").eq(12).should("have.text", "Gear category").and("be.visible");
-    cy.get(".form-light-grey-bg label").eq(13).should("have.text", "Gear type").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(14).should("have.text", "Gear category").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(15).should("have.text", "Gear type").and("be.visible");
   });
 });
 
