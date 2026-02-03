@@ -17,7 +17,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get(".govuk-heading-xl").contains("Train arriving in the UK");
     cy.wait(250);
     cy.get("form").should(($form) => {
-      expect($form.find("input[type='text']")).to.have.lengthOf(5);
+      expect($form.find("input[type='text']")).to.have.lengthOf(6);
 
       const labelObjects = $form.find("label").map((i, el) => Cypress.$(el).text());
       const textObjects = $form.find("input[type='text']").map((i, el) => Cypress.$(el).val());
@@ -26,8 +26,8 @@ describe("Add Transportation Details Train: Allowed", () => {
       const textinputs = textObjects.get();
       const hints = hintObjects.get();
 
-      expect(textinputs).to.have.length(5);
-      expect(labels).to.have.length(9);
+      expect(textinputs).to.have.length(6);
+      expect(labels).to.have.length(10);
       expect(labels).to.deep.eq([
         "Railway bill number",
         "Freight bill number (optional)",
@@ -38,6 +38,7 @@ describe("Add Transportation Details Train: Allowed", () => {
         "Day",
         "Month",
         "Year",
+        "Shipping container identification number (optional)",
       ]);
       expect(hints).to.deep.eq([
         "For example, AB12345C. This field is required now to help prepare for new EU regulations coming into force on 10 January 2026",
@@ -46,6 +47,7 @@ describe("Add Transportation Details Train: Allowed", () => {
         "For example, Calais port, Calais-Dunkerque airport or the place the train started its journey",
         "This is where the consignment was unloaded from the train when arriving in the UK",
         "For example, 25 07 2025",
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
       ]);
     });
     cy.contains("button", "Save and continue").should("be.visible");
@@ -356,6 +358,39 @@ describe("Add Transportation Details Train: Welsh Translations", () => {
 
     // "Enter the departure date" -> "Rhowch y dyddiad ymadael"
     cy.contains("a", /^Rhowch y dyddiad ymadael$/).should("be.visible");
+  });
+
+  it("should handle adding and removing containers", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportAllowed,
+    };
+
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Verify initial container field and add button
+    cy.get('input[name="containerNumbers.0"]').should("be.visible");
+    cy.get("#add-container-button").should("be.visible");
+    cy.get("#add-container-button").should("be.visible").should("contain.text", "Add another container");
+    cy.get("#remove-container-button-0").should("not.exist");
+
+    // Add another container
+    cy.get("#add-container-button").click({ force: true });
+    cy.get('input[name="containerNumbers.1"]').should("be.visible");
+    cy.get("#remove-container-button-0").should("be.visible");
+    cy.get("#remove-container-button-0").should("be.visible").should("contain.text", "Remove");
+
+    // Fill in container values
+    cy.get('[id="containerNumbers.0"]').type("ABCJ0123456", { force: true });
+    cy.get('[id="containerNumbers.1"]').type("XYZU9876543", { force: true });
+    cy.get('[id="containerNumbers.0"]').should("exist");
+    cy.get('[id="containerNumbers.1"]').should("exist");
+
+    // Remove one container
+    cy.get("#remove-container-button-0").click({ force: true });
+    cy.get('input[name="containerNumbers.1"]').should("not.exist");
+
+    // Verify the remaining container still exists
+    cy.get('input[name="containerNumbers.0"]').should("exist");
   });
 
   it("should display field labels in Welsh", () => {
