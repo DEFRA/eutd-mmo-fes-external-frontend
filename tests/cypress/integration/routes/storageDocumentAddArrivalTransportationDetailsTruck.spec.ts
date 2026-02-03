@@ -89,7 +89,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
   it("should display error when registration number length exceeds 50 characters", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.TruckTransportSaveMaxCharsRegistrationNumber,
+      testCaseId: TestCaseId.TransportSaveMaxCharsTruckRegNumber,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get(".govuk-heading-xl").should("be.visible");
