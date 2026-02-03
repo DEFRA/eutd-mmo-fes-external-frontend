@@ -17,7 +17,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get(".govuk-heading-xl").contains("Truck arriving in the UK");
     cy.wait(250);
     cy.get("form").should(($form) => {
-      expect($form.find("input[type='text']")).to.have.lengthOf(6);
+      expect($form.find("input[type='text']")).to.have.lengthOf(7);
 
       const labelObjects = $form.find("label").map((i, el) => Cypress.$(el).text());
       const textObjects = $form.find("input[type='text']").map((i, el) => Cypress.$(el).val());
@@ -25,11 +25,12 @@ describe("Add Transportation Details Truck: Allowed", () => {
       const labels = labelObjects.get();
       const textinputs = textObjects.get();
       const hints = hintObjects.get();
-      expect(textinputs).to.have.length(6);
-      expect(labels).to.have.length(10);
+      expect(textinputs).to.have.length(7);
+      expect(labels).to.have.length(11);
       expect(labels).to.deep.eq([
         "Truck nationality",
         "Registration number",
+        "Shipping container identification number (optional)",
         "Freight bill number (optional)",
         "Country of departure",
         "Where the consignment departs from",
@@ -42,6 +43,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       expect(hints).to.deep.eq([
         "Type at least two characters to load the list. For example, United Kingdom",
         "For example, A123 4567 or BD51SMR. This field is required now to help prepare for new EU regulations coming into force on 10 January 2026",
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
         "For example, AA1234567",
         "This is the country the truck left before it came to the UK",
         "For example, Calais port, Calais-Dunkerque airport or the place the truck started its journey",
@@ -299,6 +301,39 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
     cy.url().should("include", storageFacilityUrl);
+  });
+
+  it("should handle adding and removing containers", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportAllowed,
+    };
+
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+
+    // Verify initial container field and add button
+    cy.get('input[name="containerNumbers.0"]').should("be.visible");
+    cy.get("#add-container-button").should("be.visible");
+    cy.get("#add-container-button").should("be.visible").should("contain.text", "Add another container");
+    cy.get("#remove-container-button-0").should("not.exist");
+
+    // Add another container
+    cy.get("#add-container-button").click({ force: true });
+    cy.get('input[name="containerNumbers.1"]').should("be.visible");
+    cy.get("#remove-container-button-0").should("be.visible");
+    cy.get("#remove-container-button-0").should("be.visible").should("contain.text", "Remove");
+
+    // Fill in container values
+    cy.get('[id="containerNumbers.0"]').type("ABCJ0123456", { force: true });
+    cy.get('[id="containerNumbers.1"]').type("XYZU9876543", { force: true });
+    cy.get('[id="containerNumbers.0"]').should("exist");
+    cy.get('[id="containerNumbers.1"]').should("exist");
+
+    // Remove one container
+    cy.get("#remove-container-button-0").click({ force: true });
+    cy.get('input[name="containerNumbers.1"]').should("not.exist");
+
+    // Verify the remaining container still exists
+    cy.get('input[name="containerNumbers.0"]').should("exist");
   });
 });
 
