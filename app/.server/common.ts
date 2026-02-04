@@ -176,6 +176,8 @@ const onSubmitExportCertificateResponse = async (response: Response): Promise<IS
         unauthorised: true,
       };
     default:
+      const responseText = await response.text();
+      serverLogger.error(`Unexpected error from PDF service: ${response.status} - ${responseText}`);
       throw new Error(`Unexpected error: ${response.status}`);
   }
 };

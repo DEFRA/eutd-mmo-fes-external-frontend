@@ -1317,14 +1317,24 @@ describe("PS: Add catch details - Remove Functionality and Count Updates", () =>
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+
+    // First catch - fill species field
     cy.get("#catches-0-species").type("Atlantic cod (COD)");
+    cy.wait(200); // Wait for autocomplete to settle
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-111111");
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
     cy.get("#addProductDetails").click({ force: true });
-    cy.get("#catches-0-species").clear().type("Atlantic cod (COD)");
-    cy.get("#catches-0-catchCertificateNumber").clear().type("GBR-2022-CC-222222");
+
+    // Second catch - requery and fill species field
+    cy.get("#catches-0-species").clear();
+    cy.wait(100);
+    cy.get("#catches-0-species").type("Atlantic cod (COD)");
+    cy.wait(200); // Wait for autocomplete to settle
+    cy.get("#catches-0-catchCertificateNumber").clear();
+    cy.wait(100);
+    cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-222222");
     cy.get("#catches-0-totalWeightLanded").clear().type("30");
     cy.get("#catches-0-exportWeightBeforeProcessing").clear().type("15");
     cy.get("#catches-0-exportWeightAfterProcessing").clear().type("15");
@@ -1756,7 +1766,8 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
 
     // Fill out all required fields including issuing country
     cy.get("input[type='radio'][value='non_uk']").click({ force: true });
-    cy.get("#catches-0-issuingCountry").should("exist").should("be.visible");
+    // Wait for the issuing country field to appear after state update
+    cy.get("#catches-0-issuingCountry", { timeout: 5000 }).should("exist").should("be.visible");
     cy.get("#catches-0-issuingCountry").invoke("val", "France", { force: true });
 
     cy.get("#catches-0-catchCertificateNumber").type(ccNumber);
