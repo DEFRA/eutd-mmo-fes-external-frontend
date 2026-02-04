@@ -300,6 +300,7 @@ const SpeciesAutocompleteField: React.FC<{
   // Use submitted value when there are errors, otherwise use state
   const defaultSpeciesValue = submittedSpecies ?? selectedSpecies;
   const hasFieldError = hasError(errors, fieldKey);
+  const hasAnyErrors = !isEmpty(errors);
 
   // Prepare conditional props for controlled/uncontrolled input
   const speciesInputProps: any = {
@@ -310,8 +311,11 @@ const SpeciesAutocompleteField: React.FC<{
   };
 
   if (isHydrated) {
-    // When there are errors, use the submitted value, otherwise use state
-    speciesInputProps.value = hasFieldError && submittedSpecies ? submittedSpecies : selectedSpecies;
+    // Only set value prop when we need to preserve submitted data (when there are errors)
+    // Otherwise, let AutocompleteFormField manage its own state for normal typing/selection
+    if (hasAnyErrors && submittedSpecies) {
+      speciesInputProps.value = submittedSpecies;
+    }
   } else {
     speciesInputProps.defaultValue = defaultSpeciesValue;
   }
