@@ -39,7 +39,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
         "Registration number",
         "Freight bill number (optional)",
       ]);
-      expect(hints).to.have.length(11);
+      expect(hints).to.have.length(8);
       expect(hints).to.include(
         "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document."
       );
