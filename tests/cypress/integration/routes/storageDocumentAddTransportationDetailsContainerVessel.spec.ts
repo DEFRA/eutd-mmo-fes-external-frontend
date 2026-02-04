@@ -36,6 +36,35 @@ describe("Add Transportation Details: Container Vessel", () => {
       "For example, Felixstowe Port, London Gateway, or the place the container vessel departs from the UK"
     );
   });
+
+  it("should render labels with bold font weight for NMD departure transport", () => {
+    cy.get('label[id="exportedTo-label"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="vesselName"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="flagState"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departurePlace"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+
+    // Verify all labels have the base govuk-label class
+    cy.get('label[id="exportedTo-label"]').should("have.class", "govuk-label");
+    cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-label");
+    cy.get('label[for="vesselName"]').should("have.class", "govuk-label");
+    cy.get('label[for="flagState"]').should("have.class", "govuk-label");
+    cy.get('label[for="departurePlace"]').should("have.class", "govuk-label");
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-label");
+  });
+
+  it("should render all required fields for container vessel departure transport", () => {
+    cy.get("#exportedTo").should("exist");
+    cy.get("#pointOfDestination").should("exist");
+    cy.get("#vesselName").should("exist");
+    cy.get("#flagState").should("exist");
+    cy.get("#departurePlace").should("exist");
+    cy.get("#freightBillNumber").should("exist");
+    cy.get("#exportDate-day").should("exist");
+    cy.get("#exportDate-month").should("exist");
+    cy.get("#exportDate-year").should("exist");
+  });
 });
 
 describe("Save and Continue button - UnHappy path", () => {
@@ -58,7 +87,6 @@ describe("Save and Continue button - UnHappy path", () => {
     cy.get("[data-testid=save-and-continue").click({ force: true });
     cy.get(".govuk-error-summary__list").contains("Enter the vessel name");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    // cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
     cy.contains("a", /^Enter the flag state$/).should("be.visible");
     cy.contains("a", /^Enter the vessel name$/).should("be.visible");
