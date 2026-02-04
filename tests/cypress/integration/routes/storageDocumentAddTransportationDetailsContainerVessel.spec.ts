@@ -170,3 +170,29 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
     ).should("be.visible");
   });
 });
+
+describe("Catch Certificate Transport Labels (useBoldLabels=false)", () => {
+  it("should display non-bold labels for Catch Certificate transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationContainerVessel, // Using CC test case where useBoldLabels=false
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Test useBoldLabels=false condition - labels should have govuk-label class but NOT govuk-!-font-weight-bold
+    cy.get('label[id="exportedTo-label"]').should("have.class", "govuk-label");
+    cy.get('label[id="exportedTo-label"]').should("not.have.class", "govuk-!-font-weight-bold");
+
+    cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-label");
+    cy.get('label[for="pointOfDestination"]').should("not.have.class", "govuk-!-font-weight-bold");
+
+    cy.get('label[for="vesselName"]').should("have.class", "govuk-label");
+    cy.get('label[for="vesselName"]').should("not.have.class", "govuk-!-font-weight-bold");
+
+    cy.get('label[for="flagState"]').should("have.class", "govuk-label");
+    cy.get('label[for="flagState"]').should("not.have.class", "govuk-!-font-weight-bold");
+
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-label");
+    cy.get('label[for="freightBillNumber"]').should("not.have.class", "govuk-!-font-weight-bold");
+  });
+});
