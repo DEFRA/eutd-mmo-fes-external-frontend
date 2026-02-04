@@ -384,14 +384,9 @@ export const TransportationDetails = ({
 }) => {
   const { t } = useTranslation("transportation");
 
-  const getLabelClassName = () => {
-    if (useBoldLabels) {
-      return "govuk-label govuk-!-font-weight-bold";
-    }
-    return "govuk-label";
-  };
+  const getBoldLabelStyle = () => (useBoldLabels ? "govuk-label govuk-!-font-weight-bold" : "govuk-label");
 
-  const useBold = getLabelClassName();
+  const useBold = getBoldLabelStyle();
 
   return (
     <fieldset className="govuk-fieldset">
