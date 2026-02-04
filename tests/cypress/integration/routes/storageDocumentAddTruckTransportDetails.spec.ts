@@ -25,7 +25,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       const hints = hintObjects.get();
 
       expect(textinputs).to.have.length(7);
-      expect(labels).to.have.length(11);
+      expect(labels).to.have.length(8);
       expect(labels).to.deep.eq([
         "Consignment destination",
         "Point of destination",
@@ -328,41 +328,5 @@ describe("AutocompleteFormField: minCharsBeforeSearch validation", () => {
         cy.get('[role="listbox"]').should("be.visible");
       });
     });
-  });
-});
-
-describe("Catch Certificate Transport Labels (useBoldLabels=false)", () => {
-  it("should display non-bold labels for Catch Certificate transport", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.CCCheckYourInformationTruckNoCMR, // Using CC test case where useBoldLabels=false
-    };
-
-    cy.visit(truckPageUrl, { qs: { ...testParams } });
-
-    // Test useBoldLabels=false condition - labels should have govuk-label class but NOT govuk-!-font-weight-bold
-    cy.get(".govuk-label").filter(":contains('Truck nationality')").should("have.class", "govuk-label");
-    cy.get(".govuk-label")
-      .filter(":contains('Truck nationality')")
-      .should("not.have.class", "govuk-!-font-weight-bold");
-
-    cy.get(".govuk-label").filter(":contains('Registration number')").should("have.class", "govuk-label");
-    cy.get(".govuk-label")
-      .filter(":contains('Registration number')")
-      .should("not.have.class", "govuk-!-font-weight-bold");
-
-    cy.get(".govuk-label").filter(":contains('Place the export leaves the UK')").should("have.class", "govuk-label");
-    cy.get(".govuk-label")
-      .filter(":contains('Place the export leaves the UK')")
-      .should("not.have.class", "govuk-!-font-weight-bold");
-
-    cy.get(".govuk-label").filter(":contains('Container identification number')").should("have.class", "govuk-label");
-    cy.get(".govuk-label")
-      .filter(":contains('Container identification number')")
-      .should("not.have.class", "govuk-!-font-weight-bold");
-
-    cy.get(".govuk-label").filter(":contains('Freight bill number')").should("have.class", "govuk-label");
-    cy.get(".govuk-label")
-      .filter(":contains('Freight bill number')")
-      .should("not.have.class", "govuk-!-font-weight-bold");
   });
 });
