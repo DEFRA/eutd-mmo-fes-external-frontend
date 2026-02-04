@@ -42,7 +42,15 @@ export const TransportationModeDetails = ({
   useBoldLabels?: boolean;
 }) => {
   const { t } = useTranslation("transportation");
-  let useBold = useBoldLabels ? "govuk-label govuk-!-font-weight-bold" : "govuk-label";
+
+  const getLabelClassName = () => {
+    if (useBoldLabels) {
+      return "govuk-label govuk-!-font-weight-bold";
+    }
+    return "govuk-label";
+  };
+
+  const useBold = getLabelClassName();
   const renderDeparturePlaceField = () => (
     <FormInput
       containerClassName="govuk-form-group govuk-!-width-one-half"
@@ -365,7 +373,7 @@ export const TransportationDetails = ({
   countries,
   formData,
   displayOptionalSuffix,
-  useBoldLabels,
+  useBoldLabels = false,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
@@ -375,7 +383,15 @@ export const TransportationDetails = ({
   useBoldLabels?: boolean;
 }) => {
   const { t } = useTranslation("transportation");
-  let useBold = useBoldLabels ? "govuk-label govuk-!-font-weight-bold" : "govuk-label";
+
+  const getLabelClassName = () => {
+    if (useBoldLabels) {
+      return "govuk-label govuk-!-font-weight-bold";
+    }
+    return "govuk-label";
+  };
+
+  const useBold = getLabelClassName();
 
   return (
     <fieldset className="govuk-fieldset">
