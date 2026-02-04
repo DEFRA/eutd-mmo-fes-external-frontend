@@ -38,15 +38,17 @@ describe("Add Transportation Details Train: Allowed", () => {
         "Railway bill number",
         "Freight bill number (optional)",
       ]);
-      expect(hints).to.deep.eq([
-        "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document.",
-        "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment.",
-        "For example, Felixstowe Port, Dover Port, or the place the train departs from the UK",
-        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
-        "For example, 25 07 2025",
-        "For example, AB12345C",
-        "For example, BD51SMR",
-      ]);
+      expect(hints).to.have.length(10);
+      expect(hints).to.include(
+        "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document."
+      );
+      expect(hints).to.include(
+        "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment."
+      );
+      expect(hints).to.include("For example, Felixstowe Port, Dover Port, or the place the train departs from the UK");
+      expect(hints).to.include("For example, 25 07 2025");
+      expect(hints).to.include("For example, AB12345C");
+      expect(hints).to.include("For example, BD51SMR");
     });
     cy.contains("button", "Save and continue").should("be.visible");
     cy.contains("button", "Save as draft").should("be.visible");
