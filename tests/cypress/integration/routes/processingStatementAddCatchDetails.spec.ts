@@ -1317,20 +1317,22 @@ describe("PS: Add catch details - Remove Functionality and Count Updates", () =>
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+    cy.wait(1000); // Wait for page to fully load
 
     // First catch - fill species field
-    cy.get("#catches-0-species").type("Atlantic cod (COD)");
+    cy.get("#catches-0-species").should("be.enabled").type("Atlantic cod (COD)");
     cy.wait(200); // Wait for autocomplete to settle
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-111111");
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
     cy.get("#addProductDetails").click({ force: true });
+    cy.wait(500); // Wait for form to reset
 
     // Second catch - requery and fill species field
-    cy.get("#catches-0-species").clear();
+    cy.get("#catches-0-species").should("be.enabled").clear();
     cy.wait(100);
-    cy.get("#catches-0-species").type("Atlantic cod (COD)");
+    cy.get("#catches-0-species").should("be.enabled").type("Atlantic cod (COD)");
     cy.wait(200); // Wait for autocomplete to settle
     cy.get("#catches-0-catchCertificateNumber").clear();
     cy.wait(100);
