@@ -297,19 +297,21 @@ const SpeciesAutocompleteField: React.FC<{
   const fieldKey = `catches-${catchIndex}-species`;
   const errorMessage = getErrorMessage(errors, fieldKey, t);
   const speciesOptions = isHydrated ? getSpeciesOptions(species) : getNonJsSpeciesOptions(species);
-  // Use submitted value when there are errors (non-JS scenario)
+  // Use submitted value when there are errors, otherwise use state
   const defaultSpeciesValue = submittedSpecies ?? selectedSpecies;
+  const hasFieldError = hasError(errors, fieldKey);
 
   // Prepare conditional props for controlled/uncontrolled input
   const speciesInputProps: any = {
     className: classNames("govuk-input govuk-!-width-one-half", {
-      "govuk-input--error": hasError(errors, fieldKey),
+      "govuk-input--error": hasFieldError,
     }),
     "aria-describedby": `${fieldKey}-hint`,
   };
 
   if (isHydrated) {
-    speciesInputProps.value = selectedSpecies;
+    // When there are errors, use the submitted value, otherwise use state
+    speciesInputProps.value = hasFieldError && submittedSpecies ? submittedSpecies : selectedSpecies;
   } else {
     speciesInputProps.defaultValue = defaultSpeciesValue;
   }
@@ -418,7 +420,11 @@ const AddCatchDetailsIndex = () => {
 
   useEffect(() => {
     if (isReset) {
-      setIsReset(false);
+      // Use setTimeout to ensure the reset happens after the component has re-mounted
+      const timer = setTimeout(() => {
+        setIsReset(false);
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [isReset]);
 
