@@ -1684,36 +1684,30 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.wait(200);
+    cy.wait(1000);
 
-    // 1. Select non-UK to show issuing country field
-    cy.get("input[type='radio'][value='non_uk']").check({ force: true });
-    // cy.get("input[type='radio'][id='catchCertificateType-non_uk']").should("be.checked");
-    // cy.get("input[type='radio'][id='catchCertificateType-uk']").should("not.be.checked");
-    // cy.get("#catches-0-issuingCountry").should("exist").should("be.visible");
-    // cy.get("#catches-0-issuingCountry").should("have.value", "");
+    // Wait for page to be fully loaded and hydrated
+    cy.get('input[name="catchCertificateType"]').should("exist");
 
-    // 2. Select a country from autocomplete to trigger onSelected
-    // cy.get("#catches-0-issuingCountry").type("France", { force: true });
-    // cy.get("body").then(($body) => {
-    //   if ($body.find(".autocomplete__option").length > 0) {
-    //     cy.get(".autocomplete__option").first().click({ force: true });
-    //     cy.get("#catches-0-issuingCountry").should("have.value", "France");
-    //     cy.get("#catches-0-issuingCountry").should("not.have.value", "");
-    //   }
-    // });
+    // 1. First click UK to ensure we're starting from a known state
+    cy.get('label[for="catchCertificateType-uk"]').click();
+    cy.wait(500); // Wait for React state update
+    cy.get('[data-testid="issuing-country-0"]').should("not.exist");
 
-    // 3. Select UK radio to trigger onChange and hide issuing country field
-    cy.get("input[type='radio'][value='uk']").check({ force: true });
-    // cy.get("input[type='radio'][id='catchCertificateType-uk']").should("be.checked");
-    // cy.get("input[type='radio'][id='catchCertificateType-non_uk']").should("not.be.checked");
-    // cy.get("#catches-0-issuingCountry").should("not.exist");
+    // 2. Now select non-UK to show issuing country field
+    cy.get('label[for="catchCertificateType-non_uk"]').click();
+    cy.wait(500); // Wait for React state update
+    cy.get('[data-testid="issuing-country-0"]', { timeout: 10000 }).should("exist");
 
-    // 4. Re-select non-UK to show issuing country field again and trigger onChange
-    // cy.get("input[type='radio'][value='non_uk']").check({ force: true });
-    // cy.get("input[type='radio'][id='catchCertificateType-non_uk']").should("be.checked");
-    // cy.get("input[type='radio'][id='catchCertificateType-uk']").should("not.be.checked");
-    // cy.get("#catches-0-issuingCountry").should("exist").should("be.visible");
+    // 3. Select UK radio to hide issuing country field again
+    cy.get('label[for="catchCertificateType-uk"]').click();
+    cy.wait(500); // Wait for React state update
+    cy.get('[data-testid="issuing-country-0"]').should("not.exist");
+
+    // 4. Re-select non-UK to show issuing country field again
+    cy.get('label[for="catchCertificateType-non_uk"]').click();
+    cy.wait(500); // Wait for React state update
+    cy.get('[data-testid="issuing-country-0"]', { timeout: 10000 }).should("exist");
   });
 
   it("should validate issuing country is required for non-UK certificates", () => {
@@ -1724,7 +1718,7 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
     // Select non-UK and submit without issuing country
-    cy.get("input[type='radio'][value='non_uk']").click({ force: true });
+    cy.get('input[name="catchCertificateType"][value="non_uk"]').check({ force: true });
     cy.get("#catches-0-catchCertificateNumber").type(ccNumber);
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
@@ -1744,7 +1738,7 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
     // Select UK certificate and submit without issuing country
-    cy.get("input[type='radio'][value='uk']").click({ force: true });
+    cy.get('input[name="catchCertificateType"][value="uk"]').check({ force: true });
     cy.get("#catches-0-catchCertificateNumber").type(ccNumber);
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
@@ -1765,10 +1759,10 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.wait(1000);
 
     // Fill out all required fields including issuing country
-    cy.get("input[type='radio'][value='non_uk']").click({ force: true });
-    cy.get("#catches-0-issuingCountry").should("exist").should("be.visible");
-    cy.get("#catches-0-issuingCountry").invoke("val", "France", { force: true });
-
+    cy.get('input[name="catchCertificateType"][value="non_uk"]').check({ force: true });
+    cy.wait(200); // Wait for React state update and field to appear
+    cy.get('input[name="issuingCountry"]').should("exist").should("be.visible");
+    cy.get('input[name="issuingCountry"]').type("France{enter}", { force: true });
     cy.get("#catches-0-catchCertificateNumber").type(ccNumber);
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
