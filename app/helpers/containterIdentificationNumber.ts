@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 const generateId = () => uuidv4();
 
 // Default number of container fields to display in non-JS mode
-const NON_JS_DEFAULT_CONTAINER_COUNT = 5;
+const NON_JS_DEFAULT_CONTAINER_COUNT = 10;
 
 export function getContainerInputData(
   isHydrated: boolean,

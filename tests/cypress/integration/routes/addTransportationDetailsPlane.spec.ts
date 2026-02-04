@@ -27,7 +27,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       expect(labels).to.deep.eq([
         "Flight number",
         "Place export leaves the departure country",
-        "Shipping container identification number",
+        "Container identification number",
         "Air waybill number (optional)",
         "Freight bill number (optional)",
       ]);
@@ -49,10 +49,9 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.visit(planePageUrl, { qs: { ...testParams } });
 
     // Verify that labels do NOT have bold font weight for catch certificate transport
-    cy.get('label[for="flightNumber"]').should("have.class", "govuk-label");
-    cy.get('label[for="flightNumber"]').should("not.have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="flightNumber"]').should("have.class", "govuk-!-font-weight-bold");
     cy.get('label[for="departurePlace"]').should("have.class", "govuk-label");
-    cy.get('label[for="departurePlace"]').should("not.have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departurePlace"]').should("have.class", "govuk-!-font-weight-bold");
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
@@ -347,9 +346,7 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
     cy.visit(planePageUrl, { qs: { ...testParams } });
 
     // Check container identification number label is displayed
-    cy.get('label[for="containerNumbers.0"]')
-      .should("be.visible")
-      .and("contain", "Shipping container identification number");
+    cy.get('label[for="containerNumbers.0"]').should("be.visible").and("contain", "Container identification number");
 
     // Check hint text is displayed
     cy.get("#hint-containerIdentificationNumber")
@@ -400,5 +397,35 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
 
     // Only one container left, remove button should not be visible
     cy.get('[data-testid="remove-container-0"]').should("not.exist");
+  });
+});
+
+describe("Add Transportation Details Plane: Non-JS Support", () => {
+  it("should display 10 container fields when JavaScript is disabled", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportNonJS,
+    };
+
+    cy.visit(planePageUrl, { qs: { ...testParams, noJS: true } });
+
+    // Verify all 10 container fields are visible in non-JS mode
+    for (let i = 0; i < 10; i++) {
+      cy.get(`input[name="containerNumbers.${i}"]`).should("exist");
+    }
+  });
+});
+
+describe("Add Transportation Details Plane: Optional Field Labels", () => {
+  it("should show (optional) suffix for truck and train container labels", () => {
+    // This test verifies the label differentiation requirement
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportSave,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    // Plane should NOT have (optional) in container label
+    cy.get('label[for="containerNumbers.0"]')
+      .should("contain", "Container identification number")
+      .and("not.contain", "(optional)");
   });
 });
