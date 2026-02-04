@@ -325,6 +325,7 @@ const SpeciesAutocompleteField: React.FC<{
       id={fieldKey}
       name="species"
       errorMessageText={errorMessage}
+      defaultValue={defaultSpeciesValue}
       options={speciesOptions}
       optionsId="species-option"
       labelClassName="govuk-label govuk-!-font-weight-bold"
