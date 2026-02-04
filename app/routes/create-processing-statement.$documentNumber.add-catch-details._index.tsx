@@ -448,6 +448,8 @@ const AddCatchDetailsIndex = () => {
     setCurrentTotalWeightLanded(totalWeightLanded);
     setCurrentExportWeightBeforeProcessing(exportWeightBeforeProcessing);
     setCurrentExportWeightAfterProcessing(exportWeightAfterProcessing);
+    // Note: errors is intentionally NOT in dependency array - it's a new object on every render
+    // which would cause infinite loops. We check isEmpty(errors) inside the effect instead.
   }, [
     catchCertificateType,
     catchId,
@@ -515,18 +517,14 @@ const AddCatchDetailsIndex = () => {
 
   const navigationLinks = populateNavigationLinks(previousLinkLayout, nextLinkLayout);
 
-  useEffect(() => {
-    // Don't update if we have errors - preserve submitted values
-    if (isEmpty(errors)) {
-      setSelectedSpecies(speciesSelected);
-    }
-  }, [speciesSelected, errors]);
+  // Derive a boolean from errors to avoid object reference issues in useEffect
+  const hasErrors = !isEmpty(errors);
 
   useEffect(() => {
-    if (!isEmpty(errors)) {
+    if (hasErrors) {
       scrollToId("errorIsland");
     }
-  }, [errors]);
+  }, [hasErrors]); // Boolean primitive, safe to use as dependency
 
   useEffect(() => {
     if (response) {
