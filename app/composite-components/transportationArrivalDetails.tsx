@@ -262,11 +262,13 @@ export const TransportationArrivalDetails = ({
   countries,
   displayOptionalSuffix,
   placeOfUnloading,
+  useBoldLabels = false,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
   countries: ICountry[];
   displayOptionalSuffix: boolean;
+  useBoldLabels?: boolean;
 }) => {
   const { t } = useTranslation("transportation");
   return (
@@ -424,7 +426,7 @@ export const TransportationArrivalDetails = ({
         dateSelected={moment(departureDate, ["DD/MM/YYYY", "YYYY-MM-DD", "D/M/YYYY", "YYYY-M-D"]).format("YYYY-MM-DD")}
         errors={errors?.departureDate}
         label={"addTransportationArrivalDetailsDepartureDate"}
-        labelStyle="bold"
+        labelStyle={useBoldLabels ? "bold" : "normal"}
         translationNs="transportation"
         hideAddDateButton={true}
         hintText="addTransportationArrivalDetailsDepartureDateHint"
