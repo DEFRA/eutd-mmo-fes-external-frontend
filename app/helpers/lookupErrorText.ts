@@ -282,7 +282,6 @@ export const getErrorMessage = (key: string): string => {
     "error.plane.exportDate.any.min": "sdPlaneExportDateMin",
     "error.containerVessel.exportDate.any.min": "sdContainerVesselExportDateMin",
     "error.arrivalTransportationDetails.incomplete": "sdProgressArrivalTransportationDetailsRequiredError",
-    "error.containerNumbers.array.min": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.array.max": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.array.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
