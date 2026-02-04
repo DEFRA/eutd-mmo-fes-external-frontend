@@ -280,14 +280,39 @@ const SpeciesAutocompleteField: React.FC<{
   isHydrated: boolean;
   errors: any;
   t: any;
+  setSelectedSpecies: (species: string) => void;
   setSelectedSpeciesCode: (code: string) => void;
   submittedSpecies?: string;
-}> = ({ catchIndex, selectedSpecies, species, isHydrated, errors, t, setSelectedSpeciesCode, submittedSpecies }) => {
+}> = ({
+  catchIndex,
+  selectedSpecies,
+  species,
+  isHydrated,
+  errors,
+  t,
+  setSelectedSpecies,
+  setSelectedSpeciesCode,
+  submittedSpecies,
+}) => {
   const fieldKey = `catches-${catchIndex}-species`;
   const errorMessage = getErrorMessage(errors, fieldKey, t);
   const speciesOptions = isHydrated ? getSpeciesOptions(species) : getNonJsSpeciesOptions(species);
   // Use submitted value when there are errors (non-JS scenario)
   const defaultSpeciesValue = submittedSpecies ?? selectedSpecies;
+
+  // Prepare conditional props for controlled/uncontrolled input
+  const speciesInputProps: any = {
+    className: classNames("govuk-input govuk-!-width-one-half", {
+      "govuk-input--error": hasError(errors, fieldKey),
+    }),
+    "aria-describedby": `${fieldKey}-hint`,
+  };
+
+  if (isHydrated) {
+    speciesInputProps.value = selectedSpecies;
+  } else {
+    speciesInputProps.defaultValue = defaultSpeciesValue;
+  }
 
   return (
     <AutocompleteFormField
@@ -300,6 +325,7 @@ const SpeciesAutocompleteField: React.FC<{
       labelClassName="govuk-label govuk-!-font-weight-bold"
       labelText={t("speciesNameText", { ns: "psAddCatchDetails" })}
       hintText={t("speciesNameHintText", { ns: "psAddCatchDetails" })}
+      minCharsBeforeSearch={2}
       containerClassName={classNames("govuk-form-group", {
         "govuk-form-group--error": hasError(errors, fieldKey),
       })}
@@ -308,14 +334,12 @@ const SpeciesAutocompleteField: React.FC<{
           "govuk-select--error": hasError(errors, fieldKey),
         }),
       }}
-      inputProps={{
-        className: classNames("govuk-input govuk-!-width-one-half", {
-          "govuk-input--error": hasError(errors, fieldKey),
-        }),
-        "aria-describedby": `${fieldKey}-hint`,
-      }}
+      inputProps={speciesInputProps}
       searchHandler={querySpecies}
-      onSelected={(species) => setSelectedSpeciesCode(species?.split(" (")[1]?.replace(")", ""))}
+      onSelected={(species) => {
+        setSelectedSpecies(species);
+        setSelectedSpeciesCode(species?.split(" (")[1]?.replace(")", ""));
+      }}
     />
   );
 };
@@ -367,6 +391,9 @@ const AddCatchDetailsIndex = () => {
 
   const [currentCatchCertificateType, setCurrentCatchCertificateType] = useState<string>(
     getFormValue("catchCertificateType", getDefaultCatchCertificateType(catchCertificateType))
+  );
+  const [currentCatchCertificateNumber, setCurrentCatchCertificateNumber] = useState<string>(
+    getFormValue("catchCertificateNumber", isEditing ? catchCertificateNumber : "")
   );
   const [currentTotalWeightLanded, setCurrentTotalWeightLanded] = useState<string>(
     getFormValue("totalWeightLanded", "")
@@ -516,7 +543,9 @@ const AddCatchDetailsIndex = () => {
     setCurrentTotalWeightLanded("");
     setCurrentExportWeightBeforeProcessing("");
     setCurrentExportWeightAfterProcessing("");
-    setCurrentCatchCertificateType("");
+    setCurrentCatchCertificateType(getDefaultCatchCertificateType(catchCertificateType));
+    setCurrentCatchCertificateNumber("");
+    setSelectedSpecies("");
     setSelectedSpeciesCode("");
     setSelectedIssuingCountry("");
     setIsReset(true);
@@ -550,12 +579,14 @@ const AddCatchDetailsIndex = () => {
           <SecureForm method="post" action={actionUrl} csrf={csrf}>
             <div className="form-light-grey-bg govuk-!-padding-5 govuk-!-margin-bottom-5">
               <SpeciesAutocompleteField
+                key={isReset ? `species-${catchIndex}-reset` : `species-${catchIndex}`}
                 catchIndex={catchIndex}
                 selectedSpecies={selectedSpecies}
                 species={species}
                 isHydrated={isHydrated}
                 errors={errors}
                 t={t}
+                setSelectedSpecies={setSelectedSpecies}
                 setSelectedSpeciesCode={setSelectedSpeciesCode}
                 submittedSpecies={submittedFormData.species}
               />
@@ -587,9 +618,12 @@ const AddCatchDetailsIndex = () => {
                 label={t("psCatchCertificate", { ns: "psAddCatchDetails" })}
                 name="catchCertificateNumber"
                 type="text"
-                value={isHydrated ? undefined : getFormValue("catchCertificateNumber", catchCertificateNumber)}
-                defaultValue={isHydrated ? getFormValue("catchCertificateNumber", catchCertificateNumber) : undefined}
-                onChange={isHydrated ? undefined : () => {}}
+                value={
+                  isHydrated
+                    ? currentCatchCertificateNumber
+                    : getFormValue("catchCertificateNumber", catchCertificateNumber)
+                }
+                onChange={(e) => isHydrated && setCurrentCatchCertificateNumber(e.currentTarget.value)}
                 hint={{
                   id: `hint-catches-${catchIndex}-catchCertificateNumber`,
                   position: "above",
