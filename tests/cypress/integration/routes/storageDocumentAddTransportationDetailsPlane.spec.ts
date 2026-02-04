@@ -68,6 +68,14 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get('label[for="flightNumber"]').should("have.class", "govuk-!-font-weight-bold");
     cy.get('label[for="airwayBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
     cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+
+    // Verify all labels have the base govuk-label class
+    cy.get('label[id="exportedTo-label"]').should("have.class", "govuk-label");
+    cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-label");
+    cy.get('label[for="departurePlace"]').should("have.class", "govuk-label");
+    cy.get('label[for="flightNumber"]').should("have.class", "govuk-label");
+    cy.get('label[for="airwayBillNumber"]').should("have.class", "govuk-label");
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-label");
   });
 
   it("should render all required fields for plane departure transport", () => {
