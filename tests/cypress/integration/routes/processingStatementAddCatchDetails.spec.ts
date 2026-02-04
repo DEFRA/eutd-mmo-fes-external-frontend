@@ -1234,16 +1234,19 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-species").type("Atlantic cod (COD)");
+    cy.wait(1000); // Wait for page to fully load
+    cy.get("#catches-0-species").should("be.enabled").type("Atlantic cod (COD)");
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-123456");
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
     cy.get("#addProductDetails").click({ force: true });
+    cy.wait(500); // Wait for form to reset
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
     cy.get("#yourproducts tbody tr").should("have.length", 1);
-    cy.get("#catches-0-species").clear();
-    cy.get("#catches-0-species").type("European seabass (BSS)");
+    cy.get("#catches-0-species").should("be.enabled").clear();
+    cy.wait(100);
+    cy.get("#catches-0-species").should("be.enabled").type("European seabass (BSS)");
     cy.get("#catches-0-catchCertificateNumber").clear();
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-654321");
     cy.get("#catches-0-totalWeightLanded").clear();
