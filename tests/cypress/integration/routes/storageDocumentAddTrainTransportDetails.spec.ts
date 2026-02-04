@@ -26,7 +26,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       const hints = hintObjects.get();
 
       expect(textinputs).to.have.length(6);
-      expect(labels).to.have.length(7);
+      expect(labels).to.have.length(10);
       expect(labels).to.deep.eq([
         "Consignment destination",
         "Point of destination",
