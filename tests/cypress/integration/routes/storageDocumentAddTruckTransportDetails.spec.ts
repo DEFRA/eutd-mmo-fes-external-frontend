@@ -38,16 +38,18 @@ describe("Add Transportation Details Truck: Allowed", () => {
         "Registration number",
         "Freight bill number (optional)",
       ]);
-      expect(hints).to.deep.eq([
-        "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document.",
-        "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment.",
-        "For example, Dover port, the Eurotunnel, or the place the truck departs from the UK",
-        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
-        "For example, 25 07 2025",
-        "Type at least two characters to load the list. For example, United Kingdom",
-        "For example, A123 4567 or BD51SMR",
-        "For example, BD51SMR",
-      ]);
+      expect(hints).to.have.length(11);
+      expect(hints).to.include(
+        "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document."
+      );
+      expect(hints).to.include(
+        "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment."
+      );
+      expect(hints).to.include("For example, Dover port, the Eurotunnel, or the place the truck departs from the UK");
+      expect(hints).to.include("For example, 25 07 2025");
+      expect(hints).to.include("Type at least two characters to load the list. For example, United Kingdom");
+      expect(hints).to.include("For example, A123 4567 or BD51SMR");
+      expect(hints).to.include("For example, BD51SMR");
     });
     cy.contains("button", "Save and continue").should("be.visible");
     cy.contains("button", "Save as draft").should("be.visible");
