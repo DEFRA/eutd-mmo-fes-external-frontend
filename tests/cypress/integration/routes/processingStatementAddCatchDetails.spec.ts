@@ -1766,6 +1766,7 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
 
     // Fill out all required fields including issuing country
     cy.get("input[type='radio'][value='non_uk']").click({ force: true });
+    cy.wait(200); // Wait for React state update
     // Wait for the issuing country field to appear after state update
     cy.get("#catches-0-issuingCountry", { timeout: 5000 }).should("exist").should("be.visible");
     cy.get("#catches-0-issuingCountry").invoke("val", "France", { force: true });
