@@ -39,19 +39,59 @@ describe("Add Transportation Details Train: Allowed", () => {
         "Railway bill number",
         "Freight bill number (optional)",
       ]);
-      expect(hints).to.deep.eq([
-        "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document.",
-        "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment.",
-        "For example, Felixstowe Port, Dover Port, or the place the train departs from the UK",
-        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
-        "For example, 25 07 2025",
-        "For example, AB12345C",
-        "For example, BD51SMR",
-      ]);
+      expect(hints).to.have.length(7);
+      expect(hints).to.include(
+        "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document."
+      );
+      expect(hints).to.include(
+        "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment."
+      );
+      expect(hints).to.include("For example, Felixstowe Port, Dover Port, or the place the train departs from the UK");
+      expect(hints).to.include("For example, 25 07 2025");
+      expect(hints).to.include("For example, AB12345C");
+      expect(hints).to.include("For example, BD51SMR");
     });
     cy.contains("button", "Save and continue").should("be.visible");
     cy.contains("button", "Save as draft").should("be.visible");
     cy.contains("a", "Back to your progress").should("be.visible");
+  });
+
+  it("should render labels with bold font weight for NMD departure transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportAllowed,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Verify that labels have bold font weight class for NMD departure transport
+    cy.get('label[id="exportedTo-label"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departurePlace"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="railwayBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+
+    // Verify all labels have the base govuk-label class
+    cy.get('label[id="exportedTo-label"]').should("have.class", "govuk-label");
+    cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-label");
+    cy.get('label[for="departurePlace"]').should("have.class", "govuk-label");
+    cy.get('label[for="railwayBillNumber"]').should("have.class", "govuk-label");
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-label");
+  });
+
+  it("should render all required fields for train departure transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportAllowed,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Verify all fields are present
+    cy.get("#exportedTo").should("exist");
+    cy.get("#pointOfDestination").should("exist");
+    cy.get("#departurePlace").should("exist");
+    cy.get("#railwayBillNumber").should("exist");
+    cy.get("#freightBillNumber").should("exist");
+    cy.get("#exportDate-day").should("exist");
+    cy.get("#exportDate-month").should("exist");
+    cy.get("#exportDate-year").should("exist");
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {

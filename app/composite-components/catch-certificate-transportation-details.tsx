@@ -42,6 +42,7 @@ export const CatchCertificateTransportationDetails = ({
       displayOptionalSuffix={displayOptionalSuffix}
       errors={errors}
       countries={countries ?? []}
+      useBoldLabels={false}
     />
   </fieldset>
 );
