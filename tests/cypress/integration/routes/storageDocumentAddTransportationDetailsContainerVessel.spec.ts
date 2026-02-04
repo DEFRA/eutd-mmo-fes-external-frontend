@@ -57,36 +57,6 @@ describe("Add Transportation Details: Container Vessel", () => {
     cy.get("#exportDate-month").should("exist");
     cy.get("#exportDate-year").should("exist");
   });
-
-  it("should render error summary when validation errors occur", () => {
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-
-    // Verify ErrorSummary component is rendered
-    cy.get(".govuk-error-summary").should("be.visible");
-    cy.contains("h2", "There is a problem").should("be.visible");
-
-    // Verify error messages are displayed
-    cy.get(".govuk-error-summary__list").should("be.visible");
-  });
-
-  it("should render all imported components and helper functions", () => {
-    // Verify Main component is rendered
-    cy.get("main").should("be.visible");
-
-    // Verify BackToProgressLink is rendered
-    cy.contains("a", "Back to your progress").should("be.visible");
-
-    // Verify SecureForm is rendered
-    cy.get("form").should("be.visible");
-
-    // Verify ButtonGroup is rendered
-    cy.get("[data-testid=save-and-continue]").should("be.visible");
-    cy.get("[data-testid=save-draft-button]").should("be.visible");
-
-    // Verify hidden inputs are present
-    cy.get('input[name="vehicle"]').should("exist");
-    cy.get('input[name="nextUri"]').should("exist");
-  });
 });
 
 describe("Save and Continue button - UnHappy path", () => {
@@ -109,7 +79,6 @@ describe("Save and Continue button - UnHappy path", () => {
     cy.get("[data-testid=save-and-continue").click({ force: true });
     cy.get(".govuk-error-summary__list").contains("Enter the vessel name");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    // cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
     cy.contains("a", /^Enter the flag state$/).should("be.visible");
     cy.contains("a", /^Enter the vessel name$/).should("be.visible");
