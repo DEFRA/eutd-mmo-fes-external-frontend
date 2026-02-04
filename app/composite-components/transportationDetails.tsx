@@ -185,7 +185,7 @@ export const TransportationModeDetails = ({
             errors={errors}
             displayOptionalSuffix={displayOptionalSuffix}
             vehicleType="plane"
-            labelKey={"addTransportationDetailsContainerIdentificationNumberText"}
+            labelKey={"addTransportationDetailsContainerIdentificationNumberPlane"}
             hintKey={"addTransportationDetailsContainerIdentificationNumberHintCommon"}
           />
           <FormInput
@@ -406,7 +406,6 @@ export const TransportationDetails = ({
         name="exportedTo"
         defaultValue={formData.exportedTo ?? exportedTo?.officialCountryName ?? ""}
         labelText={t("addConsignmentDestination")}
-        labelClassName={useBold}
         hintText={t("addConsignmentDestinationHint")}
         selectProps={{
           id: "consignmentDestination",
@@ -489,7 +488,7 @@ export const TransportationDetails = ({
           return (
             <ContainerIdentificationNumber
               containers={containerNumbers}
-              maximumContainers={5}
+              maximumContainers={10}
               errors={errors}
               displayOptionalSuffix={true}
               vehicleType={vehicle}
@@ -629,7 +628,7 @@ export const TransportationDetails = ({
       {(vehicle === "containerVessel" || vehicle === "plane") && (
         <ContainerIdentificationNumber
           containers={containerNumbers}
-          maximumContainers={5}
+          maximumContainers={10}
           errors={errors}
           vehicleType={vehicle}
           labelKey={
@@ -674,8 +673,8 @@ export const TransportationDetails = ({
           />
           <FormInput
             type="text"
-            label={t("addTransportationDetailsRegistrationNumber")}
             labelClassName={useBold}
+            label={t("addTransportationDetailsRegistrationNumber")}
             name="registrationNumber"
             inputProps={{
               defaultValue: registrationNumber,
@@ -703,8 +702,8 @@ export const TransportationDetails = ({
       {vehicle === "train" && (
         <FormInput
           name="railwayBillNumber"
-          label={t("addTransportationDetailsRailwayBillNumber")}
           labelClassName={useBold}
+          label={t("addTransportationDetailsRailwayBillNumber")}
           type="text"
           inputClassName={classNames("govuk-input", {
             "govuk-input--error": errors?.railwayBillNumber,
