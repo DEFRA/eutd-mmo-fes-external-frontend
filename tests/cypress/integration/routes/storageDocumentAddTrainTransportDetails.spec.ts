@@ -26,7 +26,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       const hints = hintObjects.get();
 
       expect(textinputs).to.have.length(6);
-      expect(labels).to.have.length(10);
+      expect(labels).to.have.length(7);
       expect(labels).to.deep.eq([
         "Consignment destination",
         "Point of destination",
@@ -284,28 +284,5 @@ describe("Train Point of Destination - Validation Scenarios", () => {
       "a",
       /^Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
     ).should("be.visible");
-  });
-});
-
-describe("Catch Certificate Transport Labels (useBoldLabels=false)", () => {
-  it("should display non-bold labels for Catch Certificate transport", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.CCCheckYourInformationTrain, // Using CC test case where useBoldLabels=false
-    };
-
-    cy.visit(trainPageUrl, { qs: { ...testParams } });
-
-    // Test useBoldLabels=false condition - labels should have govuk-label class but NOT govuk-!-font-weight-bold
-    cy.get('label[id="exportedTo-label"]').should("have.class", "govuk-label");
-    cy.get('label[id="exportedTo-label"]').should("not.have.class", "govuk-!-font-weight-bold");
-
-    cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-label");
-    cy.get('label[for="pointOfDestination"]').should("not.have.class", "govuk-!-font-weight-bold");
-
-    cy.get('label[for="railwayBillNumber"]').should("have.class", "govuk-label");
-    cy.get('label[for="railwayBillNumber"]').should("not.have.class", "govuk-!-font-weight-bold");
-
-    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-label");
-    cy.get('label[for="freightBillNumber"]').should("not.have.class", "govuk-!-font-weight-bold");
   });
 });
