@@ -74,32 +74,9 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({ actionResult, defau
   return defaultShouldRevalidate;
 };
 
-const getCatchCertificateNumber = (
-  isHydrated: boolean,
-  currentCatchCertificateNumber: string,
-  catchCertificateNumber: string
-) => (isHydrated ? currentCatchCertificateNumber : currentCatchCertificateNumber ?? catchCertificateNumber);
-
-const getCurrentTotalWeightLanded = (
-  isHydrated: boolean,
-  currentTotalWeightLanded: string,
-  totalWeightLanded: string
-) => (isHydrated ? currentTotalWeightLanded : currentTotalWeightLanded ?? totalWeightLanded);
-const getExportWeightBeforeProcessing = (
-  isHydrated: boolean,
-  currentExportWeightBeforeProcessing: string,
-  exportWeightBeforeProcessing: string
-) =>
-  isHydrated
-    ? currentExportWeightBeforeProcessing
-    : currentExportWeightBeforeProcessing ?? exportWeightBeforeProcessing;
-
-const getExportWeightAfterProcessing = (
-  isHydrated: boolean,
-  currentExportWeightAfterProcessing: string,
-  exportWeightAfterProcessing: string
-) =>
-  isHydrated ? currentExportWeightAfterProcessing : currentExportWeightAfterProcessing ?? exportWeightAfterProcessing;
+// Helper to get weight value for display - state is already initialized with correct value from getFormValue
+const getWeightValue = (isHydrated: boolean, currentValue: string, loaderValue: string) =>
+  isHydrated ? currentValue : currentValue ?? loaderValue;
 
 const getAddProductDetailsConfig = (isEditing: boolean | undefined) => ({
   value: isEditing ? "updateCatch" : "addCatch",
@@ -109,8 +86,6 @@ const getAddProductDetailsConfig = (isEditing: boolean | undefined) => ({
 const getAddProductDetailsValue = (isEditing: boolean | undefined) => (isEditing ? "updateCatch" : "addCatch");
 const getActionUrl = (documentNumber: string, productId: string) =>
   `/create-processing-statement/${documentNumber}/add-catch-details/${productId}?pageNo=1`;
-const getDefaultCurrentCatchCertificateNumber = (catchCertificateNumber: string, isEditing?: boolean) =>
-  isEditing ? catchCertificateNumber : "";
 const getDefaultCatchCertificateType = (catchCertificateType?: string) => catchCertificateType ?? "non_uk";
 const getDefaultIssuingCountry = (loaderIssuingCountry: string, catches: any, catchId: string) => {
   // First priority: use the issuing country from loader data (for editing mode)
@@ -153,6 +128,7 @@ const CatchCertificateTypeRadios: React.FC<{
   errors: any;
   t: any;
   handleCatchCertificateTypeChange: (value: string) => void;
+  submittedCatchCertificateType?: string;
 }> = ({
   catchIndex,
   currentCatchCertificateType,
@@ -160,10 +136,14 @@ const CatchCertificateTypeRadios: React.FC<{
   errors,
   t,
   handleCatchCertificateTypeChange,
+  submittedCatchCertificateType,
 }) => {
   const fieldKey = `catches-${catchIndex}-catchCertificateType`;
   const errorMessage = getErrorMessage(errors, fieldKey, t);
   const isHydrated = useIsHydrated();
+  // Use submitted value when there are errors (non-JS scenario)
+  const defaultCertType =
+    !isEmpty(errors) && submittedCatchCertificateType ? submittedCatchCertificateType : catchCertificateType;
 
   return (
     <div
@@ -199,7 +179,7 @@ const CatchCertificateTypeRadios: React.FC<{
                   handleCatchCertificateTypeChange("uk");
                 }
               }}
-              defaultChecked={catchCertificateType === "uk"}
+              defaultChecked={defaultCertType === "uk"}
             />
             <label className="govuk-label govuk-radios__label" htmlFor="catchCertificateType-uk">
               {t("commonYesLabel", { ns: "common" })}
@@ -218,7 +198,7 @@ const CatchCertificateTypeRadios: React.FC<{
                   handleCatchCertificateTypeChange("non_uk");
                 }
               }}
-              defaultChecked={catchCertificateType === "non_uk"}
+              defaultChecked={defaultCertType === "non_uk"}
             />
             <label className="govuk-label govuk-radios__label" htmlFor="catchCertificateType-non_uk">
               {t("commonNoLabel", { ns: "common" })}
@@ -240,9 +220,21 @@ const IssuingCountryField: React.FC<{
   errors: any;
   t: any;
   setSelectedIssuingCountry: (value: string) => void;
-}> = ({ catchIndex, isReset, selectedIssuingCountry, isHydrated, countries, errors, t, setSelectedIssuingCountry }) => {
+  submittedIssuingCountry?: string;
+}> = ({
+  catchIndex,
+  isReset,
+  selectedIssuingCountry,
+  isHydrated,
+  countries,
+  errors,
+  t,
+  setSelectedIssuingCountry,
+  submittedIssuingCountry,
+}) => {
   const fieldKey = `catches-${catchIndex}-issuingCountry`;
-  const defaultValue = isReset ? "" : selectedIssuingCountry;
+  // Use submitted value when there are errors (non-JS scenario)
+  const defaultValue = isReset ? "" : submittedIssuingCountry ?? selectedIssuingCountry;
   const errorMessage = getErrorMessage(errors, fieldKey, t);
   const countryOptions = isHydrated
     ? countries.map((c: ICountry) => c.officialCountryName)
@@ -289,17 +281,20 @@ const SpeciesAutocompleteField: React.FC<{
   errors: any;
   t: any;
   setSelectedSpeciesCode: (code: string) => void;
-}> = ({ catchIndex, selectedSpecies, species, isHydrated, errors, t, setSelectedSpeciesCode }) => {
+  submittedSpecies?: string;
+}> = ({ catchIndex, selectedSpecies, species, isHydrated, errors, t, setSelectedSpeciesCode, submittedSpecies }) => {
   const fieldKey = `catches-${catchIndex}-species`;
   const errorMessage = getErrorMessage(errors, fieldKey, t);
   const speciesOptions = isHydrated ? getSpeciesOptions(species) : getNonJsSpeciesOptions(species);
+  // Use submitted value when there are errors (non-JS scenario)
+  const defaultSpeciesValue = submittedSpecies ?? selectedSpecies;
 
   return (
     <AutocompleteFormField
       id={fieldKey}
       name="species"
       errorMessageText={errorMessage}
-      defaultValue={selectedSpecies}
+      defaultValue={defaultSpeciesValue}
       options={speciesOptions}
       optionsId="species-option"
       labelClassName="govuk-label govuk-!-font-weight-bold"
@@ -348,7 +343,6 @@ const AddCatchDetailsIndex = () => {
     prevLink,
     isFirstPage,
     isLastPage,
-    lang,
     pageNo,
     totalPages,
     csrf,
@@ -361,22 +355,36 @@ const AddCatchDetailsIndex = () => {
   } = useLoaderData<ILoaderData>();
 
   const actionData = useActionData();
-  const { errors = {}, response } = getActionData(actionData) as any;
+  const { errors = {}, response, ...submittedFormData } = getActionData(actionData) as any;
+
+  // Helper function to get the value to display - prefer submitted form data when there are errors
+  const getFormValue = (fieldName: string, defaultValue: any) => {
+    if (!isEmpty(errors) && submittedFormData[fieldName] !== undefined) {
+      return submittedFormData[fieldName];
+    }
+    return defaultValue;
+  };
+
   const [currentCatchCertificateType, setCurrentCatchCertificateType] = useState<string>(
-    getDefaultCatchCertificateType(catchCertificateType)
+    getFormValue("catchCertificateType", getDefaultCatchCertificateType(catchCertificateType))
   );
-  const [currentCatchCertificateNumber, setCurrentCatchCertificateNumber] = useState<string>(
-    getDefaultCurrentCatchCertificateNumber(catchCertificateNumber, isEditing)
+  const [currentTotalWeightLanded, setCurrentTotalWeightLanded] = useState<string>(
+    getFormValue("totalWeightLanded", "")
   );
-  const [currentTotalWeightLanded, setCurrentTotalWeightLanded] = useState<string>("");
-  const [currentExportWeightBeforeProcessing, setCurrentExportWeightBeforeProcessing] = useState<string>("");
-  const [currentExportWeightAfterProcessing, setCurrentExportWeightAfterProcessing] = useState<string>("");
-  const [selectedSpecies, setSelectedSpecies] = useState<string>(speciesSelected);
-  const [selectedSpeciesCode, setSelectedSpeciesCode] = useState<string>(getDefaultSelectedSpeciesCode(speciesCode));
+  const [currentExportWeightBeforeProcessing, setCurrentExportWeightBeforeProcessing] = useState<string>(
+    getFormValue("exportWeightBeforeProcessing", "")
+  );
+  const [currentExportWeightAfterProcessing, setCurrentExportWeightAfterProcessing] = useState<string>(
+    getFormValue("exportWeightAfterProcessing", "")
+  );
+  const [selectedSpecies, setSelectedSpecies] = useState<string>(getFormValue("species", speciesSelected));
+  const [selectedSpeciesCode, setSelectedSpeciesCode] = useState<string>(
+    getFormValue("speciesCode", getDefaultSelectedSpeciesCode(speciesCode))
+  );
   const [addButtonClicked, setAddButtonClicked] = useState<boolean>(false);
   const [isReset, setIsReset] = useState<boolean>(false);
   const [selectedIssuingCountry, setSelectedIssuingCountry] = useState<string>(
-    getDefaultIssuingCountry(issuingCountry, catches, catchId)
+    getFormValue("issuingCountry", getDefaultIssuingCountry(issuingCountry, catches, catchId))
   );
 
   const actionUrl = getActionUrl(documentNumber, productId);
@@ -392,13 +400,17 @@ const AddCatchDetailsIndex = () => {
   };
 
   useEffect(() => {
+    // Don't update state if we have errors - keep the submitted values
+    if (!isEmpty(errors)) {
+      return;
+    }
+
     setCurrentCatchCertificateType(getDefaultCatchCertificateType(catchCertificateType));
     const defaultIssuingCountry = getDefaultIssuingCountry(issuingCountry, catches, catchId);
     if (defaultIssuingCountry) {
       setSelectedIssuingCountry(defaultIssuingCountry);
     }
 
-    setCurrentCatchCertificateNumber(getDefaultCurrentCatchCertificateNumber(catchCertificateNumber, isEditing));
     setSelectedSpecies(speciesSelected);
     setSelectedSpeciesCode(getDefaultSelectedSpeciesCode(speciesCode));
     setCurrentTotalWeightLanded(totalWeightLanded);
@@ -410,12 +422,12 @@ const AddCatchDetailsIndex = () => {
     isEditing,
     issuingCountry,
     catches,
-    catchCertificateNumber,
     speciesSelected,
     speciesCode,
     totalWeightLanded,
     exportWeightBeforeProcessing,
     exportWeightAfterProcessing,
+    errors,
   ]);
 
   const isHydrated = useIsHydrated();
@@ -473,14 +485,11 @@ const AddCatchDetailsIndex = () => {
   const navigationLinks = populateNavigationLinks(previousLinkLayout, nextLinkLayout);
 
   useEffect(() => {
-    if (isEmpty(errors) && lang === null) {
-      setCurrentCatchCertificateNumber(getDefaultCurrentCatchCertificateNumber(catchCertificateNumber, isEditing));
+    // Don't update if we have errors - preserve submitted values
+    if (isEmpty(errors)) {
+      setSelectedSpecies(speciesSelected);
     }
-  }, [catchCertificateNumber]);
-
-  useEffect(() => {
-    setSelectedSpecies(speciesSelected);
-  }, [speciesSelected]);
+  }, [speciesSelected, errors]);
 
   useEffect(() => {
     if (!isEmpty(errors)) {
@@ -507,7 +516,6 @@ const AddCatchDetailsIndex = () => {
     setCurrentTotalWeightLanded("");
     setCurrentExportWeightBeforeProcessing("");
     setCurrentExportWeightAfterProcessing("");
-    setCurrentCatchCertificateNumber("");
     setCurrentCatchCertificateType("");
     setSelectedSpeciesCode("");
     setSelectedIssuingCountry("");
@@ -549,6 +557,7 @@ const AddCatchDetailsIndex = () => {
                 errors={errors}
                 t={t}
                 setSelectedSpeciesCode={setSelectedSpeciesCode}
+                submittedSpecies={submittedFormData.species}
               />
               <ProductArrivalSpeciesDetails speciesExemptLink={speciesExemptLink} />
               <CatchCertificateTypeRadios
@@ -558,6 +567,7 @@ const AddCatchDetailsIndex = () => {
                 errors={errors}
                 t={t}
                 handleCatchCertificateTypeChange={handleCatchCertificateTypeChange}
+                submittedCatchCertificateType={submittedFormData.catchCertificateType}
               />
               {shouldShowIssuingCountry(isHydrated, currentCatchCertificateType) && (
                 <IssuingCountryField
@@ -569,6 +579,7 @@ const AddCatchDetailsIndex = () => {
                   errors={errors}
                   t={t}
                   setSelectedIssuingCountry={setSelectedIssuingCountry}
+                  submittedIssuingCountry={submittedFormData.issuingCountry}
                 />
               )}
               <FormInput
@@ -576,7 +587,9 @@ const AddCatchDetailsIndex = () => {
                 label={t("psCatchCertificate", { ns: "psAddCatchDetails" })}
                 name="catchCertificateNumber"
                 type="text"
-                value={getCatchCertificateNumber(isHydrated, currentCatchCertificateNumber, catchCertificateNumber)}
+                value={isHydrated ? undefined : getFormValue("catchCertificateNumber", catchCertificateNumber)}
+                defaultValue={isHydrated ? getFormValue("catchCertificateNumber", catchCertificateNumber) : undefined}
+                onChange={isHydrated ? undefined : () => {}}
                 hint={{
                   id: `hint-catches-${catchIndex}-catchCertificateNumber`,
                   position: "above",
@@ -592,11 +605,6 @@ const AddCatchDetailsIndex = () => {
                   "aria-describedby": `hint-catches-${catchIndex}-catchCertificateNumber`,
                 }}
                 labelProps={{ htmlFor: `catches-${catchIndex}-catchCertificateNumber` }}
-                onChange={(e) => {
-                  if (!isReset) {
-                    setCurrentCatchCertificateNumber(e.currentTarget.value);
-                  }
-                }}
                 errorProps={{
                   className: isEmpty(errors?.[ccNumberKey]) ? "" : "govuk-error-message",
                 }}
@@ -620,9 +628,7 @@ const AddCatchDetailsIndex = () => {
                 inputWidth={5}
                 unit="kg"
                 errors={errors ?? {}}
-                formValue={
-                  isReset ? "" : getCurrentTotalWeightLanded(isHydrated, currentTotalWeightLanded, totalWeightLanded)
-                }
+                formValue={isReset ? "" : getWeightValue(isHydrated, currentTotalWeightLanded, totalWeightLanded)}
                 speciesId={`total-weight-landed-${catchIndex}`}
                 index={catchIndex}
                 exportWeight={isReset ? "" : totalWeightLanded}
@@ -649,11 +655,7 @@ const AddCatchDetailsIndex = () => {
                 formValue={
                   isReset
                     ? ""
-                    : getExportWeightBeforeProcessing(
-                        isHydrated,
-                        currentExportWeightBeforeProcessing,
-                        exportWeightBeforeProcessing
-                      )
+                    : getWeightValue(isHydrated, currentExportWeightBeforeProcessing, exportWeightBeforeProcessing)
                 }
                 speciesId={`export-weight-before-processing-${catchIndex}`}
                 index={catchIndex}
@@ -681,11 +683,7 @@ const AddCatchDetailsIndex = () => {
                 formValue={
                   isReset
                     ? ""
-                    : getExportWeightAfterProcessing(
-                        isHydrated,
-                        currentExportWeightAfterProcessing,
-                        exportWeightAfterProcessing
-                      )
+                    : getWeightValue(isHydrated, currentExportWeightAfterProcessing, exportWeightAfterProcessing)
                 }
                 speciesId={`export-weight-after-processing-${catchIndex}`}
                 index={catchIndex}

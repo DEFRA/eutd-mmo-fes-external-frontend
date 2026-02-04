@@ -90,29 +90,6 @@ const getGoToPage = (pageNumber: string) => (!isMissing(pageNumber) ? parseInt(p
 const getScientificName = (allSpecies: Species[], faoCode: string): string | undefined =>
   Array.isArray(allSpecies) ? allSpecies.find((s: Species) => s.faoCode === faoCode)?.scientificName : undefined;
 
-const addCatchResponseHandler = (errorResponse: Response | ErrorResponse | undefined): Response | ErrorResponse => {
-  if (errorResponse) {
-    return errorResponse;
-  }
-
-  return new Response(
-    JSON.stringify({
-      response: {
-        catchCertificateNumber: "",
-        totalWeightLanded: "",
-        exportWeightBeforeProcessing: "",
-        exportWeightAfterProcessing: "",
-      },
-    }),
-    {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-};
-
 const findIndexByValue = (catches: Catch[], valueToFind: string) =>
   catches.findIndex((ctch: Catch) => ctch._id === valueToFind);
 
@@ -342,10 +319,29 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
       getIndexBySpeciesForNewRecord(catches, faoCode) === -1
     );
 
-    const handledResponse = addCatchResponseHandler(errorResponse);
-
     if (errorResponse) {
-      return handledResponse;
+      // When there are errors and JavaScript is disabled, include the submitted form values
+      // so they can be used to repopulate the form fields
+      const responseData = errorResponse instanceof Response ? await errorResponse.json() : errorResponse;
+
+      // Explicitly include the form values in the response
+      const combinedResponse = {
+        ...responseData,
+        species: values["species"],
+        catchCertificateType: values["catchCertificateType"],
+        catchCertificateNumber: values["catchCertificateNumber"],
+        issuingCountry: values["issuingCountry"],
+        totalWeightLanded: values["totalWeightLanded"],
+        exportWeightBeforeProcessing: values["exportWeightBeforeProcessing"],
+        exportWeightAfterProcessing: values["exportWeightAfterProcessing"],
+      };
+
+      return new Response(JSON.stringify(combinedResponse), {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     }
 
     // Store the selected species in session to retain after redirect
@@ -414,7 +410,29 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
     );
 
     if (errorResponse) {
-      return errorResponse;
+      // When there are errors and JavaScript is disabled, include the submitted form values
+      // so they can be used to repopulate the form fields
+      // ErrorResponse is typically already a parsed object, not a Response instance
+      const responseData = errorResponse instanceof Response ? await errorResponse.json() : errorResponse;
+
+      // Explicitly include the form values in the response
+      const combinedResponse = {
+        ...responseData,
+        species: values["species"],
+        catchCertificateType: values["catchCertificateType"],
+        catchCertificateNumber: values["catchCertificateNumber"],
+        issuingCountry: values["issuingCountry"],
+        totalWeightLanded: values["totalWeightLanded"],
+        exportWeightBeforeProcessing: values["exportWeightBeforeProcessing"],
+        exportWeightAfterProcessing: values["exportWeightAfterProcessing"],
+      };
+
+      return new Response(JSON.stringify(combinedResponse), {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     }
 
     if (values["species"]) {
