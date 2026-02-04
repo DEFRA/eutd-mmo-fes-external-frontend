@@ -31,6 +31,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
         "Consignment destination",
         "Point of destination",
         "Where the plane departs from the UK",
+        "Date the plane departs the UK",
         "Day",
         "Month",
         "Year",
@@ -229,5 +230,28 @@ describe("Plane Point of Destination - Validation Scenarios", () => {
       "a",
       /^Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
     ).should("be.visible");
+  });
+});
+
+describe("Catch Certificate Transport Labels (useBoldLabels=false)", () => {
+  it("should display non-bold labels for Catch Certificate transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationPlane, // Using CC test case where useBoldLabels=false
+    };
+
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    // Test useBoldLabels=false condition - labels should have govuk-label class but NOT govuk-!-font-weight-bold
+    cy.get('label[id="exportedTo-label"]').should("have.class", "govuk-label");
+    cy.get('label[id="exportedTo-label"]').should("not.have.class", "govuk-!-font-weight-bold");
+
+    cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-label");
+    cy.get('label[for="pointOfDestination"]').should("not.have.class", "govuk-!-font-weight-bold");
+
+    cy.get('label[for="flightNumber"]').should("have.class", "govuk-label");
+    cy.get('label[for="flightNumber"]').should("not.have.class", "govuk-!-font-weight-bold");
+
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-label");
+    cy.get('label[for="freightBillNumber"]').should("not.have.class", "govuk-!-font-weight-bold");
   });
 });
