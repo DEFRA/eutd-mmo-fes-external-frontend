@@ -39,8 +39,10 @@ export const AddTransportationDetailsComponent = ({
   displayOptionalSuffix,
 }: AddTransporrtationDetailsProps) => {
   const { t } = useTranslation(["common", "transportation"]);
-  const { errors = {}, day, month, year, ...formData } = actionData;
-  const exportDateFromAction = getExportDateFromAction(day, month, year);
+  const { errors = {}, exportDateDay, exportDateMonth, exportDateYear, ...formData } = actionData;
+
+  const exportDateFromAction = getExportDateFromAction(exportDateDay, exportDateMonth, exportDateYear);
+
   const {
     documentNumber,
     vehicle,
