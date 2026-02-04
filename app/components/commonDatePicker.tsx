@@ -35,7 +35,7 @@ export const CommonDatePicker = ({
   hideAddDateButton,
   getDateSelected,
 }: DatePickerProps) => {
-  const { t } = useTranslation(["errorsText", "common", translationNs]);
+  const { t } = useTranslation(["errorsText", "common"]);
   const dateFormat = "YYYY-MM-DD";
   const isHydrated = useIsHydrated();
   const [selectedDate, setSelectedDate] = useState<Date | null>(
@@ -89,9 +89,9 @@ export const CommonDatePicker = ({
       <fieldset className="govuk-fieldset" role="group" aria-describedby={errorMessageText(hintText, errors)}>
         <legend className="govuk-fieldset__legend govuk-fieldset__legend">
           {labelStyle === "bold" ? (
-            <b>{t(label, { ns: translationNs })}</b>
+            <label className="govuk-label govuk-!-font-weight-bold">{t(label, { ns: translationNs })}</label>
           ) : (
-            <label>{t(label, { ns: translationNs })}</label>
+            <label className="govuk-label">{t(label, { ns: translationNs })}</label>
           )}
         </legend>
         {hintText && (
@@ -102,10 +102,7 @@ export const CommonDatePicker = ({
         {!isEmpty(errors) && (
           <ErrorMessage
             id="error-message"
-            text={t(typeof errors === "string" ? errors : errors?.message, {
-              ns: "errorsText",
-              ...(typeof errors === "string" ? {} : errors?.value),
-            })}
+            text={t(errors?.message, { ...errors?.value })}
             visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
           />
         )}
