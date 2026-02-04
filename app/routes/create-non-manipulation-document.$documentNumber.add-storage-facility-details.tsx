@@ -184,7 +184,28 @@ const handleSaveAndContinue = async (
   );
 
   if (errorResponse) {
-    return errorResponse as Response;
+    // When there are errors and JavaScript is disabled, include the submitted form values
+    // so they can be used to repopulate the form fields
+    const responseData = typeof errorResponse.json === "function" ? await errorResponse.json() : errorResponse;
+
+    // Explicitly include the form values in the response under 'values' key
+    const combinedResponse = {
+      ...responseData,
+      values: {
+        facilityName: values["facilityName"],
+        facilityArrivalDate: selectedDate,
+        facilityArrivalDateDay: values["facilityArrivalDateDay"],
+        facilityArrivalDateMonth: values["facilityArrivalDateMonth"],
+        facilityArrivalDateYear: values["facilityArrivalDateYear"],
+      },
+    };
+
+    return new Response(JSON.stringify(combinedResponse), {
+      status: 400,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 
   session.unset("facilityName");
@@ -277,8 +298,16 @@ const AddStorageFacilityDetails = () => {
     csrf,
     selectedArrivalDate,
   } = useLoaderData<loaderStorageFacility>();
-  const actionData = useActionData<{ errors: IErrorsTransformed }>() ?? { errors: {} };
-  const { errors = {} } = actionData;
+  const actionData = useActionData<{ errors: IErrorsTransformed; values?: Record<string, any> }>() ?? { errors: {} };
+  const { errors = {}, values: submittedValues } = actionData;
+
+  // Helper function to get the value to display - prefer submitted form data when there are errors
+  const getFormValue = (fieldName: string, defaultValue: any) => {
+    if (!isEmpty(errors) && submittedValues?.[fieldName] !== undefined) {
+      return submittedValues[fieldName];
+    }
+    return defaultValue;
+  };
 
   const arrivalDateFromAction = getArrivalDateFromAction(actionData, "facilityArrivalDate");
 
@@ -394,7 +423,7 @@ const AddStorageFacilityDetails = () => {
               })}
               errorPosition={ErrorPosition.AFTER_LABEL}
               inputProps={{
-                defaultValue: facilityName,
+                defaultValue: getFormValue("facilityName", facilityName),
                 id: "storageFacilities-facilityName",
               }}
               hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
