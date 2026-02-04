@@ -35,6 +35,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
         "Country of departure",
         "Where the consignment departs from",
         "Place of unloading",
+        "Departure date",
         "Day",
         "Month",
         "Year",
