@@ -160,6 +160,23 @@ describe("should redirect to forbidden page it transport details return 403 on p
 });
 
 describe("Add Transportation Details Train: Container Identification Number Validation", () => {
+  it("should display container identification number label with optional suffix and hint text", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportSave,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Check label is displayed with (optional) suffix
+    cy.get('label[for="containerNumbers.0"]')
+      .should("be.visible")
+      .and("contain", "Shipping container identification number (optional)");
+
+    // Check hint text is displayed
+    cy.get("div .govuk-hint")
+      .should("be.visible")
+      .and("contain", "Enter the identification number shown on the shipping container. For example, ABCJ0123456");
+  });
+
   it("should display error when container identification number exceeds 50 characters", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportContainerIdentificationNumberMaxLength,
