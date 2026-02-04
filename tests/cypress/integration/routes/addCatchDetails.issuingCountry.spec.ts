@@ -39,24 +39,25 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.wait(1000); // Wait for page to fully load
 
-    cy.get('input[name="species"]').first().type("Tuna{enter}");
-    cy.get('input[name="catchCertificateType"][value="non_uk"]').check();
+    cy.get('input[name="species"]').first().should("be.enabled").type("Tuna{enter}");
+    cy.wait(200); // Wait for autocomplete selection
+    cy.get('label[for="catchCertificateType-non_uk"]').click();
+    cy.wait(200); // Wait for state update
     // Click Add and wait for validation to render
     cy.get('[data-testid="add-product-details"]').click();
-    cy.wait(500); // Wait for hydration
-    cy.wait(200); // Allow React to process the state change
+    cy.wait(500); // Wait for form submission
     cy.get("#errorIsland").should("exist").and("be.visible");
 
-    // select 'No' to trigger visibility of issuing country input
-    cy.get('input[name="catchCertificateType"][value="non_uk"]').check();
-
+    // Verify species field retained its value after validation error
     cy.get('input[name="species"]').should("exist").and("have.value", "Bigeye tuna (BET)");
-    cy.get('input[name="catchCertificateNumber"]').should("have.value", "");
-    cy.get('input[name="issuingCountry"]').should("have.value", "");
     cy.get('input[name="catchCertificateNumber"]').should("have.value", "");
     cy.get('input[name="totalWeightLanded"]').should("have.value", "");
     cy.get('input[name="exportWeightBeforeProcessing"]').should("have.value", "");
     cy.get('input[name="exportWeightAfterProcessing"]').should("have.value", "");
+
+    // Verify issuing country field is visible and empty for non-UK certificate
+    cy.get('[data-testid="issuing-country-0"]').should("exist").and("have.value", "");
   });
 });
