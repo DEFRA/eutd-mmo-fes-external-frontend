@@ -26,7 +26,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       const textinputs = textObjects.get();
       const hints = hintObjects.get();
       expect(textinputs).to.have.length(7);
-      expect(labels).to.have.length(10);
+      expect(labels).to.have.length(11);
       expect(labels).to.deep.eq([
         "Truck nationality",
         "Registration number",
@@ -35,6 +35,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
         "Country of departure",
         "Where the consignment departs from",
         "Place of unloading",
+        "Departure date",
         "Day",
         "Month",
         "Year",
