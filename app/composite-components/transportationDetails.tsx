@@ -512,7 +512,7 @@ export const TransportationDetails = ({
         label={`addTransportationDetailsExportDate${capitalize(vehicle)}`}
         hintText="addTransportationArrivalDetailsDepartureDateHint"
         translationNs="transportation"
-        labelStyle={useBold}
+        labelStyle={useBoldLabels ? "bold" : "normal"}
         hideAddDateButton={true}
       />
       {vehicle === "plane" && (
