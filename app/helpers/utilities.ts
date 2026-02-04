@@ -316,6 +316,30 @@ export const getPageNameFromUrl = (url: string): string => {
     pageName = Page.ProcessingStatementCreated;
   }
 
+  if (pagePath.match(/^\/create-processing-statement\/.*\/eu-data-integration-successful$/i)) {
+    pageName = Page.ProcessingStatementEUSuccessful;
+  }
+
+  if (pagePath.match(/^\/create-processing-statement\/.*\/eu-data-integration-pending$/i)) {
+    pageName = Page.ProcessingStatementEUPending;
+  }
+
+  if (pagePath.match(/^\/create-processing-statement\/.*\/eu-data-integration-failed$/i)) {
+    pageName = Page.ProcessingStatementEUFailure;
+  }
+
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/eu-data-integration-successful$/i)) {
+    pageName = Page.StorageDocumentEUSuccessful;
+  }
+
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/eu-data-integration-pending$/i)) {
+    pageName = Page.StorageDocumentEUPending;
+  }
+
+  if (pagePath.match(/^\/create-non-manipulation-document\/.*\/eu-data-integration-failed$/i)) {
+    pageName = Page.StorageDocumentEUFailure;
+  }
+
   if (pagePath.includes("/non-manipulation-document-created")) {
     pageName = Page.StorageDocumentCreated;
   }
@@ -323,6 +347,7 @@ export const getPageNameFromUrl = (url: string): string => {
   if (pagePath.includes("/add-processing-plant-address")) {
     pageName = Page.AddProcessingPlantAddress;
   }
+
   if (pagePath.match(/^\/create-catch-certificate\/.*\/what-exporters-address$/i)) {
     pageName = Page.WhatExporterPageAddress;
   }
