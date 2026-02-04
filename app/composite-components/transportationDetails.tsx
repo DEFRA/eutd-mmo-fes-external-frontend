@@ -75,11 +75,6 @@ export const TransportationModeDetails = ({
 
   return (
     <>
-      {(() => {
-        // compute label and hint keys for container identification based on vehicle
-        // to avoid nested ternary expressions inline
-        // these will be used when rendering the ContainerIdentificationNumber component
-      })()}
       {legendTitle && (
         <legend>
           <Title title={legendTitle} />
