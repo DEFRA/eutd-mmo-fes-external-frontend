@@ -297,10 +297,10 @@ const SpeciesAutocompleteField: React.FC<{
   const fieldKey = `catches-${catchIndex}-species`;
   const errorMessage = getErrorMessage(errors, fieldKey, t);
   const speciesOptions = isHydrated ? getSpeciesOptions(species) : getNonJsSpeciesOptions(species);
-  // Use submitted value when there are errors, otherwise use state
-  const defaultSpeciesValue = submittedSpecies ?? selectedSpecies;
   const hasFieldError = hasError(errors, fieldKey);
   const hasAnyErrors = !isEmpty(errors);
+  // Use submitted value when there are errors, otherwise use current state
+  const displayValue = hasAnyErrors && submittedSpecies ? submittedSpecies : selectedSpecies;
 
   // Prepare conditional props for controlled/uncontrolled input
   const speciesInputProps: any = {
@@ -310,14 +310,9 @@ const SpeciesAutocompleteField: React.FC<{
     "aria-describedby": `${fieldKey}-hint`,
   };
 
-  if (isHydrated) {
-    // Only set value prop when we need to preserve submitted data (when there are errors)
-    // Otherwise, let AutocompleteFormField manage its own state for normal typing/selection
-    if (hasAnyErrors && submittedSpecies) {
-      speciesInputProps.value = submittedSpecies;
-    }
-  } else {
-    speciesInputProps.defaultValue = defaultSpeciesValue;
+  // For non-JS scenarios, set defaultValue on the input itself
+  if (!isHydrated) {
+    speciesInputProps.defaultValue = displayValue;
   }
 
   return (
@@ -325,7 +320,7 @@ const SpeciesAutocompleteField: React.FC<{
       id={fieldKey}
       name="species"
       errorMessageText={errorMessage}
-      defaultValue={defaultSpeciesValue}
+      defaultValue={displayValue}
       options={speciesOptions}
       optionsId="species-option"
       labelClassName="govuk-label govuk-!-font-weight-bold"
@@ -464,7 +459,6 @@ const AddCatchDetailsIndex = () => {
     totalWeightLanded,
     exportWeightBeforeProcessing,
     exportWeightAfterProcessing,
-    errors,
   ]);
 
   const isHydrated = useIsHydrated();
