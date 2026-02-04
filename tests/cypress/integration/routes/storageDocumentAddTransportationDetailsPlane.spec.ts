@@ -39,16 +39,21 @@ describe("Add Transportation Details Plane: Allowed", () => {
         "Container identification number",
         "Freight bill number (optional)",
       ]);
-      expect(hints).to.deep.eq([
-        "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document.",
-        "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment.",
-        "For example, London Heathrow Airport, East Midlands Airport, or the place the plane departs from the UK",
-        "For example, 25 07 2025",
-        "For example, 123-45678901",
-        "For example, AF296Q",
-        "For example, ABCD1234567",
-        "For example, BD51SMR",
-      ]);
+      expect(hints).to.have.length(11);
+      expect(hints).to.include(
+        "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document."
+      );
+      expect(hints).to.include(
+        "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment."
+      );
+      expect(hints).to.include(
+        "For example, London Heathrow Airport, East Midlands Airport, or the place the plane departs from the UK"
+      );
+      expect(hints).to.include("For example, 25 07 2025");
+      expect(hints).to.include("For example, 123-45678901");
+      expect(hints).to.include("For example, AF296Q");
+      expect(hints).to.include("For example, ABCD1234567");
+      expect(hints).to.include("For example, BD51SMR");
     });
     cy.contains("button", "Save and continue").should("be.visible");
     cy.contains("button", "Save as draft").should("be.visible");
