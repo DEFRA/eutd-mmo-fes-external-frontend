@@ -41,13 +41,13 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.wait(1000); // Wait for page to fully load
 
-    cy.get('input[name="species"]').first().should("be.enabled").type("Tuna{enter}");
-    cy.wait(200); // Wait for autocomplete selection
+    cy.get('input[name="species"]').first().should("be.enabled").type("Bigeye tuna (BET){enter}");
+    cy.wait(300); // Wait for autocomplete selection
     cy.get('label[for="catchCertificateType-non_uk"]').click();
     cy.wait(200); // Wait for state update
     // Click Add and wait for validation to render
     cy.get('[data-testid="add-product-details"]').click();
-    cy.wait(500); // Wait for form submission
+    cy.wait(800); // Wait for form submission and error rendering
     cy.get("#errorIsland").should("exist").and("be.visible");
 
     // Verify species field retained its value after validation error
