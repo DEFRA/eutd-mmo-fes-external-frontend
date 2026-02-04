@@ -33,18 +33,28 @@ export const TransportationModeDetails = ({
   displayOptionalSuffix,
   errors,
   countries,
+  useBoldLabels = false,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
   displayOptionalSuffix?: boolean;
   countries: ICountry[];
+  useBoldLabels?: boolean;
 }) => {
   const { t } = useTranslation("transportation");
 
+  const getLabelClassName = () => {
+    if (useBoldLabels) {
+      return "govuk-label govuk-!-font-weight-bold";
+    }
+    return "govuk-label";
+  };
+
+  const useBold = getLabelClassName();
   const renderDeparturePlaceField = () => (
     <FormInput
       containerClassName="govuk-form-group govuk-!-width-one-half"
-      labelClassName="govuk-label govuk-!-font-weight-bold"
+      labelClassName={useBold}
       label={t("addTransportationDetailsPlaceExportLeavesDepartureCountry")}
       name="departurePlace"
       type="text"
@@ -73,11 +83,6 @@ export const TransportationModeDetails = ({
 
   return (
     <>
-      {(() => {
-        // compute label and hint keys for container identification based on vehicle
-        // to avoid nested ternary expressions inline
-        // these will be used when rendering the ContainerIdentificationNumber component
-      })()}
       {legendTitle && (
         <legend>
           <Title title={legendTitle} />
@@ -87,7 +92,7 @@ export const TransportationModeDetails = ({
         <>
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
-            labelClassName="govuk-label govuk-!-font-weight-bold"
+            labelClassName={useBold}
             label={t("addTransportationDetailsVesselNameText")}
             name="vesselName"
             type="text"
@@ -114,7 +119,7 @@ export const TransportationModeDetails = ({
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
-            labelClassName="govuk-label govuk-!-font-weight-bold"
+            labelClassName={useBold}
             label={t("addTransportationDetailsFlagStateText")}
             name="flagState"
             type="text"
@@ -155,7 +160,7 @@ export const TransportationModeDetails = ({
         <>
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
-            labelClassName="govuk-label govuk-!-font-weight-bold"
+            labelClassName={useBold}
             label={t("addTransportationDetailsFlightnumber")}
             name="flightNumber"
             type="text"
@@ -185,7 +190,7 @@ export const TransportationModeDetails = ({
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
-            labelClassName="govuk-label govuk-!-font-weight-bold"
+            labelClassName={useBold}
             label={
               displayOptionalSuffix
                 ? t("addTransportationDetailsAirwayBillNumberOptional")
@@ -223,14 +228,14 @@ export const TransportationModeDetails = ({
           countries={countries}
           t={t}
           minCharsBeforeSearch={2}
-          labelClassName="govuk-label govuk-!-font-weight-bold"
+          labelClassName={useBold}
         />
       )}
       {vehicle === "truck" && (
         <>
           <FormInput
             containerClassName="govuk-form-group  govuk-!-width-one-half"
-            labelClassName="govuk-label govuk-!-font-weight-bold"
+            labelClassName={useBold}
             label={t("addTransportationDetailsRegistrationNumber")}
             name="registrationNumber"
             type="text"
@@ -271,7 +276,7 @@ export const TransportationModeDetails = ({
         <>
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
-            labelClassName="govuk-label govuk-!-font-weight-bold"
+            labelClassName={useBold}
             label={t("addTransportationDetailsRailwayBillNumber")}
             name="railwayBillNumber"
             type="text"
@@ -331,7 +336,7 @@ export const TransportationModeDetails = ({
         hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
         hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
         containerClassName="govuk-form-group govuk-!-width-one-half"
-        labelClassName="govuk-label govuk-!-font-weight-bold"
+        labelClassName={useBold}
         label={
           displayOptionalSuffix
             ? t("addTransportationDetailsFreightBillNumberOptional")
@@ -368,14 +373,20 @@ export const TransportationDetails = ({
   countries,
   formData,
   displayOptionalSuffix,
+  useBoldLabels = false,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
   countries: ICountry[];
   formData: any;
   displayOptionalSuffix?: boolean;
+  useBoldLabels?: boolean;
 }) => {
   const { t } = useTranslation("transportation");
+
+  const getBoldLabelStyle = () => (useBoldLabels ? "govuk-label govuk-!-font-weight-bold" : "govuk-label");
+
+  const useBold = getBoldLabelStyle();
 
   return (
     <fieldset className="govuk-fieldset">
@@ -395,6 +406,7 @@ export const TransportationDetails = ({
         name="exportedTo"
         defaultValue={formData.exportedTo ?? exportedTo?.officialCountryName ?? ""}
         labelText={t("addConsignmentDestination")}
+        labelClassName={useBold}
         hintText={t("addConsignmentDestinationHint")}
         selectProps={{
           id: "consignmentDestination",
@@ -411,6 +423,7 @@ export const TransportationDetails = ({
       />
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
+        labelClassName={useBold}
         label={t("addPointOfDestination")}
         name="pointOfDestination"
         type="text"
@@ -437,6 +450,7 @@ export const TransportationDetails = ({
       />
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
+        labelClassName={useBold}
         label={t(`addTransportationDetailsPlaceExportLeavesUK${capitalize(vehicle)}`)}
         name="departurePlace"
         type="text"
@@ -493,12 +507,13 @@ export const TransportationDetails = ({
         label={`addTransportationDetailsExportDate${capitalize(vehicle)}`}
         hintText="addTransportationArrivalDetailsDepartureDateHint"
         translationNs="transportation"
-        labelStyle="normal"
+        labelStyle={useBoldLabels ? "bold" : "normal"}
         hideAddDateButton={true}
       />
       {vehicle === "plane" && (
         <FormInput
           containerClassName="govuk-form-group  govuk-!-width-one-half"
+          labelClassName={useBold}
           label={
             displayOptionalSuffix
               ? t("addTransportationDetailsAirwayBillNumberOptional")
@@ -531,6 +546,7 @@ export const TransportationDetails = ({
         <>
           <FormInput
             label={t("addTransportationDetailsVesselNameText")}
+            labelClassName={useBold}
             containerClassName="govuk-form-group govuk-!-width-one-half"
             type="text"
             hint={{
@@ -556,6 +572,7 @@ export const TransportationDetails = ({
           />
           <FormInput
             label={t("addTransportationDetailsFlagStateText")}
+            labelClassName={useBold}
             containerClassName="govuk-form-group govuk-!-width-one-half"
             name="flagState"
             type="text"
@@ -584,6 +601,7 @@ export const TransportationDetails = ({
       {vehicle === "plane" && (
         <FormInput
           label={t("addTransportationDetailsFlightnumber")}
+          labelClassName={useBold}
           containerClassName="govuk-form-group govuk-!-width-one-half"
           name="flightNumber"
           type="text"
@@ -638,7 +656,7 @@ export const TransportationDetails = ({
             id="nationalityOfVehicle"
             name="nationalityOfVehicle"
             labelText={t("addTransportationDetailsTruckNationality")}
-            labelClassName="govuk-label"
+            labelClassName={useBold}
             hintText={t("addTransportationArrivalDetailsTruckNationalityHint")}
             defaultValue={nationalityOfVehicle ?? ""}
             minCharsBeforeSearch={2}
@@ -657,6 +675,7 @@ export const TransportationDetails = ({
           <FormInput
             type="text"
             label={t("addTransportationDetailsRegistrationNumber")}
+            labelClassName={useBold}
             name="registrationNumber"
             inputProps={{
               defaultValue: registrationNumber,
@@ -685,6 +704,7 @@ export const TransportationDetails = ({
         <FormInput
           name="railwayBillNumber"
           label={t("addTransportationDetailsRailwayBillNumber")}
+          labelClassName={useBold}
           type="text"
           inputClassName={classNames("govuk-input", {
             "govuk-input--error": errors?.railwayBillNumber,
@@ -710,6 +730,7 @@ export const TransportationDetails = ({
       )}
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
+        labelClassName={useBold}
         name="freightBillNumber"
         type="text"
         inputClassName={classNames("govuk-input", {

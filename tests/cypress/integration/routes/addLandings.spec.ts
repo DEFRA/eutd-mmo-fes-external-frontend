@@ -1073,36 +1073,40 @@ describe("Manual landing page: Accessibility", () => {
   });
 
   it("should have label for all fields on the form", () => {
-    cy.get(".govuk-label").should("have.length", 16);
+    cy.get(".govuk-label").should("have.length", 18);
     // product
     cy.get(".govuk-label").eq(0).should("have.text", "Product").and("be.visible");
-    // start date
-    cy.get(".govuk-label").eq(1).should("have.text", "Day").and("be.visible");
-    cy.get(".govuk-label").eq(2).should("have.text", "Month").and("be.visible");
-    cy.get(".govuk-label").eq(3).should("have.text", "Year").and("be.visible");
-    // landed date
-    cy.get(".govuk-label").eq(4).should("have.text", "Day").and("be.visible");
-    cy.get(".govuk-label").eq(5).should("have.text", "Month").and("be.visible");
-    cy.get(".govuk-label").eq(6).should("have.text", "Year").and("be.visible");
+    // start date field label
+    cy.get(".govuk-label").eq(1).should("have.text", "Start date of fishing trip").and("be.visible");
+    // start date inputs
+    cy.get(".govuk-label").eq(2).should("have.text", "Day").and("be.visible");
+    cy.get(".govuk-label").eq(3).should("have.text", "Month").and("be.visible");
+    cy.get(".govuk-label").eq(4).should("have.text", "Year").and("be.visible");
+    // landed date field label
+    cy.get(".govuk-label").eq(5).should("have.text", "Date Landed").and("be.visible");
+    // landed date inputs
+    cy.get(".govuk-label").eq(6).should("have.text", "Day").and("be.visible");
+    cy.get(".govuk-label").eq(7).should("have.text", "Month").and("be.visible");
+    cy.get(".govuk-label").eq(8).should("have.text", "Year").and("be.visible");
     // catch area
-    cy.get(".govuk-label").eq(7).should("have.text", "Catch area").and("be.visible");
+    cy.get(".govuk-label").eq(9).should("have.text", "Catch area").and("be.visible");
     // High seas area
-    cy.get(".govuk-label").eq(8).should("have.text", "Yes").and("be.visible");
-    cy.get(".govuk-label").eq(9).should("have.text", "No").and("be.visible");
+    cy.get(".govuk-label").eq(10).should("have.text", "Yes").and("be.visible");
+    cy.get(".govuk-label").eq(11).should("have.text", "No").and("be.visible");
     //Eez
-    cy.get(".govuk-label").eq(10).should("have.text", "Exclusive economic zone").and("be.visible");
+    cy.get(".govuk-label").eq(12).should("have.text", "Exclusive economic zone").and("be.visible");
     // RFMO
     cy.get(".govuk-label")
-      .eq(11)
+      .eq(13)
       .should("have.text", "Regional fisheries management organisation (optional)")
       .and("be.visible");
     // vessel
-    cy.get(".govuk-label").eq(12).should("have.text", "Vessel name or port letter and number (PLN)").and("be.visible");
+    cy.get(".govuk-label").eq(14).should("have.text", "Vessel name or port letter and number (PLN)").and("be.visible");
     // export weight
-    cy.get(".govuk-label").eq(13).should("have.text", "Export Weight").and("be.visible");
+    cy.get(".govuk-label").eq(15).should("have.text", "Export Weight").and("be.visible");
     // gear details
-    cy.get(".govuk-label").eq(14).should("have.text", "Gear category").and("be.visible");
-    cy.get(".govuk-label").eq(15).should("have.text", "Gear type").and("be.visible");
+    cy.get(".govuk-label").eq(16).should("have.text", "Gear category").and("be.visible");
+    cy.get(".govuk-label").eq(17).should("have.text", "Gear type").and("be.visible");
   });
 });
 

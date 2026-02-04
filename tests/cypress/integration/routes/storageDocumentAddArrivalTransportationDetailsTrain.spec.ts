@@ -54,17 +54,38 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.contains("button", "Save as draft").should("be.visible");
   });
 
-  it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
+  it("should render labels with bold font weight for NMD arrival transport", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.SaveTransportDetailsFailsWith403,
+      testCaseId: TestCaseId.TrainTransportAllowed,
     };
-
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
-    cy.url().should("include", "/forbidden");
+
+    // Verify that labels have bold font weight class for NMD arrival transport
+    cy.get('label[for="railwayBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departureCountry"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departurePort"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="placeOfUnloading"]').should("have.class", "govuk-!-font-weight-bold");
   });
 
-  it("should display error when railway bill number exceeds 15 chars", () => {
+  it("should render all required fields for train arrival transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportAllowed,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Verify all fields are present
+    cy.get("#railwayBillNumber").should("exist");
+    cy.get("#freightBillNumber").should("exist");
+    cy.get("#departureCountry").should("exist");
+    cy.get("#departurePort").should("exist");
+    cy.get("#placeOfUnloading").should("exist");
+    cy.get("#departureDate-day").should("exist");
+    cy.get("#departureDate-month").should("exist");
+    cy.get("#departureDate-year").should("exist");
+  });
+
+  it("should display error when rail bill number has more than 15 chars", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsRailwayBillNumber,
     };

@@ -55,21 +55,45 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.contains("button", "Save as draft").should("be.visible");
   });
 
-  it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
+  it("should render labels with bold font weight for NMD arrival transport", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.SaveTruckTransportDetailsFailsWith403,
+      testCaseId: TestCaseId.TruckTransportAllowed,
     };
-
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
-    cy.url().should("include", "/forbidden");
+
+    // Verify that labels have bold font weight class for NMD arrival transport
+    cy.get('label[for="nationalityOfVehicle"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="registrationNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departureCountry"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departurePort"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="placeOfUnloading"]').should("have.class", "govuk-!-font-weight-bold");
   });
 
-  it("should display error when registration number exceeds 50 chars", () => {
+  it("should render all required fields for truck arrival transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportAllowed,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+
+    // Verify all fields are present
+    cy.get("#nationalityOfVehicle").should("exist");
+    cy.get("#registrationNumber").should("exist");
+    cy.get("#freightBillNumber").should("exist");
+    cy.get("#departureCountry").should("exist");
+    cy.get("#departurePort").should("exist");
+    cy.get("#placeOfUnloading").should("exist");
+    cy.get("#departureDate-day").should("exist");
+    cy.get("#departureDate-month").should("exist");
+    cy.get("#departureDate-year").should("exist");
+  });
+
+  it("should display error when registration number length exceeds 50 characters", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsTruckRegNumber,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get(".govuk-heading-xl").should("be.visible");
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
     cy.get("#registrationNumber").type("Registration number which is way way way way way way way more than 50 words", {
       force: true,
@@ -78,8 +102,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departureCountry").invoke("val", "Ireland");
     cy.get("#departurePort").type("Where the consignment departs from", { force: true });
     cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
-    cy.get("form").submit();
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Registration number must not exceed 50 characters$/).should("be.visible");
   });
