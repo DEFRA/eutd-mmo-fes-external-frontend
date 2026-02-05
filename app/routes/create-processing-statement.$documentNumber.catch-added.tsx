@@ -10,7 +10,7 @@ import {
 } from "~/components";
 import { useLoaderData, useActionData, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { type MetaFunction, type LoaderFunction, type ActionFunction, redirect } from "react-router";
+import { type LoaderFunction, type ActionFunction, redirect } from "react-router";
 import type {
   IUnauthorised,
   ProcessingStatement,
@@ -20,7 +20,6 @@ import type {
   IError,
   ActionDataWithErrors,
   ProcessingStatementProduct,
-  IErrorsTransformed,
 } from "~/types";
 import {
   updateProcessingStatement,
@@ -57,108 +56,62 @@ type ILoaderData = {
   csrf: string;
   productId?: string;
   q?: string;
-  nextUri?: string;
   productDescription: string;
   totalDocuments: number;
   initialPageNo?: number;
 };
 
 const applyMatchedFromSession = (session: any, psData: ProcessingStatement, hasActiveQuery: boolean) => {
+  // Only apply filtering if there's an active search query
   if (!hasActiveQuery) {
     return;
   }
-
-  const matchedCatchIds = session.get("matchCatchIds");
-  const matchedProductIds = session.get("matchProductIds");
-
-  // If we have catch IDs, filter catches first
-  if (Array.isArray(matchedCatchIds) && matchedCatchIds.length > 0 && Array.isArray(psData.catches)) {
-    const matchedIdSet = new Set(matchedCatchIds);
-    psData.catches = psData.catches.filter((c: Catch) => matchedIdSet.has(c._id));
-
-    // Get product IDs from matched catches
-    const catchProductIds = new Set(psData.catches.map((c: Catch) => c.productId));
-
-    // Also include explicitly matched product IDs
-    if (Array.isArray(matchedProductIds)) {
-      matchedProductIds.forEach((id) => catchProductIds.add(id));
+  const matchedFromSession = session.get("matchCatches");
+  if (Array.isArray(matchedFromSession)) {
+    const matchingCatches: (Catch & CatchIndex)[] = matchedFromSession as (Catch & CatchIndex)[];
+    if (matchingCatches.length > 0) {
+      const matchingProductIds = new Set(matchingCatches.map((c) => c.productId));
+      psData.catches = matchingCatches;
+      if (Array.isArray(psData.products))
+        psData.products = psData.products.filter((p: ProcessingStatementProduct) => matchingProductIds.has(p.id));
+    } else {
+      psData.catches = [];
+      psData.products = [];
     }
-
-    // Filter products to only include those with matched catches or matched product IDs
-    if (Array.isArray(psData.products)) {
-      psData.products = psData.products.filter((p: ProcessingStatementProduct) => catchProductIds.has(p.id));
-    }
-  } else if (Array.isArray(matchedProductIds) && matchedProductIds.length > 0 && Array.isArray(psData.products)) {
-    // If only product IDs matched (no catches matched), filter products and clear catches
-    const matchedProductIdSet = new Set(matchedProductIds);
-    psData.products = psData.products.filter((p: ProcessingStatementProduct) => matchedProductIdSet.has(p.id));
-    psData.catches = [];
-  } else if (Array.isArray(matchedCatchIds) && matchedCatchIds.length === 0 && !Array.isArray(matchedProductIds)) {
-    // No matches found
-    psData.catches = [];
-    psData.products = [];
+    session.unset("matchCatches");
   }
-};
-
-const getExistingParams = (url: URL | null): URLSearchParams => {
-  const existingParams = new URLSearchParams();
-  if (!url) return existingParams;
-
-  url.searchParams.forEach((value, key) => {
-    if (key !== "q" && key !== "pageNo") {
-      existingParams.set(key, value);
-    }
-  });
-  return existingParams;
-};
-
-const performCatchSearch = (q: string, psData: ProcessingStatement): string[] => {
-  if (!q || !Array.isArray(psData.catches)) return [];
-
-  const qLower = q.toLowerCase();
-  const matchingCatches = psData.catches.filter((ctch: Catch) => {
-    const species = (ctch.species ?? "").toString().toLowerCase();
-    const speciesCode = (ctch.speciesCode ?? "").toString().toLowerCase();
-    const productDescription = (ctch.productDescription ?? "").toString().toLowerCase();
-    return species.includes(qLower) || speciesCode.includes(qLower) || productDescription.includes(qLower);
-  });
-  return matchingCatches.map((c: Catch) => c._id).filter((id): id is string => Boolean(id));
-};
-
-const performProductSearch = (q: string, psData: ProcessingStatement): string[] => {
-  if (!q || !Array.isArray(psData.products)) return [];
-
-  const qLower = q.toLowerCase();
-  const matchingProducts = psData.products.filter((product: ProcessingStatementProduct) => {
-    const productDesc = (product.description ?? "").toString().toLowerCase();
-    return productDesc.includes(qLower);
-  });
-  return matchingProducts.map((p: ProcessingStatementProduct) => p.id).filter((id): id is string => Boolean(id));
-};
-
-const buildRedirectUrl = (documentNumber: string, params: URLSearchParams): string => {
-  const baseUrl = route("/create-processing-statement/:documentNumber/catch-added", {
-    documentNumber,
-  });
-  const queryString = params.toString();
-  return baseUrl + (queryString ? `?${queryString}` : "");
 };
 
 const handleFilterAction = async (
   values: Record<string, unknown>,
   session: any,
   psData: ProcessingStatement,
-  documentNumber?: string
+  documentNumber?: string,
+  request?: Request
 ): Promise<Response | null> => {
   const q = (values.q as string) ?? "";
   const actionType = (values.actionType as string) ?? "";
 
+  // Preserve existing query parameters from the original request
+  const url = request ? new URL(request.url) : null;
+  const existingParams = new URLSearchParams();
+
+  if (url) {
+    // Preserve all existing params except 'q' and 'pageNo' (which we'll set explicitly)
+    url.searchParams.forEach((value, key) => {
+      if (key !== "q" && key !== "pageNo") {
+        existingParams.set(key, value);
+      }
+    });
+  }
+
   if (actionType === "reset") {
-    session.unset("matchCatchIds");
     session.unset("matchCatches");
     session.unset("matchQuery");
+    const resetParams = existingParams.toString();
     return redirect(
-      route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }),
+      route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }) +
+        (resetParams ? `?${resetParams}` : ""),
       {
         headers: {
           "Set-Cookie": await commitSession(session),
@@ -168,21 +121,31 @@ const handleFilterAction = async (
   }
 
   if (actionType === "search") {
-    const matchingCatchIds = performCatchSearch(q, psData);
-    const matchingProductIds = performProductSearch(q, psData);
+    if (q && Array.isArray(psData.catches)) {
+      const qLower = q.toLowerCase();
+      const matchingCatches = psData.catches.filter((ctch: Catch) => {
+        const species = (ctch.species ?? "").toString().toLowerCase();
+        const speciesCode = (ctch.speciesCode ?? "").toString().toLowerCase();
+        const productDescription = (ctch.productDescription ?? "").toString().toLowerCase();
+        return species.includes(qLower) || speciesCode.includes(qLower) || productDescription.includes(qLower);
+      });
 
-    session.set("matchCatchIds", matchingCatchIds);
-    session.set("matchQuery", q);
-    if (matchingProductIds.length > 0) {
-      session.set("matchProductIds", matchingProductIds);
+      session.set("matchCatches", matchingCatches);
+      session.set("matchQuery", q);
     } else {
-      session.unset("matchProductIds");
+      session.set("matchCatches", []);
+      session.set("matchQuery", "");
     }
 
-    const searchParams = q ? `?q=${encodeURIComponent(q)}` : "";
+    // Build final query string with search param and preserved params
+    if (q) {
+      existingParams.set("q", q);
+    }
+    const searchParams = existingParams.toString();
+
     return redirect(
       route("/create-processing-statement/:documentNumber/catch-added", { documentNumber: documentNumber as string }) +
-        searchParams,
+        (searchParams ? `?${searchParams}` : ""),
       {
         headers: {
           "Set-Cookie": await commitSession(session),
@@ -194,7 +157,7 @@ const handleFilterAction = async (
   return null;
 };
 
-export const meta: MetaFunction = (args) => getMeta(args);
+export const meta = (args: any) => getMeta(args);
 
 const hasNoAddedProducts = (psData: ProcessingStatement) =>
   !Array.isArray(psData.products) || (Array.isArray(psData.products) && psData.products.length < 1);
@@ -238,7 +201,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (!urlQuery && session.get("matchQuery")) {
     session.unset("actionExecuted");
     session.unset("matchQuery");
-    session.unset("matchCatchIds");
     session.unset("matchCatches");
   }
 
@@ -266,7 +228,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const pageNo = parseInt(url.searchParams.get("pageNo") ?? "1", 10);
   const q = urlQuery ?? (typeof sessionQuery === "string" ? sessionQuery : undefined);
-  const nextUri = url.searchParams.get("nextUri") ?? "";
   const productDescription = psData.products?.length === 1 ? psData.products[0].description : undefined;
   const totalDocuments = countUniqueDocumentByCatchCertificateNumber(psData.catches);
 
@@ -280,7 +241,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       csrf,
       productId: product?.id,
       q,
-      nextUri,
       productDescription,
       totalDocuments,
       initialPageNo: pageNo,
@@ -299,11 +259,11 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const bearerToken = await getBearerTokenForRequest(request);
   const session = await getSessionFromRequest(request);
   session.set("actionExecuted", true);
-
   const processingStatement: ProcessingStatement | IUnauthorised = await getProcessingStatement(
     bearerToken,
     documentNumber
   );
+
   validateResponseData(processingStatement);
 
   const psData = processingStatement as ProcessingStatement;
@@ -313,35 +273,21 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (!isValid) return redirect("/forbidden");
 
   const { _action, ...values } = Object.fromEntries(form);
-  const nextUri = (form.get("nextUri") as string) || "";
 
-  const maybeHandled = await handleFilterAction(values, session, psData, documentNumber as string);
+  const maybeHandled = await handleFilterAction(values, session, psData, documentNumber as string, request);
   if (maybeHandled) return maybeHandled;
-
   const isDraft = _action === "saveAsDraft";
   const isSaveAndContinue = _action === "saveAndContinue";
   const isEdit = _action === "edit";
-  const addAnotherCatch = values.addAnotherCatch === "Yes";
 
   if (isEdit) {
     return redirect(values["url"] as string);
   }
 
-  // Validate products have catches when saving and continuing
-  if (isSaveAndContinue) {
-    const validationError = validateProductsHaveCatches(psData, documentNumber as string);
-    if (validationError) {
-      return new Response(JSON.stringify(validationError), {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json",
-          "Set-Cookie": await commitSession(session),
-        },
-      });
-    }
-  }
+  const addAnotherCatch = values.addAnotherCatch === "Yes";
 
   let errorData;
+
   if (isDraft || isSaveAndContinue) {
     errorData = await updateProcessingStatement(
       bearerToken,
@@ -355,7 +301,9 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   }
 
   if (isDraft) {
-    cleanupSession(session);
+    session.unset("actionExecuted");
+    session.unset("matchQuery");
+    session.unset("matchCatches");
     return redirect(route("/create-processing-statement/processing-statements"), {
       headers: {
         "Set-Cookie": await commitSession(session),
@@ -364,11 +312,27 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   }
 
   if (errorData && Array.isArray(psData?.catches)) {
-    return createErrorResponse(errorData as ErrorResponse, session);
-  }
+    const { errors, ...data } = errorData as ErrorResponse;
+    const transformedErrors: IError[] = displayErrorTransformedMessages(errors);
 
+    return new Response(
+      JSON.stringify({
+        groupedErrors: transformedErrors,
+        ...data,
+      }),
+      {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+          "Set-Cookie": await commitSession(session),
+        },
+      }
+    );
+  }
   if (addAnotherCatch) {
-    cleanupSession(session);
+    session.unset("actionExecuted");
+    session.unset("matchQuery");
+    session.unset("matchCatches");
     return redirect(`/create-processing-statement/${documentNumber}/add-consignment-details`, {
       headers: {
         "Set-Cookie": await commitSession(session),
@@ -376,87 +340,14 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     });
   }
 
-  cleanupSession(session);
-  const redirectUrl = determineRedirectUrl(nextUri, psData, documentNumber as string);
-
-  return redirect(redirectUrl, {
+  session.unset("actionExecuted");
+  session.unset("matchQuery");
+  session.unset("matchCatches");
+  return redirect(`/create-processing-statement/${documentNumber}/add-processing-plant-details`, {
     headers: {
       "Set-Cookie": await commitSession(session),
     },
   });
-};
-
-const cleanupSession = (session: any) => {
-  session.unset("actionExecuted");
-  session.unset("matchQuery");
-  session.unset("matchCatchIds");
-  session.unset("matchCatches");
-};
-
-const validateProductsHaveCatches = (
-  psData: ProcessingStatement,
-  documentNumber: string
-): { groupedErrors: IError[]; errorsUrl: string } | null => {
-  const products = psData.products ?? [];
-  const catches = psData.catches ?? [];
-
-  const hasDescriptionOnlyProduct = products.some((product: ProcessingStatementProduct) => {
-    if (!product || typeof product !== "object") return false;
-
-    const hasDescription = product.description;
-    const productCatches = catches.filter((c: Catch) => c.productId === product.id);
-    const hasCatches = productCatches.length > 0;
-
-    return hasDescription && !hasCatches;
-  });
-
-  if (hasDescriptionOnlyProduct) {
-    const errors: IErrorsTransformed = {
-      processedProductDetails: {
-        key: "processedProductDetails",
-        message: "commonProgressProductDetailsRequiredError",
-      },
-    };
-    const transformedErrors: IError[] = displayErrorTransformedMessages(errors);
-
-    return {
-      groupedErrors: transformedErrors,
-      errorsUrl: `/create-processing-statement/${documentNumber}/catch-added`,
-    };
-  }
-
-  return null;
-};
-
-const createErrorResponse = async (errorData: ErrorResponse, session: any): Promise<Response> => {
-  const { errors, ...data } = errorData;
-  const transformedErrors: IError[] = displayErrorTransformedMessages(errors);
-
-  return new Response(
-    JSON.stringify({
-      groupedErrors: transformedErrors,
-      ...data,
-    }),
-    {
-      status: 400,
-      headers: {
-        "Content-Type": "application/json",
-        "Set-Cookie": await commitSession(session),
-      },
-    }
-  );
-};
-
-const determineRedirectUrl = (nextUri: string, psData: ProcessingStatement, documentNumber: string): string => {
-  if (!nextUri || isEmpty(nextUri)) {
-    const hasPlantDetails = psData.plantName && psData.plantApprovalNumber && psData.personResponsibleForConsignment;
-
-    return hasPlantDetails
-      ? `/create-processing-statement/${documentNumber}/check-your-information`
-      : `/create-processing-statement/${documentNumber}/add-processing-plant-details`;
-  }
-
-  return nextUri;
 };
 
 const populateNavigationLinks = (
@@ -542,21 +433,11 @@ const populateNavigationLinks = (
 });
 
 const CatchAdded = () => {
-  const {
-    documentNumber,
-    products,
-    catches,
-    csrf,
-    productId,
-    productDescription,
-    totalDocuments,
-    q,
-    nextUri,
-    initialPageNo,
-  } = useLoaderData<ILoaderData>();
+  const { documentNumber, products, catches, csrf, productId, productDescription, totalDocuments, q, initialPageNo } =
+    useLoaderData<ILoaderData>();
   const actionData = useActionData<ActionDataWithErrors>();
   const groupedErrors: IError[] = ((actionData?.groupedErrors ?? []) as unknown as IError[][]).flat();
-  const { t } = useTranslation(["catchDetailsTableHeader", "common"]);
+  const { t } = useTranslation(["catchDetailsTableHeader", "common", "catchAdded"]);
   const count = products.length;
 
   // Group catches by product for display
@@ -710,16 +591,16 @@ const CatchAdded = () => {
                               {item.catchCertificateNumber}
                             </td>
                             <td className="govuk-table__cell" id={`catches-${actualIndex}-totalWeightLanded`}>
-                              {Number(item.totalWeightLanded).toFixed(2)}kg
+                              {item.totalWeightLanded}kg
                             </td>
                             <td
                               className="govuk-table__cell"
                               id={`catches-${actualIndex}-exportWeightBeforeProcessing`}
                             >
-                              {Number(item.exportWeightBeforeProcessing).toFixed(2)}kg
+                              {item.exportWeightBeforeProcessing}kg
                             </td>
                             <td className="govuk-table__cell" id={`catches-${actualIndex}-exportWeightAfterProcessing`}>
-                              {Number(item.exportWeightAfterProcessing).toFixed(2)}kg
+                              {item.exportWeightAfterProcessing}kg
                             </td>
                           </tr>
                         );
@@ -813,7 +694,6 @@ const CatchAdded = () => {
                 </div>
               </fieldset>
             </div>
-            <input type="hidden" name="nextUri" value={nextUri ?? ""} />
             <br />
             <ButtonGroup />
           </SecureForm>
