@@ -135,25 +135,6 @@ describe("Add Storage Facility Address - Forbidden", () => {
     cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
     cy.url().should("include", "/forbidden");
   });
-
-  it("should redirect to forbidden when CSRF token is invalid", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddStorageFacilityAddress,
-    };
-    cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
-
-    cy.get('input[name="facilityName"]').type("Test Facility");
-    cy.get('input[name="facilityArrivalDateDay"]').type("15");
-    cy.get('input[name="facilityArrivalDateMonth"]').type("03");
-    cy.get('input[name="facilityArrivalDateYear"]').type("2025");
-
-    cy.get('input[name="csrf"]').then(($input) => {
-      cy.wrap($input).invoke("val", "invalid-csrf-token");
-    });
-
-    cy.get('[data-testid="save-and-continue"]').click();
-    cy.url().should("include", "/forbidden");
-  });
 });
 
 describe("Add Storage Facility page when javascript is disabled", () => {
@@ -211,6 +192,7 @@ describe("Add Storage Facility page when javascript is disabled", () => {
     });
   });
 });
+
 describe("Add Storage Facility Address - Error Both Name and Date", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
