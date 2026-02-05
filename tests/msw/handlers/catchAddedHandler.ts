@@ -23,8 +23,10 @@ import postOneValidTwoInvalidCatches from "@/fixtures/saveAndValidateApi/process
 import productWithNoCatches from "@/fixtures/processingStatementApi/processingStatementWithProductsNoCatches.json";
 import manyMockCatches from "@/fixtures/processingStatementApi/processingStatementManyMockCatches.json";
 import twoProductsOneWithoutCatches from "@/fixtures/processingStatementApi/processingStatementTwoProductsOneWithoutCatches.json";
+import descriptionOnlyProduct from "@/fixtures/processingStatementApi/processingStatementDescriptionOnlyProduct.json";
 import psDocuments from "@/fixtures/dashboardApi/psDocument.json";
 import species from "@/fixtures/referenceDataApi/species.json";
+import processingStatementWithPlantDetails from "@/fixtures/processingStatementApi/processingStatementWithPlantDetails.json";
 
 const catchAddedHandler: ITestHandler = {
   [TestCaseId.PSCatchAddedFromProgress]: () => [
@@ -113,6 +115,46 @@ const catchAddedHandler: ITestHandler = {
     rest.post(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(twoProductsOneWithoutCatches))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.json(twoProductsOneWithoutCatches))
+    ),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+  ],
+  [TestCaseId.PSCatchAddedWithDescriptionOnlyProduct]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(descriptionOnlyProduct))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+  ],
+  [TestCaseId.PSCatchAddedHasPlantDetails]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithPlantDetails))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(processingStatementWithPlantDetails))
+    ),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+  ],
+  [TestCaseId.PSCatchAddedFilterBySpeciesName]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(twoValidCatches))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) => res(ctx.json(twoValidCatches))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+  ],
+  [TestCaseId.PSCatchAddedFilterByProductDescription]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(twoValidCatches))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) => res(ctx.json(twoValidCatches))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+  ],
+  [TestCaseId.PSCatchAddedResetFilter]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(twoValidCatches))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) => res(ctx.json(twoValidCatches))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+  ],
+  [TestCaseId.PSCatchAddedProductWithNoCatches]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(twoProductsOneWithoutCatches))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(twoProductsOneWithoutCatches))
+    ),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+  ],
+  [TestCaseId.PSCatchAddedSaveAndContinueValidationError]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(descriptionOnlyProduct))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(descriptionOnlyProduct))
     ),
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
   ],

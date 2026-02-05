@@ -39,8 +39,10 @@ export const AddTransportationDetailsComponent = ({
   displayOptionalSuffix,
 }: AddTransporrtationDetailsProps) => {
   const { t } = useTranslation(["common", "transportation"]);
-  const { errors = {}, day, month, year, ...formData } = actionData;
-  const exportDateFromAction = getExportDateFromAction(day, month, year);
+  const { errors = {}, exportDateDay, exportDateMonth, exportDateYear, ...formData } = actionData;
+
+  const exportDateFromAction = getExportDateFromAction(exportDateDay, exportDateMonth, exportDateYear);
+
   const {
     documentNumber,
     vehicle,
@@ -155,7 +157,7 @@ export const AddTransportationDetailsComponent = ({
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" csrf={csrf}>
-            <TransportationDetails {...componentAttributes} />
+            <TransportationDetails {...componentAttributes} useBoldLabels={true} />
             <ButtonGroup />
             <input type="hidden" name="vehicle" value={vehicle} />
             <input type="hidden" name="nextUri" value={nextUri} />

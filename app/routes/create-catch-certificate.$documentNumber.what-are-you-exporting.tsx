@@ -45,6 +45,7 @@ type WhatAreYouExportingProps = {
   isProductAddFailure: string;
   loaderSpecies: string;
   nextUri: string;
+  landingsEntryOption: string;
   defaultActiveTab?: string;
   csrf: string;
 };
@@ -77,6 +78,7 @@ const WhatAreYouExporting = () => {
     isProductAddFailure,
     loaderSpecies,
     nextUri,
+    landingsEntryOption,
     csrf,
   } = useLoaderData<WhatAreYouExportingProps>();
   const {
@@ -109,8 +111,13 @@ const WhatAreYouExporting = () => {
     }
   }, [errors]);
 
+  const backUrl =
+    landingsEntryOption === "uploadEntry"
+      ? route("/create-catch-certificate/:documentNumber/upload-file", { documentNumber })
+      : route("/create-catch-certificate/:documentNumber/add-exporter-details", { documentNumber });
+
   return (
-    <Main backUrl={route("/create-catch-certificate/:documentNumber/add-exporter-details", { documentNumber })}>
+    <Main backUrl={backUrl}>
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
       {isProductAddSuccess && (
         <NotificationBanner

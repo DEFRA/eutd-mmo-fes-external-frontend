@@ -53,4 +53,5 @@ export interface ProcessingStatement {
   pointOfDestination?: string;
   _plantDetailsUpdated?: boolean;
   isNonJs: boolean;
+  userReference?: string;
 }

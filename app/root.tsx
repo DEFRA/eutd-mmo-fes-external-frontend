@@ -34,6 +34,9 @@ import clientLogger from "./logger";
 import { allNamespaces, supportedLanguages } from "./i18n";
 
 declare global {
+  // Injected by Vite define config for cache-busting
+  const __BUILD_ID__: string;
+
   interface Window {
     gtag: any;
   }
@@ -220,7 +223,22 @@ export function ErrorBoundary() {
 
   // when true, this is what used to go to `CatchBoundary`
   if (isRouteErrorResponse(error)) {
-    return (
+    const substring = "The request is blocked.";
+    const isWAFError = error?.data.includes(substring);
+
+    return isWAFError ? (
+      <Template {...templateProps} disableScripts>
+        <Main showHelpLink={false}>
+          <div className="govuk-grid-row">
+            <div className="govuk-grid-column-two-thirds">
+              <Title title={t("forbiddenH1Text", { ns: "forbidden" })} />
+              <p data-testid="no-permission">{t("forbiddenPageP1Text", { ns: "forbidden" })}</p>
+              <p data-testid="navigate-back">{t("forbiddenPageP2Text", { ns: "forbidden" })}</p>
+            </div>
+          </div>
+        </Main>
+      </Template>
+    ) : (
       <Template {...templateProps} disableScripts>
         <>
           <h1>{t("commonErrorPageTitle")}</h1>
@@ -244,34 +262,19 @@ export function ErrorBoundary() {
     clientLogger.error(error);
   }
 
-  const substring = "The request is blocked.";
-  const isWAFError = isError && error?.message.includes(substring);
-
   return (
     <Template {...templateProps} disableScripts>
-      {isWAFError ? (
-        <Main showHelpLink={false}>
-          <div className="govuk-grid-row">
-            <div className="govuk-grid-column-two-thirds">
-              <Title title={t("forbiddenH1Text", { ns: "forbidden" })} />
-              <p data-testid="no-permission">{t("forbiddenPageP1Text", { ns: "forbidden" })}</p>
-              <p data-testid="navigate-back">{t("forbiddenPageP2Text", { ns: "forbidden" })}</p>
-            </div>
-          </div>
-        </Main>
-      ) : (
-        <Main showHelpLink={false}>
-          <h1>{t("commonErrorPageTitle")}</h1>
-          <p>{t("commonErrorPageTryagainText")}</p>
-          <p>{t("commonErrorPagesaveText")}</p>
-          {!isProdEnv() && (
-            <>
-              <p>{errorMessage}</p>
-              {isError && <pre style={{ overflowY: "scroll" }}>{error.stack}</pre>}
-            </>
-          )}
-        </Main>
-      )}
+      <Main showHelpLink={false}>
+        <h1>{t("commonErrorPageTitle")}</h1>
+        <p>{t("commonErrorPageTryagainText")}</p>
+        <p>{t("commonErrorPagesaveText")}</p>
+        {!isProdEnv() && (
+          <>
+            <p>{errorMessage}</p>
+            {isError && <pre style={{ overflowY: "scroll" }}>{error.stack}</pre>}
+          </>
+        )}
+      </Main>
     </Template>
   );
 }

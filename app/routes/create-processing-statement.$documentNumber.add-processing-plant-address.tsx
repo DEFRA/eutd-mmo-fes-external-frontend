@@ -304,10 +304,25 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   // Handle go to add address
   if (form.get("_action") === "goToAddAddress") {
     const updatedSession = await updateSessionAndCommit(session, {}, ["currentStep", "postcode"]);
-    return redirect(
-      route("/create-processing-statement/:documentNumber/what-processing-plant-address", { documentNumber }),
-      { headers: { "Set-Cookie": updatedSession } }
-    );
+    const nextUriValue = form.get("nextUri");
+
+    // Extract nextUri from request URL as fallback
+    const url = new URL(request.url);
+    const nextUriFromUrl = url.searchParams.get("nextUri") ?? "";
+
+    // Use form value if available, otherwise use URL param
+    const nextUri = (nextUriValue as string) || nextUriFromUrl;
+
+    // Build redirect URL - preserve nextUri if it exists
+    let redirectUrl = route("/create-processing-statement/:documentNumber/what-processing-plant-address", {
+      documentNumber,
+    });
+
+    if (nextUri) {
+      redirectUrl += `?nextUri=${encodeURIComponent(nextUri)}`;
+    }
+
+    return redirect(redirectUrl, { headers: { "Set-Cookie": updatedSession } });
   }
 
   // Handle default actions (save as draft, continue)
@@ -464,16 +479,25 @@ const handleDefaultActions = async (
     return errorResponse;
   }
 
-  return redirect(
-    isEmpty(nextUri)
-      ? route("/create-processing-statement/:documentNumber/add-health-certificate", { documentNumber })
-      : nextUri,
-    {
+  // If user came from check-your-information and all other sections are complete,
+  // return to check-your-information instead of proceeding to health certificate
+  if (!isEmpty(nextUri) && nextUri.includes("/check-your-information")) {
+    return redirect(nextUri, {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
-    }
-  );
+    });
+  }
+
+  const defaultRedirect = isEmpty(nextUri)
+    ? route("/create-processing-statement/:documentNumber/add-health-certificate", { documentNumber })
+    : nextUri;
+
+  return redirect(defaultRedirect, {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 };
 
 const AddProcessingPlantAddress = () => {

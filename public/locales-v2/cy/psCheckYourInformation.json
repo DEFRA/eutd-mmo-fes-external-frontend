@@ -42,16 +42,17 @@
   "psSummaryPageConfirmationIssueDate": "Dyddiad dyroddi",
   "psSummaryPageConfirmationDestinationCountry": "Gwlad gyrchfan",
   "psPointOfDestination": "Cyrchfan",
-  "psSummaryPageProcessingPlantName": "Processing plant name",
+  "psSummaryPageProcessingPlantName": "Enw'r safle prosesu",
   "psSummaryPageProcessedProducts": "Cynhyrchion wedi'u prosesu",
-  "psSummaryPageProductDescription": "Product description",
-  "psSummaryPageCommodityCode": "Commodity code",
-  "psSummaryPageSpecies": "Species",
+  "psSummaryPageProductDescription": "Disgrifiad o'r cynnyrch",
+  "psSummaryPageCommodityCode": "Cod nwyddau",
+  "psSummaryPageSpecies": "Rhywogaeth",
   "psSummaryPageCertificateIssuedInTheUK": "Tystysgrif dalfa a ddyroddwyd yn y DU",
   "psSummaryPageIssuingCountry": "Gwlad dyroddi",
   "psSummaryPageCatchCertificate": "Tystysgrif dalfa",
   "psSummaryPageCatchCertificateWeight": "Pwysau’r dystysgrif dalfa",
   "psSummaryPageExportWeightBeforeProcessing": "Y pwysau allforio cyn prosesu",
   "psSummaryPageExportWeightAfterProcessing": "Y pwysau allforio ar ôl prosesu",
-  "psSummaryPageConsignmentItem": "Eitem yn y llwyth"
+  "psSummaryPageConsignmentItem": "Eitem yn y llwyth",
+  "psSummaryPageNotProvided": "Heb ei ddarparu"
 }

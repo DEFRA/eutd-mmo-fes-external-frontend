@@ -166,22 +166,24 @@ export const updateTransportDetails = async (
 ): Promise<ITransport> => {
   if (!documentNumber || !transportId) throw new Error("Document number or transport id is required");
 
+  const requestPayload = {
+    ...payload,
+    id: transportId,
+  };
+
   const response: Response = await put(
     bearerToken,
     updateTransportDetailsByIdUrl(transportId, isDraft),
     {
       documentnumber: documentNumber,
     },
-    {
-      ...payload,
-      id: transportId,
-    }
+    requestPayload
   );
 
-  return onUpdateTransport(response);
+  return onUpdateTransport(response, payload.vehicle);
 };
 
-const onUpdateTransport = async (response: Response): Promise<ITransport> => {
+const onUpdateTransport = async (response: Response, vehicle: string): Promise<ITransport> => {
   switch (response.status) {
     case 200:
       const data = await response.json();
@@ -197,7 +199,11 @@ const onUpdateTransport = async (response: Response): Promise<ITransport> => {
         vehicle: "undefined",
         errors: Object.keys(errorsResponse).map((error) => ({
           key: error,
-          message: getErrorMessage(errorsResponse[error]),
+          message: getErrorMessage(
+            error === "containerNumber" && vehicle === "plane"
+              ? errorsResponse[error].replaceAll(".containerNumber", ".containerNumber.plane")
+              : errorsResponse[error]
+          ),
         })),
       };
     case 403:
