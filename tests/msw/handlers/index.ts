@@ -42,6 +42,7 @@ import journeyPrivacyPageHandler from "./journeyPrivacyPageHandler";
 import catchAddedHandler from "./catchAddedHandler";
 import storageProductAddedHandler from "./storageProductAddedHandler";
 import checkYourInformationPSHandler from "./checkYourInformationPSHandler";
+import checkYourInformationInvalidCCHandler from "./checkYourInformationInvalidCCHandler";
 import checkYourInformationSDHandler from "./checkYourInformationSDHandler";
 import psAddCatchDetailsHandler from "./psAddCatchDetailsHandler";
 import whatProcessingPlantAddressHandler from "./whatProcessingPlantAddressHandler";
@@ -75,6 +76,7 @@ const rootTestHandler: ITestHandler = {
   ...copyPSSDPageHandler,
   ...checkYourInformationCCHandler,
   ...checkYourInformationPSHandler,
+  ...checkYourInformationInvalidCCHandler,
   ...whatAreYouExportingHandler,
   ...transportDetailsHandler,
   ...addTransportationDetailsContainerVesselHandler,
