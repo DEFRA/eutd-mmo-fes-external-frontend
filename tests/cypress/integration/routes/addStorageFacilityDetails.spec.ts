@@ -135,6 +135,25 @@ describe("Add Storage Facility Address - Forbidden", () => {
     cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
     cy.url().should("include", "/forbidden");
   });
+
+  it("should redirect to forbidden when CSRF token is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityAddress,
+    };
+    cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
+
+    cy.get('input[name="facilityName"]').type("Test Facility");
+    cy.get('input[name="facilityArrivalDateDay"]').type("15");
+    cy.get('input[name="facilityArrivalDateMonth"]').type("03");
+    cy.get('input[name="facilityArrivalDateYear"]').type("2025");
+
+    cy.get('input[name="csrf"]').then(($input) => {
+      cy.wrap($input).invoke("val", "invalid-csrf-token");
+    });
+
+    cy.get('[data-testid="save-and-continue"]').click();
+    cy.url().should("include", "/forbidden");
+  });
 });
 
 describe("Add Storage Facility page when javascript is disabled", () => {
@@ -278,6 +297,21 @@ describe("Add Storage Facility Address - Dynamic Back Link Based on Transport Mo
         "have.attr",
         "href",
         `/create-non-manipulation-document/${documentNumber}/add-arrival-transportation-details-container-vessel`
+      );
+  });
+
+  it("should have back link to how-does-consignment-arrive when no arrival transport is set", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityAddressNoArrival,
+    };
+    cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should(
+        "have.attr",
+        "href",
+        `/create-non-manipulation-document/${documentNumber}/how-does-the-consignment-arrive-to-the-uk`
       );
   });
 });
