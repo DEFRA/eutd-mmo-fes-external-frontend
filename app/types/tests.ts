@@ -375,6 +375,7 @@ export enum TestCaseId {
   VesselContainerTransportPointOfDestinationInvalidCharacters = "VesselContainerTransportPointOfDestinationInvalidCharacters",
   ContainerVesselTransportContainerMaxLength = "ContainerVesselTransportContainerMaxLength",
   ContainerVesselTransportContainerInvalidCharacters = "ContainerVesselTransportContainerInvalidCharacters",
+  ContainerVesselAllFieldsEmptyWithInvalidContainer = "ContainerVesselAllFieldsEmptyWithInvalidContainer",
   ContainerVesselTransportMultipleContainers = "ContainerVesselTransportMultipleContainers",
   ContainerVesselTransportEmptyContainers = "ContainerVesselTransportEmptyContainers",
   ContainerVesselTransportContainerPersistence = "ContainerVesselTransportContainerPersistence",
@@ -460,6 +461,8 @@ export enum TestCaseId {
   ContainerVesselSaveInvalidDepartureDate = "ContainerVesselSaveInvalidDepartureDate",
   ContainerVesselSaveInvalidDateFormat = "ContainerVesselSaveInvalidDateFormat",
   ContainerVesselMultipleErrors = "ContainerVesselMultipleErrors",
+  ContainerVesselRequiredFieldsAndInvalidContainer = "ContainerVesselRequiredFieldsAndInvalidContainer",
+  ContainerVesselRequiredFieldsAndMaxLengthContainer = "ContainerVesselRequiredFieldsAndMaxLengthContainer",
   ContainerVesselMultipleContainerNumbersValidation = "ContainerVesselMultipleContainerNumbersValidation",
   ContainerNumberSaveValidation = "ContainerNumberSaveValidation",
 
