@@ -42,6 +42,7 @@ type loaderStorageFacility = {
   hasFacility?: boolean;
   csrf: string;
   selectedArrivalDate: string;
+  backUrl: string;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -75,6 +76,41 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const hasFacility =
     storageDocument?.facilityAddressOne !== undefined && storageDocument?.facilityPostcode !== undefined;
 
+  const getBackUrl = () => {
+    const arrivalVehicle = storageDocument?.arrivalTransport?.vehicle;
+
+    if (!arrivalVehicle) {
+      return route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
+        documentNumber,
+      });
+    }
+
+    const arrivalTransportRoutes: Record<string, string> = {
+      truck: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-truck", {
+        documentNumber,
+      }),
+      train: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-train", {
+        documentNumber,
+      }),
+      plane: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-plane", {
+        documentNumber,
+      }),
+      containerVessel: route(
+        "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-container-vessel",
+        {
+          documentNumber,
+        }
+      ),
+    };
+
+    return (
+      arrivalTransportRoutes[arrivalVehicle] ??
+      route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
+        documentNumber,
+      })
+    );
+  };
+
   return new Response(
     JSON.stringify({
       documentNumber,
@@ -86,6 +122,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       hasFacility,
       csrf,
       selectedArrivalDate: storageDocument?.facilityArrivalDate,
+      backUrl: getBackUrl(),
     }),
     {
       headers: {
@@ -297,6 +334,7 @@ const AddStorageFacilityDetails = () => {
     hasFacility,
     csrf,
     selectedArrivalDate,
+    backUrl,
   } = useLoaderData<loaderStorageFacility>();
   const actionData = useActionData<{ errors: IErrorsTransformed; values?: Record<string, any> }>() ?? { errors: {} };
   const { errors = {}, values: submittedValues } = actionData;
@@ -326,11 +364,7 @@ const AddStorageFacilityDetails = () => {
 
   useScrollOnPageError(errors);
   return (
-    <Main
-      backUrl={route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
-        documentNumber,
-      })}
-    >
+    <Main backUrl={backUrl}>
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorTransformedMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
