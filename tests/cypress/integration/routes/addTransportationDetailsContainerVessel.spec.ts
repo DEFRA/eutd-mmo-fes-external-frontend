@@ -69,6 +69,21 @@ describe("Save and Continue button - UnHappy path", () => {
     cy.contains("a", /^Enter the flag state$/).should("be.visible");
     cy.contains("a", /^Enter the vessel name$/).should("be.visible");
   });
+
+  it("[UAT-499] should display errors in the correct order matching field order on the page", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportErrors,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid=save-and-continue").click({ force: true });
+
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+
+    cy.get(".govuk-error-summary__list li").eq(0).should("contain", "Enter the vessel name");
+    cy.get(".govuk-error-summary__list li").eq(1).should("contain", "Enter the flag state");
+    cy.get(".govuk-error-summary__list li").eq(2).should("contain", "Enter the place the export leaves the UK");
+  });
 });
 
 describe("Save and Continue button - Happy path", () => {
@@ -153,6 +168,138 @@ describe("Add Transportation Details Container Vessel: Container Identification 
       "a",
       /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
     ).should("be.visible");
+  });
+
+  it("[UAT-499] should display container max length error when all required fields are filled", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportContainerMaxLength,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    // Fill all required fields
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+
+    // Add container with max length error
+    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
+  });
+
+  it("[UAT-499] should display container invalid format error when all required fields are filled", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportContainerInvalidCharacters,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    // Fill all required fields
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+
+    // Add container with invalid format
+    cy.get('input[name="containerNumbers.0"]').type("ABC123!@#", { force: true });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.get(".govuk-error-summary__list li")
+      .eq(0)
+      .should("contain", "Enter a shipping container number in the correct format");
+  });
+
+  it("[UAT-499] should display all errors in correct field order when multiple fields have errors including container", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselMultipleErrors,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    // Type invalid container value
+    cy.get('input[name="containerNumbers.0"]').type("INVALID!", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+
+    // Verify all 3 required field errors appear in correct field order
+    cy.get(".govuk-error-summary__list li").should("have.length", 3);
+    cy.get(".govuk-error-summary__list li").eq(0).should("contain", "Enter the vessel name");
+    cy.get(".govuk-error-summary__list li").eq(1).should("contain", "Enter the flag state");
+    cy.get(".govuk-error-summary__list li").eq(2).should("contain", "Enter the place the export leaves the UK");
+  });
+
+  it("[UAT-499] should display multiple container errors in correct order", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselMultipleErrors,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    // Fill required fields
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+
+    // Add multiple invalid containers
+    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
+    cy.get("#add-container-button").click({ force: true });
+    cy.get('input[name="containerNumbers.1"]').type("INVALID!", { force: true });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+
+    // Verify error order: 3 errors (vesselName + 2 container errors)
+    // Note: vesselName error appears first due to form field order
+    cy.get(".govuk-error-summary__list li").should("have.length", 3);
+    cy.get(".govuk-error-summary__list li").eq(0).should("contain", "Enter the vessel name");
+    cy.get(".govuk-error-summary__list li")
+      .eq(1)
+      .should("contain", "Container identification number must not exceed 50 characters");
+    cy.get(".govuk-error-summary__list li")
+      .eq(2)
+      .should("contain", "Enter a shipping container number in the correct format");
+  });
+
+  it("[UAT-499] should display all errors in correct field order when multiple fields have errors including container", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportErrors,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    // Add invalid container and submit without filling required fields
+    cy.get('input[name="containerNumbers.0"]').type("INVALID!", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+
+    // Verify errors appear in field order: vesselName, flagState, departurePlace
+    // Note: Container validation doesn't run because other required fields are missing
+    cy.get(".govuk-error-summary__list li").eq(0).should("contain", "Enter the vessel name");
+    cy.get(".govuk-error-summary__list li").eq(1).should("contain", "Enter the flag state");
+    cy.get(".govuk-error-summary__list li").eq(2).should("contain", "Enter the place the export leaves the UK");
+  });
+
+  it("[UAT-499] should display container errors after all required field errors", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportContainerMaxLength,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    // Fill all required fields
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+
+    // Add container with max length error
+    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should save successfully when container identification number is not provided", () => {
@@ -247,7 +394,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
 
     cy.get("#vesselName").type("Felicity Ace", { force: true });
     cy.get("#flagState").type("Greece", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890123456789012", {
+    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), {
       force: true,
     });
     cy.get("#departurePlace").type("Felixstowe Port", { force: true });

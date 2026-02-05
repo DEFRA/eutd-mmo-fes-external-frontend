@@ -2005,14 +2005,44 @@ const transportDetailsHandler: ITestHandler = {
   [TestCaseId.ContainerVesselTransportContainerMaxLength]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(vesselTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
-    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) =>
-      res(
-        ctx.status(400),
-        ctx.json({
-          "containerNumbers.0": "error.containerNumbers.0.string.max",
-        })
-      )
-    ),
+    rest.put(mockPutTransportDetailsByIdUrl, async (req, res, ctx) => {
+      const body = await req.json();
+      const errors: Record<string, string> = {};
+
+      // Check if vesselName is missing
+      if (!body.vesselName || body.vesselName.trim() === "") {
+        errors.vesselName = "error.vesselName.any.required";
+      }
+
+      // Check if flagState is missing
+      if (!body.flagState || body.flagState.trim() === "") {
+        errors.flagState = "error.flagState.any.required";
+      }
+
+      // Check if departurePlace is missing
+      if (!body.departurePlace || body.departurePlace.trim() === "") {
+        errors.departurePlace = "error.departurePlace.any.required";
+      }
+
+      // Check container validation
+      if (body.containerNumbers?.[0] && body.containerNumbers[0].length > 50) {
+        errors["containerNumbers.0"] = "error.containerNumbers.0.string.max";
+      }
+
+      // Check for invalid characters in second container if present
+      if (body.containerNumbers?.[1]) {
+        const containerValue = body.containerNumbers[1];
+        if (!/^[A-Za-z0-9]*$/.test(containerValue)) {
+          errors["containerNumbers.1"] = "error.containerNumbers.1.string.alphanum";
+        }
+      }
+
+      if (Object.keys(errors).length > 0) {
+        return res(ctx.status(400), ctx.json(errors));
+      }
+
+      return res(ctx.json(saveVesselContainerDetails));
+    }),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.ContainerVesselTransportContainerInvalidCharacters]: () => [
@@ -2076,6 +2106,88 @@ const transportDetailsHandler: ITestHandler = {
         })
       )
     ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  // UAT-499: Handler for testing error ordering with multiple field errors including container
+  [TestCaseId.ContainerVesselMultipleErrors]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(vesselTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
+    rest.post(addTransportationDetailsUrl("containerVessel"), async (req, res, ctx) => {
+      const body = await req.json();
+      const errors: Record<string, string> = {};
+
+      // Only return required field errors if fields are actually missing
+      if (!body.vesselName || body.vesselName.trim() === "") {
+        errors.vesselName = "error.vesselName.any.required";
+      }
+
+      if (!body.flagState || body.flagState.trim() === "") {
+        errors.flagState = "error.flagState.any.required";
+      }
+
+      if (!body.departurePlace || body.departurePlace.trim() === "") {
+        errors.departurePlace = "error.departurePlace.any.required";
+      }
+
+      // Validate container numbers - check both containers
+      if (body.containerNumbers) {
+        if (body.containerNumbers[0] && body.containerNumbers[0].length > 50) {
+          errors["containerNumbers.0"] = "error.containerNumbers.0.string.max";
+        } else if (body.containerNumbers[0] && !/^[A-Z0-9]+$/.test(body.containerNumbers[0])) {
+          errors["containerNumbers.0"] = "error.containerNumbers.0.string.pattern.base";
+        }
+
+        if (body.containerNumbers[1] && body.containerNumbers[1].length > 50) {
+          errors["containerNumbers.1"] = "error.containerNumbers.1.string.max";
+        } else if (body.containerNumbers[1] && !/^[A-Z0-9]+$/.test(body.containerNumbers[1])) {
+          errors["containerNumbers.1"] = "error.containerNumbers.1.string.pattern.base";
+        }
+      }
+
+      if (Object.keys(errors).length > 0) {
+        return res(ctx.status(400), ctx.json(errors));
+      }
+
+      return res(ctx.json(saveVesselContainerDetails));
+    }),
+    rest.put(mockPutTransportDetailsByIdUrl, async (req, res, ctx) => {
+      const body = await req.json();
+      const errors: Record<string, string> = {};
+
+      // Only return required field errors if fields are actually missing
+      if (!body.vesselName || body.vesselName.trim() === "") {
+        errors.vesselName = "error.vesselName.any.required";
+      }
+
+      if (!body.flagState || body.flagState.trim() === "") {
+        errors.flagState = "error.flagState.any.required";
+      }
+
+      if (!body.departurePlace || body.departurePlace.trim() === "") {
+        errors.departurePlace = "error.departurePlace.any.required";
+      }
+
+      // Validate container numbers - check both containers
+      if (body.containerNumbers) {
+        if (body.containerNumbers[0] && body.containerNumbers[0].length > 50) {
+          errors["containerNumbers.0"] = "error.containerNumbers.0.string.max";
+        } else if (body.containerNumbers[0] && !/^[A-Z0-9]+$/.test(body.containerNumbers[0])) {
+          errors["containerNumbers.0"] = "error.containerNumbers.0.string.pattern.base";
+        }
+
+        if (body.containerNumbers[1] && body.containerNumbers[1].length > 50) {
+          errors["containerNumbers.1"] = "error.containerNumbers.1.string.max";
+        } else if (body.containerNumbers[1] && !/^[A-Z0-9]+$/.test(body.containerNumbers[1])) {
+          errors["containerNumbers.1"] = "error.containerNumbers.1.string.pattern.base";
+        }
+      }
+
+      if (Object.keys(errors).length > 0) {
+        return res(ctx.status(400), ctx.json(errors));
+      }
+
+      return res(ctx.json(saveVesselContainerDetails));
+    }),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
 };
