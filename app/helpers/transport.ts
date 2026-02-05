@@ -3,8 +3,11 @@ import { isValidDate } from "./utilities";
 import isEmpty from "lodash/isEmpty";
 export const getExportDate = (exportDateFromAction?: string, exportDate?: string | null) =>
   exportDateFromAction ?? exportDate;
-export const getExportDateFromAction = (day: string, month: string, year: string) =>
-  isValidDate(`${year}-${month}-${day}`) ? `${year}-${month}-${day}` : undefined;
+export const getExportDateFromAction = (day: string, month: string, year: string) => {
+  const dateString = `${year}-${month}-${day}`;
+  // Accept both padded (01) and unpadded (1) formats
+  return isValidDate(dateString, ["YYYY-MM-DD", "YYYY-M-D"]) ? dateString : undefined;
+};
 export const getContainerNumber = (errors: any, actionData: any, containerNumber?: string) =>
   !isEmpty(errors) || actionData?.containerNumber ? actionData?.containerNumber : containerNumber;
 export const getContainerIdentificationNumber = (

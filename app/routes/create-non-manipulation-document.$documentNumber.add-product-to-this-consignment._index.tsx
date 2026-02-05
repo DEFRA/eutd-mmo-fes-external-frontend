@@ -228,7 +228,31 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
   }
   if (errorResponse) {
-    return errorResponse as Response;
+    // When there are errors and JavaScript is disabled, include the submitted form values
+    // so they can be used to repopulate the form fields
+    const responseData = typeof errorResponse.json === "function" ? await errorResponse.json() : errorResponse;
+
+    // Explicitly include the form values in the response
+    const combinedResponse = {
+      ...responseData,
+      species: values["species"],
+      docIssuedInUk: values["docIssuedInUk"],
+      issuingCountry: values["issuingCountry"],
+      entryDocument: values["entryDocument"],
+      weight: values["weight"],
+      commodityCode: values["commodityCode"],
+      productDescription: values["productDescription"],
+      netWeightProductArrival: values["netWeightProductArrival"],
+      netWeightFisheryProductArrival: values["netWeightFisheryProductArrival"],
+      supportingDocuments: supportingDocumentsFromForm,
+    };
+
+    return new Response(JSON.stringify(combinedResponse), {
+      status: 400,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 
   if (addSupportingDoc && isNonJs) {
@@ -348,11 +372,23 @@ const AddProductIndex = () => {
     updatedSupportingDocuments,
   } = useLoaderData<ILoaderData>();
   const { t } = useTranslation(["addProductToThisConsignment", "errorsText"]);
-  const { errors = {} } = useActionData<{ errors: any }>() ?? {};
+  const actionData = useActionData<{ errors: any }>() ?? {};
+  const { errors = {}, ...submittedFormData } = actionData as any;
+
+  // Helper function to get the value to display - prefer submitted form data when there are errors
+  const getFormValue = (fieldName: string, defaultValue: any) => {
+    if (!isEmpty(errors) && submittedFormData[fieldName] !== undefined) {
+      return submittedFormData[fieldName];
+    }
+    return defaultValue;
+  };
+
   const isHydrated = useIsHydrated();
   const [selectedCommodityCode, setSelectedCommodityCode] = useState<string | undefined>();
   const [isNonJs, setIsNonJs] = useState(true);
-  const [selectedCertificateType, setSelectedCertificateType] = useState<string>(catchDetails?.certificateType ?? "");
+  const [selectedCertificateType, setSelectedCertificateType] = useState<string>(
+    getFormValue("docIssuedInUk", catchDetails?.certificateType ?? "")
+  );
 
   const commodityCodeKey = `catches-${productIndex}-commodityCode`;
   const productKey = `catches-${productIndex}-product`;
@@ -382,8 +418,14 @@ const AddProductIndex = () => {
   const hasCatchesSpeciesError = hasSpeciesError(errors, speciesKey);
   const getErrorMessageForSpecies = () => getSpeciesErrorMessage(errors, productKey, speciesKey, isHydrated, t);
 
+  // Get supporting documents from submitted form data if there are errors, otherwise from loader
+  const initialSupportingDocs =
+    !isEmpty(errors) && submittedFormData.supportingDocuments !== undefined
+      ? submittedFormData.supportingDocuments
+      : updatedSupportingDocuments;
+
   const [supportingDocuments, setSupportingDocuments] = useState<string[]>(() =>
-    functionToGetInitialState(updatedSupportingDocuments, isHydrated, maximumEntryDocsAllowed)
+    functionToGetInitialState(initialSupportingDocs, isHydrated, maximumEntryDocsAllowed)
   );
 
   // Reset to 1 field after hydration if it was initialized with 5
@@ -523,7 +565,7 @@ const AddProductIndex = () => {
                       ? t(errors[issuingCountryKey].message, { ns: "errorsText" })
                       : ""
                   }
-                  defaultValue={catchDetails?.issuingCountry?.officialCountryName ?? ""}
+                  defaultValue={getFormValue("issuingCountry", catchDetails?.issuingCountry?.officialCountryName ?? "")}
                   options={countryOptions}
                   optionsId="issuing-country-option"
                   containerClassName={classNames("govuk-form-group", {
@@ -553,7 +595,7 @@ const AddProductIndex = () => {
                 })}
                 inputProps={{
                   id: certKey,
-                  defaultValue: catchDetails?.certificateNumber,
+                  defaultValue: getFormValue("entryDocument", catchDetails?.certificateNumber),
                   "aria-describedby": `${certKey}-hint`,
                 }}
                 hint={{
@@ -579,7 +621,7 @@ const AddProductIndex = () => {
                 })}
                 inputProps={{
                   id: weightKey,
-                  defaultValue: catchDetails?.weightOnCC,
+                  defaultValue: getFormValue("weight", catchDetails?.weightOnCC),
                   "aria-describedby": `hint-${weightKey}`,
                 }}
                 hint={{
@@ -686,7 +728,7 @@ const AddProductIndex = () => {
               id={`catches-${productIndex}-product`}
               name="species"
               errorMessageText={getErrorMessageForSpecies()}
-              defaultValue={catchDetails?.product ?? ""}
+              defaultValue={getFormValue("species", catchDetails?.product ?? "")}
               options={speciesOptions}
               optionsId="species-option"
               labelClassName="govuk-label govuk-!-font-weight-bold"
@@ -716,7 +758,7 @@ const AddProductIndex = () => {
                     "govuk-input--error": hasCatchesSpeciesError,
                   })}
                   inputProps={{
-                    defaultValue: catchDetails?.product ?? "",
+                    defaultValue: getFormValue("species", catchDetails?.product ?? ""),
                     id: Object.keys(allErrors)[0],
                   }}
                   hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
@@ -732,12 +774,13 @@ const AddProductIndex = () => {
               labelClassName="govuk-label govuk-!-font-weight-bold"
               hintText={t("commodityHintText", { ns: "addProductToThisConsignment" })}
               errorMessageText={t(errors?.[commodityCodeKey]?.message, { ns: "errorsText" })}
-              defaultValue={
+              defaultValue={getFormValue(
+                "commodityCode",
                 commodityCodes.find((autoCompleteOption) => autoCompleteOption.value === catchDetails?.commodityCode)
                   ?.label ??
-                selectedCommodityCode ??
-                ""
-              }
+                  selectedCommodityCode ??
+                  ""
+              )}
               options={commodityOptions}
               optionsId="commodity-option"
               containerClassName={classNames("govuk-form-group", {
@@ -767,7 +810,7 @@ const AddProductIndex = () => {
               type="text"
               inputProps={{
                 id: productDescriptionKey,
-                defaultValue: catchDetails?.productDescription,
+                defaultValue: getFormValue("productDescription", catchDetails?.productDescription),
                 "aria-describedby": `${productDescriptionKey}-hint`,
               }}
               data-testid="productDescription"
@@ -820,7 +863,7 @@ const AddProductIndex = () => {
                   name="netWeightProductArrival"
                   type="text"
                   spellCheck="false"
-                  defaultValue={catchDetails?.netWeightProductArrival}
+                  defaultValue={getFormValue("netWeightProductArrival", catchDetails?.netWeightProductArrival)}
                   minLength={0}
                   maxLength={16}
                   size={16}
@@ -865,7 +908,10 @@ const AddProductIndex = () => {
                   name="netWeightFisheryProductArrival"
                   type="text"
                   spellCheck="false"
-                  defaultValue={catchDetails?.netWeightFisheryProductArrival}
+                  defaultValue={getFormValue(
+                    "netWeightFisheryProductArrival",
+                    catchDetails?.netWeightFisheryProductArrival
+                  )}
                   minLength={0}
                   maxLength={16}
                   size={16}

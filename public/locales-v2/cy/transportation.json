@@ -11,6 +11,7 @@
   "addTransportationDetailsFlightNumberHint": "Er enghraifft, AF296Q",
   "addTransportationDetailsContainerIdentificationText": "Rhif neu rifau adnabod y cynhwysydd",
   "addTransportationDetailsContainerIdentificationNumberText": "Rhif adnabod cynhwysydd llong",
+  "addTransportationDetailsContainerIdentificationNumberPlane": "Rhif adnabod y cynhwysydd",
   "addTransportationDetailsContainerIdentificationNumberHint": "Er enghraifft, ABCD1234567",
   "addTransportationDetailsContainerIdentificationNumberHintCommon": "Rhowch y rhif adnabod a ddangosir ar y cynhwysydd llong. Er enghraifft ABCJ0123456",
   "addTransportationDetailsContainerIdentificationNumberTruck": "Rhif adnabod cynhwysydd llong (dewisol)",
