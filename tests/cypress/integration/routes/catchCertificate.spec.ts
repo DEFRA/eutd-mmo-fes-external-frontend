@@ -72,6 +72,84 @@ describe("Catch certificate created page: rendering", () => {
   it("should render survey component", () => {
     cy.get('[data-testid="surveylink-feedback"]').contains("Take a 2 minute survey");
   });
+
+  it("should render PDF download link with correct href", () => {
+    cy.get("a.govuk-link")
+      .contains("strong", /Download the catch certificate/)
+      .parent()
+      .should("have.attr", "href")
+      .and("include", "/pdf/export-certificates/");
+  });
+
+  it("should render download bullet points for Firefox and mobile", () => {
+    cy.get(".govuk-list--bullet")
+      .first()
+      .within(() => {
+        cy.get("li").should("have.length", 2);
+        cy.contains(
+          "If you are using Firefox as an internet browser, please ensure JavaScript is enabled in order to view and download the certificate"
+        );
+        cy.contains("If you are using a mobile device, please ensure you have installed a PDF viewer");
+      });
+  });
+
+  it("should render important notice icon and text", () => {
+    cy.get('svg[viewBox="0 0 35.000000 35.000000"]')
+      .should("be.visible")
+      .find("title")
+      .should("contain", "icon important");
+    cy.contains("strong", "Do not amend the catch certificate.").should("be.visible");
+  });
+
+  it("should render email instructions with proper heading", () => {
+    cy.contains("strong", "2. Email the catch certificate to the importer").should("be.visible");
+  });
+
+  it("should render all email bullet points", () => {
+    cy.get(".govuk-list--bullet")
+      .last()
+      .within(() => {
+        cy.get("li").should("have.length", 2);
+      });
+  });
+
+  it("should render document number correctly", () => {
+    cy.get(".govuk-panel__body").within(() => {
+      cy.contains("strong", documentNumber).should("be.visible");
+    });
+  });
+
+  it("should render confirmation panel with correct classes", () => {
+    cy.get(".govuk-panel.govuk-panel--confirmation").should("exist");
+  });
+
+  it("should call renderDownloadLink function", () => {
+    cy.get("h3.govuk-heading-s a.govuk-link strong").should("exist");
+  });
+
+  it("should call renderDownloadBulletPoints function", () => {
+    cy.get("ul.govuk-list.govuk-list--bullet").should("exist").and("have.length.at.least", 1);
+  });
+
+  it("should call renderImportantNotice function", () => {
+    cy.get(".govuk-\\!-margin-bottom-4").within(() => {
+      cy.get("svg").should("exist");
+      cy.get(".govuk-\\!-display-inline-block").should("exist");
+    });
+  });
+
+  it("should call renderCatchCertificateSteps function", () => {
+    cy.get(".govuk-\\!-margin-bottom-6").should("have.length.at.least", 2);
+  });
+
+  it("should render Main component with feedback link", () => {
+    cy.get('[data-testid="surveylink-feedback"]').should("exist");
+  });
+
+  it("should render all grid structure correctly", () => {
+    cy.get(".govuk-grid-row").should("have.length", 2);
+    cy.get(".govuk-grid-column-full").should("have.length", 2);
+  });
 });
 
 describe("Catch certificate created page: pageguard", () => {
