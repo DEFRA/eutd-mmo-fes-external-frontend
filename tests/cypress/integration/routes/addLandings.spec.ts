@@ -1354,4 +1354,189 @@ describe("Mandatory field validation tests", () => {
     cy.get("select#gearType option").should("have.length", 1);
     cy.get("select#gearType option").should("contain.text", "Select gear type");
   });
+
+  it("should preserve all form values after weight validation error", () => {
+    // Fill all form fields
+    cy.get("select#product").select(1, { force: true });
+
+    cy.get("input#startDate-day").clear({ force: true }).type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true }).type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true }).type("2020", { force: true });
+
+    cy.get("input#dateLanded-day").clear({ force: true }).type("02", { force: true });
+    cy.get("input#dateLanded-month").clear({ force: true }).type("09", { force: true });
+    cy.get("input#dateLanded-year").clear({ force: true }).type("2020", { force: true });
+
+    cy.get("#select-faoArea").select("FAO27", { force: true });
+    cy.get("input#highSeasArea").check({ force: true });
+
+    // Add EEZ
+    cy.get("#eez-0").type("Algeria", { force: true });
+
+    // Select RFMO
+    cy.get("select#rfmo").select(1, { force: true });
+
+    // Enter vessel
+    cy.get("#vessel\\.vesselName").type("CARINA (BF803)", { force: true });
+
+    // Enter invalid weight (too small)
+    cy.get("#weight").type("0", { force: true });
+
+    // Select gear category and type
+    cy.get("select#gearCategory").select(1, { force: true });
+    cy.wait(500); // Wait for gear types to load
+    cy.get("select#gearType").select(1, { force: true });
+
+    // Submit form with invalid weight
+    cy.get("[data-testid=submit]").click({ force: true });
+
+    // Wait for error to appear
+    cy.contains("h2", "There is a problem").should("be.visible");
+
+    // Verify all form values are preserved
+    cy.get("select#product option:selected").should("not.have.value", "");
+    cy.get("input#startDate-day").should("have.value", "01");
+    cy.get("input#startDate-month").should("have.value", "09");
+    cy.get("input#startDate-year").should("have.value", "2020");
+    cy.get("input#dateLanded-day").should("have.value", "02");
+    cy.get("input#dateLanded-month").should("have.value", "09");
+    cy.get("input#dateLanded-year").should("have.value", "2020");
+    cy.get("#select-faoArea").should("have.value", "FAO27");
+    cy.get("input#highSeasArea").should("be.checked");
+    // EEZ field - check both input and select variants
+    cy.get("#eez-0").then(($el) => {
+      if ($el.is("select")) {
+        cy.get("select#eez-0 option:selected").should("have.text", "Algeria");
+      } else {
+        cy.get("#eez-0").should("have.value", "Algeria");
+      }
+    });
+    cy.get("select#rfmo option:selected").should("not.have.value", "");
+    cy.get("#vessel\\.vesselName").should("have.value", "CARINA (BF803)");
+    cy.get("#weight").should("have.value", "0");
+    cy.get("select#gearCategory option:selected").should("not.have.value", "");
+    cy.get("select#gearType option:selected").should("not.have.value", "");
+  });
+
+  it("should preserve gear category and gear type after validation error", () => {
+    // Fill required fields
+    cy.get("select#product").select(1, { force: true });
+
+    cy.get("input#startDate-day").clear({ force: true }).type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true }).type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true }).type("2020", { force: true });
+
+    cy.get("input#highSeasArea").check({ force: true });
+
+    // Select gear category and type
+    cy.get("select#gearCategory").select("Traps", { force: true });
+    cy.wait(500); // Wait for gear types to load
+    cy.get("select#gearType").select(1, { force: true });
+
+    // Don't enter weight to trigger validation error
+
+    // Submit form
+    cy.get("[data-testid=submit]").click({ force: true });
+
+    // Wait for error to appear
+    cy.contains("h2", "There is a problem").should("be.visible");
+
+    // Verify gear category and type are preserved
+    cy.get("select#gearCategory").should("have.value", "Traps");
+    cy.get("select#gearType option:selected").should("not.have.value", "");
+  });
+
+  it("should preserve EEZ values after validation error", () => {
+    // Fill required fields
+    cy.get("select#product").select(1, { force: true });
+
+    cy.get("input#startDate-day").clear({ force: true }).type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true }).type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true }).type("2020", { force: true });
+
+    cy.get("input#separateHighSeasAreaFalse").check({ force: true });
+
+    // Add multiple EEZ zones
+    cy.get("#eez-0").type("Algeria", { force: true });
+    cy.get("#add-zone-button").click({ force: true });
+    cy.get("#eez-1").type("Angola", { force: true });
+
+    // Don't select gear category to trigger validation error
+
+    // Submit form
+    cy.get("[data-testid=submit]").click({ force: true });
+
+    // Wait for error to appear
+    cy.contains("h2", "There is a problem").should("be.visible");
+
+    // Verify EEZ values are preserved - check both input and select variants
+    cy.get("#eez-0").then(($el) => {
+      if ($el.is("select")) {
+        cy.get("select#eez-0 option:selected").should("have.text", "Algeria");
+      } else {
+        cy.get("#eez-0").should("have.value", "Algeria");
+      }
+    });
+    cy.get("#eez-1").then(($el) => {
+      if ($el.is("select")) {
+        cy.get("select#eez-1 option:selected").should("have.text", "Angola");
+      } else {
+        cy.get("#eez-1").should("have.value", "Angola");
+      }
+    });
+  });
+
+  it("should preserve RFMO value after validation error", () => {
+    // Fill required fields
+    cy.get("select#product").select(1, { force: true });
+
+    cy.get("input#startDate-day").clear({ force: true }).type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true }).type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true }).type("2020", { force: true });
+
+    cy.get("input#highSeasArea").check({ force: true });
+
+    // Select RFMO
+    cy.get("select#rfmo").select(1, { force: true });
+
+    // Don't select gear category to trigger validation error
+
+    // Submit form
+    cy.get("[data-testid=submit]").click({ force: true });
+
+    // Wait for error to appear
+    cy.contains("h2", "There is a problem").should("be.visible");
+
+    // Verify RFMO value is preserved
+    cy.get("select#rfmo option:selected").should("not.have.value", "");
+  });
+
+  it("should preserve vessel name after validation error", () => {
+    // Fill required fields
+    cy.get("select#product").select(1, { force: true });
+
+    cy.get("input#startDate-day").clear({ force: true }).type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true }).type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true }).type("2020", { force: true });
+
+    cy.get("input#dateLanded-day").clear({ force: true }).type("02", { force: true });
+    cy.get("input#dateLanded-month").clear({ force: true }).type("09", { force: true });
+    cy.get("input#dateLanded-year").clear({ force: true }).type("2020", { force: true });
+
+    cy.get("input#highSeasArea").check({ force: true });
+
+    // Enter vessel
+    cy.get("#vessel\\.vesselName").type("CARINA (BF803)", { force: true });
+
+    // Don't select gear category to trigger validation error
+
+    // Submit form
+    cy.get("[data-testid=submit]").click({ force: true });
+
+    // Wait for error to appear
+    cy.contains("h2", "There is a problem").should("be.visible");
+
+    // Verify vessel name is preserved
+    cy.get("#vessel\\.vesselName").should("have.value", "CARINA (BF803)");
+  });
 });

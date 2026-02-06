@@ -128,7 +128,10 @@ export const AddExclusiveEconomicZoneComponent = ({
             >
               <AutocompleteFormField
                 containerClassName={classNames("govuk-!-width-one-half govuk-!-margin-right-3")}
-                options={[...availableExclusiveEconomicZones.map((c: ICountry) => c.officialCountryName)]}
+                options={[
+                  eezSelectEmptyHeader,
+                  ...availableExclusiveEconomicZones.map((c: ICountry) => c.officialCountryName),
+                ]}
                 optionsId="eez-option"
                 errorMessageText={
                   errorForIndex ? t(errorForIndex.message, { ns: "errorsText", ...(errorForIndex.value ?? {}) }) : ""
