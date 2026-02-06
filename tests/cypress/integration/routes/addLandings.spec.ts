@@ -1396,8 +1396,9 @@ describe("Mandatory field validation tests", () => {
     // Submit form with invalid weight
     cy.get("[data-testid=submit]").click({ force: true });
 
-    // Wait for error to appear
+    // Wait for error to appear and form to reload
     cy.contains("h2", "There is a problem").should("be.visible");
+    cy.get("select#product").should("be.visible");
 
     // Verify all form values are preserved
     cy.get("select#product option:selected").should("not.have.value", "");
