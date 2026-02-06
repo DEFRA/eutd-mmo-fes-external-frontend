@@ -642,6 +642,10 @@ export enum TestCaseId {
   PSCheckYourInformationValidationSuccess = "psCheckYourInformationValidationSuccess",
   PSCheckYourInformationUnauthorised = "PSCheckYourInformationUnauthorised",
   PSCheckYourInformationCCUK = "PSCheckYourInformationCCUK",
+  // UAT-498: Invalid catch certificate error display on check your information
+  PSCheckYourInformationInvalidCC = "psCheckYourInformationInvalidCC",
+  PSCheckYourInformationInvalidCCWithSpeciesError = "psCheckYourInformationInvalidCCWithSpeciesError",
+  PSCheckYourInformationIncorrectFormatCC = "psCheckYourInformationIncorrectFormatCC",
   PSCatchAddedFromProgress = "psCatchAddedFromProgress",
   PSCatchAddedProductsNoCatches = "psCatchAddedNoProducts",
   PSCatchAddedFromProgressNoCatchDetails = "psCatchAddedFromProgressNoCatchDetails",
