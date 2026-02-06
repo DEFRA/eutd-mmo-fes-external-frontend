@@ -247,7 +247,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
 
     cy.get("#vesselName").type("Felicity Ace", { force: true });
     cy.get("#flagState").type("Greece", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890123456789012", {
+    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), {
       force: true,
     });
     cy.get("#departurePlace").type("Felixstowe Port", { force: true });
