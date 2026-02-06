@@ -375,6 +375,7 @@ export enum TestCaseId {
   VesselContainerTransportPointOfDestinationInvalidCharacters = "VesselContainerTransportPointOfDestinationInvalidCharacters",
   ContainerVesselTransportContainerMaxLength = "ContainerVesselTransportContainerMaxLength",
   ContainerVesselTransportContainerInvalidCharacters = "ContainerVesselTransportContainerInvalidCharacters",
+  ContainerVesselAllFieldsEmptyWithInvalidContainer = "ContainerVesselAllFieldsEmptyWithInvalidContainer",
   ContainerVesselTransportMultipleContainers = "ContainerVesselTransportMultipleContainers",
   ContainerVesselTransportEmptyContainers = "ContainerVesselTransportEmptyContainers",
   ContainerVesselTransportContainerPersistence = "ContainerVesselTransportContainerPersistence",
@@ -460,6 +461,8 @@ export enum TestCaseId {
   ContainerVesselSaveInvalidDepartureDate = "ContainerVesselSaveInvalidDepartureDate",
   ContainerVesselSaveInvalidDateFormat = "ContainerVesselSaveInvalidDateFormat",
   ContainerVesselMultipleErrors = "ContainerVesselMultipleErrors",
+  ContainerVesselRequiredFieldsAndInvalidContainer = "ContainerVesselRequiredFieldsAndInvalidContainer",
+  ContainerVesselRequiredFieldsAndMaxLengthContainer = "ContainerVesselRequiredFieldsAndMaxLengthContainer",
   ContainerVesselMultipleContainerNumbersValidation = "ContainerVesselMultipleContainerNumbersValidation",
   ContainerNumberSaveValidation = "ContainerNumberSaveValidation",
 
@@ -639,6 +642,10 @@ export enum TestCaseId {
   PSCheckYourInformationValidationSuccess = "psCheckYourInformationValidationSuccess",
   PSCheckYourInformationUnauthorised = "PSCheckYourInformationUnauthorised",
   PSCheckYourInformationCCUK = "PSCheckYourInformationCCUK",
+  // UAT-498: Invalid catch certificate error display on check your information
+  PSCheckYourInformationInvalidCC = "psCheckYourInformationInvalidCC",
+  PSCheckYourInformationInvalidCCWithSpeciesError = "psCheckYourInformationInvalidCCWithSpeciesError",
+  PSCheckYourInformationIncorrectFormatCC = "psCheckYourInformationIncorrectFormatCC",
   PSCatchAddedFromProgress = "psCatchAddedFromProgress",
   PSCatchAddedProductsNoCatches = "psCatchAddedNoProducts",
   PSCatchAddedFromProgressNoCatchDetails = "psCatchAddedFromProgressNoCatchDetails",
