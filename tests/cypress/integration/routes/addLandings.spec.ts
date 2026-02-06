@@ -1359,13 +1359,19 @@ describe("Mandatory field validation tests", () => {
     // Fill all form fields
     cy.get("select#product").select(1, { force: true });
 
-    cy.get("input#startDate-day").clear({ force: true }).type("01", { force: true });
-    cy.get("input#startDate-month").clear({ force: true }).type("09", { force: true });
-    cy.get("input#startDate-year").clear({ force: true }).type("2020", { force: true });
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
 
-    cy.get("input#dateLanded-day").clear({ force: true }).type("02", { force: true });
-    cy.get("input#dateLanded-month").clear({ force: true }).type("09", { force: true });
-    cy.get("input#dateLanded-year").clear({ force: true }).type("2020", { force: true });
+    cy.get("input#dateLanded-day").clear({ force: true });
+    cy.get("input#dateLanded-day").type("02", { force: true });
+    cy.get("input#dateLanded-month").clear({ force: true });
+    cy.get("input#dateLanded-month").type("09", { force: true });
+    cy.get("input#dateLanded-year").clear({ force: true });
+    cy.get("input#dateLanded-year").type("2020", { force: true });
 
     cy.get("#select-faoArea").select("FAO27", { force: true });
     cy.get("input#highSeasArea").check({ force: true });
@@ -1422,9 +1428,12 @@ describe("Mandatory field validation tests", () => {
     // Fill required fields
     cy.get("select#product").select(1, { force: true });
 
-    cy.get("input#startDate-day").clear({ force: true }).type("01", { force: true });
-    cy.get("input#startDate-month").clear({ force: true }).type("09", { force: true });
-    cy.get("input#startDate-year").clear({ force: true }).type("2020", { force: true });
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
 
     cy.get("input#highSeasArea").check({ force: true });
 
@@ -1450,9 +1459,12 @@ describe("Mandatory field validation tests", () => {
     // Fill required fields
     cy.get("select#product").select(1, { force: true });
 
-    cy.get("input#startDate-day").clear({ force: true }).type("01", { force: true });
-    cy.get("input#startDate-month").clear({ force: true }).type("09", { force: true });
-    cy.get("input#startDate-year").clear({ force: true }).type("2020", { force: true });
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
 
     cy.get("input#separateHighSeasAreaFalse").check({ force: true });
 
@@ -1490,9 +1502,12 @@ describe("Mandatory field validation tests", () => {
     // Fill required fields
     cy.get("select#product").select(1, { force: true });
 
-    cy.get("input#startDate-day").clear({ force: true }).type("01", { force: true });
-    cy.get("input#startDate-month").clear({ force: true }).type("09", { force: true });
-    cy.get("input#startDate-year").clear({ force: true }).type("2020", { force: true });
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
 
     cy.get("input#highSeasArea").check({ force: true });
 
@@ -1515,13 +1530,19 @@ describe("Mandatory field validation tests", () => {
     // Fill required fields
     cy.get("select#product").select(1, { force: true });
 
-    cy.get("input#startDate-day").clear({ force: true }).type("01", { force: true });
-    cy.get("input#startDate-month").clear({ force: true }).type("09", { force: true });
-    cy.get("input#startDate-year").clear({ force: true }).type("2020", { force: true });
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
 
-    cy.get("input#dateLanded-day").clear({ force: true }).type("02", { force: true });
-    cy.get("input#dateLanded-month").clear({ force: true }).type("09", { force: true });
-    cy.get("input#dateLanded-year").clear({ force: true }).type("2020", { force: true });
+    cy.get("input#dateLanded-day").clear({ force: true });
+    cy.get("input#dateLanded-day").type("02", { force: true });
+    cy.get("input#dateLanded-month").clear({ force: true });
+    cy.get("input#dateLanded-month").type("09", { force: true });
+    cy.get("input#dateLanded-year").clear({ force: true });
+    cy.get("input#dateLanded-year").type("2020", { force: true });
 
     cy.get("input#highSeasArea").check({ force: true });
 
