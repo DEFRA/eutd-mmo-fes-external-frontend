@@ -16,7 +16,7 @@ import { transportOptions } from "~/helpers/transport";
 import { displayErrorMessages, getMeta, scrollToId } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
 import { ButtonGroup } from "~/composite-components";
-import { useScrollOnPageLoad } from "~/hooks";
+import { useScrollOnPageLoad, useIsHydrated } from "~/hooks";
 import { HowDoesTheExportLeaveUkAction, HowDoesTheExportLeaveUkLoader } from "~/models";
 
 type loaderDataProps = {
@@ -36,7 +36,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 const HowDoesTheExportLeaveTheUk = () => {
   const { documentNumber, vehicle, transportId, nextUri, csrf } = useLoaderData<loaderDataProps>();
   const [isExpandedGuidance, setIsExpandedGuidance] = useState(false);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const isHydrated = useIsHydrated();
 
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
@@ -46,11 +46,6 @@ const HowDoesTheExportLeaveTheUk = () => {
     : `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk`;
 
   useScrollOnPageLoad();
-
-  /* istanbul ignore next */
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
 
   useEffect(() => {
     if (!isEmpty(errors)) {
