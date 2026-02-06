@@ -1,0 +1,19 @@
+{
+  "catches": [],
+  "facilityAddressOne": "MMO, LANCASTER HOUSE, HAMPSHIRE COURT",
+  "facilityBuildingName": "LANCASTER HOUSE",
+  "facilityBuildingNumber": "",
+  "facilitySubBuildingName": "MMO",
+  "facilityStreetName": "HAMPSHIRE COURT",
+  "facilityTownCity": "NEWCASTLE UPON TYNE",
+  "facilityCounty": "TYNESIDE",
+  "facilityCountry": "ENGLAND",
+  "facilityPostcode": "NE4 7YH",
+  "facilityName": "Storage Facility",
+  "facilityApprovalNumber": "UK/ABC/001@#$",
+  "facilityArrivalDate": "10/10/2025",
+  "facilityStorage": "Frozen",
+  "validationErrors": [{}],
+  "addAnotherProduct": "No",
+  "addAnotherStorageFacility": "No"
+}

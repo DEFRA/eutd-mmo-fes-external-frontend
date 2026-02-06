@@ -10,9 +10,12 @@ import {
 } from "~/urls.server";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
 import storageDocumentFacilityApprovalError from "@/fixtures/storageDocumentApi/storageDocumentFacilityApprovalError.json";
+import storageDocumentFacilityApprovalInvalidCharError from "@/fixtures/storageDocumentApi/storageDocumentFacilityApprovalInvalidCharError.json";
 import storageDocumentFacilityStorageError from "@/fixtures/storageDocumentApi/storageDocumentFacilityProductStorageNull.json";
 import storageDocumentFacilityOne from "@/fixtures/storageDocumentApi/storageDocumentOneFacility.json";
 import storageDocumentFacilityOneNoArrival from "@/fixtures/storageDocumentApi/storageDocumentOneFacilityNoArrival.json";
+import storageDocumentWithLongApprovalNumber from "@/fixtures/storageDocumentApi/storageDocumentWithLongApprovalNumber.json";
+import storageDocumentWithInvalidCharsApprovalNumber from "@/fixtures/storageDocumentApi/storageDocumentWithInvalidCharsApprovalNumber.json";
 import storageDocuments from "@/fixtures/dashboardApi/sdDrafts.json";
 import storageDocumentProgress from "@/fixtures/progressApi/sdIncomplete.json";
 import truckDetails from "@/fixtures/transportDetailsApi/truck.json";
@@ -52,6 +55,44 @@ const addStorageApprovalHandler: ITestHandler = {
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(storageDocumentFacilityStorageError))
+    ),
+  ],
+  [TestCaseId.SDAddStorageApprovalInvalidCharactersError]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(storageDocumentFacilityApprovalInvalidCharError))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(storageDocuments))),
+  ],
+  [TestCaseId.SDAddStorageApprovalInvalidCharactersSaveAsDraft]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => {
+      const url = new URL(req.url);
+      const isSecondVisit = url.searchParams.get("_visit") === "2";
+      return res(ctx.json(isSecondVisit ? storageDocumentWithInvalidCharsApprovalNumber : storageDocument));
+    }),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
+      res(ctx.status(200), ctx.json(storageDocumentWithInvalidCharsApprovalNumber))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(storageDocuments))),
+  ],
+  [TestCaseId.SDAddStorageApprovalMaxLengthSaveAsDraft]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => {
+      const url = new URL(req.url);
+      const isSecondVisit = url.searchParams.get("_visit") === "2";
+      return res(ctx.json(isSecondVisit ? storageDocumentWithLongApprovalNumber : storageDocument));
+    }),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
+      res(ctx.status(200), ctx.json(storageDocumentWithLongApprovalNumber))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(storageDocuments))),
+  ],
+  [TestCaseId.SDAddStorageApprovalNoJs]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentFacilityOneNoArrival))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
+      res(ctx.json(storageDocumentFacilityOne))
     ),
   ],
 };
