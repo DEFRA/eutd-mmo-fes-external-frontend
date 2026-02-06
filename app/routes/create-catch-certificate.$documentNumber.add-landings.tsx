@@ -164,11 +164,20 @@ const AddLandings = () => {
   const { gearCategory, availableGearTypes, gearType, selectedRfmo } = intialProcessedValues(rest);
 
   const {
-    errors = {},
-    groupedErrorIds = {},
+    errors: actionErrors = {},
+    groupedErrorIds: actionGroupedErrorIds = {},
     actionExecuted,
     ...values
   } = useActionData<AddLandingsActionDataType>() ?? {};
+
+  // For non-JS mode, errors come from loader data
+  const loaderErrors = (rest as any).errors ?? {};
+  const loaderGroupedErrorIds = (rest as any).groupedErrorIds ?? {};
+
+  // Use action errors for JS mode, loader errors for non-JS mode
+  const errors = !isEmpty(actionErrors) ? actionErrors : loaderErrors;
+  const groupedErrorIds = !isEmpty(actionGroupedErrorIds) ? actionGroupedErrorIds : loaderGroupedErrorIds;
+
   const startDateFromAction = getDateFromAction(values, "startDate");
   const dateFromAction = getDateFromAction(values, "dateLanded");
   const submit = useSubmit();
@@ -509,7 +518,7 @@ const AddLandings = () => {
                 })}
                 HSAHint={t("ccAddLandingHSAHint", { ns: "directLandings" })}
                 confirmHSATypeOptions={confirmHSATypeOptions}
-                highSeasArea={highSeasArea}
+                highSeasArea={highSeasArea ?? values.highSeasArea}
                 setHighSeasArea={setHighSeasArea}
                 getHSAOptionLabel={(option: HSAOptionType) => t(option.label, { ns: "common" })}
                 errors={errors?.highSeasArea}
