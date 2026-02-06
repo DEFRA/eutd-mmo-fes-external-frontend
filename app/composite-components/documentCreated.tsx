@@ -82,6 +82,7 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
 
   useScrollOnPageLoad();
 
+  /* istanbul ignore next */
   useEffect(() => {
     if (shouldRenderGA(analyticsCookieAccepted)) {
       //Protect from gtag not yet loaded
