@@ -53,6 +53,7 @@ const ContainerVesselTransportDetailsPage = () => {
   const errorKeysInOrder = [
     "vesselName",
     "flagState",
+    "departurePlace",
     "containerNumbers.0",
     "containerNumbers.1",
     "containerNumbers.2",
@@ -63,7 +64,6 @@ const ContainerVesselTransportDetailsPage = () => {
     "containerNumbers.7",
     "containerNumbers.8",
     "containerNumbers.9",
-    "departurePlace",
     "freightBillNumber",
   ];
 
