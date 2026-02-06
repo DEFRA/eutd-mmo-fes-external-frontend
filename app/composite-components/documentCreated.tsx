@@ -17,8 +17,7 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
       panelTitle: "ccCreatedPanelTitle",
       panelBody: "ccCreatedPanelBody",
       nextStepsHeader: "ccCreatedNextStepsHeader",
-      downloadSectionHeader: "ccCreatedDownloadSectionHeader",
-      downloadLink: "ccCreatedDownloadLink",
+      downloadLink: "ccCreatedDownloadSectionHeader",
       notesSubHeading: "ccCreatedDownloadDocumentNotesSubHeading",
       downloadFirefox: "downloadDocumentNotesFirefox",
       downloadMobile: "downloadDocumentNotesMobile",
@@ -97,7 +96,7 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
   const renderDownloadLink = () => (
     <h3 className="govuk-heading-s">
       <Link reloadDocument to={`/pdf/export-certificates/${documentUri}`} className="govuk-link">
-        <strong>{t(translationTags[journey].downloadSectionHeader)}</strong>
+        <strong>{t(translationTags[journey].downloadLink)}</strong>
       </Link>
     </h3>
   );

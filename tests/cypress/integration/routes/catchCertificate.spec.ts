@@ -62,9 +62,9 @@ describe("Catch certificate created page: rendering", () => {
 
     cy.contains(
       "li",
-      /^if you are using Firefox as an internet browser, please ensure JavaScript is enabled in order to view and download the certificate$/
+      /^If you are using Firefox as an internet browser, please ensure JavaScript is enabled in order to view and download the certificate$/
     ).should("be.visible");
-    cy.contains("li", /^if you are using a mobile device, please ensure you have installed a PDF viewer$/).should(
+    cy.contains("li", /^If you are using a mobile device, please ensure you have installed a PDF viewer$/).should(
       "be.visible"
     );
   });
