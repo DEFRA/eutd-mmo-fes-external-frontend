@@ -1398,7 +1398,8 @@ describe("Mandatory field validation tests", () => {
 
     // Wait for error to appear and form to reload
     cy.contains("h2", "There is a problem").should("be.visible");
-    cy.get("select#product").should("be.visible");
+    // Wait for form to be fully populated from session
+    cy.get("#weight", { timeout: 10000 }).should("have.value", "0");
 
     // Verify all form values are preserved
     cy.get("select#product option:selected").should("not.have.value", "");
