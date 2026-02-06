@@ -36,6 +36,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 const HowDoesTheExportLeaveTheUk = () => {
   const { documentNumber, vehicle, transportId, nextUri, csrf } = useLoaderData<loaderDataProps>();
   const [isExpandedGuidance, setIsExpandedGuidance] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
@@ -45,6 +46,11 @@ const HowDoesTheExportLeaveTheUk = () => {
     : `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk`;
 
   useScrollOnPageLoad();
+
+  /* istanbul ignore next */
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   useEffect(() => {
     if (!isEmpty(errors)) {
@@ -58,7 +64,7 @@ const HowDoesTheExportLeaveTheUk = () => {
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" action={actionUrl} csrf={csrf}>
-            <div className={!isEmpty(errors) ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
+            <div className={isEmpty(errors) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"}>
               <fieldset
                 className="govuk-fieldset"
                 aria-describedby={isEmpty(errors) ? "vehicle-hint" : "vehicle-hint vehicle-error"}
@@ -107,8 +113,18 @@ const HowDoesTheExportLeaveTheUk = () => {
                 ))}
               </fieldset>
             </div>
-            <details className="govuk-details">
-              <summary className="govuk-details__summary" onClick={() => setIsExpandedGuidance(!isExpandedGuidance)}>
+            <details className="govuk-details" open={isHydrated ? isExpandedGuidance : undefined}>
+              <summary
+                className="govuk-details__summary"
+                onClick={
+                  isHydrated
+                    ? (e) => {
+                        e.preventDefault();
+                        setIsExpandedGuidance(!isExpandedGuidance);
+                      }
+                    : undefined
+                }
+              >
                 <span className="govuk-details__summary-text">
                   {t("transportSelectionExpandableTitle", { ns: "transportation" })}
                 </span>
