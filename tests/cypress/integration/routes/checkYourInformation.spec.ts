@@ -2146,7 +2146,7 @@ describe("Check Your Information: Exporter details section", () => {
   });
 
   it("should render exporter full name field", () => {
-    cy.contains("dt", "Name of person responsible for this export").should("be.visible");
+    cy.contains("dt", "Full name of responsible person").should("be.visible");
   });
 
   it("should render company name field", () => {

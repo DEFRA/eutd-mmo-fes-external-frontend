@@ -82,6 +82,12 @@ export enum TestCaseId {
   CCAddExporterDetailsFailsWith403 = "CCAddExporterDetailsFailsWith403",
   CCAddExporterDetailsFailsWithErrors = "CCAddExporterDetailsFailsWithErrors",
   CCAddExporterDetailsFailsWithExporterFullNameError = "CCAddExporterDetailsFailsWithExporterFullNameError",
+  CCAddExporterDetailsFailsWithExporterFullNameMaxLength = "CCAddExporterDetailsFailsWithExporterFullNameMaxLength",
+  CCAddExporterDetailsFailsWithExporterFullNameWithSpecialCharacters = "CCAddExporterDetailsFailsWithExporterFullNameWithSpecialCharacters",
+  CCAddExporterDetailsFailsWithExporterFullNameCorrectFormat = "CCAddExporterDetailsFailsWithExporterFullNameCorrectFormat",
+  CCAddExporterDetailsFailsWithExporterCompanyNameMaxLength = "CCAddExporterDetailsFailsWithExporterCompanyNameMaxLength",
+  CCAddExporterDetailsFailsWithExporterCompanyNameWithSpecialCharacters = "CCAddExporterDetailsFailsWithExporterCompanyNameWithSpecialCharacters",
+  CCAddExporterDetailsFailsWithExporterCompanyNameCorrectFormat = "CCAddExporterDetailsFailsWithExporterCompanyNameCorrectFormat",
   CCAddExporterDetails403 = "CCAddExporterDetails403",
 
   PSAddExporterDetailsEmpty = "psAddExporterDetailsEmpty",
