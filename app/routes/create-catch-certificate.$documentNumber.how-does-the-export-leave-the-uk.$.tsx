@@ -8,7 +8,7 @@ import {
 } from "react-router";
 import type { Vehicle, ErrorResponse, TransportOptionType } from "~/types";
 import { route } from "routes-gen";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Main, BackToProgressLink, ErrorMessage, ErrorSummary, SecureForm } from "~/components";
 import { useTranslation } from "react-i18next";
@@ -35,6 +35,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
 const HowDoesTheExportLeaveTheUk = () => {
   const { documentNumber, vehicle, transportId, nextUri, csrf } = useLoaderData<loaderDataProps>();
+  const [isExpandedGuidance, setIsExpandedGuidance] = useState(false);
 
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
@@ -67,9 +68,14 @@ const HowDoesTheExportLeaveTheUk = () => {
                     {t("transportSelectionPageTitle", { ns: "transportation" })}
                   </h1>
                 </legend>
-                <div id="vehicle-hint" className="govuk-hint">
-                  {t("transportSelectionSelectTypeTransportLabel", { ns: "transportation" })}
+                <div
+                  id="vehicle-hint"
+                  className="govuk-hint"
+                  style={{ color: "#000", fontWeight: 600, marginTop: "18px" }}
+                >
+                  <strong>{t("transportSelectionSelectTypeTransportLabel", { ns: "transportation" })}</strong>
                 </div>
+                <div className="govuk-hint">{t("transportSelectionAdditionalGuidance", { ns: "transportation" })}</div>
                 {!isEmpty(errors) && (
                   <ErrorMessage
                     id="vehicle-error"
@@ -78,22 +84,39 @@ const HowDoesTheExportLeaveTheUk = () => {
                   />
                 )}
                 {transportOptions.map((option: TransportOptionType) => (
-                  <div key={option.id} className="govuk-radios__item">
-                    <input
-                      id={option.id}
-                      type="radio"
-                      name="vehicle"
-                      className="govuk-radios__input"
-                      value={option.value}
-                      defaultChecked={vehicle === option.value}
-                    />
-                    <label htmlFor={option.id} className="govuk-label govuk-radios__label">
-                      {t(option.label, { ns: "transportation" })}
-                    </label>
+                  <div key={option.id} style={{ marginBottom: "20px" }}>
+                    <div className="govuk-radios__item">
+                      <input
+                        id={option.id}
+                        type="radio"
+                        name="vehicle"
+                        className="govuk-radios__input"
+                        value={option.value}
+                        defaultChecked={vehicle === option.value}
+                      />
+                      <label htmlFor={option.id} className="govuk-label govuk-radios__label">
+                        {t(option.label, { ns: "transportation" })}
+                      </label>
+                    </div>
+                    {option.id === "truck" && (
+                      <div className="govuk-hint" style={{ marginLeft: "60px", marginBottom: "20px" }}>
+                        {t("transportSelectionTruckGuidance", { ns: "transportation" })}
+                      </div>
+                    )}
                   </div>
                 ))}
               </fieldset>
             </div>
+            <details className="govuk-details">
+              <summary className="govuk-details__summary" onClick={() => setIsExpandedGuidance(!isExpandedGuidance)}>
+                <span className="govuk-details__summary-text">
+                  {t("transportSelectionExpandableTitle", { ns: "transportation" })}
+                </span>
+              </summary>
+              <div className="govuk-details__text">
+                {t("transportSelectionExpandableContent", { ns: "transportation" })}
+              </div>
+            </details>
             <ButtonGroup />
             <input type="hidden" name="transportId" value={transportId} />
             <input type="hidden" name="nextUri" value={nextUri} />
