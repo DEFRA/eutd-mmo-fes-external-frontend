@@ -12,7 +12,7 @@ describe("Catch certificate created page: rendering", () => {
   });
 
   it("should render links", () => {
-    cy.contains("strong", /^Download the catch certificate$/).should("be.visible");
+    cy.contains("strong", /^1\. Download the catch certificate$/).should("be.visible");
 
     cy.contains("a", /^View completed catch certificates or create a new export document$/)
       .should("be.visible")
@@ -21,6 +21,26 @@ describe("Catch certificate created page: rendering", () => {
       name: "View completed catch certificates or create a new export document",
     }).click({ force: true });
     cy.url().should("include", "/catch-certificates");
+  });
+
+  it("should render email section heading", () => {
+    cy.contains("strong", /^2\. Email the catch certificate to the importer$/).should("be.visible");
+  });
+
+  it("should render important notice with icon and text", () => {
+    cy.contains("strong", /^Do not amend the catch certificate\.$/).should("be.visible");
+    cy.get("svg title").should("contain", "icon important");
+  });
+
+  it("should render email section with two bullet points", () => {
+    cy.contains(
+      "li",
+      /^It is the importer's responsibility to submit it to the import control authority where your export will enter the EU\.$/
+    ).should("be.visible");
+    cy.contains(
+      "li",
+      /^The importing authority will complete and sign their section of the document at the Border Inspection Post \(BIP\)\.$/
+    ).should("be.visible");
   });
 
   it("should render links for send feedback for catch certificate", () => {
@@ -38,13 +58,13 @@ describe("Catch certificate created page: rendering", () => {
 
   it("should render other content", () => {
     cy.get(".govuk-heading-m").contains("What you need to do next");
-    cy.contains("strong", /^Email the catch certificate to the importer$/).should("be.visible");
+    cy.contains("strong", /^2\. Email the catch certificate to the importer$/).should("be.visible");
 
     cy.contains(
       "li",
-      /^if you are using Firefox as an internet browser, please ensure JavaScript is enabled in order to view and download the certificate$/
+      /^If you are using Firefox as an internet browser, please ensure JavaScript is enabled in order to view and download the certificate$/
     ).should("be.visible");
-    cy.contains("li", /^if you are using a mobile device, please ensure you have installed a PDF viewer$/).should(
+    cy.contains("li", /^If you are using a mobile device, please ensure you have installed a PDF viewer$/).should(
       "be.visible"
     );
   });

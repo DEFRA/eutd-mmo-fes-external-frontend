@@ -17,12 +17,14 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
       panelTitle: "ccCreatedPanelTitle",
       panelBody: "ccCreatedPanelBody",
       nextStepsHeader: "ccCreatedNextStepsHeader",
-      downloadLink: "ccCreatedDownloadLink",
+      downloadLink: "ccCreatedDownloadSectionHeader",
       notesSubHeading: "ccCreatedDownloadDocumentNotesSubHeading",
       downloadFirefox: "downloadDocumentNotesFirefox",
       downloadMobile: "downloadDocumentNotesMobile",
+      emailSectionHeader: "ccCreatedEmailSectionHeader",
       emailToImporter: "ccCreatedEmailToImporter",
-      emailToImporterText: "processingStatementEmailToImporterText",
+      emailToImporterText: "ccCreatedImportersResponsibility",
+      emailToImporterText2: "ccCreatedImportersResponsibilityBIP",
       createNewLink: "ccCreatedViewOrCreateNewLink",
     },
     processingStatement: {
@@ -92,9 +94,11 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
   }, []);
 
   const renderDownloadLink = () => (
-    <Link reloadDocument to={`/pdf/export-certificates/${documentUri}`} className="govuk-link">
-      <strong>{t(translationTags[journey].downloadLink)}</strong>.
-    </Link>
+    <h3 className="govuk-heading-s">
+      <Link reloadDocument to={`/pdf/export-certificates/${documentUri}`} className="govuk-link">
+        <strong>{t(translationTags[journey].downloadLink)}</strong>
+      </Link>
+    </h3>
   );
 
   const renderDownloadBulletPoints = () => (
@@ -137,16 +141,20 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
 
   const renderCatchCertificateSteps = () => (
     <>
-      <ol className="govuk-list govuk-list--number">
-        <li>
-          {renderDownloadLink()} {t(translationTags[journey].notesSubHeading)}
-          {renderDownloadBulletPoints()}
-        </li>
-        <li>
-          <strong>{t(translationTags[journey].emailToImporter)}</strong>.{" "}
-          {t(translationTags[journey].emailToImporterText)}
-        </li>
-      </ol>
+      <div className="govuk-!-margin-bottom-6">
+        {renderDownloadLink()}
+        {renderDownloadBulletPoints()}
+        {renderImportantNotice()}
+      </div>
+      <div className="govuk-!-margin-bottom-6">
+        <h3 className="govuk-heading-s">
+          <strong>{t(translationTags[journey].emailSectionHeader)}</strong>
+        </h3>
+        <ul className="govuk-list govuk-list--bullet">
+          <li>{t(translationTags[journey].emailToImporterText)}</li>
+          <li>{t(translationTags[journey].emailToImporterText2)}</li>
+        </ul>
+      </div>
       <Link to={createLink} className="govuk-link">
         {t(translationTags[journey].createNewLink)}
       </Link>
