@@ -235,7 +235,7 @@ export const ArrivalTransportationModeDetails = ({
           displayOptionalSuffix={vehicle === "truck"}
           vehicleType={vehicle}
           labelKey={vehicle === "truck" ? "addTransportationDetailsContainerIdentificationNumberTruck" : undefined}
-          hintKey={vehicle === "truck" ? "addTransportationDetailsContainerIdentificationNumberHintTruck" : undefined}
+          hintKey={vehicle === "truck" ? "addTransportationDetailsContainerNumberHintArrivalTruck" : undefined}
         />
       )}
     </>
@@ -439,7 +439,7 @@ export const TransportationArrivalDetails = ({
           displayOptionalSuffix={true}
           vehicleType={vehicle}
           labelKey="addTransportationDetailsContainerIdentificationNumberTrain"
-          hintKey="addTransportationDetailsContainerIdentificationNumberTrainHint"
+          hintKey="addTransportationDetailsContainerNumberHintArrivalTrain"
         />
       )}
     </fieldset>
