@@ -13,23 +13,31 @@ type CheckYourInformationDocumentNumberProps = {
   checkInformationHeader?: string;
   documentNumberTitle: string;
   documentNumber: string;
+  renderWrapper?: boolean;
 };
 
 export const CheckYourInformationDocumentNumber = ({
   checkInformationHeader,
   documentNumberTitle,
   documentNumber,
-}: CheckYourInformationDocumentNumberProps) => (
-  <>
-    {checkInformationHeader && <h2 className="govuk-heading-l">{checkInformationHeader}</h2>}
-    <dl className="govuk-summary-list govuk-!-margin-bottom-5">
-      <div className="govuk-summary-list__row">
-        <dt className="govuk-summary-list__key govuk-!-width-one-half">{documentNumberTitle}</dt>
-        <dd className="govuk-summary-list__value">{documentNumber}</dd>
-      </div>
-    </dl>
-  </>
-);
+  renderWrapper = true,
+}: CheckYourInformationDocumentNumberProps) => {
+  const content = (
+    <div className="govuk-summary-list__row">
+      <dt className="govuk-summary-list__key govuk-!-width-one-half">{documentNumberTitle}</dt>
+      <dd className="govuk-summary-list__value">{documentNumber}</dd>
+    </div>
+  );
+
+  if (!renderWrapper) return content;
+
+  return (
+    <>
+      {checkInformationHeader && <h2 className="govuk-heading-l">{checkInformationHeader}</h2>}
+      <dl className="govuk-summary-list govuk-!-margin-bottom-5">{content}</dl>
+    </>
+  );
+};
 
 type CheckInfoExporterDetailsProps = {
   checkExporterDetailsHeader: string;
