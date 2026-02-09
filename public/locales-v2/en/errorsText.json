@@ -95,7 +95,7 @@
   "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError": "Container identification number must only contain letters, numbers and spaces.",
   "ccShippingContainerNumberPatternError": "Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.",
   "ccContainerVesselContainerNumberRequiredError": "Enter the shipping container identification number",
-  "ccContainerVesselContainerNumberLabelError": "Enter the Shipping container identification number or numbers",
+  "ccContainerVesselContainerNumberLabelError": "Enter the shipping container identification number or numbers",
   "commonRoadTransportDocumentError": "Select yes if you have a road transport document to go with this export",
   "ccProductFavouritesPageErrorDuplicate": "The combination of species, state, presentation and commodity code must be unique for each product",
   "ccProductFavouritesPageErrorCommodityCode": "Select a commodity code",
