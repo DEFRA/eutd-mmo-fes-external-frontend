@@ -717,6 +717,7 @@ export enum TestCaseId {
   PSAddCatchDetailsCatchCertificateTypeValidationError = "PSAddCatchDetailsCatchCertificateTypeValidationError",
 
   SDIncompleteProgress = "sdIncompleteProgress",
+  SDIncompleteProgressWithProducts = "sdIncompleteProgressWithProducts",
   SDCompleteProgress = "sdCompleteProgress",
   SDCompleteUnauthorisedProgress = "sdCompleteUnauthorisedProgress",
   SDCompleteTruckProgress = "sdCompleteTruckProgress",

@@ -4,6 +4,7 @@ import {
   CHECK_COPY_URL,
   CONFIRM_COPY_URL,
   GET_PROCESSING_STATEMENT,
+  GET_STORAGE_DOCUMENT,
   getProgressUrl,
   getTransportDetailsUrl,
   mockGetAllDocumentsUrl,
@@ -19,6 +20,7 @@ import psProgressIncomplete from "@/fixtures/progressApi/psIncomplete.json";
 import sdProgressIncomplete from "@/fixtures/progressApi/sdIncomplete.json";
 import truckTransportDetails from "@/fixtures/transportDetailsApi/truck.json";
 import processingStatement from "@/fixtures/processingStatementApi/processingStatement.json";
+import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
 
 const copyPSSDPageHandler: ITestHandler = {
   [TestCaseId.PSSDCopyAllowed]: () => [
@@ -48,6 +50,7 @@ const copyPSSDPageHandler: ITestHandler = {
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(truckTransportDetails))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
 };
 
