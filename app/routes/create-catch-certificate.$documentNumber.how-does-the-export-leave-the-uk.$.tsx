@@ -69,12 +69,8 @@ const HowDoesTheExportLeaveTheUk = () => {
                     {t("transportSelectionPageTitle", { ns: "transportation" })}
                   </h1>
                 </legend>
-                <div
-                  id="vehicle-hint"
-                  className="govuk-hint"
-                  style={{ color: "#000", fontWeight: 600, marginTop: "18px" }}
-                >
-                  <strong>{t("transportSelectionSelectTypeTransportLabel", { ns: "transportation" })}</strong>
+                <div id="vehicle-hint" className="govuk-!-margin-top-5 govuk-!-font-weight-bold govuk-!-colour-black">
+                  {t("transportSelectionSelectTypeTransportLabel", { ns: "transportation" })}
                 </div>
                 <div className="govuk-hint">{t("transportSelectionAdditionalGuidance", { ns: "transportation" })}</div>
                 {!isEmpty(errors) && (
@@ -84,9 +80,9 @@ const HowDoesTheExportLeaveTheUk = () => {
                     visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                   />
                 )}
-                {transportOptions.map((option: TransportOptionType) => (
-                  <div key={option.id} style={{ marginBottom: "20px" }}>
-                    <div className="govuk-radios__item">
+                <div className="govuk-radios" data-module="govuk-radios">
+                  {transportOptions.map((option: TransportOptionType) => (
+                    <div key={option.id} className="govuk-radios__item">
                       <input
                         id={option.id}
                         type="radio"
@@ -98,14 +94,14 @@ const HowDoesTheExportLeaveTheUk = () => {
                       <label htmlFor={option.id} className="govuk-label govuk-radios__label">
                         {t(option.label, { ns: "transportation" })}
                       </label>
+                      {option.id === "truck" && (
+                        <div id={`${option.id}-item-hint`} className="govuk-hint govuk-radios__hint">
+                          {t("transportSelectionTruckGuidance", { ns: "transportation" })}
+                        </div>
+                      )}
                     </div>
-                    {option.id === "truck" && (
-                      <div className="govuk-hint" style={{ marginLeft: "60px", marginBottom: "20px" }}>
-                        {t("transportSelectionTruckGuidance", { ns: "transportation" })}
-                      </div>
-                    )}
-                  </div>
-                ))}
+                  ))}
+                </div>
               </fieldset>
             </div>
             <details className="govuk-details" open={isHydrated ? isExpandedGuidance : undefined}>

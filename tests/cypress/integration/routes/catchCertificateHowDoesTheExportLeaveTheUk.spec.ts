@@ -18,7 +18,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
 
     cy.get(".govuk-fieldset__heading").contains("How do you transport the export?");
 
-    cy.get(".govuk-hint").contains("Select the type of transport.").should("be.visible");
+    cy.get("#vehicle-hint").contains("Select the type of transport.").should("be.visible");
 
     cy.get(".govuk-hint").contains("You can add another transport mode later if needed.").should("be.visible");
 
@@ -155,10 +155,10 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
 
     cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
 
-    cy.get("#truck")
-      .parent()
-      .next()
-      .should("contain", "Select truck if your vehicle travels by ferry or through the Eurotunnel.");
+    cy.get("#truck-item-hint").should(
+      "contain",
+      "Select truck if your vehicle travels by ferry or through the Eurotunnel."
+    );
   });
 
   it("should display expandable guidance section with title and content", () => {
