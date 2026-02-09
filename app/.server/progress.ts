@@ -186,9 +186,13 @@ export const progressPageLoader = async (request: Request, params: Params, journ
     };
   } else if (journey === "storageNotes") {
     const transportation: ITransport = await getTransportDetails(bearerToken, "storageNotes", documentNumber);
+    const { getStorageDocument } = await import("~/.server/storageDocument");
+    const storageDocumentData = await getStorageDocument(bearerToken, documentNumber);
+    const catches = "unauthorised" in storageDocumentData ? [] : storageDocumentData.catches ?? [];
     objectToReturn = {
       ...objectToReturn,
       transport: transportation,
+      catches,
     };
   } else if (journey === "processingStatement") {
     const processingStatementData: ProcessingStatement | IUnauthorised = await getProcessingStatement(

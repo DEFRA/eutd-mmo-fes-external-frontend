@@ -244,3 +244,53 @@ describe("should display the notificationBanner", () => {
     );
   });
 });
+
+describe("ProgressPage - Product details link behavior", () => {
+  describe("Scenario 1: No products added - links to add-product-to-this-consignment", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDIncompleteProgress,
+      };
+
+      cy.visit(progressUrl, { qs: { ...testParams } });
+    });
+
+    it("should link to add-product-to-this-consignment when no products have been added", () => {
+      cy.contains("a", "Product details")
+        .should("be.visible")
+        .should("have.attr", "href", `${certificateUrl}/add-product-to-this-consignment`);
+    });
+  });
+
+  describe("Scenario 2: At least 1 product added - links to you-have-added-a-product", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDIncompleteProgressWithProducts,
+      };
+
+      cy.visit(progressUrl, { qs: { ...testParams } });
+    });
+
+    it("should link to you-have-added-a-product when at least one product has been added", () => {
+      cy.contains("a", "Product details")
+        .should("be.visible")
+        .should("have.attr", "href", `${certificateUrl}/you-have-added-a-product`);
+    });
+  });
+
+  describe("Scenario 3: Complete progress with products - links to you-have-added-a-product", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDCompleteProgress,
+      };
+
+      cy.visit(progressUrl, { qs: { ...testParams } });
+    });
+
+    it("should link to you-have-added-a-product when document is complete with products", () => {
+      cy.contains("a", "Product details")
+        .should("be.visible")
+        .should("have.attr", "href", `${certificateUrl}/you-have-added-a-product`);
+    });
+  });
+});
