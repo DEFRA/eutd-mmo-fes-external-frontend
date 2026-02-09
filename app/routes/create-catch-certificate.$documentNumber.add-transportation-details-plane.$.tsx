@@ -61,6 +61,7 @@ const AddTransportationDetailsPlane = () => {
 
   const errorKeysInOrder = [
     "flightNumber",
+    "departurePlace",
     "containerNumbers.0",
     "containerNumbers.1",
     "containerNumbers.2",
@@ -72,7 +73,6 @@ const AddTransportationDetailsPlane = () => {
     "containerNumbers.8",
     "containerNumbers.9",
     "airwayBillNumber",
-    "departurePlace",
     "freightBillNumber",
   ];
   const errorMessagesForDisplay = displayErrorMessagesInOrder(errors, errorKeysInOrder);

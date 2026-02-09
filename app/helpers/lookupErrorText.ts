@@ -90,6 +90,8 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.0.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.0.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
     "error.containerNumbers.0.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumbers.plane.array.min": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.container-vessel.array.min": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.1.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.1.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.1.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
@@ -138,6 +140,7 @@ export const getErrorMessage = (key: string): string => {
     commonAddTransportationDetailsPlaneContainerNumberLabelError:
       "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     ccContainerVesselContainerNumberRequiredError: "ccContainerVesselContainerNumberRequiredError",
+    ccContainerVesselContainerNumberLabelError: "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.array.min": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.nationalityOfVehicle.any.required": "commonTransportationDetailsTruckNationalityError",
@@ -352,11 +355,17 @@ export const getTransformedError = (errors: IError[]): IErrorsTransformed => {
   const errorsTransformed: IErrorsTransformed = {};
 
   errors.forEach((error: IError) => {
-    errorsTransformed[error.key] = {
-      key: error.key,
+    // Map containerNumbers array-level errors to containerNumbers.0 so they display under the first field
+    let errorKey = error.key;
+    if (errorKey === "containerNumbers" && error.message.includes("ContainerNumberLabelError")) {
+      errorKey = "containerNumbers.0";
+    }
+
+    errorsTransformed[errorKey] = {
+      key: errorKey,
       message: error.message,
       value: error.value,
-      fieldId: `${error.key}-error`,
+      fieldId: `${errorKey}-error`,
     };
   });
 
