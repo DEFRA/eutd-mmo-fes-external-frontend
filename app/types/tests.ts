@@ -415,6 +415,7 @@ export enum TestCaseId {
   PlaneTransportContainerValidationErrors = "PlaneTransportContainerValidationErrors",
   AddTransportationDetailsContainerIdentificationNumberManagement = "AddTransportationDetailsContainerIdentificationNumberManagement",
   PlaneTransportNotAllowed = "PlaneTransportNotAllowed",
+  PlaneTransportNonJS = "PlaneTransportNonJS",
   ArrivalPlaneTransportContainerNumberEmpty = "ArrivalPlaneTransportContainerNumberEmpty",
   ArrivalPlaneTransportDepartureCountryEmpty = "ArrivalPlaneTransportDepartureCountryEmpty",
   ArrivalPlaneTransportDeparturePortEmpty = "ArrivalPlaneTransportDeparturePortEmpty",
