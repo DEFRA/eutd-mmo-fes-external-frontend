@@ -1,10 +1,22 @@
-import type { IStorageDocumentProgressSteps, IProgressDataSection, IErrorsTransformed } from "~/types";
+import type {
+  IStorageDocumentProgressSteps,
+  IProgressDataSection,
+  IErrorsTransformed,
+  StorageDocumentCatch,
+} from "~/types";
 
 export const sdProgressTableDataBuilder = (
   progress: IStorageDocumentProgressSteps,
-  errors?: IErrorsTransformed
+  errors?: IErrorsTransformed,
+  catches?: StorageDocumentCatch[]
 ): Array<IProgressDataSection> => {
   const sdContext = "/create-non-manipulation-document/:documentNumber";
+
+  // Check if at least one product has been added (saved and continued)
+  const hasAddedProducts = Array.isArray(catches) && catches.some((c) => c.product);
+  const productDetailsUrl = hasAddedProducts
+    ? `${sdContext}/you-have-added-a-product`
+    : `${sdContext}/add-product-to-this-consignment`;
 
   return [
     {
@@ -35,7 +47,7 @@ export const sdProgressTableDataBuilder = (
           title: "sdProgressProductDetails",
           status: progress?.catches,
           testId: "productsDescription",
-          url: `${sdContext}/add-product-to-this-consignment`,
+          url: productDetailsUrl,
           error: errors?.catches,
         },
       ],
