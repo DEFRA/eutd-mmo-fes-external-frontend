@@ -92,6 +92,7 @@
   "commonRoadTransportDocumentError": "Dewiswch oes os oes gennych ddogfen cludiant ffordd i fynd gyda’r hyn rydych yn ei allforio",
   "ccShippingContainerNumberPatternError": "Rhowch rif cynhwysydd llong yn y fformat cywir. Rhaid iddo fod yn 11 o gymeriadau: 3 llythyren, yna U, J, Z neu R, yna 7 rhif.",
   "ccContainerVesselContainerNumberRequiredError": "Rhowch y rhif adnabod cynhwysydd llong",
+  "ccContainerVesselContainerNumberLabelError": "Rhowch y rhif neu'r rhifau adnabod cynhwysydd llong",
   "ccProductFavouritesPageErrorDuplicate": "Rhaid i’r cyfuniad o rywogaethau, cyflwr, cyflwyniad a chod nwyddau fod yn unigryw ar gyfer pob cynnyrch",
   "ccProductFavouritesPageErrorCommodityCode": "Dewiswch god nwyddau",
   "commonProgressExporterRequiredError": "Rhaid i chi gwblhau adran manylion yr allforiwr cyn bwrw ymlaen",
