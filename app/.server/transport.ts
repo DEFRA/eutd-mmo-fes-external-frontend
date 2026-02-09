@@ -154,7 +154,7 @@ export const updateTransport = async (
     }
   );
 
-  return onUpdateTransport(response);
+  return onUpdateTransport(response, payload.vehicle);
 };
 
 export const updateTransportDetails = async (
@@ -200,8 +200,8 @@ const onUpdateTransport = async (response: Response, vehicle: string): Promise<I
         errors: Object.keys(errorsResponse).map((error) => ({
           key: error,
           message: getErrorMessage(
-            error === "containerNumber" && vehicle === "plane"
-              ? errorsResponse[error].replaceAll(".containerNumber", ".containerNumber.plane")
+            error.includes("containerNumbers") && (vehicle === "plane" || vehicle === "containerVessel")
+              ? errorsResponse[error].replaceAll(".containerNumbers", `.containerNumbers.${vehicle}`)
               : errorsResponse[error]
           ),
         })),
@@ -380,6 +380,14 @@ const onSaveTransportDetails = async (response: Response, payload?: ITransport):
       const errorsResponse = await response.json();
       return {
         errors: Object.keys(errorsResponse).map((error) => {
+          if (
+            error.includes("containerNumbers") &&
+            errorsResponse[error] === "error.containerNumbers.array.min" &&
+            payload?.vehicle === "containerVessel"
+          ) {
+            errorsResponse[error] = "error.containerNumbers.containerVessel.array.min";
+          }
+
           if (errorsResponse[error] === "error.nationalityOfVehicle.any.required") {
             errorsResponse[error] = "error.nationalityOfVehicle.any.invalid";
           }

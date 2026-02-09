@@ -16,6 +16,16 @@ type CheckYourInformationDocumentNumberProps = {
   renderWrapper?: boolean;
 };
 
+const getContainerNumbersLabel = (transport: ITransport, t: any) => {
+  if (transport.vehicle === "truck" || transport.vehicle === "train") {
+    return t("addTransportationDetailsContainerIdentificationNumberTrain", { ns: "transportation" });
+  } else if (transport.vehicle === "containerVessel") {
+    return t("addTransportationDetailsContainerIdentificationNumberText", { ns: "transportation" });
+  } else {
+    return t("sdCheckYourInformationContainer", { ns: "sdCheckYourInformation" });
+  }
+};
+
 export const CheckYourInformationDocumentNumber = ({
   checkInformationHeader,
   documentNumberTitle,
@@ -200,13 +210,20 @@ export const StorageDocumentTransportDisplay = ({
     },
   ];
 
+  const containerNumbersFields =
+    transport?.containerNumbers && transport.containerNumbers.length > 0
+      ? [
+          {
+            label: getContainerNumbersLabel(transport, t),
+            value: transport.containerNumbers.filter((num) => num && num.trim() !== "").join(", "),
+            hasChangeLink: true,
+            backLinkId: "containerNumbers.0",
+          },
+        ]
+      : [];
+
   const sharedFreightBillNumberDepartureCountry = [
-    {
-      label: t("sdCheckYourInformationContainer", { ns: "sdCheckYourInformation" }),
-      value: transport.containerNumbers?.join(", "),
-      hasChangeLink: true,
-      backLinkId: "containerNumbers.0",
-    },
+    ...containerNumbersFields,
     {
       label: t("sdCheckYourInformationFreightNumber", { ns: "sdCheckYourInformation" }),
       value:

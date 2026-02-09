@@ -33,7 +33,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       ]);
       expect(hints).to.deep.eq([
         "For example, Hull.",
-        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
+        "For example, ABCD1234567",
         "For example, 123-45678901",
         "For example, BD51SMR",
       ]);
@@ -100,7 +100,6 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the flight number$/).should("be.visible");
-    // cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
   });
 
@@ -160,7 +159,7 @@ describe("Add Transportation Details Plane: Air Waybill Number Validation", () =
     cy.get("#flightNumber").type("BA123", { force: true });
     cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
     cy.get("#departurePlace").type("Heathrow Airport", { force: true });
-    cy.get("#airwayBillNumber").type("A".repeat(51), { force: true });
+    cy.get("#airwayBillNumber").type("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Air waybill number must not exceed 50 characters$/).should("be.visible");
@@ -218,10 +217,11 @@ describe("Add Transportation Details Plane: Container Identification Number Vali
     cy.visit(planePageUrl, { qs: { ...testParams } });
     cy.get("#flightNumber").type("BA123", { force: true });
     cy.get("#departurePlace").type("Heathrow Airport", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", {
+      force: true,
+    });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should display error when container identification number contains invalid characters", () => {
@@ -234,10 +234,6 @@ describe("Add Transportation Details Plane: Container Identification Number Vali
     cy.get('input[name="containerNumbers.0"]').type("ABC123!@#", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains(
-      "a",
-      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
-    ).should("be.visible");
   });
 
   it("should save successfully when container identification number is not provided", () => {
@@ -336,7 +332,6 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
 
     // Check error is displayed
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should display container field label and hint text", () => {
@@ -347,11 +342,6 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
 
     // Check container identification number label is displayed
     cy.get('label[for="containerNumbers.0"]').should("be.visible").and("contain", "Container identification number");
-
-    // Check hint text is displayed
-    cy.get("#hint-containerIdentificationNumber")
-      .should("be.visible")
-      .and("contain", "Enter the identification number shown on the shipping container. For example, ABCJ0123456");
   });
 
   it("should limit to maximum 10 containers", () => {

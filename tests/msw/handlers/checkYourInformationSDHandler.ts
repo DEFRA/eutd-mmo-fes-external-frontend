@@ -69,6 +69,62 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentOneCatches))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
   ],
+  [TestCaseId.SDCheckYourInformationTruckWithEmptyContainers]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) =>
+      res(
+        ctx.json({
+          ...storageDocumenOneFacility,
+          transport: {
+            ...storageDocumenOneFacility.transport,
+            containerNumbers: ["CONT123", "", "CONT456", ""],
+          },
+        })
+      )
+    ),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+  ],
+  [TestCaseId.SDCheckYourInformationTrainWithWhitespaceContainers]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) =>
+      res(
+        ctx.json({
+          ...storageDocumentOneCatches,
+          transport: {
+            ...storageDocumentOneCatches.transport,
+            containerNumbers: ["TRAIN001", "  ", "TRAIN002", "   "],
+          },
+        })
+      )
+    ),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+  ],
+  [TestCaseId.SDCheckYourInformationTruckWithAllEmptyContainers]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) =>
+      res(
+        ctx.json({
+          ...storageDocumenOneFacility,
+          transport: {
+            ...storageDocumenOneFacility.transport,
+            containerNumbers: ["", "  ", ""],
+          },
+        })
+      )
+    ),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+  ],
+  [TestCaseId.SDCheckYourInformationTruckWithSingleContainer]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) =>
+      res(
+        ctx.json({
+          ...storageDocumenOneFacility,
+          transport: {
+            ...storageDocumenOneFacility.transport,
+            containerNumbers: ["CONT123"],
+          },
+        })
+      )
+    ),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+  ],
   [TestCaseId.SDCheckYourInformationValidationSuccess]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
