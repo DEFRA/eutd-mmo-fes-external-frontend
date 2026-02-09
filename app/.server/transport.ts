@@ -154,7 +154,7 @@ export const updateTransport = async (
     }
   );
 
-  return onUpdateTransport(response);
+  return onUpdateTransport(response, payload.vehicle);
 };
 
 export const updateTransportDetails = async (
@@ -200,7 +200,7 @@ const onUpdateTransport = async (response: Response, vehicle: string): Promise<I
         errors: Object.keys(errorsResponse).map((error) => ({
           key: error,
           message: getErrorMessage(
-            error === "containerNumbers.0" && (vehicle === "plane" || vehicle === "containerVessel")
+            error.includes("containerNumbers") && (vehicle === "plane" || vehicle === "containerVessel")
               ? errorsResponse[error].replaceAll(".containerNumbers", `.containerNumbers.${vehicle}`)
               : errorsResponse[error]
           ),
