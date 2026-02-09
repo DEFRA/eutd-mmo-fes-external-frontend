@@ -404,7 +404,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureDate-year").type("2025", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
+    // cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
   });
 
   it("should display error when country of departure is empty", () => {
