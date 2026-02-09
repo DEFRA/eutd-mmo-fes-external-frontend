@@ -115,6 +115,12 @@ describe("Check Your Information (Summary) page: UI", () => {
     });
   });
 
+  it("should render document number in exporter details section", () => {
+    cy.contains("dt.govuk-summary-list__key", "Document number")
+      .next("dd")
+      .should("have.text", "GBR-2022-CC-24F279E85");
+  });
+
   it("should render CMR field when set for transport", () => {
     cy.contains("dt.govuk-summary-list__key", "Do you have a road transport document to go with this export?")
       .next("dd")
@@ -217,7 +223,7 @@ describe("Check Your Information (Summary) page: UI", () => {
 
   it("should render landings section fields in the expected order", () => {
     cy.get("dl")
-      .eq(2)
+      .eq(1)
       .find("dt.govuk-summary-list__key")
       .then(($keys) => {
         const texts = $keys.toArray().map((el) => (el.textContent ?? "").trim().toLowerCase());
@@ -721,7 +727,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(2) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(3) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-exporter-details")
       .then((elem: JQuery<HTMLElement>) => {
@@ -739,7 +745,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(3) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(4) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-exporter-details")
       .then((elem: JQuery<HTMLElement>) => {
@@ -757,7 +763,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(4) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(5) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-exporter-details")
       .then((elem: JQuery<HTMLElement>) => {
@@ -773,7 +779,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(3) > .govuk-summary-list__row:nth-of-type(1) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(1) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "landings-entry")
       .then((elem: JQuery<HTMLElement>) => {
@@ -789,7 +795,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(1) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(3) > .govuk-summary-list__row:nth-of-type(1) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "what-export-journey")
       .then((elem: JQuery<HTMLElement>) => {
@@ -805,7 +811,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(2) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(3) > .govuk-summary-list__row:nth-of-type(2) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "what-export-journey")
       .then((elem: JQuery<HTMLElement>) => {
@@ -821,7 +827,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(5) > .govuk-summary-list__row:nth-of-type(1) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(1) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "whose-waters-were-they-caught-in")
       .then((elem: JQuery<HTMLElement>) => {
@@ -837,7 +843,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(3) > .govuk-summary-list__row:nth-of-type(2) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(2) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "what-are-you-exporting?productId=GBR-2022-CC-99BBF3669-a9ec91a4-58b4-42a2-a5d3-2812e5d33044")
       .then((elem: JQuery<HTMLElement>) => {
@@ -858,7 +864,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(9) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(3) > .govuk-summary-list__row:nth-of-type(9) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-additional-transport-documents-truck/1")
       .then((elem: JQuery<HTMLElement>) => {
@@ -875,7 +881,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(10) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(3) > .govuk-summary-list__row:nth-of-type(10) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-additional-transport-documents-truck/1")
       .then((elem: JQuery<HTMLElement>) => {
@@ -1854,7 +1860,7 @@ describe("Check Your Information: CommonLink component testing", () => {
   });
 
   it("should render common link for exporter address with visually hidden text", () => {
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(4)")
+    cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(5)")
       .find("a")
       .should("contain", "Change")
       .find(".govuk-visually-hidden")
@@ -1862,7 +1868,7 @@ describe("Check Your Information: CommonLink component testing", () => {
   });
 
   it("should render common link for conservation with visually hidden text", () => {
-    cy.get("dl:nth-of-type(5) > .govuk-summary-list__row:nth-of-type(1)")
+    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(1)")
       .find("a")
       .should("contain", "Change")
       .find(".govuk-visually-hidden")
@@ -2158,7 +2164,8 @@ describe("Check Your Information: Exporter details section", () => {
   });
 
   it("should have change links for all exporter fields when not locked", () => {
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row").each(($row) => {
+    // Skip document number (row 1) and check rows 2-5 (Your Reference, Name, Company, Address)
+    cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(n+2)").each(($row) => {
       cy.wrap($row).find("a").should("contain", "Change");
     });
   });
@@ -2168,6 +2175,6 @@ describe("Check Your Information: Exporter details section", () => {
       testCaseId: TestCaseId.CCCheckYourInformationLocked,
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(2)").find("a").should("not.exist");
+    cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(3)").find("a").should("not.exist");
   });
 });
