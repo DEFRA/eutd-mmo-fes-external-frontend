@@ -203,7 +203,7 @@ export const StorageDocumentTransportDisplay = ({
   const sharedFreightBillNumberDepartureCountry = [
     {
       label: t("sdCheckYourInformationContainer", { ns: "sdCheckYourInformation" }),
-      value: transport.containerNumbers?.join(", "),
+      value: transport.containerNumbers?.filter((c: string) => c?.trim())?.join(", "),
       hasChangeLink: true,
       backLinkId: "containerNumbers.0",
     },
