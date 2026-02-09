@@ -439,7 +439,7 @@ export const TransportationArrivalDetails = ({
           displayOptionalSuffix={true}
           vehicleType={vehicle}
           labelKey="addTransportationDetailsContainerIdentificationNumberTrain"
-          hintKey="addTransportationDetailsContainerNumberHintArrivalTrain"
+          hintKey="addTransportationDetailsContainerIdentificationNumberTrainHint"
         />
       )}
     </fieldset>
