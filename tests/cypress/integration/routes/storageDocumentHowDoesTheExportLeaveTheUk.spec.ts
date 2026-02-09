@@ -16,9 +16,9 @@ describe("HowDoesTheExportLeaveTheUk", () => {
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/add-storage-facility-approval`);
 
-    cy.get(".govuk-fieldset__heading").contains("How does the export leave the UK?");
+    cy.get(".govuk-fieldset__heading").contains("How do you transport the export?");
 
-    cy.get(".govuk-hint").contains("Select a type of transport").should("be.visible");
+    cy.get(".govuk-hint").contains("Select the type of transport").should("be.visible");
 
     cy.get("form").should(($form) => {
       expect($form.find("input[type='radio']")).to.have.lengthOf(4);
