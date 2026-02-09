@@ -21,7 +21,7 @@ const AddYourReference = () => {
   return (
     <AddYourReferenceCommon
       backUrl="/create-catch-certificate/:documentNumber/progress"
-      hintText={t("commonAddYourReferenceHint", { journeyText: t("catchCertificate") })}
+      hintText={t("catchCertificateAddYourReferenceHint")}
       progressLink="/create-catch-certificate/:documentNumber/progress"
     />
   );
