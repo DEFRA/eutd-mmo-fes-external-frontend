@@ -559,7 +559,10 @@ export const extractContainerNumbers = (values: Record<string, any>): string[] =
   const containerNumbers: string[] = [];
   for (let i = 0; i < 10; i++) {
     const key = `containerNumbers.${i}`;
-    containerNumbers[i] = values[key] ?? "";
+    const value = values[key];
+    if (value !== undefined && value !== "") {
+      containerNumbers.push(value);
+    }
   }
   return containerNumbers;
 };
