@@ -559,7 +559,10 @@ export const extractContainerNumbers = (values: Record<string, any>): string[] =
   const containerNumbers: string[] = [];
   for (let i = 0; i < 10; i++) {
     const key = `containerNumbers.${i}`;
-    containerNumbers[i] = values[key] ?? "";
+    const value = values[key];
+    if (value && value.trim() !== "") {
+      containerNumbers.push(value);
+    }
   }
   return containerNumbers;
 };
@@ -572,7 +575,10 @@ export const handleContainerActions = async (request: Request, _action: string, 
     case "add-container-button": {
       const currentContainers = Object.keys(values)
         .filter((key) => key.startsWith("containerNumbers."))
-        .map((key) => values[key] as string);
+        .map((key) => {
+          const value = values[key];
+          return value && value.trim() !== "" ? value : "";
+        });
 
       session.set("addContainerClicked", true);
       session.set("containerCount", currentContainers.length + 1);
@@ -587,7 +593,10 @@ export const handleContainerActions = async (request: Request, _action: string, 
     case "remove-container-button": {
       const currentContainers = Object.keys(values)
         .filter((key) => key.startsWith("containerNumbers."))
-        .map((key) => values[key] as string);
+        .map((key) => {
+          const value = values[key];
+          return value && value.trim() !== "" ? value : "";
+        });
 
       session.set("removeContainerClicked", true);
       session.set("containerCount", Math.max(1, currentContainers.length - 1));

@@ -33,7 +33,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       ]);
       expect(hints).to.deep.eq([
         "For example, Hull.",
-        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
+        "For example, ABCD1234567",
         "For example, 123-45678901",
         "For example, BD51SMR",
       ]);
@@ -100,7 +100,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the flight number$/).should("be.visible");
-    // cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
+    cy.contains("a", /^Enter the container identification number$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
   });
 

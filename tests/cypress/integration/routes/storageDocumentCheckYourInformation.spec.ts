@@ -208,7 +208,7 @@ describe("Check Your Information (Summary) page: document submission validation 
     cy.get("[data-testid=create-sd-button]").click({ force: true });
     cy.url().should("include", "/check-your-information");
     cy.get("#error-summary-title").contains("There is a problem");
-    cy.get("a[href='#validationError'").contains("The document entered is no longer valid");
+    cy.get("a[href='#validationError']").contains("The document entered is no longer valid");
     cy.get(".govuk-error-message").contains("The document entered is no longer valid");
   });
 });
@@ -331,6 +331,59 @@ describe("SD: check-your-information page - container numbers for train departur
       .find("a")
       .contains("Change")
       .should("have.attr", "href");
+  });
+});
+
+describe("SD: check-your-information page - container numbers with empty values filtering", () => {
+  it("should filter out empty strings from container numbers array", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationTruckWithEmptyContainers,
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    // Should only display non-empty container numbers
+    cy.contains("dt", "Shipping container identification number (optional)")
+      .next("dd")
+      .should("contain", "CONT123")
+      .and("contain", "CONT123, CONT456")
+      .and("not.contain", ", ,")
+      .and("not.contain", ",,");
+  });
+
+  it("should filter out whitespace-only strings from container numbers array", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationTrainWithWhitespaceContainers,
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    // Should only display trimmed non-empty container numbers
+    cy.contains("dt", "Shipping container identification number (optional)")
+      .next("dd")
+      .should("contain", "TRAIN001")
+      .and("contain", "TRAIN002")
+      .and("not.contain", "  ,");
+  });
+
+  it("should not display container field when all values are empty", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationTruckWithAllEmptyContainers,
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    // Container identification number row should not be displayed when all values are empty
+    cy.contains("dt", "Shipping container identification number (optional)").should("not.exist");
+  });
+
+  it("should display single container number without trailing comma", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationTruckWithSingleContainer,
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    cy.contains("dt", "Shipping container identification number (optional)")
+      .next("dd")
+      .should("have.text", "CONT123")
+      .and("not.contain", ",");
   });
 });
 
