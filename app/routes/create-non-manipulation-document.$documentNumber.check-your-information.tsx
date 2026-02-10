@@ -134,6 +134,13 @@ const CheckYourInformation = () => {
       checkInformationHeader="sdSummaryPageDocumentDetailsHeader"
       csrf={csrf}
       journey="storageNotes"
+      userReference={storageDocument.userReference}
+      userReferenceLabel={t("commonProgressPageExporterYourReference", { ns: "progress" })}
+      userReferenceChangeRoute={`/create-non-manipulation-document/${documentNumber}/add-your-reference?nextUri=${route(
+        "/create-non-manipulation-document/:documentNumber/check-your-information",
+        { documentNumber }
+      )}`}
+      notProvidedText={t("sdNotProvided", { ns: "sdCheckYourInformation" })}
     >
       <>
         <CheckInfoExporterDetails
@@ -145,13 +152,6 @@ const CheckYourInformation = () => {
           exporterDetailsRoute="/create-non-manipulation-document/:documentNumber/add-exporter-details"
           checkInfoRoute="/create-non-manipulation-document/:documentNumber/check-your-information"
           documentNumber={documentNumber}
-          userReference={storageDocument.userReference}
-          userReferenceLabel={t("commonProgressPageExporterYourReference", { ns: "progress" })}
-          userReferenceChangeRoute={`/create-non-manipulation-document/${documentNumber}/add-your-reference?nextUri=${route(
-            "/create-non-manipulation-document/:documentNumber/check-your-information",
-            { documentNumber }
-          )}`}
-          notProvidedText={t("sdNotProvided", { ns: "sdCheckYourInformation" })}
         />
 
         <h2 className="govuk-heading-l">{t("sdCheckYourInformationProudcts", { ns: "sdCheckYourInformation" })}</h2>
