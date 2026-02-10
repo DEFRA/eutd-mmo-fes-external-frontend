@@ -383,8 +383,9 @@ export const displayErrorMessagesInOrder = (
   errorKeysInOrder: string[]
 ): Array<IErrorsTransformed[keyof IErrorsTransformed]> => {
   const sortedData = errorKeysInOrder.flatMap((key) => {
-    const matchingKey = Object.keys(errors).find((objKey) => objKey.startsWith(key));
-    return matchingKey ? [errors[matchingKey]] : [];
+    // Find ALL matching keys, not just the first one
+    const matchingKeys = Object.keys(errors).filter((objKey) => objKey.startsWith(key));
+    return matchingKeys.map((matchingKey) => errors[matchingKey]);
   });
   return sortedData;
 };
