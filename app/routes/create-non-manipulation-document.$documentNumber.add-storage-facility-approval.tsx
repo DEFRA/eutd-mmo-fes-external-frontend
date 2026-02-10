@@ -83,7 +83,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   const { _action, ...values } = Object.fromEntries(form);
 
-  const saveToRedisIfErrors = false;
+  const isDraft = _action === "saveAsDraft";
+  const saveToRedisIfErrors = isDraft;
   const errorResponse = await updateStorageDocumentFacility(
     bearerToken,
     documentNumber,
@@ -97,7 +98,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   );
 
   const session = await getSessionFromRequest(request);
-  const isDraft = _action === "saveAsDraft";
   if (isDraft) {
     return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
       headers: { "Set-Cookie": await commitSession(session) },

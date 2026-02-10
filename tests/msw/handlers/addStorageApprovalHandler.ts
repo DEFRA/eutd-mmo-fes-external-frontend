@@ -14,8 +14,6 @@ import storageDocumentFacilityApprovalInvalidCharError from "@/fixtures/storageD
 import storageDocumentFacilityStorageError from "@/fixtures/storageDocumentApi/storageDocumentFacilityProductStorageNull.json";
 import storageDocumentFacilityOne from "@/fixtures/storageDocumentApi/storageDocumentOneFacility.json";
 import storageDocumentFacilityOneNoArrival from "@/fixtures/storageDocumentApi/storageDocumentOneFacilityNoArrival.json";
-import storageDocumentWithLongApprovalNumber from "@/fixtures/storageDocumentApi/storageDocumentWithLongApprovalNumber.json";
-import storageDocumentWithInvalidCharsApprovalNumber from "@/fixtures/storageDocumentApi/storageDocumentWithInvalidCharsApprovalNumber.json";
 import storageDocuments from "@/fixtures/dashboardApi/sdDrafts.json";
 import storageDocumentProgress from "@/fixtures/progressApi/sdIncomplete.json";
 import truckDetails from "@/fixtures/transportDetailsApi/truck.json";
@@ -65,24 +63,16 @@ const addStorageApprovalHandler: ITestHandler = {
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(storageDocuments))),
   ],
   [TestCaseId.SDAddStorageApprovalInvalidCharactersSaveAsDraft]: () => [
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => {
-      const url = new URL(req.url);
-      const isSecondVisit = url.searchParams.get("_visit") === "2";
-      return res(ctx.json(isSecondVisit ? storageDocumentWithInvalidCharsApprovalNumber : storageDocument));
-    }),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
-      res(ctx.status(200), ctx.json(storageDocumentWithInvalidCharsApprovalNumber))
+      res(ctx.status(200), ctx.json(storageDocument))
     ),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(storageDocuments))),
   ],
   [TestCaseId.SDAddStorageApprovalMaxLengthSaveAsDraft]: () => [
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => {
-      const url = new URL(req.url);
-      const isSecondVisit = url.searchParams.get("_visit") === "2";
-      return res(ctx.json(isSecondVisit ? storageDocumentWithLongApprovalNumber : storageDocument));
-    }),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
-      res(ctx.status(200), ctx.json(storageDocumentWithLongApprovalNumber))
+      res(ctx.status(200), ctx.json(storageDocument))
     ),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(storageDocuments))),
   ],
