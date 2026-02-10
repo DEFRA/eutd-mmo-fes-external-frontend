@@ -19,6 +19,7 @@ export enum TestCaseId {
   CCExporterManualAddressWithErrorsArray = "CCExporterManualAddressWithErrorsArray",
   CCExporterManualAddressWithSubBuildingErrorArray = "CCExporterManualAddressWithSubBuildingErrorArray",
   CCExporterManualAddressWithOnlyRequiredArray = "CCExporterManualAddressWithOnlyRequiredArray",
+  CCExporterManualAddressWithAllErrorsArray = "CCExporterManualAddressWithAllErrorsArray",
   StartJourney = "startJourney",
   StartJourneyFailed = "startJourneyFailed",
   StartJourneyFailedNoErrors = "startJourneyFailedNoErrors",
