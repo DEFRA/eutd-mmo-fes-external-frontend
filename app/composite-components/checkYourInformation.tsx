@@ -9,11 +9,47 @@ import * as React from "react";
 import moment from "moment";
 import capitalize from "lodash/capitalize";
 
+type UserReferenceRowProps = {
+  userReferenceLabel: string;
+  userReference?: string;
+  userReferenceChangeRoute?: string;
+  notProvidedText?: string;
+  changeLinkText: string;
+};
+
+const UserReferenceRow = ({
+  userReferenceLabel,
+  userReference,
+  userReferenceChangeRoute,
+  notProvidedText,
+  changeLinkText,
+}: UserReferenceRowProps) => (
+  <div className="govuk-summary-list__row">
+    <dt className="govuk-summary-list__key govuk-!-width-one-half">{userReferenceLabel}</dt>
+    <dd className="govuk-summary-list__value">
+      {userReference && !isEmpty(userReference) ? userReference : notProvidedText}
+    </dd>
+    {userReferenceChangeRoute && (
+      <dd className="govuk-summary-list__actions">
+        <a id="yourReferenceChangeLink" className="govuk-link" href={userReferenceChangeRoute}>
+          {changeLinkText}
+          <span className="govuk-visually-hidden"> {lowerCase(userReferenceLabel)}</span>
+        </a>
+      </dd>
+    )}
+  </div>
+);
+
 type CheckYourInformationDocumentNumberProps = {
   checkInformationHeader?: string;
   documentNumberTitle: string;
   documentNumber: string;
   renderWrapper?: boolean;
+  userReference?: string;
+  userReferenceLabel?: string;
+  userReferenceChangeRoute?: string;
+  notProvidedText?: string;
+  changeLinkText?: string;
 };
 
 export const CheckYourInformationDocumentNumber = ({
@@ -21,12 +57,28 @@ export const CheckYourInformationDocumentNumber = ({
   documentNumberTitle,
   documentNumber,
   renderWrapper = true,
+  userReference,
+  userReferenceLabel,
+  userReferenceChangeRoute,
+  notProvidedText,
+  changeLinkText,
 }: CheckYourInformationDocumentNumberProps) => {
   const content = (
-    <div className="govuk-summary-list__row">
-      <dt className="govuk-summary-list__key govuk-!-width-one-half">{documentNumberTitle}</dt>
-      <dd className="govuk-summary-list__value">{documentNumber}</dd>
-    </div>
+    <>
+      <div className="govuk-summary-list__row">
+        <dt className="govuk-summary-list__key govuk-!-width-one-half">{documentNumberTitle}</dt>
+        <dd className="govuk-summary-list__value">{documentNumber}</dd>
+      </div>
+      {userReferenceLabel && changeLinkText && (
+        <UserReferenceRow
+          userReferenceLabel={userReferenceLabel}
+          userReference={userReference}
+          userReferenceChangeRoute={userReferenceChangeRoute}
+          notProvidedText={notProvidedText}
+          changeLinkText={changeLinkText}
+        />
+      )}
+    </>
   );
 
   if (!renderWrapper) return content;
@@ -74,20 +126,13 @@ export const CheckInfoExporterDetails = ({
     <h2 className="govuk-heading-l">{checkExporterDetailsHeader}</h2>
     <dl className="govuk-summary-list govuk-!-margin-bottom-5">
       {userReferenceLabel && (
-        <div className="govuk-summary-list__row">
-          <dt className="govuk-summary-list__key govuk-!-width-one-half">{userReferenceLabel}</dt>
-          <dd className="govuk-summary-list__value">
-            {userReference && !isEmpty(userReference) ? userReference : notProvidedText}
-          </dd>
-          {userReferenceChangeRoute && (
-            <dd className="govuk-summary-list__actions">
-              <a id="yourReferenceChangeLink" className="govuk-link" href={userReferenceChangeRoute}>
-                {changeLinkText}
-                <span className="govuk-visually-hidden"> {lowerCase(userReferenceLabel)}</span>
-              </a>
-            </dd>
-          )}
-        </div>
+        <UserReferenceRow
+          userReferenceLabel={userReferenceLabel}
+          userReference={userReference}
+          userReferenceChangeRoute={userReferenceChangeRoute}
+          notProvidedText={notProvidedText}
+          changeLinkText={changeLinkText}
+        />
       )}
       <div className="govuk-summary-list__row">
         <dt className="govuk-summary-list__key govuk-!-width-one-half">{companyNameTitle}</dt>
@@ -394,6 +439,10 @@ type CheckYourInformationLayoutProps = {
   checkInformationHeader: string;
   csrf: string;
   journey: Journey;
+  userReference?: string;
+  userReferenceLabel?: string;
+  userReferenceChangeRoute?: string;
+  notProvidedText?: string;
 };
 
 export const CheckYourInformationLayout = ({
@@ -409,6 +458,10 @@ export const CheckYourInformationLayout = ({
   checkInformationHeader,
   csrf,
   journey,
+  userReference,
+  userReferenceLabel,
+  userReferenceChangeRoute,
+  notProvidedText,
 }: CheckYourInformationLayoutProps) => {
   const { t } = useTranslation(["common", "pscheckYourInformation", "sdCheckYourInformation"]);
   return (
@@ -430,6 +483,11 @@ export const CheckYourInformationLayout = ({
                 checkInformationHeader={t(checkInformationHeader, { ns: headingTranslation })}
                 documentNumberTitle={t("commonDocumentNumber", { ns: "common" })}
                 documentNumber={documentNumber}
+                userReference={userReference}
+                userReferenceLabel={userReferenceLabel}
+                userReferenceChangeRoute={userReferenceChangeRoute}
+                notProvidedText={notProvidedText}
+                changeLinkText={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
               />
             )}
             {children}
