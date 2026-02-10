@@ -390,5 +390,17 @@ export const displayErrorMessagesInOrder = (
   return sortedData;
 };
 
-export const displayErrorTransformedMessages = (errors: IErrorsTransformed): IError[] =>
-  Object.keys(errors).map((key: string) => errors[key]);
+export const displayErrorTransformedMessages = (errors: IErrorsTransformed): IError[] => {
+  const allErrors = Object.keys(errors).map((key: string) => errors[key]);
+
+  // Deduplicate errors with the same message (for addressFirstPart composite validation)
+  // Keep only the first occurrence (buildingNumber) so error summary shows it once
+  const seen = new Set<string>();
+  return allErrors.filter((error) => {
+    if (seen.has(error.message)) {
+      return false;
+    }
+    seen.add(error.message);
+    return true;
+  });
+};
