@@ -1,8 +1,5 @@
 {
-  "error.containerNumber.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-  "error.containerNumber.any.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-  "error.containerNumber.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-  "error.containerNumber.string.max": "commonAddTransportationDetailsPlaneContainerMaxCharError",
-  "error.containerNumber.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
-  "error.containerNumber.string.pattern.base": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError"
+  "containerNumbers.0": "error.containerNumbers.0.any.required",
+  "containerNumbers.1": "error.containerNumbers.1.string.max",
+  "containerNumbers.2": "error.containerNumbers.2.string.pattern.base"
 }
