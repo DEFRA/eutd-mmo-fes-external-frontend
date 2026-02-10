@@ -128,7 +128,7 @@ const CheckYourInformation = () => {
       notificationMessages={notificationMessages}
       hasErrors={hasErrors}
       errors={errors}
-      backUrl={`/create-non-manipulation-document/:documentNumber/${backUri(transport, "storageNotes")}`}
+      backUrl={`/create-non-manipulation-document/:documentNumber/progress`}
       summaryHeading="sdSummaryPageHeading"
       headingTranslation="sdCheckYourInformation"
       checkInformationHeader="sdSummaryPageDocumentDetailsHeader"

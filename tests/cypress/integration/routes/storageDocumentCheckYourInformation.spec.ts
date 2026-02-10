@@ -1,6 +1,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 const sdPageUrl = "create-non-manipulation-document/GBR-2022-SD-F71D98A30/check-your-information";
+const sdProgressUrl = "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/progress";
 
 describe("SD: check-your-information page", () => {
   beforeEach(() => {
@@ -8,6 +9,12 @@ describe("SD: check-your-information page", () => {
       testCaseId: TestCaseId.SDCheckYourInformation,
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
+  });
+
+  it("should render the correct back link", () => {
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href", sdProgressUrl);
   });
 
   it("should display the correct page heading", () => {
