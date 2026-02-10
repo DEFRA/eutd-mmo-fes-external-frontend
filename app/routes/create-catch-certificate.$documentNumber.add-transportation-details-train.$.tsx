@@ -54,6 +54,7 @@ const TrainTransportDetailsPage = () => {
 
   const errorKeysInOrder = [
     "railwayBillNumber",
+    "departurePlace",
     "containerNumbers.0",
     "containerNumbers.1",
     "containerNumbers.2",
@@ -64,7 +65,6 @@ const TrainTransportDetailsPage = () => {
     "containerNumbers.7",
     "containerNumbers.8",
     "containerNumbers.9",
-    "departurePlace",
     "freightBillNumber",
   ];
 
