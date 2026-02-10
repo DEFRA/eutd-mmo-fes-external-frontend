@@ -487,11 +487,7 @@ export const CheckYourInformationLayout = ({
                 userReferenceLabel={userReferenceLabel}
                 userReferenceChangeRoute={userReferenceChangeRoute}
                 notProvidedText={notProvidedText}
-                changeLinkText={
-                  journey === "processingStatement"
-                    ? t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })
-                    : t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })
-                }
+                changeLinkText={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
               />
             )}
             {children}
