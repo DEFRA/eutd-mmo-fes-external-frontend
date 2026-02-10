@@ -21,7 +21,7 @@ describe("ProgressPage - Incomplete Application", () => {
 
   it("should display the correct headings", () => {
     cy.contains("[data-testid='sd-progress-titling']", "Your Progress");
-    cy.contains("[data-testid='sd-progress-heading']", "Storage Document application: GBR-2021-SD-8EEB7E123");
+    cy.contains("[data-testid='sd-progress-heading']", "Non-manipulation Document application: GBR-2021-SD-8EEB7E123");
   });
 
   it("should display Application incomplete when NOT all required sections have been completed", () => {
@@ -240,7 +240,7 @@ describe("should display the notificationBanner", () => {
     cy.get("#copyDocumentAcknowledged").click({ force: true });
     cy.get('[data-testid="continue"]').click({ force: true });
     cy.get(".govuk-notification-banner__heading").contains(
-      "This draft was created by copying document GBR-2022-SD-F71D98A30. You are reminded that you must not use a storage document or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
+      "This draft was created by copying document GBR-2022-SD-F71D98A30. You are reminded that you must not use a non-manipulation document or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
     );
   });
 });

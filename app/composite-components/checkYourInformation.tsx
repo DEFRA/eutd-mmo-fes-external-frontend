@@ -68,7 +68,9 @@ export const CheckInfoExporterDetails = ({
       {userReferenceLabel && (
         <div className="govuk-summary-list__row">
           <dt className="govuk-summary-list__key govuk-!-width-one-half">{userReferenceLabel}</dt>
-          <dd className="govuk-summary-list__value">{!isEmpty(userReference) ? userReference : notProvidedText}</dd>
+          <dd className="govuk-summary-list__value">
+            {userReference && !isEmpty(userReference) ? userReference : notProvidedText}
+          </dd>
           {userReferenceChangeRoute && (
             <dd className="govuk-summary-list__actions">
               <a id="yourReferenceChangeLink" className="govuk-link" href={userReferenceChangeRoute}>

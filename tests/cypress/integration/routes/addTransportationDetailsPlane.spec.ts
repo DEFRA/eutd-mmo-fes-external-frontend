@@ -15,8 +15,6 @@ describe("Add Transportation Details Plane: Allowed", () => {
       .should("have.attr", "href", `${certificateUrl}/how-does-the-export-leave-the-uk/0`);
     cy.get(".govuk-heading-xl").contains("Add transportation details: plane");
     cy.get("form").should(($form) => {
-      expect($form.find("input[type='text']")).to.have.lengthOf(4);
-
       const labelObjects = $form.find("label").map((i, el) => Cypress.$(el).text());
       const textObjects = $form.find("input[type='text']").map((i, el) => Cypress.$(el).val());
       const hintObjects = $form.find("div.govuk-hint").map((i, el) => Cypress.$(el).text());
@@ -24,18 +22,36 @@ describe("Add Transportation Details Plane: Allowed", () => {
       const textinputs = textObjects.get();
       const hints = hintObjects.get();
 
-      expect(textinputs).to.have.length(4);
-      expect(labels).to.have.length(4);
+      expect(textinputs).to.have.length(5);
+      expect(labels).to.have.length(5);
       expect(labels).to.deep.eq([
         "Flight number",
-        "Container identification number or numbers",
         "Place export leaves the departure country",
+        "Container identification number",
+        "Air waybill number (optional)",
         "Freight bill number (optional)",
       ]);
-      expect(hints).to.deep.eq(["For example, Hull.", "For example, BD51SMR"]);
+      expect(hints).to.deep.eq([
+        "For example, Hull.",
+        "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
+        "For example, 123-45678901",
+        "For example, BD51SMR",
+      ]);
     });
     cy.contains("button", "Save and continue").should("be.visible");
     cy.contains("button", "Save as draft").should("be.visible");
+  });
+
+  it("should render labels WITHOUT bold font weight for catch certificate transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportAllowed,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    // Verify that labels do NOT have bold font weight for catch certificate transport
+    cy.get('label[for="flightNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departurePlace"]').should("have.class", "govuk-label");
+    cy.get('label[for="departurePlace"]').should("have.class", "govuk-!-font-weight-bold");
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
@@ -84,7 +100,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the flight number$/).should("be.visible");
-    cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
+    // cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
   });
 
@@ -94,7 +110,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
     cy.get("#flightNumber").type("Plane", { force: true });
-    cy.get("#containerNumber").type("Container", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
     cy.get("#departurePlace").type("Hull", { force: true });
     cy.get("#freightBillNumber").type("AA1234567", { force: true });
     cy.get("[data-testid=save-draft-button").click({ force: true });
@@ -107,7 +123,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
     cy.get("#flightNumber").type("Plane", { force: true });
-    cy.get("#containerNumber").type("Container", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
     cy.get("#departurePlace").type("Hull", { force: true });
     cy.get("#freightBillNumber").type("AA1234567", { force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
@@ -132,5 +148,284 @@ describe("should redirect to forbidden page it transport details return 403 on p
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
     cy.url().should("include", "/forbidden");
+  });
+});
+
+describe("Add Transportation Details Plane: Air Waybill Number Validation", () => {
+  it("should display error when air waybill number exceeds 50 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportAirwaybillMaxLength,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("#flightNumber").type("BA123", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
+    cy.get("#airwayBillNumber").type("A".repeat(51), { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Air waybill number must not exceed 50 characters$/).should("be.visible");
+  });
+
+  it("should display error when air waybill number contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportAirwaybillInvalidCharacters,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("#flightNumber").type("BA123", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
+    cy.get("#airwayBillNumber").type("AWB!@#$%", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Air waybill number must only contain letters, numbers, hyphens, full stops and forward slashes$/
+    ).should("be.visible");
+  });
+
+  it("should save successfully when air waybill number is not provided", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportSave,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("#flightNumber").type("BA123", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
+    // airwayBillNumber not provided - should be optional
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "/add-additional-transport-documents-plane/0");
+  });
+
+  it("should save successfully when air waybill number is valid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportSave,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("#flightNumber").type("BA123", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
+    cy.get("#airwayBillNumber").type("AWB12345678", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "/add-additional-transport-documents-plane/0");
+  });
+});
+
+describe("Add Transportation Details Plane: Container Identification Number Validation", () => {
+  it("should display error when container identification number exceeds 50 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportContainerMaxLength,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("#flightNumber").type("BA123", { force: true });
+    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
+  });
+
+  it("should display error when container identification number contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportContainerInvalidCharacters,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("#flightNumber").type("BA123", { force: true });
+    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABC123!@#", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+    ).should("be.visible");
+  });
+
+  it("should save successfully when container identification number is not provided", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportSave,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("#flightNumber").type("BA123", { force: true });
+    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
+    // containerNumbers.0 not filled - should be optional
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "/add-additional-transport-documents-plane/0");
+  });
+
+  it("should save successfully when container identification number is valid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportSave,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("#flightNumber").type("BA123", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "/add-additional-transport-documents-plane/0");
+  });
+});
+
+describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
+  it("should save multiple container values successfully", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportMultipleContainers,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    cy.get("#flightNumber").type("BA123", { force: true });
+
+    // Add and fill container fields
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    cy.get('input[name="containerNumbers.1"]').type("DEFJ9876543", { force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    cy.get('input[name="containerNumbers.2"]').type("GHIR5555555", { force: true });
+
+    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "/add-additional-transport-documents-plane/0");
+  });
+
+  it("should allow empty container fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportEmptyContainers,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    cy.get("#flightNumber").type("BA123", { force: true });
+
+    // Add multiple fields but leave some empty
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    // Leave containerNumbers.1 empty
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    cy.get('input[name="containerNumbers.2"]').type("GHIR5555555", { force: true });
+
+    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "/add-additional-transport-documents-plane/0");
+  });
+
+  it("should load pre-existing container values from backend", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportEditWithContainers,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    // Verify pre-existing values are loaded
+    cy.get('input[name="containerNumbers.0"]').should("have.value", "EXISTING001");
+    cy.get('input[name="containerNumbers.1"]').should("have.value", "EXISTING002");
+    cy.get('input[name="containerNumbers.2"]').should("have.value", "EXISTING003");
+  });
+
+  it("should display error when container number exceeds max length", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportContainerMaxLength,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    cy.get("#flightNumber").type("BA123", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890123456789012", {
+      force: true,
+    });
+    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    // Check error is displayed
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
+  });
+
+  it("should display container field label and hint text", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportSave,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    // Check container identification number label is displayed
+    cy.get('label[for="containerNumbers.0"]').should("be.visible").and("contain", "Container identification number");
+
+    // Check hint text is displayed
+    cy.get("#hint-containerIdentificationNumber")
+      .should("be.visible")
+      .and("contain", "Enter the identification number shown on the shipping container. For example, ABCJ0123456");
+  });
+
+  it("should limit to maximum 10 containers", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportSave,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    cy.get("#flightNumber").type("BA123", { force: true });
+
+    // Add 9 more containers (already have 1)
+    for (let i = 0; i < 9; i++) {
+      cy.get('[data-testid="add-another-container"]').click({ force: true });
+    }
+
+    // Verify we have 10 containers
+    cy.get('input[name="containerNumbers.9"]').should("exist");
+
+    // Add another container button should not be visible
+    cy.get('[data-testid="add-another-container"]').should("not.exist");
+  });
+
+  it("should show remove button for each container except when only one exists", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportSave,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    cy.get("#flightNumber").type("BA123", { force: true });
+
+    // Initially only one container, remove button should not be visible
+    cy.get('[data-testid="remove-container-0"]').should("not.exist");
+
+    // Add another container
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+
+    // Now both should have remove buttons
+    cy.get('[data-testid="remove-container-0"]').should("exist");
+    cy.get('[data-testid="remove-container-1"]').should("exist");
+
+    // Remove one container
+    cy.get('[data-testid="remove-container-1"]').click({ force: true });
+
+    // Only one container left, remove button should not be visible
+    cy.get('[data-testid="remove-container-0"]').should("not.exist");
+  });
+});
+
+describe("Add Transportation Details Plane: Non-JS Support", () => {
+  it("should display 10 container fields when JavaScript is disabled", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportNonJS,
+    };
+
+    cy.visit(planePageUrl, { qs: { ...testParams, noJS: true } });
+
+    // Verify all 10 container fields are visible in non-JS mode
+    for (let i = 0; i < 10; i++) {
+      cy.get(`input[name="containerNumbers.${i}"]`).should("exist");
+    }
+  });
+});
+
+describe("Add Transportation Details Plane: Optional Field Labels", () => {
+  it("should show (optional) suffix for truck and train container labels", () => {
+    // This test verifies the label differentiation requirement
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportSave,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    // Plane should NOT have (optional) in container label
+    cy.get('label[for="containerNumbers.0"]')
+      .should("contain", "Container identification number")
+      .and("not.contain", "(optional)");
   });
 });

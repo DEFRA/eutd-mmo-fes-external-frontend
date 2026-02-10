@@ -143,7 +143,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
               />
               {transport.containerIdentificationNumber && (
                 <SummaryListRow
-                  keyText={t("addTransportationDetailsContainerIdentificationNumberText", { ns: "transportation" })}
+                  keyText={t("addTransportationDetailsContainerIdentificationNumberTruck", { ns: "transportation" })}
                   value={transport.containerIdentificationNumber}
                   actions={generateActions(
                     isLocked,
@@ -153,7 +153,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                         documentNumber,
                       }
                     )}#containerIdentificationNumber`,
-                    "addTransportationDetailsContainerIdentificationNumberText",
+                    "addTransportationDetailsContainerIdentificationNumberTruck",
                     "transportation",
                     t,
                     "change-container-truck"
@@ -161,7 +161,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                 />
               )}
               <SummaryListRow
-                keyText={t("addTransportationDetailsPlaceExportLeavesUK", { ns: "transportation" })}
+                keyText={t("addTransportationDetailsPlaceExportLeavesDepartureCountry", { ns: "transportation" })}
                 value={transport.departurePlace}
                 actions={generateActions(
                   isLocked,
@@ -225,13 +225,13 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                   documentNumber,
                 }
               )}#containerNumber`,
-              "addTransportationDetailsFlightnumber",
+              "addTransportationDetailsContainerIdentificationText",
               "transportation",
               t
             )}
           />
           <SummaryListRow
-            keyText={t("addTransportationDetailsPlaceExportLeavesUK", { ns: "transportation" })}
+            keyText={t("addTransportationDetailsPlaceExportLeavesDepartureCountry", { ns: "transportation" })}
             value={transport.departurePlace}
             actions={generateActions(
               isLocked,
@@ -283,7 +283,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
             )}
           />
           <SummaryListRow
-            keyText={t("addTransportationDetailsPlaceExportLeavesUK", { ns: "transportation" })}
+            keyText={t("addTransportationDetailsPlaceExportLeavesDepartureCountry", { ns: "transportation" })}
             value={transport.departurePlace}
             actions={generateActions(
               isLocked,
@@ -300,7 +300,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
           />
           {transport.containerIdentificationNumber && (
             <SummaryListRow
-              keyText={t("addTransportationDetailsContainerIdentificationNumberText", { ns: "transportation" })}
+              keyText={t("addTransportationDetailsContainerIdentificationNumberTrain", { ns: "transportation" })}
               value={transport.containerIdentificationNumber}
               actions={generateActions(
                 isLocked,
@@ -310,7 +310,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                     documentNumber,
                   }
                 )}#containerIdentificationNumber`,
-                "addTransportationDetailsContainerIdentificationNumberText",
+                "addTransportationDetailsContainerIdentificationNumberTrain",
                 "transportation",
                 t,
                 "change-container-train"
@@ -370,7 +370,9 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
             )}
           />
           <SummaryListRow
-            keyText={t("addTransportationDetailsContainerIdentificationText", { ns: "transportation" })}
+            keyText={t("addTransportationDetailsContainerIdentificationNumberContainerVessel", {
+              ns: "transportation",
+            })}
             value={transport.containerNumber}
             actions={generateActions(
               isLocked,
@@ -380,13 +382,13 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                   documentNumber,
                 }
               )}#containerNumber`,
-              "addTransportationDetailsVesselNameText",
+              "addTransportationDetailsContainerIdentificationNumberContainerVessel",
               "transportation",
               t
             )}
           />
           <SummaryListRow
-            keyText={t("addTransportationDetailsPlaceExportLeavesUK", { ns: "transportation" })}
+            keyText={t("addTransportationDetailsPlaceExportLeavesDepartureCountry", { ns: "transportation" })}
             value={transport.departurePlace}
             actions={generateActions(
               isLocked,
@@ -516,6 +518,7 @@ const CheckYourInformation = () => {
     hasSystemFailure,
     validationErrors,
     csrf,
+    userReference,
   } = useLoaderData();
   const exporterDetails: Exporter = exporter.model;
 
@@ -649,6 +652,34 @@ const CheckYourInformation = () => {
             <dl className="govuk-summary-list govuk-!-margin-bottom-5">
               <div className="govuk-summary-list__row">
                 <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                  {t("commonProgressPageExporterYourReference", { ns: "progress" })}
+                </dt>
+                <dd className="govuk-summary-list__value">
+                  {userReference && userReference.trim() !== ""
+                    ? userReference
+                    : t("commonNotProvided", { ns: "common" })}
+                </dd>
+                <dd className="govuk-summary-list__actions">
+                  {!isLocked && (
+                    <a
+                      id="yourReferenceChangeLink"
+                      className="govuk-link"
+                      href={`/create-catch-certificate/${documentNumber}/add-your-reference?nextUri=${route(
+                        "/create-catch-certificate/:documentNumber/check-your-information",
+                        { documentNumber }
+                      )}`}
+                    >
+                      {t("commonWhatExportersAddressChangeLink", { ns: "common" })}
+                      <span className="govuk-visually-hidden">
+                        {" "}
+                        {lowerCase(t("commonProgressPageExporterYourReference", { ns: "progress" }))}
+                      </span>
+                    </a>
+                  )}
+                </dd>
+              </div>
+              <div className="govuk-summary-list__row">
+                <dt className="govuk-summary-list__key govuk-!-width-one-half">
                   {t("ccAddExporterDetailsExporterNameOfPersonResponsible", { ns: "common" })}
                 </dt>
                 <dd className="govuk-summary-list__value">{exporterDetails.exporterFullName}</dd>
@@ -772,6 +803,15 @@ const CheckYourInformation = () => {
             <span className="govuk-visually-hidden">Warning</span>
             {t("ccSummaryPageWarning", { ns: "checkYourInformation" })}
           </strong>
+        </div>
+        <div className="govuk-!-margin-top-6">
+          <h2 className="govuk-heading-l">{t("ccCreateCertificateHeader", { ns: "checkYourInformation" })}</h2>
+          <p>{t("ccCreateCertificateIntro", { ns: "checkYourInformation" })}</p>
+          <ul className="govuk-list govuk-list--bullet">
+            <li>{t("ccCreateCertificateListOne", { ns: "checkYourInformation" })}</li>
+            <li>{t("ccCreateCertificateListTwo", { ns: "checkYourInformation" })}</li>
+            <li>{t("ccCreateCertificateListThree", { ns: "checkYourInformation" })}</li>
+          </ul>
         </div>
         <input type="hidden" name="journey" value={journey} />
         <input type="hidden" name="noOfVessels" value={totalNumberOfVessels} />

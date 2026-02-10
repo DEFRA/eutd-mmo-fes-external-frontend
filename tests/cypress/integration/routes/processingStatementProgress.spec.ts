@@ -153,11 +153,19 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
       cy.get('[data-testid="continue-button"]').click({ force: true });
       cy.url().should("include", "/progress");
 
-      // Check for error summary
+      // Check for error summary at the top
       cy.contains("h2", /^There is a problem$/).should("be.visible");
 
-      // Check for specific product validation error
+      // Check for specific product validation error in error summary
       cy.contains("a", /product details section/).should("be.visible");
+
+      // Check for inline error above product details section
+      cy.get('[data-testid="progress-processedProductDetails-wrapper"]')
+        .should("have.class", "govuk-form-group--error")
+        .within(() => {
+          cy.get(".govuk-error-message").should("be.visible");
+          cy.contains(".govuk-error-message", /product details section/).should("be.visible");
+        });
     });
 
     it("should remain on progress page after validation error", () => {
@@ -183,11 +191,19 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
       cy.get('[data-testid="continue-button"]').click({ force: true });
       cy.url().should("include", "/progress");
 
-      // Check for error summary
+      // Check for error summary at the top
       cy.contains("h2", /^There is a problem$/).should("be.visible");
 
-      // Check for specific product validation error
+      // Check for specific product validation error in error summary
       cy.contains("a", /product details section/).should("be.visible");
+
+      // Check for inline error above product details section
+      cy.get('[data-testid="progress-processedProductDetails-wrapper"]')
+        .should("have.class", "govuk-form-group--error")
+        .within(() => {
+          cy.get(".govuk-error-message").should("be.visible");
+          cy.contains(".govuk-error-message", /product details section/).should("be.visible");
+        });
     });
 
     it("should remain on progress page after validation error", () => {
@@ -218,6 +234,48 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     it("should not display validation errors", () => {
       cy.get('[data-testid="continue-button"]').click({ force: true });
       cy.contains("h2", /^There is a problem$/).should("not.exist");
+    });
+  });
+
+  describe("Display multiple inline errors when sections incomplete AND products lack catches", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.PSIncompleteProgress,
+      };
+      cy.visit(progressUrl, { qs: { ...testParams } });
+    });
+
+    it("should display multiple inline errors for incomplete sections", () => {
+      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.url().should("include", "/progress");
+
+      // Check for error summary at the top
+      cy.contains("h2", /^There is a problem$/).should("be.visible");
+
+      // Check for exporter error - both in summary and inline
+      cy.contains("a", /exporter details section/).should("be.visible");
+      cy.get('[data-testid="progress-exporter-wrapper"]')
+        .should("have.class", "govuk-form-group--error")
+        .within(() => {
+          cy.get(".govuk-error-message").should("be.visible");
+        });
+
+      // Check for other incomplete section errors also display inline
+      cy.get('[data-testid="progress-processingPlant-wrapper"]')
+        .should("have.class", "govuk-form-group--error")
+        .within(() => {
+          cy.get(".govuk-error-message").should("be.visible");
+        });
+    });
+
+    it("should ensure all errors are accessible and visible", () => {
+      cy.get('[data-testid="continue-button"]').click({ force: true });
+
+      // Verify error summary links are functional
+      cy.get(".govuk-error-summary__list a").first().click();
+
+      // Should focus on the first error field
+      cy.url().should("include", "/progress");
     });
   });
 });

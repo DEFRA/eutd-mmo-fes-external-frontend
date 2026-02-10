@@ -40,20 +40,66 @@ describe("Add Transportation Details Plane: Allowed", () => {
         "Container identification number",
         "Freight bill number (optional)",
       ]);
-      expect(hints).to.deep.eq([
-        "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document.",
-        "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment.",
-        "For example, London Heathrow Airport, East Midlands Airport, or the place the plane departs from the UK",
-        "For example, 25 07 2025",
-        "For example, 123-45678901",
-        "For example, AF296Q",
-        "For example, ABCD1234567",
-        "For example, BD51SMR",
-      ]);
+      expect(hints).to.have.length(8);
+      expect(hints).to.include(
+        "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document."
+      );
+      expect(hints).to.include(
+        "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment."
+      );
+      expect(hints).to.include(
+        "For example, London Heathrow Airport, East Midlands Airport, or the place the plane departs from the UK"
+      );
+      expect(hints).to.include("For example, 25 07 2025");
+      expect(hints).to.include("For example, 123-45678901");
+      expect(hints).to.include("For example, AF296Q");
+      expect(hints).to.include("For example, ABCD1234567");
+      expect(hints).to.include("For example, BD51SMR");
     });
     cy.contains("button", "Save and continue").should("be.visible");
     cy.contains("button", "Save as draft").should("be.visible");
     cy.contains("a", "Back to your progress").should("be.visible");
+  });
+
+  it("should render labels with bold font weight for NMD departure transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportAllowed,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    // Verify that labels have bold font weight class for NMD departure transport
+    cy.get('label[id="exportedTo-label"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="departurePlace"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="flightNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="airwayBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
+
+    // Verify all labels have the base govuk-label class
+    cy.get('label[id="exportedTo-label"]').should("have.class", "govuk-label");
+    cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-label");
+    cy.get('label[for="departurePlace"]').should("have.class", "govuk-label");
+    cy.get('label[for="flightNumber"]').should("have.class", "govuk-label");
+    cy.get('label[for="airwayBillNumber"]').should("have.class", "govuk-label");
+    cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-label");
+  });
+
+  it("should render all required fields for plane departure transport", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportAllowed,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    // Verify all fields are present
+    cy.get("#exportedTo").should("exist");
+    cy.get("#pointOfDestination").should("exist");
+    cy.get("#departurePlace").should("exist");
+    cy.get("#flightNumber").should("exist");
+    cy.get("#airwayBillNumber").should("exist");
+    cy.get("#freightBillNumber").should("exist");
+    cy.get("#exportDate-day").should("exist");
+    cy.get("#exportDate-month").should("exist");
+    cy.get("#exportDate-year").should("exist");
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {

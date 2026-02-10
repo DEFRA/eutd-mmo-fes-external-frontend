@@ -27,14 +27,14 @@ import {
   createCSRFToken,
   validateCSRFToken,
 } from "~/.server";
-import { getAddressOne, getTransformedError } from "~/helpers";
+import { getAddressOne, getTransformedError, getErrorMessage } from "~/helpers";
 import { apiCallFailed } from "~/communication.server";
 import isEmpty from "lodash/isEmpty";
 import { getSessionFromRequest, commitSession } from "~/sessions.server";
 
 export const exportersAddressLoader = async (request: Request, params: Params, journey: Journey) => {
   /* istanbul ignore next */
-  setApiMock(request.url);
+  const testCaseId = setApiMock(request.url);
 
   const { documentNumber } = params;
 
@@ -52,10 +52,20 @@ export const exportersAddressLoader = async (request: Request, params: Params, j
     session.set("csrf", await createCSRFToken(request));
   }
 
+  if (testCaseId) {
+    session.set("testCaseId", testCaseId);
+  }
+
   const currentStep = session.get("currentStep");
   const postcode = session.get("postcode");
   const addressOne = session.get("addressOne");
   const countries: ICountry[] = await getCountries();
+
+  // Commit session if:
+  // 1. We added a new CSRF token (shouldUpdateSession)
+  // 2. We have currentStep which means we're in a multi-step flow
+  // This ensures session state persists to the browser, especially critical for non-JS journeys
+  const shouldCommit = shouldUpdateSession || currentStep != null;
 
   if (!isEmpty(postcode)) {
     const response: ILookUpAddress = await postCodeLookUp(postcode);
@@ -63,27 +73,6 @@ export const exportersAddressLoader = async (request: Request, params: Params, j
     const postcodeaddress: ILookUpAddressDetails | undefined = postcodeaddresses.find(
       (address: ILookUpAddressDetails) => address.address_line === addressOne
     );
-
-    if (shouldUpdateSession) {
-      return new Response(
-        JSON.stringify({
-          documentNumber,
-          currentStep,
-          postcode,
-          postcodeaddress,
-          postcodeaddresses,
-          countries,
-          csrf: session.get("csrf"),
-        }),
-        {
-          status: 200,
-          headers: {
-            "Content-Type": "application/json",
-            "Set-Cookie": await commitSession(session),
-          },
-        }
-      );
-    }
 
     return new Response(
       JSON.stringify({
@@ -99,25 +88,7 @@ export const exportersAddressLoader = async (request: Request, params: Params, j
         status: 200,
         headers: {
           "Content-Type": "application/json",
-          "Set-Cookie": await commitSession(session),
-        },
-      }
-    );
-  }
-
-  if (shouldUpdateSession) {
-    return new Response(
-      JSON.stringify({
-        documentNumber,
-        currentStep,
-        countries,
-        csrf: session.get("csrf"),
-      }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Set-Cookie": await commitSession(session),
+          ...(shouldCommit && { "Set-Cookie": await commitSession(session) }),
         },
       }
     );
@@ -134,17 +105,24 @@ export const exportersAddressLoader = async (request: Request, params: Params, j
       status: 200,
       headers: {
         "Content-Type": "application/json",
+        ...(shouldCommit && { "Set-Cookie": await commitSession(session) }),
       },
     }
   );
 };
 
 export const exportersAddressAction = async (request: Request, params: Params, journey: Journey) => {
+  /* istanbul ignore next */
+  const session = await getSessionFromRequest(request);
+  const testCaseId = session.get("testCaseId");
+  if (testCaseId) {
+    setApiMock(request.url, testCaseId);
+  }
+
   const bearerToken = await getBearerTokenForRequest(request);
   const form = await request.formData();
   const { documentNumber } = params;
   const buttonClicked = form.get("_action") as ExporterAddressButtonType;
-  const session = await getSessionFromRequest(request);
   const formData: Exporter = {
     exporterCompanyName: session.get("exporterCompanyName"),
     addressOne: form.get("selectaddress") as string,
@@ -349,13 +327,33 @@ export const exportersAddressAction = async (request: Request, params: Params, j
       ...formData,
     };
 
-    const manualAddress: IExporter = await addManualExporterAddress(
-      bearerToken,
-      documentNumber,
-      payload,
-      countryData,
-      journey
-    );
+    let manualAddress: IExporter;
+    try {
+      manualAddress = await addManualExporterAddress(bearerToken, documentNumber, payload, countryData, journey);
+    } catch (error: any) {
+      if (error.status) {
+        const status = error.status;
+        if (status === 400) {
+          const data = error.data;
+          const errors = Object.keys(data).map((key) => ({ key, message: getErrorMessage(data[key]) }));
+          return {
+            errors: getTransformedError(errors),
+            currentStep,
+            postcodeaddress: lookUpAddress,
+            csrf,
+          };
+        } else if (status === 403) {
+          session.unset("currentStep");
+          session.unset("postcode");
+          session.unset("csrf");
+          const updatedSession = await commitSession(session);
+          return redirect("/forbidden", {
+            headers: { "Set-Cookie": updatedSession },
+          });
+        }
+      }
+      throw error;
+    }
     const errors: IError[] = manualAddress.errors as IError[];
     const unauthorised = manualAddress.unauthorised as boolean;
 
@@ -381,7 +379,7 @@ export const exportersAddressAction = async (request: Request, params: Params, j
           csrf,
         }),
         {
-          status: 400,
+          status: 200,
           headers: {
             "Content-Type": "application/json",
             "Set-Cookie": updatedSession,
