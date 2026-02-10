@@ -81,10 +81,15 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumber.plane.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumber.plane.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
-    "error.containerNumber.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumber.containerVessel.any.required": "ccContainerVesselContainerNumberRequiredError",
-    "error.containerNumber.containerVessel.string.empty": "ccContainerVesselContainerNumberRequiredError",
-    "error.containerIdentificationNumber.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumbers.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumbers.containerVessel.any.required": "ccContainerVesselContainerNumberRequiredError",
+    "error.containerNumbers.containerVessel.string.empty": "ccContainerVesselContainerNumberRequiredError",
+    "error.containerNumbers.containerVessel.array.min": "ccContainerVesselContainerNumberRequiredError",
+    "error.containerIdentificationNumber.0.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumbers.containerVessel.0.any.required": "ccContainerVesselContainerNumberRequiredError",
+    "error.containerNumbers.containerVessel.0.string.empty": "ccContainerVesselContainerNumberRequiredError",
+    "error.containerNumbers.containerVessel.0.array.min": "ccContainerVesselContainerNumberRequiredError",
+    "error.containerNumber.containerVessel.string.pattern.base": "ccShippingContainerNumberPatternError",
     "error.containerNumbers.0.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.0.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.0.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
@@ -326,8 +331,6 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.array.max": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.array.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
-    "error.containerNumbers.string.pattern.base":
-      "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError",
     "error.dateLanded.string.empty": "ccCommonDateLandedRequiredError",
     "error.placeOfUnloading.string.pattern.base": "sdAddTransportationDetailsTruckPlaceOfUnloadingAsACombination",
     "validation.eezCode.string.max": "ccUploadFilePageTableEEZMaxCharError",
@@ -380,8 +383,9 @@ export const displayErrorMessagesInOrder = (
   errorKeysInOrder: string[]
 ): Array<IErrorsTransformed[keyof IErrorsTransformed]> => {
   const sortedData = errorKeysInOrder.flatMap((key) => {
-    const matchingKey = Object.keys(errors).find((objKey) => objKey.startsWith(key));
-    return matchingKey ? [errors[matchingKey]] : [];
+    // Find ALL matching keys, not just the first one
+    const matchingKeys = Object.keys(errors).filter((objKey) => objKey.startsWith(key));
+    return matchingKeys.map((matchingKey) => errors[matchingKey]);
   });
   return sortedData;
 };

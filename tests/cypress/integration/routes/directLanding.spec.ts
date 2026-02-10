@@ -14,7 +14,6 @@ describe("Direct landing page render", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DirectLanding,
     };
-
     cy.visit(directLandingUrl, { qs: { ...testParams } });
   });
 

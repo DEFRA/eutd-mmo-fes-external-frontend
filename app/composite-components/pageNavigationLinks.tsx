@@ -23,7 +23,7 @@ export const PageNavigationLinks = (
         paginationPreviousLinkDate(searchParams),
         "MM"
       )}&year=${format(paginationPreviousLinkDate(searchParams), "y")}&position=0`}
-      rel="next"
+      rel="prev"
       aria-label={t("commonDashboardPrev", { ns: "common" })}
     >
       <svg
@@ -49,7 +49,6 @@ export const PageNavigationLinks = (
           key={i}
           className={classNames("govuk-pagination__item", {
             " govuk-pagination__item--current": i === formattedDate,
-            " govuk-pagination--block": i !== formattedDate,
           })}
         >
           <a
@@ -70,11 +69,10 @@ export const PageNavigationLinks = (
         paginationNextLinkDate(searchParams),
         "MM"
       )}&year=${format(paginationNextLinkDate(searchParams), "y")}&position=0`}
-      rel="previous"
+      rel="next"
       aria-label={t("commonDashboardNext", { ns: "common" })}
     >
-      {" "}
-      <span className="govuk-pagination__link-title ">{t("commonDashboardNext", { ns: "common" })}</span>{" "}
+      <span className="govuk-pagination__link-title ">{t("commonDashboardNext", { ns: "common" })}</span>
       <svg
         className="govuk-pagination__icon govuk-pagination__icon--next"
         xmlns="http://www.w3.org/2000/svg"
