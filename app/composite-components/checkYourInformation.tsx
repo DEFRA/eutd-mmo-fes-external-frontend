@@ -9,6 +9,37 @@ import * as React from "react";
 import moment from "moment";
 import capitalize from "lodash/capitalize";
 
+type UserReferenceRowProps = {
+  userReferenceLabel: string;
+  userReference?: string;
+  userReferenceChangeRoute?: string;
+  notProvidedText?: string;
+  changeLinkText: string;
+};
+
+const UserReferenceRow = ({
+  userReferenceLabel,
+  userReference,
+  userReferenceChangeRoute,
+  notProvidedText,
+  changeLinkText,
+}: UserReferenceRowProps) => (
+  <div className="govuk-summary-list__row">
+    <dt className="govuk-summary-list__key govuk-!-width-one-half">{userReferenceLabel}</dt>
+    <dd className="govuk-summary-list__value">
+      {userReference && !isEmpty(userReference) ? userReference : notProvidedText}
+    </dd>
+    {userReferenceChangeRoute && (
+      <dd className="govuk-summary-list__actions">
+        <a id="yourReferenceChangeLink" className="govuk-link" href={userReferenceChangeRoute}>
+          {changeLinkText}
+          <span className="govuk-visually-hidden"> {lowerCase(userReferenceLabel)}</span>
+        </a>
+      </dd>
+    )}
+  </div>
+);
+
 type CheckYourInformationDocumentNumberProps = {
   checkInformationHeader?: string;
   documentNumberTitle: string;
@@ -38,21 +69,14 @@ export const CheckYourInformationDocumentNumber = ({
         <dt className="govuk-summary-list__key govuk-!-width-one-half">{documentNumberTitle}</dt>
         <dd className="govuk-summary-list__value">{documentNumber}</dd>
       </div>
-      {userReferenceLabel && (
-        <div className="govuk-summary-list__row">
-          <dt className="govuk-summary-list__key govuk-!-width-one-half">{userReferenceLabel}</dt>
-          <dd className="govuk-summary-list__value">
-            {userReference && !isEmpty(userReference) ? userReference : notProvidedText}
-          </dd>
-          {userReferenceChangeRoute && (
-            <dd className="govuk-summary-list__actions">
-              <a id="yourReferenceChangeLink" className="govuk-link" href={userReferenceChangeRoute}>
-                {changeLinkText}
-                <span className="govuk-visually-hidden"> {lowerCase(userReferenceLabel)}</span>
-              </a>
-            </dd>
-          )}
-        </div>
+      {userReferenceLabel && changeLinkText && (
+        <UserReferenceRow
+          userReferenceLabel={userReferenceLabel}
+          userReference={userReference}
+          userReferenceChangeRoute={userReferenceChangeRoute}
+          notProvidedText={notProvidedText}
+          changeLinkText={changeLinkText}
+        />
       )}
     </>
   );
@@ -102,20 +126,13 @@ export const CheckInfoExporterDetails = ({
     <h2 className="govuk-heading-l">{checkExporterDetailsHeader}</h2>
     <dl className="govuk-summary-list govuk-!-margin-bottom-5">
       {userReferenceLabel && (
-        <div className="govuk-summary-list__row">
-          <dt className="govuk-summary-list__key govuk-!-width-one-half">{userReferenceLabel}</dt>
-          <dd className="govuk-summary-list__value">
-            {userReference && !isEmpty(userReference) ? userReference : notProvidedText}
-          </dd>
-          {userReferenceChangeRoute && (
-            <dd className="govuk-summary-list__actions">
-              <a id="yourReferenceChangeLink" className="govuk-link" href={userReferenceChangeRoute}>
-                {changeLinkText}
-                <span className="govuk-visually-hidden"> {lowerCase(userReferenceLabel)}</span>
-              </a>
-            </dd>
-          )}
-        </div>
+        <UserReferenceRow
+          userReferenceLabel={userReferenceLabel}
+          userReference={userReference}
+          userReferenceChangeRoute={userReferenceChangeRoute}
+          notProvidedText={notProvidedText}
+          changeLinkText={changeLinkText}
+        />
       )}
       <div className="govuk-summary-list__row">
         <dt className="govuk-summary-list__key govuk-!-width-one-half">{companyNameTitle}</dt>
