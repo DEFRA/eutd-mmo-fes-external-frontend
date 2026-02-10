@@ -168,7 +168,6 @@ const populateNavigationLinks = (t: TFunction<"common"[], undefined>, searchPara
         const formattedDate = format(new Date(urlYear(searchParams), urlMonthIndex(searchParams), 1), "MMM y");
         const listClassNames = {
           " govuk-pagination__item--current": i === formattedDate,
-          " govuk-pagination--block": i !== formattedDate,
         };
         const monthParam = getMonth(dateI) + 1;
         const monthlyLinkRoute = route(`/create-catch-certificate/catch-certificates`);
@@ -192,10 +191,9 @@ const populateNavigationLinks = (t: TFunction<"common"[], undefined>, searchPara
         <a
           className="govuk-link govuk-pagination__link"
           href={`${nextLinkRoute}?month=${monthParam}&year=${format(paginationNextLinkDate(searchParams), "y")}&position=0`}
-          rel="previous"
+          rel="next"
         >
-          {" "}
-          <span className="govuk-pagination__link-title ">{t("commonDashboardNext", { ns: "common" })}</span>{" "}
+          <span className="govuk-pagination__link-title ">{t("commonDashboardNext", { ns: "common" })}</span>
           <svg
             className="govuk-pagination__icon govuk-pagination__icon--next"
             xmlns="http://www.w3.org/2000/svg"
