@@ -336,12 +336,23 @@ export const exportersAddressAction = async (request: Request, params: Params, j
         if (status === 400) {
           const data = error.data;
           const errors = Object.keys(data).map((key) => ({ key, message: getErrorMessage(data[key]) }));
-          return {
-            errors: getTransformedError(errors),
-            currentStep,
-            postcodeaddress: lookUpAddress,
-            csrf,
-          };
+          const updatedSession = await commitSession(session);
+
+          return new Response(
+            JSON.stringify({
+              errors: getTransformedError(errors),
+              currentStep,
+              postcodeaddress: lookUpAddress,
+              csrf,
+            }),
+            {
+              status: 200,
+              headers: {
+                "Content-Type": "application/json",
+                "Set-Cookie": updatedSession,
+              },
+            }
+          );
         } else if (status === 403) {
           session.unset("currentStep");
           session.unset("postcode");
