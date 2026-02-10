@@ -14,6 +14,11 @@ type CheckYourInformationDocumentNumberProps = {
   documentNumberTitle: string;
   documentNumber: string;
   renderWrapper?: boolean;
+  userReference?: string;
+  userReferenceLabel?: string;
+  userReferenceChangeRoute?: string;
+  notProvidedText?: string;
+  changeLinkText?: string;
 };
 
 export const CheckYourInformationDocumentNumber = ({
@@ -21,12 +26,35 @@ export const CheckYourInformationDocumentNumber = ({
   documentNumberTitle,
   documentNumber,
   renderWrapper = true,
+  userReference,
+  userReferenceLabel,
+  userReferenceChangeRoute,
+  notProvidedText,
+  changeLinkText,
 }: CheckYourInformationDocumentNumberProps) => {
   const content = (
-    <div className="govuk-summary-list__row">
-      <dt className="govuk-summary-list__key govuk-!-width-one-half">{documentNumberTitle}</dt>
-      <dd className="govuk-summary-list__value">{documentNumber}</dd>
-    </div>
+    <>
+      <div className="govuk-summary-list__row">
+        <dt className="govuk-summary-list__key govuk-!-width-one-half">{documentNumberTitle}</dt>
+        <dd className="govuk-summary-list__value">{documentNumber}</dd>
+      </div>
+      {userReferenceLabel && (
+        <div className="govuk-summary-list__row">
+          <dt className="govuk-summary-list__key govuk-!-width-one-half">{userReferenceLabel}</dt>
+          <dd className="govuk-summary-list__value">
+            {userReference && !isEmpty(userReference) ? userReference : notProvidedText}
+          </dd>
+          {userReferenceChangeRoute && (
+            <dd className="govuk-summary-list__actions">
+              <a id="yourReferenceChangeLink" className="govuk-link" href={userReferenceChangeRoute}>
+                {changeLinkText}
+                <span className="govuk-visually-hidden"> {lowerCase(userReferenceLabel)}</span>
+              </a>
+            </dd>
+          )}
+        </div>
+      )}
+    </>
   );
 
   if (!renderWrapper) return content;
@@ -394,6 +422,10 @@ type CheckYourInformationLayoutProps = {
   checkInformationHeader: string;
   csrf: string;
   journey: Journey;
+  userReference?: string;
+  userReferenceLabel?: string;
+  userReferenceChangeRoute?: string;
+  notProvidedText?: string;
 };
 
 export const CheckYourInformationLayout = ({
@@ -409,6 +441,10 @@ export const CheckYourInformationLayout = ({
   checkInformationHeader,
   csrf,
   journey,
+  userReference,
+  userReferenceLabel,
+  userReferenceChangeRoute,
+  notProvidedText,
 }: CheckYourInformationLayoutProps) => {
   const { t } = useTranslation(["common", "pscheckYourInformation", "sdCheckYourInformation"]);
   return (
@@ -430,6 +466,11 @@ export const CheckYourInformationLayout = ({
                 checkInformationHeader={t(checkInformationHeader, { ns: headingTranslation })}
                 documentNumberTitle={t("commonDocumentNumber", { ns: "common" })}
                 documentNumber={documentNumber}
+                userReference={userReference}
+                userReferenceLabel={userReferenceLabel}
+                userReferenceChangeRoute={userReferenceChangeRoute}
+                notProvidedText={notProvidedText}
+                changeLinkText={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
               />
             )}
             {children}

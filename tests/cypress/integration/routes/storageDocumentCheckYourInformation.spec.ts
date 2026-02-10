@@ -66,6 +66,35 @@ describe("SD: check-your-information page", () => {
       .should("contain", "your reference");
   });
 
+  it("should display 'Your reference' field underneath 'Document number' in the same section", () => {
+    // Verify both Document number and Your reference are in the same dl element (document details section)
+    cy.contains("h2", "Document details")
+      .next("dl")
+      .within(() => {
+        // Check Document number appears first
+        cy.contains("dt", "Document number").should("exist");
+        // Check Your reference appears after Document number
+        cy.contains("dt", "Your reference").should("exist");
+      });
+
+    // Verify Your reference comes after Document number by checking DOM order
+    cy.contains("dt", "Document number")
+      .parent()
+      .next()
+      .within(() => {
+        cy.contains("dt", "Your reference").should("exist");
+      });
+  });
+
+  it("should display change link for 'Your reference' when value is provided", () => {
+    cy.contains("dt", "Your reference")
+      .parent()
+      .within(() => {
+        cy.contains("dd", "MY-REF-12345").should("exist");
+        cy.get("#yourReferenceChangeLink").should("exist").should("contain", "Change");
+      });
+  });
+
   it("should contain the required data", () => {
     cy.contains("dd", "GBR-2023-SD-A46E23603");
     cy.contains("dd", "tesrt");
@@ -181,6 +210,23 @@ describe("SD: check-your-information page with user reference not provided", () 
       .should("exist")
       .should("have.attr", "href")
       .and("include", "/add-your-reference");
+  });
+
+  it("should display 'Your reference' in document details section when not provided", () => {
+    // Verify Your reference is in the document details section (same dl as Document number)
+    cy.contains("h2", "Document details")
+      .next("dl")
+      .within(() => {
+        cy.contains("dt", "Your reference").should("exist");
+        cy.contains("dt", "Your reference").next("dd").should("contain", "Not provided");
+      });
+
+    // Verify the change link exists even when not provided
+    cy.contains("dt", "Your reference")
+      .parent()
+      .within(() => {
+        cy.get("#yourReferenceChangeLink").should("exist");
+      });
   });
 });
 
