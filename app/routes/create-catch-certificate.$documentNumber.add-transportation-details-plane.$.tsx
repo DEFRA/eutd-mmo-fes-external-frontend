@@ -8,13 +8,13 @@ import {
   type ActionFunction,
   type MetaFunction,
 } from "react-router";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import type { ErrorResponse, IErrorsTransformed, ITransport } from "~/types";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
-import { displayErrorMessagesInOrder, getMeta, scrollToId, TransportType, getContainerNumbers } from "~/helpers";
+import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
-import { useScrollOnPageLoad } from "~/hooks";
+import { useTransportationDetailsPageSetup } from "~/hooks";
+import { CONTAINER_NUMBER_KEYS } from "~/constants/transportationDetails";
 
 export const meta: MetaFunction = (args) => getMeta(args);
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -51,27 +51,12 @@ const AddTransportationDetailsPlane = () => {
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-plane/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
-  useScrollOnPageLoad();
-
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      scrollToId("errorIsland");
-    }
-  }, [errors]);
+  useTransportationDetailsPageSetup(errors);
 
   const errorKeysInOrder = [
     "flightNumber",
     "departurePlace",
-    "containerNumbers.0",
-    "containerNumbers.1",
-    "containerNumbers.2",
-    "containerNumbers.3",
-    "containerNumbers.4",
-    "containerNumbers.5",
-    "containerNumbers.6",
-    "containerNumbers.7",
-    "containerNumbers.8",
-    "containerNumbers.9",
+    ...CONTAINER_NUMBER_KEYS,
     "airwayBillNumber",
     "freightBillNumber",
   ];
