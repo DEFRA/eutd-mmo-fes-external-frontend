@@ -35,6 +35,10 @@ const checkYourInformationPSHandler: ITestHandler = {
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
   ],
+  [TestCaseId.PSCheckYourInformationNoUserReference]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+  ],
   [TestCaseId.PSCheckYourInformationUpdatedExporter]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetailsUpdated))),

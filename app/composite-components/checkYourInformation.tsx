@@ -478,7 +478,7 @@ export const CheckYourInformationLayout = ({
                 ns: headingTranslation,
               })}
             />
-            {journey === "storageNotes" && (
+            {(journey === "storageNotes" || journey === "processingStatement") && (
               <CheckYourInformationDocumentNumber
                 checkInformationHeader={t(checkInformationHeader, { ns: headingTranslation })}
                 documentNumberTitle={t("commonDocumentNumber", { ns: "common" })}
@@ -487,7 +487,11 @@ export const CheckYourInformationLayout = ({
                 userReferenceLabel={userReferenceLabel}
                 userReferenceChangeRoute={userReferenceChangeRoute}
                 notProvidedText={notProvidedText}
-                changeLinkText={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                changeLinkText={
+                  journey === "processingStatement"
+                    ? t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })
+                    : t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })
+                }
               />
             )}
             {children}

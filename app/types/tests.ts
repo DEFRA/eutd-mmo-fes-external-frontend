@@ -642,6 +642,7 @@ export enum TestCaseId {
   PSCatchAddedUnauthorised = "psCatchAddedUnauthorised",
   PSGetPostCatchAddedUnauthorised = "psGetPostCatchAddedUnauthorised",
   PSCheckYourInformation = "psCheckYourInformation",
+  PSCheckYourInformationNoUserReference = "psCheckYourInformationNoUserReference",
   PSCheckYourInformationUpdatedExporter = "psCheckYourInformationUpdatedExporter",
   PSCheckYourInformationValidationError = "psCheckYourInformationValidationError",
   PSCheckYourInformationHealthCertificateValidationError = "psCheckYourInformationHealthCertificateValidationError",
