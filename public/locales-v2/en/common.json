@@ -98,7 +98,7 @@
   "commonWhatExportersAddressBuildingName": "Building name",
   "commonWhatExportersAddressStreetName": "Street name",
   "commonWhatExportersAddressTownOrCity": "Town or city",
-  "commonWhatExportersAddressCountyStateProvince": "County, state or province (optional)",
+  "commonWhatExportersAddressCountyStateProvince": "County/state/province (optional)",
   "commonWhatExportersAddressCountry": "Country",
   "commonWhatExportDestinationSelectTheDestinationCountry": "Select the destination country",
   "commonWhatExportDestinationHintSelectTheDestinationCountry": "This is the main destination country for the export, not the countries it is passing through. This information will not appear on the final document.",
