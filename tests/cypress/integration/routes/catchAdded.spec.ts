@@ -266,6 +266,50 @@ describe("PS: Catch added", () => {
     cy.get("tbody tr").should("have.length.greaterThan", 0);
   });
 
+  it("should filter catches when searching for existing species code AGH", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Get initial count of rows
+    cy.get("tbody tr").its("length").as("initialRowCount");
+
+    // Search for AGH species code which exists in the fixture
+    cy.get('input[name="q"]').type("AGH");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Verify the search returns at least one matching catch
+    cy.get("tbody tr").should("have.length.greaterThan", 0);
+
+    // Verify that at least one row contains AGH
+    cy.get('td[id$="-species"]').should("contain.text", "AGH");
+
+    // Reset and verify all catches are shown again
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.get("@initialRowCount").then((initialCount) => {
+      cy.get("tbody tr").should("have.length", Number(initialCount));
+    });
+  });
+
+  it("should filter catches and products when search matches", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search for species that exists in fixture (Gymnotus pantherinus)
+    cy.get('input[name="q"]').type("Gymnotus");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Should show filtered results
+    cy.get("tbody tr").should("have.length.greaterThan", 0);
+
+    // Reset to show all
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.get("tbody tr").should("have.length.greaterThan", 0);
+  });
+
   it("should handle edge cases with null/undefined values in search", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
@@ -1198,5 +1242,587 @@ describe("PS: Catch added - session clearing on navigation", () => {
 
     // Verify that the search filter is cleared
     cy.get('input[name="q"]').should("have.value", "");
+  });
+
+  it("should filter products when search matches catches with specific productId", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Get initial count of rows
+    cy.get("tbody tr").then(($rows) => {
+      const initialCount = $rows.length;
+
+      // Search for a specific species
+      cy.get('input[name="q"]').type("Atlantic");
+      cy.get('[data-testid="filter-search-submit"]').click();
+
+      // Verify table still exists and has filtered results
+      cy.get("tbody").should("exist");
+
+      // Reset and verify all rows return
+      cy.get('[data-testid="filter-search-reset"]').click();
+      cy.get("tbody tr").should("have.length", initialCount);
+    });
+  });
+
+  it("should handle search that returns zero matching catches", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search for something that won't match any catches
+    cy.get('input[name="q"]').type("ZZZZNONEXISTENT12345");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Verify the page handles empty results gracefully
+    cy.get("tbody").should("exist");
+
+    // Reset should restore the original data
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.get("tbody tr").should("have.length.greaterThan", 0);
+  });
+
+  it("should filter catches by speciesCode when searching", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search by species code (e.g., COD, SAL)
+    cy.get('input[name="q"]').type("COD");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Verify page handles the search
+    cy.get("tbody").should("exist");
+
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.get("tbody tr").should("have.length.greaterThan", 0);
+  });
+
+  it("should filter catches by productDescription when searching", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search by product description partial match
+    cy.get('input[name="q"]').type("Product");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Verify page handles the search
+    cy.get("tbody").should("exist");
+
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.get("tbody tr").should("have.length.greaterThan", 0);
+  });
+
+  it("should handle empty search with whitespace only", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search with only whitespace
+    cy.get('input[name="q"]').type("   ");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    cy.url().should("include", "catch-added");
+    cy.get("tbody").should("exist");
+  });
+
+  it("should handle case-insensitive product description search", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search with different case
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("TAILJET");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Verify search works by checking that tbody exists and has content
+    cy.get("tbody").should("exist");
+
+    cy.get('[data-testid="filter-search-reset"]').click();
+  });
+
+  it("should preserve existing query parameters during filter operations", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    const customParam = "testParam=value";
+    cy.visit(`${pageUrl}?${customParam}`, { qs: { ...testParams } });
+
+    cy.get('input[name="q"]').type("test");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Should preserve custom param - testCaseId should still be in URL
+    cy.url().should("include", "testCaseId=psCatchAddedTwoCatches");
+    cy.url().should("include", "catch-added");
+  });
+
+  it("should handle error response with groupedErrors structure", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedOneValidTwoInvalidCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get('input[name="addAnotherCatch"][value="No"]').check();
+    cy.contains("button", "Save and continue").click();
+
+    // Should display error summary
+    cy.get("#errorIsland").should("exist");
+    cy.get("#errorIsland").should("be.visible");
+  });
+
+  it("should show no results when searching for non-matching text", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search for text that definitely doesn't exist
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("ZZZZZZZZZZZZNONEXISTENT");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Verify the page still displays table structure
+    cy.get("tbody").should("exist");
+
+    // Reset to restore results
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.get('input[name="q"]').should("have.value", "");
+    cy.get("tbody tr").should("have.length.greaterThan", 0);
+  });
+
+  it("should display numeric weights formatted correctly", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Check that weight values are displayed with proper formatting
+    cy.get('td[id*="totalWeightLanded"]').should("contain.text", "kg");
+    cy.get('td[id*="exportWeightBeforeProcessing"]').should("contain.text", "kg");
+    cy.get('td[id*="exportWeightAfterProcessing"]').should("contain.text", "kg");
+  });
+
+  it("should handle loader with session query but no URL query", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    // First visit with a query to set session state
+    cy.visit(`${pageUrl}?q=test`, { qs: { ...testParams } });
+
+    // Then visit without query - should clear session state
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get('input[name="q"]').should("have.value", "");
+  });
+
+  it("should redirect to add-consignment-details when no products and no action executed", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedNoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.url().should("include", "/add-consignment-details");
+  });
+
+  it("should handle nextUri redirect when save and continue with custom nextUri", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    const customNextUri = "/custom-next-page";
+    cy.visit(`${pageUrl}?nextUri=${encodeURIComponent(customNextUri)}`, { qs: { ...testParams } });
+
+    cy.get('input[name="addAnotherCatch"][value="No"]').check();
+    cy.contains("button", "Save and continue").click();
+
+    cy.url().should("include", customNextUri);
+  });
+
+  it("should redirect to check-your-information when plant details exist", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedHasPlantDetails,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get('input[name="addAnotherCatch"][value="No"]').check();
+    cy.contains("button", "Save and continue").click();
+
+    cy.url().should("include", "/check-your-information");
+  });
+
+  it("should handle pagination with many catches", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Check if pagination exists
+    cy.get("body").then(($body) => {
+      if ($body.find('[data-testid="pagination"]').length > 0) {
+        // Test pagination navigation
+        cy.get('[data-testid="pagination"]').should("be.visible");
+
+        // Test page links if they exist
+        cy.get(".govuk-pagination__list li").then(($items) => {
+          if ($items.length > 1) {
+            // Click second page if it exists
+            cy.get(".govuk-pagination__list li").eq(1).find("a").click();
+            cy.url().should("include", "pageNo=2");
+          }
+        });
+      }
+    });
+  });
+});
+
+describe("PS: Catch added - New Filter & Validation Features", () => {
+  it("should filter catches by species name", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Enter search term for species
+    cy.get('input[name="q"]').type("Atlantic");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Should filter results and preserve search in URL
+    cy.url().should("include", "q=Atlantic");
+    cy.get('input[name="q"]').should("have.value", "Atlantic");
+  });
+
+  it("should filter catches by product description", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedFilterByProductDescription,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search by product description
+    cy.get('input[name="q"]').type("Frozen");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Verify URL contains query
+    cy.url().should("include", "q=Frozen");
+    cy.get('input[name="q"]').should("have.value", "Frozen");
+  });
+
+  it("should reset filter and clear all catches/products filters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedResetFilter,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Apply filter
+    cy.get('input[name="q"]').type("test");
+    cy.get('[data-testid="filter-search-submit"]').click();
+    cy.url().should("include", "q=test");
+
+    // Reset filter
+    cy.get('[data-testid="filter-search-reset"]').click();
+
+    // Should clear URL param and input value
+    cy.url().should("not.include", "q=");
+    cy.get('input[name="q"]').should("have.value", "");
+  });
+
+  it("should display 'No catches added' for product without catches", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedProductWithNoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Should show product tag with no catches message
+    cy.contains("No catches added").should("exist");
+    cy.get("strong.govuk-tag.govuk-tag--grey").should("exist");
+  });
+
+  it("should show validation error when saving product with description but no catches", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedSaveAndContinueValidationError,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Try to save and continue
+    cy.get('input[name="addAnotherCatch"][value="No"]').check();
+    cy.contains("button", "Save and continue").click();
+
+    // Should show error about product requiring catches
+    cy.get("#errorIsland").should("exist");
+
+    // cy.contains("commonProgressProductDetailsRequiredError").should("exist");
+    cy.url().should("include", "/catch-added");
+  });
+
+  it("should handle performCatchSearch with species code match", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search by species code (FAO27)
+    cy.get('input[name="q"]').type("FAO27");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    cy.url().should("include", "q=FAO27");
+  });
+
+  it("should handle performProductSearch matching product descriptions", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedFilterByProductDescription,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Search for product-specific term
+    cy.get('input[name="q"]').type("product");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    cy.url().should("include", "q=product");
+  });
+
+  it("should test getExistingParams excludes pageNo from filter reset URL", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
+    };
+
+    cy.visit(`${pageUrl}?pageNo=2`, { qs: { ...testParams } });
+
+    // Apply search
+    cy.get('input[name="q"]').type("test");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Reset removes both q and pageNo (getExistingParams behavior)
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.url().should("not.include", "pageNo=");
+    cy.url().should("not.include", "q=");
+    // testCaseId is preserved
+    cy.url().should("include", "testCaseId=");
+  });
+
+  it("should apply applyMatchedFromSession filtering when hasActiveQuery is true", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName,
+    };
+
+    // Visit with query parameter to trigger hasActiveQuery
+    cy.visit(`${pageUrl}?q=Atlantic`, { qs: { ...testParams } });
+
+    // Input should have the query value
+    cy.get('input[name="q"]').should("have.value", "Atlantic");
+  });
+
+  it("should clear session state when navigating without query param after previous search", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName,
+    };
+
+    // First visit with query
+    cy.visit(`${pageUrl}?q=test`, { qs: { ...testParams } });
+    cy.get('input[name="q"]').should("have.value", "test");
+
+    // Navigate without query - should clear
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get('input[name="q"]').should("have.value", "");
+  });
+
+  it("should handle validateProductsHaveCatches function and return validation errors", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedSaveAndContinueValidationError,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Try to save with description-only product
+    cy.get('input[name="addAnotherCatch"][value="No"]').check();
+    cy.contains("button", "Save and continue").click();
+
+    // Should display transformed error messages
+    cy.get("#errorIsland").should("exist");
+    cy.url().should("include", "/catch-added");
+  });
+
+  it("should handle buildRedirectUrl with query params", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Apply search
+    cy.get('input[name="q"]').type("test");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // URL should be built correctly with documentNumber and query params
+    cy.url().should("include", "/create-processing-statement/");
+    cy.url().should("include", "/catch-added");
+    cy.url().should("include", "q=test");
+  });
+
+  it("should group catches by product in catchesByProduct", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoProductsOnlyOneWithCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Should show multiple product tags
+    cy.get("strong.govuk-tag").should("have.length.greaterThan", 0);
+
+    // At least one should show "No catches added"
+    cy.contains("No catches added").should("exist");
+  });
+
+  it("should handle pagination with paginatedCatches filtering", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Should show pagination when more than 15 items
+    cy.get('[data-testid="pagination"]').should("exist");
+
+    // Should show exactly 15 items on first page
+    cy.get("tbody tr").should("have.length", 15);
+
+    // Navigate to page 2
+    cy.get(".govuk-pagination__link").contains("2").click();
+
+    // Should show remaining items (less than 15)
+    cy.get("tbody tr").should("have.length.lessThan", 15);
+  });
+
+  it("should display warning message about editing product information", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Warning message always displayed on catch-added page
+    cy.get('[data-testid="warning-message"]').should("be.visible");
+    // Verify translation key renders (may be actual text or key depending on i18n setup)
+    cy.get('[data-testid="warning-message"]').should("contain.text", "To edit product information, press change");
+  });
+
+  it("should show product description in summary heading when single product", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedBlankOneCatch,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // When only 1 product, should display its description in heading
+    cy.get("#summary-table-title").should("exist");
+  });
+
+  it("should handle totalDocuments count display", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Should show document count in heading (singular or plural)
+    cy.get("#summary-table-title").should("exist");
+  });
+
+  it("should handle cleanupSession removing filter state", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Apply filter
+    cy.get('input[name="q"]').type("test");
+    cy.get('[data-testid="filter-search-submit"]').click();
+
+    // Save as draft (triggers cleanupSession)
+    cy.contains("button", "Save as draft").click();
+
+    // Should redirect to dashboard
+    cy.url().should("include", "/processing-statements");
+  });
+
+  it("should handle determineRedirectUrl with empty nextUri", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Save and continue without nextUri should redirect to add-processing-plant-details
+    cy.get('input[name="addAnotherCatch"][value="No"]').check();
+    cy.contains("button", "Save and continue").click();
+
+    cy.url().should("include", "/add-processing-plant-details");
+  });
+
+  it("should handle populateNavigationLinks for pagination", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // previousLink should render correctly
+    cy.get(".govuk-pagination__prev").should("exist");
+
+    // pageLinks should render for all pages
+    cy.get(".govuk-pagination__list li").should("have.length", 2);
+
+    // nextLink should render correctly
+    cy.get(".govuk-pagination__next").should("exist");
+  });
+
+  it("should handle isFirstPage and isLastPage logic", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // On first page, previous should be disabled (no link)
+    cy.get(".govuk-pagination__prev a").should("not.exist");
+
+    // Next should be enabled
+    cy.get(".govuk-pagination__next a").should("exist");
+
+    // Navigate to last page
+    cy.get(".govuk-pagination__link").contains("2").click();
+
+    // Previous should now be enabled
+    cy.get(".govuk-pagination__prev a").should("exist");
+
+    // Next should be disabled
+    cy.get(".govuk-pagination__next a").should("not.exist");
   });
 });

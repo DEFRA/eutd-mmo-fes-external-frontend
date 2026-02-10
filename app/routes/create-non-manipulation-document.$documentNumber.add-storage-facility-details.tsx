@@ -23,6 +23,7 @@ import {
   getStrOrDefault,
   getTransformedError,
   toISODateFormat,
+  toDDMMYYYYFormat,
 } from "~/helpers";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { DateFieldWithPicker } from "~/composite-components";
@@ -41,6 +42,7 @@ type loaderStorageFacility = {
   hasFacility?: boolean;
   csrf: string;
   selectedArrivalDate: string;
+  backUrl: string;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -74,6 +76,41 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const hasFacility =
     storageDocument?.facilityAddressOne !== undefined && storageDocument?.facilityPostcode !== undefined;
 
+  const getBackUrl = () => {
+    const arrivalVehicle = storageDocument?.arrivalTransport?.vehicle;
+
+    if (!arrivalVehicle) {
+      return route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
+        documentNumber,
+      });
+    }
+
+    const arrivalTransportRoutes: Record<string, string> = {
+      truck: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-truck", {
+        documentNumber,
+      }),
+      train: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-train", {
+        documentNumber,
+      }),
+      plane: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-plane", {
+        documentNumber,
+      }),
+      containerVessel: route(
+        "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-container-vessel",
+        {
+          documentNumber,
+        }
+      ),
+    };
+
+    return (
+      arrivalTransportRoutes[arrivalVehicle] ??
+      route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
+        documentNumber,
+      })
+    );
+  };
+
   return new Response(
     JSON.stringify({
       documentNumber,
@@ -85,6 +122,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       hasFacility,
       csrf,
       selectedArrivalDate: storageDocument?.facilityArrivalDate,
+      backUrl: getBackUrl(),
     }),
     {
       headers: {
@@ -183,7 +221,28 @@ const handleSaveAndContinue = async (
   );
 
   if (errorResponse) {
-    return errorResponse as Response;
+    // When there are errors and JavaScript is disabled, include the submitted form values
+    // so they can be used to repopulate the form fields
+    const responseData = typeof errorResponse.json === "function" ? await errorResponse.json() : errorResponse;
+
+    // Explicitly include the form values in the response under 'values' key
+    const combinedResponse = {
+      ...responseData,
+      values: {
+        facilityName: values["facilityName"],
+        facilityArrivalDate: selectedDate,
+        facilityArrivalDateDay: values["facilityArrivalDateDay"],
+        facilityArrivalDateMonth: values["facilityArrivalDateMonth"],
+        facilityArrivalDateYear: values["facilityArrivalDateYear"],
+      },
+    };
+
+    return new Response(JSON.stringify(combinedResponse), {
+      status: 400,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 
   session.unset("facilityName");
@@ -219,7 +278,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const facilityArrivalDateDay = form.get("facilityArrivalDateDay") as string;
   const selectedDate =
     facilityArrivalDateDay || facilityArrivalDateMonth || facilityArrivalDateYear
-      ? `${facilityArrivalDateDay}/${facilityArrivalDateMonth}/${facilityArrivalDateYear}`
+      ? toDDMMYYYYFormat(facilityArrivalDateDay, facilityArrivalDateMonth, facilityArrivalDateYear)
       : undefined;
   const selectedDateInISOFormat = toISODateFormat(
     getStrOrDefault(facilityArrivalDateDay),
@@ -275,9 +334,18 @@ const AddStorageFacilityDetails = () => {
     hasFacility,
     csrf,
     selectedArrivalDate,
+    backUrl,
   } = useLoaderData<loaderStorageFacility>();
-  const actionData = useActionData<{ errors: IErrorsTransformed }>() ?? { errors: {} };
-  const { errors = {} } = actionData;
+  const actionData = useActionData<{ errors: IErrorsTransformed; values?: Record<string, any> }>() ?? { errors: {} };
+  const { errors = {}, values: submittedValues } = actionData;
+
+  // Helper function to get the value to display - prefer submitted form data when there are errors
+  const getFormValue = (fieldName: string, defaultValue: any) => {
+    if (!isEmpty(errors) && submittedValues?.[fieldName] !== undefined) {
+      return submittedValues[fieldName];
+    }
+    return defaultValue;
+  };
 
   const arrivalDateFromAction = getArrivalDateFromAction(actionData, "facilityArrivalDate");
 
@@ -296,11 +364,7 @@ const AddStorageFacilityDetails = () => {
 
   useScrollOnPageError(errors);
   return (
-    <Main
-      backUrl={route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
-        documentNumber,
-      })}
-    >
+    <Main backUrl={backUrl}>
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorTransformedMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
@@ -393,7 +457,7 @@ const AddStorageFacilityDetails = () => {
               })}
               errorPosition={ErrorPosition.AFTER_LABEL}
               inputProps={{
-                defaultValue: facilityName,
+                defaultValue: getFormValue("facilityName", facilityName),
                 id: "storageFacilities-facilityName",
               }}
               hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}

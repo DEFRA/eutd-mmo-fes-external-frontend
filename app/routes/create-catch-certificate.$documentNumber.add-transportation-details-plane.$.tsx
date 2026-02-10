@@ -12,7 +12,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import type { ErrorResponse, IErrorsTransformed, ITransport } from "~/types";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
-import { displayErrorMessagesInOrder, getMeta, scrollToId, TransportType } from "~/helpers";
+import { displayErrorMessagesInOrder, getMeta, scrollToId, TransportType, getContainerNumbers } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
 
@@ -28,16 +28,22 @@ const AddTransportationDetailsPlane = () => {
   const {
     documentNumber,
     vehicle,
-    containerNumber,
+    flightNumber,
+    airwayBillNumber,
+    containerNumbers,
     departurePlace,
     freightBillNumber,
-    flightNumber,
     nextUri,
     csrf,
     id,
     displayOptionalSuffix,
   } = useLoaderData<
-    ITransport & { documentNumber: string; nextUri: string; displayOptionalSuffix: boolean; csrf: string }
+    ITransport & {
+      documentNumber: string;
+      nextUri: string;
+      displayOptionalSuffix: boolean;
+      csrf: string;
+    }
   >();
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
@@ -53,7 +59,22 @@ const AddTransportationDetailsPlane = () => {
     }
   }, [errors]);
 
-  const errorKeysInOrder = ["flightNumber", "containerNumber", "departurePlace", "freightBillNumber"];
+  const errorKeysInOrder = [
+    "flightNumber",
+    "departurePlace",
+    "containerNumbers.0",
+    "containerNumbers.1",
+    "containerNumbers.2",
+    "containerNumbers.3",
+    "containerNumbers.4",
+    "containerNumbers.5",
+    "containerNumbers.6",
+    "containerNumbers.7",
+    "containerNumbers.8",
+    "containerNumbers.9",
+    "airwayBillNumber",
+    "freightBillNumber",
+  ];
   const errorMessagesForDisplay = displayErrorMessagesInOrder(errors, errorKeysInOrder);
 
   return (
@@ -70,7 +91,8 @@ const AddTransportationDetailsPlane = () => {
               vehicle="plane"
               errors={errorsTransformed}
               flightNumber={!isEmpty(errors) ? actionData.flightNumber : flightNumber}
-              containerNumber={!isEmpty(errors) ? actionData.containerNumber : containerNumber}
+              airwayBillNumber={!isEmpty(errors) ? actionData.airwayBillNumber : airwayBillNumber}
+              containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
               departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
               displayOptionalSuffix={displayOptionalSuffix}

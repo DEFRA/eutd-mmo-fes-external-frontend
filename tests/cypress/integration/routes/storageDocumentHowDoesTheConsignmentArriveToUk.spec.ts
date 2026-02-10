@@ -18,7 +18,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
 
     cy.get(".govuk-fieldset__heading").contains("How does your consignment arrive to the UK?");
 
-    cy.get(".govuk-hint").contains("Select a type of transport").should("be.visible");
+    cy.get(".govuk-hint").contains("Select the type of transport").should("be.visible");
     cy.get("#transport-consignment-item-hint")
       .contains("Select truck if your vehicle travels by ferry or through the Eurotunnel.")
       .should("be.visible");

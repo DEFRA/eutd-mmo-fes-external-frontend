@@ -15,6 +15,11 @@ import {
 import exporterDetails from "@/fixtures/addExporterDetails/exporterDetails.json";
 import exporterResponse from "@/fixtures/addExporterDetails/exporterResponse.json";
 import exporterErrorResponse from "@/fixtures/addExporterDetails/exporterErrorResponse.json";
+import exporterFullNameErrorResponse from "@/fixtures/addExporterDetails/exporterFullNameErrorResponse.json";
+import exporterFullNameMaxLengthErrorResponse from "@/fixtures/addExporterDetails/exporterFullNameMaxLengthErrorResponse.json";
+import exporterFullNamePatternErrorResponse from "@/fixtures/addExporterDetails/exporterFullNamePatternErrorResponse.json";
+import exporterCompanyNameMaxLengthErrorResponse from "@/fixtures/addExporterDetails/exporterCompanyNameMaxLengthErrorResponse.json";
+import exporterCompanyNamePatternErrorResponse from "@/fixtures/addExporterDetails/exporterCompanyNamePatternErrorResponse.json";
 import addedSpecies from "@/fixtures/addExporterDetails/addedSpecies.json";
 import manualEntryLandingsType from "@/fixtures/landingsTypeApi/manualEntry.json";
 import uploadEntry from "@/fixtures/landingsTypeApi/uploadEntry.json";
@@ -100,6 +105,61 @@ const addCCExporterDetailsHandler: ITestHandler = {
     rest.post(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(exporterErrorResponse))
     ),
+  ],
+  [TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameError]: () => [
+    rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(exporterDetails))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(exporterFullNameErrorResponse))
+    ),
+  ],
+  [TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameMaxLength]: () => [
+    rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(exporterFullNameMaxLengthErrorResponse))
+    ),
+  ],
+  [TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameWithSpecialCharacters]: () => [
+    rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(exporterFullNamePatternErrorResponse))
+    ),
+  ],
+  [TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameCorrectFormat]: () => [
+    rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(exporterResponse))),
+    rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(addedSpecies))),
+    rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json([]))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(SPECIES_STATE_LOOK_UP, (req, res, ctx) => res(ctx.json(speciesStateLookup))),
+    rest.get(COMMODITY_CODE_LOOK_UP, (req, res, ctx) => res(ctx.json(commodityCode))),
+  ],
+  [TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameMaxLength]: () => [
+    rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(exporterCompanyNameMaxLengthErrorResponse))
+    ),
+  ],
+  [TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameWithSpecialCharacters]: () => [
+    rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(exporterCompanyNamePatternErrorResponse))
+    ),
+  ],
+  [TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameCorrectFormat]: () => [
+    rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(exporterResponse))),
+    rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(addedSpecies))),
+    rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json([]))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(SPECIES_STATE_LOOK_UP, (req, res, ctx) => res(ctx.json(speciesStateLookup))),
+    rest.get(COMMODITY_CODE_LOOK_UP, (req, res, ctx) => res(ctx.json(commodityCode))),
   ],
   [TestCaseId.CCAddExporterDetails403]: () => [
     rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) =>

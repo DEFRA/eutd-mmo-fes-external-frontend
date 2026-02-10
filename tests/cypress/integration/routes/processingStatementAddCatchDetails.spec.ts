@@ -1234,16 +1234,19 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-species").type("Atlantic cod (COD)");
+    cy.wait(1000); // Wait for page to fully load
+    cy.get("#catches-0-species").should("be.enabled").type("Atlantic cod (COD)");
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-123456");
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
     cy.get("#addProductDetails").click({ force: true });
+    cy.wait(500); // Wait for form to reset
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
     cy.get("#yourproducts tbody tr").should("have.length", 1);
-    cy.get("#catches-0-species").clear();
-    cy.get("#catches-0-species").type("European seabass (BSS)");
+    cy.get("#catches-0-species").should("be.enabled").clear();
+    cy.wait(100);
+    cy.get("#catches-0-species").should("be.enabled").type("European seabass (BSS)");
     cy.get("#catches-0-catchCertificateNumber").clear();
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-654321");
     cy.get("#catches-0-totalWeightLanded").clear();
@@ -1268,16 +1271,16 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
     cy.get("#addProductDetails").click({ force: true });
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
-    cy.get("#catches-0-species").clear();
-    cy.get("#catches-0-species").type("European seabass (BSS)");
-    cy.get("#catches-0-catchCertificateNumber").clear();
-    cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-123456");
-    cy.get("#catches-0-totalWeightLanded").clear();
-    cy.get("#catches-0-totalWeightLanded").type("30");
-    cy.get("#catches-0-exportWeightBeforeProcessing").clear();
-    cy.get("#catches-0-exportWeightBeforeProcessing").type("15");
-    cy.get("#catches-0-exportWeightAfterProcessing").clear();
-    cy.get("#catches-0-exportWeightAfterProcessing").type("15");
+    cy.get("#catches-0-species").clear({ force: true });
+    cy.get("#catches-0-species").type("European seabass (BSS)", { force: true });
+    cy.get("#catches-0-catchCertificateNumber").clear({ force: true });
+    cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-123456", { force: true });
+    cy.get("#catches-0-totalWeightLanded").clear({ force: true });
+    cy.get("#catches-0-totalWeightLanded").type("30", { force: true });
+    cy.get("#catches-0-exportWeightBeforeProcessing").clear({ force: true });
+    cy.get("#catches-0-exportWeightBeforeProcessing").type("15", { force: true });
+    cy.get("#catches-0-exportWeightAfterProcessing").clear({ force: true });
+    cy.get("#catches-0-exportWeightAfterProcessing").type("15", { force: true });
     cy.get("#addProductDetails").click({ force: true });
   });
 });
@@ -1317,14 +1320,26 @@ describe("PS: Add catch details - Remove Functionality and Count Updates", () =>
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-species").type("Atlantic cod (COD)");
+    cy.wait(1000); // Wait for page to fully load
+
+    // First catch - fill species field
+    cy.get("#catches-0-species").should("be.enabled").type("Atlantic cod (COD)");
+    cy.wait(200); // Wait for autocomplete to settle
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-111111");
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
     cy.get("#addProductDetails").click({ force: true });
-    cy.get("#catches-0-species").clear().type("Atlantic cod (COD)");
-    cy.get("#catches-0-catchCertificateNumber").clear().type("GBR-2022-CC-222222");
+    cy.wait(500); // Wait for form to reset
+
+    // Second catch - requery and fill species field
+    cy.get("#catches-0-species").should("be.enabled").clear();
+    cy.wait(100);
+    cy.get("#catches-0-species").should("be.enabled").type("Atlantic cod (COD)");
+    cy.wait(200); // Wait for autocomplete to settle
+    cy.get("#catches-0-catchCertificateNumber").clear();
+    cy.wait(100);
+    cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-222222");
     cy.get("#catches-0-totalWeightLanded").clear().type("30");
     cy.get("#catches-0-exportWeightBeforeProcessing").clear().type("15");
     cy.get("#catches-0-exportWeightAfterProcessing").clear().type("15");
@@ -1674,36 +1689,30 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.wait(200);
+    cy.wait(1000);
 
-    // 1. Select non-UK to show issuing country field
-    cy.get("input[type='radio'][value='non_uk']").check({ force: true });
-    // cy.get("input[type='radio'][id='catchCertificateType-non_uk']").should("be.checked");
-    // cy.get("input[type='radio'][id='catchCertificateType-uk']").should("not.be.checked");
-    // cy.get("#catches-0-issuingCountry").should("exist").should("be.visible");
-    // cy.get("#catches-0-issuingCountry").should("have.value", "");
+    // Wait for page to be fully loaded and hydrated
+    cy.get('input[name="catchCertificateType"]').should("exist");
 
-    // 2. Select a country from autocomplete to trigger onSelected
-    // cy.get("#catches-0-issuingCountry").type("France", { force: true });
-    // cy.get("body").then(($body) => {
-    //   if ($body.find(".autocomplete__option").length > 0) {
-    //     cy.get(".autocomplete__option").first().click({ force: true });
-    //     cy.get("#catches-0-issuingCountry").should("have.value", "France");
-    //     cy.get("#catches-0-issuingCountry").should("not.have.value", "");
-    //   }
-    // });
+    // 1. First click UK to ensure we're starting from a known state
+    cy.get('label[for="catchCertificateType-uk"]').click();
+    cy.wait(500); // Wait for React state update
+    cy.get('[data-testid="issuing-country-0"]').should("not.exist");
 
-    // 3. Select UK radio to trigger onChange and hide issuing country field
-    cy.get("input[type='radio'][value='uk']").check({ force: true });
-    // cy.get("input[type='radio'][id='catchCertificateType-uk']").should("be.checked");
-    // cy.get("input[type='radio'][id='catchCertificateType-non_uk']").should("not.be.checked");
-    // cy.get("#catches-0-issuingCountry").should("not.exist");
+    // 2. Now select non-UK to show issuing country field
+    cy.get('label[for="catchCertificateType-non_uk"]').click();
+    cy.wait(500); // Wait for React state update
+    cy.get('[data-testid="issuing-country-0"]', { timeout: 10000 }).should("exist");
 
-    // 4. Re-select non-UK to show issuing country field again and trigger onChange
-    // cy.get("input[type='radio'][value='non_uk']").check({ force: true });
-    // cy.get("input[type='radio'][id='catchCertificateType-non_uk']").should("be.checked");
-    // cy.get("input[type='radio'][id='catchCertificateType-uk']").should("not.be.checked");
-    // cy.get("#catches-0-issuingCountry").should("exist").should("be.visible");
+    // 3. Select UK radio to hide issuing country field again
+    cy.get('label[for="catchCertificateType-uk"]').click();
+    cy.wait(500); // Wait for React state update
+    cy.get('[data-testid="issuing-country-0"]').should("not.exist");
+
+    // 4. Re-select non-UK to show issuing country field again
+    cy.get('label[for="catchCertificateType-non_uk"]').click();
+    cy.wait(500); // Wait for React state update
+    cy.get('[data-testid="issuing-country-0"]', { timeout: 10000 }).should("exist");
   });
 
   it("should validate issuing country is required for non-UK certificates", () => {
@@ -1714,7 +1723,7 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
     // Select non-UK and submit without issuing country
-    cy.get("input[type='radio'][value='non_uk']").click({ force: true });
+    cy.get('input[name="catchCertificateType"][value="non_uk"]').check({ force: true });
     cy.get("#catches-0-catchCertificateNumber").type(ccNumber);
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
@@ -1734,7 +1743,7 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
     // Select UK certificate and submit without issuing country
-    cy.get("input[type='radio'][value='uk']").click({ force: true });
+    cy.get('input[name="catchCertificateType"][value="uk"]').check({ force: true });
     cy.get("#catches-0-catchCertificateNumber").type(ccNumber);
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
@@ -1755,10 +1764,10 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.wait(1000);
 
     // Fill out all required fields including issuing country
-    cy.get("input[type='radio'][value='non_uk']").click({ force: true });
-    cy.get("#catches-0-issuingCountry").should("exist").should("be.visible");
-    cy.get("#catches-0-issuingCountry").invoke("val", "France", { force: true });
-
+    cy.get('input[name="catchCertificateType"][value="non_uk"]').check({ force: true });
+    cy.wait(200); // Wait for React state update and field to appear
+    cy.get('input[name="issuingCountry"]').should("exist").should("be.visible");
+    cy.get('input[name="issuingCountry"]').type("France{enter}", { force: true });
     cy.get("#catches-0-catchCertificateNumber").type(ccNumber);
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");

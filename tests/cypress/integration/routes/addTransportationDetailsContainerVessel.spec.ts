@@ -34,11 +34,14 @@ describe("Add Transportation Details: Container Vessel", () => {
   it("should render the input label and hint text", () => {
     cy.contains("label", "Vessel name");
     cy.contains("label", "Flag state");
-    cy.contains("label", "Container identification number or numbers");
+    cy.contains("label", "Shipping container identification number");
     cy.contains("label", "Place export leaves the departure country");
     cy.contains("label", "Freight bill number (optional)");
     cy.get("div .govuk-hint").contains("For example, Hull.");
     cy.get("div .govuk-hint").contains("For example, BD51SMR");
+    cy.get("div .govuk-hint").contains(
+      "Enter the identification number shown on the shipping container. For example, ABCJ0123456"
+    );
   });
 });
 
@@ -62,7 +65,6 @@ describe("Save and Continue button - UnHappy path", () => {
     cy.get("[data-testid=save-and-continue").click({ force: true });
     cy.get(".govuk-error-summary__list").contains("Enter the vessel name");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
     cy.contains("a", /^Enter the flag state$/).should("be.visible");
     cy.contains("a", /^Enter the vessel name$/).should("be.visible");
@@ -76,7 +78,7 @@ describe("Save and Continue button - Happy path", () => {
     };
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
-    cy.get("#containerNumber").type("Container", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
     cy.get("#vesselName").type("Vessel", { force: true });
     cy.get("#flagState").type("flag State", { force: true });
     cy.get("#departurePlace").type("Place export", { force: true });
@@ -91,7 +93,7 @@ describe("Save and Continue button - Happy path", () => {
     };
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
-    cy.get("#containerNumber").type("Container", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
     cy.get("#vesselName").type("Vessel", { force: true });
     cy.get("#flagState").type("flag State", { force: true });
     cy.get("#departurePlace").type("Place export", { force: true });
@@ -118,5 +120,206 @@ describe("should redirect to forbidden page it transport details return 403 on p
     };
     cy.visit(ccPageUrl, { qs: { ...testParams } });
     cy.url().should("include", "/forbidden");
+  });
+});
+
+describe("Add Transportation Details Container Vessel: Container Identification Number Validation", () => {
+  it("should display error when container identification number exceeds 50 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportContainerMaxLength,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
+  });
+
+  it("should display error when container identification number contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportContainerInvalidCharacters,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABC123!@#", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+    ).should("be.visible");
+  });
+
+  it("should save successfully when container identification number is not provided", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportSave,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+    // containerNumbers.0 not filled - should be optional
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", progressUrl);
+  });
+
+  it("should save successfully when container identification number is valid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportSave,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", progressUrl);
+  });
+});
+
+describe("Add Transportation Details Container Vessel: Multiple Container Numbers", () => {
+  it("should save multiple container values successfully", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportMultipleContainers,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+
+    // Add and fill container fields
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    cy.get('input[name="containerNumbers.1"]').type("DEFJ9876543", { force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    cy.get('input[name="containerNumbers.2"]').type("GHIR5555555", { force: true });
+
+    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", progressUrl);
+  });
+
+  it("should allow empty container fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportEmptyContainers,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+
+    // Add multiple fields but leave some empty
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    // Leave containerNumbers.1 empty
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    cy.get('input[name="containerNumbers.2"]').type("GHIR5555555", { force: true });
+
+    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", progressUrl);
+  });
+
+  it("should load pre-existing container values from backend", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportEditWithContainers,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    // Verify pre-existing values are loaded
+    cy.get('input[name="containerNumbers.0"]').should("have.value", "EXISTING001");
+    cy.get('input[name="containerNumbers.1"]').should("have.value", "EXISTING002");
+    cy.get('input[name="containerNumbers.2"]').should("have.value", "EXISTING003");
+  });
+
+  it("should display error when container number exceeds max length", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportContainerMaxLength,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), {
+      force: true,
+    });
+    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    // Check error is displayed
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
+  });
+
+  it("should display container field label and hint text", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportSave,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    // Check container identification number label is displayed
+    cy.get('label[for="containerNumbers.0"]')
+      .should("be.visible")
+      .and("contain", "Shipping container identification number");
+
+    // Check hint text is displayed
+    cy.get("#hint-containerIdentificationNumber")
+      .should("be.visible")
+      .and("contain", "Enter the identification number shown on the shipping container. For example, ABCJ0123456");
+  });
+
+  it("should limit to maximum 10 containers", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportSave,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+
+    // Add 9 more containers (already have 1)
+    for (let i = 0; i < 9; i++) {
+      cy.get('[data-testid="add-another-container"]').click({ force: true });
+    }
+
+    // Verify we have 10 containers
+    cy.get('input[name="containerNumbers.9"]').should("exist");
+
+    // Add another container button should not be visible
+    cy.get('[data-testid="add-another-container"]').should("not.exist");
+  });
+
+  it("should show remove button for each container except when only one exists", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportSave,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+
+    // Initially only one container, remove button should not be visible
+    cy.get('[data-testid="remove-container-0"]').should("not.exist");
+
+    // Add another container
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+
+    // Now both should have remove buttons
+    cy.get('[data-testid="remove-container-0"]').should("exist");
+    cy.get('[data-testid="remove-container-1"]').should("exist");
+
+    // Remove one container
+    cy.get('[data-testid="remove-container-1"]').click({ force: true });
+
+    // Only one container left, remove button should not be visible
+    cy.get('[data-testid="remove-container-0"]').should("not.exist");
   });
 });

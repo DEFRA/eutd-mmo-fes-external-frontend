@@ -5,6 +5,101 @@ const landingsUrl = `${documentUrl}/landings-entry`;
 const checkYourInformationUrl = `${documentUrl}/check-your-information`;
 const progressUrl = `${documentUrl}/progress`;
 
+// Helper constants for landings field order validation
+const PRODUCT_HEADER_FIELDS = ["species", "state", "presentation", "commodity code"];
+const LANDING_FIELD_ORDER = [
+  "start date",
+  "date landed",
+  "catch area",
+  "high seas area",
+  "exclusive economic zone",
+  "rfmo",
+  "vessel name",
+  "gear category",
+  "gear type",
+  "export weight",
+];
+
+// Helper functions for landings field order validation
+function findFieldIndex(section: string[], field: string): number {
+  for (let i = 0; i < section.length; i++) {
+    if (section[i].includes(field)) return i;
+  }
+  return -1;
+}
+
+function validateHeaderOrder(section: string[]): void {
+  let lastH = -1;
+  for (const h of PRODUCT_HEADER_FIELDS) {
+    const idx = findFieldIndex(section, h);
+    expect(idx, `${h} should exist in product section`).to.be.greaterThan(-1);
+    expect(idx, `${h} should come after previous header`).to.be.greaterThan(lastH);
+    lastH = idx;
+  }
+}
+
+function splitIntoLandingGroups(landingRows: string[]): string[][] {
+  const groups: string[][] = [];
+  let currentGroup: string[] = [];
+  for (const label of landingRows) {
+    currentGroup.push(label);
+    if (label.includes("export weight")) {
+      groups.push(currentGroup);
+      currentGroup = [];
+    }
+  }
+  if (currentGroup.length > 0) groups.push(currentGroup);
+  return groups;
+}
+
+function validateLandingGroup(group: string[], prodIdx: number, lgIndex: number): void {
+  const present: string[] = [];
+  for (const f of LANDING_FIELD_ORDER) {
+    if (findFieldIndex(group, f) !== -1) present.push(f);
+  }
+  let last = -1;
+  for (const f of present) {
+    const idx = findFieldIndex(group, f);
+    expect(idx, `product ${prodIdx} landing ${lgIndex} ${f} should be present`).to.be.greaterThan(-1);
+    expect(idx, `product ${prodIdx} landing ${lgIndex} ${f} should come after previous`).to.be.greaterThan(last);
+    last = idx;
+  }
+}
+
+function getProductSectionEndIndex(
+  speciesIndices: number[],
+  totalIndex: number,
+  textsLength: number,
+  prodIdx: number
+): number {
+  if (prodIdx + 1 < speciesIndices.length) {
+    return speciesIndices[prodIdx + 1];
+  }
+  if (totalIndex > -1) {
+    return totalIndex;
+  }
+  return textsLength;
+}
+
+function validateProductSection(texts: string[], speciesIndices: number[], totalIndex: number, prodIdx: number): void {
+  const startIdx = speciesIndices[prodIdx];
+  const endIdx = getProductSectionEndIndex(speciesIndices, totalIndex, texts.length, prodIdx);
+  const section = texts.slice(startIdx, endIdx);
+
+  validateHeaderOrder(section);
+
+  const commodityIdx = findFieldIndex(section, "commodity code");
+  if (commodityIdx === -1) return;
+
+  const landingRows = section.slice(commodityIdx + 1);
+  if (landingRows.length === 0) return;
+
+  const landingGroups = splitIntoLandingGroups(landingRows);
+  for (let lgIndex = 0; lgIndex < landingGroups.length; lgIndex++) {
+    validateLandingGroup(landingGroups[lgIndex], prodIdx, lgIndex);
+  }
+}
+
 describe("Check Your Information (Summary) page: UI", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
@@ -18,6 +113,12 @@ describe("Check Your Information (Summary) page: UI", () => {
       name: "Check your information before you create the catch certificate",
       level: 1,
     });
+  });
+
+  it("should render document number in exporter details section", () => {
+    cy.contains("dt.govuk-summary-list__key", "Document number")
+      .next("dd")
+      .should("have.text", "GBR-2022-CC-24F279E85");
   });
 
   it("should render CMR field when set for transport", () => {
@@ -120,6 +221,57 @@ describe("Check Your Information (Summary) page: UI", () => {
     });
   });
 
+  it("should render landings section fields in the expected order", () => {
+    cy.get("dl")
+      .eq(1)
+      .find("dt.govuk-summary-list__key")
+      .then(($keys) => {
+        const texts = $keys.toArray().map((el) => (el.textContent ?? "").trim().toLowerCase());
+
+        // Find indices of each product (by 'species') to split per-product sections
+        const speciesIndices: number[] = [];
+        for (let i = 0; i < texts.length; i++) {
+          if (texts[i].includes("species")) speciesIndices.push(i);
+        }
+
+        // Also find the index of the total export weight to bound the last product
+        const totalIndex = findFieldIndex(texts, "total export weight");
+
+        // For each product section, validate header order exists and then validate each landing group
+        for (let prodIdx = 0; prodIdx < speciesIndices.length; prodIdx++) {
+          validateProductSection(texts, speciesIndices, totalIndex, prodIdx);
+        }
+      });
+  });
+
+  it("should show transport warning with icon and correct text", () => {
+    const warning =
+      "You may be liable to investigation and enforcement action, including prosecution, if you knowingly submit false, misleading, or otherwise inaccurate data.";
+
+    cy.get(".govuk-warning-text")
+      .should("be.visible")
+      .within(() => {
+        cy.get(".govuk-warning-text__icon").should("be.visible");
+        cy.contains(warning).should("be.visible");
+      });
+  });
+
+  it("should display 'Now create your catch certificate' guidance and Accept button", () => {
+    cy.contains("h2", "Now create your catch certificate").should("be.visible");
+    cy.contains("By submitting this catch certificate, you confirm that").should("be.visible");
+    cy.contains(
+      "you understand that you are under a duty not to knowingly submit information that is false or otherwise inaccurate"
+    ).should("be.visible");
+    cy.contains("the fisheries administrations may undertake checks on the accuracy and validity of the data").should(
+      "be.visible"
+    );
+    cy.contains(
+      "you understand that you may be liable to investigation and potentially to enforcement action, including prosecution, if you knowingly submit false, misleading, or otherwise inaccurate data"
+    ).should("be.visible");
+
+    cy.get("[data-testid=create-cc-button]").should("contain", "Accept and create catch certificate");
+  });
+
   describe("Welsh translations", () => {
     it("should render translated CMR field when set for transport", () => {
       cy.get('a[hreflang="cy"][lang="cy"]').click();
@@ -190,6 +342,27 @@ describe("Check Your Information (Summary) page: UI", () => {
         .find('a:contains("Change")')
         .should("have.attr", "href")
         .and("include", "#highSeasArea-hint");
+    });
+
+    it("translates the warning text to Welsh", () => {
+      cy.get('a[hreflang="cy"][lang="cy"]').click();
+      const welshWarning =
+        "Efallai y byddwch chi'n agored i ymchwilio a chamau gorfodi, gan gynnwys eich erlyn, os byddwch chi'n fwriadol yn cyflwyno data sy'n ffug, yn gamarweiniol neu'n anghywir fel arall.";
+      cy.get(".govuk-warning-text").within(() => {
+        cy.contains(welshWarning).should("be.visible");
+      });
+    });
+
+    it("renders the 'Now create your catch certificate' section in Welsh", () => {
+      cy.get('a[hreflang="cy"][lang="cy"]').click();
+      cy.contains("h2", "Nawr lluniwch eich tystysgrif dalfa").should("be.visible");
+      cy.contains("Drwy gyflwyno'r dystysgrif dalfa yma, rydych chi'n cadarnhau").should("be.visible");
+    });
+
+    it("renders the renamed 'Place export leaves the departure country' label in Welsh", () => {
+      cy.get('a[hreflang="cy"][lang="cy"]').click();
+      // The Welsh label - check it exists somewhere in the summary list keys
+      cy.get("dt.govuk-summary-list__key").filter(':contains("fan lle")').should("have.length.at.least", 1);
     });
   });
 });
@@ -554,7 +727,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(2) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(3) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-exporter-details")
       .then((elem: JQuery<HTMLElement>) => {
@@ -572,7 +745,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(3) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(4) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-exporter-details")
       .then((elem: JQuery<HTMLElement>) => {
@@ -590,7 +763,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(4) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(5) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-exporter-details")
       .then((elem: JQuery<HTMLElement>) => {
@@ -606,7 +779,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(3) > .govuk-summary-list__row:nth-of-type(1) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(1) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "landings-entry")
       .then((elem: JQuery<HTMLElement>) => {
@@ -622,7 +795,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(1) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(3) > .govuk-summary-list__row:nth-of-type(1) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "what-export-journey")
       .then((elem: JQuery<HTMLElement>) => {
@@ -638,7 +811,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(2) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(3) > .govuk-summary-list__row:nth-of-type(2) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "what-export-journey")
       .then((elem: JQuery<HTMLElement>) => {
@@ -654,7 +827,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(5) > .govuk-summary-list__row:nth-of-type(1) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(1) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "whose-waters-were-they-caught-in")
       .then((elem: JQuery<HTMLElement>) => {
@@ -670,7 +843,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(3) > .govuk-summary-list__row:nth-of-type(2) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(2) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "what-are-you-exporting?productId=GBR-2022-CC-99BBF3669-a9ec91a4-58b4-42a2-a5d3-2812e5d33044")
       .then((elem: JQuery<HTMLElement>) => {
@@ -691,7 +864,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(9) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(3) > .govuk-summary-list__row:nth-of-type(9) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-additional-transport-documents-truck/1")
       .then((elem: JQuery<HTMLElement>) => {
@@ -708,7 +881,7 @@ describe("Check Your Information (Summary) page: change links", () => {
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(10) > .govuk-summary-list__actions > .govuk-link")
+    cy.get("dl:nth-of-type(3) > .govuk-summary-list__row:nth-of-type(10) > .govuk-summary-list__actions > .govuk-link")
       .should("have.attr", "href")
       .and("include", "add-additional-transport-documents-truck/1")
       .then((elem: JQuery<HTMLElement>) => {
@@ -727,8 +900,8 @@ describe("Check Your Information (Summary) page: Manual Landing render container
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.contains("dt", "Container identification number").should("be.visible");
-    cy.contains("dt", "Container identification number").next("dd").should("contain", "CONTAINER123");
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
+    cy.contains("dt", "Shipping container identification number").next("dd").should("contain", "CONTAINER123");
   });
 
   it("should link to the truck transportation page to change the container identification number", () => {
@@ -750,8 +923,8 @@ describe("Check Your Information (Summary) page: Manual Landing render container
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.contains("dt", "Container identification number").should("be.visible");
-    cy.contains("dt", "Container identification number").next("dd").should("contain", "CONTAINER123");
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
+    cy.contains("dt", "Shipping container identification number").next("dd").should("contain", "CONTAINER123");
   });
 
   it("should link to the train transportation page to change the container identification number", () => {
@@ -773,7 +946,7 @@ describe("Check Your Information (Summary) page: Manual Landing render container
     };
 
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.contains("dt", "Container identification number").should("not.exist");
+    cy.contains("dt", "Shipping container identification number").should("not.exist");
   });
 });
 
@@ -785,8 +958,8 @@ describe("Check Your Information (Summary) page: Manual Landing when JavaScript 
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
 
-    cy.contains("dt", "Container identification number").should("be.visible");
-    cy.contains("dt", "Container identification number").next("dd").should("contain", "CONTAINER123");
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
+    cy.contains("dt", "Shipping container identification number").next("dd").should("contain", "CONTAINER123");
     cy.get('[data-testid="change-container-truck"]')
       .should("have.attr", "href")
       .and("include", "/add-transportation-details-truck")
@@ -800,8 +973,8 @@ describe("Check Your Information (Summary) page: Manual Landing when JavaScript 
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
 
-    cy.contains("dt", "Container identification number").should("be.visible");
-    cy.contains("dt", "Container identification number").next("dd").should("contain", "CONTAINER123");
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
+    cy.contains("dt", "Shipping container identification number").next("dd").should("contain", "CONTAINER123");
     cy.get('[data-testid="change-container-train"]')
       .should("have.attr", "href")
       .and("include", "/add-transportation-details-train")
@@ -983,14 +1156,14 @@ describe("Check Your Information (Summary) page: Plane transport with no freight
     cy.contains("dt.govuk-summary-list__key", "Flight number").next("dd").should("have.text", "AA1234567");
   });
 
-  it("should render container identification number", () => {
+  it("should render Container identification number", () => {
     cy.contains("dt.govuk-summary-list__key", "Container identification number")
       .next("dd")
       .should("have.text", "CONT1234");
   });
 
   it("should render departure place", () => {
-    cy.contains("dt.govuk-summary-list__key", "Place export leaves the UK")
+    cy.contains("dt.govuk-summary-list__key", "Place export leaves the departure country")
       .next("dd")
       .should("have.text", "Joelle Rhodes");
   });
@@ -1022,14 +1195,14 @@ describe("Check Your Information (Summary) page: Container vessel transport with
     cy.contains("dt.govuk-summary-list__key", "Flag state").next("dd").should("have.text", "Panama");
   });
 
-  it("should render container identification number", () => {
-    cy.contains("dt.govuk-summary-list__key", "Container identification number")
+  it("should render shipping container identification number", () => {
+    cy.contains("dt.govuk-summary-list__key", "Shipping container identification number")
       .next("dd")
       .should("have.text", "CONT5678");
   });
 
   it("should render departure place", () => {
-    cy.contains("dt.govuk-summary-list__key", "Place export leaves the UK")
+    cy.contains("dt.govuk-summary-list__key", "Place export leaves the departure country")
       .next("dd")
       .should("have.text", "Port of Southampton");
   });
@@ -1509,31 +1682,101 @@ describe("PS - scenario 2 - Change plant address", () => {
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
   });
 
-  it("should have a change link for plant address and navigate correctly", () => {
+  it("should display Change link next to Address for Processing plant", () => {
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
-    cy.url().then((url) => cy.log(`Current URL: ${url}`));
 
     // Wait for page to fully load
     cy.get("h1").should("exist");
 
-    // Take screenshot
-    cy.screenshot("ps-plant-address-page");
+    // Verify the Address field exists for Processing plant
+    cy.get(".govuk-summary-list__key").filter(':contains("Address")').should("exist", "Address field should exist");
 
-    // Find plant address change link - be more specific about which Address field
+    // Verify Change link exists next to the Address field
     cy.get('a[href*="add-processing-plant-address"]', { timeout: 10000 })
-      .should("exist", "Plant address change link should exist")
-      .first()
-      .click();
+      .should("exist", "Change link for Address should exist")
+      .should("contain", "Change");
+  });
 
-    // Verify we're on add-processing-plant-address page with nextUri
+  it("should navigate to add-processing-plant-address when Change link is clicked", () => {
+    // Click the change link for plant address
+    cy.get('a[href*="add-processing-plant-address"]').click();
+
+    // Verify navigation to add-processing-plant-address page
     cy.url().should("include", "/add-processing-plant-address");
     cy.url().should("include", "nextUri");
 
-    // Click Save and continue without making changes
+    // Verify page content loaded
+    cy.get("h1").should("exist");
+  });
+
+  it("should return to check-your-information after completing updates and pressing Save and continue", () => {
+    cy.log("=== TEST START ===");
+
+    // Click the change link for plant address
+    cy.log("TEST STEP 1: Click change link");
+    cy.get('a[href*="add-processing-plant-address"]').click();
+
+    // Verify we're on add-processing-plant-address page (summary view)
+    cy.log("TEST STEP 2: Verify on add-processing-plant-address");
+    cy.url().should("include", "/add-processing-plant-address");
+    cy.url().should("include", "nextUri");
+
+    // Verify the hidden input has the nextUri value
+    cy.log("TEST STEP 2A: Verify hidden nextUri input");
+    cy.get('input[name="nextUri"]')
+      .should("exist")
+      .invoke("val")
+      .then((val) => {
+        cy.log("TEST STEP 2B: Hidden input value = " + val);
+        expect(val).to.include("/check-your-information");
+      });
+
+    // Click the "Change" button to open the address form
+    cy.log("TEST STEP 3: Click Change button (goToAddAddress)");
+    cy.get('button[id="goToAddAddress"]').click();
+
+    // Now we're on the address entry form (WhatExportersAddress component)
+    cy.log("TEST STEP 4: Verify on what-processing-plant-address");
+    cy.url().should("include", "/what-processing-plant-address");
+    cy.url().should("include", "nextUri");
+
+    // Click "Enter the address manually" to use manual address entry
+    cy.log("TEST STEP 5: Click Enter the address manually");
+    cy.contains("button", "Enter the address manually").click();
+
+    // Fill in manual address fields
+    cy.log("TEST STEP 6: Fill in address fields");
+    cy.get('input[name="buildingNumber"]').clear();
+    cy.get('input[name="buildingNumber"]').type("456");
+
+    cy.get('input[name="streetName"]').clear();
+    cy.get('input[name="streetName"]').type("New Avenue");
+
+    cy.get('input[name="townCity"]').clear();
+    cy.get('input[name="townCity"]').type("Manchester");
+
+    cy.get('input[name="postcode"]').clear();
+    cy.get('input[name="postcode"]').type("M1 1AA");
+
+    cy.get('input[id="country"]').type("United Kingdom{enter}");
+
+    // Click Continue with the new address
+    cy.log("TEST STEP 7: Click Continue");
+    cy.get('button[type="submit"]').contains("Continue").click();
+
+    // Should return to add-processing-plant-address page with updated address (summary view)
+    cy.log("TEST STEP 8: Verify returned to add-processing-plant-address");
+    cy.url().should("include", "/add-processing-plant-address");
+    cy.url().should("include", "nextUri");
+
+    // Click Save and continue from the summary page
+    cy.log("TEST STEP 9: Click Save and continue from summary page");
     cy.get('button[type="submit"]').contains("Save and continue").click();
 
-    // Should be redirected back to check-your-information
+    // Health certificate section is already complete, so should skip /add-health-certificate
+    // and navigate directly back to check-your-information
+    cy.log("TEST STEP 10: Verify final navigation to check-your-information");
     cy.url().should("include", "/check-your-information");
     cy.url().should("not.include", "nextUri");
     cy.url().should("not.include", "/add-health-certificate");
@@ -1617,7 +1860,7 @@ describe("Check Your Information: CommonLink component testing", () => {
   });
 
   it("should render common link for exporter address with visually hidden text", () => {
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(4)")
+    cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(5)")
       .find("a")
       .should("contain", "Change")
       .find(".govuk-visually-hidden")
@@ -1625,7 +1868,7 @@ describe("Check Your Information: CommonLink component testing", () => {
   });
 
   it("should render common link for conservation with visually hidden text", () => {
-    cy.get("dl:nth-of-type(5) > .govuk-summary-list__row:nth-of-type(1)")
+    cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(1)")
       .find("a")
       .should("contain", "Change")
       .find(".govuk-visually-hidden")
@@ -1693,7 +1936,7 @@ describe("Check Your Information: Truck transport without CMR (false)", () => {
   });
 
   it("should render place export leaves UK for truck", () => {
-    cy.contains("dt", "Place export leaves the UK").should("be.visible");
+    cy.contains("dt", "Place export leaves the departure country").should("be.visible");
   });
 
   it("should have correct change links with anchors for truck fields", () => {
@@ -1716,7 +1959,7 @@ describe("Check Your Information: Train transport details", () => {
   });
 
   it("should render place export leaves UK for train", () => {
-    cy.contains("dt", "Place export leaves the UK").should("be.visible");
+    cy.contains("dt", "Place export leaves the departure country").should("be.visible");
   });
 
   it("should render freight bill number for train", () => {
@@ -1746,12 +1989,12 @@ describe("Check Your Information: Container vessel transport details", () => {
     cy.contains("dt", "Flag state").should("be.visible");
   });
 
-  it("should render container identification number for container vessel", () => {
-    cy.contains("dt", "Container identification number").should("be.visible");
+  it("should render shipping container identification number for container vessel", () => {
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
   });
 
   it("should render place export leaves UK for container vessel", () => {
-    cy.contains("dt", "Place export leaves the UK").should("be.visible");
+    cy.contains("dt", "Place export leaves the departure country").should("be.visible");
   });
 
   it("should have correct change links with anchors for container vessel fields", () => {
@@ -1781,7 +2024,7 @@ describe("Check Your Information: Plane transport details", () => {
   });
 
   it("should render place export leaves UK for plane", () => {
-    cy.contains("dt", "Place export leaves the UK").should("be.visible");
+    cy.contains("dt", "Place export leaves the departure country").should("be.visible");
   });
 
   it("should render freight bill number for plane", () => {
@@ -1889,7 +2132,10 @@ describe("Check Your Information: Warning text", () => {
   });
 
   it("should display the full warning message", () => {
-    cy.get(".govuk-warning-text__text").should("contain", "In submitting the information in this catch certificate");
+    cy.get(".govuk-warning-text__text").should(
+      "contain",
+      "You may be liable to investigation and enforcement action, including prosecution, if you knowingly submit false, misleading, or otherwise inaccurate data."
+    );
   });
 });
 
@@ -1906,7 +2152,7 @@ describe("Check Your Information: Exporter details section", () => {
   });
 
   it("should render exporter full name field", () => {
-    cy.contains("dt", "Name of person responsible for this export").should("be.visible");
+    cy.contains("dt", "Full name of responsible person").should("be.visible");
   });
 
   it("should render company name field", () => {
@@ -1918,7 +2164,8 @@ describe("Check Your Information: Exporter details section", () => {
   });
 
   it("should have change links for all exporter fields when not locked", () => {
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row").each(($row) => {
+    // Skip document number (row 1) and check rows 2-5 (Your Reference, Name, Company, Address)
+    cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(n+2)").each(($row) => {
       cy.wrap($row).find("a").should("contain", "Change");
     });
   });
@@ -1928,6 +2175,6 @@ describe("Check Your Information: Exporter details section", () => {
       testCaseId: TestCaseId.CCCheckYourInformationLocked,
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-    cy.get("dl:nth-of-type(2) > .govuk-summary-list__row:nth-of-type(2)").find("a").should("not.exist");
+    cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(3)").find("a").should("not.exist");
   });
 });

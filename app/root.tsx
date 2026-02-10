@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import * as GovUKFrontEnd from "govuk-frontend";
 import { useTranslation } from "react-i18next";
 import { applicationinsights, getApplicationInsights } from "~/applicationInsightsService";
 import { serverApplicationinsights } from "./applicationInsightsService.server";
@@ -34,6 +33,9 @@ import clientLogger from "./logger";
 import { allNamespaces, supportedLanguages } from "./i18n";
 
 declare global {
+  // Injected by Vite define config for cache-busting
+  const __BUILD_ID__: string;
+
   interface Window {
     gtag: any;
   }
@@ -172,7 +174,7 @@ const Template = ({
   const location = useLocation();
 
   return (
-    <html className="govuk-template" lang={locale} dir={i18n.dir()}>
+    <html className="govuk-template govuk-template--rebranded" lang={locale} dir={i18n.dir()}>
       <head>
         <Meta />
         <Links />
@@ -220,7 +222,22 @@ export function ErrorBoundary() {
 
   // when true, this is what used to go to `CatchBoundary`
   if (isRouteErrorResponse(error)) {
-    return (
+    const substring = "The request is blocked.";
+    const isWAFError = error?.data.includes(substring);
+
+    return isWAFError ? (
+      <Template {...templateProps} disableScripts>
+        <Main showHelpLink={false}>
+          <div className="govuk-grid-row">
+            <div className="govuk-grid-column-two-thirds">
+              <Title title={t("forbiddenH1Text", { ns: "forbidden" })} />
+              <p data-testid="no-permission">{t("forbiddenPageP1Text", { ns: "forbidden" })}</p>
+              <p data-testid="navigate-back">{t("forbiddenPageP2Text", { ns: "forbidden" })}</p>
+            </div>
+          </div>
+        </Main>
+      </Template>
+    ) : (
       <Template {...templateProps} disableScripts>
         <>
           <h1>{t("commonErrorPageTitle")}</h1>
@@ -244,34 +261,19 @@ export function ErrorBoundary() {
     clientLogger.error(error);
   }
 
-  const substring = "The request is blocked.";
-  const isWAFError = isError && error?.message.includes(substring);
-
   return (
     <Template {...templateProps} disableScripts>
-      {isWAFError ? (
-        <Main showHelpLink={false}>
-          <div className="govuk-grid-row">
-            <div className="govuk-grid-column-two-thirds">
-              <Title title={t("forbiddenH1Text", { ns: "forbidden" })} />
-              <p data-testid="no-permission">{t("forbiddenPageP1Text", { ns: "forbidden" })}</p>
-              <p data-testid="navigate-back">{t("forbiddenPageP2Text", { ns: "forbidden" })}</p>
-            </div>
-          </div>
-        </Main>
-      ) : (
-        <Main showHelpLink={false}>
-          <h1>{t("commonErrorPageTitle")}</h1>
-          <p>{t("commonErrorPageTryagainText")}</p>
-          <p>{t("commonErrorPagesaveText")}</p>
-          {!isProdEnv() && (
-            <>
-              <p>{errorMessage}</p>
-              {isError && <pre style={{ overflowY: "scroll" }}>{error.stack}</pre>}
-            </>
-          )}
-        </Main>
-      )}
+      <Main showHelpLink={false}>
+        <h1>{t("commonErrorPageTitle")}</h1>
+        <p>{t("commonErrorPageTryagainText")}</p>
+        <p>{t("commonErrorPagesaveText")}</p>
+        {!isProdEnv() && (
+          <>
+            <p>{errorMessage}</p>
+            {isError && <pre style={{ overflowY: "scroll" }}>{error.stack}</pre>}
+          </>
+        )}
+      </Main>
     </Template>
   );
 }
@@ -309,7 +311,9 @@ export default function App() {
   const { revalidate } = useRevalidator();
 
   // invoke the loader function to revalidate page data
-  useEffect(() => revalidate(), [revalidate]);
+  useEffect(() => {
+    revalidate();
+  }, [revalidate]);
 
   useEffect(() => {
     const htmlScriptPrototype = "noModule" in HTMLScriptElement.prototype ? "govuk-frontend-supported" : "";
@@ -317,17 +321,22 @@ export default function App() {
       ? `${document.body.className} js-enabled ${htmlScriptPrototype}`
       : `js-enabled ${htmlScriptPrototype}`;
 
-    if (GovUKFrontEnd) {
-      const header = document.querySelector('[data-module="govuk-header"]');
-      if (header) {
-        const govuk = new GovUKFrontEnd.Header(header);
-        if (govuk) {
-          clientLogger.info(`using GOVUKFrontend, ${JSON.stringify(GovUKFrontEnd)}`);
+    // Dynamic import to avoid SSR issues with govuk-frontend
+    import("govuk-frontend")
+      .then((GovUKFrontEnd) => {
+        if (GovUKFrontEnd) {
+          const header = document.querySelector('[data-module="govuk-header"]');
+          if (header) {
+            const govuk = new GovUKFrontEnd.Header(header);
+            if (govuk) {
+              clientLogger.info(`using GOVUKFrontend, ${JSON.stringify(GovUKFrontEnd)}`);
+            }
+          }
         }
-      }
-    } else {
-      clientLogger.info("GOVUKFrontend or GOVUKFrontend.Header is not defined");
-    }
+      })
+      .catch((error) => {
+        clientLogger.info("GOVUKFrontend or GOVUKFrontend.Header is not defined", error);
+      });
   }, []);
 
   // ensures app insights is initialized once

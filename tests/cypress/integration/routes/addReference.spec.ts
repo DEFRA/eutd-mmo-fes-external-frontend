@@ -13,7 +13,22 @@ describe("Add Your Reference", () => {
 
     cy.get(".govuk-hint").should(
       "have.text",
-      "Enter a reference to help you identify this catch certificate within the service. This reference is for your own use and will not appear on the final certificate. For example, you could choose a reference number from your organisation."
+      "This reference is for your own records and won't appear on the final certificate. For example, you might use an internal tracking number, project code, or any label that makes sense for your organisation."
+    );
+  });
+
+  it("should render the Welsh translation of the hint text", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddReference,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("a[hreflang='cy']").click();
+
+    cy.get(".govuk-hint").should(
+      "contain",
+      "Cyfeirnod ar gyfer eich cofnodion chi'ch hun yw hwn ac ni fydd yn ymddangos ar y dystysgrif. Er enghraifft, efallai y byddwch chi'n defnyddio rhif olrhain mewnol, cod prosiect, neu unrhyw label sy'n gwneud synnwyr i'ch sefydliad."
     );
   });
 

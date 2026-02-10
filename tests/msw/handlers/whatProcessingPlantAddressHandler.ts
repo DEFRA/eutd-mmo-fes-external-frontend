@@ -29,6 +29,7 @@ const whatProcessingPlantAddressHandler: ITestHandler = {
   [TestCaseId.PSExporterManualAddressWithErrors]: () => [
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+    // Try old format: 400 + error object
     rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) => res(ctx.status(400), ctx.json(manualAddressErrors))),
   ],
   [TestCaseId.PSExporterManualAddressWithSubBuildingError]: () => [
@@ -41,6 +42,7 @@ const whatProcessingPlantAddressHandler: ITestHandler = {
   [TestCaseId.PSExporterManualAddressWith403]: () => [
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+    // Return 403 status - the onAddManualExporterAddress function will handle it
     rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) => res(ctx.status(403), ctx.json({}))),
   ],
   [TestCaseId.PSExporterSelectAddress]: () => [

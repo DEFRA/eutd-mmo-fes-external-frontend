@@ -53,5 +53,6 @@
   "psSummaryPageCatchCertificateWeight": "Catch certificate weight",
   "psSummaryPageExportWeightBeforeProcessing": "Export weight before processing",
   "psSummaryPageExportWeightAfterProcessing": "Export weight after processing",
-  "psSummaryPageConsignmentItem": "Consignment item"
+  "psSummaryPageConsignmentItem": "Consignment item",
+  "psSummaryPageNotProvided": "Not provided"
 }

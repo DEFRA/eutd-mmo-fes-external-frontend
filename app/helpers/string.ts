@@ -94,6 +94,9 @@ export const getStartDate: (values: any) => string | undefined = (values) => {
 
 export const toISODateFormat = (day: string, month: string, year: string): string => `${year}-${month}-${day}`;
 
+export const toDDMMYYYYFormat = (day: string, month: string, year: string): string =>
+  `${String(day).padStart(2, "0")}/${String(month).padStart(2, "0")}/${year}`;
+
 export const getStrOrDefault = (value: string, defaultValue: string = "") => value ?? defaultValue;
 
-export const toDelimitedStr = (items: string[], delimiter: string = ', ') => items?.join(delimiter);
+export const toDelimitedStr = (items: string[], delimiter: string = ", ") => items?.join(delimiter);

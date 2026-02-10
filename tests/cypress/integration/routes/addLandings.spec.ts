@@ -1073,36 +1073,40 @@ describe("Manual landing page: Accessibility", () => {
   });
 
   it("should have label for all fields on the form", () => {
-    cy.get(".govuk-label").should("have.length", 16);
+    cy.get(".govuk-label").should("have.length", 18);
     // product
     cy.get(".govuk-label").eq(0).should("have.text", "Product").and("be.visible");
-    // start date
-    cy.get(".govuk-label").eq(1).should("have.text", "Day").and("be.visible");
-    cy.get(".govuk-label").eq(2).should("have.text", "Month").and("be.visible");
-    cy.get(".govuk-label").eq(3).should("have.text", "Year").and("be.visible");
-    // landed date
-    cy.get(".govuk-label").eq(4).should("have.text", "Day").and("be.visible");
-    cy.get(".govuk-label").eq(5).should("have.text", "Month").and("be.visible");
-    cy.get(".govuk-label").eq(6).should("have.text", "Year").and("be.visible");
+    // start date field label
+    cy.get(".govuk-label").eq(1).should("have.text", "Start date of fishing trip").and("be.visible");
+    // start date inputs
+    cy.get(".govuk-label").eq(2).should("have.text", "Day").and("be.visible");
+    cy.get(".govuk-label").eq(3).should("have.text", "Month").and("be.visible");
+    cy.get(".govuk-label").eq(4).should("have.text", "Year").and("be.visible");
+    // landed date field label
+    cy.get(".govuk-label").eq(5).should("have.text", "Date Landed").and("be.visible");
+    // landed date inputs
+    cy.get(".govuk-label").eq(6).should("have.text", "Day").and("be.visible");
+    cy.get(".govuk-label").eq(7).should("have.text", "Month").and("be.visible");
+    cy.get(".govuk-label").eq(8).should("have.text", "Year").and("be.visible");
     // catch area
-    cy.get(".govuk-label").eq(7).should("have.text", "Catch area").and("be.visible");
+    cy.get(".govuk-label").eq(9).should("have.text", "Catch area").and("be.visible");
     // High seas area
-    cy.get(".govuk-label").eq(8).should("have.text", "Yes").and("be.visible");
-    cy.get(".govuk-label").eq(9).should("have.text", "No").and("be.visible");
+    cy.get(".govuk-label").eq(10).should("have.text", "Yes").and("be.visible");
+    cy.get(".govuk-label").eq(11).should("have.text", "No").and("be.visible");
     //Eez
-    cy.get(".govuk-label").eq(10).should("have.text", "Exclusive economic zone").and("be.visible");
+    cy.get(".govuk-label").eq(12).should("have.text", "Exclusive economic zone").and("be.visible");
     // RFMO
     cy.get(".govuk-label")
-      .eq(11)
+      .eq(13)
       .should("have.text", "Regional fisheries management organisation (optional)")
       .and("be.visible");
     // vessel
-    cy.get(".govuk-label").eq(12).should("have.text", "Vessel name or port letter and number (PLN)").and("be.visible");
+    cy.get(".govuk-label").eq(14).should("have.text", "Vessel name or port letter and number (PLN)").and("be.visible");
     // export weight
-    cy.get(".govuk-label").eq(13).should("have.text", "Export Weight").and("be.visible");
+    cy.get(".govuk-label").eq(15).should("have.text", "Export Weight").and("be.visible");
     // gear details
-    cy.get(".govuk-label").eq(14).should("have.text", "Gear category").and("be.visible");
-    cy.get(".govuk-label").eq(15).should("have.text", "Gear type").and("be.visible");
+    cy.get(".govuk-label").eq(16).should("have.text", "Gear category").and("be.visible");
+    cy.get(".govuk-label").eq(17).should("have.text", "Gear type").and("be.visible");
   });
 });
 
@@ -1349,5 +1353,142 @@ describe("Mandatory field validation tests", () => {
 
     cy.get("select#gearType option").should("have.length", 1);
     cy.get("select#gearType option").should("contain.text", "Select gear type");
+  });
+
+  it("should preserve gear category and gear type after validation error", () => {
+    // Fill required fields
+    cy.get("select#product").select(1, { force: true });
+
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
+
+    cy.get("input#highSeasArea").check({ force: true });
+
+    // Select gear category and type
+    cy.get("select#gearCategory").select("Traps", { force: true });
+    cy.wait(500); // Wait for gear types to load
+    cy.get("select#gearType").select(1, { force: true });
+
+    // Don't enter weight to trigger validation error
+
+    // Submit form
+    cy.get("[data-testid=submit]").click({ force: true });
+
+    // Wait for error to appear
+    cy.contains("h2", "There is a problem").should("be.visible");
+
+    // Verify gear category and type are preserved
+    cy.get("select#gearCategory").should("have.value", "Traps");
+    cy.get("select#gearType option:selected").should("not.have.value", "");
+  });
+
+  it("should preserve EEZ values after validation error", () => {
+    // Fill required fields
+    cy.get("select#product").select(1, { force: true });
+
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
+
+    cy.get("input#separateHighSeasAreaFalse").check({ force: true });
+
+    // Add multiple EEZ zones
+    cy.get("#eez-0").type("Algeria", { force: true });
+    cy.get("#add-zone-button").click({ force: true });
+    cy.get("#eez-1").type("Angola", { force: true });
+
+    // Don't select gear category to trigger validation error
+
+    // Submit form
+    cy.get("[data-testid=submit]").click({ force: true });
+
+    // Wait for error to appear
+    cy.contains("h2", "There is a problem").should("be.visible");
+
+    // Verify EEZ values are preserved - check both input and select variants
+    cy.get("#eez-0").then(($el) => {
+      if ($el.is("select")) {
+        cy.get("select#eez-0 option:selected").should("have.text", "Algeria");
+      } else {
+        cy.get("#eez-0").should("have.value", "Algeria");
+      }
+    });
+    cy.get("#eez-1").then(($el) => {
+      if ($el.is("select")) {
+        cy.get("select#eez-1 option:selected").should("have.text", "Angola");
+      } else {
+        cy.get("#eez-1").should("have.value", "Angola");
+      }
+    });
+  });
+
+  it("should preserve RFMO value after validation error", () => {
+    // Fill required fields
+    cy.get("select#product").select(1, { force: true });
+
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
+
+    cy.get("input#highSeasArea").check({ force: true });
+
+    // Select RFMO
+    cy.get("select#rfmo").select(1, { force: true });
+
+    // Don't select gear category to trigger validation error
+
+    // Submit form
+    cy.get("[data-testid=submit]").click({ force: true });
+
+    // Wait for error to appear
+    cy.contains("h2", "There is a problem").should("be.visible");
+
+    // Verify RFMO value is preserved
+    cy.get("select#rfmo option:selected").should("not.have.value", "");
+  });
+
+  it("should preserve vessel name after validation error", () => {
+    // Fill required fields
+    cy.get("select#product").select(1, { force: true });
+
+    cy.get("input#startDate-day").clear({ force: true });
+    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate-month").clear({ force: true });
+    cy.get("input#startDate-month").type("09", { force: true });
+    cy.get("input#startDate-year").clear({ force: true });
+    cy.get("input#startDate-year").type("2020", { force: true });
+
+    cy.get("input#dateLanded-day").clear({ force: true });
+    cy.get("input#dateLanded-day").type("02", { force: true });
+    cy.get("input#dateLanded-month").clear({ force: true });
+    cy.get("input#dateLanded-month").type("09", { force: true });
+    cy.get("input#dateLanded-year").clear({ force: true });
+    cy.get("input#dateLanded-year").type("2020", { force: true });
+
+    cy.get("input#highSeasArea").check({ force: true });
+
+    // Enter vessel
+    cy.get("#vessel\\.vesselName").type("CARINA (BF803)", { force: true });
+
+    // Don't select gear category to trigger validation error
+
+    // Submit form
+    cy.get("[data-testid=submit]").click({ force: true });
+
+    // Wait for error to appear
+    cy.contains("h2", "There is a problem").should("be.visible");
+
+    // Verify vessel name is preserved
+    cy.get("#vessel\\.vesselName").should("have.value", "CARINA (BF803)");
   });
 });

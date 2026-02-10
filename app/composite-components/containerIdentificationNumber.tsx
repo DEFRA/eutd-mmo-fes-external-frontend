@@ -17,6 +17,8 @@ interface ContainerIdentificationNumberProps {
   errors?: IErrorsTransformed;
   displayOptionalSuffix?: boolean;
   vehicleType?: "truck" | "train" | "containerVessel" | "plane";
+  labelKey?: string;
+  hintKey?: string;
 }
 
 export const ContainerIdentificationNumber = ({
@@ -25,6 +27,8 @@ export const ContainerIdentificationNumber = ({
   errors,
   displayOptionalSuffix,
   vehicleType,
+  labelKey,
+  hintKey,
 }: ContainerIdentificationNumberProps) => {
   const { t } = useTranslation("transportation");
   const actionData = useActionData() ?? {};
@@ -54,14 +58,25 @@ export const ContainerIdentificationNumber = ({
 
   const containerInputData = getContainerInputData(isHydrated, maximumContainers, containerInputs);
 
-  const containerIdentificationLabel = displayOptionalSuffix
-    ? t("addTransportationArrivalDetailsContainerIdentificationNumberOptional")
-    : t("addTransportationArrivalDetailsContainerIdentificationNumber");
+  let containerIdentificationLabel = "";
+  if (labelKey) {
+    containerIdentificationLabel = t(labelKey);
+  } else if (vehicleType === "containerVessel") {
+    containerIdentificationLabel = displayOptionalSuffix
+      ? t("addTransportationArrivalDetailsContainerIdentificationNumberOptional")
+      : t("addTransportationArrivalDetailsContainerIdentificationNumberContainerVessel");
+  } else if (displayOptionalSuffix) {
+    containerIdentificationLabel = t("addTransportationArrivalDetailsContainerIdentificationNumberOptional");
+  } else {
+    containerIdentificationLabel = t("addTransportationArrivalDetailsContainerIdentificationNumber");
+  }
 
   const getHintText = () => {
-    if (vehicleType === "truck" || vehicleType === "train") {
-      return t("addTransportationDetailsContainerIdentificationNumberHintTruckTrain");
-    }
+    if (hintKey) return t(hintKey);
+    if (vehicleType === "truck") return t("addTransportationDetailsContainerIdentificationNumberHintTruck");
+    if (vehicleType === "train") return t("addTransportationDetailsContainerIdentificationNumberTrainHint");
+    if (vehicleType === "containerVessel")
+      return t("addTransportationArrivalDetailsContainerIdentificationNumberHintContainerVessel");
     return t("addTransportationArrivalDetailsContainerIdentificationNumberHint");
   };
 
@@ -71,7 +86,7 @@ export const ContainerIdentificationNumber = ({
         <div key={input.id} className="govuk-button-group" style={{ display: "flex", alignItems: "flex-end" }}>
           <FormInput
             containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
-            labelClassName={index === 0 ? "govuk-label" : "govuk-visually-hidden"}
+            labelClassName={index === 0 ? "govuk-label govuk-!-font-weight-bold" : "govuk-visually-hidden"}
             label={containerIdentificationLabel}
             hint={
               index === 0
@@ -89,7 +104,7 @@ export const ContainerIdentificationNumber = ({
               "govuk-input--error": errors?.[`containerNumbers.${index}`],
             })}
             inputProps={{
-              value: !isHydrated ? actionData[`containerNumbers.${index}`] ?? input.value : input.value,
+              value: (isHydrated ? input.value : actionData[`containerNumbers.${index}`] ?? input.value) as string,
               id: `containerNumbers.${index}`,
               onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(input.id, e.target.value),
             }}

@@ -50,6 +50,22 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
     }
   }, [errors]);
 
+  const getWarningContent = () => {
+    if (journey === "catchCertificate") {
+      return t("commonAddExporterDetailsWarningContent");
+    }
+    if (journey === "storageNotes") {
+      return t("commonAddExporterDetailsStorageNotesWarningContent");
+    }
+    return (
+      <>
+        {t("commonAddExporterDetailsWarningContentLine1")}
+        <br />
+        {t("commonAddExporterDetailsWarningContentLine2", { journeyText: t(journey) })}
+      </>
+    );
+  };
+
   return (
     <Main backUrl={routes[journey]["backUri"]}>
       {!isEmpty(error) && <ErrorSummary errors={displayErrorTransformedMessages(errorsTransformed)} />}
@@ -64,9 +80,7 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
         </span>
         <strong className="govuk-warning-text__text">
           <span className="govuk-visually-hidden">{t("commonWarning")}</span>
-          {journey === "storageNotes"
-            ? t("commonAddExporterDetailsStorageNotesWarningContent")
-            : t("commonAddExporterDetailsWarningContent", { journeyText: t(journey) })}
+          {getWarningContent()}
         </strong>
       </div>
       <div className="govuk-grid-row">
@@ -76,15 +90,23 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
               <FormInput
                 containerClassName="govuk-form-group"
                 label={t("ccAddExporterDetailsExporterNameOfPersonResponsible")}
+                labelClassName="govuk-!-font-weight-bold"
                 name="exporterFullName"
                 type="text"
                 inputClassName={
                   isEmpty(errorsTransformed?.exporterFullName) ? "govuk-input" : "govuk-input govuk-input--error"
                 }
                 aria-label={t("ccAddExporterDetailsExporterNameOfPersonResponsible")}
+                hint={{
+                  id: "hint-exporterFullName",
+                  position: "above",
+                  text: t("ccAddExporterDetailsExporterNameOfPersonResponsibleHintText"),
+                  className: "govuk-hint govuk-!-margin-bottom-0",
+                }}
                 inputProps={{
                   defaultValue: exporterFullName,
                   id: "exporterFullName",
+                  "aria-describedby": "hint-exporterFullName",
                 }}
                 errorProps={{ className: !isEmpty(errorsTransformed?.exporterFullName) ? "govuk-error-message" : "" }}
                 staticErrorMessage={t(errorsTransformed?.exporterFullName?.message, { ns: "errorsText" })}

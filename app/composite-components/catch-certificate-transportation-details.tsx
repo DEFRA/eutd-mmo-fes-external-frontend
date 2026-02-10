@@ -13,6 +13,7 @@ export const CatchCertificateTransportationDetails = ({
   departurePlace,
   freightBillNumber,
   containerIdentificationNumber,
+  containerNumbers,
   errors,
   legendTitle,
   displayOptionalSuffix,
@@ -37,9 +38,11 @@ export const CatchCertificateTransportationDetails = ({
       departurePlace={departurePlace}
       freightBillNumber={freightBillNumber}
       containerIdentificationNumber={containerIdentificationNumber}
+      containerNumbers={containerNumbers}
       displayOptionalSuffix={displayOptionalSuffix}
       errors={errors}
       countries={countries ?? []}
+      useBoldLabels={true}
     />
   </fieldset>
 );

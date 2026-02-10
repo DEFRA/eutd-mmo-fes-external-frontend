@@ -21,6 +21,7 @@ import {
 } from "~/urls.server";
 import nullLandingsType from "@/fixtures/landingsTypeApi/null.json";
 import manualEntryLandingsType from "@/fixtures/landingsTypeApi/manualEntry.json";
+import uploadEntryLandingsType from "@/fixtures/landingsTypeApi/uploadEntry.json";
 import directLandings from "@/fixtures/directLanding/directLandings.json";
 import directLandingType from "@/fixtures/landingsTypeApi/directLanding.json";
 import species from "@/fixtures/referenceDataApi/species.json";
@@ -151,11 +152,14 @@ const whatAreYouExportingHandler: ITestHandler = {
     rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json(favourites))),
     rest.get(SPECIES_STATE_LOOK_UP, (req, res, ctx) => res(ctx.json(speciesStateLookup))),
     rest.get(COMMODITY_CODE_LOOK_UP, (req, res, ctx) => res(ctx.json([]))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
     rest.post(ADD_SPECIES_URL, (req, res, ctx) =>
       res(
         ctx.status(400),
         ctx.json({
-          message: "ccWhatExportingFromSelectProductFavouriteListError",
+          product: "ccWhatExportingFromSelectProductFavouriteListError",
         })
       )
     ),
@@ -231,6 +235,87 @@ const whatAreYouExportingHandler: ITestHandler = {
     rest.post(ADD_SPECIES_URL, (req, res, ctx) => res(ctx.json(addSpecies))),
     rest.post(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.status(403), ctx.json({ errors: [], unauthorised: true }))),
     rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json({}))),
+  ],
+  [TestCaseId.WhatAreYouExportingProductAddedToFavouritesSuccess]: () => [
+    rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json(favourites))),
+    rest.get(SPECIES_STATE_LOOK_UP, (req, res, ctx) => {
+      const faoCode = req.url.searchParams.get("faoCode");
+
+      if (faoCode) {
+        const speciesData = species.find((s: any) => s.faoCode === faoCode);
+
+        if (speciesData?.scientificName) {
+          const filtered = speciesStateLookup.filter(
+            (lookup: any) => lookup.scientificName === speciesData.scientificName
+          );
+
+          if (filtered.length > 0) {
+            return res(ctx.json(filtered));
+          }
+        }
+      }
+
+      return res(ctx.json(speciesStateLookup));
+    }),
+    rest.get(COMMODITY_CODE_LOOK_UP, (req, res, ctx) => res(ctx.json(commodityCode))),
+    rest.post(ADD_SPECIES_URL, (req, res, ctx) => res(ctx.json(addSpecies))),
+    rest.post(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
+    rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.put(mockUpdateFishUrl, (req, res, ctx) => res(ctx.status(200), ctx.json({}))),
+    rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
+    rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
+  ],
+  [TestCaseId.WhatAreYouExportingProductAddedToFavouritesFailure]: () => [
+    rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json(favourites))),
+    rest.get(SPECIES_STATE_LOOK_UP, (req, res, ctx) => {
+      const faoCode = req.url.searchParams.get("faoCode");
+
+      if (faoCode) {
+        const speciesData = species.find((s: any) => s.faoCode === faoCode);
+
+        if (speciesData?.scientificName) {
+          const filtered = speciesStateLookup.filter(
+            (lookup: any) => lookup.scientificName === speciesData.scientificName
+          );
+
+          if (filtered.length > 0) {
+            return res(ctx.json(filtered));
+          }
+        }
+      }
+
+      return res(ctx.json(speciesStateLookup));
+    }),
+    rest.get(COMMODITY_CODE_LOOK_UP, (req, res, ctx) => res(ctx.json(commodityCode))),
+    rest.post(ADD_SPECIES_URL, (req, res, ctx) => res(ctx.json(addOrUpdateResponseNoFavourites))),
+    rest.post(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
+    rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.put(mockUpdateFishUrl, (req, res, ctx) => res(ctx.status(200), ctx.json({}))),
+    rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
+    rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
+  ],
+  [TestCaseId.WhatAreYouExportingUploadEntry]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
+    rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json(favourites))),
+    rest.get(SPECIES_STATE_LOOK_UP, (req, res, ctx) => res(ctx.json(speciesStateLookup))),
+    rest.get(COMMODITY_CODE_LOOK_UP, (req, res, ctx) => res(ctx.json(commodityCode))),
+    rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
   ],
 };
 

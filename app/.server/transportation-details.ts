@@ -37,6 +37,71 @@ export enum TransportType {
   TRUCK = "truck",
 }
 
+const buildTransportPayload = (transportType: TransportType, form: FormData): Partial<ITransport> => {
+  const values = Object.fromEntries(form);
+
+  switch (transportType) {
+    case TransportType.TRUCK:
+      return {
+        nationalityOfVehicle: form.get("nationalityOfVehicle") as string,
+        registrationNumber: form.get("registrationNumber") as string,
+        containerNumbers: extractContainerNumbers(values),
+      };
+    case TransportType.TRAIN:
+      return {
+        railwayBillNumber: form.get("railwayBillNumber") as string,
+        containerIdentificationNumber: !isEmpty(form.get("containerIdentificationNumber"))
+          ? (form.get("containerIdentificationNumber") as string)
+          : null,
+        containerNumbers: extractContainerNumbers(values),
+      };
+    case TransportType.PLANE:
+      return {
+        flightNumber: form.get("flightNumber") as string,
+        airwayBillNumber: !isEmpty(form.get("airwayBillNumber")) ? (form.get("airwayBillNumber") as string) : undefined,
+        containerNumbers: extractContainerNumbers(values),
+      };
+    case TransportType.CONTAINER_VESSEL:
+      return {
+        vesselName: form.get("vesselName") as string,
+        flagState: form.get("flagState") as string,
+        containerNumbers: extractContainerNumbers(values),
+      };
+    default:
+      throw new Error("Unknown Transportation Type");
+  }
+};
+
+const handleTransportResponse = (
+  postTransport: ITransport,
+  form: FormData,
+  saveDraft: boolean,
+  documentNumber: string,
+  transportType: TransportType,
+  nextUri: string
+) => {
+  const errors: IError[] | IErrorsTransformed = (postTransport.errors as IError[]) || [];
+  const isUnauthorised = postTransport.unauthorised as boolean;
+
+  if (isUnauthorised) return redirect("/forbidden");
+  if (saveDraft) return redirect(route("/create-catch-certificate/catch-certificates"));
+  if (errors.length > 0) {
+    // Map backend error messages through getErrorMessage to get proper translation keys
+    const mappedErrors = errors.map((error: IError) => ({
+      ...error,
+      message: getErrorMessage(error.message),
+    }));
+    const values = Object.fromEntries(form);
+    return apiCallFailed(mappedErrors, values);
+  }
+
+  // Use the transport ID from the response
+  const transportId = postTransport.id;
+
+  const progressUrl = `/create-catch-certificate/${documentNumber}/add-additional-transport-documents-${transportType === TransportType.CONTAINER_VESSEL ? "container-vessel" : transportType}/${transportId ?? "0"}`;
+  return redirect(isEmpty(nextUri) ? progressUrl : nextUri);
+};
+
 export const CatchCertificateTransportationDetailsLoader = async (
   request: Request,
   params: Params,
@@ -108,11 +173,23 @@ export const CatchCertificateTransportationDetailsLoader = async (
 
     const maximumTransportDocumentPerTransport = parseInt(getEnv().EU_CATCH_MAX_TRANSPORT_DOCUMENTS, 10);
 
+    let containerNumbers: string[] = transport.containerNumbers ?? [];
+    // Initialize with empty string for all transport types that support containerNumbers
+    if (
+      [TransportType.TRUCK, TransportType.TRAIN, TransportType.PLANE, TransportType.CONTAINER_VESSEL].includes(
+        transportType
+      ) &&
+      containerNumbers.length === 0
+    ) {
+      containerNumbers = [""];
+    }
+
     return new Response(
       JSON.stringify({
         documentNumber,
         csrf,
         ...transport,
+        containerNumbers,
         documents,
         nextUri,
         pageTitle,
@@ -144,80 +221,37 @@ export const CatchCertificateTransportationDetailsAction = async (
   const splitParams = params["*"]?.split("/");
   const transportId = splitParams?.[0];
 
-  if (transportId) {
-    const form = await request.formData();
-    const isValid = await validateCSRFToken(request, form);
-    if (!isValid) return redirect("/forbidden");
-    const saveDraft = form.get("_action") === "saveAsDraft";
-
-    const departurePlace = form.get("departurePlace") as string;
-    const freightBillNumber = !isEmpty(form.get("freightBillNumber"))
-      ? (form.get("freightBillNumber") as string)
-      : undefined;
-    const nextUri = form.get("nextUri") as string;
-
-    let payload: ITransport = {
-      vehicle: transportType,
-      departurePlace: departurePlace,
-      freightBillNumber: freightBillNumber,
-    };
-
-    switch (payload.vehicle) {
-      case TransportType.TRUCK: {
-        payload.nationalityOfVehicle = form.get("nationalityOfVehicle") as string;
-        payload.registrationNumber = form.get("registrationNumber") as string;
-        payload.containerIdentificationNumber = !isEmpty(form.get("containerIdentificationNumber"))
-          ? (form.get("containerIdentificationNumber") as string)
-          : null;
-        break;
-      }
-      case TransportType.TRAIN: {
-        payload.railwayBillNumber = form.get("railwayBillNumber") as string;
-        payload.containerIdentificationNumber = !isEmpty(form.get("containerIdentificationNumber"))
-          ? (form.get("containerIdentificationNumber") as string)
-          : null;
-        break;
-      }
-      case TransportType.PLANE: {
-        payload.flightNumber = form.get("flightNumber") as string;
-        payload.containerNumber = form.get("containerNumber") as string;
-        break;
-      }
-      case TransportType.CONTAINER_VESSEL: {
-        payload.vesselName = form.get("vesselName") as string;
-        payload.flagState = form.get("flagState") as string;
-        payload.containerNumber = form.get("containerNumber") as string;
-        break;
-      }
-      default: {
-        throw new Error("Unknown Transportation Type");
-      }
-    }
-
-    const postTransport: ITransport = await updateTransportDetails(
-      bearerToken,
-      documentNumber,
-      transportId,
-      payload,
-      saveDraft
-    );
-
-    const errors: IError[] | IErrorsTransformed = (postTransport.errors as IError[]) || [];
-    const isUnauthorised = postTransport.unauthorised as boolean;
-    if (isUnauthorised) {
-      return redirect("/forbidden");
-    } else if (saveDraft) {
-      return redirect(route("/create-catch-certificate/catch-certificates"));
-    } else if (errors.length > 0) {
-      const values = Object.fromEntries(form);
-      return apiCallFailed(errors, values);
-    }
-
-    const progressUrl = `/create-catch-certificate/${documentNumber}/add-additional-transport-documents-${transportType === TransportType.CONTAINER_VESSEL ? "container-vessel" : transportType}/${transportId}`;
-    return redirect(isEmpty(nextUri) ? progressUrl : nextUri);
+  if (!transportId) {
+    return redirect(`/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk`);
   }
 
-  return redirect(`/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk`);
+  const form = await request.formData();
+  const isValid = await validateCSRFToken(request, form);
+  if (!isValid) return redirect("/forbidden");
+
+  const saveDraft = form.get("_action") === "saveAsDraft";
+  const departurePlace = form.get("departurePlace") as string;
+  const freightBillNumber = !isEmpty(form.get("freightBillNumber"))
+    ? (form.get("freightBillNumber") as string)
+    : undefined;
+  const nextUri = form.get("nextUri") as string;
+
+  const payload: ITransport = {
+    vehicle: transportType,
+    departurePlace: departurePlace,
+    freightBillNumber: freightBillNumber,
+    ...buildTransportPayload(transportType, form),
+  };
+
+  const postTransport: ITransport = await updateTransportDetails(
+    bearerToken,
+    documentNumber,
+    transportId,
+    payload,
+    saveDraft
+  );
+
+  return handleTransportResponse(postTransport, form, saveDraft, documentNumber, transportType, nextUri);
 };
 
 export const TransportationDetailsLoaderFunction = async (
@@ -419,7 +453,10 @@ const checkContainerNumbers = (containerNumbers: string[] | undefined | null) =>
   if (!containerNumbers || containerNumbers.length === 0) return [];
   const validContainers = containerNumbers.map((cn) => {
     const trimmed = cn.trim();
-    if (trimmed.length > 50 || !trimmed.match(/^[a-zA-Z0-9]+$/)) return undefined;
+    // ISO 6346 format: 3 uppercase letters + owner category letter (U/J/Z/R) + 7 digits
+    // Allow empty strings as well
+    if (trimmed === "") return trimmed;
+    if (trimmed.length > 50 || !trimmed.match(/^[A-Z]{3}[UJZR]\d{7}$/)) return undefined;
     return trimmed;
   });
   return validContainers;
@@ -519,14 +556,15 @@ export const commonSaveTransportDetails = async (
 };
 
 export const extractContainerNumbers = (values: Record<string, any>): string[] => {
-  const containerKeys = Object.keys(values)
-    .filter((key) => key.startsWith("containerNumbers."))
-    .sort((a, b) => {
-      const indexA = parseInt(a.split(".")[1], 10);
-      const indexB = parseInt(b.split(".")[1], 10);
-      return indexA - indexB;
-    });
-  return containerKeys.map((key) => values[key] as string).filter((num) => num && num.trim() !== "");
+  const containerNumbers: string[] = [];
+  for (let i = 0; i < 10; i++) {
+    const key = `containerNumbers.${i}`;
+    const value = values[key];
+    if (value !== undefined && value !== "") {
+      containerNumbers.push(value);
+    }
+  }
+  return containerNumbers;
 };
 
 // Handle container button actions when JS is disabled
