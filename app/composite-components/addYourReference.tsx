@@ -14,6 +14,7 @@ type AddYourReferenceLoaderProps = {
   documentNumber: string;
   userReference: string;
   csrf: string;
+  nextUri?: string;
 };
 
 type AddYourReferenceProps = {
@@ -26,7 +27,7 @@ type AddYourReferenceProps = {
 export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showInfoNotice }: AddYourReferenceProps) => {
   const actionData = useActionData<{ errors?: any; userReference?: string }>() ?? {};
   const { errors = {} } = actionData;
-  const { documentNumber, userReference, csrf } = useLoaderData<AddYourReferenceLoaderProps>();
+  const { documentNumber, userReference, csrf, nextUri } = useLoaderData<AddYourReferenceLoaderProps>();
   const { t } = useTranslation(["common", "errorsText"]);
 
   useScrollOnPageLoad();
@@ -76,6 +77,7 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
               />
             </div>
             <ButtonGroup />
+            <input type="hidden" name="nextUri" value={nextUri} />
           </SecureForm>
           <BackToProgressLink progressUri={progressLink} documentNumber={documentNumber} />
         </div>
