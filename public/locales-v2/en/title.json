@@ -26,7 +26,7 @@
   "sdAddYourReferenceTitle": "Add your reference for this export - Create a UK non-manipulation document - GOV.UK",
   "psAddConsignmentDetailsConsignmentPageHeader": "Add a processed product - Create a UK processing statement - GOV.UK",
   "ccTransportSelectionPageTitle": "How does the export leave the UK?",
-  "sdTransportSelectionPageTitle": "How does the export leave the UK? - Create a UK non-manipulation document - GOV.UK",
+  "sdTransportSelectionPageTitle": "How do you transport the consignment out of the UK? - Create a UK non-manipulation document - GOV.UK",
   "sdArrivalTransportSelectionPageTitle": "How does your consignment arrive to the UK? - Create a UK non-manipulation document - GOV.UK",
   "ccCopyVoidConfirmationTitle": "Are you sure you want to void the original catch certificate? - Create a UK catch certificate - GOV.UK",
   "ccCopyCertificateTitle": "Copy {{ documentNumber }} - Create a UK catch certificate - GOV.UK",
