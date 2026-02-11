@@ -110,7 +110,7 @@ export const DoYouHaveAddtionalTransportTypesAction = async (
   }
 
   const progressUrl = route("/create-catch-certificate/:documentNumber/progress", { documentNumber });
-  const whatExportJourneyUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk`;
+  const whatExportJourneyUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk?fromAdditionalTransport=true`;
 
   return redirect(addTransportation === "yes" ? whatExportJourneyUrl : progressUrl);
 };

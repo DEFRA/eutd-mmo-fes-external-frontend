@@ -525,6 +525,12 @@ export enum TestCaseId {
   DoYouHaveAdditionalTransportTypesSaveFailsWith403 = "doYouHaveAdditionalTransportTypesSaveFailsWith403",
   DoYouHaveAdditionalTransportTypesSaveFailsWithError = "doYouHaveAdditionalTransportTypesSaveFailsWithError",
 
+  // FI0-10616: Back navigation from how-does-the-export-leave-the-uk
+  HowDoesTheExportLeaveTheUkBackFromAdditionalTransport = "howDoesTheExportLeaveTheUkBackFromAdditionalTransport",
+  HowDoesTheExportLeaveTheUkBackFromWhatExportJourney = "howDoesTheExportLeaveTheUkBackFromWhatExportJourney",
+  HowDoesTheExportLeaveTheUkBackFromAdditionalTransportCloned = "howDoesTheExportLeaveTheUkBackFromAdditionalTransportCloned",
+  HowDoesTheExportLeaveTheUkBackFromWhatExportJourneyCloned = "howDoesTheExportLeaveTheUkBackFromWhatExportJourneyCloned",
+
   DeleteThisDraftDocumentBadRequest = "deleteThisDraftCatchCertificateBadRequest",
   DeleteThisDraftDocumentOptionYes = "deleteThisDraftCatchCertificateOptionYes",
   DeleteThisDraftDocumentOptionNo = "deleteThisDraftCatchCertificateOptionNo",
