@@ -45,7 +45,7 @@ describe("PS: Entering the address manually", () => {
     cy.contains("label", "Building name");
     cy.contains("label", "Street name");
     cy.contains("label", "Town or city");
-    cy.contains("label", "County, state or province");
+    cy.contains("label", "County/state/province (optional)");
     cy.contains("label", "Postcode");
     cy.contains("label", "Country");
   });

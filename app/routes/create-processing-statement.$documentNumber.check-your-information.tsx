@@ -146,7 +146,7 @@ const CheckYourInformation = () => {
       notificationMessages={notificationMessages}
       hasErrors={hasErrors}
       errors={errors}
-      backUrl={"/create-processing-statement/:documentNumber/what-export-destination"}
+      backUrl={"/create-processing-statement/:documentNumber/progress"}
       summaryHeading="psSummaryPageHeading"
       headingTranslation="psCheckYourInformation"
       checkInformationHeader="psSummaryPageDocumentDetailsHeader"
