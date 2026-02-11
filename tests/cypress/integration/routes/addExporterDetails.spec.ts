@@ -845,3 +845,86 @@ describe("FI0-679: Add exporter details - Journey-specific guidance", () => {
       .and("contain", "This information will appear on the final processing statement");
   });
 });
+
+describe("Add exporter details - Address validation error messages", () => {
+  describe("Updated error message displayed if no address added on this page", () => {
+    it("should display 'Add the exporter's address' error for catch certificate when no address exists", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.CCAddExporterDetailsNoAddress,
+      };
+      cy.visit("/create-catch-certificate/GBR-2021-CC-8EEB7E123/add-exporter-details", { qs: { ...testParams } });
+
+      // Verify page loaded with no address
+      cy.contains("Your registration address could not be accessed");
+      cy.contains("Add the exporter's address");
+
+      // Fill in required company name
+      cy.get("#exporterCompanyName").type("Test Company Ltd");
+
+      // Submit without adding address
+      cy.contains("button", "Save and continue").click();
+
+      // Verify error summary appears
+      cy.get(".govuk-error-summary").should("exist");
+      cy.get(".govuk-error-summary__title").should("contain", "There is a problem");
+
+      // Verify correct error message in summary
+      cy.get(".govuk-error-summary__list").should("contain", "Add the exporter's address");
+
+      // Verify error link points to correct anchor
+      cy.get('.govuk-error-summary__list a[href="#exporterAddress"]').should("exist").click();
+
+      // Verify page scrolled to error location
+      cy.get("#exporterAddress").should("be.visible");
+    });
+
+    it("should display 'Add the exporter's address' error for processing statement when no address exists", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.PSAddExporterDetailsNoAddress,
+      };
+      cy.visit("/create-processing-statement/GBR-2021-PS-8EEB7E123/add-exporter-details", { qs: { ...testParams } });
+
+      cy.contains("Your registration address could not be accessed");
+      cy.get("#exporterCompanyName").type("Test Company Ltd");
+      cy.contains("button", "Save and continue").click();
+
+      cy.get(".govuk-error-summary__list").should("contain", "Add the exporter's address");
+      cy.get('.govuk-error-summary__list a[href="#exporterAddress"]').should("exist");
+    });
+
+    it("should display 'Add the exporter's address' error for storage document when no address exists", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddExporterDetailsNoAddress,
+      };
+      cy.visit("/create-non-manipulation-document/GBR-2021-SD-8EEB7E123/add-exporter-details", {
+        qs: { ...testParams },
+      });
+
+      cy.contains("Your registration address could not be accessed");
+      cy.get("#exporterCompanyName").type("Test Company Ltd");
+      cy.contains("button", "Save and continue").click();
+
+      cy.get(".govuk-error-summary__list").should("contain", "Add the exporter's address");
+      cy.get('.govuk-error-summary__list a[href="#exporterAddress"]').should("exist");
+    });
+  });
+
+  describe("Welsh translation for Add exporter address error", () => {
+    it("should display Welsh translation when language is set to Welsh", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.CCAddExporterDetailsNoAddress,
+        lng: "cy",
+      };
+      cy.visit("/create-catch-certificate/GBR-2021-CC-8EEB7E123/add-exporter-details", { qs: { ...testParams } });
+
+      // Verify Welsh content on page
+      cy.contains("Ychwanegu manylion yr allforiwr"); // "Add exporter details" in Welsh
+
+      cy.get("#exporterCompanyName").type("Test Company Ltd");
+      cy.contains("button", "Cadw a pharhau").click(); // "Save and continue" in Welsh
+
+      // Verify Welsh error message
+      cy.get(".govuk-error-summary__list").should("contain", "Ychwanegwch gyfeiriad yr allforiwr");
+    });
+  });
+});

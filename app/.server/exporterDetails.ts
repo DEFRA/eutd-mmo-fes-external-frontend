@@ -627,6 +627,44 @@ export const exporterDetailsAction = async (
   payload.nextUri = routes[journey]["nextUri"];
 
   const isSaveAsDraft: boolean = form.get("_action") === "saveAsDraft";
+
+  // Validate required fields before submitting to backend
+  if (!isSaveAsDraft) {
+    const validationErrors: IError[] = [];
+
+    // Validate company name
+    if (!payload.exporterCompanyName || payload.exporterCompanyName.trim().length === 0) {
+      validationErrors.push({
+        key: "exporterCompanyName",
+        message: "commonAddExporterDetailsErrorCompanyName",
+      });
+    }
+
+    // Validate address presence - check if addressOne and postcode exist and have values
+    const hasAddressData =
+      payload.addressOne != null &&
+      payload.postcode != null &&
+      typeof payload.addressOne === "string" &&
+      typeof payload.postcode === "string" &&
+      payload.addressOne.trim().length > 0 &&
+      payload.postcode.trim().length > 0;
+
+    if (!hasAddressData) {
+      validationErrors.push({
+        key: "exporterAddress",
+        message: "commonAddExporterDetailsAddTheExportersAddress",
+      });
+    }
+
+    // Return all validation errors if any found
+    if (validationErrors.length > 0) {
+      return apiCallFailed(validationErrors, {
+        model: payload,
+        error: "invalid",
+      });
+    }
+  }
+
   const response: IExporter = await addExporterDetails(bearerToken, documentNumber, payload, journey);
   const unauthorised = response.unauthorised;
 

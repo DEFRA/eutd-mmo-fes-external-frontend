@@ -21,6 +21,7 @@
   "commonAddExporterDetailsErrorCompanyName": "Enter the company name",
   "commonAddExporterDetailsErrorCompanyNameMaxLength": "Company name must not exceed 250 characters",
   "commonAddExporterDetailsErrorCompanyNameInvalidCharacters": "Company name must only contain letters, numbers, spaces, apostrophe's, full stops, hyphens and brackets",
+  "commonAddExporterDetailsAddTheExportersAddress": "Add the exporter's address",
   "ccWhoseWatersWereTheyCaughtInErrorRequired": "Select whose waters the fish or shellfish were caught in",
   "ccWhoseWatersWereTheyCaughtInErrorOtherWatersRequired": "Enter whose waters the fish or shellfish were caught in",
   "commonLookupAddressPageErrorSelectedAddress": "Select an address to continue or click 'I cannot find my address in the list'",

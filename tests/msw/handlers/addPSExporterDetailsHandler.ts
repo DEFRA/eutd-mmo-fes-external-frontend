@@ -5,6 +5,7 @@ import empty from "@/fixtures/empty.json";
 import psAddExporterDetailsFull from "@/fixtures/addExporterDetails/psAddExporterDetailsFull.json";
 import psDrafts from "@/fixtures/dashboardApi/psDrafts.json";
 import psExporterMissingNameErrorResponse from "@/fixtures/addExporterDetails/psExporterMissingNameErrorResponse.json";
+import exporterDetailsNoAddress from "@/fixtures/addExporterDetails/exporterDetailsNoAddress.json";
 import processingStatement from "@/fixtures/processingStatementApi/processingStatement.json";
 
 const addPSExporterDetailsHandler: ITestHandler = {
@@ -49,6 +50,12 @@ const addPSExporterDetailsHandler: ITestHandler = {
     rest.post(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(psExporterMissingNameErrorResponse))
     ),
+  ],
+  [TestCaseId.PSAddExporterDetailsNoAddress]: () => [
+    rest.get(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(exporterDetailsNoAddress))
+    ),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
   ],
 };
 
