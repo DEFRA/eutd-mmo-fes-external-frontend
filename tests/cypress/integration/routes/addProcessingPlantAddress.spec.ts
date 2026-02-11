@@ -112,7 +112,7 @@ describe("Add Processing Plant Address", () => {
     cy.get(".dcx-form-input").contains("Building name");
     cy.get(".dcx-form-input").contains("Sub-building name");
     cy.get(".dcx-form-input").contains("Street name");
-    cy.get(".dcx-form-input").contains("County, state or province");
+    cy.get(".dcx-form-input").contains("County/state/province (optional)");
     cy.get(".govuk-button-group button").contains("Cancel");
     cy.get("[data-testid=continue]").should("be.visible");
     cy.contains("a", "Back to your progress").should("be.visible");

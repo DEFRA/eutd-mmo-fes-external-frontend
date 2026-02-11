@@ -19,6 +19,7 @@ export enum TestCaseId {
   CCExporterManualAddressWithErrorsArray = "CCExporterManualAddressWithErrorsArray",
   CCExporterManualAddressWithSubBuildingErrorArray = "CCExporterManualAddressWithSubBuildingErrorArray",
   CCExporterManualAddressWithOnlyRequiredArray = "CCExporterManualAddressWithOnlyRequiredArray",
+  CCExporterManualAddressWithAllErrorsArray = "CCExporterManualAddressWithAllErrorsArray",
   StartJourney = "startJourney",
   StartJourneyFailed = "startJourneyFailed",
   StartJourneyFailedNoErrors = "startJourneyFailedNoErrors",
@@ -631,6 +632,10 @@ export enum TestCaseId {
   SDAddStorageApprovalForbidden = "sdAddStorageApprovalForbidden",
   SDAddStorageSaveAsDraft = "sdAddStorageSaveAsDraft",
   SDAddStorageProductStorageError = "sdAddStorageProductStorageError",
+  SDAddStorageApprovalInvalidCharactersError = "sdAddStorageApprovalInvalidCharactersError",
+  SDAddStorageApprovalInvalidCharactersSaveAsDraft = "sdAddStorageApprovalInvalidCharactersSaveAsDraft",
+  SDAddStorageApprovalMaxLengthSaveAsDraft = "sdAddStorageApprovalMaxLengthSaveAsDraft",
+  SDAddStorageApprovalNoJs = "sdAddStorageApprovalNoJs",
 
   PSAddCatchWeights = "psAddCatchWeights",
   PSAddCatchWeightUnauthorised = "psAddCatchWeightUnauthorised",

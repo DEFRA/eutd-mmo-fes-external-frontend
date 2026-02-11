@@ -428,6 +428,16 @@ const AddProductIndex = () => {
     functionToGetInitialState(initialSupportingDocs, isHydrated, maximumEntryDocsAllowed)
   );
 
+  // Track whether the user has modified fields since errors appeared
+  const [hiddenErrorIndices, setHiddenErrorIndices] = useState<Set<number>>(new Set());
+
+  // Reset the hidden indices when new errors come in (after form submission)
+  useEffect(() => {
+    if (errors && Object.keys(errors).length > 0) {
+      setHiddenErrorIndices(new Set());
+    }
+  }, [errors]);
+
   // Reset to 1 field after hydration if it was initialized with 5
   useEffect(() => {
     if (isHydrated && !updatedSupportingDocuments?.length && supportingDocuments.length === maximumEntryDocsAllowed) {
@@ -455,6 +465,12 @@ const AddProductIndex = () => {
   const handleRemoveDoc = (index: number) => {
     if (supportingDocuments.length > 1) {
       setSupportingDocuments((prev) => prev.filter((_, i) => i !== index));
+      // Hide errors from this index onwards because they shift
+      const newHiddenIndices = new Set(hiddenErrorIndices);
+      for (let i = index; i < maximumEntryDocsAllowed; i++) {
+        newHiddenIndices.add(i);
+      }
+      setHiddenErrorIndices(newHiddenIndices);
     }
   };
 
@@ -467,19 +483,38 @@ const AddProductIndex = () => {
   const hintText = t("documentIssuedInTheUKHint", { ns: "addProductToThisConsignment" });
   const getOptionLabel = (option: DocIssuedInUkRadioSelectOptionType) => t(option.label, { ns: "common" });
 
-  const errorKeysInOrder = [
+  // Generate all possible supporting document error keys
+  const supportingDocErrorKeys = Array.from(
+    { length: maximumEntryDocsAllowed },
+    (_, i) => `${supportingDocumentsKey}-${i}`
+  );
+
+  const allErrorKeysInOrder = [
     certificateTypeKey,
     issuingCountryKey,
     certKey,
     weightKey,
-    supportingDocumentsKey,
+    ...supportingDocErrorKeys,
     productKey,
     commodityCodeKey,
     productDescriptionKey,
     netWeightProductArrivalKey,
     netWeightFisheryProductArrivalKey,
   ];
-  const errorMessagesForDisplay = displayErrorMessagesInOrder(allErrors, errorKeysInOrder);
+
+  // Deduplicate error keys to prevent duplicate error messages in error summary
+  const errorKeysInOrder = Array.from(new Set(allErrorKeysInOrder));
+  const allErrorMessages = displayErrorMessagesInOrder(allErrors, errorKeysInOrder);
+
+  // Remove duplicate errors by key to handle cases where the same field error appears multiple times
+  const seenErrorKeys = new Set<string>();
+  const errorMessagesForDisplay = allErrorMessages.filter((error: any) => {
+    if (seenErrorKeys.has(error.key)) {
+      return false;
+    }
+    seenErrorKeys.add(error.key);
+    return true;
+  });
 
   return (
     <Main backUrl={route("/create-non-manipulation-document/:documentNumber/add-exporter-details", { documentNumber })}>
@@ -640,58 +675,65 @@ const AddProductIndex = () => {
               />
               <EntryDocumentGuidanceText />
               <fieldset className="govuk-fieldset" aria-describedby={`${supportingDocumentsKey}-0-hint`}>
-                {supportingDocuments.map((value: string, index: number) => (
-                  <div
-                    key={`supporting-document-${index + 1}`}
-                    className="govuk-button-group govuk-!-margin-bottom-4"
-                    style={{ display: "flex", alignItems: "flex-end", gap: "8px" }}
-                  >
-                    <FormInput
-                      containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
-                      labelClassName="govuk-label govuk-!-font-weight-bold"
-                      label={index === 0 ? supportingDocumentsLabel : undefined}
-                      name="supportingDocuments"
-                      type="text"
-                      inputClassName={classNames("govuk-input")}
-                      inputProps={{
-                        value,
-                        id: `${supportingDocumentsKey}-${index}`,
-                        onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(index, e.target.value),
-                        "aria-describedby": `${supportingDocumentsKey}-${index}-hint`,
-                      }}
-                      hint={
-                        index === 0
-                          ? {
-                              id: `${supportingDocumentsKey}-${index}-hint`,
-                              position: "above",
-                              text: t("supportingDocumentsHint", { ns: "addProductToThisConsignment" }),
-                              className: "govuk-hint",
-                            }
-                          : undefined
-                      }
-                      errorPosition={ErrorPosition.AFTER_LABEL}
-                      errorProps={getErrorProps(errors, `${supportingDocumentsKey}-${index}`)}
-                      staticErrorMessage={getErrorMessage(errors, `${supportingDocumentsKey}-${index}`, t)}
-                      containerClassNameError={getErrorClassName(errors, `${supportingDocumentsKey}-${index}`)}
-                      hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-                      hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-                    />
-                    {isHydrated && supportingDocuments.length > 1 && (
-                      <Button
-                        key={`remove-supporting-doc-${index + 1}`}
-                        id={`remove-supporting-doc-button-${index}`}
-                        data-testid={`remove-supporting-doc-${index}`}
-                        label={t("commonRemoveButton", { ns: "common" })}
-                        className="govuk-button govuk-button--secondary govuk-!-margin-left-2"
-                        type={BUTTON_TYPE.BUTTON}
-                        data-module="govuk-button"
-                        onClick={() => handleRemoveDoc(index)}
-                        style={{ top: "15px" }}
-                        aria-label={t("commonRemoveButton", { ns: "addProductToThisConsignment" })}
+                {supportingDocuments.map((value: string, index: number) => {
+                  // Don't show errors for indices that have been affected by add/remove operations
+                  const errorKey = `${supportingDocumentsKey}-${index}`;
+                  const hasError = !hiddenErrorIndices.has(index) && errors?.[errorKey];
+
+                  return (
+                    <div
+                      key={`supporting-document-${index + 1}`}
+                      className="govuk-button-group govuk-!-margin-bottom-4"
+                      style={{ display: "flex", alignItems: "flex-end", gap: "8px" }}
+                    >
+                      <FormInput
+                        containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
+                        labelClassName="govuk-label govuk-!-font-weight-bold"
+                        label={index === 0 ? supportingDocumentsLabel : undefined}
+                        name="supportingDocuments"
+                        type="text"
+                        inputClassName={classNames("govuk-input")}
+                        inputProps={{
+                          value,
+                          id: `${supportingDocumentsKey}-${index}`,
+                          onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                            handleInputChange(index, e.target.value),
+                          "aria-describedby": `${supportingDocumentsKey}-${index}-hint`,
+                        }}
+                        hint={
+                          index === 0
+                            ? {
+                                id: `${supportingDocumentsKey}-${index}-hint`,
+                                position: "above",
+                                text: t("supportingDocumentsHint", { ns: "addProductToThisConsignment" }),
+                                className: "govuk-hint",
+                              }
+                            : undefined
+                        }
+                        errorPosition={ErrorPosition.AFTER_LABEL}
+                        errorProps={hasError ? getErrorProps(errors, errorKey) : undefined}
+                        staticErrorMessage={hasError ? getErrorMessage(errors, errorKey, t) : undefined}
+                        containerClassNameError={hasError ? getErrorClassName(errors, errorKey) : ""}
+                        hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+                        hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
                       />
-                    )}
-                  </div>
-                ))}
+                      {isHydrated && supportingDocuments.length > 1 && (
+                        <Button
+                          key={`remove-supporting-doc-${index + 1}`}
+                          id={`remove-supporting-doc-button-${index}`}
+                          data-testid={`remove-supporting-doc-${index}`}
+                          label={t("commonRemoveButton", { ns: "common" })}
+                          className="govuk-button govuk-button--secondary govuk-!-margin-left-2"
+                          type={BUTTON_TYPE.BUTTON}
+                          data-module="govuk-button"
+                          onClick={() => handleRemoveDoc(index)}
+                          style={{ top: "15px" }}
+                          aria-label={t("commonRemoveButton", { ns: "addProductToThisConsignment" })}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
                 {isHydrated && supportingDocuments.length < maximumEntryDocsAllowed && (
                   <Button
                     id="add-supporting-doc-button"

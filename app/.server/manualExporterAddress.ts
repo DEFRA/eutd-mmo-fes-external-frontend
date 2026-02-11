@@ -32,7 +32,12 @@ export const addManualExporterAddress = async (
 const getFieldFromErrorKey = (errorKey: string): string => {
   const parts = errorKey.split(".");
   if (parts[0] === "error" && parts.length > 1) {
-    return parts[1];
+    const fieldName = parts[1];
+    // Map composite addressFirstPart error to buildingNumber (first field in the group)
+    if (fieldName === "addressFirstPart") {
+      return "buildingNumber";
+    }
+    return fieldName;
   }
   return errorKey;
 };
@@ -51,10 +56,22 @@ const onAddManualExporterAddress = async (response: Response, formData: Exporter
     case 204:
       if (Array.isArray(data)) {
         // New way: errors as array of strings
-        const errors = data.map((errorKey: string) => ({
-          key: getFieldFromErrorKey(errorKey),
-          message: getErrorMessage(errorKey),
-        }));
+        const errors = data.flatMap((errorKey: string) => {
+          const fieldName = getFieldFromErrorKey(errorKey);
+          const message = getErrorMessage(errorKey);
+
+          // If this is the addressFirstPart error, map it to all four fields
+          if (errorKey.includes("addressFirstPart")) {
+            return [
+              { key: "buildingNumber", message },
+              { key: "buildingName", message },
+              { key: "subBuildingName", message },
+              { key: "streetName", message },
+            ];
+          }
+
+          return [{ key: fieldName, message }];
+        });
         return {
           model: formData,
           error: "invalid",
@@ -77,15 +94,41 @@ const onAddManualExporterAddress = async (response: Response, formData: Exporter
         };
       }
     case 400:
-      // Old way: errors as object with field names as keys
-      return {
-        model: formData,
-        error: "invalid",
-        errors: Object.keys(data).map((key: string) => ({
-          key: key,
-          message: getErrorMessage(data[key]),
-        })),
-      };
+      // Handle both array and object formats
+      if (Array.isArray(data)) {
+        // New way: errors as array of strings
+        const errors = data.flatMap((errorKey: string) => {
+          const fieldName = getFieldFromErrorKey(errorKey);
+          const message = getErrorMessage(errorKey);
+
+          // If this is the addressFirstPart error, map it to all four fields
+          if (errorKey.includes("addressFirstPart")) {
+            return [
+              { key: "buildingNumber", message },
+              { key: "buildingName", message },
+              { key: "subBuildingName", message },
+              { key: "streetName", message },
+            ];
+          }
+
+          return [{ key: fieldName, message }];
+        });
+        return {
+          model: formData,
+          error: "invalid",
+          errors,
+        };
+      } else {
+        // Old way: errors as object with field names as keys
+        return {
+          model: formData,
+          error: "invalid",
+          errors: Object.keys(data).map((key: string) => ({
+            key: key,
+            message: getErrorMessage(data[key]),
+          })),
+        };
+      }
     case 403:
       // Handle 403 Forbidden - return with unauthorised flag
       return {

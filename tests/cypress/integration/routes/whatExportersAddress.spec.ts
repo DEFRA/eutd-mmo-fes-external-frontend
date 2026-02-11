@@ -4,7 +4,10 @@ const ccPageUrl = "create-catch-certificate/GBR-2022-CC-F71D98A30/what-exporters
 
 describe("CC: Exporter address page", () => {
   beforeEach(() => {
-    cy.visit(ccPageUrl);
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCExporterManualAddressValid,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
   });
 
   it("should render the expected header", () => {
@@ -25,7 +28,10 @@ describe("CC: Exporter address page", () => {
 
 describe("CC: Entering the address manually", () => {
   beforeEach(() => {
-    cy.visit(ccPageUrl);
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCExporterManualAddressValid,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
     cy.findByText(/^Enter the address manually$/).click({ force: true });
   });
 
@@ -39,7 +45,7 @@ describe("CC: Entering the address manually", () => {
     cy.contains("label", "Building name");
     cy.contains("label", "Street name");
     cy.contains("label", "Town or city");
-    cy.contains("label", "County, state or province");
+    cy.contains("label", "County/state/province (optional)");
     cy.contains("label", "Postcode");
     cy.contains("label", "Country");
   });
@@ -247,6 +253,52 @@ describe("CC: Entering the address manually with errors", () => {
 
     cy.get("[data-testid=continue]").click({ force: true });
     cy.url().should("include", "/forbidden");
+  });
+
+  // Defect 445: All validation errors should appear simultaneously with field-level error styling
+  it("should display ALL validation errors simultaneously on empty form submission with field-level error indicators", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCExporterManualAddressWithErrorsArray,
+    };
+
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+    cy.findByText(/^Enter the address manually$/).click({ force: true });
+
+    // Submit the form without filling any fields
+    cy.get("[data-testid=continue]").click({ force: true });
+
+    // Should stay on the same page
+    cy.url().should("include", "what-exporters-address");
+
+    // Error summary should be visible at the top
+    cy.get(".govuk-error-summary").should("be.visible");
+
+    // All required field errors should appear in the error summary simultaneously
+    cy.get(".govuk-error-summary").should("contain.text", "Enter the town or city");
+    cy.get(".govuk-error-summary").should("contain.text", "Enter a postcode");
+    cy.get(".govuk-error-summary").should("contain.text", "Select a country from the list");
+
+    // Required fields should have error styling and inline error messages
+    cy.get("#townCity")
+      .parent(".govuk-form-group")
+      .should("have.class", "govuk-form-group--error")
+      .find(".govuk-error-message")
+      .should("be.visible")
+      .and("contain.text", "Enter the town or city");
+
+    cy.get("#postcode")
+      .parent(".govuk-form-group")
+      .should("have.class", "govuk-form-group--error")
+      .find(".govuk-error-message")
+      .should("be.visible")
+      .and("contain.text", "Enter a postcode");
+
+    cy.get("#country")
+      .parents(".govuk-form-group")
+      .should("have.class", "govuk-form-group--error")
+      .find(".govuk-error-message")
+      .should("be.visible")
+      .and("contain.text", "Select a country from the list");
   });
 });
 //I skipped these tests as they are flaky in CI/CD

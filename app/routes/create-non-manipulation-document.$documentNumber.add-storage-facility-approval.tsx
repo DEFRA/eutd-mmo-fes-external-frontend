@@ -12,6 +12,7 @@ import {
   getStorageDocument,
   createCSRFToken,
   updateStorageDocumentFacility,
+  validateCSRFToken,
 } from "~/.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { ButtonGroup } from "~/composite-components";
@@ -74,9 +75,16 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
   const form = await request.formData();
+
+  const isValid = await validateCSRFToken(request, form);
+  if (!isValid) {
+    return redirect("/forbidden");
+  }
+
   const { _action, ...values } = Object.fromEntries(form);
 
-  const saveToRedisIfErrors = false;
+  const isDraft = _action === "saveAsDraft";
+  const saveToRedisIfErrors = isDraft;
   const errorResponse = await updateStorageDocumentFacility(
     bearerToken,
     documentNumber,
@@ -90,7 +98,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   );
 
   const session = await getSessionFromRequest(request);
-  const isDraft = _action === "saveAsDraft";
   if (isDraft) {
     return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
       headers: { "Set-Cookie": await commitSession(session) },
@@ -150,6 +157,7 @@ const AddStorageFacilityApproval = () => {
             >
               {isEmpty(errors?.["storageFacilities-facilityApproval"]) ? null : (
                 <ErrorMessage
+                  id="storageFacilities-facilityApproval-error"
                   text={t(errors?.["storageFacilities-facilityApproval"]?.message, {
                     ns: "errorsText",
                   })}
@@ -172,7 +180,9 @@ const AddStorageFacilityApproval = () => {
                 inputProps={{
                   defaultValue: approvalNumber,
                   id: "storageFacilities-facilityApproval",
-                  "aria-describedby": "hint-storageFacilities-approvalNumber",
+                  "aria-describedby": !isEmpty(errors?.["storageFacilities-facilityApproval"])
+                    ? "hint-storageFacilities-approvalNumber storageFacilities-facilityApproval-error"
+                    : "hint-storageFacilities-approvalNumber",
                 }}
                 hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}

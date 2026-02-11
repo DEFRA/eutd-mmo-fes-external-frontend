@@ -1,5 +1,12 @@
 {
-  "include": [".react-router/types/**/*", "vite.config.mts", "**/*.js", "**/*.ts", "**/*.tsx"],
+  "include": [
+    ".react-router/types/**/*",
+    "vite.config.mts",
+    "**/*.js",
+    "**/*.ts",
+    "**/*.tsx",
+    "tests/cypress/integration/routes/npm "
+  ],
   "exclude": ["coverage", "public", "build", "build-v2", "node_modules", "instrumented"],
   "compilerOptions": {
     "types": ["@react-router/node", "vite/client"],
