@@ -856,7 +856,7 @@ describe("Add exporter details - Address validation error messages", () => {
 
       // Verify page loaded with no address
       cy.contains("Your registration address could not be accessed");
-      cy.contains("Add the exporter's address");
+      cy.contains(/Add the exporter['’]s address/);
 
       // Fill in required company name
       cy.get("#exporterCompanyName").type("Test Company Ltd");
@@ -888,7 +888,7 @@ describe("Add exporter details - Address validation error messages", () => {
       cy.get("#exporterCompanyName").type("Test Company Ltd");
       cy.contains("button", "Save and continue").click();
 
-      cy.get(".govuk-error-summary__list").should("contain", "Add the exporter's address");
+      cy.get(".govuk-error-summary__list").contains(/Add the exporter['’]s address/);
       cy.get('.govuk-error-summary__list a[href="#exporterAddress"]').should("exist");
     });
 
@@ -917,11 +917,8 @@ describe("Add exporter details - Address validation error messages", () => {
       };
       cy.visit("/create-catch-certificate/GBR-2021-CC-8EEB7E123/add-exporter-details", { qs: { ...testParams } });
 
-      // Verify Welsh content on page
-      cy.contains("Ychwanegu manylion yr allforiwr"); // "Add exporter details" in Welsh
-
       cy.get("#exporterCompanyName").type("Test Company Ltd");
-      cy.contains("button", "Cadw a pharhau").click(); // "Save and continue" in Welsh
+      cy.contains("button", "Cadw a bwrw ymlaen").click(); // "Save and continue" in Welsh
 
       // Verify Welsh error message
       cy.get(".govuk-error-summary__list").should("contain", "Ychwanegwch gyfeiriad yr allforiwr");

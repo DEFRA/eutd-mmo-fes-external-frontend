@@ -6,6 +6,7 @@ import psAddExporterDetailsFull from "@/fixtures/addExporterDetails/psAddExporte
 import psDrafts from "@/fixtures/dashboardApi/psDrafts.json";
 import psExporterMissingNameErrorResponse from "@/fixtures/addExporterDetails/psExporterMissingNameErrorResponse.json";
 import exporterDetailsNoAddress from "@/fixtures/addExporterDetails/exporterDetailsNoAddress.json";
+import exporterAddressErrorResponse from "@/fixtures/addExporterDetails/psExporterMissingNameErrorResponse.json";
 import processingStatement from "@/fixtures/processingStatementApi/processingStatement.json";
 
 const addPSExporterDetailsHandler: ITestHandler = {
@@ -56,6 +57,9 @@ const addPSExporterDetailsHandler: ITestHandler = {
       res(ctx.json(exporterDetailsNoAddress))
     ),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+    rest.post(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(exporterAddressErrorResponse))
+    ),
   ],
 };
 
