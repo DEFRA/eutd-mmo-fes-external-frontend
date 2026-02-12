@@ -361,8 +361,23 @@ export const getTransformedError = (errors: IError[]): IErrorsTransformed => {
   errors.forEach((error: IError) => {
     // Map containerNumbers array-level errors to containerNumbers.0 so they display under the first field
     let errorKey = error.key;
-    if (errorKey === "containerNumbers" && error.message.includes("ContainerNumberLabelError")) {
-      errorKey = "containerNumbers.0";
+
+    // Normalize keys coming from server. Examples:
+    // - "error.containerNumbers.0.string.empty" -> "containerNumbers.0"
+    // - "error.railwayBillNumber.any.empty" -> "railwayBillNumber"
+    // - "containerNumbers" -> "containerNumbers"
+    if (typeof errorKey === "string") {
+      // strip common prefixes
+      errorKey = errorKey.replace(/^(?:error\.|validation\.)/, "");
+
+      // remove trailing validation tokens starting at known suffix keywords
+      errorKey = errorKey.replace(/\.(?:string|any|array|date|number|pattern|alphanum|min|max|base|isoDate|format|required|empty|validation)(?:\..*)?$/i, "");
+
+      // if the key ends with a numeric segment, keep it (e.g. containerNumbers.0)
+      // otherwise, if it's the array-level containerNumbers and the message points to container label, map to .0
+      if (errorKey === "containerNumbers" && error.message && error.message.includes("ContainerNumberLabelError")) {
+        errorKey = "containerNumbers.0";
+      }
     }
 
     errorsTransformed[errorKey] = {
@@ -381,14 +396,145 @@ export const displayErrorMessages = (errors: IErrorsTransformed): IError[] =>
 
 export const displayErrorMessagesInOrder = (
   errors: IErrorsTransformed,
-  errorKeysInOrder: string[]
+  errorKeysInOrder: string[],
+  // When true use strict matching (exact key or numeric-index suffix) — intended for NMD journeys.
+  // When false (default) fall back to the previous behaviour which matches by prefix (startsWith).
+  strictForNmd = false
 ): Array<IErrorsTransformed[keyof IErrorsTransformed]> => {
-  const sortedData = errorKeysInOrder.flatMap((key) => {
-    // Find ALL matching keys, not just the first one
-    const matchingKeys = Object.keys(errors).filter((objKey) => objKey.startsWith(key));
-    return matchingKeys.map((matchingKey) => errors[matchingKey]);
+  const remainingKeys = new Set(Object.keys(errors));
+
+  const result: Array<IErrorsTransformed[keyof IErrorsTransformed]> = [];
+
+  const sortMatchingKeys = (orderKey: string, keys: string[]) => {
+    if (strictForNmd) {
+      return keys.sort((a, b) => {
+        const suffixA = a.slice(orderKey.length).replace(/^\.+/, "");
+        const suffixB = b.slice(orderKey.length).replace(/^\.+/, "");
+
+        const numA = /^\d+/.exec(suffixA);
+        const numB = /^\d+/.exec(suffixB);
+
+        if (numA && numB) {
+          return Number(numA[0]) - Number(numB[0]);
+        }
+
+        if (numA && !numB) return -1;
+        if (!numA && numB) return 1;
+
+        return a.localeCompare(b);
+      });
+    }
+
+    // Non-strict fallback: simple lexicographic order for keys that start with the orderKey
+    return keys.sort((a, b) => a.localeCompare(b));
+  };
+
+  errorKeysInOrder.forEach((orderKey) => {
+    const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    let matchingKeys: string[];
+
+    if (strictForNmd) {
+      // match either the exact key, or the key followed by a numeric index (e.g. containerNumbers or containerNumbers.0)
+      const keyRegex = new RegExp(`^${escapeRegExp(orderKey)}(?:\.(\d+))?$`);
+      matchingKeys = Object.keys(errors).filter((objKey) => keyRegex.test(objKey));
+    } else {
+      // legacy behaviour: match any key that starts with the orderKey
+      matchingKeys = Object.keys(errors).filter((objKey) => objKey.startsWith(orderKey));
+    }
+
+    if (matchingKeys.length === 0) return;
+
+    const sortedKeys = sortMatchingKeys(orderKey, matchingKeys);
+    sortedKeys.forEach((k) => {
+      if (remainingKeys.has(k)) {
+        result.push(errors[k]);
+        remainingKeys.delete(k);
+      }
+    });
   });
-  return sortedData;
+
+  // Append any remaining errors that weren't matched by the order list
+  Array.from(remainingKeys).forEach((k) => result.push(errors[k]));
+
+  return result;
+};
+
+export const getErrorKeysInOrderForTransport = (transportType: string, isArrival = false): string[] => {
+  const t = (transportType || "").toLowerCase();
+
+  switch (t) {
+    case "train":
+      if (isArrival) {
+        // On arrival the page shows railway bill first — match visual field order
+        return [
+          "railwayBillNumber",
+          "freightBillNumber",
+          "departureCountry",
+          "departurePort",
+          "placeOfUnloading",
+          "departureDate",
+          "containerNumbers",
+        ];
+      }
+      return [
+        "departureCountry",
+        "departurePort",
+        "containerNumbers",
+        "exportDate",
+        "railwayBillNumber",
+        "freightBillNumber",
+      ];
+
+    case "truck":
+      if (isArrival) {
+        // On truck arrival the departure date field is visually last — place it last in order
+        return [
+          "nationalityOfVehicle",
+          "registrationNumber",
+          "departurePlace",
+          "freightBillNumber",
+          "containerNumbers",
+          "departureCountry",
+          "departurePort",
+          "placeOfUnloading",
+          "departureDate",
+        ];
+      }
+      // Departure (non-arrival) page order: consignment destination/point/leave-from (handled by commonOrder), then
+      // container numbers, export date, nationality, registration, freight
+      return [
+        "containerNumbers",
+        "exportDate",
+        "nationalityOfVehicle",
+        "registrationNumber",
+        "freightBillNumber",
+      ];
+
+    case "plane":
+      return ["flightNumber", "departurePlace", "exportDate", "containerNumbers", "airwayBillNumber"];
+
+    case "containervessel":
+    case "container-vessel":
+    case "container_vessel":
+      if (isArrival) {
+        // Match visual order on arrival page: vessel name, flag, containers, freight, country/port/place, departure date
+        return [
+          "vesselName",
+          "flagState",
+          "containerNumbers",
+          "freightBillNumber",
+          "departureCountry",
+          "departurePort",
+          "placeOfUnloading",
+          "departureDate",
+        ];
+      }
+      return ["exportDate", "vesselName", "flagState", "containerNumbers", "freightBillNumber"];
+
+    default:
+      return ["containerNumbers", "freightBillNumber", "railwayBillNumber"];
+  }
 };
 
 export const displayErrorTransformedMessages = (errors: IErrorsTransformed): IError[] => {
