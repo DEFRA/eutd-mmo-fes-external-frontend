@@ -22,6 +22,7 @@ export const getErrorMessage = (key: string): string => {
     "error.otherWaters.string.empty": "ccWhoseWatersWereTheyCaughtInErrorOtherWatersRequired",
     "error.postcode.string.empty": "commonLookupAddressPageErrorPostcodeEmpty",
     "error.postcode.string.pattern.base": "commonLookupAddressPageErrorPostcodeValidation",
+    "error.exporterAddress.any.required": "commonAddExporterDetailsAddTheExportersAddress",
     "error.exportDestination.any.invalid": "commonProductDestinationErrorInvalidCountry",
     "error.exportDestination.any.required": "commonProductDestinationErrorInvalidCountry",
     "error.exportDestination.string.empty": "commonProductDestinationErrorInvalidCountry",

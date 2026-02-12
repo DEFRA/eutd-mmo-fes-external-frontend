@@ -9,6 +9,7 @@ import {
   GET_STORAGE_DOCUMENT,
 } from "~/urls.server";
 import exporterDetails from "@/fixtures/addExporterDetails/sdExporterDetails.json";
+import exporterDetailsNoAddress from "@/fixtures/addExporterDetails/exporterDetailsNoAddress.json";
 import exporterErrorResponse from "@/fixtures/addExporterDetails/exporterErrorResponse.json";
 import species from "@/fixtures/referenceDataApi/species.json";
 import sdDrafts from "@/fixtures/dashboardApi/sdDrafts.json";
@@ -48,6 +49,9 @@ const addSDExporterDetailsHandler: ITestHandler = {
   ],
   [TestCaseId.SDAddExporterDetails403]: () => [
     rest.get(getAddExporterDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.status(403), ctx.json({}))),
+  ],
+  [TestCaseId.SDAddExporterDetailsNoAddress]: () => [
+    rest.get(getAddExporterDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(exporterDetailsNoAddress))),
   ],
 };
 

@@ -20,6 +20,7 @@ import exporterFullNameMaxLengthErrorResponse from "@/fixtures/addExporterDetail
 import exporterFullNamePatternErrorResponse from "@/fixtures/addExporterDetails/exporterFullNamePatternErrorResponse.json";
 import exporterCompanyNameMaxLengthErrorResponse from "@/fixtures/addExporterDetails/exporterCompanyNameMaxLengthErrorResponse.json";
 import exporterCompanyNamePatternErrorResponse from "@/fixtures/addExporterDetails/exporterCompanyNamePatternErrorResponse.json";
+import exporterDetailsNoAddress from "@/fixtures/addExporterDetails/exporterDetailsNoAddress.json";
 import addedSpecies from "@/fixtures/addExporterDetails/addedSpecies.json";
 import manualEntryLandingsType from "@/fixtures/landingsTypeApi/manualEntry.json";
 import uploadEntry from "@/fixtures/landingsTypeApi/uploadEntry.json";
@@ -165,6 +166,10 @@ const addCCExporterDetailsHandler: ITestHandler = {
     rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) =>
       res(ctx.status(403), ctx.json(exporterResponse))
     ),
+  ],
+  [TestCaseId.CCAddExporterDetailsNoAddress]: () => [
+    rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(exporterDetailsNoAddress))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
   ],
 };
 
