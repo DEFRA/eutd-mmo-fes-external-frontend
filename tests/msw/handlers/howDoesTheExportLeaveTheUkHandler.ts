@@ -128,6 +128,23 @@ const howDoesTheExportLeaveTheUkHandler: ITestHandler = {
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
+  // FI0-10616: Back navigation scenarios
+  [TestCaseId.HowDoesTheExportLeaveTheUkBackFromAdditionalTransport]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(empty))),
+  ],
+  [TestCaseId.HowDoesTheExportLeaveTheUkBackFromWhatExportJourney]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(empty))),
+  ],
+  [TestCaseId.HowDoesTheExportLeaveTheUkBackFromAdditionalTransportCloned]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(empty))),
+  ],
+  [TestCaseId.HowDoesTheExportLeaveTheUkBackFromWhatExportJourneyCloned]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(empty))),
+  ],
 };
 
 export default howDoesTheExportLeaveTheUkHandler;
