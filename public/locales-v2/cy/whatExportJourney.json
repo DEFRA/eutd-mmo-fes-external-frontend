@@ -10,5 +10,7 @@
   "ccWhatExportJourneyPointOfDestinationHint": "Er enghraifft, porthladd Calais, maes awyr Calais-Dunkerque neu gyrchfan y llwyth.",
   "psPointOfDestination": "Cyrchfan",
   "psPointOfDestinationHint": "Er enghraifft, porthladd Calais, maes awyr Calais-Dunkerque neu gyrchfan y llwyth.",
-  "psWhatExportDestination": "Rhowch gyrchfan y llwyth"
+  "psWhatExportDestination": "Rhowch gyrchfan y llwyth",
+  "psDestinationCountry": "Gwlad gyrchfan",
+  "psDestinationCountryHint": "Rhowch brif wlad gyrchfan yr allforion. Peidiwch â chynnwys gwledydd y mae'r nwyddau'n pasio drwyddynt."
 }

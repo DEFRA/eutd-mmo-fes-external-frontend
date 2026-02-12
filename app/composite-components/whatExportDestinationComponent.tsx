@@ -58,8 +58,18 @@ export const WhatExportDestinationComponent = ({ journey }: { journey: Journey }
               id="exportDestination"
               name="exportedTo"
               defaultValue={formData.exportedTo === "" ? "" : exportLocation?.exportedTo?.officialCountryName ?? ""}
-              labelText={t("commonWhatExportDestinationSelectTheDestinationCountry")}
-              hintText={t("commonWhatExportDestinationHintSelectTheDestinationCountry")}
+              labelText={t(
+                journey === "processingStatement"
+                  ? "psDestinationCountry"
+                  : "commonWhatExportDestinationSelectTheDestinationCountry",
+                journey === "processingStatement" ? { ns: "whatExportJourney" } : {}
+              )}
+              hintText={t(
+                journey === "processingStatement"
+                  ? "psDestinationCountryHint"
+                  : "commonWhatExportDestinationHintSelectTheDestinationCountry",
+                journey === "processingStatement" ? { ns: "whatExportJourney" } : {}
+              )}
               selectProps={{
                 id: "exportDestination",
                 selectClassName: classNames("govuk-select", {

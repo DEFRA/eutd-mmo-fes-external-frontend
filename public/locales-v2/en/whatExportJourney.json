@@ -10,5 +10,7 @@
   "ccWhatExportJourneyPointOfDestinationHint": "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment.",
   "psPointOfDestination": "Point of destination",
   "psPointOfDestinationHint": "For example, Calais port, Calais-Dunkerque airport or the destination point of the consignment.",
-  "psWhatExportDestination": "Enter the destination for the consignment"
+  "psWhatExportDestination": "Enter the destination for the consignment",
+  "psDestinationCountry": "Destination country",
+  "psDestinationCountryHint": "Enter the main destination country for the export. Do not include countries the goods are passing through."
 }
