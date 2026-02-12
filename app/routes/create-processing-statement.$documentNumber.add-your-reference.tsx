@@ -12,7 +12,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     request,
     params,
     "/create-processing-statement/processing-statements",
-    "/create-processing-statement/:documentNumber/add-exporter-details"
+    "/create-processing-statement/:documentNumber/add-exporter-details",
+    "/create-processing-statement/:documentNumber/check-your-information"
   );
 
 const AddYourReference = () => {

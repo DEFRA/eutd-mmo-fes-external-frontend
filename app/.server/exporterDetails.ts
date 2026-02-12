@@ -434,15 +434,34 @@ const onAddExporterDetailsResponse = async (response: Response): Promise<IExport
     case 200:
     case 204:
       return await response.json();
-    case 400:
+    case 400: {
       const data = await response.json();
-      return {
-        ...data,
-        errors: Object.keys(data.errors).map((key: string) => ({
+      const validationErrors = [];
+      if (data.exporterFullName) {
+        validationErrors.push({
+          key: "exporterFullName",
+          message: getErrorMessage(data.exporterFullName),
+        });
+      }
+      if (data.exporterCompanyName) {
+        validationErrors.push({
+          key: "exporterCompanyName",
+          message: getErrorMessage(data.exporterCompanyName),
+        });
+      }
+
+      const errors =
+        data.errors &&
+        Object.keys(data.errors).map((key: string) => ({
           key: key,
           message: getErrorMessage(data.errors[key]),
-        })),
+        }));
+
+      return {
+        error: "",
+        errors: [...(errors ?? []), ...validationErrors],
       };
+    }
     case 403:
       return {
         ...(await response.json()),
