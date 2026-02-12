@@ -24,6 +24,7 @@ type loaderDataProps = {
   vehicle: Vehicle;
   transportId?: string;
   nextUri?: string;
+  fromAdditionalTransport?: boolean;
   csrf: string;
 };
 
@@ -34,7 +35,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   HowDoesTheExportLeaveUkAction(request, params);
 
 const HowDoesTheExportLeaveTheUk = () => {
-  const { documentNumber, vehicle, transportId, nextUri, csrf } = useLoaderData<loaderDataProps>();
+  const { documentNumber, vehicle, transportId, nextUri, fromAdditionalTransport, csrf } =
+    useLoaderData<loaderDataProps>();
   const [isExpandedGuidance, setIsExpandedGuidance] = useState(false);
   const isHydrated = useIsHydrated();
 
@@ -45,6 +47,10 @@ const HowDoesTheExportLeaveTheUk = () => {
     ? `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${transportId}`
     : `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk`;
 
+  const backUrl = fromAdditionalTransport
+    ? route("/create-catch-certificate/:documentNumber/do-you-have-additional-transport-types", { documentNumber })
+    : route("/create-catch-certificate/:documentNumber/what-export-journey", { documentNumber });
+
   useScrollOnPageLoad();
 
   useEffect(() => {
@@ -54,7 +60,7 @@ const HowDoesTheExportLeaveTheUk = () => {
   }, [errors]);
 
   return (
-    <Main backUrl={route("/create-catch-certificate/:documentNumber/what-export-journey", { documentNumber })}>
+    <Main backUrl={backUrl}>
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">

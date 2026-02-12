@@ -434,7 +434,7 @@ const onAddExporterDetailsResponse = async (response: Response): Promise<IExport
     case 200:
     case 204:
       return await response.json();
-    case 400:
+    case 400: {
       const data = await response.json();
       // Handle both array (frontend validation) and object (backend API) error formats
       let normalizedErrors: IError[] = [];
@@ -454,6 +454,7 @@ const onAddExporterDetailsResponse = async (response: Response): Promise<IExport
         ...data,
         errors: normalizedErrors,
       };
+    }
     case 403:
       return {
         ...(await response.json()),
