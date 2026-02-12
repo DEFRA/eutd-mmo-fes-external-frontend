@@ -1110,4 +1110,119 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get("#add-supporting-doc-button").should("not.exist");
     });
   });
+
+  // FI0-6512: Product index tracking tests
+  describe("Product index tracking on save", () => {
+    it("should include productIndex=0 in redirect URL when adding first product", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentData,
+      };
+      cy.visit(`${documentUrl}/add-product-to-this-consignment/0`, { qs: { ...testParams } });
+
+      // Fill in required fields
+      cy.get('input[value="uk"]').check({ force: true });
+      cy.get("#catches-0-certificateNumber").type("TEST123");
+      cy.get("#catches-0-weightOnCC").type("100");
+      cy.get("#catches-0-product").type("COD");
+      cy.wait(300);
+      cy.get("#catches-0-commodityCode").type("03");
+
+      // Submit form
+      cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+      // Should redirect with productIndex=0
+      cy.url().should("include", "/you-have-added-a-product");
+      cy.url().should("include", "productIndex=0");
+    });
+
+    it("should include productIndex=1 in redirect URL when adding second product", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentData,
+      };
+      cy.visit(`${documentUrl}/add-product-to-this-consignment/1`, { qs: { ...testParams } });
+
+      // Fill in required fields
+      cy.get('input[value="uk"]').check({ force: true });
+      cy.get("#catches-1-certificateNumber").type("TEST456");
+      cy.get("#catches-1-weightOnCC").type("200");
+      cy.get("#catches-1-product").type("HAD");
+      cy.wait(300);
+      cy.get("#catches-1-commodityCode").type("03");
+
+      // Submit form
+      cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+      // Should redirect with productIndex=1
+      cy.url().should("include", "/you-have-added-a-product");
+      cy.url().should("include", "productIndex=1");
+    });
+
+    it("should include productIndex in redirect URL when editing a product", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentData,
+      };
+      const editIndex = 2;
+      cy.visit(`${documentUrl}/add-product-to-this-consignment/${editIndex}`, { qs: { ...testParams } });
+
+      // Fill in required fields
+      cy.get('input[value="uk"]').check({ force: true });
+      cy.get(`#catches-${editIndex}-certificateNumber`).clear().type("EDITED123");
+      cy.get(`#catches-${editIndex}-weightOnCC`).clear().type("150");
+      cy.get(`#catches-${editIndex}-product`).type("COD");
+      cy.wait(300);
+      cy.get(`#catches-${editIndex}-commodityCode`).type("03");
+
+      // Submit form
+      cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+      // Should redirect with the edited productIndex
+      cy.url().should("include", "/you-have-added-a-product");
+      cy.url().should("include", `productIndex=${editIndex}`);
+    });
+
+    it("should preserve both nextUri and productIndex parameters in redirect", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentData,
+      };
+      const productIndex = 1;
+      const nextUri = "/some-next-page";
+      cy.visit(
+        `${documentUrl}/add-product-to-this-consignment/${productIndex}?nextUri=${encodeURIComponent(nextUri)}`,
+        {
+          qs: { ...testParams },
+        }
+      );
+
+      // Fill in required fields
+      cy.get('input[value="uk"]').check({ force: true });
+      cy.get(`#catches-${productIndex}-certificateNumber`).type("TEST789");
+      cy.get(`#catches-${productIndex}-weightOnCC`).type("100");
+      cy.get(`#catches-${productIndex}-product`).type("COD");
+      cy.wait(300);
+      cy.get(`#catches-${productIndex}-commodityCode`).type("03");
+
+      // Submit form
+      cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+      // Should redirect with both parameters
+      cy.url().should("include", "/you-have-added-a-product");
+      cy.url().should("include", `productIndex=${productIndex}`);
+      // Check for the nextUri parameter (not URL-encoded in the redirect)
+      cy.url().should("include", `nextUri=${nextUri}`);
+    });
+
+    it("should include productIndex=0 when adding product at index 0", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+      };
+      cy.visit(`${documentUrl}/add-product-to-this-consignment/0`, { qs: { ...testParams } });
+
+      // Submit with minimal data (test case handles validation)
+      cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+      // Should redirect with productIndex=0
+      cy.url().should("include", "/you-have-added-a-product");
+      cy.url().should("include", "productIndex=0");
+    });
+  });
 });
