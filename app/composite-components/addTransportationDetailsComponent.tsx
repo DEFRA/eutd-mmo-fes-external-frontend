@@ -23,6 +23,7 @@ import {
   getRegistrationNumber,
   getVesselName,
   TransportType,
+  getErrorKeysInOrderForTransport,
 } from "~/helpers";
 
 type AddTransporrtationDetailsProps = {
@@ -131,25 +132,18 @@ export const AddTransportationDetailsComponent = ({
       break;
   }
 
+  const transportOrder = getErrorKeysInOrderForTransport(vehicleType, false);
+  const commonOrder = ["exportedTo", "pointOfDestination", "departurePlace", "exportDate", "airwayBillNumber"];
+
   const errorKeysInOrder = [
-    "exportedTo",
-    "pointOfDestination",
-    "departurePlace",
-    "exportDate",
-    "airwayBillNumber",
-    "vesselName",
-    "flagState",
-    "flightNumber",
-    "containerNumbers.0",
-    "containerNumbers.1",
-    "containerNumbers.2",
-    "containerNumbers.3",
-    "containerNumbers.4",
+    ...commonOrder.filter((k) => !transportOrder.includes(k)),
+    ...transportOrder,
     "nationalityOfVehicle",
     "registrationNumber",
     "railwayBillNumber",
     "freightBillNumber",
   ];
+
   const errorMessagesForDisplay = displayErrorMessagesInOrder(errors, errorKeysInOrder);
   return (
     <Main backUrl={backUrl}>

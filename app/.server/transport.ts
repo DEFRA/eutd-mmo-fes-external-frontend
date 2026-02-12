@@ -15,48 +15,7 @@ import {
 import { getErrorMessage } from "~/helpers";
 import type { AdditionalTransportType, IAddTransportationCheck, IBase, ITransport, Journey } from "~/types";
 
-// Helper: order error keys according to a provided field order.
-const orderErrors = (errorsResponse: Record<string, string>, fieldOrder: string[] = []) => {
-  const keys = Object.keys(errorsResponse);
 
-  const ordered: string[] = [];
-  const remaining = new Set(keys);
-
-  // Place explicit keys or prefix groups (like 'containerNumbers') in the requested order
-  fieldOrder.forEach((field) => {
-    // If a direct key exists, push it
-    if (remaining.has(field)) {
-      ordered.push(field);
-      remaining.delete(field);
-      return;
-    }
-
-    // If the field represents a prefix (no dot), collect matching keys
-    const prefix = field + ".";
-    const matched = keys.filter((k) => remaining.has(k) && k.startsWith(prefix));
-    if (matched.length > 0) {
-      // sort numeric suffixes if present
-      matched.sort((a, b) => {
-        const aIdx = a.split(".").pop();
-        const bIdx = b.split(".").pop();
-        const aNum = Number.isNaN(Number(aIdx)) ? Infinity : Number(aIdx);
-        const bNum = Number.isNaN(Number(bIdx)) ? Infinity : Number(bIdx);
-        return aNum - bNum;
-      });
-      matched.forEach((m) => {
-        ordered.push(m);
-        remaining.delete(m);
-      });
-    }
-  });
-
-  // Append any remaining keys in their original order
-  keys.forEach((k) => {
-    if (remaining.has(k)) ordered.push(k);
-  });
-
-  return ordered.map((key) => ({ key, message: getErrorMessage(errorsResponse[key]) }));
-};
 
 export const getTransportations = async (bearerToken: string, documentNumber?: string): Promise<ITransport[]> => {
   if (!documentNumber) throw new Error("Document number is required");
@@ -146,7 +105,7 @@ export const addTransport = async (
   return onAddTransportDetails(response, transport?.vehicle);
 };
 
-const onAddTransportDetails = async (response: Response, vehicle?: string): Promise<ITransport> => {
+const onAddTransportDetails = async (response: Response, _vehicle?: string): Promise<ITransport> => {
   switch (response.status) {
     case 200:
       const data = await response.json();
@@ -158,13 +117,6 @@ const onAddTransportDetails = async (response: Response, vehicle?: string): Prom
 
     case 400:
       const errorsResponse = await response.json();
-      if (vehicle === "containerVessel") {
-        return {
-          vehicle: "undefined",
-          errors: orderErrors(errorsResponse, ["vesselName", "flagState", "departurePlace", "containerNumbers"]),
-        };
-      }
-
       return {
         vehicle: "undefined",
         errors: Object.keys(errorsResponse).map((error) => ({
@@ -253,13 +205,6 @@ const onUpdateTransport = async (response: Response, vehicle: string): Promise<I
             ? errorsResponse[error].replaceAll(".containerNumber", ".containerNumber.plane")
             : errorsResponse[error];
       });
-
-      if (vehicle === "containerVessel") {
-        return {
-          vehicle: "undefined",
-          errors: orderErrors(processedErrors, ["vesselName", "flagState", "departurePlace", "containerNumbers"]),
-        };
-      }
 
       return {
         vehicle: "undefined",
@@ -462,12 +407,6 @@ const onSaveTransportDetails = async (response: Response, payload?: ITransport):
           }
         }
       });
-
-      if (payload?.vehicle === "containerVessel") {
-        return {
-          errors: orderErrors(errorsResponse, ["vesselName", "flagState", "departurePlace", "containerNumbers"]),
-        };
-      }
 
       return {
         errors: Object.keys(errorsResponse).map((error) => ({
