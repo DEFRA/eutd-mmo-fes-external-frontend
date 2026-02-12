@@ -442,7 +442,7 @@ const AddCatchDetailsIndex = () => {
     if (defaultIssuingCountry) {
       setSelectedIssuingCountry(defaultIssuingCountry);
     }
-
+    setCurrentCatchCertificateNumber(isEditing ? catchCertificateNumber : "");
     setSelectedSpecies(speciesSelected);
     setSelectedSpeciesCode(getDefaultSelectedSpeciesCode(speciesCode));
     setCurrentTotalWeightLanded(totalWeightLanded);
@@ -653,26 +653,28 @@ const AddCatchDetailsIndex = () => {
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
               />
               <CatchCertificateDetails />
-              <WeightInput
-                id="weight"
-                totalWeight={() => {}}
-                label={t("psAddCatchCertificateWeight", { ns: "psAddCatchDetails" })}
-                hint={t("psAddCatchCertificateWeightHint", { ns: "psAddCatchDetails" })}
-                key={isReset ? `total-weight-landed-${catchIndex}-reset` : `total-weight-landed-${catchIndex}`}
-                weightKey={`totalWeightLanded`}
-                errorID={`catches-${catchIndex}-totalWeightLanded`}
-                inputWidth={5}
-                unit="kg"
-                errors={errors ?? {}}
-                formValue={isReset ? "" : getWeightValue(isHydrated, currentTotalWeightLanded, totalWeightLanded)}
-                speciesId={`total-weight-landed-${catchIndex}`}
-                index={catchIndex}
-                exportWeight={isReset ? "" : totalWeightLanded}
-                readOnly={false}
-                inputType="text"
-                inputName="totalWeightLanded"
-                onChange={(e) => setCurrentTotalWeightLanded(e.currentTarget.value)}
-              />
+              {currentCatchCertificateType !== "uk" && (
+                <WeightInput
+                  id="weight"
+                  totalWeight={() => {}}
+                  label={t("psAddCatchCertificateWeight", { ns: "psAddCatchDetails" })}
+                  hint={t("psAddCatchCertificateWeightHint", { ns: "psAddCatchDetails" })}
+                  key={isReset ? `total-weight-landed-${catchIndex}-reset` : `total-weight-landed-${catchIndex}`}
+                  weightKey={`totalWeightLanded`}
+                  errorID={`catches-${catchIndex}-totalWeightLanded`}
+                  inputWidth={5}
+                  unit="kg"
+                  errors={errors ?? {}}
+                  formValue={isReset ? "" : getWeightValue(isHydrated, currentTotalWeightLanded, totalWeightLanded)}
+                  speciesId={`total-weight-landed-${catchIndex}`}
+                  index={catchIndex}
+                  exportWeight={isReset ? "" : totalWeightLanded}
+                  readOnly={false}
+                  inputType="text"
+                  inputName="totalWeightLanded"
+                  onChange={(e) => setCurrentTotalWeightLanded(e.currentTarget.value)}
+                />
+              )}
               <WeightInput
                 id="weight"
                 totalWeight={() => {}}
