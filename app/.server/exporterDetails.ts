@@ -436,12 +436,23 @@ const onAddExporterDetailsResponse = async (response: Response): Promise<IExport
       return await response.json();
     case 400:
       const data = await response.json();
-      return {
-        ...data,
-        errors: Object.keys(data.errors).map((key: string) => ({
+      // Handle both array (frontend validation) and object (backend API) error formats
+      let normalizedErrors: IError[] = [];
+
+      if (Array.isArray(data.errors)) {
+        // Frontend validation already returns IError[] format
+        normalizedErrors = data.errors;
+      } else if (data?.errors && typeof data.errors === "object") {
+        // Backend API returns object format - convert to IError[]
+        normalizedErrors = Object.keys(data.errors).map((key: string) => ({
           key: key,
           message: getErrorMessage(data.errors[key]),
-        })),
+        }));
+      }
+
+      return {
+        ...data,
+        errors: normalizedErrors,
       };
     case 403:
       return {
@@ -631,6 +642,14 @@ export const exporterDetailsAction = async (
   // Validate required fields before submitting to backend
   if (!isSaveAsDraft) {
     const validationErrors: IError[] = [];
+
+    // Validate full name for catch certificate journey
+    if (isCatchCertificate && (!payload.exporterFullName || payload.exporterFullName.trim().length === 0)) {
+      validationErrors.push({
+        key: "exporterFullName",
+        message: "commonAddExporterDetailsPersonResponsibleError",
+      });
+    }
 
     // Validate company name
     if (!payload.exporterCompanyName || payload.exporterCompanyName.trim().length === 0) {
