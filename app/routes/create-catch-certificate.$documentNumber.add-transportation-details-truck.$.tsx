@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useEffect } from "react";
 import { Main, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
 import { ButtonGroup, CatchCertificateTransportationDetails } from "~/composite-components";
 import {
@@ -12,9 +11,9 @@ import {
 import { useTranslation } from "react-i18next";
 import type { ITransport, ErrorResponse, ICountry } from "~/types";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
-import { displayErrorMessagesInOrder, getMeta, scrollToId, TransportType, getContainerNumbers } from "~/helpers";
+import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
-import { useScrollOnPageLoad } from "~/hooks";
+import { useTransportationDetailsPage, getTransportErrorKeys } from "~/hooks";
 
 export const meta: MetaFunction = (args) => getMeta(args);
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -52,30 +51,8 @@ const TruckTransportDetailsPage = () => {
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
-  const errorKeysInOrder = [
-    "nationalityOfVehicle",
-    "registrationNumber",
-    "departurePlace",
-    "containerNumbers.0",
-    "containerNumbers.1",
-    "containerNumbers.2",
-    "containerNumbers.3",
-    "containerNumbers.4",
-    "containerNumbers.5",
-    "containerNumbers.6",
-    "containerNumbers.7",
-    "containerNumbers.8",
-    "containerNumbers.9",
-    "freightBillNumber",
-  ];
-
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      scrollToId("errorIsland");
-    }
-  }, [errors]);
-
-  useScrollOnPageLoad();
+  const errorKeysInOrder = getTransportErrorKeys(TransportType.TRUCK);
+  useTransportationDetailsPage(errors);
 
   return (
     <Main backUrl={backUrl}>
