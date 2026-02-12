@@ -15,8 +15,6 @@ import {
 import { getErrorMessage } from "~/helpers";
 import type { AdditionalTransportType, IAddTransportationCheck, IBase, ITransport, Journey } from "~/types";
 
-
-
 export const getTransportations = async (bearerToken: string, documentNumber?: string): Promise<ITransport[]> => {
   if (!documentNumber) throw new Error("Document number is required");
 
@@ -102,10 +100,10 @@ export const addTransport = async (
     { ...transport }
   );
 
-  return onAddTransportDetails(response, transport?.vehicle);
+  return onAddTransportDetails(response);
 };
 
-const onAddTransportDetails = async (response: Response, _vehicle?: string): Promise<ITransport> => {
+const onAddTransportDetails = async (response: Response): Promise<ITransport> => {
   switch (response.status) {
     case 200:
       const data = await response.json();
