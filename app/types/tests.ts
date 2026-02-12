@@ -82,6 +82,7 @@ export enum TestCaseId {
   CCAddExporterDetailsSaveAsDraft = "CCAddExporterDetailsSaveAsDraft",
   CCAddExporterDetailsFailsWith403 = "CCAddExporterDetailsFailsWith403",
   CCAddExporterDetailsFailsWithErrors = "CCAddExporterDetailsFailsWithErrors",
+  CCAddExporterDetailsNoAddress = "ccAddExporterDetailsNoAddress",
   CCAddExporterDetailsFailsWithExporterFullNameError = "CCAddExporterDetailsFailsWithExporterFullNameError",
   CCAddExporterDetailsFailsWithExporterFullNameMaxLength = "CCAddExporterDetailsFailsWithExporterFullNameMaxLength",
   CCAddExporterDetailsFailsWithExporterFullNameWithSpecialCharacters = "CCAddExporterDetailsFailsWithExporterFullNameWithSpecialCharacters",
@@ -97,6 +98,7 @@ export enum TestCaseId {
   PSAddExporterDetailsFailsWith403 = "psAddExporterDetailsFailsWith403",
   PSAddExporterDetails403 = "psAddExporterDetails403",
   PSAddExporterDetailsFailsWithErrors = "psAddExporterDetailsFailsWithErrors",
+  PSAddExporterDetailsNoAddress = "psAddExporterDetailsNoAddress",
 
   SDAddExporterDetails = "sdAddExporterDetails",
   SDAddExporterDetailsFromIdm = "sdAddExporterDetailsFromIdm",
@@ -105,6 +107,7 @@ export enum TestCaseId {
   SDAddExporterDetailsFailsWith403 = "sdAddExporterDetailsFailsWith403",
   SDAddExporterDetailsFailsWithErrors = "sdAddExporterDetailsFailsWithErrors",
   SDAddExporterDetails403 = "sdAddExporterDetails403",
+  SDAddExporterDetailsNoAddress = "sdAddExporterDetailsNoAddress",
 
   PSAddConsignmentDetails = "psAddConsignmentDetails",
   PSAddConsignmentDetailsEditMode = "psAddConsignmentDetailsEditMode",

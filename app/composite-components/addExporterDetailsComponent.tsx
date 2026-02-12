@@ -175,7 +175,7 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
               </>
             ) : (
               <>
-                <p>{t("commonAddExporterDetailsExporterAddressRegistration")}</p>
+                <p id="exporterAddress">{t("commonAddExporterDetailsExporterAddressRegistration")}</p>
                 <div className="govuk-button-group">
                   <Button
                     label={t("commonAddExporterDetailsAddTheExportersAddress")}
