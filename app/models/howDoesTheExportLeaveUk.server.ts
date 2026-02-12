@@ -32,6 +32,7 @@ export const HowDoesTheExportLeaveUkLoader = async (request: Request, params: Pa
   const transportId = splitParams?.[0];
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
+  const fromAdditionalTransport = url.searchParams.get("fromAdditionalTransport") === "true";
   const t = await i18next.getFixedT(request, ["title"]);
   const pageTitle = t("ccTransportSelectionPageTitle", { ns: "title" });
   const commonTitle = t("ccCommonTitle", { ns: "title" });
@@ -54,6 +55,7 @@ export const HowDoesTheExportLeaveUkLoader = async (request: Request, params: Pa
         vehicle,
         transportId,
         nextUri,
+        fromAdditionalTransport,
         pageTitle,
         commonTitle,
         csrf,
@@ -72,6 +74,7 @@ export const HowDoesTheExportLeaveUkLoader = async (request: Request, params: Pa
     JSON.stringify({
       documentNumber,
       nextUri,
+      fromAdditionalTransport,
       pageTitle,
       commonTitle,
       csrf,
