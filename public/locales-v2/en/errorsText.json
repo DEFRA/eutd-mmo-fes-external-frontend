@@ -176,7 +176,7 @@
   "psAddCatchWeightsErrorExportWeightGreaterThanNullAfterProcessing": "Enter the export weight (after processing) shown as a number with a maximum of 2 decimal places, larger than 0",
   "psAddCatchWeightsErrorEnterExportWeightMaximum2DecimalBeforeProcessing": "Enter the export weight (before processing) as a number with a maximum of 2 decimal places",
   "psAddCatchWeightsErrorEnterExportWeightMaximum2DecimalAfterProcessing": "Enter the export weight (after processing) as a number with a maximum of 2 decimal places",
-  "psAddCatchWeightsErrorEnterExportWeightInKGBeforeProcessingMoreThanTotalWeight": "Export weight in kg (before processing) must be the same or less than the Total weight shown on catch certificate in kg",
+  "psAddCatchWeightsErrorEnterExportWeightInKGBeforeProcessingMoreThanTotalWeight": "Export weight before processing must be the same or less than the total weight shown on catch certificate in kg",
   "psAddCatchTypeErrorSelectCatchCertificateType": "Select Yes if the catch certificate was issued in the UK",
   "psAddCatchTypeErrorCatchCertificateTypeInvalid": "Select Yes if the catch certificate was issued in the UK",
   "psAddCatchDetailsErrorEnterTheFAOCodeOrSpeciesName": "Enter the FAO code or species name",

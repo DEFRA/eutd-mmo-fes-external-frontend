@@ -5,11 +5,11 @@ const inferredDocumentName = (documentNumber: string | undefined) => {
   if (documentNumber && documentNumber.length > 11) {
     switch (documentNumber.substring(9, 11)) {
       case "CC":
-        return "catch certificate";
+        return "catchCertificate";
       case "PS":
-        return "processing statement";
+        return "processingStatement";
       case "SD":
-        return "non-manipulation document";
+        return "storageNotes";
       default:
         return "";
     }
@@ -21,7 +21,8 @@ export const HelpLink = () => {
   const { t } = useTranslation();
 
   const { documentNumber } = useLoaderData<string>();
-  const documentName = inferredDocumentName(documentNumber);
+  const documentNameKey = inferredDocumentName(documentNumber);
+  const documentName = t(documentNameKey);
 
   return (
     <div className="govuk-!-margin-bottom-6 govuk-!-margin-top-8" data-testid="help-section">
@@ -51,7 +52,8 @@ export const HelpLink = () => {
         >
           {t("getHelpMovingFish")}&nbsp;
           {t("commonHelpLinkOpenInNewTab")}
-        </a>.
+        </a>{" "}
+        .
       </p>
     </div>
   );
