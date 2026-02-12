@@ -458,7 +458,8 @@ const onAddExporterDetailsResponse = async (response: Response): Promise<IExport
         }));
 
       return {
-        error: "",
+        ...data,
+        error: "invalid",
         errors: [...(errors ?? []), ...validationErrors],
       };
     }

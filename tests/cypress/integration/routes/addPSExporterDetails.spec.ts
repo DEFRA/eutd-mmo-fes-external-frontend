@@ -78,6 +78,7 @@ describe("PS: add exporter details - errors", () => {
 
   it("should show errors", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").should("be.visible");
   });
 });
 
