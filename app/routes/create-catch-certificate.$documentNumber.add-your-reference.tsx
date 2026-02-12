@@ -12,7 +12,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     request,
     params,
     "/create-catch-certificate/catch-certificates",
-    "/create-catch-certificate/:documentNumber/add-exporter-details"
+    "/create-catch-certificate/:documentNumber/add-exporter-details",
+    "/create-catch-certificate/:documentNumber/check-your-information"
   );
 
 const AddYourReference = () => {
