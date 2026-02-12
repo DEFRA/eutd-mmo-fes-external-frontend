@@ -92,8 +92,7 @@ const onValidateDirectLandingsResponse = async (
         Object.keys(formatErrors).map((key: string) =>
           (formatErrors[key]["key"] && formatErrors[key]["key"] === "error.weights.exportWeight.number.base") ||
           (formatErrors[key]["key"] && formatErrors[key]["key"] === "error.seasonalFish.invalidate") ||
-          (formatErrors[key]["key"] && formatErrors[key]["key"] === "error.startDate.seasonalFish.invalidate") ||
-          (formatErrors[key]["key"] && formatErrors[key]["key"] === "error.dateLanded.date.max")
+          (formatErrors[key]["key"] && formatErrors[key]["key"] === "error.startDate.seasonalFish.invalidate")
             ? {
                 key: key,
                 message: getErrorMessage(formatErrors[key]["key"].replace(/\.[0-9]+/, "")),
@@ -116,12 +115,7 @@ const onValidateDirectLandingsResponse = async (
   }
 };
 
-const transformError = (
-  errors: ErrorLookup,
-  errorKey: string,
-  products: IDirectLandingsResponse,
-  landingLimitDaysInTheFuture: number
-) => {
+const transformError = (errors: ErrorLookup, errorKey: string, products: IDirectLandingsResponse) => {
   if (errors[errorKey] === "error.seasonalFish.invalidate") {
     const product: string =
       products.items.find((value: IDirectLandingsResponseDetails) =>
@@ -148,14 +142,6 @@ const transformError = (
       [errorKey]: {
         key: errors[errorKey],
         params: [product],
-      },
-    };
-  } else if (errorKey === "dateLanded") {
-    // FIO-10474: Handle dateLanded errors separately with landing limit param
-    return {
-      [errorKey]: {
-        key: errors[errorKey],
-        params: [landingLimitDaysInTheFuture],
       },
     };
   } else if (errorKey === "vessel.vesselName") {

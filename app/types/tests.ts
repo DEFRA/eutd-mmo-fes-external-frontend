@@ -203,6 +203,13 @@ export enum TestCaseId {
   DirectLandingEEZValidationErrors = "directLandingEEZValidationErrors",
   DirectLandingCombinedValidationErrors = "directLandingCombinedValidationErrors",
   DirectLandingInvalidDatesNoVesselError = "directLandingInvalidDatesNoVesselError",
+  // FI0-10238: Direct landing error message updates
+  DirectLandingDateLandedUnpopulated = "directLandingDateLandedUnpopulated",
+  DirectLandingDateLandedInvalid = "directLandingDateLandedInvalid",
+  DirectLandingDateLandedFuture = "directLandingDateLandedFuture",
+  DirectLandingVesselUnpopulated = "directLandingVesselUnpopulated",
+  DirectLandingVesselInvalid = "directLandingVesselInvalid",
+  DirectLandingExportWeightInvalid = "directLandingExportWeightInvalid",
   AddLandingPageGuard = "addLandingPageGuard",
   AddLandingSubmitUnauthorised = "addLandingSubmitUnauthorised",
   AddLandingSubmitUnauthorisedAndSupportId = "addLandingSubmitUnauthorisedAndSupportId",

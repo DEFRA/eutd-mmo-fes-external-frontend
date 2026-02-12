@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "product": {
+        "id": "GBR-2022-CC-TEST-c999c558-f753-4ab3-be2d-088f896b11e7",
+        "commodityCode": "03034190",
+        "commodityCodeDescription": "Frozen albacore or longfinned tunas \"Thunnus alalunga\" (excl. for industrial processing or preservation)",
+        "presentation": { "code": "GUH", "label": "Gutted and headed" },
+        "scientificName": "Thunnus alalunga",
+        "state": { "code": "FRO", "label": "Frozen" },
+        "species": { "code": "ALB", "label": "Albacore (ALB)" }
+      },
+      "landings": [
+        {
+          "model": {
+            "id": "GBR-2022-CC-TEST-7709976638",
+            "faoArea": "FAO18",
+            "dateLanded": "2022-12-11",
+            "exportWeight": 0,
+            "numberOfSubmissions": 0
+          },
+          "addMode": false,
+          "editMode": false,
+          "error": "",
+          "errors": {}
+        }
+      ]
+    }
+  ],
+  "error": "invalid",
+  "errors": {
+    "weights.0.exportWeight": "error.weights.exportWeight.number.base"
+  }
+}
