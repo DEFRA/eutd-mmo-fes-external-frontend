@@ -64,6 +64,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     journey: transport.journey,
     vehicle: transport.vehicle,
     currentUri,
+    nextUri: route("/create-non-manipulation-document/:documentNumber/progress", { documentNumber }),
     facilityArrivalDate: "facilityArrivalDate" in storageDocument ? storageDocument.facilityArrivalDate : undefined,
   };
 

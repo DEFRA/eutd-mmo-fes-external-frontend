@@ -382,11 +382,17 @@ const transportDetailsHandler: ITestHandler = {
   [TestCaseId.VesselContainerTransportSaveAsDraft]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(vesselTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+    // Validation endpoint - returns success for all valid fields
+    rest.post(addTransportationDetailsUrl("containerVessel"), (req, res, ctx) =>
+      res(ctx.json(saveVesselContainerDetails))
+    ),
+    // Draft endpoint - saves to draft
     rest.post(addTransportationDetailsUrl("containerVessel", true), (req, res, ctx) =>
       res(ctx.json(saveVesselContainerDetails))
     ),
     rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) => res(ctx.json(saveVesselContainerDetails))),
-    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([catchCertificateVessel]))),
@@ -1875,6 +1881,8 @@ const transportDetailsHandler: ITestHandler = {
   [TestCaseId.VesselContainerTransportPointOfDestinationMaxLength]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(vesselTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+    // Validation endpoint - returns 400 with pointOfDestination error
     rest.post(addTransportationDetailsUrl("containerVessel"), (req, res, ctx) =>
       res(
         ctx.status(400),
@@ -1883,6 +1891,13 @@ const transportDetailsHandler: ITestHandler = {
         })
       )
     ),
+    // Draft endpoint for save as draft - saves valid fields only (FI0-10648)
+    rest.post(addTransportationDetailsUrl("containerVessel", true), (req, res, ctx) =>
+      res(ctx.json(saveVesselContainerDetails))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.VesselContainerTransportPointOfDestinationInvalidCharacters]: () => [
