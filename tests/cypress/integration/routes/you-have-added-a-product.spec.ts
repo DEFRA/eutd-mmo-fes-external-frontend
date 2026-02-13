@@ -126,4 +126,147 @@ describe("SD: you-have-added-product page", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.url().should("include", "/add-product-to-this-consignment");
   });
+
+  // FI0-6512: Back link navigation tests
+  describe("Back link navigation to last added/edited product", () => {
+    it("Scenario 1: should navigate back to the product that was just added when productIndex is in URL", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+      };
+      const productIndex = 1; // Second product (0-indexed)
+      cy.visit(`${sdPageUrl}?productIndex=${productIndex}`, { qs: { ...testParams } });
+
+      // Verify the back link has the correct productIndex
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .should(
+          "have.attr",
+          "href",
+          `/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/${productIndex}`
+        );
+    });
+
+    it("Scenario 1: should navigate back to first product when productIndex=0", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+      };
+      const productIndex = 0; // First product
+      cy.visit(`${sdPageUrl}?productIndex=${productIndex}`, { qs: { ...testParams } });
+
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .should(
+          "have.attr",
+          "href",
+          `/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/${productIndex}`
+        );
+    });
+
+    it("Scenario 2: should maintain productIndex when navigating with nextUri parameter", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+      };
+      const productIndex = 1;
+      const nextUri = "/some-next-page";
+      cy.visit(`${sdPageUrl}?productIndex=${productIndex}&nextUri=${encodeURIComponent(nextUri)}`, {
+        qs: { ...testParams },
+      });
+
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .should(
+          "have.attr",
+          "href",
+          `/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/${productIndex}`
+        );
+    });
+
+    it("Scenario 3: should default to last product when navigating directly without productIndex", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+      };
+      // Visit without productIndex parameter (direct navigation)
+      cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+      // Should default to the last product (index 1, since there are 2 products in the test data)
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .should(
+          "have.attr",
+          "href",
+          "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/1"
+        );
+    });
+
+    it("Scenario 4: should default to last product for cloned documents without productIndex", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+      };
+      // Simulate cloned document navigation (no productIndex in URL)
+      cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+      // Should navigate to the last product index
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .and(($link) => {
+          const href = $link.attr("href");
+          // Verify it ends with a numeric index (last product)
+          expect(href).to.match(/\/add-product-to-this-consignment\/\d+$/);
+        });
+    });
+
+    it("should navigate to correct product when clicking back link with productIndex", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+      };
+      const productIndex = 1;
+      cy.visit(`${sdPageUrl}?productIndex=${productIndex}`, { qs: { ...testParams } });
+
+      // Click the back link
+      cy.contains("a", /^Back$/).click({ force: true });
+
+      // Should navigate to the correct product page
+      cy.url().should(
+        "include",
+        `/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/${productIndex}`
+      );
+    });
+
+    it("should handle single product scenario correctly", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDProductAddedValid,
+      };
+      // This test case has only 1 product
+      cy.visit(`create-non-manipulation-document/GBR-2022-SD-F71D98A30/you-have-added-a-product?productIndex=0`, {
+        qs: { ...testParams },
+      });
+
+      // Should navigate to index 0 (the only product)
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .should(
+          "have.attr",
+          "href",
+          "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/0"
+        );
+    });
+
+    it("should handle edge case when productIndex is greater than available products", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+      };
+      // Try with a very high productIndex
+      const productIndex = 99;
+      cy.visit(`${sdPageUrl}?productIndex=${productIndex}`, { qs: { ...testParams } });
+
+      // Should still use the provided productIndex (backend validation will handle invalid indices)
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .should(
+          "have.attr",
+          "href",
+          `/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/${productIndex}`
+        );
+    });
+  });
 });
