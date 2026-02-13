@@ -552,7 +552,21 @@ export const commonSaveTransportDetails = async (
     return apiCallFailed(errors, values);
   }
 
-  return redirect(isEmpty(nextUri) ? progressRoute : nextUri);
+  // If this is an arrival transport and we're redirecting to the storage facility page,
+  // include the arrival vehicle as a query parameter so the storage facility loader can
+  // determine the correct back link immediately after redirect.
+  let finalRedirect = isEmpty(nextUri) ? progressRoute : nextUri;
+  try {
+    if (payload.arrival && finalRedirect.includes("add-storage-facility-details")) {
+      const url = new URL(finalRedirect, "http://localhost");
+      url.searchParams.set("arrivalVehicle", String(payload.vehicle ?? ""));
+      finalRedirect = `${url.pathname}${url.search}`;
+    }
+  } catch {
+    // fallback to the original redirect if URL parsing fails
+  }
+
+  return redirect(finalRedirect);
 };
 
 export const extractContainerNumbers = (values: Record<string, any>): string[] => {
