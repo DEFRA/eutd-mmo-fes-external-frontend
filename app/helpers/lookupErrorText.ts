@@ -506,6 +506,21 @@ export const getErrorKeysInOrderForTransport = (transportType: string, isArrival
       return ["containerNumbers", "exportDate", "nationalityOfVehicle", "registrationNumber", "freightBillNumber"];
 
     case "plane":
+      if (isArrival) {
+        // Arrival page order: flight number, airway bill, containers, freight,
+        // departure country/port, place of unloading, then departure date
+        return [
+          "flightNumber",
+          "airwayBillNumber",
+          "containerNumbers",
+          "freightBillNumber",
+          "departureCountry",
+          "departurePort",
+          "placeOfUnloading",
+          "departureDate",
+        ];
+      }
+
       return ["flightNumber", "departurePlace", "exportDate", "containerNumbers", "airwayBillNumber"];
 
     case "containervessel":
