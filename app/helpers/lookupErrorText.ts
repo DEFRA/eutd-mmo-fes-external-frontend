@@ -371,11 +371,14 @@ export const getTransformedError = (errors: IError[]): IErrorsTransformed => {
       errorKey = errorKey.replace(/^(?:error\.|validation\.)/, "");
 
       // remove trailing validation tokens starting at known suffix keywords
-      errorKey = errorKey.replace(/\.(?:string|any|array|date|number|pattern|alphanum|min|max|base|isoDate|format|required|empty|validation)(?:\..*)?$/i, "");
+      errorKey = errorKey.replace(
+        /\.(?:string|any|array|date|number|pattern|alphanum|min|max|base|isoDate|format|required|empty|validation)(?:\..*)?$/i,
+        ""
+      );
 
       // if the key ends with a numeric segment, keep it (e.g. containerNumbers.0)
       // otherwise, if it's the array-level containerNumbers and the message points to container label, map to .0
-      if (errorKey === "containerNumbers" && error.message && error.message.includes("ContainerNumberLabelError")) {
+      if (errorKey === "containerNumbers" && error.message?.includes("ContainerNumberLabelError")) {
         errorKey = "containerNumbers.0";
       }
     }
@@ -436,7 +439,7 @@ export const displayErrorMessagesInOrder = (
 
     if (strictForNmd) {
       // match either the exact key, or the key followed by a numeric index (e.g. containerNumbers or containerNumbers.0)
-      const keyRegex = new RegExp(`^${escapeRegExp(orderKey)}(?:\.(\d+))?$`);
+      const keyRegex = new RegExp(`^${escapeRegExp(orderKey)}(?:\\.(\\d+))?$`);
       matchingKeys = Object.keys(errors).filter((objKey) => keyRegex.test(objKey));
     } else {
       // legacy behaviour: match any key that starts with the orderKey
@@ -503,13 +506,7 @@ export const getErrorKeysInOrderForTransport = (transportType: string, isArrival
       }
       // Departure (non-arrival) page order: consignment destination/point/leave-from (handled by commonOrder), then
       // container numbers, export date, nationality, registration, freight
-      return [
-        "containerNumbers",
-        "exportDate",
-        "nationalityOfVehicle",
-        "registrationNumber",
-        "freightBillNumber",
-      ];
+      return ["containerNumbers", "exportDate", "nationalityOfVehicle", "registrationNumber", "freightBillNumber"];
 
     case "plane":
       return ["flightNumber", "departurePlace", "exportDate", "containerNumbers", "airwayBillNumber"];
