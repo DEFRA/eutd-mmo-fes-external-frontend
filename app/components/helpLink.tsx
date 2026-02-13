@@ -5,11 +5,11 @@ const inferredDocumentName = (documentNumber: string | undefined) => {
   if (documentNumber && documentNumber.length > 11) {
     switch (documentNumber.substring(9, 11)) {
       case "CC":
-        return "catchCertificate";
+        return "catchCertificatehelpLink";
       case "PS":
-        return "processingStatement";
+        return "processingStatementhelpLink";
       case "SD":
-        return "storageNotes";
+        return "storageNoteshelpLink";
       default:
         return "";
     }
