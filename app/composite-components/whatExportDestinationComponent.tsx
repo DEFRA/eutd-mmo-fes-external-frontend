@@ -20,7 +20,7 @@ type WhatExportDestinationProps = {
 
 export const WhatExportDestinationComponent = ({ journey }: { journey: Journey }) => {
   const { countries, documentNumber, exportLocation, nextUri, csrf } = useLoaderData<WhatExportDestinationProps>();
-  const { t } = useTranslation(["common"]);
+  const { t } = useTranslation(["common", "whatExportJourney"]);
   const actionData = useActionData() ?? {};
   const { errors = {}, ...formData } = actionData;
 

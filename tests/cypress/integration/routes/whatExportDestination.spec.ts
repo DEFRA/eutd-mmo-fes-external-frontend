@@ -12,6 +12,15 @@ describe("what export destination page", () => {
     cy.contains("a", /^Back$/).should("be.visible");
   });
 
+  it("should render PS-specific label and hint for processing statement", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatExportDestinationDraft,
+    };
+    cy.visit(whatExportDestinationUrl, { qs: { ...testParams } });
+    cy.get("label[for='exportDestination']").should("contain", "Destination country");
+    cy.get("#exportDestination-hint").should("contain", "Enter the main destination country for the export");
+  });
+
   it("should redirect to the forbidden page if the user is unauthorised to access a document number", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportDestination403,
