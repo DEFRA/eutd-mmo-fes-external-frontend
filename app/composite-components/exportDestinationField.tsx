@@ -22,7 +22,7 @@ export const ExportDestinationField = ({
   hintKey,
   namespace = "common",
 }: ExportDestinationFieldProps) => {
-  const { t } = useTranslation(["errorsText", namespace]);
+  const { t } = useTranslation(["common", "errorsText", namespace]);
 
   return (
     <AutocompleteFormField
@@ -35,8 +35,8 @@ export const ExportDestinationField = ({
       id="exportDestination"
       name="exportedTo"
       defaultValue={formData.exportedTo === "" ? "" : exportLocation?.exportedTo?.officialCountryName ?? ""}
-      labelText={namespace === "common" ? t(labelKey) : t(labelKey, { ns: namespace })}
-      hintText={namespace === "common" ? t(hintKey) : t(hintKey, { ns: namespace })}
+      labelText={t(labelKey, namespace === "common" ? {} : { ns: namespace })}
+      hintText={t(hintKey, namespace === "common" ? {} : { ns: namespace })}
       selectProps={{
         id: "exportDestination",
         selectClassName: classNames("govuk-select", {
