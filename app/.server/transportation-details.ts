@@ -530,7 +530,7 @@ export const commonSaveTransportDetails = async (
 
   // Save valid fields as draft even when validation errors exist
   if (saveAsDraft) {
-    // Step 1: Validate to determine which fields are invalid
+    // Validate to determine which fields are invalid
     const validationResponse = await saveTransportDetails(bearerToken, documentNumber, payload, false);
 
     // Combine validation errors from client and backend
