@@ -244,7 +244,7 @@ export const getErrorMessage = (key: string): string => {
     "error.dateLanded.date.base": "ccCommonDateLandedRealError",
     "error.dateLanded.any.required": "ccCommonDateLandedRequiredError",
     "error.dateLanded.any.empty": "ccCommonDateLandedRequiredError",
-    "error.dateLanded.date.isoDate": "ccCommonDateLandedInvalidError",
+    "error.dateLanded.date.isoDate": "ccCommonDateLandedRealError",
     "validation.vessel.license.invalid-date": "ccUploadFilePageTableVesselInvalidLicenseError",
     "validation.product.seasonal.invalid-date": "ccUploadFilePageTableVesselLandingDateSeasonalRestictionError",
     "validation.product.start-date.seasonal.invalid-date":

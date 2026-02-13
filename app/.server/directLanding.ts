@@ -87,25 +87,53 @@ const onValidateDirectLandingsResponse = async (
         errorResponse,
         getEnv().LANDING_LIMIT_DAYS_FUTURE as number
       );
+      // Map direct-landing-specific error messages
+      const directLandingErrorMap: Record<string, string> = {
+        "error.dateLanded.date.max": "ccDirectLandingDateLandedFutureDateError",
+        "error.dateLanded.date.base": "ccDirectLandingDateLandedInvalidError",
+        "error.dateLanded.any.required": "ccDirectLandingDateLandedRequiredError",
+        "error.dateLanded.any.empty": "ccDirectLandingDateLandedRequiredError",
+        "error.dateLanded.date.isoDate": "ccDirectLandingDateLandedInvalidError",
+        "error.vessel.vesselName.any.required": "ccDirectLandingVesselRequiredError",
+        "error.vessel.string.base": "ccDirectLandingVesselRequiredError",
+        "error.vessel.label.any.empty": "ccDirectLandingVesselRequiredError",
+        "error.vessel.vessel.vesselName.any.empty": "ccDirectLandingVesselRequiredError",
+        "error.vessel.any.required": "ccDirectLandingVesselRequiredError",
+        "error.weights.exportWeight.number.base": "ccDirectLandingExportWeightRequiredError",
+        "error.weights.exportWeight.any.required": "ccDirectLandingExportWeightRequiredError",
+        "error.weights.exportWeight.any.empty": "ccDirectLandingExportWeightRequiredError",
+      };
+
       let errorsFormat =
         formatErrors &&
-        Object.keys(formatErrors).map((key: string) =>
-          (formatErrors[key]["key"] && formatErrors[key]["key"] === "error.weights.exportWeight.number.base") ||
-          (formatErrors[key]["key"] && formatErrors[key]["key"] === "error.seasonalFish.invalidate") ||
-          (formatErrors[key]["key"] && formatErrors[key]["key"] === "error.startDate.seasonalFish.invalidate") ||
-          (formatErrors[key]["key"] && formatErrors[key]["key"] === "error.dateLanded.date.max")
-            ? {
-                key: key,
-                message: getErrorMessage(formatErrors[key]["key"].replace(/\.[0-9]+/, "")),
-                value: { dynamicValue: formatErrors[key]["params"] },
-              }
-            : {
-                key: key,
-                message: isEmpty(formatErrors[key]["key"])
-                  ? getErrorMessage(formatErrors[key])
-                  : getErrorMessage(formatErrors[key]["key"].replace(/\.[0-9]+/, "")),
-              }
-        );
+        Object.keys(formatErrors).map((key: string) => {
+          const errorKey = formatErrors[key]["key"];
+          const errorKeyNormalized = errorKey?.replace(/\.[0-9]+/, "");
+
+          // Use direct-landing-specific error message if available
+          const errorMessage =
+            directLandingErrorMap[errorKeyNormalized] ||
+            (isEmpty(errorKey) ? getErrorMessage(formatErrors[key]) : getErrorMessage(errorKeyNormalized));
+
+          // Handle errors with dynamic values
+          if (
+            (errorKey && errorKey === "error.weights.exportWeight.number.base") ||
+            (errorKey && errorKey === "error.seasonalFish.invalidate") ||
+            (errorKey && errorKey === "error.startDate.seasonalFish.invalidate") ||
+            (errorKey && errorKey === "error.dateLanded.date.max")
+          ) {
+            return {
+              key: key,
+              message: errorMessage,
+              value: { dynamicValue: formatErrors[key]["params"] },
+            };
+          }
+
+          return {
+            key: key,
+            message: errorMessage,
+          };
+        });
       return errorsFormat;
     case 403:
       return {

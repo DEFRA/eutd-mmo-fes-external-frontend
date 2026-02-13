@@ -292,5 +292,11 @@
   "ccCommonGearTypeUnpopulatedError": "Dewiswch fath o gêr",
   "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError": "Rhaid i rif y cynhwysydd gynnwys dim ond llythrennau a rhifau",
   "removeProductErrorNoSelection": "Dewiswch 'ydw' os hoffech chi dynnu'r cynnyrch hwn a'r holl rywogaethau cysylltiedig",
-  "sdArrivalDatenotMorethanOneDay": "Ni chaiff y dyddiad cyrraedd fod fwy nag 1 diwrnod yn y dyfodol"
+  "sdArrivalDatenotMorethanOneDay": "Ni chaiff y dyddiad cyrraedd fod fwy nag 1 diwrnod yn y dyfodol",
+  "ccDirectLandingDateLandedRequiredError": "Rhowch y dyddiad glanio",
+  "ccDirectLandingDateLandedInvalidError": "Rhowch ddyddiad glanio dilys",
+  "ccDirectLandingDateLandedFutureDateError": "Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf",
+  "ccDirectLandingVesselRequiredError": "Dewiswch neu rhowch enw llong neu lythyren a rhif porthladd",
+  "ccDirectLandingVesselInvalidError": "Dewiswch gwch neu long o'r rhestr",
+  "ccDirectLandingExportWeightRequiredError": "Rhowch y pwysau allforio mewn cilogramau"
 }
