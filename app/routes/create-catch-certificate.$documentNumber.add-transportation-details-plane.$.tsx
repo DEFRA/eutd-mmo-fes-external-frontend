@@ -13,8 +13,7 @@ import type { ErrorResponse, IErrorsTransformed, ITransport } from "~/types";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
-import { useTransportationDetailsPageSetup } from "~/hooks";
-import { CONTAINER_NUMBER_KEYS } from "~/constants/transportationDetails";
+import { useTransportationDetailsPage, getTransportErrorKeys } from "~/hooks";
 
 export const meta: MetaFunction = (args) => getMeta(args);
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -51,15 +50,8 @@ const AddTransportationDetailsPlane = () => {
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-plane/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
-  useTransportationDetailsPageSetup(errors);
-
-  const errorKeysInOrder = [
-    "flightNumber",
-    "departurePlace",
-    ...CONTAINER_NUMBER_KEYS,
-    "airwayBillNumber",
-    "freightBillNumber",
-  ];
+  const errorKeysInOrder = getTransportErrorKeys(TransportType.PLANE);
+  useTransportationDetailsPage(errors);
   const errorMessagesForDisplay = displayErrorMessagesInOrder(errors, errorKeysInOrder);
 
   return (

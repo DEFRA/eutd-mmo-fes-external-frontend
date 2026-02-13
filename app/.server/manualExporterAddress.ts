@@ -42,6 +42,37 @@ const getFieldFromErrorKey = (errorKey: string): string => {
   return errorKey;
 };
 
+const sortErrors = (errors: Array<{ key: string; message: string }>) => {
+  // Define field order: address fields first, then other required fields
+  const fieldOrder = [
+    "buildingNumber",
+    "buildingName",
+    "subBuildingName",
+    "streetName",
+    "townCity",
+    "postcode",
+    "county",
+    "country",
+  ];
+
+  return errors.sort((a, b) => {
+    const indexA = fieldOrder.indexOf(a.key);
+    const indexB = fieldOrder.indexOf(b.key);
+
+    // If both fields are in the order list, sort by their position
+    if (indexA !== -1 && indexB !== -1) {
+      return indexA - indexB;
+    }
+
+    // If only one is in the list, prioritize it
+    if (indexA !== -1) return -1;
+    if (indexB !== -1) return 1;
+
+    // If neither is in the list, maintain original order
+    return 0;
+  });
+};
+
 const onAddManualExporterAddress = async (response: Response, formData: Exporter): Promise<IExporter> => {
   let data;
   try {
@@ -72,10 +103,11 @@ const onAddManualExporterAddress = async (response: Response, formData: Exporter
 
           return [{ key: fieldName, message }];
         });
+
         return {
           model: formData,
           error: "invalid",
-          errors,
+          errors: sortErrors(errors),
         };
       } else if (data.unauthorised) {
         // Handle unauthorised flag in 200 response
@@ -113,10 +145,11 @@ const onAddManualExporterAddress = async (response: Response, formData: Exporter
 
           return [{ key: fieldName, message }];
         });
+
         return {
           model: formData,
           error: "invalid",
-          errors,
+          errors: sortErrors(errors),
         };
       } else {
         // Old way: errors as object with field names as keys

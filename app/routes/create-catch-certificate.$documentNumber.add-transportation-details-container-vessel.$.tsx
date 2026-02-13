@@ -13,8 +13,7 @@ import { useTranslation } from "react-i18next";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import type { ErrorResponse, ITransport } from "~/types";
 import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";
-import { useTransportationDetailsPageSetup } from "~/hooks";
-import { CONTAINER_NUMBER_KEYS } from "~/constants/transportationDetails";
+import { useTransportationDetailsPage, getTransportErrorKeys } from "~/hooks";
 
 export const meta: MetaFunction = (args) => getMeta(args);
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -50,9 +49,8 @@ const ContainerVesselTransportDetailsPage = () => {
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-container-vessel/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
-  const errorKeysInOrder = ["vesselName", "flagState", "departurePlace", ...CONTAINER_NUMBER_KEYS, "freightBillNumber"];
-
-  useTransportationDetailsPageSetup(errors);
+  const errorKeysInOrder = getTransportErrorKeys(TransportType.CONTAINER_VESSEL);
+  useTransportationDetailsPage(errors);
 
   return (
     <Main backUrl={backUrl}>

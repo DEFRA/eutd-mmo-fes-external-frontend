@@ -13,8 +13,7 @@ import type { ITransport, ErrorResponse, ICountry } from "~/types";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
-import { useTransportationDetailsPageSetup } from "~/hooks";
-import { CONTAINER_NUMBER_KEYS } from "~/constants/transportationDetails";
+import { useTransportationDetailsPage, getTransportErrorKeys } from "~/hooks";
 
 export const meta: MetaFunction = (args) => getMeta(args);
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -52,15 +51,8 @@ const TruckTransportDetailsPage = () => {
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
-  const errorKeysInOrder = [
-    "nationalityOfVehicle",
-    "registrationNumber",
-    "departurePlace",
-    ...CONTAINER_NUMBER_KEYS,
-    "freightBillNumber",
-  ];
-
-  useTransportationDetailsPageSetup(errors);
+  const errorKeysInOrder = getTransportErrorKeys(TransportType.TRUCK);
+  useTransportationDetailsPage(errors);
 
   return (
     <Main backUrl={backUrl}>

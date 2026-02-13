@@ -178,5 +178,8 @@
   "storageNotesDeleteConfirmation": "Ydych chi'n siŵr eich bod am ddileu'r ddogfen dim triniaeth yma?",
   "catchCertificateVoidConfirmation": "Ydych chi’n siŵr eich bod am ddirymu’r dystysgrif dalfa hon?",
   "processingStatementVoidConfirmation": "Ydych chi’n siŵr eich bod am ddirymu’r datganiad prosesu?",
-  "storageNotesVoidConfirmation": "Ydych chi'n siŵr eich bod am ddiddymu’r ddogfen dim triniaeth yma?"
+  "storageNotesVoidConfirmation": "Ydych chi'n siŵr eich bod am ddiddymu’r ddogfen dim triniaeth yma?",
+  "catchCertificatehelpLink": "tystysgrif dalfa",
+  "processingStatementhelpLink": "datganiad prosesu",
+  "storageNoteshelpLink": "dogfen dim triniaeth"
 }
