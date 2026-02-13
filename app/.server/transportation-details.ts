@@ -556,14 +556,16 @@ export const commonSaveTransportDetails = async (
   // include the arrival vehicle as a query parameter so the storage facility loader can
   // determine the correct back link immediately after redirect.
   let finalRedirect = isEmpty(nextUri) ? progressRoute : nextUri;
-  try {
-    if (payload.arrival && finalRedirect.includes("add-storage-facility-details")) {
-      const url = new URL(finalRedirect, "http://localhost");
-      url.searchParams.set("arrivalVehicle", String(payload.vehicle ?? ""));
-      finalRedirect = `${url.pathname}${url.search}`;
+
+  if (payload.arrival && finalRedirect.includes("add-storage-facility-details")) {
+    const vehicleParam = encodeURIComponent(String(payload.vehicle ?? ""));
+    if (isEmpty(nextUri)) {
+      finalRedirect = `${progressRoute}?arrivalVehicle=${vehicleParam}`;
+    } else if (finalRedirect.includes("?")) {
+      finalRedirect = `${finalRedirect}&arrivalVehicle=${vehicleParam}`;
+    } else {
+      finalRedirect = `${finalRedirect}?arrivalVehicle=${vehicleParam}`;
     }
-  } catch {
-    // fallback to the original redirect if URL parsing fails
   }
 
   return redirect(finalRedirect);
