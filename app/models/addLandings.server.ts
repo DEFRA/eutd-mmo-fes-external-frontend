@@ -315,8 +315,23 @@ const addLandingAction = async (
   if (Array.isArray(response.errors) && response.errors.length > 0) {
     session.set("hasLandingError", true);
     session.set("actionExecuted", true);
+
+    // Save form values to session for non-JS reload
+    session.set("selectedStartDate", selectedStartDate);
+    session.set("selectedDate", selectedDate);
+    session.set("selectedProduct", product);
+    session.set("selectedFaoArea", faoArea);
+    session.set("selectedHighSeasArea", highSeasArea);
+    session.set("selectedWeight", weight);
     session.set("selectedVessel", vessel);
+    session.set("gearCategory", gearCategory);
     session.set("gearType", gearType);
+    session.set("selectedRfmo", selectedRfmo);
+    session.set(
+      "selectedExclusiveEconomicZones",
+      exclusiveEconomicZones?.map((item) => item?.officialCountryName).filter(Boolean) ?? []
+    );
+
     const errors = getTransformedError(response.errors);
 
     // Store errors in session for non-JS mode
