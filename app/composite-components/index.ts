@@ -42,6 +42,7 @@ export { AddExporterDetailsComponent } from "./addExporterDetailsComponent";
 export { WhatExportDestinationComponent } from "./whatExportDestinationComponent";
 export { PointOfDestinationField } from "./pointOfDestinationField";
 export { ExportDestinationField } from "./exportDestinationField";
+export { ExportJourneyPageLayout } from "./exportJourneyPageLayout";
 export * from "./checkYourInformation";
 export { AddYourReferenceCommon } from "./addYourReference";
 export { ManageFavouritesComponent } from "./manageFavouritesComponent";
