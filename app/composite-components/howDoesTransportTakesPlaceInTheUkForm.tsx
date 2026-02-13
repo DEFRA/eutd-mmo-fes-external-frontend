@@ -53,19 +53,11 @@ export const HowDoesTransportTakesPlaceInTheUkSubComponent = ({
       <legend className="govuk-fieldset_legend govuk-fieldset__legend--xl">
         <h1 className="govuk-fieldset__heading">{t(getPageTitleKey(), { ns: "transportation" })}</h1>
       </legend>
-      <div
-        id="vehicle-hint"
-        className={
-          type === Page.StorageDocumentHowDoesTheExportLeaveTheUk ? "govuk-body govuk-!-font-weight-bold" : "govuk-hint"
-        }
-      >
+      <div id="vehicle-hint" className="govuk-body govuk-!-font-weight-bold">
         {type === Page.StorageDocumentHowDoesTheExportLeaveTheUk
           ? t("sdTransportSelectionSelectTypeTransportLabel", { ns: "transportation" })
           : t("transportSelectionSelectTypeTransportLabel", { ns: "transportation" })}
       </div>
-      {type !== Page.HowDoesTheConsignmentArriveAToTheUk && (
-        <div className="govuk-hint">{t("transportSelectionAdditionalGuidance", { ns: "transportation" })}</div>
-      )}
       {!isEmpty(errors) && (
         <ErrorMessage
           id="vehicle-error"
