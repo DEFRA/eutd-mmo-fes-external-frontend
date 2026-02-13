@@ -8,7 +8,7 @@ import { ButtonGroup } from "./buttonGroup";
 import { AutocompleteFormField, BackToProgressLink, ErrorSummary, Main, SecureForm, Title } from "~/components";
 import { displayErrorMessages, scrollToId } from "~/helpers";
 import { useScrollOnPageLoad } from "~/hooks";
-import type { ICountry, IExportLocation, Journey } from "~/types";
+import type { ICountry, IExportLocation } from "~/types";
 
 type WhatExportDestinationProps = {
   documentNumber: string;
@@ -18,7 +18,7 @@ type WhatExportDestinationProps = {
   nextUri: string;
 };
 
-export const WhatExportDestinationComponent = ({ journey }: { journey: Journey }) => {
+export const WhatExportDestinationComponent = () => {
   const { countries, documentNumber, exportLocation, nextUri, csrf } = useLoaderData<WhatExportDestinationProps>();
   const { t } = useTranslation(["common", "whatExportJourney"]);
   const actionData = useActionData() ?? {};
@@ -34,14 +34,9 @@ export const WhatExportDestinationComponent = ({ journey }: { journey: Journey }
 
   return (
     <Main
-      backUrl={route(
-        journey === "processingStatement"
-          ? "/create-processing-statement/:documentNumber/add-health-certificate"
-          : "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
-        {
-          documentNumber,
-        }
-      )}
+      backUrl={route("/create-processing-statement/:documentNumber/add-health-certificate", {
+        documentNumber,
+      })}
     >
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
       <div className="govuk-grid-row">
@@ -58,16 +53,8 @@ export const WhatExportDestinationComponent = ({ journey }: { journey: Journey }
               id="exportDestination"
               name="exportedTo"
               defaultValue={formData.exportedTo === "" ? "" : exportLocation?.exportedTo?.officialCountryName ?? ""}
-              labelText={
-                journey === "processingStatement"
-                  ? t("psDestinationCountry", { ns: "whatExportJourney" })
-                  : t("commonWhatExportDestinationSelectTheDestinationCountry")
-              }
-              hintText={
-                journey === "processingStatement"
-                  ? t("psDestinationCountryHint", { ns: "whatExportJourney" })
-                  : t("commonWhatExportDestinationHintSelectTheDestinationCountry")
-              }
+              labelText={t("psDestinationCountry", { ns: "whatExportJourney" })}
+              hintText={t("psDestinationCountryHint", { ns: "whatExportJourney" })}
               selectProps={{
                 id: "exportDestination",
                 selectClassName: classNames("govuk-select", {
@@ -115,11 +102,7 @@ export const WhatExportDestinationComponent = ({ journey }: { journey: Journey }
             <input type="hidden" name="nextUri" value={nextUri} />
           </SecureForm>
           <BackToProgressLink
-            progressUri={
-              journey === "processingStatement"
-                ? "/create-processing-statement/:documentNumber/progress"
-                : "/create-non-manipulation-document/:documentNumber/progress"
-            }
+            progressUri="/create-processing-statement/:documentNumber/progress"
             documentNumber={documentNumber}
           />
         </div>

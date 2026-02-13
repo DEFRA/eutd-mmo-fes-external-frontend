@@ -9,6 +9,6 @@ export const loader: LoaderFunction = async ({ request, params }) => await WhatE
 export const action: ActionFunction = async ({ request, params }): Promise<Response | ErrorResponse> =>
   await WhatExportDestinationAction(request, params, "processingStatement");
 
-const WhatExportDestinationProcessingStatement = () => <WhatExportDestinationComponent journey="processingStatement" />;
+const WhatExportDestinationProcessingStatement = () => <WhatExportDestinationComponent />;
 
 export default WhatExportDestinationProcessingStatement;
