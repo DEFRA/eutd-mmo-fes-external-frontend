@@ -457,9 +457,6 @@ export const displayErrorMessagesInOrder = (
     });
   });
 
-  // Append any remaining errors that weren't matched by the order list
-  Array.from(remainingKeys).forEach((k) => result.push(errors[k]));
-
   return result;
 };
 
