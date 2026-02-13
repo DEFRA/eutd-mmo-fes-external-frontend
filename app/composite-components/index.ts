@@ -41,6 +41,7 @@ export { ProgressPageComponent } from "./progressPage";
 export { AddExporterDetailsComponent } from "./addExporterDetailsComponent";
 export { WhatExportDestinationComponent } from "./whatExportDestinationComponent";
 export { PointOfDestinationField } from "./pointOfDestinationField";
+export { ExportDestinationField } from "./exportDestinationField";
 export * from "./checkYourInformation";
 export { AddYourReferenceCommon } from "./addYourReference";
 export { ManageFavouritesComponent } from "./manageFavouritesComponent";
