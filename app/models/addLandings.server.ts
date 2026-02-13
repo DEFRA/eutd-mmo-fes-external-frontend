@@ -320,6 +320,9 @@ const addLandingAction = async (
 
     session.set("selectedFaoArea", faoArea);
     session.set("selectedHighSeasArea", highSeasArea);
+    session.set("selectedWeight", weight);
+    session.set("selectedVessel", vessel);
+    session.set("gearCategory", gearCategory);
     session.set("gearType", gearType);
     session.set("selectedRfmo", selectedRfmo);
     session.set(
