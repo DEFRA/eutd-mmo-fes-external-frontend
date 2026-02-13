@@ -77,7 +77,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     storageDocument?.facilityAddressOne !== undefined && storageDocument?.facilityPostcode !== undefined;
 
   const getBackUrl = () => {
-    const arrivalVehicle = storageDocument?.arrivalTransport?.vehicle;
+    // Prefer an explicit arrivalVehicle query param (set by the transport save redirect)
+    // so we can determine the correct back link immediately after redirect.
+    const url = new URL(request.url);
+    const arrivalVehicleParam = url.searchParams.get("arrivalVehicle");
+
+    const arrivalVehicle = arrivalVehicleParam ?? storageDocument?.arrivalTransport?.vehicle;
 
     if (!arrivalVehicle) {
       return route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
