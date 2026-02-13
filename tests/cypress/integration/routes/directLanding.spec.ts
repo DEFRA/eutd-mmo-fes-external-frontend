@@ -551,12 +551,15 @@ describe("DirectLanding page errors when javascript is disabled", () => {
   it("should render a page-level error when vessel name is missing", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select a vessel from the list$/).should("be.visible");
+    cy.contains("a", /^Select or enter a vessel name or port letter and number$/).should("be.visible");
   });
 
   it("should render a field-level error when vessel is missing", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
-    cy.get("span.govuk-error-message").should("contain.text", "Select a vessel from the list");
+    cy.get("span.govuk-error-message").should(
+      "contain.text",
+      "Select or enter a vessel name or port letter and number"
+    );
   });
 
   it("should render a page-level error when the add gear category button is clicked when no category is selected", () => {
@@ -681,6 +684,301 @@ describe("DirectLanding page errors when javascript is enabled", () => {
   });
 });
 
+describe("DirectLanding page guard when javascript is disabled", () => {
+  it("should redirect to a forbidden page", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingPageGuard,
+      disableScripts: true,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+
+    cy.url().should("include", "/forbidden");
+  });
+});
+
+describe("DirectLanding page, when no landing have been added", () => {
+  it("should select catch area FAO27 as a default", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingEmpty,
+    };
+
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+
+    cy.get("#select-faoArea").should("have.value", "FAO27");
+  });
+});
+
+describe("Direct Landing page when gear types api is failing", () => {
+  it("should catch errors when gear types are not found", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingPageGearTypeErrors,
+    };
+
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-message").contains("Select a gear type");
+  });
+});
+
+describe("Direct landing page: Accessibility", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLanding,
+    };
+
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+  });
+
+  it("should have label for all fields on the form", () => {
+    cy.get(".form-light-grey-bg label").should("have.length", 16);
+    // start date field label
+    cy.get(".form-light-grey-bg label").eq(0).should("have.text", "Start date of fishing trip").and("be.visible");
+    // start date inputs
+    cy.get(".form-light-grey-bg label").eq(1).should("have.text", "Day").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(2).should("have.text", "Month").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(3).should("have.text", "Year").and("be.visible");
+    // landed date field label
+    cy.get(".form-light-grey-bg label").eq(4).should("have.text", "Date Landed").and("be.visible");
+    // landed date inputs
+    cy.get(".form-light-grey-bg label").eq(5).should("have.text", "Day").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(6).should("have.text", "Month").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(7).should("have.text", "Year").and("be.visible");
+    // catch area
+    cy.get(".form-light-grey-bg label").eq(8).should("have.text", "Catch area").and("be.visible");
+    // high seas area
+    cy.get(".form-light-grey-bg label").eq(9).should("have.text", "Yes").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(10).should("have.text", "No").and("be.visible");
+    // EEZ
+    cy.get(".govuk-label").eq(11).should("have.text", "Exclusive economic zone").and("be.visible");
+    // RFMO
+    cy.get(".form-light-grey-bg label")
+      .eq(12)
+      .should("have.text", "Regional fisheries management organisation (optional)")
+      .and("be.visible");
+    // vessel
+    cy.get(".form-light-grey-bg label")
+      .eq(13)
+      .should("have.text", "Vessel name or port letter and number (PLN)")
+      .and("be.visible");
+    // gear details
+    cy.get(".form-light-grey-bg label").eq(14).should("have.text", "Gear category").and("be.visible");
+    cy.get(".form-light-grey-bg label").eq(15).should("have.text", "Gear type").and("be.visible");
+  });
+});
+
+describe("Direct Landing Error Messages - English", () => {
+  it("should display 'Enter the date landed' when date landed is unpopulated", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingDateLandedUnpopulated,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Enter the date landed");
+    cy.get(".govuk-error-message").should("contain.text", "Enter the date landed");
+  });
+
+  it("should display 'Enter a valid date landed' when date landed is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingDateLandedInvalid,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Enter a valid date landed");
+    cy.get(".govuk-error-message").should("contain.text", "Enter a valid date landed");
+  });
+
+  it("should display 'Date landed must be today or within the next 7 days' when date is > 7 days future", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingDateLandedFuture,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a").should(
+      "contain.text",
+      "Date landed must be today or within the next 7 days"
+    );
+    cy.get(".govuk-error-message").should("contain.text", "Date landed must be today or within the next 7 days");
+  });
+
+  it("should display 'Select or enter a vessel name or port letter and number' when vessel is unpopulated", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingVesselUnpopulated,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a").should(
+      "contain.text",
+      "Select or enter a vessel name or port letter and number"
+    );
+    cy.get(".govuk-error-message").should("contain.text", "Select or enter a vessel name or port letter and number");
+  });
+
+  it("should display 'Select a vessel from the list' when vessel selection is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingVesselInvalid,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Select a vessel from the list");
+    cy.get(".govuk-error-message").should("contain.text", "Select a vessel from the list");
+  });
+
+  it("should display 'Enter the export weight in kilograms' when export weight is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingExportWeightInvalid,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Enter the export weight in kilograms");
+    cy.get(".govuk-error-message").should("contain.text", "Enter the export weight in kilograms");
+  });
+});
+
+describe("Direct Landing Error Messages - Welsh", () => {
+  it("should display 'Rhowch y dyddiad glanio' when date landed is unpopulated", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingDateLandedUnpopulated,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Rhowch y dyddiad glanio");
+    cy.get(".govuk-error-message").should("contain.text", "Rhowch y dyddiad glanio");
+  });
+
+  it("should display 'Rhowch ddyddiad glanio dilys' when date landed is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingDateLandedInvalid,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Rhowch ddyddiad glanio dilys");
+    cy.get(".govuk-error-message").should("contain.text", "Rhowch ddyddiad glanio dilys");
+  });
+
+  it("should display 'Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf' when date is > 7 days future", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingDateLandedFuture,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should(
+      "contain.text",
+      "Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf"
+    );
+    cy.get(".govuk-error-message").should(
+      "contain.text",
+      "Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf"
+    );
+  });
+
+  it("should display 'Dewiswch neu rhowch enw llong neu lythyren a rhif porthladd' when vessel is unpopulated", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingVesselUnpopulated,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should(
+      "contain.text",
+      "Dewiswch neu rhowch enw llong neu lythyren a rhif porthladd"
+    );
+    cy.get(".govuk-error-message").should(
+      "contain.text",
+      "Dewiswch neu rhowch enw llong neu lythyren a rhif porthladd"
+    );
+  });
+
+  it("should display 'Dewiswch gwch neu long o'r rhestr' when vessel selection is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingVesselInvalid,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
+    cy.get(".govuk-error-message").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
+  });
+
+  it("should display 'Rhowch y pwysau allforio mewn cilogramau' when export weight is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingExportWeightInvalid,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Rhowch y pwysau allforio mewn cilogramau");
+    cy.get(".govuk-error-message").should("contain.text", "Rhowch y pwysau allforio mewn cilogramau");
+  });
+});
+
+describe("DirectLanding page errors when javascript is disabled", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingErrors,
+      disableScripts: true,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+  });
+
+  it("should trigger add date button", () => {
+    cy.get("[data-testid='add-dateLanded']").click({ force: true });
+    cy.url().should("include", "vessels");
+    cy.get("#vessel\\.vesselName").should("have.length.at.least", 1);
+  });
+
+  it("should click on save and continue", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.url().should("include", "direct-landing");
+  });
+
+  it("should render a page-level error when vessel name is missing", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Select or enter a vessel name or port letter and number$/).should("be.visible");
+  });
+
+  it("should render a field-level error when vessel is missing", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("span.govuk-error-message").should(
+      "contain.text",
+      "Select or enter a vessel name or port letter and number"
+    );
+  });
+
+  it("should render a page-level error when the add gear category button is clicked when no category is selected", () => {
+    cy.get("select#gearCategory").select("Select gear category", { force: true });
+    cy.get("[data-testid='add-gear-category']").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^You must select a gear category option to add gear category$/).should("be.visible");
+  });
+
+  it("should render a field-level error when the add gear category button is clicked when no category is selected", () => {
+    cy.get("select#gearCategory").select("Select gear category", { force: true });
+    cy.get("[data-testid='add-gear-category']").click({ force: true });
+    cy.get("p.govuk-error-message").should(
+      "contain.text",
+      "You must select a gear category option to add gear category"
+    );
+  });
+});
+
 describe("Direct Landing mandatory fields unpopulated errors", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
@@ -748,86 +1046,36 @@ describe("High Seas Component - validation error", () => {
   });
 });
 
-describe("DirectLanding page guard when javascript is disabled", () => {
-  it("should redirect to a forbidden page", () => {
+describe("Direct Landing mandatory fields unpopulated errors", () => {
+  beforeEach(() => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.DirectLandingPageGuard,
-      disableScripts: true,
+      testCaseId: TestCaseId.DirectLandingValidationErrors,
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
-
-    cy.url().should("include", "/forbidden");
   });
-});
 
-describe("DirectLanding page, when no landing have been added", () => {
-  it("should select catch area FAO27 as a default", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.DirectLandingEmpty,
-    };
-
-    cy.visit(directLandingUrl, { qs: { ...testParams } });
-
-    cy.get("#select-faoArea").should("have.value", "FAO27");
+  it("should display an error when start date is unpopulated", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-message").contains("Enter the start date of the fishing trip");
   });
-});
 
-describe("Direct Landing page when gear types api is failing", () => {
-  it("should catch errors when gear types are not found", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.DirectLandingPageGearTypeErrors,
-    };
+  it("should display an error when high seas is unpopulated", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-message").contains("Select whether the product was caught in a high seas area");
+  });
 
-    cy.visit(directLandingUrl, { qs: { ...testParams } });
-
+  it("should display an error when gear type is unpopulated", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get(".govuk-error-message").contains("Select a gear type");
   });
-});
-describe("Direct landing page: Accessibility", () => {
-  beforeEach(() => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.DirectLanding,
-    };
 
-    cy.visit(directLandingUrl, { qs: { ...testParams } });
-  });
-
-  it("should have label for all fields on the form", () => {
-    cy.get(".form-light-grey-bg label").should("have.length", 16);
-    // start date field label
-    cy.get(".form-light-grey-bg label").eq(0).should("have.text", "Start date of fishing trip").and("be.visible");
-    // start date inputs
-    cy.get(".form-light-grey-bg label").eq(1).should("have.text", "Day").and("be.visible");
-    cy.get(".form-light-grey-bg label").eq(2).should("have.text", "Month").and("be.visible");
-    cy.get(".form-light-grey-bg label").eq(3).should("have.text", "Year").and("be.visible");
-    // landed date field label
-    cy.get(".form-light-grey-bg label").eq(4).should("have.text", "Date Landed").and("be.visible");
-    // landed date inputs
-    cy.get(".form-light-grey-bg label").eq(5).should("have.text", "Day").and("be.visible");
-    cy.get(".form-light-grey-bg label").eq(6).should("have.text", "Month").and("be.visible");
-    cy.get(".form-light-grey-bg label").eq(7).should("have.text", "Year").and("be.visible");
-    // catch area
-    cy.get(".form-light-grey-bg label").eq(8).should("have.text", "Catch area").and("be.visible");
-    // high seas area
-    cy.get(".form-light-grey-bg label").eq(9).should("have.text", "Yes").and("be.visible");
-    cy.get(".form-light-grey-bg label").eq(10).should("have.text", "No").and("be.visible");
-    // EEZ
-    cy.get(".govuk-label").eq(11).should("have.text", "Exclusive economic zone").and("be.visible");
-    // RFMO
-    cy.get(".form-light-grey-bg label")
-      .eq(12)
-      .should("have.text", "Regional fisheries management organisation (optional)")
-      .and("be.visible");
-    // vessel
-    cy.get(".form-light-grey-bg label")
-      .eq(13)
-      .should("have.text", "Vessel name or port letter and number (PLN)")
-      .and("be.visible");
-    // gear details
-    cy.get(".form-light-grey-bg label").eq(14).should("have.text", "Gear category").and("be.visible");
-    cy.get(".form-light-grey-bg label").eq(15).should("have.text", "Gear type").and("be.visible");
+  it("should display an error when gear category is unpopulated", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-message").contains("Select a gear category");
   });
 });
 
@@ -874,8 +1122,8 @@ describe("Direct Landing - Invalid date validation without vessel name error (FI
     cy.get(".govuk-error-summary__list a").should("have.length", 2);
 
     // Verify the two date errors with correct error messages
-    cy.get('a[href="#startDate"]').should("exist").and("contain", "Enter a valid start date");
-    cy.get('a[href="#dateLanded"]').should("exist").and("contain", "Date landed must be a real date");
+    cy.get('a[href="#startDate"]').should("exist").and("contain", "Enter a valid start date of the fishing trip");
+    cy.get('a[href="#dateLanded"]').should("exist").and("contain", "Enter a valid date landed");
 
     // Ensure no vessel-related errors
     cy.get('a[href="#vessel.vesselName"]').should("not.exist");

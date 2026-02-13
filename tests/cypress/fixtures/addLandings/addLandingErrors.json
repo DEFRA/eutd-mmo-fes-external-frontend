@@ -8,7 +8,7 @@
     "rfmo": "error.rfmo.any.invalid",
     "exportWeight": "error.exportWeight.number.base",
     "product": "error.product.string.empty",
-    "vessel.vesselName": "error.vessel.vesselName.any.required",
+    "vessel.vesselName": "error.vessel.string.base",
     "gearType": "error.gearType.any.required",
     "gearCategory": "error.gearCategory.any.required"
   },
