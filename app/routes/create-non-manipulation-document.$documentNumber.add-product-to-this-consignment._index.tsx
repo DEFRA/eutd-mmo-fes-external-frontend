@@ -274,8 +274,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   return redirect(
     isEmpty(nextUri)
-      ? `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product`
-      : `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?nextUri=${nextUri}`
+      ? `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?productIndex=${productIndex}`
+      : `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?nextUri=${nextUri}&productIndex=${productIndex}`
   );
 };
 

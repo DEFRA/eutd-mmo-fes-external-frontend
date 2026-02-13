@@ -36,7 +36,7 @@ export const ProgressTable = (props: Props) => {
           <ul className="app-task-list__items">
             {section.rows.map((row: IProgressDataRow) => (
               <li
-                className={`app-task-list__item ${row.error !== undefined ? "govuk-form-group--error" : ""}`}
+                className={`app-task-list__item ${row.error ? "govuk-form-group--error" : ""}`}
                 data-testid={`progress-${row.testId}-wrapper`}
                 key={row.testId}
                 id={row.testId}
