@@ -1,9 +1,8 @@
 import { useEffect, type ReactNode } from "react";
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
-import { scrollToId } from "~/helpers";
+import { scrollToId, displayErrorMessages } from "~/helpers";
 import { Main, ErrorSummary, SecureForm, Title, BackToProgressLink } from "~/components";
-import { displayErrorMessages } from "~/helpers";
 import { ButtonGroup } from "./buttonGroup";
 
 type ExportJourneyPageLayoutProps = {
