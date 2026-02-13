@@ -48,7 +48,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   );
 
   const values = Object.fromEntries(form);
-  const containerNumbers = extractContainerNumbers(values);
+  const containerNumbers = extractContainerNumbers(values, 5);
 
   const payload: ITransport = {
     exportedTo,

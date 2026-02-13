@@ -233,7 +233,7 @@ export const StorageDocumentTransportDisplay = ({
     },
     {
       label: t("sdCheckYourInformationContainer", { ns: "sdCheckYourInformation" }),
-      value: transport.containerNumber,
+      value: transport.containerNumbers?.join(", "),
       hasChangeLink: true,
     },
 

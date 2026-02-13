@@ -48,7 +48,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   );
 
   const values = Object.fromEntries(form);
-  const containerNumbers = extractContainerNumbers(values);
+  const containerNumbers = extractContainerNumbers(values, 5);
 
   const payload: ITransport = {
     currentUri: route("/create-non-manipulation-document/:documentNumber/add-transportation-details-train", {

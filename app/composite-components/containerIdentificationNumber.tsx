@@ -34,11 +34,14 @@ export const ContainerIdentificationNumber = ({
   const actionData = useActionData() ?? {};
   const isHydrated = useIsHydrated();
 
-  const [containerInputs, setContainerInputs] = useState<ContainerInput[]>(
-    containers && containers.length > 0
-      ? containers.map((c) => ({ id: generateId(), value: c }))
-      : [{ id: generateId(), value: "" }]
-  );
+  const [containerInputs, setContainerInputs] = useState<ContainerInput[]>(() => {
+    if (containers && containers.length > 0) {
+      // Always limit to maximumContainers to prevent extra fields beyond the limit
+      const limitedContainers = containers.slice(0, maximumContainers);
+      return limitedContainers.map((c) => ({ id: generateId(), value: c }));
+    }
+    return [{ id: generateId(), value: "" }];
+  });
 
   // Track whether the user has modified fields since errors appeared
   // When they add/remove fields, they're actively fixing the form, so clear error display

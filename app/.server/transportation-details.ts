@@ -50,9 +50,6 @@ const buildTransportPayload = (transportType: TransportType, form: FormData): Pa
     case TransportType.TRAIN:
       return {
         railwayBillNumber: form.get("railwayBillNumber") as string,
-        containerIdentificationNumber: !isEmpty(form.get("containerIdentificationNumber"))
-          ? (form.get("containerIdentificationNumber") as string)
-          : null,
         containerNumbers: extractContainerNumbers(values),
       };
     case TransportType.PLANE:
@@ -555,14 +552,18 @@ export const commonSaveTransportDetails = async (
   return redirect(isEmpty(nextUri) ? progressRoute : nextUri);
 };
 
-export const extractContainerNumbers = (values: Record<string, any>): string[] => {
+export const extractContainerNumbers = (values: Record<string, any>, maxCount: number = 10): string[] => {
   const containerNumbers: string[] = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < maxCount; i++) {
     const key = `containerNumbers.${i}`;
     const value = values[key];
-    if (value !== undefined && value !== "") {
-      containerNumbers.push(value);
-    }
+    // Preserve all values including empty strings to maintain index integrity for error mapping
+    // (error messages like "containerNumbers.2" must map to the correct form field)
+    containerNumbers.push(value ?? "");
+  }
+  // Remove trailing empty strings for cleaner payload
+  while (containerNumbers.length > 0 && containerNumbers[containerNumbers.length - 1] === "") {
+    containerNumbers.pop();
   }
   return containerNumbers;
 };

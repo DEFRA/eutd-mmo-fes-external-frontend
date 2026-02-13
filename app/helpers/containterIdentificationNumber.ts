@@ -3,17 +3,16 @@ import { v4 as uuidv4 } from "uuid";
 
 const generateId = () => uuidv4();
 
-// Default number of container fields to display in non-JS mode
-const NON_JS_DEFAULT_CONTAINER_COUNT = 10;
-
 export function getContainerInputData(
   isHydrated: boolean,
   maximumContainers: number,
   containerInputs: ContainerInput[]
 ) {
   if (!isHydrated) {
-    const nonJsCount = Math.min(NON_JS_DEFAULT_CONTAINER_COUNT, maximumContainers);
-    return Array.from({ length: nonJsCount }, (v, i) => containerInputs?.[i] ?? { id: generateId(), value: "" });
+    // Non-JS mode: render exactly maximumContainers boxes with fallback to empty
+    return Array.from({ length: maximumContainers }, (v, i) => containerInputs?.[i] ?? { id: generateId(), value: "" });
   }
-  return containerInputs;
+  // JS mode: only show up to maximumContainers from the actual inputs
+  // This prevents showing 10 boxes when maximumContainers=5
+  return containerInputs.slice(0, maximumContainers);
 }
