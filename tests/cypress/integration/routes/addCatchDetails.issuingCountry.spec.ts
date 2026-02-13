@@ -13,7 +13,7 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
 
     cy.get('input[name="species"]').first().type("Tuna{enter}");
     cy.get('input[name="catchCertificateType"][value="non_uk"]').check();
-    cy.get('input[name="issuingCountry"]').type("Spain{enter}");
+    cy.get('[data-testid="issuing-country-0"]').type("Spain{enter}");
     cy.get('input[name="catchCertificateNumber"]').type("CERT12345");
     cy.get('input[name="totalWeightLanded"]').type("10");
     cy.get('input[name="exportWeightBeforeProcessing"]').type("5");
