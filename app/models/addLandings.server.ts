@@ -317,14 +317,9 @@ const addLandingAction = async (
     session.set("actionExecuted", true);
 
     // Save form values to session for non-JS reload
-    session.set("selectedStartDate", selectedStartDate);
-    session.set("selectedDate", selectedDate);
-    session.set("selectedProduct", product);
+
     session.set("selectedFaoArea", faoArea);
     session.set("selectedHighSeasArea", highSeasArea);
-    session.set("selectedWeight", weight);
-    session.set("selectedVessel", vessel);
-    session.set("gearCategory", gearCategory);
     session.set("gearType", gearType);
     session.set("selectedRfmo", selectedRfmo);
     session.set(
