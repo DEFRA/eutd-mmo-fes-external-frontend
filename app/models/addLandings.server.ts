@@ -14,7 +14,6 @@ import {
   getAllGearTypesByCategory,
   getBearerTokenForRequest,
   getExportPayload,
-  getGroupedAddLandingErrorFieldIds,
   getLandingData,
   getLandingsData,
   getLandingsEntryOption,
@@ -337,7 +336,6 @@ const addLandingAction = async (
 
     // Store errors in session for non-JS mode
     session.set("errors", errors);
-    session.set("groupedErrorIds", getGroupedAddLandingErrorFieldIds(errors));
 
     // For non-JS mode, redirect to reload the page with session data
     const pageUrl = route("/create-catch-certificate/:documentNumber/add-landings", { documentNumber });

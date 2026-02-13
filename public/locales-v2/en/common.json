@@ -180,5 +180,5 @@
   "storageNotesVoidConfirmation": "Are you sure you want to void this non-manipulation document?",
   "catchCertificatehelpLink": "catch certificate",
   "processingStatementhelpLink": "processing statement",
-  "storageNoteshelpLinkhelpLink": "non-manipulation document"
+  "storageNoteshelpLink": "non-manipulation document"
 }
