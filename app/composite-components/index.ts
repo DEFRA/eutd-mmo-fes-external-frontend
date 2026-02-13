@@ -40,6 +40,7 @@ export { DocumentCreatedComponent } from "./documentCreated";
 export { ProgressPageComponent } from "./progressPage";
 export { AddExporterDetailsComponent } from "./addExporterDetailsComponent";
 export { WhatExportDestinationComponent } from "./whatExportDestinationComponent";
+export { PointOfDestinationField } from "./pointOfDestinationField";
 export * from "./checkYourInformation";
 export { AddYourReferenceCommon } from "./addYourReference";
 export { ManageFavouritesComponent } from "./manageFavouritesComponent";
