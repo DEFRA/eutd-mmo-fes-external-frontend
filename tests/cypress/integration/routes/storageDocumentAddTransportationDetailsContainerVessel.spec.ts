@@ -114,6 +114,10 @@ describe("Save and Continue button - Happy path", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
+    // Fill in all required fields
+    cy.get('input[id="exportedTo"]').type("France");
+    cy.get(".autocomplete__option").first().click();
+    cy.get("#pointOfDestination").type("Valid Point of Destination", { force: true });
     cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
     cy.get("#vesselName").type("Vessel", { force: true });
     cy.get("#flagState").type("flag State", { force: true });
@@ -154,6 +158,32 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Point of destination must not exceed 100 characters$/).should("be.visible");
+  });
+
+  it("should save valid fields and redirect to dashboard when saving as draft with invalid pointOfDestination", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportPointOfDestinationMaxLength,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Fill in all valid fields
+    cy.get('input[id="exportedTo"]').type("France");
+    cy.get(".autocomplete__option").first().click();
+    cy.get('input[name="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get("#vesselName").type("Valid Vessel Name", { force: true });
+    cy.get("#flagState").type("Valid Flag State", { force: true });
+    cy.get("#departurePlace").type("Valid Departure Place", { force: true });
+
+    // Fill in invalid pointOfDestination (>101 chars)
+    const longString =
+      "q7N2vX9wL4kP1mR8zB3tY5jS0hG6fD9cA2xB7nV1mQ8wL4kP0zR5tY2jS9hG3fD6cA1xB8nV4mQ0wL7kP2zR5tY8jS3hG1fD4cA9dfsdfsdfsdf7644456";
+    cy.get("#pointOfDestination").type(longString, { force: true });
+
+    // Click save as draft
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+
+    // Should redirect to NMD dashboard without errors
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should display error when point of destination contains invalid characters", () => {
