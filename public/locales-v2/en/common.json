@@ -67,6 +67,7 @@
   "commonAddExporterDetailsWarningContentLine1": "Add the name and address of the company (or individual) responsible for this export.",
   "commonAddExporterDetailsWarningContentLine2": "This information will appear on the final {{journeyText}} so please make sure the exporter details are correct before continuing.",
   "commonAddExporterDetailsStorageNotesWarningContent": "This information will appear on the non-manipulation document.",
+  "commonAddExporterDetailsProcessingStatementWarningContent": "This information will appear on the processing statement.",
   "commonWarning": "Warning",
   "commonAddExporterDetailsCompanyName": "Company name",
   "commonAddExporterDetailsExporterCompanyNameHintText": "If you do not have a company name, enter the full name of the person responsible for the export.",
@@ -81,6 +82,7 @@
   "commonAddExporterDetailsAddTheExportersAddress": "Add the exporter’s address",
   "commonWhatExportersAddressExporterAddress": "exporter address",
   "commonAddExporterDetailsAddressContent": "Address",
+  "commonAddExporterDetailsCompanyAddress": "Company address",
   "commonWhatExportersAddressFindAddress": "Find address",
   "commonWhatExportersAddressEnterAddressManuallyLink": "Enter the address manually",
   "commonWhatExportersAddressWhatIsExportersAddress": "What is the exporter’s address",
@@ -180,5 +182,5 @@
   "storageNotesVoidConfirmation": "Are you sure you want to void this non-manipulation document?",
   "catchCertificatehelpLink": "catch certificate",
   "processingStatementhelpLink": "processing statement",
-  "storageNoteshelpLinkhelpLink": "non-manipulation document"
+  "storageNoteshelpLink": "non-manipulation document"
 }

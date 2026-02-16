@@ -2,7 +2,7 @@ import isEmpty from "lodash/isEmpty";
 import moment from "moment";
 import { route } from "routes-gen";
 import type { SearchState, Species } from "~/types";
-import { Page } from ".";
+import { Page } from "./pages";
 
 export const isTestEnv = () => process.env.NODE_ENV === "test";
 
