@@ -15,6 +15,7 @@ import countries from "@/fixtures/whatExportJourneyApi/countries.json";
 import exportLocation from "@/fixtures/whatExportJourneyApi/exportLocation.json";
 import progressNotStarted from "@/fixtures/progressApi/ccNotStarted.json";
 import ccDrafts from "@/fixtures/dashboardApi/ccDrafts.json";
+import psDrafts from "@/fixtures/dashboardApi/psDrafts.json";
 import directLanding from "@/fixtures/landingsTypeApi/directLanding.json";
 import manualEntry from "@/fixtures/landingsTypeApi/manualEntry.json";
 import nullLandingsType from "@/fixtures/landingsTypeApi/null.json";
@@ -223,7 +224,20 @@ const whatExportJourneyHandler: ITestHandler = {
     rest.post(EXPORT_LOCATION_URL, (req, res, ctx) =>
       res(ctx.status(400), ctx.json({ pointOfDestination: "error.pointOfDestination.string.max" }))
     ),
-    // Draft endpoint should not be called when validation fails
+    // Draft endpoint gets called with only valid fields (exportedTo)
+    rest.post(EXPORT_LOCATION_DRAFT_URL, (req, res, ctx) => res(ctx.status(200), ctx.json({}))),
+  ],
+
+  [TestCaseId.PSWhatExportDestinationSaveAsDraftWithInvalidPointOfDestination]: () => [
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDrafts))),
+    // POST validation endpoint returns error for invalid pointOfDestination
+    rest.post(EXPORT_LOCATION_URL, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json({ pointOfDestination: "error.pointOfDestination.string.max" }))
+    ),
+    // Draft endpoint gets called with only valid fields (exportedTo)
+    rest.post(EXPORT_LOCATION_DRAFT_URL, (req, res, ctx) => res(ctx.status(200), ctx.json({}))),
   ],
 
   // FI0-10570: Destination country validation test cases
