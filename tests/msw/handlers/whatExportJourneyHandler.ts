@@ -224,7 +224,8 @@ const whatExportJourneyHandler: ITestHandler = {
     rest.post(EXPORT_LOCATION_URL, (req, res, ctx) =>
       res(ctx.status(400), ctx.json({ pointOfDestination: "error.pointOfDestination.string.max" }))
     ),
-    // Draft endpoint should not be called when validation fails
+    // Draft endpoint gets called with only valid fields (exportedTo)
+    rest.post(EXPORT_LOCATION_DRAFT_URL, (req, res, ctx) => res(ctx.status(200), ctx.json({}))),
   ],
 
   [TestCaseId.PSWhatExportDestinationSaveAsDraftWithInvalidPointOfDestination]: () => [

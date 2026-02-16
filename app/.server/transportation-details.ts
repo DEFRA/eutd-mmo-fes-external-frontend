@@ -569,7 +569,16 @@ export const commonSaveTransportDetails = async (
     return redirect("/forbidden");
   }
 
-  const saveAsDraftRoute = route("/create-non-manipulation-document/non-manipulation-documents");
+  // Determine the correct save as draft route based on the document type
+  let saveAsDraftRoute: string;
+  if (documentNumber?.includes("-PS-")) {
+    saveAsDraftRoute = route("/create-processing-statement/processing-statements");
+  } else if (documentNumber?.includes("-SD-") || documentNumber?.includes("-SM-")) {
+    saveAsDraftRoute = route("/create-non-manipulation-document/non-manipulation-documents");
+  } else {
+    // Default to catch certificate
+    saveAsDraftRoute = route("/create-catch-certificate/catch-certificates");
+  }
   const progressRoute = payload.arrival
     ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", { documentNumber })
     : route("/create-non-manipulation-document/:documentNumber/departure-product-summary", { documentNumber });
