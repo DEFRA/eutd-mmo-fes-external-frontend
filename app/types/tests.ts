@@ -576,6 +576,7 @@ export enum TestCaseId {
   WhatExportJourneyPointOfDestinationInvalidChars = "whatExportJourneyPointOfDestinationInvalidChars",
   WhatExportJourneyPointOfDestinationValid = "whatExportJourneyPointOfDestinationValid",
   WhatExportJourneyPointOfDestinationDraftInvalid = "whatExportJourneyPointOfDestinationDraftInvalid",
+  PSWhatExportDestinationSaveAsDraftWithInvalidPointOfDestination = "PSWhatExportDestinationSaveAsDraftWithInvalidPointOfDestination",
 
   WhatExportJourneyDestinationCountryRequired = "whatExportJourneyDestinationCountryRequired",
 

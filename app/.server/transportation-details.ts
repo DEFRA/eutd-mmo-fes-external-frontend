@@ -525,26 +525,69 @@ export const commonSaveTransportDetails = async (
 ) => {
   const saveAsDraft = form.get("_action") === "saveAsDraft";
   let errors: IError[] | IErrorsTransformed = payload?.arrival ? await validatePayload(payload, saveAsDraft) : [];
+
   let postTransport: IBase;
-  postTransport = await saveTransportDetails(bearerToken, documentNumber, payload, saveAsDraft);
 
-  const sortedErrors = sortErrors(
-    [...(Array.isArray(errors) ? errors : []), ...(postTransport.errors as IError[])],
-    payload
-  );
+  // Save valid fields as draft even when validation errors exist
+  if (saveAsDraft) {
+    // Validate to determine which fields are invalid
+    const validationResponse = await saveTransportDetails(bearerToken, documentNumber, payload, false);
 
-  errors = sortedErrors;
+    // Combine validation errors from client and backend with defensive checks
+    const backendErrors = Array.isArray(validationResponse.errors) ? validationResponse.errors : [];
+    const allErrors = [...(Array.isArray(errors) ? errors : []), ...backendErrors];
+
+    if (allErrors.length > 0) {
+      // Define system fields that must never be deleted
+      const systemFields = ["vehicle", "journey", "user_id", "currentUri", "nextUri", "arrival"];
+
+      // Filter out invalid fields from payload, but preserve system fields
+      const errorKeys = allErrors.map((e) => e.key).filter((key) => !systemFields.includes(key));
+      const filteredPayload = { ...payload };
+      errorKeys.forEach((key) => {
+        delete (filteredPayload as any)[key];
+      });
+
+      // Save only valid fields as draft
+      postTransport = await saveTransportDetails(bearerToken, documentNumber, filteredPayload, true);
+    } else {
+      // No validation errors - save all data as draft
+      postTransport = await saveTransportDetails(bearerToken, documentNumber, payload, true);
+    }
+
+    errors = allErrors;
+  } else {
+    // Normal save and continue - validate and return errors if any
+    postTransport = await saveTransportDetails(bearerToken, documentNumber, payload, false);
+
+    const sortedErrors = sortErrors(
+      [...(Array.isArray(errors) ? errors : []), ...(postTransport.errors as IError[])],
+      payload
+    );
+    errors = sortedErrors;
+  }
+
   const isUnauthorised = postTransport.unauthorised as boolean;
 
   if (isUnauthorised) {
     return redirect("/forbidden");
   }
 
-  const saveAsDraftRoute = route("/create-non-manipulation-document/non-manipulation-documents");
+  // Determine the correct save as draft route based on the document type
+  let saveAsDraftRoute: string;
+  if (documentNumber?.includes("-PS-")) {
+    saveAsDraftRoute = route("/create-processing-statement/processing-statements");
+  } else if (documentNumber?.includes("-SD-") || documentNumber?.includes("-SM-")) {
+    saveAsDraftRoute = route("/create-non-manipulation-document/non-manipulation-documents");
+  } else {
+    // Default to catch certificate
+    saveAsDraftRoute = route("/create-catch-certificate/catch-certificates");
+  }
   const progressRoute = payload.arrival
     ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", { documentNumber })
     : route("/create-non-manipulation-document/:documentNumber/departure-product-summary", { documentNumber });
 
+  // Redirect to dashboard after saving valid fields
   if (saveAsDraft) return redirect(saveAsDraftRoute);
 
   if (errors.length > 0) {
