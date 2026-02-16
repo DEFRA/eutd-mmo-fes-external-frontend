@@ -45,13 +45,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const { documentNumber } = params;
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
+  const productIndexParam = url.searchParams.get("productIndex");
   const bearerToken = await getBearerTokenForRequest(request);
   const session = await getSessionFromRequest(request);
   session.unset(`documentNumber-${documentNumber}`);
   session.unset(`copyDocumentAcknowledged-${documentNumber}`);
   session.unset(`copyDocument-${documentNumber}`);
   const hasActionExecuted = session.get("actionExecuted");
-  const isFromCatchWeightsRoute = session.get("backLinkForCatchAdded");
 
   const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
@@ -89,15 +89,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const t = await i18next.getFixedT(request, ["sdYouHaveAddedAProduct", "title"]);
   const titleKey = sdData.catches.length === 1 ? "sdYouAddedSingleProductsTitle" : "sdYouAddedMultiProductsTitle";
+
+  // Determine the productIndex for back navigation
+  // Priority: URL parameter > last product index (for direct navigation or cloned documents)
+  const productIndex = productIndexParam ? Number.parseInt(productIndexParam) : sdData.catches.length - 1;
+
   return new Response(
     JSON.stringify({
       documentNumber,
       catches: sdData.catches || [],
-      isFromCatchWeightsRoute,
       pageTitle: t(titleKey, { count: sdData.catches.length, ns: "sdYouHaveAddedAProduct" }),
       commonTitle: t("sdCommonTitle", { ns: "title" }),
       nextUri,
       csrf,
+      productIndex,
     }),
     {
       headers: {
@@ -111,7 +116,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => executeAction(request, params);
 
 const YouHaveAddedAProduct = () => {
-  const { documentNumber, catches, nextUri, csrf } = useLoaderData<CatchesLoaderData>();
+  const { documentNumber, catches, nextUri, csrf, productIndex } = useLoaderData<CatchesLoaderData>();
   const { groupedErrors = [] } = useActionData<ActionDataWithErrors>() ?? {};
 
   const { t } = useTranslation("common");
@@ -137,8 +142,11 @@ const YouHaveAddedAProduct = () => {
     return null;
   };
 
+  // Construct backUrl with productIndex to navigate to the last added/edited product
+  const backUrl = `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${productIndex ?? 0}`;
+
   return (
-    <Main backUrl={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment`}>
+    <Main backUrl={backUrl}>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           {catches.length > 1 ? (
