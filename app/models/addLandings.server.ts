@@ -14,6 +14,7 @@ import {
   getAllGearTypesByCategory,
   getBearerTokenForRequest,
   getExportPayload,
+  getGroupedAddLandingErrorFieldIds,
   getLandingData,
   getLandingsData,
   getLandingsEntryOption,
@@ -95,9 +96,7 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
   if (hasActionExecuted) {
     session.unset("actionExecuted");
     const hasLandingExecuted = session.get("landingExecuted");
-    const hasLandingError = session.get("hasLandingError");
-    if (hasLandingExecuted && !hasLandingError) {
-      // Only clear weight if landing succeeded without errors
+    if (hasLandingExecuted) {
       session.set("hasLandingError", false);
       session.set("selectedWeight", "");
       session.set("landingExecuted", false);
@@ -148,16 +147,6 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
     availableGearTypes = await getAllGearTypesByCategory(gearCategory);
   }
 
-  // Get errors from session if they exist (for non-JS mode)
-  const errors = session.get("errors");
-  const groupedErrorIds = session.get("groupedErrorIds");
-
-  // Clear errors from session after reading
-  if (errors) {
-    session.unset("errors");
-    session.unset("groupedErrorIds");
-  }
-
   return new Response(
     JSON.stringify({
       documentNumber,
@@ -192,7 +181,6 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
       availableGearTypes,
       selectedHighSeasArea,
       selectedRfmo,
-      ...(errors && { errors, groupedErrorIds }),
     }),
     {
       status: 200,
@@ -314,34 +302,22 @@ const addLandingAction = async (
 
   if (Array.isArray(response.errors) && response.errors.length > 0) {
     session.set("hasLandingError", true);
-    session.set("actionExecuted", true);
-
-    // Save form values to session for non-JS reload
-
-    session.set("selectedFaoArea", faoArea);
-    session.set("selectedHighSeasArea", highSeasArea);
-    session.set("selectedWeight", weight);
-    session.set("selectedVessel", vessel);
-    session.set("gearCategory", gearCategory);
-    session.set("gearType", gearType);
-    session.set("selectedRfmo", selectedRfmo);
-    session.set(
-      "selectedExclusiveEconomicZones",
-      exclusiveEconomicZones?.map((item) => item?.officialCountryName).filter(Boolean) ?? []
-    );
 
     const errors = getTransformedError(response.errors);
-
-    // Store errors in session for non-JS mode
-    session.set("errors", errors);
-
-    // For non-JS mode, redirect to reload the page with session data
-    const pageUrl = route("/create-catch-certificate/:documentNumber/add-landings", { documentNumber });
-    return redirect(pageUrl, {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    });
+    return new Response(
+      JSON.stringify({
+        errors,
+        groupedErrorIds: getGroupedAddLandingErrorFieldIds(errors),
+        ...values,
+      }),
+      {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+          "Set-Cookie": await commitSession(session),
+        },
+      }
+    );
   }
 
   const reload = session.has("hasLandingError") && JSON.parse(session.get("hasLandingError")) === true;
@@ -456,6 +432,7 @@ export const AddLandingsAction = async (request: Request, params: Params): Promi
     .map(([, value]) => countries.find((item) => item.officialCountryName == value));
   const session = await getSessionFromRequest(request);
   const saveToSession = (data: any) => Object.keys(data).forEach((k) => session.set(k, data[k]));
+
   // get form values
   const {
     dateLandedDay,
@@ -491,6 +468,7 @@ export const AddLandingsAction = async (request: Request, params: Params): Promi
 
   session.set("actionExecuted", true);
   const nonJsActions = ["add-dateLanded", "addGearCategory", "add-zone-button"];
+
   const isPartialSubmit = nonJsActions.includes(_action as string);
   if (isPartialSubmit) {
     // capture the form state as-is
@@ -511,40 +489,15 @@ export const AddLandingsAction = async (request: Request, params: Params): Promi
   }
   const pageUrl = route("/create-catch-certificate/:documentNumber/add-landings", { documentNumber });
   switch (_action) {
-    case "add-dateLanded": {
+    case "add-dateLanded":
+      return await addDateLandedAction(selectedDate, request, values, session);
+    case "addGearCategory":
       session.set("selectedExclusiveEconomicZones", [
         ...Object.entries(values)
           .filter(([key]) => key.startsWith("eez"))
           .map(([, value]) => value as string),
       ]);
-      const result = await addDateLandedAction(selectedDate, request, values, session);
-      // If result is null, errors were set in session, redirect
-      if (result === null && session.get("errors")) {
-        return redirect(pageUrl, {
-          headers: {
-            "Set-Cookie": await commitSession(session),
-          },
-        });
-      }
-      return result;
-    }
-    case "addGearCategory": {
-      session.set("selectedExclusiveEconomicZones", [
-        ...Object.entries(values)
-          .filter(([key]) => key.startsWith("eez"))
-          .map(([, value]) => value as string),
-      ]);
-      const result = await addGearCategoryAction(selectedGearCategory as string, values, session);
-      // If there are errors in session, redirect
-      if (session.get("errors")) {
-        return redirect(pageUrl, {
-          headers: {
-            "Set-Cookie": await commitSession(session),
-          },
-        });
-      }
-      return result;
-    }
+      return await addGearCategoryAction(selectedGearCategory as string, values, session);
     case addLandingActionName: {
       const isValid = await validateCSRFToken(request, form);
       if (!isValid) return redirect("/forbidden");
