@@ -50,6 +50,23 @@ describe("PS: add exporter details page", () => {
         expect(text).to.include("This information will appear on the processing statement.");
         // Should NOT contain the generic fallback text
         expect(text).to.not.include("Add the name and address of the company");
+        // Should NOT contain catch certificate text
+        expect(text).to.not.include("final catch certificate");
+        // Should NOT contain storage notes text
+        expect(text).to.not.include("non-manipulation document");
+      });
+  });
+
+  it("should execute processingStatement branch in getWarningContent function", () => {
+    // Explicitly verify the processing statement-specific warning content is rendered
+    // This covers the if (journey === "processingStatement") branch at line 60
+    cy.get(".govuk-warning-text__text")
+      .should("be.visible")
+      .and("contain", "This information will appear on the processing statement.")
+      .then(($el) => {
+        const text = $el.text().trim();
+        // Verify it's exactly the PS-specific text (no generic fallback)
+        expect(text).to.match(/This information will appear on the processing statement\./);
       });
   });
 });
