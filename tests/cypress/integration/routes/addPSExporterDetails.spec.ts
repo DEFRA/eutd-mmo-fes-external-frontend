@@ -35,6 +35,23 @@ describe("PS: add exporter details page", () => {
   it("should display 'Company address' label instead of 'Address'", () => {
     cy.contains("label", "Company address").should("exist").and("have.class", "govuk-!-font-weight-bold");
   });
+
+  it("should NOT display exporterFullName field for processing statement journey", () => {
+    // Verify this field is only shown for catch certificate journey
+    cy.get("#exporterFullName").should("not.exist");
+  });
+
+  it("should display only the processing statement warning text without generic fallback", () => {
+    // Verify the specific processing statement branch (line 60-62) is executed
+    cy.get(".govuk-warning-text__text")
+      .invoke("text")
+      .then((text) => {
+        // Should contain the specific PS text
+        expect(text).to.include("This information will appear on the processing statement.");
+        // Should NOT contain the generic fallback text
+        expect(text).to.not.include("Add the name and address of the company");
+      });
+  });
 });
 
 describe("PS: add exporter details page - Welsh translations", () => {
@@ -55,6 +72,11 @@ describe("PS: add exporter details page - Welsh translations", () => {
 
   it("should display Welsh translation for 'Company address' label", () => {
     cy.contains("label", "Cyfeiriad y cwmni").should("exist").and("have.class", "govuk-!-font-weight-bold");
+  });
+
+  it("should NOT display old 'Address' label in Welsh", () => {
+    // Ensure the old translation key is not used
+    cy.contains("label", "Cyfeiriad").should("not.exist");
   });
 });
 
