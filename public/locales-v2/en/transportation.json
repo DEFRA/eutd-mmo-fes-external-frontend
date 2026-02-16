@@ -14,6 +14,7 @@
   "addTransportationDetailsContainerIdentificationNumberPlane": "Container identification number",
   "addTransportationDetailsContainerIdentificationNumberHint": "For example, ABCD1234567",
   "addTransportationDetailsContainerIdentificationNumberHintCommon": "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
+  "addTransportationDetailsContainerIdentificationNumberHintPlane": "For example, ABCD1234567",
   "addTransportationDetailsContainerIdentificationNumberTruck": "Shipping container identification number (optional)",
   "addTransportationDetailsContainerIdentificationNumberHintTruck": "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
   "addTransportationDetailsTruckNationality": "Truck nationality",

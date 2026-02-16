@@ -1,20 +1,15 @@
 import * as React from "react";
-import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
+import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
 
 import { useEffect } from "react";
 import { route } from "routes-gen";
-import type { ICountry, ITransport, IUnauthorised, Journey, StorageDocument } from "~/types";
+import type { ICountry, ITransport } from "~/types";
 import {
-  getBearerTokenForRequest,
-  getTransportDetails,
   TransportationDetailsLoaderFunction,
   commonSaveTransportDetails,
   calculateExportDate,
-  validateCSRFToken,
-  getCountries,
-  extractContainerNumbers,
   handleFormEmptyStringValue,
-  getStorageDocument,
+  initializeStorageNotesTransportAction,
 } from "~/.server";
 import { scrollToId, TransportType } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
@@ -26,37 +21,32 @@ export const loader: LoaderFunction = async ({ request, params }) =>
   await TransportationDetailsLoaderFunction(request, params, TransportType.PLANE, "storageNotes");
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const bearerToken = await getBearerTokenForRequest(request);
-  const { documentNumber } = params;
-  const journey: Journey = "storageNotes";
-  const transport: ITransport = await getTransportDetails(bearerToken, journey, documentNumber);
-  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
+  const initData = await initializeStorageNotesTransportAction(request, params);
+  if (initData instanceof Response) return initData;
 
-  const form = await request.formData();
-  const isValid = await validateCSRFToken(request, form);
-  if (!isValid) return redirect("/forbidden");
-  const consignmentDestination = form.get("exportedTo") as string;
-  const pointOfDestination = form.get("pointOfDestination") as string;
+  const {
+    bearerToken,
+    documentNumber,
+    transport,
+    storageDocument,
+    form,
+    pointOfDestination,
+    exportedTo,
+    containerNumbers,
+  } = initData;
+
   const nextUri = form.get("nextUri") as string;
   const currentUri = route("/create-non-manipulation-document/:documentNumber/add-transportation-details-plane", {
     documentNumber,
   });
-
-  const countries: ICountry[] = await getCountries();
-  const exportedTo: ICountry | undefined = countries.find(
-    (c: ICountry) => c.officialCountryName === consignmentDestination
-  );
-
-  const values = Object.fromEntries(form);
-  const containerNumbers = extractContainerNumbers(values, 5);
 
   const payload: ITransport = {
     exportedTo,
     pointOfDestination,
     departurePlace: form.get("departurePlace") as string,
     flightNumber: form.get("flightNumber") as string,
-    airwayBillNumber: handleFormEmptyStringValue(form, "airwayBillNumber"),
-    freightBillNumber: handleFormEmptyStringValue(form, "freightBillNumber"),
+    airwayBillNumber: handleFormEmptyStringValue(form, "airwayBillNumber", false),
+    freightBillNumber: handleFormEmptyStringValue(form, "freightBillNumber", false),
     containerNumbers,
     exportDate: calculateExportDate(form),
     exportDateTo: moment().startOf("day").add(1, "day").toISOString(),

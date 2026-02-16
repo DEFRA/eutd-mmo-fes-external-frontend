@@ -11,6 +11,7 @@ import {
   saveTransportDetails,
   updateTransportDetails,
   validateCSRFToken,
+  getStorageDocument,
 } from "~/.server";
 import type {
   ITransport,
@@ -20,6 +21,8 @@ import type {
   IErrorsTransformed,
   AdditionalDocumentsData,
   ICountry,
+  StorageDocument,
+  IUnauthorised,
 } from "~/types";
 import { route } from "routes-gen";
 import type { Params } from "@remix-run/router";
@@ -622,4 +625,63 @@ export const handleContainerActions = async (request: Request, _action: string, 
   }
 
   return null;
+};
+
+// Utility function to initialize common data for storage notes transportation action
+export const initializeStorageNotesTransportAction = async (
+  request: Request,
+  params: Params
+): Promise<
+  | {
+      bearerToken: string;
+      documentNumber: string;
+      journey: Journey;
+      transport: ITransport;
+      storageDocument: StorageDocument | IUnauthorised;
+      form: FormData;
+      consignmentDestination: string;
+      pointOfDestination: string;
+      countries: ICountry[];
+      exportedTo: ICountry | undefined;
+      containerNumbers: string[];
+      values: Record<string, any>;
+    }
+  | Response
+> => {
+  const bearerToken = await getBearerTokenForRequest(request);
+  const { documentNumber } = params;
+  const journey: Journey = "storageNotes";
+
+  const transport: ITransport = await getTransportDetails(bearerToken, journey, documentNumber);
+  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
+
+  const form = await request.formData();
+  const isValid = await validateCSRFToken(request, form);
+  if (!isValid) return redirect("/forbidden");
+
+  const consignmentDestination = form.get("exportedTo") as string;
+  const pointOfDestination = form.get("pointOfDestination") as string;
+
+  const countries: ICountry[] = await getCountries();
+  const exportedTo: ICountry | undefined = countries.find(
+    (c: ICountry) => c.officialCountryName === consignmentDestination
+  );
+
+  const values = Object.fromEntries(form);
+  const containerNumbers = extractContainerNumbers(values, 5);
+
+  return {
+    bearerToken,
+    documentNumber,
+    journey,
+    transport,
+    storageDocument,
+    form,
+    consignmentDestination,
+    pointOfDestination,
+    countries,
+    exportedTo,
+    containerNumbers,
+    values,
+  };
 };
