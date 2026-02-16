@@ -533,12 +533,16 @@ export const commonSaveTransportDetails = async (
     // Validate to determine which fields are invalid
     const validationResponse = await saveTransportDetails(bearerToken, documentNumber, payload, false);
 
-    // Combine validation errors from client and backend
-    const allErrors = [...(Array.isArray(errors) ? errors : []), ...(validationResponse.errors as IError[])];
+    // Combine validation errors from client and backend with defensive checks
+    const backendErrors = Array.isArray(validationResponse.errors) ? validationResponse.errors : [];
+    const allErrors = [...(Array.isArray(errors) ? errors : []), ...backendErrors];
 
     if (allErrors.length > 0) {
-      // Filter out invalid fields from payload
-      const errorKeys = allErrors.map((e) => e.key);
+      // Define system fields that must never be deleted
+      const systemFields = ["vehicle", "journey", "user_id", "currentUri", "nextUri", "arrival"];
+
+      // Filter out invalid fields from payload, but preserve system fields
+      const errorKeys = allErrors.map((e) => e.key).filter((key) => !systemFields.includes(key));
       const filteredPayload = { ...payload };
       errorKeys.forEach((key) => {
         delete (filteredPayload as any)[key];

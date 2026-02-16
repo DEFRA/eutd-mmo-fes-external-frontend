@@ -100,6 +100,7 @@ const transportDetailsHandler: ITestHandler = {
   [TestCaseId.TruckTransportSaveAsDraft]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.post(addTransportationDetailsUrl("truck", false), (req, res, ctx) => res(ctx.json(saveTruckDetails))),
     rest.post(addTransportationDetailsUrl("truck", true), (req, res, ctx) => res(ctx.json(saveTruckDetails))),
     rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) => res(ctx.json(saveTruckDetails))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
@@ -324,9 +325,11 @@ const transportDetailsHandler: ITestHandler = {
   [TestCaseId.TrainTransportSaveAsDraft]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.post(addTransportationDetailsUrl("train"), (req, res, ctx) => res(ctx.json(saveTrainDetails))),
+    rest.post(addTransportationDetailsUrl("train", false), (req, res, ctx) => res(ctx.json(saveTrainDetails))),
     rest.post(addTransportationDetailsUrl("train", true), (req, res, ctx) => res(ctx.json(saveTrainDetails))),
     rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) => res(ctx.json(saveTrainDetails))),
-    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([catchCertificateTruckTransportAllowedDetails]))),
@@ -1208,6 +1211,7 @@ const transportDetailsHandler: ITestHandler = {
   [TestCaseId.PlaneTransportSaveAsDraft]: () => [
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(planeTransportAllowedDetails))),
+    rest.post(addTransportationDetailsUrl("plane", false), (req, res, ctx) => res(ctx.json(savePlaneDetails))),
     rest.post(addTransportationDetailsUrl("plane", true), (req, res, ctx) => res(ctx.json(savePlaneDetails))),
     rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) => res(ctx.json(savePlaneDetails))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
@@ -1891,7 +1895,7 @@ const transportDetailsHandler: ITestHandler = {
         })
       )
     ),
-    // Draft endpoint for save as draft - saves valid fields only (FI0-10648)
+
     rest.post(addTransportationDetailsUrl("containerVessel", true), (req, res, ctx) =>
       res(ctx.json(saveVesselContainerDetails))
     ),
