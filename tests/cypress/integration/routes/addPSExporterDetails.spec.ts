@@ -74,9 +74,12 @@ describe("PS: add exporter details page - Welsh translations", () => {
     cy.contains("label", "Cyfeiriad y cwmni").should("exist").and("have.class", "govuk-!-font-weight-bold");
   });
 
-  it("should NOT display old 'Address' label in Welsh", () => {
-    // Ensure the old translation key is not used
-    cy.contains("label", "Cyfeiriad").should("not.exist");
+  it("should NOT display standalone 'Address' label in Welsh", () => {
+    // Ensure the old translation key is not used (should be "Cyfeiriad y cwmni", not just "Cyfeiriad")
+    cy.get("label.govuk-label.govuk-\\!-font-weight-bold")
+      .invoke("text")
+      .should("not.equal", "Cyfeiriad")
+      .and("include", "Cyfeiriad y cwmni");
   });
 });
 
