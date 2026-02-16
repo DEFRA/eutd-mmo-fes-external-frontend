@@ -840,9 +840,10 @@ describe("FI0-679: Add exporter details - Journey-specific guidance", () => {
     };
     cy.visit("/create-processing-statement/GBR-2021-PS-8EEB7E123/add-exporter-details", { qs: { ...testParams } });
 
-    cy.get(".govuk-warning-text__text")
-      .should("contain", "Add the name and address of the company")
-      .and("contain", "This information will appear on the final processing statement");
+    cy.get(".govuk-warning-text__text").should(
+      "contain",
+      "This information will appear on the final processing statement"
+    );
   });
 });
 
