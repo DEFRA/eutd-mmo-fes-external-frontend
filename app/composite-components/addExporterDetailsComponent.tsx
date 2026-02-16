@@ -57,6 +57,9 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
     if (journey === "storageNotes") {
       return t("commonAddExporterDetailsStorageNotesWarningContent");
     }
+    if (journey === "processingStatement") {
+      return t("commonAddExporterDetailsProcessingStatementWarningContent");
+    }
     return (
       <>
         {t("commonAddExporterDetailsWarningContentLine1")}
@@ -149,7 +152,7 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
             />
 
             <label className="govuk-label govuk-!-font-weight-bold">
-              {t("commonAddExporterDetailsAddressContent")}
+              {t("commonAddExporterDetailsCompanyAddress")}
             </label>
             {hasAddress ? (
               <>
