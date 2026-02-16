@@ -438,12 +438,20 @@ const AddProductIndex = () => {
     }
   }, [errors]);
 
-  // Reset to 1 field after hydration if it was initialized with 5
+  // Reset to 1 field after hydration if it was initialized with 5 empty fields (non-JS mode)
+  // Don't reset if there are errors or if any fields have values - we need to preserve user input
   useEffect(() => {
-    if (isHydrated && !updatedSupportingDocuments?.length && supportingDocuments.length === maximumEntryDocsAllowed) {
+    const areAllFieldsEmpty = supportingDocuments.every((doc) => doc === "");
+    if (
+      isHydrated &&
+      !updatedSupportingDocuments?.length &&
+      supportingDocuments.length === maximumEntryDocsAllowed &&
+      isEmpty(errors) &&
+      areAllFieldsEmpty
+    ) {
       setSupportingDocuments([""]);
     }
-  }, [isHydrated, updatedSupportingDocuments]);
+  }, [isHydrated, updatedSupportingDocuments, errors, supportingDocuments, maximumEntryDocsAllowed]);
 
   const supportingDocumentsLabel = getSupportingDocumentsLabel(displayOptionalSuffix, t);
   const productDescriptionLabelKey = getProductDescriptionLabelKey();
