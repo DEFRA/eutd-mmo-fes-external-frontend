@@ -19,7 +19,7 @@ import {
 } from "~/composite-components";
 import { getEnv } from "~/env.server";
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FormInput, ErrorPosition, Button, BUTTON_TYPE, Details } from "@capgeminiuk/dcx-react-library";
 import {
   getAllSpecies,
@@ -431,6 +431,9 @@ const AddProductIndex = () => {
   // Track whether the user has modified fields since errors appeared
   const [hiddenErrorIndices, setHiddenErrorIndices] = useState<Set<number>>(new Set());
 
+  // Track if we've already done the initial reset to prevent it from running repeatedly
+  const hasPerformedInitialReset = useRef(false);
+
   // Reset the hidden indices when new errors come in (after form submission)
   useEffect(() => {
     if (errors && Object.keys(errors).length > 0) {
@@ -439,19 +442,19 @@ const AddProductIndex = () => {
   }, [errors]);
 
   // Reset to 1 field after hydration if it was initialized with 5 empty fields (non-JS mode)
-  // Don't reset if there are errors or if any fields have values - we need to preserve user input
+  // ONLY do this ONCE on initial hydration - use ref to track and prevent repeated resets
   useEffect(() => {
-    const areAllFieldsEmpty = supportingDocuments.every((doc) => doc === "");
-    if (
-      isHydrated &&
-      !updatedSupportingDocuments?.length &&
-      supportingDocuments.length === maximumEntryDocsAllowed &&
-      isEmpty(errors) &&
-      areAllFieldsEmpty
-    ) {
-      setSupportingDocuments([""]);
+    if (isHydrated && !hasPerformedInitialReset.current && !updatedSupportingDocuments?.length && isEmpty(errors)) {
+      setSupportingDocuments((prev) => {
+        const areAllFieldsEmpty = prev.every((doc) => doc === "");
+        if (prev.length === maximumEntryDocsAllowed && areAllFieldsEmpty) {
+          hasPerformedInitialReset.current = true;
+          return [""];
+        }
+        return prev;
+      });
     }
-  }, [isHydrated, updatedSupportingDocuments, errors, supportingDocuments, maximumEntryDocsAllowed]);
+  }, [isHydrated, updatedSupportingDocuments, errors, maximumEntryDocsAllowed]);
 
   const supportingDocumentsLabel = getSupportingDocumentsLabel(displayOptionalSuffix, t);
   const productDescriptionLabelKey = getProductDescriptionLabelKey();
