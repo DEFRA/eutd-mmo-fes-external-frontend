@@ -239,7 +239,7 @@ export const getErrorMessage = (key: string): string => {
     "validation.rfmoCode.string.unknown": "ccUploadFilePageTableRFMONotFoundError",
     "validation.eezCode.string.unknown": "ccUploadFilePageTableEEZUnknownError",
     "validation.eezCode.string.invalid": "ccUploadFilePageTableEEZInvalidError",
-    "error.dateLanded.date.max": "ccUploadFilePageTableDateLandedFutureMaximumDaysError",
+    "error.dateLanded.date.max": "ccAddLandingDateLandedFutureDateError",
     "error.dateLanded.date.missing": "ccCommonDateLandedMissingError",
     "error.dateLanded.date.base": "ccCommonDateLandedRealError",
     "error.dateLanded.any.required": "ccCommonDateLandedRequiredError",
@@ -272,13 +272,13 @@ export const getErrorMessage = (key: string): string => {
     "error.gearCategory.string.empty": "ccAddLandingSelectGearCategoryListNullError",
     "error.gearType.string.empty": "ccAddLandingSelectGearTypeListNullError",
     "error.gearType.invalid": "ccAddLandingGearTypeInvalidError",
-    "error.weights.exportWeight.number.base": "ccCommonExportWeightAsNumberError",
+    "error.weights.exportWeight.number.base": "ccCommonExportWeightRequiredError",
     "error.weights.exportWeight.number.decimal-places": "ccCommonExportWeightDecimalPlacesError",
     "error.weights.exportWeight.any.required": "ccCommonExportWeightRequiredError",
     "error.weights.exportWeight.any.empty": "ccCommonExportWeightRequiredError",
     "error.weights.exportWeight.any.missing": "ccCommonExportWeightMissingError",
     "error.weights.exportWeight.number.greater": "ccCommonExportWeightGreaterError",
-    "error.exportWeight.number.base": "ccCommonExportWeightAsNumberError",
+    "error.exportWeight.number.base": "ccCommonExportWeightRequiredError",
     "error.exportWeight.any.missing": "ccCommonExportWeightMissingError",
     "error.exportWeight.number.decimal-places": "ccCommonExportWeightDecimalPlacesError",
     "error.exportWeight.number.greater": "ccCommonExportWeightGreaterError",
@@ -355,7 +355,7 @@ export const getErrorMessage = (key: string): string => {
   return errors[key] || key;
 };
 
-export const getTransformedError = (errors: IError[]): IErrorsTransformed => {
+export const getTransformedError = (errors: IError[], vesselInput?: string): IErrorsTransformed => {
   const errorsTransformed: IErrorsTransformed = {};
 
   errors.forEach((error: IError) => {
@@ -365,9 +365,20 @@ export const getTransformedError = (errors: IError[]): IErrorsTransformed => {
       errorKey = "containerNumbers.0";
     }
 
+    // Vessel fallback: if error is 'ccAddLandingVesselNameUnpopulatedError' but vessel field is not empty, show 'ccAddLandingSelectVesselListNullError'
+    let errorMessage = error.message;
+    if (
+      errorKey === "vessel.vesselName" &&
+      error.message === "ccAddLandingVesselNameUnpopulatedError" &&
+      vesselInput !== undefined &&
+      vesselInput.trim() !== ""
+    ) {
+      errorMessage = "ccAddLandingSelectVesselListNullError";
+    }
+
     errorsTransformed[errorKey] = {
       key: errorKey,
-      message: error.message,
+      message: errorMessage,
       value: error.value,
       fieldId: `${errorKey}-error`,
     };
