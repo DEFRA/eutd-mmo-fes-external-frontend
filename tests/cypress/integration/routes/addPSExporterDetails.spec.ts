@@ -71,6 +71,36 @@ describe("PS: add exporter details page", () => {
   });
 });
 
+describe("getWarningContent function branch coverage - comparing journey types", () => {
+  it("should return PS-specific warning text (line 63) distinct from CC journey", () => {
+    // Test Processing Statement journey (covers line 63: return statement in processingStatement branch)
+    cy.visit("/create-processing-statement/GBR-2021-PS-8EEB7E123/add-exporter-details", {
+      qs: { testCaseId: TestCaseId.PSAddExporterDetailsEmpty },
+    });
+    cy.get(".govuk-warning-text__text")
+      .should("contain", "This information will appear on the processing statement.")
+      .and("not.contain", "catch certificate")
+      .and("not.contain", "non-manipulation document");
+
+    // Test Catch Certificate journey (different branch - proves PS branch is distinct)
+    cy.visit("/create-catch-certificate/GBR-2021-CC-8EEB7E123/add-exporter-details", {
+      qs: { testCaseId: TestCaseId.CCAddExporterDetails },
+    });
+    cy.get(".govuk-warning-text__text")
+      .should("contain", "This information will appear on the final catch certificate.")
+      .and("not.contain", "processing statement");
+
+    // Test Storage Document journey (different branch - line 60)
+    cy.visit("/create-non-manipulation-document/GBR-2021-SD-8EEB7E123/add-exporter-details", {
+      qs: { testCaseId: TestCaseId.SDAddExporterDetails },
+    });
+    cy.get(".govuk-warning-text__text")
+      .should("contain", "This information will appear on the non-manipulation document.")
+      .and("not.contain", "processing statement")
+      .and("not.contain", "catch certificate");
+  });
+});
+
 describe("PS: add exporter details page - Welsh translations", () => {
   const documentUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
   const pageUrl = `${documentUrl}/add-exporter-details`;
