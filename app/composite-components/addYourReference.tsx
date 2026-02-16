@@ -22,9 +22,16 @@ type AddYourReferenceProps = {
   hintText: string;
   progressLink: string;
   showInfoNotice?: boolean;
+  infoNoticeMessageKey?: string;
 };
 
-export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showInfoNotice }: AddYourReferenceProps) => {
+export const AddYourReferenceCommon = ({
+  backUrl,
+  hintText,
+  progressLink,
+  showInfoNotice,
+  infoNoticeMessageKey,
+}: AddYourReferenceProps) => {
   const actionData = useActionData<{ errors?: any; userReference?: string }>() ?? {};
   const { errors = {} } = actionData;
   const { documentNumber, userReference, csrf, nextUri } = useLoaderData<AddYourReferenceLoaderProps>();
@@ -46,7 +53,9 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
       </div>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-two-thirds">
-          {showInfoNotice && <ImportantNotice messageKey="storageDocumentInformationNotice" />}
+          {showInfoNotice && (
+            <ImportantNotice messageKey={infoNoticeMessageKey ?? "storageDocumentInformationNotice"} />
+          )}
           <SecureForm method="post" csrf={csrf}>
             <div className={hasError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
               {hasError ? (
