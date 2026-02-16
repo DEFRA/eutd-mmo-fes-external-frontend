@@ -151,6 +151,12 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
             <label className="govuk-label govuk-!-font-weight-bold">
               {t("commonAddExporterDetailsAddressContent")}
             </label>
+            {!isEmpty(errorsTransformed?.addressOne) && (
+              <p id="addressOne-error" className="govuk-error-message">
+                <span className="govuk-visually-hidden">{t("commonErrorText", { ns: "errorsText" })}</span>
+                {t(errorsTransformed?.addressOne?.message, { ns: "errorsText" })}
+              </p>
+            )}
             {hasAddress ? (
               <>
                 <p>
