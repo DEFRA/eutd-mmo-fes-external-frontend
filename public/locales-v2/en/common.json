@@ -4,6 +4,8 @@
   "commonAddYourReferenceOptionalText": "Your reference (optional)",
   "storageDocumentInformationNotice": "This information will not appear on the non-manipulation document.",
   "storageAddYourReferenceHint": "This reference is for your own records. For example, you might use an internal tracking number, project code, or any label that makes sense for your organisation.",
+  "processingStatementInformationNotice": "This information will not appear on the processing statement.",
+  "processingStatementAddYourReferenceHint": "This reference is for your own records. For example, you might use an internal tracking number, project code, or any label that makes sense for your organisation.",
   "catchCertificateAddYourReferenceHint": "This reference is for your own records and won't appear on the final certificate. For example, you might use an internal tracking number, project code, or any label that makes sense for your organisation.",
   "commonAddYourReferenceHint": "Enter a reference to help you identify this {{journeyText}} within the service. This reference is for your own use and will not appear on the final certificate. For example, you could choose a reference number from your organisation.",
   "commonSaveAsDraftButtonSaveAsDraftText": "Save as draft",
