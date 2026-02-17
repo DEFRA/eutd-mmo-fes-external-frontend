@@ -418,7 +418,6 @@ const AddProductIndex = () => {
   const hasCatchesSpeciesError = hasSpeciesError(errors, speciesKey);
   const getErrorMessageForSpecies = () => getSpeciesErrorMessage(errors, productKey, speciesKey, isHydrated, t);
 
-  // Get supporting documents from submitted form data if there are errors, otherwise from loader
   const initialSupportingDocs =
     !isEmpty(errors) && submittedFormData.supportingDocuments !== undefined
       ? submittedFormData.supportingDocuments
