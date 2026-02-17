@@ -9,7 +9,7 @@ export const TableHeader = ({ headersToRender }: TableHeaderProps) => (
     <tr className="govuk-table__row" role="row">
       {headersToRender.map((headerText: string) => {
         if (isEmpty(headerText)) {
-          return <td scope="col" className="govuk-table__header govuk-font-size" role="columnheader" />;
+          return <td scope="col" className="govuk-table__header govuk-font-size" key={headerText} />;
         }
 
         return (
