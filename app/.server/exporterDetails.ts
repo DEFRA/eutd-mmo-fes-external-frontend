@@ -662,8 +662,8 @@ export const exporterDetailsAction = async (
 
     // Validate address presence - check if addressOne and postcode exist and have values
     const hasAddressData =
-      payload.addressOne != null &&
-      payload.postcode != null &&
+      payload.addressOne &&
+      payload.postcode &&
       typeof payload.addressOne === "string" &&
       typeof payload.postcode === "string" &&
       payload.addressOne.trim().length > 0 &&

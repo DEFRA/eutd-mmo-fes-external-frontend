@@ -152,54 +152,62 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
               hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
             />
 
-            <label className="govuk-label govuk-!-font-weight-bold">
-              {t("commonAddExporterDetailsCompanyAddress")}
-            </label>
-            {!isEmpty(errorsTransformed?.exporterAddress) && (
-              <p id="exporterAddress-error" className="govuk-error-message">
-                <span className="govuk-visually-hidden">{t("commonErrorText", { ns: "errorsText" })}</span>
-                {t(errorsTransformed?.exporterAddress?.message, { ns: "errorsText" })}
-              </p>
-            )}
-            {hasAddress ? (
-              <>
-                <p>
-                  {addressOne}
-                  <br />
-                  {townCity}
-                  <br />
-                  {postcode}
+            <div
+              className={
+                !isEmpty(errorsTransformed?.exporterAddress)
+                  ? "govuk-form-group govuk-form-group--error"
+                  : "govuk-form-group"
+              }
+            >
+              <label className="govuk-label govuk-!-font-weight-bold">
+                {t("commonAddExporterDetailsCompanyAddress")}
+              </label>
+              {!isEmpty(errorsTransformed?.exporterAddress) && (
+                <p id="exporterAddress-error" className="govuk-error-message">
+                  <span className="govuk-visually-hidden">{t("commonErrorText", { ns: "errorsText" })}</span>
+                  {t(errorsTransformed?.exporterAddress?.message, { ns: "errorsText" })}
                 </p>
-                <div className="govuk-button-group">
-                  <Button
-                    label={t("commonWhatExportersAddressChangeLink")}
-                    className="govuk-button govuk-button--secondary"
-                    type={BUTTON_TYPE.SUBMIT}
-                    data-module="govuk-button"
-                    name="_action"
-                    //@ts-ignore
-                    value="change"
-                    data-testid="change-button"
-                  />
-                </div>
-              </>
-            ) : (
-              <>
-                <p id="exporterAddress">{t("commonAddExporterDetailsExporterAddressRegistration")}</p>
-                <div className="govuk-button-group">
-                  <Button
-                    label={t("commonAddExporterDetailsAddTheExportersAddress")}
-                    className="govuk-button govuk-button--secondary"
-                    type={BUTTON_TYPE.SUBMIT}
-                    data-module="govuk-button"
-                    name="_action"
-                    //@ts-ignore
-                    value="change"
-                    data-testid="change-button"
-                  />
-                </div>
-              </>
-            )}
+              )}
+              {hasAddress ? (
+                <>
+                  <p>
+                    {addressOne}
+                    <br />
+                    {townCity}
+                    <br />
+                    {postcode}
+                  </p>
+                  <div className="govuk-button-group">
+                    <Button
+                      label={t("commonWhatExportersAddressChangeLink")}
+                      className="govuk-button govuk-button--secondary"
+                      type={BUTTON_TYPE.SUBMIT}
+                      data-module="govuk-button"
+                      name="_action"
+                      //@ts-ignore
+                      value="change"
+                      data-testid="change-button"
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p id="exporterAddress">{t("commonAddExporterDetailsExporterAddressRegistration")}</p>
+                  <div className="govuk-button-group">
+                    <Button
+                      label={t("commonAddExporterDetailsAddTheExportersAddress")}
+                      className="govuk-button govuk-button--secondary"
+                      type={BUTTON_TYPE.SUBMIT}
+                      data-module="govuk-button"
+                      name="_action"
+                      //@ts-ignore
+                      value="change"
+                      data-testid="change-button"
+                    />
+                  </div>
+                </>
+              )}
+            </div>
             <ButtonGroup />
             <input type="hidden" name="journey" value={journey} />
             <input type="hidden" name="nextUri" value={nextUri} />
