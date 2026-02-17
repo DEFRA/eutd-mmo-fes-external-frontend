@@ -304,6 +304,7 @@ const DirectLanding = () => {
             "gearCategory",
             "gearType",
             "weight",
+            "totalWeight",
           ])}
         />
       )}
@@ -527,6 +528,12 @@ const DirectLanding = () => {
                 </tr>
               </tbody>
             </table>
+            {errors?.totalWeight && (
+              <p className="govuk-error-message" id="totalWeight-error">
+                <span className="govuk-visually-hidden">Error:</span>{" "}
+                {t(errors.totalWeight.message, { ns: "errorsText" })}
+              </p>
+            )}
             <ButtonGroup />
             <BackToProgressLink
               progressUri="/create-catch-certificate/:documentNumber/progress"

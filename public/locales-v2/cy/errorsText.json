@@ -135,6 +135,7 @@
   "ccCommonExportWeightDecimalPlacesError": "Rhowch y pwysau allforio fel rhif gyda dim mwy na 2 le degol",
   "ccCommonExportWeightRequiredError": "Rhowch y pwysau allforio",
   "ccCommonExportWeightMissingError": "Mae'r pwysau allforio ar goll",
+  "ccDirectLandingTotalWeightExceedsMaxError": "Rhaid i gyfanswm cyfunol pwysau pob cynnyrch fod yn llai na 100,000,000,000",
   "ccUploadFileLandingDateMissingError": "Mae dyddiad glanio ar goll",
   "ccUploadFileFaoAreaMissingError": "Mae ardal FAO ar goll",
   "ccUploadFileVesselPlnMissingError": "Mae PLN llong ar goll",

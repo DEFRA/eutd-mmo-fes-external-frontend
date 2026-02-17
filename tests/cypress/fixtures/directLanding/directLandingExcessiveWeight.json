@@ -1,0 +1,44 @@
+{
+  "id": "GBR-2022-CC-6BC952BA3-4732932524",
+  "vessel": {
+    "vesselName": "AARON",
+    "pln": "N370",
+    "homePort": "KILKEEL",
+    "flag": "GBR",
+    "cfr": "GBR000A11177",
+    "imoNumber": null,
+    "licenceNumber": "30049",
+    "licenceValidTo": "2030-12-31T00:00:00",
+    "licenceHolder": "MR D MACBRIDE",
+    "label": "AARON (N370)",
+    "domId": "AARON-N370"
+  },
+  "numberOfSubmissions": 0,
+  "exclusiveEconomicZones": [
+    {
+      "officialCountryName": "United Kingdom",
+      "isoCodeAlpha2": "GB",
+      "isoCodeAlpha3": "GBR",
+      "isoNumericCode": "826"
+    }
+  ],
+  "dateLanded": "2025-01-15",
+  "startDate": "2025-01-01",
+  "faoArea": "FAO27",
+  "highSeasArea": "No",
+  "gearCategory": "Surrounding nets",
+  "gearType": "Purse seines (PS)",
+  "gearCode": "PS",
+  "weights": [
+    {
+      "speciesId": "GBR-2022-CC-6BC952BA3-c999c558-f753-4ab3-be2d-088f896b11e7",
+      "speciesLabel": "Albacore (ALB), Frozen, Gutted and headed, 03034190",
+      "exportWeight": "50000000000"
+    },
+    {
+      "speciesId": "GBR-2022-CC-6BC952BA3-c279be9f-551b-41d8-afb0-5b1b0a734a21",
+      "speciesLabel": "European anchovy (ANE), Frozen, Whole, 03035910",
+      "exportWeight": "50000000000"
+    }
+  ]
+}

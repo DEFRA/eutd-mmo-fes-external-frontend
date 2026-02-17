@@ -192,6 +192,35 @@ const saveAndContinueAction = async (
     exclusiveEconomicZones,
   } = await saveActionBase(values, landings, isNumeric);
 
+  // Validate total export weight across all products (max: 99,999,999,999.99)
+  const totalExportWeight = updatedWeights.reduce(
+    (sum: number, weight: IDirectLandingsDetails) => sum + (parseFloat(weight.exportWeight as string) || 0),
+    0
+  );
+
+  const MAX_TOTAL_WEIGHT = 99999999999.99;
+  if (totalExportWeight > MAX_TOTAL_WEIGHT) {
+    const errors = getTransformedError([
+      {
+        key: "totalWeight",
+        message: getErrorMessage("ccDirectLandingTotalWeightExceedsMaxError"),
+      },
+    ]);
+    return new Response(
+      JSON.stringify({
+        values,
+        errors,
+        groupedErrorIds: getGroupedAddLandingErrorFieldIds(errors),
+      }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
+
   const responseBody = {
     vessel: selectedVessel,
     startDate: startDate,

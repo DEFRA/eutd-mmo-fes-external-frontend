@@ -882,3 +882,129 @@ describe("Direct Landing - Invalid date validation without vessel name error (FI
     cy.get(".govuk-error-summary__list").should("not.contain", "vessel");
   });
 });
+
+describe("Direct Landing - Total Export Weight Validation", () => {
+  const excessiveWeightTestCaseId = TestCaseId.DirectLandingExcessiveTotalWeight;
+  const validWeightTestCaseId = TestCaseId.DirectLanding;
+
+  describe("Scenario 1 - Total Weight exceeds maximum - Save and Continue", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: excessiveWeightTestCaseId,
+      };
+      cy.visit(directLandingUrl, { qs: { ...testParams } });
+      waitForHydration();
+    });
+
+    it("should display error when total export weight exceeds 99,999,999,999.99 kg", () => {
+      // The fixture already has weights totaling 100 billion kg
+      // Just verify the form loads and click Save and Continue
+      cy.get("[data-testid='save-and-continue']").should("be.visible");
+
+      // Click Save and Continue
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+      // Verify error summary appears
+      cy.get("#error-summary-title").should("contain", "There is a problem");
+
+      // Verify the specific error message
+      cy.get(".govuk-error-summary__list").should(
+        "contain",
+        "The total combined weight of all products must be less than 100,000,000,000"
+      );
+
+      // Verify error message appears inline
+      cy.get(".govuk-error-message").should(
+        "contain",
+        "The total combined weight of all products must be less than 100,000,000,000"
+      );
+
+      // Verify landing details are not saved (status remains on direct-landing page)
+      cy.url().should("include", "/direct-landing");
+    });
+  });
+
+  describe("Scenario 2 - Total Weight exceeds maximum - Save as Draft", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: excessiveWeightTestCaseId,
+      };
+      cy.visit(directLandingUrl, { qs: { ...testParams } });
+      waitForHydration();
+    });
+
+    it("should save landing details as draft even when total weight exceeds maximum", () => {
+      // Click Save as Draft with excessive weight
+      cy.get("[data-testid='save-draft-button']").should("be.visible");
+      cy.get("[data-testid='save-draft-button']").click({ force: true });
+
+      // Should redirect to progress page
+      cy.url().should("include", "/create-catch-certificate/catch-certificates");
+
+      // No error should be displayed on the page we came from
+      // (we've already navigated away)
+    });
+  });
+
+  describe("Scenario 3 - Valid Weight - Save and Continue", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: validWeightTestCaseId,
+      };
+      cy.visit(directLandingUrl, { qs: { ...testParams } });
+      waitForHydration();
+    });
+
+    it("should successfully save when total weight is less than maximum", () => {
+      // The DirectLanding test case has valid weights (2 kg + 3 kg = 5 kg)
+      // Click Save and Continue
+      cy.get("[data-testid='save-and-continue']").should("be.visible");
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+      // Should proceed to next page (whose-waters-were-they-caught-in)
+      cy.url().should("include", "/whose-waters-were-they-caught-in");
+    });
+  });
+
+  describe("Scenario 4 - Valid Weight - Save as Draft", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: validWeightTestCaseId,
+      };
+      cy.visit(directLandingUrl, { qs: { ...testParams } });
+      waitForHydration();
+    });
+
+    it("should save landing as draft with valid weight", () => {
+      // Click Save as Draft
+      cy.get("[data-testid='save-draft-button']").should("be.visible");
+      cy.get("[data-testid='save-draft-button']").click({ force: true });
+
+      // Should redirect to progress page
+      cy.url().should("include", "/create-catch-certificate/catch-certificates");
+    });
+  });
+
+  describe("Scenario 5 - Welsh Translation", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: excessiveWeightTestCaseId,
+        lng: "cy",
+      };
+      cy.visit(directLandingUrl, { qs: { ...testParams } });
+      waitForHydration();
+    });
+
+    it("should display Welsh error message for excessive total weight", () => {
+      // Click Save and Continue (Welsh button)
+      cy.get("[data-testid='save-and-continue']").should("be.visible");
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+      // Verify Welsh error message
+      cy.get(".govuk-error-summary__list").should(
+        "contain",
+        "Rhaid i gyfanswm cyfunol pwysau pob cynnyrch fod yn llai na 100,000,000,000"
+      );
+    });
+  });
+});

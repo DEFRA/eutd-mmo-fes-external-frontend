@@ -137,6 +137,7 @@
   "ccCommonExportWeightDecimalPlacesError": "Enter the export weight as a number with a maximum of 2 decimal places",
   "ccCommonExportWeightRequiredError": "Enter the export weight",
   "ccCommonExportWeightMissingError": "Export weight is missing",
+  "ccDirectLandingTotalWeightExceedsMaxError": "The total combined weight of all products must be less than 100,000,000,000",
   "ccUploadFileLandingDateMissingError": "Date Landed is missing",
   "ccUploadFileFaoAreaMissingError": "FAO area is missing",
   "ccUploadFileVesselPlnMissingError": "Vessel PLN is missing",
