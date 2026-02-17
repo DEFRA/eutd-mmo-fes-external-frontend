@@ -40,14 +40,13 @@ export const ContainerIdentificationNumber = ({
       : [{ id: generateId(), value: "" }]
   );
 
-  // Track whether the user has modified fields since errors appeared
-  // When they add/remove fields, they're actively fixing the form, so clear error display
-  const [hiddenErrorIndices, setHiddenErrorIndices] = useState<Set<number>>(new Set());
+  // Track which original indices have been removed so we can map display indices to original error keys
+  const [removedIndices, setRemovedIndices] = useState<Set<number>>(new Set());
 
-  // Reset the hidden indices when new errors come in (after form submission)
+  // Reset the removed indices when new errors come in (after form submission)
   useEffect(() => {
     if (errors && Object.keys(errors).length > 0) {
-      setHiddenErrorIndices(new Set());
+      setRemovedIndices(new Set());
     }
   }, [errors]);
 
@@ -60,14 +59,31 @@ export const ContainerIdentificationNumber = ({
   const handleRemoveContainer = (id: string) => {
     if (containerInputs.length > 1) {
       const index = containerInputs.findIndex((input) => input.id === id);
+
+      // Map current display index to original index
+      const originalIndex = getOriginalIndex(index, removedIndices);
+
       setContainerInputs((prev) => prev.filter((input) => input.id !== id));
-      // Hide errors from this index onwards because they shift
-      const newHiddenIndices = new Set(hiddenErrorIndices);
-      for (let i = index; i < maximumContainers; i++) {
-        newHiddenIndices.add(i);
-      }
-      setHiddenErrorIndices(newHiddenIndices);
+
+      // Track that this original index has been removed
+      const newRemovedIndices = new Set(removedIndices);
+      newRemovedIndices.add(originalIndex);
+      setRemovedIndices(newRemovedIndices);
     }
+  };
+
+  // Helper function to map current display index to original error index
+  const getOriginalIndex = (displayIndex: number, removed: Set<number>): number => {
+    let originalIndex = displayIndex;
+    const sortedRemoved = Array.from(removed).sort((a, b) => a - b);
+
+    for (const removedIdx of sortedRemoved) {
+      if (removedIdx <= originalIndex) {
+        originalIndex++;
+      }
+    }
+
+    return originalIndex;
   };
 
   const handleInputChange = (id: string, value: string) => {
@@ -101,9 +117,10 @@ export const ContainerIdentificationNumber = ({
   return (
     <div>
       {containerInputData.map((input, index) => {
-        // Don't show errors for indices that have been affected by add/remove operations
-        const errorKey = `containerNumbers.${index}`;
-        const hasError = !hiddenErrorIndices.has(index) && errors?.[errorKey];
+        // Map current display index to original error index to show correct errors after removals
+        const originalIndex = getOriginalIndex(index, removedIndices);
+        const errorKey = `containerNumbers.${originalIndex}`;
+        const hasError = errors?.[errorKey];
 
         return (
           <div key={input.id} className="govuk-button-group" style={{ display: "flex", alignItems: "flex-end" }}>
