@@ -595,8 +595,8 @@ describe("Add exporter details: branch coverage - conditional rendering branches
     cy.visit(pageUrl, { qs: { ...testParams } });
     // Verify address section exists
     cy.get(".govuk-button-group").should("be.visible");
-    // Verify address label exists
-    cy.get("label").should("contain", "Address");
+    // Verify address label exists (EU2026 change: renamed to "Company address")
+    cy.get("label").should("contain", "Company address");
   });
 
   it("should apply govuk-input class when no error for full name field", () => {
@@ -701,8 +701,8 @@ describe("FI0-679: Add exporter details - UI changes", () => {
       .and("have.class", "govuk-!-font-weight-bold");
   });
 
-  it("Scenario 4: should display 'Address' label with same styling as Company name", () => {
-    cy.get(".govuk-label").contains("Address").should("have.class", "govuk-!-font-weight-bold");
+  it("Scenario 4: should display 'Company address' label with same styling as Company name", () => {
+    cy.get(".govuk-label").contains("Company address").should("have.class", "govuk-!-font-weight-bold");
   });
 });
 
@@ -719,7 +719,9 @@ describe("FI0-679: Add exporter details - Full name validation", () => {
     for (let i = 0; i < 71; i++) {
       longName += "A";
     }
-    cy.get("#exporterFullName").clear().invoke("val", longName).trigger("input");
+    cy.get("#exporterFullName").clear();
+    cy.get("#exporterFullName").invoke("val", longName);
+    cy.get("#exporterFullName").trigger("input");
     cy.get("[data-testid='save-and-continue']").click({ force: true });
 
     // Should display error
@@ -735,7 +737,9 @@ describe("FI0-679: Add exporter details - Full name validation", () => {
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameWithSpecialCharacters,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("#exporterFullName").clear().invoke("val", "John@Doe#123").trigger("input");
+    cy.get("#exporterFullName").clear();
+    cy.get("#exporterFullName").invoke("val", "John@Doe#123");
+    cy.get("#exporterFullName").trigger("input");
     cy.get("[data-testid='save-and-continue']").click({ force: true });
 
     // Should display error
@@ -751,7 +755,8 @@ describe("FI0-679: Add exporter details - Full name validation", () => {
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameCorrectFormat,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("#exporterFullName").clear().type("Mary O'Connor Jr.");
+    cy.get("#exporterFullName").clear();
+    cy.get("#exporterFullName").type("Mary O'Connor Jr.");
     cy.get("[data-testid='save-and-continue']").click({ force: true });
 
     // Should navigate successfully (no validation error)
@@ -772,7 +777,8 @@ describe("FI0-679: Add exporter details - Company name validation", () => {
     for (let i = 0; i < 251; i++) {
       longCompanyName += "A";
     }
-    cy.get("#exporterCompanyName").clear().type(longCompanyName);
+    cy.get("#exporterCompanyName").clear();
+    cy.get("#exporterCompanyName").type(longCompanyName);
     cy.get("[data-testid='save-and-continue']").click({ force: true });
 
     // Should display error
@@ -785,7 +791,8 @@ describe("FI0-679: Add exporter details - Company name validation", () => {
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameWithSpecialCharacters,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("#exporterCompanyName").clear().type("Bob & Co!");
+    cy.get("#exporterCompanyName").clear();
+    cy.get("#exporterCompanyName").type("Bob & Co!");
     cy.get("[data-testid='save-and-continue']").click({ force: true });
 
     // Should display error
@@ -801,7 +808,8 @@ describe("FI0-679: Add exporter details - Company name validation", () => {
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameCorrectFormat,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("#exporterCompanyName").clear().type("O'Reilly's Co. (UK) Ltd [2024]");
+    cy.get("#exporterCompanyName").clear();
+    cy.get("#exporterCompanyName").type("O'Reilly's Co. (UK) Ltd [2024]");
     cy.get("[data-testid='save-and-continue']").click({ force: true });
 
     // Should navigate successfully (no validation error)
@@ -840,9 +848,7 @@ describe("FI0-679: Add exporter details - Journey-specific guidance", () => {
     };
     cy.visit("/create-processing-statement/GBR-2021-PS-8EEB7E123/add-exporter-details", { qs: { ...testParams } });
 
-    cy.get(".govuk-warning-text__text")
-      .should("contain", "Add the name and address of the company")
-      .and("contain", "This information will appear on the final processing statement");
+    cy.get(".govuk-warning-text__text").should("contain", "This information will appear on the processing statement.");
   });
 });
 
@@ -921,7 +927,7 @@ describe("Add exporter details - Address validation error messages", () => {
       cy.contains("button", "Cadw a bwrw ymlaen").click(); // "Save and continue" in Welsh
 
       // Verify Welsh error message
-      cy.get(".govuk-error-summary__list").should("contain", "Ychwanegwch gyfeiriad yr allforiwr");
+      cy.get(".govuk-error-summary__list").should("contain", "Ychwanegu cyfeiriad yr allforiwr");
     });
   });
 });

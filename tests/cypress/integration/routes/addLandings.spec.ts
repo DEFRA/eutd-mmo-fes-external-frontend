@@ -883,9 +883,9 @@ describe("Manual landings page: Error summary on click of add Product", () => {
     cy.get("[data-testid=submit]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select a product from the list$/).should("be.visible");
-    cy.contains("a", /^Select a vessel from the list$/).should("be.visible");
+    cy.contains("a", /^Select or enter a vessel name or port letter and number$/).should("be.visible");
     cy.contains("a", /^Enter the date landed$/).should("be.visible");
-    cy.contains("a", /^Enter the export weight as a number, like 500 or 500.50$/).should("be.visible");
+    cy.contains("a", /^Enter the export weight in kilograms$/).should("be.visible");
     cy.contains("a", /^Select a gear category$/).should("be.visible");
     cy.contains("a", /^Select a gear type$/).should("be.visible");
   });

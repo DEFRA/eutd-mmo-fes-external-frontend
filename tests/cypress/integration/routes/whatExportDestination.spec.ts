@@ -8,7 +8,7 @@ describe("what export destination page", () => {
       testCaseId: TestCaseId.WhatExportDestinationDraft,
     };
     cy.visit(whatExportDestinationUrl, { qs: { ...testParams } });
-    cy.get(".govuk-heading-xl").contains("What is the export destination?");
+    cy.get(".govuk-heading-xl").contains("Enter the destination for the consignment");
     cy.contains("a", /^Back$/).should("be.visible");
   });
 
