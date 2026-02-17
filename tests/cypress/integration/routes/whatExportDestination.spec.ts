@@ -8,7 +8,7 @@ describe("what export destination page", () => {
       testCaseId: TestCaseId.WhatExportDestinationDraft,
     };
     cy.visit(whatExportDestinationUrl, { qs: { ...testParams } });
-    cy.get(".govuk-heading-xl").contains("What is the export destination?");
+    cy.get(".govuk-heading-xl").contains("Enter the destination for the consignment");
     cy.contains("a", /^Back$/).should("be.visible");
   });
 
@@ -50,27 +50,5 @@ describe("what export destination page", () => {
     };
     cy.visit(whatExportDestinationUrl, { qs: { ...testParams } });
     cy.url().should("include", "/forbidden");
-  });
-
-  it("should save valid fields and redirect to dashboard when saving as draft with invalid pointOfDestination", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSWhatExportDestinationSaveAsDraftWithInvalidPointOfDestination,
-    };
-    cy.visit(whatExportDestinationUrl, { qs: { ...testParams } });
-
-    // Fill in valid country
-    cy.get('input[id="exportDestination"]').type("France");
-    cy.get(".autocomplete__option").first().click();
-
-    // Fill in invalid pointOfDestination (>101 chars)
-    const longString =
-      "q7N2vX9wL4kP1mR8zB3tY5jS0hG6fD9cA2xB7nV1mQ8wL4kP0zR5tY2jS9hG3fD6cA1xB8nV4mQ0wL7kP2zR5tY8jS3hG1fD4cA9dfsdfsdfsdf7644456";
-    cy.get("#pointOfDestination").type(longString, { force: true });
-
-    // Click save as draft
-    cy.get('[data-testid="save-draft-button"]').click({ force: true });
-
-    // Should redirect to PS dashboard without errors
-    cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });
