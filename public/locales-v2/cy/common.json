@@ -6,6 +6,8 @@
   "storageAddYourReferenceHint": "Cyfeiriad ar gyfer eich cofnodion chi’ch hun yw hwn. Er enghraifft, fe allech chi ddefnyddio rhif olrhain mewnol, cod prosiect, neu unrhyw label sy'n gwneud synnwyr i'ch sefydliad chi.",
   "catchCertificateAddYourReferenceHint": "Cyfeirnod ar gyfer eich cofnodion chi'ch hun yw hwn ac ni fydd yn ymddangos ar y dystysgrif. Er enghraifft, efallai y byddwch chi'n defnyddio rhif olrhain mewnol, cod prosiect, neu unrhyw label sy'n gwneud synnwyr i'ch sefydliad.",
   "commonAddYourReferenceHint": "Rhowch gyfeirnod i’ch helpu i adnabod {{journeyText}} o fewn y gwasanaeth. At eich defnydd chi mae’r cyfeirnod hwn. Ni fydd yn ymddangos ar y dystysgrif derfynol. Er enghraifft, gallech ddewis cyfeirnod eich sefydliad.",
+  "processingStatementInformationNotice": "Ni fydd yr wybodaeth yma yn ymddangos ar y datganiad prosesu.",
+  "processingStatementAddYourReferenceHint": "Cyfeirnod ar gyfer eich cofnodion chi'ch hun yw hwn. Er enghraifft, efallai y byddwch chi'n defnyddio rhif olrhain mewnol, cod prosiect, neu unrhyw label sy'n gwneud synnwyr i'ch sefydliad.",
   "commonSaveAsDraftButtonSaveAsDraftText": "Cadw fel drafft",
   "commonContinueButtonSaveAndContinueButton": "Cadw a bwrw ymlaen",
   "commonBackToProgressLinkText": "Yn ôl i’ch cynnydd",
