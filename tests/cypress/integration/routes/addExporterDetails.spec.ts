@@ -927,7 +927,7 @@ describe("Add exporter details - Address validation error messages", () => {
       cy.contains("button", "Cadw a bwrw ymlaen").click(); // "Save and continue" in Welsh
 
       // Verify Welsh error message
-      cy.get(".govuk-error-summary__list").should("contain", "Ychwanegwch gyfeiriad yr allforiwr");
+      cy.get(".govuk-error-summary__list").should("contain", "Ychwanegu cyfeiriad yr allforiwr");
     });
   });
 });
