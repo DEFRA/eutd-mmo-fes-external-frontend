@@ -551,15 +551,12 @@ describe("DirectLanding page errors when javascript is disabled", () => {
   it("should render a page-level error when vessel name is missing", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select or enter a vessel name or port letter and number$/).should("be.visible");
+    cy.contains("a", /^Select a vessel from the list$/).should("be.visible");
   });
 
   it("should render a field-level error when vessel is missing", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
-    cy.get("span.govuk-error-message").should(
-      "contain.text",
-      "Select or enter a vessel name or port letter and number"
-    );
+    cy.get("span.govuk-error-message").should("contain.text", "Select a vessel from the list");
   });
 
   it("should render a page-level error when the add gear category button is clicked when no category is selected", () => {
@@ -1008,6 +1005,61 @@ describe("Direct Landing - Total Export Weight Validation", () => {
         "contain",
         "Rhaid i gyfanswm cyfunol pwysau pob cynnyrch fod yn llai na 100,000,000,000"
       );
+    });
+  });
+
+  describe("Coverage Tests - Error Handling", () => {
+    describe("Vessel Fetch Error", () => {
+      beforeEach(() => {
+        const testParams: ITestParams = {
+          testCaseId: TestCaseId.DirectLandingVesselFetchError,
+        };
+        cy.visit(directLandingUrl, { qs: { ...testParams } });
+        waitForHydration();
+      });
+
+      it("should handle vessel fetch error gracefully", () => {
+        // Enter a date to trigger vessel search
+        cy.get("#dateLanded-day").clear().type("11");
+        cy.get("#dateLanded-month").clear().type("12");
+        cy.get("#dateLanded-year").clear().type("2021");
+
+        // Type in vessel field to trigger fetch (which will fail)
+        cy.get("#vessel\\.vesselName").clear().type("TEST");
+
+        // Wait for the error to be caught (vessels array should be empty)
+        cy.wait(500);
+
+        // Should still be able to interact with the form
+        cy.get("[data-testid='save-and-continue']").should("be.visible");
+      });
+    });
+
+    describe("String Weight Parsing", () => {
+      beforeEach(() => {
+        const testParams: ITestParams = {
+          testCaseId: TestCaseId.DirectLandingStringWeights,
+        };
+        cy.visit(directLandingUrl, { qs: { ...testParams } });
+        waitForHydration();
+      });
+
+      it("should correctly parse string weights and calculate total", () => {
+        // Verify the page loads with string weights
+        cy.get("table#yourproducts").should("be.visible");
+
+        // Check that total weight is calculated correctly (2.5 + 3.75 = 6.25)
+        cy.get("table#yourproducts tbody tr").last().should("contain", "6.25kg");
+
+        // Modify one of the weights to trigger recalculation
+        cy.get('input[id^="weight-"]').first().clear().type("5");
+
+        // Wait for recalculation
+        cy.wait(200);
+
+        // Total should now be 8.75kg (5 + 3.75)
+        cy.get("table#yourproducts tbody tr").last().should("contain", "8.75kg");
+      });
     });
   });
 });
