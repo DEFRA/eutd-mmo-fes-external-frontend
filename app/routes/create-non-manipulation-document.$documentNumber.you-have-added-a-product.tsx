@@ -142,8 +142,11 @@ const YouHaveAddedAProduct = () => {
     return null;
   };
 
-  // Construct backUrl with productIndex to navigate to the last added/edited product
-  const backUrl = `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${productIndex ?? 0}`;
+  // For multiple products, include a query parameter so subsequent back clicks can navigate
+  // backwards through products in reverse add order.
+  const shouldNavigateBackThroughProducts = catches.length > 1 && productIndex > 0;
+  const backThroughProductsQuery = shouldNavigateBackThroughProducts ? "?backThroughProducts=true" : "";
+  const backUrl = `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${productIndex ?? count}${backThroughProductsQuery}`;
 
   return (
     <Main backUrl={backUrl}>
@@ -175,7 +178,7 @@ const YouHaveAddedAProduct = () => {
                         <input
                           type="hidden"
                           name="url"
-                          value={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${validCatchIndex}`}
+                          value={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${validCatchIndex}${backThroughProductsQuery}`}
                         />
                         <input type="hidden" name="productId" value={item._id} />
                         <Button
