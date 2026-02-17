@@ -84,7 +84,7 @@ export type CatchesLoaderData = {
   documentNumber: string;
   catches: (StorageDocumentCatch & CatchIndex)[];
   nextUri?: string;
-  productIndex?: number;
+  productIndex: number;
   csrf: string;
 };
 

@@ -144,7 +144,7 @@ const YouHaveAddedAProduct = () => {
 
   // For multiple products, include a query parameter so subsequent back clicks can navigate
   // backwards through products in reverse add order.
-  const shouldNavigateBackThroughProducts = catches.length > 1 && (productIndex ?? 0) > 0;
+  const shouldNavigateBackThroughProducts = catches.length > 1 && productIndex > 0;
   const backThroughProductsQuery = shouldNavigateBackThroughProducts ? "?backThroughProducts=true" : "";
   const backUrl = `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${productIndex ?? count}${backThroughProductsQuery}`;
 
