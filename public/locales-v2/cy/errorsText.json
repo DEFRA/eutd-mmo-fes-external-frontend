@@ -74,7 +74,7 @@
   "ccContainerIdentificationNumberInvalidCharacters": "Rhaid i rif y cynhwysydd gynnwys dim ond llythrennau, rhifau a bylchau",
   "sdTransportDepatureDateInvalidError": "Rhaid i'r dyddiad ymadael fod yn ddyddiad go iawn",
   "sdTransportDepatureDateRequiredError": "Rhowch y dyddiad ymadael",
-  "sdTransportDepatureDateMaxError": "Rhaid i'r dyddiad ymadael fod ar neu cyn dyddiad heddiw",
+  "sdTransportDepatureDateMaxError": "Rhaid i'r dyddiad ymadael fod ar neu cyn dyddiad cyrraedd y cyfleuster storio",
   "sdTransportDepatureCountryInvalidError": "Dewiswch wlad ymadael ddilys",
   "sdTransportDepatureCountryRequiredError": "Rhowch y wlad ymadael",
   "sdTransportConsignmentOriginRequiredError": "Rhowch o ble mae'r llwyth yn ymadael",
