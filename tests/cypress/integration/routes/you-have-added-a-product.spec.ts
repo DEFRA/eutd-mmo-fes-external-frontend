@@ -77,7 +77,7 @@ describe("SD: you-have-added-product page", () => {
     cy.contains("button", "Edit").click({ force: true });
     cy.url().should(
       "eq",
-      "http://localhost:3000/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/0"
+      "http://localhost:3000/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/0?backThroughProducts=true"
     );
   });
 
@@ -142,7 +142,7 @@ describe("SD: you-have-added-product page", () => {
         .should(
           "have.attr",
           "href",
-          `/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/${productIndex}`
+          `/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/${productIndex}?backThroughProducts=true`
         );
     });
 
@@ -177,7 +177,7 @@ describe("SD: you-have-added-product page", () => {
         .should(
           "have.attr",
           "href",
-          `/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/${productIndex}`
+          `/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/${productIndex}?backThroughProducts=true`
         );
     });
 
@@ -194,7 +194,7 @@ describe("SD: you-have-added-product page", () => {
         .should(
           "have.attr",
           "href",
-          "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/1"
+          "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/1?backThroughProducts=true"
         );
     });
 
@@ -211,7 +211,9 @@ describe("SD: you-have-added-product page", () => {
         .and(($link) => {
           const href = $link.attr("href");
           // Verify it ends with a numeric index (last product)
-          expect(href).to.match(/\/add-product-to-this-consignment\/\d+$/);
+          expect(href).to.match(
+            /\/create-non-manipulation-document\/[^/]+\/add-product-to-this-consignment\/\d+\?backThroughProducts=true$/
+          );
         });
     });
 
@@ -229,6 +231,26 @@ describe("SD: you-have-added-product page", () => {
       cy.url().should(
         "include",
         `/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/${productIndex}`
+      );
+    });
+
+    it("Scenario 2: should navigate to previous product when back link is selected twice", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+      };
+
+      cy.visit(`${sdPageUrl}?productIndex=1`, { qs: { ...testParams } });
+
+      cy.contains("a", /^Back$/).click({ force: true });
+      cy.url().should(
+        "include",
+        "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/1?backThroughProducts=true"
+      );
+
+      cy.contains("a", /^Back$/).click({ force: true });
+      cy.url().should(
+        "include",
+        "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/0?backThroughProducts=true"
       );
     });
 
@@ -265,7 +287,7 @@ describe("SD: you-have-added-product page", () => {
         .should(
           "have.attr",
           "href",
-          `/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/${productIndex}`
+          `/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/${productIndex}?backThroughProducts=true`
         );
     });
   });

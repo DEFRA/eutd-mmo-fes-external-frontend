@@ -69,6 +69,7 @@ interface ILoaderData {
   displayOptionalSuffix: boolean;
   maximumEntryDocsAllowed: number;
   updatedSupportingDocuments: string[];
+  backUrl: string;
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -80,6 +81,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const countries = await getCountries();
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
+  const backThroughProducts = url.searchParams.get("backThroughProducts") === "true";
   const productIndex = Number.parseInt(params["*"] ?? "") || 0;
   const commodities: CodeAndDescription[] = await getCommodities();
   const speciesExemptLink = getEnv().SPECIES_EXEMPT_LINK;
@@ -110,6 +112,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     session.unset("addSupportingDoc");
   }
 
+  const backUrl =
+    backThroughProducts && productIndex > 0
+      ? `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${productIndex - 1}?backThroughProducts=true`
+      : route("/create-non-manipulation-document/:documentNumber/add-exporter-details", { documentNumber });
+
   return json(
     {
       documentNumber,
@@ -132,6 +139,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       csrf,
       displayOptionalSuffix,
       maximumEntryDocsAllowed: Number.parseInt(maximumEntryDocsAllowed, 10),
+      backUrl,
     },
     session
   );
@@ -171,6 +179,7 @@ const getUpdateStorageDocumentData = (
         : undefined,
   };
 };
+
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
@@ -370,6 +379,7 @@ const AddProductIndex = () => {
     displayOptionalSuffix,
     maximumEntryDocsAllowed,
     updatedSupportingDocuments,
+    backUrl,
   } = useLoaderData<ILoaderData>();
   const { t } = useTranslation(["addProductToThisConsignment", "errorsText"]);
   const actionData = useActionData<{ errors: any }>() ?? {};
@@ -543,7 +553,7 @@ const AddProductIndex = () => {
   });
 
   return (
-    <Main backUrl={route("/create-non-manipulation-document/:documentNumber/add-exporter-details", { documentNumber })}>
+    <Main backUrl={backUrl}>
       {!isEmpty(errors) && <ErrorSummary errors={errorMessagesForDisplay} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
