@@ -290,5 +290,93 @@ describe("SD: you-have-added-product page", () => {
           `/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/${productIndex}?backThroughProducts=true`
         );
     });
+
+    // Coverage tests for lines 147-149
+    it("should NOT include backThroughProducts query when productIndex is 0 with multiple products (line 147-148 coverage)", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+      };
+      const productIndex = 0;
+      cy.visit(`${sdPageUrl}?productIndex=${productIndex}`, { qs: { ...testParams } });
+
+      // Verify shouldNavigateBackThroughProducts is false (catches.length > 1 but productIndex === 0)
+      // which means backThroughProductsQuery should be "" (empty string)
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .and(($link) => {
+          const href = $link.attr("href");
+          // Explicitly verify no query parameter is present
+          expect(href).to.equal(
+            "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/0"
+          );
+          expect(href).to.not.include("backThroughProducts");
+        });
+    });
+
+    it("should NOT include backThroughProducts query with single product even if productIndex > 0 (line 147 first condition coverage)", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDProductAddedValid, // Single product scenario
+      };
+      const productIndex = 1; // Explicitly set to > 0
+      cy.visit(
+        `create-non-manipulation-document/GBR-2022-SD-F71D98A30/you-have-added-a-product?productIndex=${productIndex}`,
+        { qs: { ...testParams } }
+      );
+
+      // Verify shouldNavigateBackThroughProducts is false (catches.length === 1, even though productIndex > 0)
+      // This tests the first condition of the AND operator on line 147
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .and(($link) => {
+          const href = $link.attr("href");
+          // Should use productIndex but without query parameter
+          expect(href).to.equal(
+            "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/1"
+          );
+          expect(href).to.not.include("backThroughProducts");
+        });
+    });
+
+    it("should use productIndex when defined in backUrl (line 149 first branch coverage)", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+      };
+      const productIndex = 1;
+      cy.visit(`${sdPageUrl}?productIndex=${productIndex}`, { qs: { ...testParams } });
+
+      // Verify that the backUrl uses productIndex (not count) since productIndex is defined
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .and(($link) => {
+          const href = $link.attr("href");
+          // Should contain /1 (the productIndex value)
+          expect(href).to.include("/add-product-to-this-consignment/1");
+          expect(href).to.include("?backThroughProducts=true");
+        });
+    });
+
+    it("should build correct backUrl format when backThroughProductsQuery is empty (line 149 concatenation coverage)", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDProductAddedValid, // Single product
+      };
+      const productIndex = 0;
+      cy.visit(
+        `create-non-manipulation-document/GBR-2022-SD-F71D98A30/you-have-added-a-product?productIndex=${productIndex}`,
+        { qs: { ...testParams } }
+      );
+
+      // Verify backUrl is properly formatted when backThroughProductsQuery is "" (empty string from line 148)
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .and(($link) => {
+          const href = $link.attr("href");
+          // Should be properly formatted without trailing characters
+          expect(href).to.equal(
+            "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/0"
+          );
+          // Ensure no question mark or query params
+          expect(href).to.not.include("?");
+        });
+    });
   });
 });
