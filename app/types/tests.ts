@@ -204,8 +204,6 @@ export enum TestCaseId {
   DirectLandingCombinedValidationErrors = "directLandingCombinedValidationErrors",
   DirectLandingInvalidDatesNoVesselError = "directLandingInvalidDatesNoVesselError",
   DirectLandingExcessiveTotalWeight = "directLandingExcessiveTotalWeight",
-  DirectLandingVesselFetchError = "directLandingVesselFetchError",
-  DirectLandingStringWeights = "directLandingStringWeights",
   AddLandingPageGuard = "addLandingPageGuard",
   AddLandingSubmitUnauthorised = "addLandingSubmitUnauthorised",
   AddLandingSubmitUnauthorisedAndSupportId = "addLandingSubmitUnauthorisedAndSupportId",

@@ -551,12 +551,15 @@ describe("DirectLanding page errors when javascript is disabled", () => {
   it("should render a page-level error when vessel name is missing", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select a vessel from the list$/).should("be.visible");
+    cy.contains("a", /^Select or enter a vessel name or port letter and number$/).should("be.visible");
   });
 
   it("should render a field-level error when vessel is missing", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
-    cy.get("span.govuk-error-message").should("contain.text", "Select a vessel from the list");
+    cy.get("span.govuk-error-message").should(
+      "contain.text",
+      "Select or enter a vessel name or port letter and number"
+    );
   });
 
   it("should render a page-level error when the add gear category button is clicked when no category is selected", () => {
@@ -1008,57 +1011,86 @@ describe("Direct Landing - Total Export Weight Validation", () => {
     });
   });
 
-  describe("Coverage Tests - Error Handling", () => {
-    describe("Vessel Fetch Error", () => {
+  describe("Error Handling Coverage", () => {
+    describe("Vessel Search Error Handling", () => {
       beforeEach(() => {
         const testParams: ITestParams = {
-          testCaseId: TestCaseId.DirectLandingVesselFetchError,
+          testCaseId: TestCaseId.DirectLandingPageErrors,
         };
         cy.visit(directLandingUrl, { qs: { ...testParams } });
         waitForHydration();
       });
 
-      it("should handle vessel fetch error gracefully", () => {
-        // Enter a date to trigger vessel search
-        cy.get("#dateLanded-day").clear().type("11");
-        cy.get("#dateLanded-month").clear().type("12");
-        cy.get("#dateLanded-year").clear().type("2021");
+      it("should handle vessel search API errors gracefully", () => {
+        // Fill in the date landed to enable vessel search
+        cy.get("#dateLanded-day").clear();
+        cy.get("#dateLanded-day").type("15");
+        cy.get("#dateLanded-month").clear();
+        cy.get("#dateLanded-month").type("12");
+        cy.get("#dateLanded-year").clear();
+        cy.get("#dateLanded-year").type("2021");
 
-        // Type in vessel field to trigger fetch (which will fail)
-        cy.get("#vessel\\.vesselName").clear().type("TEST");
+        // Type into vessel field to trigger search (which will fail with 500)
+        cy.get("#vessel\\.vesselName").clear();
+        cy.get("#vessel\\.vesselName").type("TEST");
 
-        // Wait for the error to be caught (vessels array should be empty)
+        // Wait for the error to be handled
         cy.wait(500);
 
-        // Should still be able to interact with the form
-        cy.get("[data-testid='save-and-continue']").should("be.visible");
+        // Verify page doesn't crash and vessel field is still interactive
+        cy.get("#vessel\\.vesselName").should("be.visible");
       });
     });
 
-    describe("String Weight Parsing", () => {
+    describe("Weight Calculation with String Values", () => {
       beforeEach(() => {
         const testParams: ITestParams = {
-          testCaseId: TestCaseId.DirectLandingStringWeights,
+          testCaseId: TestCaseId.DirectLanding,
         };
         cy.visit(directLandingUrl, { qs: { ...testParams } });
         waitForHydration();
       });
 
-      it("should correctly parse string weights and calculate total", () => {
-        // Verify the page loads with string weights
-        cy.get("table#yourproducts").should("be.visible");
+      it("should handle weight calculation when weights are string values", () => {
+        // Enter string-like weight values (simulating form submission with string values)
+        cy.get('input[id="weights.0.exportWeight"]').clear({ force: true });
+        cy.get('input[id="weights.0.exportWeight"]').type("25.50", { force: true });
+        cy.get('input[id="weights.0.exportWeight"]').blur();
 
-        // Check that total weight is calculated correctly (2.5 + 3.75 = 6.25)
-        cy.get("table#yourproducts tbody tr").last().should("contain", "6.25kg");
+        cy.get('input[id="weights.1.exportWeight"]').clear({ force: true });
+        cy.get('input[id="weights.1.exportWeight"]').type("15.75", { force: true });
+        cy.get('input[id="weights.1.exportWeight"]').blur();
 
-        // Modify one of the weights to trigger recalculation
-        cy.get('input[id^="weight-"]').first().clear().type("5");
+        // Verify total weight is calculated correctly (25.50 + 15.75 = 41.25)
+        cy.get("#yourproducts tr:last-child td:last-of-type").should("contain", "41.25kg");
 
-        // Wait for recalculation
-        cy.wait(200);
+        // Change one weight to test the string parsing path
+        cy.get('input[id="weights.0.exportWeight"]').clear({ force: true });
+        cy.get('input[id="weights.0.exportWeight"]').type("100", { force: true });
+        cy.get('input[id="weights.0.exportWeight"]').blur();
 
-        // Total should now be 8.75kg (5 + 3.75)
-        cy.get("table#yourproducts tbody tr").last().should("contain", "8.75kg");
+        // Verify total weight updates (100 + 15.75 = 115.75)
+        cy.get("#yourproducts tr:last-child td:last-of-type").should("contain", "115.75kg");
+      });
+
+      it("should handle NaN values in weight calculation", () => {
+        // Clear both weights
+        cy.get('input[id="weights.0.exportWeight"]').clear({ force: true });
+        cy.get('input[id="weights.0.exportWeight"]').blur();
+
+        cy.get('input[id="weights.1.exportWeight"]').clear({ force: true });
+        cy.get('input[id="weights.1.exportWeight"]').blur();
+
+        // Verify total is 0kg when weights are empty/NaN
+        cy.get("#yourproducts tr:last-child td:last-of-type").should("contain", "0.00kg");
+
+        // Add one valid weight
+        cy.get('input[id="weights.1.exportWeight"]').clear({ force: true });
+        cy.get('input[id="weights.1.exportWeight"]').type("50", { force: true });
+        cy.get('input[id="weights.1.exportWeight"]').blur();
+
+        // Verify total is 50kg (other weight is NaN, should be treated as 0)
+        cy.get("#yourproducts tr:last-child td:last-of-type").should("contain", "50.00kg");
       });
     });
   });
