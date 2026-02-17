@@ -154,7 +154,7 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
       landingLimitDaysInFuture,
       offlineValidationTime,
       maxAddLandingsLimit,
-      maximumEezPerLanding: parseInt(maximumEezPerLanding, 10),
+      maximumEezPerLanding: Number.parseInt(maximumEezPerLanding, 10),
       landingsData,
       vesselsNoJs: isValidDate(selectedDate, ["YYYY-M-D", "YYYY-MM-DD"])
         ? await getVesselsNoJs(selectedDate)
@@ -241,27 +241,31 @@ const addLandingAction = async (
   }
 
   let selectedVessel: IVessel | undefined;
-  if (isDateLandedValid) {
-    selectedVessel = await getVesselDetails(
-      vessel as string,
-      selectedDate as string,
-      bearerToken,
-      documentNumber,
-      product as string,
-      landingId as string
-    );
-    if (!selectedVessel) {
-      return redirect(route("/forbidden"));
+
+  // Only fetch vessel details if vessel field is not empty
+  if (!isEmpty(vessel as string)) {
+    if (isDateLandedValid) {
+      selectedVessel = await getVesselDetails(
+        vessel as string,
+        selectedDate as string,
+        bearerToken,
+        documentNumber,
+        product as string,
+        landingId as string
+      );
+    } else {
+      selectedVessel = await getVesselDetails(
+        vessel as string,
+        moment().format("YYYY-MM-DD"),
+        bearerToken,
+        documentNumber,
+        product as string,
+        landingId as string
+      );
     }
-  } else {
-    selectedVessel = await getVesselDetails(
-      vessel as string,
-      moment().format("YYYY-MM-DD"),
-      bearerToken,
-      documentNumber,
-      product as string,
-      landingId as string
-    );
+
+    // API will return error.vessel.string.base = "Select a vessel from the list"
+    selectedVessel ??= { vesselName: String(vessel) };
   }
 
   const selectedRfmo = isEmpty(rfmo) ? undefined : (rfmo as string);
@@ -408,15 +412,15 @@ const getVesselDetails = async (
   const pln = String(vessel).endsWith(")") ? getCodeFromLabel(vessel) : vessel;
   const vessels: IVessel[] = !isEmpty(pln) ? await getVessels(pln.toString(), date) : [];
   const selectedVessel: IVessel | undefined = vessels.find((_: IVessel) => _.pln === pln);
-
   if (selectedVessel) {
     selectedVessel.label = vessel;
     selectedVessel.domId = vessel.replace(" (", "-").replace(")", "");
     return selectedVessel;
   }
   const exportPayload: ProductsLanded | IUnauthorised = await getExportPayload(bearerToken, documentNumber);
-  if (instanceOfUnauthorised(exportPayload)) return undefined;
-
+  if (instanceOfUnauthorised(exportPayload)) {
+    return undefined;
+  }
   const landingResponse: Landing | undefined = getLandingData(exportPayload, product, landingId);
   return buildPreviousVessel(landingResponse);
 };

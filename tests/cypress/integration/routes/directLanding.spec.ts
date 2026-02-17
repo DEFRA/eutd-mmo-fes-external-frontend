@@ -551,12 +551,15 @@ describe("DirectLanding page errors when javascript is disabled", () => {
   it("should render a page-level error when vessel name is missing", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select a vessel from the list$/).should("be.visible");
+    cy.contains("a", /^Select or enter a vessel name or port letter and number$/).should("be.visible");
   });
 
   it("should render a field-level error when vessel is missing", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
-    cy.get("span.govuk-error-message").should("contain.text", "Select a vessel from the list");
+    cy.get("span.govuk-error-message").should(
+      "contain.text",
+      "Select or enter a vessel name or port letter and number"
+    );
   });
 
   it("should render a page-level error when the add gear category button is clicked when no category is selected", () => {
@@ -875,7 +878,7 @@ describe("Direct Landing - Invalid date validation without vessel name error (FI
 
     // Verify the two date errors with correct error messages
     cy.get('a[href="#startDate"]').should("exist").and("contain", "Enter a valid start date");
-    cy.get('a[href="#dateLanded"]').should("exist").and("contain", "Date landed must be a real date");
+    cy.get('a[href="#dateLanded"]').should("exist").and("contain", "Enter a valid date landed");
 
     // Ensure no vessel-related errors
     cy.get('a[href="#vessel.vesselName"]').should("not.exist");
