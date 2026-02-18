@@ -6,6 +6,7 @@ import { Main } from "~/components";
 import { useScrollOnPageLoad } from "~/hooks";
 import { useEffect } from "react";
 import { shouldRenderGA } from "~/helpers";
+import { useRedirectOnBackFromCreatedPage } from "~/hooks/useRedirectOnBackFromCreatedPage";
 
 type DocumentCreatedType = {
   journey: Journey;
@@ -78,9 +79,20 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
 
   const { t } = useTranslation([translationFile, "common"]);
   const { completedDocument, feedbackURL, noOfVessels, analyticsCookieAccepted } = useLoaderData();
-  const { documentNumber, documentUri } = completedDocument;
-
+  const { documentNumber, documentUri, documentStatus } = completedDocument;
   useScrollOnPageLoad();
+  // Add back button redirect for all journeys by inferring from documentNumber
+  let redirectPath: string | undefined;
+  if (documentNumber) {
+    if (documentNumber.includes("CC")) {
+      redirectPath = "/create-catch-certificate/catch-certificates";
+    } else if (documentNumber.includes("PS")) {
+      redirectPath = "/create-processing-statement/processing-statements";
+    } else if (documentNumber.includes("SD")) {
+      redirectPath = "/create-non-manipulation-document/non-manipulation-documents";
+    }
+  }
+  useRedirectOnBackFromCreatedPage(documentStatus, redirectPath ?? "");
 
   /* istanbul ignore next */
   useEffect(() => {
