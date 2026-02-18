@@ -187,13 +187,21 @@ const AddLandings = () => {
   const { gearCategory, availableGearTypes, gearType, selectedRfmo } = intialProcessedValues(rest);
 
   const {
-    errors = {},
-    groupedErrorIds = {},
+    errors: actionErrors = {},
+    groupedErrorIds: actionGroupedErrorIds = {},
     actionExecuted,
     vesselsNoJs: vesselsNoJsFromAction,
     availableGearTypes: availableGearTypesFromAction,
     ...values
   } = useActionData<AddLandingsActionDataType>() ?? {};
+
+  // For non-JS mode, errors come from loader data
+  const loaderErrors = (rest as any).errors ?? {};
+  const loaderGroupedErrorIds = (rest as any).groupedErrorIds ?? {};
+
+  // Use action errors for JS mode, loader errors for non-JS mode
+  const errors = isEmpty(actionErrors) ? loaderErrors : actionErrors;
+  const groupedErrorIds = isEmpty(actionGroupedErrorIds) ? loaderGroupedErrorIds : actionGroupedErrorIds;
 
   // Use lists from action data when errors occur (non-JS mode), otherwise use loader data
   const vesselsForField = !isEmpty(errors) && vesselsNoJsFromAction ? vesselsNoJsFromAction : vesselsNoJs;
