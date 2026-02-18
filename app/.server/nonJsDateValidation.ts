@@ -1,6 +1,7 @@
 import isEmpty from "lodash/isEmpty";
 import { getTransformedError, isValidDate, getErrorMessage } from "~/helpers";
 import i18next from "~/i18next.server";
+import { getAllGearTypesByCategory, getVesselsNoJs } from "~/.server";
 
 export const nonJsDateValidation = async (
   request: Request,
@@ -14,9 +15,19 @@ export const nonJsDateValidation = async (
   if (isEmpty(year) || isEmpty(month) || isEmpty(day) || !isValidDate(selectedDate, ["YYYY-M-D", "YYYY-MM-DD"])) {
     const t = await i18next.getFixedT(request, ["uploadFile"]);
 
+    // Load lists for non-JS mode
+    const vesselsNoJs =
+      fieldPrefix === "dateLanded" && isValidDate(selectedDate, ["YYYY-M-D", "YYYY-MM-DD"])
+        ? await getVesselsNoJs(selectedDate)
+        : undefined;
+    const gearCategory = values.gearCategory as string;
+    const availableGearTypes = gearCategory ? await getAllGearTypesByCategory(gearCategory) : undefined;
+
     return new Response(
       JSON.stringify({
-        values,
+        ...values,
+        vesselsNoJs,
+        availableGearTypes,
         errors: getTransformedError([
           {
             key: fieldPrefix,
