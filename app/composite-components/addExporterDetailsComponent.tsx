@@ -152,9 +152,9 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
 
             <div
               className={
-                !isEmpty(errorsTransformed?.exporterAddress)
-                  ? "govuk-form-group govuk-form-group--error"
-                  : "govuk-form-group"
+                isEmpty(errorsTransformed?.exporterAddress)
+                  ? "govuk-form-group"
+                  : "govuk-form-group govuk-form-group--error"
               }
             >
               <label className="govuk-label govuk-!-font-weight-bold">
