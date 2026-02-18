@@ -164,8 +164,8 @@ const AddLandings = () => {
   const { gearCategory, availableGearTypes, gearType, selectedRfmo } = intialProcessedValues(rest);
 
   const {
-    errors = {},
-    groupedErrorIds = {},
+    errors: actionErrors = {},
+    groupedErrorIds: actionGroupedErrorIds = {},
     actionExecuted,
     ...values
   } = useActionData<AddLandingsActionDataType>() ?? {};
