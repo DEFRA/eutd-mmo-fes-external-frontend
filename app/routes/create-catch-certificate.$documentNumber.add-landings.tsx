@@ -169,6 +169,15 @@ const AddLandings = () => {
     actionExecuted,
     ...values
   } = useActionData<AddLandingsActionDataType>() ?? {};
+
+  // For non-JS mode, errors come from loader data
+  const loaderErrors = (rest as any).errors ?? {};
+  const loaderGroupedErrorIds = (rest as any).groupedErrorIds ?? {};
+
+  // Use action errors for JS mode, loader errors for non-JS mode
+  const errors = isEmpty(actionErrors) ? loaderErrors : actionErrors;
+  const groupedErrorIds = isEmpty(actionGroupedErrorIds) ? loaderGroupedErrorIds : actionGroupedErrorIds;
+
   const startDateFromAction = getDateFromAction(values, "startDate");
   const dateFromAction = getDateFromAction(values, "dateLanded");
   const submit = useSubmit();
