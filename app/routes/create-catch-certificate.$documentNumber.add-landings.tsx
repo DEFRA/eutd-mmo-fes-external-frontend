@@ -123,6 +123,29 @@ const intialProcessedValues = (
   selectedRfmo: values.selectedRfmo ?? "",
 });
 
+// Helper function to get value from action data or fallback to state value
+const getValueFromActionOrState = <T,>(
+  errors: any,
+  actionValue: T | undefined,
+  stateValue: T,
+  typeGuard?: (val: any) => T
+): T => {
+  if (!isEmpty(errors) && actionValue !== undefined) {
+    return typeGuard ? typeGuard(actionValue) : (actionValue as T);
+  }
+  return stateValue;
+};
+
+// Helper function to extract EEZ values from action data
+const getEezValuesFromAction = (errors: any, values: any, stateEezValues: string[]): string[] => {
+  if (!isEmpty(errors) && !isEmpty(values)) {
+    return Object.entries(values)
+      .filter(([key]) => key.startsWith("eez"))
+      .map(([, value]) => value as string);
+  }
+  return stateEezValues;
+};
+
 const AddLandings = () => {
   const isHydrated = useIsHydrated();
 
@@ -205,18 +228,11 @@ const AddLandings = () => {
   hasMaxLandingExceeded(errors, maxLandingExceeded);
 
   // Compute values from action data when errors are present (for non-JS form preservation)
-  const currentHighSeasArea =
-    !isEmpty(errors) && values.highSeasArea ? (values.highSeasArea as HighSeasAreaType) : highSeasArea;
-  const currentRfmo = !isEmpty(errors) && values.rfmo ? (values.rfmo as string) : rfmo;
-  const currentExclusiveEconomicZones =
-    !isEmpty(errors) && !isEmpty(values)
-      ? Object.entries(values)
-          .filter(([key]) => key.startsWith("eez"))
-          .map(([, value]) => value as string)
-      : exclusiveEconomicZones;
-  const currentSelectedGearCategory =
-    !isEmpty(errors) && values.gearCategory ? (values.gearCategory as string) : selectedGearCategory;
-  const currentSelectedGearType = !isEmpty(errors) && values.gearType ? (values.gearType as string) : selectedGearType;
+  const currentHighSeasArea = getValueFromActionOrState(errors, values.highSeasArea, highSeasArea);
+  const currentRfmo = getValueFromActionOrState(errors, values.rfmo, rfmo);
+  const currentExclusiveEconomicZones = getEezValuesFromAction(errors, values, exclusiveEconomicZones);
+  const currentSelectedGearCategory = getValueFromActionOrState(errors, values.gearCategory, selectedGearCategory);
+  const currentSelectedGearType = getValueFromActionOrState(errors, values.gearType, selectedGearType);
 
   const getStartDate = (date: string) => {
     setStartDate(date);
