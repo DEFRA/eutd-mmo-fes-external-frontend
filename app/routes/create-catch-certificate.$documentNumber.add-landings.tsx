@@ -167,8 +167,15 @@ const AddLandings = () => {
     errors = {},
     groupedErrorIds = {},
     actionExecuted,
+    vesselsNoJs: vesselsNoJsFromAction,
+    availableGearTypes: availableGearTypesFromAction,
     ...values
   } = useActionData<AddLandingsActionDataType>() ?? {};
+
+  // Use lists from action data when errors occur (non-JS mode), otherwise use loader data
+  const vesselsForField = !isEmpty(errors) && vesselsNoJsFromAction ? vesselsNoJsFromAction : vesselsNoJs;
+  const gearTypesForField =
+    !isEmpty(errors) && availableGearTypesFromAction ? availableGearTypesFromAction : availableGearTypes;
   const startDateFromAction = getDateFromAction(values, "startDate");
   const dateFromAction = getDateFromAction(values, "dateLanded");
   const submit = useSubmit();
@@ -186,7 +193,7 @@ const AddLandings = () => {
   // premature event triggering (e.g. when the field is pre-populated)
   const [enableChange, setEnableChange] = useState<boolean>(isHydrated);
   const [selectedGearCategory, setSelectedGearCategory] = useState<string>(gearCategory);
-  const [gearTypes, setGearTypes] = useState<IGearType[]>(availableGearTypes);
+  const [gearTypes, setGearTypes] = useState<IGearType[]>(gearTypesForField ?? []);
   const [selectedGearType, setSelectedGearType] = useState<string>(gearType);
   const [highSeasArea, setHighSeasArea] = useState<HighSeasAreaType>(selectedHighSeasArea);
 
@@ -196,6 +203,20 @@ const AddLandings = () => {
   const navigation = useNavigation();
   const isActionReload = getIsActionReload(navigation);
   hasMaxLandingExceeded(errors, maxLandingExceeded);
+
+  // Compute values from action data when errors are present (for non-JS form preservation)
+  const currentHighSeasArea =
+    !isEmpty(errors) && values.highSeasArea ? (values.highSeasArea as HighSeasAreaType) : highSeasArea;
+  const currentRfmo = !isEmpty(errors) && values.rfmo ? (values.rfmo as string) : rfmo;
+  const currentExclusiveEconomicZones =
+    !isEmpty(errors) && !isEmpty(values)
+      ? Object.entries(values)
+          .filter(([key]) => key.startsWith("eez"))
+          .map(([, value]) => value as string)
+      : exclusiveEconomicZones;
+  const currentSelectedGearCategory =
+    !isEmpty(errors) && values.gearCategory ? (values.gearCategory as string) : selectedGearCategory;
+  const currentSelectedGearType = !isEmpty(errors) && values.gearType ? (values.gearType as string) : selectedGearType;
 
   const getStartDate = (date: string) => {
     setStartDate(date);
@@ -509,7 +530,7 @@ const AddLandings = () => {
                 })}
                 HSAHint={t("ccAddLandingHSAHint", { ns: "directLandings" })}
                 confirmHSATypeOptions={confirmHSATypeOptions}
-                highSeasArea={highSeasArea}
+                highSeasArea={currentHighSeasArea}
                 setHighSeasArea={setHighSeasArea}
                 getHSAOptionLabel={(option: HSAOptionType) => t(option.label, { ns: "common" })}
                 errors={errors?.highSeasArea}
@@ -525,7 +546,7 @@ const AddLandings = () => {
                 eezHelpSectionContentTwo={t("ccEezHelpSectionContentTwo", { ns: "addLandings" })}
                 eezHelpSectionContentThreeLink={t("ccEezHelpSectionContentThreeLink", { ns: "addLandings" })}
                 availableExclusiveEconomicZones={availableExclusiveEconomicZones}
-                preloadedZones={exclusiveEconomicZones.length > 0 ? exclusiveEconomicZones : []}
+                preloadedZones={currentExclusiveEconomicZones.length > 0 ? currentExclusiveEconomicZones : []}
                 onExclusiveEconomicZonesChange={handleExclusiveEconomicZonesChange}
                 maximumEezPerLanding={maximumEezPerLanding}
                 errors={errors}
@@ -537,7 +558,7 @@ const AddLandings = () => {
                 rfmoNullOption={t("ccRfmoNullOption")}
                 rfmoHintText={t("ccRfmoHintText")}
                 optionalLabel={t("ccRfmoOptionalLabel")}
-                selectedRfmo={rfmo}
+                selectedRfmo={currentRfmo}
                 setRfmo={setRfmo}
                 rfmos={rfmos}
               />
@@ -550,7 +571,7 @@ const AddLandings = () => {
                     : ""
                 }
                 defaultValue={values.vessel ?? selectedVessel ?? ""}
-                options={isHydrated ? vessels : vesselsNoJs}
+                options={isHydrated ? vessels : vesselsForField}
                 optionsId="vessel-option"
                 minCharsMessage={t("ccAddVesselFormVesselQueryPrompt", { ns: "directLandings" })}
                 promptMessage={promptText}
@@ -638,8 +659,8 @@ const AddLandings = () => {
                 gearCategories={gearCategories}
                 setSelectedGearType={setSelectedGearType}
                 setSelectedGearCategory={setSelectedGearCategory}
-                selectedGearType={selectedGearType}
-                selectedGearCategory={selectedGearCategory}
+                selectedGearType={currentSelectedGearType}
+                selectedGearCategory={currentSelectedGearCategory}
                 isHydrated={isHydrated}
               />
               <Details
