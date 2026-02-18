@@ -92,8 +92,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     saveToRedisIfErrors,
     undefined,
     {
-      facilityApprovalNumber: !isEmpty(values["approvalNumber"]) ? (values["approvalNumber"] as string) : undefined,
-      facilityStorage: !isEmpty(values["facilityStorage"]) ? (values["facilityStorage"] as string) : undefined,
+      facilityApprovalNumber: isEmpty(values["approvalNumber"]) ? undefined : (values["approvalNumber"] as string),
+      facilityStorage: isEmpty(values["facilityStorage"]) ? undefined : (values["facilityStorage"] as string),
     }
   );
 
@@ -180,9 +180,9 @@ const AddStorageFacilityApproval = () => {
                 inputProps={{
                   defaultValue: approvalNumber,
                   id: "storageFacilities-facilityApproval",
-                  "aria-describedby": !isEmpty(errors?.["storageFacilities-facilityApproval"])
-                    ? "hint-storageFacilities-approvalNumber storageFacilities-facilityApproval-error"
-                    : "hint-storageFacilities-approvalNumber",
+                  "aria-describedby": isEmpty(errors?.["storageFacilities-facilityApproval"])
+                    ? "hint-storageFacilities-approvalNumber"
+                    : "hint-storageFacilities-approvalNumber storageFacilities-facilityApproval-error",
                 }}
                 hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
@@ -199,9 +199,9 @@ const AddStorageFacilityApproval = () => {
               <fieldset
                 className="govuk-fieldset"
                 aria-describedby={
-                  !isEmpty(errors?.["storageFacilities-facilityStorage"])
-                    ? "product-storage-hint storageFacilities-facilityStorage-error"
-                    : "product-storage-hint"
+                  isEmpty(errors?.["storageFacilities-facilityStorage"])
+                    ? "product-storage-hint"
+                    : "product-storage-hint storageFacilities-facilityStorage-error"
                 }
               >
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--s">

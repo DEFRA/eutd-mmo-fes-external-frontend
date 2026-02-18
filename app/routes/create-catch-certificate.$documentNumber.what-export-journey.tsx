@@ -3,10 +3,11 @@ import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction 
 
 import { route } from "routes-gen";
 import { useEffect } from "react";
-import { Main, Title, BackToProgressLink, ErrorSummary, AutocompleteFormField, SecureForm } from "~/components";
+import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
+import { PointOfDestinationField } from "~/composite-components/pointOfDestinationField";
+import { ExportDestinationField } from "~/composite-components/exportDestinationField";
 import { displayErrorMessages, scrollToId } from "~/helpers";
 import type { IExportLocation, ICountry, LandingEntryType } from "~/types";
-import classNames from "classnames/bind";
 import isEmpty from "lodash/isEmpty";
 import { useTranslation } from "react-i18next";
 import { ButtonGroup } from "~/composite-components";
@@ -103,61 +104,22 @@ const WhatExportJourney = () => {
                 ))}
               </fieldset>
             </div>
-            <AutocompleteFormField
-              containerClassName={classNames("govuk-form-group govuk-!-width-two-thirds ", {
-                "govuk-form-group--error": errors?.exportDestination,
-              })}
-              options={["", ...countries.map((c) => c.officialCountryName)]}
-              optionsId="country-option"
-              errorMessageText={t(errors?.exportDestination?.message, { ns: "errorsText" })}
-              id="exportDestination"
-              name="exportedTo"
-              defaultValue={formData.exportedTo === "" ? "" : exportLocation?.exportedTo?.officialCountryName ?? ""}
-              labelText={t("commonWhatExportDestinationSelectTheDestinationCountry")}
-              hintText={t("commonWhatExportDestinationHintSelectTheDestinationCountry")}
-              selectProps={{
-                selectClassName: classNames("govuk-select", {
-                  "govuk-select--error": errors?.exportDestination,
-                }),
-              }}
-              inputProps={{
-                className: classNames("govuk-input", {
-                  "govuk-input--error": errors?.exportDestination,
-                }),
-                "aria-describedby": "exportDestination-hint",
-              }}
+            <ExportDestinationField
+              countries={countries}
+              errors={errors}
+              formData={formData}
+              exportLocation={exportLocation}
+              labelKey="commonWhatExportDestinationSelectTheDestinationCountry"
+              hintKey="commonWhatExportDestinationHintSelectTheDestinationCountry"
             />
-            <div
-              className={classNames("govuk-form-group govuk-!-width-two-thirds", {
-                "govuk-form-group--error": errors?.pointOfDestination,
-              })}
-            >
-              <label className="govuk-label" htmlFor="pointOfDestination">
-                {t("ccWhatExportJourneyPointOfDestination", { ns: "whatExportJourney" })}
-              </label>
-              <div id="pointOfDestination-hint" className="govuk-hint">
-                {t("ccWhatExportJourneyPointOfDestinationHint", { ns: "whatExportJourney" })}
-              </div>
-              {errors?.pointOfDestination && (
-                <p id="pointOfDestination-error" className="govuk-error-message">
-                  <span className="govuk-visually-hidden">Error:</span>{" "}
-                  {t(errors?.pointOfDestination?.message, { ns: "errorsText" })}
-                </p>
-              )}
-              <input
-                className={classNames("govuk-input", {
-                  "govuk-input--error": errors?.pointOfDestination,
-                })}
-                id="pointOfDestination"
-                name="pointOfDestination"
-                type="text"
-                defaultValue={formData.pointOfDestination ?? exportLocation?.pointOfDestination ?? ""}
-                aria-describedby={classNames({
-                  "pointOfDestination-hint": true,
-                  "pointOfDestination-error": errors?.pointOfDestination,
-                })}
-              />
-            </div>
+            <PointOfDestinationField
+              errors={errors}
+              formData={formData}
+              exportLocation={exportLocation}
+              labelKey="ccWhatExportJourneyPointOfDestination"
+              hintKey="ccWhatExportJourneyPointOfDestinationHint"
+              namespace="whatExportJourney"
+            />
             <ButtonGroup />
             <input type="hidden" name="landingsEntryOption" defaultValue={landingsEntryOption} />
             <input type="hidden" name="nextUri" defaultValue={nextUri} />

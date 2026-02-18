@@ -438,6 +438,7 @@ const onAddExporterDetailsResponse = async (response: Response): Promise<IExport
       const data = await response.json();
       // Handle both array (frontend validation) and object (backend API) error formats
       let normalizedErrors: IError[] = [];
+      const validationErrors: IError[] = [];
 
       if (Array.isArray(data.errors)) {
         // Frontend validation already returns IError[] format
@@ -450,9 +451,23 @@ const onAddExporterDetailsResponse = async (response: Response): Promise<IExport
         }));
       }
 
+      if (data.exporterFullName) {
+        validationErrors.push({
+          key: "exporterFullName",
+          message: getErrorMessage(data.exporterFullName),
+        });
+      }
+      if (data.exporterCompanyName) {
+        validationErrors.push({
+          key: "exporterCompanyName",
+          message: getErrorMessage(data.exporterCompanyName),
+        });
+      }
+
       return {
         ...data,
-        errors: normalizedErrors,
+        error: "invalid",
+        errors: [...(normalizedErrors ?? []), ...validationErrors],
       };
     }
     case 403:
@@ -662,8 +677,8 @@ export const exporterDetailsAction = async (
 
     // Validate address presence - check if addressOne and postcode exist and have values
     const hasAddressData =
-      payload.addressOne != null &&
-      payload.postcode != null &&
+      payload.addressOne &&
+      payload.postcode &&
       typeof payload.addressOne === "string" &&
       typeof payload.postcode === "string" &&
       payload.addressOne.trim().length > 0 &&

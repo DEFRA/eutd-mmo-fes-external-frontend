@@ -397,30 +397,32 @@ export const StorageDocumentTransportDisplay = ({
   return (
     <>
       {transportLabels[transportType].map((itemData: any) => {
-        if (!itemData.value) return null;
+        if (itemData.value) {
+          return (
+            <div key={itemData.label} className="govuk-summary-list__row">
+              <dt className="govuk-summary-list__key">{itemData.label}</dt>
+              <dd className="govuk-summary-list__value">{itemData.value}</dd>
+              {itemData.hasChangeLink && (
+                <dd className="govuk-summary-list__actions">
+                  <a
+                    aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                    className="govuk-link"
+                    href={`/create-non-manipulation-document/${documentNumber}/${changeLinkUri(transportType, transport)}?nextUri=${route(
+                      "/create-non-manipulation-document/:documentNumber/check-your-information",
+                      {
+                        documentNumber,
+                      }
+                    )}#${itemData.backLinkId}`}
+                  >
+                    {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                  </a>
+                </dd>
+              )}
+            </div>
+          );
+        }
 
-        return (
-          <div key={itemData.label} className="govuk-summary-list__row">
-            <dt className="govuk-summary-list__key">{itemData.label}</dt>
-            <dd className="govuk-summary-list__value">{itemData.value}</dd>
-            {itemData.hasChangeLink && (
-              <dd className="govuk-summary-list__actions">
-                <a
-                  aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
-                  className="govuk-link"
-                  href={`/create-non-manipulation-document/${documentNumber}/${changeLinkUri(transportType, transport)}?nextUri=${route(
-                    "/create-non-manipulation-document/:documentNumber/check-your-information",
-                    {
-                      documentNumber,
-                    }
-                  )}#${itemData.backLinkId}`}
-                >
-                  {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
-                </a>
-              </dd>
-            )}
-          </div>
-        );
+        return null;
       })}
     </>
   );

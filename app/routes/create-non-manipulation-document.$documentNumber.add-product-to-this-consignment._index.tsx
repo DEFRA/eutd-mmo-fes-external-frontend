@@ -19,7 +19,7 @@ import {
 } from "~/composite-components";
 import { getEnv } from "~/env.server";
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FormInput, ErrorPosition, Button, BUTTON_TYPE, Details } from "@capgeminiuk/dcx-react-library";
 import {
   getAllSpecies,
@@ -69,6 +69,7 @@ interface ILoaderData {
   displayOptionalSuffix: boolean;
   maximumEntryDocsAllowed: number;
   updatedSupportingDocuments: string[];
+  backUrl: string;
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -80,6 +81,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const countries = await getCountries();
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
+  const backThroughProducts = url.searchParams.get("backThroughProducts") === "true";
   const productIndex = Number.parseInt(params["*"] ?? "") || 0;
   const commodities: CodeAndDescription[] = await getCommodities();
   const speciesExemptLink = getEnv().SPECIES_EXEMPT_LINK;
@@ -110,6 +112,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     session.unset("addSupportingDoc");
   }
 
+  const backUrl =
+    backThroughProducts && productIndex > 0
+      ? `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${productIndex - 1}?backThroughProducts=true`
+      : route("/create-non-manipulation-document/:documentNumber/add-exporter-details", { documentNumber });
+
   return json(
     {
       documentNumber,
@@ -132,6 +139,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       csrf,
       displayOptionalSuffix,
       maximumEntryDocsAllowed: Number.parseInt(maximumEntryDocsAllowed, 10),
+      backUrl,
     },
     session
   );
@@ -171,6 +179,7 @@ const getUpdateStorageDocumentData = (
         : undefined,
   };
 };
+
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
@@ -370,6 +379,7 @@ const AddProductIndex = () => {
     displayOptionalSuffix,
     maximumEntryDocsAllowed,
     updatedSupportingDocuments,
+    backUrl,
   } = useLoaderData<ILoaderData>();
   const { t } = useTranslation(["addProductToThisConsignment", "errorsText"]);
   const actionData = useActionData<{ errors: any }>() ?? {};
@@ -418,7 +428,6 @@ const AddProductIndex = () => {
   const hasCatchesSpeciesError = hasSpeciesError(errors, speciesKey);
   const getErrorMessageForSpecies = () => getSpeciesErrorMessage(errors, productKey, speciesKey, isHydrated, t);
 
-  // Get supporting documents from submitted form data if there are errors, otherwise from loader
   const initialSupportingDocs =
     !isEmpty(errors) && submittedFormData.supportingDocuments !== undefined
       ? submittedFormData.supportingDocuments
@@ -428,22 +437,33 @@ const AddProductIndex = () => {
     functionToGetInitialState(initialSupportingDocs, isHydrated, maximumEntryDocsAllowed)
   );
 
-  // Track whether the user has modified fields since errors appeared
-  const [hiddenErrorIndices, setHiddenErrorIndices] = useState<Set<number>>(new Set());
+  // Track which original indices have been removed so we can map display indices to original error keys
+  const [removedIndices, setRemovedIndices] = useState<Set<number>>(new Set());
 
-  // Reset the hidden indices when new errors come in (after form submission)
+  // Track if we've already done the initial reset to prevent it from running repeatedly
+  const hasPerformedInitialReset = useRef(false);
+
+  // Reset the removed indices when new errors come in (after form submission)
   useEffect(() => {
     if (errors && Object.keys(errors).length > 0) {
-      setHiddenErrorIndices(new Set());
+      setRemovedIndices(new Set());
     }
   }, [errors]);
 
-  // Reset to 1 field after hydration if it was initialized with 5
+  // Reset to 1 field after hydration if it was initialized with 5 empty fields (non-JS mode)
+  // ONLY do this ONCE on initial hydration - use ref to track and prevent repeated resets
   useEffect(() => {
-    if (isHydrated && !updatedSupportingDocuments?.length && supportingDocuments.length === maximumEntryDocsAllowed) {
-      setSupportingDocuments([""]);
+    if (isHydrated && !hasPerformedInitialReset.current && !updatedSupportingDocuments?.length && isEmpty(errors)) {
+      setSupportingDocuments((prev) => {
+        const areAllFieldsEmpty = prev.every((doc) => doc === "");
+        if (prev.length === maximumEntryDocsAllowed && areAllFieldsEmpty) {
+          hasPerformedInitialReset.current = true;
+          return [""];
+        }
+        return prev;
+      });
     }
-  }, [isHydrated, updatedSupportingDocuments]);
+  }, [isHydrated, updatedSupportingDocuments, errors, maximumEntryDocsAllowed]);
 
   const supportingDocumentsLabel = getSupportingDocumentsLabel(displayOptionalSuffix, t);
   const productDescriptionLabelKey = getProductDescriptionLabelKey();
@@ -464,14 +484,30 @@ const AddProductIndex = () => {
 
   const handleRemoveDoc = (index: number) => {
     if (supportingDocuments.length > 1) {
+      // Map current display index to original index
+      const originalIndex = getOriginalIndex(index, removedIndices);
+
       setSupportingDocuments((prev) => prev.filter((_, i) => i !== index));
-      // Hide errors from this index onwards because they shift
-      const newHiddenIndices = new Set(hiddenErrorIndices);
-      for (let i = index; i < maximumEntryDocsAllowed; i++) {
-        newHiddenIndices.add(i);
-      }
-      setHiddenErrorIndices(newHiddenIndices);
+
+      // Track that this original index has been removed
+      const newRemovedIndices = new Set(removedIndices);
+      newRemovedIndices.add(originalIndex);
+      setRemovedIndices(newRemovedIndices);
     }
+  };
+
+  // Helper function to map current display index to original error index
+  const getOriginalIndex = (displayIndex: number, removed: Set<number>): number => {
+    let originalIndex = displayIndex;
+    const sortedRemoved = Array.from(removed).sort((a, b) => a - b);
+
+    for (const removedIdx of sortedRemoved) {
+      if (removedIdx <= originalIndex) {
+        originalIndex++;
+      }
+    }
+
+    return originalIndex;
   };
 
   const handleInputChange = (index: number, value: string) => {
@@ -517,7 +553,7 @@ const AddProductIndex = () => {
   });
 
   return (
-    <Main backUrl={route("/create-non-manipulation-document/:documentNumber/add-exporter-details", { documentNumber })}>
+    <Main backUrl={backUrl}>
       {!isEmpty(errors) && <ErrorSummary errors={errorMessagesForDisplay} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
@@ -676,9 +712,10 @@ const AddProductIndex = () => {
               <EntryDocumentGuidanceText />
               <fieldset className="govuk-fieldset" aria-describedby={`${supportingDocumentsKey}-0-hint`}>
                 {supportingDocuments.map((value: string, index: number) => {
-                  // Don't show errors for indices that have been affected by add/remove operations
-                  const errorKey = `${supportingDocumentsKey}-${index}`;
-                  const hasError = !hiddenErrorIndices.has(index) && errors?.[errorKey];
+                  // Map current display index to original error index to show correct errors after removals
+                  const originalIndex = getOriginalIndex(index, removedIndices);
+                  const errorKey = `${supportingDocumentsKey}-${originalIndex}`;
+                  const hasError = errors?.[errorKey];
 
                   return (
                     <div

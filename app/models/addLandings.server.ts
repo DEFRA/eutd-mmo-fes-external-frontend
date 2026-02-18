@@ -14,6 +14,7 @@ import {
   getAllGearTypesByCategory,
   getBearerTokenForRequest,
   getExportPayload,
+  getGroupedAddLandingErrorFieldIds,
   getLandingData,
   getLandingsData,
   getLandingsEntryOption,
@@ -97,9 +98,11 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
     const hasLandingExecuted = session.get("landingExecuted");
     const hasLandingError = session.get("hasLandingError");
     if (hasLandingExecuted && !hasLandingError) {
-      // Only clear weight if landing succeeded without errors
-      session.set("hasLandingError", false);
+      // Only clear session data if landing was successful (no errors)
       session.set("selectedWeight", "");
+      session.set("landingExecuted", false);
+    } else if (hasLandingExecuted && hasLandingError) {
+      // If there were errors, just clear the execution flag but keep the data
       session.set("landingExecuted", false);
     }
     selectedStartDate = getSessionData(session, "selectedStartDate");
@@ -148,16 +151,6 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
     availableGearTypes = await getAllGearTypesByCategory(gearCategory);
   }
 
-  // Get errors from session if they exist (for non-JS mode)
-  const errors = session.get("errors");
-  const groupedErrorIds = session.get("groupedErrorIds");
-
-  // Clear errors from session after reading
-  if (errors) {
-    session.unset("errors");
-    session.unset("groupedErrorIds");
-  }
-
   return new Response(
     JSON.stringify({
       documentNumber,
@@ -165,7 +158,7 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
       landingLimitDaysInFuture,
       offlineValidationTime,
       maxAddLandingsLimit,
-      maximumEezPerLanding: parseInt(maximumEezPerLanding, 10),
+      maximumEezPerLanding: Number.parseInt(maximumEezPerLanding, 10),
       landingsData,
       vesselsNoJs: isValidDate(selectedDate, ["YYYY-M-D", "YYYY-MM-DD"])
         ? await getVesselsNoJs(selectedDate)
@@ -192,7 +185,6 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
       availableGearTypes,
       selectedHighSeasArea,
       selectedRfmo,
-      ...(errors && { errors, groupedErrorIds }),
     }),
     {
       status: 200,
@@ -253,27 +245,31 @@ const addLandingAction = async (
   }
 
   let selectedVessel: IVessel | undefined;
-  if (isDateLandedValid) {
-    selectedVessel = await getVesselDetails(
-      vessel as string,
-      selectedDate as string,
-      bearerToken,
-      documentNumber,
-      product as string,
-      landingId as string
-    );
-    if (!selectedVessel) {
-      return redirect(route("/forbidden"));
+
+  // Only fetch vessel details if vessel field is not empty
+  if (!isEmpty(vessel as string)) {
+    if (isDateLandedValid) {
+      selectedVessel = await getVesselDetails(
+        vessel as string,
+        selectedDate as string,
+        bearerToken,
+        documentNumber,
+        product as string,
+        landingId as string
+      );
+    } else {
+      selectedVessel = await getVesselDetails(
+        vessel as string,
+        moment().format("YYYY-MM-DD"),
+        bearerToken,
+        documentNumber,
+        product as string,
+        landingId as string
+      );
     }
-  } else {
-    selectedVessel = await getVesselDetails(
-      vessel as string,
-      moment().format("YYYY-MM-DD"),
-      bearerToken,
-      documentNumber,
-      product as string,
-      landingId as string
-    );
+
+    // API will return error.vessel.string.base = "Select a vessel from the list"
+    selectedVessel ??= { vesselName: String(vessel) };
   }
 
   const selectedRfmo = isEmpty(rfmo) ? undefined : (rfmo as string);
@@ -314,36 +310,46 @@ const addLandingAction = async (
 
   if (Array.isArray(response.errors) && response.errors.length > 0) {
     session.set("hasLandingError", true);
-    session.set("actionExecuted", true);
 
-    // Save form values to session for non-JS reload
+    // Save form state to session so loader can repopulate lists (vessels, gear types)
     session.set("selectedStartDate", selectedStartDate);
     session.set("selectedDate", selectedDate);
-    session.set("selectedProduct", product);
-    session.set("selectedFaoArea", faoArea);
-    session.set("selectedHighSeasArea", highSeasArea);
-    session.set("selectedWeight", weight);
-    session.set("selectedVessel", vessel);
-    session.set("gearCategory", gearCategory);
-    session.set("gearType", gearType);
+    session.set("selectedProduct", product as string);
+    session.set("selectedFaoArea", faoArea as string);
+    session.set("selectedHighSeasArea", highSeasArea as string);
+    session.set("selectedWeight", weight as string);
+    session.set("selectedVessel", vessel as string);
+    session.set("gearCategory", gearCategory as string);
+    session.set("gearType", gearType as string);
     session.set("selectedRfmo", selectedRfmo);
-    session.set(
-      "selectedExclusiveEconomicZones",
-      exclusiveEconomicZones?.map((item) => item?.officialCountryName).filter(Boolean) ?? []
-    );
+    const eezValues = Object.entries(values)
+      .filter(([key]) => key.startsWith("eez"))
+      .map(([, value]) => value as string);
+    session.set("selectedExclusiveEconomicZones", eezValues);
+
+    // Load lists for non-JS mode (since loader won't run again on error response)
+    const vesselsNoJs = isValidDate(selectedDate, ["YYYY-M-D", "YYYY-MM-DD"])
+      ? await getVesselsNoJs(selectedDate as string)
+      : undefined;
+    const availableGearTypes = gearCategory ? await getAllGearTypesByCategory(gearCategory as string) : undefined;
 
     const errors = getTransformedError(response.errors);
-
-    // Store errors in session for non-JS mode
-    session.set("errors", errors);
-
-    // For non-JS mode, redirect to reload the page with session data
-    const pageUrl = route("/create-catch-certificate/:documentNumber/add-landings", { documentNumber });
-    return redirect(pageUrl, {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    });
+    return new Response(
+      JSON.stringify({
+        errors,
+        groupedErrorIds: getGroupedAddLandingErrorFieldIds(errors),
+        vesselsNoJs,
+        availableGearTypes,
+        ...values,
+      }),
+      {
+        status: 400,
+        headers: {
+          "Content-Type": "application/json",
+          "Set-Cookie": await commitSession(session),
+        },
+      }
+    );
   }
 
   const reload = session.has("hasLandingError") && JSON.parse(session.get("hasLandingError")) === true;
@@ -434,15 +440,15 @@ const getVesselDetails = async (
   const pln = String(vessel).endsWith(")") ? getCodeFromLabel(vessel) : vessel;
   const vessels: IVessel[] = !isEmpty(pln) ? await getVessels(pln.toString(), date) : [];
   const selectedVessel: IVessel | undefined = vessels.find((_: IVessel) => _.pln === pln);
-
   if (selectedVessel) {
     selectedVessel.label = vessel;
     selectedVessel.domId = vessel.replace(" (", "-").replace(")", "");
     return selectedVessel;
   }
   const exportPayload: ProductsLanded | IUnauthorised = await getExportPayload(bearerToken, documentNumber);
-  if (instanceOfUnauthorised(exportPayload)) return undefined;
-
+  if (instanceOfUnauthorised(exportPayload)) {
+    return undefined;
+  }
   const landingResponse: Landing | undefined = getLandingData(exportPayload, product, landingId);
   return buildPreviousVessel(landingResponse);
 };
@@ -458,6 +464,7 @@ export const AddLandingsAction = async (request: Request, params: Params): Promi
     .map(([, value]) => countries.find((item) => item.officialCountryName == value));
   const session = await getSessionFromRequest(request);
   const saveToSession = (data: any) => Object.keys(data).forEach((k) => session.set(k, data[k]));
+
   // get form values
   const {
     dateLandedDay,
@@ -493,6 +500,7 @@ export const AddLandingsAction = async (request: Request, params: Params): Promi
 
   session.set("actionExecuted", true);
   const nonJsActions = ["add-dateLanded", "addGearCategory", "add-zone-button"];
+
   const isPartialSubmit = nonJsActions.includes(_action as string);
   if (isPartialSubmit) {
     // capture the form state as-is
@@ -513,40 +521,15 @@ export const AddLandingsAction = async (request: Request, params: Params): Promi
   }
   const pageUrl = route("/create-catch-certificate/:documentNumber/add-landings", { documentNumber });
   switch (_action) {
-    case "add-dateLanded": {
+    case "add-dateLanded":
+      return await addDateLandedAction(selectedDate, request, values, session);
+    case "addGearCategory":
       session.set("selectedExclusiveEconomicZones", [
         ...Object.entries(values)
           .filter(([key]) => key.startsWith("eez"))
           .map(([, value]) => value as string),
       ]);
-      const result = await addDateLandedAction(selectedDate, request, values, session);
-      // If result is null, errors were set in session, redirect
-      if (result === null && session.get("errors")) {
-        return redirect(pageUrl, {
-          headers: {
-            "Set-Cookie": await commitSession(session),
-          },
-        });
-      }
-      return result;
-    }
-    case "addGearCategory": {
-      session.set("selectedExclusiveEconomicZones", [
-        ...Object.entries(values)
-          .filter(([key]) => key.startsWith("eez"))
-          .map(([, value]) => value as string),
-      ]);
-      const result = await addGearCategoryAction(selectedGearCategory as string, values, session);
-      // If there are errors in session, redirect
-      if (session.get("errors")) {
-        return redirect(pageUrl, {
-          headers: {
-            "Set-Cookie": await commitSession(session),
-          },
-        });
-      }
-      return result;
-    }
+      return await addGearCategoryAction(selectedGearCategory as string, values, session);
     case addLandingActionName: {
       const isValid = await validateCSRFToken(request, form);
       if (!isValid) return redirect("/forbidden");

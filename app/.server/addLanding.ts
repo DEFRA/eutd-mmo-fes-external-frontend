@@ -40,16 +40,9 @@ export const addDateLandedAction = async (
   formData: Record<string, FormDataEntryValue>,
   session: Session<SessionData, SessionData>
 ) => {
-  const result = await nonJsDateValidation(request, formData, dateLanded, "dateLanded", session);
-  // result is null if validation failed (errors saved in session)
+  const result = await nonJsDateValidation(request, formData, dateLanded, "dateLanded");
   if (result !== null) {
     return result;
-  }
-
-  // Check if errors were set in session
-  if (session.get("errors")) {
-    // Return to caller - it will redirect
-    return null;
   }
 
   return redirect("?#vessels", {
@@ -72,12 +65,30 @@ export const addGearCategoryAction = async (
       },
     ]);
 
-    // Save errors to session for non-JS mode
-    session.set("errors", errors);
-    session.set("groupedErrorIds", getGroupedAddLandingErrorFieldIds(errors));
+    // Load lists for non-JS mode
+    const { getAllGearTypesByCategory, getVesselsNoJs } = await import("~/.server");
+    const { isValidDate } = await import("~/helpers");
+    const dateLanded = `${formData.dateLandedYear ?? ""}-${formData.dateLandedMonth ?? ""}-${formData.dateLandedDay ?? ""}`;
+    const vesselsNoJs = isValidDate(dateLanded, ["YYYY-M-D", "YYYY-MM-DD"])
+      ? await getVesselsNoJs(dateLanded)
+      : undefined;
+    const availableGearTypes = gearCategory ? await getAllGearTypesByCategory(gearCategory) : undefined;
 
-    // Don't return response, let caller handle redirect
-    return null;
+    return new Response(
+      JSON.stringify({
+        ...formData,
+        vesselsNoJs,
+        availableGearTypes,
+        errors,
+        groupedErrorIds: getGroupedAddLandingErrorFieldIds(errors),
+      }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
   // clear old gear type selection when the category is changed
   session.set("gearType", "");

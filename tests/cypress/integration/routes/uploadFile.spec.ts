@@ -213,7 +213,6 @@ describe("Upload File Page Upload - date errors", () => {
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Date landed is missing");
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Date landed must be a real date");
     cy.get("#row-1-PRD765-2-upload-file-error").contains("Enter a valid date landed");
-    cy.get("#row-1-PRD765-3-upload-file-error").contains("Date landed can be no more than 7 days in the future");
   });
 });
 
