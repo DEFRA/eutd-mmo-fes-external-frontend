@@ -174,7 +174,7 @@ const handleGoToAddAddress = async (
   t: TFunction,
   documentNumber: string
 ): Promise<Response> => {
-  session.set("facilityName", values["facilityName"]);
+  session.set("facilityName", String(getStrOrDefault(values["facilityName"])));
   session.set("selectedArrivalDate", selectedDate);
 
   const fieldPrefixName = "storageFacilities-facilityName";
@@ -221,7 +221,7 @@ const handleSaveAndContinue = async (
     saveToRedisIfErrors,
     undefined,
     {
-      facilityName: values["facilityName"] as string,
+      facilityName: String(getStrOrDefault(values["facilityName"])),
       facilityArrivalDate: selectedDate as string,
     }
   );
@@ -235,7 +235,7 @@ const handleSaveAndContinue = async (
     const combinedResponse = {
       ...responseData,
       values: {
-        facilityName: values["facilityName"],
+        facilityName: String(getStrOrDefault(values["facilityName"])),
         facilityArrivalDate: selectedDate,
         facilityArrivalDateDay: values["facilityArrivalDateDay"],
         facilityArrivalDateMonth: values["facilityArrivalDateMonth"],
