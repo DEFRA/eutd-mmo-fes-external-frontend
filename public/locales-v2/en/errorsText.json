@@ -299,5 +299,11 @@
   "ccCommonGearTypeUnpopulatedError": "Select a gear type",
   "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError": "Container identification number must only contain letters and numbers",
   "removeProductErrorNoSelection": "Select yes if you want to remove this product and all its associated species",
-  "sdArrivalDatenotMorethanOneDay": "Arrival date must not be more than 1 day in the future"
+  "sdArrivalDatenotMorethanOneDay": "Arrival date must not be more than 1 day in the future",
+  "ccDirectLandingDateLandedRequiredError": "Enter the date landed",
+  "ccDirectLandingDateLandedInvalidError": "Enter a valid date landed",
+  "ccDirectLandingDateLandedFutureDateError": "Date landed must be today or within the next 7 days",
+  "ccDirectLandingVesselRequiredError": "Select or enter a vessel name or port letter and number",
+  "ccDirectLandingVesselInvalidError": "Select a vessel from the list",
+  "ccDirectLandingExportWeightRequiredError": "Enter the export weight in kilograms"
 }
