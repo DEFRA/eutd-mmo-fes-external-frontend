@@ -101,7 +101,6 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
     }
   }
 
-  // return redirect('/create-catch-certificate/catch-certificates');
   return new Response(
     JSON.stringify({
       documentNumber,
