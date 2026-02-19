@@ -310,22 +310,11 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (_action === "saveAsDraft") {
     session.unset("facilityName");
     session.unset("selectedArrivalDate");
-    const response = await handleSaveAndContinue(
-      bearerToken,
-      documentNumber,
-      values,
-      selectedDate,
-      session,
-      nextUri,
-      true
-    );
-    // If there were errors saving as draft, still redirect to dashboard
-    if (response.status === 400) {
-      return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
-        headers: { "Set-Cookie": await commitSession(session) },
-      });
-    }
-    return response;
+    await handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri, true);
+    // Always redirect to dashboard when saving as draft, regardless of errors
+    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
+      headers: { "Set-Cookie": await commitSession(session) },
+    });
   }
 
   return handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri, false);
