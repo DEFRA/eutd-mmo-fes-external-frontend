@@ -55,6 +55,9 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
     landingsEntryOption,
     userReference,
   }: ICatchCertificateSummary = (await getCatchCertificateSummary(bearerToken, documentNumber)) ?? {};
+  if (status === "COMPLETE") {
+    return redirect("/create-catch-certificate/catch-certificates");
+  }
 
   if (
     !hasRequiredDataCatchCertificateSummary(
@@ -98,6 +101,7 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
     }
   }
 
+  // return redirect('/create-catch-certificate/catch-certificates');
   return new Response(
     JSON.stringify({
       documentNumber,
