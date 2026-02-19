@@ -388,6 +388,7 @@ export enum TestCaseId {
   ContainerVesselTransportContainerRequired = "ContainerVesselTransportContainerRequired",
   ContainerVesselTransportMultipleContainers = "ContainerVesselTransportMultipleContainers",
   ContainerVesselTransportEmptyContainers = "ContainerVesselTransportEmptyContainers",
+  ContainerVesselAllFieldsEmptyWithInvalidContainer = "ContainerVesselAllFieldsEmptyWithInvalidContainer",
   ContainerVesselTransportContainerPersistence = "ContainerVesselTransportContainerPersistence",
   ContainerVesselTransportEditWithContainers = "ContainerVesselTransportEditWithContainers",
   ContainerVesselTransportContainerValidationErrors = "ContainerVesselTransportContainerValidationErrors",

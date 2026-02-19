@@ -99,10 +99,38 @@ const transportDetailsHandler: ITestHandler = {
   ],
   [TestCaseId.TruckTransportSaveAsDraft]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
-    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
-    rest.post(addTransportationDetailsUrl("truck", false), (req, res, ctx) => res(ctx.json(saveTruckDetails))),
-    rest.post(addTransportationDetailsUrl("truck", true), (req, res, ctx) => res(ctx.json(saveTruckDetails))),
-    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) => res(ctx.json(saveTruckDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) =>
+      // Return saved data with dates and container numbers if they exist
+      res(
+        ctx.json({
+          ...catchCertificateTrain,
+          nationalityOfVehicle: "Ireland",
+          registrationNumber: "ABC123",
+          freightBillNumber: "FREIGHT001",
+          departureCountry: "France",
+          departurePort: "Calais Port",
+          placeOfUnloading: "Dover Port",
+          departureDate: "15/12/2025",
+          containerNumbers: ["ABCU1234567"],
+          vehicle: "truck",
+          arrival: true,
+        })
+      )
+    ),
+    rest.post(addTransportationDetailsUrl("truck", false), async (req, res, ctx) => {
+      // Accept and return whatever was sent in save-as-draft mode
+      const body = await req.json();
+      return res(ctx.json({ ...body, ...saveTruckDetails }));
+    }),
+    rest.post(addTransportationDetailsUrl("truck", true), async (req, res, ctx) => {
+      // Accept and return whatever was sent in save-as-draft mode (arrival)
+      const body = await req.json();
+      return res(ctx.json({ ...body, ...saveTruckDetails }));
+    }),
+    rest.put(mockPutTransportDetailsByIdUrl, async (req, res, ctx) => {
+      const body = await req.json();
+      return res(ctx.json({ ...body, ...saveTruckDetails }));
+    }),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
@@ -1209,11 +1237,39 @@ const transportDetailsHandler: ITestHandler = {
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.PlaneTransportSaveAsDraft]: () => [
-    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) =>
+      // Return saved data with dates and container numbers if they exist
+      res(
+        ctx.json({
+          ...catchCertificatePlane,
+          airwayBillNumber: "456-78901234",
+          flightNumber: "BA101",
+          freightBillNumber: "FR123456",
+          departureCountry: "Germany",
+          departurePort: "Frankfurt Airport",
+          placeOfUnloading: "Heathrow Airport",
+          departureDate: "20/01/2026",
+          containerNumbers: ["DEFG2345678"],
+          vehicle: "plane",
+          arrival: true,
+        })
+      )
+    ),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(planeTransportAllowedDetails))),
-    rest.post(addTransportationDetailsUrl("plane", false), (req, res, ctx) => res(ctx.json(savePlaneDetails))),
-    rest.post(addTransportationDetailsUrl("plane", true), (req, res, ctx) => res(ctx.json(savePlaneDetails))),
-    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) => res(ctx.json(savePlaneDetails))),
+    rest.post(addTransportationDetailsUrl("plane", false), async (req, res, ctx) => {
+      // Accept and return whatever was sent in save-as-draft mode
+      const body = await req.json();
+      return res(ctx.json({ ...body, ...savePlaneDetails }));
+    }),
+    rest.post(addTransportationDetailsUrl("plane", true), async (req, res, ctx) => {
+      // Accept and return whatever was sent in save-as-draft mode (arrival)
+      const body = await req.json();
+      return res(ctx.json({ ...body, ...savePlaneDetails }));
+    }),
+    rest.put(mockPutTransportDetailsByIdUrl, async (req, res, ctx) => {
+      const body = await req.json();
+      return res(ctx.json({ ...body, ...savePlaneDetails }));
+    }),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),

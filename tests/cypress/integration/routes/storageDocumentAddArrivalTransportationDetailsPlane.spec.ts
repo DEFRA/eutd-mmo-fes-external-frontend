@@ -100,6 +100,74 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
+  it("should retain all field values including dates and containers when saving as draft with complete data", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    // Fill all fields including date and container
+    cy.get("#airwayBillNumber").type("456-78901234", { force: true });
+    cy.get("#flightNumber").type("BA101", { force: true });
+    cy.get("#freightBillNumber").type("FR123456", { force: true });
+    cy.get("#departureCountry").invoke("val", "Germany");
+    cy.get("#departurePort").type("Frankfurt Airport", { force: true });
+    cy.get("#placeOfUnloading").type("Heathrow Airport", { force: true });
+    cy.get("#departureDate-day").type("20", { force: true });
+    cy.get("#departureDate-month").type("01", { force: true });
+    cy.get("#departureDate-year").type("2026", { force: true });
+    cy.get('[id="containerNumbers.0"]').type("DEFG2345678", { force: true });
+
+    // Save as draft
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return to the page
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    // Verify all values retained
+    cy.get("#airwayBillNumber").should("have.value", "456-78901234");
+    cy.get("#flightNumber").should("have.value", "BA101");
+    cy.get("#freightBillNumber").should("have.value", "FR123456");
+    cy.get("#departureCountry").should("have.value", "Germany");
+    cy.get("#departurePort").should("have.value", "Frankfurt Airport");
+    cy.get("#placeOfUnloading").should("have.value", "Heathrow Airport");
+    cy.get("#departureDate-day").should("have.value", "20");
+    cy.get("#departureDate-month").should("have.value", "01");
+    cy.get("#departureDate-year").should("have.value", "2026");
+    cy.get('[id="containerNumbers.0"]').should("have.value", "DEFG2345678");
+  });
+
+  it("should retain dates and accept invalid container format when saving as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+
+    // Fill with invalid container number (would fail validation on save & continue)
+    cy.get("#airwayBillNumber").type("999-11111111", { force: true });
+    cy.get("#flightNumber").type("LH500", { force: true });
+    cy.get("#departureCountry").invoke("val", "Spain");
+    cy.get("#departurePort").type("Madrid Airport", { force: true });
+    cy.get("#departureDate-day").type("05", { force: true });
+    cy.get("#departureDate-month").type("03", { force: true });
+    cy.get("#departureDate-year").type("2026", { force: true });
+    cy.get('[id="containerNumbers.0"]').type("TOO-SHORT", { force: true }); // Invalid format
+    cy.get('[id="containerNumbers.1"]').type("123", { force: true }); // Add second container
+
+    // Save as draft should accept invalid containers
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return and verify values retained including invalid containers
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("#departureDate-day").should("have.value", "05");
+    cy.get("#departureDate-month").should("have.value", "03");
+    cy.get("#departureDate-year").should("have.value", "2026");
+    cy.get('[id="containerNumbers.0"]').should("have.value", "TOO-SHORT");
+    cy.get('[id="containerNumbers.1"]').should("have.value", "123");
+  });
+
   it("should navigate to storage facility page on click of save and continue button", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,

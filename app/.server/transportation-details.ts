@@ -401,7 +401,10 @@ export const calculateExportDate = (form: any): string | undefined => {
   const day = form.get("exportDateDay") as string;
   const month = form.get("exportDateMonth") as string;
   const year = form.get("exportDateYear") as string;
-  return day && month && year ? `${day}/${month}/${year}` : undefined;
+  // If all parts are empty, return an explicit empty string so the payload contains a clear marker
+  // (JSON.stringify will include the key with an empty string value). This allows the server
+  // to distinguish "user cleared this field" from "field not supplied" and overwrite stored values.
+  return !day && !month && !year ? "" : `${day}/${month}/${year}`;
 };
 
 export const calculateDepartureDate = (form: any): string | undefined => {

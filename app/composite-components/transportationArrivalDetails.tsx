@@ -423,7 +423,11 @@ export const TransportationArrivalDetails = ({
         id="departureDate"
         name="departureDate"
         getDateSelected={() => {}}
-        dateSelected={moment(departureDate, ["DD/MM/YYYY", "YYYY-MM-DD", "D/M/YYYY", "YYYY-M-D"]).format("YYYY-MM-DD")}
+        dateSelected={(() => {
+          if (!departureDate || departureDate === "") return undefined;
+          const parsedDate = moment(departureDate, ["DD/MM/YYYY", "YYYY-MM-DD", "D/M/YYYY", "YYYY-M-D"]);
+          return parsedDate.isValid() ? parsedDate.format("YYYY-MM-DD") : undefined;
+        })()}
         errors={errors?.departureDate}
         label={"addTransportationArrivalDetailsDepartureDate"}
         labelStyle={useBoldLabels ? "bold" : "normal"}
