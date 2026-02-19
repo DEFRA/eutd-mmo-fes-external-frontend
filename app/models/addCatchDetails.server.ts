@@ -230,16 +230,6 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
 
   const catches = getCatches(processingStatement);
 
-  // For copied documents, fix the productId mismatch
-  if (productId && documentNumber && !productId.startsWith(documentNumber)) {
-    // This is likely a copied document with old productId
-    // Use the current document's product ID
-    const currentProduct = processingStatement.products?.[0];
-    if (currentProduct) {
-      productId = currentProduct.id ?? "";
-    }
-  }
-
   const form = await request.formData();
   const { _action, ...values } = Object.fromEntries(form);
   const nextUri = form.get("nextUri") as string;

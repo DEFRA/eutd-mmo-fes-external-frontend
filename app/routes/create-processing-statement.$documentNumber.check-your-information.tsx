@@ -230,7 +230,11 @@ const CheckYourInformation = () => {
                     {/* Species Row with Error */}
                     <div
                       id={speciesFieldId}
-                      className={hasSpeciesError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}
+                      className={
+                        hasSpeciesError
+                          ? "govuk-form-group govuk-form-group--error govuk-summary-list__row"
+                          : "govuk-summary-list__row"
+                      }
                     >
                       {hasSpeciesError && (
                         <ErrorMessage
@@ -238,13 +242,11 @@ const CheckYourInformation = () => {
                           visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                         />
                       )}
-                      <div className="govuk-summary-list__row">
-                        <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                          {" "}
-                          {t("psSummaryPageSpecies", { ns: "psCheckYourInformation" })}
-                        </dt>
-                        <dd className="govuk-summary-list__value">{catchItem.species}</dd>
-                      </div>
+                      <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                        {" "}
+                        {t("psSummaryPageSpecies", { ns: "psCheckYourInformation" })}
+                      </dt>
+                      <dd className="govuk-summary-list__value">{catchItem.species}</dd>
                     </div>
                     <div className="govuk-summary-list__row">
                       <dt className="govuk-summary-list__key govuk-!-width-one-half">
@@ -267,7 +269,9 @@ const CheckYourInformation = () => {
                     <div
                       id={catchCertificateFieldId}
                       className={
-                        hasCatchCertificateError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"
+                        hasCatchCertificateError
+                          ? "govuk-form-group govuk-form-group--error govuk-summary-list__row"
+                          : "govuk-summary-list__row"
                       }
                     >
                       {hasCatchCertificateError && (
@@ -276,12 +280,10 @@ const CheckYourInformation = () => {
                           visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                         />
                       )}
-                      <div className="govuk-summary-list__row">
-                        <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                          {t("psSummaryPageCatchCertificate", { ns: "psCheckYourInformation" })}
-                        </dt>
-                        <dd className="govuk-summary-list__value">{catchItem.catchCertificateNumber}</dd>
-                      </div>
+                      <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                        {t("psSummaryPageCatchCertificate", { ns: "psCheckYourInformation" })}
+                      </dt>
+                      <dd className="govuk-summary-list__value">{catchItem.catchCertificateNumber}</dd>
                     </div>
                     <div className="govuk-summary-list__row">
                       <dt className="govuk-summary-list__key govuk-!-width-one-half">
