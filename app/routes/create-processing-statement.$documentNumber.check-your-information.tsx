@@ -228,13 +228,20 @@ const CheckYourInformation = () => {
                       <dd className="govuk-summary-list__value">{product.commodityCode}</dd>
                     </div>
                     {/* Species Row with Error */}
-                    {hasSpeciesError && (
-                      <ErrorMessage
-                        text={t(catchErrors.species.message, { ns: "errorsText" })}
-                        visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
-                      />
-                    )}
-                    <div id={speciesFieldId} className="govuk-summary-list__row">
+                    <div
+                      id={speciesFieldId}
+                      className={
+                        hasSpeciesError
+                          ? "govuk-form-group govuk-form-group--error govuk-summary-list__row"
+                          : "govuk-summary-list__row"
+                      }
+                    >
+                      {hasSpeciesError && (
+                        <ErrorMessage
+                          text={t(catchErrors.species.message, { ns: "errorsText" })}
+                          visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                        />
+                      )}
                       <dt className="govuk-summary-list__key govuk-!-width-one-half">
                         {" "}
                         {t("psSummaryPageSpecies", { ns: "psCheckYourInformation" })}
@@ -259,13 +266,20 @@ const CheckYourInformation = () => {
                       </div>
                     )}
                     {/* Catch Certificate Row with Error */}
-                    {hasCatchCertificateError && (
-                      <ErrorMessage
-                        text={t(catchErrors.catchCertificateNumber.message, { ns: "errorsText" })}
-                        visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
-                      />
-                    )}
-                    <div id={catchCertificateFieldId} className="govuk-summary-list__row">
+                    <div
+                      id={catchCertificateFieldId}
+                      className={
+                        hasCatchCertificateError
+                          ? "govuk-form-group govuk-form-group--error govuk-summary-list__row"
+                          : "govuk-summary-list__row"
+                      }
+                    >
+                      {hasCatchCertificateError && (
+                        <ErrorMessage
+                          text={t(catchErrors.catchCertificateNumber.message, { ns: "errorsText" })}
+                          visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                        />
+                      )}
                       <dt className="govuk-summary-list__key govuk-!-width-one-half">
                         {t("psSummaryPageCatchCertificate", { ns: "psCheckYourInformation" })}
                       </dt>
