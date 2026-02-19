@@ -35,6 +35,23 @@ const onUploadLandings = async (response: Response): Promise<IUploadedLanding[] 
       const errors = (await response.json()) ?? {};
       return Object.keys(errors).map((key: string) => {
         const errorCode = errors[key]?.["key"];
+        // If this is a gearType related error coming from file upload, try to map to contextual message
+        if (key === "gearType") {
+          const landing = errors[key]?.["landing"];
+          const gearCategory = landing?.gearCategory;
+          const gearType = landing?.gearType;
+          const messageKey =
+            gearCategory && !gearType
+              ? "ccAddLandingGearTypeEmptyWithCategoryError"
+              : !gearCategory && !gearType
+                ? "ccAddLandingGearTypeEmptyError"
+                : errors[key];
+          return {
+            key,
+            message: getErrorMessage(messageKey),
+          };
+        }
+
         if (
           errorCode === "validation.product.start-date.seasonal.invalid-date" ||
           errorCode === "validation.product.seasonal.invalid-date"
@@ -107,7 +124,15 @@ const onSaveLandings = async (response: Response): Promise<IBase & { rows?: IUpl
               }
             : {
                 key,
-                message: getErrorMessage(errors[key]),
+                // Map gearType to contextual message when possible
+                message:
+                  key === "gearType" && errors[key]?.["landing"]
+                    ? getErrorMessage(
+                        errors[key]["landing"]["gearCategory"] && !errors[key]["landing"]["gearType"]
+                          ? "ccAddLandingGearTypeEmptyWithCategoryError"
+                          : "ccAddLandingGearTypeEmptyError"
+                      )
+                    : getErrorMessage(errors[key]),
               }
         ),
         unauthorised: false,

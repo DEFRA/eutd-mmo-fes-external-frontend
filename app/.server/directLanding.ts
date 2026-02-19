@@ -176,6 +176,27 @@ const transformError = (
       },
     };
   } else {
+    // Special handling for gearType to provide specific message when gearCategory present but gearType missing
+    if (errorKey === "gearType") {
+      // find the landing that contains this error
+      const landingWithError = Object.values(products.items ?? [])
+        .flatMap((i: any) => i.landings ?? [])
+        .find((l: any) => Object.values(l?.errors ?? {}).includes(errors[errorKey]));
+      const gearCategory = landingWithError?.model?.gearCategory;
+      const gearType = landingWithError?.model?.gearType;
+      const messageKey =
+        gearCategory && !gearType
+          ? "ccAddLandingGearTypeEmptyWithCategoryError"
+          : !gearCategory && !gearType
+            ? "ccAddLandingGearTypeEmptyError"
+            : errors[errorKey];
+      return {
+        [errorKey]: {
+          key: messageKey,
+        },
+      };
+    }
+
     return {
       [errorKey]: errors[errorKey],
     };

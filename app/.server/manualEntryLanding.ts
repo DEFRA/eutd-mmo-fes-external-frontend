@@ -198,21 +198,36 @@ const onAddLandingResponse = async (
       const product: string =
         products.find((p: ProductLanded) => p.product.id === productId)?.product.species.label ?? "";
 
-      return {
-        errors: Object.keys(errorsResponse.errors).map((error) => ({
+      // Custom gearType error logic
+      const errors = Object.keys(errorsResponse.errors).map((error) => {
+        let messageKey = errorsResponse.errors[error];
+        // Check for gearType error
+        if (error === "gearType") {
+          const gearCategory = errorsResponse?.items?.find((p) => p.product.id === productId)?.landings?.[0]?.model
+            ?.gearCategory;
+          const gearType = errorsResponse?.items?.find((p) => p.product.id === productId)?.landings?.[0]?.model
+            ?.gearType;
+          if (gearCategory && !gearType) {
+            messageKey = "ccAddLandingGearTypeEmptyWithCategoryError";
+          } else if (!gearCategory && !gearType) {
+            messageKey = "ccAddLandingGearTypeEmptyError";
+          } // else use default
+        }
+        return {
           key: error,
-          message: getErrorMessage(errorsResponse.errors[error]),
-          ...(errorsResponse.errors[error] === "error.dateLanded.date.max" && {
+          message: getErrorMessage(messageKey),
+          ...(messageKey === "error.dateLanded.date.max" && {
             value: { dynamicValue: getEnv().LANDING_LIMIT_DAYS_FUTURE },
           }),
-          ...(errorsResponse.errors[error] === "error.seasonalFish.invalidate" && {
+          ...(messageKey === "error.seasonalFish.invalidate" && {
             value: { dynamicValue: product },
           }),
-          ...(errorsResponse.errors[error] === "error.startDate.seasonalFish.invalidate" && {
+          ...(messageKey === "error.startDate.seasonalFish.invalidate" && {
             value: { dynamicValue: product },
           }),
-        })),
-      };
+        };
+      });
+      return { errors };
     case 403:
       return {
         unauthorised: true,

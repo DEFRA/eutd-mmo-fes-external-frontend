@@ -127,6 +127,7 @@
   "ccAddLandingSelectGearCategoryListNullError": "Select a gear category",
   "ccAddLandingGearCategoryAddButtonError": "You must select a gear category option to add gear category",
   "ccAddLandingSelectGearTypeListNullError": "Select a gear type",
+  "ccAddLandingGearTypeEmptyError": "Select a gear type",
   "ccAddLandingGearTypeEmptyWithCategoryError": "You must select a gear type when you have selected a gear category",
   "ccAddLandingGearTypeInvalidError": "You must select a gear type when you have selected a gear category",
   "ccAddLandingSelectProductFromListError": "Select a product from the list",
