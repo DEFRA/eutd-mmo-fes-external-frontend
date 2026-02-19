@@ -128,7 +128,7 @@
   "ccAddLandingGearCategoryAddButtonError": "You must select a gear category option to add gear category",
   "ccAddLandingSelectGearTypeListNullError": "Select a gear type",
   "ccAddLandingGearTypeEmptyWithCategoryError": "You must select a gear type when you have selected a gear category",
-  "ccAddLandingGearTypeInvalidError": "The selected gear type is not valid for the selected gear category",
+  "ccAddLandingGearTypeInvalidError": "You must select a gear type when you have selected a gear category",
   "ccAddLandingSelectProductFromListError": "Select a product from the list",
   "ccAddLandingDateLandedFutureDateError": "Date landed must be today or within the next 7 days",
   "ccAddLandingMaxLandingExceededError": "The maximum landings limit has been reached. To progress, you will need to remove the products without landings.",
