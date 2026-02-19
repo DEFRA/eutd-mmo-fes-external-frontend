@@ -228,23 +228,18 @@ const CheckYourInformation = () => {
                       <dd className="govuk-summary-list__value">{product.commodityCode}</dd>
                     </div>
                     {/* Species Row with Error */}
-                    <div
-                      id={speciesFieldId}
-                      className={hasSpeciesError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}
-                    >
-                      {hasSpeciesError && (
-                        <ErrorMessage
-                          text={t(catchErrors.species.message, { ns: "errorsText" })}
-                          visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
-                        />
-                      )}
-                      <div className="govuk-summary-list__row">
-                        <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                          {" "}
-                          {t("psSummaryPageSpecies", { ns: "psCheckYourInformation" })}
-                        </dt>
-                        <dd className="govuk-summary-list__value">{catchItem.species}</dd>
-                      </div>
+                    {hasSpeciesError && (
+                      <ErrorMessage
+                        text={t(catchErrors.species.message, { ns: "errorsText" })}
+                        visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                      />
+                    )}
+                    <div id={speciesFieldId} className="govuk-summary-list__row">
+                      <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                        {" "}
+                        {t("psSummaryPageSpecies", { ns: "psCheckYourInformation" })}
+                      </dt>
+                      <dd className="govuk-summary-list__value">{catchItem.species}</dd>
                     </div>
                     <div className="govuk-summary-list__row">
                       <dt className="govuk-summary-list__key govuk-!-width-one-half">
@@ -264,24 +259,17 @@ const CheckYourInformation = () => {
                       </div>
                     )}
                     {/* Catch Certificate Row with Error */}
-                    <div
-                      id={catchCertificateFieldId}
-                      className={
-                        hasCatchCertificateError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"
-                      }
-                    >
-                      {hasCatchCertificateError && (
-                        <ErrorMessage
-                          text={t(catchErrors.catchCertificateNumber.message, { ns: "errorsText" })}
-                          visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
-                        />
-                      )}
-                      <div className="govuk-summary-list__row">
-                        <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                          {t("psSummaryPageCatchCertificate", { ns: "psCheckYourInformation" })}
-                        </dt>
-                        <dd className="govuk-summary-list__value">{catchItem.catchCertificateNumber}</dd>
-                      </div>
+                    {hasCatchCertificateError && (
+                      <ErrorMessage
+                        text={t(catchErrors.catchCertificateNumber.message, { ns: "errorsText" })}
+                        visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                      />
+                    )}
+                    <div id={catchCertificateFieldId} className="govuk-summary-list__row">
+                      <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                        {t("psSummaryPageCatchCertificate", { ns: "psCheckYourInformation" })}
+                      </dt>
+                      <dd className="govuk-summary-list__value">{catchItem.catchCertificateNumber}</dd>
                     </div>
                     <div className="govuk-summary-list__row">
                       <dt className="govuk-summary-list__key govuk-!-width-one-half">
