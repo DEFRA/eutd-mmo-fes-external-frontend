@@ -108,7 +108,7 @@ const saveActionBase: any = async (values: any, landings: IDirectLandings, isNum
   return {
     selectedVessel: selectedVessel ?? previousVessel,
     startDate,
-    date: isDateValid ? date : "",
+    date,
     updatedWeights,
     gearCategory,
     gearType,
