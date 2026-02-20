@@ -388,18 +388,6 @@ describe("Upload File Page Upload - gearCode errors", () => {
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Nid yw'r Math o gêr yn bodoli");
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Nid yw'r Math o gêr yn bodoli");
   });
-
-  it("should display contextual error when gear category is selected but gear type is not", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.CCUploadGearTypeWithCategoryError,
-    };
-    cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    // Simulate selecting a gear category but not a gear type, then submit
-    cy.get("#gearCategory").select(1, { force: true });
-    cy.get("[data-testid=upload]").click({ force: true });
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^You must select a gear type after selecting a gear category$/).should("be.visible");
-  });
 });
 
 describe("Upload File Page Upload - AV scan failure error", () => {

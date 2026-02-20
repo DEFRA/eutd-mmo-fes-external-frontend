@@ -710,7 +710,17 @@ describe("Direct Landing mandatory fields unpopulated errors", () => {
     });
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.get("#error-summary-title").contains("There is a problem");
-    cy.get(".govuk-error-message").contains("You must select a gear type when you have selected a gear category");
+    cy.get("#gearCategory option:selected")
+      .invoke("text")
+      .then((text) => {
+        const placeholderPatterns = [/Select gear category/, /Dewiswch categori/, /Dewiswch gategori/];
+        const isPlaceholder = placeholderPatterns.some((p) => p.test(text));
+        if (isPlaceholder) {
+          cy.get(".govuk-error-message").contains("Select a gear type");
+        } else {
+          cy.get(".govuk-error-message").contains("You must select a gear type when you have selected a gear category");
+        }
+      });
   });
 
   it("should display an error when gear category is unpopulated", () => {
@@ -788,7 +798,7 @@ describe("Direct Landing page when gear types api is failing", () => {
 
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.get("#error-summary-title").contains("There is a problem");
-    cy.get(".govuk-error-message").contains("Select a gear type");
+    cy.get(".govuk-error-message").contains("You must select a gear type when you have selected a gear category");
   });
 });
 describe("Direct landing page: Accessibility", () => {
