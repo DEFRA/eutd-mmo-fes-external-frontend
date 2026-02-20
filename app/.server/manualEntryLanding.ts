@@ -181,12 +181,13 @@ export const addLanding = async (
     }
   );
 
-  return onAddLandingResponse(response, product);
+  return onAddLandingResponse(response, product, gearFields);
 };
 
 const onAddLandingResponse = async (
   response: Response,
-  productId: string
+  productId: string,
+  sentGearFields?: { gearCategory: string; gearType: string; gearCode: string | undefined }
 ): Promise<ProductsLanded | { unauthorised: boolean; supportId?: string } | IBase> => {
   switch (response.status) {
     case 200:
@@ -198,36 +199,38 @@ const onAddLandingResponse = async (
       const product: string =
         products.find((p: ProductLanded) => p.product.id === productId)?.product.species.label ?? "";
 
-      // Custom gearType error logic
-      const errors = Object.keys(errorsResponse.errors).map((error) => {
-        let messageKey = errorsResponse.errors[error];
-        // Check for gearType error
-        if (error === "gearType") {
-          const gearCategory = errorsResponse?.items?.find((p) => p.product.id === productId)?.landings?.[0]?.model
-            ?.gearCategory;
-          const gearType = errorsResponse?.items?.find((p) => p.product.id === productId)?.landings?.[0]?.model
-            ?.gearType;
-          if (gearCategory && !gearType) {
-            messageKey = "ccAddLandingGearTypeEmptyWithCategoryError";
-          } else if (!gearCategory && !gearType) {
-            messageKey = "ccAddLandingGearTypeEmptyError";
-          } // else use default
-        }
-        return {
-          key: error,
-          message: getErrorMessage(messageKey),
-          ...(messageKey === "error.dateLanded.date.max" && {
-            value: { dynamicValue: getEnv().LANDING_LIMIT_DAYS_FUTURE },
-          }),
-          ...(messageKey === "error.seasonalFish.invalidate" && {
-            value: { dynamicValue: product },
-          }),
-          ...(messageKey === "error.startDate.seasonalFish.invalidate" && {
-            value: { dynamicValue: product },
-          }),
-        };
-      });
-      return { errors };
+      return {
+        errors: Object.keys(errorsResponse.errors).map((error) => {
+          // Default message key from API
+          let messageKey = errorsResponse.errors[error];
+
+          // If this is a gearType error, prefer contextual message based on what was sent
+          if (error === "gearType" && sentGearFields) {
+            const sentCategory = sentGearFields.gearCategory;
+            const sentType = sentGearFields.gearType;
+            if (sentCategory && !sentType) {
+              messageKey = "ccAddLandingGearTypeEmptyWithCategoryError";
+            } else if (!sentCategory && !sentType) {
+              // use existing select-list-null key
+              messageKey = "ccAddLandingSelectGearTypeListNullError";
+            }
+          }
+
+          return {
+            key: error,
+            message: getErrorMessage(messageKey),
+            ...(messageKey === "error.dateLanded.date.max" && {
+              value: { dynamicValue: getEnv().LANDING_LIMIT_DAYS_FUTURE },
+            }),
+            ...(messageKey === "error.seasonalFish.invalidate" && {
+              value: { dynamicValue: product },
+            }),
+            ...(messageKey === "error.startDate.seasonalFish.invalidate" && {
+              value: { dynamicValue: product },
+            }),
+          };
+        }),
+      };
     case 403:
       return {
         unauthorised: true,
