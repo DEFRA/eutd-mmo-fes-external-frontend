@@ -35,22 +35,6 @@ const onUploadLandings = async (response: Response): Promise<IUploadedLanding[] 
       const errors = (await response.json()) ?? {};
       return Object.keys(errors).map((key: string) => {
         const errorCode = errors[key]?.["key"];
-        // If this is a gearType related error coming from file upload, try to map to contextual message
-        if (key === "gearType") {
-          const landing = errors[key]?.["landing"];
-          const gearCategory = landing?.gearCategory;
-          const gearType = landing?.gearType;
-          const messageKey =
-            gearCategory && !gearType
-              ? "ccAddLandingGearTypeEmptyWithCategoryError"
-              : !gearCategory && !gearType
-                ? "ccAddLandingGearTypeEmptyError"
-                : errors[key];
-          return {
-            key,
-            message: getErrorMessage(messageKey),
-          };
-        }
 
         if (
           errorCode === "validation.product.start-date.seasonal.invalid-date" ||
@@ -68,9 +52,10 @@ const onUploadLandings = async (response: Response): Promise<IUploadedLanding[] 
             value: { dynamicValue: errors[key]["params"]["limit"] },
           };
         } else {
+          const messageKey = key === "gearType" ? "ccAddLandingGearTypeEmptyError" : errors[key];
           return {
             key,
-            message: getErrorMessage(errors[key]),
+            message: getErrorMessage(messageKey),
           };
         }
       });
@@ -124,15 +109,12 @@ const onSaveLandings = async (response: Response): Promise<IBase & { rows?: IUpl
               }
             : {
                 key,
-                // Map gearType to contextual message when possible
+                // For save/upload flows we should not synthesize contextual
+                // gear-type messages based on uploaded landing payloads. Use
+                // the generic gear-type key so uploads don't require a
+                // pre-existing gear category.
                 message:
-                  key === "gearType" && errors[key]?.["landing"]
-                    ? getErrorMessage(
-                        errors[key]["landing"]["gearCategory"] && !errors[key]["landing"]["gearType"]
-                          ? "ccAddLandingGearTypeEmptyWithCategoryError"
-                          : "ccAddLandingGearTypeEmptyError"
-                      )
-                    : getErrorMessage(errors[key]),
+                  key === "gearType" ? getErrorMessage("ccAddLandingGearTypeEmptyError") : getErrorMessage(errors[key]),
               }
         ),
         unauthorised: false,
