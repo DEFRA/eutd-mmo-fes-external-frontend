@@ -241,27 +241,20 @@ export const getErrorMessage = (key: string): string => {
     "validation.eezCode.string.invalid": "ccUploadFilePageTableEEZInvalidError",
     "error.dateLanded.date.max": "ccAddLandingDateLandedFutureDateError",
     "error.dateLanded.date.missing": "ccCommonDateLandedMissingError",
-    "error.dateLanded.date.base": "ccCommonDateLandedValidError",
+    "error.dateLanded.date.base": "ccCommonDateLandedRealError",
     "error.dateLanded.any.required": "ccCommonDateLandedRequiredError",
     "error.dateLanded.any.empty": "ccCommonDateLandedRequiredError",
     "error.dateLanded.date.isoDate": "ccCommonDateLandedInvalidError",
     // Direct landing specific error mappings (FI0-10238)
-    "error.dateLanded.directLanding.date.base": "ccDirectLandingDateLandedRequiredError",
     "error.dateLanded.directLanding.any.required": "ccDirectLandingDateLandedRequiredError",
-    "error.dateLanded.directLanding.any.empty": "ccDirectLandingDateLandedRequiredError",
-    "error.dateLanded.directLanding.date.invalid": "ccDirectLandingDateLandedInvalidError",
     "error.dateLanded.directLanding.date.isoDate": "ccDirectLandingDateLandedInvalidError",
     "error.dateLanded.directLanding.date.max": "ccDirectLandingDateLandedFutureDateError",
     // Direct landing specific vessel error mappings (FI0-10238)
     "error.vessel.vesselName.directLanding.any.required": "ccDirectLandingVesselRequiredError",
-    "error.vessel.vesselName.directLanding.any.empty": "ccDirectLandingVesselRequiredError",
     "error.vessel.vesselName.directLanding.string.base": "ccDirectLandingVesselInvalidError",
-    "error.vessel.vesselName.directLanding.any.invalid": "ccDirectLandingVesselInvalidError",
     // Direct landing specific export weight error mappings (FI0-10238)
     "error.weights.exportWeight.directLanding.any.required": "ccDirectLandingExportWeightRequiredError",
-    "error.weights.exportWeight.directLanding.any.empty": "ccDirectLandingExportWeightRequiredError",
     "error.weights.exportWeight.directLanding.any.base": "ccDirectLandingExportWeightRequiredError",
-    //! end TODO: check redundancies before commit.
     "validation.vessel.license.invalid-date": "ccUploadFilePageTableVesselInvalidLicenseError",
     "validation.product.seasonal.invalid-date": "ccUploadFilePageTableVesselLandingDateSeasonalRestictionError",
     "validation.product.start-date.seasonal.invalid-date":

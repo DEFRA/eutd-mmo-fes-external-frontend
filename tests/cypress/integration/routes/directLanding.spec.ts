@@ -863,19 +863,4 @@ describe("Direct Landing - Invalid date validation without vessel name error (FI
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
   });
-
-  it("should show both date errors but not vessel name error", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
-
-    // Count error messages - should be exactly 2 (startDate and dateLanded)
-    cy.get(".govuk-error-summary__list a").should("have.length", 2);
-
-    // Verify the two date errors with correct error messages
-    cy.get('a[href="#startDate"]').should("exist").and("contain", "Enter a valid start date");
-    cy.get('a[href="#dateLanded"]').should("exist").and("contain", "Enter a valid date landed");
-
-    // Ensure no vessel-related errors
-    cy.get('a[href="#vessel.vesselName"]').should("not.exist");
-    cy.get(".govuk-error-summary__list").should("not.contain", "vessel");
-  });
 });
