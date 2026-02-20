@@ -15,6 +15,6 @@
   ],
   "error": "invalid",
   "errors": {
-    "vessel.vesselName": "error.vessel.string.base"
+    "vessel.vesselName": "error.vessel.vesselName.directLanding.string.base"
   }
 }

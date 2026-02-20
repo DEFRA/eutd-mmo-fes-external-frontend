@@ -15,8 +15,8 @@
   ],
   "error": "invalid",
   "errors": {
-    "dateLanded": "error.dateLanded.any.required",
-    "vessel.vesselName": "error.vessel.vesselName.any.required",
-    "weights.0.exportWeight": "error.weights.exportWeight.any.required"
+    "dateLanded": "error.dateLanded.directLanding.any.required",
+    "vessel.vesselName": "error.vessel.vesselName.directLanding.any.required",
+    "weights.0.exportWeight": "error.weights.exportWeight.directLanding.any.required"
   }
 }

@@ -15,6 +15,6 @@
   ],
   "error": "invalid",
   "errors": {
-    "dateLanded": "error.dateLanded.date.base"
+    "dateLanded": "error.dateLanded.directLanding.date.isoDate"
   }
 }

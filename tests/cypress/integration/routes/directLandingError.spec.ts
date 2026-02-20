@@ -24,30 +24,36 @@ describe("Direct Landing Error Messages - English", () => {
     cy.get(".govuk-error-message").should("contain.text", "Enter the export weight in kilograms"); // Passes in dev localhost:3000
   });
 
-  it.skip("should display 'Enter a valid date landed' when date is invalid", () => {
+  it("should display 'Enter a valid date landed' when date is invalid", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DirectLandingDateLandedInvalid,
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     // Enter invalid date: Day 23 Month 14 Year 2026
-    cy.get("#dateLanded-day").clear().type("23");
-    cy.get("#dateLanded-month").clear().type("14");
-    cy.get("#dateLanded-year").clear().type("2026");
+    cy.get("#dateLanded-day").clear();
+    cy.get("#dateLanded-day").type("23");
+    cy.get("#dateLanded-month").clear();
+    cy.get("#dateLanded-month").type("14");
+    cy.get("#dateLanded-year").clear();
+    cy.get("#dateLanded-year").type("2026");
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Enter a valid date landed");
     cy.get(".govuk-error-message").should("contain.text", "Enter a valid date landed");
   });
 
-  it.skip("should display 'Date landed must be today or within the next 7 days' when date is > 7 days future", () => {
+  it("should display 'Date landed must be today or within the next 7 days' when date is > 7 days future", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DirectLandingDateLandedFuture,
     };
     // Passes in dev localhost:3000
     cy.visit(directLandingUrl, { qs: { ...testParams } });
-    cy.get("#dateLanded-day").clear().type("1");
-    cy.get("#dateLanded-month").clear().type("1");
-    cy.get("#dateLanded-year").clear().type("2029");
+    cy.get("#dateLanded-day").clear();
+    cy.get("#dateLanded-day").type("1");
+    cy.get("#dateLanded-month").clear();
+    cy.get("#dateLanded-month").type("1");
+    cy.get("#dateLanded-year").clear();
+    cy.get("#dateLanded-year").type("2029");
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get(".govuk-error-summary__list a").should(
@@ -70,7 +76,7 @@ describe("Direct Landing Error Messages - English", () => {
     cy.get(".govuk-error-message").should("contain.text", "Select a vessel from the list");
   });
 
-  it.skip("should display 'Enter the export weight in kilograms' when export weight is invalid", () => {
+  it("should display 'Enter the export weight in kilograms' when export weight is invalid", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DirectLandingExportWeightInvalid,
     };
@@ -107,7 +113,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
     cy.get(".govuk-error-message").should("contain.text", "Rhowch ddyddiad glanio dilys");
   });
 
-  it.skip("should display 'Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf' when date is > 7 days future", () => {
+  it("should display 'Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf' when date is > 7 days future", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DirectLandingDateLandedFuture,
       lng: "cy",
@@ -149,7 +155,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
       lng: "cy",
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
-    cy.get("#vessel\\\\.vesselName").invoke("val", "").type(invalidVesselValue);
+    cy.get("#vessel\\.vesselName").invoke("val", "").type(invalidVesselValue);
     cy.wait(500);
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.get("#error-summary-title").contains("Mae yna broblem");
