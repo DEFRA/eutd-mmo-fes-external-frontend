@@ -46,7 +46,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (!isValid) return redirect("/forbidden");
 
   const saveAsDraft = form.get("_action") === "saveAsDraft";
-  const consignmentDestination = form.get("exportedTo") as string;
+  const exportedToCountryName = form.get("exportedTo") as string;
   const pointOfDestination = form.get("pointOfDestination") as string;
   const nationalityOfVehicle = form.get("nationalityOfVehicle") as string;
   const registrationNumber = form.get("registrationNumber") as string;
@@ -57,7 +57,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   const countries: ICountry[] = await getCountries();
   const exportedTo: ICountry | undefined = countries.find(
-    (c: ICountry) => c.officialCountryName === consignmentDestination
+    (c: ICountry) => c.officialCountryName === exportedToCountryName
   );
 
   const values = Object.fromEntries(form);

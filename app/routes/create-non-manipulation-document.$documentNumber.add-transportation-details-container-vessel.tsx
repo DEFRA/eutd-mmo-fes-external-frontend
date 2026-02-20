@@ -40,10 +40,10 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     documentNumber,
     isDepartureTransportation
   );
-  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
   const form = await request.formData();
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
+  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
 
   const saveAsDraft = form.get("_action") === "saveAsDraft";
   const vesselName = form.get("vesselName") as string;
