@@ -321,6 +321,8 @@ export enum TestCaseId {
   TruckTransportSaveAsDraftRetainAllValuesCheck = "TruckTransportSaveAsDraftRetainAllValuesCheck",
   TruckTransportSaveAsDraftRetainDate = "TruckTransportSaveAsDraftRetainDate",
   TruckTransportSaveAsDraftRetainDateCheck = "TruckTransportSaveAsDraftRetainDateCheck",
+  ArrivalTruckTransportSaveAsDraftRetainAllValuesCheck = "ArrivalTruckTransportSaveAsDraftRetainAllValuesCheck",
+  ArrivalTruckTransportSaveAsDraftRetainDateCheck = "ArrivalTruckTransportSaveAsDraftRetainDateCheck",
   SaveTruckTransportDetailsFailsWith403 = "saveTruckTransportDetailsFailsWith403",
   TruckSaveInvalidFormatContainerNumber = "TruckSaveInvalidFormatContainerNumber",
   TruckSaveMaxCharsContainerIdentificationNumber = "TruckSaveMaxCharsContainerIdentificationNumber",

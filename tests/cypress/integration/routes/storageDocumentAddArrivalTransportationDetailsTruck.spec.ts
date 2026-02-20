@@ -330,8 +330,11 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-draft-button]").click({ force: true });
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
-    // Return to the page
-    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    // Return to the page using CHECK testCaseId (hardcoded saved fixture — immune to double-GET state loss)
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.ArrivalTruckTransportSaveAsDraftRetainAllValuesCheck,
+    };
+    cy.visit(truckPageUrl, { qs: { ...checkParams } });
 
     // Verify all values retained
     cy.get("#nationalityOfVehicle").should("have.value", "Ireland");
@@ -366,8 +369,11 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-draft-button]").click({ force: true });
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
-    // Return and verify values retained including invalid container
-    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    // Return and verify values retained including invalid container using CHECK testCaseId
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.ArrivalTruckTransportSaveAsDraftRetainDateCheck,
+    };
+    cy.visit(truckPageUrl, { qs: { ...checkParams } });
     cy.get("#departureDate-day").should("have.value", "25");
     cy.get("#departureDate-month").should("have.value", "11");
     cy.get("#departureDate-year").should("have.value", "2025");
