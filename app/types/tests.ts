@@ -430,6 +430,8 @@ export enum TestCaseId {
   PlaneTransportNonJS = "PlaneTransportNonJS",
   AddTransportationDetailsContainerIdentificationNumberManagement = "AddTransportationDetailsContainerIdentificationNumberManagement",
   PlaneTransportNotAllowed = "PlaneTransportNotAllowed",
+  ArrivalPlaneTransportSaveAsDraftRetainAllValuesCheck = "ArrivalPlaneTransportSaveAsDraftRetainAllValuesCheck",
+  ArrivalPlaneTransportSaveAsDraftRetainDateCheck = "ArrivalPlaneTransportSaveAsDraftRetainDateCheck",
   ArrivalPlaneTransportContainerNumberEmpty = "ArrivalPlaneTransportContainerNumberEmpty",
   ArrivalPlaneTransportDepartureCountryEmpty = "ArrivalPlaneTransportDepartureCountryEmpty",
   ArrivalPlaneTransportDeparturePortEmpty = "ArrivalPlaneTransportDeparturePortEmpty",

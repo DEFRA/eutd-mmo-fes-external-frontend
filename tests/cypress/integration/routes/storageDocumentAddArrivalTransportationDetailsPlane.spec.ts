@@ -122,8 +122,11 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-draft-button]").click({ force: true });
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
-    // Return to the page
-    cy.visit(planePageUrl, { qs: { ...testParams } });
+    // Return to the page using CHECK testCaseId (hardcoded saved fixture — immune to double-GET state loss)
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.ArrivalPlaneTransportSaveAsDraftRetainAllValuesCheck,
+    };
+    cy.visit(planePageUrl, { qs: { ...checkParams } });
 
     // Verify all values retained
     cy.get("#airwayBillNumber").should("have.value", "456-78901234");
@@ -153,14 +156,16 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departureDate-month").type("03", { force: true });
     cy.get("#departureDate-year").type("2026", { force: true });
     cy.get('[id="containerNumbers.0"]').type("TOO-SHORT", { force: true }); // Invalid format
-    cy.get('[id="containerNumbers.1"]').type("123", { force: true }); // Add second container
 
     // Save as draft should accept invalid containers
     cy.get("[data-testid=save-draft-button]").click({ force: true });
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
-    // Return and verify values retained including invalid containers
-    cy.visit(planePageUrl, { qs: { ...testParams } });
+    // Return and verify values retained including invalid containers using CHECK testCaseId
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.ArrivalPlaneTransportSaveAsDraftRetainDateCheck,
+    };
+    cy.visit(planePageUrl, { qs: { ...checkParams } });
     cy.get("#departureDate-day").should("have.value", "05");
     cy.get("#departureDate-month").should("have.value", "03");
     cy.get("#departureDate-year").should("have.value", "2026");

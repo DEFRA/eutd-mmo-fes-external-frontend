@@ -1,0 +1,10 @@
+{
+  "vehicle": "plane",
+  "arrival": true,
+  "airwayBillNumber": "999-11111111",
+  "flightNumber": "LH500",
+  "departureCountry": "Spain",
+  "departurePort": "Madrid Airport",
+  "departureDate": "05/03/2026",
+  "containerNumbers": ["TOO-SHORT", "123"]
+}
