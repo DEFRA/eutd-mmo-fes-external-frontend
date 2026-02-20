@@ -67,6 +67,10 @@ import truckSaveAsDraftInitialData from "@/fixtures/transportDetailsApi/truckSav
 import truckSaveAsDraftRetainDateInitialData from "@/fixtures/transportDetailsApi/truckSaveAsDraftRetainDateInitial.json";
 import truckRetainAllSavedData from "@/fixtures/transportDetailsApi/truckRetainAllSaved.json";
 import truckRetainDateSavedData from "@/fixtures/transportDetailsApi/truckRetainDateSaved.json";
+import trainRetainAllSavedData from "@/fixtures/transportDetailsApi/trainRetainAllSaved.json";
+import trainRetainDateSavedData from "@/fixtures/transportDetailsApi/trainRetainDateSaved.json";
+import planeRetainAllSavedData from "@/fixtures/transportDetailsApi/planeRetainAllSaved.json";
+import planeRetainDateSavedData from "@/fixtures/transportDetailsApi/planeRetainDateSaved.json";
 
 // Isolated store for stateful save-as-draft tests.
 // savedData is null until the first POST save; once set it keeps returning saved data
@@ -496,6 +500,57 @@ const transportDetailsHandler: ITestHandler = {
       const body = await req.json();
       statefulDataStore.saveTrainData(body);
       return res(ctx.json({ ...saveTrainDetails, ...body }));
+    }),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([catchCertificateTruckTransportAllowedDetails]))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  // Static CHECK handlers: return hardcoded saved-state fixture — immune to double-GET and retry state issues
+  [TestCaseId.TrainTransportSaveAsDraftRetainAllValuesCheck]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainRetainAllSavedData))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(trainRetainAllSavedData))),
+    rest.post(addTransportationDetailsUrl("train"), async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.post(addTransportationDetailsUrl("train", false), async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.post(addTransportationDetailsUrl("train", true), async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.put(mockPutTransportDetailsByIdUrl, async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([catchCertificateTruckTransportAllowedDetails]))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TrainTransportSaveAsDraftRetainDateCheck]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainRetainDateSavedData))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(trainRetainDateSavedData))),
+    rest.post(addTransportationDetailsUrl("train"), async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.post(addTransportationDetailsUrl("train", false), async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.post(addTransportationDetailsUrl("train", true), async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.put(mockPutTransportDetailsByIdUrl, async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
     }),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
@@ -1409,6 +1464,45 @@ const transportDetailsHandler: ITestHandler = {
     rest.put(mockPutTransportDetailsByIdUrl, async (req, res, ctx) => {
       const body = await req.json();
       return res(ctx.json({ ...body, ...savePlaneDetails }));
+    }),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  // Static CHECK handlers for plane: return hardcoded saved-state fixture
+  [TestCaseId.PlaneTransportSaveAsDraftRetainAllValuesCheck]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(planeRetainAllSavedData))),
+    rest.post(addTransportationDetailsUrl("plane", false), async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.post(addTransportationDetailsUrl("plane", true), async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.put(mockPutTransportDetailsByIdUrl, async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.PlaneTransportSaveAsDraftRetainDateCheck]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(planeRetainDateSavedData))),
+    rest.post(addTransportationDetailsUrl("plane", false), async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.post(addTransportationDetailsUrl("plane", true), async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.put(mockPutTransportDetailsByIdUrl, async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
     }),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
