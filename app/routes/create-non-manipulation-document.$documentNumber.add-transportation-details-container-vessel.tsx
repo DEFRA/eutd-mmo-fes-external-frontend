@@ -1,5 +1,7 @@
 import * as React from "react";
-import { redirect, type LoaderFunction, type ActionFunction } from "react-router";
+import isEmpty from "lodash/isEmpty";
+import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
+import { useEffect } from "react";
 import {
   getBearerTokenForRequest,
   getTransportDetails,
@@ -12,9 +14,10 @@ import {
   handleFormEmptyStringValue,
   getStorageDocument,
 } from "~/.server";
-import type { ITransport, IUnauthorised, Journey, StorageDocument, ICountry, ErrorResponse } from "~/types";
-import { TransportType } from "~/helpers";
-import { AddTransportationDetailsPage } from "~/composite-components";
+import type { ErrorResponse, ICountry, ITransport, IUnauthorised, Journey, StorageDocument } from "~/types";
+import { scrollToId, TransportType } from "~/helpers";
+import { useScrollOnPageLoad } from "~/hooks";
+import { AddTransportationDetailsComponent } from "~/composite-components";
 import moment from "moment";
 
 const isDepartureTransportation = false;
@@ -81,7 +84,29 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);
 };
 
-const ContainerVesselTransportDetailsPage = () => (
-  <AddTransportationDetailsPage vehicleType={TransportType.CONTAINER_VESSEL} />
-);
+const ContainerVesselTransportDetailsPage = () => {
+  const { countries, displayOptionalSuffix } = useLoaderData<{
+    countries: ICountry[];
+    displayOptionalSuffix?: boolean;
+  }>();
+  const actionData = useActionData<{ errors: any }>() ?? {};
+  const { errors = {} } = actionData;
+
+  useScrollOnPageLoad();
+
+  useEffect(() => {
+    if (!isEmpty(errors)) {
+      scrollToId("errorIsland");
+    }
+  }, [errors]);
+
+  return (
+    <AddTransportationDetailsComponent
+      countries={countries}
+      vehicleType={TransportType.CONTAINER_VESSEL}
+      actionData={actionData}
+      displayOptionalSuffix={displayOptionalSuffix}
+    />
+  );
+};
 export default ContainerVesselTransportDetailsPage;

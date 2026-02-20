@@ -1,8 +1,6 @@
-import { useEffect } from "react";
 import { Main, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
 import { useTranslation } from "react-i18next";
-import { useActionData, useLoaderData } from "react-router";
-import { useScrollOnPageLoad } from "~/hooks";
+import { useLoaderData } from "react-router";
 import { ButtonGroup } from "./buttonGroup";
 import { TransportationDetails } from "./transportationDetails";
 import type { ITransport, IErrorsTransformed, Vehicle, ICountry } from "~/types";
@@ -26,7 +24,6 @@ import {
   getVesselName,
   TransportType,
   getErrorKeysInOrderForTransport,
-  scrollToId,
 } from "~/helpers";
 
 type AddTransporrtationDetailsProps = {
@@ -166,31 +163,5 @@ export const AddTransportationDetailsComponent = ({
         </div>
       </div>
     </Main>
-  );
-};
-
-export const AddTransportationDetailsPage = ({ vehicleType }: { vehicleType: Vehicle }) => {
-  const { countries, displayOptionalSuffix } = useLoaderData<{
-    countries: ICountry[];
-    displayOptionalSuffix?: boolean;
-  }>();
-  const actionData = useActionData<{ errors: any }>() ?? {};
-  const { errors = {} } = actionData;
-
-  useScrollOnPageLoad();
-
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      scrollToId("errorIsland");
-    }
-  }, [errors]);
-
-  return (
-    <AddTransportationDetailsComponent
-      countries={countries}
-      vehicleType={vehicleType}
-      actionData={actionData}
-      displayOptionalSuffix={displayOptionalSuffix}
-    />
   );
 };

@@ -31,7 +31,7 @@ export { PrivacyNotice } from "./privacyNotice";
 export { SpeciesDetails } from "./speciesDetails";
 export { ProductDescriptionsTable } from "./productDescriptionsTable";
 export { CatchDetailsTable } from "./catchDetailsTable";
-export { AddTransportationDetailsComponent, AddTransportationDetailsPage } from "./addTransportationDetailsComponent";
+export { AddTransportationDetailsComponent } from "./addTransportationDetailsComponent";
 export { WhatExportersAddress } from "./whatExportersAddress";
 export { VoidthisDocumentComponent } from "./voidThisDocument";
 export { CopyVoidDocumentComponent } from "./copyVoidConfirmation";

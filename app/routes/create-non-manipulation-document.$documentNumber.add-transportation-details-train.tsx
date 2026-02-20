@@ -1,8 +1,9 @@
 import * as React from "react";
-import { redirect, type LoaderFunction, type ActionFunction } from "react-router";
+import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
 import { route } from "routes-gen";
-import type { ITransport, Journey, IUnauthorised, StorageDocument, ICountry, ErrorResponse } from "~/types";
-import { TransportType } from "~/helpers";
+import { useEffect } from "react";
+import type { ITransport, Journey, ErrorResponse, ICountry, IUnauthorised, StorageDocument } from "~/types";
+import { scrollToId, TransportType } from "~/helpers";
 import {
   getBearerTokenForRequest,
   getTransportDetails,
@@ -15,7 +16,9 @@ import {
   extractContainerNumbers,
   getStorageDocument,
 } from "~/.server";
-import { AddTransportationDetailsPage } from "~/composite-components";
+import isEmpty from "lodash/isEmpty";
+import { useScrollOnPageLoad } from "~/hooks";
+import { AddTransportationDetailsComponent } from "~/composite-components";
 import moment from "moment";
 
 const isDepartureTransportation = false;
@@ -82,5 +85,29 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);
 };
 
-const TrainTransportDetailsPage = () => <AddTransportationDetailsPage vehicleType={TransportType.TRAIN} />;
+const TrainTransportDetailsPage = () => {
+  const { countries, displayOptionalSuffix } = useLoaderData<{
+    countries: ICountry[];
+    displayOptionalSuffix?: boolean;
+  }>();
+  const actionData = useActionData<{ errors: any }>() ?? {};
+  const { errors = {} } = actionData;
+
+  useScrollOnPageLoad();
+
+  useEffect(() => {
+    if (!isEmpty(errors)) {
+      scrollToId("errorIsland");
+    }
+  }, [errors]);
+
+  return (
+    <AddTransportationDetailsComponent
+      countries={countries}
+      vehicleType={TransportType.TRAIN}
+      actionData={actionData}
+      displayOptionalSuffix={displayOptionalSuffix}
+    />
+  );
+};
 export default TrainTransportDetailsPage;
