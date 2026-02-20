@@ -1,9 +1,7 @@
 import * as React from "react";
-import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
-
-import { useEffect } from "react";
+import { redirect, type LoaderFunction, type ActionFunction } from "react-router";
 import { route } from "routes-gen";
-import type { ICountry, ITransport, IUnauthorised, Journey, StorageDocument } from "~/types";
+import type { ITransport, IUnauthorised, Journey, StorageDocument, ICountry } from "~/types";
 import {
   getBearerTokenForRequest,
   getTransportDetails,
@@ -16,10 +14,8 @@ import {
   handleFormEmptyStringValue,
   getStorageDocument,
 } from "~/.server";
-import { scrollToId, TransportType } from "~/helpers";
-import isEmpty from "lodash/isEmpty";
-import { useScrollOnPageLoad } from "~/hooks";
-import { AddTransportationDetailsComponent } from "~/composite-components";
+import { TransportType } from "~/helpers";
+import { AddTransportationDetailsPage } from "~/composite-components";
 import moment from "moment";
 
 const isDepartureTransportation = false;
@@ -86,29 +82,5 @@ export const action: ActionFunction = async ({ request, params }) => {
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);
 };
 
-const AddTransportationDetailsPlane = () => {
-  const { countries, displayOptionalSuffix } = useLoaderData<{
-    countries: ICountry[];
-    displayOptionalSuffix?: boolean;
-  }>();
-  const actionData = useActionData<{ errors: any }>() ?? {};
-  const { errors = {} } = actionData;
-
-  useScrollOnPageLoad();
-
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      scrollToId("errorIsland");
-    }
-  }, [errors]);
-
-  return (
-    <AddTransportationDetailsComponent
-      countries={countries}
-      vehicleType={TransportType.PLANE}
-      actionData={actionData}
-      displayOptionalSuffix={displayOptionalSuffix}
-    />
-  );
-};
+const AddTransportationDetailsPlane = () => <AddTransportationDetailsPage vehicleType={TransportType.PLANE} />;
 export default AddTransportationDetailsPlane;
