@@ -15,9 +15,7 @@ export interface ITransport extends IBase {
   registrationNumber?: string;
   departurePlace?: string | null;
   freightBillNumber?: string | null;
-  containerIdentificationNumber?: string | null;
   flightNumber?: string;
-  containerNumber?: string;
   containerNumbers?: string[];
   railwayBillNumber?: string;
   airwayBillNumber?: string;
