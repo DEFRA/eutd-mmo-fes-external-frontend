@@ -328,7 +328,7 @@ describe("SD: check-your-information page - container numbers for truck departur
   });
 
   it("should display container identification numbers label", () => {
-    cy.contains("dt", "Container identification number").should("be.visible");
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
   });
 
   it("should display container numbers values", () => {
@@ -336,7 +336,7 @@ describe("SD: check-your-information page - container numbers for truck departur
   });
 
   it("should have change link for container numbers", () => {
-    cy.contains("dt", "Container identification number")
+    cy.contains("dt", "Shipping container identification number")
       .parent()
       .find("a")
       .contains("Change")
@@ -345,7 +345,7 @@ describe("SD: check-your-information page - container numbers for truck departur
   });
 
   it("should have correct anchor in change link URL", () => {
-    cy.contains("dt", "Container identification number")
+    cy.contains("dt", "Shipping container identification number")
       .parent()
       .find("a")
       .contains("Change")
@@ -362,7 +362,7 @@ describe("SD: check-your-information page - container numbers for train departur
   });
 
   it("should display container identification numbers label", () => {
-    cy.contains("dt", "Container identification number").should("be.visible");
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
   });
 
   it("should display container numbers values", () => {
@@ -370,7 +370,7 @@ describe("SD: check-your-information page - container numbers for train departur
   });
 
   it("should have change link for container numbers", () => {
-    cy.contains("dt", "Container identification number")
+    cy.contains("dt", "Shipping container identification number")
       .parent()
       .find("a")
       .contains("Change")
@@ -379,7 +379,7 @@ describe("SD: check-your-information page - container numbers for train departur
   });
 
   it("should have correct anchor in change link URL", () => {
-    cy.contains("dt", "Container identification number")
+    cy.contains("dt", "Shipping container identification number")
       .parent()
       .find("a")
       .contains("Change")
