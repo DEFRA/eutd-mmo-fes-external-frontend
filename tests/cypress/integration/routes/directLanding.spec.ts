@@ -705,6 +705,9 @@ describe("Direct Landing mandatory fields unpopulated errors", () => {
   });
 
   it("should display an error when gear type is unpopulated", () => {
+    cy.get("#gearCategory").then(() => {
+      cy.get("#gearCategory").select(4, { force: true });
+    });
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get(".govuk-error-message").contains("You must select a gear type when you have selected a gear category");

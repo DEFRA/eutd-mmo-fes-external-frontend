@@ -818,6 +818,21 @@ describe("Manual landing page when javascript is disabled", () => {
       cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
       cy.contains("a", /^Dewiswch gategori gêr$/).should("be.visible");
     });
+
+    it("should display contextual error when gear category is selected but gear type is not", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.AddLandingPageFailsWithErrors,
+        lng: "cy",
+      };
+      cy.visit(manualLandingUrl, { qs: { ...testParams } });
+      cy.get("#gearCategory").then(() => {
+        cy.get("#gearCategory").select(4, { force: true });
+      });
+      cy.get("#gearCategory").contains("Dredges");
+      cy.get("[data-testid=submit]").click({ force: true });
+      cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
+      cy.contains("a", /^Rhaid ichi ddewis math o gêr ar ôl ichi ddewis categori gêr$/).should("be.visible");
+    });
   });
 });
 
