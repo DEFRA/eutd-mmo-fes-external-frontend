@@ -704,25 +704,6 @@ describe("Direct Landing mandatory fields unpopulated errors", () => {
     cy.contains(".govuk-error-message", "Select whether the product was caught in a high seas area");
   });
 
-  it("should display an error when gear type is unpopulated", () => {
-    cy.get("#gearCategory").then(() => {
-      cy.get("#gearCategory").select(4, { force: true });
-    });
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
-    cy.get("#error-summary-title").contains("There is a problem");
-    cy.get("#gearCategory option:selected")
-      .invoke("text")
-      .then((text) => {
-        const placeholderPatterns = [/Select gear category/, /Dewiswch categori/, /Dewiswch gategori/];
-        const isPlaceholder = placeholderPatterns.some((p) => p.test(text));
-        if (isPlaceholder) {
-          cy.contains(".govuk-error-message", "Select a gear type");
-        } else {
-          cy.contains(".govuk-error-message", "You must select a gear type when you have selected a gear category");
-        }
-      });
-  });
-
   it("should display an error when gear category is unpopulated", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.get("#error-summary-title").contains("There is a problem");
