@@ -1,0 +1,29 @@
+[
+  {
+    "productId": "PRD770",
+    "startDate": "23/02/2026",
+    "landingDate": "01/06/2026",
+    "faoArea": "FAO27",
+    "highSeasArea": "yes",
+    "eezCode": "",
+    "rfmoCode": "",
+    "vesselPln": "PH1100",
+    "gearCode": "",
+    "exportWeight": "50.95",
+    "rowNumber": 1,
+    "originalRow": "PRD770,23/02/2026,01/06/2026,FAO27,Yes,,,PH1100,PS,50.95",
+    "errors": ["error.dateLanded.date.max"],
+    "product": {
+      "species": "Atlantic cod (COD)",
+      "speciesCode": "COD",
+      "scientificName": "Gadus morhua",
+      "state": "FRE",
+      "stateLabel": "Fresh",
+      "presentation": "FIL",
+      "presentationLabel": "Filleted",
+      "commodity_code": "03044410",
+      "commodity_code_description": "Fresh or chilled fillets of cod \"Gadus morhua, Gadus ogac, Gadus macrocephalus\" and of Boreogadus saida",
+      "id": "PRD770"
+    }
+  }
+]

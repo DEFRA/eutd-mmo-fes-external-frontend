@@ -495,6 +495,7 @@ export enum TestCaseId {
   CCSaveUploadLandingsClear = "ccSaveUploadLandingsClear",
   CCSaveUploadLandingsClearForbidden = "ccSaveUploadLandingsClearForbidden",
   CCUploadMissingDateLanded = "ccUploadMissingDateLanded",
+  CCUploadFutureDateLanded = "ccUploadFutureDateLanded",
   CCUploadMissingExportWeight = "ccUploadMissingExportWeight",
   CCUploadInvalidHighSeasArea = "ccUploadInvalidHighSeasArea",
   CCUploadUnknownEEZ = "ccUploadUnknownEEZ",
