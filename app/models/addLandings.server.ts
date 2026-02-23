@@ -222,7 +222,7 @@ const addLandingAction = async (
     gearType,
     rfmo,
   } = values;
-
+  session.unset("hasLandingError"); // unsetting hasLandingError session as it is not unsetted when user have all valid values after error is resolved
   const isDateLandedProvided = Boolean(dateLandedDay || dateLandedMonth || dateLandedYear);
   let selectedDate: string | undefined;
   if (isDateLandedProvided) {
