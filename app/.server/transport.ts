@@ -349,7 +349,7 @@ export const saveTransportDetails = async (
     {
       documentnumber: documentNumber,
     },
-    { ...payload }
+    { ...payload, isTransportSavedAsDraft: isSaveAsDraft }
   );
   return onSaveTransportDetails(response, payload);
 };

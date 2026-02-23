@@ -308,6 +308,102 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
+  it("should retain all field values including dates when saving as draft with complete data", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveAsDraft,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+
+    // Fill all fields including date and container
+    cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
+    cy.get("#registrationNumber").type("ABC123", { force: true });
+    cy.get("#freightBillNumber").type("FREIGHT001", { force: true });
+    cy.get("#departureCountry").invoke("val", "France");
+    cy.get("#departurePort").type("Calais Port", { force: true });
+    cy.get("#placeOfUnloading").type("Dover Port", { force: true });
+    cy.get("#departureDate-day").type("15", { force: true });
+    cy.get("#departureDate-month").type("12", { force: true });
+    cy.get("#departureDate-year").type("2025", { force: true });
+    cy.get('[id="containerNumbers.0"]').type("ABCU1234567", { force: true });
+
+    // Save as draft
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return to the page using CHECK testCaseId (hardcoded saved fixture — immune to double-GET state loss)
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.ArrivalTruckTransportSaveAsDraftRetainAllValuesCheck,
+    };
+    cy.visit(truckPageUrl, { qs: { ...checkParams } });
+
+    // Verify all values retained
+    cy.get("#nationalityOfVehicle").should("have.value", "Ireland");
+    cy.get("#registrationNumber").should("have.value", "ABC123");
+    cy.get("#freightBillNumber").should("have.value", "FREIGHT001");
+    cy.get("#departureCountry").should("have.value", "France");
+    cy.get("#departurePort").should("have.value", "Calais Port");
+    cy.get("#placeOfUnloading").should("have.value", "Dover Port");
+    cy.get("#departureDate-day").should("have.value", "15");
+    cy.get("#departureDate-month").should("have.value", "12");
+    cy.get("#departureDate-year").should("have.value", "2025");
+    cy.get('[id="containerNumbers.0"]').should("have.value", "ABCU1234567");
+  });
+
+  it("should retain dates and accept invalid container format when saving as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveAsDraft,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+
+    // Fill with invalid container number (would fail validation on save & continue)
+    cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
+    cy.get("#registrationNumber").type("REG456", { force: true });
+    cy.get("#departureCountry").invoke("val", "Belgium");
+    cy.get("#departurePort").type("Antwerp", { force: true });
+    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate-month").type("11", { force: true });
+    cy.get("#departureDate-year").type("2025", { force: true });
+    cy.get('[id="containerNumbers.0"]').type("INVALID", { force: true }); // Invalid ISO 6346 format
+
+    // Save as draft should accept invalid container
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return and verify values retained including invalid container using CHECK testCaseId
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.ArrivalTruckTransportSaveAsDraftRetainDateCheck,
+    };
+    cy.visit(truckPageUrl, { qs: { ...checkParams } });
+    cy.get("#departureDate-day").should("have.value", "25");
+    cy.get("#departureDate-month").should("have.value", "11");
+    cy.get("#departureDate-year").should("have.value", "2025");
+    cy.get('[id="containerNumbers.0"]').should("have.value", "INVALID");
+  });
+
+  it("should retain empty date when saving as draft without departure date", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveAsDraft,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+
+    // Fill only required fields, leave date empty
+    cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
+    cy.get("#registrationNumber").type("NOREG789", { force: true });
+    cy.get("#departureCountry").invoke("val", "Ireland");
+    cy.get("#departurePort").type("Dublin", { force: true });
+    // Leave date fields empty
+
+    // Save as draft
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return and verify empty date fields
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get("#departureDate-day").should("have.value", "");
+    cy.get("#departureDate-month").should("have.value", "");
+    cy.get("#departureDate-year").should("have.value", "");
+  });
+
   it("should navigate to storage facility page on click of save and continue button when all mandatory fields are populated", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSave,

@@ -50,6 +50,7 @@
   "ccCommonDateLandedRealError": "Date landed must be a real date",
   "ccCommonDateLandedRequiredError": "Enter the date landed",
   "ccCommonDateLandedInvalidError": "Enter a valid date landed",
+  "ccAddLandingDateLandedFutureDateError": "Date landed must be today or within the next 7 days",
   "ccCommonExportWeightMissingError": "Export weight is missing",
   "ccCommonExportWeightDecimalPlacesError": "Enter the export weight as a number with a maximum of 2 decimal places",
   "ccCommonExportWeightGreaterError": "Enter the export weight as a number greater than 0",

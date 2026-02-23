@@ -1,0 +1,12 @@
+{
+  "vehicle": "truck",
+  "arrival": true,
+  "nationalityOfVehicle": "Ireland",
+  "registrationNumber": "ABC123",
+  "freightBillNumber": "FREIGHT001",
+  "departureCountry": "France",
+  "departurePort": "Calais Port",
+  "placeOfUnloading": "Dover Port",
+  "departureDate": "15/12/2025",
+  "containerNumbers": ["ABCU1234567"]
+}
