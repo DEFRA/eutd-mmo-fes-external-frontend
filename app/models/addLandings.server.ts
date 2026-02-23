@@ -140,6 +140,7 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
     selectedExclusiveEconomicZones = landing?.exclusiveEconomicZones?.map((item) => item.officialCountryName) ?? [];
     nextUri = url.searchParams.get("nextUri") ?? "";
   } else {
+    selectedProduct = getSessionData(session, "selectedProduct");
     clearSession(session, "add-landings");
   }
 
@@ -222,7 +223,6 @@ const addLandingAction = async (
     gearType,
     rfmo,
   } = values;
-
   const isDateLandedProvided = Boolean(dateLandedDay || dateLandedMonth || dateLandedYear);
   let selectedDate: string | undefined;
   if (isDateLandedProvided) {
