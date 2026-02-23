@@ -175,36 +175,33 @@ const transformError = (
         params: [product.species.label, product.state.label, product.presentation.label, product.commodityCode],
       },
     };
-  } else {
-    // Special handling for gearType to provide specific message when gearCategory present but gearType missing
-    if (errorKey === "gearType") {
-      const landingWithError = products.errors;
-      let gearCategory, gearType;
-      if (landingWithError && typeof landingWithError === "object") {
-        // @ts-ignore
-        gearCategory = (landingWithError as any).gearCategory;
-        // @ts-ignore
-        gearType = (landingWithError as any).gearType;
-      }
-      let messageKey;
-      if (!gearCategory && gearType) {
-        messageKey = "ccAddLandingGearTypeEmptyWithCategoryError";
-      } else if (gearCategory && gearType) {
-        messageKey = "ccAddLandingGearTypeEmptyError";
-      } else {
-        messageKey = errors[errorKey];
-      }
-      return {
-        [errorKey]: {
-          key: messageKey,
-        },
-      };
+  } else if (errorKey === "gearType") {
+    const landingWithError = products.errors;
+    let gearCategory, gearType;
+    if (landingWithError && typeof landingWithError === "object") {
+      // @ts-ignore
+      gearCategory = (landingWithError as any).gearCategory;
+      // @ts-ignore
+      gearType = (landingWithError as any).gearType;
     }
-
+    let messageKey;
+    if (!gearCategory && gearType) {
+      messageKey = "ccAddLandingGearTypeEmptyWithCategoryError";
+    } else if (gearCategory && gearType) {
+      messageKey = "ccAddLandingGearTypeEmptyError";
+    } else {
+      messageKey = errors[errorKey];
+    }
     return {
-      [errorKey]: errors[errorKey],
+      [errorKey]: {
+        key: messageKey,
+      },
     };
   }
+
+  return {
+    [errorKey]: errors[errorKey],
+  };
 };
 
 export const getRfmos = async (): Promise<string[]> => {
