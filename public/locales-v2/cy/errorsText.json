@@ -46,6 +46,7 @@
   "ccWhatExportJourneyErrorPointOfDestinationMaxLength": "Rhaid i'r gyrchfan fod yn llai na 100 o nodau",
   "ccWhatExportJourneyErrorPointOfDestinationInvalidCharacters": "Rhaid i'r gyrchfan gynnwys llythrennau, rhifau, cysylltnodau, collnodau, bylchau a blaenslaesau yn unig",
   "commonCopyVoidConfirmationError": "Dewiswch opsiwn i fwrw ymlaen",
+  "ccAddLandingGearTypeEmptyWithCategoryError": "Rhaid ichi ddewis y math o gêr ar ôl ichi ddewis categori gêr",
   "commonCopyAcknowledgementError": "Gwiriwch y gydnabyddiaeth i fwrw ymlaen",
   "commonTransportSelectionTypeOfTransportErrorNull": "Dewiswch sut bydd yr hyn sy’n cael ei allforio’n gadael y DU",
   "sdArrivalTransportTypeSelectionError": "Dewiswch sut mae'r llwyth yn cyrraedd y DU",
