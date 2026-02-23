@@ -135,7 +135,7 @@ export const GearDetails = ({
           className={classNames("govuk-select govuk-!-width-one-half", {
             " govuk-select--error": errors?.gearType?.message,
           })}
-          defaultValue={selectedGearType}
+          defaultValue={values?.gearType ?? selectedGearType}
           onChange={(e) => setSelectedGearType(e.target.value)}
         >
           <option value="" selected aria-label={addLandingGearTypeNullOption}>

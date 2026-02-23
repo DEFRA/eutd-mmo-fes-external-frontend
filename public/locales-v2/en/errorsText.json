@@ -74,7 +74,7 @@
   "ccAddTransportationDetailsDeparturePortOnlyNumLettersError": "Where the consignment departs from must only contain letters, numbers, apostrophes, hyphens and spaces",
   "sdTransportDepatureDateInvalidError": "Departure date must be a real date",
   "sdTransportDepatureDateRequiredError": "Enter the departure date",
-  "sdTransportDepatureDateMaxError": "Departure date must be on or before today's date",
+  "sdTransportDepatureDateMaxError": "Departure date must be on or before the storage facility arrival date",
   "sdTransportDepatureCountryInvalidError": "Select a valid country of departure",
   "sdTransportDepatureCountryRequiredError": "Enter the country of departure",
   "sdTransportConsignmentOriginRequiredError": "Enter where the consignment departs from",
