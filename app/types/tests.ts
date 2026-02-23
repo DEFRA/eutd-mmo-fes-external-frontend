@@ -199,6 +199,7 @@ export enum TestCaseId {
   DirectLandingIncorrectWeights = "directLandingIncorrectWeights",
   DirectLandingPageErrors = "DirectLandingPageErrors",
   DirectLandingPageGearTypeErrors = "DirectLandingPageGearTypeErrors",
+  DirectLandingCoverageBranches = "directLandingCoverageBranches",
   DirectLandingValidationErrors = "directLandingValidationErrors",
   DirectLandingEEZValidationErrors = "directLandingEEZValidationErrors",
   DirectLandingCombinedValidationErrors = "directLandingCombinedValidationErrors",

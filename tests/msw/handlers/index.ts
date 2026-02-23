@@ -28,6 +28,7 @@ import voidThisDocumentHandler from "./voidThisDocumentHandler";
 import whatExportJourneyHandler from "./whatExportJourneyHandler";
 import uploadLandingsHandler from "./uploadLandingsHandler";
 import directLandingHandler from "./directLandingHandler";
+import directLandingCoverageHandler from "./directLandingCoverageHandler";
 import processingStatementDashboardHandler from "./processingStatementDashboardHandler";
 import storageDocumentDashboardHandler from "./storageDocumentDashboardHandler";
 import addConsignmentDetailsHandler from "./addConsignmentDetailsHandler";
@@ -91,6 +92,7 @@ const rootTestHandler: ITestHandler = {
   ...whatExportJourneyHandler,
   ...uploadLandingsHandler,
   ...directLandingHandler,
+  ...directLandingCoverageHandler,
   ...processingStatementDashboardHandler,
   ...storageDocumentDashboardHandler,
   ...addConsignmentDetailsHandler,
