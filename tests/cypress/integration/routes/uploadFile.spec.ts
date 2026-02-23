@@ -216,6 +216,18 @@ describe("Upload File Page Upload - date errors", () => {
   });
 });
 
+describe("Upload File Page Upload - future date landed errors", () => {
+  it("should display the correct error message for a date landed in the future", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadFutureDateLanded,
+    };
+
+    cy.visit(uploadFileUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("#row-1-PRD770-0-upload-file-error").contains("Date landed must be today or within the next 7 days");
+  });
+});
+
 describe("Upload File Page Upload - export weight errors", () => {
   it("should display an error for a upload with a missing export weight", () => {
     const testParams: ITestParams = {
