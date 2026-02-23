@@ -136,6 +136,7 @@
   "ccAddLandingStartDateRestrictedError": "{{dynamicValue}} was subject to fishing restrictions on your specified start date. Please refer to GOV.UK for further guidance.",
   "ccAddLandingDateLandedRestrictedError": "{{dynamicValue}} was subject to fishing restrictions on your specified Landing date. Please refer to GOV.UK for further guidance.",
   "ccCommonExportWeightGreaterError": "Enter the export weight as a number greater than 0",
+  "ccDirectLandingTotalWeightExceededError": "The total combined weight of all products must be less than 100,000,000,000",
   "ccCommonExportWeightAsNumberError": "Enter the export weight as a number, like 500 or 500.50",
   "ccCommonExportWeightDecimalPlacesError": "Enter the export weight as a number with a maximum of 2 decimal places",
   "ccCommonExportWeightRequiredError": "Enter the export weight in kilograms",

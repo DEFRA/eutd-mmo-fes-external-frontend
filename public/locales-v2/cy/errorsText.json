@@ -131,6 +131,7 @@
   "ccAddLandingSelectVesselListNullError": "Dewiswch gwch neu long o'r rhestr",
   "ccAddLandingSelectProductFromListError": "Dewiswch gynnyrch o'r rhestr",
   "ccCommonExportWeightGreaterError": "Rhowch y pwysau allforio fel rhif sy’n fwy na 0",
+  "ccDirectLandingTotalWeightExceededError": "The total combined weight of all products must be less than 100,000,000,000",
   "ccCommonExportWeightAsNumberError": "Rhowch y pwysau allforio fel rhif, fel 500 neu 500.50",
   "ccAddLandingSelectGearCategoryListNullError": "Dewiswch gategori gêr",
   "ccAddLandingSelectGearTypeListNullError": "Dewiswch fath o gêr",
