@@ -1,0 +1,107 @@
+[
+  {
+    "productId": "PRD765",
+    "landingDate": "01/01/2021",
+    "faoArea": "FAO27",
+    "vesselPln": "PH1100",
+    "exportWeight": "9999999.9",
+    "rowNumber": 1,
+    "originalRow": "PRD765,01/01/2021,01/01/2021,FAO27,No,GB,,PH1100,FPN,9999999.9",
+    "errors": [],
+    "product": {
+      "presentation": "FIS",
+      "presentationLabel": "Filleted and skinned",
+      "species": "Beaked redfish (REB)",
+      "speciesCode": "REB",
+      "state": "FRE",
+      "stateLabel": "Fresh",
+      "scientificName": "Sebastes mentella",
+      "commodity_code": "03044950",
+      "commodity_code_description": "Fresh or chilled fillets of redfish \"Sebastes spp.\"",
+      "id": "PRD765"
+    },
+    "vessel": {
+      "pln": "PH1100",
+      "vesselName": "WIRON 5",
+      "flag": "GBR",
+      "cfr": "NLD200202641",
+      "homePort": "PLYMOUTH",
+      "licenceNumber": "12480",
+      "imoNumber": 9249556,
+      "licenceValidTo": "2021-08-09T00:00:00",
+      "rssNumber": "C20514",
+      "vesselLength": 50.63,
+      "licenceHolder": "INTERFISH WIRONS LIMITED"
+    }
+  },
+  {
+    "productId": "PRD765",
+    "landingDate": "01/01/2021",
+    "faoArea": "FAO27",
+    "vesselPln": "PH1100",
+    "exportWeight": "100",
+    "rowNumber": 2,
+    "originalRow": "PRD765,01/01/2021,01/01/2021,FAO27,No,GB,,PH1100,FPN,100",
+    "errors": [],
+    "product": {
+      "presentation": "FIS",
+      "presentationLabel": "Filleted and skinned",
+      "species": "Beaked redfish (REB)",
+      "speciesCode": "REB",
+      "state": "FRE",
+      "stateLabel": "Fresh",
+      "scientificName": "Sebastes mentella",
+      "commodity_code": "03044950",
+      "commodity_code_description": "Fresh or chilled fillets of redfish \"Sebastes spp.\"",
+      "id": "PRD765"
+    },
+    "vessel": {
+      "pln": "PH1100",
+      "vesselName": "WIRON 5",
+      "flag": "GBR",
+      "cfr": "NLD200202641",
+      "homePort": "PLYMOUTH",
+      "licenceNumber": "12480",
+      "imoNumber": 9249556,
+      "licenceValidTo": "2021-08-09T00:00:00",
+      "rssNumber": "C20514",
+      "vesselLength": 50.63,
+      "licenceHolder": "INTERFISH WIRONS LIMITED"
+    }
+  },
+  {
+    "productId": "PRD765",
+    "landingDate": "01/01/2021",
+    "faoArea": "FAO27",
+    "vesselPln": "PH1100",
+    "exportWeight": "100",
+    "rowNumber": 3,
+    "originalRow": "PRD765,01/01/2021,01/01/2021,FAO27,No,GB,,PH1100,FPN,100",
+    "errors": [],
+    "product": {
+      "presentation": "FIS",
+      "presentationLabel": "Filleted and skinned",
+      "species": "Beaked redfish (REB)",
+      "speciesCode": "REB",
+      "state": "FRE",
+      "stateLabel": "Fresh",
+      "scientificName": "Sebastes mentella",
+      "commodity_code": "03044950",
+      "commodity_code_description": "Fresh or chilled fillets of redfish \"Sebastes spp.\"",
+      "id": "PRD765"
+    },
+    "vessel": {
+      "pln": "PH1100",
+      "vesselName": "WIRON 5",
+      "flag": "GBR",
+      "cfr": "NLD200202641",
+      "homePort": "PLYMOUTH",
+      "licenceNumber": "12480",
+      "imoNumber": 9249556,
+      "licenceValidTo": "2021-08-09T00:00:00",
+      "rssNumber": "C20514",
+      "vesselLength": 50.63,
+      "licenceHolder": "INTERFISH WIRONS LIMITED"
+    }
+  }
+]

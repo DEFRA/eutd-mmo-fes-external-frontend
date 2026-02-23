@@ -66,5 +66,6 @@
   "ccUploadFilePageErrorInvalidFileType": "The selected file must be a CSV",
   "ccUploadFilePageErrorMaxLandings": "The selected file should contain a maximum of {{dynamicValue}} rows",
   "ccUploadFilePageErrorFileRequired": "Upload a valid CSV file to continue",
-  "ccUploadFilePageTableEEZMaxCharError": "You are only able to add maximum of {{dynamicValue}} EEZ"
+  "ccUploadFilePageTableEEZMaxCharError": "You are only able to add maximum of {{dynamicValue}} EEZ",
+  "ccUploadFilePageTableTotalWeightExceededError": "The total combined weight for all products must be less than 10,000,000"
 }
