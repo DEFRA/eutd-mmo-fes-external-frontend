@@ -15,6 +15,7 @@ import {
 import uploadLandingsSuccess from "@/fixtures/uploadLandingsApi/ccUploadLandingSuccess.json";
 import uploadLandingsError from "@/fixtures/uploadLandingsApi/ccUploadLandingUnsuccessful.json";
 import uploadLandingsMissingDateLanded from "@/fixtures/uploadLandingsApi/ccUploadLandingMissingDateLanded.json";
+import uploadLandingsFutureDateLanded from "@/fixtures/uploadLandingsApi/ccUploadLandingFutureDateLanded.json";
 import uploadLandingsMissingExportWeight from "@/fixtures/uploadLandingsApi/ccUploadLandingMissingExportWeight.json";
 import ccUploadLandingInvalidHighSeasArea from "@/fixtures/uploadLandingsApi/ccUploadLandingInvalidHighSeasArea.json";
 import ccUploadLandingUnknownEEZ from "@/fixtures/uploadLandingsApi/ccUploadLandingUnknownEEZ.json";
@@ -81,6 +82,10 @@ const uploadLandingsHandler: ITestHandler = {
   [TestCaseId.CCUploadMissingDateLanded]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
     rest.post(UPLOAD_LANDINGS_URL, (req, res, ctx) => res(ctx.status(200), ctx.json(uploadLandingsMissingDateLanded))),
+  ],
+  [TestCaseId.CCUploadFutureDateLanded]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(UPLOAD_LANDINGS_URL, (req, res, ctx) => res(ctx.status(200), ctx.json(uploadLandingsFutureDateLanded))),
   ],
   [TestCaseId.CCUploadMissingExportWeight]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
