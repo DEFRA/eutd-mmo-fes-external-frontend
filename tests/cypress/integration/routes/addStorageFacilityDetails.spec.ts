@@ -177,6 +177,19 @@ describe("Add Storage Facility page when javascript is disabled", () => {
     cy.get(".govuk-error-summary").should("be.visible");
   });
 
+  it("should show error when year 0000 is entered in the date picker", () => {
+    cy.get('input[name="facilityArrivalDateDay"]').clear().type("01");
+    cy.get('input[name="facilityArrivalDateMonth"]').clear().type("01");
+    cy.get('input[name="facilityArrivalDateYear"]').clear().type("0000");
+
+    cy.get("form").within(() => {
+      cy.get('button[name="_action"][value="add-facilityArrivalDate"]').click();
+    });
+
+    cy.contains("Arrival date must be a real date").should("be.visible");
+    cy.get(".govuk-error-summary").should("be.visible");
+  });
+
   describe("Add Storage Facility page save as draft", () => {
     beforeEach(() => {
       const testParams: ITestParams = {

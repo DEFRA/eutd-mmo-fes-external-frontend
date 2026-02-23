@@ -14,7 +14,7 @@ import {
   processingStatemenGenericLoader,
   validateCSRFToken,
 } from "~/.server";
-import { displayErrorMessages, getStrOrDefault } from "~/helpers";
+import { displayErrorMessages, getStrOrDefault, isValidDate, getTransformedError } from "~/helpers";
 import type { IErrorsTransformed } from "~/types";
 
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -32,6 +32,32 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
+
+  const healthCertificateDateYear = values["healthCertificateDateYear"] as string;
+  const healthCertificateDateMonth = values["healthCertificateDateMonth"] as string;
+  const healthCertificateDateDay = values["healthCertificateDateDay"] as string;
+  const isoHealthCertificateDate = `${healthCertificateDateYear}-${healthCertificateDateMonth}-${healthCertificateDateDay}`;
+  if (
+    healthCertificateDateYear &&
+    healthCertificateDateMonth &&
+    healthCertificateDateDay &&
+    !isValidDate(isoHealthCertificateDate, ["YYYY-M-D", "YYYY-MM-DD"])
+  ) {
+    return new Response(
+      JSON.stringify({
+        errors: getTransformedError([
+          {
+            key: "healthCertificateDate",
+            message: "psAddHealthCertificateErrorRealDateHealthCertificateDate",
+          },
+        ]),
+      }),
+      {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
 
   const errorResponse = await updateProcessingStatement(
     bearerToken,
