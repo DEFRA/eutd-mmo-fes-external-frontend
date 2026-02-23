@@ -140,6 +140,7 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
     selectedExclusiveEconomicZones = landing?.exclusiveEconomicZones?.map((item) => item.officialCountryName) ?? [];
     nextUri = url.searchParams.get("nextUri") ?? "";
   } else {
+    selectedProduct = getSessionData(session, "selectedProduct");
     clearSession(session, "add-landings");
   }
 
@@ -222,7 +223,6 @@ const addLandingAction = async (
     gearType,
     rfmo,
   } = values;
-  session.unset("hasLandingError"); // unsetting hasLandingError session as it is not unsetted when user have all valid values after error is resolved
   const isDateLandedProvided = Boolean(dateLandedDay || dateLandedMonth || dateLandedYear);
   let selectedDate: string | undefined;
   if (isDateLandedProvided) {

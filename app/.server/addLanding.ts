@@ -8,7 +8,6 @@ import { getGroupedAddLandingErrorFieldIds, nonJsDateValidation, saveAddLandings
 import { apiCallFailed } from "~/communication.server";
 
 export const addLandingSessionKeys = [
-  "selectedProduct",
   "selectedStartDate",
   "selectedDate",
   "selectedFaoArea",
