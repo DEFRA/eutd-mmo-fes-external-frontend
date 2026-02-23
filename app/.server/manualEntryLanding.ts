@@ -181,12 +181,13 @@ export const addLanding = async (
     }
   );
 
-  return onAddLandingResponse(response, product);
+  return onAddLandingResponse(response, product, gearFields);
 };
 
 const onAddLandingResponse = async (
   response: Response,
-  productId: string
+  productId: string,
+  sentGearFields?: { gearCategory: string; gearType: string; gearCode: string | undefined }
 ): Promise<ProductsLanded | { unauthorised: boolean; supportId?: string } | IBase> => {
   switch (response.status) {
     case 200:
@@ -199,19 +200,36 @@ const onAddLandingResponse = async (
         products.find((p: ProductLanded) => p.product.id === productId)?.product.species.label ?? "";
 
       return {
-        errors: Object.keys(errorsResponse.errors).map((error) => ({
-          key: error,
-          message: getErrorMessage(errorsResponse.errors[error]),
-          ...(errorsResponse.errors[error] === "error.dateLanded.date.max" && {
-            value: { dynamicValue: getEnv().LANDING_LIMIT_DAYS_FUTURE },
-          }),
-          ...(errorsResponse.errors[error] === "error.seasonalFish.invalidate" && {
-            value: { dynamicValue: product },
-          }),
-          ...(errorsResponse.errors[error] === "error.startDate.seasonalFish.invalidate" && {
-            value: { dynamicValue: product },
-          }),
-        })),
+        errors: Object.keys(errorsResponse.errors).map((error) => {
+          // Default message key from API
+          let messageKey = errorsResponse.errors[error];
+
+          // If this is a gearType error, prefer contextual message based on what was sent
+          if (error === "gearType" && sentGearFields) {
+            const sentCategory = sentGearFields.gearCategory;
+            const sentType = sentGearFields.gearType;
+            if (sentCategory && !sentType) {
+              messageKey = "ccAddLandingGearTypeEmptyWithCategoryError";
+            } else if (!sentCategory && !sentType) {
+              // use existing select-list-null key
+              messageKey = "ccAddLandingSelectGearTypeListNullError";
+            }
+          }
+
+          return {
+            key: error,
+            message: getErrorMessage(messageKey),
+            ...(messageKey === "error.dateLanded.date.max" && {
+              value: { dynamicValue: getEnv().LANDING_LIMIT_DAYS_FUTURE },
+            }),
+            ...(messageKey === "error.seasonalFish.invalidate" && {
+              value: { dynamicValue: product },
+            }),
+            ...(messageKey === "error.startDate.seasonalFish.invalidate" && {
+              value: { dynamicValue: product },
+            }),
+          };
+        }),
       };
     case 403:
       return {
