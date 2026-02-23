@@ -362,6 +362,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidDepartureDate,
       };
+
       cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
       cy.get("#departureDate-day").type("32", { force: true });
       cy.get("#departureDate-month").type("13", { force: true });
