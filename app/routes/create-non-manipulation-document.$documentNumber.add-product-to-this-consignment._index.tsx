@@ -828,22 +828,6 @@ const AddProductIndex = () => {
                 "aria-describedby": `catches-${productIndex}-product-hint`,
               }}
               searchHandler={querySpecies}
-              customNonJSComp={
-                <FormInput
-                  containerClassName="govuk-form-group govuk-!-width-full"
-                  name="species"
-                  type="text"
-                  inputClassName={classNames("govuk-input", {
-                    "govuk-input--error": hasCatchesSpeciesError,
-                  })}
-                  inputProps={{
-                    defaultValue: getFormValue("species", catchDetails?.product ?? ""),
-                    id: Object.keys(allErrors)[0],
-                  }}
-                  hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-                  hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-                />
-              }
             />
             <ProductArrivalSpeciesDetails speciesExemptLink={speciesExemptLink} />
             <AutocompleteFormField
