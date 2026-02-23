@@ -35,7 +35,6 @@ const onUploadLandings = async (response: Response): Promise<IUploadedLanding[] 
       const errors = (await response.json()) ?? {};
       return Object.keys(errors).map((key: string) => {
         const errorCode = errors[key]?.["key"];
-
         if (
           errorCode === "validation.product.start-date.seasonal.invalid-date" ||
           errorCode === "validation.product.seasonal.invalid-date"
@@ -52,10 +51,9 @@ const onUploadLandings = async (response: Response): Promise<IUploadedLanding[] 
             value: { dynamicValue: errors[key]["params"]["limit"] },
           };
         } else {
-          const messageKey = key === "gearType" ? "ccAddLandingGearTypeEmptyError" : errors[key];
           return {
             key,
-            message: getErrorMessage(messageKey),
+            message: getErrorMessage(errors[key]),
           };
         }
       });
@@ -109,12 +107,7 @@ const onSaveLandings = async (response: Response): Promise<IBase & { rows?: IUpl
               }
             : {
                 key,
-                // For save/upload flows we should not synthesize contextual
-                // gear-type messages based on uploaded landing payloads. Use
-                // the generic gear-type key so uploads don't require a
-                // pre-existing gear category.
-                message:
-                  key === "gearType" ? getErrorMessage("ccAddLandingGearTypeEmptyError") : getErrorMessage(errors[key]),
+                message: getErrorMessage(errors[key]),
               }
         ),
         unauthorised: false,
