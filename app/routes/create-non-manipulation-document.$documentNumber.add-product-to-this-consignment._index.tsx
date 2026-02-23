@@ -222,7 +222,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     supportingDocumentsFromForm,
     countries
   );
-  const saveToRedisIfErrors = false;
+  const saveToRedisIfErrors = isDraft;
   const errorResponse = await updateStorageDocumentCatchDetails(
     bearerToken,
     documentNumber,

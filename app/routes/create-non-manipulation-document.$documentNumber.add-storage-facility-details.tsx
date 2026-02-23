@@ -210,9 +210,10 @@ const handleSaveAndContinue = async (
   values: Record<string, FormDataEntryValue>,
   selectedDate: string | undefined,
   session: Session,
-  nextUri: string
+  nextUri: string,
+  isDraft: boolean = false
 ): Promise<Response> => {
-  const saveToRedisIfErrors = false;
+  const saveToRedisIfErrors = isDraft;
   const errorResponse = await updateStorageDocumentFacility(
     bearerToken,
     documentNumber,
@@ -309,12 +310,14 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (_action === "saveAsDraft") {
     session.unset("facilityName");
     session.unset("selectedArrivalDate");
+    await handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri, true);
+    // Always redirect to dashboard when saving as draft, regardless of errors
     return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
       headers: { "Set-Cookie": await commitSession(session) },
     });
   }
 
-  return handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri);
+  return handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri, false);
 };
 
 const getArrivalDateFromAction = (actionData: any, type: string): string => {

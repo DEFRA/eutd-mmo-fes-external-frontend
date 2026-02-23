@@ -138,7 +138,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const saveAndContinue = form.get("_action") === "saveAndContinue";
   const isRemove = form.get("_action") === "remove";
 
-  const saveToRedisIfErrors = false;
+  const saveToRedisIfErrors = isDraft;
   const productId = isEmpty(values["productId"])
     ? documentNumber + "-" + moment.utc().unix()
     : (values["productId"] as string);

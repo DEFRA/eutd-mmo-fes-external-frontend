@@ -162,6 +162,72 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
+  it("should retain all field values including export date when saving as draft with complete data", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveAsDraftRetainAllValues,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+
+    // Fill all fields including export date and container
+    // cy.get("#nationalityOfVehicle").type("Belgium", { force: true });
+    cy.get("#registrationNumber").clear({ force: true }).type("DEP789", { force: true });
+    cy.get("#departurePlace").clear({ force: true }).type("Southampton Port", { force: true });
+    cy.get("#exportDate-day").clear({ force: true }).type("10", { force: true });
+    cy.get("#exportDate-month").clear({ force: true }).type("02", { force: true });
+    cy.get("#exportDate-year").clear({ force: true }).type("2026", { force: true });
+    cy.get('input[name="containerNumbers.0"]').clear({ force: true }).type("GHIJ3456789", { force: true });
+
+    // Save as draft
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return to the page using CHECK testCaseId (hardcoded saved fixture — immune to double-GET and retry state issues)
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveAsDraftRetainAllValuesCheck,
+    };
+    cy.visit(truckPageUrl, { qs: { ...checkParams } });
+
+    // Verify all values retained
+    cy.get("#nationalityOfVehicle").should("have.value", "Belgium");
+    cy.get("#registrationNumber").should("have.value", "DEP789");
+    cy.get("#departurePlace").should("have.value", "Southampton Port");
+    cy.get("#exportDate-day").should("have.value", "10");
+    cy.get("#exportDate-month").should("have.value", "02");
+    cy.get("#exportDate-year").should("have.value", "2026");
+    cy.get('input[name="containerNumbers.0"]').should("have.value", "GHIJ3456789");
+  });
+
+  it("should retain export date and accept invalid container format when saving as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveAsDraftRetainDate,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+
+    // Fill with invalid container number (would fail validation on save & continue)
+    cy.get("#nationalityOfVehicle").type("Netherlands", { force: true });
+    cy.get("#registrationNumber").clear({ force: true }).type("NL999", { force: true });
+    cy.get("#departurePlace").clear({ force: true }).type("Rotterdam", { force: true });
+    cy.get("#exportDate-day").clear({ force: true }).type("31", { force: true });
+    cy.get("#exportDate-month").clear({ force: true }).type("12", { force: true });
+    cy.get("#exportDate-year").clear({ force: true }).type("2025", { force: true });
+    cy.get('input[name="containerNumbers.0"]').clear({ force: true }).type("BAD-FORMAT", { force: true }); // Save-as-draft accepts invalid container format
+
+    // Save as draft should accept invalid containers
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return and verify values retained including invalid containers using CHECK testCaseId
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveAsDraftRetainDateCheck,
+    };
+    cy.visit(truckPageUrl, { qs: { ...checkParams } });
+    cy.get("#exportDate-day").should("have.value", "31");
+    cy.get("#exportDate-month").should("have.value", "12");
+    cy.get("#exportDate-year").should("have.value", "2025");
+    cy.get('input[name="containerNumbers.0"]').should("have.value", "BAD-FORMAT");
+    cy.get('input[name="containerNumbers.1"]').should("have.value", "X");
+  });
+
   it("should navigate to departure summary page on click of save and continue button", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSave,

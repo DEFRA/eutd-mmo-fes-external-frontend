@@ -61,6 +61,19 @@ export const HowDoesTheConsignmentArriveToTheUkAction = async ({
 
   const transportDetails = await getTransportDetails(bearerToken, journey, documentNumber, isArrivalTransportation);
   const vehicleChanged = transportDetails.vehicle && vehicle !== transportDetails.vehicle;
+  const isSavedAsDraft: boolean = buttonClicked === "saveAsDraft";
+
+  // If vehicle hasn't changed AND transport data exists, skip saving to avoid overwriting existing data
+  // Just redirect to the appropriate page
+  if (!vehicleChanged && transportDetails.vehicle && transportDetails.vehicle !== "undefined") {
+    if (nextUri) {
+      return redirect(nextUri);
+    }
+    // Same vehicle - redirect directly to transport details form or save as draft page
+    return isSavedAsDraft ? redirect(saveAsDraftUrl) : redirect(completedUrl);
+  }
+
+  // Vehicle has changed or no transport data exists yet - save/reset transport data
   const transport: ITransport = vehicleChanged
     ? {
         vehicle: vehicle,
@@ -76,7 +89,6 @@ export const HowDoesTheConsignmentArriveToTheUkAction = async ({
       }
     : { vehicle: vehicle, arrival: isArrivalTransportation };
 
-  const isSavedAsDraft: boolean = buttonClicked === "saveAsDraft";
   const transportDetailsResponse: IBase = await saveTransport(
     bearerToken,
     documentNumber,
@@ -95,12 +107,6 @@ export const HowDoesTheConsignmentArriveToTheUkAction = async ({
       const values = Object.fromEntries(form);
       return apiCallFailed(errors, values);
     }
-  }
-
-  // If vehicle hasn't changed and nextUri is provided (e.g., from check-your-information change link),
-  // redirect back to that page instead of the transport details form
-  if (!vehicleChanged && nextUri && transportDetails.vehicle) {
-    return redirect(nextUri);
   }
 
   return isSavedAsDraft ? redirect(saveAsDraftUrl) : redirect(completedUrl);
