@@ -181,6 +181,7 @@ describe("Add Storage Facility page when javascript is disabled", () => {
     beforeEach(() => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDAddStorageSaveAsDraft,
+        disableScripts: true,
       };
       cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
     });

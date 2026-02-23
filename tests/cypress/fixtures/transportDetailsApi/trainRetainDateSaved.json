@@ -1,0 +1,11 @@
+{
+  "currentUri": "/create-non-manipulation-document/:documentNumber/add-transportation-details-train",
+  "journey": "storageNotes",
+  "user_id": "5bd2e0a1-a98d-4fe7-a004-336a22310b2a",
+  "vehicle": "train",
+  "railwayBillNumber": "EURO123",
+  "departurePlace": "St Pancras International",
+  "exportDate": "14/09/2026",
+  "containerNumbers": ["WRONG", "A"],
+  "arrival": false
+}

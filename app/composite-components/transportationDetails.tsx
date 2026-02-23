@@ -502,7 +502,11 @@ export const TransportationDetails = ({
         id="exportDate"
         name="exportDate"
         getDateSelected={() => {}}
-        dateSelected={moment(exportDate, ["DD/MM/YYYY", "YYYY-MM-DD", "D/M/YYYY", "YYYY-M-D"]).format("YYYY-MM-DD")}
+        dateSelected={(() => {
+          if (!exportDate || exportDate === "") return undefined;
+          const parsedDate = moment(exportDate, ["DD/MM/YYYY", "YYYY-MM-DD", "D/M/YYYY", "YYYY-M-D"]);
+          return parsedDate.isValid() ? parsedDate.format("YYYY-MM-DD") : undefined;
+        })()}
         errors={errors?.exportDate}
         label={`addTransportationDetailsExportDate${capitalize(vehicle)}`}
         hintText="addTransportationArrivalDetailsDepartureDateHint"
