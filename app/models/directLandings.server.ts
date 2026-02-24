@@ -156,19 +156,7 @@ const saveAsDraftAction = async (
     exclusiveEconomicZones,
   };
 
-  const saveResult = await validateDirectLandings(bearerToken, documentNumber, responseBody);
-  if (Array.isArray(saveResult) && saveResult.length > 0) {
-    // Primary save failed (e.g. total weight exceeded) — attempt a fallback save using the
-    // last known-good weights from the DB, so that non-weight fields (vessel, dates, etc.)
-    // are still persisted as a draft.
-    const validDbWeights = Array.isArray(landings.weights)
-      ? landings.weights.filter((w: IDirectLandingsDetails) => w.exportWeight !== null && w.exportWeight !== undefined)
-      : [];
-    if (validDbWeights.length > 0) {
-      const fallbackResponseBody = { ...responseBody, weights: validDbWeights };
-      await validateDirectLandings(bearerToken, documentNumber, fallbackResponseBody);
-    }
-  }
+  await validateDirectLandings(bearerToken, documentNumber, responseBody);
 
   session.unset("selectedDate");
 
