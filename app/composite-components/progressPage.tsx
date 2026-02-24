@@ -82,6 +82,8 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
   const translations: any = {
     catchCertificate: {
       progressApplication: "ccCatchCertificateApplication",
+      notificationIsVoided: "ccProgressNotificationMsgIsVoided",
+      notificationNotVoided: "ccProgressNotificationMsgIsNotVoided",
     },
     processingStatement: {
       notificationIsVoided: "psProgressNotificationMsgIsVoided",
@@ -101,7 +103,9 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
       notificationMsgs.push(
         voidDocumentConfirm
           ? t(translations[journey].notificationIsVoided, { ns: "progress" })
-          : t(translations[journey].notificationNotVoided, { c, ns: "progress" })
+          : journey === "catchCertificate"
+            ? t(translations[journey].notificationNotVoided, { documentNumber: c, ns: "progress" })
+            : t(translations[journey].notificationNotVoided, { c, ns: "progress" })
       );
 
     return notificationMsgs.length ? notificationMsgs : [];
