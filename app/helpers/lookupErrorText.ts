@@ -278,6 +278,7 @@ export const getErrorMessage = (key: string): string => {
     "error.weights.exportWeight.any.empty": "ccCommonExportWeightRequiredError",
     "error.weights.exportWeight.any.missing": "ccCommonExportWeightMissingError",
     "error.weights.exportWeight.number.greater": "ccCommonExportWeightGreaterError",
+    "error.weights.exportWeight.number.unsafe": "ccCommonExportWeightRequiredError",
     "error.weights.array.totalWeightExceeded": "ccDirectLandingTotalWeightExceededError",
     "error.exportWeight.number.base": "ccCommonExportWeightRequiredError",
     "error.exportWeight.any.missing": "ccCommonExportWeightMissingError",

@@ -500,23 +500,30 @@ const DirectLanding = () => {
                 </tr>
               </thead>
               <tbody>
-                {directLandings?.weights.map((landings: IDirectLandingsDetails, index: number) => (
-                  <tr className="govuk-table__row" key={`directlanding-${landings.speciesId}`}>
-                    <td className="govuk-table__cell tablerowuserref table-adjust-font">{landings.speciesLabel}</td>
-                    <td className="govuk-table__cell">
-                      <WeightInput
-                        id="weight"
-                        unit="kg"
-                        errors={errors}
-                        formValue={values?.[`weight-${landings?.speciesId}`]}
-                        speciesId={landings?.speciesId}
-                        index={index}
-                        exportWeight={isEmpty(values) ? landings?.exportWeight?.toString() : ""}
-                        totalWeight={getTotalWeight}
-                      />
-                    </td>
-                  </tr>
-                ))}
+                {directLandings?.weights.map((landings: IDirectLandingsDetails, index: number) => {
+                  const fieldKey = `weights.${index}.exportWeight`;
+                  const weightErrors = {
+                    ...errors,
+                    [fieldKey]: errors[fieldKey] ?? errors["weights"],
+                  };
+                  return (
+                    <tr className="govuk-table__row" key={`directlanding-${landings.speciesId}`}>
+                      <td className="govuk-table__cell tablerowuserref table-adjust-font">{landings.speciesLabel}</td>
+                      <td className="govuk-table__cell">
+                        <WeightInput
+                          id="weight"
+                          unit="kg"
+                          errors={weightErrors}
+                          formValue={values?.[`weight-${landings?.speciesId}`]}
+                          speciesId={landings?.speciesId}
+                          index={index}
+                          exportWeight={isEmpty(values) ? landings?.exportWeight?.toString() : ""}
+                          totalWeight={getTotalWeight}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
                 <tr className="govuk-table__row">
                   <td className="govuk-table__cell">
                     <strong>{t("ccAddLandingTotalExportWeight")}</strong>
