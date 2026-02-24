@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useEffect } from "react";
 import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
-
 import type { ITransport, ErrorResponse, ICountry } from "~/types";
 import {
   TransportationDetailsLoaderFunction,
@@ -16,11 +15,18 @@ import { useScrollOnPageLoad } from "~/hooks";
 import { AddTransportationDetailsComponent } from "~/composite-components";
 import moment from "moment";
 
+const isDepartureTransportation = false;
 export const loader: LoaderFunction = async ({ request, params }) =>
-  await TransportationDetailsLoaderFunction(request, params, TransportType.TRUCK, "storageNotes");
+  await TransportationDetailsLoaderFunction(
+    request,
+    params,
+    TransportType.TRUCK,
+    "storageNotes",
+    isDepartureTransportation
+  );
 
 export const action: ActionFunction = async ({ request, params }): Promise<Response | ErrorResponse> => {
-  const initData = await initializeStorageNotesTransportAction(request, params);
+  const initData = await initializeStorageNotesTransportAction(request, params, isDepartureTransportation);
   if (initData instanceof Response) return initData;
 
   const {
@@ -35,10 +41,12 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     containerNumbers,
   } = initData;
 
+  const saveAsDraft = form.get("_action") === "saveAsDraft";
   const nationalityOfVehicle = form.get("nationalityOfVehicle") as string;
   const registrationNumber = form.get("registrationNumber") as string;
   const departurePlace = form.get("departurePlace") as string;
-  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", false);
+  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
+
   const nextUri = form.get("nextUri") as string;
 
   const payload: ITransport = {
@@ -59,6 +67,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     exportDate: calculateExportDate(form),
     exportDateTo: moment().startOf("day").add(1, "day").toISOString(),
     facilityArrivalDate: "facilityArrivalDate" in storageDocument ? storageDocument.facilityArrivalDate : undefined,
+    arrival: isDepartureTransportation,
   };
 
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);
@@ -89,5 +98,4 @@ const TruckTransportDetailsPage = () => {
     />
   );
 };
-
 export default TruckTransportDetailsPage;

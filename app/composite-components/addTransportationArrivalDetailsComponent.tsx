@@ -36,8 +36,8 @@ export const AddTransportationArrivalDetailsComponent = ({
   actionData,
 }: AddArrivalTransporrtationDetailsProps) => {
   const { t } = useTranslation("transportation");
-  const { errors = {}, day, month, year } = actionData;
-  const departureDateFromAction = getDepartureDateFromAction(day, month, year);
+  const { errors = {}, departureDateDay, departureDateMonth, departureDateYear } = actionData;
+  const departureDateFromAction = getDepartureDateFromAction(departureDateDay, departureDateMonth, departureDateYear);
   const {
     documentNumber,
     vehicle,

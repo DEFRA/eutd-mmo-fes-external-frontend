@@ -46,6 +46,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const vesselName = handleFormEmptyStringValue(form, "vesselName", saveAsDraft);
   const flagState = handleFormEmptyStringValue(form, "flagState", saveAsDraft);
   const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
+  const departureCountry = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
   const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
   const placeOfUnloading = handleFormEmptyStringValue(form, "placeOfUnloading", saveAsDraft);
 
@@ -63,12 +64,12 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     nextUri: route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", {
       documentNumber,
     }),
-    journey: transport.journey,
+    journey: "storageNotes",
     vesselName,
     flagState,
     containerNumbers,
     freightBillNumber,
-    departureCountry: form.get("departureCountry") as string,
+    departureCountry,
     departurePort,
     departureDate: calculateDepartureDate(form),
     placeOfUnloading,
