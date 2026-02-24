@@ -133,6 +133,7 @@
   "ccAddLandingSelectProductFromListError": "Select a product from the list",
   "ccAddLandingDateLandedFutureDateError": "Date landed must be today or within the next 7 days",
   "ccAddLandingMaxLandingExceededError": "The maximum landings limit has been reached. To progress, you will need to remove the products without landings.",
+  "ccAddLandingTotalExportWeightLessThan": "The total combined weight for all products must be less than 10,000,000",
   "ccAddLandingStartDateRestrictedError": "{{dynamicValue}} was subject to fishing restrictions on your specified start date. Please refer to GOV.UK for further guidance.",
   "ccAddLandingDateLandedRestrictedError": "{{dynamicValue}} was subject to fishing restrictions on your specified Landing date. Please refer to GOV.UK for further guidance.",
   "ccCommonExportWeightGreaterError": "Enter the export weight as a number greater than 0",

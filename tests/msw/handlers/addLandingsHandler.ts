@@ -30,6 +30,7 @@ import addOrUpdateResponse from "@/fixtures/addLandings/addOrUpdateResponse.json
 import getVessels from "@/fixtures/directLanding/getVessels.json";
 import empty from "@/fixtures/empty.json";
 import addLandingsErrors from "@/fixtures/addLandings/addLandingErrors.json";
+import addLandingTotalWeightExceeded from "@/fixtures/addLandings/addLandingTotalWeightExceeded.json";
 import getGearCategories from "@/fixtures/addLandings/getGearCategories.json";
 import getGearTypesByCategory from "@/fixtures/addLandings/getGearTypesByCategory.json";
 import getRfmos from "@/fixtures/addLandings/getRfmos.json";
@@ -111,6 +112,7 @@ const addLandingsHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.post(VALIDATE_LANDINGS_URL, (req, res, ctx) => res(ctx.status(400), ctx.json(addLandingTotalWeightExceeded))),
   ],
   [TestCaseId.AddLandingPageFailsWithErrorsOnSaveAndContinue]: () => [
     rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json(addLandings))),

@@ -964,6 +964,21 @@ describe("Manual landings page: Error with Max landings exceeded", () => {
   });
 });
 
+describe("Manual landings page: Error with total combined export weight exceeded", () => {
+  it("should display an error summary when total combined export weight exceeds limit", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.AddLandingPageFailsWithMaxLandingExceededError,
+    };
+    cy.visit(manualLandingUrl, { qs: { ...testParams } });
+
+    // Trigger form submit which will hit the VALIDATE_LANDINGS_URL MSW endpoint and return 400
+    cy.get("[data-testid=submit]").click({ force: true });
+
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^The total combined weight for all products must be less than 10,000,000$/).should("be.visible");
+  });
+});
+
 describe("Manual page errors when javascript is disabled", () => {
   beforeEach(() => {
     const testParams: ITestParams = {

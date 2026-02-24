@@ -1,0 +1,7 @@
+{
+  "error": "invalid",
+  "errors": {
+    "exportWeight": "ccAddLandingTotalExportWeightLessThan",
+    "weight": "ccAddLandingTotalExportWeightLessThan"
+  }
+}
