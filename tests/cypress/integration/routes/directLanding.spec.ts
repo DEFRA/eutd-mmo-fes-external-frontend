@@ -879,3 +879,101 @@ describe("Direct Landing - Invalid date validation without vessel name error (FI
     cy.get(".govuk-error-summary__list").should("not.contain", "vessel");
   });
 });
+
+describe("Direct Landing - total combined weight exceeded (field-level error)", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingTotalWeightExceeded,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+  });
+
+  it("should display the error summary with the total weight exceeded message", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").should("contain.text", "There is a problem");
+    cy.get(".govuk-error-summary__list").should(
+      "contain.text",
+      "The total combined weight of all products must be less than 100,000,000,000"
+    );
+  });
+
+  it("should apply error styling (govuk-input--error) to the first weight input", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get('input[id="weights.0.exportWeight"]').should("have.class", "govuk-input--error");
+  });
+
+  it("should apply error styling (govuk-input--error) to all weight inputs when total is exceeded", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get('input[id="weights.0.exportWeight"]').should("have.class", "govuk-input--error");
+    cy.get('input[id="weights.1.exportWeight"]').should("have.class", "govuk-input--error");
+  });
+
+  it("should display the inline field-level error message on the first weight input", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get('input[id="weights.0.exportWeight"]')
+      .closest(".govuk-form-group")
+      .find(".govuk-error-message")
+      .should("contain.text", "The total combined weight of all products must be less than 100,000,000,000");
+  });
+
+  it("should display the inline field-level error message on every weight input", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get('input[id="weights.1.exportWeight"]')
+      .closest(".govuk-form-group")
+      .find(".govuk-error-message")
+      .should("contain.text", "The total combined weight of all products must be less than 100,000,000,000");
+  });
+
+  it("should apply govuk-form-group--error class to each weight row when total is exceeded", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get('input[id="weights.0.exportWeight"]')
+      .closest(".govuk-form-group")
+      .should("have.class", "govuk-form-group--error");
+    cy.get('input[id="weights.1.exportWeight"]')
+      .closest(".govuk-form-group")
+      .should("have.class", "govuk-form-group--error");
+  });
+});
+
+describe("Direct Landing - unsafe weight value (field-level error)", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingUnsafeWeight,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+  });
+
+  it("should display the error summary when an unsafe weight is submitted", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").should("contain.text", "There is a problem");
+    cy.get(".govuk-error-summary__list").should("contain.text", "Enter the export weight");
+  });
+
+  it("should apply error styling to only the first weight input (number.unsafe)", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get('input[id="weights.0.exportWeight"]').should("have.class", "govuk-input--error");
+  });
+
+  it("should NOT apply error styling to the second weight input when only the first has an error", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get('input[id="weights.1.exportWeight"]').should("not.have.class", "govuk-input--error");
+  });
+
+  it("should display the inline field-level error message on the first weight input for number.unsafe", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get('input[id="weights.0.exportWeight"]')
+      .closest(".govuk-form-group")
+      .find(".govuk-error-message")
+      .should("contain.text", "Enter the export weight");
+  });
+
+  it("should apply govuk-form-group--error only to the affected weight row", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get('input[id="weights.0.exportWeight"]')
+      .closest(".govuk-form-group")
+      .should("have.class", "govuk-form-group--error");
+    cy.get('input[id="weights.1.exportWeight"]')
+      .closest(".govuk-form-group")
+      .should("not.have.class", "govuk-form-group--error");
+  });
+});
