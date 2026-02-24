@@ -26,7 +26,7 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
   const townCity = model?.townCity;
   const postcode = model?.postcode;
   const errorsTransformed = errors as IErrorsTransformed;
-  const hasAddress = !isEmpty(addressOne) && !isEmpty(postcode);
+  const hasAddress = isEmpty(addressOne) === false && isEmpty(postcode) === false;
   const routes = {
     catchCertificate: {
       backUri: route("/create-catch-certificate/:documentNumber/add-your-reference", { documentNumber }),
@@ -45,7 +45,7 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
   useScrollOnPageLoad();
 
   useEffect(() => {
-    if (!isEmpty(errors)) {
+    if (isEmpty(errors) === false) {
       scrollToId("errorIsland");
     }
   }, [errors]);
@@ -72,7 +72,7 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
 
   return (
     <Main backUrl={routes[journey]["backUri"]}>
-      {!isEmpty(error) && <ErrorSummary errors={displayErrorTransformedMessages(errorsTransformed)} />}
+      {isEmpty(error) ? null : <ErrorSummary errors={displayErrorTransformedMessages(errorsTransformed)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <Title title={t("commonAddExporterDetailsText")} />
@@ -112,10 +112,10 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
                   id: "exporterFullName",
                   "aria-describedby": "hint-exporterFullName",
                 }}
-                errorProps={{ className: !isEmpty(errorsTransformed?.exporterFullName) ? "govuk-error-message" : "" }}
+                errorProps={{ className: isEmpty(errorsTransformed?.exporterFullName) ? "" : "govuk-error-message" }}
                 staticErrorMessage={t(errorsTransformed?.exporterFullName?.message, { ns: "errorsText" })}
                 errorPosition={ErrorPosition.AFTER_LABEL}
-                containerClassNameError={!isEmpty(errorsTransformed?.exporterFullName) ? "govuk-form-group--error" : ""}
+                containerClassNameError={isEmpty(errorsTransformed?.exporterFullName) ? "" : "govuk-form-group--error"}
                 hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
               />
@@ -142,21 +142,19 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
                 id: "exporterCompanyName",
                 "aria-describedby": "hint-exporterCompanyName",
               }}
-              errorProps={{ className: !isEmpty(errorsTransformed?.exporterCompanyName) ? "govuk-error-message" : "" }}
+              errorProps={{ className: isEmpty(errorsTransformed?.exporterCompanyName) ? "" : "govuk-error-message" }}
               staticErrorMessage={t(errorsTransformed?.exporterCompanyName?.message, { ns: "errorsText" })}
               errorPosition={ErrorPosition.AFTER_LABEL}
-              containerClassNameError={
-                !isEmpty(errorsTransformed?.exporterCompanyName) ? "govuk-form-group--error" : ""
-              }
+              containerClassNameError={isEmpty(errorsTransformed?.exporterCompanyName) ? "" : "govuk-form-group--error"}
               hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
               hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
             />
 
             <div
               className={
-                !isEmpty(errorsTransformed?.exporterAddress)
-                  ? "govuk-form-group govuk-form-group--error"
-                  : "govuk-form-group"
+                isEmpty(errorsTransformed?.exporterAddress)
+                  ? "govuk-form-group"
+                  : "govuk-form-group govuk-form-group--error"
               }
             >
               <label className="govuk-label govuk-!-font-weight-bold">

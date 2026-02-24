@@ -52,10 +52,11 @@ const LandingsEntry = () => {
 
     return notificationMsgs.length ? notificationMsgs : [];
   };
+  const showNotificationBanner = copyDocumentAcknowledged || generatedByContent;
 
   return (
     <Main backUrl={route("/create-catch-certificate/catch-certificates")}>
-      {(generatedByContent ?? copyDocumentAcknowledged) && (
+      {showNotificationBanner && (
         <NotificationBanner
           header={t("commonImportant", { ns: "common" })}
           messages={getNotificationMsg(generatedByContent)}

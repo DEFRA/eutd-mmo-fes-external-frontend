@@ -401,7 +401,10 @@ export const calculateExportDate = (form: any): string | undefined => {
   const day = form.get("exportDateDay") as string;
   const month = form.get("exportDateMonth") as string;
   const year = form.get("exportDateYear") as string;
-  return day && month && year ? `${day}/${month}/${year}` : undefined;
+  // If all parts are empty, return an explicit empty string so the payload contains a clear marker
+  // (JSON.stringify will include the key with an empty string value). This allows the server
+  // to distinguish "user cleared this field" from "field not supplied" and overwrite stored values.
+  return !day && !month && !year ? "" : `${day}/${month}/${year}`;
 };
 
 export const calculateDepartureDate = (form: any): string | undefined => {
@@ -449,18 +452,6 @@ const checkPlaceOfUnloading = (placeOfUnloading: string | undefined | null) =>
   checkField(placeOfUnloading, 50, /^[a-zA-Z0-9]+$/);
 const checkPointOfDestination = (pointOfDestination: string | undefined | null) =>
   checkField(pointOfDestination, 100, /^[a-zA-Z0-9\-' /]+$/);
-const checkContainerNumbers = (containerNumbers: string[] | undefined | null) => {
-  if (!containerNumbers || containerNumbers.length === 0) return [];
-  const validContainers = containerNumbers.map((cn) => {
-    const trimmed = cn.trim();
-    // ISO 6346 format: 3 uppercase letters + owner category letter (U/J/Z/R) + 7 digits
-    // Allow empty strings as well
-    if (trimmed === "") return trimmed;
-    if (trimmed.length > 50 || !trimmed.match(/^[A-Z]{3}[UJZR]\d{7}$/)) return undefined;
-    return trimmed;
-  });
-  return validContainers;
-};
 const validatePayload = async (payload: ITransport, saveAsDraft: boolean) => {
   if (saveAsDraft) {
     payload.nationalityOfVehicle = await returnValidCountryName(payload.nationalityOfVehicle);
@@ -474,7 +465,9 @@ const validatePayload = async (payload: ITransport, saveAsDraft: boolean) => {
     payload.flightNumber = checkFlightNumber(payload.flightNumber);
     payload.placeOfUnloading = checkPlaceOfUnloading(payload.placeOfUnloading);
     payload.pointOfDestination = checkPointOfDestination(payload.pointOfDestination);
-    payload.containerNumbers = checkContainerNumbers(payload.containerNumbers).filter((cn) => cn !== undefined);
+    // Save-as-draft preserves container numbers as entered (including invalid formats)
+    // so users can return and correct them. Only strip undefined/null entries.
+    payload.containerNumbers = (payload.containerNumbers ?? []).filter((cn): cn is string => cn != null);
     return [] as IError[] | IErrorsTransformed;
   } else {
     const errors: IError[] | IErrorsTransformed = [];
@@ -525,6 +518,26 @@ export const commonSaveTransportDetails = async (
 ) => {
   const saveAsDraft = form.get("_action") === "saveAsDraft";
   let errors: IError[] | IErrorsTransformed = payload?.arrival ? await validatePayload(payload, saveAsDraft) : [];
+
+  // Reject year 0000 (and any sub-1000 year) for exportDate and departureDate (format dd/mm/yyyy)
+  // before hitting the API. moment.js in strict mode accepts year 0000 as valid;
+  // isValidDate now rejects it, but we use moment().year() directly here rather than !isValidDate
+  // to avoid adding frontend errors for other invalid formats (e.g. month 13) that the API
+  // already catches, which would produce duplicate error messages.
+  if (!saveAsDraft) {
+    if (payload.exportDate) {
+      const exportDateParsed = moment(payload.exportDate as string, "DD/MM/YYYY", true);
+      if (exportDateParsed.isValid() && exportDateParsed.year() < 1000) {
+        (errors as IError[]).push({ key: "exportDate", message: "sdTransportExportDateInvalidError" });
+      }
+    }
+    if (payload.departureDate) {
+      const departureDateParsed = moment(payload.departureDate as string, "DD/MM/YYYY", true);
+      if (departureDateParsed.isValid() && departureDateParsed.year() < 1000) {
+        (errors as IError[]).push({ key: "departureDate", message: "sdTransportDepatureDateInvalidError" });
+      }
+    }
+  }
 
   let postTransport: IBase;
 

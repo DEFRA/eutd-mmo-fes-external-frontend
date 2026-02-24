@@ -8,7 +8,6 @@ import { getGroupedAddLandingErrorFieldIds, nonJsDateValidation, saveAddLandings
 import { apiCallFailed } from "~/communication.server";
 
 export const addLandingSessionKeys = [
-  "selectedProduct",
   "selectedStartDate",
   "selectedDate",
   "selectedFaoArea",
@@ -64,9 +63,21 @@ export const addGearCategoryAction = async (
         message: getErrorMessage("error.gearCategory.string.empty"),
       },
     ]);
+
+    // Load lists for non-JS mode
+    const { getAllGearTypesByCategory, getVesselsNoJs } = await import("~/.server");
+    const { isValidDate } = await import("~/helpers");
+    const dateLanded = `${formData.dateLandedYear ?? ""}-${formData.dateLandedMonth ?? ""}-${formData.dateLandedDay ?? ""}`;
+    const vesselsNoJs = isValidDate(dateLanded, ["YYYY-M-D", "YYYY-MM-DD"])
+      ? await getVesselsNoJs(dateLanded)
+      : undefined;
+    const availableGearTypes = gearCategory ? await getAllGearTypesByCategory(gearCategory) : undefined;
+
     return new Response(
       JSON.stringify({
-        values: formData,
+        ...formData,
+        vesselsNoJs,
+        availableGearTypes,
         errors,
         groupedErrorIds: getGroupedAddLandingErrorFieldIds(errors),
       }),
