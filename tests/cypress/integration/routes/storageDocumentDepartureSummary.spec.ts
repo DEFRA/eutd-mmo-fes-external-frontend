@@ -482,7 +482,6 @@ describe("Storage document departure summary: tab with empty departure and load 
   });
 });
 
-// FI0-10714: Departure weights should sync when arrival weights are updated
 describe("Storage document departure summary: departure weights synced with arrival weights", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
@@ -540,7 +539,6 @@ describe("Storage document departure summary: departure weights synced with arri
   });
 });
 
-// FI0-10714: Departure weights should sync when arrival weights are updated
 describe("Storage document departure summary: departure weights synced with arrival weights", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
