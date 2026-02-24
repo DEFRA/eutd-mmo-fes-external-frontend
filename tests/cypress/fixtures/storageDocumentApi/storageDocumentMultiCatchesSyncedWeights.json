@@ -1,0 +1,61 @@
+{
+  "catches": [
+    {
+      "_id": "64550db5c61c2d186476b888",
+      "product": "Golden damselfish (ADH)",
+      "commodityCode": "03011100",
+      "certificateNumber": "GBR-2023-SD-A46E23603",
+      "productWeight": "10",
+      "weightOnCC": "10",
+      "placeOfUnloading": "dover",
+      "dateOfUnloading": "03/05/2023",
+      "transportUnloadedFrom": "43",
+      "id": "someDocumentNumber-1683295546",
+      "scientificName": "Amblyglyphidodon aureus",
+      "catchCertificateType": "non_uk",
+      "netWeightProductArrival": "200",
+      "netWeightFisheryProductArrival": "200",
+      "netWeightProductDeparture": "200",
+      "netWeightFisheryProductDeparture": "200"
+    },
+    {
+      "_id": "64550db5c61c2d186476b889",
+      "product": "Peacock sole (ADJ)",
+      "commodityCode": "03011100",
+      "certificateNumber": "GBR-2023-SD-A46E23603",
+      "productWeight": "10",
+      "weightOnCC": "10",
+      "placeOfUnloading": "dover",
+      "dateOfUnloading": "03/05/2023",
+      "transportUnloadedFrom": "43",
+      "id": "someDocumentNumber-1683295547",
+      "scientificName": "Pardachirus pavoninus",
+      "catchCertificateType": "non_uk",
+      "netWeightProductArrival": "150",
+      "netWeightFisheryProductArrival": "150",
+      "netWeightProductDeparture": "150",
+      "netWeightFisheryProductDeparture": "150"
+    }
+  ],
+  "validationErrors": [{}],
+  "addAnotherProduct": "No",
+  "transport": {
+    "vehicle": "train",
+    "stationName": "LONDON",
+    "railwayBillNumber": "E11111E",
+    "departurePlace": "HULL",
+    "exportDate": "31/01/2018",
+    "exportedTo": {
+      "officialCountryName": "British Indian Ocean Territory",
+      "isoCodeAlpha2": "IO",
+      "isoCodeAlpha3": "IOT",
+      "isoNumericCode": "086"
+    }
+  },
+  "exportedTo": {
+    "officialCountryName": "British Indian Ocean Territory",
+    "isoCodeAlpha2": "IO",
+    "isoCodeAlpha3": "IOT",
+    "isoNumericCode": "086"
+  }
+}
