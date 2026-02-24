@@ -180,11 +180,20 @@ export const updateStorageDocumentCatchDetails = async (
   if (Array.isArray(currentStorageDocument?.catches)) {
     if (isUpdatingCatch) {
       if (currentStorageDocument.catches[catchIndex]) {
-        // Update a catch in the existing catches array
-        currentStorageDocument.catches[catchIndex] = {
+        const catchData = data as StorageDocumentCatch;
+        const updatedCatch: StorageDocumentCatch = {
           ...currentStorageDocument.catches[catchIndex],
-          ...(data as StorageDocumentCatch),
+          ...catchData,
         };
+        // Sync departure weights when arrival weights are updated
+        if (catchData.netWeightProductArrival !== undefined) {
+          updatedCatch.netWeightProductDeparture = catchData.netWeightProductArrival;
+        }
+        if (catchData.netWeightFisheryProductArrival !== undefined) {
+          updatedCatch.netWeightFisheryProductDeparture = catchData.netWeightFisheryProductArrival;
+        }
+        // Update a catch in the existing catches array
+        currentStorageDocument.catches[catchIndex] = updatedCatch;
       } else {
         // Add a new catch to the existing catches array
         currentStorageDocument.catches.push({ ...(data as StorageDocumentCatch) });

@@ -481,3 +481,119 @@ describe("Storage document departure summary: tab with empty departure and load 
     cy.url().should("include", "/progress");
   });
 });
+
+// FI0-10714: Departure weights should sync when arrival weights are updated
+describe("Storage document departure summary: departure weights synced with arrival weights", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDDepartureSummaryWithSyncedWeights,
+    };
+    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
+  });
+
+  it("should show synced departure weights matching the updated arrival weights", () => {
+    cy.url().should("include", storageDocumentUrl);
+    cy.get("[data-tab-id='storageDepartureTab']").click({ force: true });
+    cy.get("#storage-departure-tab").within(() => {
+      cy.get("table").within(() => {
+        cy.get("tbody").within(() => {
+          cy.get("tr").should("have.length", 2);
+          cy.get("tr")
+            .eq(0)
+            .within(() => {
+              cy.get("td").eq(1).find("input").should("have.value", "200.00");
+              cy.get("td").eq(2).find("input").should("have.value", "200.00");
+            });
+          cy.get("tr")
+            .eq(1)
+            .within(() => {
+              cy.get("td").eq(1).find("input").should("have.value", "150.00");
+              cy.get("td").eq(2).find("input").should("have.value", "150.00");
+            });
+        });
+      });
+    });
+  });
+
+  it("should show synced arrival weights in the arrival tab", () => {
+    cy.url().should("include", storageDocumentUrl);
+    cy.get("[data-tab-id='storageArrivalTab']").click({ force: true });
+    cy.get("#storage-arrival-tab").within(() => {
+      cy.get("table").within(() => {
+        cy.get("tbody").within(() => {
+          cy.get("tr").should("have.length", 2);
+          cy.get("tr")
+            .eq(0)
+            .within(() => {
+              cy.get("td").eq(1).find("input").should("have.value", "200.00");
+              cy.get("td").eq(2).find("input").should("have.value", "200.00");
+            });
+          cy.get("tr")
+            .eq(1)
+            .within(() => {
+              cy.get("td").eq(1).find("input").should("have.value", "150.00");
+              cy.get("td").eq(2).find("input").should("have.value", "150.00");
+            });
+        });
+      });
+    });
+  });
+});
+
+// FI0-10714: Departure weights should sync when arrival weights are updated
+describe("Storage document departure summary: departure weights synced with arrival weights", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDDepartureSummaryWithSyncedWeights,
+    };
+    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
+  });
+
+  it("should show synced departure weights matching the updated arrival weights", () => {
+    cy.url().should("include", storageDocumentUrl);
+    cy.get("[data-tab-id='storageDepartureTab']").click({ force: true });
+    cy.get("#storage-departure-tab").within(() => {
+      cy.get("table").within(() => {
+        cy.get("tbody").within(() => {
+          cy.get("tr").should("have.length", 2);
+          cy.get("tr")
+            .eq(0)
+            .within(() => {
+              cy.get("td").eq(1).find("input").should("have.value", "200.00");
+              cy.get("td").eq(2).find("input").should("have.value", "200.00");
+            });
+          cy.get("tr")
+            .eq(1)
+            .within(() => {
+              cy.get("td").eq(1).find("input").should("have.value", "150.00");
+              cy.get("td").eq(2).find("input").should("have.value", "150.00");
+            });
+        });
+      });
+    });
+  });
+
+  it("should show synced arrival weights in the arrival tab", () => {
+    cy.url().should("include", storageDocumentUrl);
+    cy.get("[data-tab-id='storageArrivalTab']").click({ force: true });
+    cy.get("#storage-arrival-tab").within(() => {
+      cy.get("table").within(() => {
+        cy.get("tbody").within(() => {
+          cy.get("tr").should("have.length", 2);
+          cy.get("tr")
+            .eq(0)
+            .within(() => {
+              cy.get("td").eq(1).find("input").should("have.value", "200.00");
+              cy.get("td").eq(2).find("input").should("have.value", "200.00");
+            });
+          cy.get("tr")
+            .eq(1)
+            .within(() => {
+              cy.get("td").eq(1).find("input").should("have.value", "150.00");
+              cy.get("td").eq(2).find("input").should("have.value", "150.00");
+            });
+        });
+      });
+    });
+  });
+});

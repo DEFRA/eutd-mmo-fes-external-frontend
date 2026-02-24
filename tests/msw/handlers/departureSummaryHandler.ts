@@ -15,6 +15,7 @@ import emptyCatches from "@/fixtures/storageDocumentApi/storageDocumentEmptyCatc
 import multiCatches from "@/fixtures/storageDocumentApi/storageDocumentMultiCatches.json";
 import singleCatch from "@/fixtures/storageDocumentApi/storageDocumentSingleCatch.json";
 import multiCatchesEmptyDepartureWeight from "@/fixtures/storageDocumentApi/storageDocumentMultiCatchesEmptyDepartureWeight.json";
+import multiCatchesSyncedWeights from "@/fixtures/storageDocumentApi/storageDocumentMultiCatchesSyncedWeights.json";
 import noTransport from "@/fixtures/storageDocumentApi/storageDocumentAddDocumentType.json";
 import planeTransportAllowedDetails from "@/fixtures/transportDetailsApi/planeAllowed.json";
 import trainTransportAllowedDetails from "@/fixtures/transportDetailsApi/trainAllowed.json";
@@ -85,6 +86,15 @@ const departureSummaryHandlerHandler: ITestHandler = {
   ],
   [TestCaseId.SDDepartureSummaryForbidden]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.status(403))),
+  ],
+  [TestCaseId.SDDepartureSummaryWithSyncedWeights]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(multiCatchesSyncedWeights))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.status(200), ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) => res(ctx.json(sdProductAddedValidData))),
   ],
 };
 

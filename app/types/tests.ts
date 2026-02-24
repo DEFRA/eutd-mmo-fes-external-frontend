@@ -791,6 +791,8 @@ export enum TestCaseId {
   SDDepartureSummaryCatchesSingleCatch = "sdDepartureSummaryCatchesSingleCatch",
   SDDepartureSummaryCatchesEmptyWeights = "sdDepartureSummaryCatchesEmptyWeights",
   SDDepartureSummaryCatchesInvalidWeightSave = "sdDepartureSummaryCatchesInvalidWeightSave",
+  // FI0-10714: Departure weights should sync with arrival weights when arrival is updated
+  SDDepartureSummaryWithSyncedWeights = "sdDepartureSummaryWithSyncedWeights",
 
   // FI0-10296: Remove Product Page
   RemoveProductPageLoads = "removeProductPageLoads",
