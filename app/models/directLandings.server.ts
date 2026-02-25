@@ -54,7 +54,16 @@ const saveActionBase: any = async (values: any, landings: IDirectLandings, isNum
       ? getCodeFromLabel(values["vessel"] as string)
       : values["vessel"];
   const startDate = getStartDate(values);
-  const date = `${values["dateLandedYear"]}-${values["dateLandedMonth"]}-${values["dateLandedDay"]}`;
+
+  // If all date parts are empty, send empty string to trigger "required" error
+  // Otherwise, send the constructed date (even if invalid) to trigger "invalid format" error
+  const hasValue = (val: any) => val !== undefined && val !== null && val !== "";
+  const hasAnyDatePart =
+    hasValue(values["dateLandedYear"]) || hasValue(values["dateLandedMonth"]) || hasValue(values["dateLandedDay"]);
+  const date = hasAnyDatePart
+    ? `${values["dateLandedYear"]}-${values["dateLandedMonth"]}-${values["dateLandedDay"]}`
+    : "";
+
   const gearCategory = isEmpty(values["gearCategory"]) ? undefined : values["gearCategory"];
   const gearType = isEmpty(values["gearType"]) ? undefined : values["gearType"];
   const gearTypes: IGearType[] = await getAllGearTypesByCategory(gearCategory as string);
@@ -108,7 +117,7 @@ const saveActionBase: any = async (values: any, landings: IDirectLandings, isNum
   return {
     selectedVessel: selectedVessel ?? previousVessel,
     startDate,
-    date: isDateValid ? date : "",
+    date,
     updatedWeights,
     gearCategory,
     gearType,
