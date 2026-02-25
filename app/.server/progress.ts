@@ -177,6 +177,7 @@ export const progressPageLoader = async (request: Request, params: Params, journ
 
   if (journey === "catchCertificate") {
     objectToReturn = {
+      ...objectToReturn,
       ...landingsEntry,
       progress,
       completedSections,
