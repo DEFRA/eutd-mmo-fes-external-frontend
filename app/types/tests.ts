@@ -205,6 +205,7 @@ export enum TestCaseId {
   DirectLandingInvalidDatesNoVesselError = "directLandingInvalidDatesNoVesselError",
   DirectLandingTotalWeightExceeded = "directLandingTotalWeightExceeded",
   DirectLandingUnsafeWeight = "directLandingUnsafeWeight",
+  DirectLandingVesselFetchError = "directLandingVesselFetchError",
   AddLandingPageGuard = "addLandingPageGuard",
   AddLandingSubmitUnauthorised = "addLandingSubmitUnauthorised",
   AddLandingSubmitUnauthorisedAndSupportId = "addLandingSubmitUnauthorisedAndSupportId",

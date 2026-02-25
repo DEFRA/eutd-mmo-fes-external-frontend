@@ -977,3 +977,16 @@ describe("Direct Landing - unsafe weight value (field-level error)", () => {
       .should("not.have.class", "govuk-form-group--error");
   });
 });
+
+describe("Direct Landing page when vessel fetch fails", () => {
+  it("should gracefully handle a vessel fetch error and clear vessel options", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingVesselFetchError,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    waitForHydration();
+    cy.get("#vessel\\.vesselName").clear();
+    cy.get("#vessel\\.vesselName").type("ff");
+    cy.get(".autocomplete__option").should("not.exist");
+  });
+});
