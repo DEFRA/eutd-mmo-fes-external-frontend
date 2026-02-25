@@ -337,6 +337,7 @@ export const getErrorMessage = (key: string): string => {
     "error.dateLanded.string.empty": "ccCommonDateLandedRequiredError",
     "error.placeOfUnloading.string.pattern.base": "sdAddTransportationDetailsTruckPlaceOfUnloadingAsACombination",
     "validation.eezCode.string.max": "ccUploadFilePageTableEEZMaxCharError",
+    "validation.totalExportWeight.number.max": "ccUploadFilePageTableTotalWeightExceededError",
     "error.startDate.any.required": "ccCommonStartDateUnpopulatedError",
     "error.gearCategory.any.required": "ccCommonGearCategoryUnpopulatedError",
     "error.gearType.any.required": "ccCommonGearTypeUnpopulatedError",

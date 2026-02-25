@@ -123,6 +123,7 @@
   "ccAddLandingForProductError": "Ychwanegwch laniad ar gyfer {{species}}, {{state}}, {{presentation}}, {{commodityCode}} neu tynnwch y cynnyrch",
   "ccAddLandingDateLandedFutureDateError": "Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf",
   "ccAddLandingMaxLandingExceededError": "Wedi cyrraedd terfyn uchaf y glaniadau. I fwrw ymlaen, bydd angen i chi dynnu’r cynnyrch heb laniadau.",
+  "ccAddLandingTotalExportWeightLessThan": "Rhaid i gyfanswm y pwysau cyfun ar gyfer yr holl gynhyrchion fod yn llai na 10,000,000",
   "ccAddLandingStartDateRestrictedError": "Roedd y {{dynamicValue}} o dan gyfyngiadau pysgota ar eich dyddiad cychwyn penodedig. Gweler GOV.UK i gael rhagor o arweiniad.",
   "ccAddLandingDateLandedRestrictedError": "Roedd y {{dynamicValue}} yn destun cyfyngiadau pysgota ar y dyddiad glanio rydych wedi’i nodi. Cyfeiriwch at GOV.UK am ragor o ganllawiau.",
   "ccCommonDateLandedRealError": "Rhowch ddyddiad glanio dilys",
