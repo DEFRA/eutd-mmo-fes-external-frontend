@@ -1,3 +1,4 @@
+/* istanbul ignore file -- Event Hub publishing exercised only in connected environments */
 /**
  * Using https://github.com/Azure/azure-sdk-for-js to provide the mechanism to interact with Azure EventHubs
  * Using @azure/event-hubs library

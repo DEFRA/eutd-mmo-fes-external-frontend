@@ -1,3 +1,4 @@
+/* istanbul ignore file -- browser Application Insights wiring not covered in e2e flows */
 import { ApplicationInsights, type ITelemetryItem } from "@microsoft/applicationinsights-web";
 import { SeverityLevel, type ITraceTelemetry } from "@microsoft/applicationinsights-common";
 import { isProdEnv } from "./helpers";

@@ -169,7 +169,6 @@ const transformError = (
     const index: number = parseInt(errorKey.split(".")[1]);
     const product = products.items[index].product;
 
-    // Map all export weight error types to the direct landing required error
     const mappedKey = "error.weights.exportWeight.directLanding.any.base";
     return {
       [errorKey]: {
