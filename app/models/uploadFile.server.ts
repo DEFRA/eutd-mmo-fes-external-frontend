@@ -178,26 +178,12 @@ export const UploadFileAction = async (request: Request, params: Params): Promis
       return apiCallFailed(rows);
     }
 
-    const TOTAL_EXPORT_WEIGHT_LIMIT = 9_999_999.99;
-    const totalExportWeight = rows.reduce((sum: number, row: IUploadedLanding) => {
-      const weight = parseFloat(row.exportWeight);
-      return sum + (isNaN(weight) ? 0 : weight);
-    }, 0);
-
-    const validatedRows =
-      totalExportWeight > TOTAL_EXPORT_WEIGHT_LIMIT
-        ? rows.map((row: IUploadedLanding) => ({
-            ...row,
-            errors: [...row.errors, "validation.totalExportWeight.number.max"],
-          }))
-        : rows;
-
     return new Response(
       JSON.stringify({
-        rows: validatedRows,
-        successfullyUploadedRows: validatedRows.filter((row: IUploadedLanding) => row.errors.length === 0).length,
-        totalRows: validatedRows.length,
-        showNotification: validatedRows.length > 0,
+        rows,
+        successfullyUploadedRows: rows.filter((row: IUploadedLanding) => row.errors.length === 0).length,
+        totalRows: rows.length,
+        showNotification: rows.length > 0,
       }),
       {
         status: 200,
