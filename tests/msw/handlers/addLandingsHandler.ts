@@ -114,6 +114,15 @@ const addLandingsHandler: ITestHandler = {
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
     rest.post(VALIDATE_LANDINGS_URL, (req, res, ctx) => res(ctx.status(400), ctx.json(addLandingTotalWeightExceeded))),
   ],
+  [TestCaseId.AddLandingPageFailsWithTotalWeightExceeded]: () => [
+    rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json(addLandings))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(mannualLandingType))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
+    rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
+    rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.post(VALIDATE_LANDINGS_URL, (req, res, ctx) => res(ctx.status(400), ctx.json(addLandingTotalWeightExceeded))),
+  ],
   [TestCaseId.AddLandingPageFailsWithErrorsOnSaveAndContinue]: () => [
     rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json(addLandings))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(mannualLandingType))),

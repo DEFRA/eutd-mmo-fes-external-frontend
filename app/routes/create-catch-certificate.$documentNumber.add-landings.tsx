@@ -734,7 +734,7 @@ const AddLandings = () => {
                         ? t("ccAddLandingUpdateLandingBtnLabel")
                         : t("commonAddLandingButtonText", { ns: "common" })
                     }
-                    data-testid={addLandingActionName}
+                    data-testid="submit"
                   />
                 )}
               </div>
