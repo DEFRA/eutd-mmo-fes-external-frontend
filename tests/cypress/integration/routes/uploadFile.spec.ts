@@ -1015,6 +1015,6 @@ describe("Upload File Page Upload - total combined export weight exceeded", () =
 
     cy.get("#row-1-PRD765-0-upload-file-error")
       .should("exist")
-      .and("contain.text", "Rhaid i gyfanswm pwysau cyfunol yr holl gynhyrchion fod yn llai na 10,000,000");
+      .and("contain.text", "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 10,000,000");
   });
 });

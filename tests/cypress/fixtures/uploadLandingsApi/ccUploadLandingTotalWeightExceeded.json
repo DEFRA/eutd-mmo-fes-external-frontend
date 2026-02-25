@@ -7,7 +7,7 @@
     "exportWeight": "9999999.9",
     "rowNumber": 1,
     "originalRow": "PRD765,01/01/2021,01/01/2021,FAO27,No,GB,,PH1100,FPN,9999999.9",
-    "errors": [],
+    "errors": ["validation.totalExportWeight.number.max"],
     "product": {
       "presentation": "FIS",
       "presentationLabel": "Filleted and skinned",
@@ -42,7 +42,7 @@
     "exportWeight": "100",
     "rowNumber": 2,
     "originalRow": "PRD765,01/01/2021,01/01/2021,FAO27,No,GB,,PH1100,FPN,100",
-    "errors": [],
+    "errors": ["validation.totalExportWeight.number.max"],
     "product": {
       "presentation": "FIS",
       "presentationLabel": "Filleted and skinned",
@@ -77,7 +77,7 @@
     "exportWeight": "100",
     "rowNumber": 3,
     "originalRow": "PRD765,01/01/2021,01/01/2021,FAO27,No,GB,,PH1100,FPN,100",
-    "errors": [],
+    "errors": ["validation.totalExportWeight.number.max"],
     "product": {
       "presentation": "FIS",
       "presentationLabel": "Filleted and skinned",
