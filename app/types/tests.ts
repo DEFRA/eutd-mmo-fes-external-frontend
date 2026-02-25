@@ -838,4 +838,8 @@ export enum TestCaseId {
   SDDashboardWithPendingEUStatus = "sdDashboardWithPendingEUStatus",
   SDDashboardWithFailedEUStatus = "sdDashboardWithFailedEUStatus",
   SDDashboardWithSuccessEUStatus = "sdDashboardWithSuccessEUStatus",
+
+  // Year 0000 validation for transport date pickers
+  TruckTransportSaveInvalidYearExportDate = "TruckTransportSaveInvalidYearExportDate",
+  ArrivalTruckTransportSaveInvalidYearDepartureDate = "ArrivalTruckTransportSaveInvalidYearDepartureDate",
 }

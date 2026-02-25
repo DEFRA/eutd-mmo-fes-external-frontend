@@ -519,6 +519,26 @@ export const commonSaveTransportDetails = async (
   const saveAsDraft = form.get("_action") === "saveAsDraft";
   let errors: IError[] | IErrorsTransformed = payload?.arrival ? await validatePayload(payload, saveAsDraft) : [];
 
+  // Reject year 0000 (and any sub-1000 year) for exportDate and departureDate (format dd/mm/yyyy)
+  // before hitting the API. moment.js in strict mode accepts year 0000 as valid;
+  // isValidDate now rejects it, but we use moment().year() directly here rather than !isValidDate
+  // to avoid adding frontend errors for other invalid formats (e.g. month 13) that the API
+  // already catches, which would produce duplicate error messages.
+  if (!saveAsDraft) {
+    if (payload.exportDate) {
+      const exportDateParsed = moment(payload.exportDate as string, "DD/MM/YYYY", true);
+      if (exportDateParsed.isValid() && exportDateParsed.year() < 1000) {
+        (errors as IError[]).push({ key: "exportDate", message: "sdTransportExportDateInvalidError" });
+      }
+    }
+    if (payload.departureDate) {
+      const departureDateParsed = moment(payload.departureDate as string, "DD/MM/YYYY", true);
+      if (departureDateParsed.isValid() && departureDateParsed.year() < 1000) {
+        (errors as IError[]).push({ key: "departureDate", message: "sdTransportDepatureDateInvalidError" });
+      }
+    }
+  }
+
   let postTransport: IBase;
 
   // Save valid fields as draft even when validation errors exist
