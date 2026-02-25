@@ -503,6 +503,7 @@ export enum TestCaseId {
   CCUploadLandingsMaxRowsError = "ccUploadLandingsMaxRowsError",
   CCUploadLandingsFileTooLargeError = "ccUploadLandingsFileTooLargeError",
   CCUploadLandingsFileGenericError = "ccUploadLandingsFileGenericError",
+  CCUploadLandingsTotalWeightExceeded = "ccUploadLandingsTotalWeightExceeded",
   CCSaveUploadLandingsError = "ccSaveUploadLandingsError",
   CCSaveUploadLandingsSuccess = "ccSaveUploadLandingsSuccess",
   CCSaveUploadLandingsForbidden = "ccSaveUploadLandingsForbidden",
