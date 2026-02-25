@@ -76,6 +76,18 @@ describe("Direct Landing Error Messages - English", () => {
     cy.get(".govuk-error-message").should("contain.text", "Select a vessel from the list");
   });
 
+  it("should display 'Select a vessel from the list' when vessel.isListed error is returned", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingVesselIsListed,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Select a vessel from the list");
+    cy.get(".govuk-error-message").should("contain.text", "Select a vessel from the list");
+    cy.get("#vessel\\.vesselName").closest(".govuk-form-group").should("have.class", "govuk-form-group--error");
+  });
+
   it("should display 'Enter the export weight in kilograms' when export weight is invalid", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DirectLandingExportWeightInvalid,
@@ -161,6 +173,19 @@ describe("Direct Landing Error Messages - Welsh", () => {
     cy.get("#error-summary-title").contains("Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
     cy.get(".govuk-error-message").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
+  });
+
+  it("should display 'Dewiswch gwch neu long o'r rhestr' when vessel.isListed error is returned", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingVesselIsListed,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
+    cy.get(".govuk-error-message").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
+    cy.get("#vessel\\.vesselName").closest(".govuk-form-group").should("have.class", "govuk-form-group--error");
   });
 
   it("should display 'Rhowch y pwysau allforio mewn cilogramau' when export weight is invalid", () => {

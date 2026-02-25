@@ -208,6 +208,7 @@ export enum TestCaseId {
   DirectLandingDateLandedFuture = "directLandingDateLandedFuture",
   DirectLandingVesselUnpopulated = "directLandingVesselUnpopulated",
   DirectLandingVesselInvalid = "directLandingVesselInvalid",
+  DirectLandingVesselIsListed = "directLandingVesselIsListed",
   DirectLandingExportWeightInvalid = "directLandingExportWeightInvalid",
   AddLandingPageGuard = "addLandingPageGuard",
   AddLandingSubmitUnauthorised = "addLandingSubmitUnauthorised",

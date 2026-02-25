@@ -79,6 +79,9 @@ const saveActionBase: any = async (values: any, landings: IDirectLandings, isNum
   if (selectedVessel) {
     selectedVessel.label = values["vessel"].toString();
     selectedVessel.domId = values["vessel"].toString().replace(" (", "-").replace(")", "");
+  } else if (selectedVessel === undefined && values["vessel"] !== "") {
+    previousVessel.vesselName = values["vessel"] as string;
+    previousVessel.isListed = false;
   } else {
     previousVessel.pln = landings?.vessel?.pln;
     previousVessel.vesselName = landings?.vessel?.vesselName;
