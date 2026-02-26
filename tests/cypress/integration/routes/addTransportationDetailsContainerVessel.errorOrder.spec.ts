@@ -41,7 +41,7 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
       );
   });
 
-  it("[UAT-499] should display required field errors before container max length error in correct order", () => {
+  it("[UAT-499] should display required field errors before container format error in correct order (FI0-10940)", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselRequiredFieldsAndMaxLengthContainer,
     };
@@ -50,7 +50,7 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
     // Wait for page to load completely
     cy.get("#vesselName", { timeout: 10000 }).should("be.visible");
 
-    // Fill only the container field with a value over 50 characters
+    // Fill only the container field with a value over 50 characters (FI0-10940: no 50-char limit, only format matters)
     cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
 
     // Submit form without filling required fields
@@ -66,7 +66,10 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
     cy.get(".govuk-error-summary__list li").eq(2).should("contain", "Enter the place the export leaves the UK");
     cy.get(".govuk-error-summary__list li")
       .eq(3)
-      .should("contain", "Container identification number must not exceed 50 characters");
+      .should(
+        "contain",
+        "Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers."
+      );
   });
 
   it("[UAT-499] should display container invalid format error ONLY when all required fields are filled", () => {
