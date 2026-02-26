@@ -1,4 +1,3 @@
-/* istanbul ignore file -- Azure Dynamics integration exercised only in higher envs */
 import * as msal from "@azure/msal-node";
 import querystring from "querystring";
 import { getEnv } from "~/env.server";
