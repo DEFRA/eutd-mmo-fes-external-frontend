@@ -880,7 +880,7 @@ describe("Direct Landing - Invalid date validation without vessel name error (FI
   });
 });
 
-describe.only("Direct Landing - Welsh translation: total combined weight exceeded (FIO-9121)", () => {
+describe("Direct Landing - Welsh translation: total combined weight exceeded (FIO-9121)", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DirectLandingTotalWeightExceeded,
