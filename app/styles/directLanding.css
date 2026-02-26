@@ -25,7 +25,3 @@
 #gearCategory {
   margin-right: 15px;
 }
-/* avoid input error message bashing */
-#yourproducts .govuk-input {
-  margin-left: 0.5em;
-}
