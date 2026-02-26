@@ -2468,7 +2468,6 @@ const transportDetailsHandler: ITestHandler = {
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
-  // UAT-499: Handler for testing error order - all required fields missing + container format error (FI0-10940: no 50-char limit)
   [TestCaseId.ContainerVesselRequiredFieldsAndMaxLengthContainer]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(vesselTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
@@ -2556,7 +2555,6 @@ const transportDetailsHandler: ITestHandler = {
         errors.departurePlace = "error.departurePlace.any.required";
       }
 
-      // Validate container numbers - check both containers (FI0-10940: no 50-char limit, only ISO 6346 format)
       if (body.containerNumbers) {
         if (body.containerNumbers[0] && !/^[A-Z]{3}[UJZR]\d{7}$/.test(body.containerNumbers[0])) {
           errors["containerNumbers.0"] = "error.containerNumbers.0.string.pattern.base";
@@ -2590,7 +2588,6 @@ const transportDetailsHandler: ITestHandler = {
         errors.departurePlace = "error.departurePlace.any.required";
       }
 
-      // Validate container numbers - check both containers (FI0-10940: no 50-char limit, only ISO 6346 format)
       if (body.containerNumbers) {
         if (body.containerNumbers[0] && !/^[A-Z]{3}[UJZR]\d{7}$/.test(body.containerNumbers[0])) {
           errors["containerNumbers.0"] = "error.containerNumbers.0.string.pattern.base";

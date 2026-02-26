@@ -260,7 +260,7 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
     cy.contains("h2", "There is a problem").should("be.visible");
   });
 
-  it("should show format error when a container identification number has invalid format regardless of length (FI0-10940)", () => {
+  it("should show format error when a container identification number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainSaveMaxCharsContainerIdentificationNumber,
     };

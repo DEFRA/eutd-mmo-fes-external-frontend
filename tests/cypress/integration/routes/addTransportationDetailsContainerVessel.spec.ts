@@ -124,7 +124,7 @@ describe("should redirect to forbidden page it transport details return 403 on p
 });
 
 describe("Add Transportation Details Container Vessel: Container Identification Number Validation", () => {
-  it("should display format error when container identification number has invalid format regardless of length (FI0-10940)", () => {
+  it("should display format error when container identification number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportContainerMaxLength,
     };
@@ -242,7 +242,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.get('input[name="containerNumbers.2"]').should("have.value", "EXISTING003");
   });
 
-  it("should display format error when container number has invalid format regardless of length (FI0-10940)", () => {
+  it("should display format error when container number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportContainerMaxLength,
     };
@@ -257,7 +257,6 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
 
     cy.get("[data-testid=save-and-continue]").click({ force: true });
 
-    // Check format error is displayed (FI0-10940: no 50-char limit, only invalid format error)
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains(
       "a",

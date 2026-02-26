@@ -177,7 +177,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
       .and("contain", "Enter the identification number shown on the shipping container. For example, ABCJ0123456");
   });
 
-  it("should display format error when container identification number has invalid format regardless of length (FI0-10940)", () => {
+  it("should display format error when container identification number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportContainerIdentificationNumberMaxLength,
     };
@@ -332,7 +332,7 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     cy.contains("a", /^Container identification number must only contain letters and numbers$/).should("be.visible");
   });
 
-  it("should display format error when container number has invalid format regardless of length (FI0-10940)", () => {
+  it("should display format error when container number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportContainerMaxLength,
     };
@@ -346,7 +346,6 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
 
     cy.get("[data-testid=save-and-continue]").click({ force: true });
 
-    // Check format error is displayed (FI0-10940: no 50-char limit, only invalid format error)
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Container identification number must only contain letters and numbers$/).should("be.visible");
   });

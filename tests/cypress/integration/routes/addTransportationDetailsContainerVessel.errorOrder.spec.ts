@@ -41,7 +41,7 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
       );
   });
 
-  it("[UAT-499] should display required field errors before container format error in correct order (FI0-10940)", () => {
+  it("[UAT-499] should display required field errors before container format error in correct order", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselRequiredFieldsAndMaxLengthContainer,
     };
@@ -50,7 +50,6 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
     // Wait for page to load completely
     cy.get("#vesselName", { timeout: 10000 }).should("be.visible");
 
-    // Fill only the container field with a value over 50 characters (FI0-10940: no 50-char limit, only format matters)
     cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
 
     // Submit form without filling required fields
