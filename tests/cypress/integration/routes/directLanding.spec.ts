@@ -335,8 +335,10 @@ describe("Direct landing page render", () => {
 
   it("should disable vessel input until date landed is populated", () => {
     waitForHydration();
-    cy.get("#vessel\\.vesselName").clear();
-    cy.get("#vessel\\.vesselName").invoke("val").should("eq", "");
+    cy.get(String.raw`#vessel\.vesselName`).clear();
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val")
+      .should("eq", "");
     cy.get("#dateLanded-day").clear();
     cy.get("#dateLanded-day").invoke("val").should("eq", "");
     cy.get("#dateLanded-month").clear();
@@ -344,15 +346,19 @@ describe("Direct landing page render", () => {
     cy.get("#dateLanded-year").clear();
     cy.get("#dateLanded-year").invoke("val").should("eq", "");
     // attempt to change vessel
-    cy.get("#vessel\\.vesselName").type("CARINA (BF803)");
-    cy.get("#vessel\\.vesselName").invoke("val").should("eq", "");
+    cy.get(String.raw`#vessel\.vesselName`).type("CARINA (BF803)");
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val")
+      .should("eq", "");
     // populate valid landed date
     cy.get("#dateLanded-day").type("11");
     cy.get("#dateLanded-month").type("12");
     cy.get("#dateLanded-year").type("2021");
     // attempt to change vessel
-    cy.get("#vessel\\.vesselName").type("CARINA (BF803)");
-    cy.get("#vessel\\.vesselName").invoke("val").should("eq", "CARINA (BF803)");
+    cy.get(String.raw`#vessel\.vesselName`).type("CARINA (BF803)");
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val")
+      .should("eq", "CARINA (BF803)");
   });
 
   it("should fill the form fields with gear details", () => {
@@ -373,10 +379,10 @@ describe("Direct landing page render", () => {
       cy.get("#rfmo").select(2, { force: true });
     });
     // vessel
-    cy.get("#vessel\\.vesselName").invoke("val", "CARINA (BF803)");
+    cy.get(String.raw`#vessel\.vesselName`).invoke("val", "CARINA (BF803)");
     // weight
-    cy.get("#weights\\.0\\.exportWeight").invoke("val", 4);
-    cy.get("#weights\\.1\\.exportWeight").invoke("val", 8);
+    cy.get(String.raw`#weights\.0\.exportWeight`).invoke("val", 4);
+    cy.get(String.raw`#weights\.1\.exportWeight`).invoke("val", 8);
     // gear details
     cy.get("#gearCategory").contains("Select gear category");
     cy.get("#gearCategory").then(() => {
@@ -401,10 +407,14 @@ describe("Direct landing page render", () => {
   });
 
   it("should render 0kg if the entered weights are not defined", () => {
-    cy.get("#weights\\.0\\.exportWeight").should("have.value", "2");
-    cy.get("#weights\\.1\\.exportWeight").should("have.value", "3");
-    cy.get("#weights\\.0\\.exportWeight").invoke("val", "").trigger("change");
-    cy.get("#weights\\.1\\.exportWeight").invoke("val", "").trigger("change");
+    cy.get(String.raw`#weights\.0\.exportWeight`).should("have.value", "2");
+    cy.get(String.raw`#weights\.1\.exportWeight`).should("have.value", "3");
+    cy.get(String.raw`#weights\.0\.exportWeight`)
+      .invoke("val", "")
+      .trigger("change");
+    cy.get(String.raw`#weights\.1\.exportWeight`)
+      .invoke("val", "")
+      .trigger("change");
     cy.get("#yourproducts tr:last-child td:last-of-type").contains("0kg");
   });
 
@@ -425,10 +435,14 @@ describe("Direct landing page render", () => {
 
   it("should trigger vessel dropdown when user types", () => {
     waitForHydration();
-    cy.get("#vessel\\.vesselName").invoke("val").should("eq", "AARON (N370)");
-    cy.get("#vessel\\.vesselName").clear();
-    cy.get("#vessel\\.vesselName").invoke("val").should("be.empty");
-    cy.get("#vessel\\.vesselName").type("ff");
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val")
+      .should("eq", "AARON (N370)");
+    cy.get(String.raw`#vessel\.vesselName`).clear();
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val")
+      .should("be.empty");
+    cy.get(String.raw`#vessel\.vesselName`).type("ff");
     cy.get(".autocomplete__option").should("have.length", 5501);
   });
 });
@@ -491,20 +505,20 @@ describe("DirectLanding page when javascript is disabled", () => {
   });
 
   it("should render a select box with pre-populated vessel names when valid date landed exists", () => {
-    cy.get("select#vessel\\.vesselName").should("exist");
+    cy.get(String.raw`select#vessel\.vesselName`).should("exist");
     cy.get("select#vessel\\.vesselName option").should("not.have.length", 0);
   });
 
   it("should retain existing vessel name when date landed is added", () => {
     cy.get("[data-testid='add-dateLanded']").click({ force: true });
-    cy.get("select#vessel\\.vesselName").should("have.length.at.least", 1);
-    cy.get("select#vessel\\.vesselName").should("have.value", "AARON (N370)");
+    cy.get(String.raw`select#vessel\.vesselName`).should("have.length.at.least", 1);
+    cy.get(String.raw`select#vessel\.vesselName`).should("have.value", "AARON (N370)");
   });
 
   it("should retain existing vessel name when date landed is added", () => {
     cy.get("[data-testid='add-dateLanded']").click({ force: true });
-    cy.get("select#vessel\\.vesselName").should("have.length.at.least", 1);
-    cy.get("select#vessel\\.vesselName").should("have.value", "AARON (N370)");
+    cy.get(String.raw`select#vessel\.vesselName`).should("have.length.at.least", 1);
+    cy.get(String.raw`select#vessel\.vesselName`).should("have.value", "AARON (N370)");
   });
 
   it("should trigger add date button with values", () => {
@@ -541,7 +555,7 @@ describe("DirectLanding page errors when javascript is disabled", () => {
   it("should trigger add date button", () => {
     cy.get("[data-testid='add-dateLanded']").click({ force: true });
     cy.url().should("include", "vessels");
-    cy.get("#vessel\\.vesselName").should("have.length.at.least", 1);
+    cy.get(String.raw`#vessel\.vesselName`).should("have.length.at.least", 1);
   });
 
   it("should click on save and continue", () => {
@@ -589,7 +603,9 @@ describe("DirectLanding page errors when javascript is enabled", () => {
   });
 
   it("should search autoinput field", () => {
-    cy.get("#vessel\\.vesselName").invoke("val", "abc").trigger("change");
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val", "abc")
+      .trigger("change");
   });
 
   it("should click on save and continue", () => {
@@ -864,6 +880,19 @@ describe("Direct Landing - Invalid date validation without vessel name error (FI
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
   });
+
+  it("should load the page with invalid pre-populated dates without a vessel field error", () => {
+    cy.get(".govuk-heading-xl").contains("Add your trip").should("be.visible");
+    cy.get(String.raw`#vessel\.vesselName`).should("exist");
+  });
+
+  it("should display date errors but not a vessel error when invalid dates are submitted (FIO-10474)", () => {
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.url().should("include", "direct-landing");
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list").should("contain.text", "Enter a valid");
+    cy.get(".govuk-error-summary__list").should("not.contain.text", "Select a vessel from the list");
+  });
 });
 describe("Direct Landing Error Messages - English", () => {
   it("should display the correct error messages when inputs are unpopulated", () => {
@@ -928,7 +957,9 @@ describe("Direct Landing Error Messages - English", () => {
       testCaseId: TestCaseId.DirectLandingVesselInvalid,
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
-    cy.get("#vessel\\.vesselName").invoke("val", "").type(invalidVesselValue);
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val", "")
+      .type(invalidVesselValue);
     cy.wait(500);
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.get("#error-summary-title").contains("There is a problem");
@@ -945,7 +976,9 @@ describe("Direct Landing Error Messages - English", () => {
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Select a vessel from the list");
     cy.get(".govuk-error-message").should("contain.text", "Select a vessel from the list");
-    cy.get("#vessel\\.vesselName").closest(".govuk-form-group").should("have.class", "govuk-form-group--error");
+    cy.get(String.raw`#vessel\.vesselName`)
+      .closest(".govuk-form-group")
+      .should("have.class", "govuk-form-group--error");
   });
 
   it("should display 'Enter the export weight in kilograms' when export weight is invalid", () => {
@@ -1027,7 +1060,9 @@ describe("Direct Landing Error Messages - Welsh", () => {
       lng: "cy",
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
-    cy.get("#vessel\\.vesselName").invoke("val", "").type(invalidVesselValue);
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val", "")
+      .type(invalidVesselValue);
     cy.wait(500);
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.get("#error-summary-title").contains("Mae yna broblem");
@@ -1045,7 +1080,9 @@ describe("Direct Landing Error Messages - Welsh", () => {
     cy.get("#error-summary-title").contains("Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
     cy.get(".govuk-error-message").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
-    cy.get("#vessel\\.vesselName").closest(".govuk-form-group").should("have.class", "govuk-form-group--error");
+    cy.get(String.raw`#vessel\.vesselName`)
+      .closest(".govuk-form-group")
+      .should("have.class", "govuk-form-group--error");
   });
 
   it("should display 'Rhowch y pwysau allforio mewn cilogramau' when export weight is invalid", () => {
@@ -1058,5 +1095,37 @@ describe("Direct Landing Error Messages - Welsh", () => {
     cy.get("#error-summary-title").contains("Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Rhowch y pwysau allforio mewn cilogramau");
     cy.get(".govuk-error-message").should("contain.text", "Rhowch y pwysau allforio mewn cilogramau");
+  });
+});
+
+describe("Direct Landing - Client-side fetch error resilience", () => {
+  // Test Intent: Cover the catch blocks in handleGearCategoryChange and getVessels
+  // to ensure graceful degradation when the /get-gear-types or /get-vessels
+  // endpoints return network errors after hydration.
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLanding,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    waitForHydration();
+  });
+
+  it("should handle gear types fetch network errors gracefully and keep the gear type input rendered", () => {
+    cy.intercept("GET", "/get-gear-types*", { forceNetworkError: true }).as("gearTypesFetchError");
+    // Change gear category to trigger handleGearCategoryChange which fetches /get-gear-types
+    cy.get("#gearCategory").select("Dredges");
+    cy.wait("@gearTypesFetchError");
+    // After the error, the gear type select should still be in the DOM
+    cy.get("#gearType").should("exist");
+  });
+
+  it("should handle vessel search fetch network errors gracefully and keep the vessel input rendered", () => {
+    cy.intercept("GET", "/get-vessels*", { forceNetworkError: true }).as("vesselFetchError");
+    // Clear vessel and type to trigger the useEffect which fetches /get-vessels
+    cy.get(String.raw`#vessel\.vesselName`).clear();
+    cy.get(String.raw`#vessel\.vesselName`).type("ab");
+    cy.wait("@vesselFetchError");
+    // After the error, the vessel input should still be in the DOM
+    cy.get(String.raw`#vessel\.vesselName`).should("exist");
   });
 });
