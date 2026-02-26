@@ -1,6 +1,6 @@
 # This assumes that the parent image has been built locally using production and development build configuration as defra-node
 # and defra-node-development tagged with a version.
-ARG DEFRA_BASE_IMAGE_TAG=latest-22
+ARG DEFRA_BASE_IMAGE_TAG=latest-24
 FROM defradigital/node-development:$DEFRA_BASE_IMAGE_TAG as base
 
 # We have production dependencies requiring node-gyp builds which don't
@@ -16,7 +16,7 @@ RUN mkdir /app
 COPY --chown=node:node . /app
 
 # Create a build for running tests
-FROM cypress/base:22.13.1 as test
+FROM cypress/base:24 as test
 # Update the package list and install curl
 RUN apt-get update && apt-get install -y curl
 COPY --chown=node:node . /app
