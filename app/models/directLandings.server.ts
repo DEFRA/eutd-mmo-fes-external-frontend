@@ -209,6 +209,13 @@ const saveAndContinueAction = async (
   const submitForm = await validateDirectLandings(bearerToken, documentNumber, responseBody);
   if (Array.isArray(submitForm) && submitForm.length > 0) {
     const errors = getTransformedError(submitForm);
+    // If there is an array-level weights error (e.g. totalWeightExceeded), map it
+    // to the first weight field so the error appears at field level and exactly once
+    // in the error summary. The original array-level key is removed to prevent duplicates.
+    if (errors["weights"] && Array.isArray(updatedWeights) && updatedWeights.length > 0) {
+      errors["weights.0.exportWeight"] = errors["weights"];
+      delete errors["weights"];
+    }
     return new Response(
       JSON.stringify({
         values,

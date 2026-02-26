@@ -879,3 +879,29 @@ describe("Direct Landing - Invalid date validation without vessel name error (FI
     cy.get(".govuk-error-summary__list").should("not.contain", "vessel");
   });
 });
+
+describe.only("Direct Landing - Welsh translation: total combined weight exceeded (FIO-9121)", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingTotalWeightExceeded,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+  });
+
+  it("should display the Welsh translation of the total weight exceeded error in the error summary", () => {
+    cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
+    cy.contains(
+      ".govuk-error-summary__list a",
+      "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000"
+    ).should("be.visible");
+  });
+
+  it("should display the Welsh translation of the total weight exceeded error at field level", () => {
+    cy.contains(
+      ".govuk-error-message",
+      "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000"
+    ).should("be.visible");
+  });
+});
