@@ -1,7 +1,7 @@
 # This assumes that the parent image has been built locally using production and development build configuration as defra-node
 # and defra-node-development tagged with a version.
 ARG DEFRA_BASE_IMAGE_TAG=latest-24
-FROM defradigital/node-development:$DEFRA_BASE_IMAGE_TAG as base
+FROM defradigital/node-development:$DEFRA_BASE_IMAGE_TAG AS base
 
 # We have production dependencies requiring node-gyp builds which don't
 #   install cleanly with the defradigital/node image. So we'll install them here
@@ -16,7 +16,7 @@ RUN mkdir /app
 COPY --chown=node:node . /app
 
 # Create a build for running tests
-FROM cypress/base:24 as test
+FROM cypress/base:24.14.0 AS test
 # Update the package list and install curl
 RUN apt-get update && apt-get install -y curl
 COPY --chown=node:node . /app
@@ -28,7 +28,7 @@ HEALTHCHECK --interval=10s --start-period=60s \
     CMD curl --fail http://localhost:3000/ || exit 1
 
 # Production stage exposes service port, copies in app code, creates a production build, and declares the Node app as the default command
-FROM defradigital/node:$DEFRA_BASE_IMAGE_TAG as production
+FROM defradigital/node:$DEFRA_BASE_IMAGE_TAG AS production
 # Accept BUILD_ID from build pipeline for cache-busting locale JSON files
 ARG BUILD_ID=""
 ENV BUILD_ID=${BUILD_ID}
