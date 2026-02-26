@@ -1,4 +1,3 @@
-/* istanbul ignore file -- logging utilities rely on runtime telemetry wiring */
 /* eslint-disable no-console */
 import { getApplicationInsights } from "~/applicationInsightsService";
 import type { IApplicationInsights } from "@microsoft/applicationinsights-web";
