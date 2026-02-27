@@ -100,3 +100,21 @@ export const toDDMMYYYYFormat = (day: string, month: string, year: string): stri
 export const getStrOrDefault = (value: string, defaultValue: string = "") => value ?? defaultValue;
 
 export const toDelimitedStr = (items: string[], delimiter: string = ", ") => items?.join(delimiter);
+
+export const getUploadNotificationHeader = (
+  uploadNotification: boolean,
+  ccUploadFilePageNotificationProgressHeader: string,
+  ccUploadFilePageNotificationCompletionHeader: string
+) => (uploadNotification ? ccUploadFilePageNotificationProgressHeader : ccUploadFilePageNotificationCompletionHeader);
+
+export const getUploadNotificationMessage = (
+  uploadNotification: boolean,
+  ccUploadFilePageNotificationProgressMessage: string,
+  ccUploadFilePageNotificationCompletionMessage: string
+) => (uploadNotification ? ccUploadFilePageNotificationProgressMessage : ccUploadFilePageNotificationCompletionMessage);
+
+export const getUploadNotificationClassName = (uploadNotification: boolean) =>
+  uploadNotification ? "" : "govuk-notification-banner--success";
+
+export const getUploadNotificationRole = (showNotification: boolean | undefined) =>
+  showNotification ? "alert" : "region";
