@@ -158,7 +158,9 @@ const DirectLanding = () => {
 
   // vessel input
   const getVesselErrorText = () => {
-    const error = errors?.["vessel.vesselName"]?.message ?? "";
+    const vesselNameError = errors?.["vessel.vesselName"]?.message ?? "";
+    const vesselIsListedError = errors?.["vessel.isListed"]?.message ?? "";
+    const error = vesselNameError || vesselIsListedError;
     return isEmpty(error) ? "" : t(error, { ns: "errorsText" });
   };
 
@@ -301,6 +303,7 @@ const DirectLanding = () => {
             "eez.3",
             "eez.4",
             "vessel.vesselName",
+            "vessel.isListed",
             "gearCategory",
             "gearType",
             "weight",
@@ -425,16 +428,17 @@ const DirectLanding = () => {
                   return showPrompt;
                 }}
                 containerClassName={classNames("govuk-form-group", "govuk-!-width-one-half", {
-                  "govuk-form-group--error": !isEmpty(errors["vessel.vesselName"]),
+                  "govuk-form-group--error":
+                    !isEmpty(errors["vessel.vesselName"]) || !isEmpty(errors["vessel.isListed"]),
                 })}
                 selectProps={{
                   selectClassName: classNames("govuk-select", {
-                    "govuk-select--error": !isEmpty(errors["vessel.vesselName"]),
+                    "govuk-select--error": !isEmpty(errors["vessel.vesselName"]) || !isEmpty(errors["vessel.isListed"]),
                   }),
                 }}
                 inputProps={{
                   className: classNames("govuk-input", {
-                    "govuk-input--error": !isEmpty(errors["vessel.vesselName"]),
+                    "govuk-input--error": !isEmpty(errors["vessel.vesselName"]) || !isEmpty(errors["vessel.isListed"]),
                   }),
                 }}
                 onChange={enableChange ? handleVesselChange : undefined}
