@@ -35,7 +35,7 @@ export const CommonDatePicker = ({
   hideAddDateButton,
   getDateSelected,
 }: DatePickerProps) => {
-  const { t } = useTranslation(["errorsText", "common"]);
+  const { t } = useTranslation(["errorsText", "common", translationNs]);
   const dateFormat = "YYYY-MM-DD";
   const isHydrated = useIsHydrated();
   const [selectedDate, setSelectedDate] = useState<Date | null>(
@@ -102,7 +102,10 @@ export const CommonDatePicker = ({
         {!isEmpty(errors) && (
           <ErrorMessage
             id="error-message"
-            text={t(errors?.message, { ...errors?.value })}
+            text={t(typeof errors === "string" ? errors : errors?.message, {
+              ns: "errorsText",
+              ...(typeof errors === "string" ? {} : errors?.value),
+            })}
             visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
           />
         )}

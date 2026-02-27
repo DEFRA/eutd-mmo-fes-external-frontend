@@ -158,7 +158,9 @@ export const AddTransportationArrivalDetailsComponent = ({
 
   return (
     <Main backUrl={backUrl}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} />}
+      {!isEmpty(errors) && (
+        <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} translationNs="transportation" />
+      )}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" csrf={csrf}>
