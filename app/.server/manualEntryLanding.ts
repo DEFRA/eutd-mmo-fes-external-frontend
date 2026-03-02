@@ -154,7 +154,8 @@ export const addLanding = async (
   },
   rfmo: string | undefined,
   vessel: IVessel = {},
-  exclusiveEconomicZones: (ICountry | undefined)[] = []
+  exclusiveEconomicZones: (ICountry | undefined)[] = [],
+  frontendTotals?: { totalExportWeight?: string; totalCombinedExportWeight?: string }
 ): Promise<ProductsLanded | IUnauthorised | IBase> => {
   if (!documentNumber) throw new Error("Document number is required");
 
@@ -177,6 +178,11 @@ export const addLanding = async (
       gearCode: isEmpty(gearFields.gearCode) ? undefined : gearFields.gearCode,
       rfmo,
       exclusiveEconomicZones,
+      // include optional frontend-calculated totals so orchestration can validate aggregate
+      ...(frontendTotals?.totalExportWeight !== undefined && { totalExportWeight: frontendTotals.totalExportWeight }),
+      ...(frontendTotals?.totalCombinedExportWeight !== undefined && {
+        totalCombinedExportWeight: frontendTotals.totalCombinedExportWeight,
+      }),
       ...(landingId && { id: landingId }),
     }
   );
