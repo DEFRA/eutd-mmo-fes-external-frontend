@@ -304,6 +304,7 @@ const addLandingAction = async (
     {
       totalExportWeight: (values as any).totalExportWeight as string | undefined,
       totalCombinedExportWeight: (values as any).totalCombinedExportWeight as string | undefined,
+      existingLandingWeight: (values as any).existingLandingWeight as string | undefined,
     }
   );
 
