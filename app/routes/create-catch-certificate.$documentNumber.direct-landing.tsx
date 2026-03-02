@@ -4,6 +4,7 @@ import {
   Title,
   AutocompleteFormField,
   BackToProgressLink,
+  ErrorMessage,
   ErrorSummary,
   SecureForm,
   GearDetails,
@@ -492,45 +493,55 @@ const DirectLanding = () => {
               </Details>
             </div>
             <h2>{t("ccAddLandingProductWeightHeader")}</h2>
-            <table className="govuk-table" id="yourproducts">
-              <thead className="govuk-table__head">
-                <tr className="govuk-table__row">
-                  <th scope="col" className="govuk-table__header table-adjust-font">
-                    {t("ccAddLandingProductLabel")}
-                  </th>
-                  <th scope="col" className="govuk-table__header table-adjust-font">
-                    {t("ccAddLandingExportWeightFieldLabel")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {directLandings?.weights.map((landings: IDirectLandingsDetails, index: number) => (
-                  <tr className="govuk-table__row" key={`directlanding-${landings.speciesId}`}>
-                    <td className="govuk-table__cell tablerowuserref table-adjust-font">{landings.speciesLabel}</td>
+            <div
+              id="weights"
+              className={classNames({
+                "govuk-form-group govuk-form-group--error": !isEmpty(errors?.["weights"]),
+              })}
+            >
+              {!isEmpty(errors?.["weights"]) && (
+                <ErrorMessage text={t(errors["weights"].message, { ns: "errorsText" })} />
+              )}
+              <table className="govuk-table" id="yourproducts">
+                <thead className="govuk-table__head">
+                  <tr className="govuk-table__row">
+                    <th scope="col" className="govuk-table__header table-adjust-font">
+                      {t("ccAddLandingProductLabel")}
+                    </th>
+                    <th scope="col" className="govuk-table__header table-adjust-font">
+                      {t("ccAddLandingExportWeightFieldLabel")}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {directLandings?.weights.map((landings: IDirectLandingsDetails, index: number) => (
+                    <tr className="govuk-table__row" key={`directlanding-${landings.speciesId}`}>
+                      <td className="govuk-table__cell tablerowuserref table-adjust-font">{landings.speciesLabel}</td>
+                      <td className="govuk-table__cell">
+                        <WeightInput
+                          id="weight"
+                          unit="kg"
+                          errors={errors}
+                          formValue={values?.[`weight-${landings?.speciesId}`]}
+                          speciesId={landings?.speciesId}
+                          index={index}
+                          exportWeight={isEmpty(values) ? landings?.exportWeight?.toString() : ""}
+                          totalWeight={getTotalWeight}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className="govuk-table__row">
                     <td className="govuk-table__cell">
-                      <WeightInput
-                        id="weight"
-                        unit="kg"
-                        errors={errors}
-                        formValue={values?.[`weight-${landings?.speciesId}`]}
-                        speciesId={landings?.speciesId}
-                        index={index}
-                        exportWeight={isEmpty(values) ? landings?.exportWeight?.toString() : ""}
-                        totalWeight={getTotalWeight}
-                      />
+                      <strong>{t("ccAddLandingTotalExportWeight")}</strong>
+                    </td>
+                    <td className="govuk-table__cell">
+                      <strong>{calculatedWeight?.toFixed(2)}kg</strong>
                     </td>
                   </tr>
-                ))}
-                <tr className="govuk-table__row">
-                  <td className="govuk-table__cell">
-                    <strong>{t("ccAddLandingTotalExportWeight")}</strong>
-                  </td>
-                  <td className="govuk-table__cell">
-                    <strong>{calculatedWeight?.toFixed(2)}kg</strong>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
             <ButtonGroup />
             <BackToProgressLink
               progressUri="/create-catch-certificate/:documentNumber/progress"
