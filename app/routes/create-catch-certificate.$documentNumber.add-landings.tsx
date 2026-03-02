@@ -438,6 +438,7 @@ const AddLandings = () => {
           <ImportantNotice messageKey="commonAddTripDetailsWarningContent" />
           <SecureForm method="post" key={renderCounter} csrf={csrf}>
             {isEditing && <input type="hidden" name="landingId" defaultValue={landingId} />}
+            {isEditing && <input type="hidden" name="existingLandingWeight" defaultValue={selectedWeight} />}
             {disableProductSelection && <input type="hidden" name="product" defaultValue={initialProductValue} />}
             {/* Submit frontend-calculated combined total so orchestration can validate aggregate weight */}
             <input
