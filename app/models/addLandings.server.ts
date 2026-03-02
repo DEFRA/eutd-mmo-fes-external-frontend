@@ -299,12 +299,7 @@ const addLandingAction = async (
     },
     selectedRfmo,
     selectedVessel,
-    exclusiveEconomicZones,
-    // forward frontend-calculated totals (if provided by form hidden inputs)
-    {
-      totalExportWeight: (values as any).totalExportWeight as string | undefined,
-      totalCombinedExportWeight: (values as any).totalCombinedExportWeight as string | undefined,
-    }
+    exclusiveEconomicZones
   );
 
   if (instanceOfUnauthorisedWithSupportId(response)) {
