@@ -222,18 +222,62 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     supportingDocumentsFromForm,
     countries
   );
-  const saveToRedisIfErrors = isDraft;
+  // First validation pass – always validate without saving so we can inspect errors
   const errorResponse = await updateStorageDocumentCatchDetails(
     bearerToken,
     documentNumber,
     { ...updateData },
     `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment${productIndexUrlFragment}`,
     productIndex,
-    saveToRedisIfErrors,
+    false, // saveToRedisIfErrors = false (validate only)
     false,
     isNonJs
   );
   if (isDraft) {
+    if (errorResponse) {
+      // Filter out invalid fields and save only valid ones as draft
+      const responseData =
+        typeof (errorResponse as any).json === "function"
+          ? await (errorResponse as Response).clone().json()
+          : errorResponse;
+      const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+      const catchPrefix = `catches-${productIndex}-`;
+      const invalidFieldNames = new Set(
+        errorKeys.filter((k) => k.startsWith(catchPrefix)).map((k) => k.slice(catchPrefix.length).split("-")[0])
+      );
+      // Start with all submitted fields, then null out invalid ones so the
+      // client-side Redis merge clears any previously-saved bad values.
+      const filteredData = { ...updateData } as Partial<StorageDocumentCatch>;
+      for (const invalidField of invalidFieldNames) {
+        (filteredData as any)[invalidField] = null;
+      }
+      // If species is invalid, also clear the derived scientificName field
+      if (invalidFieldNames.has("product")) {
+        (filteredData as any).scientificName = null;
+      }
+      await updateStorageDocumentCatchDetails(
+        bearerToken,
+        documentNumber,
+        { ...filteredData },
+        `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment${productIndexUrlFragment}`,
+        productIndex,
+        true, // saveToRedisIfErrors = true (nulls clear invalid values in Redis)
+        false,
+        isNonJs
+      );
+    } else {
+      // No errors – save all data as draft
+      await updateStorageDocumentCatchDetails(
+        bearerToken,
+        documentNumber,
+        { ...updateData },
+        `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment${productIndexUrlFragment}`,
+        productIndex,
+        true, // saveToRedisIfErrors = true
+        false,
+        isNonJs
+      );
+    }
     return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
   }
   if (errorResponse) {

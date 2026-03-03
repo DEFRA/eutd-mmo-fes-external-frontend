@@ -105,3 +105,15 @@ describe("Add Storage Facility Details: validation errors", () => {
     cy.contains("h2", /^There is a problem$/).should("be.visible");
   });
 });
+
+describe("Add Storage Facility Details: save as draft retains valid fields", () => {
+  it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftWithErrors,
+    };
+
+    cy.visit(pagePath, { qs: { ...testParams } });
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
+});

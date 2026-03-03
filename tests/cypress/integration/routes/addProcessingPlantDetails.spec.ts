@@ -197,3 +197,14 @@ describe("Add Processing Plant Details: Save as Draft functionality", () => {
     cy.get("[data-testid=save-and-continue]").should("be.visible").should("not.contain.text", "Save as draft");
   });
 });
+
+describe("Add Processing Plant Details (PS): save as draft retains valid fields", () => {
+  it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftWithErrors,
+    };
+    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
+});

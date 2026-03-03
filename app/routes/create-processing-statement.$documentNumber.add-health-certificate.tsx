@@ -28,24 +28,55 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const { _action, ...values } = Object.fromEntries(form);
   const nextUri = form.get("nextUri") as string;
   const isDraft = form.get("_action") === "saveAsDraft";
-  const saveToRedisIfErrors = true;
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
+  const healthCertData = {
+    healthCertificateNumber: values["healthCertificateNumber"] as string,
+    healthCertificateDate: `${getStrOrDefault(values["healthCertificateDateDay"] as string)}/${getStrOrDefault(values["healthCertificateDateMonth"] as string)}/${getStrOrDefault(values["healthCertificateDateYear"] as string)}`,
+  };
+  const healthCertUrl = route("/create-processing-statement/:documentNumber/add-health-certificate", {
+    documentNumber,
+  });
+
+  if (isDraft) {
+    // Validate-first: saveToRedisIfErrors=false so nothing is persisted on the first call
+    const validationResponse = await updateProcessingStatement(
+      bearerToken,
+      documentNumber,
+      healthCertData,
+      healthCertUrl,
+      undefined,
+      false // saveToRedisIfErrors = false (validate only)
+    );
+    if (validationResponse) {
+      const responseData = await (validationResponse as Response).clone().json();
+      const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+      const invalidFieldNames = new Set(errorKeys);
+      // Start with all submitted fields, then null out invalid ones so the
+      // client-side Redis merge clears any previously-saved bad values.
+      const filteredData: Record<string, string | null> = { ...healthCertData };
+      for (const invalidField of invalidFieldNames) {
+        filteredData[invalidField] = null;
+      }
+      await updateProcessingStatement(bearerToken, documentNumber, filteredData, healthCertUrl, undefined, true);
+    } else {
+      // No errors – persist all fields as draft
+      await updateProcessingStatement(bearerToken, documentNumber, healthCertData, healthCertUrl, undefined, true);
+    }
+    return redirect(route("/create-processing-statement/processing-statements"));
+  }
+
+  // Save and continue – validate without saving (saveToRedisIfErrors=false fixes the previous bug)
   const errorResponse = await updateProcessingStatement(
     bearerToken,
     documentNumber,
-    {
-      healthCertificateNumber: values["healthCertificateNumber"] as string,
-      healthCertificateDate: `${getStrOrDefault(values["healthCertificateDateDay"] as string)}/${getStrOrDefault(values["healthCertificateDateMonth"] as string)}/${getStrOrDefault(values["healthCertificateDateYear"] as string)}`,
-    },
-    route("/create-processing-statement/:documentNumber/add-health-certificate", { documentNumber }),
+    healthCertData,
+    healthCertUrl,
     undefined,
-    saveToRedisIfErrors
+    false // saveToRedisIfErrors = false
   );
-
-  if (isDraft) return redirect(route("/create-processing-statement/processing-statements"));
 
   if (errorResponse) {
     return errorResponse as Response;

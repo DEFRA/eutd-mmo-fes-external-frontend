@@ -108,3 +108,17 @@ describe("Add Health Certificate, bad data show errors", () => {
     cy.get("#error-summary-title").should("be.visible");
   });
 });
+
+describe("Add Health Certificate (PS): save as draft retains valid fields", () => {
+  const documentUrl = "/create-processing-statement/GBR-2022-PS-3FE1169D1";
+  const pageUrl = `${documentUrl}/add-health-certificate`;
+
+  it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddHealthCertificateSaveAsDraftWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
+});

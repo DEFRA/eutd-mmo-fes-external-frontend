@@ -138,7 +138,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const saveAndContinue = form.get("_action") === "saveAndContinue";
   const isRemove = form.get("_action") === "remove";
 
-  const saveToRedisIfErrors = isDraft;
   const productId = isEmpty(values["productId"])
     ? documentNumber + "-" + moment.utc().unix()
     : (values["productId"] as string);
@@ -152,7 +151,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     return redirect(`/create-processing-statement/${documentNumber}/remove-product/${productId}`);
   }
 
-  const errorResponse = await updateProcessingStatementProducts(
+  // First validation pass – always validate without saving so we can inspect errors
+  const validationResponse = await updateProcessingStatementProducts(
     bearerToken,
     documentNumber,
     {
@@ -161,18 +161,45 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       description: commodityDescription,
     },
     productId,
-    saveToRedisIfErrors
+    false // saveToRedisIfErrors = false (validate only)
   );
 
   if (saveAndContinue) {
-    if (errorResponse) {
-      return errorResponse as Response;
+    if (validationResponse) {
+      return validationResponse as Response;
     }
 
     return redirect(`/create-processing-statement/${documentNumber}/add-catch-details/${productId}`);
   }
 
   if (isDraft) {
+    if (validationResponse) {
+      // Filter invalid fields and save only valid ones as draft
+      const responseData =
+        typeof (validationResponse as any).json === "function"
+          ? await (validationResponse as Response).clone().json()
+          : validationResponse;
+      const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+      // Map backend error key 'consignmentDescription' to the data field 'description'
+      const invalidFieldNames = new Set(errorKeys.map((k) => (k === "consignmentDescription" ? "description" : k)));
+      // Start with all submitted fields, then null out invalid ones so the
+      // client-side Redis merge clears any previously-saved bad values.
+      const filteredData: { id: string; commodityCode: string | null; description: string | null } = {
+        id: productId,
+        commodityCode: invalidFieldNames.has("commodityCode") ? null : commodityCode,
+        description: invalidFieldNames.has("description") ? null : commodityDescription,
+      };
+      await updateProcessingStatementProducts(bearerToken, documentNumber, filteredData, productId, true);
+    } else {
+      // No errors – save all data as draft
+      await updateProcessingStatementProducts(
+        bearerToken,
+        documentNumber,
+        { id: productId, commodityCode, description: commodityDescription },
+        productId,
+        true // saveToRedisIfErrors = true
+      );
+    }
     return redirect(route("/create-processing-statement/processing-statements"));
   }
 
@@ -182,7 +209,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     {},
     `/create-processing-statement/${documentNumber}/add-consignment-details`,
     undefined,
-    saveToRedisIfErrors
+    false // saveToRedisIfErrors = false
   );
 
   if (response) {

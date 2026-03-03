@@ -1226,3 +1226,14 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
   });
 });
+
+describe("Add product to consignment (SD): save as draft retains valid fields", () => {
+  it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentSaveAsDraftWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
+});

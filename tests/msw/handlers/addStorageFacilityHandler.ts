@@ -108,6 +108,14 @@ const addStorageFacilityHandler: ITestHandler = {
     }),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(storageDocuments))),
   ],
+  [TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftWithErrors]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
+      res.once(ctx.status(400), ctx.json(storageDocumentFacilityNameError))
+    ),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(storageDocuments))),
+  ],
 };
 
 export default addStorageFacilityHandler;

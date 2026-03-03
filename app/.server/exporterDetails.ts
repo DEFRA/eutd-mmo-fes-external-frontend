@@ -708,6 +708,18 @@ export const exporterDetailsAction = async (
   }
 
   if (isSaveAsDraft) {
+    const saveAsDraftErrors: IError[] = (response.errors as IError[]) || [];
+    if (saveAsDraftErrors.length > 0) {
+      const errorKeys = saveAsDraftErrors.map((e) => e.key);
+      const systemFields = new Set(["journey", "currentUri", "nextUri"]);
+      const filteredPayload: Exporter = Object.fromEntries(
+        Object.entries(payload).filter(([key]) => systemFields.has(key) || !errorKeys.includes(key))
+      ) as Exporter;
+      const hasUserDataFields = Object.keys(filteredPayload).some((k) => !systemFields.has(k));
+      if (hasUserDataFields) {
+        await addExporterDetails(bearerToken, documentNumber, filteredPayload, journey);
+      }
+    }
     if (isCatchCertificate) session.unset("exporterFullName");
     session.unset("exporterCompanyName");
     return redirect(routes[journey]["saveAsDraft"], {

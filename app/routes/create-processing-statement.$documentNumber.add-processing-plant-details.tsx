@@ -41,28 +41,56 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const { _action, ...values } = Object.fromEntries(form);
 
   const isDraft = _action === "saveAsDraft";
-  const saveToRedisIfErrors = true;
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
+  const plantData = {
+    plantName: values["plantName"] as string,
+    plantApprovalNumber: values["plantApprovalNumber"] as string,
+    personResponsibleForConsignment: values["personResponsibleForConsignment"] as string,
+  };
+  const plantUrl = "/create-processing-statement/:documentNumber/add-processing-plant-details";
+
+  if (isDraft) {
+    // Validate-first: saveToRedisIfErrors=false so nothing is persisted on the first call
+    const validationResponse = await updateProcessingStatement(
+      bearerToken,
+      documentNumber,
+      plantData,
+      plantUrl,
+      undefined,
+      false, // saveToRedisIfErrors = false (validate only)
+      false // returnDataOnly = false (get a Response we can inspect)
+    );
+    if (validationResponse) {
+      const responseData = await (validationResponse as Response).clone().json();
+      const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+      const invalidFieldNames = new Set(errorKeys);
+      // Start with all submitted fields, then null out invalid ones so the
+      // client-side Redis merge clears any previously-saved bad values.
+      const filteredData: Record<string, string | null> = { ...plantData };
+      for (const invalidField of invalidFieldNames) {
+        filteredData[invalidField] = null;
+      }
+      await updateProcessingStatement(bearerToken, documentNumber, filteredData, plantUrl, undefined, true, false);
+    } else {
+      // No errors – persist all fields as draft
+      await updateProcessingStatement(bearerToken, documentNumber, plantData, plantUrl, undefined, true, false);
+    }
+    return redirect(route("/create-processing-statement/processing-statements"));
+  }
+
+  // Save and continue – validate without saving; return errors or redirect
   const errorResponse = await updateProcessingStatement(
     bearerToken,
     documentNumber,
-    {
-      plantName: values["plantName"] as string,
-      plantApprovalNumber: values["plantApprovalNumber"] as string,
-      personResponsibleForConsignment: values["personResponsibleForConsignment"] as string,
-    },
-    "/create-processing-statement/:documentNumber/add-processing-plant-details",
+    plantData,
+    plantUrl,
     undefined,
-    isDraft,
-    saveToRedisIfErrors
+    false, // saveToRedisIfErrors = false
+    true // returnDataOnly = true (existing save-and-continue behaviour)
   );
-
-  if (isDraft) {
-    return redirect(route("/create-processing-statement/processing-statements"));
-  }
 
   if (errorResponse) {
     return errorResponse as Response;

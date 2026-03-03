@@ -310,8 +310,54 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (_action === "saveAsDraft") {
     session.unset("facilityName");
     session.unset("selectedArrivalDate");
-    await handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri, true);
-    // Always redirect to dashboard when saving as draft, regardless of errors
+    const storageFacilityData = {
+      facilityName: String(getStrOrDefault(values["facilityName"])),
+      facilityArrivalDate: selectedDate as string,
+    };
+    // Validate without saving to identify invalid fields
+    const validationResponse = await updateStorageDocumentFacility(
+      bearerToken,
+      documentNumber,
+      "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
+      false, // saveToRedisIfErrors = false (validate only)
+      false, // returnDataOnly
+      storageFacilityData
+    );
+    if (validationResponse) {
+      // Errors found – save only the valid fields
+      const responseData =
+        typeof (validationResponse as any).json === "function"
+          ? await (validationResponse as Response).clone().json()
+          : validationResponse;
+      const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+      // Start with all submitted fields, then null out invalid ones so the
+      // client-side Redis merge clears any previously-saved bad values.
+      const filteredFacility = { ...storageFacilityData } as Partial<StorageDocument>;
+      if (errorKeys.some((k) => k.includes("facilityName"))) {
+        filteredFacility.facilityName = null as unknown as string;
+      }
+      if (errorKeys.some((k) => k.includes("facilityArrivalDate"))) {
+        filteredFacility.facilityArrivalDate = null as unknown as string;
+      }
+      await updateStorageDocumentFacility(
+        bearerToken,
+        documentNumber,
+        "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
+        true, // saveToRedisIfErrors = true (nulls clear invalid values in Redis)
+        false,
+        filteredFacility
+      );
+    } else {
+      // No errors – save all data as draft
+      await updateStorageDocumentFacility(
+        bearerToken,
+        documentNumber,
+        "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
+        true, // saveToRedisIfErrors = true
+        false,
+        storageFacilityData
+      );
+    }
     return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
       headers: { "Set-Cookie": await commitSession(session) },
     });

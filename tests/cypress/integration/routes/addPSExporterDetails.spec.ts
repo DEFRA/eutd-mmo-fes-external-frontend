@@ -239,3 +239,17 @@ describe("PS: add exporter details - forbidden", () => {
     cy.url().should("include", "/forbidden");
   });
 });
+
+describe("PS: add exporter details - save as draft retains valid fields", () => {
+  const documentUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+
+  it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddExporterDetailsSaveAsDraftWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
+});
