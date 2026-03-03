@@ -124,7 +124,7 @@ describe("should redirect to forbidden page it transport details return 403 on p
 });
 
 describe("Add Transportation Details Container Vessel: Container Identification Number Validation", () => {
-  it("should display error when container identification number exceeds 50 characters", () => {
+  it("should display format error when container identification number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportContainerMaxLength,
     };
@@ -135,7 +135,10 @@ describe("Add Transportation Details Container Vessel: Container Identification 
     cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+    ).should("be.visible");
   });
 
   it("should display error when container identification number contains invalid characters", () => {
@@ -239,7 +242,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.get('input[name="containerNumbers.2"]').should("have.value", "EXISTING003");
   });
 
-  it("should display error when container number exceeds max length", () => {
+  it("should display format error when container number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportContainerMaxLength,
     };
@@ -247,16 +250,18 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
 
     cy.get("#vesselName").type("Felicity Ace", { force: true });
     cy.get("#flagState").type("Greece", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890123456789012", {
+    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), {
       force: true,
     });
     cy.get("#departurePlace").type("Felixstowe Port", { force: true });
 
     cy.get("[data-testid=save-and-continue]").click({ force: true });
 
-    // Check error is displayed
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+    ).should("be.visible");
   });
 
   it("should display container field label and hint text", () => {

@@ -249,7 +249,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.contains("h2", "There is a problem").should("be.visible");
     });
 
-    it("should show error when a container identification number exceeds 50 characters", () => {
+    it("should show format error when a container identification number has invalid format regardless of length", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveMaxCharsContainerIdentificationNumber,
       };
@@ -368,7 +368,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("#departureDate-year").type("2025", { force: true });
       cy.get("[data-testid=save-and-continue]").click({ force: true });
       cy.contains("h2", /^There is a problem$/).should("be.visible");
-      cy.contains("a", /^Departure date must be a real date$/).should("be.visible");
+      cy.contains("a", "Departure date must be a real date").should("be.visible");
     });
   });
 });

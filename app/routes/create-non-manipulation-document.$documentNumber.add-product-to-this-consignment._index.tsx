@@ -19,7 +19,7 @@ import {
 } from "~/composite-components";
 import { getEnv } from "~/env.server";
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FormInput, ErrorPosition, Button, BUTTON_TYPE, Details } from "@capgeminiuk/dcx-react-library";
 import {
   getAllSpecies,
@@ -69,6 +69,7 @@ interface ILoaderData {
   displayOptionalSuffix: boolean;
   maximumEntryDocsAllowed: number;
   updatedSupportingDocuments: string[];
+  backUrl: string;
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -80,6 +81,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const countries = await getCountries();
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
+  const backThroughProducts = url.searchParams.get("backThroughProducts") === "true";
   const productIndex = Number.parseInt(params["*"] ?? "") || 0;
   const commodities: CodeAndDescription[] = await getCommodities();
   const speciesExemptLink = getEnv().SPECIES_EXEMPT_LINK;
@@ -110,6 +112,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     session.unset("addSupportingDoc");
   }
 
+  const backUrl =
+    backThroughProducts && productIndex > 0
+      ? `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${productIndex - 1}?backThroughProducts=true`
+      : route("/create-non-manipulation-document/:documentNumber/add-exporter-details", { documentNumber });
+
   return json(
     {
       documentNumber,
@@ -132,6 +139,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       csrf,
       displayOptionalSuffix,
       maximumEntryDocsAllowed: Number.parseInt(maximumEntryDocsAllowed, 10),
+      backUrl,
     },
     session
   );
@@ -171,6 +179,7 @@ const getUpdateStorageDocumentData = (
         : undefined,
   };
 };
+
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
@@ -213,7 +222,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     supportingDocumentsFromForm,
     countries
   );
-  const saveToRedisIfErrors = false;
+  const saveToRedisIfErrors = isDraft;
   const errorResponse = await updateStorageDocumentCatchDetails(
     bearerToken,
     documentNumber,
@@ -274,8 +283,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   return redirect(
     isEmpty(nextUri)
-      ? `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product`
-      : `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?nextUri=${nextUri}`
+      ? `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?productIndex=${productIndex}`
+      : `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?nextUri=${nextUri}&productIndex=${productIndex}`
   );
 };
 
@@ -370,6 +379,7 @@ const AddProductIndex = () => {
     displayOptionalSuffix,
     maximumEntryDocsAllowed,
     updatedSupportingDocuments,
+    backUrl,
   } = useLoaderData<ILoaderData>();
   const { t } = useTranslation(["addProductToThisConsignment", "errorsText"]);
   const actionData = useActionData<{ errors: any }>() ?? {};
@@ -418,7 +428,6 @@ const AddProductIndex = () => {
   const hasCatchesSpeciesError = hasSpeciesError(errors, speciesKey);
   const getErrorMessageForSpecies = () => getSpeciesErrorMessage(errors, productKey, speciesKey, isHydrated, t);
 
-  // Get supporting documents from submitted form data if there are errors, otherwise from loader
   const initialSupportingDocs =
     !isEmpty(errors) && submittedFormData.supportingDocuments !== undefined
       ? submittedFormData.supportingDocuments
@@ -428,12 +437,33 @@ const AddProductIndex = () => {
     functionToGetInitialState(initialSupportingDocs, isHydrated, maximumEntryDocsAllowed)
   );
 
-  // Reset to 1 field after hydration if it was initialized with 5
+  // Track which original indices have been removed so we can map display indices to original error keys
+  const [removedIndices, setRemovedIndices] = useState<Set<number>>(new Set());
+
+  // Track if we've already done the initial reset to prevent it from running repeatedly
+  const hasPerformedInitialReset = useRef(false);
+
+  // Reset the removed indices when new errors come in (after form submission)
   useEffect(() => {
-    if (isHydrated && !updatedSupportingDocuments?.length && supportingDocuments.length === maximumEntryDocsAllowed) {
-      setSupportingDocuments([""]);
+    if (errors && Object.keys(errors).length > 0) {
+      setRemovedIndices(new Set());
     }
-  }, [isHydrated, updatedSupportingDocuments]);
+  }, [errors]);
+
+  // Reset to 1 field after hydration if it was initialized with 5 empty fields (non-JS mode)
+  // ONLY do this ONCE on initial hydration - use ref to track and prevent repeated resets
+  useEffect(() => {
+    if (isHydrated && !hasPerformedInitialReset.current && !updatedSupportingDocuments?.length && isEmpty(errors)) {
+      setSupportingDocuments((prev) => {
+        const areAllFieldsEmpty = prev.every((doc) => doc === "");
+        if (prev.length === maximumEntryDocsAllowed && areAllFieldsEmpty) {
+          hasPerformedInitialReset.current = true;
+          return [""];
+        }
+        return prev;
+      });
+    }
+  }, [isHydrated, updatedSupportingDocuments, errors, maximumEntryDocsAllowed]);
 
   const supportingDocumentsLabel = getSupportingDocumentsLabel(displayOptionalSuffix, t);
   const productDescriptionLabelKey = getProductDescriptionLabelKey();
@@ -454,8 +484,30 @@ const AddProductIndex = () => {
 
   const handleRemoveDoc = (index: number) => {
     if (supportingDocuments.length > 1) {
+      // Map current display index to original index
+      const originalIndex = getOriginalIndex(index, removedIndices);
+
       setSupportingDocuments((prev) => prev.filter((_, i) => i !== index));
+
+      // Track that this original index has been removed
+      const newRemovedIndices = new Set(removedIndices);
+      newRemovedIndices.add(originalIndex);
+      setRemovedIndices(newRemovedIndices);
     }
+  };
+
+  // Helper function to map current display index to original error index
+  const getOriginalIndex = (displayIndex: number, removed: Set<number>): number => {
+    let originalIndex = displayIndex;
+    const sortedRemoved = Array.from(removed).sort((a, b) => a - b);
+
+    for (const removedIdx of sortedRemoved) {
+      if (removedIdx <= originalIndex) {
+        originalIndex++;
+      }
+    }
+
+    return originalIndex;
   };
 
   const handleInputChange = (index: number, value: string) => {
@@ -467,22 +519,41 @@ const AddProductIndex = () => {
   const hintText = t("documentIssuedInTheUKHint", { ns: "addProductToThisConsignment" });
   const getOptionLabel = (option: DocIssuedInUkRadioSelectOptionType) => t(option.label, { ns: "common" });
 
-  const errorKeysInOrder = [
+  // Generate all possible supporting document error keys
+  const supportingDocErrorKeys = Array.from(
+    { length: maximumEntryDocsAllowed },
+    (_, i) => `${supportingDocumentsKey}-${i}`
+  );
+
+  const allErrorKeysInOrder = [
     certificateTypeKey,
     issuingCountryKey,
     certKey,
     weightKey,
-    supportingDocumentsKey,
+    ...supportingDocErrorKeys,
     productKey,
     commodityCodeKey,
     productDescriptionKey,
     netWeightProductArrivalKey,
     netWeightFisheryProductArrivalKey,
   ];
-  const errorMessagesForDisplay = displayErrorMessagesInOrder(allErrors, errorKeysInOrder);
+
+  // Deduplicate error keys to prevent duplicate error messages in error summary
+  const errorKeysInOrder = Array.from(new Set(allErrorKeysInOrder));
+  const allErrorMessages = displayErrorMessagesInOrder(allErrors, errorKeysInOrder);
+
+  // Remove duplicate errors by key to handle cases where the same field error appears multiple times
+  const seenErrorKeys = new Set<string>();
+  const errorMessagesForDisplay = allErrorMessages.filter((error: any) => {
+    if (seenErrorKeys.has(error.key)) {
+      return false;
+    }
+    seenErrorKeys.add(error.key);
+    return true;
+  });
 
   return (
-    <Main backUrl={route("/create-non-manipulation-document/:documentNumber/add-exporter-details", { documentNumber })}>
+    <Main backUrl={backUrl}>
       {!isEmpty(errors) && <ErrorSummary errors={errorMessagesForDisplay} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
@@ -640,58 +711,66 @@ const AddProductIndex = () => {
               />
               <EntryDocumentGuidanceText />
               <fieldset className="govuk-fieldset" aria-describedby={`${supportingDocumentsKey}-0-hint`}>
-                {supportingDocuments.map((value: string, index: number) => (
-                  <div
-                    key={`supporting-document-${index + 1}`}
-                    className="govuk-button-group govuk-!-margin-bottom-4"
-                    style={{ display: "flex", alignItems: "flex-end", gap: "8px" }}
-                  >
-                    <FormInput
-                      containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
-                      labelClassName="govuk-label govuk-!-font-weight-bold"
-                      label={index === 0 ? supportingDocumentsLabel : undefined}
-                      name="supportingDocuments"
-                      type="text"
-                      inputClassName={classNames("govuk-input")}
-                      inputProps={{
-                        value,
-                        id: `${supportingDocumentsKey}-${index}`,
-                        onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(index, e.target.value),
-                        "aria-describedby": `${supportingDocumentsKey}-${index}-hint`,
-                      }}
-                      hint={
-                        index === 0
-                          ? {
-                              id: `${supportingDocumentsKey}-${index}-hint`,
-                              position: "above",
-                              text: t("supportingDocumentsHint", { ns: "addProductToThisConsignment" }),
-                              className: "govuk-hint",
-                            }
-                          : undefined
-                      }
-                      errorPosition={ErrorPosition.AFTER_LABEL}
-                      errorProps={getErrorProps(errors, `${supportingDocumentsKey}-${index}`)}
-                      staticErrorMessage={getErrorMessage(errors, `${supportingDocumentsKey}-${index}`, t)}
-                      containerClassNameError={getErrorClassName(errors, `${supportingDocumentsKey}-${index}`)}
-                      hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-                      hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-                    />
-                    {isHydrated && supportingDocuments.length > 1 && (
-                      <Button
-                        key={`remove-supporting-doc-${index + 1}`}
-                        id={`remove-supporting-doc-button-${index}`}
-                        data-testid={`remove-supporting-doc-${index}`}
-                        label={t("commonRemoveButton", { ns: "common" })}
-                        className="govuk-button govuk-button--secondary govuk-!-margin-left-2"
-                        type={BUTTON_TYPE.BUTTON}
-                        data-module="govuk-button"
-                        onClick={() => handleRemoveDoc(index)}
-                        style={{ top: "15px" }}
-                        aria-label={t("commonRemoveButton", { ns: "addProductToThisConsignment" })}
+                {supportingDocuments.map((value: string, index: number) => {
+                  // Map current display index to original error index to show correct errors after removals
+                  const originalIndex = getOriginalIndex(index, removedIndices);
+                  const errorKey = `${supportingDocumentsKey}-${originalIndex}`;
+                  const hasError = errors?.[errorKey];
+
+                  return (
+                    <div
+                      key={`supporting-document-${index + 1}`}
+                      className="govuk-button-group govuk-!-margin-bottom-4"
+                      style={{ display: "flex", alignItems: "flex-end", gap: "8px" }}
+                    >
+                      <FormInput
+                        containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
+                        labelClassName="govuk-label govuk-!-font-weight-bold"
+                        label={index === 0 ? supportingDocumentsLabel : undefined}
+                        name="supportingDocuments"
+                        type="text"
+                        inputClassName={classNames("govuk-input")}
+                        inputProps={{
+                          value,
+                          id: `${supportingDocumentsKey}-${index}`,
+                          onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                            handleInputChange(index, e.target.value),
+                          "aria-describedby": `${supportingDocumentsKey}-${index}-hint`,
+                        }}
+                        hint={
+                          index === 0
+                            ? {
+                                id: `${supportingDocumentsKey}-${index}-hint`,
+                                position: "above",
+                                text: t("supportingDocumentsHint", { ns: "addProductToThisConsignment" }),
+                                className: "govuk-hint",
+                              }
+                            : undefined
+                        }
+                        errorPosition={ErrorPosition.AFTER_LABEL}
+                        errorProps={hasError ? getErrorProps(errors, errorKey) : undefined}
+                        staticErrorMessage={hasError ? getErrorMessage(errors, errorKey, t) : undefined}
+                        containerClassNameError={hasError ? getErrorClassName(errors, errorKey) : ""}
+                        hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+                        hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
                       />
-                    )}
-                  </div>
-                ))}
+                      {isHydrated && supportingDocuments.length > 1 && (
+                        <Button
+                          key={`remove-supporting-doc-${index + 1}`}
+                          id={`remove-supporting-doc-button-${index}`}
+                          data-testid={`remove-supporting-doc-${index}`}
+                          label={t("commonRemoveButton", { ns: "common" })}
+                          className="govuk-button govuk-button--secondary govuk-!-margin-left-2"
+                          type={BUTTON_TYPE.BUTTON}
+                          data-module="govuk-button"
+                          onClick={() => handleRemoveDoc(index)}
+                          style={{ top: "15px" }}
+                          aria-label={t("commonRemoveButton", { ns: "addProductToThisConsignment" })}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
                 {isHydrated && supportingDocuments.length < maximumEntryDocsAllowed && (
                   <Button
                     id="add-supporting-doc-button"

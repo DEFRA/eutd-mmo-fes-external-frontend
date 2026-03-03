@@ -1,0 +1,22 @@
+{
+  "model": {
+    "contactId": "c1c31dea-4949-ec11-8c62-6045bd8d2833",
+    "exporterFullName": "John Smith",
+    "exporterCompanyName": "Test Company Ltd",
+    "addressOne": null,
+    "buildingNumber": null,
+    "subBuildingName": null,
+    "buildingName": null,
+    "streetName": null,
+    "county": null,
+    "country": null,
+    "townCity": null,
+    "postcode": null,
+    "_dynamicsAddress": null,
+    "_dynamicsUser": { "firstName": "John", "lastName": "Smith" },
+    "user_id": "",
+    "journey": "",
+    "currentUri": "",
+    "nextUri": ""
+  }
+}

@@ -12,7 +12,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     request,
     params,
     "/create-catch-certificate/catch-certificates",
-    "/create-catch-certificate/:documentNumber/add-exporter-details"
+    "/create-catch-certificate/:documentNumber/add-exporter-details",
+    "/create-catch-certificate/:documentNumber/check-your-information"
   );
 
 const AddYourReference = () => {
@@ -21,7 +22,7 @@ const AddYourReference = () => {
   return (
     <AddYourReferenceCommon
       backUrl="/create-catch-certificate/:documentNumber/progress"
-      hintText={t("commonAddYourReferenceHint", { journeyText: t("catchCertificate") })}
+      hintText={t("catchCertificateAddYourReferenceHint")}
       progressLink="/create-catch-certificate/:documentNumber/progress"
     />
   );

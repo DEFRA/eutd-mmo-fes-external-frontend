@@ -177,7 +177,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
       .and("contain", "Enter the identification number shown on the shipping container. For example, ABCJ0123456");
   });
 
-  it("should display error when container identification number exceeds 50 characters", () => {
+  it("should display format error when container identification number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportContainerIdentificationNumberMaxLength,
     };
@@ -187,7 +187,10 @@ describe("Add Transportation Details Train: Container Identification Number Vali
     cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+    ).should("be.visible");
   });
 
   it("should display error when container identification number contains invalid characters", () => {
@@ -329,7 +332,7 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     cy.contains("a", /^Container identification number must only contain letters and numbers$/).should("be.visible");
   });
 
-  it("should display error when container number exceeds max length", () => {
+  it("should display format error when container number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportContainerMaxLength,
     };
@@ -343,8 +346,7 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
 
     cy.get("[data-testid=save-and-continue]").click({ force: true });
 
-    // Check error is displayed
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
+    cy.contains("a", /^Container identification number must only contain letters and numbers$/).should("be.visible");
   });
 });

@@ -213,7 +213,18 @@ describe("Upload File Page Upload - date errors", () => {
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Date landed is missing");
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Date landed must be a real date");
     cy.get("#row-1-PRD765-2-upload-file-error").contains("Enter a valid date landed");
-    cy.get("#row-1-PRD765-3-upload-file-error").contains("Date landed can be no more than 7 days in the future");
+  });
+});
+
+describe("Upload File Page Upload - future date landed errors", () => {
+  it("should display the correct error message for a date landed in the future", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadFutureDateLanded,
+    };
+
+    cy.visit(uploadFileUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("#row-1-PRD770-0-upload-file-error").contains("Date landed must be today or within the next 7 days");
   });
 });
 
@@ -959,5 +970,51 @@ describe("Upload File Page Upload - EEZ max length string error", () => {
     cy.get("#row-1-PRD765-0-upload-file-error")
       .should("exist")
       .and("contain.text", "You are only able to add maximum of 5 EEZ");
+  });
+});
+
+describe("Upload File Page Upload - total combined export weight exceeded", () => {
+  it("should display a total combined weight error on every row when total exceeds 9,999,999.99", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadLandingsTotalWeightExceeded,
+    };
+
+    cy.visit(uploadFileUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=upload]").click({ force: true });
+
+    cy.get("#row-1-PRD765-0-upload-file-error")
+      .should("exist")
+      .and("contain.text", "The total combined weight for all products must be less than 10,000,000");
+    cy.get("#row-2-PRD765-0-upload-file-error")
+      .should("exist")
+      .and("contain.text", "The total combined weight for all products must be less than 10,000,000");
+    cy.get("#row-3-PRD765-0-upload-file-error")
+      .should("exist")
+      .and("contain.text", "The total combined weight for all products must be less than 10,000,000");
+  });
+
+  it("should display 0 rows uploaded successfully when total weight is exceeded", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadLandingsTotalWeightExceeded,
+    };
+
+    cy.visit(uploadFileUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=upload]").click({ force: true });
+
+    cy.get(".govuk-notification-banner__heading").contains("0 out of 3 rows uploaded successfully");
+  });
+
+  it("should display the total weight error in Welsh when language is set to Welsh", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadLandingsTotalWeightExceeded,
+      lng: "cy",
+    };
+
+    cy.visit(uploadFileUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=upload]").click({ force: true });
+
+    cy.get("#row-1-PRD765-0-upload-file-error")
+      .should("exist")
+      .and("contain.text", "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 10,000,000");
   });
 });

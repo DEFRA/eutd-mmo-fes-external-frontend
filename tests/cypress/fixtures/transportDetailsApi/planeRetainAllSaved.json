@@ -1,0 +1,11 @@
+{
+  "currentUri": "/create-non-manipulation-document/:documentNumber/add-transportation-details-plane",
+  "journey": "storageNotes",
+  "user_id": "5bd2e0a1-a98d-4fe7-a004-336a22310b2a",
+  "vehicle": "plane",
+  "flightNumber": "EK215",
+  "departurePlace": "Gatwick Airport",
+  "exportDate": "18/04/2026",
+  "containerNumbers": ["KLMN4567890"],
+  "arrival": false
+}

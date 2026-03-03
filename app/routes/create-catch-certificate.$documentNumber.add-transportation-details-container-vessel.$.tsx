@@ -9,12 +9,11 @@ import {
   type ActionFunction,
   type MetaFunction,
 } from "react-router";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import type { ErrorResponse, ITransport } from "~/types";
-import { displayErrorMessagesInOrder, getMeta, scrollToId, TransportType, getContainerNumbers } from "~/helpers";
-import { useScrollOnPageLoad } from "~/hooks";
+import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";
+import { useTransportationDetailsPage, getTransportErrorKeys } from "~/hooks";
 
 export const meta: MetaFunction = (args) => getMeta(args);
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -50,30 +49,8 @@ const ContainerVesselTransportDetailsPage = () => {
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-container-vessel/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
-  const errorKeysInOrder = [
-    "vesselName",
-    "flagState",
-    "containerNumbers.0",
-    "containerNumbers.1",
-    "containerNumbers.2",
-    "containerNumbers.3",
-    "containerNumbers.4",
-    "containerNumbers.5",
-    "containerNumbers.6",
-    "containerNumbers.7",
-    "containerNumbers.8",
-    "containerNumbers.9",
-    "departurePlace",
-    "freightBillNumber",
-  ];
-
-  useScrollOnPageLoad();
-
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      scrollToId("errorIsland");
-    }
-  }, [errors]);
+  const errorKeysInOrder = getTransportErrorKeys(TransportType.CONTAINER_VESSEL);
+  useTransportationDetailsPage(errors);
 
   return (
     <Main backUrl={backUrl}>

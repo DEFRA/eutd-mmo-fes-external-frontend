@@ -8,7 +8,7 @@ import {
 } from "react-router";
 import type { Vehicle, ErrorResponse, TransportOptionType } from "~/types";
 import { route } from "routes-gen";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Main, BackToProgressLink, ErrorMessage, ErrorSummary, SecureForm } from "~/components";
 import { useTranslation } from "react-i18next";
@@ -16,7 +16,7 @@ import { transportOptions } from "~/helpers/transport";
 import { displayErrorMessages, getMeta, scrollToId } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
 import { ButtonGroup } from "~/composite-components";
-import { useScrollOnPageLoad } from "~/hooks";
+import { useScrollOnPageLoad, useIsHydrated } from "~/hooks";
 import { HowDoesTheExportLeaveUkAction, HowDoesTheExportLeaveUkLoader } from "~/models";
 
 type loaderDataProps = {
@@ -24,6 +24,7 @@ type loaderDataProps = {
   vehicle: Vehicle;
   transportId?: string;
   nextUri?: string;
+  fromAdditionalTransport?: boolean;
   csrf: string;
 };
 
@@ -34,7 +35,10 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   HowDoesTheExportLeaveUkAction(request, params);
 
 const HowDoesTheExportLeaveTheUk = () => {
-  const { documentNumber, vehicle, transportId, nextUri, csrf } = useLoaderData<loaderDataProps>();
+  const { documentNumber, vehicle, transportId, nextUri, fromAdditionalTransport, csrf } =
+    useLoaderData<loaderDataProps>();
+  const [isExpandedGuidance, setIsExpandedGuidance] = useState(false);
+  const isHydrated = useIsHydrated();
 
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
@@ -42,6 +46,10 @@ const HowDoesTheExportLeaveTheUk = () => {
   const actionUrl = transportId
     ? `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${transportId}`
     : `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk`;
+
+  const backUrl = fromAdditionalTransport
+    ? route("/create-catch-certificate/:documentNumber/do-you-have-additional-transport-types", { documentNumber })
+    : route("/create-catch-certificate/:documentNumber/what-export-journey", { documentNumber });
 
   useScrollOnPageLoad();
 
@@ -52,12 +60,12 @@ const HowDoesTheExportLeaveTheUk = () => {
   }, [errors]);
 
   return (
-    <Main backUrl={route("/create-catch-certificate/:documentNumber/what-export-journey", { documentNumber })}>
+    <Main backUrl={backUrl}>
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" action={actionUrl} csrf={csrf}>
-            <div className={!isEmpty(errors) ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
+            <div className={isEmpty(errors) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"}>
               <fieldset
                 className="govuk-fieldset"
                 aria-describedby={isEmpty(errors) ? "vehicle-hint" : "vehicle-hint vehicle-error"}
@@ -67,9 +75,10 @@ const HowDoesTheExportLeaveTheUk = () => {
                     {t("transportSelectionPageTitle", { ns: "transportation" })}
                   </h1>
                 </legend>
-                <div id="vehicle-hint" className="govuk-hint">
+                <div id="vehicle-hint" className="govuk-!-margin-top-5 govuk-!-font-weight-bold govuk-!-colour-black">
                   {t("transportSelectionSelectTypeTransportLabel", { ns: "transportation" })}
                 </div>
+                <div className="govuk-hint">{t("transportSelectionAdditionalGuidance", { ns: "transportation" })}</div>
                 {!isEmpty(errors) && (
                   <ErrorMessage
                     id="vehicle-error"
@@ -77,23 +86,50 @@ const HowDoesTheExportLeaveTheUk = () => {
                     visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                   />
                 )}
-                {transportOptions.map((option: TransportOptionType) => (
-                  <div key={option.id} className="govuk-radios__item">
-                    <input
-                      id={option.id}
-                      type="radio"
-                      name="vehicle"
-                      className="govuk-radios__input"
-                      value={option.value}
-                      defaultChecked={vehicle === option.value}
-                    />
-                    <label htmlFor={option.id} className="govuk-label govuk-radios__label">
-                      {t(option.label, { ns: "transportation" })}
-                    </label>
-                  </div>
-                ))}
+                <div className="govuk-radios" data-module="govuk-radios">
+                  {transportOptions.map((option: TransportOptionType) => (
+                    <div key={option.id} className="govuk-radios__item">
+                      <input
+                        id={option.id}
+                        type="radio"
+                        name="vehicle"
+                        className="govuk-radios__input"
+                        value={option.value}
+                        defaultChecked={vehicle === option.value}
+                      />
+                      <label htmlFor={option.id} className="govuk-label govuk-radios__label">
+                        {t(option.label, { ns: "transportation" })}
+                      </label>
+                      {option.id === "truck" && (
+                        <div id={`${option.id}-item-hint`} className="govuk-hint govuk-radios__hint">
+                          {t("transportSelectionTruckGuidance", { ns: "transportation" })}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </fieldset>
             </div>
+            <details className="govuk-details" open={isHydrated ? isExpandedGuidance : undefined}>
+              <summary
+                className="govuk-details__summary"
+                onClick={
+                  isHydrated
+                    ? (e) => {
+                        e.preventDefault();
+                        setIsExpandedGuidance(!isExpandedGuidance);
+                      }
+                    : undefined
+                }
+              >
+                <span className="govuk-details__summary-text">
+                  {t("transportSelectionExpandableTitle", { ns: "transportation" })}
+                </span>
+              </summary>
+              <div className="govuk-details__text">
+                {t("transportSelectionExpandableContent", { ns: "transportation" })}
+              </div>
+            </details>
             <ButtonGroup />
             <input type="hidden" name="transportId" value={transportId} />
             <input type="hidden" name="nextUri" value={nextUri} />

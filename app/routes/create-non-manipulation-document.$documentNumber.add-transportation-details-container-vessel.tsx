@@ -1,7 +1,6 @@
 import * as React from "react";
 import isEmpty from "lodash/isEmpty";
 import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
-
 import { useEffect } from "react";
 import {
   getBearerTokenForRequest,
@@ -21,24 +20,38 @@ import { useScrollOnPageLoad } from "~/hooks";
 import { AddTransportationDetailsComponent } from "~/composite-components";
 import moment from "moment";
 
+const isDepartureTransportation = false;
 export const loader: LoaderFunction = async ({ request, params }) =>
-  await TransportationDetailsLoaderFunction(request, params, TransportType.CONTAINER_VESSEL, "storageNotes");
+  await TransportationDetailsLoaderFunction(
+    request,
+    params,
+    TransportType.CONTAINER_VESSEL,
+    "storageNotes",
+    isDepartureTransportation
+  );
 
 export const action: ActionFunction = async ({ request, params }): Promise<Response | ErrorResponse> => {
   const bearerToken = await getBearerTokenForRequest(request);
   const { documentNumber } = params;
   const journey: Journey = "storageNotes";
-  const transport: ITransport = await getTransportDetails(bearerToken, journey, documentNumber);
-  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
+  const transport: ITransport = await getTransportDetails(
+    bearerToken,
+    journey,
+    documentNumber,
+    isDepartureTransportation
+  );
   const form = await request.formData();
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
+  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
+
+  const saveAsDraft = form.get("_action") === "saveAsDraft";
   const vesselName = form.get("vesselName") as string;
   const pointOfDestination = form.get("pointOfDestination") as string;
   const flagState = form.get("flagState") as string;
   const departurePlace = form.get("departurePlace") as string;
   const consignmentDestination = form.get("exportedTo") as string;
-  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber");
+  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
   const nextUri = form.get("nextUri") as string;
 
   const countries: ICountry[] = await getCountries();
@@ -65,6 +78,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     exportDateTo: moment().startOf("day").add(1, "day").toISOString(),
     exportedTo,
     facilityArrivalDate: "facilityArrivalDate" in storageDocument ? storageDocument.facilityArrivalDate : undefined,
+    arrival: isDepartureTransportation,
   };
 
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);

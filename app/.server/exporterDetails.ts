@@ -434,15 +434,42 @@ const onAddExporterDetailsResponse = async (response: Response): Promise<IExport
     case 200:
     case 204:
       return await response.json();
-    case 400:
+    case 400: {
       const data = await response.json();
-      return {
-        ...data,
-        errors: Object.keys(data.errors).map((key: string) => ({
+      // Handle both array (frontend validation) and object (backend API) error formats
+      let normalizedErrors: IError[] = [];
+      const validationErrors: IError[] = [];
+
+      if (Array.isArray(data.errors)) {
+        // Frontend validation already returns IError[] format
+        normalizedErrors = data.errors;
+      } else if (data?.errors && typeof data.errors === "object") {
+        // Backend API returns object format - convert to IError[]
+        normalizedErrors = Object.keys(data.errors).map((key: string) => ({
           key: key,
           message: getErrorMessage(data.errors[key]),
-        })),
+        }));
+      }
+
+      if (data.exporterFullName) {
+        validationErrors.push({
+          key: "exporterFullName",
+          message: getErrorMessage(data.exporterFullName),
+        });
+      }
+      if (data.exporterCompanyName) {
+        validationErrors.push({
+          key: "exporterCompanyName",
+          message: getErrorMessage(data.exporterCompanyName),
+        });
+      }
+
+      return {
+        ...data,
+        error: "invalid",
+        errors: [...(normalizedErrors ?? []), ...validationErrors],
       };
+    }
     case 403:
       return {
         ...(await response.json()),
@@ -627,6 +654,52 @@ export const exporterDetailsAction = async (
   payload.nextUri = routes[journey]["nextUri"];
 
   const isSaveAsDraft: boolean = form.get("_action") === "saveAsDraft";
+
+  // Validate required fields before submitting to backend
+  if (!isSaveAsDraft) {
+    const validationErrors: IError[] = [];
+
+    // Validate full name for catch certificate journey
+    if (isCatchCertificate && (!payload.exporterFullName || payload.exporterFullName.trim().length === 0)) {
+      validationErrors.push({
+        key: "exporterFullName",
+        message: "commonAddExporterDetailsPersonResponsibleError",
+      });
+    }
+
+    // Validate company name
+    if (!payload.exporterCompanyName || payload.exporterCompanyName.trim().length === 0) {
+      validationErrors.push({
+        key: "exporterCompanyName",
+        message: "commonAddExporterDetailsErrorCompanyName",
+      });
+    }
+
+    // Validate address presence - check if addressOne and postcode exist and have values
+    const hasAddressData =
+      payload.addressOne &&
+      payload.postcode &&
+      typeof payload.addressOne === "string" &&
+      typeof payload.postcode === "string" &&
+      payload.addressOne.trim().length > 0 &&
+      payload.postcode.trim().length > 0;
+
+    if (!hasAddressData) {
+      validationErrors.push({
+        key: "exporterAddress",
+        message: "commonAddExporterDetailsAddTheExportersAddress",
+      });
+    }
+
+    // Return all validation errors if any found
+    if (validationErrors.length > 0) {
+      return apiCallFailed(validationErrors, {
+        model: payload,
+        error: "invalid",
+      });
+    }
+  }
+
   const response: IExporter = await addExporterDetails(bearerToken, documentNumber, payload, journey);
   const unauthorised = response.unauthorised;
 

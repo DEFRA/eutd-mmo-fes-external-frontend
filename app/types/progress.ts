@@ -1,4 +1,12 @@
-import type { IBase, IError, ITransport, LandingEntryType, ProcessingStatementProduct } from ".";
+import type {
+  DocumentName,
+  IBase,
+  IError,
+  ITransport,
+  LandingEntryType,
+  ProcessingStatementProduct,
+  StorageDocumentCatch,
+} from ".";
 
 export enum ProgressStatus {
   INCOMPLETE = "INCOMPLETE",
@@ -72,4 +80,5 @@ export interface ProgressLoaderProps {
   csrf: string;
   landingsEntryOption?: LandingEntryType;
   products?: ProcessingStatementProduct[];
+  catches?: StorageDocumentCatch[];
 }

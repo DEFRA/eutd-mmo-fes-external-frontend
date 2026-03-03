@@ -12,7 +12,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     request,
     params,
     "/create-processing-statement/processing-statements",
-    "/create-processing-statement/:documentNumber/add-exporter-details"
+    "/create-processing-statement/:documentNumber/add-exporter-details",
+    "/create-processing-statement/:documentNumber/check-your-information"
   );
 
 const AddYourReference = () => {
@@ -21,8 +22,10 @@ const AddYourReference = () => {
   return (
     <AddYourReferenceCommon
       backUrl="/create-processing-statement/:documentNumber/progress"
-      hintText={t("commonAddYourReferenceHint", { journeyText: t("processingStatement") })}
+      hintText={t("processingStatementAddYourReferenceHint")}
       progressLink="/create-processing-statement/:documentNumber/progress"
+      showInfoNotice={true}
+      infoNoticeMessageKey="processingStatementInformationNotice"
     />
   );
 };

@@ -12,12 +12,17 @@ export const getErrorMessage = (key: string): string => {
     "error.landingsEntryOption.any.required": "ccLandingTypeSelectOption",
     "error.landingsEntryConfirmation.string.empty": "ccLandingTypeSelectOption",
     "error.exporterFullName.string.empty": "commonAddExporterDetailsPersonResponsibleError",
+    "error.exporterFullName.string.max": "commonAddExporterDetailsPersonResponsibleErrorMaxLength",
+    "error.exporterFullName.string.pattern.base": "commonAddExporterDetailsPersonResponsibleErrorInvalidCharacters",
     "error.exporterCompanyName.string.empty": "commonAddExporterDetailsErrorCompanyName",
+    "error.exporterCompanyName.string.max": "commonAddExporterDetailsErrorCompanyNameMaxLength",
+    "error.exporterCompanyName.string.pattern.base": "commonAddExporterDetailsErrorCompanyNameInvalidCharacters",
     "error.watersCaughtIn.object.missing": "ccWhoseWatersWereTheyCaughtInErrorRequired",
     "error.otherWaters.any.required": "ccWhoseWatersWereTheyCaughtInErrorOtherWatersRequired",
     "error.otherWaters.string.empty": "ccWhoseWatersWereTheyCaughtInErrorOtherWatersRequired",
     "error.postcode.string.empty": "commonLookupAddressPageErrorPostcodeEmpty",
     "error.postcode.string.pattern.base": "commonLookupAddressPageErrorPostcodeValidation",
+    "error.exporterAddress.any.required": "commonAddExporterDetailsAddTheExportersAddress",
     "error.exportDestination.any.invalid": "commonProductDestinationErrorInvalidCountry",
     "error.exportDestination.any.required": "commonProductDestinationErrorInvalidCountry",
     "error.exportDestination.string.empty": "commonProductDestinationErrorInvalidCountry",
@@ -234,12 +239,26 @@ export const getErrorMessage = (key: string): string => {
     "validation.rfmoCode.string.unknown": "ccUploadFilePageTableRFMONotFoundError",
     "validation.eezCode.string.unknown": "ccUploadFilePageTableEEZUnknownError",
     "validation.eezCode.string.invalid": "ccUploadFilePageTableEEZInvalidError",
-    "error.dateLanded.date.max": "ccUploadFilePageTableDateLandedFutureMaximumDaysError",
+    "error.dateLanded.date.max": "ccAddLandingDateLandedFutureDateError",
     "error.dateLanded.date.missing": "ccCommonDateLandedMissingError",
     "error.dateLanded.date.base": "ccCommonDateLandedRealError",
     "error.dateLanded.any.required": "ccCommonDateLandedRequiredError",
     "error.dateLanded.any.empty": "ccCommonDateLandedRequiredError",
     "error.dateLanded.date.isoDate": "ccCommonDateLandedInvalidError",
+    // Direct landing specific error mappings (FI0-10238)
+    "error.dateLanded.directLanding.any.required": "ccDirectLandingDateLandedRequiredError",
+    "error.dateLanded.directLanding.date.invalid": "ccDirectLandingDateLandedInvalidError",
+    "error.dateLanded.directLanding.date.base": "ccDirectLandingDateLandedRequiredError", // enter the date landed
+    "error.dateLanded.directLanding.date.isoDate": "ccDirectLandingDateLandedInvalidError",
+    "error.dateLanded.directLanding.date.max": "ccDirectLandingDateLandedFutureDateError",
+    // Direct landing specific vessel error mappings (FI0-10238)
+    "error.vessel.vesselName.directLanding.any.required": "ccDirectLandingVesselRequiredError",
+    "error.vessel.vesselName.directLanding.string.base": "ccDirectLandingVesselInvalidError",
+    "error.vessel.isListed.directLanding.vessel.isListed.base": "ccDirectLandingVesselInvalidError",
+
+    // Direct landing specific export weight error mappings (FI0-10238)
+    "error.weights.exportWeight.directLanding.any.required": "ccDirectLandingExportWeightRequiredError",
+    "error.weights.exportWeight.directLanding.any.base": "ccDirectLandingExportWeightRequiredError",
     "validation.vessel.license.invalid-date": "ccUploadFilePageTableVesselInvalidLicenseError",
     "validation.product.seasonal.invalid-date": "ccUploadFilePageTableVesselLandingDateSeasonalRestictionError",
     "validation.product.start-date.seasonal.invalid-date":
@@ -259,24 +278,27 @@ export const getErrorMessage = (key: string): string => {
     "error.vesselPln.any.invalid": "ccUploadFilePageTableVesselInvalidLicenseError",
     "validation.gearCode.string.invalid": "ccUploadFilePageTableGearCodeNotFoundError",
     "validation.gearCode.string.unknown": "ccUploadFilePageTableGearCodeNotFoundError",
-    "error.vessel.vesselName.any.required": "ccAddLandingSelectVesselListNullError",
+    "error.vessel.vesselName.any.required": "ccAddLandingVesselNameUnpopulatedError",
     "error.vessel.string.base": "ccAddLandingSelectVesselListNullError",
-    "error.vessel.label.any.empty": "ccAddLandingSelectVesselListNullError",
-    "error.vessel.vessel.vesselName.any.empty": "ccAddLandingSelectVesselListNullError",
-    "error.vessel.any.required": "ccAddLandingSelectVesselListNullError",
+    "error.vessel.label.any.empty": "ccAddLandingVesselNameUnpopulatedError",
+    "error.vessel.vessel.vesselName.any.empty": "ccAddLandingVesselNameUnpopulatedError",
+    "error.vessel.any.required": "ccAddLandingVesselNameUnpopulatedError",
     "error.gearCategory.string.empty": "ccAddLandingSelectGearCategoryListNullError",
     "error.gearType.string.empty": "ccAddLandingSelectGearTypeListNullError",
     "error.gearType.invalid": "ccAddLandingGearTypeInvalidError",
-    "error.weights.exportWeight.number.base": "ccCommonExportWeightAsNumberError",
+    "error.weights.exportWeight.number.base": "ccCommonExportWeightRequiredError",
     "error.weights.exportWeight.number.decimal-places": "ccCommonExportWeightDecimalPlacesError",
     "error.weights.exportWeight.any.required": "ccCommonExportWeightRequiredError",
     "error.weights.exportWeight.any.empty": "ccCommonExportWeightRequiredError",
     "error.weights.exportWeight.any.missing": "ccCommonExportWeightMissingError",
     "error.weights.exportWeight.number.greater": "ccCommonExportWeightGreaterError",
-    "error.exportWeight.number.base": "ccCommonExportWeightAsNumberError",
+    "error.weights.exportWeight.number.unsafe": "ccDirectLandingTotalWeightExceededError",
+    "error.weights.array.totalWeightExceeded": "ccDirectLandingTotalWeightExceededError",
+    "error.exportWeight.number.base": "ccCommonExportWeightRequiredError",
     "error.exportWeight.any.missing": "ccCommonExportWeightMissingError",
     "error.exportWeight.number.decimal-places": "ccCommonExportWeightDecimalPlacesError",
     "error.exportWeight.number.greater": "ccCommonExportWeightGreaterError",
+    "error.exportWeight.number.unsafe": "ccDirectLandingTotalWeightExceededError",
     "error.dateLanded.any.missing": "ccUploadFileLandingDateMissingError",
     "error.vesselPln.string.required": "ccUploadFilePageTableVesselMissingError",
     "error.vesselPln.string.empty": "ccUploadFilePageTableVesselMissingError",
@@ -330,6 +352,7 @@ export const getErrorMessage = (key: string): string => {
     "error.dateLanded.string.empty": "ccCommonDateLandedRequiredError",
     "error.placeOfUnloading.string.pattern.base": "sdAddTransportationDetailsTruckPlaceOfUnloadingAsACombination",
     "validation.eezCode.string.max": "ccUploadFilePageTableEEZMaxCharError",
+    "validation.totalExportWeight.number.max": "ccUploadFilePageTableTotalWeightExceededError",
     "error.startDate.any.required": "ccCommonStartDateUnpopulatedError",
     "error.gearCategory.any.required": "ccCommonGearCategoryUnpopulatedError",
     "error.gearType.any.required": "ccCommonGearTypeUnpopulatedError",
@@ -350,19 +373,48 @@ export const getErrorMessage = (key: string): string => {
   return errors[key] || key;
 };
 
-export const getTransformedError = (errors: IError[]): IErrorsTransformed => {
+export const getTransformedError = (errors: IError[], vesselInput?: string): IErrorsTransformed => {
   const errorsTransformed: IErrorsTransformed = {};
 
   errors.forEach((error: IError) => {
     // Map containerNumbers array-level errors to containerNumbers.0 so they display under the first field
     let errorKey = error.key;
-    if (errorKey === "containerNumbers" && error.message.includes("ContainerNumberLabelError")) {
-      errorKey = "containerNumbers.0";
+
+    // Normalize keys coming from server. Examples:
+    // - "error.containerNumbers.0.string.empty" -> "containerNumbers.0"
+    // - "error.railwayBillNumber.any.empty" -> "railwayBillNumber"
+    // - "containerNumbers" -> "containerNumbers"
+    if (typeof errorKey === "string") {
+      // strip common prefixes
+      errorKey = errorKey.replace(/^(?:error\.|validation\.)/, "");
+
+      // remove trailing validation tokens starting at known suffix keywords
+      errorKey = errorKey.replace(
+        /\.(?:string|any|array|date|number|pattern|alphanum|min|max|base|isoDate|format|required|empty|validation)(?:\..*)?$/i,
+        ""
+      );
+
+      // if the key ends with a numeric segment, keep it (e.g. containerNumbers.0)
+      // otherwise, if it's the array-level containerNumbers and the message points to container label, map to .0
+      if (errorKey === "containerNumbers" && error.message?.includes("ContainerNumberLabelError")) {
+        errorKey = "containerNumbers.0";
+      }
+    }
+
+    // Vessel fallback: if error is 'ccAddLandingVesselNameUnpopulatedError' but vessel field is not empty, show 'ccAddLandingSelectVesselListNullError'
+    let errorMessage = error.message;
+    if (
+      errorKey === "vessel.vesselName" &&
+      error.message === "ccAddLandingVesselNameUnpopulatedError" &&
+      vesselInput !== undefined &&
+      vesselInput.trim() !== ""
+    ) {
+      errorMessage = "ccAddLandingSelectVesselListNullError";
     }
 
     errorsTransformed[errorKey] = {
       key: errorKey,
-      message: error.message,
+      message: errorMessage,
       value: error.value,
       fieldId: `${errorKey}-error`,
     };
@@ -376,14 +428,164 @@ export const displayErrorMessages = (errors: IErrorsTransformed): IError[] =>
 
 export const displayErrorMessagesInOrder = (
   errors: IErrorsTransformed,
-  errorKeysInOrder: string[]
+  errorKeysInOrder: string[],
+  // When true use strict matching (exact key or numeric-index suffix) — intended for NMD journeys.
+  // When false (default) fall back to the previous behaviour which matches by prefix (startsWith).
+  strictForNmd = false
 ): Array<IErrorsTransformed[keyof IErrorsTransformed]> => {
-  const sortedData = errorKeysInOrder.flatMap((key) => {
-    const matchingKey = Object.keys(errors).find((objKey) => objKey.startsWith(key));
-    return matchingKey ? [errors[matchingKey]] : [];
+  const remainingKeys = new Set(Object.keys(errors));
+
+  const result: Array<IErrorsTransformed[keyof IErrorsTransformed]> = [];
+
+  const sortMatchingKeys = (orderKey: string, keys: string[]) => {
+    if (strictForNmd) {
+      return keys.sort((a, b) => {
+        const suffixA = a.slice(orderKey.length).replace(/^\.+/, "");
+        const suffixB = b.slice(orderKey.length).replace(/^\.+/, "");
+
+        const numA = /^\d+/.exec(suffixA);
+        const numB = /^\d+/.exec(suffixB);
+
+        if (numA && numB) {
+          return Number(numA[0]) - Number(numB[0]);
+        }
+
+        if (numA && !numB) return -1;
+        if (!numA && numB) return 1;
+
+        return a.localeCompare(b);
+      });
+    }
+
+    // Non-strict fallback: simple lexicographic order for keys that start with the orderKey
+    return keys.sort((a, b) => a.localeCompare(b));
+  };
+
+  errorKeysInOrder.forEach((orderKey) => {
+    const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    let matchingKeys: string[];
+
+    if (strictForNmd) {
+      // match either the exact key, or the key followed by a numeric index (e.g. containerNumbers or containerNumbers.0)
+      const keyRegex = new RegExp(`^${escapeRegExp(orderKey)}(?:\\.(\\d+))?$`);
+      matchingKeys = Object.keys(errors).filter((objKey) => keyRegex.test(objKey));
+    } else {
+      // legacy behaviour: match any key that starts with the orderKey
+      matchingKeys = Object.keys(errors).filter((objKey) => objKey.startsWith(orderKey));
+    }
+
+    if (matchingKeys.length === 0) return;
+
+    const sortedKeys = sortMatchingKeys(orderKey, matchingKeys);
+    sortedKeys.forEach((k) => {
+      if (remainingKeys.has(k)) {
+        result.push(errors[k]);
+        remainingKeys.delete(k);
+      }
+    });
   });
-  return sortedData;
+
+  return result;
 };
 
-export const displayErrorTransformedMessages = (errors: IErrorsTransformed): IError[] =>
-  Object.keys(errors).map((key: string) => errors[key]);
+export const getErrorKeysInOrderForTransport = (transportType: string, isArrival = false): string[] => {
+  const t = (transportType || "").toLowerCase();
+
+  switch (t) {
+    case "train":
+      if (isArrival) {
+        // On arrival the page shows railway bill first — match visual field order
+        return [
+          "railwayBillNumber",
+          "freightBillNumber",
+          "departureCountry",
+          "departurePort",
+          "placeOfUnloading",
+          "departureDate",
+          "containerNumbers",
+        ];
+      }
+      return [
+        "departureCountry",
+        "departurePort",
+        "containerNumbers",
+        "exportDate",
+        "railwayBillNumber",
+        "freightBillNumber",
+      ];
+
+    case "truck":
+      if (isArrival) {
+        // On truck arrival the departure date field is visually last — place it last in order
+        return [
+          "nationalityOfVehicle",
+          "registrationNumber",
+          "departurePlace",
+          "freightBillNumber",
+          "containerNumbers",
+          "departureCountry",
+          "departurePort",
+          "placeOfUnloading",
+          "departureDate",
+        ];
+      }
+      // Departure (non-arrival) page order: consignment destination/point/leave-from (handled by commonOrder), then
+      // container numbers, export date, nationality, registration, freight
+      return ["containerNumbers", "exportDate", "nationalityOfVehicle", "registrationNumber", "freightBillNumber"];
+
+    case "plane":
+      if (isArrival) {
+        // Arrival page order: flight number, airway bill, containers, freight,
+        // departure country/port, place of unloading, then departure date
+        return [
+          "flightNumber",
+          "airwayBillNumber",
+          "containerNumbers",
+          "freightBillNumber",
+          "departureCountry",
+          "departurePort",
+          "placeOfUnloading",
+          "departureDate",
+        ];
+      }
+
+      return ["flightNumber", "departurePlace", "exportDate", "containerNumbers", "airwayBillNumber"];
+
+    case "containervessel":
+    case "container-vessel":
+    case "container_vessel":
+      if (isArrival) {
+        // Match visual order on arrival page: vessel name, flag, containers, freight, country/port/place, departure date
+        return [
+          "vesselName",
+          "flagState",
+          "containerNumbers",
+          "freightBillNumber",
+          "departureCountry",
+          "departurePort",
+          "placeOfUnloading",
+          "departureDate",
+        ];
+      }
+      return ["exportDate", "vesselName", "flagState", "containerNumbers", "freightBillNumber"];
+
+    default:
+      return ["containerNumbers", "freightBillNumber", "railwayBillNumber"];
+  }
+};
+
+export const displayErrorTransformedMessages = (errors: IErrorsTransformed): IError[] => {
+  const allErrors = Object.keys(errors).map((key: string) => errors[key]);
+
+  // Deduplicate errors with the same message (for addressFirstPart composite validation)
+  // Keep only the first occurrence (buildingNumber) so error summary shows it once
+  const seen = new Set<string>();
+  return allErrors.filter((error) => {
+    if (seen.has(error.message)) {
+      return false;
+    }
+    seen.add(error.message);
+    return true;
+  });
+};

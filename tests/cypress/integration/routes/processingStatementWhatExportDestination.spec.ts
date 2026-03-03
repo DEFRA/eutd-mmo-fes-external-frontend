@@ -20,12 +20,12 @@ describe("What Export Destination page: UI", () => {
   });
 
   it("should contain the page title", () => {
-    cy.contains("h1", /^What is the export destination\?$/).should("be.visible");
+    cy.contains("h1", /^Enter the destination for the consignment$/).should("be.visible");
   });
 
   it("should contain destination country field", () => {
     cy.get("label")
-      .contains(/^Select the destination country$/)
+      .contains(/^Destination country$/)
       .should("be.visible");
     cy.get("#exportDestination").should("exist");
   });
@@ -53,15 +53,21 @@ describe("What Export Destination page: UI", () => {
 
   it("should not save invalid point of destination when save as draft is clicked", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSWhatExportDestinationDraftInvalid,
+      testCaseId: TestCaseId.PSWhatExportDestinationSaveAsDraftWithInvalidPointOfDestination,
     };
     cy.visit(whatExportDestinationUrl, { qs: { ...testParams } });
 
-    cy.get("#exportDestination").invoke("val", "France");
+    // Fill in valid country using autocomplete interaction
+    cy.get('input[id="exportDestination"]').should("be.visible").type("France");
+    cy.get(".autocomplete__option").first().should("be.visible").click();
+
+    // Fill in invalid pointOfDestination (>100 chars)
     cy.get("#pointOfDestination").type(new Array(102).join("A"));
-    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+
+    // Click save as draft
+    cy.get('[data-testid="save-draft-button"]').should("be.visible").click({ force: true });
 
     // Should redirect to dashboard without showing errors and without saving invalid data
-    cy.url().should("include", "/processing-statements");
+    cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });

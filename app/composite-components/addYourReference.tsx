@@ -14,6 +14,7 @@ type AddYourReferenceLoaderProps = {
   documentNumber: string;
   userReference: string;
   csrf: string;
+  nextUri?: string;
 };
 
 type AddYourReferenceProps = {
@@ -21,12 +22,19 @@ type AddYourReferenceProps = {
   hintText: string;
   progressLink: string;
   showInfoNotice?: boolean;
+  infoNoticeMessageKey?: string;
 };
 
-export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showInfoNotice }: AddYourReferenceProps) => {
+export const AddYourReferenceCommon = ({
+  backUrl,
+  hintText,
+  progressLink,
+  showInfoNotice,
+  infoNoticeMessageKey,
+}: AddYourReferenceProps) => {
   const actionData = useActionData<{ errors?: any; userReference?: string }>() ?? {};
   const { errors = {} } = actionData;
-  const { documentNumber, userReference, csrf } = useLoaderData<AddYourReferenceLoaderProps>();
+  const { documentNumber, userReference, csrf, nextUri } = useLoaderData<AddYourReferenceLoaderProps>();
   const { t } = useTranslation(["common", "errorsText"]);
 
   useScrollOnPageLoad();
@@ -45,7 +53,9 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
       </div>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-two-thirds">
-          {showInfoNotice && <ImportantNotice messageKey="storageDocumentInformationNotice" />}
+          {showInfoNotice && (
+            <ImportantNotice messageKey={infoNoticeMessageKey ?? "storageDocumentInformationNotice"} />
+          )}
           <SecureForm method="post" csrf={csrf}>
             <div className={hasError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
               {hasError ? (
@@ -76,6 +86,7 @@ export const AddYourReferenceCommon = ({ backUrl, hintText, progressLink, showIn
               />
             </div>
             <ButtonGroup />
+            <input type="hidden" name="nextUri" value={nextUri} />
           </SecureForm>
           <BackToProgressLink progressUri={progressLink} documentNumber={documentNumber} />
         </div>

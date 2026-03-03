@@ -42,6 +42,7 @@ type loaderStorageFacility = {
   hasFacility?: boolean;
   csrf: string;
   selectedArrivalDate: string;
+  backUrl: string;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -75,6 +76,46 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const hasFacility =
     storageDocument?.facilityAddressOne !== undefined && storageDocument?.facilityPostcode !== undefined;
 
+  const getBackUrl = () => {
+    // Prefer an explicit arrivalVehicle query param (set by the transport save redirect)
+    // so we can determine the correct back link immediately after redirect.
+    const url = new URL(request.url);
+    const arrivalVehicleParam = url.searchParams.get("arrivalVehicle");
+
+    const arrivalVehicle = arrivalVehicleParam ?? storageDocument?.arrivalTransport?.vehicle;
+
+    if (!arrivalVehicle) {
+      return route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
+        documentNumber,
+      });
+    }
+
+    const arrivalTransportRoutes: Record<string, string> = {
+      truck: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-truck", {
+        documentNumber,
+      }),
+      train: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-train", {
+        documentNumber,
+      }),
+      plane: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-plane", {
+        documentNumber,
+      }),
+      containerVessel: route(
+        "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-container-vessel",
+        {
+          documentNumber,
+        }
+      ),
+    };
+
+    return (
+      arrivalTransportRoutes[arrivalVehicle] ??
+      route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
+        documentNumber,
+      })
+    );
+  };
+
   return new Response(
     JSON.stringify({
       documentNumber,
@@ -86,6 +127,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       hasFacility,
       csrf,
       selectedArrivalDate: storageDocument?.facilityArrivalDate,
+      backUrl: getBackUrl(),
     }),
     {
       headers: {
@@ -132,7 +174,7 @@ const handleGoToAddAddress = async (
   t: TFunction,
   documentNumber: string
 ): Promise<Response> => {
-  session.set("facilityName", values["facilityName"]);
+  session.set("facilityName", String(getStrOrDefault(values["facilityName"])));
   session.set("selectedArrivalDate", selectedDate);
 
   const fieldPrefixName = "storageFacilities-facilityName";
@@ -168,9 +210,10 @@ const handleSaveAndContinue = async (
   values: Record<string, FormDataEntryValue>,
   selectedDate: string | undefined,
   session: Session,
-  nextUri: string
+  nextUri: string,
+  isDraft: boolean = false
 ): Promise<Response> => {
-  const saveToRedisIfErrors = false;
+  const saveToRedisIfErrors = isDraft;
   const errorResponse = await updateStorageDocumentFacility(
     bearerToken,
     documentNumber,
@@ -178,7 +221,7 @@ const handleSaveAndContinue = async (
     saveToRedisIfErrors,
     undefined,
     {
-      facilityName: values["facilityName"] as string,
+      facilityName: String(getStrOrDefault(values["facilityName"])),
       facilityArrivalDate: selectedDate as string,
     }
   );
@@ -192,7 +235,7 @@ const handleSaveAndContinue = async (
     const combinedResponse = {
       ...responseData,
       values: {
-        facilityName: values["facilityName"],
+        facilityName: String(getStrOrDefault(values["facilityName"])),
         facilityArrivalDate: selectedDate,
         facilityArrivalDateDay: values["facilityArrivalDateDay"],
         facilityArrivalDateMonth: values["facilityArrivalDateMonth"],
@@ -267,12 +310,14 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (_action === "saveAsDraft") {
     session.unset("facilityName");
     session.unset("selectedArrivalDate");
+    await handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri, true);
+    // Always redirect to dashboard when saving as draft, regardless of errors
     return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
       headers: { "Set-Cookie": await commitSession(session) },
     });
   }
 
-  return handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri);
+  return handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri, false);
 };
 
 const getArrivalDateFromAction = (actionData: any, type: string): string => {
@@ -297,6 +342,7 @@ const AddStorageFacilityDetails = () => {
     hasFacility,
     csrf,
     selectedArrivalDate,
+    backUrl,
   } = useLoaderData<loaderStorageFacility>();
   const actionData = useActionData<{ errors: IErrorsTransformed; values?: Record<string, any> }>() ?? { errors: {} };
   const { errors = {}, values: submittedValues } = actionData;
@@ -326,11 +372,7 @@ const AddStorageFacilityDetails = () => {
 
   useScrollOnPageError(errors);
   return (
-    <Main
-      backUrl={route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
-        documentNumber,
-      })}
-    >
+    <Main backUrl={backUrl}>
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorTransformedMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">

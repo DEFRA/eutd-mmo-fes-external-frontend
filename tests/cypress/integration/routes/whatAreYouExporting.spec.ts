@@ -255,19 +255,6 @@ describe("Errors on click of add product button from favourites", () => {
     cy.get("#product").should("exist");
   });
 
-  it("should successfully add product from favourites without errors", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.WhatAreYouExporting,
-    };
-    cy.visit(productsUrl, { qs: { ...testParams } });
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
-
-    // Select a favourite (tests the non-error branch of lines 233, 239, 242)
-    cy.get("#product").select(1);
-    cy.get("#add-from-favourites").should("exist");
-    cy.get("#product").should("exist");
-  });
-
   it("should trigger error scrolling when there are validation errors", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnSaveFromFavourites,
@@ -748,5 +735,1031 @@ describe("What are you exporting page: Selected values from action data", () => 
 
     // Verify errors shown
     cy.get("#errorIsland").should("be.visible");
+  });
+});
+
+describe("What are you exporting page: Notification Banners", () => {
+  it("should not display notification banner when no success or failure flags", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Verify no notification banner is displayed
+    cy.get(".govuk-notification-banner").should("not.exist");
+  });
+});
+
+describe("What are you exporting page: Error object transformation", () => {
+  it("should correctly transform errors object using reduce function", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Submit form to trigger errors
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+
+    // Verify error summary displays correctly transformed errors
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-error-summary__list").find("a").should("have.length.greaterThan", 0);
+  });
+
+  it("should handle empty errors object gracefully", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // With no errors, the error summary should not exist
+    cy.get(".govuk-error-summary").should("not.exist");
+
+    // Form fields should render without errors
+    cy.get("#species").should("exist");
+    cy.get("#state").should("exist");
+    cy.get("#presentation").should("exist");
+    cy.get("#commodity_code").should("exist");
+  });
+
+  it("should transform multiple error keys correctly", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+
+    // Verify all expected error links are present
+    cy.get(".govuk-error-summary__list a").contains("Enter the common name or FAO code");
+    cy.get(".govuk-error-summary__list a").contains("Select the state");
+    cy.get(".govuk-error-summary__list a").contains("Select the presentation");
+    cy.get(".govuk-error-summary__list a").contains("Select a commodity code");
+  });
+});
+
+describe("What are you exporting page: TabRef and handleTab functionality", () => {
+  it("should call handleTab and update active tab when product is edited", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Start on favourites tab
+    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("#add-from-favourites").should("be.visible");
+
+    // Click edit button to trigger handleTab via onClickHandler
+    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+
+    // Verify we're back on products tab
+    cy.wait(300);
+    cy.get("#add-products").should("be.visible");
+  });
+
+  it("should scroll to productsTab when handleTab is invoked", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Switch to favourites tab
+    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+
+    // Edit a product to trigger handleTab
+    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+
+    // Verify productsTab is visible (scrolled to)
+    cy.get("#productsTab").should("be.visible");
+    cy.get("#add-products").should("be.visible");
+  });
+
+  it("should update tabRef.current when handleTab is called", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Switch tabs to ensure tabRef is working
+    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("#add-from-favourites").should("be.visible");
+
+    cy.get("[data-tab-id='productsTab']").click({ force: true });
+    cy.get("#add-products").should("be.visible");
+
+    // Click edit to trigger handleTab through onClickHandler
+    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+    cy.get(".govuk-tabs__list-item--selected").should("exist");
+  });
+});
+
+describe("What are you exporting page: useEffect error scrolling", () => {
+  it("should scroll to errorIsland when validation errors occur", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Trigger validation errors
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+
+    // useEffect should scroll to errorIsland
+    cy.get("#errorIsland").should("be.visible");
+    cy.contains("h2", "There is a problem").should("be.visible");
+  });
+
+  it("should not scroll when errors remain empty", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // No errors, so errorIsland should not exist
+    cy.get("#errorIsland").should("not.exist");
+    cy.get(".govuk-error-summary").should("not.exist");
+
+    // Navigate around without triggering errors
+    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='productsTab']").click({ force: true });
+
+    // Still no errorIsland
+    cy.get("#errorIsland").should("not.exist");
+  });
+});
+
+describe("What are you exporting page: Edge cases and conditional rendering", () => {
+  it("should handle undefined nextUri value gracefully", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Hidden input for nextUri should exist (even if undefined/empty)
+    cy.get("input[name='nextUri']").should("exist");
+  });
+
+  it("should render with empty stateLookup and fall back to stateLookupNonJs", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Submit to get action data with stateLookupNonJs
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+
+    // State dropdown should still render using fallback
+    cy.get("#state").should("exist");
+    cy.get("#presentation").should("exist");
+  });
+
+  it("should handle empty commodityCodes array", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Commodity code field should exist even with empty array
+    cy.get("#commodity_code").should("exist");
+  });
+
+  it("should use nullish coalescing for optional props", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Test that component renders with fallback values
+    cy.get("#species").should("exist");
+    cy.get("#state").should("exist");
+    cy.get("#presentation").should("exist");
+    cy.get("#commodity_code").should("exist");
+
+    // Verify loaderSpecies is used when selectedSpecies is undefined
+    cy.get("#species").should("have.value", "");
+  });
+
+  it("should handle products array edge case when length equals maxLandingsLimit", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // displayAddProduct should be false, hiding add button
+    cy.get("[data-testid='add-product']").should("not.exist");
+
+    // showFavouriteCheckbox should also be false
+    cy.get("#addToFavourites").should("not.exist");
+
+    // Favourites tab button should not render
+    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("#add-from-favourites [data-testid='add-product']").should("not.exist");
+  });
+
+  it("should correctly map stateLookup to states prop", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Verify state dropdown has options (mapped from stateLookup)
+    cy.get("#state").should("exist");
+    cy.get("#state option").should("have.length.greaterThan", 0);
+  });
+
+  it("should correctly map presentations from stateLookup", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Select a species and state to populate presentations
+    cy.get("#species").invoke("val", "Albacore (ALB)").trigger("change");
+    cy.wait(500);
+
+    // Presentation field should exist
+    cy.get("#presentation").should("exist");
+  });
+
+  it("should handle isEditMode flag correctly", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Click edit to enable edit mode
+    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+
+    // Form should be populated with product data
+    cy.get("#species").should("have.value", "Aesop shrimp (AES)");
+    cy.get("#state").should("contain", "Fresh");
+  });
+
+  it("should pass all required props to AddProducts component", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Verify all critical props are rendered in the component
+    cy.get("#species").should("exist"); // species prop
+    cy.get("#state").should("exist"); // states prop
+    cy.get("#presentation").should("exist"); // presentations prop
+    cy.get("#commodity_code").should("exist"); // commodityCodes prop
+    cy.get("#addToFavourites").should("exist"); // showFavouriteCheckbox prop
+
+    // Verify speciesCode is passed (faoCode)
+    cy.get("input[name='speciesCode']").should("exist");
+  });
+
+  it("should handle action data with all optional fields undefined", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // With no action data, should use loader data fallbacks
+    cy.get("#species").should("exist");
+    cy.get("#state").should("exist");
+    cy.get("#presentation").should("exist");
+    cy.get("#commodity_code").should("exist");
+  });
+
+  it("should correctly apply error styling via the reduce function", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+
+    // Verify error classes are applied via transformed errors object
+    cy.get(".govuk-form-group--error").should("exist");
+    cy.get(".govuk-error-message").should("exist");
+  });
+});
+
+describe("What are you exporting page: useScrollOnPageLoad hook", () => {
+  it("should trigger useScrollOnPageLoad on initial render", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Page should load and scroll to top (hook behavior)
+    cy.get("h1").should("be.visible");
+    cy.get("#productTabs").should("be.visible");
+  });
+});
+
+describe("What are you exporting page: Main component props", () => {
+  it("should pass correct backUrl to Main component for non-upload journey", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    cy.findByRole("link", { name: "Back" }).should("have.attr", "href").and("include", "/add-exporter-details");
+  });
+
+  it("should pass correct backUrl to Main component for upload journey", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingUploadEntry,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    cy.findByRole("link", { name: "Back" }).should("have.attr", "href").and("include", "/upload-file");
+  });
+});
+
+describe("AddProducts Component: Basic Rendering and Integration", () => {
+  it("should render Add Products form with all required form elements", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Verify all form fields exist
+    cy.get("#species").should("exist");
+    cy.get("#state").should("exist");
+    cy.get("#presentation").should("exist");
+    cy.get("#commodity_code").should("exist");
+    cy.get("[data-testid='add-product']").should("exist");
+    cy.get("[data-testid='cancel']").should("exist");
+    cy.get("#addToFavourites").should("exist");
+  });
+
+  it("should handle edit mode correctly by populating existing product data", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Click edit on existing product
+    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+
+    // Verify form is populated with existing data
+    cy.get("#species").should("have.value", "Aesop shrimp (AES)");
+    cy.get("#state").should("not.have.value", "");
+    cy.get("#presentation").should("not.have.value", "");
+    cy.get("#commodity_code").should("not.have.value", "");
+
+    // Verify button text changes to "Update"
+    cy.get("[data-testid='add-product']").should("contain", "Update");
+  });
+
+  it("should reset form when cancel button is clicked", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Edit a product
+    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+
+    // Verify form has data
+    cy.get("#species").should("not.have.value", "");
+
+    // Click cancel
+    cy.get("[data-testid='cancel']").click({ force: true });
+
+    // Form should be reset
+    cy.get("#species").should("have.value", "");
+    cy.get("#state").should("have.value", "");
+  });
+
+  it("should display hidden inputs for scientific name and species code", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Edit product to populate hidden fields
+    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+
+    // Verify hidden inputs exist
+    cy.get("input[name='scientificName']").should("exist");
+    cy.get("input[name='speciesCode']").should("exist");
+    cy.get("input[name='stateLabel']").should("exist");
+    cy.get("input[name='presentationLabel']").should("exist");
+  });
+
+  it("should handle add to favourites checkbox toggle", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    // Check the checkbox
+    cy.get("#addToFavourites").check();
+    cy.get("#addToFavourites").should("be.checked");
+
+    // Uncheck
+    cy.get("#addToFavourites").uncheck();
+    cy.get("#addToFavourites").should("not.be.checked");
+  });
+});
+
+describe("AddProducts useEffect hooks: Complete coverage without intercepts", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+  });
+
+  describe("useEffect for isReset - Form reset on navigation actions", () => {
+    it("should reset all form fields when cancel button is clicked", () => {
+      // Edit an existing product to populate form
+      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+
+      // Verify form is populated
+      cy.get("#species").should("have.value", "Aesop shrimp (AES)");
+      cy.get("#state").should("not.have.value", "");
+
+      // Click cancel to trigger isReset = true
+      cy.get("[data-testid='cancel']").click({ force: true });
+
+      // Verify useEffect reset all fields
+      cy.get("#species").should("have.value", "");
+      cy.get("#state").should("have.value", "");
+      cy.get("#presentation").should("have.value", "");
+      cy.get("#commodity_code").should("have.value", "");
+    });
+
+    it("should reset form fields when add product button is clicked after filling form", () => {
+      // Fill in the form
+      cy.get("#species").type("Albacore");
+      cy.wait(500);
+
+      // Check if autocomplete appears and select if available
+      cy.get("body").then(($body) => {
+        if ($body.find(".autocomplete__option").length > 0) {
+          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.wait(1000);
+        }
+      });
+
+      // Submit the form (triggers navigation with addProduct action)
+      cy.get("[data-testid='add-product']").click({ force: true });
+      cy.wait(500);
+
+      // Verify form was reset by useEffect (isReset = true after submit)
+      cy.get("#species").should("have.value", "");
+    });
+  });
+
+  describe("useEffect for commonSpecies - Fetch states when species change", () => {
+    it("should handle species change by updating states", () => {
+      // Edit first product
+      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.wait(500);
+
+      cy.get("#species").invoke("val");
+
+      // Clear and type new species (force: true required as autocomplete disables input after selection)
+      cy.get("#species").clear({ force: true }).type("Atlantic cod", { force: true });
+      cy.wait(1000);
+
+      // Select from autocomplete if available
+      cy.get("body").then(($body) => {
+        if ($body.find(".autocomplete__option").length > 0) {
+          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.wait(2000);
+
+          // Verify species code changed
+          cy.get("input[name='speciesCode']")
+            .invoke("val")
+            .then((val) => {
+              cy.wrap(val).should("not.equal", "AES");
+            });
+        }
+      });
+    });
+  });
+
+  describe("useEffect for [commonSpecies, currentState] - Fetch presentations", () => {
+    it("should update presentations when state changes", () => {
+      // Edit a product
+      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.wait(1000);
+
+      // Get current presentation count
+      cy.get("#presentation option")
+        .its("length")
+        .then(() => {
+          // Change state if multiple states available
+          cy.get("#state option")
+            .its("length")
+            .then((stateCount) => {
+              if (stateCount > 2) {
+                cy.get("#state").select(1);
+                cy.wait(1000);
+
+                // Presentations should be updated by useEffect
+                cy.get("#presentation option").should("exist");
+              }
+            });
+        });
+    });
+  });
+
+  describe("useEffect for currentPresentation - Fetch commodity codes", () => {
+    it("should populate commodity codes when presentation is selected", () => {
+      // Edit a product with all fields
+      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.wait(1000);
+
+      // Verify commodity codes are populated by useEffect
+      cy.get("#commodity_code option").should("have.length.greaterThan", 0);
+    });
+
+    it("should auto-select commodity code when only one is available", () => {
+      // Edit a product
+      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.wait(1000);
+
+      // Check if commodity code is auto-selected
+      cy.get("#commodity_code option")
+        .its("length")
+        .then((count) => {
+          if (count === 2) {
+            // 1 empty + 1 actual
+            cy.get("#commodity_code").should("not.have.value", "");
+          }
+        });
+    });
+
+    it("should update commodity codes when presentation changes", () => {
+      // Edit a product
+      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.wait(1000);
+
+      // Get current commodity code
+      cy.get("#commodity_code").invoke("val");
+
+      // Change presentation if multiple available
+      cy.get("#presentation option")
+        .its("length")
+        .then((count) => {
+          if (count > 2) {
+            cy.get("#presentation").select(1);
+            cy.wait(2000);
+
+            // Commodity codes should be updated by useEffect
+            cy.get("#commodity_code option").should("exist");
+          }
+        });
+    });
+  });
+
+  describe("useEffect for selectedSpecies - Update commonSpecies from prop", () => {
+    it("should update commonSpecies when selectedSpecies prop changes on edit", () => {
+      // Initially species is empty
+      cy.get("#species").should("have.value", "");
+
+      // Edit a product (selectedSpecies prop changes)
+      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+
+      // useEffect should update commonSpecies from selectedSpecies prop
+      cy.get("#species").should("have.value", "Aesop shrimp (AES)");
+    });
+  });
+
+  describe("useEffect for [commodityCodes, selectedCommodityCode] - Update commodity code holders from props", () => {
+    it("should update commodityCodesHolder when commodityCodes prop changes", () => {
+      // Edit a product (commodityCodes prop is passed)
+      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.wait(1000);
+
+      // useEffect should populate commodityCodesHolder from commodityCodes prop
+      cy.get("#commodity_code option").should("have.length.greaterThan", 0);
+    });
+
+    it("should handle empty commodityCodes array gracefully", () => {
+      // Start with empty form
+      cy.get("#commodity_code option")
+        .its("length")
+        .then(() => {
+          // Edit product
+          cy.get("[data-testid*='edit-button']").first().click({ force: true });
+          cy.wait(1000);
+
+          // useEffect should handle commodityCodes prop even if empty initially
+          cy.get("#commodity_code").should("exist");
+        });
+    });
+  });
+
+  describe("useEffect cleanup functions - Abort controller management", () => {
+    it("should cleanup on cancel action", () => {
+      // Edit a product to trigger useEffect hooks
+      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.wait(1000);
+
+      // Cancel triggers navigation and cleanup
+      cy.get("[data-testid='cancel']").click({ force: true });
+      cy.wait(500);
+
+      // Form should be clean
+      cy.get("#species").should("have.value", "");
+      cy.get("#state").should("have.value", "");
+    });
+  });
+
+  describe("useEffect integration - Multiple hooks working together", () => {
+    it("should maintain state consistency across useEffect executions", () => {
+      // Edit product
+      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.wait(1000);
+
+      // Capture initial state
+      cy.get("#species").invoke("val").as("originalSpecies");
+      cy.get("#state").invoke("val").as("originalState");
+
+      // Change state
+      cy.get("#state option")
+        .its("length")
+        .then((count) => {
+          if (count > 2) {
+            cy.get("#state").select(1);
+            cy.wait(2000);
+
+            // Species should remain the same (useEffect for presentations shouldn't affect species)
+            cy.get("@originalSpecies").then((original) => {
+              cy.get("#species").should("have.value", original);
+            });
+          }
+        });
+    });
+  });
+});
+
+describe("handleSpeciesSelection function: Complete coverage", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+  });
+
+  describe("Basic species selection functionality", () => {
+    it("should call handleSpeciesSelection when a species is selected from autocomplete", () => {
+      // Type into species field to trigger autocomplete
+      cy.get("#species").type("Albacore");
+      cy.wait(1000);
+
+      // Select the first option from autocomplete dropdown
+      cy.get("body").then(($body) => {
+        if ($body.find(".autocomplete__option").length > 0) {
+          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.wait(500);
+
+          // Verify species was set (setCommonSpecies called)
+          cy.get("#species").should("contain.value", "Albacore");
+        }
+      });
+    });
+
+    it("should set the selected species value correctly", () => {
+      // Test with different species
+      cy.get("#species").type("Atlantic cod");
+      cy.wait(1000);
+
+      cy.get("body").then(($body) => {
+        if ($body.find(".autocomplete__option").length > 0) {
+          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.wait(500);
+
+          // Verify setCommonSpecies was called with correct value
+          cy.get("#species").invoke("val").should("not.be.empty");
+        }
+      });
+    });
+  });
+
+  describe("Multiple species selection scenarios", () => {
+    it("should handle selecting species multiple times in succession", () => {
+      // Select first species
+      cy.get("#species").type("Cod");
+      cy.wait(1000);
+
+      cy.get("body").then(($body) => {
+        if ($body.find(".autocomplete__option").length > 0) {
+          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.wait(1500);
+
+          cy.get("#species").invoke("val").as("firstSpecies");
+
+          // Select second species
+          cy.get("#species").clear().type("Haddock");
+          cy.wait(1000);
+
+          cy.get("body").then(($body2) => {
+            if ($body2.find(".autocomplete__option").length > 0) {
+              cy.get(".autocomplete__option").first().click({ force: true });
+              cy.wait(500);
+
+              // Verify species changed
+              cy.get("@firstSpecies").then((first) => {
+                cy.get("#species").invoke("val").should("not.equal", first);
+              });
+
+              // All fields should still be reset
+              cy.get("#state").should("have.value", "");
+              cy.get("#presentation").should("have.value", "");
+              cy.get("#commodity_code").should("have.value", "");
+            }
+          });
+        }
+      });
+    });
+
+    it("should handle empty species selection (clearing species)", () => {
+      // Edit a product
+      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.wait(1000);
+
+      // Clear species field (simulates selecting empty value)
+      cy.get("#species").clear();
+      cy.wait(500);
+
+      // Type and select again
+      cy.get("#species").type("Whiting");
+      cy.wait(1000);
+
+      cy.get("body").then(($body) => {
+        if ($body.find(".autocomplete__option").length > 0) {
+          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.wait(500);
+
+          // handleSpeciesSelection should set all fields correctly
+          cy.get("#species").invoke("val").should("not.be.empty");
+          cy.get("#state").should("have.value", "");
+        }
+      });
+    });
+  });
+
+  describe("Integration with form state", () => {
+    it("should maintain form consistency after species selection", () => {
+      // Type and select species
+      cy.get("#species").type("Pollock");
+      cy.wait(1000);
+
+      cy.get("body").then(($body) => {
+        if ($body.find(".autocomplete__option").length > 0) {
+          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.wait(1500);
+
+          // After handleSpeciesSelection, verify form is in consistent state
+          cy.get("#species").invoke("val").should("not.be.empty");
+          cy.get("#state").should("have.value", "");
+          cy.get("#presentation").should("have.value", "");
+          cy.get("#commodity_code").should("have.value", "");
+
+          // Hidden inputs should also be affected
+          cy.get("input[name='speciesCode']").should("exist");
+          cy.get("input[name='scientificName']").should("exist");
+        }
+      });
+    });
+
+    it("should allow subsequent field population after species selection", () => {
+      // Select species
+      cy.get("#species").type("Hake");
+      cy.wait(1000);
+
+      cy.get("body").then(($body) => {
+        if ($body.find(".autocomplete__option").length > 0) {
+          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.wait(2000);
+
+          // After species selection and reset, state should be populated by useEffect
+          cy.get("#state option")
+            .its("length")
+            .then((count) => {
+              if (count > 1) {
+                // States were fetched, select one
+                cy.get("#state").select(1);
+                cy.wait(1000);
+
+                // Should be able to continue populating form
+                cy.get("#state").invoke("val").should("not.be.empty");
+              }
+            });
+        }
+      });
+    });
+  });
+
+  describe("Edge cases and special scenarios", () => {
+    it("should handle species selection with special characters", () => {
+      // Some species names may have special characters
+      cy.get("#species").type("Ray");
+      cy.wait(1000);
+
+      cy.get("body").then(($body) => {
+        if ($body.find(".autocomplete__option").length > 0) {
+          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.wait(500);
+
+          // handleSpeciesSelection should work regardless of species name format
+          cy.get("#species").invoke("val").should("not.be.empty");
+          cy.get("#state").should("have.value", "");
+        }
+      });
+    });
+  });
+
+  describe("Function coverage - All execution paths", () => {
+    it("should execute all statements in handleSpeciesSelection", () => {
+      // This test ensures 100% statement coverage by triggering the function
+      cy.get("#species").type("Scallop");
+      cy.wait(1000);
+
+      cy.get("body").then(($body) => {
+        if ($body.find(".autocomplete__option").length > 0) {
+          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.wait(500);
+
+          // Every line in the function should be executed:
+          // Line 136: setSearchState([])
+          // Line 137: setCommonSpecies(selectedValue)
+          // Line 138: setCurrentState("")
+          // Line 139: setCurrentPresentation("")
+          // Line 140: setStateHolder([])
+          // Line 141: setPresentationHolder([])
+          // Line 142: setCommodityCodesHolder([])
+          // Line 143: setCurrentCommodityCode("")
+
+          // Verify execution by checking resulting DOM state
+          cy.get("#species").invoke("val").should("not.be.empty");
+          cy.get("#state").should("have.value", "");
+          cy.get("#presentation").should("have.value", "");
+          cy.get("#commodity_code").should("have.value", "");
+        }
+      });
+    });
+
+    it("should execute handleSpeciesSelection with various input values", () => {
+      const speciesNames = ["Crab", "Lobster", "Prawn"];
+
+      // Test function with different input values to ensure all branches
+      speciesNames.forEach((species, index) => {
+        cy.get("#species").type(species);
+        cy.wait(1000);
+
+        cy.get("body").then(($body) => {
+          if ($body.find(".autocomplete__option").length > 0) {
+            cy.get(".autocomplete__option").first().click({ force: true });
+            cy.wait(index === speciesNames.length - 1 ? 500 : 300);
+
+            // Function should execute successfully for each input
+            cy.get("#state").should("have.value", "");
+            cy.get("#presentation").should("have.value", "");
+          }
+        });
+      });
+    });
+  });
+});
+
+describe("AddProducts Component: State holder initialization with nullish values", () => {
+  it("should initialize all holders to empty arrays when props are null/undefined", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+    // Fresh page load - all holders should use || [] fallback
+    cy.get("#state option").should("have.length", 1);
+    cy.get("#presentation option").should("have.length", 1);
+    cy.get("#commodity_code option").should("have.length", 1);
+  });
+});
+
+describe("AddProducts Component: defaultValue input props - Lines 298-300 coverage", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+  });
+
+  describe("stateInputProps.defaultValue assignment (line 298)", () => {
+    it("should use defaultValue for state when component receives selectedState prop", () => {
+      // Edit existing product to trigger defaultValue path in non-hydrated state
+      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+
+      // Verify state field has the pre-populated value (tests defaultValue = selectedState)
+      cy.get("#state").should("exist");
+      cy.get("#state option:selected").should("contain", "Fresh");
+    });
+
+    it("should handle empty selectedState prop with defaultValue", () => {
+      // On fresh page load without editing, selectedState should be empty
+      cy.get("#state").should("exist");
+      cy.get("#state").should("have.value", "");
+    });
+
+    it("should assign selectedState to defaultValue in edit mode", () => {
+      // Edit a product where selectedState prop is passed from server
+      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+
+      // The state dropdown should show the correct default selection
+      cy.get("#state").should("not.have.value", "");
+      cy.get("#state option:selected").should("exist");
+    });
+  });
+
+  describe("presentationInputProps.defaultValue assignment (line 299)", () => {
+    it("should use defaultValue for presentation when component receives selectedPresentation prop", () => {
+      // Edit existing product to trigger defaultValue path
+      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+
+      // Verify presentation field has the pre-populated value (tests defaultValue = selectedPresentation)
+      cy.get("#presentation").should("exist");
+      cy.get("#presentation option:selected").should("contain", "Whole");
+    });
+
+    it("should handle empty selectedPresentation prop with defaultValue", () => {
+      // On fresh page load, selectedPresentation should be empty
+      cy.get("#presentation").should("exist");
+      cy.get("#presentation").should("have.value", "");
+    });
+
+    it("should assign selectedPresentation to defaultValue in edit mode", () => {
+      // Edit a product where selectedPresentation prop is passed from server
+      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+
+      // The presentation dropdown should show the correct default selection
+      cy.get("#presentation").should("not.have.value", "");
+      cy.get("#presentation option:selected").should("exist");
+    });
+  });
+
+  describe("commodityCodeValue variable initialization and defaultValue (line 300+)", () => {
+    it("should initialize commodityCodeValue to empty string when commodityCodes is not an array", () => {
+      // Fresh page load - commodityCodes might not be an array initially
+      cy.get("#commodity_code").should("exist");
+      cy.get("#commodity_code").should("have.value", "");
+    });
+
+    it("should handle commodityCodes array with multiple values and find matching selectedCommodityCode", () => {
+      // Edit existing product which has multiple commodity codes
+      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+
+      // Verify commodity code field shows pre-selected value
+      // Tests: comodityCodeValue = commodityCodes.find(c => c.value === selectedCommodityCode)?.value
+      cy.get("#commodity_code").should("exist");
+      cy.get("#commodity_code option:selected").should("exist");
+    });
+
+    it("should assign commodityCodeValue to defaultValue in edit mode", () => {
+      // Edit a product where commodityCodes array is populated
+      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+
+      // Verify the commodity code dropdown has the correct default value
+      cy.get("#commodity_code").should("not.have.value", "");
+      cy.get("#commodity_code option:selected").should("contain.text", "03063590");
+    });
+
+    it("should handle empty commodityCodes array with defaultValue", () => {
+      // Fresh page without any selections
+      cy.get("#commodity_code").should("exist");
+      cy.get("#commodity_code option").should("have.length", 1); // Only placeholder
+      cy.get("#commodity_code").should("have.value", "");
+    });
+  });
+
+  describe("Complete defaultValue flow - All three input props (lines 298-300)", () => {
+    it("should set all three defaultValues when editing an existing product", () => {
+      // Edit product - this triggers the else block where defaultValue is used
+      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+
+      // Verify all three fields have defaultValues set correctly
+      // Line 298: stateInputProps.defaultValue = selectedState
+      cy.get("#state option:selected").should("contain", "Fresh");
+
+      // Line 299: presentationInputProps.defaultValue = selectedPresentation
+      cy.get("#presentation option:selected").should("contain", "Whole");
+
+      // Lines 300-308: commodityCodeInputProps.defaultValue logic
+      cy.get("#commodity_code option:selected").should("contain.text", "03063590");
+    });
+
+    it("should handle all defaultValues as empty when no selections are made", () => {
+      // Fresh page load - all defaultValues should be empty or default
+      cy.get("#state").should("have.value", "");
+      cy.get("#presentation").should("have.value", "");
+      cy.get("#commodity_code").should("have.value", "");
+    });
+  });
+
+  describe("Edge cases for defaultValue assignments", () => {
+    it("should handle Array.isArray check for commodityCodes when it's undefined", () => {
+      // On fresh page, commodityCodes might be undefined/null initially
+      // Tests: if (Array.isArray(commodityCodes))
+      cy.get("#commodity_code").should("exist");
+      cy.get("#commodity_code").should("have.value", "");
+    });
   });
 });

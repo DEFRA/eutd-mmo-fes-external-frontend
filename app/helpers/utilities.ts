@@ -2,13 +2,18 @@ import isEmpty from "lodash/isEmpty";
 import moment from "moment";
 import { route } from "routes-gen";
 import type { SearchState, Species } from "~/types";
-import { Page } from ".";
+import { Page } from "./pages";
 
 export const isTestEnv = () => process.env.NODE_ENV === "test";
 
 export const isProdEnv = () => process.env.NODE_ENV === "production";
 
-export const isValidDate = (date = "", format: string | string[] = "YYYY-M-D") => moment(date, format, true).isValid();
+export const isValidDate = (date = "", format: string | string[] = "YYYY-M-D") => {
+  const m = moment(date, format, true);
+  // moment.js in strict mode accepts year 0000 as valid; reject any year < 1000
+  // (a 4-digit non-zero year) so that entries like 0000 surface as invalid.
+  return m.isValid() && m.year() >= 1000;
+};
 
 export const shouldRenderGA = (isCookieAccepted = false) => isProdEnv() && isCookieAccepted;
 
