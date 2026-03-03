@@ -991,6 +991,41 @@ describe("Direct Landing Error Messages - English", () => {
     cy.get(".govuk-error-summary__list a").should("contain.text", "Enter the export weight in kilograms");
     cy.get(".govuk-error-message").should("contain.text", "Enter the export weight in kilograms");
   });
+
+  it("should display total weight exceeded error for a single product", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingTotalWeightExceededSingle,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a")
+      .should("contain.text", "The total combined weight of all products must be less than 100,000,000,000")
+      .and("have.attr", "href", "#weights");
+    cy.get("#weights").should("have.class", "govuk-form-group--error");
+    cy.get("#weights .govuk-error-message").should(
+      "contain.text",
+      "The total combined weight of all products must be less than 100,000,000,000"
+    );
+  });
+
+  it("should display total weight exceeded error for multiple products", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingTotalWeightExceededMultiple,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a")
+      .should("contain.text", "The total combined weight of all products must be less than 100,000,000,000")
+      .and("have.attr", "href", "#weights");
+    cy.get("#weights").should("have.class", "govuk-form-group--error");
+    cy.get("#weights .govuk-error-message").should(
+      "contain.text",
+      "The total combined weight of all products must be less than 100,000,000,000"
+    );
+    cy.get(String.raw`#weights\.0\.exportWeight, [id^="weights."]`).should("have.length.greaterThan", 1);
+  });
 });
 
 describe("Direct Landing Error Messages - Welsh", () => {
@@ -1095,6 +1130,42 @@ describe("Direct Landing Error Messages - Welsh", () => {
     cy.get("#error-summary-title").contains("Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Rhowch y pwysau allforio mewn cilogramau");
     cy.get(".govuk-error-message").should("contain.text", "Rhowch y pwysau allforio mewn cilogramau");
+  });
+
+  it("should display Welsh total weight exceeded error for a single product", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingTotalWeightExceededSingle,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a")
+      .should("contain.text", "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000")
+      .and("have.attr", "href", "#weights");
+    cy.get("#weights").should("have.class", "govuk-form-group--error");
+    cy.get("#weights .govuk-error-message").should(
+      "contain.text",
+      "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000"
+    );
+  });
+
+  it("should display Welsh total weight exceeded error for multiple products", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingTotalWeightExceededMultiple,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a")
+      .should("contain.text", "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000")
+      .and("have.attr", "href", "#weights");
+    cy.get("#weights").should("have.class", "govuk-form-group--error");
+    cy.get("#weights .govuk-error-message").should(
+      "contain.text",
+      "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000"
+    );
   });
 });
 
