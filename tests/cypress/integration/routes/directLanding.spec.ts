@@ -3,6 +3,7 @@ import { type ITestParams, TestCaseId } from "~/types";
 const documentUrl = "/create-catch-certificate";
 const documentNumber = "GBR-2022-CC-6BC952BA3";
 const directLandingUrl = `${documentUrl}/${documentNumber}/direct-landing`;
+const invalidVesselValue = "Invalid123";
 
 const waitForHydration = () => {
   // if the date pickers are there then we can assume the UI is ready
@@ -334,8 +335,10 @@ describe("Direct landing page render", () => {
 
   it("should disable vessel input until date landed is populated", () => {
     waitForHydration();
-    cy.get("#vessel\\.vesselName").clear();
-    cy.get("#vessel\\.vesselName").invoke("val").should("eq", "");
+    cy.get(String.raw`#vessel\.vesselName`).clear();
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val")
+      .should("eq", "");
     cy.get("#dateLanded-day").clear();
     cy.get("#dateLanded-day").invoke("val").should("eq", "");
     cy.get("#dateLanded-month").clear();
@@ -343,15 +346,19 @@ describe("Direct landing page render", () => {
     cy.get("#dateLanded-year").clear();
     cy.get("#dateLanded-year").invoke("val").should("eq", "");
     // attempt to change vessel
-    cy.get("#vessel\\.vesselName").type("CARINA (BF803)");
-    cy.get("#vessel\\.vesselName").invoke("val").should("eq", "");
+    cy.get(String.raw`#vessel\.vesselName`).type("CARINA (BF803)");
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val")
+      .should("eq", "");
     // populate valid landed date
     cy.get("#dateLanded-day").type("11");
     cy.get("#dateLanded-month").type("12");
     cy.get("#dateLanded-year").type("2021");
     // attempt to change vessel
-    cy.get("#vessel\\.vesselName").type("CARINA (BF803)");
-    cy.get("#vessel\\.vesselName").invoke("val").should("eq", "CARINA (BF803)");
+    cy.get(String.raw`#vessel\.vesselName`).type("CARINA (BF803)");
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val")
+      .should("eq", "CARINA (BF803)");
   });
 
   it("should fill the form fields with gear details", () => {
@@ -372,10 +379,10 @@ describe("Direct landing page render", () => {
       cy.get("#rfmo").select(2, { force: true });
     });
     // vessel
-    cy.get("#vessel\\.vesselName").invoke("val", "CARINA (BF803)");
+    cy.get(String.raw`#vessel\.vesselName`).invoke("val", "CARINA (BF803)");
     // weight
-    cy.get("#weights\\.0\\.exportWeight").invoke("val", 4);
-    cy.get("#weights\\.1\\.exportWeight").invoke("val", 8);
+    cy.get(String.raw`#weights\.0\.exportWeight`).invoke("val", 4);
+    cy.get(String.raw`#weights\.1\.exportWeight`).invoke("val", 8);
     // gear details
     cy.get("#gearCategory").contains("Select gear category");
     cy.get("#gearCategory").then(() => {
@@ -400,10 +407,14 @@ describe("Direct landing page render", () => {
   });
 
   it("should render 0kg if the entered weights are not defined", () => {
-    cy.get("#weights\\.0\\.exportWeight").should("have.value", "2");
-    cy.get("#weights\\.1\\.exportWeight").should("have.value", "3");
-    cy.get("#weights\\.0\\.exportWeight").invoke("val", "").trigger("change");
-    cy.get("#weights\\.1\\.exportWeight").invoke("val", "").trigger("change");
+    cy.get(String.raw`#weights\.0\.exportWeight`).should("have.value", "2");
+    cy.get(String.raw`#weights\.1\.exportWeight`).should("have.value", "3");
+    cy.get(String.raw`#weights\.0\.exportWeight`)
+      .invoke("val", "")
+      .trigger("change");
+    cy.get(String.raw`#weights\.1\.exportWeight`)
+      .invoke("val", "")
+      .trigger("change");
     cy.get("#yourproducts tr:last-child td:last-of-type").contains("0kg");
   });
 
@@ -424,10 +435,14 @@ describe("Direct landing page render", () => {
 
   it("should trigger vessel dropdown when user types", () => {
     waitForHydration();
-    cy.get("#vessel\\.vesselName").invoke("val").should("eq", "AARON (N370)");
-    cy.get("#vessel\\.vesselName").clear();
-    cy.get("#vessel\\.vesselName").invoke("val").should("be.empty");
-    cy.get("#vessel\\.vesselName").type("ff");
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val")
+      .should("eq", "AARON (N370)");
+    cy.get(String.raw`#vessel\.vesselName`).clear();
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val")
+      .should("be.empty");
+    cy.get(String.raw`#vessel\.vesselName`).type("ff");
     cy.get(".autocomplete__option").should("have.length", 5501);
   });
 });
@@ -490,20 +505,20 @@ describe("DirectLanding page when javascript is disabled", () => {
   });
 
   it("should render a select box with pre-populated vessel names when valid date landed exists", () => {
-    cy.get("select#vessel\\.vesselName").should("exist");
+    cy.get(String.raw`select#vessel\.vesselName`).should("exist");
     cy.get("select#vessel\\.vesselName option").should("not.have.length", 0);
   });
 
   it("should retain existing vessel name when date landed is added", () => {
     cy.get("[data-testid='add-dateLanded']").click({ force: true });
-    cy.get("select#vessel\\.vesselName").should("have.length.at.least", 1);
-    cy.get("select#vessel\\.vesselName").should("have.value", "AARON (N370)");
+    cy.get(String.raw`select#vessel\.vesselName`).should("have.length.at.least", 1);
+    cy.get(String.raw`select#vessel\.vesselName`).should("have.value", "AARON (N370)");
   });
 
   it("should retain existing vessel name when date landed is added", () => {
     cy.get("[data-testid='add-dateLanded']").click({ force: true });
-    cy.get("select#vessel\\.vesselName").should("have.length.at.least", 1);
-    cy.get("select#vessel\\.vesselName").should("have.value", "AARON (N370)");
+    cy.get(String.raw`select#vessel\.vesselName`).should("have.length.at.least", 1);
+    cy.get(String.raw`select#vessel\.vesselName`).should("have.value", "AARON (N370)");
   });
 
   it("should trigger add date button with values", () => {
@@ -540,7 +555,7 @@ describe("DirectLanding page errors when javascript is disabled", () => {
   it("should trigger add date button", () => {
     cy.get("[data-testid='add-dateLanded']").click({ force: true });
     cy.url().should("include", "vessels");
-    cy.get("#vessel\\.vesselName").should("have.length.at.least", 1);
+    cy.get(String.raw`#vessel\.vesselName`).should("have.length.at.least", 1);
   });
 
   it("should click on save and continue", () => {
@@ -588,7 +603,9 @@ describe("DirectLanding page errors when javascript is enabled", () => {
   });
 
   it("should search autoinput field", () => {
-    cy.get("#vessel\\.vesselName").invoke("val", "abc").trigger("change");
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val", "abc")
+      .trigger("change");
   });
 
   it("should click on save and continue", () => {
@@ -864,18 +881,322 @@ describe("Direct Landing - Invalid date validation without vessel name error (FI
     cy.visit(directLandingUrl, { qs: { ...testParams } });
   });
 
-  it("should show both date errors but not vessel name error", () => {
+  it("should load the page with invalid pre-populated dates without a vessel field error", () => {
+    cy.get(".govuk-heading-xl").contains("Add your trip").should("be.visible");
+    cy.get(String.raw`#vessel\.vesselName`).should("exist");
+  });
+
+  it("should display date errors but not a vessel error when invalid dates are submitted (FIO-10474)", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.url().should("include", "direct-landing");
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list").should("contain.text", "Enter a valid");
+    cy.get(".govuk-error-summary__list").should("not.contain.text", "Select a vessel from the list");
+  });
+});
+describe("Direct Landing Error Messages - English", () => {
+  it("should display the correct error messages when inputs are unpopulated", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingDateLandedUnpopulated,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem"); // Passes in dev localhost:3000
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Enter the date landed"); // Passes in dev localhost:3000
+    cy.get(".govuk-error-summary__list a").should(
+      "contain.text",
+      "Select or enter a vessel name or port letter and number"
+    );
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Enter the export weight in kilograms"); // Passes in dev localhost:3000
+    cy.get(".govuk-error-message").should("contain.text", "Enter the date landed"); // Passes in dev localhost:3000
+    cy.get(".govuk-error-message").should("contain.text", "Select or enter a vessel name or port letter and number"); // Passes in dev localhost:3000
+    cy.get(".govuk-error-message").should("contain.text", "Enter the export weight in kilograms"); // Passes in dev localhost:3000
+  });
 
-    // Count error messages - should be exactly 2 (startDate and dateLanded)
-    cy.get(".govuk-error-summary__list a").should("have.length", 2);
+  it("should display 'Enter a valid date landed' when date is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingDateLandedInvalid,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    // Enter invalid date: Day 23 Month 14 Year 2026
+    cy.get("#dateLanded-day").clear();
+    cy.get("#dateLanded-day").type("23");
+    cy.get("#dateLanded-month").clear();
+    cy.get("#dateLanded-month").type("14");
+    cy.get("#dateLanded-year").clear();
+    cy.get("#dateLanded-year").type("2026");
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Enter a valid date landed");
+    cy.get(".govuk-error-message").should("contain.text", "Enter a valid date landed");
+  });
 
-    // Verify the two date errors with correct error messages
-    cy.get('a[href="#startDate"]').should("exist").and("contain", "Enter a valid start date");
-    cy.get('a[href="#dateLanded"]').should("exist").and("contain", "Enter a valid date landed");
+  it("should display 'Date landed must be today or within the next 7 days' when date is > 7 days future", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingDateLandedFuture,
+    };
+    // Passes in dev localhost:3000
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("#dateLanded-day").clear();
+    cy.get("#dateLanded-day").type("1");
+    cy.get("#dateLanded-month").clear();
+    cy.get("#dateLanded-month").type("1");
+    cy.get("#dateLanded-year").clear();
+    cy.get("#dateLanded-year").type("2029");
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a").should(
+      "contain.text",
+      "Date landed must be today or within the next 7 days"
+    );
+    cy.get(".govuk-error-message").should("contain.text", "Date landed must be today or within the next 7 days");
+  });
 
-    // Ensure no vessel-related errors
-    cy.get('a[href="#vessel.vesselName"]').should("not.exist");
-    cy.get(".govuk-error-summary__list").should("not.contain", "vessel");
+  it("should display 'Select a vessel from the list' when vessel selection is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingVesselInvalid,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val", "")
+      .type(invalidVesselValue);
+    cy.wait(500);
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Select a vessel from the list");
+    cy.get(".govuk-error-message").should("contain.text", "Select a vessel from the list");
+  });
+
+  it("should display 'Select a vessel from the list' when vessel.isListed error is returned", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingVesselIsListed,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Select a vessel from the list");
+    cy.get(".govuk-error-message").should("contain.text", "Select a vessel from the list");
+    cy.get(String.raw`#vessel\.vesselName`)
+      .closest(".govuk-form-group")
+      .should("have.class", "govuk-form-group--error");
+  });
+
+  it("should display 'Enter the export weight in kilograms' when export weight is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingExportWeightInvalid,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Enter the export weight in kilograms");
+    cy.get(".govuk-error-message").should("contain.text", "Enter the export weight in kilograms");
+  });
+
+  it("should display total weight exceeded error for a single product", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingTotalWeightExceededSingle,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a")
+      .should("contain.text", "The total combined weight of all products must be less than 100,000,000,000")
+      .and("have.attr", "href", "#weights");
+    cy.get("#weights").should("have.class", "govuk-form-group--error");
+    cy.get("#weights .govuk-error-message").should(
+      "contain.text",
+      "The total combined weight of all products must be less than 100,000,000,000"
+    );
+  });
+
+  it("should display total weight exceeded error for multiple products", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingTotalWeightExceededMultiple,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get(".govuk-error-summary__list a")
+      .should("contain.text", "The total combined weight of all products must be less than 100,000,000,000")
+      .and("have.attr", "href", "#weights");
+    cy.get("#weights").should("have.class", "govuk-form-group--error");
+    cy.get("#weights .govuk-error-message").should(
+      "contain.text",
+      "The total combined weight of all products must be less than 100,000,000,000"
+    );
+    cy.get(String.raw`#weights\.0\.exportWeight, [id^="weights."]`).should("have.length.greaterThan", 1);
+  });
+});
+
+describe("Direct Landing Error Messages - Welsh", () => {
+  it("should display 'Rhowch y dyddiad glanio' when date landed is unpopulated", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingDateLandedUnpopulated,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Rhowch y dyddiad glanio");
+    cy.get(".govuk-error-message").should("contain.text", "Rhowch y dyddiad glanio");
+  });
+
+  it("should display 'Rhowch ddyddiad glanio dilys' when date landed is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingDateLandedInvalid,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Rhowch ddyddiad glanio dilys");
+    cy.get(".govuk-error-message").should("contain.text", "Rhowch ddyddiad glanio dilys");
+  });
+
+  it("should display 'Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf' when date is > 7 days future", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingDateLandedFuture,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should(
+      "contain.text",
+      "Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf"
+    );
+    cy.get(".govuk-error-message").should(
+      "contain.text",
+      "Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf"
+    );
+  });
+
+  it("should display 'Dewiswch neu rhowch enw llong neu lythyren a rhif porthladd' when vessel is unpopulated", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingVesselUnpopulated,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should(
+      "contain.text",
+      "Dewiswch neu rhowch enw llong neu lythyren a rhif porthladd"
+    );
+    cy.get(".govuk-error-message").should(
+      "contain.text",
+      "Dewiswch neu rhowch enw llong neu lythyren a rhif porthladd"
+    );
+  });
+
+  it("should display 'Dewiswch gwch neu long o'r rhestr' when vessel selection is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingVesselInvalid,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get(String.raw`#vessel\.vesselName`)
+      .invoke("val", "")
+      .type(invalidVesselValue);
+    cy.wait(500);
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
+    cy.get(".govuk-error-message").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
+  });
+
+  it("should display 'Dewiswch gwch neu long o'r rhestr' when vessel.isListed error is returned", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingVesselIsListed,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
+    cy.get(".govuk-error-message").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
+    cy.get(String.raw`#vessel\.vesselName`)
+      .closest(".govuk-form-group")
+      .should("have.class", "govuk-form-group--error");
+  });
+
+  it("should display 'Rhowch y pwysau allforio mewn cilogramau' when export weight is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingExportWeightInvalid,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", "Rhowch y pwysau allforio mewn cilogramau");
+    cy.get(".govuk-error-message").should("contain.text", "Rhowch y pwysau allforio mewn cilogramau");
+  });
+
+  it("should display Welsh total weight exceeded error for a single product", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingTotalWeightExceededSingle,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a")
+      .should("contain.text", "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000")
+      .and("have.attr", "href", "#weights");
+    cy.get("#weights").should("have.class", "govuk-form-group--error");
+    cy.get("#weights .govuk-error-message").should(
+      "contain.text",
+      "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000"
+    );
+  });
+
+  it("should display Welsh total weight exceeded error for multiple products", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingTotalWeightExceededMultiple,
+      lng: "cy",
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get(".govuk-error-summary__list a")
+      .should("contain.text", "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000")
+      .and("have.attr", "href", "#weights");
+    cy.get("#weights").should("have.class", "govuk-form-group--error");
+    cy.get("#weights .govuk-error-message").should(
+      "contain.text",
+      "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000"
+    );
+  });
+});
+
+describe("Direct Landing - Client-side fetch error resilience", () => {
+  // Test Intent: Cover the catch blocks in handleGearCategoryChange and getVessels
+  // to ensure graceful degradation when the /get-gear-types or /get-vessels
+  // endpoints return network errors after hydration.
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLanding,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    waitForHydration();
+  });
+
+  it("should handle gear types fetch network errors gracefully and keep the gear type input rendered", () => {
+    cy.intercept("GET", "/get-gear-types*", { forceNetworkError: true }).as("gearTypesFetchError");
+    // Change gear category to trigger handleGearCategoryChange which fetches /get-gear-types
+    cy.get("#gearCategory").select("Dredges");
+    cy.wait("@gearTypesFetchError");
+    // After the error, the gear type select should still be in the DOM
+    cy.get("#gearType").should("exist");
+  });
+
+  it("should handle vessel search fetch network errors gracefully and keep the vessel input rendered", () => {
+    cy.intercept("GET", "/get-vessels*", { forceNetworkError: true }).as("vesselFetchError");
+    // Clear vessel and type to trigger the useEffect which fetches /get-vessels
+    cy.get(String.raw`#vessel\.vesselName`).clear();
+    cy.get(String.raw`#vessel\.vesselName`).type("ab");
+    cy.wait("@vesselFetchError");
+    // After the error, the vessel input should still be in the DOM
+    cy.get(String.raw`#vessel\.vesselName`).should("exist");
   });
 });

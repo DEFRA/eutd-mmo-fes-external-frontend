@@ -245,6 +245,20 @@ export const getErrorMessage = (key: string): string => {
     "error.dateLanded.any.required": "ccCommonDateLandedRequiredError",
     "error.dateLanded.any.empty": "ccCommonDateLandedRequiredError",
     "error.dateLanded.date.isoDate": "ccCommonDateLandedInvalidError",
+    // Direct landing specific error mappings (FI0-10238)
+    "error.dateLanded.directLanding.any.required": "ccDirectLandingDateLandedRequiredError",
+    "error.dateLanded.directLanding.date.invalid": "ccDirectLandingDateLandedInvalidError",
+    "error.dateLanded.directLanding.date.base": "ccDirectLandingDateLandedRequiredError", // enter the date landed
+    "error.dateLanded.directLanding.date.isoDate": "ccDirectLandingDateLandedInvalidError",
+    "error.dateLanded.directLanding.date.max": "ccDirectLandingDateLandedFutureDateError",
+    // Direct landing specific vessel error mappings (FI0-10238)
+    "error.vessel.vesselName.directLanding.any.required": "ccDirectLandingVesselRequiredError",
+    "error.vessel.vesselName.directLanding.string.base": "ccDirectLandingVesselInvalidError",
+    "error.vessel.isListed.directLanding.vessel.isListed.base": "ccDirectLandingVesselInvalidError",
+
+    // Direct landing specific export weight error mappings (FI0-10238)
+    "error.weights.exportWeight.directLanding.any.required": "ccDirectLandingExportWeightRequiredError",
+    "error.weights.exportWeight.directLanding.any.base": "ccDirectLandingExportWeightRequiredError",
     "validation.vessel.license.invalid-date": "ccUploadFilePageTableVesselInvalidLicenseError",
     "validation.product.seasonal.invalid-date": "ccUploadFilePageTableVesselLandingDateSeasonalRestictionError",
     "validation.product.start-date.seasonal.invalid-date":
@@ -278,11 +292,13 @@ export const getErrorMessage = (key: string): string => {
     "error.weights.exportWeight.any.empty": "ccCommonExportWeightRequiredError",
     "error.weights.exportWeight.any.missing": "ccCommonExportWeightMissingError",
     "error.weights.exportWeight.number.greater": "ccCommonExportWeightGreaterError",
+    "error.weights.exportWeight.number.unsafe": "ccDirectLandingTotalWeightExceededError",
     "error.weights.array.totalWeightExceeded": "ccDirectLandingTotalWeightExceededError",
     "error.exportWeight.number.base": "ccCommonExportWeightRequiredError",
     "error.exportWeight.any.missing": "ccCommonExportWeightMissingError",
     "error.exportWeight.number.decimal-places": "ccCommonExportWeightDecimalPlacesError",
     "error.exportWeight.number.greater": "ccCommonExportWeightGreaterError",
+    "error.exportWeight.number.unsafe": "ccDirectLandingTotalWeightExceededError",
     "error.dateLanded.any.missing": "ccUploadFileLandingDateMissingError",
     "error.vesselPln.string.required": "ccUploadFilePageTableVesselMissingError",
     "error.vesselPln.string.empty": "ccUploadFilePageTableVesselMissingError",
@@ -336,6 +352,7 @@ export const getErrorMessage = (key: string): string => {
     "error.dateLanded.string.empty": "ccCommonDateLandedRequiredError",
     "error.placeOfUnloading.string.pattern.base": "sdAddTransportationDetailsTruckPlaceOfUnloadingAsACombination",
     "validation.eezCode.string.max": "ccUploadFilePageTableEEZMaxCharError",
+    "validation.totalExportWeight.number.max": "ccUploadFilePageTableTotalWeightExceededError",
     "error.startDate.any.required": "ccCommonStartDateUnpopulatedError",
     "error.gearCategory.any.required": "ccCommonGearCategoryUnpopulatedError",
     "error.gearType.any.required": "ccCommonGearTypeUnpopulatedError",

@@ -972,3 +972,49 @@ describe("Upload File Page Upload - EEZ max length string error", () => {
       .and("contain.text", "You are only able to add maximum of 5 EEZ");
   });
 });
+
+describe("Upload File Page Upload - total combined export weight exceeded", () => {
+  it("should display a total combined weight error on every row when total exceeds 9,999,999.99", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadLandingsTotalWeightExceeded,
+    };
+
+    cy.visit(uploadFileUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=upload]").click({ force: true });
+
+    cy.get("#row-1-PRD765-0-upload-file-error")
+      .should("exist")
+      .and("contain.text", "The total combined weight for all products must be less than 10,000,000");
+    cy.get("#row-2-PRD765-0-upload-file-error")
+      .should("exist")
+      .and("contain.text", "The total combined weight for all products must be less than 10,000,000");
+    cy.get("#row-3-PRD765-0-upload-file-error")
+      .should("exist")
+      .and("contain.text", "The total combined weight for all products must be less than 10,000,000");
+  });
+
+  it("should display 0 rows uploaded successfully when total weight is exceeded", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadLandingsTotalWeightExceeded,
+    };
+
+    cy.visit(uploadFileUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=upload]").click({ force: true });
+
+    cy.get(".govuk-notification-banner__heading").contains("0 out of 3 rows uploaded successfully");
+  });
+
+  it("should display the total weight error in Welsh when language is set to Welsh", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadLandingsTotalWeightExceeded,
+      lng: "cy",
+    };
+
+    cy.visit(uploadFileUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=upload]").click({ force: true });
+
+    cy.get("#row-1-PRD765-0-upload-file-error")
+      .should("exist")
+      .and("contain.text", "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 10,000,000");
+  });
+});

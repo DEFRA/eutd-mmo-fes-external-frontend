@@ -356,7 +356,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          "containerNumbers.0": "error.containerNumbers.string.max",
+          "containerNumbers.0": "error.containerNumbers.string.pattern.base",
         })
       )
     ),
@@ -388,7 +388,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          "containerNumbers.0": "error.containerNumbers.string.max",
+          "containerNumbers.0": "error.containerNumbers.string.pattern.base",
         })
       )
     ),
@@ -1261,7 +1261,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          containerNumbers: "error.containerNumber.string.max",
+          containerNumbers: "error.containerNumber.string.pattern.base",
         })
       )
     ),
@@ -1269,7 +1269,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          containerNumbers: "error.containerNumber.string.max",
+          containerNumbers: "error.containerNumber.string.pattern.base",
         })
       )
     ),
@@ -2056,7 +2056,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          "containerNumbers[0]": "Container identification number must not exceed 50 characters",
+          "containerNumbers[0]": "Container identification number must only contain letters and numbers",
         })
       )
     ),
@@ -2137,7 +2137,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          "containerNumbers.0": "Container identification number must not exceed 50 characters",
+          "containerNumbers.0": "Container identification number must only contain letters and numbers",
         })
       )
     ),
@@ -2194,7 +2194,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          "containerNumbers.0": "error.containerNumbers.0.string.max",
+          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
         })
       )
     ),
@@ -2202,7 +2202,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          "containerNumbers.0": "error.containerNumbers.0.string.max",
+          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
         })
       )
     ),
@@ -2508,7 +2508,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          "containerNumbers.0": "error.containerNumbers.0.string.max",
+          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
         })
       )
     ),
@@ -2572,7 +2572,6 @@ const transportDetailsHandler: ITestHandler = {
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
-  // UAT-499: Handler for testing error order - all required fields missing + container max length
   [TestCaseId.ContainerVesselRequiredFieldsAndMaxLengthContainer]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(vesselTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateVessel))),
@@ -2583,7 +2582,7 @@ const transportDetailsHandler: ITestHandler = {
           vesselName: "error.vesselName.any.required",
           flagState: "error.flagState.any.required",
           departurePlace: "error.departurePlace.any.required",
-          "containerNumbers.0": "error.containerNumbers.0.string.max",
+          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
         })
       )
     ),
@@ -2660,17 +2659,12 @@ const transportDetailsHandler: ITestHandler = {
         errors.departurePlace = "error.departurePlace.any.required";
       }
 
-      // Validate container numbers - check both containers
       if (body.containerNumbers) {
-        if (body.containerNumbers[0] && body.containerNumbers[0].length > 50) {
-          errors["containerNumbers.0"] = "error.containerNumbers.0.string.max";
-        } else if (body.containerNumbers[0] && !/^[A-Z0-9]+$/.test(body.containerNumbers[0])) {
+        if (body.containerNumbers[0] && !/^[A-Z]{3}[UJZR]\d{7}$/.test(body.containerNumbers[0])) {
           errors["containerNumbers.0"] = "error.containerNumbers.0.string.pattern.base";
         }
 
-        if (body.containerNumbers[1] && body.containerNumbers[1].length > 50) {
-          errors["containerNumbers.1"] = "error.containerNumbers.1.string.max";
-        } else if (body.containerNumbers[1] && !/^[A-Z0-9]+$/.test(body.containerNumbers[1])) {
+        if (body.containerNumbers[1] && !/^[A-Z]{3}[UJZR]\d{7}$/.test(body.containerNumbers[1])) {
           errors["containerNumbers.1"] = "error.containerNumbers.1.string.pattern.base";
         }
       }
@@ -2698,17 +2692,12 @@ const transportDetailsHandler: ITestHandler = {
         errors.departurePlace = "error.departurePlace.any.required";
       }
 
-      // Validate container numbers - check both containers
       if (body.containerNumbers) {
-        if (body.containerNumbers[0] && body.containerNumbers[0].length > 50) {
-          errors["containerNumbers.0"] = "error.containerNumbers.0.string.max";
-        } else if (body.containerNumbers[0] && !/^[A-Z0-9]+$/.test(body.containerNumbers[0])) {
+        if (body.containerNumbers[0] && !/^[A-Z]{3}[UJZR]\d{7}$/.test(body.containerNumbers[0])) {
           errors["containerNumbers.0"] = "error.containerNumbers.0.string.pattern.base";
         }
 
-        if (body.containerNumbers[1] && body.containerNumbers[1].length > 50) {
-          errors["containerNumbers.1"] = "error.containerNumbers.1.string.max";
-        } else if (body.containerNumbers[1] && !/^[A-Z0-9]+$/.test(body.containerNumbers[1])) {
+        if (body.containerNumbers[1] && !/^[A-Z]{3}[UJZR]\d{7}$/.test(body.containerNumbers[1])) {
           errors["containerNumbers.1"] = "error.containerNumbers.1.string.pattern.base";
         }
       }
@@ -2720,6 +2709,30 @@ const transportDetailsHandler: ITestHandler = {
       return res(ctx.json(saveVesselContainerDetails));
     }),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TruckTransportSaveInvalidYearExportDate]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+    rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) => res(ctx.json(saveTruckDetails))),
+    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) => res(ctx.json(saveTruckDetails))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([catchCertificateTruckTransportAllowedDetails]))),
+  ],
+  [TestCaseId.ArrivalTruckTransportSaveInvalidYearDepartureDate]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+    rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) => res(ctx.json(saveTruckDetails))),
+    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) => res(ctx.json(saveTruckDetails))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([catchCertificateTruckTransportAllowedDetails]))),
   ],
 };
 

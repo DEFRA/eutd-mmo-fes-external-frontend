@@ -14,7 +14,7 @@ import {
   processingStatemenGenericLoader,
   validateCSRFToken,
 } from "~/.server";
-import { displayErrorMessages, getStrOrDefault } from "~/helpers";
+import { displayErrorMessages, isValidDate, getTransformedError } from "~/helpers";
 import type { IErrorsTransformed } from "~/types";
 
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -27,48 +27,36 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const form = await request.formData();
   const { _action, ...values } = Object.fromEntries(form);
   const nextUri = form.get("nextUri") as string;
-  const isDraft = form.get("_action") === "saveAsDraft";
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
-  const healthCertData = {
-    healthCertificateNumber: values["healthCertificateNumber"] as string,
-    healthCertificateDate: `${getStrOrDefault(values["healthCertificateDateDay"] as string)}/${getStrOrDefault(values["healthCertificateDateMonth"] as string)}/${getStrOrDefault(values["healthCertificateDateYear"] as string)}`,
-  };
-  const healthCertUrl = route("/create-processing-statement/:documentNumber/add-health-certificate", {
-    documentNumber,
-  });
-
-  if (isDraft) {
-    // Validate-first: saveToRedisIfErrors=false so nothing is persisted on the first call
-    const validationResponse = await updateProcessingStatement(
-      bearerToken,
-      documentNumber,
-      healthCertData,
-      healthCertUrl,
-      undefined,
-      false // saveToRedisIfErrors = false (validate only)
-    );
-    if (validationResponse) {
-      const responseData = await (validationResponse as Response).clone().json();
-      const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
-      const invalidFieldNames = new Set(errorKeys);
-      // Start with all submitted fields, then null out invalid ones so the
-      // client-side Redis merge clears any previously-saved bad values.
-      const filteredData: Record<string, string | null> = { ...healthCertData };
-      for (const invalidField of invalidFieldNames) {
-        filteredData[invalidField] = null;
+  const healthCertificateDateYear = values["healthCertificateDateYear"] as string;
+  const healthCertificateDateMonth = values["healthCertificateDateMonth"] as string;
+  const healthCertificateDateDay = values["healthCertificateDateDay"] as string;
+  const isoHealthCertificateDate = `${healthCertificateDateYear}-${healthCertificateDateMonth}-${healthCertificateDateDay}`;
+  if (
+    healthCertificateDateYear &&
+    healthCertificateDateMonth &&
+    healthCertificateDateDay &&
+    !isValidDate(isoHealthCertificateDate, ["YYYY-M-D", "YYYY-MM-DD"])
+  ) {
+    return new Response(
+      JSON.stringify({
+        errors: getTransformedError([
+          {
+            key: "healthCertificateDate",
+            message: "psAddHealthCertificateErrorRealDateHealthCertificateDate",
+          },
+        ]),
+      }),
+      {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
       }
-      await updateProcessingStatement(bearerToken, documentNumber, filteredData, healthCertUrl, undefined, true);
-    } else {
-      // No errors – persist all fields as draft
-      await updateProcessingStatement(bearerToken, documentNumber, healthCertData, healthCertUrl, undefined, true);
-    }
-    return redirect(route("/create-processing-statement/processing-statements"));
+    );
   }
 
-  // Save and continue – validate without saving (saveToRedisIfErrors=false fixes the previous bug)
   const errorResponse = await updateProcessingStatement(
     bearerToken,
     documentNumber,

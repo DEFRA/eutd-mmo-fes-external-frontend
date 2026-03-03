@@ -475,3 +475,24 @@ describe("Add Transportation Details Truck: 403 on page load", () => {
     cy.url().should("include", "/forbidden");
   });
 });
+
+describe("Add Transportation Details Truck: Invalid year in departure date", () => {
+  it("should display error when year 0000 is entered in the departure date picker", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ArrivalTruckTransportSaveInvalidYearDepartureDate,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get("#nationalityOfVehicle").type("France", { force: true });
+    cy.get("#registrationNumber").type("AB12 3CD", { force: true });
+    cy.get("#departureCountry").invoke("val", "Ireland");
+    cy.get("#departurePort").type("Calais port", { force: true });
+    cy.get("#placeOfUnloading").type("Dover port", { force: true });
+    cy.get("#departureDate-day").clear().type("01", { force: true });
+    cy.get("#departureDate-month").clear().type("01", { force: true });
+    cy.get("#departureDate-year").clear().type("0000", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.wait(250);
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Departure date must be a real date$/).should("be.visible");
+  });
+});

@@ -272,7 +272,7 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
     cy.contains("h2", "There is a problem").should("be.visible");
   });
 
-  it("should show error when a container identification number exceeds 50 characters", () => {
+  it("should show format error when a container identification number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckSaveMaxCharsContainerIdentificationNumber,
     };
@@ -394,5 +394,24 @@ describe("AutocompleteFormField: minCharsBeforeSearch validation", () => {
         cy.get('[role="listbox"]').should("be.visible");
       });
     });
+  });
+});
+
+describe("Add Transportation Details Truck: Invalid year in export date", () => {
+  it("should display error when year 0000 is entered in the export date picker", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveInvalidYearExportDate,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get("#nationalityOfVehicle").type("France", { force: true });
+    cy.get("#registrationNumber").type("AB12 3CD", { force: true });
+    cy.get("#departurePlace").type("Dover port", { force: true });
+    cy.get("#exportDate-day").clear().type("01", { force: true });
+    cy.get("#exportDate-month").clear().type("01", { force: true });
+    cy.get("#exportDate-year").clear().type("0000", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.wait(250);
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Export date must be a real date$/).should("be.visible");
   });
 });

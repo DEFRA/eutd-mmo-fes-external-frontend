@@ -140,6 +140,7 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
     selectedExclusiveEconomicZones = landing?.exclusiveEconomicZones?.map((item) => item.officialCountryName) ?? [];
     nextUri = url.searchParams.get("nextUri") ?? "";
   } else {
+    selectedProduct = getSessionData(session, "selectedProduct");
     clearSession(session, "add-landings");
   }
 
@@ -222,7 +223,6 @@ const addLandingAction = async (
     gearType,
     rfmo,
   } = values;
-
   const isDateLandedProvided = Boolean(dateLandedDay || dateLandedMonth || dateLandedYear);
   let selectedDate: string | undefined;
   if (isDateLandedProvided) {
@@ -299,7 +299,13 @@ const addLandingAction = async (
     },
     selectedRfmo,
     selectedVessel,
-    exclusiveEconomicZones
+    exclusiveEconomicZones,
+    // forward frontend-calculated totals (if provided by form hidden inputs)
+    {
+      totalExportWeight: (values as any).totalExportWeight as string | undefined,
+      totalCombinedExportWeight: (values as any).totalCombinedExportWeight as string | undefined,
+      existingLandingWeight: (values as any).existingLandingWeight as string | undefined,
+    }
   );
 
   if (instanceOfUnauthorisedWithSupportId(response)) {

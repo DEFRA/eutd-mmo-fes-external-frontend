@@ -101,19 +101,19 @@ export const AddProducts = ({
 }: AddProductsProps) => {
   const isHydrated = useIsHydrated();
 
-  const [commonSpecies, setCommonSpecies] = useState<string>(selectedSpecies || "");
+  const [commonSpecies, setCommonSpecies] = useState<string>(selectedSpecies);
   const [currentStateLabel, setCurrentStateLabel] = useState<string>("");
-  const [currentState, setCurrentState] = useState<string>(selectedState || "");
-  const [currentPresentation, setCurrentPresentation] = useState<string>(selectedPresentation || "");
+  const [currentState, setCurrentState] = useState<string>(selectedState);
+  const [currentPresentation, setCurrentPresentation] = useState<string>(selectedPresentation);
   const [currentPresentationLabel, setCurrentPresentationLabel] = useState<string>("");
-  const [currentCommodityCode, setCurrentCommodityCode] = useState<string>(selectedCommodityCode || "");
+  const [currentCommodityCode, setCurrentCommodityCode] = useState<string>(selectedCommodityCode);
   const [selectedSpeciesCode, setSelectedSpeciesCode] = useState<string>(speciesCode);
-  const [speciesScientificName, setSpeciesScientificName] = useState<string>("");
+  const [speciesScientificName, setSpeciesScientificName] = useState<string>(scientificName);
 
   const [searchState, setSearchState] = useState<SearchState[]>();
-  const [stateHolder, setStateHolder] = useState<LabelAndValue[]>(states || []);
-  const [presentationHolder, setPresentationHolder] = useState<LabelAndValue[]>(presentations || []);
-  const [commodityCodesHolder, setCommodityCodesHolder] = useState<LabelAndValue[]>(commodityCodes || []);
+  const [stateHolder, setStateHolder] = useState<LabelAndValue[]>(states);
+  const [presentationHolder, setPresentationHolder] = useState<LabelAndValue[]>(presentations);
+  const [commodityCodesHolder, setCommodityCodesHolder] = useState<LabelAndValue[]>(commodityCodes);
 
   let abortControllerRef = useRef<AbortController | null>(null);
 
@@ -238,14 +238,14 @@ export const AddProducts = ({
       setSearchState(res);
 
       const states: LabelAndValue[] =
-        res?.map((searchState: SearchState) => ({
+        res.map((searchState: SearchState) => ({
           label: searchState.state.label,
           value: searchState.state.value,
         })) ?? [];
 
-      setStateHolder(states || []);
-      setSelectedSpeciesCode(faoCode || "");
-      setSpeciesScientificName(res[0].scientificName || "");
+      setStateHolder(states);
+      setSelectedSpeciesCode(faoCode);
+      setSpeciesScientificName(res[0].scientificName);
     } catch (e) {
       if (e instanceof Error) {
         logger.error(e);

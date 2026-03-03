@@ -109,16 +109,24 @@ describe("Add Health Certificate, bad data show errors", () => {
   });
 });
 
-describe("Add Health Certificate (PS): save as draft retains valid fields", () => {
-  const documentUrl = "/create-processing-statement/GBR-2022-PS-3FE1169D1";
-  const pageUrl = `${documentUrl}/add-health-certificate`;
-
-  it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+describe("Add Health Certificate - invalid year in date picker", () => {
+  const pageUrl = `create-processing-statement/GBR-2022-PS-3FE1169D1/add-health-certificate`;
+  beforeEach(() => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSAddHealthCertificateSaveAsDraftWithErrors,
+      testCaseId: TestCaseId.PSAddHealthCertificate,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='save-draft-button']").click({ force: true });
-    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
+
+  it("should show an error when year 0000 is entered in the date picker", () => {
+    cy.get('input[name="healthCertificateDateDay"]').clear();
+    cy.get('input[name="healthCertificateDateDay"]').type("01");
+    cy.get('input[name="healthCertificateDateMonth"]').clear();
+    cy.get('input[name="healthCertificateDateMonth"]').type("01");
+    cy.get('input[name="healthCertificateDateYear"]').clear();
+    cy.get('input[name="healthCertificateDateYear"]').type("0000");
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.url().should("include", "/add-health-certificate");
+    cy.contains("Enter a real date in the dd/mm/yyyy format").should("be.visible");
   });
 });
