@@ -1215,8 +1215,8 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
       cy.get("#species").invoke("val");
 
-      // Clear and type new species
-      cy.get("#species").clear().type("Atlantic cod");
+      // Clear and type new species (force: true required as autocomplete disables input after selection)
+      cy.get("#species").clear({ force: true }).type("Atlantic cod", { force: true });
       cy.wait(1000);
 
       // Select from autocomplete if available
