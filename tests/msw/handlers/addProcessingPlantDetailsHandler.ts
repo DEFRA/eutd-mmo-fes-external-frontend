@@ -59,6 +59,13 @@ const addProcessingPlantDetailsHandler: ITestHandler = {
     ),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocuments))),
   ],
+  [TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftNoErrors]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(processingStatement))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocuments))),
+  ],
 };
 
 export default addProcessingPlantDetailsHandler;

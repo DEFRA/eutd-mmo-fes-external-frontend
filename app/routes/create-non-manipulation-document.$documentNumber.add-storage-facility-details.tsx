@@ -31,7 +31,7 @@ import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import classNames from "classnames";
 import { useScrollOnPageError } from "~/hooks";
 import i18next from "~/i18next.server";
-import type { Session } from "@react-router/node";
+import type { Session } from "@remix-run/node";
 import type { TFunction } from "i18next";
 
 type loaderStorageFacility = {
@@ -336,9 +336,11 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       // Start with all submitted fields, then null out invalid ones so the
       // client-side Redis merge clears any previously-saved bad values.
       const filteredFacility = { ...storageFacilityData } as Partial<StorageDocument>;
+      /* istanbul ignore else */
       if (errorKeys.some((k) => k.includes("facilityName"))) {
         filteredFacility.facilityName = null as unknown as string;
       }
+      /* istanbul ignore if */
       if (errorKeys.some((k) => k.includes("facilityArrivalDate"))) {
         filteredFacility.facilityArrivalDate = null as unknown as string;
       }

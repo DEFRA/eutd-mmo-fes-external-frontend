@@ -128,6 +128,7 @@ export enum TestCaseId {
   PSPostAddProcessingPlantDetails = "psPostAddProcessingPlantDetails",
   PSAddProcessingPlantDetailsUnauthorised = "psAddProcessingPlantDetailsUnauthorised",
   PSAddProcessingPlantDetailsSaveAsDraftWithErrors = "psAddProcessingPlantDetailsSaveAsDraftWithErrors",
+  PSAddProcessingPlantDetailsSaveAsDraftNoErrors = "psAddProcessingPlantDetailsSaveAsDraftNoErrors",
 
   PSAddHealthCertificate = "psAddHealthCertificate",
   PSAddHealthCertificateError = "psAddHealthCertificateError",
