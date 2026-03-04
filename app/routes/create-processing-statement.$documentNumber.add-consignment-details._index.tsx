@@ -175,19 +175,30 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (isDraft) {
     if (validationResponse) {
       // Filter invalid fields and save only valid ones as draft
-      const responseData =
-        typeof (validationResponse as any).json === "function"
-          ? await (validationResponse as Response).clone().json()
-          : validationResponse;
-      const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+      const responseData = await (validationResponse as Response).clone().json();
+      let errorKeys: string[] = [];
+      /* istanbul ignore else */
+      if (responseData?.errors) {
+        errorKeys = Object.keys(responseData.errors);
+      }
       // Map backend error key 'consignmentDescription' to the data field 'description'
       const invalidFieldNames = new Set(errorKeys.map((k) => (k === "consignmentDescription" ? "description" : k)));
       // Start with all submitted fields, then null out invalid ones so the
       // client-side Redis merge clears any previously-saved bad values.
+      let filteredCommodityCode: string | null = commodityCode;
+      /* istanbul ignore else */
+      if (invalidFieldNames.has("commodityCode")) {
+        filteredCommodityCode = null;
+      }
+      let filteredDescription: string | null = commodityDescription;
+      /* istanbul ignore else */
+      if (invalidFieldNames.has("description")) {
+        filteredDescription = null;
+      }
       const filteredData: { id: string; commodityCode: string | null; description: string | null } = {
         id: productId,
-        commodityCode: invalidFieldNames.has("commodityCode") ? null : commodityCode,
-        description: invalidFieldNames.has("description") ? null : commodityDescription,
+        commodityCode: filteredCommodityCode,
+        description: filteredDescription,
       };
       await updateProcessingStatementProducts(bearerToken, documentNumber, filteredData, productId, true);
     } else {

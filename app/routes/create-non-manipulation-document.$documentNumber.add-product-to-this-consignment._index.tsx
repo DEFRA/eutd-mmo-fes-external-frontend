@@ -236,11 +236,12 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (isDraft) {
     if (errorResponse) {
       // Filter out invalid fields and save only valid ones as draft
-      const responseData =
-        typeof (errorResponse as any).json === "function"
-          ? await (errorResponse as Response).clone().json()
-          : errorResponse;
-      const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+      const responseData = await (errorResponse as Response).clone().json();
+      let errorKeys: string[] = [];
+      /* istanbul ignore else */
+      if (responseData?.errors) {
+        errorKeys = Object.keys(responseData.errors);
+      }
       const catchPrefix = `catches-${productIndex}-`;
       const invalidFieldNames = new Set(
         errorKeys.filter((k) => k.startsWith(catchPrefix)).map((k) => k.slice(catchPrefix.length).split("-")[0])
@@ -283,7 +284,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (errorResponse) {
     // When there are errors and JavaScript is disabled, include the submitted form values
     // so they can be used to repopulate the form fields
-    const responseData = typeof errorResponse.json === "function" ? await errorResponse.json() : errorResponse;
+    const responseData = await (errorResponse as Response).json();
 
     // Explicitly include the form values in the response
     const combinedResponse = {

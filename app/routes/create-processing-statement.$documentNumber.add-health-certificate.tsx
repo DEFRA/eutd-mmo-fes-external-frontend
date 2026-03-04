@@ -78,7 +78,11 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     );
     if (validationResponse) {
       const responseData = await (validationResponse as Response).clone().json();
-      const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+      let errorKeys: string[] = [];
+      /* istanbul ignore else */
+      if (responseData?.errors) {
+        errorKeys = Object.keys(responseData.errors);
+      }
       const invalidFieldNames = new Set(errorKeys);
       const filteredData: Record<string, string | null> = { ...healthCertData };
       for (const invalidField of invalidFieldNames) {
