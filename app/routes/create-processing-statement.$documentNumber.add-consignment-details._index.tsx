@@ -22,7 +22,14 @@ import {
   createCSRFToken,
   validateCSRFToken,
 } from "~/.server";
-import type { CodeAndDescription, ErrorResponse, IUnauthorised, LabelAndValue, ProcessingStatement } from "~/types";
+import type {
+  CodeAndDescription,
+  ErrorResponse,
+  IUnauthorised,
+  LabelAndValue,
+  ProcessingStatement,
+  ProcessingStatementProduct,
+} from "~/types";
 import { ButtonGroup } from "~/composite-components";
 import { getEnv } from "~/env.server";
 import classNames from "classnames";
@@ -195,12 +202,18 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       if (invalidFieldNames.has("description")) {
         filteredDescription = null;
       }
-      const filteredData: { id: string; commodityCode: string | null; description: string | null } = {
+      const filteredData = {
         id: productId,
         commodityCode: filteredCommodityCode,
         description: filteredDescription,
       };
-      await updateProcessingStatementProducts(bearerToken, documentNumber, filteredData, productId, true);
+      await updateProcessingStatementProducts(
+        bearerToken,
+        documentNumber,
+        filteredData as unknown as Partial<ProcessingStatementProduct>,
+        productId,
+        true
+      );
     } else {
       // No errors – save all data as draft
       await updateProcessingStatementProducts(

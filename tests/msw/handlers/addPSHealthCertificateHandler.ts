@@ -51,6 +51,13 @@ const addPSHealthCertificateHandler: ITestHandler = {
     ),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDraft))),
   ],
+  [TestCaseId.PSAddHealthCertificateSaveAsDraftNoErrors]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(processingStatement))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDraft))),
+  ],
 };
 
 export default addPSHealthCertificateHandler;

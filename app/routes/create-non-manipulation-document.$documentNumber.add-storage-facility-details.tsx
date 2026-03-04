@@ -28,9 +28,11 @@ import {
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { DateFieldWithPicker } from "~/composite-components";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
-import classNames from "classnames/bind";
+import classNames from "classnames";
 import { useScrollOnPageError } from "~/hooks";
 import i18next from "~/i18next.server";
+import type { Session } from "@react-router/node";
+import type { TFunction } from "i18next";
 
 type loaderStorageFacility = {
   documentNumber: string;
@@ -174,7 +176,7 @@ const handleGoToAddAddress = async (
   t: TFunction,
   documentNumber: string
 ): Promise<Response> => {
-  session.set("facilityName", String(getStrOrDefault(values["facilityName"])));
+  session.set("facilityName", String(getStrOrDefault(values["facilityName"] as string)));
   session.set("selectedArrivalDate", selectedDate);
 
   const fieldPrefixName = "storageFacilities-facilityName";
@@ -221,7 +223,7 @@ const handleSaveAndContinue = async (
     saveToRedisIfErrors,
     undefined,
     {
-      facilityName: String(getStrOrDefault(values["facilityName"])),
+      facilityName: String(getStrOrDefault(values["facilityName"] as string)),
       facilityArrivalDate: selectedDate as string,
     }
   );
@@ -235,7 +237,7 @@ const handleSaveAndContinue = async (
     const combinedResponse = {
       ...responseData,
       values: {
-        facilityName: String(getStrOrDefault(values["facilityName"])),
+        facilityName: String(getStrOrDefault(values["facilityName"] as string)),
         facilityArrivalDate: selectedDate,
         facilityArrivalDateDay: values["facilityArrivalDateDay"],
         facilityArrivalDateMonth: values["facilityArrivalDateMonth"],
@@ -311,7 +313,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     session.unset("facilityName");
     session.unset("selectedArrivalDate");
     const storageFacilityData = {
-      facilityName: String(getStrOrDefault(values["facilityName"])),
+      facilityName: String(getStrOrDefault(values["facilityName"] as string)),
       facilityArrivalDate: selectedDate as string,
     };
     // Validate without saving to identify invalid fields
@@ -334,11 +336,9 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       // Start with all submitted fields, then null out invalid ones so the
       // client-side Redis merge clears any previously-saved bad values.
       const filteredFacility = { ...storageFacilityData } as Partial<StorageDocument>;
-      /* istanbul ignore else */
       if (errorKeys.some((k) => k.includes("facilityName"))) {
         filteredFacility.facilityName = null as unknown as string;
       }
-      /* istanbul ignore if */
       if (errorKeys.some((k) => k.includes("facilityArrivalDate"))) {
         filteredFacility.facilityArrivalDate = null as unknown as string;
       }

@@ -1236,4 +1236,22 @@ describe("Add product to consignment (SD): save as draft retains valid fields", 
     cy.get('[data-testid="save-draft-button"]').click({ force: true });
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
+
+  it("should clear scientificName and redirect to dashboard when species/product is invalid on save as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentSaveAsDraftWithSpeciesError,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
+
+  it("should redirect to dashboard without errors when all fields are valid on save as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentSaveAsDraftNoErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
 });

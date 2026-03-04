@@ -140,4 +140,13 @@ describe("Add Health Certificate: save as draft retains valid fields", () => {
     cy.get("[data-testid='save-draft-button']").click({ force: true });
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
+
+  it("should redirect to dashboard when no validation errors on save as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddHealthCertificateSaveAsDraftNoErrors,
+    };
+    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
 });
