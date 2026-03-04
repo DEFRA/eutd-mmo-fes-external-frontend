@@ -12,6 +12,7 @@ import {
   instanceOfUnauthorised,
   hasRequiredDataProcessingStatementSummary,
   createCSRFToken,
+  getCompletedDocument,
 } from "~/.server";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import { hasExporterAddressBeenUpdated, scrollToId } from "~/helpers";
@@ -45,6 +46,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const session = await getSessionFromRequest(request);
   const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
+  const completedDocument = await getCompletedDocument(bearerToken, documentNumber);
+  if (completedDocument?.documentStatus === "COMPLETE") {
+    return redirect(`/create-processing-statement/processing-statements`);
+  }
   const processingStatement: ProcessingStatement | IUnauthorised = await getProcessingStatement(
     bearerToken,
     documentNumber

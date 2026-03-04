@@ -150,4 +150,14 @@ describe("Processing statement created page: pageguard", () => {
     cy.visit(processingStatementUrl, { failOnStatusCode: false, qs: { ...testParams } });
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
+
+  it("should redirect to the dashboard page when document status is pending", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ProcessingStatementPendingPageGuard,
+      args: [documentNumber],
+    };
+
+    cy.visit(processingStatementUrl, { failOnStatusCode: false, qs: { ...testParams } });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
 });
