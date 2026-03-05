@@ -43,11 +43,13 @@ const addPSHealthCertificateHandler: ITestHandler = {
   ],
   [TestCaseId.PSAddHealthCertificateSaveAsDraftWithErrors]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
-    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
-      res.once(ctx.status(400), ctx.json(PSAddHealthCertificateError))
-    ),
+    // persistent 200 handler must come first so that after setApiMock's forEach-prepend
+    // it ends up BEHIND the res.once(400) handler in MSW's stack
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.json(processingStatement))
+    ),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res.once(ctx.status(400), ctx.json(PSAddHealthCertificateError))
     ),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDraft))),
   ],

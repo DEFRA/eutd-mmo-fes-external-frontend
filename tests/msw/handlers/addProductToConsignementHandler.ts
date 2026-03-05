@@ -131,19 +131,21 @@ const addProductConsignementHandler: ITestHandler = {
   [TestCaseId.SDAddProductConsignmentSaveAsDraftWithErrors]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    // persistent 200 handler must come first in the array so that after setApiMock's
+    // forEach-prepend it ends up BEHIND the res.once(400) handler in MSW's stack
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) =>
       res.once(ctx.status(400), ctx.json(storageDocumentError))
     ),
-    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
   ],
   [TestCaseId.SDAddProductConsignmentSaveAsDraftWithSpeciesError]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) =>
       res.once(ctx.status(400), ctx.json(storageDocumentProductSpeciesError))
     ),
-    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
   ],
   [TestCaseId.SDAddProductConsignmentSaveAsDraftNoErrors]: () => [
