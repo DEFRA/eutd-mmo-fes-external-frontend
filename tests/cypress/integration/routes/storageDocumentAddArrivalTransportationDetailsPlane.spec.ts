@@ -42,7 +42,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       ]);
       expect(hints).to.deep.eq([
         "For example, 123-45678901",
-        "For example, AF296Q. This field is required now to help prepare for new EU regulations coming into force on 10 January 2026",
+        "For example, AF296Q",
         "For example, ABCD1234567",
         "For example, BD51SMR",
         "This is the country the plane left before it came to the UK",

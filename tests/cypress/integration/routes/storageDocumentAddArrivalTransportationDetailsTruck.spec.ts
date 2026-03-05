@@ -42,7 +42,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       ]);
       expect(hints).to.deep.eq([
         "Type at least two characters to load the list. For example, United Kingdom",
-        "For example, A123 4567 or BD51SMR. This field is required now to help prepare for new EU regulations coming into force on 10 January 2026",
+        "For example, A123 4567 or BD51SMR",
         "Enter the identification number shown on the shipping container. For example, ABCJ0123456",
         "For example, AA1234567",
         "This is the country the truck left before it came to the UK",
