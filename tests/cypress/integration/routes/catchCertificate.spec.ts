@@ -161,4 +161,14 @@ describe("Catch certificate created page: pageguard", () => {
     cy.visit(catchCertificateUrl, { failOnStatusCode: false, qs: { ...testParams } });
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
+
+  it("should redirect to the dashboard page when document status is pending", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CatchCertificatePendingPageGuard,
+      args: [documentNumber],
+    };
+
+    cy.visit(catchCertificateUrl, { failOnStatusCode: false, qs: { ...testParams } });
+    cy.url().should("include", "/create-catch-certificate/catch-certificates");
+  });
 });

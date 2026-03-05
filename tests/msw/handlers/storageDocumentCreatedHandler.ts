@@ -17,6 +17,12 @@ const sdCreatedHandler: ITestHandler = {
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
     rest.get(getCreatedCertificateUrl(documentNumber), (req, res, ctx) => res(ctx.json(empty))),
   ],
+  [TestCaseId.StorageDocumentPendingPageGuard]: (documentNumber: string) => [
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(getCreatedCertificateUrl(documentNumber), (req, res, ctx) =>
+      res(ctx.json({ ...sdCreated, documentStatus: "PENDING" }))
+    ),
+  ],
 };
 
 export default sdCreatedHandler;
