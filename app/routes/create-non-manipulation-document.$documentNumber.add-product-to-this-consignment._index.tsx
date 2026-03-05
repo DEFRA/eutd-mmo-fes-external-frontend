@@ -107,7 +107,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   let updatedSupportingDocuments: string[] =
     ((currentCatchDetails as StorageDocumentCatch) || undefined)?.supportingDocuments ?? [];
-  /* istanbul ignore next */
+  /* istanbul ignore if */
   if (isAddSupportingDocumentButtonClicked) {
     updatedSupportingDocuments = [...updatedSupportingDocuments, ""];
     session.unset("addSupportingDoc");
