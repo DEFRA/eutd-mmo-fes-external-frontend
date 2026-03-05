@@ -3,7 +3,7 @@
   "catchDetailsTableHeader": "You have added {{uniqueSpeciesCount}} species and {{totalDocuments}} documents for {{productDescription}}",
   "speciesNameFAO": "Species name (FAO)",
   "catchCertificateNumber": "Catch Certificate number",
-  "catchCertificateWeight": "Catch certificate weight",
+  "catchCertificateWeight": "Weight on catch certificate",
   "exportWeightBeforeProcessing": "Export weight before processing",
   "exportWeightAfterProcessing": "Export weight after processing",
   "action": "Action"
