@@ -210,11 +210,11 @@ const getValidFacilityData = async (
   validationResponse: Response | null | undefined,
   storageFacilityData: Partial<StorageDocument>
 ): Promise<Partial<StorageDocument>> => {
-  if (!validationResponse) {
+  if (!validationResponse || !(validationResponse instanceof Response)) {
     return storageFacilityData;
   }
 
-  const responseData = await (validationResponse as Response).clone().json();
+  const responseData = await validationResponse.clone().json();
   const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
 
   const filteredFacility = { ...storageFacilityData };
@@ -294,10 +294,10 @@ const handleSaveAndContinue = async (
     }
   );
 
-  if (errorResponse) {
+  if (errorResponse instanceof Response) {
     // When there are errors and JavaScript is disabled, include the submitted form values
     // so they can be used to repopulate the form fields
-    const responseData = await (errorResponse as Response).json();
+    const responseData = await errorResponse.json();
 
     // Explicitly include the form values in the response under 'values' key
     const combinedResponse = {

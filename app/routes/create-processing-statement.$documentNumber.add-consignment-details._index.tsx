@@ -59,11 +59,11 @@ const getValidProductData = async (
 ): Promise<Partial<ProcessingStatementProduct>> => {
   const fullData = { id: productId, commodityCode, description: commodityDescription };
 
-  if (!validationResponse) {
+  if (!validationResponse || !(validationResponse instanceof Response)) {
     return fullData;
   }
 
-  const responseData = await (validationResponse as Response).clone().json();
+  const responseData = await validationResponse.clone().json();
   const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
   const invalidFieldNames = new Set(errorKeys.map((k) => (k === "consignmentDescription" ? "description" : k)));
 
@@ -224,8 +224,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   );
 
   if (saveAndContinue) {
-    if (validationResponse) {
-      return validationResponse as Response;
+    if (validationResponse instanceof Response) {
+      return validationResponse;
     }
 
     return redirect(`/create-processing-statement/${documentNumber}/add-catch-details/${productId}`);

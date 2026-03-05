@@ -248,7 +248,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (errorResponse) {
     // When there are errors and JavaScript is disabled, include the submitted form values
     // so they can be used to repopulate the form fields
-    const responseData = await (errorResponse as Response).json();
+    const responseData = errorResponse instanceof Response ? await errorResponse.json() : errorResponse;
 
     // Explicitly include the form values in the response
     const combinedResponse = {
