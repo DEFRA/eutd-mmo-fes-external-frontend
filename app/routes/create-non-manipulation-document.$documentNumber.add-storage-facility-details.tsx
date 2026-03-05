@@ -205,6 +205,72 @@ const handleGoToAddAddress = async (
   });
 };
 
+// Helper to extract valid facility fields after a draft validation response
+const getValidFacilityData = async (
+  validationResponse: Response | null | undefined,
+  storageFacilityData: Partial<StorageDocument>
+): Promise<Partial<StorageDocument>> => {
+  if (!validationResponse) {
+    return storageFacilityData;
+  }
+
+  const responseData = await (validationResponse as Response).clone().json();
+  const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+
+  const filteredFacility = { ...storageFacilityData };
+
+  if (errorKeys.some((k) => k.includes("facilityName"))) {
+    filteredFacility.facilityName = null as unknown as string;
+  }
+
+  if (errorKeys.some((k) => k.includes("facilityArrivalDate"))) {
+    filteredFacility.facilityArrivalDate = null as unknown as string;
+  }
+
+  return filteredFacility;
+};
+
+// Helper function to handle save as draft action
+const handleSaveAsDraft = async (
+  bearerToken: string,
+  documentNumber: string,
+  values: Record<string, FormDataEntryValue>,
+  selectedDate: string | undefined,
+  session: Session
+): Promise<Response> => {
+  session.unset("facilityName");
+  session.unset("selectedArrivalDate");
+
+  const storageFacilityData = {
+    facilityName: String(getStrOrDefault(values["facilityName"] as string)),
+    facilityArrivalDate: selectedDate as string,
+  };
+
+  const validationResponse = await updateStorageDocumentFacility(
+    bearerToken,
+    documentNumber,
+    "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
+    false,
+    false,
+    storageFacilityData
+  );
+
+  const dataToSave = await getValidFacilityData(validationResponse, storageFacilityData);
+
+  await updateStorageDocumentFacility(
+    bearerToken,
+    documentNumber,
+    "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
+    true,
+    false,
+    dataToSave
+  );
+
+  return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
+    headers: { "Set-Cookie": await commitSession(session) },
+  });
+};
+
 // Helper function to handle save and continue action
 const handleSaveAndContinue = async (
   bearerToken: string,
@@ -310,62 +376,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   }
 
   if (_action === "saveAsDraft") {
-    session.unset("facilityName");
-    session.unset("selectedArrivalDate");
-    const storageFacilityData = {
-      facilityName: String(getStrOrDefault(values["facilityName"] as string)),
-      facilityArrivalDate: selectedDate as string,
-    };
-    // Validate without saving to identify invalid fields
-    const validationResponse = await updateStorageDocumentFacility(
-      bearerToken,
-      documentNumber,
-      "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
-      false, // saveToRedisIfErrors = false (validate only)
-      false, // returnDataOnly
-      storageFacilityData
-    );
-    if (validationResponse) {
-      // Errors found – save only the valid fields
-      const responseData = await (validationResponse as Response).clone().json();
-      let errorKeys: string[] = [];
-      /* istanbul ignore else */
-      if (responseData?.errors) {
-        errorKeys = Object.keys(responseData.errors);
-      }
-      // Start with all submitted fields, then null out invalid ones so the
-      // client-side Redis merge clears any previously-saved bad values.
-      const filteredFacility = { ...storageFacilityData } as Partial<StorageDocument>;
-      /* istanbul ignore else */
-      if (errorKeys.some((k) => k.includes("facilityName"))) {
-        filteredFacility.facilityName = null as unknown as string;
-      }
-      /* istanbul ignore if */
-      if (errorKeys.some((k) => k.includes("facilityArrivalDate"))) {
-        filteredFacility.facilityArrivalDate = null as unknown as string;
-      }
-      await updateStorageDocumentFacility(
-        bearerToken,
-        documentNumber,
-        "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
-        true, // saveToRedisIfErrors = true (nulls clear invalid values in Redis)
-        false,
-        filteredFacility
-      );
-    } else {
-      // No errors – save all data as draft
-      await updateStorageDocumentFacility(
-        bearerToken,
-        documentNumber,
-        "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
-        true, // saveToRedisIfErrors = true
-        false,
-        storageFacilityData
-      );
-    }
-    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
-      headers: { "Set-Cookie": await commitSession(session) },
-    });
+    return handleSaveAsDraft(bearerToken, documentNumber, values, selectedDate, session);
   }
 
   return handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri, false);
@@ -375,10 +386,7 @@ const getArrivalDateFromAction = (actionData: any, type: string): string => {
   const year = actionData?.values?.[`${type}Year`] ?? "";
   const month = actionData?.values?.[`${type}Month`] ?? "";
   const day = actionData?.values?.[`${type}Day`] ?? "";
-  if (year || month || day) {
-    return `${year ?? ""}-${month ?? ""}-${day ?? ""}`;
-  }
-  return "";
+  return year || month || day ? `${year}-${month}-${day}` : "";
 };
 
 const AddStorageFacilityDetails = () => {
@@ -408,15 +416,8 @@ const AddStorageFacilityDetails = () => {
 
   const arrivalDateFromAction = getArrivalDateFromAction(actionData, "facilityArrivalDate");
 
-  const getDateFromActionOrLoader = (dateFromAction: string, dateFromLoader: string | undefined) => {
-    if (dateFromAction && dateFromAction.trim() !== "") {
-      return dateFromAction;
-    }
-    if (dateFromLoader && dateFromLoader.trim() !== "") {
-      return dateFromLoader;
-    }
-    return "";
-  };
+  const getDateFromActionOrLoader = (dateFromAction: string, dateFromLoader: string | undefined): string =>
+    dateFromAction?.trim() ?? dateFromLoader?.trim() ?? "";
 
   const [daySelected = "", monthSelected = "", yearSelected = ""] =
     selectedArrivalDate && typeof selectedArrivalDate === "string" ? selectedArrivalDate.split("/") : " ";

@@ -50,6 +50,58 @@ type loaderConsignmentDetails = {
   csrf: string;
 };
 
+// Helper to build valid product data, nulling out any fields that failed validation
+const getValidProductData = async (
+  validationResponse: Response | null | undefined,
+  productId: string,
+  commodityCode: string,
+  commodityDescription: string
+): Promise<Partial<ProcessingStatementProduct>> => {
+  const fullData = { id: productId, commodityCode, description: commodityDescription };
+
+  if (!validationResponse) {
+    return fullData;
+  }
+
+  const responseData = await (validationResponse as Response).clone().json();
+  const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+  const invalidFieldNames = new Set(errorKeys.map((k) => (k === "consignmentDescription" ? "description" : k)));
+
+  let filteredCommodityCode: string | null = commodityCode;
+  /* istanbul ignore else */
+  if (invalidFieldNames.has("commodityCode")) {
+    filteredCommodityCode = null;
+  }
+
+  let filteredDescription: string | null = commodityDescription;
+  /* istanbul ignore else */
+  if (invalidFieldNames.has("description")) {
+    filteredDescription = null;
+  }
+
+  return {
+    ...fullData,
+    commodityCode: filteredCommodityCode,
+    description: filteredDescription,
+  } as unknown as Partial<ProcessingStatementProduct>;
+};
+
+// Helper function to handle save as draft action
+const handleSaveAsDraft = async (
+  bearerToken: string,
+  documentNumber: string | undefined,
+  productId: string,
+  commodityCode: string,
+  commodityDescription: string,
+  validationResponse: Response | null | undefined
+): Promise<Response> => {
+  const dataToSave = await getValidProductData(validationResponse, productId, commodityCode, commodityDescription);
+
+  await updateProcessingStatementProducts(bearerToken, documentNumber, dataToSave, productId, true);
+
+  return redirect(route("/create-processing-statement/processing-statements"));
+};
+
 const addConsignmentDetailsActionHandler = (
   documentNumber: string | undefined,
   processingStatement: ProcessingStatement | IUnauthorised,
@@ -180,51 +232,14 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   }
 
   if (isDraft) {
-    if (validationResponse) {
-      // Filter invalid fields and save only valid ones as draft
-      const responseData = await (validationResponse as Response).clone().json();
-      let errorKeys: string[] = [];
-      /* istanbul ignore else */
-      if (responseData?.errors) {
-        errorKeys = Object.keys(responseData.errors);
-      }
-      // Map backend error key 'consignmentDescription' to the data field 'description'
-      const invalidFieldNames = new Set(errorKeys.map((k) => (k === "consignmentDescription" ? "description" : k)));
-      // Start with all submitted fields, then null out invalid ones so the
-      // client-side Redis merge clears any previously-saved bad values.
-      let filteredCommodityCode: string | null = commodityCode;
-      /* istanbul ignore else */
-      if (invalidFieldNames.has("commodityCode")) {
-        filteredCommodityCode = null;
-      }
-      let filteredDescription: string | null = commodityDescription;
-      /* istanbul ignore else */
-      if (invalidFieldNames.has("description")) {
-        filteredDescription = null;
-      }
-      const filteredData = {
-        id: productId,
-        commodityCode: filteredCommodityCode,
-        description: filteredDescription,
-      };
-      await updateProcessingStatementProducts(
-        bearerToken,
-        documentNumber,
-        filteredData as unknown as Partial<ProcessingStatementProduct>,
-        productId,
-        true
-      );
-    } else {
-      // No errors – save all data as draft
-      await updateProcessingStatementProducts(
-        bearerToken,
-        documentNumber,
-        { id: productId, commodityCode, description: commodityDescription },
-        productId,
-        true // saveToRedisIfErrors = true
-      );
-    }
-    return redirect(route("/create-processing-statement/processing-statements"));
+    return handleSaveAsDraft(
+      bearerToken,
+      documentNumber,
+      productId,
+      commodityCode,
+      commodityDescription,
+      validationResponse
+    );
   }
 
   const response = await updateProcessingStatement(
