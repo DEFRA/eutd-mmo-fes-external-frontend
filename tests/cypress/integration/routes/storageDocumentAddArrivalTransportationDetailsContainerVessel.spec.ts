@@ -59,10 +59,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
         cy.get("#departureCountry").should("exist");
         cy.get("#departurePort").should("exist");
       });
-      cy.contains(
-        ".govuk-hint",
-        "For example, Felicity Ace. This field is required now to help prepare for new EU regulations coming into force on 10 January 2026."
-      ).should("be.visible");
+      cy.contains(".govuk-hint", "For example, Felicity Ace").should("be.visible");
       cy.contains(".govuk-hint", "For example, Greece").should("be.visible");
       cy.contains(
         ".govuk-hint",

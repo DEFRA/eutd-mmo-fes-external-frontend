@@ -19,6 +19,12 @@ const ccCreatedHandler: ITestHandler = {
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
     rest.get(getCreatedCertificateUrl(documentNumber), (req, res, ctx) => res(ctx.json(emptyDetails))),
   ],
+  [TestCaseId.CatchCertificatePendingPageGuard]: (documentNumber: string) => [
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(getCreatedCertificateUrl(documentNumber), (req, res, ctx) =>
+      res(ctx.json({ ...ccCreatedDetails, documentStatus: "PENDING" }))
+    ),
+  ],
 };
 
 export default ccCreatedHandler;

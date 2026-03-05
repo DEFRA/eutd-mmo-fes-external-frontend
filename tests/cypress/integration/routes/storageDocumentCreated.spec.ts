@@ -169,4 +169,14 @@ describe("Storage document created page: pageguard", () => {
     cy.visit(storageDocumentUrl, { failOnStatusCode: false, qs: { ...testParams } });
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
+
+  it("should redirect to the dashboard page when document status is pending", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.StorageDocumentPendingPageGuard,
+      args: [documentNumber],
+    };
+
+    cy.visit(storageDocumentUrl, { failOnStatusCode: false, qs: { ...testParams } });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
 });

@@ -1,9 +1,16 @@
 import { rest } from "msw";
 import { type ITestHandler, TestCaseId } from "~/types";
-import { generatePdf, GET_CLIENT_IP_URL, GET_PROCESSING_STATEMENT, mockAddExporterDetails } from "~/urls.server";
+import {
+  generatePdf,
+  GET_CLIENT_IP_URL,
+  GET_PROCESSING_STATEMENT,
+  mockAddExporterDetails,
+  mockDocumentUrl,
+} from "~/urls.server";
 
 import processingStatement from "@/fixtures/processingStatementApi/processingStatement.json";
 import exporterDetails from "@/fixtures/addExporterDetails/exporterDetails.json";
+import psCreated from "@/fixtures/documentsApi/psCreated.json";
 
 /**
  * Handler for UAT-498: Testing invalid catch certificate errors on Check Your Information page
@@ -17,6 +24,7 @@ const checkYourInformationInvalidCCHandler: ITestHandler = {
    * Simulates a voided UK catch certificate error on submission
    */
   [TestCaseId.PSCheckYourInformationInvalidCC]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
@@ -40,6 +48,7 @@ const checkYourInformationInvalidCCHandler: ITestHandler = {
    * Simulates both catch certificate and species validation errors
    */
   [TestCaseId.PSCheckYourInformationInvalidCCWithSpeciesError]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
@@ -67,6 +76,7 @@ const checkYourInformationInvalidCCHandler: ITestHandler = {
    * Simulates format validation error for catch certificate number
    */
   [TestCaseId.PSCheckYourInformationIncorrectFormatCC]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
