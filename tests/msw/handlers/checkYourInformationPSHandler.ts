@@ -32,34 +32,45 @@ const documentNumber = "GBR-2023-PS-DE53D6E7C";
 
 const checkYourInformationPSHandler: ITestHandler = {
   [TestCaseId.PSCheckYourInformation]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
   ],
   [TestCaseId.PSCheckYourInformationUpdatedExporter]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetailsUpdated))),
   ],
   [TestCaseId.PSCheckYourInformationPageGuardCase]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
     rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgress))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
   ],
   [TestCaseId.PSCheckYourInformationPageGuardCaseNoExporter]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgress))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json({}))),
   ],
+  [TestCaseId.PSCheckYourInformationPageGuardCaseComplete]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json(psCreated))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDashboard))),
+  ],
   [TestCaseId.PSCheckYourInformationProductDescriptions]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementProductDescriptions))),
     rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgress))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
   ],
   [TestCaseId.PSCheckYourInformationPageGuardProductDescriptions]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementNoProductDescriptions))),
     rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgress))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
   ],
   [TestCaseId.PSCheckYourInformationValidationError]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
@@ -68,6 +79,7 @@ const checkYourInformationPSHandler: ITestHandler = {
     ),
   ],
   [TestCaseId.PSCheckYourInformationHealthCertificateValidationError]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
@@ -75,27 +87,38 @@ const checkYourInformationPSHandler: ITestHandler = {
       res(ctx.status(400), ctx.json(processingStatementHealthCertificateError))
     ),
   ],
-  [TestCaseId.PSCheckYourInformationValidationSuccess]: () => [
-    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDashboard))),
-    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json(psCreated))),
-    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
-    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
-    rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
-    rest.post(generatePdf("processingStatement"), (req, res, ctx) =>
-      res(
-        ctx.status(200),
-        ctx.json({
-          documentNumber,
-          uri: "_382462d9-ea63-4125-9e11-bb1bc474d8a1.pdf",
-        })
-      )
-    ),
-  ],
+  [TestCaseId.PSCheckYourInformationValidationSuccess]: () => {
+    let documentSubmitted = false;
+    return [
+      rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDashboard))),
+      rest.get(mockDocumentUrl, (req, res, ctx) => {
+        if (documentSubmitted) {
+          return res(ctx.json(psCreated));
+        }
+        return res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }));
+      }),
+      rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+      rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+      rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
+      rest.post(generatePdf("processingStatement"), (req, res, ctx) => {
+        documentSubmitted = true;
+        return res(
+          ctx.status(200),
+          ctx.json({
+            documentNumber,
+            uri: "_382462d9-ea63-4125-9e11-bb1bc474d8a1.pdf",
+          })
+        );
+      }),
+    ];
+  },
   [TestCaseId.PSCheckYourInformationCCUK]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementSummary))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
   ],
   [TestCaseId.PSCheckYourInformationUnauthorised]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res.once(ctx.status(403))),
   ],
   [TestCaseId.PSCheckYourInformationChangeProductDetails]: () => {
@@ -152,6 +175,7 @@ const checkYourInformationPSHandler: ITestHandler = {
     };
 
     return [
+      rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
       rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
       rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
       rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => {
@@ -190,6 +214,7 @@ const checkYourInformationPSHandler: ITestHandler = {
     };
 
     return [
+      rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
       rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => {
         const response = postCallCount > 0 ? addressAfterChange : addressBeforeChange;
         return res(ctx.json(response));

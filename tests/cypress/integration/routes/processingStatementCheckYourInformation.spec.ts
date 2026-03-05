@@ -240,6 +240,15 @@ describe("Check Your Information (Summary) page: page guard", () => {
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
     cy.url().should("include", "/progress");
   });
+
+  it("should redirect to dashboard when processing statement is already complete", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformationPageGuardCaseComplete,
+    };
+
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
 });
 
 describe("Check Your Information (Summary) page: with product descriptions", () => {
