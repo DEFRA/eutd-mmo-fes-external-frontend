@@ -316,7 +316,7 @@ const handleSaveAsDraftConsignment = async (
   const sdUrl = `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment${productIndexUrlFragment}`;
   if (errorResponse) {
     // Filter out invalid fields and save only valid ones as draft
-    const responseData = await (errorResponse as Response).clone().json();
+    const responseData = await errorResponse.clone().json();
     let errorKeys: string[] = [];
     /* istanbul ignore else */
     if (responseData?.errors) {
