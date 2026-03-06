@@ -381,6 +381,9 @@ export enum TestCaseId {
   TruckTransportPointOfDestinationRequired = "TruckTransportPointOfDestinationRequired",
   TruckTransportPointOfDestinationMaxLength = "TruckTransportPointOfDestinationMaxLength",
   TruckTransportPointOfDestinationInvalidCharacters = "TruckTransportPointOfDestinationInvalidCharacters",
+  // FI0-10061: Welsh error messages for departure port field
+  TruckTransportSaveMaxCharsDeparturePort = "TruckTransportSaveMaxCharsDeparturePort",
+  TruckTransportSaveInvalidCharsDeparturePort = "TruckTransportSaveInvalidCharsDeparturePort",
   TrainTransportContainerIdentificationNumberMaxLength = "TrainTransportContainerIdentificationNumberMaxLength",
   TrainTransportContainerIdentificationNumberInvalidCharacters = "TrainTransportContainerIdentificationNumberInvalidCharacters",
   TrainTransportMultipleContainers = "TrainTransportMultipleContainers",
