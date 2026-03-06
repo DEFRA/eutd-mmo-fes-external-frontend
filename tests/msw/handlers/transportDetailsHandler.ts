@@ -2167,6 +2167,35 @@ const transportDetailsHandler: ITestHandler = {
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
+  // FI0-10061: Welsh error messages for departure port field
+  [TestCaseId.TruckTransportSaveMaxCharsDeparturePort]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+    rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          departurePlace: "error.departurePort.string.max",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
+  [TestCaseId.TruckTransportSaveInvalidCharsDeparturePort]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+    rest.post(addTransportationDetailsUrl("truck"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          departurePlace: "error.departurePort.string.pattern.base",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
   [TestCaseId.TrainTransportPointOfDestinationRequired]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
