@@ -20,7 +20,7 @@
   "issuingCountryHint": "Enter the country that issued the catch certificate",
   "catchCertificateGuidanceTitle": "Help with catch certificate",
   "catchCertificateGuidanceTextOne": "The UK catch certificate is the official paperwork that allowed the product to enter the UK",
-  "psAddCatchCertificateWeight": "Catch certificate weight",
+  "psAddCatchCertificateWeight": "Weight on catch certificate",
   "psAddCatchCertificateWeightHint": "Enter the weight of the product being exported, as shown on the Catch certificate.",
   "psAddCatchWeightsExportWeightBeforeProcessingLabel": "Export weight before processing",
   "psAddCatchWeightsExportWeightBeforeProcessingHint": "Enter the weight of the product before any processing. Do not include any additional ingredients.",

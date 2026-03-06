@@ -41,7 +41,7 @@ describe("Add Transportation Details Train: Allowed", () => {
         "Shipping container identification number (optional)",
       ]);
       expect(hints).to.deep.eq([
-        "For example, AB12345C. This field is required now to help prepare for new EU regulations coming into force on 10 January 2026",
+        "For example, AB12345C",
         "For example, AA1234567",
         "This is the country the train left before it came to the UK",
         "For example, Calais port, Calais-Dunkerque airport or the place the train started its journey",

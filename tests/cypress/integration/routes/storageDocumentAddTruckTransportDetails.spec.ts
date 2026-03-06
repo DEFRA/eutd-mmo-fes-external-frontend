@@ -397,6 +397,43 @@ describe("AutocompleteFormField: minCharsBeforeSearch validation", () => {
   });
 });
 
+// FI0-10061: Welsh error messages for departure port field
+describe("Add Transportation Details Truck: Welsh translations for departure port errors", () => {
+  it("should display Welsh error message when departure port exceeds 50 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveMaxCharsDeparturePort,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams, lng: "cy" } });
+    const longString = new Array(52).join("a");
+    cy.get("#departurePlace").type(longString, { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
+    cy.contains("a", /^Rhaid i O ble mae'r lori’n ymadael fod yn llai na 50 o nodau$/).should("be.visible");
+    cy.get(".govuk-error-message").should(
+      "contain.text",
+      "Rhaid i O ble mae'r lori’n ymadael fod yn llai na 50 o nodau"
+    );
+  });
+
+  it("should display Welsh error message when departure port contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveInvalidCharsDeparturePort,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams, lng: "cy" } });
+    cy.get("#departurePlace").type("Invalid@#$%", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Rhaid i O ble mae'r lori’n ymadael gynnwys llythrennau, rhifau, collnodau, cysylltnodau a bylchau yn unig$/
+    ).should("be.visible");
+    cy.get(".govuk-error-message").should(
+      "contain.text",
+      "Rhaid i O ble mae'r lori’n ymadael gynnwys llythrennau, rhifau, collnodau, cysylltnodau a bylchau yn unig"
+    );
+  });
+});
+
 describe("Add Transportation Details Truck: Invalid year in export date", () => {
   it("should display error when year 0000 is entered in the export date picker", () => {
     const testParams: ITestParams = {
