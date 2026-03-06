@@ -50,7 +50,7 @@
   "psSummaryPageCertificateIssuedInTheUK": "Catch certificate issued in the UK",
   "psSummaryPageIssuingCountry": "Issuing country",
   "psSummaryPageCatchCertificate": "Catch certificate",
-  "psSummaryPageCatchCertificateWeight": "Catch certificate weight",
+  "psSummaryPageCatchCertificateWeight": "Weight on catch certificate",
   "psSummaryPageExportWeightBeforeProcessing": "Export weight before processing",
   "psSummaryPageExportWeightAfterProcessing": "Export weight after processing",
   "psSummaryPageConsignmentItem": "Consignment item",
