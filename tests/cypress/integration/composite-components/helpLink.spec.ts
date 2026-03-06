@@ -69,7 +69,7 @@ describe("HelpSection", () => {
     cy.get("[data-test-id=get-help-phone]").should("contain.text", "Phone: 0330 159 198");
     cy.get("[data-test-id=get-help-hours]").should(
       "contain.text",
-      "Monday to Friday, 9am to 5pm (except public holidays)"
+      "Monday to Friday, 8am to 6pm (except public holidays)"
     );
     cy.get("[data-test-id=call-charges-link]").should("have.attr", "href", "https://www.gov.uk/call-charges");
     cy.get("[data-test-id=call-charges-link]").should("contain.text", "Find out about call charges");
@@ -104,7 +104,7 @@ describe("HelpSection", () => {
     cy.get("[data-test-id=get-help-phone]").should("contain.text", "Ffôn: 0330 159 1989");
     cy.get("[data-test-id=get-help-hours]").should(
       "contain.text",
-      "Dydd Llun i ddydd Gwener, 9am i 5pm (ac eithrio gwyliau cyhoeddus)"
+      "Dydd Llun i ddydd Gwener, 8am i 6pm (ac eithrio gwyliau cyhoeddus)"
     );
     cy.get("[data-test-id=call-charges-link]").should("contain.text", "Gwybodaeth am gostau galwadau");
     cy.get("[data-test-id=get-help-guidance]").should("contain.text", "Darllen y canllawiau ar");
