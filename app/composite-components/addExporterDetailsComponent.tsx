@@ -1,10 +1,17 @@
 import { useLoaderData, useActionData } from "react-router";
-import { FormInput, ErrorPosition, Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
+import { ErrorPosition, Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import isEmpty from "lodash/isEmpty";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { route } from "routes-gen";
-import { Main, ErrorSummary, Title, BackToProgressLink, SecureForm } from "~/components";
+import {
+  Main,
+  ErrorSummary,
+  Title,
+  BackToProgressLink,
+  SecureForm,
+  EmojiBlockingInput as FormInput,
+} from "~/components";
 import { scrollToId, displayErrorTransformedMessages } from "~/helpers";
 import { useScrollOnPageLoad } from "~/hooks";
 import type { IExporter, IErrorsTransformed, Journey } from "~/types";
