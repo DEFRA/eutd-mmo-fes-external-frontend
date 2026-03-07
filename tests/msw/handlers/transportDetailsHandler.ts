@@ -75,6 +75,7 @@ import arrivalPlaneRetainAllSavedData from "@/fixtures/transportDetailsApi/arriv
 import arrivalPlaneRetainDateSavedData from "@/fixtures/transportDetailsApi/arrivalPlaneRetainDateSaved.json";
 import arrivalTruckRetainAllSavedData from "@/fixtures/transportDetailsApi/arrivalTruckRetainAllSaved.json";
 import arrivalTruckRetainDateSavedData from "@/fixtures/transportDetailsApi/arrivalTruckRetainDateSaved.json";
+import arrivalContainerVesselFutureDateSavedData from "@/fixtures/transportDetailsApi/arrivalContainerVesselFutureDateSaved.json";
 import containerVesselSaveAsDraftInitialData from "@/fixtures/transportDetailsApi/containerVesselSaveAsDraftInitial.json";
 import containerVesselRetainAllSavedData from "@/fixtures/transportDetailsApi/containerVesselRetainAllSaved.json";
 import containerVesselRetainInvalidVesselNameSavedData from "@/fixtures/transportDetailsApi/containerVesselRetainInvalidVesselNameSaved.json";
@@ -1149,6 +1150,27 @@ const transportDetailsHandler: ITestHandler = {
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(addArrivalContainerVesselDisallowedDetails))),
+  ],
+  // Static CHECK handler for arrival container vessel: returns fixture with empty departureDate
+  // (represents state after a future departure date was stripped during save-as-draft)
+  [TestCaseId.ArrivalContainerVesselTransportSaveAsDraftFutureDateCheck]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(arrivalContainerVesselFutureDateSavedData))),
+    rest.post(addTransportationDetailsUrl("containerVessel", false), async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.post(addTransportationDetailsUrl("containerVessel", true), async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.put(mockPutTransportDetailsByIdUrl, async (req, res, ctx) => {
+      await req.json();
+      return res(ctx.json({ errors: [] }));
+    }),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.ContainerVesselTransportSaveEmpty]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(saveAddArrivalContainerVesselDetails))),

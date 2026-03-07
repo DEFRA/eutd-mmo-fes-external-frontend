@@ -50,9 +50,9 @@ type loaderConsignmentDetails = {
   csrf: string;
 };
 
-// Helper to build valid product data, nulling out any fields that failed validation
+// Helper to build valid product data, clearing any fields that failed validation
 const getValidProductData = async (
-  validationResponse: Response | null | undefined,
+  validationResponse: Response | ErrorResponse | undefined,
   productId: string,
   commodityCode: string,
   commodityDescription: string
@@ -67,16 +67,19 @@ const getValidProductData = async (
   const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
   const invalidFieldNames = new Set(errorKeys.map((k) => (k === "consignmentDescription" ? "description" : k)));
 
-  let filteredCommodityCode: string | null = commodityCode;
+  // Use "" (empty string) instead of null for invalid fields: the backend Joi schema
+  // accepts "" to clear a string field but rejects null — sending null causes the entire
+  // save call to fail, which means even valid fields are lost ("not saving anything").
+  let filteredCommodityCode: string = commodityCode;
   /* istanbul ignore else */
   if (invalidFieldNames.has("commodityCode")) {
-    filteredCommodityCode = null;
+    filteredCommodityCode = "";
   }
 
-  let filteredDescription: string | null = commodityDescription;
+  let filteredDescription: string = commodityDescription;
   /* istanbul ignore else */
   if (invalidFieldNames.has("description")) {
-    filteredDescription = null;
+    filteredDescription = "";
   }
 
   return {
@@ -93,7 +96,7 @@ const handleSaveAsDraft = async (
   productId: string,
   commodityCode: string,
   commodityDescription: string,
-  validationResponse: Response | null | undefined
+  validationResponse: Response | ErrorResponse | undefined
 ): Promise<Response> => {
   const dataToSave = await getValidProductData(validationResponse, productId, commodityCode, commodityDescription);
 

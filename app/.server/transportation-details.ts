@@ -602,6 +602,29 @@ export const commonSaveTransportDetails = async (
         filteredPayload.exportDate = undefined;
       }
     }
+    // departureDate: omit invalid or future dates when saving as draft so we don't persist
+    // values that would be rejected by the full save-and-continue validation.
+    if (typeof filteredPayload.departureDate === "string") {
+      const departureDateFormats = ["DD/MM/YYYY", "DD/M/YYYY", "D/MM/YYYY", "D/M/YYYY"];
+      const dep = filteredPayload.departureDate as string;
+      // Treat explicit empty string as the intent to clear the field => allow backend to overwrite
+      if (dep === "") {
+        filteredPayload.departureDate = undefined;
+      } else {
+        // If format isn't valid, omit the field so backend preserves prior value
+        const validMoment = departureDateFormats.map((fmt) => moment(dep, fmt, true)).find((m) => m.isValid());
+        if (!validMoment) {
+          filteredPayload.departureDate = undefined;
+        } else {
+          // If the date is in the future (after today) omit it for draft saves
+          const parsed = validMoment.startOf("day");
+          const today = moment().startOf("day");
+          if (parsed.isAfter(today)) {
+            filteredPayload.departureDate = undefined;
+          }
+        }
+      }
+    }
 
     // Single save – no backend round-trip needed for draft filtering
     postTransport = await saveTransportDetails(bearerToken, documentNumber, filteredPayload, true);

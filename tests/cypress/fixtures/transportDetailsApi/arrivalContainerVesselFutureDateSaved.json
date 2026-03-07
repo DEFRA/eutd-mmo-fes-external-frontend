@@ -1,0 +1,12 @@
+{
+  "vehicle": "containerVessel",
+  "arrival": true,
+  "vesselName": "Ocean Star",
+  "flagState": "France",
+  "containerNumbers": [""],
+  "freightBillNumber": "",
+  "departureCountry": "France",
+  "departurePort": "Marseille",
+  "departureDate": "",
+  "placeOfUnloading": ""
+}

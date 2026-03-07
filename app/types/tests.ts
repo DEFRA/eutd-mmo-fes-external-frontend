@@ -462,6 +462,7 @@ export enum TestCaseId {
   ArrivalPlaneTransportDepartureCountryEmpty = "ArrivalPlaneTransportDepartureCountryEmpty",
   ArrivalPlaneTransportDeparturePortEmpty = "ArrivalPlaneTransportDeparturePortEmpty",
   ArrivalPlaneTransportDepartureDateEmpty = "ArrivalPlaneTransportDepartureDateEmpty",
+  ArrivalContainerVesselTransportSaveAsDraftFutureDateCheck = "ArrivalContainerVesselTransportSaveAsDraftFutureDateCheck",
   SDCheckYourInformationAllFieldsNotProvided = "SDCheckYourInformationAllFieldsNotProvided",
 
   TruckTransportDocuments = "truckTransportDocuments",

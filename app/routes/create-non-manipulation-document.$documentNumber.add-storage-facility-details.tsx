@@ -5,7 +5,7 @@ import { Button, BUTTON_TYPE, ErrorPosition, FormInput } from "@capgeminiuk/dcx-
 import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
 
 import { route } from "routes-gen";
-import type { StorageDocument, IUnauthorised, IErrorsTransformed } from "~/types";
+import type { StorageDocument, IUnauthorised, IErrorsTransformed, ErrorResponse } from "~/types";
 import {
   getBearerTokenForRequest,
   validateResponseData,
@@ -207,7 +207,7 @@ const handleGoToAddAddress = async (
 
 // Helper to extract valid facility fields after a draft validation response
 const getValidFacilityData = async (
-  validationResponse: Response | null | undefined,
+  validationResponse: Response | ErrorResponse | null | undefined,
   storageFacilityData: Partial<StorageDocument>
 ): Promise<Partial<StorageDocument>> => {
   if (!validationResponse || !(validationResponse instanceof Response)) {
@@ -417,7 +417,8 @@ const AddStorageFacilityDetails = () => {
   const arrivalDateFromAction = getArrivalDateFromAction(actionData, "facilityArrivalDate");
 
   const getDateFromActionOrLoader = (dateFromAction: string, dateFromLoader: string | undefined): string =>
-    dateFromAction?.trim() ?? dateFromLoader?.trim() ?? "";
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- intentionally use || so empty strings fall through to the loader date
+    dateFromAction?.trim() || dateFromLoader?.trim() || "";
 
   const [daySelected = "", monthSelected = "", yearSelected = ""] =
     selectedArrivalDate && typeof selectedArrivalDate === "string" ? selectedArrivalDate.split("/") : " ";
