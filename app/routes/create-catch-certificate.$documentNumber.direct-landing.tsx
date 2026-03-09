@@ -15,7 +15,7 @@ import {
   AddLandingsVesselHelpContent,
 } from "~/components";
 import { route } from "routes-gen";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useIsHydrated, useScrollOnPageLoad } from "~/hooks";
 import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
 
@@ -140,6 +140,7 @@ const DirectLanding = () => {
   const [gearCategory, setGearCategory] = useState<string>(selectedGearCategory ?? "");
   const [gearType, setGearType] = useState<string>(selectedGearType ?? "");
   const [gearTypes, setGearTypes] = useState<IGearType[]>(fallbackGearTypes ?? []);
+  const isFirstGearCategoryRender = useRef(true);
   const [highSeasArea, setHighSeasArea] = useState<HighSeasAreaType>(selectedHighSeasArea);
   const [rfmo, setRfmo] = useState<string>(selectedRfmo ?? "");
 
@@ -264,11 +265,15 @@ const DirectLanding = () => {
   useEffect(() => {
     const searchTerm = gearCategory ?? values?.gearCategory;
     if (searchTerm) {
+      if (!isFirstGearCategoryRender.current) {
+        setGearType("");
+      }
       handleGearCategoryChange(searchTerm);
     } else {
       setGearType("");
       setGearTypes([]);
     }
+    isFirstGearCategoryRender.current = false;
   }, [gearCategory]);
 
   const getOptions = () => {
@@ -453,8 +458,7 @@ const DirectLanding = () => {
                 setSelectedGearCategory={setGearCategory}
                 setSelectedGearType={setGearType}
                 gearCategories={gearCategories}
-                gearTypes={fallbackGearTypes ?? gearTypes}
-                gearType={selectedGearType ?? ""}
+                gearTypes={gearTypes}
                 addLandingGearCategoryNullOption={t("ccAddLandingGearCategoryNullOption")}
                 addLandingGearTypeNullOption={t("ccAddLandingGearTypeNullOption")}
                 groupedErrorIds={groupedErrorIds}

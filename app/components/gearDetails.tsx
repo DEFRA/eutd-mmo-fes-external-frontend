@@ -11,7 +11,6 @@ type gearDetailsProps = {
   setSelectedGearType: (value: React.SetStateAction<string>) => void;
   gearCategories: string[];
   gearTypes: IGearType[];
-  gearType: string;
   addLandingGearCategoryNullOption: string;
   addLandingGearTypeNullOption: string;
   groupedErrorIds: Record<string, string[]>;
@@ -35,7 +34,6 @@ export const GearDetails = ({
   setSelectedGearType,
   gearCategories,
   gearTypes,
-  gearType,
   addLandingGearCategoryNullOption,
   addLandingGearTypeNullOption,
   groupedErrorIds,
@@ -135,18 +133,14 @@ export const GearDetails = ({
           className={classNames("govuk-select govuk-!-width-one-half", {
             " govuk-select--error": errors?.gearType?.message,
           })}
-          defaultValue={values?.gearType ?? selectedGearType}
+          value={selectedGearType ?? ""}
           onChange={(e) => setSelectedGearType(e.target.value)}
         >
-          <option value="" selected aria-label={addLandingGearTypeNullOption}>
+          <option value="" aria-label={addLandingGearTypeNullOption}>
             {addLandingGearTypeNullOption}
           </option>
           {gearTypes.map(({ gearName, gearCode }) => (
-            <option
-              key={gearCode}
-              value={`${gearName} (${gearCode})`}
-              selected={`${gearName} (${gearCode})` === gearType}
-            >
+            <option key={gearCode} value={`${gearName} (${gearCode})`}>
               {`${gearName} (${gearCode})`}
             </option>
           ))}
