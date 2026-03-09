@@ -12,6 +12,16 @@ export const progressTableDataBuilder = (
   const ccContext = "/create-catch-certificate/:documentNumber";
   const transportDetailsStatus: string = progress.transportDetails;
 
+  const getTransportDetailsUrl = (): string => {
+    if (transportDetailsStatus === "INCOMPLETE" && transport?.vehicle && transport?.id) {
+      return `${ccContext}/${forwardUri(transport.vehicle, "catchCertificate")}/${transport.id}`;
+    }
+    if (transportDetailsStatus === "INCOMPLETE") {
+      return `${ccContext}/how-does-the-export-leave-the-uk`;
+    }
+    return `${ccContext}/do-you-have-additional-transport-types`;
+  };
+
   return [
     {
       title: "commonProgressPageExporter",
@@ -98,10 +108,7 @@ export const progressTableDataBuilder = (
                 title: "commonProgressPageTransportationTransportDetails",
                 status: progress.transportDetails,
                 testId: "transportDetails",
-                url:
-                  transportDetailsStatus === "INCOMPLETE"
-                    ? `${ccContext}/${forwardUri(transport.vehicle, "catchCertificate")}/${transport.id}`
-                    : `${ccContext}/do-you-have-additional-transport-types`,
+                url: getTransportDetailsUrl(),
                 error: errors?.transportDetails,
               },
             ]),
