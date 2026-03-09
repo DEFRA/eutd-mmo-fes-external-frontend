@@ -141,10 +141,7 @@ describe("Check Your Information (Summary) page: Validation", () => {
 
     cy.get("[data-testid=create-ps-button]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains(
-      "a",
-      /^You cannot submit this Processing Statement, the Health Certificate date selected must be today or in the past.$/
-    ).should("be.visible");
+    cy.contains("a", /^The health certificate date must be today or in the past.$/).should("be.visible");
   });
 
   it("should redirect user to processing statement created page", () => {
