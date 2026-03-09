@@ -531,6 +531,7 @@ const DirectLanding = () => {
                           index={index}
                           exportWeight={isEmpty(values) ? landings?.exportWeight?.toString() : ""}
                           totalWeight={getTotalWeight}
+                          customClass="govuk-input--width-5"
                         />
                       </td>
                     </tr>
