@@ -112,7 +112,7 @@ describe("progressTableDataBuilder", () => {
     });
   });
 
-  describe("Products and Landings section", () => {
+  describe("Products and Landings section ", () => {
     it("should include a dataUpload row when dataUpload is true", () => {
       const result = progressTableDataBuilder(true, false, baseProgress, baseTransport);
       const productSection = result.find((s) => s.testId === "ProductsAndLandings");
