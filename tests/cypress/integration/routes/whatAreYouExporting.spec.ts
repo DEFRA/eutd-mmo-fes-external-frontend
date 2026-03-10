@@ -1215,8 +1215,10 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
       cy.get("#species").invoke("val");
 
-      // Clear and type new species (force: true required as autocomplete disables input after selection)
-      cy.get("#species").clear({ force: true }).type("Atlantic cod", { force: true });
+      // Clear and type new species - break the chain to avoid detached DOM errors
+      cy.get("#species").clear({ force: true });
+      cy.wait(500);
+      cy.get("#species").type("Atlantic cod", { force: true });
       cy.wait(1000);
 
       // Select from autocomplete if available
@@ -1782,9 +1784,9 @@ describe("Duplicate product error - form remains fully interactive", () => {
   it("should display the duplicate product error inline on the species field", () => {
     cy.get("[data-testid='add-product']").eq(0).click({ force: true });
     cy.get("#errorIsland").should("exist");
-    cy.contains(
-      /The combination of species, state, presentation and commodity code must be unique/
-    ).should("be.visible");
+    cy.contains(/The combination of species, state, presentation and commodity code must be unique/).should(
+      "be.visible"
+    );
   });
 
   it("should keep the state dropdown enabled after a duplicate product error", () => {

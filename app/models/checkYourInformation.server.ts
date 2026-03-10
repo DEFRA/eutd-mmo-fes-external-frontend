@@ -121,6 +121,7 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
       status: 200,
       headers: {
         "Content-Type": "application/json",
+        "Cache-Control": "no-store",
         "Set-Cookie": await commitSession(session),
       },
     }

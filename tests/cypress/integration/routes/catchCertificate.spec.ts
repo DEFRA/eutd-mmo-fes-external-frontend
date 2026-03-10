@@ -152,6 +152,20 @@ describe("Catch certificate created page: rendering", () => {
   });
 });
 
+describe("Catch certificate created page: back button redirects to dashboard", () => {
+  it("should navigate to the CC dashboard when the browser back button is pressed", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CatchCertificateCreated,
+      args: [documentNumber],
+    };
+    cy.visit(catchCertificateUrl, { qs: { ...testParams } });
+    cy.get(".govuk-panel--confirmation").should("be.visible");
+    cy.window().its("history.state").should("have.property", "createdPage", true);
+    cy.go("back");
+    cy.url().should("include", "/create-catch-certificate/catch-certificates");
+  });
+});
+
 describe("Catch certificate created page: pageguard", () => {
   it("should redirect to the dashboard page if didn't got expected response", () => {
     const testParams: ITestParams = {

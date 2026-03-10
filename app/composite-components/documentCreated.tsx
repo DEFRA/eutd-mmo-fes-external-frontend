@@ -82,6 +82,18 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
 
   useScrollOnPageLoad();
 
+  // Clear all previous history entries and only keep the dashboard URL
+  // so the browser back button always navigates to the dashboard
+  useEffect(() => {
+    const createdPageUrl = window.location.href;
+
+    // Replace the previous history entry with the dashboard URL
+    window.history.replaceState({ dashboardRedirect: true }, "", createLink);
+
+    // Push the created page back as the current visible entry
+    window.history.pushState({ createdPage: true }, "", createdPageUrl);
+  }, [createLink]);
+
   /* istanbul ignore next */
   useEffect(() => {
     if (shouldRenderGA(analyticsCookieAccepted)) {
