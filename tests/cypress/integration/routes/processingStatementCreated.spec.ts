@@ -141,6 +141,20 @@ describe("Processing statement created page: rendering", () => {
   });
 });
 
+describe("Processing statement created page: back button redirects to dashboard", () => {
+  it("should navigate to the PS dashboard when the browser back button is pressed", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ProcessingStatementCreated,
+      args: [documentNumber],
+    };
+    cy.visit(processingStatementUrl, { qs: { ...testParams } });
+    cy.get(".govuk-panel--confirmation").should("be.visible");
+    cy.window().its("history.state").should("have.property", "createdPage", true);
+    cy.go("back");
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
+});
+
 describe("Processing statement created page: pageguard", () => {
   it("should redirect to the dashboard page if didn't got expected response", () => {
     const testParams: ITestParams = {
