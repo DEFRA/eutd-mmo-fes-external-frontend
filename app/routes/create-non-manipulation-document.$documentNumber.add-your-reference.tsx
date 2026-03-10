@@ -12,7 +12,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     request,
     params,
     "/create-non-manipulation-document/non-manipulation-documents",
-    "/create-non-manipulation-document/:documentNumber/add-exporter-details"
+    "/create-non-manipulation-document/:documentNumber/add-exporter-details",
+    "/create-non-manipulation-document/:documentNumber/check-your-information"
   );
 
 const AddYourReference = () => {

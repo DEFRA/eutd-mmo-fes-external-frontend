@@ -59,10 +59,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
         cy.get("#departureCountry").should("exist");
         cy.get("#departurePort").should("exist");
       });
-      cy.contains(
-        ".govuk-hint",
-        "For example, Felicity Ace. This field is required now to help prepare for new EU regulations coming into force on 10 January 2026."
-      ).should("be.visible");
+      cy.contains(".govuk-hint", "For example, Felicity Ace").should("be.visible");
       cy.contains(".govuk-hint", "For example, Greece").should("be.visible");
       cy.contains(
         ".govuk-hint",
@@ -249,7 +246,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.contains("h2", "There is a problem").should("be.visible");
     });
 
-    it("should show error when a container identification number exceeds 50 characters", () => {
+    it("should show format error when a container identification number has invalid format regardless of length", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveMaxCharsContainerIdentificationNumber,
       };
@@ -368,7 +365,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("#departureDate-year").type("2025", { force: true });
       cy.get("[data-testid=save-and-continue]").click({ force: true });
       cy.contains("h2", /^There is a problem$/).should("be.visible");
-      cy.contains("a", /^Departure date must be a real date$/).should("be.visible");
+      cy.contains("a", "Departure date must be a real date").should("be.visible");
     });
   });
 });

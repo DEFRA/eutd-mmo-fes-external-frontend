@@ -1,14 +1,21 @@
 import * as React from "react";
-import { useEffect, type FormEventHandler, type MouseEventHandler } from "react";
+import { type FormEventHandler, type MouseEventHandler } from "react";
 import { Link, useActionData, useLoaderData, useSubmit, useNavigation } from "react-router-dom";
 import { BackToProgressLink, Main, Title, NotificationBanner, ErrorSummary, SecureForm } from "~/components";
 import { route } from "routes-gen";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
-import { useIsHydrated, useScrollOnPageLoad } from "~/hooks";
+import { useIsHydrated, useScrollOnPageError, useScrollOnPageLoad } from "~/hooks";
 import { type LoaderFunction, type ActionFunction } from "react-router";
 import { useTranslation } from "react-i18next";
 import isEmpty from "lodash/isEmpty";
-import { displayErrorTransformedMessages, getErrorMessage, scrollToId } from "~/helpers";
+import {
+  displayErrorTransformedMessages,
+  getErrorMessage,
+  getUploadNotificationClassName,
+  getUploadNotificationHeader,
+  getUploadNotificationMessage,
+  getUploadNotificationRole,
+} from "~/helpers";
 import type { ErrorObject, ErrorResponse, IErrorsTransformed, IUploadedLanding } from "~/types";
 import { UploadFileAction, UploadFileLoader } from "~/models";
 import { RenderUploadFileLandingsData } from "~/composite-components/renderUploadFileLandingsData";
@@ -57,11 +64,7 @@ const UploadFile = () => {
 
   useScrollOnPageLoad();
 
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      scrollToId("errorIsland");
-    }
-  }, [errors]);
+  useScrollOnPageError(errors);
 
   const handleClearUpload: MouseEventHandler<HTMLButtonElement> = (event: React.MouseEvent<HTMLButtonElement>) => {
     (document?.getElementById("upload-form") as HTMLFormElement).reset();
@@ -76,21 +79,23 @@ const UploadFile = () => {
     >
       {(uploadNotification || showNotification) && (
         <NotificationBanner
-          header={
-            uploadNotification
-              ? t("ccUploadFilePageNotificationProgressHeader")
-              : t("ccUploadFilePageNotificationCompletionHeader")
-          }
+          header={getUploadNotificationHeader(
+            uploadNotification,
+            t("ccUploadFilePageNotificationProgressHeader"),
+            t("ccUploadFilePageNotificationCompletionHeader")
+          )}
           messages={[
-            uploadNotification
-              ? t("ccUploadFilePageNotificationProgressMessage")
-              : t("ccUploadFilePageNotificationCompletionMessage", {
-                  completedRows: successfullyUploadedRows,
-                  totalRows,
-                }),
+            getUploadNotificationMessage(
+              uploadNotification,
+              t("ccUploadFilePageNotificationProgressMessage"),
+              t("ccUploadFilePageNotificationCompletionMessage", {
+                completedRows: successfullyUploadedRows,
+                totalRows,
+              })
+            ),
           ]}
-          className={uploadNotification ? "" : "govuk-notification-banner--success"}
-          role={showNotification ? "alert" : "region"}
+          className={getUploadNotificationClassName(uploadNotification)}
+          role={getUploadNotificationRole(showNotification)}
         />
       )}
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorTransformedMessages(errors)} />}
@@ -222,7 +227,7 @@ const UploadFile = () => {
                         {landing.errors?.map((error: ErrorObject | string, index: number) => (
                           <span
                             id={`row-${landing.rowNumber}-${
-                              !isEmpty(landing.productId) ? landing.productId : "PRD-UNKNOWN"
+                              isEmpty(landing.productId) ? "PRD-UNKNOWN" : landing.productId
                             }-${index}-upload-file-error`}
                             key={`row-${landing.productId}`}
                           >

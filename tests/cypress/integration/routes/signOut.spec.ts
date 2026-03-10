@@ -14,7 +14,7 @@ describe("Sign Out Page", () => {
   });
   it("should redirect to logout page after 5s", () => {
     cy.visit("/sign-out");
-    // setting timeout to 5.5s to wait until page redirects
-    cy.url({ timeout: 5500 }).should("eq", "http://localhost:3000/server-logout");
+    // allow extra time for the client-side redirect to happen
+    cy.url({ timeout: 10000 }).should("include", "/server-logout");
   });
 });

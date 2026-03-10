@@ -50,6 +50,7 @@
   "ccCommonDateLandedRealError": "Rhaid i'r dyddiad glanio fod yn ddyddiad go iawn",
   "ccCommonDateLandedRequiredError": "Rhowch y dyddiad glanio",
   "ccCommonDateLandedInvalidError": "Rhowch ddyddiad glanio dilys",
+  "ccAddLandingDateLandedFutureDateError": "Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf",
   "ccCommonExportWeightMissingError": "Mae'r pwysau allforio ar goll",
   "ccCommonExportWeightDecimalPlacesError": "Rhowch y pwysau allforio fel rhif gyda dim mwy na 2 le degol",
   "ccCommonExportWeightGreaterError": "Rhowch y pwysau allforio fel rhif sy’n fwy na 0",
@@ -65,5 +66,6 @@
   "ccUploadFilePageErrorInvalidFileType": "Rhaid i'r ffeil a ddewiswyd fod yn CSV",
   "ccUploadFilePageErrorMaxLandings": "Dylai'r ffeil a ddewiswyd gynnwys uchafswm o {{dynamicValue}} rhes",
   "ccUploadFilePageErrorFileRequired": "Rhaid llwytho ffeil CSV ddilys i fyny i fwrw ymlaen",
-  "ccUploadFilePageTableEEZMaxCharError": "Cewch ychwanegu {{dynamicValue}} EEZ ar y mwyaf"
+  "ccUploadFilePageTableEEZMaxCharError": "Cewch ychwanegu {{dynamicValue}} EEZ ar y mwyaf",
+  "ccUploadFilePageTableTotalWeightExceededError": "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 10,000,000"
 }

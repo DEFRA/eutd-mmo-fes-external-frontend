@@ -76,8 +76,26 @@ export const WhatExportDestinationAction = async (request: Request, params: Para
   }
 
   if (form.get("_action") === "saveAsDraft") {
-    // if there are validation errors, redirect to dashboard without saving or showing errors
+    // Save valid fields as draft even when validation errors exist
     if (errors.length > 0) {
+      const errorKeys = errors.map((e) => e.key);
+      const filteredRequestBody: any = {};
+
+      // Include only fields that passed validation
+      if (!errorKeys.includes("exportedTo") && !errorKeys.includes("exportDestination")) {
+        filteredRequestBody.exportedTo = requestBody.exportedTo;
+        filteredRequestBody.exportDestination = requestBody.exportDestination;
+      }
+
+      if (!errorKeys.includes("pointOfDestination")) {
+        filteredRequestBody.pointOfDestination = requestBody.pointOfDestination;
+      }
+
+      // Save valid fields to draft (if any)
+      if (Object.keys(filteredRequestBody).length > 0) {
+        await postDraftExportLocation(bearerToken, documentNumber, filteredRequestBody);
+      }
+
       return redirect(
         route(
           journey === "processingStatement"
@@ -86,7 +104,8 @@ export const WhatExportDestinationAction = async (request: Request, params: Para
         )
       );
     }
-    // if data is valid, save as draft and redirect to dashboard
+
+    // No validation errors - save all data as draft
     await postDraftExportLocation(bearerToken, documentNumber, requestBody);
     return redirect(
       route(

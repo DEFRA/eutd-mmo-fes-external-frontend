@@ -1,6 +1,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 const sdPageUrl = "create-non-manipulation-document/GBR-2022-SD-F71D98A30/check-your-information";
+const sdProgressUrl = "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/progress";
 
 describe("SD: check-your-information page", () => {
   beforeEach(() => {
@@ -8,6 +9,12 @@ describe("SD: check-your-information page", () => {
       testCaseId: TestCaseId.SDCheckYourInformation,
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
+  });
+
+  it("should render the correct back link", () => {
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href", sdProgressUrl);
   });
 
   it("should display the correct page heading", () => {
@@ -64,6 +71,35 @@ describe("SD: check-your-information page", () => {
       .find(".govuk-visually-hidden")
       .should("exist")
       .should("contain", "your reference");
+  });
+
+  it("should display 'Your reference' field underneath 'Document number' in the same section", () => {
+    // Verify both Document number and Your reference are in the same dl element (document details section)
+    cy.contains("h2", "Document details")
+      .next("dl")
+      .within(() => {
+        // Check Document number appears first
+        cy.contains("dt", "Document number").should("exist");
+        // Check Your reference appears after Document number
+        cy.contains("dt", "Your reference").should("exist");
+      });
+
+    // Verify Your reference comes after Document number by checking DOM order
+    cy.contains("dt", "Document number")
+      .parent()
+      .next()
+      .within(() => {
+        cy.contains("dt", "Your reference").should("exist");
+      });
+  });
+
+  it("should display change link for 'Your reference' when value is provided", () => {
+    cy.contains("dt", "Your reference")
+      .parent()
+      .within(() => {
+        cy.contains("dd", "MY-REF-12345").should("exist");
+        cy.get("#yourReferenceChangeLink").should("exist").should("contain", "Change");
+      });
   });
 
   it("should contain the required data", () => {
@@ -182,6 +218,23 @@ describe("SD: check-your-information page with user reference not provided", () 
       .should("have.attr", "href")
       .and("include", "/add-your-reference");
   });
+
+  it("should display 'Your reference' in document details section when not provided", () => {
+    // Verify Your reference is in the document details section (same dl as Document number)
+    cy.contains("h2", "Document details")
+      .next("dl")
+      .within(() => {
+        cy.contains("dt", "Your reference").should("exist");
+        cy.contains("dt", "Your reference").next("dd").should("contain", "Not provided");
+      });
+
+    // Verify the change link exists even when not provided
+    cy.contains("dt", "Your reference")
+      .parent()
+      .within(() => {
+        cy.get("#yourReferenceChangeLink").should("exist");
+      });
+  });
 });
 
 describe("Check Your Information (Summary) page: document submission", () => {
@@ -231,6 +284,15 @@ describe("Check Your Information (Summary) page: guard", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.url().should("include", "/progress");
   });
+
+  it("should redirect user to dashboard when storage document is already complete", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationValidationComplete,
+    };
+
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
 });
 
 describe("SD: check-your-information page with issuing country", () => {
@@ -275,7 +337,7 @@ describe("SD: check-your-information page - container numbers for truck departur
   });
 
   it("should display container identification numbers label", () => {
-    cy.contains("dt", "Container identification number").should("be.visible");
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
   });
 
   it("should display container numbers values", () => {
@@ -283,7 +345,7 @@ describe("SD: check-your-information page - container numbers for truck departur
   });
 
   it("should have change link for container numbers", () => {
-    cy.contains("dt", "Container identification number")
+    cy.contains("dt", "Shipping container identification number")
       .parent()
       .find("a")
       .contains("Change")
@@ -292,7 +354,7 @@ describe("SD: check-your-information page - container numbers for truck departur
   });
 
   it("should have correct anchor in change link URL", () => {
-    cy.contains("dt", "Container identification number")
+    cy.contains("dt", "Shipping container identification number")
       .parent()
       .find("a")
       .contains("Change")
@@ -309,7 +371,7 @@ describe("SD: check-your-information page - container numbers for train departur
   });
 
   it("should display container identification numbers label", () => {
-    cy.contains("dt", "Container identification number").should("be.visible");
+    cy.contains("dt", "Shipping container identification number").should("be.visible");
   });
 
   it("should display container numbers values", () => {
@@ -317,7 +379,7 @@ describe("SD: check-your-information page - container numbers for train departur
   });
 
   it("should have change link for container numbers", () => {
-    cy.contains("dt", "Container identification number")
+    cy.contains("dt", "Shipping container identification number")
       .parent()
       .find("a")
       .contains("Change")
@@ -326,7 +388,7 @@ describe("SD: check-your-information page - container numbers for train departur
   });
 
   it("should have correct anchor in change link URL", () => {
-    cy.contains("dt", "Container identification number")
+    cy.contains("dt", "Shipping container identification number")
       .parent()
       .find("a")
       .contains("Change")

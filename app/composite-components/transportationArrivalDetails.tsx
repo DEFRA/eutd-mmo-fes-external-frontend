@@ -64,8 +64,8 @@ export const ArrivalTransportationModeDetails = ({
             staticErrorMessage={t(errors?.railwayBillNumber?.message, { ns: "errorsText" })}
             errorPosition={ErrorPosition.AFTER_LABEL}
             containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.railwayBillNumber))}
-            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
             hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
           />
         </>
       )}
@@ -95,8 +95,8 @@ export const ArrivalTransportationModeDetails = ({
             staticErrorMessage={t(errors?.vesselName?.message, { ns: "errorsText" })}
             errorPosition={ErrorPosition.AFTER_LABEL}
             containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.vesselName))}
-            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
             hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
@@ -122,8 +122,8 @@ export const ArrivalTransportationModeDetails = ({
             staticErrorMessage={t(errors?.flagState?.message, { ns: "errorsText" })}
             errorPosition={ErrorPosition.AFTER_LABEL}
             containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.flagState))}
-            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
             hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
           />
         </>
       )}
@@ -162,8 +162,8 @@ export const ArrivalTransportationModeDetails = ({
             staticErrorMessage={t(errors?.registrationNumber?.message, { ns: "errorsText" })}
             errorPosition={ErrorPosition.AFTER_LABEL}
             containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.registrationNumber))}
-            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
             hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
           />
         </>
       )}
@@ -196,8 +196,8 @@ export const ArrivalTransportationModeDetails = ({
             staticErrorMessage={t(errors?.airwayBillNumber?.message, { ns: "errorsText" })}
             errorPosition={ErrorPosition.AFTER_LABEL}
             containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.airwayBillNumber))}
-            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
             hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
@@ -222,8 +222,8 @@ export const ArrivalTransportationModeDetails = ({
             staticErrorMessage={t(errors?.flightNumber?.message, { ns: "errorsText" })}
             errorPosition={ErrorPosition.AFTER_LABEL}
             containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.flightNumber))}
-            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
             hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
           />
         </>
       )}
@@ -322,8 +322,8 @@ export const TransportationArrivalDetails = ({
         }}
         errorPosition={ErrorPosition.AFTER_LABEL}
         errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.freightBillNumber)) }}
-        hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
         hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+        hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
       />
       <AutocompleteFormField
         containerClassName={classNames("govuk-form-group govuk-!-width-one-half", {
@@ -384,8 +384,8 @@ export const TransportationArrivalDetails = ({
         staticErrorMessage={t(errors?.departurePort?.message, { ns: "errorsText" })}
         errorPosition={ErrorPosition.AFTER_LABEL}
         containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.departurePort))}
-        hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
         hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+        hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
       />
       <FormInput
         containerClassName="govuk-form-group govuk-!-width-one-half"
@@ -416,14 +416,18 @@ export const TransportationArrivalDetails = ({
         staticErrorMessage={t(errors?.placeOfUnloading?.message, { ns: "errorsText" })}
         errorPosition={ErrorPosition.AFTER_LABEL}
         containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.placeOfUnloading))}
-        hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
         hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+        hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
       />
       <DateFieldWithPicker
         id="departureDate"
         name="departureDate"
         getDateSelected={() => {}}
-        dateSelected={moment(departureDate, ["DD/MM/YYYY", "YYYY-MM-DD", "D/M/YYYY", "YYYY-M-D"]).format("YYYY-MM-DD")}
+        dateSelected={(() => {
+          if (!departureDate || departureDate === "") return undefined;
+          const parsedDate = moment(departureDate, ["DD/MM/YYYY", "YYYY-MM-DD", "D/M/YYYY", "YYYY-M-D"]);
+          return parsedDate.isValid() ? parsedDate.format("YYYY-MM-DD") : undefined;
+        })()}
         errors={errors?.departureDate}
         label={"addTransportationArrivalDetailsDepartureDate"}
         labelStyle={useBoldLabels ? "bold" : "normal"}

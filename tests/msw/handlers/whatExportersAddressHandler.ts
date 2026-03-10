@@ -54,6 +54,20 @@ const whatExportersAddressHandler: ITestHandler = {
       )
     ),
   ],
+  [TestCaseId.CCExporterManualAddressWithAllErrorsArray]: () => [
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+    rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) =>
+      res(
+        ctx.status(200),
+        ctx.json([
+          "error.townCity.string.empty",
+          "error.postcode.string.empty",
+          "error.country.string.empty",
+          "error.addressFirstPart.any.required",
+        ])
+      )
+    ),
+  ],
   [TestCaseId.CCExporterManualAddressWithAddressFirstPartError]: () => [
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) =>

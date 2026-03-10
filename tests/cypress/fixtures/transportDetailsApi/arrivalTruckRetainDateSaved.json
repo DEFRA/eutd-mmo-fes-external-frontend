@@ -1,0 +1,10 @@
+{
+  "vehicle": "truck",
+  "arrival": true,
+  "nationalityOfVehicle": "Ireland",
+  "registrationNumber": "REG456",
+  "departureCountry": "Belgium",
+  "departurePort": "Antwerp",
+  "departureDate": "25/11/2025",
+  "containerNumbers": ["INVALID"]
+}

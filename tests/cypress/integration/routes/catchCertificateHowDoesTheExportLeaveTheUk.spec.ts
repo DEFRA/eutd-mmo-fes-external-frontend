@@ -16,9 +16,11 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/what-export-journey`);
 
-    cy.get(".govuk-fieldset__heading").contains("How does the export leave the UK?");
+    cy.get(".govuk-fieldset__heading").contains("How do you transport the export?");
 
-    cy.get(".govuk-hint").contains("Select a type of transport").should("be.visible");
+    cy.get("#vehicle-hint").contains("Select the type of transport.").should("be.visible");
+
+    cy.get(".govuk-hint").contains("You can add another transport mode later if needed.").should("be.visible");
 
     cy.get("form").should(($form) => {
       expect($form.find("input[type='radio']")).to.have.lengthOf(4);
@@ -144,5 +146,42 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
     cy.contains("a", /^Select how the export leaves the UK$/).should("be.visible");
     cy.contains("span.govuk-visually-hidden", /^Error:$/).should("be.visible");
     cy.get("p.govuk-error-message").contains("Select how the export leaves the UK");
+  });
+
+  it("should display truck guidance text when page renders", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.HowDoesTheExportLeaveNoTransportDetails,
+    };
+
+    cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
+
+    cy.get("#truck-item-hint").should(
+      "contain",
+      "Select truck if your vehicle travels by ferry or through the Eurotunnel."
+    );
+  });
+
+  it("should display expandable guidance section with title and content", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.HowDoesTheExportLeaveNoTransportDetails,
+    };
+
+    cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
+
+    cy.get(".govuk-details__summary-text").should("contain", "Why can I add more than one mode of transport?");
+  });
+
+  it("should expand and display expandable guidance content when clicked", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.HowDoesTheExportLeaveNoTransportDetails,
+    };
+
+    cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
+
+    cy.get(".govuk-details__summary").click();
+    cy.get(".govuk-details__text").should(
+      "contain",
+      "New EU regulations allow you to include more than one mode of transport in your catch certificate. This helps improve traceability when your catch is moved using different types of transport, such as by sea, road, or air."
+    );
   });
 });

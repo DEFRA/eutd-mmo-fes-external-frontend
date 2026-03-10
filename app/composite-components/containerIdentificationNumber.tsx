@@ -1,6 +1,6 @@
 import { FormInput, Button, BUTTON_TYPE, ErrorPosition } from "@capgeminiuk/dcx-react-library";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import classNames from "classnames";
 import isEmpty from "lodash/isEmpty";
 import { getContainerErrorClassName, getContainerInputData, getErrorMessageClassName } from "~/helpers";
@@ -40,6 +40,16 @@ export const ContainerIdentificationNumber = ({
       : [{ id: generateId(), value: "" }]
   );
 
+  // Track which original indices have been removed so we can map display indices to original error keys
+  const [removedIndices, setRemovedIndices] = useState<Set<number>>(new Set());
+
+  // Reset the removed indices when new errors come in (after form submission)
+  useEffect(() => {
+    if (errors && Object.keys(errors).length > 0) {
+      setRemovedIndices(new Set());
+    }
+  }, [errors]);
+
   const handleAddContainer = () => {
     if (containerInputs.length < maximumContainers) {
       setContainerInputs((prev) => [...prev, { id: generateId(), value: "" }]);
@@ -48,8 +58,32 @@ export const ContainerIdentificationNumber = ({
 
   const handleRemoveContainer = (id: string) => {
     if (containerInputs.length > 1) {
+      const index = containerInputs.findIndex((input) => input.id === id);
+
+      // Map current display index to original index
+      const originalIndex = getOriginalIndex(index, removedIndices);
+
       setContainerInputs((prev) => prev.filter((input) => input.id !== id));
+
+      // Track that this original index has been removed
+      const newRemovedIndices = new Set(removedIndices);
+      newRemovedIndices.add(originalIndex);
+      setRemovedIndices(newRemovedIndices);
     }
+  };
+
+  // Helper function to map current display index to original error index
+  const getOriginalIndex = (displayIndex: number, removed: Set<number>): number => {
+    let originalIndex = displayIndex;
+    const sortedRemoved = Array.from(removed).sort((a, b) => a - b);
+
+    for (const removedIdx of sortedRemoved) {
+      if (removedIdx <= originalIndex) {
+        originalIndex++;
+      }
+    }
+
+    return originalIndex;
   };
 
   const handleInputChange = (id: string, value: string) => {
@@ -82,60 +116,65 @@ export const ContainerIdentificationNumber = ({
 
   return (
     <div>
-      {containerInputData.map((input, index) => (
-        <div key={input.id} className="govuk-button-group" style={{ display: "flex", alignItems: "flex-end" }}>
-          <FormInput
-            containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
-            labelClassName={index === 0 ? "govuk-label govuk-!-font-weight-bold" : "govuk-visually-hidden"}
-            label={containerIdentificationLabel}
-            hint={
-              index === 0
-                ? {
-                    id: "hint-containerIdentificationNumber",
-                    position: "above",
-                    text: getHintText(),
-                    className: "govuk-hint govuk-!-margin-bottom-0",
-                  }
-                : undefined
-            }
-            name={`containerNumbers.${index}`}
-            type="text"
-            inputClassName={classNames("govuk-input", {
-              "govuk-input--error": errors?.[`containerNumbers.${index}`],
-            })}
-            inputProps={{
-              value: (isHydrated ? input.value : actionData[`containerNumbers.${index}`] ?? input.value) as string,
-              id: `containerNumbers.${index}`,
-              onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(input.id, e.target.value),
-            }}
-            errorProps={{
-              className: getErrorMessageClassName(!isEmpty(errors?.[`containerNumbers.${index}`])),
-            }}
-            staticErrorMessage={
-              errors?.[`containerNumbers.${index}`]?.message
-                ? t(errors[`containerNumbers.${index}`].message, { ns: "errorsText" })
-                : undefined
-            }
-            errorPosition={ErrorPosition.AFTER_LABEL}
-            containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.[`containerNumbers.${index}`]))}
-            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-            hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-          />
-          {isHydrated && containerInputs.length > 1 && (
-            <Button
-              key={`remove-container-${input.id}`}
-              id={`remove-container-button-${index}`}
-              data-testid={`remove-container-${index}`}
-              label={t("removeContainerButton")}
-              className="govuk-button govuk-button--secondary govuk-!-margin-left-2"
-              type={BUTTON_TYPE.BUTTON}
-              data-module="govuk-button"
-              onClick={() => handleRemoveContainer(input.id)}
-              style={{ top: "15px" }}
+      {containerInputData.map((input, index) => {
+        // Map current display index to original error index to show correct errors after removals
+        const originalIndex = getOriginalIndex(index, removedIndices);
+        const errorKey = `containerNumbers.${originalIndex}`;
+        const hasError = errors?.[errorKey];
+
+        return (
+          <div key={input.id} className="govuk-button-group" style={{ display: "flex", alignItems: "flex-end" }}>
+            <FormInput
+              containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
+              labelClassName={index === 0 ? "govuk-label govuk-!-font-weight-bold" : "govuk-visually-hidden"}
+              label={containerIdentificationLabel}
+              hint={
+                index === 0
+                  ? {
+                      id: "hint-containerIdentificationNumber",
+                      position: "above",
+                      text: getHintText(),
+                      className: "govuk-hint govuk-!-margin-bottom-0",
+                    }
+                  : undefined
+              }
+              name={`containerNumbers.${index}`}
+              type="text"
+              inputClassName={classNames("govuk-input", {
+                "govuk-input--error": hasError,
+              })}
+              inputProps={{
+                value: (isHydrated ? input.value : actionData[errorKey] ?? input.value) as string,
+                id: `containerNumbers.${index}`,
+                onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(input.id, e.target.value),
+              }}
+              errorProps={{
+                className: getErrorMessageClassName(!isEmpty(hasError)),
+              }}
+              staticErrorMessage={
+                hasError && errors[errorKey]?.message ? t(errors[errorKey].message, { ns: "errorsText" }) : undefined
+              }
+              errorPosition={ErrorPosition.AFTER_LABEL}
+              containerClassNameError={getContainerErrorClassName(!isEmpty(hasError))}
+              hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+              hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
             />
-          )}
-        </div>
-      ))}
+            {isHydrated && containerInputs.length > 1 && (
+              <Button
+                key={`remove-container-${input.id}`}
+                id={`remove-container-button-${index}`}
+                data-testid={`remove-container-${index}`}
+                label={t("removeContainerButton")}
+                className="govuk-button govuk-button--secondary govuk-!-margin-left-2"
+                type={BUTTON_TYPE.BUTTON}
+                data-module="govuk-button"
+                onClick={() => handleRemoveContainer(input.id)}
+                style={{ top: "15px" }}
+              />
+            )}
+          </div>
+        );
+      })}
       {isHydrated && containerInputs.length < maximumContainers && (
         <Button
           id="add-container-button"

@@ -38,53 +38,72 @@ const documentNumber = "GBR-2023-SD-DE53D6E7C";
 
 const checkYourInformationSDHandler: ITestHandler = {
   [TestCaseId.SDCheckYourInformationAllFieldsNotProvided]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(checkYourInformationAllFieldsNotProvided))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
   ],
   [TestCaseId.SDCheckYourInformation]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
   ],
   [TestCaseId.SDCheckYourInformationMandatory]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentMandatory))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
   ],
   [TestCaseId.SDCheckYourInformationTrain]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentOneCatches))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
   ],
   [TestCaseId.SDCheckYourInformationPlane]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentNoFacilities))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
   ],
   [TestCaseId.SDCheckYourInformationTruckCmr]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumenOneFacility))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
   ],
   [TestCaseId.SDCheckYourInformationTruckWithContainers]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumenOneFacility))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
   ],
   [TestCaseId.SDCheckYourInformationTrainWithContainers]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentOneCatches))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
   ],
-  [TestCaseId.SDCheckYourInformationValidationSuccess]: () => [
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
-    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
-    rest.post(generatePdf("storageNotes"), (req, res, ctx) =>
-      res(
-        ctx.status(200),
-        ctx.json({
-          documentNumber,
-          uri: "_382462d9-ea63-4125-9e11-bb1bc474d8a1.pdf",
-        })
-      )
-    ),
-    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json(sdCreated))),
-  ],
+  [TestCaseId.SDCheckYourInformationValidationSuccess]: () => {
+    let documentSubmitted = false;
+    return [
+      rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
+      rest.get(mockDocumentUrl, (req, res, ctx) => {
+        if (documentSubmitted) {
+          return res(ctx.json(sdCreated));
+        }
+        return res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }));
+      }),
+      rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+      rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+      rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
+      rest.post(generatePdf("storageNotes"), (req, res, ctx) => {
+        documentSubmitted = true;
+        return res(
+          ctx.status(200),
+          ctx.json({
+            documentNumber,
+            uri: "_382462d9-ea63-4125-9e11-bb1bc474d8a1.pdf",
+          })
+        );
+      }),
+    ];
+  },
   [TestCaseId.SDCheckYourInformationValidationFailure]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
@@ -103,12 +122,17 @@ const checkYourInformationSDHandler: ITestHandler = {
         })
       )
     ),
-    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json(sdCreated))),
   ],
   [TestCaseId.SDCheckYourInformationValidationGuard]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.status(403))),
   ],
+  [TestCaseId.SDCheckYourInformationValidationComplete]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json(sdCreated))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
+  ],
   [TestCaseId.SDCheckYourInformationValidationProgress]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentNoCatches))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
@@ -116,24 +140,28 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
   ],
   [TestCaseId.SDCheckYourInformationTruckEdit]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumenOneFacility))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(truckTransport))),
     rest.post(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
   ],
   [TestCaseId.SDCheckYourInformationPlaneEdit]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentNoFacilities))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(planeTransport))),
     rest.post(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
   ],
   [TestCaseId.SDCheckYourInformationTrainEdit]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentOneCatches))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(trainTransport))),
     rest.post(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
   ],
   [TestCaseId.SDCheckYourInformationContainerVesselEdit]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(containerVesselTransport))),
@@ -141,6 +169,7 @@ const checkYourInformationSDHandler: ITestHandler = {
   ],
   [TestCaseId.SDCheckYourInformationChangeProductNoChange]: () => [
     // Check your information page - need complete progress to avoid redirect
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
@@ -156,6 +185,7 @@ const checkYourInformationSDHandler: ITestHandler = {
     let postCallCount = 0;
     return [
       // Check your information page - need complete progress to avoid redirect
+      rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
       rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
       rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
       rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
@@ -174,6 +204,7 @@ const checkYourInformationSDHandler: ITestHandler = {
   },
   [TestCaseId.SDCheckYourInformationChangeArrivalTransportModeNoChange]: () => [
     // Check your information page - need complete progress to avoid redirect
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
@@ -189,6 +220,7 @@ const checkYourInformationSDHandler: ITestHandler = {
     let postCallCount = 0;
     return [
       // Check your information page - need complete progress to avoid redirect
+      rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
       rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
       rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
       rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
@@ -207,6 +239,7 @@ const checkYourInformationSDHandler: ITestHandler = {
   },
   [TestCaseId.SDCheckYourInformationChangeDepartureTransportModeNoChange]: () => [
     // Check your information page - need complete progress to avoid redirect
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
@@ -223,6 +256,7 @@ const checkYourInformationSDHandler: ITestHandler = {
   ],
   [TestCaseId.SDCheckYourInformationChangeFacilityNoChange]: () => [
     // Check your information page - use complete storageDocument so guard allows access
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),

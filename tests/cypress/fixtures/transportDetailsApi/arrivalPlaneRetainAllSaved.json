@@ -1,0 +1,12 @@
+{
+  "vehicle": "plane",
+  "arrival": true,
+  "airwayBillNumber": "456-78901234",
+  "flightNumber": "BA101",
+  "freightBillNumber": "FR123456",
+  "departureCountry": "Germany",
+  "departurePort": "Frankfurt Airport",
+  "placeOfUnloading": "Heathrow Airport",
+  "departureDate": "20/01/2026",
+  "containerNumbers": ["DEFG2345678"]
+}

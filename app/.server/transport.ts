@@ -195,15 +195,20 @@ const onUpdateTransport = async (response: Response, vehicle: string): Promise<I
 
     case 400:
       const errorsResponse = await response.json();
+      const processedErrors: Record<string, string> = {};
+
+      Object.keys(errorsResponse).forEach((error) => {
+        processedErrors[error] =
+          error === "containerNumber" && vehicle === "plane"
+            ? errorsResponse[error].replaceAll(".containerNumber", ".containerNumber.plane")
+            : errorsResponse[error];
+      });
+
       return {
         vehicle: "undefined",
-        errors: Object.keys(errorsResponse).map((error) => ({
+        errors: Object.keys(processedErrors).map((error) => ({
           key: error,
-          message: getErrorMessage(
-            error === "containerNumber" && vehicle === "plane"
-              ? errorsResponse[error].replaceAll(".containerNumber", ".containerNumber.plane")
-              : errorsResponse[error]
-          ),
+          message: getErrorMessage(processedErrors[error]),
         })),
       };
     case 403:
@@ -344,7 +349,7 @@ export const saveTransportDetails = async (
     {
       documentnumber: documentNumber,
     },
-    { ...payload }
+    { ...payload, isTransportSavedAsDraft: isSaveAsDraft }
   );
   return onSaveTransportDetails(response, payload);
 };
@@ -378,34 +383,34 @@ const onSaveTransportDetails = async (response: Response, payload?: ITransport):
       };
     case 400:
       const errorsResponse = await response.json();
+
+      // Apply transformations to the raw errors
+      Object.keys(errorsResponse).forEach((error) => {
+        if (
+          error.includes("containerNumbers") &&
+          errorsResponse[error] === "error.containerNumbers.array.min" &&
+          payload?.vehicle === "containerVessel"
+        ) {
+          errorsResponse[error] = "error.containerNumbers.containerVessel.array.min";
+        }
+
+        if (errorsResponse[error] === "error.nationalityOfVehicle.any.required") {
+          errorsResponse[error] = "error.nationalityOfVehicle.any.invalid";
+        }
+
+        if (error === "departureDate" && errorsResponse[error] === "error.departureDate.date.format") {
+          const departureDate = payload?.departureDate?.trim();
+          if (!departureDate || /^[\s\-/]*$/.test(departureDate)) {
+            errorsResponse[error] = "error.departureDate.any.required";
+          }
+        }
+      });
+
       return {
-        errors: Object.keys(errorsResponse).map((error) => {
-          if (
-            error.includes("containerNumbers") &&
-            errorsResponse[error] === "error.containerNumbers.array.min" &&
-            payload?.vehicle === "containerVessel"
-          ) {
-            errorsResponse[error] = "error.containerNumbers.containerVessel.array.min";
-          }
-
-          if (errorsResponse[error] === "error.nationalityOfVehicle.any.required") {
-            errorsResponse[error] = "error.nationalityOfVehicle.any.invalid";
-          }
-
-          // Map departure date format error to required error when field is actually empty
-          if (error === "departureDate" && errorsResponse[error] === "error.departureDate.date.format") {
-            const departureDate = payload?.departureDate?.trim();
-            // Check if the field is empty or only contains whitespace or just date separators
-            if (!departureDate || /^[\s\-/]*$/.test(departureDate)) {
-              errorsResponse[error] = "error.departureDate.any.required";
-            }
-          }
-
-          return {
-            key: error,
-            message: getErrorMessage(errorsResponse[error]),
-          };
-        }),
+        errors: Object.keys(errorsResponse).map((error) => ({
+          key: error,
+          message: getErrorMessage(errorsResponse[error]),
+        })),
       };
     case 403:
       return {

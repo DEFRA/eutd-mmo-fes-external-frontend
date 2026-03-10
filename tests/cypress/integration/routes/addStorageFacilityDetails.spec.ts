@@ -23,7 +23,7 @@ describe("Add Storage Facility Address", () => {
       .should(
         "have.attr",
         "href",
-        "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/how-does-the-consignment-arrive-to-the-uk"
+        "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-arrival-transportation-details-plane"
       );
 
     cy.get(".govuk-heading-xl").contains("Add storage facility details");
@@ -177,10 +177,24 @@ describe("Add Storage Facility page when javascript is disabled", () => {
     cy.get(".govuk-error-summary").should("be.visible");
   });
 
+  it("should show error when year 0000 is entered in the date picker", () => {
+    cy.get('input[name="facilityArrivalDateDay"]').clear().type("01");
+    cy.get('input[name="facilityArrivalDateMonth"]').clear().type("01");
+    cy.get('input[name="facilityArrivalDateYear"]').clear().type("0000");
+
+    cy.get("form").within(() => {
+      cy.get('button[name="_action"][value="add-facilityArrivalDate"]').click();
+    });
+
+    cy.contains("Arrival date must be a real date").should("be.visible");
+    cy.get(".govuk-error-summary").should("be.visible");
+  });
+
   describe("Add Storage Facility page save as draft", () => {
     beforeEach(() => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDAddStorageSaveAsDraft,
+        disableScripts: true,
       };
       cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
     });
@@ -192,6 +206,7 @@ describe("Add Storage Facility page when javascript is disabled", () => {
     });
   });
 });
+
 describe("Add Storage Facility Address - Error Both Name and Date", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
@@ -215,5 +230,84 @@ describe("Add Storage Facility Address - Error Both Name and Date", () => {
     cy.contains("h2", "There is a problem").should("be.visible");
     cy.contains("Enter the facility name").should("be.visible");
     cy.contains("Arrival date must be a real date").should("be.visible");
+  });
+});
+
+describe("Add Storage Facility Address - Dynamic Back Link Based on Transport Mode", () => {
+  const documentNumber = "GBR-2022-SD-3FE1169D1";
+
+  it("should have back link to truck transport details page when truck transport is used", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityAddressWithTruckTransport,
+    };
+    cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should(
+        "have.attr",
+        "href",
+        `/create-non-manipulation-document/${documentNumber}/add-arrival-transportation-details-truck`
+      );
+  });
+
+  it("should have back link to train transport details page when train transport is used", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityAddressWithTrainTransport,
+    };
+    cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should(
+        "have.attr",
+        "href",
+        `/create-non-manipulation-document/${documentNumber}/add-arrival-transportation-details-train`
+      );
+  });
+
+  it("should have back link to plane transport details page when plane transport is used", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityAddressWithPlaneTransport,
+    };
+    cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should(
+        "have.attr",
+        "href",
+        `/create-non-manipulation-document/${documentNumber}/add-arrival-transportation-details-plane`
+      );
+  });
+
+  it("should have back link to container vessel transport details page when container vessel transport is used", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityAddressWithContainerVesselTransport,
+    };
+    cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should(
+        "have.attr",
+        "href",
+        `/create-non-manipulation-document/${documentNumber}/add-arrival-transportation-details-container-vessel`
+      );
+  });
+
+  it("should have back link to how-does-consignment-arrive when no arrival transport is set", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityAddressNoArrival,
+    };
+    cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should(
+        "have.attr",
+        "href",
+        `/create-non-manipulation-document/${documentNumber}/how-does-the-consignment-arrive-to-the-uk`
+      );
   });
 });

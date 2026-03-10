@@ -41,7 +41,7 @@ describe("Add Transportation Details Train: Allowed", () => {
         "Shipping container identification number (optional)",
       ]);
       expect(hints).to.deep.eq([
-        "For example, AB12345C. This field is required now to help prepare for new EU regulations coming into force on 10 January 2026",
+        "For example, AB12345C",
         "For example, AA1234567",
         "This is the country the train left before it came to the UK",
         "For example, Calais port, Calais-Dunkerque airport or the place the train started its journey",
@@ -187,7 +187,9 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#freightBillNumber").type("Freight bill", { force: true });
     cy.get("#departureCountry").invoke("val", "Ireland");
     cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
+    cy.get("[data-testid=save-draft-button]").should("be.visible").should("not.be.disabled");
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 

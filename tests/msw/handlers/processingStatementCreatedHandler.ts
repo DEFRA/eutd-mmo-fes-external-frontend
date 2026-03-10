@@ -17,6 +17,12 @@ const psCreatedHandler: ITestHandler = {
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDrafts))),
     rest.get(getCreatedCertificateUrl(documentNumber), (req, res, ctx) => res(ctx.json(empty))),
   ],
+  [TestCaseId.ProcessingStatementPendingPageGuard]: (documentNumber: string) => [
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDrafts))),
+    rest.get(getCreatedCertificateUrl(documentNumber), (req, res, ctx) =>
+      res(ctx.json({ ...psCreated, documentStatus: "PENDING" }))
+    ),
+  ],
 };
 
 export default psCreatedHandler;

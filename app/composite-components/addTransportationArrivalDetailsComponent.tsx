@@ -23,6 +23,7 @@ import {
   getAirwayBillNumber,
   getFlightNumber,
   getPlaceOfUnloading,
+  getErrorKeysInOrderForTransport,
 } from "~/helpers";
 import { TransportationArrivalDetails } from "./transportationArrivalDetails";
 
@@ -36,8 +37,8 @@ export const AddTransportationArrivalDetailsComponent = ({
   actionData,
 }: AddArrivalTransporrtationDetailsProps) => {
   const { t } = useTranslation("transportation");
-  const { errors = {}, day, month, year } = actionData;
-  const departureDateFromAction = getDepartureDateFromAction(day, month, year);
+  const { errors = {}, departureDateDay, departureDateMonth, departureDateYear } = actionData;
+  const departureDateFromAction = getDepartureDateFromAction(departureDateDay, departureDateMonth, departureDateYear);
   const {
     documentNumber,
     vehicle,
@@ -132,7 +133,8 @@ export const AddTransportationArrivalDetailsComponent = ({
       break;
   }
 
-  const errorKeysInOrder = [
+  const transportOrder = getErrorKeysInOrderForTransport(vehicleType, true);
+  const commonOrder = [
     "exportedTo",
     "departurePlace",
     "exportDate",
@@ -140,19 +142,18 @@ export const AddTransportationArrivalDetailsComponent = ({
     "vesselName",
     "flagState",
     "flightNumber",
-    "containerNumbers.0",
-    "containerNumbers.1",
-    "containerNumbers.2",
-    "containerNumbers.3",
-    "containerNumbers.4",
+  ];
+
+  const errorKeysInOrder = [
+    // common keys first (if not already in transport order)
+    ...commonOrder.filter((k) => !transportOrder.includes(k)),
+    // transport-specific ordered keys
+    ...transportOrder,
+    // ensure these appear after transport-specific ordering if still unmatched
     "nationalityOfVehicle",
     "registrationNumber",
-    "railwayBillNumber",
     "freightBillNumber",
-    "departureCountry",
-    "departurePort",
     "placeOfUnloading",
-    "departureDate",
   ];
 
   return (

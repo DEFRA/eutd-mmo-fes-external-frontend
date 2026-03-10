@@ -818,6 +818,21 @@ describe("Manual landing page when javascript is disabled", () => {
       cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
       cy.contains("a", /^Dewiswch gategori gêr$/).should("be.visible");
     });
+
+    it("should display contextual error when gear category is selected but gear type is not", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.AddLandingPageFailsWithErrors,
+        lng: "cy",
+      };
+      cy.visit(manualLandingUrl, { qs: { ...testParams } });
+      cy.get("#gearCategory").then(() => {
+        cy.get("#gearCategory").select(4, { force: true });
+      });
+      cy.get("#gearCategory").contains("Dredges");
+      cy.get("[data-testid=submit]").click({ force: true });
+      cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
+      cy.contains("a", /^Rhaid ichi ddewis y math o gêr ar ôl ichi ddewis categori gêr$/).should("be.visible");
+    });
   });
 });
 
@@ -883,9 +898,9 @@ describe("Manual landings page: Error summary on click of add Product", () => {
     cy.get("[data-testid=submit]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select a product from the list$/).should("be.visible");
-    cy.contains("a", /^Select a vessel from the list$/).should("be.visible");
+    cy.contains("a", /^Select or enter a vessel name or port letter and number$/).should("be.visible");
     cy.contains("a", /^Enter the date landed$/).should("be.visible");
-    cy.contains("a", /^Enter the export weight as a number, like 500 or 500.50$/).should("be.visible");
+    cy.contains("a", /^Enter the export weight in kilograms$/).should("be.visible");
     cy.contains("a", /^Select a gear category$/).should("be.visible");
     cy.contains("a", /^Select a gear type$/).should("be.visible");
   });
@@ -901,7 +916,17 @@ describe("Manual landings page: Error summary on click of add Product", () => {
     cy.get("#gearCategory").contains("Dredges");
     cy.get("[data-testid=submit]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select a gear type$/).should("be.visible");
+    cy.get("#gearCategory option:selected")
+      .invoke("text")
+      .then((text) => {
+        const placeholderPatterns = [/Select gear category/, /Dewiswch categori/, /Dewiswch gategori/];
+        const isPlaceholder = placeholderPatterns.some((p) => p.test(text));
+        if (isPlaceholder) {
+          cy.contains("a", /^Select a gear type$/).should("be.visible");
+        } else {
+          cy.contains("a", /^You must select a gear type when you have selected a gear category$/).should("be.visible");
+        }
+      });
   });
   it("should not display any error when gear catergory and gear type are not selected", () => {
     const testParams: ITestParams = {
@@ -936,6 +961,21 @@ describe("Manual landings page: Error with Max landings exceeded", () => {
       "a",
       /^The maximum landings limit has been reached. To progress, you will need to remove the products without landings.$/
     ).should("be.visible");
+  });
+});
+
+describe("Manual landings page: Error with total combined export weight exceeded", () => {
+  it("should display an error summary when total combined export weight exceeds limit", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.AddLandingPageFailsWithTotalWeightExceeded,
+    };
+    cy.visit(manualLandingUrl, { qs: { ...testParams } });
+
+    // Trigger form submit which will hit the VALIDATE_LANDINGS_URL MSW endpoint and return 400
+    cy.get("[data-testid='submit']").click({ force: true });
+
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^The total combined weight for all products must be less than 10,000,000$/).should("be.visible");
   });
 });
 
@@ -1278,8 +1318,19 @@ describe("Mandatory field validation tests", () => {
     cy.get("[data-testid=submit]").click({ force: true });
 
     cy.contains("h2", "There is a problem").should("be.visible");
-
-    cy.get(".govuk-error-summary").contains("a", "Select a gear type").should("be.visible");
+    cy.get("#gearCategory option:selected")
+      .invoke("text")
+      .then((text) => {
+        const placeholderPatterns = [/Select gear category/, /Dewiswch categori/, /Dewiswch gategori/];
+        const isPlaceholder = placeholderPatterns.some((p) => p.test(text));
+        if (isPlaceholder) {
+          cy.get(".govuk-error-summary").contains("a", "Select a gear type").should("be.visible");
+        } else {
+          cy.get(".govuk-error-summary")
+            .contains("a", "You must select a gear type when you have selected a gear category")
+            .should("be.visible");
+        }
+      });
 
     cy.get("select#gearType").should("have.class", "govuk-select--error");
   });

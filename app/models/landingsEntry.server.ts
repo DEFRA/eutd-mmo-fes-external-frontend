@@ -78,9 +78,6 @@ export const LandingEntryAction = async (request: Request, params: Params): Prom
   const newLanding = form.get("landingsEntry") as LandingEntryType;
   const nextUri = form.get("nextUri") as string;
   const session = await getSessionFromRequest(request);
-  session.unset(`documentNumber-${documentNumber}`);
-  session.unset(`copyDocumentAcknowledged-${documentNumber}`);
-  session.unset(`copyDocument-${documentNumber}`);
 
   const nonDirectLandings: LandingEntryType[] = ["manualEntry", "uploadEntry"];
 

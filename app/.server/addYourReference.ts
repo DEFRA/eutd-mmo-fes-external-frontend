@@ -12,6 +12,7 @@ import {
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { getSessionFromRequest, commitSession } from "~/sessions.server";
 import { route } from "routes-gen";
+import isEmpty from "lodash/isEmpty";
 
 export const addYourReferenceLoader = async (request: Request, params: Params, journey: Journey) => {
   /* istanbul ignore next */
@@ -23,6 +24,8 @@ export const addYourReferenceLoader = async (request: Request, params: Params, j
 
   const { documentNumber } = params;
   const userReference: UserReference = await getUserReference(bearerToken, documentNumber);
+  const url = new URL(request.url);
+  const nextUri = url.searchParams.get("nextUri") ?? "";
 
   validateResponseData(userReference);
 
@@ -42,7 +45,7 @@ export const addYourReferenceLoader = async (request: Request, params: Params, j
       break;
   }
 
-  return new Response(JSON.stringify({ ...userReference, documentNumber, csrf }), {
+  return new Response(JSON.stringify({ ...userReference, documentNumber, csrf, nextUri }), {
     status: 200,
     headers: {
       "Content-Type": "application/json",
@@ -54,12 +57,14 @@ export const addYourReferenceLoader = async (request: Request, params: Params, j
 export const addYourReferenceAction = async (
   request: Request,
   params: Params,
-  saveAsDraftLink: any,
-  successLink: any
+  saveAsDraftLink: string,
+  successLink: string,
+  nextUriLink: string
 ) => {
   const bearerToken = await getBearerTokenForRequest(request);
   const { documentNumber } = params;
   const form = await request.formData();
+  const nextUri = form.get("nextUri") as string;
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
@@ -77,5 +82,5 @@ export const addYourReferenceAction = async (
     return errorResponse as Response;
   }
 
-  return redirect(route(successLink, { documentNumber }));
+  return redirect(route(isEmpty(nextUri) ? successLink : nextUriLink, { documentNumber }));
 };

@@ -154,6 +154,69 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
+  it("should retain all field values including export date when saving as draft with complete data", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportSaveAsDraft,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Fill all fields including export date and container
+    cy.get("#railwayBillNumber").type("RAIL9876", { force: true });
+    cy.get("#departurePlace").type("Channel Tunnel UK Terminal", { force: true });
+    cy.get("#exportDate-day").type("28", { force: true });
+    cy.get("#exportDate-month").type("07", { force: true });
+    cy.get("#exportDate-year").type("2026", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("OPQR5678901", { force: true });
+
+    // Save as draft
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return to the page using CHECK testCaseId (hardcoded saved fixture — immune to double-GET and retry state issues)
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportSaveAsDraftRetainAllValuesCheck,
+    };
+    cy.visit(trainPageUrl, { qs: { ...checkParams } });
+
+    // Verify all values retained
+    cy.get("#railwayBillNumber").should("have.value", "RAIL9876");
+    cy.get("#departurePlace").should("have.value", "Channel Tunnel UK Terminal");
+    cy.get("#exportDate-day").should("have.value", "28");
+    cy.get("#exportDate-month").should("have.value", "07");
+    cy.get("#exportDate-year").should("have.value", "2026");
+    cy.get('input[name="containerNumbers.0"]').should("have.value", "OPQR5678901");
+  });
+
+  it("should retain export date and accept invalid container format when saving as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportSaveAsDraft,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+
+    // Fill with invalid container numbers (would fail validation on save & continue)
+    cy.get("#railwayBillNumber").type("EURO123", { force: true });
+    cy.get("#departurePlace").type("St Pancras International", { force: true });
+    cy.get("#exportDate-day").type("14", { force: true });
+    cy.get("#exportDate-month").type("09", { force: true });
+    cy.get("#exportDate-year").type("2026", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("WRONG", { force: true }); // Invalid format
+
+    // Save as draft should accept invalid containers
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return and verify values retained including invalid containers using CHECK testCaseId
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportSaveAsDraftRetainDateCheck,
+    };
+    cy.visit(trainPageUrl, { qs: { ...checkParams } });
+    cy.get("#exportDate-day").should("have.value", "14");
+    cy.get("#exportDate-month").should("have.value", "09");
+    cy.get("#exportDate-year").should("have.value", "2026");
+    cy.get('input[name="containerNumbers.0"]').should("have.value", "WRONG");
+    cy.get('input[name="containerNumbers.1"]').should("have.value", "A");
+  });
+
   it("should navigate to departure summary page on click of save and continue button", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,
@@ -197,7 +260,7 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
     cy.contains("h2", "There is a problem").should("be.visible");
   });
 
-  it("should show error when a container identification number exceeds 50 characters", () => {
+  it("should show format error when a container identification number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainSaveMaxCharsContainerIdentificationNumber,
     };

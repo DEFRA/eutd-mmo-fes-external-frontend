@@ -14,6 +14,10 @@ import storageDocumentFacilityOne from "@/fixtures/storageDocumentApi/storageDoc
 import storageDocumentNoFacilities from "@/fixtures/storageDocumentApi/storageDocumentNoFacilities.json";
 import storageDocumentNoCatches from "@/fixtures/storageDocumentApi/storageDocumentNoCatches.json";
 import storageDocumentNoDepatureDate from "@/fixtures/storageDocumentApi/storageDocumentNoDepartureDate.json";
+import storageDocumentWithTruckArrival from "@/fixtures/storageDocumentApi/storageDocumentWithTruckArrival.json";
+import storageDocumentWithTrainArrival from "@/fixtures/storageDocumentApi/storageDocumentWithTrainArrival.json";
+import storageDocumentWithPlaneArrival from "@/fixtures/storageDocumentApi/storageDocumentWithPlaneArrival.json";
+import storageDocumentWithContainerVesselArrival from "@/fixtures/storageDocumentApi/storageDocumentWithContainerVesselArrival.json";
 import storageDocuments from "@/fixtures/dashboardApi/sdDrafts.json";
 import storageDocumentProgress from "@/fixtures/progressApi/sdIncomplete.json";
 import truckDetails from "@/fixtures/transportDetailsApi/truck.json";
@@ -51,6 +55,26 @@ const addStorageFacilityHandler: ITestHandler = {
   ],
   [TestCaseId.SDAddStorageFacilityAddressForbidden]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.status(403), ctx.json(storageDocument))),
+  ],
+  [TestCaseId.SDAddStorageFacilityAddressWithTruckTransport]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentWithTruckArrival))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+  ],
+  [TestCaseId.SDAddStorageFacilityAddressWithTrainTransport]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentWithTrainArrival))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+  ],
+  [TestCaseId.SDAddStorageFacilityAddressWithPlaneTransport]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentWithPlaneArrival))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+  ],
+  [TestCaseId.SDAddStorageFacilityAddressWithContainerVesselTransport]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentWithContainerVesselArrival))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
   ],
   [TestCaseId.SDAddStorageFacilityNameAddressError]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentNoFacilities))),

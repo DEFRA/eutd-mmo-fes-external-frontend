@@ -70,10 +70,14 @@ export const AddExclusiveEconomicZoneComponent = ({
     setExclusiveEconomicZones((prev) => [...prev, `zone-${exclusiveEconomicZones.length + 1}`]);
   };
 
-  const handleRemoveLastZone = (index: number) => {
-    setExclusiveEconomicZones((prev) => [...prev.slice(0, -1)]);
-    const updatedSelectedZones = { ...selectedExclusiveEconomicZones };
-    delete updatedSelectedZones[`zone-${index + 1}`];
+  const handleRemoveZone = (index: number) => {
+    const updatedZones = exclusiveEconomicZones.filter((_, i) => i !== index);
+    const renumberedZones = updatedZones.map((_, i) => `zone-${i + 1}`);
+    const updatedSelectedZones: { [key: string]: string } = {};
+    updatedZones.forEach((zone, i) => {
+      updatedSelectedZones[`zone-${i + 1}`] = selectedExclusiveEconomicZones[zone] || "";
+    });
+    setExclusiveEconomicZones(renumberedZones);
     setSelectedExclusiveEconomicZones(updatedSelectedZones);
   };
 
@@ -95,14 +99,15 @@ export const AddExclusiveEconomicZoneComponent = ({
       value={id}
       data-testid={`${buttonValue}-${id}`}
       {...(id === "remove-zone-button" && { style: { top: "15px" } })}
-      onClick={() => onClick(index)} // PLEASE REMOVE THIS AS IT WILL NOT WORK IN NO-JS
+      onClick={(e: React.MouseEvent) => {
+        e.preventDefault();
+        onClick(index);
+      }} // PLEASE REMOVE THIS AS IT WILL NOT WORK IN NO-JS
     />
   );
 
   const showRemoveZoneButton = (exclusiveZones: string[], index: number) =>
-    index === exclusiveZones.length - 1 && exclusiveZones.length > 1
-      ? showButton("remove-zone-button", index, handleRemoveLastZone, removeButtonText)
-      : null;
+    exclusiveZones.length > 1 ? showButton("remove-zone-button", index, handleRemoveZone, removeButtonText) : null;
 
   // Get error for a specific index
   const getErrorForIndex = (index: number): IError | undefined => {
@@ -128,7 +133,10 @@ export const AddExclusiveEconomicZoneComponent = ({
             >
               <AutocompleteFormField
                 containerClassName={classNames("govuk-!-width-one-half govuk-!-margin-right-3")}
-                options={[...availableExclusiveEconomicZones.map((c: ICountry) => c.officialCountryName)]}
+                options={[
+                  eezSelectEmptyHeader,
+                  ...availableExclusiveEconomicZones.map((c: ICountry) => c.officialCountryName),
+                ]}
                 optionsId="eez-option"
                 errorMessageText={
                   errorForIndex ? t(errorForIndex.message, { ns: "errorsText", ...(errorForIndex.value ?? {}) }) : ""

@@ -162,6 +162,72 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
+  it("should retain all field values including export date when saving as draft with complete data", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveAsDraftRetainAllValues,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+
+    // Fill all fields including export date and container
+    // cy.get("#nationalityOfVehicle").type("Belgium", { force: true });
+    cy.get("#registrationNumber").clear({ force: true }).type("DEP789", { force: true });
+    cy.get("#departurePlace").clear({ force: true }).type("Southampton Port", { force: true });
+    cy.get("#exportDate-day").clear({ force: true }).type("10", { force: true });
+    cy.get("#exportDate-month").clear({ force: true }).type("02", { force: true });
+    cy.get("#exportDate-year").clear({ force: true }).type("2026", { force: true });
+    cy.get('input[name="containerNumbers.0"]').clear({ force: true }).type("GHIJ3456789", { force: true });
+
+    // Save as draft
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return to the page using CHECK testCaseId (hardcoded saved fixture — immune to double-GET and retry state issues)
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveAsDraftRetainAllValuesCheck,
+    };
+    cy.visit(truckPageUrl, { qs: { ...checkParams } });
+
+    // Verify all values retained
+    cy.get("#nationalityOfVehicle").should("have.value", "Belgium");
+    cy.get("#registrationNumber").should("have.value", "DEP789");
+    cy.get("#departurePlace").should("have.value", "Southampton Port");
+    cy.get("#exportDate-day").should("have.value", "10");
+    cy.get("#exportDate-month").should("have.value", "02");
+    cy.get("#exportDate-year").should("have.value", "2026");
+    cy.get('input[name="containerNumbers.0"]').should("have.value", "GHIJ3456789");
+  });
+
+  it("should retain export date and accept invalid container format when saving as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveAsDraftRetainDate,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+
+    // Fill with invalid container number (would fail validation on save & continue)
+    cy.get("#nationalityOfVehicle").type("Netherlands", { force: true });
+    cy.get("#registrationNumber").clear({ force: true }).type("NL999", { force: true });
+    cy.get("#departurePlace").clear({ force: true }).type("Rotterdam", { force: true });
+    cy.get("#exportDate-day").clear({ force: true }).type("31", { force: true });
+    cy.get("#exportDate-month").clear({ force: true }).type("12", { force: true });
+    cy.get("#exportDate-year").clear({ force: true }).type("2025", { force: true });
+    cy.get('input[name="containerNumbers.0"]').clear({ force: true }).type("BAD-FORMAT", { force: true }); // Save-as-draft accepts invalid container format
+
+    // Save as draft should accept invalid containers
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return and verify values retained including invalid containers using CHECK testCaseId
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveAsDraftRetainDateCheck,
+    };
+    cy.visit(truckPageUrl, { qs: { ...checkParams } });
+    cy.get("#exportDate-day").should("have.value", "31");
+    cy.get("#exportDate-month").should("have.value", "12");
+    cy.get("#exportDate-year").should("have.value", "2025");
+    cy.get('input[name="containerNumbers.0"]').should("have.value", "BAD-FORMAT");
+    cy.get('input[name="containerNumbers.1"]').should("have.value", "X");
+  });
+
   it("should navigate to departure summary page on click of save and continue button", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSave,
@@ -206,7 +272,7 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
     cy.contains("h2", "There is a problem").should("be.visible");
   });
 
-  it("should show error when a container identification number exceeds 50 characters", () => {
+  it("should show format error when a container identification number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckSaveMaxCharsContainerIdentificationNumber,
     };
@@ -328,5 +394,61 @@ describe("AutocompleteFormField: minCharsBeforeSearch validation", () => {
         cy.get('[role="listbox"]').should("be.visible");
       });
     });
+  });
+});
+
+// FI0-10061: Welsh error messages for departure port field
+describe("Add Transportation Details Truck: Welsh translations for departure port errors", () => {
+  it("should display Welsh error message when departure port exceeds 50 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveMaxCharsDeparturePort,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams, lng: "cy" } });
+    const longString = new Array(52).join("a");
+    cy.get("#departurePlace").type(longString, { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
+    cy.contains("a", /^Rhaid i O ble mae'r lori’n ymadael fod yn llai na 50 o nodau$/).should("be.visible");
+    cy.get(".govuk-error-message").should(
+      "contain.text",
+      "Rhaid i O ble mae'r lori’n ymadael fod yn llai na 50 o nodau"
+    );
+  });
+
+  it("should display Welsh error message when departure port contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveInvalidCharsDeparturePort,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams, lng: "cy" } });
+    cy.get("#departurePlace").type("Invalid@#$%", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Rhaid i O ble mae'r lori’n ymadael gynnwys llythrennau, rhifau, collnodau, cysylltnodau a bylchau yn unig$/
+    ).should("be.visible");
+    cy.get(".govuk-error-message").should(
+      "contain.text",
+      "Rhaid i O ble mae'r lori’n ymadael gynnwys llythrennau, rhifau, collnodau, cysylltnodau a bylchau yn unig"
+    );
+  });
+});
+
+describe("Add Transportation Details Truck: Invalid year in export date", () => {
+  it("should display error when year 0000 is entered in the export date picker", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveInvalidYearExportDate,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get("#nationalityOfVehicle").type("France", { force: true });
+    cy.get("#registrationNumber").type("AB12 3CD", { force: true });
+    cy.get("#departurePlace").type("Dover port", { force: true });
+    cy.get("#exportDate-day").clear().type("01", { force: true });
+    cy.get("#exportDate-month").clear().type("01", { force: true });
+    cy.get("#exportDate-year").clear().type("0000", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.wait(250);
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Export date must be a real date$/).should("be.visible");
   });
 });

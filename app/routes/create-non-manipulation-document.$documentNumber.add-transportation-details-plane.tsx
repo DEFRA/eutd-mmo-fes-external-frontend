@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
-
 import { useEffect } from "react";
 import { route } from "routes-gen";
 import type { ICountry, ITransport, IUnauthorised, Journey, StorageDocument } from "~/types";
@@ -22,19 +21,33 @@ import { useScrollOnPageLoad } from "~/hooks";
 import { AddTransportationDetailsComponent } from "~/composite-components";
 import moment from "moment";
 
+const isDepartureTransportation = false;
 export const loader: LoaderFunction = async ({ request, params }) =>
-  await TransportationDetailsLoaderFunction(request, params, TransportType.PLANE, "storageNotes");
+  await TransportationDetailsLoaderFunction(
+    request,
+    params,
+    TransportType.PLANE,
+    "storageNotes",
+    isDepartureTransportation
+  );
 
 export const action: ActionFunction = async ({ request, params }) => {
   const bearerToken = await getBearerTokenForRequest(request);
   const { documentNumber } = params;
   const journey: Journey = "storageNotes";
-  const transport: ITransport = await getTransportDetails(bearerToken, journey, documentNumber);
+  const transport: ITransport = await getTransportDetails(
+    bearerToken,
+    journey,
+    documentNumber,
+    isDepartureTransportation
+  );
   const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
 
   const form = await request.formData();
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
+
+  const saveAsDraft = form.get("_action") === "saveAsDraft";
   const consignmentDestination = form.get("exportedTo") as string;
   const pointOfDestination = form.get("pointOfDestination") as string;
   const nextUri = form.get("nextUri") as string;
@@ -55,8 +68,8 @@ export const action: ActionFunction = async ({ request, params }) => {
     pointOfDestination,
     departurePlace: form.get("departurePlace") as string,
     flightNumber: form.get("flightNumber") as string,
-    airwayBillNumber: handleFormEmptyStringValue(form, "airwayBillNumber"),
-    freightBillNumber: handleFormEmptyStringValue(form, "freightBillNumber"),
+    airwayBillNumber: handleFormEmptyStringValue(form, "airwayBillNumber", saveAsDraft),
+    freightBillNumber: handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft),
     containerNumbers,
     exportDate: calculateExportDate(form),
     exportDateTo: moment().startOf("day").add(1, "day").toISOString(),
@@ -64,7 +77,9 @@ export const action: ActionFunction = async ({ request, params }) => {
     journey: transport.journey,
     vehicle: transport.vehicle,
     currentUri,
+    nextUri: route("/create-non-manipulation-document/:documentNumber/progress", { documentNumber }),
     facilityArrivalDate: "facilityArrivalDate" in storageDocument ? storageDocument.facilityArrivalDate : undefined,
+    arrival: isDepartureTransportation,
   };
 
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);

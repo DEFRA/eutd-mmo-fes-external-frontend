@@ -7,7 +7,8 @@ import { route } from "routes-gen";
 import { displayErrorMessages, Page } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
 import { ButtonGroup } from "./buttonGroup";
-import { useScrollOnPageLoad } from "~/hooks";
+import { useScrollOnPageLoad, useIsHydrated } from "~/hooks";
+import { useState } from "react";
 
 type loaderDataProps = {
   documentNumber: string;
@@ -18,7 +19,10 @@ type loaderDataProps = {
 };
 
 type howDoesTransportTakesPlaceInTheUkFormProps = {
-  type: Page.HowDoesTheConsignmentArriveAToTheUk | Page.HowDoesTheExportLeaveTheUk | Page.StorageDocumentHowDoesTheExportLeaveTheUk;
+  type:
+    | Page.HowDoesTheConsignmentArriveAToTheUk
+    | Page.HowDoesTheExportLeaveTheUk
+    | Page.StorageDocumentHowDoesTheExportLeaveTheUk;
   backUrl:
     | "/create-non-manipulation-document/:documentNumber/add-storage-facility-approval"
     | "/create-non-manipulation-document/:documentNumber/add-product-to-this-consignment"
@@ -34,28 +38,36 @@ export const HowDoesTransportTakesPlaceInTheUkSubComponent = ({
   type: howDoesTransportTakesPlaceInTheUkFormProps["type"];
   errors: any;
   t: any;
-}) => (
-  <>
-    <legend className="govuk-fieldset_legend govuk-fieldset__legend--xl">
-      <h1 className="govuk-fieldset__heading">
-        {t(
-          `${type === Page.HowDoesTheExportLeaveTheUk || type === Page.StorageDocumentHowDoesTheExportLeaveTheUk ? "transportSelectionPageTitle" : "arrivalTransportSelectionPageTitle"}`,
-          { ns: "transportation" }
-        )}
-      </h1>
-    </legend>
-    <div id="vehicle-hint" className="govuk-hint">
-      {t("transportSelectionSelectTypeTransportLabel", { ns: "transportation" })}
-    </div>
-    {!isEmpty(errors) && (
-      <ErrorMessage
-        id="vehicle-error"
-        text={t(errors.vehicle.message, { ns: "errorsText" })}
-        visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
-      />
-    )}
-  </>
-);
+}) => {
+  const getPageTitleKey = () => {
+    if (type === Page.StorageDocumentHowDoesTheExportLeaveTheUk) {
+      return "sdTransportSelectionPageTitle";
+    }
+    return type === Page.HowDoesTheExportLeaveTheUk
+      ? "transportSelectionPageTitle"
+      : "arrivalTransportSelectionPageTitle";
+  };
+
+  return (
+    <>
+      <legend className="govuk-fieldset_legend govuk-fieldset__legend--xl">
+        <h1 className="govuk-fieldset__heading">{t(getPageTitleKey(), { ns: "transportation" })}</h1>
+      </legend>
+      <div id="vehicle-hint" className="govuk-body govuk-!-font-weight-bold">
+        {type === Page.StorageDocumentHowDoesTheExportLeaveTheUk
+          ? t("sdTransportSelectionSelectTypeTransportLabel", { ns: "transportation" })
+          : t("transportSelectionSelectTypeTransportLabel", { ns: "transportation" })}
+      </div>
+      {!isEmpty(errors) && (
+        <ErrorMessage
+          id="vehicle-error"
+          text={t(errors.vehicle.message, { ns: "errorsText" })}
+          visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+        />
+      )}
+    </>
+  );
+};
 
 export const HowDoesTransportTakesPlaceInTheUkForm = ({
   type,
@@ -66,6 +78,8 @@ export const HowDoesTransportTakesPlaceInTheUkForm = ({
   const actionData = useActionData<{ errors: any }>() ?? {};
   const { errors = {} } = actionData;
   const { t } = useTranslation(["common", "transportation", "errorsText"]);
+  const [isExpandedGuidance, setIsExpandedGuidance] = useState(false);
+  const isHydrated = useIsHydrated();
 
   useScrollOnPageLoad();
 
@@ -103,10 +117,37 @@ export const HowDoesTransportTakesPlaceInTheUkForm = ({
                         {t("arrivalTransportTruckHint", { ns: "transportation" })}
                       </div>
                     )}
+                    {type === Page.StorageDocumentHowDoesTheExportLeaveTheUk && transportOption.value === "truck" && (
+                      <div id="truck-item-hint" className="govuk-hint govuk-radios__hint">
+                        {t("transportSelectionTruckGuidance", { ns: "transportation" })}
+                      </div>
+                    )}
                   </div>
-                ))}
+                ))}{" "}
               </fieldset>
             </div>
+            {type === Page.StorageDocumentHowDoesTheExportLeaveTheUk && (
+              <details className="govuk-details" open={isHydrated ? isExpandedGuidance : undefined}>
+                <summary
+                  className="govuk-details__summary"
+                  onClick={
+                    isHydrated
+                      ? (e) => {
+                          e.preventDefault();
+                          setIsExpandedGuidance(!isExpandedGuidance);
+                        }
+                      : undefined
+                  }
+                >
+                  <span className="govuk-details__summary-text">
+                    {t("transportSelectionExpandableTitle", { ns: "transportation" })}
+                  </span>
+                </summary>
+                <div className="govuk-details__text">
+                  {t("transportSelectionExpandableContent", { ns: "transportation" })}
+                </div>
+              </details>
+            )}
             <ButtonGroup />
             <input type="hidden" name="journey" value={journey} />
             <input type="hidden" name="nextUri" value={nextUri} />

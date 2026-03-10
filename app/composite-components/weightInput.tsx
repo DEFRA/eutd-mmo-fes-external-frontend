@@ -59,8 +59,8 @@ export const WeightInput = ({
     <div
       className={
         errors && !isEmpty(errors[inputId])
-          ? "govuk-form-group govuk-!-static-margin-top-0 govuk-!-static-margin-bottom-3 govuk-form-group--error"
-          : "govuk-form-group govuk-!-static-margin-top-0 govuk-!-static-margin-bottom-3"
+          ? "govuk-form-group govuk-!-static-margin-top-0 govuk-!-static-margin-bottom-3 govuk-!-static govuk-form-group--error"
+          : "govuk-form-group govuk-!-static-margin-top-0 govuk-!-static-margin-bottom-3 govuk-!-static"
       }
     >
       {label && hint && (
@@ -81,8 +81,8 @@ export const WeightInput = ({
         <input
           className={
             !isEmpty(errors?.[inputId])
-              ? `govuk-input  ${inputWidthClass} govuk-input--error`
-              : `govuk-input  ${inputWidthClass}`
+              ? `govuk-input govuk-!-static-margin-left-3 ${inputWidthClass} govuk-input--error`
+              : `govuk-input govuk-!-static-margin-left-3 ${inputWidthClass}`
           }
           id={inputId}
           name={inputName ?? `weight-${speciesId}`}

@@ -77,10 +77,11 @@ const onValidateDirectLandingsResponse = async (
   response: Response
 ): Promise<IDirectLandingsResponse | IError[] | IUnauthorised> => {
   switch (response.status) {
-    case 200:
+    case 200: {
       const res = await response.text();
       return JSON.parse(res);
-    case 400:
+    }
+    case 400: {
       const errorResponse = await response.json();
       const formatErrors = transformAllErrors(
         errorResponse.errors,
@@ -107,6 +108,7 @@ const onValidateDirectLandingsResponse = async (
               }
         );
       return errorsFormat;
+    }
     case 403:
       return {
         unauthorised: true,
@@ -175,11 +177,33 @@ const transformError = (
         params: [product.species.label, product.state.label, product.presentation.label, product.commodityCode],
       },
     };
-  } else {
+  } else if (errorKey === "gearType") {
+    const landingWithError = products.errors;
+    let gearCategory, gearType;
+    if (landingWithError && typeof landingWithError === "object") {
+      // @ts-ignore
+      gearCategory = (landingWithError as any).gearCategory;
+      // @ts-ignore
+      gearType = (landingWithError as any).gearType;
+    }
+    let messageKey;
+    if (!gearCategory && gearType) {
+      messageKey = "ccAddLandingGearTypeEmptyWithCategoryError";
+    } else if (gearCategory && gearType) {
+      messageKey = "ccAddLandingGearTypeEmptyError";
+    } else {
+      messageKey = errors[errorKey];
+    }
     return {
-      [errorKey]: errors[errorKey],
+      [errorKey]: {
+        key: messageKey,
+      },
     };
   }
+
+  return {
+    [errorKey]: errors[errorKey],
+  };
 };
 
 export const getRfmos = async (): Promise<string[]> => {

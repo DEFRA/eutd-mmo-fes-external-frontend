@@ -96,9 +96,13 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
   if (hasActionExecuted) {
     session.unset("actionExecuted");
     const hasLandingExecuted = session.get("landingExecuted");
-    if (hasLandingExecuted) {
-      session.set("hasLandingError", false);
+    const hasLandingError = session.get("hasLandingError");
+    if (hasLandingExecuted && !hasLandingError) {
+      // Only clear session data if landing was successful (no errors)
       session.set("selectedWeight", "");
+      session.set("landingExecuted", false);
+    } else if (hasLandingExecuted && hasLandingError) {
+      // If there were errors, just clear the execution flag but keep the data
       session.set("landingExecuted", false);
     }
     selectedStartDate = getSessionData(session, "selectedStartDate");
@@ -136,6 +140,7 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
     selectedExclusiveEconomicZones = landing?.exclusiveEconomicZones?.map((item) => item.officialCountryName) ?? [];
     nextUri = url.searchParams.get("nextUri") ?? "";
   } else {
+    selectedProduct = getSessionData(session, "selectedProduct");
     clearSession(session, "add-landings");
   }
 
@@ -154,7 +159,7 @@ export const AddLandingsLoader = async (request: Request, params: Params): Promi
       landingLimitDaysInFuture,
       offlineValidationTime,
       maxAddLandingsLimit,
-      maximumEezPerLanding: parseInt(maximumEezPerLanding, 10),
+      maximumEezPerLanding: Number.parseInt(maximumEezPerLanding, 10),
       landingsData,
       vesselsNoJs: isValidDate(selectedDate, ["YYYY-M-D", "YYYY-MM-DD"])
         ? await getVesselsNoJs(selectedDate)
@@ -218,7 +223,6 @@ const addLandingAction = async (
     gearType,
     rfmo,
   } = values;
-
   const isDateLandedProvided = Boolean(dateLandedDay || dateLandedMonth || dateLandedYear);
   let selectedDate: string | undefined;
   if (isDateLandedProvided) {
@@ -241,27 +245,31 @@ const addLandingAction = async (
   }
 
   let selectedVessel: IVessel | undefined;
-  if (isDateLandedValid) {
-    selectedVessel = await getVesselDetails(
-      vessel as string,
-      selectedDate as string,
-      bearerToken,
-      documentNumber,
-      product as string,
-      landingId as string
-    );
-    if (!selectedVessel) {
-      return redirect(route("/forbidden"));
+
+  // Only fetch vessel details if vessel field is not empty
+  if (!isEmpty(vessel as string)) {
+    if (isDateLandedValid) {
+      selectedVessel = await getVesselDetails(
+        vessel as string,
+        selectedDate as string,
+        bearerToken,
+        documentNumber,
+        product as string,
+        landingId as string
+      );
+    } else {
+      selectedVessel = await getVesselDetails(
+        vessel as string,
+        moment().format("YYYY-MM-DD"),
+        bearerToken,
+        documentNumber,
+        product as string,
+        landingId as string
+      );
     }
-  } else {
-    selectedVessel = await getVesselDetails(
-      vessel as string,
-      moment().format("YYYY-MM-DD"),
-      bearerToken,
-      documentNumber,
-      product as string,
-      landingId as string
-    );
+
+    // API will return error.vessel.string.base = "Select a vessel from the list"
+    selectedVessel ??= { vesselName: String(vessel) };
   }
 
   const selectedRfmo = isEmpty(rfmo) ? undefined : (rfmo as string);
@@ -291,7 +299,13 @@ const addLandingAction = async (
     },
     selectedRfmo,
     selectedVessel,
-    exclusiveEconomicZones
+    exclusiveEconomicZones,
+    // forward frontend-calculated totals (if provided by form hidden inputs)
+    {
+      totalExportWeight: (values as any).totalExportWeight as string | undefined,
+      totalCombinedExportWeight: (values as any).totalCombinedExportWeight as string | undefined,
+      existingLandingWeight: (values as any).existingLandingWeight as string | undefined,
+    }
   );
 
   if (instanceOfUnauthorisedWithSupportId(response)) {
@@ -303,11 +317,35 @@ const addLandingAction = async (
   if (Array.isArray(response.errors) && response.errors.length > 0) {
     session.set("hasLandingError", true);
 
+    // Save form state to session so loader can repopulate lists (vessels, gear types)
+    session.set("selectedStartDate", selectedStartDate);
+    session.set("selectedDate", selectedDate);
+    session.set("selectedProduct", product as string);
+    session.set("selectedFaoArea", faoArea as string);
+    session.set("selectedHighSeasArea", highSeasArea as string);
+    session.set("selectedWeight", weight as string);
+    session.set("selectedVessel", vessel as string);
+    session.set("gearCategory", gearCategory as string);
+    session.set("gearType", gearType as string);
+    session.set("selectedRfmo", selectedRfmo);
+    const eezValues = Object.entries(values)
+      .filter(([key]) => key.startsWith("eez"))
+      .map(([, value]) => value as string);
+    session.set("selectedExclusiveEconomicZones", eezValues);
+
+    // Load lists for non-JS mode (since loader won't run again on error response)
+    const vesselsNoJs = isValidDate(selectedDate, ["YYYY-M-D", "YYYY-MM-DD"])
+      ? await getVesselsNoJs(selectedDate as string)
+      : undefined;
+    const availableGearTypes = gearCategory ? await getAllGearTypesByCategory(gearCategory as string) : undefined;
+
     const errors = getTransformedError(response.errors);
     return new Response(
       JSON.stringify({
         errors,
         groupedErrorIds: getGroupedAddLandingErrorFieldIds(errors),
+        vesselsNoJs,
+        availableGearTypes,
         ...values,
       }),
       {
@@ -408,15 +446,15 @@ const getVesselDetails = async (
   const pln = String(vessel).endsWith(")") ? getCodeFromLabel(vessel) : vessel;
   const vessels: IVessel[] = !isEmpty(pln) ? await getVessels(pln.toString(), date) : [];
   const selectedVessel: IVessel | undefined = vessels.find((_: IVessel) => _.pln === pln);
-
   if (selectedVessel) {
     selectedVessel.label = vessel;
     selectedVessel.domId = vessel.replace(" (", "-").replace(")", "");
     return selectedVessel;
   }
   const exportPayload: ProductsLanded | IUnauthorised = await getExportPayload(bearerToken, documentNumber);
-  if (instanceOfUnauthorised(exportPayload)) return undefined;
-
+  if (instanceOfUnauthorised(exportPayload)) {
+    return undefined;
+  }
   const landingResponse: Landing | undefined = getLandingData(exportPayload, product, landingId);
   return buildPreviousVessel(landingResponse);
 };

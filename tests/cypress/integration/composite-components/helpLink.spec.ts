@@ -99,7 +99,7 @@ describe("HelpSection", () => {
     cy.get(".govuk-heading-l").should("contain.text", "Cael help gyda'ch cais");
     cy.get("[data-test-id=get-help-body]").should(
       "contain.text",
-      "Os oes gennych rif cyfeirnod unigryw catch certificate, gofalwch fod hwnnw gennych pan fyddwch chi'n ffonio."
+      "Os oes gennych rif cyfeirnod unigryw tystysgrif dalfa, gofalwch fod hwnnw gennych pan fyddwch chi'n ffonio."
     );
     cy.get("[data-test-id=get-help-phone]").should("contain.text", "Ffôn: 0330 159 1989");
     cy.get("[data-test-id=get-help-hours]").should(

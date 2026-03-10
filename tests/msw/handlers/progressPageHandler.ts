@@ -41,6 +41,7 @@ import processingStatementMixedProducts from "@/fixtures/processingStatementApi/
 import processingStatementValidProducts from "@/fixtures/processingStatementApi/processingStatementValidProducts.json";
 import exporterDetails from "@/fixtures/addExporterDetails/exporterDetails.json";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
+import storageDocumentNoCatches from "@/fixtures/storageDocumentApi/storageDocumentNoCatches.json";
 import sdDocuments from "@/fixtures/dashboardApi/sdDocument.json";
 import transportations from "@/fixtures/transportationApi/transportations.json";
 
@@ -133,6 +134,14 @@ const progressPageHandler: ITestHandler = {
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
     rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(400), ctx.json(sdCheckProgressError))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentNoCatches))),
+  ],
+  [TestCaseId.SDIncompleteProgressWithProducts]: () => [
+    rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
+    rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(400), ctx.json(sdCheckProgressError))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
   [TestCaseId.SDCompleteProgress]: () => [
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
@@ -145,10 +154,12 @@ const progressPageHandler: ITestHandler = {
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(planeTransportDetails))),
     rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(403), ctx.json({}))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
   [TestCaseId.SDCompleteTruckProgress]: () => [
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(truckTransportDetails))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
   [TestCaseId.SDCompleteTruckCMRProgress]: () => [
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
@@ -160,14 +171,17 @@ const progressPageHandler: ITestHandler = {
         })
       )
     ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
   [TestCaseId.SDCompleteTrainProgress]: () => [
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(trainTransportDetails))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
   [TestCaseId.SDCompleteContainerVesselProgress]: () => [
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(containerVesselTransportDetails))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
 };
 

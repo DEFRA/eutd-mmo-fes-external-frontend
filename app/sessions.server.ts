@@ -36,7 +36,13 @@ function clearSession(session: Session<SessionData, SessionData>, uri?: URI) {
       session.unset("selectedVessel");
       session.unset("landingId");
       session.unset("editLanding");
+      session.unset("selectedHighSeasArea");
+      session.unset("gearCategory");
+      session.unset("gearType");
+      session.unset("selectedRfmo");
+      session.unset("selectedExclusiveEconomicZones");
       break;
+
     default:
       session.unset("species");
       session.unset("state");
@@ -52,6 +58,11 @@ function clearSession(session: Session<SessionData, SessionData>, uri?: URI) {
       session.unset("selectedVessel");
       session.unset("landingId");
       session.unset("editLanding");
+      session.unset("selectedHighSeasArea");
+      session.unset("gearCategory");
+      session.unset("gearType");
+      session.unset("selectedRfmo");
+      session.unset("selectedExclusiveEconomicZones");
       session.unset("addAnotherDocument");
   }
 }

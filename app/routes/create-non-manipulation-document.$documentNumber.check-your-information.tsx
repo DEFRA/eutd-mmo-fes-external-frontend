@@ -11,6 +11,7 @@ import { formatAddress } from "~/components";
 import {
   createCSRFToken,
   getBearerTokenForRequest,
+  getCompletedDocument,
   getExporterDetailsFromMongo,
   getStorageDocument,
   hasRequiredDataStorageDocumentSummary,
@@ -55,6 +56,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const session = await getSessionFromRequest(request);
   const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
+  const completedDocument = await getCompletedDocument(bearerToken, documentNumber);
+  if (completedDocument?.documentStatus === "COMPLETE") {
+    return redirect(`/create-non-manipulation-document/non-manipulation-documents`);
+  }
   const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
 
   if (instanceOfUnauthorised(storageDocument)) {
@@ -128,12 +133,19 @@ const CheckYourInformation = () => {
       notificationMessages={notificationMessages}
       hasErrors={hasErrors}
       errors={errors}
-      backUrl={`/create-non-manipulation-document/:documentNumber/${backUri(transport, "storageNotes")}`}
+      backUrl={`/create-non-manipulation-document/:documentNumber/progress`}
       summaryHeading="sdSummaryPageHeading"
       headingTranslation="sdCheckYourInformation"
       checkInformationHeader="sdSummaryPageDocumentDetailsHeader"
       csrf={csrf}
       journey="storageNotes"
+      userReference={storageDocument.userReference}
+      userReferenceLabel={t("commonProgressPageExporterYourReference", { ns: "progress" })}
+      userReferenceChangeRoute={`/create-non-manipulation-document/${documentNumber}/add-your-reference?nextUri=${route(
+        "/create-non-manipulation-document/:documentNumber/check-your-information",
+        { documentNumber }
+      )}`}
+      notProvidedText={t("sdNotProvided", { ns: "sdCheckYourInformation" })}
     >
       <>
         <CheckInfoExporterDetails
@@ -145,13 +157,6 @@ const CheckYourInformation = () => {
           exporterDetailsRoute="/create-non-manipulation-document/:documentNumber/add-exporter-details"
           checkInfoRoute="/create-non-manipulation-document/:documentNumber/check-your-information"
           documentNumber={documentNumber}
-          userReference={storageDocument.userReference}
-          userReferenceLabel={t("commonProgressPageExporterYourReference", { ns: "progress" })}
-          userReferenceChangeRoute={`/create-non-manipulation-document/${documentNumber}/add-your-reference?nextUri=${route(
-            "/create-non-manipulation-document/:documentNumber/check-your-information",
-            { documentNumber }
-          )}`}
-          notProvidedText={t("sdNotProvided", { ns: "sdCheckYourInformation" })}
         />
 
         <h2 className="govuk-heading-l">{t("sdCheckYourInformationProudcts", { ns: "sdCheckYourInformation" })}</h2>

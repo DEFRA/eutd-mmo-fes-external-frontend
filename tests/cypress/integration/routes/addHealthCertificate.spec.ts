@@ -108,3 +108,25 @@ describe("Add Health Certificate, bad data show errors", () => {
     cy.get("#error-summary-title").should("be.visible");
   });
 });
+
+describe("Add Health Certificate - invalid year in date picker", () => {
+  const pageUrl = `create-processing-statement/GBR-2022-PS-3FE1169D1/add-health-certificate`;
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddHealthCertificate,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+  });
+
+  it("should show an error when year 0000 is entered in the date picker", () => {
+    cy.get('input[name="healthCertificateDateDay"]').clear();
+    cy.get('input[name="healthCertificateDateDay"]').type("01");
+    cy.get('input[name="healthCertificateDateMonth"]').clear();
+    cy.get('input[name="healthCertificateDateMonth"]').type("01");
+    cy.get('input[name="healthCertificateDateYear"]').clear();
+    cy.get('input[name="healthCertificateDateYear"]').type("0000");
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.url().should("include", "/add-health-certificate");
+    cy.contains("Enter a real date in the dd/mm/yyyy format").should("be.visible");
+  });
+});

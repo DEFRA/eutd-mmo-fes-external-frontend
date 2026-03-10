@@ -2,7 +2,7 @@ import { type ITestParams, TestCaseId } from "~/types";
 
 const documentUrl = "/create-processing-statement/GBR-2023-PS-DE53D6E7C";
 const checkYourInformationUrl = `${documentUrl}/check-your-information`;
-const whatExportDestinationUrl = `${documentUrl}/what-export-destination`;
+const progressUrl = `${documentUrl}/progress`;
 
 describe("Check Your Information (Summary) page: UI", () => {
   beforeEach(() => {
@@ -12,11 +12,11 @@ describe("Check Your Information (Summary) page: UI", () => {
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
   });
 
-  it("should render the correct back link", () => {
+  it("should render the correct back link to progress page", () => {
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", whatExportDestinationUrl);
+      .should("have.attr", "href", progressUrl);
   });
 
   it("should contain the required heading", () => {
@@ -29,7 +29,7 @@ describe("Check Your Information (Summary) page: UI", () => {
     cy.contains("dt", "Issue date");
     cy.contains("dt", "Species");
     cy.contains("dt", "Catch certificate");
-    cy.contains("dt", "Catch certificate weight");
+    cy.contains("dt", "Weight on catch certificate");
     cy.contains("dt", "Export weight before processing");
     cy.contains("dt", "Export weight after processing");
     cy.contains("dt", "Person responsible for consignment");
@@ -141,10 +141,7 @@ describe("Check Your Information (Summary) page: Validation", () => {
 
     cy.get("[data-testid=create-ps-button]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains(
-      "a",
-      /^You cannot submit this Processing Statement, the Health Certificate date selected must be today or in the past.$/
-    ).should("be.visible");
+    cy.contains("a", /^The health certificate date must be today or in the past.$/).should("be.visible");
   });
 
   it("should redirect user to processing statement created page", () => {
@@ -178,7 +175,7 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", whatExportDestinationUrl);
+      .should("have.attr", "href", progressUrl);
   });
 
   it("should contain the required heading", () => {
@@ -194,7 +191,7 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
     cy.contains("dt", "Issue date");
     cy.contains("dt", "Species");
     cy.contains("dt", "Catch certificate");
-    cy.contains("dt", "Catch certificate weight");
+    cy.contains("dt", "Weight on catch certificate");
     cy.contains("dt", "Export weight before processing");
     cy.contains("dt", "Export weight after processing");
     cy.contains("dt", "Person responsible for consignment");
@@ -239,6 +236,15 @@ describe("Check Your Information (Summary) page: page guard", () => {
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
     cy.url().should("include", "/progress");
+  });
+
+  it("should redirect to dashboard when processing statement is already complete", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformationPageGuardCaseComplete,
+    };
+
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });
 

@@ -126,12 +126,12 @@ export const WhatExportJourneyAction = async (request: Request, params: Params):
     return apiCallFailed(errors, values);
   }
 
+  // For direct landing journey, redirect to progress page
   if (landingsEntryOption === "directLanding" || !isEmpty(body.get("nextUri"))) {
-    return redirect(
-      route("/create-catch-certificate/:documentNumber/check-your-information", { documentNumber: documentNumber })
-    );
+    return redirect(route("/create-catch-certificate/:documentNumber/progress", { documentNumber }));
   }
 
+  // For manual entry, redirect to how-does-the-export-leave-the-uk
   const transportations: ITransport[] = await getTransportations(bearerToken, documentNumber);
   if (Array.isArray(transportations) && transportations.length > 0) {
     const transport: ITransport | undefined = transportations.findLast((transport: ITransport) => transport.id);

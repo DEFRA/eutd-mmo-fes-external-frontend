@@ -644,12 +644,13 @@ const CheckYourInformation = () => {
                 ns: "checkYourInformation",
               })}
             />
-            <CheckYourInformationDocumentNumber
-              documentNumberTitle={t("commonDocumentNumber", { ns: "common" })}
-              documentNumber={documentNumber}
-            />
             <h2 className="govuk-heading-l">{t("commonProgressPageExporterDetails", { ns: "progress" })}</h2>
             <dl className="govuk-summary-list govuk-!-margin-bottom-5">
+              <CheckYourInformationDocumentNumber
+                documentNumberTitle={t("commonDocumentNumber", { ns: "common" })}
+                documentNumber={documentNumber}
+                renderWrapper={false}
+              />
               <div className="govuk-summary-list__row">
                 <dt className="govuk-summary-list__key govuk-!-width-one-half">
                   {t("commonProgressPageExporterYourReference", { ns: "progress" })}

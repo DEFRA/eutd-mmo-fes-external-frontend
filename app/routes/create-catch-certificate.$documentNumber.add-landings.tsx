@@ -123,6 +123,29 @@ const intialProcessedValues = (
   selectedRfmo: values.selectedRfmo ?? "",
 });
 
+// Helper function to get value from action data or fallback to state value
+const getValueFromActionOrState = <T,>(
+  errors: any,
+  actionValue: T | undefined,
+  stateValue: T,
+  typeGuard?: (val: any) => T
+): T => {
+  if (!isEmpty(errors) && actionValue !== undefined) {
+    return typeGuard ? typeGuard(actionValue) : (actionValue as T);
+  }
+  return stateValue;
+};
+
+// Helper function to extract EEZ values from action data
+const getEezValuesFromAction = (errors: any, values: any, stateEezValues: string[]): string[] => {
+  if (!isEmpty(errors) && !isEmpty(values)) {
+    return Object.entries(values)
+      .filter(([key]) => key.startsWith("eez"))
+      .map(([, value]) => value as string);
+  }
+  return stateEezValues;
+};
+
 const AddLandings = () => {
   const isHydrated = useIsHydrated();
 
@@ -164,11 +187,26 @@ const AddLandings = () => {
   const { gearCategory, availableGearTypes, gearType, selectedRfmo } = intialProcessedValues(rest);
 
   const {
-    errors = {},
-    groupedErrorIds = {},
+    errors: actionErrors = {},
+    groupedErrorIds: actionGroupedErrorIds = {},
     actionExecuted,
+    vesselsNoJs: vesselsNoJsFromAction,
+    availableGearTypes: availableGearTypesFromAction,
     ...values
   } = useActionData<AddLandingsActionDataType>() ?? {};
+
+  // For non-JS mode, errors come from loader data
+  const loaderErrors = (rest as any).errors ?? {};
+  const loaderGroupedErrorIds = (rest as any).groupedErrorIds ?? {};
+
+  // Use action errors for JS mode, loader errors for non-JS mode
+  const errors = isEmpty(actionErrors) ? loaderErrors : actionErrors;
+  const groupedErrorIds = isEmpty(actionGroupedErrorIds) ? loaderGroupedErrorIds : actionGroupedErrorIds;
+
+  // Use lists from action data when errors occur (non-JS mode), otherwise use loader data
+  const vesselsForField = !isEmpty(errors) && vesselsNoJsFromAction ? vesselsNoJsFromAction : vesselsNoJs;
+  const gearTypesForField =
+    !isEmpty(errors) && availableGearTypesFromAction ? availableGearTypesFromAction : availableGearTypes;
   const startDateFromAction = getDateFromAction(values, "startDate");
   const dateFromAction = getDateFromAction(values, "dateLanded");
   const submit = useSubmit();
@@ -186,7 +224,7 @@ const AddLandings = () => {
   // premature event triggering (e.g. when the field is pre-populated)
   const [enableChange, setEnableChange] = useState<boolean>(isHydrated);
   const [selectedGearCategory, setSelectedGearCategory] = useState<string>(gearCategory);
-  const [gearTypes, setGearTypes] = useState<IGearType[]>(availableGearTypes);
+  const [gearTypes, setGearTypes] = useState<IGearType[]>(gearTypesForField ?? []);
   const [selectedGearType, setSelectedGearType] = useState<string>(gearType);
   const [highSeasArea, setHighSeasArea] = useState<HighSeasAreaType>(selectedHighSeasArea);
 
@@ -196,6 +234,13 @@ const AddLandings = () => {
   const navigation = useNavigation();
   const isActionReload = getIsActionReload(navigation);
   hasMaxLandingExceeded(errors, maxLandingExceeded);
+
+  // Compute values from action data when errors are present (for non-JS form preservation)
+  const currentHighSeasArea = getValueFromActionOrState(errors, values.highSeasArea, highSeasArea);
+  const currentRfmo = getValueFromActionOrState(errors, values.rfmo, rfmo);
+  const currentExclusiveEconomicZones = getEezValuesFromAction(errors, values, exclusiveEconomicZones);
+  const currentSelectedGearCategory = getValueFromActionOrState(errors, values.gearCategory, selectedGearCategory);
+  const currentSelectedGearType = getValueFromActionOrState(errors, values.gearType, selectedGearType);
 
   const getStartDate = (date: string) => {
     setStartDate(date);
@@ -393,7 +438,20 @@ const AddLandings = () => {
           <ImportantNotice messageKey="commonAddTripDetailsWarningContent" />
           <SecureForm method="post" key={renderCounter} csrf={csrf}>
             {isEditing && <input type="hidden" name="landingId" defaultValue={landingId} />}
+            {isEditing && <input type="hidden" name="existingLandingWeight" defaultValue={selectedWeight} />}
             {disableProductSelection && <input type="hidden" name="product" defaultValue={initialProductValue} />}
+            {/* Submit frontend-calculated combined total so orchestration can validate aggregate weight */}
+            <input
+              type="hidden"
+              name="totalCombinedExportWeight"
+              value={productsTableData
+                .reduce(
+                  (previousValue: number, currentValue: any) =>
+                    currentValue.exportWeight ? previousValue + currentValue.exportWeight : previousValue,
+                  0
+                )
+                .toFixed(2)}
+            />
             <div className="form-light-grey-bg govuk-!-padding-5 govuk-!-margin-bottom-5">
               <div
                 className={classNames("govuk-form-group", {
@@ -509,7 +567,7 @@ const AddLandings = () => {
                 })}
                 HSAHint={t("ccAddLandingHSAHint", { ns: "directLandings" })}
                 confirmHSATypeOptions={confirmHSATypeOptions}
-                highSeasArea={highSeasArea}
+                highSeasArea={currentHighSeasArea}
                 setHighSeasArea={setHighSeasArea}
                 getHSAOptionLabel={(option: HSAOptionType) => t(option.label, { ns: "common" })}
                 errors={errors?.highSeasArea}
@@ -525,7 +583,7 @@ const AddLandings = () => {
                 eezHelpSectionContentTwo={t("ccEezHelpSectionContentTwo", { ns: "addLandings" })}
                 eezHelpSectionContentThreeLink={t("ccEezHelpSectionContentThreeLink", { ns: "addLandings" })}
                 availableExclusiveEconomicZones={availableExclusiveEconomicZones}
-                preloadedZones={exclusiveEconomicZones.length > 0 ? exclusiveEconomicZones : []}
+                preloadedZones={currentExclusiveEconomicZones.length > 0 ? currentExclusiveEconomicZones : []}
                 onExclusiveEconomicZonesChange={handleExclusiveEconomicZonesChange}
                 maximumEezPerLanding={maximumEezPerLanding}
                 errors={errors}
@@ -537,7 +595,7 @@ const AddLandings = () => {
                 rfmoNullOption={t("ccRfmoNullOption")}
                 rfmoHintText={t("ccRfmoHintText")}
                 optionalLabel={t("ccRfmoOptionalLabel")}
-                selectedRfmo={rfmo}
+                selectedRfmo={currentRfmo}
                 setRfmo={setRfmo}
                 rfmos={rfmos}
               />
@@ -550,7 +608,7 @@ const AddLandings = () => {
                     : ""
                 }
                 defaultValue={values.vessel ?? selectedVessel ?? ""}
-                options={isHydrated ? vessels : vesselsNoJs}
+                options={isHydrated ? vessels : vesselsForField}
                 optionsId="vessel-option"
                 minCharsMessage={t("ccAddVesselFormVesselQueryPrompt", { ns: "directLandings" })}
                 promptMessage={promptText}
@@ -638,8 +696,8 @@ const AddLandings = () => {
                 gearCategories={gearCategories}
                 setSelectedGearType={setSelectedGearType}
                 setSelectedGearCategory={setSelectedGearCategory}
-                selectedGearType={selectedGearType}
-                selectedGearCategory={selectedGearCategory}
+                selectedGearType={currentSelectedGearType}
+                selectedGearCategory={currentSelectedGearCategory}
                 isHydrated={isHydrated}
               />
               <Details
@@ -689,7 +747,7 @@ const AddLandings = () => {
                         ? t("ccAddLandingUpdateLandingBtnLabel")
                         : t("commonAddLandingButtonText", { ns: "common" })
                     }
-                    data-testid={addLandingActionName}
+                    data-testid="submit"
                   />
                 )}
               </div>

@@ -50,6 +50,7 @@
   "ccCommonDateLandedRealError": "Date landed must be a real date",
   "ccCommonDateLandedRequiredError": "Enter the date landed",
   "ccCommonDateLandedInvalidError": "Enter a valid date landed",
+  "ccAddLandingDateLandedFutureDateError": "Date landed must be today or within the next 7 days",
   "ccCommonExportWeightMissingError": "Export weight is missing",
   "ccCommonExportWeightDecimalPlacesError": "Enter the export weight as a number with a maximum of 2 decimal places",
   "ccCommonExportWeightGreaterError": "Enter the export weight as a number greater than 0",
@@ -65,5 +66,6 @@
   "ccUploadFilePageErrorInvalidFileType": "The selected file must be a CSV",
   "ccUploadFilePageErrorMaxLandings": "The selected file should contain a maximum of {{dynamicValue}} rows",
   "ccUploadFilePageErrorFileRequired": "Upload a valid CSV file to continue",
-  "ccUploadFilePageTableEEZMaxCharError": "You are only able to add maximum of {{dynamicValue}} EEZ"
+  "ccUploadFilePageTableEEZMaxCharError": "You are only able to add maximum of {{dynamicValue}} EEZ",
+  "ccUploadFilePageTableTotalWeightExceededError": "The total combined weight for all products must be less than 10,000,000"
 }

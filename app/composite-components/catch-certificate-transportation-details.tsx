@@ -18,6 +18,7 @@ export const CatchCertificateTransportationDetails = ({
   legendTitle,
   displayOptionalSuffix,
   countries,
+  airwayBillNumber,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
@@ -43,6 +44,7 @@ export const CatchCertificateTransportationDetails = ({
       errors={errors}
       countries={countries ?? []}
       useBoldLabels={true}
+      airwayBillNumber={airwayBillNumber}
     />
   </fieldset>
 );

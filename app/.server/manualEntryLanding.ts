@@ -72,14 +72,16 @@ export const getLandingsData = (exportPayload: ProductsLanded) => {
           item.product.commodityCodeAdmin
         ),
         exportWeight: Array.isArray(item?.landings)
-          ? parseFloat(
-              item.landings
-                .reduce(
+          ? Number.parseFloat(
+              Number(
+                item.landings.reduce(
                   (previousValue: number, currentValue: LandingStatus) =>
-                    currentValue.model.exportWeight ? previousValue + currentValue.model.exportWeight : previousValue,
+                    currentValue.model.exportWeight
+                      ? previousValue + Number(currentValue.model.exportWeight)
+                      : previousValue,
                   0
                 )
-                .toFixed(2)
+              ).toFixed(2)
             )
           : 0,
         species: item.product.species.admin ?? item.product.species.label,
@@ -154,7 +156,8 @@ export const addLanding = async (
   },
   rfmo: string | undefined,
   vessel: IVessel = {},
-  exclusiveEconomicZones: (ICountry | undefined)[] = []
+  exclusiveEconomicZones: (ICountry | undefined)[] = [],
+  frontendTotals?: { totalExportWeight?: string; totalCombinedExportWeight?: string; existingLandingWeight?: string }
 ): Promise<ProductsLanded | IUnauthorised | IBase> => {
   if (!documentNumber) throw new Error("Document number is required");
 
@@ -177,16 +180,25 @@ export const addLanding = async (
       gearCode: isEmpty(gearFields.gearCode) ? undefined : gearFields.gearCode,
       rfmo,
       exclusiveEconomicZones,
+      // include optional frontend-calculated totals so orchestration can validate aggregate
+      ...(frontendTotals?.totalExportWeight !== undefined && { totalExportWeight: frontendTotals.totalExportWeight }),
+      ...(frontendTotals?.totalCombinedExportWeight !== undefined && {
+        totalCombinedExportWeight: frontendTotals.totalCombinedExportWeight,
+      }),
+      ...(frontendTotals?.existingLandingWeight !== undefined && {
+        existingLandingWeight: frontendTotals.existingLandingWeight,
+      }),
       ...(landingId && { id: landingId }),
     }
   );
 
-  return onAddLandingResponse(response, product);
+  return onAddLandingResponse(response, product, gearFields);
 };
 
 const onAddLandingResponse = async (
   response: Response,
-  productId: string
+  productId: string,
+  sentGearFields?: { gearCategory: string; gearType: string; gearCode: string | undefined }
 ): Promise<ProductsLanded | { unauthorised: boolean; supportId?: string } | IBase> => {
   switch (response.status) {
     case 200:
@@ -199,19 +211,36 @@ const onAddLandingResponse = async (
         products.find((p: ProductLanded) => p.product.id === productId)?.product.species.label ?? "";
 
       return {
-        errors: Object.keys(errorsResponse.errors).map((error) => ({
-          key: error,
-          message: getErrorMessage(errorsResponse.errors[error]),
-          ...(errorsResponse.errors[error] === "error.dateLanded.date.max" && {
-            value: { dynamicValue: getEnv().LANDING_LIMIT_DAYS_FUTURE },
-          }),
-          ...(errorsResponse.errors[error] === "error.seasonalFish.invalidate" && {
-            value: { dynamicValue: product },
-          }),
-          ...(errorsResponse.errors[error] === "error.startDate.seasonalFish.invalidate" && {
-            value: { dynamicValue: product },
-          }),
-        })),
+        errors: Object.keys(errorsResponse.errors).map((error) => {
+          // Default message key from API
+          let messageKey = errorsResponse.errors[error];
+
+          // If this is a gearType error, prefer contextual message based on what was sent
+          if (error === "gearType" && sentGearFields) {
+            const sentCategory = sentGearFields.gearCategory;
+            const sentType = sentGearFields.gearType;
+            if (sentCategory && !sentType) {
+              messageKey = "ccAddLandingGearTypeEmptyWithCategoryError";
+            } else if (!sentCategory && !sentType) {
+              // use existing select-list-null key
+              messageKey = "ccAddLandingSelectGearTypeListNullError";
+            }
+          }
+
+          return {
+            key: error,
+            message: getErrorMessage(messageKey),
+            ...(messageKey === "error.dateLanded.date.max" && {
+              value: { dynamicValue: getEnv().LANDING_LIMIT_DAYS_FUTURE },
+            }),
+            ...(messageKey === "error.seasonalFish.invalidate" && {
+              value: { dynamicValue: product },
+            }),
+            ...(messageKey === "error.startDate.seasonalFish.invalidate" && {
+              value: { dynamicValue: product },
+            }),
+          };
+        }),
       };
     case 403:
       return {

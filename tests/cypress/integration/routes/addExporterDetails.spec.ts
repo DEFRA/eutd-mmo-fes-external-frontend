@@ -595,8 +595,8 @@ describe("Add exporter details: branch coverage - conditional rendering branches
     cy.visit(pageUrl, { qs: { ...testParams } });
     // Verify address section exists
     cy.get(".govuk-button-group").should("be.visible");
-    // Verify address label exists
-    cy.get("label").should("contain", "Address");
+    // Verify address label exists (EU2026 change: renamed to "Company address")
+    cy.get("label").should("contain", "Company address");
   });
 
   it("should apply govuk-input class when no error for full name field", () => {
@@ -662,5 +662,272 @@ describe("Add exporter details: errorsTransformed?.exporterFullName not empty", 
     // Verify error styling and message are applied
     cy.get("#exporterFullName").closest(".govuk-form-group--error").should("exist");
     cy.get(".govuk-error-message").should("be.visible");
+  });
+});
+
+describe("FI0-679: Add exporter details - UI changes", () => {
+  const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+  });
+
+  it("Scenario 1: should display simplified guidance text for catch certificate", () => {
+    cy.get(".govuk-warning-text__text").should(
+      "contain",
+      "This information will appear on the final catch certificate."
+    );
+  });
+
+  it("Scenario 2: should display 'Full name of responsible person' label in bold", () => {
+    cy.get("label[for='exporterFullName']")
+      .should("contain", "Full name of responsible person")
+      .and("have.class", "govuk-!-font-weight-bold");
+  });
+
+  it("Scenario 2: should display hint text for full name field", () => {
+    cy.get("#hint-exporterFullName")
+      .should("be.visible")
+      .and("contain", "This should be a company name or the person overseeing the export process.");
+  });
+
+  it("Scenario 3: should display 'Company name' label in bold", () => {
+    cy.get("label[for='exporterCompanyName']")
+      .should("contain", "Company name")
+      .and("have.class", "govuk-!-font-weight-bold");
+  });
+
+  it("Scenario 4: should display 'Company address' label with same styling as Company name", () => {
+    cy.get(".govuk-label").contains("Company address").should("have.class", "govuk-!-font-weight-bold");
+  });
+});
+
+describe("FI0-679: Add exporter details - Full name validation", () => {
+  const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+
+  it("Scenario 5: should validate max length of 70 characters for full name", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameMaxLength,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    let longName = "";
+    for (let i = 0; i < 71; i++) {
+      longName += "A";
+    }
+    cy.get("#exporterFullName").clear();
+    cy.get("#exporterFullName").invoke("val", longName);
+    cy.get("#exporterFullName").trigger("input");
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+    // Should display error
+    cy.get("#error-summary-title").should("be.visible");
+    cy.get(".govuk-error-message").should(
+      "contain",
+      "Name of person responsible for this export must not exceed 70 characters"
+    );
+  });
+
+  it("Scenario 6: should validate allowed characters for full name", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameWithSpecialCharacters,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("#exporterFullName").clear();
+    cy.get("#exporterFullName").invoke("val", "John@Doe#123");
+    cy.get("#exporterFullName").trigger("input");
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+    // Should display error
+    cy.get("#error-summary-title").should("be.visible");
+    cy.get(".govuk-error-message").should(
+      "contain",
+      "Name of person responsible for this export must only contain letters, spaces, apostrophe's and full stops"
+    );
+  });
+
+  it("should accept valid full name with letters, spaces, apostrophes and periods", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameCorrectFormat,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("#exporterFullName").clear();
+    cy.get("#exporterFullName").type("Mary O'Connor Jr.");
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+    // Should navigate successfully (no validation error)
+    cy.url().should("include", "/what-are-you-exporting");
+  });
+});
+
+describe("FI0-679: Add exporter details - Company name validation", () => {
+  const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+
+  it("Scenario 7: should validate max length of 250 characters for company name", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameMaxLength,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    let longCompanyName = "";
+    for (let i = 0; i < 251; i++) {
+      longCompanyName += "A";
+    }
+    cy.get("#exporterCompanyName").clear();
+    cy.get("#exporterCompanyName").type(longCompanyName);
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+    // Should display error
+    cy.get("#error-summary-title").should("be.visible");
+    cy.get(".govuk-error-message").should("contain", "Company name must not exceed 250 characters");
+  });
+
+  it("Scenario 8: should validate allowed characters for company name", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameWithSpecialCharacters,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("#exporterCompanyName").clear();
+    cy.get("#exporterCompanyName").type("Bob & Co!");
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+    // Should display error
+    cy.get("#error-summary-title").should("be.visible");
+    cy.get(".govuk-error-message").should(
+      "contain",
+      "Company name must only contain letters, numbers, spaces, apostrophe's, full stops, hyphens and brackets"
+    );
+  });
+
+  it("should accept valid company name with allowed characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameCorrectFormat,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("#exporterCompanyName").clear();
+    cy.get("#exporterCompanyName").type("O'Reilly's Co. (UK) Ltd [2024]");
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+    // Should navigate successfully (no validation error)
+    cy.url().should("include", "/what-are-you-exporting");
+  });
+});
+
+describe("FI0-679: Add exporter details - Journey-specific guidance", () => {
+  it("should show simplified guidance for catch certificate journey", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetails,
+    };
+    cy.visit("/create-catch-certificate/GBR-2021-CC-8EEB7E123/add-exporter-details", { qs: { ...testParams } });
+
+    cy.get(".govuk-warning-text__text").should(
+      "contain",
+      "This information will appear on the final catch certificate."
+    );
+  });
+
+  it("should show storage notes guidance for storage document journey", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddExporterDetails,
+    };
+    cy.visit("/create-non-manipulation-document/GBR-2021-SD-8EEB7E123/add-exporter-details", { qs: { ...testParams } });
+
+    cy.get(".govuk-warning-text__text").should(
+      "contain",
+      "This information will appear on the non-manipulation document."
+    );
+  });
+
+  it("should show processing statement guidance with journey text", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddExporterDetailsFull,
+    };
+    cy.visit("/create-processing-statement/GBR-2021-PS-8EEB7E123/add-exporter-details", { qs: { ...testParams } });
+
+    cy.get(".govuk-warning-text__text").should("contain", "This information will appear on the processing statement.");
+  });
+});
+
+describe("Add exporter details - Address validation error messages", () => {
+  describe("Updated error message displayed if no address added on this page", () => {
+    it("should display 'Add the exporter's address' error for catch certificate when no address exists", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.CCAddExporterDetailsNoAddress,
+      };
+      cy.visit("/create-catch-certificate/GBR-2021-CC-8EEB7E123/add-exporter-details", { qs: { ...testParams } });
+
+      // Verify page loaded with no address
+      cy.contains("Your registration address could not be accessed");
+      cy.contains(/Add the exporter['’]s address/);
+
+      // Fill in required company name
+      cy.get("#exporterCompanyName").type("Test Company Ltd");
+
+      // Submit without adding address
+      cy.contains("button", "Save and continue").click();
+
+      // Verify error summary appears
+      cy.get(".govuk-error-summary").should("exist");
+      cy.get(".govuk-error-summary__title").should("contain", "There is a problem");
+
+      // Verify correct error message in summary
+      cy.get(".govuk-error-summary__list").should("contain", "Add the exporter's address");
+
+      // Verify error link points to correct anchor
+      cy.get('.govuk-error-summary__list a[href="#exporterAddress"]').should("exist").click();
+
+      // Verify page scrolled to error location
+      cy.get("#exporterAddress").should("be.visible");
+    });
+
+    it("should display 'Add the exporter's address' error for processing statement when no address exists", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.PSAddExporterDetailsNoAddress,
+      };
+      cy.visit("/create-processing-statement/GBR-2021-PS-8EEB7E123/add-exporter-details", { qs: { ...testParams } });
+
+      cy.contains("Your registration address could not be accessed");
+      cy.get("#exporterCompanyName").type("Test Company Ltd");
+      cy.contains("button", "Save and continue").click();
+
+      cy.get(".govuk-error-summary__list").contains(/Add the exporter['’]s address/);
+      cy.get('.govuk-error-summary__list a[href="#exporterAddress"]').should("exist");
+    });
+
+    it("should display 'Add the exporter's address' error for storage document when no address exists", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddExporterDetailsNoAddress,
+      };
+      cy.visit("/create-non-manipulation-document/GBR-2021-SD-8EEB7E123/add-exporter-details", {
+        qs: { ...testParams },
+      });
+
+      cy.contains("Your registration address could not be accessed");
+      cy.get("#exporterCompanyName").type("Test Company Ltd");
+      cy.contains("button", "Save and continue").click();
+
+      cy.get(".govuk-error-summary__list").should("contain", "Add the exporter's address");
+      cy.get('.govuk-error-summary__list a[href="#exporterAddress"]').should("exist");
+    });
+  });
+
+  describe("Welsh translation for Add exporter address error", () => {
+    it("should display Welsh translation when language is set to Welsh", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.CCAddExporterDetailsNoAddress,
+        lng: "cy",
+      };
+      cy.visit("/create-catch-certificate/GBR-2021-CC-8EEB7E123/add-exporter-details", { qs: { ...testParams } });
+
+      cy.get("#exporterCompanyName").type("Test Company Ltd");
+      cy.contains("button", "Cadw a bwrw ymlaen").click(); // "Save and continue" in Welsh
+
+      // Verify Welsh error message
+      cy.get(".govuk-error-summary__list").should("contain", "Ychwanegu cyfeiriad yr allforiwr");
+    });
   });
 });
