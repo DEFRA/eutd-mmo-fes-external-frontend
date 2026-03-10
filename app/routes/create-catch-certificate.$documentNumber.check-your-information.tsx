@@ -46,6 +46,10 @@ type TransportationDetailsSummaryProps = {
   isLocked: boolean;
 };
 
+export const headers = () => ({
+  "Cache-Control": "no-store",
+});
+
 const CommonLink = ({ routeLink, documentNumber, textOne, textTwo }: CommonLinkProps) => (
   <a
     className="govuk-link"
