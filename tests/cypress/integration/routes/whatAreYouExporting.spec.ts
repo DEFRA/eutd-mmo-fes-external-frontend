@@ -1763,7 +1763,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
     });
   });
 });
-describe("FI0-10970: Duplicate product error - form remains fully interactive", () => {
+describe("Duplicate product error - form remains fully interactive", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingDuplicateProduct,
@@ -1829,7 +1829,7 @@ describe("FI0-10970: Duplicate product error - form remains fully interactive", 
     cy.get("[data-testid='add-product']").eq(0).click({ force: true });
     cy.get("#errorIsland").should("exist");
 
-    cy.get("select#state").should("not.be.disabled").click({ force: true });
+    cy.get("select#state").should("not.be.disabled").select(0, { force: true });
   });
 
   it("should allow the user to attempt re-submission after a duplicate product error", () => {
