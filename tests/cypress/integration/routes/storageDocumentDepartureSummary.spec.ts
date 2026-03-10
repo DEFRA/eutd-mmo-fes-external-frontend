@@ -481,3 +481,14 @@ describe("Storage document departure summary: tab with empty departure and load 
     cy.url().should("include", "/progress");
   });
 });
+
+describe("Storage document departure summary: save as draft with validation errors (FI0-10577)", () => {
+  it("should redirect to the NMD dashboard when Save as Draft is clicked with validation errors", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDDepartureSummarySaveAsDraftWithErrors,
+    };
+    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
+    cy.get("#saveAsDraft").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
+});
