@@ -28,7 +28,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const { _action, ...values } = Object.fromEntries(form);
   const nextUri = form.get("nextUri") as string;
   const isDraft = form.get("_action") === "saveAsDraft";
-  const saveToRedisIfErrors = true;
+  const saveToRedisIfErrors = isDraft;
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");

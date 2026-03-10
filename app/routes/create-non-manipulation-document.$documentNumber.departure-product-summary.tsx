@@ -270,8 +270,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   const isNonJs = form.get("isNonJs") === "true";
   const { _action, ...values } = Object.fromEntries(form);
-  const saveToRedisIfErrors = true;
   const isDraft = form.get("_action") === "saveAsDraft";
+  const saveToRedisIfErrors = isDraft;
 
   const isEdit = (_action as string)?.startsWith("edit-");
   const isRemove = (_action as string)?.startsWith("remove-");

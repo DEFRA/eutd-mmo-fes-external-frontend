@@ -85,6 +85,14 @@ const addProcessingPlantAddressHandler: ITestHandler = {
   [TestCaseId.PSAddProcessingPlantAddressForbidden]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res.once(ctx.status(403))),
   ],
+  [TestCaseId.PSAddProcessingPlantAddressSaveAsDraftWithErrors]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(processingStatementAddPlantNameError))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocument))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(psProgressIncomplete))),
+  ],
   [TestCaseId.PSAddProcessingPlantAddressWithExistingAddress]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(processingStatement))),
