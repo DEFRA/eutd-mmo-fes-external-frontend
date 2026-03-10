@@ -203,14 +203,19 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    // Fill with invalid container number (would fail validation on save & continue)
     cy.get("#nationalityOfVehicle").type("Netherlands", { force: true });
-    cy.get("#registrationNumber").clear({ force: true }).type("NL999", { force: true });
-    cy.get("#departurePlace").clear({ force: true }).type("Rotterdam", { force: true });
-    cy.get("#exportDate-day").clear({ force: true }).type("31", { force: true });
-    cy.get("#exportDate-month").clear({ force: true }).type("12", { force: true });
-    cy.get("#exportDate-year").clear({ force: true }).type("2025", { force: true });
-    cy.get('input[name="containerNumbers.0"]').clear({ force: true }).type("BAD-FORMAT", { force: true }); // Save-as-draft accepts invalid container format
+    cy.get("#registrationNumber").clear({ force: true });
+    cy.get("#registrationNumber").type("NL999", { force: true });
+    cy.get("#departurePlace").clear({ force: true });
+    cy.get("#departurePlace").type("Rotterdam", { force: true });
+    cy.get("#exportDate-day").clear({ force: true });
+    cy.get("#exportDate-day").type("31", { force: true });
+    cy.get("#exportDate-month").clear({ force: true });
+    cy.get("#exportDate-month").type("12", { force: true });
+    cy.get("#exportDate-year").clear({ force: true });
+    cy.get("#exportDate-year").type("2025", { force: true });
+    cy.get('input[name="containerNumbers.0"]').clear({ force: true });
+    cy.get('input[name="containerNumbers.0"]').type("BAD-FORMAT", { force: true });
 
     // Save as draft should accept invalid containers
     cy.get("[data-testid=save-draft-button]").click({ force: true });
