@@ -260,7 +260,7 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
     cy.contains("h2", "There is a problem").should("be.visible");
   });
 
-  it("should show error when a container identification number exceeds 50 characters", () => {
+  it("should show format error when a container identification number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainSaveMaxCharsContainerIdentificationNumber,
     };

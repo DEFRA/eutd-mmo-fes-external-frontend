@@ -438,7 +438,20 @@ const AddLandings = () => {
           <ImportantNotice messageKey="commonAddTripDetailsWarningContent" />
           <SecureForm method="post" key={renderCounter} csrf={csrf}>
             {isEditing && <input type="hidden" name="landingId" defaultValue={landingId} />}
+            {isEditing && <input type="hidden" name="existingLandingWeight" defaultValue={selectedWeight} />}
             {disableProductSelection && <input type="hidden" name="product" defaultValue={initialProductValue} />}
+            {/* Submit frontend-calculated combined total so orchestration can validate aggregate weight */}
+            <input
+              type="hidden"
+              name="totalCombinedExportWeight"
+              value={productsTableData
+                .reduce(
+                  (previousValue: number, currentValue: any) =>
+                    currentValue.exportWeight ? previousValue + currentValue.exportWeight : previousValue,
+                  0
+                )
+                .toFixed(2)}
+            />
             <div className="form-light-grey-bg govuk-!-padding-5 govuk-!-margin-bottom-5">
               <div
                 className={classNames("govuk-form-group", {

@@ -91,6 +91,15 @@ describe("Add Health Certificate - save as draft", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.url().should("include", "/forbidden");
   });
+
+  it("should redirect to the dashboard when Save as Draft is clicked with validation errors (FI0-10577)", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddHealthCertificateSaveAsDraftWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
 });
 
 describe("Add Health Certificate, bad data show errors", () => {
@@ -119,9 +128,12 @@ describe("Add Health Certificate - invalid year in date picker", () => {
   });
 
   it("should show an error when year 0000 is entered in the date picker", () => {
-    cy.get('input[name="healthCertificateDateDay"]').clear().type("01");
-    cy.get('input[name="healthCertificateDateMonth"]').clear().type("01");
-    cy.get('input[name="healthCertificateDateYear"]').clear().type("0000");
+    cy.get('input[name="healthCertificateDateDay"]').clear();
+    cy.get('input[name="healthCertificateDateDay"]').type("01");
+    cy.get('input[name="healthCertificateDateMonth"]').clear();
+    cy.get('input[name="healthCertificateDateMonth"]').type("01");
+    cy.get('input[name="healthCertificateDateYear"]').clear();
+    cy.get('input[name="healthCertificateDateYear"]').type("0000");
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.url().should("include", "/add-health-certificate");
     cy.contains("Enter a real date in the dd/mm/yyyy format").should("be.visible");

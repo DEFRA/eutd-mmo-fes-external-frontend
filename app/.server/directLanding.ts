@@ -77,10 +77,11 @@ const onValidateDirectLandingsResponse = async (
   response: Response
 ): Promise<IDirectLandingsResponse | IError[] | IUnauthorised> => {
   switch (response.status) {
-    case 200:
+    case 200: {
       const res = await response.text();
       return JSON.parse(res);
-    case 400:
+    }
+    case 400: {
       const errorResponse = await response.json();
       const formatErrors = transformAllErrors(
         errorResponse.errors,
@@ -107,6 +108,7 @@ const onValidateDirectLandingsResponse = async (
               }
         );
       return errorsFormat;
+    }
     case 403:
       return {
         unauthorised: true,

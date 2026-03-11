@@ -160,12 +160,36 @@ describe("Storage document created page: rendering", () => {
   });
 });
 
+describe("Storage document created page: back button redirects to dashboard", () => {
+  it("should navigate to the SD dashboard when the browser back button is pressed", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.StorageDocumentCreated,
+      args: [documentNumber],
+    };
+    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
+    cy.get(".govuk-panel--confirmation").should("be.visible");
+    cy.window().its("history.state").should("have.property", "createdPage", true);
+    cy.go("back");
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
+});
+
 describe("Storage document created page: pageguard", () => {
   it("should redirect to the dashboard page if didn't got expected response", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StorageDocumentPageGuard,
       args: [documentNumber],
     };
+    cy.visit(storageDocumentUrl, { failOnStatusCode: false, qs: { ...testParams } });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
+
+  it("should redirect to the dashboard page when document status is pending", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.StorageDocumentPendingPageGuard,
+      args: [documentNumber],
+    };
+
     cy.visit(storageDocumentUrl, { failOnStatusCode: false, qs: { ...testParams } });
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });

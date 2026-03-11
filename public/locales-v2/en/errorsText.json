@@ -21,6 +21,7 @@
   "commonAddExporterDetailsErrorCompanyName": "Enter the company name",
   "commonAddExporterDetailsErrorCompanyNameMaxLength": "Company name must not exceed 250 characters",
   "commonAddExporterDetailsErrorCompanyNameInvalidCharacters": "Company name must only contain letters, numbers, spaces, apostrophe's, full stops, hyphens and brackets",
+  "emojiCharactersNotPermitted": "Please only use letters and numbers",
   "commonAddExporterDetailsAddTheExportersAddress": "Add the exporter's address",
   "ccWhoseWatersWereTheyCaughtInErrorRequired": "Select whose waters the fish or shellfish were caught in",
   "ccWhoseWatersWereTheyCaughtInErrorOtherWatersRequired": "Enter whose waters the fish or shellfish were caught in",
@@ -207,7 +208,7 @@
   "psAddHealthCertificateErrorValidDateHealthCertificateDate": "Health certificate date must be today or in the past",
   "psAddHealthCertificateErrorMaxDaysHealthCertificateDate": "A Health certificate’s date can be selected in the past but not outside 7 days in advance of today",
   "psAddHealthCertificateErrorTodayOrPastSubmitDateValidationError": "The Health Certificate date selected must be today or in the past",
-  "psAddHealthCertificateErrorTodayOrPastSubmitDateError": "You cannot submit this Processing Statement, the Health Certificate date selected must be today or in the past.",
+  "psAddHealthCertificateErrorTodayOrPastSubmitDateError": "The health certificate date must be today or in the past.",
   "sdAddStorageFacilityDetailsErrorEnterTheFacilityName": "Enter the facility name",
   "sdAddStorageFacilityDetailsErrorEnterTheAddress": "Enter the address",
   "sdAddStorageFacilityApprovalCharacterError": "Approval number must not exceed 50 characters",
@@ -299,5 +300,11 @@
   "ccCommonGearTypeUnpopulatedError": "Select a gear type",
   "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError": "Container identification number must only contain letters and numbers",
   "removeProductErrorNoSelection": "Select yes if you want to remove this product and all its associated species",
-  "sdArrivalDatenotMorethanOneDay": "Arrival date must not be more than 1 day in the future"
+  "sdArrivalDatenotMorethanOneDay": "Arrival date must not be more than 1 day in the future",
+  "ccDirectLandingDateLandedRequiredError": "Enter the date landed",
+  "ccDirectLandingDateLandedInvalidError": "Enter a valid date landed",
+  "ccDirectLandingDateLandedFutureDateError": "Date landed must be today or within the next 7 days",
+  "ccDirectLandingVesselRequiredError": "Select or enter a vessel name or port letter and number",
+  "ccDirectLandingVesselInvalidError": "Select a vessel from the list",
+  "ccDirectLandingExportWeightRequiredError": "Enter the export weight in kilograms"
 }

@@ -134,8 +134,8 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "engines": {
-    "node": "~22.13.1",
-    "npm": "~10.9.2"
+    "node": "24.x",
+    "npm": "~11.6.2"
   },
   "overrides": {
     "cookie": "^0.7.0",

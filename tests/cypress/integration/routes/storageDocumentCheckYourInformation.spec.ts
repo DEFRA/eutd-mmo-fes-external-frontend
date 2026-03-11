@@ -284,6 +284,15 @@ describe("Check Your Information (Summary) page: guard", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.url().should("include", "/progress");
   });
+
+  it("should redirect user to dashboard when storage document is already complete", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationValidationComplete,
+    };
+
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
 });
 
 describe("SD: check-your-information page with issuing country", () => {

@@ -272,7 +272,7 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
     cy.contains("h2", "There is a problem").should("be.visible");
   });
 
-  it("should show error when a container identification number exceeds 50 characters", () => {
+  it("should show format error when a container identification number has invalid format regardless of length", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckSaveMaxCharsContainerIdentificationNumber,
     };
@@ -394,6 +394,43 @@ describe("AutocompleteFormField: minCharsBeforeSearch validation", () => {
         cy.get('[role="listbox"]').should("be.visible");
       });
     });
+  });
+});
+
+// FI0-10061: Welsh error messages for departure port field
+describe("Add Transportation Details Truck: Welsh translations for departure port errors", () => {
+  it("should display Welsh error message when departure port exceeds 50 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveMaxCharsDeparturePort,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams, lng: "cy" } });
+    const longString = new Array(52).join("a");
+    cy.get("#departurePlace").type(longString, { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
+    cy.contains("a", /^Rhaid i O ble mae'r lori’n ymadael fod yn llai na 50 o nodau$/).should("be.visible");
+    cy.get(".govuk-error-message").should(
+      "contain.text",
+      "Rhaid i O ble mae'r lori’n ymadael fod yn llai na 50 o nodau"
+    );
+  });
+
+  it("should display Welsh error message when departure port contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSaveInvalidCharsDeparturePort,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams, lng: "cy" } });
+    cy.get("#departurePlace").type("Invalid@#$%", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Rhaid i O ble mae'r lori’n ymadael gynnwys llythrennau, rhifau, collnodau, cysylltnodau a bylchau yn unig$/
+    ).should("be.visible");
+    cy.get(".govuk-error-message").should(
+      "contain.text",
+      "Rhaid i O ble mae'r lori’n ymadael gynnwys llythrennau, rhifau, collnodau, cysylltnodau a bylchau yn unig"
+    );
   });
 });
 

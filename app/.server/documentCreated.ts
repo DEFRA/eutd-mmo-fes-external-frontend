@@ -50,7 +50,8 @@ export const documentCreatedLoader = async (request: Request, params: Params, jo
   const hasRequiredData = () =>
     completedDocument?.documentNumber &&
     completedDocument.documentUri &&
-    completedDocument.documentNumber.includes(documentNumberInclude);
+    completedDocument.documentNumber.includes(documentNumberInclude) &&
+    completedDocument.documentStatus === "COMPLETE";
 
   if (!hasRequiredData()) {
     return redirect(hasIncorrectDataRoute);
@@ -59,6 +60,7 @@ export const documentCreatedLoader = async (request: Request, params: Params, jo
     status: 200,
     headers: {
       "Content-Type": "application/json",
+      "Cache-Control": "no-store",
     },
   });
 };

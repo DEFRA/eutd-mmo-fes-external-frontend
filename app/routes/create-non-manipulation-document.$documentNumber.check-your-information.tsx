@@ -11,6 +11,7 @@ import { formatAddress } from "~/components";
 import {
   createCSRFToken,
   getBearerTokenForRequest,
+  getCompletedDocument,
   getExporterDetailsFromMongo,
   getStorageDocument,
   hasRequiredDataStorageDocumentSummary,
@@ -45,6 +46,10 @@ type loaderProps = {
   csrf: string;
 };
 
+export const headers = () => ({
+  "Cache-Control": "no-store",
+});
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   /* istanbul ignore next */
   setApiMock(request.url);
@@ -55,6 +60,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const session = await getSessionFromRequest(request);
   const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
+  const completedDocument = await getCompletedDocument(bearerToken, documentNumber);
+  if (completedDocument?.documentStatus === "COMPLETE") {
+    return redirect(`/create-non-manipulation-document/non-manipulation-documents`);
+  }
   const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
 
   if (instanceOfUnauthorised(storageDocument)) {
@@ -77,6 +86,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     {
       headers: {
         "Content-Type": "application/json",
+        "Cache-Control": "no-store",
         "Set-Cookie": await commitSession(session),
       },
     }

@@ -929,7 +929,7 @@ describe("PS: Add catch details - Catch Details Table", () => {
     cy.get("#yourproducts thead").should("exist");
     cy.get("#yourproducts thead th").should("have.length.greaterThan", 0);
     cy.get("#yourproducts thead th").eq(0).should("contain.text", "Species");
-    cy.get("#yourproducts thead th").eq(1).should("contain.text", "Catch certificate weight");
+    cy.get("#yourproducts thead th").eq(1).should("contain.text", "Weight on catch certificate");
     cy.get("#yourproducts thead th").eq(2).should("contain.text", "Export weight before processing");
     cy.get("#yourproducts thead th").eq(3).should("contain.text", "Export weight after processing");
     cy.get("#yourproducts thead th").eq(4).should("contain.text", "Action");

@@ -21,7 +21,11 @@ describe("ProgressPage - Incomplete Application", () => {
 
   it("should display the correct headings", () => {
     cy.contains("[data-testid='sd-progress-titling']", "Your Progress");
-    cy.contains("[data-testid='sd-progress-heading']", "Non-manipulation Document application: GBR-2021-SD-8EEB7E123");
+    cy.contains("[data-testid='sd-progress-heading']", "Non-manipulation document application: GBR-2021-SD-8EEB7E123");
+  });
+
+  it("should display the progress heading without bold styling", () => {
+    cy.get("[data-testid='sd-progress-heading']").should("not.have.class", "govuk-!-font-weight-bold");
   });
 
   it("should display Application incomplete when NOT all required sections have been completed", () => {
