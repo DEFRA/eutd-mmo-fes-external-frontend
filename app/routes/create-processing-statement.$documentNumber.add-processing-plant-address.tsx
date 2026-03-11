@@ -458,7 +458,7 @@ const handleDefaultActions = async (
 ) => {
   const nextUri = form.get("nextUri") as string;
   const isDraft = form.get("_action") === "saveAsDraft";
-  const saveToRedisIfErrors = false;
+  const saveToRedisIfErrors = isDraft;
 
   const errorResponse = await updateProcessingStatement(
     plantAddressBearerToken,

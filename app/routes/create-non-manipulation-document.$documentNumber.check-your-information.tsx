@@ -46,6 +46,10 @@ type loaderProps = {
   csrf: string;
 };
 
+export const headers = () => ({
+  "Cache-Control": "no-store",
+});
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   /* istanbul ignore next */
   setApiMock(request.url);
@@ -82,6 +86,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     {
       headers: {
         "Content-Type": "application/json",
+        "Cache-Control": "no-store",
         "Set-Cookie": await commitSession(session),
       },
     }

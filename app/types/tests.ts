@@ -124,12 +124,14 @@ export enum TestCaseId {
   PSAddProcessingPlantDetailsError = "psAddProcessingPlantDetailsError",
   PSPostAddProcessingPlantDetails = "psPostAddProcessingPlantDetails",
   PSAddProcessingPlantDetailsUnauthorised = "psAddProcessingPlantDetailsUnauthorised",
+  PSAddProcessingPlantDetailsSaveAsDraftWithErrors = "psAddProcessingPlantDetailsSaveAsDraftWithErrors",
 
   PSAddHealthCertificate = "psAddHealthCertificate",
   PSAddHealthCertificateError = "psAddHealthCertificateError",
   PSAddHealthCertificateHappyPath = "PSAddHealthCertificateHappyPath",
   PSAddHealthCertificateNoCertificateDate = "PSAddHealthCertificateNoCertificateDate",
   PSAddHealthCertificateHappyPathForbidden = "PSAddHealthCertificateHappyPathForbidden",
+  PSAddHealthCertificateSaveAsDraftWithErrors = "psAddHealthCertificateSaveAsDraftWithErrors",
 
   LandingsTypeNull = "landingsTypeNull",
   LandingsTypeManualEntry = "landingsTypeManualEntry",
@@ -185,6 +187,7 @@ export enum TestCaseId {
   WhatAreYouExportingErrorsOnSaveFromFavourites = "WhatAreYouExportingErrorsOnSaveFromFavourites",
   WhatAreYouExportingErrorsOnSaveFromEmptyFavourites = "WhatAreYouExportingErrorsOnSaveFromEmptyFavourites",
   WhatAreYouExportingErrorsOnProductSave = "WhatAreYouExportingErrorsOnProductSave",
+  WhatAreYouExportingDuplicateProduct = "WhatAreYouExportingDuplicateProduct",
   WhatAreYouExportingProductAddedToFavourites = "whatAreYouExportingProductAddedToFavourites",
   WhatAreYouExportingProductAddedToFavouritesSuccess = "whatAreYouExportingProductAddedToFavouritesSuccess",
   WhatAreYouExportingProductAddedToFavouritesFailure = "whatAreYouExportingProductAddedToFavouritesFailure",
@@ -649,6 +652,7 @@ export enum TestCaseId {
   PSAddProcessingPlantAddressMissingPlantAddressError = "psAddProcessingPlantAddressMissingPlantAddressError",
   PSAddProcessingPlantAddressInvalidPlantNameError = "psAddProcessingPlantAddressInvalidPlantNameError",
   PSAddProcessingPlantAddressComplete = "psAddProcessingPlantAddressComplete",
+  PSAddProcessingPlantAddressSaveAsDraftWithErrors = "psAddProcessingPlantAddressSaveAsDraftWithErrors",
   PSAddProcessingPlantAddressWithSessionPostcode = "psAddProcessingPlantAddressWithSessionPostcode",
   PSAddProcessingPlantAddressFindAddress = "psAddProcessingPlantAddressFindAddress",
   PSAddProcessingPlantAddressWithExistingAddress = "psAddProcessingPlantAddressWithExistingAddress",
@@ -824,6 +828,7 @@ export enum TestCaseId {
   SDDepartureSummaryCatchesSingleCatch = "sdDepartureSummaryCatchesSingleCatch",
   SDDepartureSummaryCatchesEmptyWeights = "sdDepartureSummaryCatchesEmptyWeights",
   SDDepartureSummaryCatchesInvalidWeightSave = "sdDepartureSummaryCatchesInvalidWeightSave",
+  SDDepartureSummarySaveAsDraftWithErrors = "sdDepartureSummarySaveAsDraftWithErrors",
 
   // FI0-10296: Remove Product Page
   RemoveProductPageLoads = "removeProductPageLoads",

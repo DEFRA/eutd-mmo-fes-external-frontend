@@ -83,6 +83,16 @@ const departureSummaryHandlerHandler: ITestHandler = {
       res(ctx.status(400), ctx.json(sdProductAddedInvalidWeightData))
     ),
   ],
+  [TestCaseId.SDDepartureSummarySaveAsDraftWithErrors]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(multiCatches))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.status(200), ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(sdProductAddedInvalidWeightData))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+  ],
   [TestCaseId.SDDepartureSummaryForbidden]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.status(403))),
   ],
