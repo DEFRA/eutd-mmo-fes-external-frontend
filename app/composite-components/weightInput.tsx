@@ -83,9 +83,9 @@ export const WeightInput = ({
         )}
         <input
           className={
-            isEmpty(errors?.[inputId])
-              ? `govuk-input ${inputWidthClass} ${inputClassName ?? ""}`
-              : `govuk-input ${inputWidthClass} govuk-input--error ${inputClassName ?? ""}`
+            !isEmpty(errors?.[inputId])
+              ? `govuk-input ${inputWidthClass} govuk-input--error ${inputClassName ?? ""}`
+              : `govuk-input ${inputWidthClass} ${inputClassName ?? ""}`
           }
           id={inputId}
           name={inputName ?? `weight-${speciesId}`}
