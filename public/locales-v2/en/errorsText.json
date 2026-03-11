@@ -208,7 +208,7 @@
   "psAddHealthCertificateErrorValidDateHealthCertificateDate": "Health certificate date must be today or in the past",
   "psAddHealthCertificateErrorMaxDaysHealthCertificateDate": "A Health certificate’s date can be selected in the past but not outside 7 days in advance of today",
   "psAddHealthCertificateErrorTodayOrPastSubmitDateValidationError": "The Health Certificate date selected must be today or in the past",
-  "psAddHealthCertificateErrorTodayOrPastSubmitDateError": "You cannot submit this Processing Statement, the Health Certificate date selected must be today or in the past.",
+  "psAddHealthCertificateErrorTodayOrPastSubmitDateError": "The health certificate date must be today or in the past.",
   "sdAddStorageFacilityDetailsErrorEnterTheFacilityName": "Enter the facility name",
   "sdAddStorageFacilityDetailsErrorEnterTheAddress": "Enter the address",
   "sdAddStorageFacilityApprovalCharacterError": "Approval number must not exceed 50 characters",
