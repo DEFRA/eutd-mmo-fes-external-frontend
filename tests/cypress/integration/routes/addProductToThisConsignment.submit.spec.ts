@@ -144,6 +144,7 @@ describe("Add product to this consignment: issuing country validation", () => {
     cy.get(".govuk-error-summary__list")
       .contains("Enter the country that issued the entry document")
       .should("be.visible");
+    cy.contains(".govuk-error-summary__body", "Enter the country that issued the entry document").should("be.visible");
   });
 });
 

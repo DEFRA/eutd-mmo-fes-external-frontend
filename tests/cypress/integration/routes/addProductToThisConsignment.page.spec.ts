@@ -90,6 +90,7 @@ describe("Add product to this consignment: page structure and navigation", () =>
     cy.get(".govuk-details__text")
       .contains("The UK entry document is the official paperwork that allowed the product to enter the UK.")
       .should("be.visible");
+    cy.get(".govuk-details__text").contains("Make sure the document is one of the following:").should("be.visible");
     cy.get(".govuk-details__text").contains("A catch certificate").should("be.visible");
     cy.get(".govuk-details__text").contains("A processing statement").should("be.visible");
     cy.get(".govuk-details__text").contains("A non-manipulation document").should("be.visible");
@@ -100,6 +101,12 @@ describe("Add product to this consignment: page structure and navigation", () =>
     cy.get(".govuk-details__text")
       .contains("Supporting documents are additional records that back up the information in your UK entry document.")
       .should("be.visible");
+    cy.get(".govuk-details__text")
+      .contains(
+        "If you\u2019re using a processing statement, you\u2019ll need to include the reference number for each supporting document."
+      )
+      .should("be.visible");
+    cy.get(".govuk-details__text").contains("These might include:").should("be.visible");
     cy.get(".govuk-details__text").contains("Catch certificates").should("be.visible");
     cy.get(".govuk-details__text").contains("Processing statements").should("be.visible");
     cy.get(".govuk-details__text").contains("Non-manipulation documents").should("be.visible");
@@ -144,6 +151,10 @@ describe("Add product to this consignment: accessibility", () => {
   beforeEach(() => {
     cy.visit(pageUrl, { qs: defaultTestParams });
     cy.get(".govuk-heading-xl").should("be.visible");
+  });
+
+  it("should have exactly 12 form labels", () => {
+    cy.get("form label").should("have.length", 12);
   });
 
   it("should have correct label for certificate type field", () => {

@@ -97,6 +97,29 @@ describe("Add product to this consignment: supporting documents (JS enabled)", (
     cy.get("#remove-supporting-doc-button-0").should("be.visible").click();
     cy.get("input[name='supportingDocuments']").should("have.length", 3);
   });
+
+  it("should correctly remove two documents sequentially, leaving only the last", () => {
+    cy.get("#add-supporting-doc-button").click();
+    cy.get("#catches-0-supportingDocuments-1").should("exist");
+    cy.get("#add-supporting-doc-button").click();
+    cy.get("#catches-0-supportingDocuments-2").should("exist");
+
+    cy.get("#catches-0-supportingDocuments-0").clear().type("First Document");
+    cy.get("#catches-0-supportingDocuments-1").clear().type("Second Document");
+    cy.get("#catches-0-supportingDocuments-2").clear().type("Third Document");
+
+    // Remove the middle document (index 1)
+    cy.get("#remove-supporting-doc-button-1").click();
+    cy.get("input[name='supportingDocuments']").should("have.length", 2);
+    cy.get("#catches-0-supportingDocuments-0").should("have.value", "First Document");
+    cy.get("#catches-0-supportingDocuments-1").should("have.value", "Third Document");
+
+    // Remove the first document (index 0), leaving only the last
+    cy.get("#remove-supporting-doc-button-0").click();
+    cy.get("input[name='supportingDocuments']").should("have.length", 1);
+    cy.get("#catches-0-supportingDocuments-0").should("have.value", "Third Document");
+    cy.get('[id^="remove-supporting-doc-button"]').should("not.exist");
+  });
 });
 
 describe("Add product to this consignment: supporting documents (default catch data)", () => {
@@ -111,6 +134,26 @@ describe("Add product to this consignment: supporting documents (default catch d
     cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments } });
     cy.get("#catches-0-supportingDocuments-0").should("be.visible").and("have.value", "");
     cy.get("[data-testid=save-and-continue]").click();
+    cy.url().should("include", "/you-have-added-a-product");
+  });
+
+  it("should submit the form with supporting documents without triggering remove logic", () => {
+    cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments } });
+    cy.get("#add-supporting-doc-button").should("be.visible");
+    cy.get("#add-supporting-doc-button").click();
+    cy.get("#catches-0-supportingDocuments-1").should("exist");
+
+    cy.get("#catches-0-supportingDocuments-0").type("First Document");
+    cy.get("#catches-0-supportingDocuments-1").type("Second Document");
+
+    cy.get('input[value="uk"]').click({ force: true });
+    cy.get("#catches-0-certificateNumber").type("TEST123");
+    cy.get("#catches-0-weightOnCC").type("100");
+    cy.get("#catches-0-product").type("COD").blur();
+    cy.get("#catches-0-commodityCode").type("03").blur();
+
+    // Submitting with save-and-continue should not trigger remove logic (getRemoveIndex returns -1)
+    cy.get('[data-testid="save-and-continue"]').click();
     cy.url().should("include", "/you-have-added-a-product");
   });
 });
