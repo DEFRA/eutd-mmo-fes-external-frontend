@@ -276,6 +276,7 @@
   "sdNetWeightProductFisheryArrivalErrorMax2DecimalLargerThan0": "Rhowch bwysau net y cynnyrch pysgodfeydd mewn kg fel rhif gydag uchafswm o 2 le degol",
   "sdNetWeightProductFisheryArrivalPositiveMax2Decimal": "Rhowch bwysau net y cynnyrch pysgodfeydd mewn kg fel rhif gydag uchafswm o 2 le degol",
   "sdNetWeightProductFisheryArrivalExceed12Digit": "Rhaid i bwysau net y cynnyrch pysgodfeydd fod yn llai na 100000000000",
+  "sdNetWeightFisheryProductArrivalExceedsProductArrival": "Ni chaiff pwysau net cynhyrchion pysgodfeydd wrth gyrraedd fod yn fwy na phwysau net y cynhyrchion wrth gyrraedd.",
   "ccUploadFilePageTableVesselInvalidLicenseError": "Rhaid i’r dyddiad glanio gyfateb i’r adeg y cafodd y cwch ei drwyddedu",
   "sdAddTransportationDetailsTruckPlaceOfUnloadingError": "Rhowch y man lle cafodd y llwyth ei ddadlwytho",
   "sdAddTransportationDetailsPlaceOfUnloadingCharExceedError": "Rhaid i’r man dadlwytho fod yn llai na 50 o nodau",
