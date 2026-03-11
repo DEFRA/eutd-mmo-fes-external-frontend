@@ -112,7 +112,7 @@ const onValidateDirectLandingsResponse = async (
       // remove any redundant per-item "weights.N.exportWeight" errors that resolve to the
       // same message. Both fire when a value exceeds Number.MAX_SAFE_INTEGER but showing the
       // same error twice in the summary is confusing.
-      const hasArrayWeightError = errorsFormat && errorsFormat.some((e: IError) => e.key === "weights");
+      const hasArrayWeightError = errorsFormat?.some((e: IError) => e.key === "weights");
       if (hasArrayWeightError) {
         errorsFormat = errorsFormat.filter((e: IError) => !/^weights\.\d+\.exportWeight$/.test(e.key));
       }
