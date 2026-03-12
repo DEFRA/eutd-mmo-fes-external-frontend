@@ -595,11 +595,22 @@ export const commonSaveTransportDetails = async (
     // undefined so the key is omitted from JSON and the backend preserves the previously saved value.
     if (typeof filteredPayload.exportDate === "string") {
       const exportDateFormats = ["DD/MM/YYYY", "DD/M/YYYY", "D/MM/YYYY", "D/M/YYYY"];
-      const isValidExportDate =
-        filteredPayload.exportDate !== "" &&
-        exportDateFormats.some((fmt) => moment(filteredPayload.exportDate as string, fmt, true).isValid());
-      if (!isValidExportDate) {
+      const exp = filteredPayload.exportDate as string;
+      if (exp === "") {
         filteredPayload.exportDate = undefined;
+      } else {
+        const validMoment = exportDateFormats.map((fmt) => moment(exp, fmt, true)).find((m) => m.isValid());
+        if (!validMoment) {
+          // Invalid format - omit field
+          filteredPayload.exportDate = undefined;
+        } else {
+          const exportYear = validMoment.year();
+          // Reject years outside reasonable range (< 1000 or > 9999)
+          // Catches obviously invalid entries like year 777777
+          if (exportYear < 1000 || exportYear > 9999) {
+            filteredPayload.exportDate = undefined;
+          }
+        }
       }
     }
     // departureDate: omit invalid or future dates when saving as draft so we don't persist
@@ -616,10 +627,13 @@ export const commonSaveTransportDetails = async (
         if (!validMoment) {
           filteredPayload.departureDate = undefined;
         } else {
-          // If the date is in the future (after today) omit it for draft saves
           const parsed = validMoment.startOf("day");
           const today = moment().startOf("day");
-          if (parsed.isAfter(today)) {
+          const departureYear = parsed.year();
+          // Reject years outside reasonable range (< 1000 or > 9999)
+          // Catches obviously invalid entries like year 777777
+          // Also reject future dates (after today)
+          if (departureYear < 1000 || departureYear > 9999 || parsed.isAfter(today)) {
             filteredPayload.departureDate = undefined;
           }
         }
