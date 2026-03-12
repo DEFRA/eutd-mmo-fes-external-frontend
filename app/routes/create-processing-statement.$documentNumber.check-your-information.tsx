@@ -36,6 +36,10 @@ type loaderDataProps = {
   csrf: string;
 };
 
+export const headers = () => ({
+  "Cache-Control": "no-store",
+});
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   /* istanbul ignore next */
   setApiMock(request.url);
@@ -75,6 +79,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     {
       headers: {
         "Content-Type": "application/json",
+        "Cache-Control": "no-store",
         "Set-Cookie": await commitSession(session),
       },
     }
@@ -220,96 +225,86 @@ const CheckYourInformation = () => {
                 const catchErrors = getCatchErrors(errors, currentCatchIndex);
                 const hasCatchCertificateError = catchErrors.catchCertificateNumber !== undefined;
                 const hasSpeciesError = catchErrors.species !== undefined;
+                const hasAnyCatchError = hasCatchCertificateError || hasSpeciesError;
                 const catchCertificateFieldId = `catches-${currentCatchIndex}-catchCertificateNumber`;
-                const speciesFieldId = `catches-${currentCatchIndex}-species`;
 
                 return (
-                  <dl key={catchItem.id} className="govuk-summary-list govuk-!-margin-bottom-5">
-                    <div className="govuk-summary-list__row">
-                      <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                        {" "}
-                        {t("psSummaryPageCommodityCode", { ns: "psCheckYourInformation" })}
-                      </dt>
-                      <dd className="govuk-summary-list__value">{product.commodityCode}</dd>
-                    </div>
-                    {/* Species Row with Error */}
-                    <div
-                      id={speciesFieldId}
-                      className={
-                        hasSpeciesError
-                          ? "govuk-form-group govuk-form-group--error govuk-summary-list__row"
-                          : "govuk-summary-list__row"
-                      }
-                    >
-                      {hasSpeciesError && (
-                        <ErrorMessage
-                          text={t(catchErrors.species.message, { ns: "errorsText" })}
-                          visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
-                        />
-                      )}
-                      <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                        {" "}
-                        {t("psSummaryPageSpecies", { ns: "psCheckYourInformation" })}
-                      </dt>
-                      <dd className="govuk-summary-list__value">{catchItem.species}</dd>
-                    </div>
-                    <div className="govuk-summary-list__row">
-                      <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                        {" "}
-                        {t("psSummaryPageCertificateIssuedInTheUK", { ns: "psCheckYourInformation" })}
-                      </dt>
-                      <dd className="govuk-summary-list__value">
-                        {catchItem.catchCertificateType === "uk" ? "Yes" : "No"}
-                      </dd>
-                    </div>
-                    {catchItem.catchCertificateType === "non_uk" && catchItem.issuingCountry && (
+                  <div
+                    key={catchItem.id}
+                    id={hasAnyCatchError ? catchCertificateFieldId : undefined}
+                    className={hasAnyCatchError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}
+                  >
+                    {hasCatchCertificateError && (
+                      <ErrorMessage
+                        text={t(catchErrors.catchCertificateNumber.message, { ns: "errorsText" })}
+                        visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                      />
+                    )}
+                    {hasSpeciesError && (
+                      <ErrorMessage
+                        text={t(catchErrors.species.message, { ns: "errorsText" })}
+                        visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                      />
+                    )}
+                    <dl className="govuk-summary-list govuk-!-margin-bottom-5">
                       <div className="govuk-summary-list__row">
                         <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                          {t("psSummaryPageIssuingCountry", { ns: "psCheckYourInformation" })}
+                          {" "}
+                          {t("psSummaryPageCommodityCode", { ns: "psCheckYourInformation" })}
                         </dt>
-                        <dd className="govuk-summary-list__value">{catchItem.issuingCountry.officialCountryName}</dd>
+                        <dd className="govuk-summary-list__value">{product.commodityCode}</dd>
                       </div>
-                    )}
-                    {/* Catch Certificate Row with Error */}
-                    <div
-                      id={catchCertificateFieldId}
-                      className={
-                        hasCatchCertificateError
-                          ? "govuk-form-group govuk-form-group--error govuk-summary-list__row"
-                          : "govuk-summary-list__row"
-                      }
-                    >
-                      {hasCatchCertificateError && (
-                        <ErrorMessage
-                          text={t(catchErrors.catchCertificateNumber.message, { ns: "errorsText" })}
-                          visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
-                        />
+                      <div className="govuk-summary-list__row">
+                        <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                          {" "}
+                          {t("psSummaryPageSpecies", { ns: "psCheckYourInformation" })}
+                        </dt>
+                        <dd className="govuk-summary-list__value">{catchItem.species}</dd>
+                      </div>
+                      <div className="govuk-summary-list__row">
+                        <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                          {" "}
+                          {t("psSummaryPageCertificateIssuedInTheUK", { ns: "psCheckYourInformation" })}
+                        </dt>
+                        <dd className="govuk-summary-list__value">
+                          {catchItem.catchCertificateType === "uk" ? "Yes" : "No"}
+                        </dd>
+                      </div>
+                      {catchItem.catchCertificateType === "non_uk" && catchItem.issuingCountry && (
+                        <div className="govuk-summary-list__row">
+                          <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                            {t("psSummaryPageIssuingCountry", { ns: "psCheckYourInformation" })}
+                          </dt>
+                          <dd className="govuk-summary-list__value">{catchItem.issuingCountry.officialCountryName}</dd>
+                        </div>
                       )}
-                      <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                        {t("psSummaryPageCatchCertificate", { ns: "psCheckYourInformation" })}
-                      </dt>
-                      <dd className="govuk-summary-list__value">{catchItem.catchCertificateNumber}</dd>
-                    </div>
-                    <div className="govuk-summary-list__row">
-                      <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                        {t("psSummaryPageCatchCertificateWeight", { ns: "psCheckYourInformation" })}
-                      </dt>
-                      <dd className="govuk-summary-list__value">{`${Number(catchItem.totalWeightLanded).toFixed(2)}kg`}</dd>
-                    </div>
-                    <div className="govuk-summary-list__row">
-                      <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                        {t("psSummaryPageExportWeightBeforeProcessing", { ns: "psCheckYourInformation" })}
-                      </dt>
-                      <dd className="govuk-summary-list__value">{`${Number(catchItem.exportWeightBeforeProcessing).toFixed(2)}kg`}</dd>
-                    </div>
-                    <div className="govuk-summary-list__row">
-                      <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                        {t("psSummaryPageExportWeightAfterProcessing", { ns: "psCheckYourInformation" })}
-                      </dt>
-                      <dd className="govuk-summary-list__value">{`${Number(catchItem.exportWeightAfterProcessing).toFixed(2)}kg`}</dd>
-                    </div>
-                    <div className="govuk-!-margin-bottom-5"></div>
-                  </dl>
+                      <div className="govuk-summary-list__row">
+                        <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                          {t("psSummaryPageCatchCertificate", { ns: "psCheckYourInformation" })}
+                        </dt>
+                        <dd className="govuk-summary-list__value">{catchItem.catchCertificateNumber}</dd>
+                      </div>
+                      <div className="govuk-summary-list__row">
+                        <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                          {t("psSummaryPageCatchCertificateWeight", { ns: "psCheckYourInformation" })}
+                        </dt>
+                        <dd className="govuk-summary-list__value">{`${Number(catchItem.totalWeightLanded).toFixed(2)}kg`}</dd>
+                      </div>
+                      <div className="govuk-summary-list__row">
+                        <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                          {t("psSummaryPageExportWeightBeforeProcessing", { ns: "psCheckYourInformation" })}
+                        </dt>
+                        <dd className="govuk-summary-list__value">{`${Number(catchItem.exportWeightBeforeProcessing).toFixed(2)}kg`}</dd>
+                      </div>
+                      <div className="govuk-summary-list__row">
+                        <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                          {t("psSummaryPageExportWeightAfterProcessing", { ns: "psCheckYourInformation" })}
+                        </dt>
+                        <dd className="govuk-summary-list__value">{`${Number(catchItem.exportWeightAfterProcessing).toFixed(2)}kg`}</dd>
+                      </div>
+                      <div className="govuk-!-margin-bottom-5"></div>
+                    </dl>
+                  </div>
                 );
               })}
             </div>
@@ -378,79 +373,98 @@ const CheckYourInformation = () => {
           </div>
         </dl>
         <h2 className="govuk-heading-l">{t("psSummaryPageTransportDetails", { ns: "psCheckYourInformation" })}</h2>
-        <dl className="govuk-summary-list govuk-!-margin-bottom-5">
-          <div className="govuk-summary-list__row">
-            <dt className="govuk-summary-list__key govuk-!-width-one-half">
-              {t("psSummaryPageConfirmationExportHealthCertificate", { ns: "psCheckYourInformation" })}
-            </dt>
-            <dd className="govuk-summary-list__value">{processingStatement?.healthCertificateNumber}</dd>
-            <dd className="govuk-summary-list__actions">
-              {
-                <a
-                  id="healthCertificateNumberChangeLink"
-                  className="govuk-link"
-                  href={`${route("/create-processing-statement/:documentNumber/add-health-certificate", {
-                    documentNumber,
-                  })}?nextUri=${route("/create-processing-statement/:documentNumber/check-your-information", {
-                    documentNumber,
-                  })}`}
-                >
-                  {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
-                </a>
-              }
-            </dd>
-          </div>
-          <div className="govuk-summary-list__row">
-            <dt className="govuk-summary-list__key govuk-!-width-one-half">
-              {t("psSummaryPageConfirmationIssueDate", { ns: "psCheckYourInformation" })}
-            </dt>
-            <dd className="govuk-summary-list__value">{processingStatement?.healthCertificateDate}</dd>
-          </div>
-          <div className="govuk-summary-list__row">
-            <dt className="govuk-summary-list__key govuk-!-width-one-half">
-              {t("psSummaryPageConfirmationDestinationCountry", { ns: "psCheckYourInformation" })}
-            </dt>
-            <dd className="govuk-summary-list__value">{processingStatement?.exportedTo?.officialCountryName}</dd>
-            <dd className="govuk-summary-list__actions">
-              {
-                <a
-                  id="exportToChangeLink"
-                  className="govuk-link"
-                  href={`${route("/create-processing-statement/:documentNumber/what-export-destination", {
-                    documentNumber,
-                  })}?nextUri=${route("/create-processing-statement/:documentNumber/check-your-information", {
-                    documentNumber,
-                  })}`}
-                >
-                  {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
-                </a>
-              }
-            </dd>
-          </div>
-          {processingStatement?.pointOfDestination && (
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                {t("psPointOfDestination", { ns: "psCheckYourInformation" })}
-              </dt>
-              <dd className="govuk-summary-list__value">{processingStatement?.pointOfDestination}</dd>
-              <dd className="govuk-summary-list__actions">
-                {
-                  <a
-                    id="pointOfDestinationChangeLink"
-                    className="govuk-link"
-                    href={`${route("/create-processing-statement/:documentNumber/what-export-destination", {
-                      documentNumber,
-                    })}?nextUri=${route("/create-processing-statement/:documentNumber/check-your-information", {
-                      documentNumber,
-                    })}#pointOfDestination`}
-                  >
-                    {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
-                  </a>
-                }
-              </dd>
+        {(() => {
+          const healthCertificateDateError = errors.find((error) => error.key === "dateValidationError");
+          const hasHealthCertificateError = healthCertificateDateError !== undefined;
+          const healthCertificateFieldId = "dateValidationError";
+
+          return (
+            <div
+              id={hasHealthCertificateError ? healthCertificateFieldId : undefined}
+              className={hasHealthCertificateError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}
+            >
+              {hasHealthCertificateError && (
+                <ErrorMessage
+                  text={t(healthCertificateDateError.message, { ns: "errorsText" })}
+                  visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                />
+              )}
+              <dl className="govuk-summary-list govuk-!-margin-bottom-5">
+                <div className="govuk-summary-list__row">
+                  <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                    {t("psSummaryPageConfirmationExportHealthCertificate", { ns: "psCheckYourInformation" })}
+                  </dt>
+                  <dd className="govuk-summary-list__value">{processingStatement?.healthCertificateNumber}</dd>
+                  <dd className="govuk-summary-list__actions">
+                    {
+                      <a
+                        id="healthCertificateNumberChangeLink"
+                        className="govuk-link"
+                        href={`${route("/create-processing-statement/:documentNumber/add-health-certificate", {
+                          documentNumber,
+                        })}?nextUri=${route("/create-processing-statement/:documentNumber/check-your-information", {
+                          documentNumber,
+                        })}`}
+                      >
+                        {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
+                      </a>
+                    }
+                  </dd>
+                </div>
+                <div className="govuk-summary-list__row">
+                  <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                    {t("psSummaryPageConfirmationIssueDate", { ns: "psCheckYourInformation" })}
+                  </dt>
+                  <dd className="govuk-summary-list__value">{processingStatement?.healthCertificateDate}</dd>
+                </div>
+                <div className="govuk-summary-list__row">
+                  <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                    {t("psSummaryPageConfirmationDestinationCountry", { ns: "psCheckYourInformation" })}
+                  </dt>
+                  <dd className="govuk-summary-list__value">{processingStatement?.exportedTo?.officialCountryName}</dd>
+                  <dd className="govuk-summary-list__actions">
+                    {
+                      <a
+                        id="exportToChangeLink"
+                        className="govuk-link"
+                        href={`${route("/create-processing-statement/:documentNumber/what-export-destination", {
+                          documentNumber,
+                        })}?nextUri=${route("/create-processing-statement/:documentNumber/check-your-information", {
+                          documentNumber,
+                        })}`}
+                      >
+                        {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
+                      </a>
+                    }
+                  </dd>
+                </div>
+                {processingStatement?.pointOfDestination && (
+                  <div className="govuk-summary-list__row">
+                    <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                      {t("psPointOfDestination", { ns: "psCheckYourInformation" })}
+                    </dt>
+                    <dd className="govuk-summary-list__value">{processingStatement?.pointOfDestination}</dd>
+                    <dd className="govuk-summary-list__actions">
+                      {
+                        <a
+                          id="pointOfDestinationChangeLink"
+                          className="govuk-link"
+                          href={`${route("/create-processing-statement/:documentNumber/what-export-destination", {
+                            documentNumber,
+                          })}?nextUri=${route("/create-processing-statement/:documentNumber/check-your-information", {
+                            documentNumber,
+                          })}#pointOfDestination`}
+                        >
+                          {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
+                        </a>
+                      }
+                    </dd>
+                  </div>
+                )}
+              </dl>
             </div>
-          )}
-        </dl>
+          );
+        })()}
 
         <div className="govuk-warning-text">
           <span className="govuk-warning-text__icon" aria-hidden="true">

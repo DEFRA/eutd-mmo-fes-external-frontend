@@ -1215,8 +1215,10 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
       cy.get("#species").invoke("val");
 
-      // Clear and type new species (force: true required as autocomplete disables input after selection)
-      cy.get("#species").clear({ force: true }).type("Atlantic cod", { force: true });
+      // Clear and type new species - break the chain to avoid detached DOM errors
+      cy.get("#species").clear({ force: true });
+      cy.wait(500);
+      cy.get("#species").type("Atlantic cod", { force: true });
       cy.wait(1000);
 
       // Select from autocomplete if available
@@ -1761,5 +1763,88 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
       cy.get("#commodity_code").should("exist");
       cy.get("#commodity_code").should("have.value", "");
     });
+  });
+});
+describe("Duplicate product error - form remains fully interactive", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingDuplicateProduct,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+  });
+
+  it("should display the duplicate product error message in the error summary", () => {
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /The combination of species, state, presentation and commodity code must be unique/).should(
+      "be.visible"
+    );
+  });
+
+  it("should display the duplicate product error inline on the species field", () => {
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("#errorIsland").should("exist");
+    cy.contains(/The combination of species, state, presentation and commodity code must be unique/).should(
+      "be.visible"
+    );
+  });
+
+  it("should keep the state dropdown enabled after a duplicate product error", () => {
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("#errorIsland").should("exist");
+    cy.get("select#state").should("exist");
+    cy.get("select#state").should("not.be.disabled");
+  });
+
+  it("should keep the presentation dropdown enabled after a duplicate product error", () => {
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("#errorIsland").should("exist");
+    cy.get("select#presentation").should("exist");
+    cy.get("select#presentation").should("not.be.disabled");
+  });
+
+  it("should keep the commodity code dropdown enabled after a duplicate product error", () => {
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("#errorIsland").should("exist");
+    cy.get("select#commodity_code").should("exist");
+    cy.get("select#commodity_code").should("not.be.disabled");
+  });
+
+  it("should keep the species autocomplete field usable after a duplicate product error", () => {
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("#errorIsland").should("exist");
+    cy.get("#species").should("exist");
+    cy.get("#species").should("not.be.disabled");
+  });
+
+  it("should not clear pre-populated state options after a duplicate product error", () => {
+    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+
+    cy.get("#species").should("have.value", "Aesop shrimp (AES)");
+    cy.get("select#state option").should("have.length.greaterThan", 1);
+    cy.get("select#state").should("not.have.value", "");
+
+    cy.get("select#state option:not([value=''])").should("have.length.greaterThan", 0);
+  });
+
+  it("should allow the user to re-select a state value after a duplicate product error", () => {
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("#errorIsland").should("exist");
+
+    cy.get("select#state").should("not.be.disabled").select(0, { force: true });
+  });
+
+  it("should allow the user to attempt re-submission after a duplicate product error", () => {
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("#errorIsland").should("exist");
+
+    cy.get("[data-testid='add-product']").eq(0).should("exist").should("not.be.disabled");
+  });
+
+  it("should allow the user to cancel after a duplicate product error", () => {
+    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("#errorIsland").should("exist");
+
+    cy.get("[data-testid='cancel']").should("exist").should("not.be.disabled").click({ force: true });
   });
 });

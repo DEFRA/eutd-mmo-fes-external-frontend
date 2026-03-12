@@ -306,6 +306,33 @@ const whatAreYouExportingHandler: ITestHandler = {
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
   ],
+  [TestCaseId.WhatAreYouExportingDuplicateProduct]: () => [
+    rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json(favourites))),
+    rest.get(SPECIES_STATE_LOOK_UP, (req, res, ctx) => res(ctx.json(speciesStateLookup))),
+    rest.get(COMMODITY_CODE_LOOK_UP, (req, res, ctx) => res(ctx.json(commodityCode))),
+    // The ADD_SPECIES_URL POST always returns a 400 duplicate product error,
+    // simulating what the backend returns when the same species/state/presentation/
+    // commodity code combination already exists in the document.
+    rest.post(ADD_SPECIES_URL, (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          species: "error.favourite.duplicate",
+        })
+      )
+    ),
+    rest.post(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
+    rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.put(mockUpdateFishUrl, (req, res, ctx) => res(ctx.status(200), ctx.json({}))),
+    rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
+    rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
+  ],
   [TestCaseId.WhatAreYouExportingUploadEntry]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
     rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),

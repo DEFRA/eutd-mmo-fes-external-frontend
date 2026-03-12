@@ -34,6 +34,7 @@ export const WeightInput = ({
   label,
   hint,
   inputName,
+  inputClassName,
   onChange,
 }: WeightInputProps) => {
   const { t } = useTranslation("directLandings");
@@ -81,8 +82,8 @@ export const WeightInput = ({
         <input
           className={
             !isEmpty(errors?.[inputId])
-              ? `govuk-input govuk-!-static-margin-left-3 ${inputWidthClass} govuk-input--error`
-              : `govuk-input govuk-!-static-margin-left-3 ${inputWidthClass}`
+              ? `govuk-input ${inputWidthClass} govuk-input--error ${inputClassName ?? ""}`
+              : `govuk-input ${inputWidthClass} ${inputClassName ?? ""}`
           }
           id={inputId}
           name={inputName ?? `weight-${speciesId}`}

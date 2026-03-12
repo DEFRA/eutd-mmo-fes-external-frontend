@@ -1225,6 +1225,83 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.url().should("include", "productIndex=0");
     });
   });
+
+  // FI0-10949: Fishery products net weight on arrival cannot exceed product net weight on arrival
+  describe("Net weight of fishery products on arrival validation", () => {
+    it("should show field-level error when fishery product weight exceeds product weight", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentFisheryWeightExceedsProductWeight,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
+      cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+      cy.contains(
+        ".govuk-error-message",
+        "Fishery products net weight on arrival cannot exceed the product net weight on arrival."
+      ).should("be.visible");
+    });
+
+    it("should show the error in the error summary when fishery product weight exceeds product weight", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentFisheryWeightExceedsProductWeight,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
+      cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+      cy.get(".govuk-error-summary__list").should(
+        "contain",
+        "Fishery products net weight on arrival cannot exceed the product net weight on arrival."
+      );
+    });
+
+    it("should apply error styling to the fishery product weight field when it exceeds product weight", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentFisheryWeightExceedsProductWeight,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
+      cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+      cy.get("#catches-0-netWeightFisheryProductArrival").should("have.class", "govuk-form-group--error");
+      cy.get("#netWeightFisheryProductArrival").should("have.class", "govuk-input--error");
+    });
+
+    it("should scroll to error island when fishery product weight exceeds product weight", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentFisheryWeightExceedsProductWeight,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
+      cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+      cy.get("#errorIsland").should("be.visible");
+    });
+
+    it("should not show a fishery weight error when fishery product weight is within product weight", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentData,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
+      cy.get('input[value="uk"]').check({ force: true });
+      cy.get("#catches-0-certificateNumber").type("GBR-2024-CC-TEST123");
+      cy.get("#catches-0-weightOnCC").type("100");
+      cy.get("#catches-0-product").type("Atlantic cod (COD)");
+      cy.get("#catches-0-commodityCode").type("03011100 - Fresh or chilled trout");
+      cy.get("#catches-0-productDescription").type("Test description");
+      cy.get("#netWeightProductArrival").type("100");
+      cy.get("#netWeightFisheryProductArrival").type("100");
+
+      cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+      cy.contains(
+        ".govuk-error-message",
+        "Fishery products net weight on arrival cannot exceed the product net weight on arrival."
+      ).should("not.exist");
+    });
+  });
 });
 
 describe("Add product to consignment (SD): save as draft retains valid fields", () => {

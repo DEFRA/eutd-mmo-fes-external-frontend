@@ -40,6 +40,7 @@ import directLandingVesselInvalid from "@/fixtures/directLanding/directLandingVe
 import directLandingVesselIsListed from "@/fixtures/directLanding/directLandingVesselIsListed.json";
 import directLandingExportWeightInvalid from "@/fixtures/directLanding/directLandingExportWeightInvalid.json";
 import directLandingTotalWeightExceededError from "@/fixtures/directLanding/directLandingTotalWeightExceededError.json";
+import directLandingBothWeightErrors from "@/fixtures/directLanding/directLandingBothWeightErrors.json";
 import directLandingsSingleProduct from "@/fixtures/directLanding/directLandingsSingleProduct.json";
 import species from "@/fixtures/referenceDataApi/species.json";
 import favourites from "@/fixtures/whatAreYouExportingApi/favourites.json";
@@ -392,6 +393,25 @@ const directLandingHandler: ITestHandler = {
     rest.get(mockSearchVesselName, (req, res, ctx) => res(ctx.json(getVessels))),
     rest.post(VALIDATE_DIRECT_LANDINGS_URL, (req, res, ctx) =>
       res(ctx.status(400), ctx.json(directLandingTotalWeightExceededError))
+    ),
+    rest.get(CONSERVATION_URL, (req, res, ctx) => res(ctx.json(empty))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+    rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(FAVOURITES_URL, (req, res, ctx) => res(ctx.json(favourites))),
+    rest.get(SPECIES_STATE_LOOK_UP, (req, res, ctx) => res(ctx.json(speciesStateLookup))),
+    rest.get(COMMODITY_CODE_LOOK_UP, (req, res, ctx) => res(ctx.json(commodityCode))),
+    rest.post(ADD_SPECIES_URL, (req, res, ctx) => res(ctx.json(addOrUpdateResponse))),
+    rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
+    rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
+    rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+  ],
+  [TestCaseId.DirectLandingTotalWeightExceededBothErrors]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingType))),
+    rest.get(GET_DIRECT_LANDINGS_URL, (req, res, ctx) => res(ctx.json(directLandingsSingleProduct))),
+    rest.get(mockSearchVesselName, (req, res, ctx) => res(ctx.json(getVessels))),
+    rest.post(VALIDATE_DIRECT_LANDINGS_URL, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(directLandingBothWeightErrors))
     ),
     rest.get(CONSERVATION_URL, (req, res, ctx) => res(ctx.json(empty))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),

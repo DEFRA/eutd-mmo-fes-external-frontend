@@ -24,6 +24,7 @@ import storageDocumentSupportingDocumentsError from "@/fixtures/storageDocumentA
 import storageDocumentSpeciesSuggestError from "@/fixtures/storageDocumentApi/storageDocumentSpeciesSuggestError.json";
 import sdAddProductConsignmentIssuingCountryRequired from "@/fixtures/saveAndValidateApi/sdAddProductConsignmentIssuingCountryRequired.json";
 import sdAddProductConsignmentProductDescriptionRequired from "@/fixtures/saveAndValidateApi/sdAddProductConsignmentProductDescriptionRequired.json";
+import sdAddProductConsignmentFisheryWeightExceedsProductWeight from "@/fixtures/saveAndValidateApi/sdAddProductConsignmentFisheryWeightExceedsProductWeight.json";
 
 const addProductConsignementHandler: ITestHandler = {
   [TestCaseId.SDAddProductConsignmentData]: () => [
@@ -118,6 +119,16 @@ const addProductConsignementHandler: ITestHandler = {
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
     rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) =>
       res(ctx.status(400), ctx.json(sdAddProductConsignmentProductDescriptionRequired))
+    ),
+  ],
+  [TestCaseId.SDAddProductConsignmentFisheryWeightExceedsProductWeight]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(sdAddProductConsignmentFisheryWeightExceedsProductWeight))
     ),
   ],
   [TestCaseId.SDAddProductConsignmentDataProductIndex1]: () => [

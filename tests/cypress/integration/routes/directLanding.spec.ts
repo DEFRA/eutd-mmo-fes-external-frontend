@@ -1026,6 +1026,25 @@ describe("Direct Landing Error Messages - English", () => {
     );
     cy.get(String.raw`#weights\.0\.exportWeight, [id^="weights."]`).should("have.length.greaterThan", 1);
   });
+
+  it("should display total weight exceeded error only once when both number.unsafe and array.totalWeightExceeded errors are returned", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingTotalWeightExceededBothErrors,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    // The error message should appear exactly once in the summary list
+    cy.get(".govuk-error-summary__list a")
+      .filter(':contains("The total combined weight of all products must be less than 100,000,000,000")')
+      .should("have.length", 1)
+      .and("have.attr", "href", "#weights");
+    cy.get("#weights").should("have.class", "govuk-form-group--error");
+    cy.get("#weights .govuk-error-message").should(
+      "contain.text",
+      "The total combined weight of all products must be less than 100,000,000,000"
+    );
+  });
 });
 
 describe("Direct Landing Error Messages - Welsh", () => {
@@ -1198,5 +1217,95 @@ describe("Direct Landing - Client-side fetch error resilience", () => {
     cy.wait("@vesselFetchError");
     // After the error, the vessel input should still be in the DOM
     cy.get(String.raw`#vessel\.vesselName`).should("exist");
+  });
+});
+
+describe("Direct Landing - Amending gear category updates gear type options", () => {
+  // Test Intent: When a user returns to the direct-landing page with a previously saved
+  // gear category and type, then changes the gear category, the gear type dropdown must
+  // fetch and display options for the new category, and the previously selected gear type
+  // must be cleared.
+  //
+  // Regression coverage for the bug where:
+  //   1. gearTypes={fallbackGearTypes ?? gearTypes} always used the loader data (never dynamic)
+  //   2. Gear type select used defaultValue (uncontrolled), so options never re-rendered
+  //   3. gearType state was not reset when category changed
+
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLanding,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    waitForHydration();
+  });
+
+  it("should display the pre-saved gear category and gear type on page load", () => {
+    cy.get("#gearCategory").should("have.value", "Surrounding nets");
+    cy.get("#gearType").should("have.value", "Purse seines (PS)");
+  });
+
+  it("should fetch new gear type options when gear category is changed", () => {
+    cy.intercept("GET", "/get-gear-types*", { fixture: "addLandings/getGearTypesByTraps.json" }).as("getGearTypes");
+
+    cy.get("#gearCategory").select("Traps");
+    cy.wait("@getGearTypes");
+
+    cy.get("#gearType option").should("have.length.greaterThan", 1);
+    cy.get("#gearType option").should("contain.text", "Fyke nets (FYK)");
+    cy.get("#gearType option").should("contain.text", "Pots (FPO)");
+    cy.get("#gearType option").should("contain.text", "Traps (nei) (FIX)");
+  });
+
+  it("should clear the previously selected gear type when gear category is changed", () => {
+    cy.intercept("GET", "/get-gear-types*", { fixture: "addLandings/getGearTypesByTraps.json" }).as("getGearTypes");
+
+    cy.get("#gearType").should("have.value", "Purse seines (PS)");
+
+    cy.get("#gearCategory").select("Traps");
+    cy.wait("@getGearTypes");
+
+    cy.get("#gearType").should("have.value", "");
+  });
+
+  it("should not display gear type options from the previous category after changing gear category", () => {
+    cy.intercept("GET", "/get-gear-types*", { fixture: "addLandings/getGearTypesByTraps.json" }).as("getGearTypes");
+
+    cy.get("#gearCategory").select("Traps");
+    cy.wait("@getGearTypes");
+
+    cy.get("#gearType option").should("not.contain.text", "Purse seines (PS)");
+  });
+
+  it("should allow selecting a gear type from the updated options after changing gear category", () => {
+    cy.intercept("GET", "/get-gear-types*", { fixture: "addLandings/getGearTypesByTraps.json" }).as("getGearTypes");
+
+    cy.get("#gearCategory").select("Traps");
+    cy.wait("@getGearTypes");
+
+    cy.get("#gearType").select("Fyke nets (FYK)");
+    cy.get("#gearType").should("have.value", "Fyke nets (FYK)");
+  });
+
+  it("should update gear type options independently on each successive category change", () => {
+    cy.intercept("GET", "/get-gear-types?gearCategory=Traps", {
+      fixture: "addLandings/getGearTypesByTraps.json",
+    }).as("getTrapsGearTypes");
+
+    cy.intercept("GET", "/get-gear-types?gearCategory=Dredges", {
+      fixture: "addLandings/getGearTypesByCategory.json",
+    }).as("getDredgesGearTypes");
+
+    // First change: Surrounding nets → Traps
+    cy.get("#gearCategory").select("Traps");
+    cy.wait("@getTrapsGearTypes");
+    cy.get("#gearType").should("have.value", "");
+    cy.get("#gearType option").should("contain.text", "Fyke nets (FYK)");
+
+    // Second change: Traps → Dredges
+    cy.get("#gearCategory").select("Dredges");
+    cy.wait("@getDredgesGearTypes");
+    cy.get("#gearType").should("have.value", "");
+    cy.get("#gearType option").should("contain.text", "Towed dredges (DRB)");
+    cy.get("#gearType option").should("not.contain.text", "Fyke nets (FYK)");
   });
 });

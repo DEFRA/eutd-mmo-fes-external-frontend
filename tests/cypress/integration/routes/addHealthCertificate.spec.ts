@@ -91,6 +91,15 @@ describe("Add Health Certificate - save as draft", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.url().should("include", "/forbidden");
   });
+
+  it("should redirect to the dashboard when Save as Draft is clicked with validation errors (FI0-10577)", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddHealthCertificateSaveAsDraftWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
 });
 
 describe("Add Health Certificate, bad data show errors", () => {
