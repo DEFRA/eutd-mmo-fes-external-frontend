@@ -102,3 +102,14 @@ describe("Add Consignment Details: save and continue", () => {
     cy.url().should("include", `/${baseUrl}/remove-product`);
   });
 });
+
+describe("Add Consignment Details (PS): save as draft retains valid fields", () => {
+  it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddConsignmentDetailsSaveAsDraftWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
+});
