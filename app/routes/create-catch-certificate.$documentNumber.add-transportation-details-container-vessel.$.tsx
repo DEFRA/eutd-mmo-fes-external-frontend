@@ -29,7 +29,7 @@ const ContainerVesselTransportDetailsPage = () => {
     vehicle,
     vesselName,
     flagState,
-    containerNumbers,
+    containerNumber,
     departurePlace,
     freightBillNumber,
     nextUri,
@@ -64,7 +64,7 @@ const ContainerVesselTransportDetailsPage = () => {
               vehicle={vehicle}
               vesselName={!isEmpty(errors) ? actionData.vesselName : vesselName}
               flagState={!isEmpty(errors) ? actionData.flagState : flagState}
-              containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
+              containerNumber={getContainerNumbers(errors, actionData, containerNumber)}
               departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
               errors={errors}

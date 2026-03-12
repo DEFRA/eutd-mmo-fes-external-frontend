@@ -145,10 +145,10 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                   t
                 )}
               />
-              {transport.containerIdentificationNumber && (
+              {Array.isArray(transport.containerNumber) && transport.containerNumber.length > 0 && (
                 <SummaryListRow
                   keyText={t("addTransportationDetailsContainerIdentificationNumberTruck", { ns: "transportation" })}
-                  value={transport.containerIdentificationNumber}
+                  value={transport.containerNumber.join(", ")}
                   actions={generateActions(
                     isLocked,
                     `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${transport.id}?nextUri=${route(
@@ -156,7 +156,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                       {
                         documentNumber,
                       }
-                    )}#containerIdentificationNumber`,
+                    )}#containerNumber.0`,
                     "addTransportationDetailsContainerIdentificationNumberTruck",
                     "transportation",
                     t,
@@ -220,7 +220,11 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
           />
           <SummaryListRow
             keyText={t("addTransportationDetailsContainerIdentificationText", { ns: "transportation" })}
-            value={transport.containerNumber}
+            value={
+              Array.isArray(transport.containerNumber) && transport.containerNumber.length > 0
+                ? transport.containerNumber.join(", ")
+                : ""
+            }
             actions={generateActions(
               isLocked,
               `/create-catch-certificate/${documentNumber}/add-transportation-details-plane/${transport.id}?nextUri=${route(
@@ -302,10 +306,10 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
               t
             )}
           />
-          {transport.containerIdentificationNumber && (
+          {Array.isArray(transport.containerNumber) && transport.containerNumber.length > 0 && (
             <SummaryListRow
               keyText={t("addTransportationDetailsContainerIdentificationNumberTrain", { ns: "transportation" })}
-              value={transport.containerIdentificationNumber}
+              value={transport.containerNumber.join(", ")}
               actions={generateActions(
                 isLocked,
                 `/create-catch-certificate/${documentNumber}/add-transportation-details-train/${transport.id}?nextUri=${route(
@@ -313,7 +317,7 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
                   {
                     documentNumber,
                   }
-                )}#containerIdentificationNumber`,
+                )}#containerNumber.0`,
                 "addTransportationDetailsContainerIdentificationNumberTrain",
                 "transportation",
                 t,
@@ -377,7 +381,11 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
             keyText={t("addTransportationDetailsContainerIdentificationNumberContainerVessel", {
               ns: "transportation",
             })}
-            value={transport.containerNumber}
+            value={
+              Array.isArray(transport.containerNumber) && transport.containerNumber.length > 0
+                ? transport.containerNumber.join(", ")
+                : ""
+            }
             actions={generateActions(
               isLocked,
               `/create-catch-certificate/${documentNumber}/add-transportation-details-container-vessel/${transport.id}?nextUri=${route(

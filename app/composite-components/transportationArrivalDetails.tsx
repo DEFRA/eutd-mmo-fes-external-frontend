@@ -18,7 +18,7 @@ export const ArrivalTransportationModeDetails = ({
   flagState,
   airwayBillNumber,
   flightNumber,
-  containerNumbers,
+  containerNumber,
   nationalityOfVehicle,
   registrationNumber,
   errors,
@@ -229,7 +229,7 @@ export const ArrivalTransportationModeDetails = ({
       )}
       {(vehicle === "plane" || vehicle === "containerVessel" || vehicle === "truck") && (
         <ContainerIdentificationNumber
-          containers={containerNumbers}
+          containers={containerNumber}
           maximumContainers={5}
           errors={errors}
           displayOptionalSuffix={vehicle === "truck"}
@@ -250,7 +250,6 @@ export const TransportationArrivalDetails = ({
   containerNumber,
   airwayBillNumber,
   flightNumber,
-  containerNumbers,
   nationalityOfVehicle,
   registrationNumber,
   departureCountry,
@@ -282,7 +281,6 @@ export const TransportationArrivalDetails = ({
         airwayBillNumber={airwayBillNumber}
         flightNumber={flightNumber}
         containerNumber={containerNumber}
-        containerNumbers={containerNumbers}
         nationalityOfVehicle={nationalityOfVehicle}
         registrationNumber={registrationNumber}
         departurePort={departurePort}
@@ -437,7 +435,7 @@ export const TransportationArrivalDetails = ({
       />
       {vehicle === "train" && (
         <ContainerIdentificationNumber
-          containers={containerNumbers}
+          containers={containerNumber}
           maximumContainers={5}
           errors={errors}
           displayOptionalSuffix={true}

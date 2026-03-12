@@ -29,7 +29,7 @@ const AddTransportationDetailsPlane = () => {
     vehicle,
     flightNumber,
     airwayBillNumber,
-    containerNumbers,
+    containerNumber,
     departurePlace,
     freightBillNumber,
     nextUri,
@@ -69,7 +69,7 @@ const AddTransportationDetailsPlane = () => {
               errors={errorsTransformed}
               flightNumber={!isEmpty(errors) ? actionData.flightNumber : flightNumber}
               airwayBillNumber={!isEmpty(errors) ? actionData.airwayBillNumber : airwayBillNumber}
-              containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
+              containerNumber={getContainerNumbers(errors, actionData, containerNumber)}
               departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
               displayOptionalSuffix={displayOptionalSuffix}

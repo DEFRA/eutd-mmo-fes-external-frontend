@@ -80,7 +80,6 @@ export const getErrorMessage = (key: string): string => {
     "error.flightNumber.string.empty": "commonAddTransportationDetailsPlaneFlightNumberLabelError",
     "error.flightNumber.string.max": "commonAddTransportationDetailsPlaneFlightNumberMaxCharError",
     "error.flightNumber.string.alphanum": "commonAddTransportationDetailsPlaneFlightNumberOnlyNumbersError",
-    "error.containerNumber.any.required": "ccContainerVesselContainerNumberRequiredError",
     "error.containerNumber.any.empty": "ccContainerVesselContainerNumberRequiredError",
     "error.containerNumber.string.empty": "ccContainerVesselContainerNumberRequiredError",
     "error.containerNumber.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
@@ -90,73 +89,73 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumber.plane.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumber.plane.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
-    "error.containerNumbers.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.containerVessel.any.required": "ccContainerVesselContainerNumberRequiredError",
-    "error.containerNumbers.containerVessel.string.empty": "ccContainerVesselContainerNumberRequiredError",
-    "error.containerNumbers.containerVessel.array.min": "ccContainerVesselContainerNumberRequiredError",
+    "error.containerNumber.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumber.containerVessel.any.required": "ccContainerVesselContainerNumberRequiredError",
+    "error.containerNumber.containerVessel.string.empty": "ccContainerVesselContainerNumberRequiredError",
+    "error.containerNumber.containerVessel.array.min": "ccContainerVesselContainerNumberRequiredError",
     "error.containerIdentificationNumber.0.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.containerVessel.0.any.required": "ccContainerVesselContainerNumberRequiredError",
-    "error.containerNumbers.containerVessel.0.string.empty": "ccContainerVesselContainerNumberRequiredError",
-    "error.containerNumbers.containerVessel.0.array.min": "ccContainerVesselContainerNumberRequiredError",
+    "error.containerNumber.containerVessel.0.any.required": "ccContainerVesselContainerNumberRequiredError",
+    "error.containerNumber.containerVessel.0.string.empty": "ccContainerVesselContainerNumberRequiredError",
+    "error.containerNumber.containerVessel.0.array.min": "ccContainerVesselContainerNumberRequiredError",
     "error.containerNumber.containerVessel.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.0.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.0.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.0.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
-    "error.containerNumbers.0.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
-    "error.containerNumbers.0.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.plane.array.min": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.container-vessel.array.min": "ccContainerVesselContainerNumberLabelError",
-    "error.containerNumbers.1.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.1.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.1.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
-    "error.containerNumbers.1.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
-    "error.containerNumbers.1.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.2.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.2.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.2.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
-    "error.containerNumbers.2.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
-    "error.containerNumbers.2.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.3.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.3.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.3.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
-    "error.containerNumbers.3.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
-    "error.containerNumbers.3.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.4.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.4.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.4.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
-    "error.containerNumbers.4.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
-    "error.containerNumbers.4.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.5.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.5.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.5.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
-    "error.containerNumbers.5.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
-    "error.containerNumbers.5.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.6.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.6.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.6.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
-    "error.containerNumbers.6.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
-    "error.containerNumbers.6.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.7.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.7.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.7.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
-    "error.containerNumbers.7.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
-    "error.containerNumbers.7.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.8.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.8.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.8.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
-    "error.containerNumbers.8.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
-    "error.containerNumbers.8.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.9.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.9.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.9.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
-    "error.containerNumbers.9.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
-    "error.containerNumbers.9.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumber.0.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.0.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.0.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumber.0.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumber.0.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumber.plane.array.min": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.container-vessel.array.min": "ccContainerVesselContainerNumberLabelError",
+    "error.containerNumber.1.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.1.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.1.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumber.1.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumber.1.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumber.2.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.2.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.2.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumber.2.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumber.2.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumber.3.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.3.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.3.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumber.3.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumber.3.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumber.4.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.4.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.4.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumber.4.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumber.4.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumber.5.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.5.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.5.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumber.5.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumber.5.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumber.6.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.6.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.6.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumber.6.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumber.6.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumber.7.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.7.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.7.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumber.7.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumber.7.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumber.8.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.8.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.8.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumber.8.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumber.8.string.pattern.base": "ccShippingContainerNumberPatternError",
+    "error.containerNumber.9.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.9.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.9.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumber.9.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumber.9.string.pattern.base": "ccShippingContainerNumberPatternError",
     commonAddTransportationDetailsPlaneContainerNumberLabelError:
       "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     ccContainerVesselContainerNumberRequiredError: "ccContainerVesselContainerNumberRequiredError",
     ccContainerVesselContainerNumberLabelError: "ccContainerVesselContainerNumberLabelError",
-    "error.containerNumbers.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.array.min": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.array.min": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.nationalityOfVehicle.any.required": "commonTransportationDetailsTruckNationalityError",
     "error.nationalityOfVehicle.any.empty": "commonTransportationDetailsTruckNationalityError",
     "error.nationalityOfVehicle.string.empty": "commonTransportationDetailsTruckNationalityError",
@@ -369,9 +368,8 @@ export const getErrorMessage = (key: string): string => {
     "error.plane.exportDate.any.min": "sdPlaneExportDateMin",
     "error.containerVessel.exportDate.any.min": "sdContainerVesselExportDateMin",
     "error.arrivalTransportationDetails.incomplete": "sdProgressArrivalTransportationDetailsRequiredError",
-    "error.containerNumbers.array.max": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.array.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
-    "error.containerNumbers.string.max": "ccAddTransportationDetailsContainerIdentificationNumberCharExceedError",
+    "error.containerNumber.array.max": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.array.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.dateLanded.string.empty": "ccCommonDateLandedRequiredError",
     "error.placeOfUnloading.string.pattern.base": "sdAddTransportationDetailsTruckPlaceOfUnloadingAsACombination",
     "validation.eezCode.string.max": "ccUploadFilePageTableEEZMaxCharError",
@@ -400,13 +398,13 @@ export const getTransformedError = (errors: IError[], vesselInput?: string): IEr
   const errorsTransformed: IErrorsTransformed = {};
 
   errors.forEach((error: IError) => {
-    // Map containerNumbers array-level errors to containerNumbers.0 so they display under the first field
+    // Map containerNumber array-level errors to containerNumber.0 so they display under the first field
     let errorKey = error.key;
 
     // Normalize keys coming from server. Examples:
-    // - "error.containerNumbers.0.string.empty" -> "containerNumbers.0"
+    // - "error.containerNumber.0.string.empty" -> "containerNumber.0"
     // - "error.railwayBillNumber.any.empty" -> "railwayBillNumber"
-    // - "containerNumbers" -> "containerNumbers"
+    // - "containerNumber" -> "containerNumber"
     if (typeof errorKey === "string") {
       // strip common prefixes
       errorKey = errorKey.replace(/^(?:error\.|validation\.)/, "");
@@ -417,10 +415,10 @@ export const getTransformedError = (errors: IError[], vesselInput?: string): IEr
         ""
       );
 
-      // if the key ends with a numeric segment, keep it (e.g. containerNumbers.0)
-      // otherwise, if it's the array-level containerNumbers and the message points to container label, map to .0
-      if (errorKey === "containerNumbers" && error.message?.includes("ContainerNumberLabelError")) {
-        errorKey = "containerNumbers.0";
+      // if the key ends with a numeric segment, keep it (e.g. containerNumber.0)
+      // otherwise, if it's the array-level containerNumber and the message points to container label, map to .0
+      if (errorKey === "containerNumber" && error.message?.includes("ContainerNumberLabelError")) {
+        errorKey = "containerNumber.0";
       }
     }
 
@@ -490,7 +488,7 @@ export const displayErrorMessagesInOrder = (
     let matchingKeys: string[];
 
     if (strictForNmd) {
-      // match either the exact key, or the key followed by a numeric index (e.g. containerNumbers or containerNumbers.0)
+      // match either the exact key, or the key followed by a numeric index (e.g. containerNumber or containerNumber.0)
       const keyRegex = new RegExp(`^${escapeRegExp(orderKey)}(?:\\.(\\d+))?$`);
       matchingKeys = Object.keys(errors).filter((objKey) => keyRegex.test(objKey));
     } else {
@@ -526,13 +524,13 @@ export const getErrorKeysInOrderForTransport = (transportType: string, isArrival
           "departurePort",
           "placeOfUnloading",
           "departureDate",
-          "containerNumbers",
+          "containerNumber",
         ];
       }
       return [
         "departureCountry",
         "departurePort",
-        "containerNumbers",
+        "containerNumber",
         "exportDate",
         "railwayBillNumber",
         "freightBillNumber",
@@ -546,7 +544,7 @@ export const getErrorKeysInOrderForTransport = (transportType: string, isArrival
           "registrationNumber",
           "departurePlace",
           "freightBillNumber",
-          "containerNumbers",
+          "containerNumber",
           "departureCountry",
           "departurePort",
           "placeOfUnloading",
@@ -555,7 +553,7 @@ export const getErrorKeysInOrderForTransport = (transportType: string, isArrival
       }
       // Departure (non-arrival) page order: consignment destination/point/leave-from (handled by commonOrder), then
       // container numbers, export date, nationality, registration, freight
-      return ["containerNumbers", "exportDate", "nationalityOfVehicle", "registrationNumber", "freightBillNumber"];
+      return ["containerNumber", "exportDate", "nationalityOfVehicle", "registrationNumber", "freightBillNumber"];
 
     case "plane":
       if (isArrival) {
@@ -564,7 +562,7 @@ export const getErrorKeysInOrderForTransport = (transportType: string, isArrival
         return [
           "flightNumber",
           "airwayBillNumber",
-          "containerNumbers",
+          "containerNumber",
           "freightBillNumber",
           "departureCountry",
           "departurePort",
@@ -573,7 +571,7 @@ export const getErrorKeysInOrderForTransport = (transportType: string, isArrival
         ];
       }
 
-      return ["flightNumber", "departurePlace", "exportDate", "containerNumbers", "airwayBillNumber"];
+      return ["flightNumber", "departurePlace", "exportDate", "containerNumber", "airwayBillNumber"];
 
     case "containervessel":
     case "container-vessel":
@@ -583,7 +581,7 @@ export const getErrorKeysInOrderForTransport = (transportType: string, isArrival
         return [
           "vesselName",
           "flagState",
-          "containerNumbers",
+          "containerNumber",
           "freightBillNumber",
           "departureCountry",
           "departurePort",
@@ -591,10 +589,10 @@ export const getErrorKeysInOrderForTransport = (transportType: string, isArrival
           "departureDate",
         ];
       }
-      return ["exportDate", "vesselName", "flagState", "containerNumbers", "freightBillNumber"];
+      return ["exportDate", "vesselName", "flagState", "containerNumber", "freightBillNumber"];
 
     default:
-      return ["containerNumbers", "freightBillNumber", "railwayBillNumber"];
+      return ["containerNumber", "freightBillNumber", "railwayBillNumber"];
   }
 };
 

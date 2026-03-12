@@ -61,7 +61,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   );
 
   const values = Object.fromEntries(form);
-  const containerNumbers = extractContainerNumbers(values);
+  const containerNumber = extractContainerNumbers(values, 5);
 
   const payload: ITransport = {
     exportedTo,
@@ -70,7 +70,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     flightNumber: form.get("flightNumber") as string,
     airwayBillNumber: handleFormEmptyStringValue(form, "airwayBillNumber", saveAsDraft),
     freightBillNumber: handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft),
-    containerNumbers,
+    containerNumber,
     exportDate: calculateExportDate(form),
     exportDateTo: moment().startOf("day").add(1, "day").toISOString(),
     user_id: transport.user_id,

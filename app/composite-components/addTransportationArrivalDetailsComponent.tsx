@@ -7,7 +7,6 @@ import { route } from "routes-gen";
 import isEmpty from "lodash/isEmpty";
 import {
   displayErrorMessagesInOrder,
-  getContainerNumber,
   getContainerNumbers,
   getExportDateFromAction as getDepartureDateFromAction,
   TransportType,
@@ -51,7 +50,6 @@ export const AddTransportationArrivalDetailsComponent = ({
     registrationNumber,
     airwayBillNumber,
     flightNumber,
-    containerNumbers,
     departureCountry,
     departureDate,
     departurePort,
@@ -78,14 +76,13 @@ export const AddTransportationArrivalDetailsComponent = ({
     displayOptionalSuffix: boolean;
   } = {
     vehicle: vehicleType,
-    containerNumber: getContainerNumber(errors, actionData, containerNumber),
+    containerNumber: getContainerNumbers(errors, actionData, containerNumber),
     vesselName: getVesselName(errors, actionData, vesselName),
     flagState: getFlagState(errors, actionData, flagState),
     freightBillNumber: getFreightBillNumber(errors, actionData, freightBillNumber?.toString()),
     departureCountry: getDepartureCountry(errors, actionData, departureCountry),
     departurePort: getDeparturePort(errors, actionData, departurePort ?? undefined),
     departureDate: getDepartureDate(departureDateFromAction, departureDate),
-    containerNumbers: getContainerNumbers(errors, actionData, containerNumbers),
     placeOfUnloading: getPlaceOfUnloading(errors, actionData, placeOfUnloading ?? undefined),
     countries: countries,
     errors: errors,
@@ -127,7 +124,7 @@ export const AddTransportationArrivalDetailsComponent = ({
         ...componentAttributes,
         airwayBillNumber: getAirwayBillNumber(errors, actionData, airwayBillNumber),
         flightNumber: getFlightNumber(errors, actionData, flightNumber),
-        containerNumbers: getContainerNumbers(errors, actionData, containerNumbers),
+        containerNumber: getContainerNumbers(errors, actionData, containerNumber),
         legendTitle: t("addArrivalTransportationDetailsPlaneTitle"),
       };
       break;

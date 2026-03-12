@@ -57,7 +57,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const placeOfUnloading = handleFormEmptyStringValue(form, "placeOfUnloading", saveAsDraft);
   const nextUri = form.get("nextUri") as string;
   const values = Object.fromEntries(form);
-  const containerNumbers = extractContainerNumbers(values);
+  const containerNumber = extractContainerNumbers(values, 5);
 
   const payload: ITransport = {
     currentUri: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-truck", {
@@ -74,7 +74,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     departureDate: calculateDepartureDate(form),
     departureCountry,
     placeOfUnloading,
-    containerNumbers,
+    containerNumber,
     vehicle: transport.vehicle,
     user_id: transport.user_id,
     arrival: true,

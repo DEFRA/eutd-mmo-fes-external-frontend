@@ -52,7 +52,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   const nextUri = form.get("nextUri") as string;
   const values = Object.fromEntries(form);
-  const containerNumbers = extractContainerNumbers(values);
+  const containerNumber = extractContainerNumbers(values, 5);
 
   const payload: ITransport = {
     currentUri: route(
@@ -67,7 +67,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     journey: "storageNotes",
     vesselName,
     flagState,
-    containerNumbers,
+    containerNumber,
     freightBillNumber,
     departureCountry,
     departurePort,

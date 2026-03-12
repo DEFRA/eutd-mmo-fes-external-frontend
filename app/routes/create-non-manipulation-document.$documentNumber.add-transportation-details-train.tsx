@@ -61,7 +61,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   );
 
   const values = Object.fromEntries(form);
-  const containerNumbers = extractContainerNumbers(values);
+  const containerNumber = extractContainerNumbers(values);
 
   const payload: ITransport = {
     currentUri: route("/create-non-manipulation-document/:documentNumber/add-transportation-details-train", {
@@ -78,7 +78,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     vehicle: transport.vehicle,
     exportDate: calculateExportDate(form),
     exportDateTo: moment().startOf("day").add(1, "day").toISOString(),
-    containerNumbers,
+    containerNumber,
     facilityArrivalDate: "facilityArrivalDate" in storageDocument ? storageDocument.facilityArrivalDate : null,
     arrival: isDepartureTransportation,
   };

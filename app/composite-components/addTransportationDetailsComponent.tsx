@@ -9,7 +9,6 @@ import isEmpty from "lodash/isEmpty";
 import {
   displayErrorMessagesInOrder,
   getAirwayBillNumber,
-  getContainerNumber,
   getContainerNumbers,
   getDeparturePlace,
   getExportDate,
@@ -51,7 +50,6 @@ export const AddTransportationDetailsComponent = ({
     flagState,
     containerNumber,
     flightNumber,
-    containerNumbers,
     railwayBillNumber,
     airwayBillNumber,
     exportedTo,
@@ -75,7 +73,7 @@ export const AddTransportationDetailsComponent = ({
     vehicle: vehicleType,
     exportedTo,
     pointOfDestination: getPointOfDestination(errors, actionData, pointOfDestination),
-    containerNumber: getContainerNumber(errors, actionData, containerNumber),
+    containerNumber: getContainerNumbers(errors, actionData, containerNumber),
     departurePlace: getDeparturePlace(errors, actionData, departurePlace),
     errors: errors,
     exportDate: getExportDate(exportDateFromAction, exportDate),
@@ -92,7 +90,7 @@ export const AddTransportationDetailsComponent = ({
     case TransportType.CONTAINER_VESSEL:
       componentAttributes = {
         ...componentAttributes,
-        containerNumbers: getContainerNumbers(errors, actionData, containerNumbers),
+        containerNumber: getContainerNumbers(errors, actionData, containerNumber),
         vesselName: getVesselName(errors, actionData, vesselName),
         flagState: getFlagState(errors, actionData, flagState),
         legendTitle: t("addContainerVesselTransportationDetailsTransportDetailsTitle", { ns: "transportation" }),
@@ -101,7 +99,7 @@ export const AddTransportationDetailsComponent = ({
     case TransportType.PLANE:
       componentAttributes = {
         ...componentAttributes,
-        containerNumbers: getContainerNumbers(errors, actionData, containerNumbers),
+        containerNumber: getContainerNumbers(errors, actionData, containerNumber),
         flightNumber: getFlightNumber(errors, actionData, flightNumber),
         airwayBillNumber: getAirwayBillNumber(errors, actionData, airwayBillNumber),
         legendTitle: t("addPlaneTransportationDetailsTransportDetailsTitle", { ns: "transportation" }),
@@ -110,7 +108,7 @@ export const AddTransportationDetailsComponent = ({
     case TransportType.TRAIN:
       componentAttributes = {
         ...componentAttributes,
-        containerNumbers: getContainerNumbers(errors, actionData, containerNumbers),
+        containerNumber: getContainerNumbers(errors, actionData, containerNumber),
         displayOptionalSuffix,
         railwayBillNumber: getRailwayBillNumber(errors, actionData, railwayBillNumber),
         legendTitle: t("addTrainTransportationDetailsTransportDetailsTitle", { ns: "transportation" }),
@@ -119,7 +117,7 @@ export const AddTransportationDetailsComponent = ({
     case TransportType.TRUCK:
       componentAttributes = {
         ...componentAttributes,
-        containerNumbers: getContainerNumbers(errors, actionData, containerNumbers),
+        containerNumber: getContainerNumbers(errors, actionData, containerNumber),
         nationalityOfVehicle: getNationalityOfVehicle(errors, actionData, nationalityOfVehicle),
         registrationNumber: getRegistrationNumber(errors, actionData, registrationNumber),
         legendTitle: t("addTruckTransportationDetailsTransportDetailsTitle", { ns: "transportation" }),

@@ -45,27 +45,24 @@ const buildTransportPayload = (transportType: TransportType, form: FormData): Pa
       return {
         nationalityOfVehicle: form.get("nationalityOfVehicle") as string,
         registrationNumber: form.get("registrationNumber") as string,
-        containerNumbers: extractContainerNumbers(values),
+        containerNumber: extractContainerNumbers(values),
       };
     case TransportType.TRAIN:
       return {
         railwayBillNumber: form.get("railwayBillNumber") as string,
-        containerIdentificationNumber: !isEmpty(form.get("containerIdentificationNumber"))
-          ? (form.get("containerIdentificationNumber") as string)
-          : null,
-        containerNumbers: extractContainerNumbers(values),
+        containerNumber: extractContainerNumbers(values),
       };
     case TransportType.PLANE:
       return {
         flightNumber: form.get("flightNumber") as string,
         airwayBillNumber: !isEmpty(form.get("airwayBillNumber")) ? (form.get("airwayBillNumber") as string) : undefined,
-        containerNumbers: extractContainerNumbers(values),
+        containerNumber: extractContainerNumbers(values),
       };
     case TransportType.CONTAINER_VESSEL:
       return {
         vesselName: form.get("vesselName") as string,
         flagState: form.get("flagState") as string,
-        containerNumbers: extractContainerNumbers(values),
+        containerNumber: extractContainerNumbers(values),
       };
     default:
       throw new Error("Unknown Transportation Type");
@@ -173,15 +170,15 @@ export const CatchCertificateTransportationDetailsLoader = async (
 
     const maximumTransportDocumentPerTransport = parseInt(getEnv().EU_CATCH_MAX_TRANSPORT_DOCUMENTS, 10);
 
-    let containerNumbers: string[] = transport.containerNumbers ?? [];
+    let containerNumber: string[] = transport.containerNumber ?? [];
     // Initialize with empty string for all transport types that support containerNumbers
     if (
       [TransportType.TRUCK, TransportType.TRAIN, TransportType.PLANE, TransportType.CONTAINER_VESSEL].includes(
         transportType
       ) &&
-      containerNumbers.length === 0
+      containerNumber.length === 0
     ) {
-      containerNumbers = [""];
+      containerNumber = [""];
     }
 
     return new Response(
@@ -189,7 +186,7 @@ export const CatchCertificateTransportationDetailsLoader = async (
         documentNumber,
         csrf,
         ...transport,
-        containerNumbers,
+        containerNumber,
         documents,
         nextUri,
         pageTitle,
@@ -289,9 +286,9 @@ export const TransportationDetailsLoaderFunction = async (
   session.unset("addContainerClicked");
   session.unset("removeContainerClicked");
 
-  let containerNumbers = transport.containerNumbers;
+  let containerNumber = transport.containerNumber;
   if (addContainerClicked || removeContainerClicked) {
-    containerNumbers = Array.from({ length: containerCount }, (_, index) => sessionContainerValues[index] ?? "");
+    containerNumber = Array.from({ length: containerCount }, (_, index) => sessionContainerValues[index] ?? "");
   }
 
   return new Response(
@@ -302,7 +299,7 @@ export const TransportationDetailsLoaderFunction = async (
       csrf,
       countries,
       displayOptionalSuffix,
-      containerNumbers,
+      containerNumber,
     }),
     {
       status: 200,
@@ -467,7 +464,7 @@ const validatePayload = async (payload: ITransport, saveAsDraft: boolean) => {
     payload.pointOfDestination = checkPointOfDestination(payload.pointOfDestination);
     // Save-as-draft preserves container numbers as entered (including invalid formats)
     // so users can return and correct them. Only strip undefined/null entries.
-    payload.containerNumbers = (payload.containerNumbers ?? []).filter((cn): cn is string => cn != null);
+    payload.containerNumber = (payload.containerNumber ?? []).filter((cn): cn is string => cn != null);
     return [] as IError[] | IErrorsTransformed;
   } else {
     const errors: IError[] | IErrorsTransformed = [];
@@ -627,16 +624,20 @@ export const commonSaveTransportDetails = async (
   return redirect(finalRedirect);
 };
 
-export const extractContainerNumbers = (values: Record<string, any>): string[] => {
-  const containerNumbers: string[] = [];
-  for (let i = 0; i < 10; i++) {
-    const key = `containerNumbers.${i}`;
+export const extractContainerNumbers = (values: Record<string, any>, maxCount: number = 10): string[] => {
+  const containerNumber: string[] = [];
+  for (let i = 0; i < maxCount; i++) {
+    const key = `containerNumber.${i}`;
     const value = values[key];
-    if (value !== undefined && value !== "") {
-      containerNumbers.push(value);
-    }
+    // Preserve all values including empty strings to maintain index integrity for error mapping
+    // (error messages like "containerNumber.2" must map to the correct form field)
+    containerNumber.push(value ?? "");
   }
-  return containerNumbers;
+  // Remove trailing empty strings for cleaner payload
+  while (containerNumber.length > 0 && containerNumber[containerNumber.length - 1] === "") {
+    containerNumber.pop();
+  }
+  return containerNumber;
 };
 
 // Handle container button actions when JS is disabled
@@ -646,7 +647,7 @@ export const handleContainerActions = async (request: Request, _action: string, 
   switch (_action) {
     case "add-container-button": {
       const currentContainers = Object.keys(values)
-        .filter((key) => key.startsWith("containerNumbers."))
+        .filter((key) => key.startsWith("containerNumber."))
         .map((key) => values[key] as string);
 
       session.set("addContainerClicked", true);
@@ -661,7 +662,7 @@ export const handleContainerActions = async (request: Request, _action: string, 
     }
     case "remove-container-button": {
       const currentContainers = Object.keys(values)
-        .filter((key) => key.startsWith("containerNumbers."))
+        .filter((key) => key.startsWith("containerNumber."))
         .map((key) => values[key] as string);
 
       session.set("removeContainerClicked", true);

@@ -233,7 +233,7 @@ export const StorageDocumentTransportDisplay = ({
     },
     {
       label: t("sdCheckYourInformationContainer", { ns: "sdCheckYourInformation" }),
-      value: transport.containerNumber,
+      value: transport.containerNumber?.join(", "),
       hasChangeLink: true,
     },
 
@@ -248,9 +248,9 @@ export const StorageDocumentTransportDisplay = ({
   const sharedFreightBillNumberDepartureCountry = [
     {
       label: t("sdCheckYourInformationContainer", { ns: "sdCheckYourInformation" }),
-      value: transport.containerNumbers?.join(", "),
+      value: transport.containerNumber?.join(", "),
       hasChangeLink: true,
-      backLinkId: "containerNumbers.0",
+      backLinkId: "containerNumber.0",
     },
     {
       label: t("sdCheckYourInformationFreightNumber", { ns: "sdCheckYourInformation" }),

@@ -31,7 +31,7 @@ const TruckTransportDetailsPage = () => {
     registrationNumber,
     departurePlace,
     freightBillNumber,
-    containerNumbers,
+    containerNumber,
     nextUri,
     csrf,
     id,
@@ -71,7 +71,7 @@ const TruckTransportDetailsPage = () => {
               registrationNumber={!isEmpty(errors) ? actionData.registrationNumber : registrationNumber}
               departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
-              containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
+              containerNumber={getContainerNumbers(errors, actionData, containerNumber)}
               displayOptionalSuffix={displayOptionalSuffix}
               countries={countries}
             />
