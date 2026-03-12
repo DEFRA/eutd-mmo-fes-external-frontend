@@ -200,7 +200,7 @@ const onUpdateTransport = async (response: Response, vehicle: string): Promise<I
       Object.keys(errorsResponse).forEach((error) => {
         processedErrors[error] =
           error === "containerNumber" && vehicle === "plane"
-            ? errorsResponse[error].replaceAll(".containerNumber", ".containerNumber.plane")
+            ? errorsResponse[error].replaceAll(".containerNumbers", `.containerNumbers.${vehicle}`)
             : errorsResponse[error];
       });
 
@@ -389,9 +389,9 @@ const onSaveTransportDetails = async (response: Response, payload?: ITransport):
         if (
           error.includes("containerNumbers") &&
           errorsResponse[error] === "error.containerNumbers.array.min" &&
-          payload?.vehicle === "containerVessel"
+          (payload?.vehicle === "containerVessel" || payload?.vehicle === "plane")
         ) {
-          errorsResponse[error] = "error.containerNumbers.containerVessel.array.min";
+          errorsResponse[error] = `error.containerNumbers.${payload?.vehicle}.array.min`;
         }
 
         if (errorsResponse[error] === "error.nationalityOfVehicle.any.required") {
