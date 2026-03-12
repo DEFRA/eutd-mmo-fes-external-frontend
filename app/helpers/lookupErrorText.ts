@@ -157,6 +157,7 @@ export const getErrorMessage = (key: string): string => {
     ccContainerVesselContainerNumberLabelError: "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.array.min": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumbers.array.unique": "ccContainerNumberDuplicateError",
     "error.nationalityOfVehicle.any.required": "commonTransportationDetailsTruckNationalityError",
     "error.nationalityOfVehicle.any.empty": "commonTransportationDetailsTruckNationalityError",
     "error.nationalityOfVehicle.string.empty": "commonTransportationDetailsTruckNationalityError",
