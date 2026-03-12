@@ -56,6 +56,25 @@ const addProcessingPlantDetailsHandler: ITestHandler = {
       return res.once(ctx.status(403));
     }),
   ],
+  [TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftWithErrors]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+    // persistent 200 handler must come first so that after setApiMock's forEach-prepend
+    // it ends up BEHIND the res.once(400) handler in MSW's stack
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(processingStatement))
+    ),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res.once(ctx.status(400), ctx.json(processingStatementError))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocuments))),
+  ],
+  [TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftNoErrors]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(processingStatement))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocuments))),
+  ],
 };
 
 export default addProcessingPlantDetailsHandler;
