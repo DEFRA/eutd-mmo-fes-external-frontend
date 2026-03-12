@@ -1343,7 +1343,7 @@ const transportDetailsHandler: ITestHandler = {
         ctx.json({
           departurePlace: "error.departurePlace.any.required",
           flightNumber: "error.flightNumber.any.required",
-          containerNumber: "error.containerNumber.any.required",
+          containerNumbers: "error.containerNumbers.plane.array.min",
         })
       )
     ),
@@ -1353,7 +1353,7 @@ const transportDetailsHandler: ITestHandler = {
         ctx.json({
           departurePlace: "error.departurePlace.any.required",
           flightNumber: "error.flightNumber.any.required",
-          containerNumber: "error.containerNumber.any.required",
+          containerNumbers: "error.containerNumbers.plane.array.min",
         })
       )
     ),
@@ -2658,6 +2658,11 @@ const transportDetailsHandler: ITestHandler = {
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([catchCertificateTruckTransportAllowedDetails]))),
+  ],
+  [TestCaseId.PlaneTransportNonJS]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(planeTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
 };
 
