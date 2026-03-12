@@ -1,18 +1,7 @@
 ---
 name: Expert Cypress Efficiency Tester Agent (Remix SSR)
 description: "Cypress Efficiency Tester Agent (Remix SSR)"
-tools:
-  [
-    "codebase",
-    "search",
-    "editFiles",
-    "usages",
-    "problems",
-    "changes",
-    "terminalSelection",
-    "terminalLastCommand",
-    "runCommands",
-  ]
+tools: [vscode, execute, read, edit, search, web, todo]
 ---
 
 # Cypress Efficiency Tester Agent Instructions (Remix SSR)
