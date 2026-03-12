@@ -151,6 +151,31 @@ describe("Add Transportation Details Plane: Allowed", () => {
     // cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
   });
+
+  it("should display error messages in the same order as the fields on the page", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportErrors,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("form").submit();
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+
+    // departurePlace field appears before flightNumber field on the page,
+    // so its error should appear first in the error summary
+    cy.get(".govuk-error-summary__list li").then(($items) => {
+      const texts = $items.map((_, el) => Cypress.$(el).text().trim()).get();
+      const departurePlaceIndex = texts.findIndex((t) => t.includes("place the export leaves the UK"));
+      const flightNumberIndex = texts.findIndex((t) => t.includes("flight number"));
+      expect(departurePlaceIndex).to.be.greaterThan(-1, "departurePlace error should be present");
+      expect(flightNumberIndex).to.be.greaterThan(-1, "flightNumber error should be present");
+      expect(departurePlaceIndex).to.be.lessThan(
+        flightNumberIndex,
+        "departurePlace error should appear before flightNumber error"
+      );
+    });
+  });
+
   it("should navigate to sd dashboard page on click of save as draft button", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
