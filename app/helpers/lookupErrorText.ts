@@ -573,7 +573,7 @@ export const getErrorKeysInOrderForTransport = (transportType: string, isArrival
         ];
       }
 
-      return ["flightNumber", "departurePlace", "exportDate", "containerNumbers", "airwayBillNumber"];
+      return ["departurePlace", "exportDate", "airwayBillNumber", "flightNumber", "containerNumbers"];
 
     case "containervessel":
     case "container-vessel":
