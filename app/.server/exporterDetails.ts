@@ -76,11 +76,16 @@ export const getUserDetails = async (bearerToken: string): Promise<IExporter> =>
     return await onGetIDMUserDetailsResponse(await fetchImpl(`${ENV.STUB_URL}/dynamix/user-details`));
   }
 
+  const tokenStart = performance.now();
   const dynamicsToken = await getDynamicsToken();
+  serverLogger.info(`[PERF][getUserDetails] getDynamicsToken: ${(performance.now() - tokenStart).toFixed(1)}ms`);
+
+  const fetchStart = performance.now();
   const response: Response = await fetchImpl(
     getIdmUserDetailsUrl(jwt.decode(bearerToken)),
     getDynamicsHeader(dynamicsToken)
   );
+  serverLogger.info(`[PERF][getUserDetails] Dynamics API call: ${(performance.now() - fetchStart).toFixed(1)}ms`);
 
   return onGetIDMUserDetailsResponse(response);
 };
