@@ -71,7 +71,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     journey: transport.journey,
     exportedTo,
     pointOfDestination,
-    nextUri: route("/create-non-manipulation-document/:documentNumber/progress", { documentNumber }),
+    nextUri: route("/create-non-manipulation-document/:documentNumber/check-your-information", { documentNumber }),
     railwayBillNumber: railwayBillNumber,
     freightBillNumber: freightBillNumber,
     user_id: transport.user_id,
