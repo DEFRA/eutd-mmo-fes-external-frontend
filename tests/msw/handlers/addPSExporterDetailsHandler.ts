@@ -61,6 +61,19 @@ const addPSExporterDetailsHandler: ITestHandler = {
       res(ctx.status(400), ctx.json(exporterAddressErrorResponse))
     ),
   ],
+  [TestCaseId.PSAddExporterDetailsSaveAsDraftWithErrors]: () => [
+    rest.get(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(psAddExporterDetailsFull))
+    ),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+    rest.post(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) =>
+      res.once(ctx.status(400), ctx.json(psExporterMissingNameErrorResponse))
+    ),
+    rest.post(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(psAddExporterDetailsFull))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDrafts))),
+  ],
 };
 
 export default addPSExporterDetailsHandler;

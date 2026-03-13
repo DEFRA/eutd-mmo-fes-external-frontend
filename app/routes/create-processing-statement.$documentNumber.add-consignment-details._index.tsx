@@ -22,7 +22,14 @@ import {
   createCSRFToken,
   validateCSRFToken,
 } from "~/.server";
-import type { CodeAndDescription, ErrorResponse, IUnauthorised, LabelAndValue, ProcessingStatement } from "~/types";
+import type {
+  CodeAndDescription,
+  ErrorResponse,
+  IUnauthorised,
+  LabelAndValue,
+  ProcessingStatement,
+  ProcessingStatementProduct,
+} from "~/types";
 import { ButtonGroup } from "~/composite-components";
 import { getEnv } from "~/env.server";
 import classNames from "classnames";
@@ -41,6 +48,61 @@ type loaderConsignmentDetails = {
   productDescriptionMaxLength: number;
   isEditing?: boolean;
   csrf: string;
+};
+
+// Helper to build valid product data, clearing any fields that failed validation
+const getValidProductData = async (
+  validationResponse: Response | ErrorResponse | undefined,
+  productId: string,
+  commodityCode: string,
+  commodityDescription: string
+): Promise<Partial<ProcessingStatementProduct>> => {
+  const fullData = { id: productId, commodityCode, description: commodityDescription };
+
+  if (!validationResponse || !(validationResponse instanceof Response)) {
+    return fullData;
+  }
+
+  const responseData = await validationResponse.clone().json();
+  const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+  const invalidFieldNames = new Set(errorKeys.map((k) => (k === "consignmentDescription" ? "description" : k)));
+
+  // Use "" (empty string) instead of null for invalid fields: the backend Joi schema
+  // accepts "" to clear a string field but rejects null — sending null causes the entire
+  // save call to fail, which means even valid fields are lost ("not saving anything").
+  let filteredCommodityCode: string = commodityCode;
+  /* istanbul ignore else */
+  if (invalidFieldNames.has("commodityCode")) {
+    filteredCommodityCode = "";
+  }
+
+  let filteredDescription: string = commodityDescription;
+  /* istanbul ignore else */
+  if (invalidFieldNames.has("description")) {
+    filteredDescription = "";
+  }
+
+  return {
+    ...fullData,
+    commodityCode: filteredCommodityCode,
+    description: filteredDescription,
+  } as unknown as Partial<ProcessingStatementProduct>;
+};
+
+// Helper function to handle save as draft action
+const handleSaveAsDraft = async (
+  bearerToken: string,
+  documentNumber: string | undefined,
+  productId: string,
+  commodityCode: string,
+  commodityDescription: string,
+  validationResponse: Response | ErrorResponse | undefined
+): Promise<Response> => {
+  const dataToSave = await getValidProductData(validationResponse, productId, commodityCode, commodityDescription);
+
+  await updateProcessingStatementProducts(bearerToken, documentNumber, dataToSave, productId, true);
+
+  return redirect(route("/create-processing-statement/processing-statements"));
 };
 
 const addConsignmentDetailsActionHandler = (
@@ -138,7 +200,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const saveAndContinue = form.get("_action") === "saveAndContinue";
   const isRemove = form.get("_action") === "remove";
 
-  const saveToRedisIfErrors = isDraft;
   const productId = isEmpty(values["productId"])
     ? documentNumber + "-" + moment.utc().unix()
     : (values["productId"] as string);
@@ -152,7 +213,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     return redirect(`/create-processing-statement/${documentNumber}/remove-product/${productId}`);
   }
 
-  const errorResponse = await updateProcessingStatementProducts(
+  // First validation pass – always validate without saving so we can inspect errors
+  const validationResponse = await updateProcessingStatementProducts(
     bearerToken,
     documentNumber,
     {
@@ -161,19 +223,26 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       description: commodityDescription,
     },
     productId,
-    saveToRedisIfErrors
+    false // saveToRedisIfErrors = false (validate only)
   );
 
   if (saveAndContinue) {
-    if (errorResponse) {
-      return errorResponse as Response;
+    if (validationResponse instanceof Response) {
+      return validationResponse;
     }
 
     return redirect(`/create-processing-statement/${documentNumber}/add-catch-details/${productId}`);
   }
 
   if (isDraft) {
-    return redirect(route("/create-processing-statement/processing-statements"));
+    return handleSaveAsDraft(
+      bearerToken,
+      documentNumber,
+      productId,
+      commodityCode,
+      commodityDescription,
+      validationResponse
+    );
   }
 
   const response = await updateProcessingStatement(
@@ -182,7 +251,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     {},
     `/create-processing-statement/${documentNumber}/add-consignment-details`,
     undefined,
-    saveToRedisIfErrors
+    false // saveToRedisIfErrors = false
   );
 
   if (response) {

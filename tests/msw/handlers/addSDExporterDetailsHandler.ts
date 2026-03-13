@@ -53,6 +53,14 @@ const addSDExporterDetailsHandler: ITestHandler = {
   [TestCaseId.SDAddExporterDetailsNoAddress]: () => [
     rest.get(getAddExporterDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(exporterDetailsNoAddress))),
   ],
+  [TestCaseId.SDAddExporterDetailsSaveAsDraftWithErrors]: () => [
+    rest.get(getAddExporterDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(exporterDetails))),
+    rest.post(getAddExporterDetailsUrl("storageNotes"), (req, res, ctx) =>
+      res.once(ctx.status(400), ctx.json(exporterErrorResponse))
+    ),
+    rest.post(getAddExporterDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(exporterDetails))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+  ],
 };
 
 export default addSDExporterDetailsHandler;

@@ -107,6 +107,16 @@ const onValidateDirectLandingsResponse = async (
                   : getErrorMessage(formatErrors[key]["key"].replace(/\.[0-9]+/, "")),
               }
         );
+
+      // When the array-level "weights" error (array.totalWeightExceeded) is present,
+      // remove any redundant per-item "weights.N.exportWeight" errors that resolve to the
+      // same message. Both fire when a value exceeds Number.MAX_SAFE_INTEGER but showing the
+      // same error twice in the summary is confusing.
+      const hasArrayWeightError = errorsFormat?.some((e: IError) => e.key === "weights");
+      if (hasArrayWeightError) {
+        errorsFormat = errorsFormat.filter((e: IError) => !/^weights\.\d+\.exportWeight$/.test(e.key));
+      }
+
       return errorsFormat;
     }
     case 403:

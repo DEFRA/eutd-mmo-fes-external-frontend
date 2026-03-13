@@ -156,6 +156,7 @@ export const getErrorMessage = (key: string): string => {
     ccContainerVesselContainerNumberLabelError: "ccContainerVesselContainerNumberLabelError",
     "error.containerNumber.any.required": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumber.array.min": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
+    "error.containerNumber.array.unique": "ccContainerNumberDuplicateError",
     "error.nationalityOfVehicle.any.required": "commonTransportationDetailsTruckNationalityError",
     "error.nationalityOfVehicle.any.empty": "commonTransportationDetailsTruckNationalityError",
     "error.nationalityOfVehicle.string.empty": "commonTransportationDetailsTruckNationalityError",
@@ -571,7 +572,7 @@ export const getErrorKeysInOrderForTransport = (transportType: string, isArrival
         ];
       }
 
-      return ["flightNumber", "departurePlace", "exportDate", "containerNumber", "airwayBillNumber"];
+      return ["departurePlace", "exportDate", "airwayBillNumber", "flightNumber", "containerNumber"];
 
     case "containervessel":
     case "container-vessel":

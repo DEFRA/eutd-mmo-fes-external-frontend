@@ -449,6 +449,8 @@ const checkPlaceOfUnloading = (placeOfUnloading: string | undefined | null) =>
   checkField(placeOfUnloading, 50, /^[a-zA-Z0-9]+$/);
 const checkPointOfDestination = (pointOfDestination: string | undefined | null) =>
   checkField(pointOfDestination, 100, /^[a-zA-Z0-9\-' /]+$/);
+const checkVesselName = (vesselName: string | undefined | null) => checkField(vesselName, 50, /^[a-zA-Z0-9\-'`() ]+$/);
+const checkFlagState = (flagState: string | undefined | null) => checkField(flagState, 50, /^[a-zA-Z0-9\-' ]+$/);
 const validatePayload = async (payload: ITransport, saveAsDraft: boolean) => {
   if (saveAsDraft) {
     payload.nationalityOfVehicle = await returnValidCountryName(payload.nationalityOfVehicle);
@@ -514,7 +516,11 @@ export const commonSaveTransportDetails = async (
   form: any
 ) => {
   const saveAsDraft = form.get("_action") === "saveAsDraft";
-  let errors: IError[] | IErrorsTransformed = payload?.arrival ? await validatePayload(payload, saveAsDraft) : [];
+  // For save-as-draft, skip validatePayload (which mutates the payload by clearing invalid
+  // fields to undefined before we can identify them). Country normalisation has already been
+  // done in each route's action function. Backend validation will catch invalid values.
+  let errors: IError[] | IErrorsTransformed =
+    payload?.arrival && !saveAsDraft ? await validatePayload(payload, false) : [];
 
   // Reject year 0000 (and any sub-1000 year) for exportDate and departureDate (format dd/mm/yyyy)
   // before hitting the API. moment.js in strict mode accepts year 0000 as valid;
@@ -540,32 +546,100 @@ export const commonSaveTransportDetails = async (
 
   // Save valid fields as draft even when validation errors exist
   if (saveAsDraft) {
-    // Validate to determine which fields are invalid
-    const validationResponse = await saveTransportDetails(bearerToken, documentNumber, payload, false);
+    // Validate client-side only — do NOT call the non-draft endpoint for validation.
+    // The non-draft endpoint does strict "all required fields must be present" validation,
+    // which would falsely flag blank optional fields as errors and null them out, wiping
+    // previously saved data. Instead, validate each submitted value against the same
+    // checkField rules used on save-and-continue: only null out a field when it has a
+    // non-empty submitted value that fails the format/length check.
+    const filteredPayload = { ...payload };
 
-    // Combine validation errors from client and backend with defensive checks
-    const backendErrors = Array.isArray(validationResponse.errors) ? validationResponse.errors : [];
-    const allErrors = [...(Array.isArray(errors) ? errors : []), ...backendErrors];
+    // Clear a field only when it is non-empty AND fails its check rule.
+    // Empty/blank fields (user left them or cleared them) are passed through unchanged.
+    // Invalid values are replaced with "" (empty string) rather than null because the
+    // backend Joi schemas only allow "" for string fields, not null — sending null would
+    // cause a 400 and prevent *all* fields (including valid ones) from being saved.
+    // "" is still serialised by JSON.stringify so the backend overwrites any previously-
+    // stored invalid value with an empty string (the field shows blank when user returns).
+    const nullIfInvalid = (
+      value: string | undefined | null,
+      checker: (v: string | undefined | null) => string | undefined
+    ): any => (value !== undefined && value !== null && value !== "" && checker(value) === undefined ? "" : value);
 
-    if (allErrors.length > 0) {
-      // Define system fields that must never be deleted
-      const systemFields = ["vehicle", "journey", "user_id", "currentUri", "nextUri", "arrival"];
+    filteredPayload.registrationNumber = nullIfInvalid(payload.registrationNumber, checkRegistrationNumber);
+    filteredPayload.freightBillNumber = nullIfInvalid(payload.freightBillNumber, checkFreightBillNumber);
+    filteredPayload.railwayBillNumber = nullIfInvalid(payload.railwayBillNumber, checkRailwayBillNumber);
+    filteredPayload.airwayBillNumber = nullIfInvalid(payload.airwayBillNumber, checkAirWayBillNumber);
+    filteredPayload.flightNumber = nullIfInvalid(payload.flightNumber, checkFlightNumber);
+    filteredPayload.departurePort = nullIfInvalid(payload.departurePort, checkDeparturePort);
+    filteredPayload.placeOfUnloading = nullIfInvalid(payload.placeOfUnloading, checkPlaceOfUnloading);
+    filteredPayload.departurePlace = nullIfInvalid(payload.departurePlace, checkDeparturePlace);
+    filteredPayload.pointOfDestination = nullIfInvalid(payload.pointOfDestination, checkPointOfDestination);
+    filteredPayload.vesselName = nullIfInvalid(payload.vesselName, checkVesselName);
+    filteredPayload.flagState = nullIfInvalid(payload.flagState, checkFlagState);
+    // Country fields (nationalityOfVehicle, departureCountry) are resolved to undefined in
+    // the route action when the selected value is invalid. undefined is omitted by
+    // JSON.stringify, so the backend merge preserves the existing saved country.
 
-      // Filter out invalid fields from payload, but preserve system fields
-      const errorKeys = allErrors.map((e) => e.key).filter((key) => !systemFields.includes(key));
-      const filteredPayload = { ...payload };
-      errorKeys.forEach((key) => {
-        delete (filteredPayload as any)[key];
-      });
+    // Container numbers: keep only correctly formatted ones (ISO 6346: 3 letters + U/J/Z/R + 7 digits).
+    const CONTAINER_NUMBER_REGEX = /^[A-Za-z]{3}[UJZRujzr][0-9]{7}$/;
+    filteredPayload.containerNumbers = (payload.containerNumbers ?? []).filter(
+      (cn) => cn != null && CONTAINER_NUMBER_REGEX.test(String(cn).trim())
+    );
 
-      // Save only valid fields as draft
-      postTransport = await saveTransportDetails(bearerToken, documentNumber, filteredPayload, true);
-    } else {
-      // No validation errors - save all data as draft
-      postTransport = await saveTransportDetails(bearerToken, documentNumber, payload, true);
+    // exportDate: the backend Joi schema for departure truck (arrival=false, journey='storageNotes')
+    // does NOT allow empty string – only valid date formats pass. Convert "" or invalid formats to
+    // undefined so the key is omitted from JSON and the backend preserves the previously saved value.
+    if (typeof filteredPayload.exportDate === "string") {
+      const exportDateFormats = ["DD/MM/YYYY", "DD/M/YYYY", "D/MM/YYYY", "D/M/YYYY"];
+      const exp = filteredPayload.exportDate as string;
+      if (exp === "") {
+        filteredPayload.exportDate = undefined;
+      } else {
+        const validMoment = exportDateFormats.map((fmt) => moment(exp, fmt, true)).find((m) => m.isValid());
+        if (!validMoment) {
+          // Invalid format - omit field
+          filteredPayload.exportDate = undefined;
+        } else {
+          const exportYear = validMoment.year();
+          // Reject years outside reasonable range (< 1000 or > 9999)
+          // Catches obviously invalid entries like year 777777
+          if (exportYear < 1000 || exportYear > 9999) {
+            filteredPayload.exportDate = undefined;
+          }
+        }
+      }
+    }
+    // departureDate: omit invalid or future dates when saving as draft so we don't persist
+    // values that would be rejected by the full save-and-continue validation.
+    if (typeof filteredPayload.departureDate === "string") {
+      const departureDateFormats = ["DD/MM/YYYY", "DD/M/YYYY", "D/MM/YYYY", "D/M/YYYY"];
+      const dep = filteredPayload.departureDate as string;
+      // Treat explicit empty string as the intent to clear the field => allow backend to overwrite
+      if (dep === "") {
+        filteredPayload.departureDate = undefined;
+      } else {
+        // If format isn't valid, omit the field so backend preserves prior value
+        const validMoment = departureDateFormats.map((fmt) => moment(dep, fmt, true)).find((m) => m.isValid());
+        if (!validMoment) {
+          filteredPayload.departureDate = undefined;
+        } else {
+          const parsed = validMoment.startOf("day");
+          const today = moment().startOf("day");
+          const departureYear = parsed.year();
+          // Reject years outside reasonable range (< 1000 or > 9999)
+          // Catches obviously invalid entries like year 777777
+          // Also reject future dates (after today)
+          if (departureYear < 1000 || departureYear > 9999 || parsed.isAfter(today)) {
+            filteredPayload.departureDate = undefined;
+          }
+        }
+      }
     }
 
-    errors = allErrors;
+    // Single save – no backend round-trip needed for draft filtering
+    postTransport = await saveTransportDetails(bearerToken, documentNumber, filteredPayload, true);
+    errors = [];
   } else {
     // Normal save and continue - validate and return errors if any
     postTransport = await saveTransportDetails(bearerToken, documentNumber, payload, false);
