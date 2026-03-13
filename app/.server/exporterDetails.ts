@@ -507,8 +507,17 @@ export const exporterDetailsLoader = async (request: Request, params: Params, jo
 
   const isCatchCertificate: boolean = journey === "catchCertificate";
 
+  // Check if a prior save-as-draft flagged this field as invalid — show empty rather than
+  // restoring the previously saved company name (backend cannot persist an empty string).
+  const clearCompanyNameFlag = session.get(`clearExporterCompanyName-${documentNumber}`);
+  if (clearCompanyNameFlag) {
+    session.unset(`clearExporterCompanyName-${documentNumber}`);
+  }
+
   const exporterFullName = session.get("exporterFullName") ?? exporter.model?.exporterFullName;
-  const exporterCompanyName = session.get("exporterCompanyName") ?? exporter.model?.exporterCompanyName;
+  const exporterCompanyName = clearCompanyNameFlag
+    ? undefined
+    : session.get("exporterCompanyName") ?? exporter.model?.exporterCompanyName;
 
   if (shouldLoadFromIdm(bearerToken, exporter)) {
     const { userDetails, addresses, accounts } = await loadIdmData(bearerToken);
@@ -518,7 +527,7 @@ export const exporterDetailsLoader = async (request: Request, params: Params, jo
           contactId: userDetails.model?.contactId,
           accountId: accounts.model?.accountId,
           ...(isCatchCertificate && { exporterFullName: userDetails.model?.exporterFullName }),
-          exporterCompanyName: accounts.model?.exporterCompanyName,
+          exporterCompanyName: clearCompanyNameFlag ? undefined : accounts.model?.exporterCompanyName,
           ...addresses.model,
         },
         documentNumber,
@@ -708,6 +717,24 @@ export const exporterDetailsAction = async (
   }
 
   if (isSaveAsDraft) {
+    const saveAsDraftErrors: IError[] = (response.errors as IError[]) || [];
+    if (saveAsDraftErrors.length > 0) {
+      const errorKeys = saveAsDraftErrors.map((e) => e.key);
+      const systemFields = new Set(["journey", "currentUri", "nextUri"]);
+      const filteredPayload: Exporter = Object.fromEntries(
+        Object.entries(payload).filter(([key]) => systemFields.has(key) || !errorKeys.includes(key))
+      ) as Exporter;
+      const hasUserDataFields = Object.keys(filteredPayload).some((k) => !systemFields.has(k));
+      if (hasUserDataFields) {
+        await addExporterDetails(bearerToken, documentNumber, filteredPayload, journey);
+      }
+      // The backend requires exporterCompanyName so it cannot be cleared via the API.
+      // Set a session flag so the loader shows the field empty on the next page visit
+      // instead of restoring the previously saved value.
+      if (errorKeys.includes("exporterCompanyName")) {
+        session.set(`clearExporterCompanyName-${documentNumber}`, "true");
+      }
+    }
     if (isCatchCertificate) session.unset("exporterFullName");
     session.unset("exporterCompanyName");
     return redirect(routes[journey]["saveAsDraft"], {

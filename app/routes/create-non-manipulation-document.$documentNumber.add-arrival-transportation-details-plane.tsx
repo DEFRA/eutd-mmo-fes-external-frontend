@@ -3,10 +3,11 @@ import { useActionData, redirect, type LoaderFunction, type ActionFunction } fro
 
 import { route } from "routes-gen";
 import { useEffect } from "react";
-import type { ITransport, ErrorResponse } from "~/types";
+import type { ITransport, ErrorResponse, ICountry } from "~/types";
 import { scrollToId, TransportType } from "~/helpers";
 import {
   getBearerTokenForRequest,
+  getCountries,
   getTransportDetails,
   TransportationDetailsLoaderFunction,
   commonSaveTransportDetails,
@@ -43,9 +44,13 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (!isValid) return redirect("/forbidden");
 
   const saveAsDraft = form.get("_action") === "saveAsDraft";
+  const countries: ICountry[] = await getCountries();
   const airwayBillNumber = handleFormEmptyStringValue(form, "airwayBillNumber", saveAsDraft);
   const flightNumber = handleFormEmptyStringValue(form, "flightNumber", saveAsDraft);
-  const departureCountry = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
+  const departureCountryForm = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
+  const departureCountry = countries.find(
+    (c: ICountry) => c.officialCountryName === departureCountryForm
+  )?.officialCountryName;
   const departureDate = calculateDepartureDate(form);
   const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
   const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);

@@ -5,7 +5,7 @@ import { Button, BUTTON_TYPE, ErrorPosition, FormInput } from "@capgeminiuk/dcx-
 import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
 
 import { route } from "routes-gen";
-import type { StorageDocument, IUnauthorised, IErrorsTransformed } from "~/types";
+import type { StorageDocument, IUnauthorised, IErrorsTransformed, ErrorResponse } from "~/types";
 import {
   getBearerTokenForRequest,
   validateResponseData,
@@ -28,9 +28,11 @@ import {
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { DateFieldWithPicker } from "~/composite-components";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
-import classNames from "classnames/bind";
+import classNames from "classnames";
 import { useScrollOnPageError } from "~/hooks";
 import i18next from "~/i18next.server";
+import type { Session } from "@remix-run/node";
+import type { TFunction } from "i18next";
 
 type loaderStorageFacility = {
   documentNumber: string;
@@ -174,7 +176,7 @@ const handleGoToAddAddress = async (
   t: TFunction,
   documentNumber: string
 ): Promise<Response> => {
-  session.set("facilityName", String(getStrOrDefault(values["facilityName"])));
+  session.set("facilityName", String(getStrOrDefault(values["facilityName"] as string)));
   session.set("selectedArrivalDate", selectedDate);
 
   const fieldPrefixName = "storageFacilities-facilityName";
@@ -203,6 +205,72 @@ const handleGoToAddAddress = async (
   });
 };
 
+// Helper to extract valid facility fields after a draft validation response
+const getValidFacilityData = async (
+  validationResponse: Response | ErrorResponse | null | undefined,
+  storageFacilityData: Partial<StorageDocument>
+): Promise<Partial<StorageDocument>> => {
+  if (!validationResponse || !(validationResponse instanceof Response)) {
+    return storageFacilityData;
+  }
+
+  const responseData = await validationResponse.clone().json();
+  const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+
+  const filteredFacility = { ...storageFacilityData };
+
+  if (errorKeys.some((k) => k.includes("facilityName"))) {
+    filteredFacility.facilityName = null as unknown as string;
+  }
+
+  if (errorKeys.some((k) => k.includes("facilityArrivalDate"))) {
+    filteredFacility.facilityArrivalDate = null as unknown as string;
+  }
+
+  return filteredFacility;
+};
+
+// Helper function to handle save as draft action
+const handleSaveAsDraft = async (
+  bearerToken: string,
+  documentNumber: string,
+  values: Record<string, FormDataEntryValue>,
+  selectedDate: string | undefined,
+  session: Session
+): Promise<Response> => {
+  session.unset("facilityName");
+  session.unset("selectedArrivalDate");
+
+  const storageFacilityData = {
+    facilityName: String(getStrOrDefault(values["facilityName"] as string)),
+    facilityArrivalDate: selectedDate as string,
+  };
+
+  const validationResponse = await updateStorageDocumentFacility(
+    bearerToken,
+    documentNumber,
+    "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
+    false,
+    false,
+    storageFacilityData
+  );
+
+  const dataToSave = await getValidFacilityData(validationResponse, storageFacilityData);
+
+  await updateStorageDocumentFacility(
+    bearerToken,
+    documentNumber,
+    "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
+    true,
+    false,
+    dataToSave
+  );
+
+  return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
+    headers: { "Set-Cookie": await commitSession(session) },
+  });
+};
+
 // Helper function to handle save and continue action
 const handleSaveAndContinue = async (
   bearerToken: string,
@@ -221,21 +289,21 @@ const handleSaveAndContinue = async (
     saveToRedisIfErrors,
     undefined,
     {
-      facilityName: String(getStrOrDefault(values["facilityName"])),
+      facilityName: String(getStrOrDefault(values["facilityName"] as string)),
       facilityArrivalDate: selectedDate as string,
     }
   );
 
-  if (errorResponse) {
+  if (errorResponse instanceof Response) {
     // When there are errors and JavaScript is disabled, include the submitted form values
     // so they can be used to repopulate the form fields
-    const responseData = typeof errorResponse.json === "function" ? await errorResponse.json() : errorResponse;
+    const responseData = await errorResponse.json();
 
     // Explicitly include the form values in the response under 'values' key
     const combinedResponse = {
       ...responseData,
       values: {
-        facilityName: String(getStrOrDefault(values["facilityName"])),
+        facilityName: String(getStrOrDefault(values["facilityName"] as string)),
         facilityArrivalDate: selectedDate,
         facilityArrivalDateDay: values["facilityArrivalDateDay"],
         facilityArrivalDateMonth: values["facilityArrivalDateMonth"],
@@ -308,13 +376,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   }
 
   if (_action === "saveAsDraft") {
-    session.unset("facilityName");
-    session.unset("selectedArrivalDate");
-    await handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri, true);
-    // Always redirect to dashboard when saving as draft, regardless of errors
-    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
-      headers: { "Set-Cookie": await commitSession(session) },
-    });
+    return handleSaveAsDraft(bearerToken, documentNumber, values, selectedDate, session);
   }
 
   return handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri, false);
@@ -324,10 +386,7 @@ const getArrivalDateFromAction = (actionData: any, type: string): string => {
   const year = actionData?.values?.[`${type}Year`] ?? "";
   const month = actionData?.values?.[`${type}Month`] ?? "";
   const day = actionData?.values?.[`${type}Day`] ?? "";
-  if (year || month || day) {
-    return `${year ?? ""}-${month ?? ""}-${day ?? ""}`;
-  }
-  return "";
+  return year || month || day ? `${year}-${month}-${day}` : "";
 };
 
 const AddStorageFacilityDetails = () => {
@@ -357,15 +416,9 @@ const AddStorageFacilityDetails = () => {
 
   const arrivalDateFromAction = getArrivalDateFromAction(actionData, "facilityArrivalDate");
 
-  const getDateFromActionOrLoader = (dateFromAction: string, dateFromLoader: string | undefined) => {
-    if (dateFromAction && dateFromAction.trim() !== "") {
-      return dateFromAction;
-    }
-    if (dateFromLoader && dateFromLoader.trim() !== "") {
-      return dateFromLoader;
-    }
-    return "";
-  };
+  const getDateFromActionOrLoader = (dateFromAction: string, dateFromLoader: string | undefined): string =>
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- intentionally use || so empty strings fall through to the loader date
+    dateFromAction?.trim() || dateFromLoader?.trim() || "";
 
   const [daySelected = "", monthSelected = "", yearSelected = ""] =
     selectedArrivalDate && typeof selectedArrivalDate === "string" ? selectedArrivalDate.split("/") : " ";
