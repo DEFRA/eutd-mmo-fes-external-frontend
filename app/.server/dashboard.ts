@@ -13,6 +13,7 @@ import isEmpty from "lodash/isEmpty";
 import { createCSRFToken } from ".";
 import { clearSession, commitSession, getSessionFromRequest } from "~/sessions.server";
 import i18next from "~/i18next.server";
+import serverLogger from "~/logger.server";
 
 type CreateDocumentType = {
   documentNumber?: string;
@@ -28,7 +29,11 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
   const url = new URL(request.url);
   const month = url.searchParams.get("month") ? Number(url.searchParams.get("month")) : new Date().getMonth() + 1;
   const year = url.searchParams.get("year") ? Number(url.searchParams.get("year")) : new Date().getFullYear();
+  const loaderStart = performance.now();
+
+  const attrStart = performance.now();
   const userAttributes: UserAttribute[] = await getAllUserAttributes(bearerToken);
+  serverLogger.info(`[PERF][getDashboardLoader] getAllUserAttributes: ${(performance.now() - attrStart).toFixed(1)}ms`);
 
   if (!isAcceptedCookiesAvailable(userAttributes)) {
     return redirect(route("/cookies"));
@@ -37,10 +42,21 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
   if (!isPrivacyAccepted(userAttributes)) {
     return redirect(route("/:journey/privacy-notice", { journey: getPrivacyNoticeJourney(journey) }));
   }
-  const documents = await getAllDocuments(bearerToken, journey, year, month);
+
   const isAdminSupport: boolean = isAdminUser(bearerToken);
   const emptyExporterFromIdm: IExporter = { error: "", errors: [] };
-  const userDetails: IExporter = !isAdminSupport ? await getUserDetails(bearerToken) : emptyExporterFromIdm;
+
+  // Parallelize independent API calls for performance
+  const parallelStart = performance.now();
+  const [documents, userDetails, notification] = await Promise.all([
+    getAllDocuments(bearerToken, journey, year, month),
+    !isAdminSupport ? getUserDetails(bearerToken) : Promise.resolve(emptyExporterFromIdm),
+    getNotification(bearerToken),
+  ]);
+  serverLogger.info(
+    `[PERF][getDashboardLoader] parallel calls (documents + userDetails + notification): ${(performance.now() - parallelStart).toFixed(1)}ms`
+  );
+
   const accountDetails: IExporter = !isAdminSupport ? getAccounts(bearerToken) : emptyExporterFromIdm;
 
   let name: string = "";
@@ -57,7 +73,6 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
   if (journey === "catchCertificate") {
     clearSession(session);
   }
-  const notification = await getNotification(bearerToken);
   const responseData = {
     journey,
     documents: documents,
@@ -71,6 +86,7 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
     csrf,
   };
   const sessionCookie = await commitSession(session);
+  serverLogger.info(`[PERF][getDashboardLoader] total: ${(performance.now() - loaderStart).toFixed(1)}ms`);
 
   // Return Response with JSON and Set-Cookie header
   return new Response(JSON.stringify(responseData), {
