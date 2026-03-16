@@ -289,6 +289,13 @@ const DirectLanding = () => {
   const normalize = (s?: string | null) => (s?.trim() === "" ? undefined : s);
 
   const faoValue = normalize(faoArea) ?? normalize(directLandings?.faoArea) ?? "FAO27";
+  const { "vessel.isListed": isListedError, ...restErrors } = errors;
+  const errorsForSummary = isListedError
+    ? {
+        ...restErrors,
+        "vessel.vesselName": { ...isListedError, fieldId: "vessel.vesselName-error", key: "vessel.vesselName" },
+      }
+    : errors;
 
   return (
     <Main
@@ -298,7 +305,7 @@ const DirectLanding = () => {
     >
       {!isEmpty(errors) && (
         <ErrorSummary
-          errors={displayErrorMessagesInOrder(errors, [
+          errors={displayErrorMessagesInOrder(errorsForSummary, [
             "startDate",
             "dateLanded",
             "faoArea",
@@ -309,7 +316,6 @@ const DirectLanding = () => {
             "eez.3",
             "eez.4",
             "vessel.vesselName",
-            "vessel.isListed",
             "gearCategory",
             "gearType",
             "weight",
