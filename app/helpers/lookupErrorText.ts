@@ -511,15 +511,6 @@ export const displayErrorMessagesInOrder = (
     });
   });
 
-  // Append any errors whose keys were not covered by errorKeysInOrder.
-  // Without this, unknown keys are silently dropped — meaning the ErrorSummary
-  // guard (errorMessagesForDisplay.length > 0) hides them and the page appears
-  // stuck: the user clicks Save and continue, the action returns errors, but
-  // nothing visible happens.
-  remainingKeys.forEach((k) => {
-    result.push(errors[k]);
-  });
-
   return result;
 };
 
