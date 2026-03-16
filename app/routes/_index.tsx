@@ -1,5 +1,5 @@
 import { analyticsAcceptedCookie } from "~/cookies.server";
-import type { UserAttribute, IError } from "~/types";
+import type { IError } from "~/types";
 import {
   createCSRFToken,
   getAllUserAttributes,
@@ -51,12 +51,16 @@ export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
   const journeySelection = form.get("journeySelection") as string;
 
-  const response: {
-    journeySelection?: string;
-    errors?: IError[];
-  } = await journeySelectionSubmission(bearerToken, journeySelection);
+  // Parallelize the journey selection submission and user attributes fetch —
+  // both only require the bearer token and are independent of each other.
+  const [response, userAttributes] = await Promise.all([
+    journeySelectionSubmission(bearerToken, journeySelection) as Promise<{
+      journeySelection?: string;
+      errors?: IError[];
+    }>,
+    getAllUserAttributes(bearerToken),
+  ]);
 
-  const userAttributes: UserAttribute[] = await getAllUserAttributes(bearerToken);
   const hasAcceptedCookies = isAcceptedCookies(userAttributes);
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");

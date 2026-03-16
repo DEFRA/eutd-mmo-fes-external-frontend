@@ -130,26 +130,36 @@ export const hasRequiredDataCatchCertificateSummary = (
 export const submitExportCertificate = async (
   bearerToken: string,
   documentNumber: string | undefined,
-  journey: Journey
+  journey: Journey,
+  ipAddress?: string
 ): Promise<ICatchCertificateSubmitResponse> => {
   if (!documentNumber) {
     throw new Error("catch certificate document number is required");
   }
 
-  const res: Response = await get(bearerToken, GET_CLIENT_IP_URL);
-  const ipAddress: string = await res.text();
+  // If ipAddress was not pre-fetched by the caller, fetch it now.
+  const resolvedIpAddress = ipAddress ?? (await get(bearerToken, GET_CLIENT_IP_URL).then((r) => r.text()));
 
-  const response = await fetch(CREATE_EXPORT_CERTIFICATE, {
-    method: "POST",
-    headers: {
-      documentNumber: documentNumber,
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${bearerToken}`,
-    },
-    body: JSON.stringify({ journey, data: ipAddress }),
-  });
+  const CERTIFICATE_SUBMIT_TIMEOUT_MS = 60000;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), CERTIFICATE_SUBMIT_TIMEOUT_MS);
 
-  return await onSubmitExportCertificateResponse(response);
+  try {
+    const response = await fetch(CREATE_EXPORT_CERTIFICATE, {
+      method: "POST",
+      headers: {
+        documentNumber: documentNumber,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${bearerToken}`,
+      },
+      body: JSON.stringify({ journey, data: resolvedIpAddress }),
+      signal: controller.signal,
+    });
+
+    return await onSubmitExportCertificateResponse(response);
+  } finally {
+    clearTimeout(timeoutId);
+  }
 };
 
 const onSubmitExportCertificateResponse = async (response: Response): Promise<ICatchCertificateSubmitResponse> => {
