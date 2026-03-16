@@ -131,7 +131,7 @@ export const LandingsTable = ({ landings, csrf }: LandingsTableProps) => {
               </td>
               <td
                 className="govuk-table__cell tablerowuserref govuk-!-padding-0 govuk-!-padding-top-2 govuk-!-padding-right-2 govuk-!-padding-bottom-2 govuk-!-font-size-19 table-adjust-font"
-                style={{ width: "10%" }}
+                style={{ width: "10%", whiteSpace: "nowrap" }}
               >
                 {landing.exportWeight !== undefined && landing.exportWeight !== null
                   ? Number(landing.exportWeight).toFixed(2)
