@@ -94,7 +94,7 @@ describe("Save and Continue button - UnHappy path", () => {
 });
 
 describe("Save and Continue button - Happy path", () => {
-  it("should redirect to departure summary page on click of save and continue button", () => {
+  it("should redirect to check-your-information page on click of save and continue button", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSave,
     };
@@ -105,7 +105,7 @@ describe("Save and Continue button - Happy path", () => {
     cy.get("#flagState").type("flag State", { force: true });
     cy.get("#departurePlace").type("Place export", { force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
-    cy.url().should("include", "/departure-product-summary");
+    cy.url().should("include", "/check-your-information");
   });
 
   it("should redirect to dashboard page on click of save as draft button", () => {
