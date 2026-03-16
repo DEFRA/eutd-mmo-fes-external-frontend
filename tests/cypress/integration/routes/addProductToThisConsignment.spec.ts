@@ -947,6 +947,31 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       .should("be.visible");
   });
 
+  it("FI0-11052: should display commodity code error before product description error in the error summary", () => {
+    // Regression test: "catches-0-product" must not prefix-match "catches-0-productDescription"
+    // via startsWith, which would hoist productDescription above commodityCode in the summary.
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataError,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    cy.get(".govuk-error-summary__list").should("exist");
+
+    cy.get(".govuk-error-summary__list li").then(($items) => {
+      const texts = [...$items].map((el) => el.innerText.trim());
+      const commodityCodeIndex = texts.findIndex((t) => t.toLowerCase().includes("commodity code"));
+      const productDescriptionIndex = texts.findIndex((t) => t.toLowerCase().includes("description"));
+
+      expect(commodityCodeIndex, "commodity code error index").to.be.greaterThan(-1);
+      expect(productDescriptionIndex, "product description error index").to.be.greaterThan(-1);
+      expect(commodityCodeIndex, "commodity code error should appear before product description error").to.be.lessThan(
+        productDescriptionIndex
+      );
+    });
+  });
+
   it("should handle default values for all fields from catchDetails", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
@@ -1164,13 +1189,15 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       const editIndex = 2;
       cy.visit(`${documentUrl}/add-product-to-this-consignment/${editIndex}`, { qs: { ...testParams } });
 
-      // Fill in required fields
+      // Fill in non-autocomplete required fields only — autocomplete fields
+      // (product, commodityCode) trigger React re-renders mid-type which detach
+      // the element from the DOM. This test only verifies the redirect URL so
+      // the mocked API response (success) makes them unnecessary here.
       cy.get('input[value="uk"]').check({ force: true });
-      cy.get(`#catches-${editIndex}-certificateNumber`).clear().type("EDITED123");
-      cy.get(`#catches-${editIndex}-weightOnCC`).clear().type("150");
-      cy.get(`#catches-${editIndex}-product`).type("COD");
-      cy.wait(300);
-      cy.get(`#catches-${editIndex}-commodityCode`).type("03");
+      cy.get(`#catches-${editIndex}-certificateNumber`).clear();
+      cy.get(`#catches-${editIndex}-certificateNumber`).type("EDITED123");
+      cy.get(`#catches-${editIndex}-weightOnCC`).clear();
+      cy.get(`#catches-${editIndex}-weightOnCC`).type("150");
 
       // Submit form
       cy.get('[data-testid="save-and-continue"]').click({ force: true });
@@ -1198,8 +1225,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get(`#catches-${productIndex}-certificateNumber`).type("TEST789");
       cy.get(`#catches-${productIndex}-weightOnCC`).type("100");
       cy.get(`#catches-${productIndex}-product`).type("COD");
-      cy.wait(300);
-      cy.get(`#catches-${productIndex}-commodityCode`).type("03");
+      cy.get(`#catches-${productIndex}-commodityCode`).should("be.visible").type("03");
 
       // Submit form
       cy.get('[data-testid="save-and-continue"]').click({ force: true });
