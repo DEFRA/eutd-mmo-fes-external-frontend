@@ -914,7 +914,7 @@ describe("Check Your Information (Summary) page: Manual Landing render container
       .should("be.visible")
       .should("have.attr", "href")
       .and("include", "/add-transportation-details-truck")
-      .and("include", "#containerIdentificationNumber");
+      .and("include", "#containerNumber");
   });
 
   it("should render container identification number for train when present on manual landing journey", () => {
@@ -937,7 +937,7 @@ describe("Check Your Information (Summary) page: Manual Landing render container
       .should("be.visible")
       .should("have.attr", "href")
       .and("include", "/add-transportation-details-train")
-      .and("include", "#containerIdentificationNumber");
+      .and("include", "#containerNumber");
   });
 
   it("should not render container identification number for train when not present on manual landing journey", () => {
@@ -963,7 +963,7 @@ describe("Check Your Information (Summary) page: Manual Landing when JavaScript 
     cy.get('[data-testid="change-container-truck"]')
       .should("have.attr", "href")
       .and("include", "/add-transportation-details-truck")
-      .and("include", "#containerIdentificationNumber");
+      .and("include", "#containerNumber");
   });
 
   it("should render container identification number for train transport without JavaScript", () => {
@@ -978,7 +978,7 @@ describe("Check Your Information (Summary) page: Manual Landing when JavaScript 
     cy.get('[data-testid="change-container-train"]')
       .should("have.attr", "href")
       .and("include", "/add-transportation-details-train")
-      .and("include", "#containerIdentificationNumber");
+      .and("include", "#containerNumber");
   });
 
   it("should allow form submission without JavaScript", () => {

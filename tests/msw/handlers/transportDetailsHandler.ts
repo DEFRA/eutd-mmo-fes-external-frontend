@@ -1617,7 +1617,7 @@ const transportDetailsHandler: ITestHandler = {
           departurePort: "Frankfurt Airport",
           placeOfUnloading: "Heathrow Airport",
           departureDate: "20/01/2026",
-          containerNumbers: ["DEFG2345678"],
+          containerNumber: ["DEFG2345678"],
           vehicle: "plane",
           arrival: true,
         })
@@ -2482,7 +2482,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          "containerNumbers.0": "error.containerNumbers.0.string.max",
+          "containerNumber.0": "error.containerNumber.0.string.max",
         })
       )
     ),
@@ -2495,7 +2495,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
+          "containerNumber.0": "error.containerNumber.0.string.pattern.base",
         })
       )
     ),
@@ -2532,7 +2532,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.json({
           ...catchCertificatePlane,
-          containerNumbers: ["EXISTING001", "EXISTING002", "EXISTING003"],
+          containerNumber: ["EXISTING001", "EXISTING002", "EXISTING003"],
         })
       )
     ),
@@ -2559,7 +2559,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
+          "containerNumber.0": "error.containerNumber.0.string.pattern.base",
         })
       )
     ),
@@ -2572,7 +2572,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
+          "containerNumber.0": "error.containerNumber.0.string.pattern.base",
         })
       )
     ),
@@ -2670,7 +2670,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.json({
           ...catchCertificateVessel,
-          containerNumbers: ["EXISTING001", "EXISTING002", "EXISTING003"],
+          containerNumber: ["EXISTING001", "EXISTING002", "EXISTING003"],
         })
       )
     ),
@@ -2683,7 +2683,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
+          "containerNumber.0": "error.containerNumber.0.string.pattern.base",
         })
       )
     ),
@@ -2743,13 +2743,13 @@ const transportDetailsHandler: ITestHandler = {
         errors.departurePlace = "error.departurePlace.any.required";
       }
 
-      if (body.containerNumbers) {
-        if (body.containerNumbers[0] && !/^[A-Z]{3}[UJZR]\d{7}$/.test(body.containerNumbers[0])) {
-          errors["containerNumbers.0"] = "error.containerNumbers.0.string.pattern.base";
+      if (body.containerNumber) {
+        if (body.containerNumber[0] && !/^[A-Z]{3}[UJZR]\d{7}$/.test(body.containerNumber[0])) {
+          errors["containerNumber.0"] = "error.containerNumber.0.string.pattern.base";
         }
 
-        if (body.containerNumbers[1] && !/^[A-Z]{3}[UJZR]\d{7}$/.test(body.containerNumbers[1])) {
-          errors["containerNumbers.1"] = "error.containerNumbers.1.string.pattern.base";
+        if (body.containerNumber[1] && !/^[A-Z]{3}[UJZR]\d{7}$/.test(body.containerNumber[1])) {
+          errors["containerNumber.1"] = "error.containerNumber.1.string.pattern.base";
         }
       }
 

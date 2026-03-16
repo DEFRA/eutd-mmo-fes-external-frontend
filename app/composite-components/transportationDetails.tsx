@@ -186,7 +186,7 @@ export const TransportationModeDetails = ({
             displayOptionalSuffix={displayOptionalSuffix}
             vehicleType="plane"
             labelKey={"addTransportationDetailsContainerIdentificationNumberPlane"}
-            hintKey={"addTransportationDetailsContainerIdentificationNumberHintPlane"}
+            hintKey={"addTransportationDetailsContainerIdentificationNumberHint"}
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"

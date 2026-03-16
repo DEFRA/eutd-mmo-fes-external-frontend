@@ -324,7 +324,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departureDate-day").type("15", { force: true });
     cy.get("#departureDate-month").type("12", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get('[id="containerNumber.0"]').type("ABCU1234567", { force: true });
 
     // Save as draft
     cy.get("[data-testid=save-draft-button]").click({ force: true });
@@ -346,7 +346,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departureDate-day").should("have.value", "15");
     cy.get("#departureDate-month").should("have.value", "12");
     cy.get("#departureDate-year").should("have.value", "2025");
-    cy.get('[id="containerNumbers.0"]').should("have.value", "ABCU1234567");
+    cy.get('[id="containerNumber.0"]').should("have.value", "ABCU1234567");
   });
 
   it("should retain dates and accept invalid container format when saving as draft", () => {
@@ -363,7 +363,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departureDate-day").type("25", { force: true });
     cy.get("#departureDate-month").type("11", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("INVALID", { force: true }); // Invalid ISO 6346 format
+    cy.get('[id="containerNumber.0"]').type("INVALID", { force: true }); // Invalid ISO 6346 format
 
     // Save as draft should accept invalid container
     cy.get("[data-testid=save-draft-button]").click({ force: true });
@@ -377,7 +377,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departureDate-day").should("have.value", "25");
     cy.get("#departureDate-month").should("have.value", "11");
     cy.get("#departureDate-year").should("have.value", "2025");
-    cy.get('[id="containerNumbers.0"]').should("have.value", "INVALID");
+    cy.get('[id="containerNumber.0"]').should("have.value", "INVALID");
   });
 
   it("should retain empty date when saving as draft without departure date", () => {
@@ -430,29 +430,29 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
     // Verify initial container field and add button
-    cy.get('input[name="containerNumbers.0"]').should("be.visible");
+    cy.get('input[name="containerNumber.0"]').should("be.visible");
     cy.get("#add-container-button").should("be.visible");
     cy.get("#add-container-button").should("be.visible").should("contain.text", "Add another container");
     cy.get("#remove-container-button-0").should("not.exist");
 
     // Add another container
     cy.get("#add-container-button").click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').should("be.visible");
+    cy.get('input[name="containerNumber.1"]').should("be.visible");
     cy.get("#remove-container-button-0").should("be.visible");
     cy.get("#remove-container-button-0").should("be.visible").should("contain.text", "Remove");
 
     // Fill in container values
-    cy.get('[id="containerNumbers.0"]').type("ABCJ0123456", { force: true });
-    cy.get('[id="containerNumbers.1"]').type("XYZU9876543", { force: true });
-    cy.get('[id="containerNumbers.0"]').should("exist");
-    cy.get('[id="containerNumbers.1"]').should("exist");
+    cy.get('[id="containerNumber.0"]').type("ABCJ0123456", { force: true });
+    cy.get('[id="containerNumber.1"]').type("XYZU9876543", { force: true });
+    cy.get('[id="containerNumber.0"]').should("exist");
+    cy.get('[id="containerNumber.1"]').should("exist");
 
     // Remove one container
     cy.get("#remove-container-button-0").click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').should("not.exist");
+    cy.get('input[name="containerNumber.1"]').should("not.exist");
 
     // Verify the remaining container still exists
-    cy.get('input[name="containerNumbers.0"]').should("exist");
+    cy.get('input[name="containerNumber.0"]').should("exist");
   });
 });
 

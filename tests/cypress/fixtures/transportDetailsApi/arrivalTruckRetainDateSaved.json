@@ -6,5 +6,5 @@
   "departureCountry": "Belgium",
   "departurePort": "Antwerp",
   "departureDate": "25/11/2025",
-  "containerNumbers": ["INVALID"]
+  "containerNumber": ["INVALID"]
 }
