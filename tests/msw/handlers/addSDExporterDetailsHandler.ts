@@ -8,6 +8,7 @@ import {
   mockGetIdmAddressDetails,
   GET_STORAGE_DOCUMENT,
   getProgressUrl,
+  getTransportDetailsUrl,
 } from "~/urls.server";
 import exporterDetails from "@/fixtures/addExporterDetails/sdExporterDetails.json";
 import exporterDetailsNoAddress from "@/fixtures/addExporterDetails/exporterDetailsNoAddress.json";
@@ -71,6 +72,7 @@ const addSDExporterDetailsHandler: ITestHandler = {
     rest.post(getAddExporterDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdExporterIncomplete))),
+    rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
 };
