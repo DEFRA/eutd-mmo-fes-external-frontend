@@ -608,7 +608,7 @@ const AddProductIndex = () => {
 
   // Deduplicate error keys to prevent duplicate error messages in error summary
   const errorKeysInOrder = Array.from(new Set(allErrorKeysInOrder));
-  const allErrorMessages = displayErrorMessagesInOrder(allErrors, errorKeysInOrder);
+  const allErrorMessages = displayErrorMessagesInOrder(allErrors, errorKeysInOrder, true);
 
   // Remove duplicate errors by key to handle cases where the same field error appears multiple times
   const seenErrorKeys = new Set<string>();
