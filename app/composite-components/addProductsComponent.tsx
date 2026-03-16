@@ -242,7 +242,7 @@ export const AddProductsComponent = ({
           detailsTextClassName="govuk-details__text"
           summaryTextProps={{ id: "commodity-code-details" }}
         >
-          <p>{t("ccFavouritesPageFormCommodityCodeDetails", { contactInfo: "0330 159 1989" })}</p>
+          <p>{t("ccFavouritesPageFormCommodityCodeDetails")}</p>
         </Details>
         {displayAddProduct && showFavouriteCheckbox && (
           <div className="govuk-form-group">
