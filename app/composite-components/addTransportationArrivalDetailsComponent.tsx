@@ -4,7 +4,6 @@ import { useLoaderData } from "react-router";
 import { ButtonGroup } from "./buttonGroup";
 import type { ITransport, IErrorsTransformed, Vehicle, ICountry } from "~/types";
 import { route } from "routes-gen";
-import isEmpty from "lodash/isEmpty";
 import {
   displayErrorMessagesInOrder,
   getContainerNumber,
@@ -156,9 +155,11 @@ export const AddTransportationArrivalDetailsComponent = ({
     "placeOfUnloading",
   ];
 
+  const errorMessagesForDisplay = displayErrorMessagesInOrder(errors, errorKeysInOrder);
+
   return (
     <Main backUrl={backUrl}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} />}
+      {errorMessagesForDisplay.length > 0 && <ErrorSummary errors={errorMessagesForDisplay} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" csrf={csrf}>

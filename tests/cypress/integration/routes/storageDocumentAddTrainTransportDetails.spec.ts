@@ -142,6 +142,15 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.contains("a", /^Enter the railway bill number$/).should("be.visible");
   });
 
+  it("regression: should not show 'There is a problem' header when page loads without errors", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportAllowed,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.get(".govuk-error-summary").should("not.exist");
+    cy.contains("h2", /^There is a problem$/).should("not.exist");
+  });
+
   it("should navigate to sd dashboard page on click of save as draft button", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSaveAsDraft,

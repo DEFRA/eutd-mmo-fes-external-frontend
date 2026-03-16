@@ -5,7 +5,6 @@ import { ButtonGroup } from "./buttonGroup";
 import { TransportationDetails } from "./transportationDetails";
 import type { ITransport, IErrorsTransformed, Vehicle, ICountry } from "~/types";
 import { route } from "routes-gen";
-import isEmpty from "lodash/isEmpty";
 import {
   displayErrorMessagesInOrder,
   getAirwayBillNumber,
@@ -147,7 +146,7 @@ export const AddTransportationDetailsComponent = ({
   const errorMessagesForDisplay = displayErrorMessagesInOrder(errors, errorKeysInOrder);
   return (
     <Main backUrl={backUrl}>
-      {!isEmpty(errors) && <ErrorSummary errors={errorMessagesForDisplay} />}
+      {errorMessagesForDisplay.length > 0 && <ErrorSummary errors={errorMessagesForDisplay} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" csrf={csrf}>

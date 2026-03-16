@@ -362,6 +362,7 @@ export const getErrorMessage = (key: string): string => {
     "error.airwayBillNumber.string.max": "sdAirwayBillNumberMaxCharError",
     "error.airwayBillNumber.string.pattern.base": "sdAirwayBillNumberMaxPatternError",
     "error.facilityArrivalDate.date.missing": "ccCommonArrivalDateMissingError",
+    "error.facilityArrivalDate.date.base": "ccCommonArrivalDateMissingError",
     "error.facilityArrivalDate.date.isoDate": "ccArrivalDateValidationError",
     "error.placeOfUnloading.any.required": "sdAddTransportationDetailsTruckPlaceOfUnloadingError",
     "error.placeOfUnloading.string.max": "sdAddTransportationDetailsPlaceOfUnloadingCharExceedError",
@@ -508,6 +509,15 @@ export const displayErrorMessagesInOrder = (
         remainingKeys.delete(k);
       }
     });
+  });
+
+  // Append any errors whose keys were not covered by errorKeysInOrder.
+  // Without this, unknown keys are silently dropped — meaning the ErrorSummary
+  // guard (errorMessagesForDisplay.length > 0) hides them and the page appears
+  // stuck: the user clicks Save and continue, the action returns errors, but
+  // nothing visible happens.
+  remainingKeys.forEach((k) => {
+    result.push(errors[k]);
   });
 
   return result;

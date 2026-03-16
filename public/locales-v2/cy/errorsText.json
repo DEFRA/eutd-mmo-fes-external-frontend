@@ -307,5 +307,7 @@
   "ccDirectLandingDateLandedFutureDateError": "Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf",
   "ccDirectLandingVesselRequiredError": "Dewiswch neu rhowch enw llong neu lythyren a rhif porthladd",
   "ccDirectLandingVesselInvalidError": "Dewiswch gwch neu long o'r rhestr",
-  "ccDirectLandingExportWeightRequiredError": "Rhowch y pwysau allforio mewn cilogramau"
+  "ccDirectLandingExportWeightRequiredError": "Rhowch y pwysau allforio mewn cilogramau",
+  "ccCommonArrivalDateMissingError": "Rhowch y dyddiad cyrraedd ar gyfer y cyfleuster storio",
+  "ccArrivalDateValidationError": "Rhaid i'r dyddiad cyrraedd fod yn ddyddiad go iawn"
 }

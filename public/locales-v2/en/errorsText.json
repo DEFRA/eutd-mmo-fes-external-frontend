@@ -308,5 +308,7 @@
   "ccDirectLandingDateLandedFutureDateError": "Date landed must be today or within the next 7 days",
   "ccDirectLandingVesselRequiredError": "Select or enter a vessel name or port letter and number",
   "ccDirectLandingVesselInvalidError": "Select a vessel from the list",
-  "ccDirectLandingExportWeightRequiredError": "Enter the export weight in kilograms"
+  "ccDirectLandingExportWeightRequiredError": "Enter the export weight in kilograms",
+  "ccCommonArrivalDateMissingError": "Enter the storage facility arrival date",
+  "ccArrivalDateValidationError": "Arrival date must be a real date"
 }

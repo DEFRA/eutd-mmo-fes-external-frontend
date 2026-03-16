@@ -647,10 +647,11 @@ export const commonSaveTransportDetails = async (
     // Normal save and continue - validate and return errors if any
     postTransport = await saveTransportDetails(bearerToken, documentNumber, payload, false);
 
-    const sortedErrors = sortErrors(
-      [...(Array.isArray(errors) ? errors : []), ...(postTransport.errors as IError[])],
-      payload
-    );
+    const allErrors = [...(Array.isArray(errors) ? errors : []), ...(postTransport.errors as IError[])];
+
+    const filteredErrors = allErrors.filter((e) => e.key !== "facilityArrivalDate");
+
+    const sortedErrors = sortErrors(filteredErrors, payload);
     errors = sortedErrors;
   }
 
