@@ -78,7 +78,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     });
   }
 
-  const bearerToken = mode === validModes[0] ? await getBearerTokenForRequest(request) : AUTHENTICATION_NOT_REQUIRED;
+  const blobName = `${params.documentUri}.pdf`;
+
+  // Parallelize bearer token fetch and document info lookup — they are independent:
+  // bearer token reads the session cookie; getDocumentInfo uses basic auth with the reference service.
+  const [bearerToken, documentInfo] = await Promise.all([
+    mode === validModes[0] ? getBearerTokenForRequest(request) : Promise.resolve(AUTHENTICATION_NOT_REQUIRED),
+    getDocumentInfo(blobName),
+  ]);
+  const { documentType, documentNumber, createdBy, contactId, documentStatus } = documentInfo;
 
   if (!bearerToken) {
     return Unauthorised401HttpResponse();
@@ -87,8 +95,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const claims: any = mode === validModes[0] ? jwt.decode(bearerToken) : {};
   const requestByAdmin = mode === validModes[0] ? isAdminUser(bearerToken) : null;
   const requestByUser = claims && !requestByAdmin ? claims.sub : null;
-  const blobName = `${params.documentUri}.pdf`;
-  const { documentType, documentNumber, createdBy, contactId, documentStatus } = await getDocumentInfo(blobName);
   const ipAaddress = getIPaddress(request);
   const sessionId = requestByUser ? `${claims.auth_time}:${claims.contactId}` : undefined;
   const claimsContactId = claims?.contactId;
