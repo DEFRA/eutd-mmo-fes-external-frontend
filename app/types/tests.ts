@@ -100,6 +100,7 @@ export enum TestCaseId {
   PSAddExporterDetailsFailsWithErrors = "psAddExporterDetailsFailsWithErrors",
   PSAddExporterDetailsNoAddress = "psAddExporterDetailsNoAddress",
   PSAddExporterDetailsSaveAsDraftWithErrors = "psAddExporterDetailsSaveAsDraftWithErrors",
+  PSAddExporterDetailsSaveAsDraftScenario3 = "psAddExporterDetailsSaveAsDraftScenario3",
 
   SDAddExporterDetails = "sdAddExporterDetails",
   SDAddExporterDetailsFromIdm = "sdAddExporterDetailsFromIdm",
@@ -110,6 +111,7 @@ export enum TestCaseId {
   SDAddExporterDetails403 = "sdAddExporterDetails403",
   SDAddExporterDetailsNoAddress = "sdAddExporterDetailsNoAddress",
   SDAddExporterDetailsSaveAsDraftWithErrors = "sdAddExporterDetailsSaveAsDraftWithErrors",
+  SDAddExporterDetailsSaveAsDraftScenario3 = "sdAddExporterDetailsSaveAsDraftScenario3",
 
   PSAddConsignmentDetails = "psAddConsignmentDetails",
   PSAddConsignmentDetailsEditMode = "psAddConsignmentDetailsEditMode",
@@ -783,6 +785,7 @@ export enum TestCaseId {
   PSAddCatchDetailsMultipleSameSpecies = "PSAddCatchDetailsMultipleSameSpecies",
   PSAddCatchDetailsIssuingCountryValidationError = "PSAddCatchDetailsIssuingCountryValidationError",
   PSAddCatchDetailsCatchCertificateTypeValidationError = "PSAddCatchDetailsCatchCertificateTypeValidationError",
+  PSAddCatchDetailsSaveAsDraftScenario3 = "PSAddCatchDetailsSaveAsDraftScenario3",
 
   SDIncompleteProgress = "sdIncompleteProgress",
   SDIncompleteProgressWithProducts = "sdIncompleteProgressWithProducts",

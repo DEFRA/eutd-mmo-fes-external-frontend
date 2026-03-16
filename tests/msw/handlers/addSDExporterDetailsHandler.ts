@@ -7,6 +7,7 @@ import {
   mockGetIdmUserDetails,
   mockGetIdmAddressDetails,
   GET_STORAGE_DOCUMENT,
+  getProgressUrl,
 } from "~/urls.server";
 import exporterDetails from "@/fixtures/addExporterDetails/sdExporterDetails.json";
 import exporterDetailsNoAddress from "@/fixtures/addExporterDetails/exporterDetailsNoAddress.json";
@@ -14,6 +15,7 @@ import exporterErrorResponse from "@/fixtures/addExporterDetails/exporterErrorRe
 import species from "@/fixtures/referenceDataApi/species.json";
 import sdDrafts from "@/fixtures/dashboardApi/sdDrafts.json";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
+import sdExporterIncomplete from "@/fixtures/progressApi/sdExporterIncomplete.json";
 
 const addSDExporterDetailsHandler: ITestHandler = {
   [TestCaseId.SDAddExporterDetails]: () => [
@@ -60,6 +62,16 @@ const addSDExporterDetailsHandler: ITestHandler = {
     ),
     rest.post(getAddExporterDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+  ],
+  [TestCaseId.SDAddExporterDetailsSaveAsDraftScenario3]: () => [
+    rest.get(getAddExporterDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(exporterDetails))),
+    rest.post(getAddExporterDetailsUrl("storageNotes"), (req, res, ctx) =>
+      res.once(ctx.status(400), ctx.json(exporterErrorResponse))
+    ),
+    rest.post(getAddExporterDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(exporterDetails))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdExporterIncomplete))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
 };
 
