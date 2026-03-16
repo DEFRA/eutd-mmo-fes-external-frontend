@@ -1,6 +1,11 @@
 import { rest } from "msw";
 import { type ITestHandler, TestCaseId } from "~/types";
-import { getAddExporterDetailsUrl, mockGetAllDocumentsUrl, GET_PROCESSING_STATEMENT } from "~/urls.server";
+import {
+  getAddExporterDetailsUrl,
+  mockGetAllDocumentsUrl,
+  GET_PROCESSING_STATEMENT,
+  getProgressUrl,
+} from "~/urls.server";
 import empty from "@/fixtures/empty.json";
 import psAddExporterDetailsFull from "@/fixtures/addExporterDetails/psAddExporterDetailsFull.json";
 import psDrafts from "@/fixtures/dashboardApi/psDrafts.json";
@@ -8,6 +13,7 @@ import psExporterMissingNameErrorResponse from "@/fixtures/addExporterDetails/ps
 import exporterDetailsNoAddress from "@/fixtures/addExporterDetails/exporterDetailsNoAddress.json";
 import exporterAddressErrorResponse from "@/fixtures/addExporterDetails/psExporterMissingNameErrorResponse.json";
 import processingStatement from "@/fixtures/processingStatementApi/processingStatement.json";
+import psExporterIncomplete from "@/fixtures/progressApi/psExporterIncomplete.json";
 
 const addPSExporterDetailsHandler: ITestHandler = {
   [TestCaseId.PSAddExporterDetailsEmpty]: () => [
@@ -73,6 +79,20 @@ const addPSExporterDetailsHandler: ITestHandler = {
       res(ctx.json(psAddExporterDetailsFull))
     ),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDrafts))),
+  ],
+  [TestCaseId.PSAddExporterDetailsSaveAsDraftScenario3]: () => [
+    rest.get(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(psAddExporterDetailsFull))
+    ),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+    rest.post(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) =>
+      res.once(ctx.status(400), ctx.json(psExporterMissingNameErrorResponse))
+    ),
+    rest.post(getAddExporterDetailsUrl("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(psAddExporterDetailsFull))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDrafts))),
+    rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psExporterIncomplete))),
   ],
 };
 

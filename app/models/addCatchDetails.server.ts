@@ -477,6 +477,39 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
   }
 
   if (isDraft) {
+    const catchId = values["catchId"] as string;
+    if (catchId) {
+      const catchIndex = findIndexByValue(catches, catchId);
+      if (catchIndex >= 0) {
+        const isValidWeight = (v: unknown): boolean => {
+          if (!v || typeof v !== "string") return false;
+          const num = parseFloat(v);
+          return !isNaN(num) && isFinite(num) && num >= 0;
+        };
+        const totalWeightLanded = values["totalWeightLanded"] as string;
+        const exportWeightBeforeProcessing = values["exportWeightBeforeProcessing"] as string;
+        const exportWeightAfterProcessing = values["exportWeightAfterProcessing"] as string;
+        const draftCatch = {
+          id: values["id"] as string,
+          _id: catchId,
+          totalWeightLanded: isValidWeight(totalWeightLanded) ? totalWeightLanded : (null as any),
+          exportWeightBeforeProcessing: isValidWeight(exportWeightBeforeProcessing)
+            ? exportWeightBeforeProcessing
+            : (null as any),
+          exportWeightAfterProcessing: isValidWeight(exportWeightAfterProcessing)
+            ? exportWeightAfterProcessing
+            : (null as any),
+        };
+        await updateProcessingStatement(
+          bearerToken,
+          documentNumber,
+          draftCatch,
+          `/create-processing-statement/${documentNumber}/add-catch-details/${productId}/${catchIndex}`,
+          catchIndex,
+          true
+        );
+      }
+    }
     return redirect(route("/create-processing-statement/processing-statements"));
   }
 
