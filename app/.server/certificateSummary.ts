@@ -17,6 +17,7 @@ import type {
   ValidationFailure,
 } from "~/types";
 import moment from "moment";
+import { getEnv } from "~/env.server";
 
 export const getCatchCertificateSummary = async (
   bearerToken: string,
@@ -196,12 +197,20 @@ const getErrorMessage = (key: string) => {
 
 export const transformError: (errors: ValidationFailure[]) => IError[] = (errors: ValidationFailure[]): IError[] => {
   const error: IError[] = [];
+  const ENV = getEnv();
+  const contactNumber = ENV.SUPPORT_CONTACT_NUMBER ?? "0330 159 1989";
+
   errors.forEach((vError: ValidationFailure, index: number) => {
     vError.rules.forEach((rule: string) => {
       error.push({
         key: `validationError-${rule}-${index}`,
         message: getErrorMessage(rule),
-        value: { species: vError.species, vessel: vError.vessel, dateLanded: moment(vError.date).format("DD/MM/YYYY") },
+        value: {
+          species: vError.species,
+          vessel: vError.vessel,
+          dateLanded: moment(vError.date).format("DD/MM/YYYY"),
+          contactNumber,
+        },
       });
     });
   });
