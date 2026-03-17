@@ -116,6 +116,8 @@ export type WeightInputProps = {
   label?: string;
   hint?: string;
   inputName?: string;
+  inputClassName?: string;
+  customClass?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 

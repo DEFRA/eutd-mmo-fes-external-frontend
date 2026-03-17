@@ -121,7 +121,7 @@ export const AddProducts = ({
   const isReset: boolean = hasResetProduct(navigation);
 
   useEffect(() => {
-    if (!isReset) {
+    if (!isReset && isEmpty(errors)) {
       setCurrentState("");
       setCurrentPresentation("");
       setStateHolder([]);
