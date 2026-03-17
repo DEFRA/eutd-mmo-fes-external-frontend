@@ -1,5 +1,11 @@
 import * as React from "react";
-import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
+import {
+  useActionData,
+  useLoaderData,
+  useRouteLoaderData,
+  type LoaderFunction,
+  type ActionFunction,
+} from "react-router";
 
 import { route } from "routes-gen";
 import { Fragment, useEffect } from "react";
@@ -16,6 +22,7 @@ import type {
   IError,
   ITransport,
   IExportLocation,
+  IMainAppProps,
 } from "~/types";
 import {
   LandingDetailsSummary,
@@ -509,6 +516,8 @@ const CheckYourInformation = () => {
   const navigation = useNavigation();
 
   const { t } = useTranslation(["checkYourInformation", "common", "progress"]);
+  const rootData = useRouteLoaderData<IMainAppProps>("root");
+  const contactNumber = rootData?.supportContactNumber ?? "0330 159 1989";
   const {
     documentNumber,
     status,
@@ -604,6 +613,13 @@ const CheckYourInformation = () => {
         validationError.value = {
           ...validationError.value,
           species: landing.product.species.label,
+          contactNumber,
+        };
+      } else if (validationError.value) {
+        // Ensure contactNumber is available even if species lookup fails
+        validationError.value = {
+          ...validationError.value,
+          contactNumber,
         };
       }
     });
