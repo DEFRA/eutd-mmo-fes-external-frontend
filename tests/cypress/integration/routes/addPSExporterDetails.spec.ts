@@ -253,3 +253,20 @@ describe("PS: add exporter details - save as draft retains valid fields", () => 
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });
+
+describe("PS: add exporter details - save as draft sets section to INCOMPLETE when invalid fields submitted", () => {
+  const documentUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+  const progressUrl = `${documentUrl}/progress`;
+
+  it("should show exporter section as INCOMPLETE on progress page after saving draft with invalid company name", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddExporterDetailsSaveAsDraftScenario3,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+    cy.visit(progressUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='progress-exporter-tag']").should("contain.text", "INCOMPLETE");
+  });
+});
