@@ -143,8 +143,10 @@ export const AddCatchDetailsLoader = async (request: Request, params: Params) =>
   const currentCatchDetails: Catch | undefined = getCatchDetails(processingStatement, catchIndex);
 
   const pageNo: number = parseInt(searchParams.get("pageNo") ?? "1");
-  const species = await getAllSpecies();
-  const countries = (await getCountries()).filter(
+
+  // FI0-10854: parallelize independent reference data calls
+  const [species, allCountries] = await Promise.all([getAllSpecies(), getCountries()]);
+  const countries = allCountries.filter(
     (c: ICountry) => !c.officialCountryName.includes("United Kingdom of Great Britain and Northern Ireland")
   );
   const speciesExemptLink = getEnv().SPECIES_EXEMPT_LINK;
@@ -217,10 +219,12 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
 
   const bearerToken = await getBearerTokenForRequest(request);
 
-  const processingStatement: ProcessingStatement | IUnauthorised = await getProcessingStatement(
-    bearerToken,
-    documentNumber
-  );
+  // FI0-10854: parallelize independent calls
+  const [processingStatement, allSpecies, form] = await Promise.all([
+    getProcessingStatement(bearerToken, documentNumber) as Promise<ProcessingStatement | IUnauthorised>,
+    getAllSpecies() as Promise<Species[]>,
+    request.formData(),
+  ]);
 
   if (instanceOfUnauthorised(processingStatement)) {
     return redirect("/unauthorised");
@@ -230,11 +234,9 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
 
   const catches = getCatches(processingStatement);
 
-  const form = await request.formData();
   const { _action, ...values } = Object.fromEntries(form);
   const nextUri = form.get("nextUri") as string;
 
-  const allSpecies: Species[] = await getAllSpecies();
   const selectedSpeciesName = values["species"] as string;
   const faoCode = getFaoCodeFromSelectedSpecies(allSpecies, selectedSpeciesName);
 

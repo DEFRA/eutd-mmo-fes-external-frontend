@@ -31,6 +31,7 @@ import serverLogger from "~/logger.server";
 import { getGroupedValues, getTransformedError } from "~/helpers";
 import { commitSession } from "~/sessions.server";
 import isEmpty from "lodash/isEmpty";
+import { getCached } from "./referenceDataCache";
 
 export async function handleManualAddressErrors(
   errors: IError[],
@@ -104,10 +105,11 @@ export const validateResponseData = (
   }
 };
 
-export const getCommodities = async (): Promise<CodeAndDescription[]> => {
-  const response: Response = await getReferenceData(COMMODITY_CODES);
-  return await response.json();
-};
+export const getCommodities = async (): Promise<CodeAndDescription[]> =>
+  getCached("commodities", async () => {
+    const response: Response = await getReferenceData(COMMODITY_CODES);
+    return await response.json();
+  });
 
 export const getCompletedDocument = async (
   bearerToken: string,
