@@ -71,7 +71,7 @@ const saveActionBase: any = async (values: any, landings: IDirectLandings, isNum
   const dateForVesselLookup = isDateValid ? date : moment().format("YYYY-MM-DD");
   const vessels: IVessel[] = !isEmpty(pln) ? await getVessels(pln.toString(), dateForVesselLookup) : [];
   const selectedVessel: IVessel | undefined = vessels.find((_: IVessel) => _.pln === pln);
-  const previousVessel: IVessel | undefined = {};
+  const previousVessel: (IVessel & { isListed?: boolean }) | undefined = {};
   let exclusiveEconomicZones: ICountry[] = [];
 
   exclusiveEconomicZones = await getSelectedEezInIcountryFormat(values);

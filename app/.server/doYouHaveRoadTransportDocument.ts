@@ -60,7 +60,7 @@ export const doYouHaveRoadTransportDocumentAction = async ({
       currentUri = route(`/create-non-manipulation-document/:documentNumber/do-you-have-a-road-transport-document`, {
         documentNumber,
       });
-      progressUrl = route(`/create-non-manipulation-document/:documentNumber/departure-product-summary`, {
+      progressUrl = route(`/create-non-manipulation-document/:documentNumber/check-your-information`, {
         documentNumber,
       });
       addTruckDetailsUrl = route(`/create-non-manipulation-document/:documentNumber/add-transportation-details-truck`, {

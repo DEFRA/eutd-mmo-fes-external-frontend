@@ -672,7 +672,7 @@ export const commonSaveTransportDetails = async (
   }
   const progressRoute = payload.arrival
     ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", { documentNumber })
-    : route("/create-non-manipulation-document/:documentNumber/departure-product-summary", { documentNumber });
+    : route("/create-non-manipulation-document/:documentNumber/check-your-information", { documentNumber });
 
   // Redirect to dashboard after saving valid fields
   if (saveAsDraft) return redirect(saveAsDraftRoute);

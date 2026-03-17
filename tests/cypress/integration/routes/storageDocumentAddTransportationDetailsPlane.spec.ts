@@ -251,7 +251,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get('input[name="containerNumbers.1"]').should("have.value", "12");
     cy.get('input[name="containerNumbers.2"]').should("have.value", "NO-GOOD");
   });
-  it("should navigate to departure summary page on click of save and continue button", () => {
+  it("should navigate to check-your-information page on click of save and continue button", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
@@ -260,7 +260,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
     cy.get("#departurePlace").type("Hull", { force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
-    cy.url().should("include", "/departure-product-summary");
+    cy.url().should("include", "/check-your-information");
   });
 });
 
