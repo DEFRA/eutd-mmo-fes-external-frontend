@@ -1119,8 +1119,8 @@ const transportDetailsHandler: ITestHandler = {
         if (!body.flagState || body.flagState === "") {
           errors.flagState = "error.flagState.any.required";
         }
-        if (!body.containerNumbers || body.containerNumbers.length === 0 || body.containerNumbers[0] === "") {
-          errors["containerNumbers.0"] = "error.containerNumbers.array.min";
+        if (!body.containerNumber || body.containerNumber.length === 0 || body.containerNumber[0] === "") {
+          errors["containerNumber.0"] = "error.containerNumber.containerVessel.array.min";
         }
         if (!body.departureCountry || body.departureCountry === "") {
           errors.departureCountry = "error.departureCountry.any.required";
