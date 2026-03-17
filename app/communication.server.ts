@@ -20,8 +20,6 @@ const commonRequestHeaders = (bearerToken: string) => ({
 
 const ENV = getEnv();
 
-const FETCH_TIMEOUT_MS = 10000;
-
 type Get = (bearerToken: string, url: string, requestHeaders?: HeadersInit) => Promise<Response>;
 type Post = (bearerToken: string, url: string, requestHeaders?: HeadersInit, requestBody?: any) => Promise<Response>;
 type Put = (bearerToken: string, url: string, requestHeaders?: HeadersInit, requestBody?: any) => Promise<Response>;
@@ -46,25 +44,18 @@ export const get: Get = async (
   url: string,
   requestHeaders: HeadersInit = {}
 ): Promise<Response> => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-  try {
-    const response = await fetchImpl(url, {
-      method: "GET",
-      headers: {
-        ...requestHeaders,
-        ...commonRequestHeaders(bearerToken),
-      },
-      signal: controller.signal,
-    });
+  const response = await fetchImpl(url, {
+    method: "GET",
+    headers: {
+      ...requestHeaders,
+      ...commonRequestHeaders(bearerToken),
+    },
+  });
 
-    if (!response.ok && ![400, 403, 404].includes(response.status)) {
-      throw new Response(response.statusText, response);
-    }
-    return response;
-  } finally {
-    clearTimeout(timeoutId);
+  if (!response.ok && ![400, 403, 404].includes(response.status)) {
+    throw new Response(response.statusText, response);
   }
+  return response;
 };
 
 export const post: Post = async (
@@ -73,27 +64,20 @@ export const post: Post = async (
   requestHeaders: HeadersInit = {},
   requestBody: any = {}
 ): Promise<Response> => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-  try {
-    const response = await fetchImpl(url, {
-      method: "POST",
-      headers: {
-        ...requestHeaders,
-        ...commonRequestHeaders(bearerToken),
-      },
-      body: !isEmpty(requestBody) ? JSON.stringify({ ...requestBody }) : undefined,
-      signal: controller.signal,
-    });
+  const response = await fetchImpl(url, {
+    method: "POST",
+    headers: {
+      ...requestHeaders,
+      ...commonRequestHeaders(bearerToken),
+    },
+    body: !isEmpty(requestBody) ? JSON.stringify({ ...requestBody }) : undefined,
+  });
 
-    if (!response.ok && ![400, 403, 404].includes(response.status)) {
-      throw new Response(response.statusText, response);
-    }
-
-    return response;
-  } finally {
-    clearTimeout(timeoutId);
+  if (!response.ok && ![400, 403, 404].includes(response.status)) {
+    throw new Response(response.statusText, response);
   }
+
+  return response;
 };
 
 export const put: Put = async (
