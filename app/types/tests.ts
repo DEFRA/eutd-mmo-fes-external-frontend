@@ -91,6 +91,8 @@ export enum TestCaseId {
   CCAddExporterDetailsFailsWithExporterCompanyNameWithSpecialCharacters = "CCAddExporterDetailsFailsWithExporterCompanyNameWithSpecialCharacters",
   CCAddExporterDetailsFailsWithExporterCompanyNameCorrectFormat = "CCAddExporterDetailsFailsWithExporterCompanyNameCorrectFormat",
   CCAddExporterDetails403 = "CCAddExporterDetails403",
+  CCAddExporterDetailsFailsWithExporterFullNameEmoji = "CCAddExporterDetailsFailsWithExporterFullNameEmoji",
+  CCAddExporterDetailsFailsWithExporterCompanyNameEmoji = "CCAddExporterDetailsFailsWithExporterCompanyNameEmoji",
 
   PSAddExporterDetailsEmpty = "psAddExporterDetailsEmpty",
   PSAddExporterDetailsFull = "psAddExporterDetailsFull",
