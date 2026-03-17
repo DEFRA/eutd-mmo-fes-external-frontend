@@ -76,16 +76,11 @@ export const getUserDetails = async (bearerToken: string): Promise<IExporter> =>
     return await onGetIDMUserDetailsResponse(await fetchImpl(`${ENV.STUB_URL}/dynamix/user-details`));
   }
 
-  const tokenStart = performance.now();
   const dynamicsToken = await getDynamicsToken();
-  serverLogger.info(`[PERF][getUserDetails] getDynamicsToken: ${(performance.now() - tokenStart).toFixed(1)}ms`);
-
-  const fetchStart = performance.now();
   const response: Response = await fetchImpl(
     getIdmUserDetailsUrl(jwt.decode(bearerToken)),
     getDynamicsHeader(dynamicsToken)
   );
-  serverLogger.info(`[PERF][getUserDetails] Dynamics API call: ${(performance.now() - fetchStart).toFixed(1)}ms`);
 
   return onGetIDMUserDetailsResponse(response);
 };
@@ -416,7 +411,8 @@ export const addExporterDetails = async (
   bearerToken: string,
   documentNumber: string | undefined,
   payload: Exporter,
-  journey: Journey
+  journey: Journey,
+  isDraft?: boolean
 ): Promise<IExporter> => {
   if (!documentNumber) {
     throw new Error("catch certificate document number is required");
@@ -424,7 +420,7 @@ export const addExporterDetails = async (
 
   const response: Response = await post(
     bearerToken,
-    getAddExporterDetailsUrl(journey),
+    getAddExporterDetailsUrl(journey, isDraft),
     {
       documentnumber: documentNumber,
     },
@@ -724,22 +720,17 @@ export const exporterDetailsAction = async (
   if (isSaveAsDraft) {
     const saveAsDraftErrors: IError[] = (response.errors as IError[]) || [];
     if (saveAsDraftErrors.length > 0) {
-      const errorKeys = saveAsDraftErrors.map((e) => e.key);
-      const systemFields = new Set(["journey", "currentUri", "nextUri"]);
-      const filteredPayload: Exporter = Object.fromEntries(
-        Object.entries(payload).filter(([key]) => systemFields.has(key) || !errorKeys.includes(key))
-      ) as Exporter;
-      const hasUserDataFields = Object.keys(filteredPayload).some((k) => !systemFields.has(k));
-      if (hasUserDataFields) {
-        await addExporterDetails(bearerToken, documentNumber, filteredPayload, journey);
-      }
-      // The backend requires exporterCompanyName so it cannot be cleared via the API.
-      // Set a session flag so the loader shows the field empty on the next page visit
-      // instead of restoring the previously saved value.
-      if (errorKeys.includes("exporterCompanyName")) {
-        session.set(`clearExporterCompanyName-${documentNumber}`, "true");
-      }
+      const invalidKeys = new Set(saveAsDraftErrors.map((e) => e.key));
+      const nulledPayload: Exporter = {
+        ...payload,
+        ...(invalidKeys.has("exporterCompanyName") && { exporterCompanyName: null as any }),
+        ...(invalidKeys.has("exporterFullName") && { exporterFullName: null as any }),
+        ...(invalidKeys.has("postcode") && { postcode: null as any }),
+      };
+      await addExporterDetails(bearerToken, documentNumber, nulledPayload, journey, true);
     }
+    // Remove any stale session flag from the previous workaround
+    session.unset(`clearExporterCompanyName-${documentNumber}`);
     if (isCatchCertificate) session.unset("exporterFullName");
     session.unset("exporterCompanyName");
     return redirect(routes[journey]["saveAsDraft"], {
