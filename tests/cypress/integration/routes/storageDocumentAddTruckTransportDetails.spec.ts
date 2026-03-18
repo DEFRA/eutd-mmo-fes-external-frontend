@@ -205,6 +205,8 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
     // Fill with invalid container number (would fail validation on save & continue)
     cy.get("#nationalityOfVehicle").type("Netherlands", { force: true });
+    cy.wait(500); // Wait for autocomplete to stabilize
+    cy.get("#nationalityOfVehicle").type("{enter}", { force: true }); // Select from autocomplete or close dropdown
     cy.get("#registrationNumber").clear({ force: true }).type("NL999", { force: true });
     cy.get("#departurePlace").clear({ force: true }).type("Rotterdam", { force: true });
     cy.get("#exportDate-day").clear({ force: true }).type("31", { force: true });
