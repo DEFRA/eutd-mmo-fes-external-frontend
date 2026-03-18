@@ -167,7 +167,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
     // Check label is displayed with (optional) suffix
-    cy.get('label[for="containerNumbers.0"]')
+    cy.get('label[for="containerNumber.0"]')
       .should("be.visible")
       .and("contain", "Shipping container identification number (optional)");
 
@@ -184,7 +184,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     cy.get("#railwayBillNumber").type("RB123456", { force: true });
     cy.get("#departurePlace").type("Dover", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
+    cy.get('input[name="containerNumber.0"]').type("A".repeat(51), { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains(
@@ -200,7 +200,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     cy.get("#railwayBillNumber").type("RB123456", { force: true });
     cy.get("#departurePlace").type("Dover", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABC123!@#", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("ABC123!@#", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains(
@@ -216,7 +216,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     cy.get("#railwayBillNumber").type("RB123456", { force: true });
     cy.get("#departurePlace").type("Dover", { force: true });
-    // containerNumbers.0 is not filled - should be optional
+    // containerNumber.0 is not filled - should be optional
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.url().should("include", progressUrl);
   });
@@ -228,7 +228,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     cy.get("#railwayBillNumber").type("RB123456", { force: true });
     cy.get("#departurePlace").type("Dover", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("ABCU1234567", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.url().should("include", progressUrl);
   });
@@ -244,11 +244,11 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     cy.get("#railwayBillNumber").type("RB123456", { force: true });
 
     // Add and fill container fields
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("ABCU1234567", { force: true });
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("DEFJ9876543", { force: true });
+    cy.get('input[name="containerNumber.1"]').type("DEFJ9876543", { force: true });
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("GHIR5555555", { force: true });
+    cy.get('input[name="containerNumber.2"]').type("GHIR5555555", { force: true });
 
     cy.get("#departurePlace").type("Dover", { force: true });
 
@@ -265,11 +265,11 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     cy.get("#railwayBillNumber").type("RB123456", { force: true });
 
     // Add multiple fields but leave some empty
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("ABCU1234567", { force: true });
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    // Leave containerNumbers.1 empty
+    // Leave containerNumber.1 empty
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("GHIR5555555", { force: true });
+    cy.get('input[name="containerNumber.2"]').type("GHIR5555555", { force: true });
 
     cy.get("#departurePlace").type("Dover", { force: true });
 
@@ -286,10 +286,10 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     // Leave railwayBillNumber empty to trigger validation error
 
     // Add container values
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("ABCU1234567", { force: true });
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
-    cy.get('input[name="containerNumbers.1"]').type("DEFJ9876543", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("ABCU1234567", { force: true });
+    cy.get('input[name="containerNumber.1"]').type("DEFJ9876543", { force: true });
 
     cy.get("#departurePlace").type("Dover", { force: true });
 
@@ -299,8 +299,8 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     cy.contains("h2", /^There is a problem$/).should("be.visible");
 
     // Verify container values are still present
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "ABCU1234567");
-    cy.get('input[name="containerNumbers.1"]').should("have.value", "DEFJ9876543");
+    cy.get('input[name="containerNumber.0"]').should("have.value", "ABCU1234567");
+    cy.get('input[name="containerNumber.1"]').should("have.value", "DEFJ9876543");
   });
 
   it("should load pre-existing container values from backend", () => {
@@ -310,9 +310,9 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
     // Verify pre-existing values are loaded
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "EXISTING001");
-    cy.get('input[name="containerNumbers.1"]').should("have.value", "EXISTING002");
-    cy.get('input[name="containerNumbers.2"]').should("have.value", "EXISTING003");
+    cy.get('input[name="containerNumber.0"]').should("have.value", "EXISTING001");
+    cy.get('input[name="containerNumber.1"]').should("have.value", "EXISTING002");
+    cy.get('input[name="containerNumber.2"]').should("have.value", "EXISTING003");
   });
 
   it("should display error when container number has invalid format", () => {
@@ -322,7 +322,7 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
     cy.get("#railwayBillNumber").type("RB123456", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("INVALID!", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("INVALID!", { force: true });
     cy.get("#departurePlace").type("Dover", { force: true });
 
     cy.get("[data-testid=save-and-continue]").click({ force: true });
@@ -339,7 +339,7 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
     cy.get("#railwayBillNumber").type("RB123456", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890123456789012", {
+    cy.get('input[name="containerNumber.0"]').type("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890123456789012", {
       force: true,
     });
     cy.get("#departurePlace").type("Dover", { force: true });

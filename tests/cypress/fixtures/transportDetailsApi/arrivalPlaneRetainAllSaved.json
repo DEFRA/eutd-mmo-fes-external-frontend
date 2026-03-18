@@ -8,5 +8,5 @@
   "departurePort": "Frankfurt Airport",
   "placeOfUnloading": "Heathrow Airport",
   "departureDate": "20/01/2026",
-  "containerNumbers": ["DEFG2345678"]
+  "containerNumber": ["DEFG2345678"]
 }

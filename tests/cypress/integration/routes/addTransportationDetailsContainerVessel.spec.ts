@@ -78,7 +78,7 @@ describe("Save and Continue button - Happy path", () => {
     };
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
-    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("Container", { force: true });
     cy.get("#vesselName").type("Vessel", { force: true });
     cy.get("#flagState").type("flag State", { force: true });
     cy.get("#departurePlace").type("Place export", { force: true });
@@ -93,7 +93,7 @@ describe("Save and Continue button - Happy path", () => {
     };
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
-    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("Container", { force: true });
     cy.get("#vesselName").type("Vessel", { force: true });
     cy.get("#flagState").type("flag State", { force: true });
     cy.get("#departurePlace").type("Place export", { force: true });
@@ -124,23 +124,6 @@ describe("should redirect to forbidden page it transport details return 403 on p
 });
 
 describe("Add Transportation Details Container Vessel: Container Identification Number Validation", () => {
-  it("should display format error when container identification number has invalid format regardless of length", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.ContainerVesselTransportContainerMaxLength,
-    };
-    cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.get("#vesselName").type("Felicity Ace", { force: true });
-    cy.get("#flagState").type("Greece", { force: true });
-    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains(
-      "a",
-      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
-    ).should("be.visible");
-  });
-
   it("should display error when container identification number contains invalid characters", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportContainerInvalidCharacters,
@@ -149,7 +132,7 @@ describe("Add Transportation Details Container Vessel: Container Identification 
     cy.get("#vesselName").type("Felicity Ace", { force: true });
     cy.get("#flagState").type("Greece", { force: true });
     cy.get("#departurePlace").type("Felixstowe Port", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABC123!@#", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("ABC123!@#", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains(
@@ -166,7 +149,7 @@ describe("Add Transportation Details Container Vessel: Container Identification 
     cy.get("#vesselName").type("Felicity Ace", { force: true });
     cy.get("#flagState").type("Greece", { force: true });
     cy.get("#departurePlace").type("Felixstowe Port", { force: true });
-    // containerNumbers.0 not filled - should be optional
+    // containerNumber.0 not filled - should be optional
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.url().should("include", progressUrl);
   });
@@ -179,7 +162,7 @@ describe("Add Transportation Details Container Vessel: Container Identification 
     cy.get("#vesselName").type("Felicity Ace", { force: true });
     cy.get("#flagState").type("Greece", { force: true });
     cy.get("#departurePlace").type("Felixstowe Port", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("ABCU1234567", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.url().should("include", progressUrl);
   });
@@ -196,11 +179,11 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.get("#flagState").type("Greece", { force: true });
 
     // Add and fill container fields
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("ABCU1234567", { force: true });
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("DEFJ9876543", { force: true });
+    cy.get('input[name="containerNumber.1"]').type("DEFJ9876543", { force: true });
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("GHIR5555555", { force: true });
+    cy.get('input[name="containerNumber.2"]').type("GHIR5555555", { force: true });
 
     cy.get("#departurePlace").type("Felixstowe Port", { force: true });
 
@@ -218,11 +201,11 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.get("#flagState").type("Greece", { force: true });
 
     // Add multiple fields but leave some empty
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("ABCU1234567", { force: true });
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    // Leave containerNumbers.1 empty
+    // Leave containerNumber.1 empty
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("GHIR5555555", { force: true });
+    cy.get('input[name="containerNumber.2"]').type("GHIR5555555", { force: true });
 
     cy.get("#departurePlace").type("Felixstowe Port", { force: true });
 
@@ -237,9 +220,9 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
     // Verify pre-existing values are loaded
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "EXISTING001");
-    cy.get('input[name="containerNumbers.1"]').should("have.value", "EXISTING002");
-    cy.get('input[name="containerNumbers.2"]').should("have.value", "EXISTING003");
+    cy.get('input[name="containerNumber.0"]').should("have.value", "EXISTING001");
+    cy.get('input[name="containerNumber.1"]').should("have.value", "EXISTING002");
+    cy.get('input[name="containerNumber.2"]').should("have.value", "EXISTING003");
   });
 
   it("should display format error when container number has invalid format regardless of length", () => {
@@ -250,7 +233,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
 
     cy.get("#vesselName").type("Felicity Ace", { force: true });
     cy.get("#flagState").type("Greece", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), {
+    cy.get('input[name="containerNumber.0"]').type("A".repeat(51), {
       force: true,
     });
     cy.get("#departurePlace").type("Felixstowe Port", { force: true });
@@ -271,7 +254,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
     // Check container identification number label is displayed
-    cy.get('label[for="containerNumbers.0"]')
+    cy.get('label[for="containerNumber.0"]')
       .should("be.visible")
       .and("contain", "Shipping container identification number");
 
@@ -296,7 +279,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     }
 
     // Verify we have 10 containers
-    cy.get('input[name="containerNumbers.9"]').should("exist");
+    cy.get('input[name="containerNumber.9"]').should("exist");
 
     // Add another container button should not be visible
     cy.get('[data-testid="add-another-container"]').should("not.exist");

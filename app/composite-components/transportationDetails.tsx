@@ -29,7 +29,7 @@ export const TransportationModeDetails = ({
   railwayBillNumber,
   departurePlace,
   freightBillNumber,
-  containerNumbers,
+  containerNumber,
   displayOptionalSuffix,
   errors,
   countries,
@@ -146,7 +146,7 @@ export const TransportationModeDetails = ({
           />
           {renderDeparturePlaceField()}
           <ContainerIdentificationNumber
-            containers={containerNumbers}
+            containers={containerNumber}
             maximumContainers={10}
             errors={errors}
             displayOptionalSuffix={displayOptionalSuffix}
@@ -180,13 +180,13 @@ export const TransportationModeDetails = ({
           />
           {renderDeparturePlaceField()}
           <ContainerIdentificationNumber
-            containers={containerNumbers}
+            containers={containerNumber}
             maximumContainers={10}
             errors={errors}
             displayOptionalSuffix={displayOptionalSuffix}
             vehicleType="plane"
             labelKey={"addTransportationDetailsContainerIdentificationNumberPlane"}
-            hintKey={"addTransportationDetailsContainerIdentificationNumberHintCommon"}
+            hintKey={"addTransportationDetailsContainerIdentificationNumberHint"}
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
@@ -262,7 +262,7 @@ export const TransportationModeDetails = ({
           />
           {renderDeparturePlaceField()}
           <ContainerIdentificationNumber
-            containers={containerNumbers}
+            containers={containerNumber}
             maximumContainers={10}
             errors={errors}
             displayOptionalSuffix={displayOptionalSuffix}
@@ -303,7 +303,7 @@ export const TransportationModeDetails = ({
           />
           {renderDeparturePlaceField()}
           <ContainerIdentificationNumber
-            containers={containerNumbers}
+            containers={containerNumber}
             maximumContainers={10}
             errors={errors}
             displayOptionalSuffix={displayOptionalSuffix}
@@ -358,7 +358,7 @@ export const TransportationDetails = ({
   vesselName,
   flagState,
   flightNumber,
-  containerNumbers,
+  containerNumber,
   nationalityOfVehicle,
   registrationNumber,
   airwayBillNumber,
@@ -488,7 +488,7 @@ export const TransportationDetails = ({
           }
           return (
             <ContainerIdentificationNumber
-              containers={containerNumbers}
+              containers={containerNumber}
               maximumContainers={10}
               errors={errors}
               displayOptionalSuffix={true}
@@ -632,7 +632,7 @@ export const TransportationDetails = ({
       )}
       {(vehicle === "containerVessel" || vehicle === "plane") && (
         <ContainerIdentificationNumber
-          containers={containerNumbers}
+          containers={containerNumber}
           maximumContainers={10}
           errors={errors}
           vehicleType={vehicle}

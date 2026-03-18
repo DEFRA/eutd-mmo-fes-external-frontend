@@ -8,5 +8,5 @@
   "departurePort": "Calais Port",
   "placeOfUnloading": "Dover Port",
   "departureDate": "15/12/2025",
-  "containerNumbers": ["ABCU1234567"]
+  "containerNumber": ["ABCU1234567"]
 }

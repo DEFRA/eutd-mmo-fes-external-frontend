@@ -1,6 +1,5 @@
 {
-  "containerNumber": "",
-  "containerNumbers": [""],
+  "containerNumber": [""],
   "currentUri": "/create-storage-document/:documentNumber/add-arrival-transportation-details-container-vessel",
   "departurePort": "",
   "departureDate": "",

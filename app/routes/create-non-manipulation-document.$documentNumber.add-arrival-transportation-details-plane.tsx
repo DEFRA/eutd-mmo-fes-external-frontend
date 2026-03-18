@@ -64,7 +64,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const containerActionResponse = await handleContainerActions(request, _action as string, values);
   if (containerActionResponse) return containerActionResponse;
 
-  const containerNumbers = extractContainerNumbers(values);
+  const containerNumber = extractContainerNumbers(values, 5);
 
   const payload: ITransport = {
     currentUri: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-plane", {
@@ -77,7 +77,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     freightBillNumber,
     airwayBillNumber,
     flightNumber,
-    containerNumbers,
+    containerNumber,
     departurePort,
     departureDate,
     departureCountry,

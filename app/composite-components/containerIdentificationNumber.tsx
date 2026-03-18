@@ -119,7 +119,7 @@ export const ContainerIdentificationNumber = ({
       {containerInputData.map((input, index) => {
         // Map current display index to original error index to show correct errors after removals
         const originalIndex = getOriginalIndex(index, removedIndices);
-        const errorKey = `containerNumbers.${originalIndex}`;
+        const errorKey = `containerNumber.${originalIndex}`;
         const hasError = errors?.[errorKey];
 
         return (
@@ -138,14 +138,14 @@ export const ContainerIdentificationNumber = ({
                     }
                   : undefined
               }
-              name={`containerNumbers.${index}`}
+              name={`containerNumber.${index}`}
               type="text"
               inputClassName={classNames("govuk-input", {
                 "govuk-input--error": hasError,
               })}
               inputProps={{
                 value: (isHydrated ? input.value : actionData[errorKey] ?? input.value) as string,
-                id: `containerNumbers.${index}`,
+                id: `containerNumber.${index}`,
                 onChange: (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange(input.id, e.target.value),
               }}
               errorProps={{

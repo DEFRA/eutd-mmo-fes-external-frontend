@@ -98,7 +98,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get("label[for='containerNumbers.0']").should(
+    cy.get("label[for='containerNumber.0']").should(
       "contain.text",
       "Shipping container identification number (optional)"
     );
@@ -355,8 +355,8 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get('input[name="containerNumbers.0"]').should("be.visible");
-    cy.get('input[name="containerNumbers.1"]').should("not.exist");
+    cy.get('input[name="containerNumber.0"]').should("be.visible");
+    cy.get('input[name="containerNumber.1"]').should("not.exist");
     cy.get('[data-testid="add-another-container"]').should("be.visible");
   });
 
@@ -366,7 +366,7 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get('label[for="containerNumbers.0"]')
+    cy.get('label[for="containerNumber.0"]')
       .should("contain.text", "Shipping container identification number (optional)")
       .should("have.class", "govuk-!-font-weight-bold");
   });
@@ -379,11 +379,11 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
 
     // Add a second field
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').should("be.visible");
+    cy.get('input[name="containerNumber.1"]').should("be.visible");
 
     // Remove the second field
     cy.get('[data-testid="remove-container-1"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').should("not.exist");
+    cy.get('input[name="containerNumber.1"]').should("not.exist");
   });
 
   it("should not show remove button when only one field exists", () => {
@@ -405,11 +405,11 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     cy.get("#registrationNumber").type("ABC123", { force: true });
 
     // Add and fill container fields
-    cy.get('input[name="containerNumbers.0"]').type("CONT001", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("CONT001", { force: true });
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("CONT002", { force: true });
+    cy.get('input[name="containerNumber.1"]').type("CONT002", { force: true });
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("CONT003", { force: true });
+    cy.get('input[name="containerNumber.2"]').type("CONT003", { force: true });
 
     cy.get("#departurePlace").type("Dover", { force: true });
 
@@ -427,11 +427,11 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     cy.get("#registrationNumber").type("ABC123", { force: true });
 
     // Add multiple fields but leave some empty
-    cy.get('input[name="containerNumbers.0"]').type("CONT001", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("CONT001", { force: true });
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    // Leave containerNumbers.1 empty
+    // Leave containerNumber.1 empty
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("CONT003", { force: true });
+    cy.get('input[name="containerNumber.2"]').type("CONT003", { force: true });
 
     cy.get("#departurePlace").type("Dover", { force: true });
 
@@ -449,9 +449,9 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     // Leave registrationNumber empty to trigger validation error
 
     // Add container values
-    cy.get('input[name="containerNumbers.0"]').type("CONT001", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("CONT001", { force: true });
     cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("CONT002", { force: true });
+    cy.get('input[name="containerNumber.1"]').type("CONT002", { force: true });
 
     cy.get("#departurePlace").type("Dover", { force: true });
 
@@ -461,8 +461,8 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     cy.contains("h2", /^There is a problem$/).should("be.visible");
 
     // Verify container values are still present
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "CONT001");
-    cy.get('input[name="containerNumbers.1"]').should("have.value", "CONT002");
+    cy.get('input[name="containerNumber.0"]').should("have.value", "CONT001");
+    cy.get('input[name="containerNumber.1"]').should("have.value", "CONT002");
   });
 
   it("should load pre-existing container values from backend", () => {
@@ -472,8 +472,8 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
     // Verify pre-existing values are loaded
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "EXISTING001");
-    cy.get('input[name="containerNumbers.1"]').should("have.value", "EXISTING002");
-    cy.get('input[name="containerNumbers.2"]').should("have.value", "EXISTING003");
+    cy.get('input[name="containerNumber.0"]').should("have.value", "EXISTING001");
+    cy.get('input[name="containerNumber.1"]').should("have.value", "EXISTING002");
+    cy.get('input[name="containerNumber.2"]').should("have.value", "EXISTING003");
   });
 });

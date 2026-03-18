@@ -134,7 +134,7 @@
       "registrationNumber": "Vincent Nunez",
       "departurePlace": "Joelle Rhodes",
       "flightNumber": "AA1234567",
-      "containerNumber": "CONT1234",
+      "containerNumber": ["CONT1234"],
       "documents": [
         {
           "name": "Invoice 1",

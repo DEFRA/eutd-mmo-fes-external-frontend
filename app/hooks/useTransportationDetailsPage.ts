@@ -5,16 +5,16 @@ import { useScrollOnPageLoad } from "./useScrollOnPageLoad";
 
 export const getTransportErrorKeys = (transportType: TransportType): string[] => {
   const containerNumberKeys = [
-    "containerNumbers.0",
-    "containerNumbers.1",
-    "containerNumbers.2",
-    "containerNumbers.3",
-    "containerNumbers.4",
-    "containerNumbers.5",
-    "containerNumbers.6",
-    "containerNumbers.7",
-    "containerNumbers.8",
-    "containerNumbers.9",
+    "containerNumber.0",
+    "containerNumber.1",
+    "containerNumber.2",
+    "containerNumber.3",
+    "containerNumber.4",
+    "containerNumber.5",
+    "containerNumber.6",
+    "containerNumber.7",
+    "containerNumber.8",
+    "containerNumber.9",
   ];
 
   switch (transportType) {

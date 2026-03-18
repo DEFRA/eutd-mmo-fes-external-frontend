@@ -29,7 +29,7 @@ const TrainTransportDetailsPage = () => {
     railwayBillNumber,
     departurePlace,
     freightBillNumber,
-    containerNumbers,
+    containerNumber,
     vehicle,
     nextUri,
     csrf,
@@ -68,7 +68,7 @@ const TrainTransportDetailsPage = () => {
               railwayBillNumber={!isEmpty(errors) ? actionData.railwayBillNumber : railwayBillNumber}
               departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
-              containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
+              containerNumber={getContainerNumbers(errors, actionData, containerNumber)}
               errors={errors}
               displayOptionalSuffix={displayOptionalSuffix}
               countries={countries}

@@ -132,7 +132,7 @@
       "vehicle": "containerVessel",
       "vesselName": "MV Test Vessel",
       "flagState": "Panama",
-      "containerNumber": "CONT5678",
+      "containerNumber": ["CONT5678"],
       "departurePlace": "Port of Southampton"
     }
   ],

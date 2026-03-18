@@ -6,6 +6,6 @@
   "railwayBillNumber": "RAIL9876",
   "departurePlace": "Channel Tunnel UK Terminal",
   "exportDate": "28/07/2026",
-  "containerNumbers": ["OPQR5678901"],
+  "containerNumber": ["OPQR5678901"],
   "arrival": false
 }

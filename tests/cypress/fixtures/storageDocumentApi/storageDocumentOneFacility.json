@@ -34,7 +34,7 @@
     "registrationNumber": "Vincent Nunez",
     "departurePlace": "Joelle Rhodes",
     "pointOfDestination": "Brussels Central Station",
-    "containerNumbers": ["CONT123", "CONT456", "CONT789"],
+    "containerNumber": ["CONT123", "CONT456", "CONT789"],
     "exportedTo": {
       "officialCountryName": "Hungary",
       "isoCodeAlpha2": "HU",

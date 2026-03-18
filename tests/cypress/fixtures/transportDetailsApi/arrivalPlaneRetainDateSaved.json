@@ -6,5 +6,5 @@
   "departureCountry": "Spain",
   "departurePort": "Madrid Airport",
   "departureDate": "05/03/2026",
-  "containerNumbers": ["TOO-SHORT", "123"]
+  "containerNumber": ["TOO-SHORT", "123"]
 }

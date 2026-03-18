@@ -60,7 +60,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   );
 
   const values = Object.fromEntries(form);
-  const containerNumbers = extractContainerNumbers(values);
+  const containerNumber = extractContainerNumbers(values);
 
   const payload: ITransport = {
     vehicle: transport.vehicle,
@@ -68,7 +68,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     pointOfDestination,
     flagState,
     departurePlace,
-    containerNumbers,
+    containerNumber,
     freightBillNumber,
     currentUri: "/create-non-manipulation-document/:documentNumber/add-transportation-details-conatiner-vessel",
     user_id: transport.user_id,
