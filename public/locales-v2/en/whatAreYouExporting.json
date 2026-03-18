@@ -21,7 +21,7 @@
   "ccFavouritesPageFormStateFieldPlaceholder": "Select...",
   "ccFavouritesPageProductTableRowPresentation": "Presentation",
   "ccFavouritesPageFormCommodityCodeField": "Commodity Code",
-  "ccFavouritesPageFormCommodityCodeDetails": "Call {{contactInfo}} if the commodity code you need is not shown.",
+  "ccFavouritesPageFormCommodityCodeDetails": "Call {{contactNumber}} if the commodity code you need is not shown.",
   "ccFavouritesPageFormCommodityCodeSummary": "I cannot find the commodity code",
   "ccAddSpeciesPageAddButtonText": "Add product",
   "ccFavouritesPageProductTableHeaderTwo": "Product",

@@ -61,6 +61,7 @@ const testEnv = {
   EU_CATCH_MAX_EEZ: "5",
   EU_CATCH_MAX_TRANSPORT_DOCUMENTS: "5",
   EU_SD_MAX_ENTRY_DOCS: "5",
+  SUPPORT_CONTACT_NUMBER: "0330 159 1989",
 };
 
 function getEnv() {
@@ -120,6 +121,7 @@ function getEnv() {
         EU_CATCH_MAX_EEZ: process.env.EU_CATCH_MAX_EEZ ?? "5",
         EU_CATCH_MAX_TRANSPORT_DOCUMENTS: process.env.EU_CATCH_MAX_TRANSPORT_DOCUMENTS ?? "5",
         EU_SD_MAX_ENTRY_DOCS: process.env.EU_SD_MAX_ENTRY_DOCS ?? "5",
+        SUPPORT_CONTACT_NUMBER: process.env.SUPPORT_CONTACT_NUMBER ?? "0330 159 1989",
       };
 }
 

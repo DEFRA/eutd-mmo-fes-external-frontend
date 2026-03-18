@@ -3,14 +3,21 @@ import path from "node:path";
 import { RemixI18Next } from "remix-i18next/server";
 import { initLanguages } from "./i18n";
 import { i18nextCookie } from "./cookies.server";
+import { getEnv } from "./env.server";
 
 const { fallbackLng, supportedLngs } = initLanguages();
+const ENV = getEnv();
 
 const i18next = new RemixI18Next({
   detection: { fallbackLanguage: fallbackLng, supportedLanguages: supportedLngs, cookie: i18nextCookie },
   // This is the configuration for i18next used
   // when translating messages server-side only
   i18next: {
+    interpolation: {
+      defaultVariables: {
+        contactNumber: ENV.SUPPORT_CONTACT_NUMBER ?? "0330 159 1989",
+      },
+    },
     backend: {
       loadPath: path.resolve("./public/locales-v2/{{lng}}/{{ns}}.json"),
     },
