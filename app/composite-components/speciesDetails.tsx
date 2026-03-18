@@ -28,7 +28,7 @@ export const SpeciesDetails = ({ speciesExemptLink, documentType }: SpeciesDetai
             <span className="govuk-visually-hidden">{t("commonSpeciesDetailsOpenInNewTab", { ns: "common" })}</span>
           </a>
         </p>
-        <p>{t("ccAddCatchDetailsSpeciesDetailsCannotFindSpecies")}&nbsp;0330 159 1989.</p>
+        <p>{t("ccAddCatchDetailsSpeciesDetailsCannotFindSpecies")}</p>
       </>
     </Details>
   );

@@ -411,7 +411,8 @@ export const addExporterDetails = async (
   bearerToken: string,
   documentNumber: string | undefined,
   payload: Exporter,
-  journey: Journey
+  journey: Journey,
+  isDraft?: boolean
 ): Promise<IExporter> => {
   if (!documentNumber) {
     throw new Error("catch certificate document number is required");
@@ -419,7 +420,7 @@ export const addExporterDetails = async (
 
   const response: Response = await post(
     bearerToken,
-    getAddExporterDetailsUrl(journey),
+    getAddExporterDetailsUrl(journey, isDraft),
     {
       documentnumber: documentNumber,
     },
@@ -507,8 +508,17 @@ export const exporterDetailsLoader = async (request: Request, params: Params, jo
 
   const isCatchCertificate: boolean = journey === "catchCertificate";
 
+  // Check if a prior save-as-draft flagged this field as invalid — show empty rather than
+  // restoring the previously saved company name (backend cannot persist an empty string).
+  const clearCompanyNameFlag = session.get(`clearExporterCompanyName-${documentNumber}`);
+  if (clearCompanyNameFlag) {
+    session.unset(`clearExporterCompanyName-${documentNumber}`);
+  }
+
   const exporterFullName = session.get("exporterFullName") ?? exporter.model?.exporterFullName;
-  const exporterCompanyName = session.get("exporterCompanyName") ?? exporter.model?.exporterCompanyName;
+  const exporterCompanyName = clearCompanyNameFlag
+    ? undefined
+    : session.get("exporterCompanyName") ?? exporter.model?.exporterCompanyName;
 
   if (shouldLoadFromIdm(bearerToken, exporter)) {
     const { userDetails, addresses, accounts } = await loadIdmData(bearerToken);
@@ -518,7 +528,7 @@ export const exporterDetailsLoader = async (request: Request, params: Params, jo
           contactId: userDetails.model?.contactId,
           accountId: accounts.model?.accountId,
           ...(isCatchCertificate && { exporterFullName: userDetails.model?.exporterFullName }),
-          exporterCompanyName: accounts.model?.exporterCompanyName,
+          exporterCompanyName: clearCompanyNameFlag ? undefined : accounts.model?.exporterCompanyName,
           ...addresses.model,
         },
         documentNumber,
@@ -708,6 +718,19 @@ export const exporterDetailsAction = async (
   }
 
   if (isSaveAsDraft) {
+    const saveAsDraftErrors: IError[] = (response.errors as IError[]) || [];
+    if (saveAsDraftErrors.length > 0) {
+      const invalidKeys = new Set(saveAsDraftErrors.map((e) => e.key));
+      const nulledPayload: Exporter = {
+        ...payload,
+        ...(invalidKeys.has("exporterCompanyName") && { exporterCompanyName: null as any }),
+        ...(invalidKeys.has("exporterFullName") && { exporterFullName: null as any }),
+        ...(invalidKeys.has("postcode") && { postcode: null as any }),
+      };
+      await addExporterDetails(bearerToken, documentNumber, nulledPayload, journey, true);
+    }
+    // Remove any stale session flag from the previous workaround
+    session.unset(`clearExporterCompanyName-${documentNumber}`);
     if (isCatchCertificate) session.unset("exporterFullName");
     session.unset("exporterCompanyName");
     return redirect(routes[journey]["saveAsDraft"], {

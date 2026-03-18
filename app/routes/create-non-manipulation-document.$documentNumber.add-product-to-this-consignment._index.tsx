@@ -107,6 +107,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   let updatedSupportingDocuments: string[] =
     ((currentCatchDetails as StorageDocumentCatch) || undefined)?.supportingDocuments ?? [];
+  /* istanbul ignore if */
   if (isAddSupportingDocumentButtonClicked) {
     updatedSupportingDocuments = [...updatedSupportingDocuments, ""];
     session.unset("addSupportingDoc");
@@ -123,7 +124,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       speciesExemptLink,
       commodityCodeLink,
       productIndex,
-      catchDetails: currentCatchDetails || {},
+      catchDetails: currentCatchDetails || /* istanbul ignore next */ {},
       updatedSupportingDocuments: updatedSupportingDocuments,
       catchIndex: validCatchIndex,
       nextUri,
@@ -222,24 +223,32 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     supportingDocumentsFromForm,
     countries
   );
-  const saveToRedisIfErrors = isDraft;
+  // First validation pass – always validate without saving so we can inspect errors
   const errorResponse = await updateStorageDocumentCatchDetails(
     bearerToken,
     documentNumber,
     { ...updateData },
     `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment${productIndexUrlFragment}`,
     productIndex,
-    saveToRedisIfErrors,
+    false, // saveToRedisIfErrors = false (validate only)
     false,
     isNonJs
   );
   if (isDraft) {
-    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
+    return handleSaveAsDraftConsignment(
+      bearerToken,
+      documentNumber,
+      errorResponse,
+      updateData,
+      productIndex,
+      productIndexUrlFragment,
+      isNonJs
+    );
   }
   if (errorResponse) {
     // When there are errors and JavaScript is disabled, include the submitted form values
     // so they can be used to repopulate the form fields
-    const responseData = typeof errorResponse.json === "function" ? await errorResponse.json() : errorResponse;
+    const responseData = errorResponse instanceof Response ? await errorResponse.json() : errorResponse;
 
     // Explicitly include the form values in the response
     const combinedResponse = {
@@ -281,11 +290,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     });
   }
 
-  return redirect(
-    isEmpty(nextUri)
-      ? `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?productIndex=${productIndex}`
-      : `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?nextUri=${nextUri}&productIndex=${productIndex}`
-  );
+  return redirect(getProductNextRedirectUrl(nextUri, documentNumber as string, productIndex));
 };
 
 const getRemoveSupportingDoc = (form: FormData, action: string): boolean =>
@@ -293,6 +298,69 @@ const getRemoveSupportingDoc = (form: FormData, action: string): boolean =>
 
 const getRemoveIndex = (removeSupportingDoc: boolean, action: string): number =>
   removeSupportingDoc ? Number.parseInt(action.split("-")[1], 10) : -1;
+
+const getProductNextRedirectUrl = (nextUri: string, documentNumber: string, productIndex: number): string =>
+  isEmpty(nextUri)
+    ? `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?productIndex=${productIndex}`
+    : `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?nextUri=${nextUri}&productIndex=${productIndex}`;
+
+const handleSaveAsDraftConsignment = async (
+  bearerToken: string,
+  documentNumber: string | undefined,
+  errorResponse: Response | undefined,
+  updateData: Partial<StorageDocument | StorageDocumentCatch>,
+  productIndex: number,
+  productIndexUrlFragment: string,
+  isNonJs: boolean
+): Promise<Response> => {
+  const sdUrl = `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment${productIndexUrlFragment}`;
+  if (errorResponse) {
+    // Filter out invalid fields and save only valid ones as draft
+    const responseData = await errorResponse.clone().json();
+    let errorKeys: string[] = [];
+    /* istanbul ignore else */
+    if (responseData?.errors) {
+      errorKeys = Object.keys(responseData.errors);
+    }
+    const catchPrefix = `catches-${productIndex}-`;
+    const invalidFieldNames = new Set(
+      errorKeys.filter((k) => k.startsWith(catchPrefix)).map((k) => k.slice(catchPrefix.length).split("-")[0])
+    );
+    // Start with all submitted fields, then null out invalid ones so the
+    // client-side Redis merge clears any previously-saved bad values.
+    const filteredData = { ...updateData } as Partial<StorageDocumentCatch>;
+    for (const invalidField of invalidFieldNames) {
+      (filteredData as any)[invalidField] = null;
+    }
+    // If species is invalid, also clear the derived scientificName field
+    if (invalidFieldNames.has("product")) {
+      (filteredData as any).scientificName = null;
+    }
+    await updateStorageDocumentCatchDetails(
+      bearerToken,
+      documentNumber,
+      { ...filteredData },
+      sdUrl,
+      productIndex,
+      true, // saveToRedisIfErrors = true (nulls clear invalid values in Redis)
+      false,
+      isNonJs
+    );
+  } else {
+    // No errors – save all data as draft
+    await updateStorageDocumentCatchDetails(
+      bearerToken,
+      documentNumber,
+      { ...updateData },
+      sdUrl,
+      productIndex,
+      true, // saveToRedisIfErrors = true
+      false,
+      isNonJs
+    );
+  }
+  return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
+};
 
 // Helper functions to reduce cognitive complexity
 const hasError = (errors: any, fieldKey: string): boolean => !!errors?.[fieldKey]?.message;
@@ -540,7 +608,7 @@ const AddProductIndex = () => {
 
   // Deduplicate error keys to prevent duplicate error messages in error summary
   const errorKeysInOrder = Array.from(new Set(allErrorKeysInOrder));
-  const allErrorMessages = displayErrorMessagesInOrder(allErrors, errorKeysInOrder);
+  const allErrorMessages = displayErrorMessagesInOrder(allErrors, errorKeysInOrder, true);
 
   // Remove duplicate errors by key to handle cases where the same field error appears multiple times
   const seenErrorKeys = new Set<string>();

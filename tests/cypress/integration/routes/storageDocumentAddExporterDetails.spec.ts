@@ -127,3 +127,34 @@ describe("Add exporter details: unauthorised access", () => {
     cy.url().should("include", "/forbidden");
   });
 });
+
+describe("Add exporter details (SD): save as draft retains valid fields", () => {
+  const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+
+  it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddExporterDetailsSaveAsDraftWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
+});
+
+describe("SD: add exporter details - save as draft sets section to INCOMPLETE when invalid fields submitted", () => {
+  const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+  const progressUrl = `${documentUrl}/progress`;
+
+  it("should show exporter section as INCOMPLETE on progress page after saving draft with invalid company name", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddExporterDetailsSaveAsDraftScenario3,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+    cy.visit(progressUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='progress-exporter-tag']").should("contain.text", "INCOMPLETE");
+  });
+});

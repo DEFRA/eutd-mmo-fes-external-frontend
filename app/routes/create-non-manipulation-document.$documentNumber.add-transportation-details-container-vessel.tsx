@@ -73,7 +73,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     currentUri: "/create-non-manipulation-document/:documentNumber/add-transportation-details-conatiner-vessel",
     user_id: transport.user_id,
     journey: transport.journey,
-    nextUri: "/create-non-manipulation-document/:documentNumber/progress",
+    nextUri: "/create-non-manipulation-document/:documentNumber/check-your-information",
     exportDate: calculateExportDate(form),
     exportDateTo: moment().startOf("day").add(1, "day").toISOString(),
     exportedTo,

@@ -63,7 +63,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
-  it("should redirect user to departure summary page when user selects and submits YES", () => {
+  it("should redirect user to check-your-information page when user selects and submits YES", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocument,
       args: ["storageNotes"],
@@ -77,7 +77,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.wait(200);
     cy.get("[data-testid=save-and-continue").click({ force: true });
 
-    cy.url({ timeout: 10000 }).should("include", "/departure-product-summary");
+    cy.url({ timeout: 10000 }).should("include", "/check-your-information");
   });
 
   it("should redirect user to truck transportation details page when user selects and submits NO", () => {

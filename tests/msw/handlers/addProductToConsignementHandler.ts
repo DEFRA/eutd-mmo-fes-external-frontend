@@ -17,12 +17,14 @@ import species from "@/fixtures/referenceDataApi/species.json";
 import countries from "@/fixtures/referenceDataApi/countries.json";
 import truckDetails from "@/fixtures/transportDetailsApi/truck.json";
 import storageDocumentError from "@/fixtures/storageDocumentApi/storageDocumentProductAddedInvalidData.json";
+import storageDocumentProductSpeciesError from "@/fixtures/storageDocumentApi/storageDocumentProductSpeciesError.json";
 import storageDocumentInvalidEntryDoc from "@/fixtures/storageDocumentApi/storageDocumentProductAddedInvalidEntryDoc.json";
 import storageDocumentSpeciesError from "@/fixtures/storageDocumentApi/storageDocumentSpeciesError.json";
 import storageDocumentSupportingDocumentsError from "@/fixtures/storageDocumentApi/storageDocumentSupportingDocumentsError.json";
 import storageDocumentSpeciesSuggestError from "@/fixtures/storageDocumentApi/storageDocumentSpeciesSuggestError.json";
 import sdAddProductConsignmentIssuingCountryRequired from "@/fixtures/saveAndValidateApi/sdAddProductConsignmentIssuingCountryRequired.json";
 import sdAddProductConsignmentProductDescriptionRequired from "@/fixtures/saveAndValidateApi/sdAddProductConsignmentProductDescriptionRequired.json";
+import sdAddProductConsignmentFisheryWeightExceedsProductWeight from "@/fixtures/saveAndValidateApi/sdAddProductConsignmentFisheryWeightExceedsProductWeight.json";
 
 const addProductConsignementHandler: ITestHandler = {
   [TestCaseId.SDAddProductConsignmentData]: () => [
@@ -119,6 +121,16 @@ const addProductConsignementHandler: ITestHandler = {
       res(ctx.status(400), ctx.json(sdAddProductConsignmentProductDescriptionRequired))
     ),
   ],
+  [TestCaseId.SDAddProductConsignmentFisheryWeightExceedsProductWeight]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(sdAddProductConsignmentFisheryWeightExceedsProductWeight))
+    ),
+  ],
   [TestCaseId.SDAddProductConsignmentDataProductIndex1]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
@@ -126,6 +138,32 @@ const addProductConsignementHandler: ITestHandler = {
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
     rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
+  ],
+  [TestCaseId.SDAddProductConsignmentSaveAsDraftWithErrors]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    // persistent 200 handler must come first in the array so that after setApiMock's
+    // forEach-prepend it ends up BEHIND the res.once(400) handler in MSW's stack
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) =>
+      res.once(ctx.status(400), ctx.json(storageDocumentError))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+  ],
+  [TestCaseId.SDAddProductConsignmentSaveAsDraftWithSpeciesError]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) =>
+      res.once(ctx.status(400), ctx.json(storageDocumentProductSpeciesError))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+  ],
+  [TestCaseId.SDAddProductConsignmentSaveAsDraftNoErrors]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
   ],
 };
 

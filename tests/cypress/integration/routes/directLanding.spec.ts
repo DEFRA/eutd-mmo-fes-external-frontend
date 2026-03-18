@@ -1026,6 +1026,25 @@ describe("Direct Landing Error Messages - English", () => {
     );
     cy.get(String.raw`#weights\.0\.exportWeight, [id^="weights."]`).should("have.length.greaterThan", 1);
   });
+
+  it("should display total weight exceeded error only once when both number.unsafe and array.totalWeightExceeded errors are returned", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingTotalWeightExceededBothErrors,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("#error-summary-title").contains("There is a problem");
+    // The error message should appear exactly once in the summary list
+    cy.get(".govuk-error-summary__list a")
+      .filter(':contains("The total combined weight of all products must be less than 100,000,000,000")')
+      .should("have.length", 1)
+      .and("have.attr", "href", "#weights");
+    cy.get("#weights").should("have.class", "govuk-form-group--error");
+    cy.get("#weights .govuk-error-message").should(
+      "contain.text",
+      "The total combined weight of all products must be less than 100,000,000,000"
+    );
+  });
 });
 
 describe("Direct Landing Error Messages - Welsh", () => {

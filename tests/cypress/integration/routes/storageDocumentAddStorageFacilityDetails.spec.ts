@@ -105,3 +105,39 @@ describe("Add Storage Facility Details: validation errors", () => {
     cy.contains("h2", /^There is a problem$/).should("be.visible");
   });
 });
+
+describe("Add Storage Facility Details: save as draft retains valid fields", () => {
+  it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftWithErrors,
+    };
+
+    cy.visit(pagePath, { qs: { ...testParams } });
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
+
+  it("should redirect to dashboard when no validation errors on save as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftNoErrors,
+    };
+
+    cy.visit(pagePath, { qs: { ...testParams } });
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
+});
+
+describe("Add Storage Facility Details: pre-populated arrival date from stored document", () => {
+  it("should display the stored facility arrival date in the date inputs on initial page load", () => {
+    // storageDocumentNoDepartureDate fixture has facilityArrivalDate: "09/11/2024"
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityAddressNoDepartureDate,
+    };
+
+    cy.visit(pagePath, { qs: { ...testParams } });
+    cy.get("#storageFacilities-facilityArrivalDate-day").should("have.value", "09");
+    cy.get("#storageFacilities-facilityArrivalDate-month").should("have.value", "11");
+    cy.get("#storageFacilities-facilityArrivalDate-year").should("have.value", "2024");
+  });
+});
