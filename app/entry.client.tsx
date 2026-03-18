@@ -18,6 +18,11 @@ i18next
   .init({
     ...initLanguages(),
     ns: getInitialNamespaces(),
+    interpolation: {
+      defaultVariables: {
+        contactNumber: (window as any).__contactNumber__ ?? "0330 159 1989",
+      },
+    },
     backend: {
       // Cache-bust locale JSON URLs with build ID to ensure fresh translations after deploy
       loadPath: `/locales-v2/{{lng}}/{{ns}}.json?v=${__BUILD_ID__}`,

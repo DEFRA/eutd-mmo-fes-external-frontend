@@ -592,22 +592,27 @@ const CheckYourInformation = () => {
   const journey: Journey = "catchCertificate";
   const backTo = getBackToRoutes();
   const actionData = useActionData();
-  const errors = actionData?.submitCertificate?.errors ?? validationErrors;
+  const validationErrorsFromLoader = actionData?.submitCertificate?.errors ?? validationErrors;
 
-  if (Array.isArray(errors)) {
-    errors.forEach((validationError: IError) => {
-      const landing: ProductLanded | undefined = exportPayload?.items.find(
-        (payloadData: ProductLanded) => payloadData.product.species?.code === validationError.value?.species
-      );
+  // Transform errors to include full species labels
+  const errors = Array.isArray(validationErrorsFromLoader)
+    ? validationErrorsFromLoader.map((validationError: IError) => {
+        const landing: ProductLanded | undefined = exportPayload?.items.find(
+          (payloadData: ProductLanded) => payloadData.product.species?.code === validationError.value?.species
+        );
 
-      if (landing) {
-        validationError.value = {
-          ...validationError.value,
-          species: landing.product.species.label,
-        };
-      }
-    });
-  }
+        if (landing && validationError.value) {
+          return {
+            ...validationError,
+            value: {
+              ...validationError.value,
+              species: landing.product.species.label,
+            },
+          };
+        }
+        return validationError;
+      })
+    : validationErrorsFromLoader;
 
   useScrollOnPageLoad();
 

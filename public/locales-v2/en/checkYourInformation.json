@@ -1,9 +1,9 @@
 {
-  "ccSummaryPageDocumentLockedNotification": "This document has been locked. To unlock, contact support on 0330 159 1989.",
-  "ccSummaryPageVesselNotFound": "Contact support on 0330 159 1989 to replace your Vessel name or PLN entries of 'Vessel not found (N/A)'.",
+  "ccSummaryPageDocumentLockedNotification": "This document has been locked. To unlock, contact support on {{contactNumber}}.",
+  "ccSummaryPageVesselNotFound": "Contact support on {{contactNumber}} to replace your Vessel name or PLN entries of 'Vessel not found (N/A)'.",
   "ccSummaryPageOverridenByAdminNotificationDirectLanding": "Landings amended and authorised by service support cannot be changed.",
   "ccSummaryPageOverridenByAdminNotificationNonDirectLanding": "Landings amended and authorised by service support cannot be changed but can be removed.",
-  "ccSummaryPageSystemError": "There was an error in processing. Please resubmit. If the problem persists, contact support on 0330 159 1989.",
+  "ccSummaryPageSystemError": "There was an error in processing. Please resubmit. If the problem persists, contact support on {{contactNumber}}.",
   "commonSummaryPageMainHeader": "Check your information before you create the catch certificate",
   "commonSummaryPageExporterCompanyAddress": "Company address",
   "ccSummaryPageLandingDetails": "Landing details",
