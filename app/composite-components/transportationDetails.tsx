@@ -31,6 +31,7 @@ export const TransportationModeDetails = ({
   freightBillNumber,
   containerNumbers,
   displayOptionalSuffix,
+  maximumNumberOfContainerNumbers,
   errors,
   countries,
   useBoldLabels = false,
@@ -40,6 +41,7 @@ export const TransportationModeDetails = ({
   displayOptionalSuffix?: boolean;
   countries: ICountry[];
   useBoldLabels?: boolean;
+  maximumNumberOfContainerNumbers: number;
 }) => {
   const { t } = useTranslation("transportation");
 
@@ -147,7 +149,7 @@ export const TransportationModeDetails = ({
           {renderDeparturePlaceField()}
           <ContainerIdentificationNumber
             containers={containerNumbers}
-            maximumContainers={10}
+            maximumContainers={maximumNumberOfContainerNumbers}
             errors={errors}
             displayOptionalSuffix={displayOptionalSuffix}
             vehicleType="containerVessel"
