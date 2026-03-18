@@ -2070,20 +2070,6 @@ const transportDetailsHandler: ITestHandler = {
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
-  [TestCaseId.TruckTransportContainerMaxLength]: () => [
-    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
-    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
-    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
-    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) =>
-      res(
-        ctx.status(400),
-        ctx.json({
-          "containerNumbers[0]": "Container identification number must only contain letters and numbers",
-        })
-      )
-    ),
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
-  ],
   [TestCaseId.TruckTransportEmptyContainers]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
@@ -2470,19 +2456,6 @@ const transportDetailsHandler: ITestHandler = {
         ctx.status(400),
         ctx.json({
           airwayBillNumber: "error.airwayBillNumber.string.pattern.base",
-        })
-      )
-    ),
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
-  ],
-  [TestCaseId.PlaneTransportContainerMaxLength]: () => [
-    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(planeTransportAllowedDetails))),
-    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
-    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) =>
-      res(
-        ctx.status(400),
-        ctx.json({
-          "containerNumbers.0": "error.containerNumbers.0.string.max",
         })
       )
     ),
