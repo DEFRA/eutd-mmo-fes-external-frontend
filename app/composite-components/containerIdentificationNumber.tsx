@@ -1,6 +1,6 @@
 import { FormInput, Button, BUTTON_TYPE, ErrorPosition } from "@capgeminiuk/dcx-react-library";
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import classNames from "classnames";
 import isEmpty from "lodash/isEmpty";
 import { getContainerErrorClassName, getContainerInputData, getErrorMessageClassName } from "~/helpers";
@@ -19,6 +19,7 @@ interface ContainerIdentificationNumberProps {
   vehicleType?: "truck" | "train" | "containerVessel" | "plane";
   labelKey?: string;
   hintKey?: string;
+  onErrorsChange?: (updatedErrors: IErrorsTransformed) => void;
 }
 
 export const ContainerIdentificationNumber = ({
@@ -29,6 +30,7 @@ export const ContainerIdentificationNumber = ({
   vehicleType,
   labelKey,
   hintKey,
+  onErrorsChange,
 }: ContainerIdentificationNumberProps) => {
   const { t } = useTranslation("transportation");
   const actionData = useActionData() ?? {};
@@ -40,15 +42,28 @@ export const ContainerIdentificationNumber = ({
       : [{ id: generateId(), value: "" }]
   );
 
-  // Track which original indices have been removed so we can map display indices to original error keys
-  const [removedIndices, setRemovedIndices] = useState<Set<number>>(new Set());
+  const removeContainerErrorAtIndex = (currentErrors: IErrorsTransformed, removedIndex: number): IErrorsTransformed => {
+    const updatedErrors: IErrorsTransformed = {};
 
-  // Reset the removed indices when new errors come in (after form submission)
-  useEffect(() => {
-    if (errors && Object.keys(errors).length > 0) {
-      setRemovedIndices(new Set());
-    }
-  }, [errors]);
+    Object.entries(currentErrors).forEach(([key, value]) => {
+      const containerMatch = key.match(/^containerNumbers\.(\d+)$/);
+
+      if (!containerMatch) {
+        updatedErrors[key] = value;
+        return;
+      }
+
+      const currentIndex = Number(containerMatch[1]);
+      if (currentIndex === removedIndex) {
+        return;
+      }
+
+      const nextKey = currentIndex > removedIndex ? `containerNumbers.${currentIndex - 1}` : key;
+      updatedErrors[nextKey] = value;
+    });
+
+    return updatedErrors;
+  };
 
   const handleAddContainer = () => {
     if (containerInputs.length < maximumContainers) {
@@ -60,30 +75,12 @@ export const ContainerIdentificationNumber = ({
     if (containerInputs.length > 1) {
       const index = containerInputs.findIndex((input) => input.id === id);
 
-      // Map current display index to original index
-      const originalIndex = getOriginalIndex(index, removedIndices);
-
       setContainerInputs((prev) => prev.filter((input) => input.id !== id));
 
-      // Track that this original index has been removed
-      const newRemovedIndices = new Set(removedIndices);
-      newRemovedIndices.add(originalIndex);
-      setRemovedIndices(newRemovedIndices);
-    }
-  };
-
-  // Helper function to map current display index to original error index
-  const getOriginalIndex = (displayIndex: number, removed: Set<number>): number => {
-    let originalIndex = displayIndex;
-    const sortedRemoved = Array.from(removed).sort((a, b) => a - b);
-
-    for (const removedIdx of sortedRemoved) {
-      if (removedIdx <= originalIndex) {
-        originalIndex++;
+      if (errors && index >= 0) {
+        onErrorsChange?.(removeContainerErrorAtIndex(errors, index));
       }
     }
-
-    return originalIndex;
   };
 
   const handleInputChange = (id: string, value: string) => {
@@ -117,9 +114,7 @@ export const ContainerIdentificationNumber = ({
   return (
     <div>
       {containerInputData.map((input, index) => {
-        // Map current display index to original error index to show correct errors after removals
-        const originalIndex = getOriginalIndex(index, removedIndices);
-        const errorKey = `containerNumbers.${originalIndex}`;
+        const errorKey = `containerNumbers.${index}`;
         const hasError = errors?.[errorKey];
 
         return (
