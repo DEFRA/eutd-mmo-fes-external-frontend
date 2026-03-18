@@ -8,6 +8,6 @@
   "registrationNumber": "DEP789",
   "departurePlace": "Southampton Port",
   "exportDate": "10/02/2026",
-  "containerNumbers": ["GHIJ3456789"],
+  "containerNumber": ["GHIJ3456789"],
   "arrival": false
 }

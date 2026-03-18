@@ -8,6 +8,6 @@
   "registrationNumber": "NL999",
   "departurePlace": "Rotterdam",
   "exportDate": "31/12/2025",
-  "containerNumbers": ["BAD-FORMAT", "X"],
+  "containerNumber": ["BAD-FORMAT", "X"],
   "arrival": false
 }

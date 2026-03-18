@@ -154,7 +154,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       testCaseId: TestCaseId.TruckTransportSaveAsDraft,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("Container", { force: true });
     cy.get("#nationalityOfVehicle").type("France", { force: true });
     cy.get("#registrationNumber").type("Registration", { force: true });
     cy.get("#departurePlace").type("Hull", { force: true });
@@ -175,7 +175,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#exportDate-day").clear({ force: true }).type("10", { force: true });
     cy.get("#exportDate-month").clear({ force: true }).type("02", { force: true });
     cy.get("#exportDate-year").clear({ force: true }).type("2026", { force: true });
-    cy.get('input[name="containerNumbers.0"]').clear({ force: true }).type("GHIJ3456789", { force: true });
+    cy.get('input[name="containerNumber.0"]').clear({ force: true }).type("GHIJ3456789", { force: true });
 
     // Save as draft
     cy.get("[data-testid=save-draft-button]").click({ force: true });
@@ -194,7 +194,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#exportDate-day").should("have.value", "10");
     cy.get("#exportDate-month").should("have.value", "02");
     cy.get("#exportDate-year").should("have.value", "2026");
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "GHIJ3456789");
+    cy.get('input[name="containerNumber.0"]').should("have.value", "GHIJ3456789");
   });
 
   it("should retain export date and accept invalid container format when saving as draft", () => {
@@ -210,7 +210,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#exportDate-day").clear({ force: true }).type("31", { force: true });
     cy.get("#exportDate-month").clear({ force: true }).type("12", { force: true });
     cy.get("#exportDate-year").clear({ force: true }).type("2025", { force: true });
-    cy.get('input[name="containerNumbers.0"]').clear({ force: true }).type("BAD-FORMAT", { force: true }); // Save-as-draft accepts invalid container format
+    cy.get('input[name="containerNumber.0"]').clear({ force: true }).type("BAD-FORMAT", { force: true }); // Save-as-draft accepts invalid container format
 
     // Save as draft should accept invalid containers
     cy.get("[data-testid=save-draft-button]").click({ force: true });
@@ -224,8 +224,8 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#exportDate-day").should("have.value", "31");
     cy.get("#exportDate-month").should("have.value", "12");
     cy.get("#exportDate-year").should("have.value", "2025");
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "BAD-FORMAT");
-    cy.get('input[name="containerNumbers.1"]').should("have.value", "X");
+    cy.get('input[name="containerNumber.0"]').should("have.value", "BAD-FORMAT");
+    cy.get('input[name="containerNumber.1"]').should("have.value", "X");
   });
 
   it("should navigate to check-your-information page on click of save and continue button", () => {
@@ -267,7 +267,7 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
       testCaseId: TestCaseId.TruckSaveInvalidFormatContainerNumber,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get('[name="containerNumbers.0"]').should("be.visible").type("INVALID@#", { force: true });
+    cy.get('[name="containerNumber.0"]').should("be.visible").type("INVALID@#", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", "There is a problem").should("be.visible");
   });
@@ -277,7 +277,7 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
       testCaseId: TestCaseId.TruckSaveMaxCharsContainerIdentificationNumber,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get('[name="containerNumbers.0"]')
+    cy.get('[name="containerNumber.0"]')
       .should("be.visible")
       .type("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", {
         force: true,
@@ -294,7 +294,7 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
 
     for (let i = 0; i < 5; i++) {
       cy.wait(500);
-      cy.get(`[name="containerNumbers.${i}"]`).should("be.visible").type("ABCD1234567", { force: true });
+      cy.get(`[name="containerNumber.${i}"]`).should("be.visible").type("ABCD1234567", { force: true });
       if (i < 4) {
         cy.get('[data-testid="add-another-container"]').click({ force: true });
       }
@@ -312,15 +312,15 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
     cy.wait(500);
     cy.get('[data-testid="add-another-container"]').click({ force: true });
 
-    cy.get('[name="containerNumbers.0"]').type("ABCD1234567", { force: true });
-    cy.get('[name="containerNumbers.1"]').type("ABCD1234561", { force: true });
+    cy.get('[name="containerNumber.0"]').type("ABCD1234567", { force: true });
+    cy.get('[name="containerNumber.1"]').type("ABCD1234561", { force: true });
 
-    cy.get('[name^="containerNumbers."]').should("have.length", 2);
+    cy.get('[name^="containerNumber."]').should("have.length", 2);
 
     cy.get('[data-testid="remove-container-1"]').click({ force: true });
 
-    cy.get('[name^="containerNumbers."]').should("have.length", 1);
-    cy.get('[name="containerNumbers.0"]').should("have.value", "ABCD1234567");
+    cy.get('[name^="containerNumber."]').should("have.length", 1);
+    cy.get('[name="containerNumber.0"]').should("have.value", "ABCD1234567");
   });
 });
 

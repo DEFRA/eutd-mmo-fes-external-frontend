@@ -116,7 +116,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departureDate-day").type("20", { force: true });
     cy.get("#departureDate-month").type("01", { force: true });
     cy.get("#departureDate-year").type("2026", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("DEFG2345678", { force: true });
+    cy.get('[id="containerNumber.0"]').type("DEFG2345678", { force: true });
 
     // Save as draft
     cy.get("[data-testid=save-draft-button]").click({ force: true });
@@ -138,7 +138,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departureDate-day").should("have.value", "20");
     cy.get("#departureDate-month").should("have.value", "01");
     cy.get("#departureDate-year").should("have.value", "2026");
-    cy.get('[id="containerNumbers.0"]').should("have.value", "DEFG2345678");
+    cy.get('[id="containerNumber.0"]').should("have.value", "DEFG2345678");
   });
 
   it("should retain dates and accept invalid container format when saving as draft", () => {
@@ -155,7 +155,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departureDate-day").type("05", { force: true });
     cy.get("#departureDate-month").type("03", { force: true });
     cy.get("#departureDate-year").type("2026", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("TOO-SHORT", { force: true }); // Invalid format
+    cy.get('[id="containerNumber.0"]').type("TOO-SHORT", { force: true }); // Invalid format
 
     // Save as draft should accept invalid containers
     cy.get("[data-testid=save-draft-button]").click({ force: true });
@@ -169,8 +169,8 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departureDate-day").should("have.value", "05");
     cy.get("#departureDate-month").should("have.value", "03");
     cy.get("#departureDate-year").should("have.value", "2026");
-    cy.get('[id="containerNumbers.0"]').should("have.value", "TOO-SHORT");
-    cy.get('[id="containerNumbers.1"]').should("have.value", "123");
+    cy.get('[id="containerNumber.0"]').should("have.value", "TOO-SHORT");
+    cy.get('[id="containerNumber.1"]').should("have.value", "123");
   });
 
   it("should navigate to storage facility page on click of save and continue button", () => {
@@ -361,14 +361,14 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#airwayBillNumber").type("123-45678901", { force: true });
     cy.get("#flightNumber").type("AF296Q", { force: true });
     cy.get("#freightBillNumber").type("Freight bill", { force: true });
-    cy.get('[id="containerNumbers.0"]').should("have.value", "");
+    cy.get('[id="containerNumber.0"]').should("have.value", "");
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
     cy.get("#placeOfUnloading").type("Heathrow", { force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the shipping container identification number$/).should("be.visible");
+    cy.contains("a", /^Enter the container identification number$/).should("be.visible");
   });
 
   it("should display error when country of departure is not populated", () => {
@@ -379,7 +379,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#airwayBillNumber").type("123-45678901", { force: true });
     cy.get("#flightNumber").type("AF296Q", { force: true });
     cy.get("#freightBillNumber").type("Freight bill", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get('[id="containerNumber.0"]').type("ABCD1234567", { force: true });
     cy.get("#departureCountry").should("have.value", "");
     cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
     cy.get("#placeOfUnloading").type("Heathrow", { force: true });
@@ -397,7 +397,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#airwayBillNumber").type("123-45678901", { force: true });
     cy.get("#flightNumber").type("AF296Q", { force: true });
     cy.get("#freightBillNumber").type("Freight bill", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get('[id="containerNumber.0"]').type("ABCD1234567", { force: true });
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").should("have.value", "");
     cy.get("#placeOfUnloading").type("Heathrow", { force: true });
@@ -416,7 +416,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#airwayBillNumber").type("123-45678901", { force: true });
     cy.get("#flightNumber").type("AF296Q", { force: true });
     cy.get("#freightBillNumber").type("Freight bill", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get('[id="containerNumber.0"]').type("ABCD1234567", { force: true });
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
     cy.get("#placeOfUnloading").type("Heathrow", { force: true });
@@ -434,26 +434,26 @@ describe("Add Transportation Details Plane: Allowed", () => {
       cy.visit(planePageUrl, { qs: { ...testParams } });
       cy.wait(500);
 
-      cy.get('input[name="containerNumbers.0"]').should("be.visible");
+      cy.get('input[name="containerNumber.0"]').should("be.visible");
       cy.get("#add-container-button").should("be.visible");
       cy.get("#add-container-button").should("be.visible").should("contain.text", "Add another container");
       cy.get("#remove-container-button-0").should("not.exist");
 
       cy.get("#add-container-button").click({ force: true });
-      cy.get('input[name="containerNumbers.1"]').should("be.visible");
+      cy.get('input[name="containerNumber.1"]').should("be.visible");
       cy.get("#remove-container-button-0").should("be.visible");
       cy.get("#remove-container-button-0").should("be.visible").should("contain.text", "Remove");
 
-      cy.get('[id="containerNumbers.0"]').type("CONT123", { force: true });
-      cy.get('[id="containerNumbers.1"]').type("CONT456", { force: true });
-      cy.get('[id="containerNumbers.0"]').should("exist");
-      cy.get('[id="containerNumbers.1"]').should("exist");
+      cy.get('[id="containerNumber.0"]').type("CONT123", { force: true });
+      cy.get('[id="containerNumber.1"]').type("CONT456", { force: true });
+      cy.get('[id="containerNumber.0"]').should("exist");
+      cy.get('[id="containerNumber.1"]').should("exist");
 
       cy.get("#remove-container-button-0").click({ force: true });
-      cy.get('input[name="containerNumbers.1"]').should("not.exist");
+      cy.get('input[name="containerNumber.1"]').should("not.exist");
       cy.get("#remove-container-button-0").should("not.exist");
 
-      cy.get('input[name="containerNumbers.0"]').should("exist");
+      cy.get('input[name="containerNumber.0"]').should("exist");
     });
   });
 });
