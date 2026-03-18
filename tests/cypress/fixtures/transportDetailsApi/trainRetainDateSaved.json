@@ -6,6 +6,6 @@
   "railwayBillNumber": "EURO123",
   "departurePlace": "St Pancras International",
   "exportDate": "14/09/2026",
-  "containerNumbers": ["WRONG", "A"],
+  "containerNumber": ["WRONG", "A"],
   "arrival": false
 }

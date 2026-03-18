@@ -147,7 +147,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TrainTransportSaveAsDraft,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("Container", { force: true });
     cy.get("#railwayBillNumber").type("Railbill", { force: true });
     cy.get("#departurePlace").type("Hull", { force: true });
     cy.get("[data-testid=save-draft-button").click({ force: true });
@@ -166,7 +166,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#exportDate-day").type("28", { force: true });
     cy.get("#exportDate-month").type("07", { force: true });
     cy.get("#exportDate-year").type("2026", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("OPQR5678901", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("OPQR5678901", { force: true });
 
     // Save as draft
     cy.get("[data-testid=save-draft-button]").click({ force: true });
@@ -184,7 +184,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#exportDate-day").should("have.value", "28");
     cy.get("#exportDate-month").should("have.value", "07");
     cy.get("#exportDate-year").should("have.value", "2026");
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "OPQR5678901");
+    cy.get('input[name="containerNumber.0"]').should("have.value", "OPQR5678901");
   });
 
   it("should retain export date and accept invalid container format when saving as draft", () => {
@@ -199,7 +199,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#exportDate-day").type("14", { force: true });
     cy.get("#exportDate-month").type("09", { force: true });
     cy.get("#exportDate-year").type("2026", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("WRONG", { force: true }); // Invalid format
+    cy.get('input[name="containerNumber.0"]').type("WRONG", { force: true }); // Invalid format
 
     // Save as draft should accept invalid containers
     cy.get("[data-testid=save-draft-button]").click({ force: true });
@@ -213,8 +213,8 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#exportDate-day").should("have.value", "14");
     cy.get("#exportDate-month").should("have.value", "09");
     cy.get("#exportDate-year").should("have.value", "2026");
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "WRONG");
-    cy.get('input[name="containerNumbers.1"]').should("have.value", "A");
+    cy.get('input[name="containerNumber.0"]').should("have.value", "WRONG");
+    cy.get('input[name="containerNumber.1"]').should("have.value", "A");
   });
 
   it("should navigate to check-your-information page on click of save and continue button", () => {
@@ -255,7 +255,7 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
       testCaseId: TestCaseId.TrainSaveInvalidFormatContainerNumber,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get('[name="containerNumbers.0"]').should("be.visible").type("INVALID@#", { force: true });
+    cy.get('[name="containerNumber.0"]').should("be.visible").type("INVALID@#", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", "There is a problem").should("be.visible");
   });
@@ -265,7 +265,7 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
       testCaseId: TestCaseId.TrainSaveMaxCharsContainerIdentificationNumber,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get('[name="containerNumbers.0"]')
+    cy.get('[name="containerNumber.0"]')
       .should("be.visible")
       .type("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", {
         force: true,
@@ -282,7 +282,7 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
 
     for (let i = 0; i < 5; i++) {
       cy.wait(500);
-      cy.get(`[name="containerNumbers.${i}"]`).should("be.visible").type("ABCD1234567", { force: true });
+      cy.get(`[name="containerNumber.${i}"]`).should("be.visible").type("ABCD1234567", { force: true });
       if (i < 4) {
         cy.get('[data-testid="add-another-container"]').click({ force: true });
       }
@@ -300,15 +300,15 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
     cy.wait(500);
     cy.get('[data-testid="add-another-container"]').click({ force: true });
 
-    cy.get('[name="containerNumbers.0"]').type("ABCD1234567", { force: true });
-    cy.get('[name="containerNumbers.1"]').type("ABCD1234561", { force: true });
+    cy.get('[name="containerNumber.0"]').type("ABCD1234567", { force: true });
+    cy.get('[name="containerNumber.1"]').type("ABCD1234561", { force: true });
 
-    cy.get('[name^="containerNumbers."]').should("have.length", 2);
+    cy.get('[name^="containerNumber."]').should("have.length", 2);
 
     cy.get('[data-testid="remove-container-1"]').click({ force: true });
 
-    cy.get('[name^="containerNumbers."]').should("have.length", 1);
-    cy.get('[name="containerNumbers.0"]').should("have.value", "ABCD1234567");
+    cy.get('[name^="containerNumber."]').should("have.length", 1);
+    cy.get('[name="containerNumber.0"]').should("have.value", "ABCD1234567");
   });
 });
 

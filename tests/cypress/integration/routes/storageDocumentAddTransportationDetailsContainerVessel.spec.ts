@@ -100,7 +100,7 @@ describe("Save and Continue button - Happy path", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("Container", { force: true });
     cy.get("#vesselName").type("Vessel", { force: true });
     cy.get("#flagState").type("flag State", { force: true });
     cy.get("#departurePlace").type("Place export", { force: true });
@@ -118,7 +118,7 @@ describe("Save and Continue button - Happy path", () => {
     cy.get('input[id="exportedTo"]').type("France");
     cy.get(".autocomplete__option").first().click();
     cy.get("#pointOfDestination").type("Valid Point of Destination", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("Container", { force: true });
     cy.get("#vesselName").type("Vessel", { force: true });
     cy.get("#flagState").type("flag State", { force: true });
     cy.get("#departurePlace").type("Place export", { force: true });
@@ -169,7 +169,7 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
     // Fill in all valid fields
     cy.get('input[id="exportedTo"]').type("France");
     cy.get(".autocomplete__option").first().click();
-    cy.get('input[name="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("ABCD1234567", { force: true });
     cy.get("#vesselName").type("Valid Vessel Name", { force: true });
     cy.get("#flagState").type("Valid Flag State", { force: true });
     cy.get("#departurePlace").type("Valid Departure Place", { force: true });
@@ -212,7 +212,7 @@ describe("Container Vessel Save as Draft - Retain valid field values", () => {
     cy.get("#vesselName").clear({ force: true }).type("Atlantic Star", { force: true });
     cy.get("#flagState").clear({ force: true }).type("Greece", { force: true });
     cy.get("#departurePlace").clear({ force: true }).type("Felixstowe Port", { force: true });
-    cy.get('input[name="containerNumbers.0"]').clear({ force: true }).type("ABCJ0123456", { force: true });
+    cy.get('input[name="containerNumber.0"]').clear({ force: true }).type("ABCJ0123456", { force: true });
 
     // Save as draft
     cy.get("[data-testid=save-draft-button]").click({ force: true });
@@ -228,7 +228,7 @@ describe("Container Vessel Save as Draft - Retain valid field values", () => {
     cy.get("#vesselName").should("have.value", "Atlantic Star");
     cy.get("#flagState").should("have.value", "Greece");
     cy.get("#departurePlace").should("have.value", "Felixstowe Port");
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "ABCJ0123456");
+    cy.get('input[name="containerNumber.0"]').should("have.value", "ABCJ0123456");
   });
 
   it("should clear invalid vesselName but retain valid flagState when saving as draft", () => {

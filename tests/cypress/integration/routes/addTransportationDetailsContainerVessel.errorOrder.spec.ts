@@ -20,7 +20,7 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
     cy.get("#vesselName", { timeout: 10000 }).should("be.visible");
 
     // Fill only the container field with an invalid value
-    cy.get('input[name="containerNumbers.0"]').type("££££££££££", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("££££££££££", { force: true });
 
     // Submit form without filling required fields
     cy.get("[data-testid=save-and-continue]").click({ force: true });
@@ -50,7 +50,7 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
     // Wait for page to load completely
     cy.get("#vesselName", { timeout: 10000 }).should("be.visible");
 
-    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
+    cy.get('input[name="containerNumber.0"]').type("A".repeat(51), { force: true });
 
     // Submit form without filling required fields
     cy.get("[data-testid=save-and-continue]").click({ force: true });
@@ -83,7 +83,7 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
     cy.get("#departurePlace").type("Felixstowe Port", { force: true });
 
     // Add container with invalid format
-    cy.get('input[name="containerNumbers.0"]').type("ABC123!@#", { force: true });
+    cy.get('input[name="containerNumber.0"]').type("ABC123!@#", { force: true });
 
     cy.get("[data-testid=save-and-continue]").click({ force: true });
 

@@ -32,8 +32,7 @@
     "vehicle": "train",
     "vesselName": "gfs",
     "flagState": "ghj",
-    "containerNumber": "56",
-    "containerNumbers": ["TRAIN001", "TRAIN002"],
+    "containerNumber": ["TRAIN001", "TRAIN002"],
     "departurePlace": "hull",
     "pointOfDestination": "Paris Gare du Nord",
     "exportedTo": {
