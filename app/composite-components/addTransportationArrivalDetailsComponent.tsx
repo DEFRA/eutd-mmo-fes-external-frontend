@@ -1,6 +1,7 @@
 import { Main, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
 import { useTranslation } from "react-i18next";
 import { useLoaderData } from "react-router";
+import { useEffect, useState } from "react";
 import { ButtonGroup } from "./buttonGroup";
 import type { ITransport, IErrorsTransformed, Vehicle, ICountry } from "~/types";
 import { route } from "routes-gen";
@@ -37,8 +38,15 @@ export const AddTransportationArrivalDetailsComponent = ({
   actionData,
 }: AddArrivalTransporrtationDetailsProps) => {
   const { t } = useTranslation("transportation");
-  const { errors = {}, departureDateDay, departureDateMonth, departureDateYear } = actionData;
+  const { errors: actionErrors = {}, departureDateDay, departureDateMonth, departureDateYear } = actionData;
   const departureDateFromAction = getDepartureDateFromAction(departureDateDay, departureDateMonth, departureDateYear);
+  const [errorsOverride, setErrorsOverride] = useState<IErrorsTransformed | undefined>(undefined);
+  const errors = errorsOverride ?? actionErrors;
+
+  useEffect(() => {
+    setErrorsOverride(undefined);
+  }, [actionData]);
+
   const {
     documentNumber,
     vehicle,
@@ -162,7 +170,11 @@ export const AddTransportationArrivalDetailsComponent = ({
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" csrf={csrf}>
-            <TransportationArrivalDetails {...componentAttributes} useBoldLabels={true} />
+            <TransportationArrivalDetails
+              {...componentAttributes}
+              useBoldLabels={true}
+              onErrorsChange={setErrorsOverride}
+            />
             <ButtonGroup />
             <input type="hidden" name="vehicle" value={vehicle} />
             <input type="hidden" name="nextUri" value={nextUri} />

@@ -11,7 +11,7 @@ import {
 } from "react-router";
 import { useTranslation } from "react-i18next";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
-import type { ErrorResponse, ITransport } from "~/types";
+import type { ErrorResponse, ITransport, IErrorsTransformed } from "~/types";
 import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";
 import { useTransportationDetailsPage, getTransportErrorKeys } from "~/hooks";
 
@@ -47,7 +47,12 @@ const ContainerVesselTransportDetailsPage = () => {
     }
   >();
   const actionData = useActionData() ?? {};
-  const { errors = {} } = actionData;
+  const { errors: actionErrors = {} } = actionData as { errors?: IErrorsTransformed };
+  const [errorsOverride, setErrorsOverride] = React.useState<IErrorsTransformed | undefined>(undefined);
+  const errors = errorsOverride ?? actionErrors;
+  React.useEffect(() => {
+    setErrorsOverride(undefined);
+  }, [actionData]);
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-container-vessel/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
@@ -72,6 +77,7 @@ const ContainerVesselTransportDetailsPage = () => {
               errors={errors}
               displayOptionalSuffix={displayOptionalSuffix}
               maximumNumberOfContainerNumbers={maximumNumberOfContainerNumbers}
+              onErrorsChange={setErrorsOverride}
             />
             <ButtonGroup />
             <input type="hidden" name="nextUri" value={nextUri} />

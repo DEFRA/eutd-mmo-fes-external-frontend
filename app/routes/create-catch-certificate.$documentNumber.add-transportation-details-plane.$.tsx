@@ -47,7 +47,12 @@ const AddTransportationDetailsPlane = () => {
     }
   >();
   const actionData = useActionData() ?? {};
-  const { errors = {} } = actionData;
+  const { errors: actionErrors = {} } = actionData as { errors?: IErrorsTransformed };
+  const [errorsOverride, setErrorsOverride] = React.useState<IErrorsTransformed | undefined>(undefined);
+  const errors = errorsOverride ?? actionErrors;
+  React.useEffect(() => {
+    setErrorsOverride(undefined);
+  }, [actionData]);
   const errorsTransformed = errors as IErrorsTransformed;
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-plane/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
@@ -76,6 +81,7 @@ const AddTransportationDetailsPlane = () => {
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
               displayOptionalSuffix={displayOptionalSuffix}
               maximumNumberOfContainerNumbers={maximumNumberOfContainerNumbers}
+              onErrorsChange={setErrorsOverride}
             />
             <ButtonGroup />
             <input type="hidden" name="vehicle" value={vehicle} />

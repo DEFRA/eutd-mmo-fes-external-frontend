@@ -20,12 +20,14 @@ export const CatchCertificateTransportationDetails = ({
   countries,
   airwayBillNumber,
   maximumNumberOfContainerNumbers,
+  onErrorsChange,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
   displayOptionalSuffix?: boolean;
   countries?: ICountry[];
   maximumNumberOfContainerNumbers: number;
+  onErrorsChange?: (updatedErrors: IErrorsTransformed) => void;
 }) => (
   <fieldset className="govuk-fieldset">
     <TransportationModeDetails
@@ -48,6 +50,7 @@ export const CatchCertificateTransportationDetails = ({
       countries={countries ?? []}
       useBoldLabels={true}
       airwayBillNumber={airwayBillNumber}
+      onErrorsChange={onErrorsChange}
     />
   </fieldset>
 );
