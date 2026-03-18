@@ -1,13 +1,16 @@
 import * as React from "react";
 import { Main, Title } from "~/components";
 import { useTranslation } from "react-i18next";
-import { type LoaderFunction } from "react-router";
+import { type LoaderFunction, useRouteLoaderData } from "react-router";
 import { getBearerTokenForRequest } from "~/.server";
+import type { IMainAppProps } from "~/types";
 
 export const loader: LoaderFunction = async ({ request }) => await getBearerTokenForRequest(request);
 
 const Accessibility = () => {
   const { t } = useTranslation("accessibility");
+  const rootData = useRouteLoaderData<IMainAppProps>("root");
+  const contactNumber = rootData?.supportContactNumber ?? "0330 159 1989";
 
   return (
     <Main showHelpLink={false}>
@@ -64,8 +67,8 @@ const Accessibility = () => {
           <ul className="govuk-list--bullet">
             <li>
               {t("feebackAndContactInfoListItem")}{" "}
-              <a className="govuk-link" href="tel:0330 159 1989 ">
-                0330 159 1989
+              <a className="govuk-link" href={`tel:${contactNumber}`}>
+                {contactNumber}
               </a>
             </li>
           </ul>
