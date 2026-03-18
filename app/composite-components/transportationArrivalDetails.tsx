@@ -247,7 +247,6 @@ export const TransportationArrivalDetails = ({
   railwayBillNumber,
   vesselName,
   flagState,
-  containerNumber,
   airwayBillNumber,
   flightNumber,
   containerNumbers,
@@ -281,7 +280,6 @@ export const TransportationArrivalDetails = ({
         flagState={flagState}
         airwayBillNumber={airwayBillNumber}
         flightNumber={flightNumber}
-        containerNumber={containerNumber}
         containerNumbers={containerNumbers}
         nationalityOfVehicle={nationalityOfVehicle}
         registrationNumber={registrationNumber}

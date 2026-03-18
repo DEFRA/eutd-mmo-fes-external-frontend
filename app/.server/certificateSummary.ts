@@ -50,7 +50,7 @@ const hasTransportDetails = (transport: ITransport): boolean => {
       );
       break;
     case "plane":
-      hasRequiredTransportDetails = ["flightNumber", "containerNumber", "departurePlace"].every(
+      hasRequiredTransportDetails = ["flightNumber", "containerNumbers", "departurePlace"].every(
         (prop) => !isEmpty(transport[prop as keyof ITransport])
       );
       break;
@@ -60,7 +60,7 @@ const hasTransportDetails = (transport: ITransport): boolean => {
       );
       break;
     case "containerVessel":
-      hasRequiredTransportDetails = ["vesselName", "flagState", "containerNumber", "departurePlace"].every(
+      hasRequiredTransportDetails = ["vesselName", "flagState", "containerNumbers", "departurePlace"].every(
         (prop) => !isEmpty(transport[prop as keyof ITransport])
       );
       break;

@@ -1,18 +1,13 @@
 import * as React from "react";
 import { useEffect } from "react";
-import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
-import type { ITransport, Journey, ErrorResponse, ICountry, StorageDocument, IUnauthorised } from "~/types";
+import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
+import type { ITransport, ErrorResponse, ICountry } from "~/types";
 import {
-  getBearerTokenForRequest,
-  getTransportDetails,
   TransportationDetailsLoaderFunction,
   commonSaveTransportDetails,
   calculateExportDate,
-  validateCSRFToken,
-  getCountries,
   handleFormEmptyStringValue,
-  extractContainerNumbers,
-  getStorageDocument,
+  initializeStorageNotesTransportAction,
 } from "~/.server";
 import { scrollToId, TransportType } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
@@ -31,37 +26,28 @@ export const loader: LoaderFunction = async ({ request, params }) =>
   );
 
 export const action: ActionFunction = async ({ request, params }): Promise<Response | ErrorResponse> => {
-  const bearerToken = await getBearerTokenForRequest(request);
-  const { documentNumber } = params;
-  const journey: Journey = "storageNotes";
-  const transport: ITransport = await getTransportDetails(
+  const initData = await initializeStorageNotesTransportAction(request, params, isDepartureTransportation);
+  if (initData instanceof Response) return initData;
+
+  const {
     bearerToken,
-    journey,
     documentNumber,
-    isDepartureTransportation
-  );
-  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
-  const form = await request.formData();
-  const isValid = await validateCSRFToken(request, form);
-  if (!isValid) return redirect("/forbidden");
+    transport,
+    storageDocument,
+    form,
+    pointOfDestination,
+    countries,
+    exportedTo,
+    containerNumbers,
+  } = initData;
 
   const saveAsDraft = form.get("_action") === "saveAsDraft";
-  const exportedToCountryName = form.get("exportedTo") as string;
-  const pointOfDestination = form.get("pointOfDestination") as string;
   const nationalityOfVehicle = form.get("nationalityOfVehicle") as string;
   const registrationNumber = form.get("registrationNumber") as string;
   const departurePlace = form.get("departurePlace") as string;
   const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
 
   const nextUri = form.get("nextUri") as string;
-
-  const countries: ICountry[] = await getCountries();
-  const exportedTo: ICountry | undefined = countries.find(
-    (c: ICountry) => c.officialCountryName === exportedToCountryName
-  );
-
-  const values = Object.fromEntries(form);
-  const containerNumbers = extractContainerNumbers(values);
 
   const payload: ITransport = {
     vehicle: transport.vehicle,

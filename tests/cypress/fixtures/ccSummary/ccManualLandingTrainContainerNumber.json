@@ -8,7 +8,7 @@
       "vehicle": "train",
       "departurePlace": "London St Pancras",
       "railwayBillNumber": "RAIL123456",
-      "containerIdentificationNumber": "CONTAINER123"
+      "containerNumbers": ["CONTAINER123"]
     }
   ],
   "exporter": {

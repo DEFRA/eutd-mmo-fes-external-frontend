@@ -8,16 +8,6 @@ export const getExportDateFromAction = (day: string, month: string, year: string
   // Accept both padded (01) and unpadded (1) formats
   return isValidDate(dateString, ["YYYY-MM-DD", "YYYY-M-D"]) ? dateString : undefined;
 };
-export const getContainerNumber = (errors: any, actionData: any, containerNumber?: string) =>
-  !isEmpty(errors) || actionData?.containerNumber ? actionData?.containerNumber : containerNumber;
-export const getContainerIdentificationNumber = (
-  errors: any,
-  actionData: any,
-  containerIdentificationNumber?: string | null
-) =>
-  !isEmpty(errors) || actionData?.containerIdentificationNumber
-    ? actionData?.containerIdentificationNumber
-    : containerIdentificationNumber;
 export const getDeparturePlace = (errors: any, actionData: any, departurePlace?: string | null) =>
   !isEmpty(errors) || actionData?.departurePlace ? actionData?.departurePlace : departurePlace;
 export const getVesselName = (errors: any, actionData: any, vesselName?: string) =>

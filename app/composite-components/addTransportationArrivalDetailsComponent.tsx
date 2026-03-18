@@ -7,7 +7,6 @@ import { route } from "routes-gen";
 import isEmpty from "lodash/isEmpty";
 import {
   displayErrorMessagesInOrder,
-  getContainerNumber,
   getContainerNumbers,
   getExportDateFromAction as getDepartureDateFromAction,
   TransportType,
@@ -42,7 +41,6 @@ export const AddTransportationArrivalDetailsComponent = ({
   const {
     documentNumber,
     vehicle,
-    containerNumber,
     vesselName,
     flagState,
     railwayBillNumber,
@@ -78,7 +76,6 @@ export const AddTransportationArrivalDetailsComponent = ({
     displayOptionalSuffix: boolean;
   } = {
     vehicle: vehicleType,
-    containerNumber: getContainerNumber(errors, actionData, containerNumber),
     vesselName: getVesselName(errors, actionData, vesselName),
     flagState: getFlagState(errors, actionData, flagState),
     freightBillNumber: getFreightBillNumber(errors, actionData, freightBillNumber?.toString()),

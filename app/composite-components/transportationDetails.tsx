@@ -186,7 +186,7 @@ export const TransportationModeDetails = ({
             displayOptionalSuffix={displayOptionalSuffix}
             vehicleType="plane"
             labelKey={"addTransportationDetailsContainerIdentificationNumberPlane"}
-            hintKey={"addTransportationDetailsContainerIdentificationNumberHintCommon"}
+            hintKey={"addTransportationDetailsContainerIdentificationNumberHintPlane"}
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
@@ -489,7 +489,7 @@ export const TransportationDetails = ({
           return (
             <ContainerIdentificationNumber
               containers={containerNumbers}
-              maximumContainers={10}
+              maximumContainers={5}
               errors={errors}
               displayOptionalSuffix={true}
               vehicleType={vehicle}
@@ -633,7 +633,7 @@ export const TransportationDetails = ({
       {(vehicle === "containerVessel" || vehicle === "plane") && (
         <ContainerIdentificationNumber
           containers={containerNumbers}
-          maximumContainers={10}
+          maximumContainers={5}
           errors={errors}
           vehicleType={vehicle}
           labelKey={

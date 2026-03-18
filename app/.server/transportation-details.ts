@@ -11,6 +11,7 @@ import {
   saveTransportDetails,
   updateTransportDetails,
   validateCSRFToken,
+  getStorageDocument,
 } from "~/.server";
 import type {
   ITransport,
@@ -20,6 +21,8 @@ import type {
   IErrorsTransformed,
   AdditionalDocumentsData,
   ICountry,
+  StorageDocument,
+  IUnauthorised,
 } from "~/types";
 import { route } from "routes-gen";
 import type { Params } from "@remix-run/router";
@@ -50,9 +53,6 @@ const buildTransportPayload = (transportType: TransportType, form: FormData): Pa
     case TransportType.TRAIN:
       return {
         railwayBillNumber: form.get("railwayBillNumber") as string,
-        containerIdentificationNumber: !isEmpty(form.get("containerIdentificationNumber"))
-          ? (form.get("containerIdentificationNumber") as string)
-          : null,
         containerNumbers: extractContainerNumbers(values),
       };
     case TransportType.PLANE:
@@ -701,14 +701,18 @@ export const commonSaveTransportDetails = async (
   return redirect(finalRedirect);
 };
 
-export const extractContainerNumbers = (values: Record<string, any>): string[] => {
+export const extractContainerNumbers = (values: Record<string, any>, maxCount: number = 10): string[] => {
   const containerNumbers: string[] = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < maxCount; i++) {
     const key = `containerNumbers.${i}`;
     const value = values[key];
-    if (value !== undefined && value !== "") {
-      containerNumbers.push(value);
-    }
+    // Preserve all values including empty strings to maintain index integrity for error mapping
+    // (error messages like "containerNumbers.2" must map to the correct form field)
+    containerNumbers.push(value ?? "");
+  }
+  // Remove trailing empty strings for cleaner payload
+  while (containerNumbers.length > 0 && containerNumbers[containerNumbers.length - 1] === "") {
+    containerNumbers.pop();
   }
   return containerNumbers;
 };
@@ -751,4 +755,69 @@ export const handleContainerActions = async (request: Request, _action: string, 
   }
 
   return null;
+};
+
+// Utility function to initialize common data for storage notes transportation action
+export const initializeStorageNotesTransportAction = async (
+  request: Request,
+  params: Params,
+  isDepartureTransportation?: boolean
+): Promise<
+  | {
+      bearerToken: string;
+      documentNumber: string;
+      journey: Journey;
+      transport: ITransport;
+      storageDocument: StorageDocument | IUnauthorised;
+      form: FormData;
+      consignmentDestination: string;
+      pointOfDestination: string;
+      countries: ICountry[];
+      exportedTo: ICountry | undefined;
+      containerNumbers: string[];
+      values: Record<string, any>;
+    }
+  | Response
+> => {
+  const bearerToken = await getBearerTokenForRequest(request);
+  const { documentNumber } = params;
+  const journey: Journey = "storageNotes";
+
+  const transport: ITransport = await getTransportDetails(
+    bearerToken,
+    journey,
+    documentNumber,
+    isDepartureTransportation
+  );
+  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
+
+  const form = await request.formData();
+  const isValid = await validateCSRFToken(request, form);
+  if (!isValid) return redirect("/forbidden");
+
+  const consignmentDestination = form.get("exportedTo") as string;
+  const pointOfDestination = form.get("pointOfDestination") as string;
+
+  const countries: ICountry[] = await getCountries();
+  const exportedTo: ICountry | undefined = countries.find(
+    (c: ICountry) => c.officialCountryName === consignmentDestination
+  );
+
+  const values = Object.fromEntries(form);
+  const containerNumbers = extractContainerNumbers(values, 5);
+
+  return {
+    bearerToken,
+    documentNumber,
+    journey,
+    transport,
+    storageDocument,
+    form,
+    consignmentDestination,
+    pointOfDestination,
+    countries,
+    exportedTo,
+    containerNumbers,
+    values,
+  };
 };

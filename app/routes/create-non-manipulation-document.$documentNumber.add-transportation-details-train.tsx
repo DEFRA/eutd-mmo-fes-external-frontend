@@ -1,20 +1,15 @@
 import * as React from "react";
-import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
+import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
 import { route } from "routes-gen";
 import { useEffect } from "react";
-import type { ITransport, Journey, ErrorResponse, ICountry, IUnauthorised, StorageDocument } from "~/types";
+import type { ITransport, ErrorResponse, ICountry } from "~/types";
 import { scrollToId, TransportType } from "~/helpers";
 import {
-  getBearerTokenForRequest,
-  getTransportDetails,
   TransportationDetailsLoaderFunction,
   commonSaveTransportDetails,
   calculateExportDate,
-  validateCSRFToken,
-  getCountries,
   handleFormEmptyStringValue,
-  extractContainerNumbers,
-  getStorageDocument,
+  initializeStorageNotesTransportAction,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
@@ -32,36 +27,26 @@ export const loader: LoaderFunction = async ({ request, params }) =>
   );
 
 export const action: ActionFunction = async ({ request, params }): Promise<Response | ErrorResponse> => {
-  const bearerToken = await getBearerTokenForRequest(request);
-  const { documentNumber } = params;
-  const journey: Journey = "storageNotes";
-  const transport: ITransport = await getTransportDetails(
+  const initData = await initializeStorageNotesTransportAction(request, params, isDepartureTransportation);
+  if (initData instanceof Response) return initData;
+
+  const {
     bearerToken,
-    journey,
     documentNumber,
-    isDepartureTransportation
-  );
-  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
-  const form = await request.formData();
-  const isValid = await validateCSRFToken(request, form);
-  if (!isValid) return redirect("/forbidden");
+    transport,
+    storageDocument,
+    form,
+    pointOfDestination,
+    exportedTo,
+    containerNumbers,
+  } = initData;
 
   const saveAsDraft = form.get("_action") === "saveAsDraft";
-  const exportedToCountryName = form.get("exportedTo") as string;
-  const pointOfDestination = form.get("pointOfDestination") as string;
   const railwayBillNumber = form.get("railwayBillNumber") as string;
   const departurePlace = form.get("departurePlace") as string;
   const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
 
   const nextUri = form.get("nextUri") as string;
-
-  const countries: ICountry[] = await getCountries();
-  const exportedTo: ICountry | undefined = countries.find(
-    (c: ICountry) => c.officialCountryName === exportedToCountryName
-  );
-
-  const values = Object.fromEntries(form);
-  const containerNumbers = extractContainerNumbers(values);
 
   const payload: ITransport = {
     currentUri: route("/create-non-manipulation-document/:documentNumber/add-transportation-details-train", {
@@ -69,7 +54,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     }),
     departurePlace: departurePlace,
     journey: transport.journey,
-    exportedTo,
+    exportedTo: exportedTo,
     pointOfDestination,
     nextUri: route("/create-non-manipulation-document/:documentNumber/check-your-information", { documentNumber }),
     railwayBillNumber: railwayBillNumber,

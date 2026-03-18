@@ -9,7 +9,6 @@ import isEmpty from "lodash/isEmpty";
 import {
   displayErrorMessagesInOrder,
   getAirwayBillNumber,
-  getContainerNumber,
   getContainerNumbers,
   getDeparturePlace,
   getExportDate,
@@ -49,7 +48,6 @@ export const AddTransportationDetailsComponent = ({
     vehicle,
     vesselName,
     flagState,
-    containerNumber,
     flightNumber,
     containerNumbers,
     railwayBillNumber,
@@ -75,7 +73,7 @@ export const AddTransportationDetailsComponent = ({
     vehicle: vehicleType,
     exportedTo,
     pointOfDestination: getPointOfDestination(errors, actionData, pointOfDestination),
-    containerNumber: getContainerNumber(errors, actionData, containerNumber),
+
     departurePlace: getDeparturePlace(errors, actionData, departurePlace),
     errors: errors,
     exportDate: getExportDate(exportDateFromAction, exportDate),

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Main, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
 import { ButtonGroup, CatchCertificateTransportationDetails } from "~/composite-components";
 import {
@@ -8,7 +9,6 @@ import {
   type ActionFunction,
   type MetaFunction,
 } from "react-router";
-import { useTranslation } from "react-i18next";
 import type { ITransport, ErrorResponse, ICountry } from "~/types";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";

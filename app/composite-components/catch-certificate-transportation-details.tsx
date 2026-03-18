@@ -6,13 +6,11 @@ export const CatchCertificateTransportationDetails = ({
   vesselName,
   flagState,
   flightNumber,
-  containerNumber,
   nationalityOfVehicle,
   registrationNumber,
   railwayBillNumber,
   departurePlace,
   freightBillNumber,
-  containerIdentificationNumber,
   containerNumbers,
   errors,
   legendTitle,
@@ -32,13 +30,11 @@ export const CatchCertificateTransportationDetails = ({
       vesselName={vesselName}
       flagState={flagState}
       flightNumber={flightNumber}
-      containerNumber={containerNumber}
       nationalityOfVehicle={nationalityOfVehicle}
       registrationNumber={registrationNumber}
       railwayBillNumber={railwayBillNumber}
       departurePlace={departurePlace}
       freightBillNumber={freightBillNumber}
-      containerIdentificationNumber={containerIdentificationNumber}
       containerNumbers={containerNumbers}
       displayOptionalSuffix={displayOptionalSuffix}
       errors={errors}
