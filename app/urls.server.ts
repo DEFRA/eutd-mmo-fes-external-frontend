@@ -1,6 +1,6 @@
 import { getEnv } from "~/env.server";
 import type { Journey } from "~/types";
-import querystring from "querystring";
+import querystring from "node:querystring";
 
 const ENV = getEnv();
 const serviceUrl = ENV.DYNAMICS_RESOURCEURL + ENV.DYNAMICS_ENDPOINTBASE;

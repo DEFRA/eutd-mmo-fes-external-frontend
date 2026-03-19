@@ -1,5 +1,5 @@
 import * as msal from "@azure/msal-node";
-import querystring from "querystring";
+import querystring from "node:querystring";
 import { getEnv } from "~/env.server";
 
 // Import cross-fetch for test mode (MSW v1.3.1 cannot intercept Node 18+ native fetch)

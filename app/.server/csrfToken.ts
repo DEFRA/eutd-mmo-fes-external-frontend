@@ -1,4 +1,4 @@
-import { randomBytes } from "crypto";
+import { randomBytes } from "node:crypto";
 import { isTestEnv } from "~/helpers";
 import { getSessionFromRequest } from "~/sessions.server";
 
