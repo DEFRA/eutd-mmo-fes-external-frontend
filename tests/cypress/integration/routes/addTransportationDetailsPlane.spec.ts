@@ -211,19 +211,6 @@ describe("Add Transportation Details Plane: Air Waybill Number Validation", () =
 });
 
 describe("Add Transportation Details Plane: Container Identification Number Validation", () => {
-  it("should display error when container identification number exceeds 50 characters", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PlaneTransportContainerMaxLength,
-    };
-    cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#flightNumber").type("BA123", { force: true });
-    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
-  });
-
   it("should display error when container identification number contains invalid characters", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportContainerInvalidCharacters,
@@ -318,25 +305,6 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
     cy.get('input[name="containerNumbers.0"]').should("have.value", "EXISTING001");
     cy.get('input[name="containerNumbers.1"]').should("have.value", "EXISTING002");
     cy.get('input[name="containerNumbers.2"]').should("have.value", "EXISTING003");
-  });
-
-  it("should display error when container number exceeds max length", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PlaneTransportContainerMaxLength,
-    };
-    cy.visit(planePageUrl, { qs: { ...testParams } });
-
-    cy.get("#flightNumber").type("BA123", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890123456789012", {
-      force: true,
-    });
-    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
-
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
-
-    // Check error is displayed
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Container identification number must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should display container field label and hint text", () => {

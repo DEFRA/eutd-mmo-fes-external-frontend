@@ -37,6 +37,7 @@ const TruckTransportDetailsPage = () => {
     id,
     displayOptionalSuffix,
     countries,
+    maximumNumberOfContainerNumbers,
   } = useLoaderData<
     ITransport & {
       documentNumber: string;
@@ -44,6 +45,7 @@ const TruckTransportDetailsPage = () => {
       displayOptionalSuffix: boolean;
       csrf: string;
       countries: ICountry[];
+      maximumNumberOfContainerNumbers: number;
     }
   >();
   const actionData = useActionData<any>() ?? {};
@@ -51,7 +53,7 @@ const TruckTransportDetailsPage = () => {
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
-  const errorKeysInOrder = getTransportErrorKeys(TransportType.TRUCK);
+  const errorKeysInOrder = getTransportErrorKeys(TransportType.TRUCK, maximumNumberOfContainerNumbers);
   useTransportationDetailsPage(errors);
 
   return (
@@ -73,6 +75,7 @@ const TruckTransportDetailsPage = () => {
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
               containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
               displayOptionalSuffix={displayOptionalSuffix}
+              maximumNumberOfContainerNumbers={maximumNumberOfContainerNumbers}
               countries={countries}
             />
             <ButtonGroup />

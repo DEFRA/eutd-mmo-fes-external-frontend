@@ -37,7 +37,11 @@ export enum TransportType {
   TRUCK = "truck",
 }
 
-const buildTransportPayload = (transportType: TransportType, form: FormData): Partial<ITransport> => {
+const buildTransportPayload = (
+  transportType: TransportType,
+  form: FormData,
+  maximumNumberOfContainerNumbers: number
+): Partial<ITransport> => {
   const values = Object.fromEntries(form);
 
   switch (transportType) {
@@ -45,7 +49,7 @@ const buildTransportPayload = (transportType: TransportType, form: FormData): Pa
       return {
         nationalityOfVehicle: form.get("nationalityOfVehicle") as string,
         registrationNumber: form.get("registrationNumber") as string,
-        containerNumbers: extractContainerNumbers(values),
+        containerNumbers: extractContainerNumbers(values, maximumNumberOfContainerNumbers),
       };
     case TransportType.TRAIN:
       return {
@@ -53,19 +57,19 @@ const buildTransportPayload = (transportType: TransportType, form: FormData): Pa
         containerIdentificationNumber: !isEmpty(form.get("containerIdentificationNumber"))
           ? (form.get("containerIdentificationNumber") as string)
           : null,
-        containerNumbers: extractContainerNumbers(values),
+        containerNumbers: extractContainerNumbers(values, maximumNumberOfContainerNumbers),
       };
     case TransportType.PLANE:
       return {
         flightNumber: form.get("flightNumber") as string,
         airwayBillNumber: !isEmpty(form.get("airwayBillNumber")) ? (form.get("airwayBillNumber") as string) : undefined,
-        containerNumbers: extractContainerNumbers(values),
+        containerNumbers: extractContainerNumbers(values, maximumNumberOfContainerNumbers),
       };
     case TransportType.CONTAINER_VESSEL:
       return {
         vesselName: form.get("vesselName") as string,
         flagState: form.get("flagState") as string,
-        containerNumbers: extractContainerNumbers(values),
+        containerNumbers: extractContainerNumbers(values, maximumNumberOfContainerNumbers),
       };
     default:
       throw new Error("Unknown Transportation Type");
@@ -76,7 +80,7 @@ const handleTransportResponse = (
   postTransport: ITransport,
   form: FormData,
   saveDraft: boolean,
-  documentNumber: string,
+  documentNumber: string | undefined,
   transportType: TransportType,
   nextUri: string
 ) => {
@@ -156,7 +160,9 @@ export const CatchCertificateTransportationDetailsLoader = async (
         }))
       : [];
 
-    const displayOptionalSuffix = getEnv().EU_CATCH_FIELDS_OPTIONAL === "true";
+    const env = getEnv();
+    const displayOptionalSuffix = env.EU_CATCH_FIELDS_OPTIONAL === "true";
+    const maximumNumberOfContainerNumbers = env.MAXIMUM_CONTAINERS_NUMBER_LENGTH;
 
     const session = await getSessionFromRequest(request);
     const csrf = await createCSRFToken(request);
@@ -171,7 +177,7 @@ export const CatchCertificateTransportationDetailsLoader = async (
       });
     }
 
-    const maximumTransportDocumentPerTransport = parseInt(getEnv().EU_CATCH_MAX_TRANSPORT_DOCUMENTS, 10);
+    const maximumTransportDocumentPerTransport = parseInt(env.EU_CATCH_MAX_TRANSPORT_DOCUMENTS, 10);
 
     let containerNumbers: string[] = transport.containerNumbers ?? [];
     // Initialize with empty string for all transport types that support containerNumbers
@@ -197,6 +203,7 @@ export const CatchCertificateTransportationDetailsLoader = async (
         displayOptionalSuffix,
         maximumTransportDocumentPerTransport,
         countries,
+        maximumNumberOfContainerNumbers,
       }),
       {
         status: 200,
@@ -235,12 +242,12 @@ export const CatchCertificateTransportationDetailsAction = async (
     ? (form.get("freightBillNumber") as string)
     : undefined;
   const nextUri = form.get("nextUri") as string;
-
+  const env = getEnv();
   const payload: ITransport = {
     vehicle: transportType,
     departurePlace: departurePlace,
     freightBillNumber: freightBillNumber,
-    ...buildTransportPayload(transportType, form),
+    ...buildTransportPayload(transportType, form, parseInt(env.MAXIMUM_CONTAINERS_NUMBER_LENGTH, 10)),
   };
 
   const postTransport: ITransport = await updateTransportDetails(
@@ -672,7 +679,7 @@ export const commonSaveTransportDetails = async (
   }
   const progressRoute = payload.arrival
     ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", { documentNumber })
-    : route("/create-non-manipulation-document/:documentNumber/check-your-information", { documentNumber });
+    : route("/create-non-manipulation-document/:documentNumber/departure-product-summary", { documentNumber });
 
   // Redirect to dashboard after saving valid fields
   if (saveAsDraft) return redirect(saveAsDraftRoute);
@@ -701,12 +708,15 @@ export const commonSaveTransportDetails = async (
   return redirect(finalRedirect);
 };
 
-export const extractContainerNumbers = (values: Record<string, any>): string[] => {
+export const extractContainerNumbers = (
+  values: Record<string, any>,
+  maximumNumberOfContainerNumbers: number = 10
+): string[] => {
   const containerNumbers: string[] = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < maximumNumberOfContainerNumbers; i++) {
     const key = `containerNumbers.${i}`;
     const value = values[key];
-    if (value !== undefined && value !== "") {
+    if (value !== undefined) {
       containerNumbers.push(value);
     }
   }
