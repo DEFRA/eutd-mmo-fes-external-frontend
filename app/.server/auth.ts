@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import querystring from "querystring";
-import * as https from "https";
-import crypto from "crypto";
+import querystring from "node:querystring";
+import * as https from "node:https";
+import crypto from "node:crypto";
 import { type TypedResponse, redirect, type Session } from "react-router";
 import { getEnv } from "~/env.server";
 import { type CallbackParamsType, Issuer, type TokenSet, type BaseClient, custom } from "openid-client";
