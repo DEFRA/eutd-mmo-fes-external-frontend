@@ -242,7 +242,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get('input[name="containerNumbers.1"]').should("have.value", "X");
   });
 
-  it("should navigate to check-your-information page on click of save and continue button", () => {
+  it("should navigate to departure summary page on click of save and continue button", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSave,
     };
@@ -251,7 +251,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#registrationNumber").type("Registration", { force: true });
     cy.get("#departurePlace").type("Hull", { force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
-    cy.url().should("include", "/check-your-information");
+    cy.url().should("include", "/departure-product-summary");
   });
 });
 
