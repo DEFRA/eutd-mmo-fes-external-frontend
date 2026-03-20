@@ -47,17 +47,12 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (!isValid) return redirect("/forbidden");
 
   const saveAsDraft = form.get("_action") === "saveAsDraft";
-  const exportedToCountryName = form.get("exportedTo") as string;
   const pointOfDestination = form.get("pointOfDestination") as string;
-  const railwayBillNumber = form.get("railwayBillNumber") as string;
-  const departurePlace = form.get("departurePlace") as string;
-  const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
-
   const nextUri = form.get("nextUri") as string;
 
   const countries: ICountry[] = await getCountries();
   const exportedTo: ICountry | undefined = countries.find(
-    (c: ICountry) => c.officialCountryName === exportedToCountryName
+    (c: ICountry) => c.officialCountryName === (form.get("exportedTo") as string)
   );
 
   const values = Object.fromEntries(form);
@@ -67,13 +62,13 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     currentUri: route("/create-non-manipulation-document/:documentNumber/add-transportation-details-train", {
       documentNumber,
     }),
-    departurePlace: departurePlace,
+    departurePlace: form.get("departurePlace") as string,
     journey: transport.journey,
     exportedTo,
     pointOfDestination,
     nextUri: route("/create-non-manipulation-document/:documentNumber/progress", { documentNumber }),
-    railwayBillNumber: railwayBillNumber,
-    freightBillNumber: freightBillNumber,
+    railwayBillNumber: form.get("railwayBillNumber") as string,
+    freightBillNumber: handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft),
     user_id: transport.user_id,
     vehicle: transport.vehicle,
     exportDate: calculateExportDate(form),
