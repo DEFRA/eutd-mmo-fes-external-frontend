@@ -79,7 +79,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     exportDate: calculateExportDate(form),
     exportDateTo: moment().startOf("day").add(1, "day").toISOString(),
     containerNumbers,
-    facilityArrivalDate: "facilityArrivalDate" in storageDocument ? storageDocument.facilityArrivalDate : null,
+    facilityArrivalDate: "facilityArrivalDate" in storageDocument ? storageDocument.facilityArrivalDate : undefined,
     arrival: isDepartureTransportation,
   };
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);
