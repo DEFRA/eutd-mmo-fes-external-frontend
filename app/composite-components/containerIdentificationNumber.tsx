@@ -111,7 +111,7 @@ export const ContainerIdentificationNumber = ({
     if (vehicleType === "train") return t("addTransportationDetailsContainerIdentificationNumberTrainHint");
     if (vehicleType === "containerVessel")
       return t("addTransportationArrivalDetailsContainerIdentificationNumberHintContainerVessel");
-    return t("addTransportationArrivalDetailsContainerIdentificationNumberHint");
+    return t("addTransportationDetailsContainerIdentificationNumberHint");
   };
 
   return (
