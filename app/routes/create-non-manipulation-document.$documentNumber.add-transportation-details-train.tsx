@@ -21,20 +21,15 @@ import { useScrollOnPageLoad } from "~/hooks";
 import { AddTransportationDetailsComponent } from "~/composite-components";
 import moment from "moment";
 
+const journey: Journey = "storageNotes";
 const isDepartureTransportation = false;
+
 export const loader: LoaderFunction = async ({ request, params }) =>
-  await TransportationDetailsLoaderFunction(
-    request,
-    params,
-    TransportType.TRAIN,
-    "storageNotes",
-    isDepartureTransportation
-  );
+  await TransportationDetailsLoaderFunction(request, params, TransportType.TRAIN, journey, isDepartureTransportation);
 
 export const action: ActionFunction = async ({ request, params }): Promise<Response | ErrorResponse> => {
   const bearerToken = await getBearerTokenForRequest(request);
   const { documentNumber } = params;
-  const journey: Journey = "storageNotes";
   const transport: ITransport = await getTransportDetails(
     bearerToken,
     journey,
