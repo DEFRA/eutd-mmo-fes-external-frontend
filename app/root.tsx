@@ -94,6 +94,7 @@ const Template = ({
   clarityProjectId,
   children,
   analyticsCookieAccepted,
+  supportContactNumber,
 }: React.PropsWithChildren<IMainAppProps>) => {
   const ref = useRef<HTMLSpanElement>(null);
   const { pathname } = useLocation();
@@ -177,6 +178,11 @@ const Template = ({
     <html className="govuk-template govuk-template--rebranded" lang={locale} dir={i18n.dir()}>
       <head>
         <Meta />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.__contactNumber__ = ${JSON.stringify(supportContactNumber)};`,
+          }}
+        />
         <Links />
       </head>
       <body className="govuk-template__body govuk-body">

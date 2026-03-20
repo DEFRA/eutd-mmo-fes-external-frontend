@@ -258,3 +258,7 @@ npm run debug              # Start with Node inspector
 - `app/types/tests.ts`: Test case ID enum
 - `tests/msw/handlers/index.ts`: Central MSW handler registry
 - `vite.config.mts`: Vite/Remix configuration (code instrumentation for tests)
+
+## Skills
+
+Use `/develop` for implementation, coding, and research tasks. Use `/unit-tests` for writing Cypress tests, MSW handlers, and coverage.

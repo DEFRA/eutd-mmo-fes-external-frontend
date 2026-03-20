@@ -36,12 +36,14 @@ const AddTransportationDetailsPlane = () => {
     csrf,
     id,
     displayOptionalSuffix,
+    maximumNumberOfContainerNumbers,
   } = useLoaderData<
     ITransport & {
       documentNumber: string;
       nextUri: string;
       displayOptionalSuffix: boolean;
       csrf: string;
+      maximumNumberOfContainerNumbers: number;
     }
   >();
   const actionData = useActionData() ?? {};
@@ -50,7 +52,7 @@ const AddTransportationDetailsPlane = () => {
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-plane/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
-  const errorKeysInOrder = getTransportErrorKeys(TransportType.PLANE);
+  const errorKeysInOrder = getTransportErrorKeys(TransportType.PLANE, maximumNumberOfContainerNumbers);
   useTransportationDetailsPage(errors);
   const errorMessagesForDisplay = displayErrorMessagesInOrder(errors, errorKeysInOrder);
 
@@ -73,6 +75,7 @@ const AddTransportationDetailsPlane = () => {
               departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
               displayOptionalSuffix={displayOptionalSuffix}
+              maximumNumberOfContainerNumbers={maximumNumberOfContainerNumbers}
             />
             <ButtonGroup />
             <input type="hidden" name="vehicle" value={vehicle} />

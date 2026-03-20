@@ -20,6 +20,8 @@ import exporterFullNameMaxLengthErrorResponse from "@/fixtures/addExporterDetail
 import exporterFullNamePatternErrorResponse from "@/fixtures/addExporterDetails/exporterFullNamePatternErrorResponse.json";
 import exporterCompanyNameMaxLengthErrorResponse from "@/fixtures/addExporterDetails/exporterCompanyNameMaxLengthErrorResponse.json";
 import exporterCompanyNamePatternErrorResponse from "@/fixtures/addExporterDetails/exporterCompanyNamePatternErrorResponse.json";
+import exporterFullNameEmojiErrorResponse from "@/fixtures/addExporterDetails/exporterFullNameEmojiErrorResponse.json";
+import exporterCompanyNameEmojiErrorResponse from "@/fixtures/addExporterDetails/exporterCompanyNameEmojiErrorResponse.json";
 import exporterDetailsNoAddress from "@/fixtures/addExporterDetails/exporterDetailsNoAddress.json";
 import addedSpecies from "@/fixtures/addExporterDetails/addedSpecies.json";
 import manualEntryLandingsType from "@/fixtures/landingsTypeApi/manualEntry.json";
@@ -165,6 +167,20 @@ const addCCExporterDetailsHandler: ITestHandler = {
   [TestCaseId.CCAddExporterDetails403]: () => [
     rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) =>
       res(ctx.status(403), ctx.json(exporterResponse))
+    ),
+  ],
+  [TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameEmoji]: () => [
+    rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(exporterDetails))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(exporterFullNameEmojiErrorResponse))
+    ),
+  ],
+  [TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameEmoji]: () => [
+    rest.get(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(exporterDetails))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.post(getAddExporterDetailsUrl("catchCertificate"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(exporterCompanyNameEmojiErrorResponse))
     ),
   ],
   [TestCaseId.CCAddExporterDetailsNoAddress]: () => [
