@@ -9,11 +9,11 @@ import {
   type MetaFunction,
 } from "react-router";
 import { useTranslation } from "react-i18next";
-import type { ITransport, ErrorResponse, ICountry, IErrorsTransformed } from "~/types";
+import type { ITransport, ErrorResponse, ICountry } from "~/types";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
-import { useTransportationDetailsPage, getTransportErrorKeys } from "~/hooks";
+import { useTransportationDetailsPage, getTransportErrorKeys, useErrorsOverride } from "~/hooks";
 
 export const meta: MetaFunction = (args) => getMeta(args);
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -49,12 +49,7 @@ const TruckTransportDetailsPage = () => {
     }
   >();
   const actionData = useActionData<any>() ?? {};
-  const { errors: actionErrors = {} } = actionData;
-  const [errorsOverride, setErrorsOverride] = React.useState<IErrorsTransformed | undefined>(undefined);
-  const errors = errorsOverride ?? actionErrors;
-  React.useEffect(() => {
-    setErrorsOverride(undefined);
-  }, [actionData]);
+  const { errors, setErrorsOverride } = useErrorsOverride(actionData?.errors);
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 

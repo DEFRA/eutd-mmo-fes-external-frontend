@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import type { ErrorResponse, ITransport, IErrorsTransformed } from "~/types";
 import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";
-import { useTransportationDetailsPage, getTransportErrorKeys } from "~/hooks";
+import { useTransportationDetailsPage, getTransportErrorKeys, useErrorsOverride } from "~/hooks";
 
 export const meta: MetaFunction = (args) => getMeta(args);
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -47,12 +47,7 @@ const ContainerVesselTransportDetailsPage = () => {
     }
   >();
   const actionData = useActionData() ?? {};
-  const { errors: actionErrors = {} } = actionData as { errors?: IErrorsTransformed };
-  const [errorsOverride, setErrorsOverride] = React.useState<IErrorsTransformed | undefined>(undefined);
-  const errors = errorsOverride ?? actionErrors;
-  React.useEffect(() => {
-    setErrorsOverride(undefined);
-  }, [actionData]);
+  const { errors, setErrorsOverride } = useErrorsOverride((actionData as { errors?: IErrorsTransformed })?.errors);
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-container-vessel/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 

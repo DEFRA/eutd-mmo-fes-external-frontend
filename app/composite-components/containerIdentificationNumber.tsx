@@ -4,6 +4,7 @@ import { useState } from "react";
 import classNames from "classnames";
 import isEmpty from "lodash/isEmpty";
 import { getContainerErrorClassName, getContainerInputData, getErrorMessageClassName } from "~/helpers";
+import { reindexContainerErrors } from "~/helpers/errorReindexing";
 import type { ContainerInput, IErrorsTransformed } from "~/types";
 import { v4 as uuidv4 } from "uuid";
 import { useIsHydrated } from "~/hooks";
@@ -42,29 +43,6 @@ export const ContainerIdentificationNumber = ({
       : [{ id: generateId(), value: "" }]
   );
 
-  const removeContainerErrorAtIndex = (currentErrors: IErrorsTransformed, removedIndex: number): IErrorsTransformed => {
-    const updatedErrors: IErrorsTransformed = {};
-
-    Object.entries(currentErrors).forEach(([key, value]) => {
-      const containerMatch = key.match(/^containerNumbers\.(\d+)$/);
-
-      if (!containerMatch) {
-        updatedErrors[key] = value;
-        return;
-      }
-
-      const currentIndex = Number(containerMatch[1]);
-      if (currentIndex === removedIndex) {
-        return;
-      }
-
-      const nextKey = currentIndex > removedIndex ? `containerNumbers.${currentIndex - 1}` : key;
-      updatedErrors[nextKey] = value;
-    });
-
-    return updatedErrors;
-  };
-
   const handleAddContainer = () => {
     if (containerInputs.length < maximumContainers) {
       setContainerInputs((prev) => [...prev, { id: generateId(), value: "" }]);
@@ -78,7 +56,7 @@ export const ContainerIdentificationNumber = ({
       setContainerInputs((prev) => prev.filter((input) => input.id !== id));
 
       if (errors && index >= 0) {
-        onErrorsChange?.(removeContainerErrorAtIndex(errors, index));
+        onErrorsChange?.(reindexContainerErrors(errors, index));
       }
     }
   };

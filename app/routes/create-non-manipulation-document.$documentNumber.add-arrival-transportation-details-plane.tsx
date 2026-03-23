@@ -2,9 +2,8 @@ import * as React from "react";
 import { useActionData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
 
 import { route } from "routes-gen";
-import { useEffect } from "react";
 import type { ITransport, ErrorResponse, ICountry } from "~/types";
-import { scrollToId, TransportType } from "~/helpers";
+import { TransportType } from "~/helpers";
 import {
   getBearerTokenForRequest,
   getCountries,
@@ -17,7 +16,6 @@ import {
   handleContainerActions,
   handleFormEmptyStringValue,
 } from "~/.server";
-import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
 import { AddTransportationArrivalDetailsComponent } from "~/composite-components/addTransportationArrivalDetailsComponent";
 
@@ -91,14 +89,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 };
 
 const PlaneTransportArrivalDetailsPage = () => {
-  const actionData = useActionData() ?? {};
-  const errors = actionData?.errors ?? {};
+  const actionData = useActionData<any>() ?? {};
   useScrollOnPageLoad();
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      scrollToId("errorIsland");
-    }
-  }, [errors]);
 
   return <AddTransportationArrivalDetailsComponent vehicleType={TransportType.PLANE} actionData={actionData} />;
 };
