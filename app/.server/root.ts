@@ -13,7 +13,7 @@ export const getRootData = async (request: Request): Promise<IMainAppProps> => {
   const currentPageData = pages[pageName];
 
   const homeLink = currentPageData?.homeLink ?? "catch-certificate";
-  const headerTitleKey = `${homeLink === "/" ? "journeyTitle_catch-certificate" : `journeyTitle_${homeLink}`}`;
+  const headerTitleKey = homeLink === "/" ? "journeyTitle_catch-certificate" : `journeyTitle_${homeLink}`;
   const headerTitleTo = homeLink === "/" ? "/" : `/create-${homeLink}/${homeLink}s`;
 
   const disableScripts = !isProdEnv() ? new URL(request.url).searchParams.get("disableScripts") : false;

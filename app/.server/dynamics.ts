@@ -72,7 +72,8 @@ const getDynamicsContactAccountUrl = (contactId: string) => {
 
   const roleIds = [roleId.citizen, roleId.employee, roleId.agentCustomer];
 
-  params.$filter += ` and ( ${roleIds.map((roleId) => `_record1roleid_value eq ${roleId}`).join(" or ")} ) `;
+  const roleFilters = roleIds.map((roleId) => `_record1roleid_value eq ${roleId}`).join(" or ");
+  params.$filter += ` and ( ${roleFilters} ) `;
 
   return buildUrl("connections", params);
 };
