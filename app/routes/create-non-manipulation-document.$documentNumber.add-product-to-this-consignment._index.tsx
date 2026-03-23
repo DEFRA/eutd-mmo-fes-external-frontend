@@ -47,6 +47,7 @@ import type {
   ICountry,
 } from "~/types";
 import { querySpecies, getCodeFromLabel, displayErrorMessagesInOrder, scrollToId } from "~/helpers";
+import { reindexDocumentErrors } from "~/helpers/errorReindexing";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { route } from "routes-gen";
 import isEmpty from "lodash/isEmpty";
@@ -508,29 +509,6 @@ const AddProductIndex = () => {
   // Track if we've already done the initial reset to prevent it from running repeatedly
   const hasPerformedInitialReset = useRef(false);
 
-  const removeDocumentErrorAtIndex = (currentErrors: any, removedIndex: number): any => {
-    const updatedErrors: any = {};
-
-    Object.entries(currentErrors).forEach(([key, value]) => {
-      const docMatch = key.match(new RegExp(`^${supportingDocumentsKey}-(\\d+)$`));
-
-      if (!docMatch) {
-        updatedErrors[key] = value;
-        return;
-      }
-
-      const currentIndex = Number(docMatch[1]);
-      if (currentIndex === removedIndex) {
-        return;
-      }
-
-      const nextKey = currentIndex > removedIndex ? `${supportingDocumentsKey}-${currentIndex - 1}` : key;
-      updatedErrors[nextKey] = value;
-    });
-
-    return updatedErrors;
-  };
-
   // Reset to 1 field after hydration if it was initialized with 5 empty fields (non-JS mode)
   // ONLY do this ONCE on initial hydration - use ref to track and prevent repeated resets
   useEffect(() => {
@@ -569,7 +547,7 @@ const AddProductIndex = () => {
 
       if (!isEmpty(errors)) {
         // Remove any errors associated with the removed supporting document and reindex higher ones
-        const updatedErrors = removeDocumentErrorAtIndex(errors, index);
+        const updatedErrors = reindexDocumentErrors(errors, index, supportingDocumentsKey);
         // Update actionData errors to reflect the reindexed state
         Object.keys(errors).forEach((key) => delete errors[key]);
         Object.assign(errors, updatedErrors);
