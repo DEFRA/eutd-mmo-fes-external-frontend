@@ -3,6 +3,17 @@ import { type ITestParams, TestCaseId } from "~/types";
 const certificateUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
 const progressUrl = `${certificateUrl}/progress`;
 
+describe("ProgressPage - Cache-Control header", () => {
+  it("should return Cache-Control: no-store to prevent stale progress state on back navigation (FI0-11073)", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSIncompleteProgress,
+    };
+    cy.intercept("GET", progressUrl + "*").as("progressPage");
+    cy.visit(progressUrl, { qs: { ...testParams } });
+    cy.wait("@progressPage").its("response.headers").should("have.property", "cache-control", "no-store");
+  });
+});
+
 describe("ProgressPage - Incomplete Application", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
