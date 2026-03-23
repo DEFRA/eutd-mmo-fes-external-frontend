@@ -243,6 +243,23 @@ export const CatchCertificateTransportationDetailsAction = async (
     : undefined;
   const nextUri = form.get("nextUri") as string;
   const env = getEnv();
+
+  if (!saveDraft) {
+    const formValues = Object.fromEntries(form);
+    const maxContainers = parseInt(env.MAXIMUM_CONTAINERS_NUMBER_LENGTH, 10);
+    const containerNumberErrors: IError[] = [];
+    for (let i = 0; i < maxContainers; i++) {
+      const key = `containerNumbers.${i}`;
+      const value = formValues[key];
+      if (typeof value === "string" && value.trim() !== "" && value.trim().split(/\s+/).length > 1) {
+        containerNumberErrors.push({ key, message: "ccContainerNumberMultipleValuesError" });
+      }
+    }
+    if (containerNumberErrors.length > 0) {
+      return apiCallFailed(containerNumberErrors, formValues);
+    }
+  }
+
   const payload: ITransport = {
     vehicle: transportType,
     departurePlace: departurePlace,

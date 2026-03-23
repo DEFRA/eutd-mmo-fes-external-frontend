@@ -97,6 +97,7 @@
   "ccContainerVesselContainerNumberRequiredError": "Enter the shipping container identification number",
   "ccContainerVesselContainerNumberLabelError": "Enter the shipping container identification number",
   "ccContainerNumberDuplicateError": "The shipping container number has already been used. Enter a different identification number.",
+  "ccContainerNumberMultipleValuesError": "Enter only one container identification number in each field",
   "commonRoadTransportDocumentError": "Select yes if you have a road transport document to go with this export",
   "ccProductFavouritesPageErrorDuplicate": "The combination of species, state, presentation and commodity code must be unique for each product",
   "ccProductFavouritesPageErrorCommodityCode": "Select a commodity code",
