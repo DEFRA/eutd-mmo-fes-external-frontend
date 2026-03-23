@@ -404,6 +404,10 @@ const onSaveTransportDetails = async (response: Response, payload?: ITransport):
             errorsResponse[error] = "error.departureDate.any.required";
           }
         }
+
+        if (payload?.vehicle === "plane") {
+          errorsResponse[error] = errorsResponse[error].replaceAll(".containerNumbers", ".containerNumbers.plane");
+        }
       });
 
       return {
