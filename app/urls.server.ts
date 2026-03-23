@@ -119,16 +119,16 @@ export const getTransportDetailsUrl = (journey: Journey, arrival?: boolean) =>
   `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/transport/details/${journey}?arrival=${arrival}`;
 
 export const getTransportByIdUrl = (transportId: string, subResource?: string) =>
-  `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/catch-certificate/transport/${transportId}${subResource ? `/${subResource}` : ""}`;
+  `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/catch-certificate/transport/${transportId}${subResource ? "/" + subResource : ""}`;
 
 export const updateTransportDetailsByIdUrl = (transportId: string, isDraft?: boolean) =>
-  `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/catch-certificate/transport-details/${transportId}${isDraft ? `?draft=${isDraft}` : ""}`;
+  `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/catch-certificate/transport-details/${transportId}${isDraft ? "?draft=true" : ""}`;
 
 export const deleteTransportByIdUrl = (transportId: string) =>
   `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/catch-certificate/transport/${transportId}`;
 
 export const updateTransportDocumentsByIdUrl = (transportId: string, isDraft?: boolean) =>
-  `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/catch-certificate/transport-documents/${transportId}${isDraft ? `?draft=${isDraft}` : ""}`;
+  `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/catch-certificate/transport-documents/${transportId}${isDraft ? "?draft=true" : ""}`;
 
 export const getProgressUrl = (journey: Journey) => `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/progress/${journey}`;
 
