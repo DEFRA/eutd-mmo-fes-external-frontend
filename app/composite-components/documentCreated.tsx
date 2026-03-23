@@ -1,5 +1,5 @@
 import type { Journey } from "~/types";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, PrefetchPageLinks, useLoaderData } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { route } from "routes-gen";
 import { Main } from "~/components";
@@ -168,7 +168,8 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
           <li>{t(translationTags[journey].emailToImporterText2)}</li>
         </ul>
       </div>
-      <Link to={createLink} className="govuk-link">
+      <PrefetchPageLinks page={createLink} />
+      <Link to={createLink} className="govuk-link" prefetch="render">
         {t(translationTags[journey].createNewLink)}
       </Link>
     </>
@@ -190,7 +191,8 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
           </ul>
         </li>
       </ol>
-      <Link to={createLink} className="govuk-link">
+      <PrefetchPageLinks page={createLink} />
+      <Link to={createLink} className="govuk-link" prefetch="render">
         {t(translationTags[journey].createNewLink)}
       </Link>
     </>
