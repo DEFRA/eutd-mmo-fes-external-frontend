@@ -33,7 +33,7 @@ Frontend for the Fish Export Service (FES), using Remix (React-based web framewo
 
 ## Explore the folder structure
 
-```
+```bash
 mmo-cc-fe-v2
 ├── README.md
 ├── app
@@ -88,7 +88,7 @@ Let's talk briefly about a few of these files:
 (\*) The routes are the entry points of the app. Please use a flat structure when possible. Avoid to use index.tsx when possible
 (\*\*) Most of the styles files in this folder are coming from "govuk-frontend" package and are the result of the
 
-```
+```bash
  "sass": "sass --watch ./node_modules/govuk-frontend/govuk:app/styles"
 ```
 
@@ -102,7 +102,7 @@ The environment variables are used to configure the app.
 
 Add contents of `.envSample` to `.env`
 
-```
+```bash
 example:
 MMO_ECC_ORCHESTRATION_SVC_URL=http://localhost:5500
 MMO_ECC_REFERENCE_SVC_URL=http://localhost:9000
@@ -308,7 +308,7 @@ export enum TestCaseId {
 
 The values themselves don't matter as long as they are unique and descriptive. These values will be used as query-string parameters during the test run. For example, Cypress will make a request to a page like so:
 
-```
+```html
 http://localhost:3000/create-catch-certificate/GBR-2022-CC-488FE89C1/progress?testCaseId=ccUploadEntryProgressData
 ```
 
