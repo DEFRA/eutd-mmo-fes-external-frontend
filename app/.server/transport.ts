@@ -26,14 +26,11 @@ export const getTransportations = async (bearerToken: string, documentNumber?: s
 };
 
 const onGetTransportations = async (response: Response): Promise<ITransport[]> => {
-  switch (response.status) {
-    case 200: {
-      const transportations: ITransport[] = await response.json();
-      return transportations;
-    }
-    default:
-      throw new Error(`Unexpected error: ${response.status}`);
+  if (response.status === 200) {
+    const transportations: ITransport[] = await response.json();
+    return transportations;
   }
+  throw new Error(`Unexpected error: ${response.status}`);
 };
 
 export const getTransportDetails = async (
