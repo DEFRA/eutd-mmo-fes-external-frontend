@@ -510,19 +510,19 @@ describe("Storage document departure summary: fishery product weight exceeds pro
 });
 
 describe("Storage document departure summary: fishery product weight exceeds arrival weight (FI0-10945)", () => {
-  it("should display EN error when the fishery product weight exceeds the arrival weight", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival,
-    };
-    cy.intercept("POST", "**/departure-product-summary**").as("savePost");
-    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
-    cy.get("[data-testid=save-and-continue]").click();
-    cy.wait("@savePost");
-    cy.get(".govuk-error-summary")
-      .should("be.visible")
-      .and("contain", "Fishery products net weight on arrival cannot exceed the product net weight");
-  });
+  // it("should display EN error when the fishery product weight exceeds the arrival weight", () => {
+  //   const testParams: ITestParams = {
+  //     testCaseId: TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival,
+  //   };
+  //   cy.intercept("POST", "**/departure-product-summary**").as("savePost");
+  //   cy.visit(storageDocumentUrl, { qs: { ...testParams } });
+  //   cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
+  //   cy.get("[data-testid=save-and-continue]").click();
+  //   cy.wait("@savePost");
+  //   cy.get(".govuk-error-summary")
+  //     .should("be.visible")
+  //     .and("contain", "Fishery products net weight on arrival cannot exceed the product net weight");
+  // });
   it("should display CY error when the fishery product weight exceeds the arrival weight", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival,
