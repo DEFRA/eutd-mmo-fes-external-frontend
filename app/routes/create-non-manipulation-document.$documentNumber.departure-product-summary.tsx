@@ -270,7 +270,7 @@ const buildFilteredDepartureValues = async (
   const filteredValues = { ...values };
   if (!(validationResponse instanceof Response)) return filteredValues;
 
-  const responseData = await (validationResponse as Response).clone().json();
+  const responseData = await validationResponse.clone().json();
   const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
 
   const catchWeightPattern = /^catches-(\d+)-(netWeightProductDeparture|netWeightFisheryProductDeparture)$/;
