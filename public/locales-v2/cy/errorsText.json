@@ -100,6 +100,7 @@
   "ccContainerVesselContainerNumberLabelError": "Rhowch y rhif neu'r rhifau adnabod cynhwysydd llong",
   "ccContainerNumberDuplicateError": "Mae'r rhif cynhwysydd llong wedi'i ddefnyddio’n barod. Rhowch rif adnabod gwahanol",
   "ccProductFavouritesPageErrorDuplicate": "Rhaid i’r cyfuniad o rywogaethau, cyflwr, cyflwyniad a chod nwyddau fod yn unigryw ar gyfer pob cynnyrch",
+  "ccShippingContainerNumberDuplicateError": "Mae'r rhif adnabod cynhwysydd llong wedi'i ddefnyddio'n barod. Rhowch rif adnabod gwahanol.",
   "ccProductFavouritesPageErrorCommodityCode": "Dewiswch god nwyddau",
   "commonProgressExporterRequiredError": "Rhaid i chi gwblhau adran manylion yr allforiwr cyn bwrw ymlaen",
   "sdProgressStorageFacilitiesRequiredError": "Rhaid i chi gwblhau adran cyfleusterau storio cyn bwrw ymlaen",
