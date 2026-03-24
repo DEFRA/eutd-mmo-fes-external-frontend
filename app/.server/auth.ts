@@ -95,9 +95,11 @@ export const autoEnrollUserForService = async (contactId: string, tokenSet: Toke
         dynamicsToken,
         enrolmentRequest.connectionDetailsId,
         enrolmentStatus.completeApproved,
-        enrolmentRequest.accountId,
-        ENV.IDENTITY_SERVICEID,
-        ENV.IDENTITY_SERVICEROLEID
+        {
+          organisationAccountId: enrolmentRequest.accountId,
+          lobServiceId: ENV.IDENTITY_SERVICEID,
+          lobServiceRoleId: ENV.IDENTITY_SERVICEROLEID,
+        }
       )
     )
   );
