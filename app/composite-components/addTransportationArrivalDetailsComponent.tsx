@@ -1,10 +1,12 @@
 import { Main, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLoaderData } from "react-router";
 import { ButtonGroup } from "./buttonGroup";
 import type { ITransport, IErrorsTransformed, Vehicle, ICountry } from "~/types";
 import { route } from "routes-gen";
 import isEmpty from "lodash/isEmpty";
+import { useScrollOnPageLoad, useErrorsOverride } from "~/hooks";
 import {
   displayErrorMessagesInOrder,
   getContainerNumber,
@@ -13,6 +15,7 @@ import {
   TransportType,
   getDepartureDate,
   getDepartureCountry,
+  scrollToId,
   getVesselName,
   getFlagState,
   getRailwayBillNumber,
@@ -30,15 +33,21 @@ import { TransportationArrivalDetails } from "./transportationArrivalDetails";
 type AddArrivalTransporrtationDetailsProps = {
   actionData: any;
   vehicleType: Vehicle;
+  errors?: IErrorsTransformed;
+  onErrorsChange?: (updatedErrors: IErrorsTransformed) => void;
 };
 
 export const AddTransportationArrivalDetailsComponent = ({
   vehicleType,
   actionData,
+  errors: propsErrors,
+  onErrorsChange,
 }: AddArrivalTransporrtationDetailsProps) => {
   const { t } = useTranslation("transportation");
-  const { errors = {}, departureDateDay, departureDateMonth, departureDateYear } = actionData;
+  const { errors: actionErrors = {}, departureDateDay, departureDateMonth, departureDateYear } = actionData;
+  const { errors, setErrorsOverride } = useErrorsOverride(propsErrors ?? actionErrors);
   const departureDateFromAction = getDepartureDateFromAction(departureDateDay, departureDateMonth, departureDateYear);
+
   const {
     documentNumber,
     vehicle,
@@ -156,13 +165,24 @@ export const AddTransportationArrivalDetailsComponent = ({
     "placeOfUnloading",
   ];
 
+  useScrollOnPageLoad();
+  useEffect(() => {
+    if (!isEmpty(errors)) {
+      scrollToId("errorIsland");
+    }
+  }, [errors]);
+
   return (
     <Main backUrl={backUrl}>
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" csrf={csrf}>
-            <TransportationArrivalDetails {...componentAttributes} useBoldLabels={true} />
+            <TransportationArrivalDetails
+              {...componentAttributes}
+              useBoldLabels={true}
+              onErrorsChange={onErrorsChange ?? setErrorsOverride}
+            />
             <ButtonGroup />
             <input type="hidden" name="vehicle" value={vehicle} />
             <input type="hidden" name="nextUri" value={nextUri} />

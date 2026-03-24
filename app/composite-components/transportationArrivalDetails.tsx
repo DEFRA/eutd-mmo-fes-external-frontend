@@ -24,11 +24,13 @@ export const ArrivalTransportationModeDetails = ({
   errors,
   countries,
   displayOptionalSuffix,
+  onErrorsChange,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
   countries: ICountry[];
   displayOptionalSuffix: boolean;
+  onErrorsChange?: (updatedErrors: IErrorsTransformed) => void;
 }) => {
   const { t } = useTranslation("transportation");
 
@@ -236,6 +238,7 @@ export const ArrivalTransportationModeDetails = ({
           vehicleType={vehicle}
           labelKey={vehicle === "truck" ? "addTransportationDetailsContainerIdentificationNumberTruck" : undefined}
           hintKey={vehicle === "truck" ? "addTransportationDetailsContainerIdentificationNumberHintTruck" : undefined}
+          onErrorsChange={onErrorsChange}
         />
       )}
     </>
@@ -263,12 +266,14 @@ export const TransportationArrivalDetails = ({
   displayOptionalSuffix,
   placeOfUnloading,
   useBoldLabels = false,
+  onErrorsChange,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
   countries: ICountry[];
   displayOptionalSuffix: boolean;
   useBoldLabels?: boolean;
+  onErrorsChange?: (updatedErrors: IErrorsTransformed) => void;
 }) => {
   const { t } = useTranslation("transportation");
   return (
@@ -289,6 +294,7 @@ export const TransportationArrivalDetails = ({
         errors={errors}
         countries={countries}
         displayOptionalSuffix={displayOptionalSuffix}
+        onErrorsChange={onErrorsChange}
       />
       <FormInput
         name="freightBillNumber"
@@ -444,6 +450,7 @@ export const TransportationArrivalDetails = ({
           vehicleType={vehicle}
           labelKey="addTransportationDetailsContainerIdentificationNumberTrain"
           hintKey="addTransportationDetailsContainerIdentificationNumberTrainHint"
+          onErrorsChange={onErrorsChange}
         />
       )}
     </fieldset>

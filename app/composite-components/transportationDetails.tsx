@@ -35,6 +35,7 @@ export const TransportationModeDetails = ({
   errors,
   countries,
   useBoldLabels = false,
+  onErrorsChange,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
@@ -42,6 +43,7 @@ export const TransportationModeDetails = ({
   countries: ICountry[];
   useBoldLabels?: boolean;
   maximumNumberOfContainerNumbers: number;
+  onErrorsChange?: (updatedErrors: IErrorsTransformed) => void;
 }) => {
   const { t } = useTranslation("transportation");
 
@@ -155,6 +157,7 @@ export const TransportationModeDetails = ({
             vehicleType="containerVessel"
             labelKey={"addTransportationDetailsContainerIdentificationNumberContainerVessel"}
             hintKey={"addTransportationDetailsContainerIdentificationNumberHintCommon"}
+            onErrorsChange={onErrorsChange}
           />
         </>
       )}
@@ -189,6 +192,7 @@ export const TransportationModeDetails = ({
             vehicleType="plane"
             labelKey={"addTransportationDetailsContainerIdentificationNumberPlane"}
             hintKey={"addTransportationDetailsContainerIdentificationNumberHintCommon"}
+            onErrorsChange={onErrorsChange}
           />
           <FormInput
             containerClassName="govuk-form-group govuk-!-width-one-half"
@@ -271,6 +275,7 @@ export const TransportationModeDetails = ({
             vehicleType="truck"
             labelKey={"addTransportationDetailsContainerIdentificationNumberTruck"}
             hintKey={"addTransportationDetailsContainerIdentificationNumberHintCommon"}
+            onErrorsChange={onErrorsChange}
           />
         </>
       )}
@@ -312,6 +317,7 @@ export const TransportationModeDetails = ({
             vehicleType="train"
             labelKey={"addTransportationDetailsContainerIdentificationNumberTrain"}
             hintKey={"addTransportationDetailsContainerIdentificationNumberHintCommon"}
+            onErrorsChange={onErrorsChange}
           />
         </>
       )}
@@ -376,6 +382,7 @@ export const TransportationDetails = ({
   formData,
   displayOptionalSuffix,
   useBoldLabels = false,
+  onErrorsChange,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
@@ -383,6 +390,7 @@ export const TransportationDetails = ({
   formData: any;
   displayOptionalSuffix?: boolean;
   useBoldLabels?: boolean;
+  onErrorsChange?: (updatedErrors: IErrorsTransformed) => void;
 }) => {
   const { t } = useTranslation("transportation");
 
@@ -497,6 +505,7 @@ export const TransportationDetails = ({
               vehicleType={vehicle}
               labelKey={cidLabelKey}
               hintKey={cidHintKey}
+              onErrorsChange={onErrorsChange}
             />
           );
         })()}
@@ -648,6 +657,7 @@ export const TransportationDetails = ({
               ? "addTransportationDetailsContainerIdentificationNumberHintContainerVessel"
               : undefined
           }
+          onErrorsChange={onErrorsChange}
         />
       )}
       {vehicle === "truck" && (
