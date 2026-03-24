@@ -510,7 +510,7 @@ describe("Storage document departure summary: fishery product weight exceeds pro
 });
 
 describe("Storage document departure summary: fishery product weight exceeds arrival weight (FI0-10945)", () => {
-  it("should display EN and CY error when the fishery product weight exceeds the arrival weight", () => {
+  it("should display EN error when the fishery product weight exceeds the arrival weight", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival,
     };
@@ -522,6 +522,11 @@ describe("Storage document departure summary: fishery product weight exceeds arr
     cy.get(".govuk-error-summary")
       .should("be.visible")
       .and("contain", "Fishery products net weight on arrival cannot exceed the product net weight");
+  });
+  it("should display CY error when the fishery product weight exceeds the arrival weight", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival,
+    };
 
     cy.intercept("POST", "**/departure-product-summary**").as("savePostCy");
     cy.visit(storageDocumentUrl, { qs: { ...testParams, lng: "cy" } });
