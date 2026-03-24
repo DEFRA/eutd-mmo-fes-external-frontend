@@ -203,6 +203,22 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
       {transport.vehicle === "plane" && (
         <>
           <SummaryListRow
+            keyText={t("addTransportationDetailsAirwayBillNumber", { ns: "transportation" })}
+            value={transport.airwayBillNumber ?? t("commonNotProvided", { ns: "common" })}
+            actions={generateActions(
+              isLocked,
+              `/create-catch-certificate/${documentNumber}/add-transportation-details-plane/${transport.id}?nextUri=${route(
+                "/create-catch-certificate/:documentNumber/check-your-information",
+                {
+                  documentNumber,
+                }
+              )}#airwayBillNumber`,
+              "addTransportationDetailsAirwayBillNumber",
+              "transportation",
+              t
+            )}
+          />
+          <SummaryListRow
             keyText={t("addTransportationDetailsFlightnumber", { ns: "transportation" })}
             value={transport.flightNumber}
             actions={generateActions(

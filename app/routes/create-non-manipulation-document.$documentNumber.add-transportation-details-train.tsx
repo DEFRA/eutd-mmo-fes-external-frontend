@@ -1,9 +1,8 @@
 import * as React from "react";
 import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
 import { route } from "routes-gen";
-import { useEffect } from "react";
 import type { ITransport, Journey, ErrorResponse, ICountry, IUnauthorised, StorageDocument } from "~/types";
-import { scrollToId, TransportType } from "~/helpers";
+import { TransportType } from "~/helpers";
 import {
   getBearerTokenForRequest,
   getTransportDetails,
@@ -16,8 +15,6 @@ import {
   extractContainerNumbers,
   getStorageDocument,
 } from "~/.server";
-import isEmpty from "lodash/isEmpty";
-import { useScrollOnPageLoad } from "~/hooks";
 import { AddTransportationDetailsComponent } from "~/composite-components";
 import moment from "moment";
 
@@ -80,16 +77,7 @@ const TrainTransportDetailsPage = () => {
     countries: ICountry[];
     displayOptionalSuffix?: boolean;
   }>();
-  const actionData = useActionData<{ errors: any }>() ?? {};
-  const { errors = {} } = actionData;
-
-  useScrollOnPageLoad();
-
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      scrollToId("errorIsland");
-    }
-  }, [errors]);
+  const actionData = useActionData<any>() ?? {};
 
   return (
     <AddTransportationDetailsComponent

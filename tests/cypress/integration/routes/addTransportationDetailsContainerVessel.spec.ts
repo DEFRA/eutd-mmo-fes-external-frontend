@@ -132,7 +132,9 @@ describe("Add Transportation Details Container Vessel: Container Identification 
     cy.get("#vesselName").type("Felicity Ace", { force: true });
     cy.get("#flagState").type("Greece", { force: true });
     cy.get("#departurePlace").type("Felixstowe Port", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABC", {
+      force: true,
+    });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains(
@@ -250,7 +252,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
 
     cy.get("#vesselName").type("Felicity Ace", { force: true });
     cy.get("#flagState").type("Greece", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), {
+    cy.get('input[name="containerNumbers.0"]').type("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABC", {
       force: true,
     });
     cy.get("#departurePlace").type("Felixstowe Port", { force: true });
@@ -326,5 +328,81 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
 
     // Only one container left, remove button should not be visible
     cy.get('[data-testid="remove-container-0"]').should("not.exist");
+  });
+
+  it("should properly reindex container inputs when removing middle container", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportSave,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    // Add multiple containers
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+
+    // Fill containers with identifiable values
+    cy.get('input[name="containerNumbers.0"]').type("FIRST0001111", { force: true });
+    cy.get('input[name="containerNumbers.1"]').type("SECOND001111", { force: true });
+    cy.get('input[name="containerNumbers.2"]').type("THIRD0001111", { force: true });
+
+    // Verify all three containers exist
+    cy.get('input[name="containerNumbers.0"]').should("have.value", "FIRST0001111");
+    cy.get('input[name="containerNumbers.1"]').should("have.value", "SECOND001111");
+    cy.get('input[name="containerNumbers.2"]').should("have.value", "THIRD0001111");
+
+    // Remove the middle container (index 1)
+    cy.get('[data-testid="remove-container-1"]').click({ force: true });
+
+    // After removal, verify containers are reindexed correctly
+    cy.get('input[name="containerNumbers.0"]').should("have.value", "FIRST0001111");
+    cy.get('input[name="containerNumbers.1"]').should("have.value", "THIRD0001111");
+    cy.get('input[name="containerNumbers.2"]').should("not.exist");
+  });
+
+  it("should properly reindex container inputs when removing first container", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportSave,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    // Add multiple containers
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+
+    // Fill containers with identifiable values
+    cy.get('input[name="containerNumbers.0"]').type("REMOVE_THIS001", { force: true });
+    cy.get('input[name="containerNumbers.1"]').type("BECOMES_ZERO02", { force: true });
+    cy.get('input[name="containerNumbers.2"]').type("BECOMES_ONE003", { force: true });
+
+    // Remove the first container (index 0)
+    cy.get('[data-testid="remove-container-0"]').click({ force: true });
+
+    // After removal, verify remaining containers are reindexed
+    cy.get('input[name="containerNumbers.0"]').should("have.value", "BECOMES_ZERO02");
+    cy.get('input[name="containerNumbers.1"]').should("have.value", "BECOMES_ONE003");
+  });
+
+  it("should properly reindex container inputs when removing last container", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportSave,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+
+    // Add multiple containers
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    cy.get('[data-testid="add-another-container"]').click({ force: true });
+
+    // Fill containers with identifiable values
+    cy.get('input[name="containerNumbers.0"]').type("KEEP0000FIRST01", { force: true });
+    cy.get('input[name="containerNumbers.1"]').type("KEEP0000SECOND01", { force: true });
+    cy.get('input[name="containerNumbers.2"]').type("REMOVE_LAST0001", { force: true });
+
+    // Remove the last container (index 2)
+    cy.get('[data-testid="remove-container-2"]').click({ force: true });
+
+    // After removal, verify remaining containers are intact
+    cy.get('input[name="containerNumbers.0"]').should("have.value", "KEEP0000FIRST01");
+    cy.get('input[name="containerNumbers.1"]').should("have.value", "KEEP0000SECOND01");
+    cy.get('input[name="containerNumbers.2"]').should("not.exist");
   });
 });

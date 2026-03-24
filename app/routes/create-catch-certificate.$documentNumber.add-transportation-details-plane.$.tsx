@@ -13,7 +13,7 @@ import type { ErrorResponse, IErrorsTransformed, ITransport } from "~/types";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
-import { useTransportationDetailsPage, getTransportErrorKeys } from "~/hooks";
+import { useTransportationDetailsPage, getTransportErrorKeys, useErrorsOverride } from "~/hooks";
 
 export const meta: MetaFunction = (args) => getMeta(args);
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -47,8 +47,7 @@ const AddTransportationDetailsPlane = () => {
     }
   >();
   const actionData = useActionData() ?? {};
-  const { errors = {} } = actionData;
-  const errorsTransformed = errors as IErrorsTransformed;
+  const { errors, setErrorsOverride } = useErrorsOverride((actionData as { errors?: IErrorsTransformed })?.errors);
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-plane/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
@@ -68,7 +67,7 @@ const AddTransportationDetailsPlane = () => {
                 { ns: "transportation" }
               )}`}
               vehicle="plane"
-              errors={errorsTransformed}
+              errors={errors}
               flightNumber={!isEmpty(errors) ? actionData.flightNumber : flightNumber}
               airwayBillNumber={!isEmpty(errors) ? actionData.airwayBillNumber : airwayBillNumber}
               containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
@@ -76,6 +75,7 @@ const AddTransportationDetailsPlane = () => {
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
               displayOptionalSuffix={displayOptionalSuffix}
               maximumNumberOfContainerNumbers={maximumNumberOfContainerNumbers}
+              onErrorsChange={setErrorsOverride}
             />
             <ButtonGroup />
             <input type="hidden" name="vehicle" value={vehicle} />

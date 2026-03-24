@@ -47,6 +47,7 @@ import type {
   ICountry,
 } from "~/types";
 import { querySpecies, getCodeFromLabel, displayErrorMessagesInOrder, scrollToId } from "~/helpers";
+import { reindexDocumentErrors } from "~/helpers/errorReindexing";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { route } from "routes-gen";
 import isEmpty from "lodash/isEmpty";
@@ -505,18 +506,8 @@ const AddProductIndex = () => {
     functionToGetInitialState(initialSupportingDocs, isHydrated, maximumEntryDocsAllowed)
   );
 
-  // Track which original indices have been removed so we can map display indices to original error keys
-  const [removedIndices, setRemovedIndices] = useState<Set<number>>(new Set());
-
   // Track if we've already done the initial reset to prevent it from running repeatedly
   const hasPerformedInitialReset = useRef(false);
-
-  // Reset the removed indices when new errors come in (after form submission)
-  useEffect(() => {
-    if (errors && Object.keys(errors).length > 0) {
-      setRemovedIndices(new Set());
-    }
-  }, [errors]);
 
   // Reset to 1 field after hydration if it was initialized with 5 empty fields (non-JS mode)
   // ONLY do this ONCE on initial hydration - use ref to track and prevent repeated resets
@@ -552,30 +543,16 @@ const AddProductIndex = () => {
 
   const handleRemoveDoc = (index: number) => {
     if (supportingDocuments.length > 1) {
-      // Map current display index to original index
-      const originalIndex = getOriginalIndex(index, removedIndices);
-
       setSupportingDocuments((prev) => prev.filter((_, i) => i !== index));
 
-      // Track that this original index has been removed
-      const newRemovedIndices = new Set(removedIndices);
-      newRemovedIndices.add(originalIndex);
-      setRemovedIndices(newRemovedIndices);
-    }
-  };
-
-  // Helper function to map current display index to original error index
-  const getOriginalIndex = (displayIndex: number, removed: Set<number>): number => {
-    let originalIndex = displayIndex;
-    const sortedRemoved = Array.from(removed).sort((a, b) => a - b);
-
-    for (const removedIdx of sortedRemoved) {
-      if (removedIdx <= originalIndex) {
-        originalIndex++;
+      if (!isEmpty(errors)) {
+        // Remove any errors associated with the removed supporting document and reindex higher ones
+        const updatedErrors = reindexDocumentErrors(errors, index, supportingDocumentsKey);
+        // Update actionData errors to reflect the reindexed state
+        Object.keys(errors).forEach((key) => delete errors[key]);
+        Object.assign(errors, updatedErrors);
       }
     }
-
-    return originalIndex;
   };
 
   const handleInputChange = (index: number, value: string) => {
@@ -780,9 +757,7 @@ const AddProductIndex = () => {
               <EntryDocumentGuidanceText />
               <fieldset className="govuk-fieldset" aria-describedby={`${supportingDocumentsKey}-0-hint`}>
                 {supportingDocuments.map((value: string, index: number) => {
-                  // Map current display index to original error index to show correct errors after removals
-                  const originalIndex = getOriginalIndex(index, removedIndices);
-                  const errorKey = `${supportingDocumentsKey}-${originalIndex}`;
+                  const errorKey = `${supportingDocumentsKey}-${index}`;
                   const hasError = errors?.[errorKey];
 
                   return (
