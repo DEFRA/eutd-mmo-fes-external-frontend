@@ -271,7 +271,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const isNonJs = form.get("isNonJs") === "true";
   const { _action, ...values } = Object.fromEntries(form);
   const isDraft = form.get("_action") === "saveAsDraft";
-  const saveToRedisIfErrors = isDraft;
 
   const isEdit = (_action as string)?.startsWith("edit-");
   const isRemove = (_action as string)?.startsWith("remove-");
@@ -292,7 +291,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       documentNumber,
       "",
       removeIndex,
-      saveToRedisIfErrors,
+      false,
       false,
       isNonJs
     );
@@ -304,19 +303,63 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     return redirect(`/create-non-manipulation-document/${documentNumber}/departure-product-summary`);
   }
 
+  const departureUrl = `/create-non-manipulation-document/${documentNumber}/departure-product-summary`;
+
+  if (isDraft) {
+    // Validate-first: saveToRedisIfErrors=false so nothing is persisted on the first call
+    const validationResponse = await updateStorageDocumentCatchDepartureWeights(
+      bearerToken,
+      documentNumber,
+      values,
+      departureUrl,
+      false, // saveToRedisIfErrors = false (validate only)
+      false,
+      isNonJs
+    );
+
+    const filteredValues = { ...values };
+
+    if (validationResponse instanceof Response) {
+      const responseData = await validationResponse.clone().json();
+      const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+
+      // Map error keys (catches-{i}-netWeightProductDeparture / netWeightFisheryProductDeparture)
+      // back to form field names and clear them so invalid values are not persisted
+      for (const errorKey of errorKeys) {
+        const match = errorKey.match(/^catches-(\d+)-(netWeightProductDeparture|netWeightFisheryProductDeparture)$/);
+        if (match) {
+          const index = match[1];
+          if (match[2] === "netWeightProductDeparture") {
+            filteredValues[`weight-net-weight-product-departure-${index}`] = "";
+          } else {
+            filteredValues[`weight-net-weight-fishery-product-departure-${index}`] = "";
+          }
+        }
+      }
+    }
+
+    await updateStorageDocumentCatchDepartureWeights(
+      bearerToken,
+      documentNumber,
+      filteredValues,
+      departureUrl,
+      true, // saveToRedisIfErrors = true (persist valid fields)
+      false,
+      isNonJs
+    );
+
+    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
+  }
+
   const errorResponse = await updateStorageDocumentCatchDepartureWeights(
     bearerToken,
     documentNumber,
     values,
-    `/create-non-manipulation-document/${documentNumber}/departure-product-summary`,
-    saveToRedisIfErrors,
+    departureUrl,
+    false, // saveToRedisIfErrors = false
     false,
     isNonJs
   );
-
-  if (isDraft) {
-    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
-  }
 
   // If errorResponse is a Response, extract its body as text
   if (errorResponse instanceof Response) {

@@ -84,25 +84,60 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const { _action, ...values } = Object.fromEntries(form);
 
   const isDraft = _action === "saveAsDraft";
-  const saveToRedisIfErrors = isDraft;
-  const errorResponse = await updateStorageDocumentFacility(
-    bearerToken,
-    documentNumber,
-    "/create-non-manipulation-document/:documentNumber/add-storage-facility-approval",
-    saveToRedisIfErrors,
-    undefined,
-    {
-      facilityApprovalNumber: isEmpty(values["approvalNumber"]) ? undefined : (values["approvalNumber"] as string),
-      facilityStorage: isEmpty(values["facilityStorage"]) ? undefined : (values["facilityStorage"] as string),
-    }
-  );
 
-  const session = await getSessionFromRequest(request);
+  const facilityApprovalNumber = isEmpty(values["approvalNumber"]) ? undefined : (values["approvalNumber"] as string);
+  const facilityStorage = isEmpty(values["facilityStorage"]) ? undefined : (values["facilityStorage"] as string);
+  const facilityUrl = "/create-non-manipulation-document/:documentNumber/add-storage-facility-approval";
+  const facilityData = { facilityApprovalNumber, facilityStorage };
+
   if (isDraft) {
+    // Validate-first: saveToRedisIfErrors=false so nothing is persisted on the first call
+    const validationResponse = await updateStorageDocumentFacility(
+      bearerToken,
+      documentNumber,
+      facilityUrl,
+      false, // saveToRedisIfErrors = false (validate only)
+      undefined,
+      facilityData
+    );
+
+    const dataToSave: { facilityApprovalNumber?: string | null; facilityStorage?: string | null } = {
+      ...facilityData,
+    };
+
+    if (validationResponse instanceof Response) {
+      const responseData = await validationResponse.clone().json();
+      const errorKeys = new Set<string>(responseData?.errors ? Object.keys(responseData.errors) : []);
+      // Null out invalid fields so any previously-saved bad values are cleared in Redis
+      if (errorKeys.has("facilityApprovalNumber")) dataToSave.facilityApprovalNumber = null;
+      if (errorKeys.has("facilityStorage")) dataToSave.facilityStorage = null;
+    }
+
+    await updateStorageDocumentFacility(
+      bearerToken,
+      documentNumber,
+      facilityUrl,
+      true, // saveToRedisIfErrors = true (persist valid fields)
+      undefined,
+      dataToSave
+    );
+
+    const session = await getSessionFromRequest(request);
     return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
       headers: { "Set-Cookie": await commitSession(session) },
     });
   }
+
+  const errorResponse = await updateStorageDocumentFacility(
+    bearerToken,
+    documentNumber,
+    facilityUrl,
+    false, // saveToRedisIfErrors = false
+    undefined,
+    facilityData
+  );
+
+  const session = await getSessionFromRequest(request);
 
   if (errorResponse) {
     return errorResponse as Response;
