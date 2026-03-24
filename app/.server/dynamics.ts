@@ -29,7 +29,7 @@ export const roleId = {
 
 const validateResponse = (data: any) => {
   if (!Array.isArray(data.value)) {
-    throw new Error("response has unrecognised JSON");
+    throw new TypeError("response has unrecognised JSON");
   }
 };
 
@@ -163,13 +163,12 @@ export const createEnrolment = async (
   dynamicsToken: string,
   connectionDetailsId: string,
   enrolmentStatus: number,
-  organisationAccountId?: string,
-  lobServiceId?: string,
-  lobServiceRoleId?: string,
-  verified: boolean = false
+  options: { organisationAccountId?: string; lobServiceId?: string; lobServiceRoleId?: string; verified?: boolean } = {}
 ): Promise<any> => {
+  const { organisationAccountId, lobServiceId, lobServiceRoleId, verified = false } = options;
+
   if (!lobServiceRoleId || !lobServiceId) {
-    throw new Error("Either lobServiceRoleId or lobServiceId should be supplied");
+    throw new TypeError("Either lobServiceRoleId or lobServiceId should be supplied");
   }
 
   const payload: any = {
