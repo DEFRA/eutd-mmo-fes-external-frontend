@@ -92,8 +92,8 @@ const saveAsDraftFacility = async (
   if (validationResponse instanceof Response) {
     const responseData = await validationResponse.clone().json();
     const errorKeys = new Set<string>(Object.keys(responseData?.errors ?? {}));
-    if (errorKeys.has("facilityApprovalNumber")) dataToSave.facilityApprovalNumber = null;
-    if (errorKeys.has("facilityStorage")) dataToSave.facilityStorage = null;
+    if (errorKeys.has("storageFacilities-facilityApproval")) dataToSave.facilityApprovalNumber = null;
+    if (errorKeys.has("storageFacilities-facilityStorage")) dataToSave.facilityStorage = null;
   }
 
   await updateStorageDocumentFacility(bearerToken, documentNumber, facilityUrl, true, undefined, dataToSave);

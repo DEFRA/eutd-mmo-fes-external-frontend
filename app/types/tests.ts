@@ -694,6 +694,7 @@ export enum TestCaseId {
   SDAddStorageApprovalInvalidCharactersSaveAsDraft = "sdAddStorageApprovalInvalidCharactersSaveAsDraft",
   SDAddStorageApprovalMaxLengthSaveAsDraft = "sdAddStorageApprovalMaxLengthSaveAsDraft",
   SDAddStorageApprovalNoJs = "sdAddStorageApprovalNoJs",
+  SDAddStorageApprovalSaveAsDraftWithErrors = "sdAddStorageApprovalSaveAsDraftWithErrors",
 
   PSAddCatchWeights = "psAddCatchWeights",
   PSAddCatchWeightUnauthorised = "psAddCatchWeightUnauthorised",

@@ -85,6 +85,13 @@ const addStorageApprovalHandler: ITestHandler = {
       res(ctx.json(storageDocumentFacilityOne))
     ),
   ],
+  [TestCaseId.SDAddStorageApprovalSaveAsDraftWithErrors]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(storageDocumentFacilityApprovalError))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(storageDocuments))),
+  ],
 };
 
 export default addStorageApprovalHandler;

@@ -219,3 +219,16 @@ describe("Add Storage Facility Approval - Forbidden", () => {
     cy.url().should("include", "/forbidden");
   });
 });
+
+describe("Add Storage Facility Approval - Save as Draft with validation errors (FI0-10577)", () => {
+  it("should redirect to the NMD dashboard when Save as Draft is clicked and backend returns validation errors", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageApprovalSaveAsDraftWithErrors,
+    };
+    cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
+    cy.get("#storageFacilities-facilityApproval").clear().type("UK/ABC/001@#$");
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "create-non-manipulation-document/non-manipulation-documents");
+    cy.get(".govuk-error-summary").should("not.exist");
+  });
+});
