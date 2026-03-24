@@ -505,7 +505,7 @@ export const displayErrorMessagesInOrder = (
   };
 
   errorKeysInOrder.forEach((orderKey) => {
-    const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const escapeRegExp = (s: string) => s.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 
     let matchingKeys: string[];
 
