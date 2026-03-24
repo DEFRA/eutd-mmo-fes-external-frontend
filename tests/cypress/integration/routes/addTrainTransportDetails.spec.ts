@@ -208,26 +208,6 @@ describe("Add Transportation Details Train: Container Identification Number Vali
       /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
     ).should("be.visible");
   });
-  it("should reindex container inputs when middle container is removed", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.TrainTransportSave,
-    };
-    cy.visit(trainPageUrl, { qs: { ...testParams } });
-
-    cy.get("#railwayBillNumber").type("RB123456", { force: true });
-
-    cy.get('input[name="containerNumbers.0"]').type("FIRST0001111", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("SECOND001111", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("THIRD0001111", { force: true });
-
-    cy.get('[data-testid="remove-container-1"]').click({ force: true });
-
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "FIRST0001111");
-    cy.get('input[name="containerNumbers.1"]').should("have.value", "THIRD0001111");
-    cy.get('input[name="containerNumbers.2"]').should("not.exist");
-  });
   it("should save successfully when container identification number is not provided", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,

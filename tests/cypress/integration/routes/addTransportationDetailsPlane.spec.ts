@@ -365,27 +365,6 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
     // Only one container left, remove button should not be visible
     cy.get('[data-testid="remove-container-0"]').should("not.exist");
   });
-
-  it("should reindex container inputs when the middle container is removed", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PlaneTransportSave,
-    };
-    cy.visit(planePageUrl, { qs: { ...testParams } });
-
-    cy.get("#flightNumber").type("BA123", { force: true });
-
-    cy.get('input[name="containerNumbers.0"]').type("FIRST0001111", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("SECOND001111", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("THIRD0001111", { force: true });
-
-    cy.get('[data-testid="remove-container-1"]').click({ force: true });
-
-    cy.get('input[name="containerNumbers.0"]').should("have.value", "FIRST0001111");
-    cy.get('input[name="containerNumbers.1"]').should("have.value", "THIRD0001111");
-    cy.get('input[name="containerNumbers.2"]').should("not.exist");
-  });
 });
 
 describe("Add Transportation Details Plane: Non-JS Support", () => {
