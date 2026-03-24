@@ -1,13 +1,104 @@
 import { type ITestParams, TestCaseId } from "~/types";
+
 const documentNumber = "GBR-2023-SD-97DA962EC";
-const storageDocumentUrl = `/create-non-manipulation-document/${documentNumber}/departure-product-summary`;
+
+const getStorageDocumentUrl = (docNumber = documentNumber) =>
+  `/create-non-manipulation-document/${docNumber}/departure-product-summary`;
+
+const EN_HEADING = "Check and confirm your consignment weight";
+const EN_GUIDANCE = "If the product weight has changed or remained the same since storage, confirm the details below.";
+
+const CY_FISHERY_WEIGHT_ERROR =
+  "Ni chaiff pwysau net cynhyrchion pysgodfeydd wrth gyrraedd fod yn fwy na phwysau net y cynhyrchion";
+
+const visitDepartureSummary = (
+  testCaseId: TestCaseId,
+  options?: {
+    lng?: "cy";
+    disableScripts?: boolean;
+    failOnStatusCode?: boolean;
+    docNumber?: string;
+  }
+) => {
+  const { lng, disableScripts, failOnStatusCode, docNumber } = options ?? {};
+
+  const testParams: ITestParams = {
+    testCaseId,
+    ...(disableScripts ? { disableScripts: true } : {}),
+  };
+
+  cy.visit(getStorageDocumentUrl(docNumber), {
+    qs: {
+      ...testParams,
+      ...(lng ? { lng } : {}),
+    },
+    ...(failOnStatusCode !== undefined ? { failOnStatusCode } : {}),
+  });
+};
+
+const assertEnglishHeading = () => {
+  cy.findByRole("heading", { name: EN_HEADING, level: 1 });
+};
+
+const assertAnyHeading = () => {
+  cy.findByRole("heading", { level: 1 }).should("be.visible");
+};
+
+const clickSaveAndContinue = () => {
+  cy.get("[data-testid=save-and-continue]").click();
+};
+
+const submitDepartureSummary = (alias = "saveDepartureSummary") => {
+  cy.intercept("POST", "**/departure-product-summary**").as(alias);
+  clickSaveAndContinue();
+  cy.wait(`@${alias}`);
+};
+
+const submitDepartureSummaryAndAssertStatus = (alias = "saveDepartureSummary") => {
+  cy.intercept("POST", "**/departure-product-summary**").as(alias);
+  clickSaveAndContinue();
+  cy.wait(`@${alias}`).its("response.statusCode").should("be.oneOf", [200, 400, 422]);
+};
+
+const assertErrorSummaryContains = (message: string) => {
+  cy.get(".govuk-error-summary").should("be.visible").and("contain.text", message);
+};
+
+const openArrivalTab = () => {
+  cy.get("[data-tab-id='storageArrivalTab']").click({ force: true });
+  cy.get(".govuk-tabs__tab").contains("Storage arrival");
+};
+
+const openDepartureTab = () => {
+  cy.get("[data-tab-id='storageDepartureTab']").click({ force: true });
+  cy.get(".govuk-tabs__tab").contains("Storage departure");
+};
+
+const assertArrivalTableHeaders = () => {
+  cy.get("thead").within(() => {
+    cy.get("tr").should("have.length", 1);
+    cy.get("th").should("have.length", 4);
+    cy.get("th").eq(0).contains("Product");
+    cy.get("th").eq(1).contains("Net weight on arrival");
+    cy.get("th").eq(2).contains("Fishery product weight");
+    cy.get("th").eq(3).should("exist");
+  });
+};
+
+const assertDepartureTableHeaders = () => {
+  cy.get("thead").within(() => {
+    cy.get("tr").should("have.length", 1);
+    cy.get("th").should("have.length", 4);
+    cy.get("th").eq(0).contains("Product");
+    cy.get("th").eq(1).contains("Net weight on departure");
+    cy.get("th").eq(2).contains("Fishery product weight");
+    cy.get("th").eq(3).should("exist");
+  });
+};
 
 describe("Storage document departure summary: rendering", () => {
   beforeEach(() => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummary,
-    };
-    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
+    visitDepartureSummary(TestCaseId.SDDepartureSummary);
   });
 
   it("should render a back link", () => {
@@ -26,10 +117,8 @@ describe("Storage document departure summary: rendering", () => {
   });
 
   it("should render the correct content", () => {
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
-    cy.get("#sdProductSummaryGuidanceMessage").contains(
-      "If the product weight has changed or remained the same since storage, confirm the details below."
-    );
+    assertEnglishHeading();
+    cy.get("#sdProductSummaryGuidanceMessage").contains(EN_GUIDANCE);
   });
 
   it("should check the tabs", () => {
@@ -43,19 +132,14 @@ describe("Storage document departure summary: rendering", () => {
   });
 
   it("should toggle the tabs and find text", () => {
-    cy.get("[data-tab-id='storageArrivalTab']").click({ force: true });
-    cy.get(".govuk-tabs__tab").contains("Storage arrival");
-    cy.get("[data-tab-id='storageDepartureTab']").click({ force: true });
-    cy.get(".govuk-tabs__tab").contains("Storage departure");
+    openArrivalTab();
+    openDepartureTab();
   });
 });
 
 describe("Storage document departure summary: pageguard", () => {
   it("should redirect to the departure transport page", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryNoTransport,
-    };
-    cy.visit(storageDocumentUrl, { failOnStatusCode: false, qs: { ...testParams } });
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryNoTransport, { failOnStatusCode: false });
     cy.url().should(
       "include",
       `/create-non-manipulation-document/${documentNumber}/how-does-the-consignment-leave-the-uk`
@@ -63,77 +147,58 @@ describe("Storage document departure summary: pageguard", () => {
   });
 
   it("should redirect to the forbidden page", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryForbidden,
-    };
-    cy.visit(storageDocumentUrl, { failOnStatusCode: false, qs: { ...testParams } });
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryForbidden, { failOnStatusCode: false });
     cy.url().should("include", "/forbidden");
   });
 
   it("should redirect to the add product to this consignment page", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryNoCatches,
-    };
-    cy.visit(storageDocumentUrl, { failOnStatusCode: false, qs: { ...testParams } });
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryNoCatches, { failOnStatusCode: false });
     cy.url().should("include", "/add-product-to-this-consignment");
   });
 
   it("should redirect to the add product to this consignment page with an empty catch", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryEmptyCatches,
-    };
-    cy.visit(storageDocumentUrl, { failOnStatusCode: false, qs: { ...testParams } });
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryEmptyCatches, { failOnStatusCode: false });
     cy.url().should("include", "/add-product-to-this-consignment");
   });
 });
 
 describe("Storage document departure summary: arrival tab", () => {
   beforeEach(() => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryCatches,
-      disableScripts: true,
-    };
-    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryCatches, { disableScripts: true });
   });
+
   it("loads the page with catches", () => {
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
-    cy.get("#sdProductSummaryGuidanceMessage").contains(
-      "If the product weight has changed or remained the same since storage, confirm the details below."
-    );
-    cy.get("[data-tab-id='storageArrivalTab']").click();
-    cy.get(".govuk-tabs__tab").contains("Storage arrival");
+    assertEnglishHeading();
+    cy.get("#sdProductSummaryGuidanceMessage").contains(EN_GUIDANCE);
+
+    openArrivalTab();
+
     cy.get("#storage-arrival-tab").within(() => {
       cy.findByRole("heading", { name: "Storage arrival", level: 2 });
+
       cy.get("table").within(() => {
-        cy.get("thead").within(() => {
-          cy.get("tr").should("have.length", 1);
-          cy.get("th").should("have.length", 4);
-          cy.get("th").eq(0).contains("Product");
-          cy.get("th").eq(1).contains("Net weight on arrival");
-          cy.get("th").eq(2).contains("Fishery product weight");
-          cy.get("th").eq(3).should("exist");
-        });
+        assertArrivalTableHeaders();
+
         cy.get("tbody").within(() => {
           cy.get("tr").should("have.length", 2);
+
           cy.get("tr")
             .eq(0)
             .within(() => {
               cy.get("td").eq(0).contains("Golden damselfish (ADH)");
               cy.get("td").eq(1).find("input").should("have.value", "100.00");
               cy.get("td").eq(2).find("input").should("have.value", "100.00");
-
               cy.get("td").eq(3).find("button").eq(0).contains("Edit");
               cy.get("td").eq(3).find("button").eq(1).contains("Remove");
             });
+
           cy.get("tr")
             .eq(1)
             .within(() => {
               cy.get("td").eq(0).contains("Peacock sole (ADJ)");
               cy.get("td").eq(1).find("input").should("have.value", "50.00");
               cy.get("td").eq(2).find("input").should("have.value", "50.00");
-
               cy.get("td").eq(3).find("button").eq(0).contains("Edit");
-
               cy.get("td").eq(3).find("button").eq(1).contains("Remove");
             });
         });
@@ -142,22 +207,15 @@ describe("Storage document departure summary: arrival tab", () => {
   });
 
   it("loads the edit page with catches", () => {
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
-    cy.get("#sdProductSummaryGuidanceMessage").contains(
-      "If the product weight has changed or remained the same since storage, confirm the details below."
-    );
-    cy.get("[data-tab-id='storageArrivalTab']").click();
-    cy.get(".govuk-tabs__tab").contains("Storage arrival");
+    assertEnglishHeading();
+    cy.get("#sdProductSummaryGuidanceMessage").contains(EN_GUIDANCE);
+
+    openArrivalTab();
+
     cy.get("#storage-arrival-tab").within(() => {
       cy.get("table").within(() => {
-        cy.get("thead").within(() => {
-          cy.get("tr").should("have.length", 1);
-          cy.get("th").should("have.length", 4);
-          cy.get("th").eq(0).contains("Product");
-          cy.get("th").eq(1).contains("Net weight on arrival");
-          cy.get("th").eq(2).contains("Fishery product weight");
-          cy.get("th").eq(3).should("exist");
-        });
+        assertArrivalTableHeaders();
+
         cy.get("tbody").within(() => {
           cy.get("tr").should("have.length", 2);
           cy.get("tr")
@@ -173,22 +231,15 @@ describe("Storage document departure summary: arrival tab", () => {
   });
 
   it("should remove catch", () => {
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
-    cy.get("#sdProductSummaryGuidanceMessage").contains(
-      "If the product weight has changed or remained the same since storage, confirm the details below."
-    );
-    cy.get("[data-tab-id='storageArrivalTab']").click();
-    cy.get(".govuk-tabs__tab").contains("Storage arrival");
+    assertEnglishHeading();
+    cy.get("#sdProductSummaryGuidanceMessage").contains(EN_GUIDANCE);
+
+    openArrivalTab();
+
     cy.get("#storage-arrival-tab").within(() => {
       cy.get("table").within(() => {
-        cy.get("thead").within(() => {
-          cy.get("tr").should("have.length", 1);
-          cy.get("th").should("have.length", 4);
-          cy.get("th").eq(0).contains("Product");
-          cy.get("th").eq(1).contains("Net weight on arrival");
-          cy.get("th").eq(2).contains("Fishery product weight");
-          cy.get("th").eq(3).should("exist");
-        });
+        assertArrivalTableHeaders();
+
         cy.get("tbody").within(() => {
           cy.get("tr").should("have.length", 2);
           cy.get("tr")
@@ -200,31 +251,23 @@ describe("Storage document departure summary: arrival tab", () => {
       });
     });
 
-    cy.url().should("include", storageDocumentUrl);
+    cy.url().should("include", getStorageDocumentUrl());
   });
 });
 
 describe("Storage document departure summary: arrival tab with one catch", () => {
   beforeEach(() => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryCatchesSingleCatch,
-    };
-    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryCatchesSingleCatch);
   });
+
   it("should not have remove button in arrival tab with one product", () => {
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
-    cy.get("[data-tab-id='storageArrivalTab']").click();
-    cy.get(".govuk-tabs__tab").contains("Storage arrival");
+    assertEnglishHeading();
+    openArrivalTab();
+
     cy.get("#storage-arrival-tab").within(() => {
       cy.get("table").within(() => {
-        cy.get("thead").within(() => {
-          cy.get("tr").should("have.length", 1);
-          cy.get("th").should("have.length", 4);
-          cy.get("th").eq(0).contains("Product");
-          cy.get("th").eq(1).contains("Net weight on arrival");
-          cy.get("th").eq(2).contains("Fishery product weight");
-          cy.get("th").eq(3).should("exist");
-        });
+        assertArrivalTableHeaders();
+
         cy.get("tbody").within(() => {
           cy.get("tr").should("have.length", 1);
           cy.get("tr")
@@ -240,47 +283,39 @@ describe("Storage document departure summary: arrival tab with one catch", () =>
 
 describe("Storage document departure summary: departure tab", () => {
   beforeEach(() => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryCatches,
-    };
-    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryCatches);
   });
+
   it("loads the page with catches", () => {
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
-    cy.get("#sdProductSummaryGuidanceMessage").contains(
-      "If the product weight has changed or remained the same since storage, confirm the details below."
-    );
-    cy.get("[data-tab-id='storageDepartureTab']").click({ force: true });
-    cy.get(".govuk-tabs__tab").contains("Storage departure");
+    assertEnglishHeading();
+    cy.get("#sdProductSummaryGuidanceMessage").contains(EN_GUIDANCE);
+
+    openDepartureTab();
+
     cy.get("#storage-departure-tab").within(() => {
       cy.findByRole("heading", { name: "Storage departure", level: 2 });
+
       cy.get("table").within(() => {
-        cy.get("thead").within(() => {
-          cy.get("tr").should("have.length", 1);
-          cy.get("th").should("have.length", 4);
-          cy.get("th").eq(0).contains("Product");
-          cy.get("th").eq(1).contains("Net weight on departure");
-          cy.get("th").eq(2).contains("Fishery product weight");
-          cy.get("th").eq(3).should("exist");
-        });
+        assertDepartureTableHeaders();
+
         cy.get("tbody").within(() => {
           cy.get("tr").should("have.length", 2);
+
           cy.get("tr")
             .eq(0)
             .within(() => {
               cy.get("td").eq(0).contains("Golden damselfish (ADH)");
               cy.get("td").eq(1).find("input").should("have.value", "100.00");
               cy.get("td").eq(2).find("input").should("have.value", "100.00");
-
               cy.get("td").eq(3).should("exist");
             });
+
           cy.get("tr")
             .eq(1)
             .within(() => {
               cy.get("td").eq(0).contains("Peacock sole (ADJ)");
               cy.get("td").eq(1).find("input").should("have.value", "50.00");
               cy.get("td").eq(2).find("input").should("have.value", "50.00");
-
               cy.get("td").eq(3).should("exist");
             });
         });
@@ -289,7 +324,8 @@ describe("Storage document departure summary: departure tab", () => {
   });
 
   it("loads the page with catches and save weight", () => {
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
+    assertEnglishHeading();
+
     cy.get("#storage-departure-tab").within(() => {
       cy.get("table").within(() => {
         cy.get("tbody").within(() => {
@@ -302,16 +338,15 @@ describe("Storage document departure summary: departure tab", () => {
         });
       });
     });
-    cy.get("[data-testid=save-and-continue]").click();
+
+    clickSaveAndContinue();
     cy.url().should("include", "/progress");
   });
 
   it("loads the page with catches and save wrong weight", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryCatchesInvalidWeightSave,
-    };
-    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryCatchesInvalidWeightSave);
+    assertEnglishHeading();
+
     cy.get("#storage-departure-tab").within(() => {
       cy.get("table").within(() => {
         cy.get("tbody").within(() => {
@@ -324,66 +359,59 @@ describe("Storage document departure summary: departure tab", () => {
         });
       });
     });
-    cy.get("[data-testid=save-and-continue]").click();
+
+    clickSaveAndContinue();
   });
 
   it("should render the save as draft button", () => {
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
+    assertEnglishHeading();
     cy.findByRole("button", { name: "Save as draft" });
     cy.get("#saveAsDraft").click();
     cy.url().should("include", "/create-non-manipulation-document");
   });
 
   it("should navigate to progress when back to progress is clicked", () => {
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
+    assertEnglishHeading();
     cy.get("#backToProgress").click();
     cy.url().should("include", "/progress");
   });
 });
 
-describe("Storage document departure summary: tab with empty departure and load arrival weight ", () => {
+describe("Storage document departure summary: tab with empty departure and load arrival weight", () => {
   beforeEach(() => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryCatchesEmptyWeights,
-    };
-    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryCatchesEmptyWeights);
   });
+
   it("loads the page with catches", () => {
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
-    cy.get("#sdProductSummaryGuidanceMessage").contains(
-      "If the product weight has changed or remained the same since storage, confirm the details below."
-    );
-    cy.get("[data-tab-id='storageDepartureTab']").click({ force: true });
-    cy.get(".govuk-tabs__tab").contains("Storage departure");
+    assertEnglishHeading();
+    cy.get("#sdProductSummaryGuidanceMessage").contains(EN_GUIDANCE);
+
+    openDepartureTab();
+
     cy.get("#storage-departure-tab").within(() => {
       cy.findByRole("heading", { name: "Storage departure", level: 2 });
+
       cy.get("table").within(() => {
-        cy.get("thead").within(() => {
-          cy.get("tr").should("have.length", 1);
-          cy.get("th").should("have.length", 4);
-          cy.get("th").eq(0).contains("Product");
-          cy.get("th").eq(1).contains("Net weight on departure");
-          cy.get("th").eq(2).contains("Fishery product weight");
-          cy.get("th").eq(3).should("exist");
-        });
+        assertDepartureTableHeaders();
+
         cy.get("tbody").within(() => {
           cy.get("tr").should("have.length", 2);
+
           cy.get("tr")
             .eq(0)
             .within(() => {
               cy.get("td").eq(0).contains("Golden damselfish (ADH)");
               cy.get("td").eq(1).find("input").should("have.value", "100.00");
               cy.get("td").eq(2).find("input").should("have.value", "100.00");
-
               cy.get("td").eq(3).should("exist");
             });
+
           cy.get("tr")
             .eq(1)
             .within(() => {
               cy.get("td").eq(0).contains("Peacock sole (ADJ)");
               cy.get("td").eq(1).find("input").should("have.value", "50.00");
               cy.get("td").eq(2).find("input").should("have.value", "50.00");
-
               cy.get("td").eq(3).should("exist");
             });
         });
@@ -392,7 +420,8 @@ describe("Storage document departure summary: tab with empty departure and load 
   });
 
   it("loads the page with catches and save weight", () => {
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
+    assertEnglishHeading();
+
     cy.get("#storage-departure-tab").within(() => {
       cy.get("table").within(() => {
         cy.get("tbody").within(() => {
@@ -405,16 +434,15 @@ describe("Storage document departure summary: tab with empty departure and load 
         });
       });
     });
-    cy.get("[data-testid=save-and-continue]").click();
+
+    clickSaveAndContinue();
     cy.url().should("include", "/progress");
   });
 
   it("loads the page with catches and save wrong weight", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryCatchesInvalidWeightSave,
-    };
-    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryCatchesInvalidWeightSave);
+    assertEnglishHeading();
+
     cy.get("#storage-departure-tab").within(() => {
       cy.get("table").within(() => {
         cy.get("tbody").within(() => {
@@ -427,18 +455,19 @@ describe("Storage document departure summary: tab with empty departure and load 
         });
       });
     });
-    cy.get("[data-testid=save-and-continue]").click();
+
+    clickSaveAndContinue();
   });
 
   it("should render the save as draft button", () => {
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
+    assertEnglishHeading();
     cy.findByRole("button", { name: "Save as draft" });
     cy.get("#saveAsDraft").click();
     cy.url().should("include", "/create-non-manipulation-document");
   });
 
   it("should navigate to progress when back to progress is clicked", () => {
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
+    assertEnglishHeading();
     cy.get("#backToProgress").click();
     cy.url().should("include", "/progress");
   });
@@ -446,11 +475,8 @@ describe("Storage document departure summary: tab with empty departure and load 
 
 describe("Storage document departure summary: save as draft with validation errors (FI0-10577)", () => {
   it("should redirect to the NMD dashboard when Save as Draft is clicked with validation errors", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummarySaveAsDraftWithErrors,
-    };
-    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
+    visitDepartureSummary(TestCaseId.SDDepartureSummarySaveAsDraftWithErrors);
+    assertEnglishHeading();
     cy.get("#saveAsDraft").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
@@ -458,81 +484,42 @@ describe("Storage document departure summary: save as draft with validation erro
 
 describe("Storage document departure summary: departure weight exceeds arrival weight (FI0-10945)", () => {
   it("should display EN and CY error when the departure weight exceeds the arrival weight", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryProductWeightExceedsArrival,
-    };
-    cy.intercept("POST", "**/departure-product-summary**").as("savePost");
-    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
-    cy.get("[data-testid=save-and-continue]").click();
-    cy.wait("@savePost");
-    cy.get(".govuk-error-summary")
-      .should("be.visible")
-      .and("contain", "Departure weight cannot be greater than arrival weight");
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryProductWeightExceedsArrival);
+    assertEnglishHeading();
+    submitDepartureSummary("savePostEn");
+    assertErrorSummaryContains("Departure weight cannot be greater than arrival weight");
 
-    cy.intercept("POST", "**/departure-product-summary**").as("savePostCy");
-    cy.visit(storageDocumentUrl, { qs: { ...testParams, lng: "cy" } });
-    cy.findByRole("heading", { level: 1 });
-    cy.get("[data-testid=save-and-continue]").click();
-    cy.wait("@savePostCy");
-    cy.get(".govuk-error-summary")
-      .should("be.visible")
-      .and("contain", "Ni chaiff pwysau ymadael fod yn fwy na’r pwysau cyrraedd.");
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryProductWeightExceedsArrival, { lng: "cy" });
+    assertAnyHeading();
+    submitDepartureSummaryAndAssertStatus("savePostCy");
+    assertErrorSummaryContains("Ni chaiff pwysau ymadael fod yn fwy na’r pwysau cyrraedd.");
   });
 });
 
 describe("Storage document departure summary: fishery product weight exceeds product weight (FI0-10945)", () => {
   it("should display EN and CY error when the fishery product weight exceeds the product departure weight", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryFisheryWeightExceedsProduct,
-    };
-    cy.intercept("POST", "**/departure-product-summary**").as("savePost");
-    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
-    cy.get("[data-testid=save-and-continue]").click();
-    cy.wait("@savePost");
-    cy.get(".govuk-error-summary")
-      .should("be.visible")
-      .and("contain", "Fishery products net weight on arrival cannot exceed the product net weight");
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsProduct);
+    assertEnglishHeading();
+    submitDepartureSummary("savePostEn");
+    assertErrorSummaryContains("Fishery products net weight on arrival cannot exceed the product net weight");
 
-    cy.intercept("POST", "**/departure-product-summary**").as("savePostCy");
-    cy.visit(storageDocumentUrl, { qs: { ...testParams, lng: "cy" } });
-    cy.findByRole("heading", { level: 1 });
-    cy.get("[data-testid=save-and-continue]").click();
-    cy.wait("@savePostCy");
-    cy.get(".govuk-error-summary")
-      .should("be.visible")
-      .and(
-        "contain",
-        "Ni chaiff pwysau net cynhyrchion pysgodfeydd wrth gyrraedd fod yn fwy na phwysau net y cynhyrchion"
-      );
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsProduct, { lng: "cy" });
+    assertAnyHeading();
+    submitDepartureSummaryAndAssertStatus("savePostCy");
+    assertErrorSummaryContains(CY_FISHERY_WEIGHT_ERROR);
   });
 });
 
 describe("Storage document departure summary: fishery product weight exceeds arrival weight (FI0-10945)", () => {
   it("should display EN and CY error when the fishery product weight exceeds the arrival weight", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival,
-    };
-    cy.intercept("POST", "**/departure-product-summary**").as("savePost");
-    cy.visit(storageDocumentUrl, { qs: { ...testParams } });
-    cy.findByRole("heading", { name: "Check and confirm your consignment weight", level: 1 });
-    cy.get("[data-testid=save-and-continue]").click();
-    cy.wait("@savePost");
-    cy.get(".govuk-error-summary")
-      .should("be.visible")
-      .and("contain", "Fishery products net weight on arrival cannot exceed the product net weight");
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival);
+    assertEnglishHeading();
+    submitDepartureSummary("savePostEn");
+    assertErrorSummaryContains("Fishery products net weight on arrival cannot exceed the product net weight");
 
-    cy.intercept("POST", "**/departure-product-summary**").as("saveDepartureProductSummary");
-    cy.visit(storageDocumentUrl, { qs: { ...testParams, lng: "cy" } });
-    cy.findByRole("heading", { level: 1 }).should("be.visible");
-    cy.get("[data-testid=save-and-continue]").click();
-    cy.wait("@saveDepartureProductSummary").its("response.statusCode").should("be.oneOf", [200, 400, 422]);
-    cy.get(".govuk-error-summary")
-      .should("be.visible")
-      .and(
-        "contain.text",
-        "Ni chaiff pwysau net cynhyrchion pysgodfeydd wrth gyrraedd fod yn fwy na phwysau net y cynhyrchion"
-      );
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival, { lng: "cy" });
+    assertAnyHeading();
+    submitDepartureSummaryAndAssertStatus("savePostCy");
+    assertErrorSummaryContains(CY_FISHERY_WEIGHT_ERROR);
   });
 });
