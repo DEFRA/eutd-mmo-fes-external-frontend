@@ -241,7 +241,11 @@ export const getSelectedEezInIcountryFormat = async (values: any): Promise<ICoun
     if (country) {
       acc.push(country);
     } else {
-      acc.push({ officialCountryName: countryName });
+      // Treat unrecognised values (e.g. non-JS select placeholder text) as empty
+      // so that orchestration's isZoneEmpty check handles them correctly:
+      //   highSeasArea = 'Yes' → empty zones are silently removed (no error)
+      //   highSeasArea = 'No'  → empty zones trigger the required-field error
+      acc.push({ officialCountryName: "" });
     }
     return acc;
   }, []);
