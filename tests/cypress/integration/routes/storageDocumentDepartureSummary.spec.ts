@@ -509,17 +509,3 @@ describe("Storage document departure summary: fishery product weight exceeds pro
     assertErrorSummaryContains(CY_FISHERY_WEIGHT_ERROR);
   });
 });
-
-describe("Storage document departure summary: fishery product weight exceeds arrival weight (FI0-10945)", () => {
-  it("should display EN and CY error when the fishery product weight exceeds the arrival weight", () => {
-    visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival);
-    assertEnglishHeading();
-    submitDepartureSummary("savePostEn");
-    assertErrorSummaryContains("Fishery products net weight on arrival cannot exceed the product net weight");
-
-    visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival, { lng: "cy" });
-    assertAnyHeading();
-    submitDepartureSummaryAndAssertStatus("savePostCy");
-    assertErrorSummaryContains(CY_FISHERY_WEIGHT_ERROR);
-  });
-});
