@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
-import { useEffect } from "react";
 import { route } from "routes-gen";
 import type { ICountry, ITransport, IUnauthorised, Journey, StorageDocument } from "~/types";
 import {
@@ -15,9 +14,7 @@ import {
   handleFormEmptyStringValue,
   getStorageDocument,
 } from "~/.server";
-import { scrollToId, TransportType } from "~/helpers";
-import isEmpty from "lodash/isEmpty";
-import { useScrollOnPageLoad } from "~/hooks";
+import { TransportType } from "~/helpers";
 import { AddTransportationDetailsComponent } from "~/composite-components";
 import moment from "moment";
 
@@ -90,16 +87,7 @@ const AddTransportationDetailsPlane = () => {
     countries: ICountry[];
     displayOptionalSuffix?: boolean;
   }>();
-  const actionData = useActionData<{ errors: any }>() ?? {};
-  const { errors = {} } = actionData;
-
-  useScrollOnPageLoad();
-
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      scrollToId("errorIsland");
-    }
-  }, [errors]);
+  const actionData = useActionData<any>() ?? {};
 
   return (
     <AddTransportationDetailsComponent

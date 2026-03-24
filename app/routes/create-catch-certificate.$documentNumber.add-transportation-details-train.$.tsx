@@ -9,11 +9,11 @@ import {
   type MetaFunction,
 } from "react-router";
 import { useTranslation } from "react-i18next";
-import type { ITransport, ErrorResponse, ICountry } from "~/types";
+import type { ITransport, ErrorResponse, ICountry, IErrorsTransformed } from "~/types";
 import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import isEmpty from "lodash/isEmpty";
-import { useTransportationDetailsPage, getTransportErrorKeys } from "~/hooks";
+import { useTransportationDetailsPage, getTransportErrorKeys, useErrorsOverride } from "~/hooks";
 
 export const meta: MetaFunction = (args) => getMeta(args);
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -48,7 +48,7 @@ const TrainTransportDetailsPage = () => {
     }
   >();
   const actionData = useActionData() ?? {};
-  const { errors = {} } = actionData;
+  const { errors, setErrorsOverride } = useErrorsOverride((actionData as { errors?: IErrorsTransformed })?.errors);
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-train/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
@@ -75,6 +75,7 @@ const TrainTransportDetailsPage = () => {
               displayOptionalSuffix={displayOptionalSuffix}
               maximumNumberOfContainerNumbers={maximumNumberOfContainerNumbers}
               countries={countries}
+              onErrorsChange={setErrorsOverride}
             />
             <ButtonGroup />
             <input type="hidden" name="nextUri" value={nextUri} />
