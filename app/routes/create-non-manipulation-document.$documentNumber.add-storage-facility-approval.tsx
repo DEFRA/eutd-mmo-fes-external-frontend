@@ -71,6 +71,39 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   );
 };
 
+const saveAsDraftFacility = async (
+  bearerToken: string,
+  documentNumber: string,
+  facilityUrl: string,
+  facilityData: { facilityApprovalNumber?: string; facilityStorage?: string },
+  request: Request
+): Promise<Response> => {
+  const validationResponse = await updateStorageDocumentFacility(
+    bearerToken,
+    documentNumber,
+    facilityUrl,
+    false,
+    undefined,
+    facilityData
+  );
+
+  const dataToSave: { facilityApprovalNumber?: string | null; facilityStorage?: string | null } = { ...facilityData };
+
+  if (validationResponse instanceof Response) {
+    const responseData = await validationResponse.clone().json();
+    const errorKeys = new Set<string>(Object.keys(responseData?.errors ?? {}));
+    if (errorKeys.has("facilityApprovalNumber")) dataToSave.facilityApprovalNumber = null;
+    if (errorKeys.has("facilityStorage")) dataToSave.facilityStorage = null;
+  }
+
+  await updateStorageDocumentFacility(bearerToken, documentNumber, facilityUrl, true, undefined, dataToSave);
+
+  const session = await getSessionFromRequest(request);
+  return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
+    headers: { "Set-Cookie": await commitSession(session) },
+  });
+};
+
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
@@ -91,41 +124,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const facilityData = { facilityApprovalNumber, facilityStorage };
 
   if (isDraft) {
-    // Validate-first: saveToRedisIfErrors=false so nothing is persisted on the first call
-    const validationResponse = await updateStorageDocumentFacility(
-      bearerToken,
-      documentNumber,
-      facilityUrl,
-      false, // saveToRedisIfErrors = false (validate only)
-      undefined,
-      facilityData
-    );
-
-    const dataToSave: { facilityApprovalNumber?: string | null; facilityStorage?: string | null } = {
-      ...facilityData,
-    };
-
-    if (validationResponse instanceof Response) {
-      const responseData = await validationResponse.clone().json();
-      const errorKeys = new Set<string>(responseData?.errors ? Object.keys(responseData.errors) : []);
-      // Null out invalid fields so any previously-saved bad values are cleared in Redis
-      if (errorKeys.has("facilityApprovalNumber")) dataToSave.facilityApprovalNumber = null;
-      if (errorKeys.has("facilityStorage")) dataToSave.facilityStorage = null;
-    }
-
-    await updateStorageDocumentFacility(
-      bearerToken,
-      documentNumber,
-      facilityUrl,
-      true, // saveToRedisIfErrors = true (persist valid fields)
-      undefined,
-      dataToSave
-    );
-
-    const session = await getSessionFromRequest(request);
-    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
-      headers: { "Set-Cookie": await commitSession(session) },
-    });
+    return saveAsDraftFacility(bearerToken, documentNumber, facilityUrl, facilityData, request);
   }
 
   const errorResponse = await updateStorageDocumentFacility(

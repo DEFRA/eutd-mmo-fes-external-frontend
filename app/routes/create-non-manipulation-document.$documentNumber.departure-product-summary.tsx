@@ -263,6 +263,86 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   );
 };
 
+const buildFilteredDepartureValues = async (
+  validationResponse: unknown,
+  values: Record<string, FormDataEntryValue>
+): Promise<Record<string, FormDataEntryValue>> => {
+  const filteredValues = { ...values };
+  if (!(validationResponse instanceof Response)) return filteredValues;
+
+  const responseData = await (validationResponse as Response).clone().json();
+  const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+
+  for (const errorKey of errorKeys) {
+    const match = errorKey.match(/^catches-(\d+)-(netWeightProductDeparture|netWeightFisheryProductDeparture)$/);
+    if (match) {
+      const index = match[1];
+      if (match[2] === "netWeightProductDeparture") {
+        filteredValues[`weight-net-weight-product-departure-${index}`] = "";
+      } else {
+        filteredValues[`weight-net-weight-fishery-product-departure-${index}`] = "";
+      }
+    }
+  }
+
+  return filteredValues;
+};
+
+const handleRemoveCatch = async (
+  bearerToken: string,
+  documentNumber: string,
+  removeIndex: string,
+  isNonJs: boolean
+): Promise<Response> => {
+  const errorResponse = await removeStorageDocumentCatch(
+    bearerToken,
+    documentNumber,
+    "",
+    removeIndex,
+    false,
+    false,
+    isNonJs
+  );
+
+  if (errorResponse) {
+    return errorResponse as Response;
+  }
+
+  return redirect(`/create-non-manipulation-document/${documentNumber}/departure-product-summary`);
+};
+
+const saveAsDraftDeparture = async (
+  bearerToken: string,
+  documentNumber: string,
+  values: Record<string, FormDataEntryValue>,
+  departureUrl: string,
+  isNonJs: boolean
+): Promise<Response> => {
+  const validationResponse = await updateStorageDocumentCatchDepartureWeights(
+    bearerToken,
+    documentNumber,
+    values,
+    departureUrl,
+    false,
+    false,
+    isNonJs
+  );
+
+  const filteredValues = await buildFilteredDepartureValues(validationResponse, values);
+
+  await updateStorageDocumentCatchDepartureWeights(
+    bearerToken,
+    documentNumber,
+    filteredValues,
+    departureUrl,
+    true,
+    false,
+    isNonJs
+  );
+
+  return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
+};
+
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
@@ -286,69 +366,13 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   if (isRemove) {
     const removeIndex = (_action as string).split("-")[1];
-    const errorResponse = await removeStorageDocumentCatch(
-      bearerToken,
-      documentNumber,
-      "",
-      removeIndex,
-      false,
-      false,
-      isNonJs
-    );
-
-    if (errorResponse) {
-      return errorResponse as Response;
-    }
-
-    return redirect(`/create-non-manipulation-document/${documentNumber}/departure-product-summary`);
+    return handleRemoveCatch(bearerToken, documentNumber, removeIndex, isNonJs);
   }
 
   const departureUrl = `/create-non-manipulation-document/${documentNumber}/departure-product-summary`;
 
   if (isDraft) {
-    // Validate-first: saveToRedisIfErrors=false so nothing is persisted on the first call
-    const validationResponse = await updateStorageDocumentCatchDepartureWeights(
-      bearerToken,
-      documentNumber,
-      values,
-      departureUrl,
-      false, // saveToRedisIfErrors = false (validate only)
-      false,
-      isNonJs
-    );
-
-    const filteredValues = { ...values };
-
-    if (validationResponse instanceof Response) {
-      const responseData = await validationResponse.clone().json();
-      const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
-
-      // Map error keys (catches-{i}-netWeightProductDeparture / netWeightFisheryProductDeparture)
-      // back to form field names and clear them so invalid values are not persisted
-      for (const errorKey of errorKeys) {
-        const match = errorKey.match(/^catches-(\d+)-(netWeightProductDeparture|netWeightFisheryProductDeparture)$/);
-        if (match) {
-          const index = match[1];
-          if (match[2] === "netWeightProductDeparture") {
-            filteredValues[`weight-net-weight-product-departure-${index}`] = "";
-          } else {
-            filteredValues[`weight-net-weight-fishery-product-departure-${index}`] = "";
-          }
-        }
-      }
-    }
-
-    await updateStorageDocumentCatchDepartureWeights(
-      bearerToken,
-      documentNumber,
-      filteredValues,
-      departureUrl,
-      true, // saveToRedisIfErrors = true (persist valid fields)
-      false,
-      isNonJs
-    );
-
-    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
+    return saveAsDraftDeparture(bearerToken, documentNumber, values, departureUrl, isNonJs);
   }
 
   const errorResponse = await updateStorageDocumentCatchDepartureWeights(
