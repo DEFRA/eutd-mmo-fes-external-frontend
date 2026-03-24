@@ -528,15 +528,20 @@ describe("Storage document departure summary: fishery product weight exceeds arr
       testCaseId: TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival,
     };
 
-    cy.intercept("POST", "**/departure-product-summary**").as("savePostCy");
+    cy.intercept("POST", "**/departure-product-summary**").as("saveDepartureProductSummary");
+
     cy.visit(storageDocumentUrl, { qs: { ...testParams, lng: "cy" } });
-    cy.findByRole("heading", { level: 1 });
+
+    cy.findByRole("heading", { level: 1 }).should("be.visible");
+
     cy.get("[data-testid=save-and-continue]").click();
-    cy.wait("@savePostCy");
+
+    cy.wait("@saveDepartureProductSummary").its("response.statusCode").should("be.oneOf", [200, 400, 422]);
+
     cy.get(".govuk-error-summary")
       .should("be.visible")
       .and(
-        "contain",
+        "contain.text",
         "Ni chaiff pwysau net cynhyrchion pysgodfeydd wrth gyrraedd fod yn fwy na phwysau net y cynhyrchion"
       );
   });
