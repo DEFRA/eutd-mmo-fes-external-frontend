@@ -164,14 +164,16 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       serverLogger.info(
         `[PDF][PROTECTIVE MONITORING][COMPLETE][${documentType}, ${documentNumber}, ${PROTECTIVE_MONITORING_PRIORITY_NORMAL}, ${ipAaddress}, ${sessionId}]`
       );
-      await fireProtectiveMonitoringEvent(
+      // Fire-and-forget: this is an audit event only; awaiting it adds latency
+      // without providing any value to the user's response.
+      fireProtectiveMonitoringEvent(
         documentType,
         documentNumber,
         PROTECTIVE_MONITORING_PRIORITY_NORMAL,
         ipAaddress,
         sessionId,
         ""
-      );
+      ).catch((err) => serverLogger.error(`[PDF][PROTECTIVE MONITORING][COMPLETE][ERROR] ${err}`));
     }
   }
 
