@@ -23,11 +23,11 @@ describe("ProgressPage - Incomplete Application", () => {
     cy.visit(progressUrl, { qs: { ...testParams } });
   });
 
-  it("should display back button and back button should have correct href pointing to landings entry page", () => {
+  it("should display back button and back button should have correct href pointing to catch certificates dashboard", () => {
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/landings-entry`);
+      .should("have.attr", "href", "/create-catch-certificate/catch-certificates");
   });
 
   it("should display the correct headings", () => {
