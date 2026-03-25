@@ -96,7 +96,7 @@ const WhatExportJourney = () => {
                       }
                     />
                     <label id={`label-${country.id}`} className="govuk-label govuk-radios__label" htmlFor={country.id}>
-                      {t(`ccWhatExportJourneyCountry${country.value.replace(/\s/g, "")}`, {
+                      {t(`ccWhatExportJourneyCountry${country.value.replaceAll(/\s/g, "")}`, {
                         ns: "whatExportJourney",
                       })}
                     </label>
