@@ -579,13 +579,7 @@ const CheckYourInformation = () => {
     }
   };
 
-  const getBackToRoutes = () => {
-    if (isLocked) {
-      return route("/create-catch-certificate/catch-certificates");
-    } else {
-      return route("/create-catch-certificate/:documentNumber/progress", { documentNumber });
-    }
-  };
+  const getBackToRoutes = () => route("/create-catch-certificate/catch-certificates");
 
   const getNotificationMsg = (exporterDetails: Exporter, _errors: SystemFailure | IError[]) => {
     let notificationMsgs: string[] = [];
