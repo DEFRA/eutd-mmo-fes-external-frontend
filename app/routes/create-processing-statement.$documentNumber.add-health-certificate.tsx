@@ -20,6 +20,37 @@ import type { IErrorsTransformed } from "~/types";
 export const loader: LoaderFunction = async ({ request, params }) =>
   processingStatemenGenericLoader(request, params, ["healthCertificateNumber", "healthCertificateDate"]);
 
+const handleSaveAsDraft = async (
+  bearerToken: string,
+  documentNumber: string | undefined,
+  healthCertData: { healthCertificateNumber: string; healthCertificateDate: string },
+  healthCertUrl: string
+): Promise<Response> => {
+  const validationResponse = await updateProcessingStatement(
+    bearerToken,
+    documentNumber,
+    healthCertData,
+    healthCertUrl,
+    undefined,
+    false
+  );
+
+  if (validationResponse) {
+    const responseData = await (validationResponse as Response).clone().json();
+    const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+    const invalidFieldNames = new Set(errorKeys);
+    const filteredData: Record<string, string | null> = { ...healthCertData };
+    for (const invalidField of invalidFieldNames) {
+      filteredData[invalidField] = null;
+    }
+    await updateProcessingStatement(bearerToken, documentNumber, filteredData, healthCertUrl, undefined, true);
+  } else {
+    await updateProcessingStatement(bearerToken, documentNumber, healthCertData, healthCertUrl, undefined, true);
+  }
+
+  return redirect(route("/create-processing-statement/processing-statements"));
+};
+
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
@@ -30,18 +61,16 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const isDraft = form.get("_action") === "saveAsDraft";
 
   const isValid = await validateCSRFToken(request, form);
-  if (!isValid) return redirect("/forbidden");
+  if (isValid === false) return redirect("/forbidden");
 
   const healthCertificateDateYear = values["healthCertificateDateYear"] as string;
   const healthCertificateDateMonth = values["healthCertificateDateMonth"] as string;
   const healthCertificateDateDay = values["healthCertificateDateDay"] as string;
   const isoHealthCertificateDate = `${healthCertificateDateYear}-${healthCertificateDateMonth}-${healthCertificateDateDay}`;
-  if (
-    healthCertificateDateYear &&
-    healthCertificateDateMonth &&
-    healthCertificateDateDay &&
-    !isValidDate(isoHealthCertificateDate, ["YYYY-M-D", "YYYY-MM-DD"])
-  ) {
+  const hasFullHealthCertificateDate =
+    !!healthCertificateDateYear && !!healthCertificateDateMonth && !!healthCertificateDateDay;
+  const healthCertificateDateIsValid = isValidDate(isoHealthCertificateDate, ["YYYY-M-D", "YYYY-MM-DD"]);
+  if (hasFullHealthCertificateDate && healthCertificateDateIsValid === false) {
     return new Response(
       JSON.stringify({
         errors: getTransformedError([
@@ -67,32 +96,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   });
 
   if (isDraft) {
-    // Validate-first: saveToRedisIfErrors=false so nothing is persisted on the first call
-    const validationResponse = await updateProcessingStatement(
-      bearerToken,
-      documentNumber,
-      healthCertData,
-      healthCertUrl,
-      undefined,
-      false // saveToRedisIfErrors = false (validate only)
-    );
-    if (validationResponse) {
-      const responseData = await (validationResponse as Response).clone().json();
-      let errorKeys: string[] = [];
-      /* istanbul ignore else */
-      if (responseData?.errors) {
-        errorKeys = Object.keys(responseData.errors);
-      }
-      const invalidFieldNames = new Set(errorKeys);
-      const filteredData: Record<string, string | null> = { ...healthCertData };
-      for (const invalidField of invalidFieldNames) {
-        filteredData[invalidField] = null;
-      }
-      await updateProcessingStatement(bearerToken, documentNumber, filteredData, healthCertUrl, undefined, true);
-    } else {
-      await updateProcessingStatement(bearerToken, documentNumber, healthCertData, healthCertUrl, undefined, true);
-    }
-    return redirect(route("/create-processing-statement/processing-statements"));
+    return handleSaveAsDraft(bearerToken, documentNumber, healthCertData, healthCertUrl);
   }
 
   const errorResponse = await updateProcessingStatement(
@@ -132,6 +136,8 @@ const AddHealthCertificate = () => {
   }>();
 
   const { errors = {} } = useActionData<{ errors: IErrorsTransformed }>() ?? {};
+  const hasErrors = !isEmpty(errors);
+  const hasHealthCertificateNumberError = !isEmpty(errors?.healthCertificateNumber);
   const [daySelected = "", monthSelected = "", yearSelected = ""] =
     healthCertificateDate === null ? " " : healthCertificateDate.split("/");
 
@@ -139,7 +145,7 @@ const AddHealthCertificate = () => {
     <Main
       backUrl={route("/create-processing-statement/:documentNumber/add-processing-plant-address", { documentNumber })}
     >
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
+      {hasErrors && <ErrorSummary errors={displayErrorMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <Title
@@ -154,9 +160,7 @@ const AddHealthCertificate = () => {
           <SecureForm method="post" csrf={csrf}>
             <div
               className={
-                isEmpty(errors?.healthCertificateNumber)
-                  ? "govuk-form-group"
-                  : "govuk-form-group govuk-form-group--error"
+                hasHealthCertificateNumberError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"
               }
             >
               <FormInput
@@ -183,10 +187,10 @@ const AddHealthCertificate = () => {
                   id: "healthCertificateNumber",
                   "aria-describedby": "hint-healthCertificateNumber",
                 }}
-                errorProps={{ className: !isEmpty(errors?.healthCertificateNumber) ? "govuk-error-message" : "" }}
+                errorProps={{ className: hasHealthCertificateNumberError ? "govuk-error-message" : "" }}
                 staticErrorMessage={t(errors?.healthCertificateNumber?.message, { ns: "errorsText" })}
                 errorPosition={ErrorPosition.AFTER_HINT}
-                containerClassNameError={!isEmpty(errors?.healthCertificateNumber) ? "govuk-form-group--error" : ""}
+                containerClassNameError={hasHealthCertificateNumberError ? "govuk-form-group--error" : ""}
                 hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
               />
