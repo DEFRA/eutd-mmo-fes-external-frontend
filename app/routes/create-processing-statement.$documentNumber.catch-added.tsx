@@ -161,7 +161,7 @@ const handleFilterAction = async (
     session.unset("matchCatches");
     session.unset("matchQuery");
     session.unset("matchProductIds");
-    return redirect(buildRedirectUrl(documentNumber as string, existingParams), {
+    return redirect(buildRedirectUrl(documentNumber, existingParams), {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
@@ -183,7 +183,7 @@ const handleFilterAction = async (
     if (q) {
       existingParams.set("q", q);
     }
-    return redirect(buildRedirectUrl(documentNumber!, existingParams), {
+    return redirect(buildRedirectUrl(documentNumber, existingParams), {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
@@ -314,7 +314,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const { _action, ...values } = Object.fromEntries(form);
   const nextUri = (form.get("nextUri") as string) || "";
 
-  const maybeHandled = await handleFilterAction(values, session, psData, documentNumber as string, request);
+  const maybeHandled = await handleFilterAction(values, session, psData, documentNumber, request);
   if (maybeHandled) return maybeHandled;
 
   const isDraft = _action === "saveAsDraft";
@@ -328,7 +328,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   // Validate products have catches when saving and continuing
   if (isSaveAndContinue) {
-    const validationError = validateProductsHaveCatches(psData, documentNumber as string);
+    const validationError = validateProductsHaveCatches(psData, documentNumber);
     if (validationError) {
       return new Response(JSON.stringify(validationError), {
         status: 400,
@@ -376,7 +376,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   }
 
   cleanupSession(session);
-  const redirectUrl = determineRedirectUrl(nextUri, psData, documentNumber as string);
+  const redirectUrl = determineRedirectUrl(nextUri, psData, documentNumber);
 
   return redirect(redirectUrl, {
     headers: {
