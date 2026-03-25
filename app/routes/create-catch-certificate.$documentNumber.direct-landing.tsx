@@ -129,7 +129,7 @@ const DirectLanding = () => {
       : []
   );
 
-  const { t } = useTranslation("directLandings");
+  const { t } = useTranslation(["directLandings", "errorsText"]);
   const isHydrated = useIsHydrated();
   const [promptText, setPromptText] = useState<string | undefined>(t("ccAddVesselFormVesselDateQueryPrompt"));
   const [showPrompt, setShowPrompt] = useState<boolean>(false);
