@@ -55,7 +55,7 @@ const buildTransportPayload = (
       return {
         railwayBillNumber: form.get("railwayBillNumber") as string,
         containerIdentificationNumber: !isEmpty(form.get("containerIdentificationNumber"))
-          ? (form.get("containerIdentificationNumber") as string)
+          ? (form.get("containerIdentificationNumber") as string).toUpperCase()
           : null,
         containerNumbers: extractContainerNumbers(values, maximumNumberOfContainerNumbers),
       };
@@ -717,7 +717,7 @@ export const extractContainerNumbers = (
     const key = `containerNumbers.${i}`;
     const value = values[key];
     if (value !== undefined) {
-      containerNumbers.push(value);
+      containerNumbers.push(String(value).toUpperCase());
     }
   }
   return containerNumbers;

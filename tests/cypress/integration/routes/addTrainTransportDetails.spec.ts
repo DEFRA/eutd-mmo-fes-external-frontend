@@ -208,7 +208,6 @@ describe("Add Transportation Details Train: Container Identification Number Vali
       /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
     ).should("be.visible");
   });
-
   it("should save successfully when container identification number is not provided", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,
@@ -229,6 +228,18 @@ describe("Add Transportation Details Train: Container Identification Number Vali
     cy.get("#railwayBillNumber").type("RB123456", { force: true });
     cy.get("#departurePlace").type("Dover", { force: true });
     cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", progressUrl);
+  });
+
+  it("should save successfully when container identification number is entered in lowercase", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportSave,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.get("#railwayBillNumber").type("RB123456", { force: true });
+    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("abcu1234567", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.url().should("include", progressUrl);
   });

@@ -1166,8 +1166,10 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
 
       // Fill in required fields
       cy.get('input[value="uk"]').check({ force: true });
-      cy.get(`#catches-${editIndex}-certificateNumber`).clear().type("EDITED123");
-      cy.get(`#catches-${editIndex}-weightOnCC`).clear().type("150");
+      cy.get(`#catches-${editIndex}-certificateNumber`).clear();
+      cy.get(`#catches-${editIndex}-certificateNumber`).type("EDITED123");
+      cy.get(`#catches-${editIndex}-weightOnCC`).clear();
+      cy.get(`#catches-${editIndex}-weightOnCC`).type("150");
       cy.get(`#catches-${editIndex}-product`).type("COD");
       cy.wait(300);
       cy.get(`#catches-${editIndex}-commodityCode`).type("03");
