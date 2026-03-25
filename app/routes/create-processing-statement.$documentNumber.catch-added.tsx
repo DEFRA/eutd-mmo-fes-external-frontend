@@ -263,7 +263,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const product = psData.products?.findLast((p: ProcessingStatementProduct) => p.id);
 
-  const pageNo = parseInt(url.searchParams.get("pageNo") ?? "1", 10);
+  const pageNo = Number.parseInt(url.searchParams.get("pageNo") ?? "1", 10);
   const q = urlQuery ?? (typeof sessionQuery === "string" ? sessionQuery : undefined);
   const nextUri = url.searchParams.get("nextUri") ?? "";
   const productDescription = psData.products?.length === 1 ? psData.products[0].description : undefined;
@@ -728,7 +728,7 @@ const CatchAdded = () => {
               )}
             </tbody>
           </table>
-          {catches.filter((data) => "catchCertificateNumber" in data).length > 0 && totalPages > 1 && (
+          {catches.some((data) => "catchCertificateNumber" in data) && totalPages > 1 && (
             <nav className="govuk-pagination" role="navigation" aria-label="results" data-testid="pagination">
               <div className="govuk-pagination__prev">
                 {isFirstPage ? (
