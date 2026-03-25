@@ -84,6 +84,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const currentStep = session.get("currentStep");
   const postcode = session.get("postcode");
   const hasPostcode = isEmpty(postcode) === false;
+  const hasPostcode = isEmpty(postcode) === false;
   const addressOne = session.get("addressOne");
 
   // Parallelise all independent network calls: processing statement, countries reference
