@@ -22,6 +22,8 @@ import catchCertificatePlane from "@/fixtures/transportDetailsApi/catchCertifica
 import catchCertificateTrain from "@/fixtures/transportDetailsApi/catchCertificateTrain.json";
 import sdProductAddedValidData from "@/fixtures/storageDocumentApi/storageDocumentProductAddedValidData.json";
 import sdProductAddedInvalidWeightData from "@/fixtures/storageDocumentApi/storageDocumentProductWeightAddedInvalidData.json";
+import sdProductWeightExceedsArrivalData from "@/fixtures/storageDocumentApi/storageDocumentProductWeightExceedsArrivalData.json";
+import sdFisheryWeightExceedsProductData from "@/fixtures/storageDocumentApi/storageDocumentFisheryWeightExceedsProductData.json";
 import species from "@/fixtures/referenceDataApi/species.json";
 import storageDocumentProgress from "@/fixtures/progressApi/sdIncomplete.json";
 import sdDrafts from "@/fixtures/dashboardApi/sdDrafts.json";
@@ -92,6 +94,22 @@ const departureSummaryHandlerHandler: ITestHandler = {
     ),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+  ],
+  [TestCaseId.SDDepartureSummaryProductWeightExceedsArrival]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(multiCatches))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.status(200), ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(sdProductWeightExceedsArrivalData))
+    ),
+  ],
+  [TestCaseId.SDDepartureSummaryFisheryWeightExceedsProduct]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(multiCatches))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.status(200), ctx.json(trainTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(sdFisheryWeightExceedsProductData))
+    ),
   ],
   [TestCaseId.SDDepartureSummaryForbidden]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.status(403))),
