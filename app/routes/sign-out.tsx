@@ -23,7 +23,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   setApiMock(request.url);
   const ENV = getEnv();
 
-  const warningTime: number = parseInt(ENV.WARNING_T0_TIME_OUT_IN_MILLISECONDS);
+  const warningTime: number = Number.parseInt(ENV.WARNING_T0_TIME_OUT_IN_MILLISECONDS, 10);
   const minuteInMilliseconds = 60000;
   const secondInMilliseconds = 1000;
   const csrf = await createCSRFToken(request);
