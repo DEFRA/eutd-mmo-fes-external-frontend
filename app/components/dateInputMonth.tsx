@@ -27,19 +27,7 @@ export const DateInputMonth = ({
     <label className="govuk-label govuk-date-input__label" htmlFor={`${id}-month`}>
       {label}
     </label>
-    {!isHydrated ? (
-      <input
-        className={
-          isEmpty(errors)
-            ? "govuk-input govuk-date-input__input govuk-input--width-2"
-            : "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
-        }
-        id={`${id}-month`}
-        name={`${name}Month`}
-        type="number"
-        defaultValue={monthSelected}
-      />
-    ) : (
+    {isHydrated ? (
       <input
         className={
           isEmpty(errors)
@@ -52,6 +40,18 @@ export const DateInputMonth = ({
         onChange={handleMonthChange}
         inputMode="numeric"
         value={month}
+      />
+    ) : (
+      <input
+        className={
+          isEmpty(errors)
+            ? "govuk-input govuk-date-input__input govuk-input--width-2"
+            : "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
+        }
+        id={`${id}-month`}
+        name={`${name}Month`}
+        type="number"
+        defaultValue={monthSelected}
       />
     )}
   </div>
