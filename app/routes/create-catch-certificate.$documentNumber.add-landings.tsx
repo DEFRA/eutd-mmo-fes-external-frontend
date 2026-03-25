@@ -131,7 +131,7 @@ const getValueFromActionOrState = <T,>(
   typeGuard?: (val: any) => T
 ): T => {
   if (!isEmpty(errors) && actionValue !== undefined) {
-    return typeGuard ? typeGuard(actionValue) : (actionValue as T);
+    return typeGuard ? typeGuard(actionValue) : actionValue;
   }
   return stateValue;
 };
