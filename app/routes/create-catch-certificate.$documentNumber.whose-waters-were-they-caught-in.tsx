@@ -32,6 +32,9 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 const WhoseWatersWereTheyCaughtIn = () => {
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
+  const hasErrors = !isEmpty(errors);
+  const hasWatersCaughtInError = !isEmpty(errors?.watersCaughtIn);
+  const hasOtherWatersError = !isEmpty(errors?.otherWaters);
   const {
     documentNumber,
     otherWaters,
@@ -51,28 +54,24 @@ const WhoseWatersWereTheyCaughtIn = () => {
   const { t } = useTranslation(["whoseWatersWereTheyCaughtIn", "common", "errorsText"]);
 
   useEffect(() => {
-    if (!isEmpty(errors)) {
+    if (hasErrors) {
       scrollToId("errorIsland");
     }
-  }, [errors]);
+  }, [errors, hasErrors]);
 
   useScrollOnPageLoad();
 
   return (
     <Main backUrl={backUri}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
+      {hasErrors && <ErrorSummary errors={displayErrorMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" csrf={csrf}>
-            <div
-              className={
-                !isEmpty(errors?.watersCaughtIn) ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"
-              }
-            >
+            <div className={hasWatersCaughtInError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
               <fieldset
                 className="govuk-fieldset"
                 aria-describedby={
-                  isEmpty(errors?.watersCaughtIn) ? "watersCaughtIn-hint" : "watersCaughtIn-hint watersCaughtIn-error"
+                  hasWatersCaughtInError ? "watersCaughtIn-hint watersCaughtIn-error" : "watersCaughtIn-hint"
                 }
               >
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--xl">
@@ -81,7 +80,7 @@ const WhoseWatersWereTheyCaughtIn = () => {
                 <div id="watersCaughtIn-hint" className="govuk-hint">
                   {t("ccWhoseWatersWereTheyCaughtInSelectText")}
                 </div>
-                {!isEmpty(errors?.watersCaughtIn) && (
+                {hasWatersCaughtInError && (
                   <ErrorMessage
                     id="watersCaughtIn-error"
                     text={t(errors?.watersCaughtIn?.message, { ns: "errorsText" })}
@@ -92,10 +91,10 @@ const WhoseWatersWereTheyCaughtIn = () => {
                   fallback={
                     <WhoseWaters
                       error={errors?.otherWaters?.message}
-                      caughtInUKWaters={!isEmpty(errors) ? actionData?.caughtInUKWaters : caughtInUKWaters}
-                      caughtInEUWaters={!isEmpty(errors) ? actionData?.caughtInEUWaters : caughtInEUWaters}
-                      caughtInOtherWaters={!isEmpty(errors) ? actionData?.caughtInOtherWaters : caughtInOtherWaters}
-                      otherWaters={!isEmpty(errors) ? actionData?.otherWaters : otherWaters}
+                      caughtInUKWaters={hasErrors ? actionData?.caughtInUKWaters : caughtInUKWaters}
+                      caughtInEUWaters={hasErrors ? actionData?.caughtInEUWaters : caughtInEUWaters}
+                      caughtInOtherWaters={hasErrors ? actionData?.caughtInOtherWaters : caughtInOtherWaters}
+                      otherWaters={hasErrors ? actionData?.otherWaters : otherWaters}
                     />
                   }
                 >
@@ -138,15 +137,13 @@ const WhoseWatersWereTheyCaughtIn = () => {
                         <div className="govuk-checkboxes__conditional">
                           <div
                             className={
-                              !isEmpty(errors?.otherWaters)
-                                ? "govuk-form-group govuk-form-group--error"
-                                : "govuk-form-group"
+                              hasOtherWatersError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"
                             }
                           >
                             <label className="govuk-label" htmlFor="otherWaters">
                               {t("ccWhoseWatersWereTheyCaughtInInputText")}
                             </label>
-                            {!isEmpty(errors?.otherWaters) && (
+                            {hasOtherWatersError && (
                               <ErrorMessage
                                 text={t(errors?.otherWaters?.message, { ns: "errorsText" })}
                                 visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
