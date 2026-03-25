@@ -11,8 +11,8 @@ export const LanguageToggle = ({ languages, locale, params }: ILanguageTogglePro
     const strs: string[] = entry.split("=");
 
     for (const key in strs) {
-      if (parseInt(key) % 2 == 0 && !dict[strs[key]] && strs[key] !== "lng") {
-        dict[strs[key]] = `${strs[key]}=${strs[parseInt(key) + 1]}`;
+      if (Number.parseInt(key, 10) % 2 == 0 && !dict[strs[key]] && strs[key] !== "lng") {
+        dict[strs[key]] = `${strs[key]}=${strs[Number.parseInt(key, 10) + 1]}`;
       }
     }
   });
