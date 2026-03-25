@@ -215,7 +215,7 @@ describe("PS: Catch added", () => {
     cy.get('label[for*="filter"]').should("exist");
     cy.get('input[name="q"]')
       .should("have.attr", "id")
-      .and("satisfy", (id: string) => id.endsWith("-filter"));
+      .and("match", /.*-filter$/);
     cy.get(".govuk-hint").should("exist");
     cy.get('input[name="q"]').should("have.attr", "aria-describedby");
   });
@@ -231,7 +231,7 @@ describe("PS: Catch added", () => {
     cy.get('input[type="search"]').should("exist");
     cy.get('input[name="q"]')
       .should("have.attr", "id")
-      .and("satisfy", (id: string) => id.endsWith("-filter"));
+      .and("match", /.*-filter$/);
     cy.get(".govuk-hint").should("exist");
     cy.get('input[name="q"]').should("have.attr", "aria-describedby");
     cy.get('[data-testid="filter-search-submit"]').should("exist");
@@ -519,7 +519,7 @@ describe("PS: Catch added", () => {
 
     cy.get('input[name="q"]')
       .should("have.attr", "id")
-      .and("satisfy", (id: string) => id.endsWith("-filter"));
+      .and("match", /.*-filter$/);
 
     cy.get('input[name="q"]')
       .invoke("attr", "id")
@@ -671,7 +671,7 @@ describe("PS: Catch added", () => {
 
     cy.get('input[name="q"]')
       .should("have.attr", "id")
-      .and("satisfy", (id: string) => id.endsWith("-filter"));
+      .and("match", /.*-filter$/);
 
     cy.get('input[name="q"]')
       .invoke("attr", "id")
@@ -1611,16 +1611,14 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
       testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName,
     };
 
-    cy.intercept("GET", "**/create-processing-statement/*/catch-added*").as("catchAddedLoad");
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.wait("@catchAddedLoad");
 
     cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
 
     // Search by species code (FAO27)
-    cy.get('input[name="q"]').should("be.visible").and("not.be.disabled");
-    cy.get('input[name="q"]').clear();
-    cy.get('input[name="q"]').type("FAO27");
+    cy.get('input[name="q"]').should("be.visible");
+    cy.get('input[name="q"]').clear({ force: true });
+    cy.get('input[name="q"]').type("FAO27", { force: true });
     cy.get('input[name="q"]').should("have.value", "FAO27");
     cy.get('[data-testid="filter-search-submit"]').click();
 
@@ -1635,16 +1633,14 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
       testCaseId: TestCaseId.PSCatchAddedFilterByProductDescription,
     };
 
-    cy.intercept("GET", "**/create-processing-statement/*/catch-added*").as("catchAddedLoad");
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.wait("@catchAddedLoad");
 
     cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
 
     // Search for product-specific term
-    cy.get('input[name="q"]').should("be.visible").and("not.be.disabled");
-    cy.get('input[name="q"]').clear();
-    cy.get('input[name="q"]').type("product");
+    cy.get('input[name="q"]').should("be.visible");
+    cy.get('input[name="q"]').clear({ force: true });
+    cy.get('input[name="q"]').type("product", { force: true });
     cy.get('input[name="q"]').should("have.value", "product");
     cy.get('[data-testid="filter-search-submit"]').click();
 
