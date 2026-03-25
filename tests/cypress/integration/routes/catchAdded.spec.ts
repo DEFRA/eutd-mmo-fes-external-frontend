@@ -1603,7 +1603,6 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     // Should show error about product requiring catches
     cy.get("#errorIsland").should("exist");
 
-    // cy.contains("commonProgressProductDetailsRequiredError").should("exist");
     cy.url().should("include", "/catch-added");
   });
 
@@ -1725,7 +1724,10 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
 
     // Apply search
-    cy.get('input[name="q"]').type("test");
+    cy.get('input[name="q"]').should("be.visible");
+    cy.get('input[name="q"]').clear({ force: true });
+    cy.get('input[name="q"]').type("test", { force: true });
+    cy.get('input[name="q"]').should("have.value", "test");
     cy.get('[data-testid="filter-search-submit"]').click();
 
     cy.wait("@filterSubmit").then(({ request }) => {
