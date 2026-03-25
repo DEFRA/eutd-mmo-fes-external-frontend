@@ -8,6 +8,7 @@ import {
   getLandingsEntryOption,
   getExportLocation,
   getCountries,
+  getCountriesByName,
   createCSRFToken,
   getTransportations,
   postDraftExportLocation,
@@ -68,14 +69,15 @@ export const WhatExportJourneyLoader = async (request: Request, params: Params) 
 export const WhatExportJourneyAction = async (request: Request, params: Params): Promise<Response | ErrorResponse> => {
   const bearerToken = await getBearerTokenForRequest(request);
   const { documentNumber } = params;
-  const countries = await getCountries();
-  const body = await request.formData();
+  // Parallelize form parsing and indexed countries Map fetch — they are independent.
+  const [body, countriesByName] = await Promise.all([request.formData(), getCountriesByName()]);
   const exportedFrom = (body.get("exportedFrom") as string) ?? "United Kingdom";
   const exportedTo = body.get("exportedTo");
   const pointOfDestination = body.get("pointOfDestination");
   const landingsEntryOption = body.get("landingsEntryOption");
   const action = body.get("_action");
-  const country = countries.filter((i) => i.officialCountryName === exportedTo)[0];
+  // O(1) Map lookup instead of O(n) array.filter scan
+  const country = exportedTo ? countriesByName.get((exportedTo as string).toLowerCase()) : undefined;
   const requestBody = {
     exportedFrom,
     // loaded: true, // TO DO: need to find out what this property does, when it should be true/false, and whether we actually need it.
