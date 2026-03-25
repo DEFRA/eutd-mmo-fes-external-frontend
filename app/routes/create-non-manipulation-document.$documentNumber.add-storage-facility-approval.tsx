@@ -71,6 +71,39 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   );
 };
 
+const saveAsDraftFacility = async (
+  bearerToken: string,
+  documentNumber: string,
+  facilityUrl: string,
+  facilityData: { facilityApprovalNumber?: string; facilityStorage?: string },
+  request: Request
+): Promise<Response> => {
+  const validationResponse = await updateStorageDocumentFacility(
+    bearerToken,
+    documentNumber,
+    facilityUrl,
+    false,
+    undefined,
+    facilityData
+  );
+
+  const dataToSave: { facilityApprovalNumber?: string | null; facilityStorage?: string | null } = { ...facilityData };
+
+  if (validationResponse instanceof Response) {
+    const responseData = await validationResponse.clone().json();
+    const errorKeys = new Set<string>(Object.keys(responseData?.errors ?? {}));
+    if (errorKeys.has("storageFacilities-facilityApproval")) dataToSave.facilityApprovalNumber = null;
+    if (errorKeys.has("storageFacilities-facilityStorage")) dataToSave.facilityStorage = null;
+  }
+
+  await updateStorageDocumentFacility(bearerToken, documentNumber, facilityUrl, true, undefined, dataToSave);
+
+  const session = await getSessionFromRequest(request);
+  return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
+    headers: { "Set-Cookie": await commitSession(session) },
+  });
+};
+
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
@@ -84,25 +117,26 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const { _action, ...values } = Object.fromEntries(form);
 
   const isDraft = _action === "saveAsDraft";
-  const saveToRedisIfErrors = isDraft;
+
+  const facilityApprovalNumber = isEmpty(values["approvalNumber"]) ? undefined : (values["approvalNumber"] as string);
+  const facilityStorage = isEmpty(values["facilityStorage"]) ? undefined : (values["facilityStorage"] as string);
+  const facilityUrl = "/create-non-manipulation-document/:documentNumber/add-storage-facility-approval";
+  const facilityData = { facilityApprovalNumber, facilityStorage };
+
+  if (isDraft) {
+    return saveAsDraftFacility(bearerToken, documentNumber, facilityUrl, facilityData, request);
+  }
+
   const errorResponse = await updateStorageDocumentFacility(
     bearerToken,
     documentNumber,
-    "/create-non-manipulation-document/:documentNumber/add-storage-facility-approval",
-    saveToRedisIfErrors,
+    facilityUrl,
+    false, // saveToRedisIfErrors = false
     undefined,
-    {
-      facilityApprovalNumber: isEmpty(values["approvalNumber"]) ? undefined : (values["approvalNumber"] as string),
-      facilityStorage: isEmpty(values["facilityStorage"]) ? undefined : (values["facilityStorage"] as string),
-    }
+    facilityData
   );
 
   const session = await getSessionFromRequest(request);
-  if (isDraft) {
-    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
-      headers: { "Set-Cookie": await commitSession(session) },
-    });
-  }
 
   if (errorResponse) {
     return errorResponse as Response;

@@ -263,6 +263,87 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   );
 };
 
+const buildFilteredDepartureValues = async (
+  validationResponse: unknown,
+  values: Record<string, FormDataEntryValue>
+): Promise<Record<string, FormDataEntryValue>> => {
+  const filteredValues = { ...values };
+  if (!(validationResponse instanceof Response)) return filteredValues;
+
+  const responseData = await validationResponse.clone().json();
+  const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+
+  const catchWeightPattern = /^catches-(\d+)-(netWeightProductDeparture|netWeightFisheryProductDeparture)$/;
+  for (const errorKey of errorKeys) {
+    const match = catchWeightPattern.exec(errorKey);
+    if (match) {
+      const index = match[1];
+      if (match[2] === "netWeightProductDeparture") {
+        filteredValues[`weight-net-weight-product-departure-${index}`] = "";
+      } else {
+        filteredValues[`weight-net-weight-fishery-product-departure-${index}`] = "";
+      }
+    }
+  }
+
+  return filteredValues;
+};
+
+const handleRemoveCatch = async (
+  bearerToken: string,
+  documentNumber: string,
+  removeIndex: string,
+  isNonJs: boolean
+): Promise<Response> => {
+  const errorResponse = await removeStorageDocumentCatch(
+    bearerToken,
+    documentNumber,
+    "",
+    removeIndex,
+    false,
+    false,
+    isNonJs
+  );
+
+  if (errorResponse) {
+    return errorResponse as Response;
+  }
+
+  return redirect(`/create-non-manipulation-document/${documentNumber}/departure-product-summary`);
+};
+
+const saveAsDraftDeparture = async (
+  bearerToken: string,
+  documentNumber: string,
+  values: Record<string, FormDataEntryValue>,
+  departureUrl: string,
+  isNonJs: boolean
+): Promise<Response> => {
+  const validationResponse = await updateStorageDocumentCatchDepartureWeights(
+    bearerToken,
+    documentNumber,
+    values,
+    departureUrl,
+    false,
+    false,
+    isNonJs
+  );
+
+  const filteredValues = await buildFilteredDepartureValues(validationResponse, values);
+
+  await updateStorageDocumentCatchDepartureWeights(
+    bearerToken,
+    documentNumber,
+    filteredValues,
+    departureUrl,
+    true,
+    false,
+    isNonJs
+  );
+
+  return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
+};
+
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
@@ -271,7 +352,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const isNonJs = form.get("isNonJs") === "true";
   const { _action, ...values } = Object.fromEntries(form);
   const isDraft = form.get("_action") === "saveAsDraft";
-  const saveToRedisIfErrors = isDraft;
 
   const isEdit = (_action as string)?.startsWith("edit-");
   const isRemove = (_action as string)?.startsWith("remove-");
@@ -287,36 +367,24 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   if (isRemove) {
     const removeIndex = (_action as string).split("-")[1];
-    const errorResponse = await removeStorageDocumentCatch(
-      bearerToken,
-      documentNumber,
-      "",
-      removeIndex,
-      saveToRedisIfErrors,
-      false,
-      isNonJs
-    );
+    return handleRemoveCatch(bearerToken, documentNumber, removeIndex, isNonJs);
+  }
 
-    if (errorResponse) {
-      return errorResponse as Response;
-    }
+  const departureUrl = `/create-non-manipulation-document/${documentNumber}/departure-product-summary`;
 
-    return redirect(`/create-non-manipulation-document/${documentNumber}/departure-product-summary`);
+  if (isDraft) {
+    return saveAsDraftDeparture(bearerToken, documentNumber, values, departureUrl, isNonJs);
   }
 
   const errorResponse = await updateStorageDocumentCatchDepartureWeights(
     bearerToken,
     documentNumber,
     values,
-    `/create-non-manipulation-document/${documentNumber}/departure-product-summary`,
-    saveToRedisIfErrors,
+    departureUrl,
+    false, // saveToRedisIfErrors = false
     false,
     isNonJs
   );
-
-  if (isDraft) {
-    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
-  }
 
   // If errorResponse is a Response, extract its body as text
   if (errorResponse instanceof Response) {
