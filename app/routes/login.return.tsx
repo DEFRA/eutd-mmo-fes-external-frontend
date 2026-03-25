@@ -21,4 +21,6 @@ export const action: ActionFunction = async ({ request }) => {
   return await onLoginReturnHandler(request);
 };
 
-export default () => <Main showHelpLink={false} />;
+export default function LoginReturn() {
+  return <Main showHelpLink={false} />;
+}
