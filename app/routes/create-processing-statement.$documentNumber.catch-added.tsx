@@ -726,7 +726,7 @@ const CatchAdded = () => {
               )}
             </tbody>
           </table>
-          {catches.filter((data) => "catchCertificateNumber" in data).length > 0 && totalPages > 1 && (
+          {catches.some((data) => "catchCertificateNumber" in data) && totalPages > 1 && (
             <nav className="govuk-pagination" role="navigation" aria-label="results" data-testid="pagination">
               <div className="govuk-pagination__prev">
                 {isFirstPage ? (
