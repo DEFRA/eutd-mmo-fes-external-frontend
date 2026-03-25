@@ -27,19 +27,7 @@ export const DateInputDay = ({
     <label className="govuk-label govuk-date-input__label" htmlFor={`${id}-day`}>
       {label}
     </label>
-    {!isHydrated ? (
-      <input
-        className={
-          isEmpty(errors)
-            ? "govuk-input govuk-date-input__input govuk-input--width-2"
-            : "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
-        }
-        id={`${id}-day`}
-        name={`${name}Day`}
-        type="number"
-        defaultValue={daySelected}
-      />
-    ) : (
+    {isHydrated ? (
       <input
         className={
           isEmpty(errors)
@@ -52,6 +40,18 @@ export const DateInputDay = ({
         onChange={handleDayChange}
         inputMode="numeric"
         value={day}
+      />
+    ) : (
+      <input
+        className={
+          isEmpty(errors)
+            ? "govuk-input govuk-date-input__input govuk-input--width-2"
+            : "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
+        }
+        id={`${id}-day`}
+        name={`${name}Day`}
+        type="number"
+        defaultValue={daySelected}
       />
     )}
   </div>
