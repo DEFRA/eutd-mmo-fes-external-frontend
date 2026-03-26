@@ -93,7 +93,7 @@
   "commonAddTransportationDetailsVesselFlagMaxCharError": "Does dim modd i wladwriaeth y faner fod yn fwy na 50 nod",
   "commonAddTransportationDetailsVesselFlagBasePatternError": "Rhaid i wladwriaeth y faner gynnwys dim ond llythrennau, rhifau, collnodau, cysylltnodau a bylchau",
   "commonAddTransportationDetailsPlaneContainerNumberLabelError": "Rhowch rif neu rifau adnabod y cynhwysydd",
-  "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError": "Rhaid i rif y cynhwysydd gynnwys dim ond llythrennau, rhifau a bylchau.",
+  "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError": "Rhowch rif cynhwysydd yn y fformat cywir. Rhaid iddo fod yn llythrennau a rhifau yn unig.",
   "commonRoadTransportDocumentError": "Dewiswch oes os oes gennych ddogfen cludiant ffordd i fynd gyda’r hyn rydych yn ei allforio",
   "ccShippingContainerNumberPatternError": "Rhowch rif cynhwysydd llong yn y fformat cywir. Rhaid iddo fod yn 11 o gymeriadau: 3 llythyren, yna U, J, Z neu R, yna 7 rhif.",
   "ccContainerVesselContainerNumberRequiredError": "Rhowch y rhif adnabod cynhwysydd llong",

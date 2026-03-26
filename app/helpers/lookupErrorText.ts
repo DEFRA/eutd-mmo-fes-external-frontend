@@ -123,63 +123,63 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.plane.1.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.1.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.1.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.1.plane.string.pattern.base":
+    "error.containerNumbers.plane.1.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.2.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.2.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.2.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.2.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.2.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.2.plane.string.pattern.base":
+    "error.containerNumbers.plane.2.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.3.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.3.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.3.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.3.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.3.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.3.plane.string.pattern.base":
+    "error.containerNumbers.plane.3.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.4.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.4.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.4.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.4.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.4.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.4.plane.string.pattern.base":
+    "error.containerNumbers.plane.4.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.5.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.5.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.5.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.5.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.5.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.5.plane.string.pattern.base":
+    "error.containerNumbers.plane.5.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.6.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.6.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.6.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.6.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.6.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.6.plane.string.pattern.base":
+    "error.containerNumbers.plane.6.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.7.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.7.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.7.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.7.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.7.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.7.plane.string.pattern.base":
+    "error.containerNumbers.plane.7.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.8.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.8.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.8.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.8.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.8.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.8.plane.string.pattern.base":
+    "error.containerNumbers.plane.8.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.9.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.9.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.9.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.9.string.alphanum": "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     "error.containerNumbers.9.string.pattern.base": "ccShippingContainerNumberPatternError",
-    "error.containerNumbers.9.plane.string.pattern.base":
+    "error.containerNumbers.plane.9.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
     commonAddTransportationDetailsPlaneContainerNumberLabelError:
       "commonAddTransportationDetailsPlaneContainerNumberLabelError",

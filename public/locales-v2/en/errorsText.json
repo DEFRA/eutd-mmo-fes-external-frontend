@@ -92,7 +92,7 @@
   "commonAddTransportationDetailsVesselFlagMaxCharError": "Flag state must not exceed 50 characters",
   "commonAddTransportationDetailsVesselFlagBasePatternError": "Flag state must only contain letters, numbers, apostrophes, hyphens and spaces",
   "commonAddTransportationDetailsPlaneContainerNumberLabelError": "Enter the container identification number",
-  "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError": "Container identification number must only contain letters, numbers and spaces.",
+  "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError": "Enter a container number in the correct format. This must be letters and numbers only.",
   "ccShippingContainerNumberPatternError": "Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.",
   "ccContainerVesselContainerNumberRequiredError": "Enter the shipping container identification number",
   "ccContainerVesselContainerNumberLabelError": "Enter the shipping container identification number",
