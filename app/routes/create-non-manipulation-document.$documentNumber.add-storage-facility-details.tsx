@@ -86,36 +86,36 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
     const arrivalVehicle = arrivalVehicleParam ?? storageDocument?.arrivalTransport?.vehicle;
 
-    if (!arrivalVehicle) {
-      return route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
-        documentNumber,
-      });
+    if (arrivalVehicle) {
+      const arrivalTransportRoutes: Record<string, string> = {
+        truck: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-truck", {
+          documentNumber,
+        }),
+        train: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-train", {
+          documentNumber,
+        }),
+        plane: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-plane", {
+          documentNumber,
+        }),
+        containerVessel: route(
+          "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-container-vessel",
+          {
+            documentNumber,
+          }
+        ),
+      };
+
+      return (
+        arrivalTransportRoutes[arrivalVehicle] ??
+        route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
+          documentNumber,
+        })
+      );
     }
 
-    const arrivalTransportRoutes: Record<string, string> = {
-      truck: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-truck", {
-        documentNumber,
-      }),
-      train: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-train", {
-        documentNumber,
-      }),
-      plane: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-plane", {
-        documentNumber,
-      }),
-      containerVessel: route(
-        "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-container-vessel",
-        {
-          documentNumber,
-        }
-      ),
-    };
-
-    return (
-      arrivalTransportRoutes[arrivalVehicle] ??
-      route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
-        documentNumber,
-      })
-    );
+    return route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
+      documentNumber,
+    });
   };
 
   return new Response(
@@ -511,7 +511,7 @@ const AddStorageFacilityDetails = () => {
                 "govuk-input--error": errors?.["storageFacilities-facilityName"],
               })}
               errorProps={{
-                className: !isEmpty(errors?.["storageFacilities-facilityName"]) ? "govuk-error-message" : "",
+                className: isEmpty(errors?.["storageFacilities-facilityName"]) ? "" : "govuk-error-message",
               }}
               staticErrorMessage={t(errors?.["storageFacilities-facilityName"]?.message, {
                 ns: "errorsText",

@@ -81,14 +81,16 @@ export const CheckYourInformationDocumentNumber = ({
     </>
   );
 
-  if (!renderWrapper) return content;
+  if (renderWrapper) {
+    return (
+      <>
+        {checkInformationHeader && <h2 className="govuk-heading-l">{checkInformationHeader}</h2>}
+        <dl className="govuk-summary-list govuk-!-margin-bottom-5">{content}</dl>
+      </>
+    );
+  }
 
-  return (
-    <>
-      {checkInformationHeader && <h2 className="govuk-heading-l">{checkInformationHeader}</h2>}
-      <dl className="govuk-summary-list govuk-!-margin-bottom-5">{content}</dl>
-    </>
-  );
+  return content;
 };
 
 type CheckInfoExporterDetailsProps = {
@@ -553,7 +555,7 @@ export const CheckYourInformationProductLayout = ({
     <div
       key={`catchesdata-${ctch._id}`}
       id={`catches-${index}-certificateNumber`}
-      className={catchValidationError !== undefined ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}
+      className={catchValidationError === undefined ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"}
     >
       {catchValidationError?.message !== undefined && (
         <ErrorMessage
