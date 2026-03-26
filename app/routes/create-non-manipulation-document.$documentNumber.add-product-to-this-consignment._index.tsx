@@ -40,7 +40,6 @@ import type {
   LabelAndValue,
   CodeAndDescription,
   StorageDocument,
-  IUnauthorised,
   StorageDocumentCatch,
   DocIssuedInUkRadioSelectOptionType,
   DocIssuedInUkRadioSelectType,
@@ -78,17 +77,23 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   setApiMock(request.url);
 
   const { documentNumber } = params;
-  const species = await getAllSpecies();
-  const countries = await getCountries();
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
   const backThroughProducts = url.searchParams.get("backThroughProducts") === "true";
   const productIndex = Number.parseInt(params["*"] ?? "") || 0;
-  const commodities: CodeAndDescription[] = await getCommodities();
   const speciesExemptLink = getEnv().SPECIES_EXEMPT_LINK;
   const commodityCodeLink = getEnv().COMMODITY_CODE_LINK;
+
+  // Fetch bearer token first so it can be used in the parallel storageDocument fetch.
   const bearerToken = await getBearerTokenForRequest(request);
-  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
+
+  // Parallelise all independent reference-data and document fetches.
+  const [species, countries, commodities, storageDocument] = await Promise.all([
+    getAllSpecies(),
+    getCountries(),
+    getCommodities(),
+    getStorageDocument(bearerToken, documentNumber),
+  ]);
   const displayOptionalSuffix = getEnv().EU_CATCH_FIELDS_OPTIONAL === "true";
   const maximumEntryDocsAllowed = getEnv().EU_SD_MAX_ENTRY_DOCS;
 

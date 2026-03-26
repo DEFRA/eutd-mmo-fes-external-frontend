@@ -63,11 +63,16 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const postcode = session.get("postcode");
   const addressOne = session.get("addressOne");
 
-  const countries: ICountry[] = await getCountries();
+  // Parallelise countries reference-data with the postcode lookup when a postcode
+  // is already in the session — both are independent network calls.
   const actionUri = `/create-non-manipulation-document/${documentNumber}/what-storage-facility-address`;
-  if (!isEmpty(postcode)) {
-    const response: ILookUpAddress = await postCodeLookUp(postcode);
-    const postcodeaddresses: ILookUpAddressDetails[] = response.data;
+  const [countries, lookupResponse] = await Promise.all([
+    getCountries(),
+    !isEmpty(postcode) ? postCodeLookUp(postcode) : Promise.resolve(null as ILookUpAddress | null),
+  ]);
+
+  if (!isEmpty(postcode) && lookupResponse) {
+    const postcodeaddresses: ILookUpAddressDetails[] = Array.isArray(lookupResponse.data) ? lookupResponse.data : [];
     const postcodeaddress: ILookUpAddressDetails | undefined = postcodeaddresses.find(
       (address: ILookUpAddressDetails) => address.address_line === addressOne
     );
