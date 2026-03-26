@@ -851,6 +851,8 @@ export enum TestCaseId {
   SDDepartureSummaryCatchesEmptyWeights = "sdDepartureSummaryCatchesEmptyWeights",
   SDDepartureSummaryCatchesInvalidWeightSave = "sdDepartureSummaryCatchesInvalidWeightSave",
   SDDepartureSummarySaveAsDraftWithErrors = "sdDepartureSummarySaveAsDraftWithErrors",
+  SDDepartureSummaryProductWeightExceedsArrival = "sdDepartureSummaryProductWeightExceedsArrival",
+  SDDepartureSummaryFisheryWeightExceedsProduct = "sdDepartureSummaryFisheryWeightExceedsProduct",
 
   // FI0-10296: Remove Product Page
   RemoveProductPageLoads = "removeProductPageLoads",

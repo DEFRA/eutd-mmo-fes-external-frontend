@@ -231,6 +231,18 @@ describe("Add Transportation Details Train: Container Identification Number Vali
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.url().should("include", progressUrl);
   });
+
+  it("should save successfully when container identification number is entered in lowercase", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportSave,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.get("#railwayBillNumber").type("RB123456", { force: true });
+    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("abcu1234567", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", progressUrl);
+  });
 });
 
 describe("Add Transportation Details Train: Multiple Container Numbers", () => {
