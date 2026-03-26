@@ -221,9 +221,7 @@ describe("Add Transportation Details Plane: Container Identification Number Vali
     cy.get('input[name="containerNumbers.0"]').type("ABC123!@#", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Container identification number must only contain letters, numbers and spaces.$/).should(
-      "be.visible"
-    );
+    cy.contains("a", /^Container identification number must only contain letters and numbers.$/).should("be.visible");
   });
 
   it("should display error when multiple space-separated container IDs are entered in a single field", () => {
