@@ -15,6 +15,7 @@ import emptyCatches from "@/fixtures/storageDocumentApi/storageDocumentEmptyCatc
 import multiCatches from "@/fixtures/storageDocumentApi/storageDocumentMultiCatches.json";
 import singleCatch from "@/fixtures/storageDocumentApi/storageDocumentSingleCatch.json";
 import multiCatchesEmptyDepartureWeight from "@/fixtures/storageDocumentApi/storageDocumentMultiCatchesEmptyDepartureWeight.json";
+import copiedDocUpdatedArrival from "@/fixtures/storageDocumentApi/storageDocumentCopiedDocUpdatedArrival.json";
 import noTransport from "@/fixtures/storageDocumentApi/storageDocumentAddDocumentType.json";
 import planeTransportAllowedDetails from "@/fixtures/transportDetailsApi/planeAllowed.json";
 import trainTransportAllowedDetails from "@/fixtures/transportDetailsApi/trainAllowed.json";
@@ -110,6 +111,14 @@ const departureSummaryHandlerHandler: ITestHandler = {
     rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(sdFisheryWeightExceedsProductData))
     ),
+  ],
+  // Copied NMD document – arrival weights updated, departure weights cleared
+  [TestCaseId.SDDepartureSummaryCopiedDocUpdatedArrival]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(copiedDocUpdatedArrival))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.status(200), ctx.json(planeTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
   ],
   [TestCaseId.SDDepartureSummaryForbidden]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.status(403))),
