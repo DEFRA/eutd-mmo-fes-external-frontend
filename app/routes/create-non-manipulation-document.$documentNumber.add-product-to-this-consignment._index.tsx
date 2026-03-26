@@ -40,11 +40,12 @@ import type {
   LabelAndValue,
   CodeAndDescription,
   StorageDocument,
-  IUnauthorised,
   StorageDocumentCatch,
   DocIssuedInUkRadioSelectOptionType,
   DocIssuedInUkRadioSelectType,
   ICountry,
+  IUnauthorised,
+  ErrorResponse,
 } from "~/types";
 import { querySpecies, getCodeFromLabel, displayErrorMessagesInOrder, scrollToId } from "~/helpers";
 import { reindexDocumentErrors } from "~/helpers/errorReindexing";
@@ -84,6 +85,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const productIndex = Number.parseInt(params["*"] ?? "") || 0;
   const speciesExemptLink = getEnv().SPECIES_EXEMPT_LINK;
   const commodityCodeLink = getEnv().COMMODITY_CODE_LINK;
+
+  // Fetch bearer token first so it can be used in the parallel storageDocument fetch.
   const bearerToken = await getBearerTokenForRequest(request);
   const displayOptionalSuffix = getEnv().EU_CATCH_FIELDS_OPTIONAL === "true";
   const maximumEntryDocsAllowed = getEnv().EU_SD_MAX_ENTRY_DOCS;
@@ -318,7 +321,7 @@ const getProductNextRedirectUrl = (nextUri: string, documentNumber: string, prod
 const handleSaveAsDraftConsignment = async (
   bearerToken: string,
   documentNumber: string | undefined,
-  errorResponse: Response | undefined,
+  errorResponse: Response | ErrorResponse | undefined,
   updateData: Partial<StorageDocument | StorageDocumentCatch>,
   productIndex: number,
   productIndexUrlFragment: string,
@@ -327,7 +330,7 @@ const handleSaveAsDraftConsignment = async (
   const sdUrl = `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment${productIndexUrlFragment}`;
   if (errorResponse) {
     // Filter out invalid fields and save only valid ones as draft
-    const responseData = await errorResponse.clone().json();
+    const responseData = errorResponse instanceof Response ? await errorResponse.clone().json() : errorResponse;
     let errorKeys: string[] = [];
     /* istanbul ignore else */
     if (responseData?.errors) {

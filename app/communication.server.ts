@@ -20,7 +20,11 @@ const commonRequestHeaders = (bearerToken: string) => ({
 
 const ENV = getEnv();
 
+// Short timeout for lightweight GET calls (reference data, client-ip, etc.).
 const FETCH_TIMEOUT_MS = 10000;
+// Longer timeout for orchestration POST calls that run validation, persistence
+// and downstream service calls (e.g. saveAndValidate, generatePdf).
+const ORCHESTRATION_FETCH_TIMEOUT_MS = 30000;
 
 type Get = (bearerToken: string, url: string, requestHeaders?: HeadersInit) => Promise<Response>;
 type Post = (bearerToken: string, url: string, requestHeaders?: HeadersInit, requestBody?: any) => Promise<Response>;
@@ -62,6 +66,11 @@ export const get: Get = async (
       throw new Response(response.statusText, response);
     }
     return response;
+  } catch (e) {
+    if (e instanceof DOMException && e.name === "AbortError") {
+      throw new Response("Gateway Timeout", { status: 504 });
+    }
+    throw e;
   } finally {
     clearTimeout(timeoutId);
   }
@@ -74,7 +83,7 @@ export const post: Post = async (
   requestBody: any = {}
 ): Promise<Response> => {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  const timeoutId = setTimeout(() => controller.abort(), ORCHESTRATION_FETCH_TIMEOUT_MS);
   try {
     const response = await fetchImpl(url, {
       method: "POST",
@@ -91,6 +100,11 @@ export const post: Post = async (
     }
 
     return response;
+  } catch (e) {
+    if (e instanceof DOMException && e.name === "AbortError") {
+      throw new Response("Gateway Timeout", { status: 504 });
+    }
+    throw e;
   } finally {
     clearTimeout(timeoutId);
   }
