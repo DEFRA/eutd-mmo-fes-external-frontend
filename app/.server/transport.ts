@@ -406,12 +406,7 @@ const onSaveTransportDetails = async (response: Response, payload?: ITransport):
         }
 
         if (payload?.vehicle === "plane") {
-          const val = errorsResponse[error];
-          if (error.includes("containerNumbers") && val.endsWith(".string.pattern.base")) {
-            errorsResponse[error] = "ccContainerIdentificationNumberInvalidCharacters";
-          } else {
-            errorsResponse[error] = val.replaceAll(".containerNumbers", ".containerNumbers.plane");
-          }
+          errorsResponse[error] = errorsResponse[error].replaceAll(".containerNumbers", ".containerNumbers.plane");
         }
       });
 
