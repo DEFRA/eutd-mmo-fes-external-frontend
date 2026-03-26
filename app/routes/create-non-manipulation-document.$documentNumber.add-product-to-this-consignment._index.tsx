@@ -44,6 +44,8 @@ import type {
   DocIssuedInUkRadioSelectOptionType,
   DocIssuedInUkRadioSelectType,
   ICountry,
+  IUnauthorised,
+  ErrorResponse,
 } from "~/types";
 import { querySpecies, getCodeFromLabel, displayErrorMessagesInOrder, scrollToId } from "~/helpers";
 import { reindexDocumentErrors } from "~/helpers/errorReindexing";
@@ -86,18 +88,18 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   // Fetch bearer token first so it can be used in the parallel storageDocument fetch.
   const bearerToken = await getBearerTokenForRequest(request);
-
-  // Parallelise all independent reference-data and document fetches.
-  const [species, countries, commodities, storageDocument] = await Promise.all([
-    getAllSpecies(),
-    getCountries(),
-    getCommodities(),
-    getStorageDocument(bearerToken, documentNumber),
-  ]);
   const displayOptionalSuffix = getEnv().EU_CATCH_FIELDS_OPTIONAL === "true";
   const maximumEntryDocsAllowed = getEnv().EU_SD_MAX_ENTRY_DOCS;
 
-  const session = await getSessionFromRequest(request);
+  // FI0-10854: parallelize independent API calls
+  const [species, countries, commodities, storageDocument, session] = await Promise.all([
+    getAllSpecies(),
+    getCountries(),
+    getCommodities() as Promise<CodeAndDescription[]>,
+    getStorageDocument(bearerToken, documentNumber) as Promise<StorageDocument | IUnauthorised>,
+    getSessionFromRequest(request),
+  ]);
+
   const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
@@ -207,7 +209,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   let scientificName;
 
-  const allSpecies: Species[] = await getAllSpecies();
+  // FI0-10854: parallelize independent reference data calls
+  const [allSpecies, countries] = await Promise.all([getAllSpecies() as Promise<Species[]>, getCountries()]);
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
@@ -221,7 +224,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     supportingDocumentsFromForm.splice(removeIndex, 1);
   }
 
-  const countries = await getCountries();
   const updateData: Partial<StorageDocument | StorageDocumentCatch> = getUpdateStorageDocumentData(
     commodityCode,
     values,
@@ -313,7 +315,7 @@ const getProductNextRedirectUrl = (nextUri: string, documentNumber: string, prod
 const handleSaveAsDraftConsignment = async (
   bearerToken: string,
   documentNumber: string | undefined,
-  errorResponse: Response | undefined,
+  errorResponse: Response | ErrorResponse | undefined,
   updateData: Partial<StorageDocument | StorageDocumentCatch>,
   productIndex: number,
   productIndexUrlFragment: string,
@@ -322,7 +324,7 @@ const handleSaveAsDraftConsignment = async (
   const sdUrl = `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment${productIndexUrlFragment}`;
   if (errorResponse) {
     // Filter out invalid fields and save only valid ones as draft
-    const responseData = await errorResponse.clone().json();
+    const responseData = errorResponse instanceof Response ? await errorResponse.clone().json() : errorResponse;
     let errorKeys: string[] = [];
     /* istanbul ignore else */
     if (responseData?.errors) {
