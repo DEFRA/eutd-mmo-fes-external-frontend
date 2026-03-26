@@ -30,3 +30,4 @@ export { FaoAreaSelector } from "./faoAreaSelector";
 export { FilterSearch } from "./filterSearch";
 export { ImportantNotice } from "./importantNotice";
 export { AddLandingsVesselHelpContent } from "./addLandingsVesselHelpContent";
+export { EmojiBlockingInput } from "./emojiBlockingInput";

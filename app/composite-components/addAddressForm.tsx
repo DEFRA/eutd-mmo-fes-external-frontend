@@ -1,8 +1,8 @@
-import { Button, BUTTON_TYPE, ErrorPosition, FormInput } from "@capgeminiuk/dcx-react-library";
+import { Button, BUTTON_TYPE, ErrorPosition } from "@capgeminiuk/dcx-react-library";
 import isEmpty from "lodash/isEmpty";
 import { useTranslation } from "react-i18next";
 import type { ICountry, IErrorsTransformed, ILookUpAddressDetails, Journey } from "~/types";
-import { AutocompleteFormField, SecureForm } from "~/components";
+import { AutocompleteFormField, SecureForm, EmojiBlockingInput as FormInput } from "~/components";
 import classNames from "classnames/bind";
 import {
   getBuildingName,
