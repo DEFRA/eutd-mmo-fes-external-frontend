@@ -185,6 +185,19 @@ describe("Add Transportation Details Container Vessel: Container Identification 
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.url().should("include", progressUrl);
   });
+
+  it("should save successfully when container identification number is entered in lowercase", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportSave,
+    };
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+    cy.get("#vesselName").type("Felicity Ace", { force: true });
+    cy.get("#flagState").type("Greece", { force: true });
+    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("abcu1234567", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", progressUrl);
+  });
 });
 
 describe("Add Transportation Details Container Vessel: Multiple Container Numbers", () => {

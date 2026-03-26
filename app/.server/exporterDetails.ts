@@ -77,6 +77,7 @@ export const getUserDetails = async (bearerToken: string): Promise<IExporter> =>
   }
 
   const dynamicsToken = await getDynamicsToken();
+
   const response: Response = await fetchImpl(
     getIdmUserDetailsUrl(jwt.decode(bearerToken)),
     getDynamicsHeader(dynamicsToken)
