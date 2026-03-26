@@ -104,15 +104,12 @@ export const addTransport = async (
 const onAddTransportDetails = async (response: Response): Promise<ITransport> => {
   switch (response.status) {
     case 200: {
-    case 200: {
       const data = await response.json();
       return {
         id: data.id,
         vehicle: data.vehicle,
         errors: [],
       };
-    }
-    case 400: {
     }
     case 400: {
       const errorsResponse = await response.json();
@@ -123,7 +120,6 @@ const onAddTransportDetails = async (response: Response): Promise<ITransport> =>
           message: getErrorMessage(errorsResponse[error]),
         })),
       };
-    }
     }
     case 403:
       return {
@@ -197,8 +193,6 @@ const onUpdateTransport = async (response: Response, vehicle: string): Promise<I
       };
     }
     case 400: {
-    }
-    case 400: {
       const errorsResponse = await response.json();
       const processedErrors: Record<string, string> = {};
 
@@ -216,7 +210,6 @@ const onUpdateTransport = async (response: Response, vehicle: string): Promise<I
           message: getErrorMessage(processedErrors[error]),
         })),
       };
-    }
     }
     case 403:
       return {
@@ -389,7 +382,6 @@ const onSaveTransportDetails = async (response: Response, payload?: ITransport):
         errors: [],
       };
     case 400: {
-    case 400: {
       const errorsResponse = await response.json();
 
       // Apply transformations to the raw errors
@@ -424,7 +416,6 @@ const onSaveTransportDetails = async (response: Response, payload?: ITransport):
           message: getErrorMessage(errorsResponse[error]),
         })),
       };
-    }
     }
     case 403:
       return {
@@ -464,7 +455,6 @@ const onSaveTruckCMR = async (response: Response): Promise<IBase> => {
         errors: [],
       };
     case 400: {
-    case 400: {
       const errorsResponse = await response.json();
       return {
         errors: Object.keys(errorsResponse).map((error) => ({
@@ -472,7 +462,6 @@ const onSaveTruckCMR = async (response: Response): Promise<IBase> => {
           message: getErrorMessage(errorsResponse[error]),
         })),
       };
-    }
     }
     case 403:
       return {
@@ -520,14 +509,11 @@ const onAddAdditionalTransportTypes = async (response: Response): Promise<IAddTr
         errors: [],
       };
     case 200: {
-    case 200: {
       const data = await response.json();
       return {
         addTransportation: data.addTransportation,
         errors: [],
       };
-    }
-    case 400: {
     }
     case 400: {
       const errorsResponse = await response.json();
@@ -537,7 +523,6 @@ const onAddAdditionalTransportTypes = async (response: Response): Promise<IAddTr
           message: getErrorMessage(errorsResponse[error]),
         })),
       };
-    }
     }
     case 403:
       return {
