@@ -13,6 +13,21 @@ const createApplicationInsightService = () => {
     appInsights = new ApplicationInsights({
       config: {
         instrumentationKey,
+        enableCorsCorrelation: true,
+        cookieCfg: {
+          enabled: true,
+          domain: globalThis.window === undefined ? undefined : globalThis.window.location.hostname,
+          path: "/",
+          getCookie: undefined,
+          setCookie: undefined,
+          delCookie: undefined,
+        },
+        // Privacy and security enhancements
+        enableRequestHeaderTracking: false,
+        enableResponseHeaderTracking: false,
+        distributedTracingMode: 1, // W3C mode for better privacy
+        disableAjaxTracking: false,
+        maxAjaxCallsPerView: 500,
       },
     });
     appInsights.loadAppInsights();
