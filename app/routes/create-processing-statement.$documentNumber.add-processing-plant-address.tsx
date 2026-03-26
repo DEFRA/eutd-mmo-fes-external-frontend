@@ -90,7 +90,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const [processingStatement, countries, lookupResponse] = await Promise.all([
     getProcessingStatement(plantAddressBearerToken, documentNumber),
     getCountries(),
-    !isEmpty(postcode) ? postCodeLookUp(postcode) : Promise.resolve(null as ILookUpAddress | null),
+    isEmpty(postcode) ? Promise.resolve(null as ILookUpAddress | null) : postCodeLookUp(postcode),
   ]);
 
   validateResponseData(processingStatement);

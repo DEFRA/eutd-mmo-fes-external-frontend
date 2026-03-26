@@ -68,7 +68,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const actionUri = `/create-non-manipulation-document/${documentNumber}/what-storage-facility-address`;
   const [countries, lookupResponse] = await Promise.all([
     getCountries(),
-    !isEmpty(postcode) ? postCodeLookUp(postcode) : Promise.resolve(null as ILookUpAddress | null),
+    isEmpty(postcode) ? Promise.resolve(null as ILookUpAddress | null) : postCodeLookUp(postcode),
   ]);
 
   if (!isEmpty(postcode) && lookupResponse) {
