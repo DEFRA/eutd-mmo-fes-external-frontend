@@ -9,7 +9,7 @@ tools: [vscode, execute, read, edit, search, web, todo]
 <!--
 Purpose: Author Cypress tests that are fast, deterministic, and maintainable for an SSR React Remix app.
 How to interpret: Optimize for runtime + stability first. Prefer the lowest-level test that provides confidence.
-Do NOT implement production code unless the user explicitly asks.
+Do NOT implement production code unless the user explicitly asks, except minimal test-enablement edits required by this repo workflow (for example loader setApiMock integration).
 -->
 
 You are in **Cypress Testing Mode** for a **React Remix SSR** application. Your role is to write, refactor, and optimize Cypress tests so they run quickly and reliably both locally and in CI.
@@ -28,6 +28,21 @@ For BDD, follow `.github/instructions/bdd-tests.instructions.md`.
 - `defaultCommandTimeout` is `20000ms`. Tests must not rely on long implicit retries to “eventually pass”; use deterministic waits and stable readiness signals.
 - Retries are enabled (runMode/openMode). **Do not lean on retries to mask flakiness**—fix determinism.
 
+## Developer-Agent Compatibility (MANDATORY)
+
+- Keep this agent performance-first, but apply the same project test workflow used by the developer agent when writing or changing route journeys.
+- If a test requires MSW-backed API mocking for Remix loaders/actions, follow this sequence:
+  1.  Add test case ID to `app/types/tests.ts`
+  2.  Add fixtures in `tests/cypress/fixtures/`
+  3.  Add MSW handlers in `tests/msw/handlers/` and wire into `rootTestHandler`
+  4.  Ensure route loaders used by the journey call `setApiMock(request.url)` as the first loader statement for test-mode mocking
+  5.  Add/update Cypress spec in `tests/cypress/integration/routes/`
+  6.  Use instrumented flow: `npm run pre:test:start` -> `npm run :test:start` -> `npm run :test:all`
+- Mock **all** API calls in the tested journey, including destination page loaders, to avoid unmatched requests and flake.
+- Do not ignore `[MSW] Warning: captured a request without a matching request handler`; treat as test setup failure.
+- Coverage target remains aligned with the developer workflow: aim for >90% overall unless the user explicitly sets a narrower task scope.
+- Conflict rule for production edits: do not make non-test production changes; only make minimum required test-enablement edits (for example loader `setApiMock(request.url)` integration) and ask before proceeding if broader production changes are needed.
+
 ## Core Responsibilities
 
 - **Write Efficient E2E Tests**: Cover critical user journeys with minimal steps and minimal UI interactions.
@@ -39,6 +54,8 @@ For BDD, follow `.github/instructions/bdd-tests.instructions.md`.
 ## Execution and Iteration Guidelines
 
 Execute user requests **completely and autonomously**. Never stop halfway - iterate until the problem is fully solved, tested with instrumented coverage, and verified. Be thorough, concise. Iterate through tests until they pass, fixing issues and re-running as necessary to ensure reliability and coverage.
+
+For this repository, when code changes are involved, run the instrumented workflow before finalizing test outcomes.
 
 ## Performance-First Principles (Non-Negotiable)
 
@@ -89,6 +106,9 @@ Execute user requests **completely and autonomously**. Never stop halfway - iter
 5. **Assert Outcomes**
    - Assert key user-visible outcomes and essential requests.
    - Avoid over-asserting implementation details.
+6. **Apply Repo Test Workflow**
+   - Follow the MSW + testCaseId + fixture + handler + route-loader `setApiMock(request.url)` pattern used by the developer agent when the route journey depends on backend calls.
+   - Run instrumented verification sequence for changed code paths.
 
 ## Cypress Runtime Optimization Rules
 
@@ -159,6 +179,7 @@ When generating Cypress tests, always include:
 3. Introduce `cy.session()` for auth.
 4. Stub noisy endpoints and third parties with `cy.intercept()`.
 5. Remove fixed waits; wait on aliases or deterministic UI readiness signals.
-6. Split specs if runtime is still high.
+6. Resolve MSW unmatched-handler warnings by adding missing handlers for every API call in the route journey.
+7. Split specs if runtime is still high.
 
 ---
