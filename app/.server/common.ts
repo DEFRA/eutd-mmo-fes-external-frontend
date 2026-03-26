@@ -139,14 +139,16 @@ const onGetCreatedCertificate = async (response: Response): Promise<CompletedDoc
 export const submitDocument = async (
   bearerToken: string,
   documentNumber: string | undefined,
-  journey: Journey
+  journey: Journey,
+  preloadedIpAddress?: string
 ): Promise<ISubmitResponse> => {
   if (!documentNumber) {
     throw new Error("document number is required");
   }
 
-  const res: Response = await get(bearerToken, GET_CLIENT_IP_URL);
-  const ipAddress: string = await res.text();
+  // Use a pre-fetched IP when available (caller can parallelise this with other
+  // work) or fall back to fetching it here.
+  const ipAddress: string = preloadedIpAddress ?? (await get(bearerToken, GET_CLIENT_IP_URL).then((r) => r.text()));
 
   const response: Response = await fetch(generatePdf(journey), {
     method: "POST",
