@@ -31,6 +31,7 @@ import serverLogger from "~/logger.server";
 import { getGroupedValues, getTransformedError } from "~/helpers";
 import { commitSession } from "~/sessions.server";
 import isEmpty from "lodash/isEmpty";
+import { cacheGet, cacheSet } from "./referenceDataCache";
 
 export async function handleManualAddressErrors(
   errors: IError[],
@@ -105,8 +106,12 @@ export const validateResponseData = (
 };
 
 export const getCommodities = async (): Promise<CodeAndDescription[]> => {
+  const cached = cacheGet<CodeAndDescription[]>("commodities");
+  if (cached) return cached;
   const response: Response = await getReferenceData(COMMODITY_CODES);
-  return await response.json();
+  const data: CodeAndDescription[] = await response.json();
+  cacheSet("commodities", data);
+  return data;
 };
 
 export const getCompletedDocument = async (
@@ -126,9 +131,10 @@ export const getCompletedDocument = async (
 const onGetCreatedCertificate = async (response: Response): Promise<CompletedDocument | null> => {
   switch (response.status) {
     case 200:
-    case 204:
+    case 204: { 
       const completedDocument: CompletedDocument = await response.json();
       return { ...completedDocument };
+    }
     case 403:
       return null;
     default:
