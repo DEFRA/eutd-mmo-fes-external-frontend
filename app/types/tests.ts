@@ -452,6 +452,7 @@ export enum TestCaseId {
   PlaneTransportAirwaybillInvalidCharacters = "PlaneTransportAirwaybillInvalidCharacters",
   PlaneTransportContainerInvalidCharacters = "PlaneTransportContainerInvalidCharacters",
   PlaneTransportContainerErrors = "PlaneTransportContainerErrors",
+  PlaneTransportMultipleIdsInSingleField = "PlaneTransportMultipleIdsInSingleField",
   PlaneTransportMultipleContainers = "PlaneTransportMultipleContainers",
   PlaneTransportEmptyContainers = "PlaneTransportEmptyContainers",
   PlaneTransportContainerPersistence = "PlaneTransportContainerPersistence",

@@ -174,6 +174,8 @@ export const getErrorMessage = (key: string): string => {
       "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     ccContainerVesselContainerNumberRequiredError: "ccContainerVesselContainerNumberRequiredError",
     ccContainerVesselContainerNumberLabelError: "ccContainerVesselContainerNumberLabelError",
+    ccAddTransportationDetailsPlaneContainerMultipleNotAllowedError:
+      "ccAddTransportationDetailsPlaneContainerMultipleNotAllowedError",
     "error.containerNumbers.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.array.min": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.array.unique": "ccShippingContainerNumberDuplicateError",

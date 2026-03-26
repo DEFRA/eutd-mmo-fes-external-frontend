@@ -221,7 +221,22 @@ describe("Add Transportation Details Plane: Container Identification Number Vali
     cy.get('input[name="containerNumbers.0"]').type("ABC123!@#", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Container identification number must only contain letters, numbers and spaces.$/).should(
+    cy.contains("a", /^Enter a container number in the correct format. This must be letters and numbers only.$/).should(
+      "be.visible"
+    );
+  });
+
+  it("should display error when multiple space-separated container IDs are entered in a single field", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportMultipleIdsInSingleField,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("#flightNumber").type("BA123", { force: true });
+    cy.get("#departurePlace").type("Heathrow Airport", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABC1 ABC2 ABC3", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Enter a container number in the correct format. This must be letters and numbers only.$/).should(
       "be.visible"
     );
   });
