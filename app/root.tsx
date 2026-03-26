@@ -153,7 +153,17 @@ const Template = ({
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-        gtag('config', '${gaId}');`;
+        gtag('config', '${gaId}', {
+          'cookie_flags': 'SameSite=None;Secure',
+          'cookie_domain': window.location.hostname,
+          'cookie_path': '/',
+          'cookie_expires': 63072000,
+          'anonymize_ip': true,
+          'allow_google_signals': false,
+          'allow_ad_personalization_signals': false,
+          'cookie_update': true,
+          'send_page_view': true
+        });`;
 
       document.head.appendChild(gtmScript);
       document.head.appendChild(gtagScript);
