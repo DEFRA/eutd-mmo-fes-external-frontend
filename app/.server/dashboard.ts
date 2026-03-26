@@ -28,6 +28,7 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
   const url = new URL(request.url);
   const month = url.searchParams.get("month") ? Number(url.searchParams.get("month")) : new Date().getMonth() + 1;
   const year = url.searchParams.get("year") ? Number(url.searchParams.get("year")) : new Date().getFullYear();
+
   const userAttributes: UserAttribute[] = await getAllUserAttributes(bearerToken);
 
   if (!isAcceptedCookiesAvailable(userAttributes)) {
@@ -37,10 +38,17 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
   if (!isPrivacyAccepted(userAttributes)) {
     return redirect(route("/:journey/privacy-notice", { journey: getPrivacyNoticeJourney(journey) }));
   }
-  const documents = await getAllDocuments(bearerToken, journey, year, month);
+
   const isAdminSupport: boolean = isAdminUser(bearerToken);
   const emptyExporterFromIdm: IExporter = { error: "", errors: [] };
-  const userDetails: IExporter = !isAdminSupport ? await getUserDetails(bearerToken) : emptyExporterFromIdm;
+
+  // Parallelize independent API calls for performance
+  const [documents, userDetails, notification] = await Promise.all([
+    getAllDocuments(bearerToken, journey, year, month),
+    !isAdminSupport ? getUserDetails(bearerToken) : Promise.resolve(emptyExporterFromIdm),
+    getNotification(bearerToken),
+  ]);
+
   const accountDetails: IExporter = !isAdminSupport ? getAccounts(bearerToken) : emptyExporterFromIdm;
 
   let name: string = "";
@@ -57,7 +65,6 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
   if (journey === "catchCertificate") {
     clearSession(session);
   }
-  const notification = await getNotification(bearerToken);
   const responseData = {
     journey,
     documents: documents,

@@ -9,10 +9,15 @@ export const getStreetName = (postcodeaddress?: ILookUpAddressDetails) => postco
 export const getCity = (postcodeaddress?: ILookUpAddressDetails) => postcodeaddress?.city ?? "";
 export const getCounty = (postcodeaddress?: ILookUpAddressDetails) => postcodeaddress?.county ?? "";
 export const getPostcode = (postcodeaddress?: ILookUpAddressDetails) => postcodeaddress?.postCode ?? "";
-export const getCountryData = (countries: ICountry[], selectedCountry: string) =>
-  countries.find(
-    (c: ICountry) =>
-      !isEmpty(c.officialCountryName) &&
-      !isEmpty(selectedCountry) &&
-      c.officialCountryName.toLowerCase() === selectedCountry.toLowerCase()
-  ) ?? { officialCountryName: "" };
+export const getCountryData = (countries: ICountry[] | Map<string, ICountry>, selectedCountry: string) => {
+  if (!selectedCountry) return { officialCountryName: "" };
+  const key = selectedCountry.toLowerCase();
+  if (countries instanceof Map) {
+    return countries.get(key) ?? { officialCountryName: "" };
+  }
+  return (
+    countries.find((c: ICountry) => !isEmpty(c.officialCountryName) && c.officialCountryName.toLowerCase() === key) ?? {
+      officialCountryName: "",
+    }
+  );
+};

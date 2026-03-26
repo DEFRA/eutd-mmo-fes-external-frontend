@@ -10,6 +10,7 @@ export * from "./transport";
 export * from "./userReference";
 export * from "./landingsTypeConfirmation";
 export * from "./countries";
+export { cacheInvalidate, cacheClear } from "./referenceDataCache";
 export * from "./exportLocation";
 export * from "./exportPayload";
 export * from "./dynamics";
