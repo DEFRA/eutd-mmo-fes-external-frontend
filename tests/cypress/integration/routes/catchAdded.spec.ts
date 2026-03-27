@@ -1633,18 +1633,19 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
       testCaseId: TestCaseId.PSCatchAddedFilterByProductDescription,
     };
 
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
     cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
 
-    // Search for product-specific term
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
     cy.get('input[name="q"]').should("be.visible").and("be.enabled");
     cy.get('input[name="q"]').clear();
     cy.get('input[name="q"]').click();
     cy.focused().type("product");
 
+    cy.get('input[name="q"]').should("exist");
     cy.get('input[name="q"]').should("have.value", "product");
-    cy.get('[data-testid="filter-search-submit"]').click();
+
+    cy.get('[data-testid="filter-search-submit"]').should("be.visible").click();
 
     cy.wait("@filterSubmit").then(({ request }) => {
       expect(String(request.body)).to.include("actionType=search");
