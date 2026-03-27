@@ -1185,10 +1185,10 @@ describe("PS: Catch added - session clearing on navigation", () => {
 
     // Perform a search
     cy.get('input[name="q"]').should("be.visible");
-    cy.get('input[name="q"]').clear({ force: true });
-    cy.get('input[name="q"]').type("Atlantic", { force: true });
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("Atlantic");
     cy.get('input[name="q"]').should("have.value", "Atlantic");
-    cy.get('button[name="actionType"][value="search"]').click({ force: true });
+    cy.get('button[name="actionType"][value="search"]').click();
 
     // Verify search was applied (URL should have q parameter)
     cy.url().should("include", "catch-added");
