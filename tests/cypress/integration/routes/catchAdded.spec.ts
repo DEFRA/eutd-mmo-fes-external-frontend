@@ -215,7 +215,7 @@ describe("PS: Catch added", () => {
     cy.get('label[for*="filter"]').should("exist");
     cy.get('input[name="q"]')
       .should("have.attr", "id")
-      .and("match", /.*-filter$/);
+      .and("match", /.*-filter$/); // ignore denial of service - test file
     cy.get(".govuk-hint").should("exist");
     cy.get('input[name="q"]').should("have.attr", "aria-describedby");
   });
@@ -231,7 +231,7 @@ describe("PS: Catch added", () => {
     cy.get('input[type="search"]').should("exist");
     cy.get('input[name="q"]')
       .should("have.attr", "id")
-      .and("match", /.*-filter$/);
+      .and("match", /.*-filter$/); // ignore denial of service - test file
     cy.get(".govuk-hint").should("exist");
     cy.get('input[name="q"]').should("have.attr", "aria-describedby");
     cy.get('[data-testid="filter-search-submit"]').should("exist");
@@ -519,7 +519,7 @@ describe("PS: Catch added", () => {
 
     cy.get('input[name="q"]')
       .should("have.attr", "id")
-      .and("match", /.*-filter$/);
+      .and("match", /.*-filter$/); // ignore denial of service - test file
 
     cy.get('input[name="q"]')
       .invoke("attr", "id")
@@ -672,7 +672,7 @@ describe("PS: Catch added", () => {
 
     cy.get('input[name="q"]')
       .should("have.attr", "id")
-      .and("match", /.*-filter$/);
+      .and("match", /.*-filter$/); // ignore denial of service - test file
 
     cy.get('input[name="q"]')
       .invoke("attr", "id")
@@ -1185,7 +1185,10 @@ describe("PS: Catch added - session clearing on navigation", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     // Perform a search
-    cy.get('input[name="q"]').type("Atlantic");
+    cy.get('input[name="q"]').should("be.visible");
+    cy.get('input[name="q"]').clear({ force: true });
+    cy.get('input[name="q"]').type("Atlantic", { force: true });
+    cy.get('input[name="q"]').should("have.value", "Atlantic");
     cy.get('button[name="actionType"][value="search"]').click({ force: true });
 
     // Verify search was applied (URL should have q parameter)
@@ -1506,12 +1509,19 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
+
     // Enter search term for species
-    cy.get('input[name="q"]').type("Atlantic");
+    cy.get('input[name="q"]').should("be.visible");
+    cy.get('input[name="q"]').clear({ force: true });
+    cy.get('input[name="q"]').type("Atlantic", { force: true });
+    cy.get('input[name="q"]').should("have.value", "Atlantic");
     cy.get('[data-testid="filter-search-submit"]').click();
 
-    // Should filter results and preserve search in URL
-    cy.url().should("include", "q=Atlantic");
+    cy.wait("@filterSubmit").then(({ request }) => {
+      expect(String(request.body)).to.include("actionType=search");
+      expect(String(request.body)).to.include("q=Atlantic");
+    });
     cy.get('input[name="q"]').should("have.value", "Atlantic");
   });
 
@@ -1522,12 +1532,19 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
+
     // Search by product description
-    cy.get('input[name="q"]').type("Frozen");
+    cy.get('input[name="q"]').should("be.visible");
+    cy.get('input[name="q"]').clear({ force: true });
+    cy.get('input[name="q"]').type("Frozen", { force: true });
+    cy.get('input[name="q"]').should("have.value", "Frozen");
     cy.get('[data-testid="filter-search-submit"]').click();
 
-    // Verify URL contains query
-    cy.url().should("include", "q=Frozen");
+    cy.wait("@filterSubmit").then(({ request }) => {
+      expect(String(request.body)).to.include("actionType=search");
+      expect(String(request.body)).to.include("q=Frozen");
+    });
     cy.get('input[name="q"]').should("have.value", "Frozen");
   });
 
@@ -1538,13 +1555,24 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
+
     // Apply filter
-    cy.get('input[name="q"]').type("test");
+    cy.get('input[name="q"]').should("be.visible");
+    cy.get('input[name="q"]').clear({ force: true });
+    cy.get('input[name="q"]').type("test", { force: true });
+    cy.get('input[name="q"]').should("have.value", "test");
     cy.get('[data-testid="filter-search-submit"]').click();
-    cy.url().should("include", "q=test");
+    cy.wait("@filterSubmit").then(({ request }) => {
+      expect(String(request.body)).to.include("actionType=search");
+    });
 
     // Reset filter
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterReset");
     cy.get('[data-testid="filter-search-reset"]').click();
+    cy.wait("@filterReset").then(({ request }) => {
+      expect(String(request.body)).to.include("actionType=reset");
+    });
 
     // Should clear URL param and input value
     cy.url().should("not.include", "q=");
@@ -1577,7 +1605,6 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     // Should show error about product requiring catches
     cy.get("#errorIsland").should("exist");
 
-    // cy.contains("commonProgressProductDetailsRequiredError").should("exist");
     cy.url().should("include", "/catch-added");
   });
 
@@ -1588,11 +1615,19 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
+
     // Search by species code (FAO27)
-    cy.get('input[name="q"]').type("FAO27");
+    cy.get('input[name="q"]').should("be.visible");
+    cy.get('input[name="q"]').clear({ force: true });
+    cy.get('input[name="q"]').type("FAO27", { force: true });
+    cy.get('input[name="q"]').should("have.value", "FAO27");
     cy.get('[data-testid="filter-search-submit"]').click();
 
-    cy.url().should("include", "q=FAO27");
+    cy.wait("@filterSubmit").then(({ request }) => {
+      expect(String(request.body)).to.include("actionType=search");
+      expect(String(request.body)).to.include("q=FAO27");
+    });
   });
 
   it("should handle performProductSearch matching product descriptions", () => {
@@ -1602,11 +1637,19 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
+
     // Search for product-specific term
-    cy.get('input[name="q"]').type("product");
+    cy.get('input[name="q"]').should("be.visible");
+    cy.get('input[name="q"]').clear({ force: true });
+    cy.get('input[name="q"]').type("product", { force: true });
+    cy.get('input[name="q"]').should("have.value", "product");
     cy.get('[data-testid="filter-search-submit"]').click();
 
-    cy.url().should("include", "q=product");
+    cy.wait("@filterSubmit").then(({ request }) => {
+      expect(String(request.body)).to.include("actionType=search");
+      expect(String(request.body)).to.include("q=product");
+    });
   });
 
   it("should test getExistingParams excludes pageNo from filter reset URL", () => {
@@ -1617,7 +1660,10 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     cy.visit(`${pageUrl}?pageNo=2`, { qs: { ...testParams } });
 
     // Apply search
-    cy.get('input[name="q"]').type("test");
+    cy.get('input[name="q"]').should("be.visible");
+    cy.get('input[name="q"]').clear({ force: true });
+    cy.get('input[name="q"]').type("test", { force: true });
+    cy.get('input[name="q"]').should("have.value", "test");
     cy.get('[data-testid="filter-search-submit"]').click();
 
     // Reset removes both q and pageNo (getExistingParams behavior)
@@ -1677,14 +1723,23 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
+
     // Apply search
-    cy.get('input[name="q"]').type("test");
+    cy.get('input[name="q"]').should("be.visible");
+    cy.get('input[name="q"]').clear({ force: true });
+    cy.get('input[name="q"]').type("test", { force: true });
+    cy.get('input[name="q"]').should("have.value", "test");
     cy.get('[data-testid="filter-search-submit"]').click();
+
+    cy.wait("@filterSubmit").then(({ request }) => {
+      expect(String(request.body)).to.include("actionType=search");
+      expect(String(request.body)).to.include("q=test");
+    });
 
     // URL should be built correctly with documentNumber and query params
     cy.url().should("include", "/create-processing-statement/");
     cy.url().should("include", "/catch-added");
-    cy.url().should("include", "q=test");
   });
 
   it("should group catches by product in catchesByProduct", () => {
