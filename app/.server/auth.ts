@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import querystring from "querystring";
-import * as https from "https";
-import crypto from "crypto";
+import querystring from "node:querystring";
+import * as https from "node:https";
+import crypto from "node:crypto";
 import { type TypedResponse, redirect, type Session } from "react-router";
 import { getEnv } from "~/env.server";
 import { type CallbackParamsType, Issuer, type TokenSet, type BaseClient, custom } from "openid-client";
@@ -95,9 +95,11 @@ export const autoEnrollUserForService = async (contactId: string, tokenSet: Toke
         dynamicsToken,
         enrolmentRequest.connectionDetailsId,
         enrolmentStatus.completeApproved,
-        enrolmentRequest.accountId,
-        ENV.IDENTITY_SERVICEID,
-        ENV.IDENTITY_SERVICEROLEID
+        {
+          organisationAccountId: enrolmentRequest.accountId,
+          lobServiceId: ENV.IDENTITY_SERVICEID,
+          lobServiceRoleId: ENV.IDENTITY_SERVICEROLEID,
+        }
       )
     )
   );
@@ -109,8 +111,8 @@ export const onLoginReturnAuth = async (request: Request): Promise<CallbackParam
   const data = await request.text();
 
   if (data?.includes("error=")) {
-    const errorMatch = data.match(/error=([^&]*)/);
-    const errorDescMatch = data.match(/error_description=([^&]*)/);
+    const errorMatch = /error=([^&]*)/.exec(data);
+    const errorDescMatch = /error_description=([^&]*)/.exec(data);
     const error = errorMatch ? decodeURIComponent(errorMatch[1]) : "Unknown error";
     const errorDescription = errorDescMatch ? decodeURIComponent(errorDescMatch[1]) : "";
 
@@ -144,11 +146,37 @@ const setTokenId: (id: string, session: Session) => void = (id: string, session:
 const getDecodedPayload: (id_token: string) => jwt.JwtPayload = (id_token: string) => {
   const decoded: string | jwt.JwtPayload | null = jwt.decode(id_token);
 
-  if (!decoded || typeof decoded === "string" || decoded instanceof String) {
+  if (!decoded || typeof decoded === "string") {
     throw new Error("Claim in wrong format");
   }
 
   return decoded;
+};
+
+const processTokenEnrolment = async (tokenSet: TokenSet, session: Session): Promise<void> => {
+  if (!tokenSet?.id_token) {
+    throw new Error("No token provided");
+  }
+
+  const { contactId, enrolmentRequestCount, enrolmentCount } = getDecodedPayload(tokenSet.id_token);
+
+  if (enrolmentRequestCount > 0) {
+    const { id_token } = await autoEnrollUserForService(contactId, tokenSet);
+
+    if (id_token) {
+      const { enrolmentCount: newEnrolmentCount } = getDecodedPayload(id_token);
+
+      if (newEnrolmentCount === 0) {
+        throw new Error("User has no enrolments");
+      }
+
+      setTokenId(id_token, session);
+    }
+  } else if (enrolmentCount > 0) {
+    setTokenId(tokenSet.id_token, session);
+  } else {
+    throw new Error("User has no enrolments");
+  }
 };
 
 export const onLoginReturnHandler = async (request: Request): Promise<Response> => {
@@ -161,37 +189,7 @@ export const onLoginReturnHandler = async (request: Request): Promise<Response> 
 
     const session = await getSessionFromRequest(request);
 
-    if (tokenSet?.id_token) {
-      // Authentication
-      // Authorisation, new user, returning
-
-      // 1. Organisation picker? Answer: need picker
-      // 2. We need to return here if I do not have the right role / relationship. Response: work for further down the line
-      // 3. present the "Sorry there is problem with the service" page in the event of an error. Response: Done
-
-      const { contactId, enrolmentRequestCount, enrolmentCount } = getDecodedPayload(tokenSet?.id_token);
-
-      if (enrolmentRequestCount > 0) {
-        const { id_token }: TokenSet = await autoEnrollUserForService(contactId, tokenSet);
-
-        if (id_token) {
-          // check enrolment count
-          const { enrolmentCount } = getDecodedPayload(id_token);
-
-          if (enrolmentCount === 0) {
-            throw new Error("User has no enrolments");
-          }
-
-          setTokenId(id_token, session);
-        }
-      } else if (enrolmentCount > 0) {
-        setTokenId(tokenSet?.id_token, session);
-      } else {
-        throw new Error("User has no enrolments");
-      }
-    } else {
-      throw new Error("No token provided");
-    }
+    await processTokenEnrolment(tokenSet, session);
 
     const params = {
       loggedIn: "yes",

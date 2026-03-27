@@ -27,19 +27,7 @@ export const DateInputYear = ({
     <label className="govuk-label govuk-date-input__label" htmlFor={`${id}-year`}>
       {label}
     </label>
-    {!isHydrated ? (
-      <input
-        className={
-          isEmpty(errors)
-            ? "govuk-input govuk-date-input__input govuk-input--width-4"
-            : "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error"
-        }
-        id={`${id}-year`}
-        name={`${name}Year`}
-        type="number"
-        defaultValue={yearSelected}
-      />
-    ) : (
+    {isHydrated ? (
       <input
         className={
           isEmpty(errors)
@@ -52,6 +40,18 @@ export const DateInputYear = ({
         onChange={handleYearChange}
         inputMode="numeric"
         value={year}
+      />
+    ) : (
+      <input
+        className={
+          isEmpty(errors)
+            ? "govuk-input govuk-date-input__input govuk-input--width-4"
+            : "govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error"
+        }
+        id={`${id}-year`}
+        name={`${name}Year`}
+        type="number"
+        defaultValue={yearSelected}
       />
     )}
   </div>

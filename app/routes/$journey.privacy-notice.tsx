@@ -22,7 +22,7 @@ const Privacy = () => {
 
   useEffect(() => {
     if (!isEmpty(actionData)) {
-      window.location.href = actionData;
+      globalThis.location.href = actionData;
     }
   });
 

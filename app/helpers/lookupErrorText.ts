@@ -505,13 +505,13 @@ export const displayErrorMessagesInOrder = (
   };
 
   errorKeysInOrder.forEach((orderKey) => {
-    const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const escapeRegExp = (s: string) => s.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 
     let matchingKeys: string[];
 
     if (strictForNmd) {
       // match either the exact key, or the key followed by a numeric index (e.g. containerNumbers or containerNumbers.0)
-      const keyRegex = new RegExp(`^${escapeRegExp(orderKey)}(?:\\.(\\d+))?$`);
+      const keyRegex = new RegExp(String.raw`^${escapeRegExp(orderKey)}(?:\.(\d+))?$`);
       matchingKeys = Object.keys(errors).filter((objKey) => keyRegex.test(objKey));
     } else {
       // legacy behaviour: match any key that starts with the orderKey

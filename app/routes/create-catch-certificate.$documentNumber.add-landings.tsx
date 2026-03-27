@@ -88,7 +88,7 @@ type AddLandingsActionDataType = {
 const addLandingActionName = "submit";
 const cancelActionName = "cancel";
 
-const clearFormActions = [addLandingActionName, cancelActionName];
+const clearFormActions = new Set([addLandingActionName, cancelActionName]);
 
 export const loader: LoaderFunction = async ({ params, request }) => await AddLandingsLoader(request, params);
 export const action: ActionFunction = async ({ request, params }): Promise<Response | ErrorResponse> =>
@@ -131,7 +131,7 @@ const getValueFromActionOrState = <T,>(
   typeGuard?: (val: any) => T
 ): T => {
   if (!isEmpty(errors) && actionValue !== undefined) {
-    return typeGuard ? typeGuard(actionValue) : (actionValue as T);
+    return typeGuard ? typeGuard(actionValue) : actionValue;
   }
   return stateValue;
 };
@@ -328,7 +328,7 @@ const AddLandings = () => {
   };
 
   useEffect(() => {
-    if (isActionReload && clearFormActions.includes(actionExecuted)) {
+    if (isActionReload && clearFormActions.has(actionExecuted)) {
       forceUpdate();
       setCurrentProduct(values.product ?? "");
       setSelectedGearCategory("");

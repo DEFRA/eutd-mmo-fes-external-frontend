@@ -13,11 +13,11 @@ export const getRootData = async (request: Request): Promise<IMainAppProps> => {
   const currentPageData = pages[pageName];
 
   const homeLink = currentPageData?.homeLink ?? "catch-certificate";
-  const headerTitleKey = `${homeLink === "/" ? "journeyTitle_catch-certificate" : `journeyTitle_${homeLink}`}`;
+  const headerTitleKey = homeLink === "/" ? "journeyTitle_catch-certificate" : `journeyTitle_${homeLink}`;
   const headerTitleTo = homeLink === "/" ? "/" : `/create-${homeLink}/${homeLink}s`;
 
-  const disableScripts = !isProdEnv() ? new URL(request.url).searchParams.get("disableScripts") : false;
-  const idleTimeoutInMilliseconds: number = parseInt(ENV.IDLE_TIME_OUT_IN_MILLISECONDS);
+  const disableScripts = isProdEnv() ? false : new URL(request.url).searchParams.get("disableScripts");
+  const idleTimeoutInMilliseconds: number = Number.parseInt(ENV.IDLE_TIME_OUT_IN_MILLISECONDS);
   const gtmId: string = ENV.GOOGLE_TAG_MANAGER_ID;
   const gaId: string = ENV.GA_TRACKING_ID;
   const clarityProjectId: string = ENV.CLARITY_PROJECT_ID;

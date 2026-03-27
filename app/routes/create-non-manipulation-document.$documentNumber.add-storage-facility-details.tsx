@@ -210,7 +210,7 @@ const getValidFacilityData = async (
   validationResponse: Response | ErrorResponse | null | undefined,
   storageFacilityData: Partial<StorageDocument>
 ): Promise<Partial<StorageDocument>> => {
-  if (!validationResponse || !(validationResponse instanceof Response)) {
+  if (!(validationResponse instanceof Response)) {
     return storageFacilityData;
   }
 
@@ -243,7 +243,7 @@ const handleSaveAsDraft = async (
 
   const storageFacilityData = {
     facilityName: String(getStrOrDefault(values["facilityName"] as string)),
-    facilityArrivalDate: selectedDate as string,
+    facilityArrivalDate: selectedDate,
   };
 
   const validationResponse = await updateStorageDocumentFacility(
@@ -290,7 +290,7 @@ const handleSaveAndContinue = async (
     undefined,
     {
       facilityName: String(getStrOrDefault(values["facilityName"] as string)),
-      facilityArrivalDate: selectedDate as string,
+      facilityArrivalDate: selectedDate,
     }
   );
 
@@ -405,10 +405,12 @@ const AddStorageFacilityDetails = () => {
   } = useLoaderData<loaderStorageFacility>();
   const actionData = useActionData<{ errors: IErrorsTransformed; values?: Record<string, any> }>() ?? { errors: {} };
   const { errors = {}, values: submittedValues } = actionData;
+  const hasErrors = !isEmpty(errors);
+  const hasFacilityNameError = !isEmpty(errors?.["storageFacilities-facilityName"]);
 
   // Helper function to get the value to display - prefer submitted form data when there are errors
   const getFormValue = (fieldName: string, defaultValue: any) => {
-    if (!isEmpty(errors) && submittedValues?.[fieldName] !== undefined) {
+    if (hasErrors && submittedValues?.[fieldName] !== undefined) {
       return submittedValues[fieldName];
     }
     return defaultValue;
@@ -426,7 +428,7 @@ const AddStorageFacilityDetails = () => {
   useScrollOnPageError(errors);
   return (
     <Main backUrl={backUrl}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorTransformedMessages(errors)} />}
+      {hasErrors && <ErrorSummary errors={displayErrorTransformedMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <Title title={`${t("sdAddStorageDetailsHeader")}`} />
@@ -500,9 +502,9 @@ const AddStorageFacilityDetails = () => {
             </details>
             <FormInput
               containerClassName={
-                isEmpty(errors?.["storageFacilities-facilityName"])
-                  ? "govuk-form-group govuk-!-width-one-half"
-                  : "govuk-form-group govuk-!-width-one-half govuk-form-group--error"
+                hasFacilityNameError
+                  ? "govuk-form-group govuk-!-width-one-half govuk-form-group--error"
+                  : "govuk-form-group govuk-!-width-one-half"
               }
               label={t("sdFacilityName")}
               name="facilityName"
@@ -511,7 +513,7 @@ const AddStorageFacilityDetails = () => {
                 "govuk-input--error": errors?.["storageFacilities-facilityName"],
               })}
               errorProps={{
-                className: isEmpty(errors?.["storageFacilities-facilityName"]) ? "" : "govuk-error-message",
+                className: !isEmpty(errors?.["storageFacilities-facilityName"]) ? "govuk-error-message" : "",
               }}
               staticErrorMessage={t(errors?.["storageFacilities-facilityName"]?.message, {
                 ns: "errorsText",

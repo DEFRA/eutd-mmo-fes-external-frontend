@@ -26,13 +26,11 @@ export const getTransportations = async (bearerToken: string, documentNumber?: s
 };
 
 const onGetTransportations = async (response: Response): Promise<ITransport[]> => {
-  switch (response.status) {
-    case 200:
-      const transportations: ITransport[] = await response.json();
-      return transportations;
-    default:
-      throw new Error(`Unexpected error: ${response.status}`);
+  if (response.status === 200) {
+    const transportations: ITransport[] = await response.json();
+    return transportations;
   }
+  throw new Error(`Unexpected error: ${response.status}`);
 };
 
 export const getTransportDetails = async (
@@ -105,15 +103,15 @@ export const addTransport = async (
 
 const onAddTransportDetails = async (response: Response): Promise<ITransport> => {
   switch (response.status) {
-    case 200:
+    case 200: {
       const data = await response.json();
       return {
         id: data.id,
         vehicle: data.vehicle,
         errors: [],
       };
-
-    case 400:
+    }
+    case 400: {
       const errorsResponse = await response.json();
       return {
         vehicle: "undefined",
@@ -122,6 +120,7 @@ const onAddTransportDetails = async (response: Response): Promise<ITransport> =>
           message: getErrorMessage(errorsResponse[error]),
         })),
       };
+    }
     case 403:
       return {
         vehicle: "undefined",
@@ -185,15 +184,15 @@ export const updateTransportDetails = async (
 
 const onUpdateTransport = async (response: Response, vehicle: string): Promise<ITransport> => {
   switch (response.status) {
-    case 200:
+    case 200: {
       const data = await response.json();
       return {
         id: data.id,
         vehicle: data.vehicle,
         errors: [],
       };
-
-    case 400:
+    }
+    case 400: {
       const errorsResponse = await response.json();
       const processedErrors: Record<string, string> = {};
 
@@ -211,6 +210,7 @@ const onUpdateTransport = async (response: Response, vehicle: string): Promise<I
           message: getErrorMessage(processedErrors[error]),
         })),
       };
+    }
     case 403:
       return {
         vehicle: "undefined",
@@ -381,7 +381,7 @@ const onSaveTransportDetails = async (response: Response, payload?: ITransport):
       return {
         errors: [],
       };
-    case 400:
+    case 400: {
       const errorsResponse = await response.json();
 
       // Apply transformations to the raw errors
@@ -416,6 +416,7 @@ const onSaveTransportDetails = async (response: Response, payload?: ITransport):
           message: getErrorMessage(errorsResponse[error]),
         })),
       };
+    }
     case 403:
       return {
         errors: [],
@@ -453,7 +454,7 @@ const onSaveTruckCMR = async (response: Response): Promise<IBase> => {
       return {
         errors: [],
       };
-    case 400:
+    case 400: {
       const errorsResponse = await response.json();
       return {
         errors: Object.keys(errorsResponse).map((error) => ({
@@ -461,6 +462,7 @@ const onSaveTruckCMR = async (response: Response): Promise<IBase> => {
           message: getErrorMessage(errorsResponse[error]),
         })),
       };
+    }
     case 403:
       return {
         errors: [],
@@ -506,13 +508,14 @@ const onAddAdditionalTransportTypes = async (response: Response): Promise<IAddTr
         addTransportation: undefined,
         errors: [],
       };
-    case 200:
+    case 200: {
       const data = await response.json();
       return {
         addTransportation: data.addTransportation,
         errors: [],
       };
-    case 400:
+    }
+    case 400: {
       const errorsResponse = await response.json();
       return {
         errors: Object.keys(errorsResponse).map((error) => ({
@@ -520,6 +523,7 @@ const onAddAdditionalTransportTypes = async (response: Response): Promise<IAddTr
           message: getErrorMessage(errorsResponse[error]),
         })),
       };
+    }
     case 403:
       return {
         errors: [],

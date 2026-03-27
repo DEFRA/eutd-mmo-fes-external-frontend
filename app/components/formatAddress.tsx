@@ -1,9 +1,7 @@
-export const formatAddress = (...adresssLines: (string | null | undefined)[]) =>
-  adresssLines
-    .filter((addressLine: string | null | undefined) => addressLine)
-    .map((addressLine) => (
-      <div key={`address-${addressLine}`}>
-        {addressLine}
-        <br />
-      </div>
-    ));
+export const formatAddress = (...addressLines: (string | null | undefined)[]) =>
+  addressLines.filter(Boolean).map((addressLine) => (
+    <div key={`address-${addressLine}`}>
+      {addressLine}
+      <br />
+    </div>
+  ));

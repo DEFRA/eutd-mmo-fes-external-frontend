@@ -48,6 +48,8 @@ const AddTransportationDetailsPlane = () => {
   >();
   const actionData = useActionData() ?? {};
   const { errors, setErrorsOverride } = useErrorsOverride((actionData as { errors?: IErrorsTransformed })?.errors);
+  const hasErrors = !isEmpty(errors);
+  const errorsTransformed = errors as IErrorsTransformed;
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-plane/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
@@ -57,7 +59,7 @@ const AddTransportationDetailsPlane = () => {
 
   return (
     <Main backUrl={backUrl}>
-      {!isEmpty(errors) && <ErrorSummary errors={errorMessagesForDisplay} />}
+      {hasErrors && <ErrorSummary errors={errorMessagesForDisplay} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" action={actionUrl} csrf={csrf}>
@@ -67,12 +69,12 @@ const AddTransportationDetailsPlane = () => {
                 { ns: "transportation" }
               )}`}
               vehicle="plane"
-              errors={errors}
-              flightNumber={!isEmpty(errors) ? actionData.flightNumber : flightNumber}
-              airwayBillNumber={!isEmpty(errors) ? actionData.airwayBillNumber : airwayBillNumber}
+              errors={errorsTransformed}
+              flightNumber={hasErrors ? actionData.flightNumber : flightNumber}
+              airwayBillNumber={hasErrors ? actionData.airwayBillNumber : airwayBillNumber}
               containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
-              departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
-              freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
+              departurePlace={hasErrors ? actionData.departurePlace : departurePlace}
+              freightBillNumber={hasErrors ? actionData.freightBillNumber : freightBillNumber}
               displayOptionalSuffix={displayOptionalSuffix}
               maximumNumberOfContainerNumbers={maximumNumberOfContainerNumbers}
               onErrorsChange={setErrorsOverride}

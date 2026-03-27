@@ -1,5 +1,5 @@
 import * as msal from "@azure/msal-node";
-import querystring from "querystring";
+import querystring from "node:querystring";
 import { getEnv } from "~/env.server";
 
 // Import cross-fetch for test mode (MSW v1.3.1 cannot intercept Node 18+ native fetch)
@@ -29,7 +29,7 @@ export const roleId = {
 
 const validateResponse = (data: any) => {
   if (!Array.isArray(data.value)) {
-    throw new Error("response has unrecognised JSON");
+    throw new TypeError("response has unrecognised JSON");
   }
 };
 
@@ -72,7 +72,8 @@ const getDynamicsContactAccountUrl = (contactId: string) => {
 
   const roleIds = [roleId.citizen, roleId.employee, roleId.agentCustomer];
 
-  params.$filter += ` and ( ${roleIds.map((roleId) => `_record1roleid_value eq ${roleId}`).join(" or ")} ) `;
+  const roleFilters = roleIds.map((roleId) => `_record1roleid_value eq ${roleId}`).join(" or ");
+  params.$filter += ` and ( ${roleFilters} ) `;
 
   return buildUrl("connections", params);
 };
@@ -162,13 +163,12 @@ export const createEnrolment = async (
   dynamicsToken: string,
   connectionDetailsId: string,
   enrolmentStatus: number,
-  organisationAccountId?: string,
-  lobServiceId?: string,
-  lobServiceRoleId?: string,
-  verified: boolean = false
+  options: { organisationAccountId?: string; lobServiceId?: string; lobServiceRoleId?: string; verified?: boolean } = {}
 ): Promise<any> => {
+  const { organisationAccountId, lobServiceId, lobServiceRoleId, verified = false } = options;
+
   if (!lobServiceRoleId || !lobServiceId) {
-    throw new Error("Either lobServiceRoleId or lobServiceId should be supplied");
+    throw new TypeError("Either lobServiceRoleId or lobServiceId should be supplied");
   }
 
   const payload: any = {

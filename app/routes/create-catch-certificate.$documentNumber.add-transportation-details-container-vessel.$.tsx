@@ -48,6 +48,7 @@ const ContainerVesselTransportDetailsPage = () => {
   >();
   const actionData = useActionData() ?? {};
   const { errors, setErrorsOverride } = useErrorsOverride((actionData as { errors?: IErrorsTransformed })?.errors);
+  const hasErrors = !isEmpty(errors);
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-container-vessel/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
@@ -56,7 +57,7 @@ const ContainerVesselTransportDetailsPage = () => {
 
   return (
     <Main backUrl={backUrl}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} />}
+      {hasErrors && <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" action={actionUrl} csrf={csrf}>
@@ -64,11 +65,11 @@ const ContainerVesselTransportDetailsPage = () => {
               legendTitle={`${t("addTransportationDetailsTransportDetailsTitle", { ns: "transportation" })} 
                 ${t("addTransportationDetailsContainerVessel", { ns: "transportation" })}`}
               vehicle={vehicle}
-              vesselName={!isEmpty(errors) ? actionData.vesselName : vesselName}
-              flagState={!isEmpty(errors) ? actionData.flagState : flagState}
+              vesselName={hasErrors ? actionData.vesselName : vesselName}
+              flagState={hasErrors ? actionData.flagState : flagState}
               containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
-              departurePlace={!isEmpty(errors) ? actionData.departurePlace : departurePlace}
-              freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
+              departurePlace={hasErrors ? actionData.departurePlace : departurePlace}
+              freightBillNumber={hasErrors ? actionData.freightBillNumber : freightBillNumber}
               errors={errors}
               displayOptionalSuffix={displayOptionalSuffix}
               maximumNumberOfContainerNumbers={maximumNumberOfContainerNumbers}
