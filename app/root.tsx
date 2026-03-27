@@ -25,6 +25,7 @@ import { IdleTimerProvider } from "react-idle-timer";
 import { shouldRenderGA, isProdEnv } from "./helpers";
 import { Header, Footer, Banner, Main, Title } from "./components";
 import { getRootData } from "./.server";
+import { useNonce } from "~/nonce-context";
 import i18next from "~/i18next.server";
 import { i18nextCookie, analyticsAcceptedCookie, parseCookie, type IAnalyticsAcceptedCookie } from "./cookies.server";
 import { getStyles } from "./styles/styles";
@@ -99,6 +100,7 @@ const Template = ({
   const ref = useRef<HTMLSpanElement>(null);
   const { pathname } = useLocation();
   const { i18n } = useTranslation();
+  const nonce = useNonce();
 
   useChangeLanguage(locale);
 
@@ -179,6 +181,7 @@ const Template = ({
       <head>
         <Meta />
         <script
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: `window.__contactNumber__ = ${JSON.stringify(supportContactNumber)};`,
           }}

@@ -1,4 +1,5 @@
 import * as React from "react";
+import crypto from "node:crypto";
 import { ServerRouter } from "react-router";
 import type { EntryContext } from "@react-router/node";
 import { createInstance } from "i18next";
@@ -8,6 +9,7 @@ import { renderToPipeableStream } from "react-dom/server";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import { PassThrough } from "node:stream";
 import { isProdEnv } from "./helpers";
+import { NonceProvider } from "./nonce-context";
 import i18next from "./i18next.server";
 import { initLanguages } from "./i18n";
 
@@ -41,13 +43,18 @@ export default async function handleRequest(
       },
     });
 
+  const nonce = crypto.randomBytes(16).toString("base64");
+
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
-      <I18nextProvider i18n={instance}>
-        <ServerRouter context={remixContext} url={request.url} />
-      </I18nextProvider>,
+      <NonceProvider value={nonce}>
+        <I18nextProvider i18n={instance}>
+          <ServerRouter context={remixContext} url={request.url} nonce={nonce} />
+        </I18nextProvider>
+      </NonceProvider>,
       {
+        nonce,
         onShellReady() {
           shellRendered = true;
           const body = new PassThrough();
@@ -65,12 +72,12 @@ export default async function handleRequest(
 
             responseHeaders.set(
               "Content-Security-Policy",
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' www.googletagmanager.com www.google-analytics.com *.clarity.ms; style-src 'self' 'unsafe-inline'; connect-src 'self' dc.services.visualstudio.com js.monitor.azure.com region1.google-analytics.com www.google-analytics.com *.clarity.ms; img-src 'self' www.googletagmanager.com www.google-analytics.com *.clarity.ms *.bing.com;"
+              `default-src 'self'; script-src 'self' 'nonce-${nonce}' www.googletagmanager.com www.google-analytics.com *.clarity.ms; style-src 'self' 'unsafe-inline'; connect-src 'self' dc.services.visualstudio.com js.monitor.azure.com region1.google-analytics.com www.google-analytics.com *.clarity.ms; img-src 'self' www.googletagmanager.com www.google-analytics.com *.clarity.ms *.bing.com;`
             );
           } else {
             responseHeaders.set(
               "Content-Security-Policy",
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' ws://localhost:*;"
+              `default-src 'self'; script-src 'self' 'nonce-${nonce}'; style-src 'self' 'unsafe-inline'; connect-src 'self' ws://localhost:*;`
             );
           }
 
