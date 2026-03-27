@@ -1638,9 +1638,11 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
 
     // Search for product-specific term
-    cy.get('input[name="q"]').should("be.visible");
-    cy.get('input[name="q"]').clear({ force: true });
-    cy.get('input[name="q"]').type("product", { force: true });
+    cy.get('input[name="q"]').should("be.visible").and("be.enabled");
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').click();
+    cy.focused().type("product");
+
     cy.get('input[name="q"]').should("have.value", "product");
     cy.get('[data-testid="filter-search-submit"]').click();
 
