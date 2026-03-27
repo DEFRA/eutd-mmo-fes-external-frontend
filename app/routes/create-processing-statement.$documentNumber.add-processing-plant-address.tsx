@@ -33,7 +33,6 @@ import type {
   ILookUpAddress,
   ILookUpAddressDetails,
   ProcessingStatement,
-  IUnauthorised,
   IErrorsTransformed,
   IError,
   IExporter,
@@ -70,15 +69,12 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
 
-  const plantAddressBearerToken = await getBearerTokenForRequest(request);
-  const processingStatement: ProcessingStatement | IUnauthorised = await getProcessingStatement(
-    plantAddressBearerToken,
-    documentNumber
-  );
+  // Fetch bearer token and session in parallel — both only need the immutable request.
+  const [plantAddressBearerToken, session] = await Promise.all([
+    getBearerTokenForRequest(request),
+    getSessionFromRequest(request),
+  ]);
 
-  validateResponseData(processingStatement);
-
-  const session = await getSessionFromRequest(request);
   const shouldUpdateSession = !session.has("csrf");
 
   if (shouldUpdateSession) {
@@ -88,14 +84,23 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const currentStep = session.get("currentStep");
   const postcode = session.get("postcode");
   const addressOne = session.get("addressOne");
-  const countries: ICountry[] = await getCountries();
+
+  // Parallelise all independent network calls: processing statement, countries reference
+  // data, and (when a postcode is already in the session) the address lookup.
+  const [processingStatement, countries, lookupResponse] = await Promise.all([
+    getProcessingStatement(plantAddressBearerToken, documentNumber),
+    getCountries(),
+    isEmpty(postcode) ? Promise.resolve(null as ILookUpAddress | null) : postCodeLookUp(postcode),
+  ]);
+
+  validateResponseData(processingStatement);
+
   const processingStatementData = processingStatement as ProcessingStatement;
 
   let responseData;
 
-  if (!isEmpty(postcode)) {
-    const response: ILookUpAddress = await postCodeLookUp(postcode);
-    const postcodeaddresses: ILookUpAddressDetails[] = Array.isArray(response.data) ? response.data : [];
+  if (!isEmpty(postcode) && lookupResponse) {
+    const postcodeaddresses: ILookUpAddressDetails[] = Array.isArray(lookupResponse.data) ? lookupResponse.data : [];
     const postcodeaddress: ILookUpAddressDetails | undefined = postcodeaddresses.find(
       (address: ILookUpAddressDetails) => address.address_line === addressOne
     );

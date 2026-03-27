@@ -38,18 +38,24 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
   if (!isPrivacyAccepted(userAttributes)) {
     return redirect(route("/:journey/privacy-notice", { journey: getPrivacyNoticeJourney(journey) }));
   }
-
   const isAdminSupport: boolean = isAdminUser(bearerToken);
   const emptyExporterFromIdm: IExporter = { error: "", errors: [] };
 
-  // Parallelize independent API calls for performance
-  const [documents, userDetails, notification] = await Promise.all([
-    getAllDocuments(bearerToken, journey, year, month),
-    !isAdminSupport ? getUserDetails(bearerToken) : Promise.resolve(emptyExporterFromIdm),
+  // FI0-10854: parallelize independent API calls
+  const [documents, userDetails, accountDetails, notification, t, session] = await Promise.all([
+    getAllDocuments(bearerToken, journey, month, year),
+    isAdminSupport ? Promise.resolve(emptyExporterFromIdm) : getUserDetails(bearerToken),
+    isAdminSupport ? Promise.resolve(emptyExporterFromIdm) : Promise.resolve(getAccounts(bearerToken)),
     getNotification(bearerToken),
+    i18next.getFixedT(request, ["title"]),
+    getSessionFromRequest(request),
   ]);
 
-  const accountDetails: IExporter = !isAdminSupport ? getAccounts(bearerToken) : emptyExporterFromIdm;
+  const csrf = await createCSRFToken(request);
+  session.set("csrf", csrf);
+  if (journey === "catchCertificate") {
+    clearSession(session);
+  }
 
   let name: string = "";
   if (accountDetails.model?.exporterCompanyName) {
@@ -58,13 +64,6 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
     name = userDetails.model?.exporterFullName;
   }
 
-  const t = await i18next.getFixedT(request, ["title"]);
-  const session = await getSessionFromRequest(request);
-  const csrf = await createCSRFToken(request);
-  session.set("csrf", csrf);
-  if (journey === "catchCertificate") {
-    clearSession(session);
-  }
   const responseData = {
     journey,
     documents: documents,
