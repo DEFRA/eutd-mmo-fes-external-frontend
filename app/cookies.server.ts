@@ -1,7 +1,12 @@
 import { type Cookie, createCookie } from "@remix-run/node";
 
-export const i18nextCookie = createCookie("i18next", { path: "/", sameSite: "strict" });
-export const analyticsAcceptedCookie = createCookie("analytics_cookies_accepted", { path: "/", sameSite: "strict" });
+export const i18nextCookie = createCookie("i18next", { path: "/", sameSite: "strict", httpOnly: true, secure: true });
+export const analyticsAcceptedCookie = createCookie("analytics_cookies_accepted", {
+  path: "/",
+  sameSite: "strict",
+  httpOnly: true,
+  secure: true,
+});
 
 export type II18nextCookie = string;
 
