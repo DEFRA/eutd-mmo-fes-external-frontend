@@ -10,6 +10,7 @@ import { PassThrough } from "node:stream";
 import { isProdEnv } from "./helpers";
 import i18next from "./i18next.server";
 import { initLanguages } from "./i18n";
+import { getEnv } from "./env.server";
 
 // Initialize MSW server for test environment
 // The server module itself checks NODE_ENV and only initializes in test mode
@@ -29,6 +30,8 @@ export default async function handleRequest(
   const lng = await i18next.getLocale(request);
   const ns = i18next.getRouteNamespaces(remixContext);
 
+  const ENV = getEnv();
+
   await instance
     .use(initReactI18next)
     .use(Backend)
@@ -36,6 +39,11 @@ export default async function handleRequest(
       ...initLanguages(),
       lng,
       ns,
+      interpolation: {
+        defaultVariables: {
+          contactNumber: ENV.SUPPORT_CONTACT_NUMBER ?? "0330 159 1989",
+        },
+      },
       backend: {
         loadPath: path.resolve("./public/locales-v2/{{lng}}/{{ns}}.json"),
       },
