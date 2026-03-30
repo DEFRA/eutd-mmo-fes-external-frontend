@@ -186,6 +186,12 @@ const getUpdateStorageDocumentData = (
       values.netWeightFisheryProductArrival && !isEmpty(values.netWeightFisheryProductArrival)
         ? (values.netWeightFisheryProductArrival as string)
         : undefined,
+    // Clear departure weights when arrival weights are updated so that the
+    // departure-product-summary page recalculates them from the new arrival values.
+    // Without this, departure weights copied from an NMD document are retained even
+    // after arrival weights change.
+    netWeightProductDeparture: undefined,
+    netWeightFisheryProductDeparture: undefined,
   };
 };
 

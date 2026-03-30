@@ -717,7 +717,10 @@ export const extractContainerNumbers = (
     const key = `containerNumbers.${i}`;
     const value = values[key];
     if (value !== undefined) {
-      containerNumbers.push(String(value).toUpperCase());
+      const trimmed = String(value).trim();
+      if (trimmed) {
+        containerNumbers.push(trimmed.toUpperCase());
+      }
     }
   }
   return containerNumbers;

@@ -509,3 +509,79 @@ describe("Storage document departure summary: fishery product weight exceeds pro
     assertErrorSummaryContains(CY_FISHERY_WEIGHT_ERROR);
   });
 });
+
+describe("Storage document departure summary: departure weights reflect updated arrival weights (FI0-10714)", () => {
+  beforeEach(() => {
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryCopiedDocUpdatedArrival);
+  });
+
+  it("loads the departure tab with updated arrival weights when departure weights have been cleared after editing a copied document", () => {
+    assertEnglishHeading();
+
+    openDepartureTab();
+
+    cy.get("#storage-departure-tab").within(() => {
+      cy.findByRole("heading", { name: "Storage departure", level: 2 });
+
+      cy.get("table").within(() => {
+        assertDepartureTableHeaders();
+
+        cy.get("tbody").within(() => {
+          cy.get("tr").should("have.length", 2);
+
+          cy.get("tr")
+            .eq(0)
+            .within(() => {
+              cy.get("td").eq(0).contains("Golden damselfish (ADH)");
+              // Departure should fall back to updated arrival weight (75) not original copied value
+              cy.get("td").eq(1).find("input").should("have.value", "75.00");
+              cy.get("td").eq(2).find("input").should("have.value", "75.00");
+            });
+
+          cy.get("tr")
+            .eq(1)
+            .within(() => {
+              cy.get("td").eq(0).contains("Peacock sole (ADJ)");
+              // Departure should fall back to updated arrival weight (35) not original copied value
+              cy.get("td").eq(1).find("input").should("have.value", "35.00");
+              cy.get("td").eq(2).find("input").should("have.value", "35.00");
+            });
+        });
+      });
+    });
+  });
+
+  it("loads the arrival tab with the updated arrival weights", () => {
+    assertEnglishHeading();
+
+    openArrivalTab();
+
+    cy.get("#storage-arrival-tab").within(() => {
+      cy.findByRole("heading", { name: "Storage arrival", level: 2 });
+
+      cy.get("table").within(() => {
+        assertArrivalTableHeaders();
+
+        cy.get("tbody").within(() => {
+          cy.get("tr").should("have.length", 2);
+
+          cy.get("tr")
+            .eq(0)
+            .within(() => {
+              cy.get("td").eq(0).contains("Golden damselfish (ADH)");
+              cy.get("td").eq(1).find("input").should("have.value", "75.00");
+              cy.get("td").eq(2).find("input").should("have.value", "75.00");
+            });
+
+          cy.get("tr")
+            .eq(1)
+            .within(() => {
+              cy.get("td").eq(0).contains("Peacock sole (ADJ)");
+              cy.get("td").eq(1).find("input").should("have.value", "35.00");
+              cy.get("td").eq(2).find("input").should("have.value", "35.00");
+            });
+        });
+      });
+    });
+  });
+});
