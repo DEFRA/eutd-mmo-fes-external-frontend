@@ -31,6 +31,7 @@ type DepartureProductSummaryProps = {
   catches: StorageDocumentCatch[];
   transport: ITransport;
   defaultActiveTab?: string;
+  displayOptionalSuffix?: any;
   csrf: string;
   nextUri: string;
 };
