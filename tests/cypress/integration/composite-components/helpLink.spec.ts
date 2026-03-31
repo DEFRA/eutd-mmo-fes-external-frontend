@@ -80,6 +80,7 @@ describe("HelpSection", () => {
       "https://www.gov.uk/guidance/exporting-or-moving-fish-from-the-uk#get-help-with-fish-export-documents"
     );
 
+    cy.get("[data-test-id='exporting-link']").should("have.attr", "target", "_blank");
     cy.get("[data-test-id='exporting-link']")
       .invoke("text")
       .should("match", /exporting or moving fish from the UK\s*\(opens in new tab\)\.?/i);
