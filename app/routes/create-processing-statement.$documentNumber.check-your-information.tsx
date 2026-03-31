@@ -162,6 +162,13 @@ const CheckYourInformation = () => {
       checkInformationHeader="psSummaryPageDocumentDetailsHeader"
       csrf={csrf}
       journey="processingStatement"
+      userReference={processingStatement.userReference}
+      userReferenceLabel={t("commonProgressPageExporterYourReference", { ns: "progress" })}
+      userReferenceChangeRoute={`/create-processing-statement/${documentNumber}/add-your-reference?nextUri=${route(
+        "/create-processing-statement/:documentNumber/check-your-information",
+        { documentNumber }
+      )}`}
+      notProvidedText={t("psSummaryPageNotProvided", { ns: "psCheckYourInformation" })}
     >
       <>
         <CheckYourInformationDocumentNumber
@@ -178,13 +185,6 @@ const CheckYourInformation = () => {
           exporterDetailsRoute="/create-processing-statement/:documentNumber/add-exporter-details"
           checkInfoRoute="/create-processing-statement/:documentNumber/check-your-information"
           documentNumber={documentNumber}
-          userReference={processingStatement.userReference}
-          userReferenceLabel={t("commonProgressPageExporterYourReference", { ns: "progress" })}
-          userReferenceChangeRoute={`/create-processing-statement/${documentNumber}/add-your-reference?nextUri=${route(
-            "/create-processing-statement/:documentNumber/check-your-information",
-            { documentNumber }
-          )}`}
-          notProvidedText={t("psSummaryPageNotProvided", { ns: "psCheckYourInformation" })}
         />
         <h2 className="govuk-heading-l">{t("psSummaryPageProcessedProducts", { ns: "psCheckYourInformation" })}</h2>
         {(() => {

@@ -64,5 +64,6 @@
     "officialCountryName": "Nicaragua"
   },
   "pointOfDestination": "Calais port",
-  "_plantDetailsUpdated": false
+  "_plantDetailsUpdated": false,
+  "userReference": "PS-REF-98765"
 }

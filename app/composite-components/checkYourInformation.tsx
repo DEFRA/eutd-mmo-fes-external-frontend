@@ -482,7 +482,7 @@ export const CheckYourInformationLayout = ({
                 ns: headingTranslation,
               })}
             />
-            {journey === "storageNotes" && (
+            {(journey === "storageNotes" || journey === "processingStatement") && (
               <CheckYourInformationDocumentNumber
                 checkInformationHeader={t(checkInformationHeader, { ns: headingTranslation })}
                 documentNumberTitle={t("commonDocumentNumber", { ns: "common" })}

@@ -294,3 +294,93 @@ describe("Check Your Information (Summary) page: non-UK catch certificate with i
     cy.get("dt").contains("Issuing country").should("have.length", 1);
   });
 });
+
+describe("PS: check-your-information page - Your reference field", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should display user reference value", () => {
+    cy.contains("dt", "Your reference").next("dd").should("contain", "PS-REF-98765");
+  });
+
+  it("should have a change link for user reference with correct href", () => {
+    cy.get("#yourReferenceChangeLink")
+      .should("exist")
+      .should("have.attr", "href")
+      .and("include", "/add-your-reference")
+      .and("include", "nextUri")
+      .and("include", "check-your-information");
+  });
+
+  it("should have visually-hidden text for accessibility on reference change link", () => {
+    cy.get("#yourReferenceChangeLink")
+      .find(".govuk-visually-hidden")
+      .should("exist")
+      .should("contain", "your reference");
+  });
+
+  it("should display 'Your reference' field underneath 'Document number' in the same section", () => {
+    // Verify both Document number and Your reference are in the same dl element (document details section)
+    cy.contains("h2", "Document details")
+      .next("dl")
+      .within(() => {
+        // Check Document number appears first
+        cy.contains("dt", "Document number").should("exist");
+        // Check Your reference appears after Document number
+        cy.contains("dt", "Your reference").should("exist");
+      });
+
+    // Verify Your reference comes after Document number by checking DOM order
+    cy.contains("dt", "Document number")
+      .parent()
+      .next()
+      .within(() => {
+        cy.contains("dt", "Your reference").should("exist");
+      });
+  });
+
+  it("should display change link for 'Your reference' when value is provided", () => {
+    cy.contains("dt", "Your reference")
+      .parent()
+      .within(() => {
+        cy.contains("dd", "PS-REF-98765").should("exist");
+        cy.get("#yourReferenceChangeLink").should("exist").should("contain", "Change");
+      });
+  });
+});
+
+describe("PS: check-your-information page - Your reference not provided", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformationNoUserReference,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+  });
+
+  it("should display 'Not provided' when user reference is empty", () => {
+    cy.contains("dt", "Your reference").next("dd").should("contain", "Not provided");
+  });
+
+  it("should still have change link for user reference when not provided", () => {
+    cy.get("#yourReferenceChangeLink")
+      .should("exist")
+      .should("have.attr", "href")
+      .and("include", "/add-your-reference");
+  });
+
+  it("should display 'Your reference' in document details section when not provided", () => {
+    cy.contains("h2", "Document details")
+      .next("dl")
+      .within(() => {
+        cy.contains("dt", "Document number").should("exist");
+        cy.contains("dt", "Your reference").next("dd").should("contain", "Not provided");
+      });
+
+    // Verify the change link exists even when not provided
+    cy.get("#yourReferenceChangeLink").should("exist");
+  });
+});
