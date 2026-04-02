@@ -1668,9 +1668,9 @@ describe("PS - scenario 1 - Change product details", () => {
     cy.get('button[type="submit"]').contains("Save and continue").click();
 
     // Should be redirected back to check-your-information
-    cy.url().should("include", "/check-your-information");
+    cy.url().should("include", "/add-processing-plant-details");
     cy.url().should("not.include", "nextUri");
-    cy.url().should("not.include", "/add-processing-plant-details");
+    cy.url().should("not.include", "/check-your-information");
   });
 });
 

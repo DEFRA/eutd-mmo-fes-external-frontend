@@ -3,6 +3,7 @@ import type { Catch, CatchIndex } from "~/types";
 export const getCatchAddedHeaders = (
   productDescription: string,
   speciesNameFAO: string,
+  speciesCommodityCode: string,
   catchCertificateNumber: string,
   catchCertificateWeight: string,
   exportWeightBeforeProcessing: string,
@@ -10,6 +11,7 @@ export const getCatchAddedHeaders = (
 ) => [
   { id: "productDescription", text: productDescription },
   { id: "speciesNameFAO", text: speciesNameFAO },
+  { id: "speciesCommodityCode", text: speciesCommodityCode },
   { id: "catchCertificateNumber", text: catchCertificateNumber },
   { id: "catchCertificateWeight", text: catchCertificateWeight },
   {
@@ -24,12 +26,14 @@ export const getCatchAddedHeaders = (
 
 export const getCatchDetailsHeaders = (
   speciesNameFAO: string,
+  speciesCommodityCode: string,
   catchCertificateWeight: string,
   exportWeightBeforeProcessing: string,
   exportWeightAfterProcessing: string,
   action: string
 ) => [
   { id: "speciesNameFAO", text: speciesNameFAO },
+  { id: "speciesCommodityCode", text: speciesCommodityCode },
   { id: "catchCertificateWeight", text: catchCertificateWeight },
   {
     id: "exportWeightBeforeProcessing",

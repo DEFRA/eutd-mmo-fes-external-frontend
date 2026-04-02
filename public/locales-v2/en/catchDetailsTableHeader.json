@@ -2,6 +2,7 @@
   "productDescription": "Product description",
   "catchDetailsTableHeader": "You have added {{uniqueSpeciesCount}} species and {{totalDocuments}} documents for {{productDescription}}",
   "speciesNameFAO": "Species name (FAO)",
+  "speciesCommodityCode": "Commodity code",
   "catchCertificateNumber": "Catch Certificate number",
   "catchCertificateWeight": "Weight on catch certificate",
   "exportWeightBeforeProcessing": "Export weight before processing",

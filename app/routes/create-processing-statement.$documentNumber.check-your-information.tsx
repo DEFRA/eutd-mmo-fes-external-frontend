@@ -286,6 +286,12 @@ const CheckYourInformation = () => {
                       </div>
                       <div className="govuk-summary-list__row">
                         <dt className="govuk-summary-list__key govuk-!-width-one-half">
+                          {t("psSummaryPageSpeciesCommodityCode", { ns: "psCheckYourInformation" })}
+                        </dt>
+                        <dd className="govuk-summary-list__value">{catchItem.speciesCommodityCode}</dd>
+                      </div>
+                      <div className="govuk-summary-list__row">
+                        <dt className="govuk-summary-list__key govuk-!-width-one-half">
                           {t("psSummaryPageCatchCertificateWeight", { ns: "psCheckYourInformation" })}
                         </dt>
                         <dd className="govuk-summary-list__value">{`${Number(catchItem.totalWeightLanded).toFixed(2)}kg`}</dd>
@@ -465,7 +471,6 @@ const CheckYourInformation = () => {
             </div>
           );
         })()}
-
         <div className="govuk-warning-text">
           <span className="govuk-warning-text__icon" aria-hidden="true">
             !

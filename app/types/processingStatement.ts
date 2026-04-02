@@ -17,6 +17,7 @@ export interface Catch {
   productId?: string;
   productDescription?: string;
   productCommodityCode?: string;
+  speciesCommodityCode?: string;
 }
 
 export interface ProcessingStatementProduct {
