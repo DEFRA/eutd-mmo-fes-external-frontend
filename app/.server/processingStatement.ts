@@ -460,7 +460,8 @@ export const hasRequiredDataProcessingStatementSummary = (
         validateWeight(item.totalWeightLanded) &&
         validateWeight(item.exportWeightBeforeProcessing) &&
         validateWeight(item.exportWeightAfterProcessing) &&
-        parseFloat(item.exportWeightBeforeProcessing) <= parseFloat(item.totalWeightLanded)
+        parseFloat(item.exportWeightBeforeProcessing) <= parseFloat(item.totalWeightLanded) &&
+        !isEmpty(item.speciesCommodityCode)
     );
 
   return (

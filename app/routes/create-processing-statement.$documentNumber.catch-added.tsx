@@ -376,7 +376,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   }
 
   cleanupSession(session);
-  const redirectUrl = determineRedirectUrl(nextUri, psData, documentNumber as string);
+  const redirectUrl = determineRedirectUrl(nextUri, documentNumber as string);
 
   return redirect(redirectUrl, {
     headers: {
@@ -446,17 +446,10 @@ const createErrorResponse = async (errorData: ErrorResponse, session: any): Prom
   );
 };
 
-const determineRedirectUrl = (nextUri: string, psData: ProcessingStatement, documentNumber: string): string => {
-  if (!nextUri || isEmpty(nextUri)) {
-    const hasPlantDetails = psData.plantName && psData.plantApprovalNumber && psData.personResponsibleForConsignment;
-
-    return hasPlantDetails
-      ? `/create-processing-statement/${documentNumber}/check-your-information`
-      : `/create-processing-statement/${documentNumber}/add-processing-plant-details`;
-  }
-
-  return nextUri;
-};
+const determineRedirectUrl = (nextUri: string, documentNumber: string): string =>
+  !nextUri || isEmpty(nextUri)
+    ? `/create-processing-statement/${documentNumber}/add-processing-plant-details`
+    : nextUri;
 
 const populateNavigationLinks = (
   t: TFunction<"common"[], undefined>,
@@ -623,6 +616,7 @@ const CatchAdded = () => {
               headersToRender={getCatchAddedHeaders(
                 t("productDescription", { ns: "catchDetailsTableHeader" }),
                 t("speciesNameFAO", { ns: "catchDetailsTableHeader" }),
+                t("speciesCommodityCode", { ns: "catchDetailsTableHeader" }),
                 t("catchCertificateNumber", { ns: "catchDetailsTableHeader" }),
                 t("catchCertificateWeight", { ns: "catchDetailsTableHeader" }),
                 t("exportWeightBeforeProcessing", { ns: "catchDetailsTableHeader" }),
@@ -632,7 +626,7 @@ const CatchAdded = () => {
             <tbody className="govuk-table__body">
               {!isEmpty(q) && catches.length === 0 && products.length === 0 ? (
                 <tr className="govuk-table__row">
-                  <td colSpan={6} className="govuk-table__cell">
+                  <td colSpan={7} className="govuk-table__cell">
                     {t("commonNoResultsFound", { ns: "common" })}
                   </td>
                 </tr>
@@ -661,7 +655,7 @@ const CatchAdded = () => {
                               </Link>
                             </div>
                           </td>
-                          <td colSpan={5} className="govuk-table__cell">
+                          <td colSpan={6} className="govuk-table__cell">
                             {t("commonNoCatchesAdded", { ns: "common" })}
                           </td>
                         </tr>
@@ -704,6 +698,9 @@ const CatchAdded = () => {
                             </td>
                             <td className="govuk-table__cell" id={`catches-${actualIndex}-species`}>
                               {item.species}
+                            </td>
+                            <td className="govuk-table__cell" id={`catches-${actualIndex}-speciesCommodityCode`}>
+                              {item.speciesCommodityCode}
                             </td>
                             <td className="govuk-table__cell" id={`catches-${actualIndex}-catchCertificateNumber`}>
                               {item.catchCertificateNumber}

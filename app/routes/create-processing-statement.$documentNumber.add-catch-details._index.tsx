@@ -10,7 +10,7 @@ import {
 } from "react-router";
 
 import { useTranslation } from "react-i18next";
-import { FormInput, ErrorPosition, Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
+import { FormInput, ErrorPosition, Button, BUTTON_TYPE, Details } from "@capgeminiuk/dcx-react-library";
 import classNames from "classnames";
 import isEmpty from "lodash/isEmpty";
 import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm, AutocompleteFormField } from "~/components";
@@ -59,6 +59,7 @@ interface ILoaderData {
   documentCountByCertificateNumber: number;
   countries: ICountry[];
   issuingCountry: string;
+  speciesCommodityCode?: string;
 }
 
 export const meta: MetaFunction = (args) => getMeta(args);
@@ -119,6 +120,14 @@ const getErrorMessage = (errors: any, fieldKey: string, t: any): string =>
 
 // Helper function to check if field has error
 const hasError = (errors: any, fieldKey: string): boolean => !!errors?.[fieldKey]?.message;
+
+// Module-level helper so the form value resolution logic carries no nesting penalty
+const resolveFormValue = (errors: any, submittedFormData: any, fieldName: string, defaultValue: any) => {
+  if (!isEmpty(errors) && submittedFormData[fieldName] !== undefined) {
+    return submittedFormData[fieldName];
+  }
+  return defaultValue;
+};
 
 // Helper component to reduce complexity
 const CatchCertificateTypeRadios: React.FC<{
@@ -345,6 +354,115 @@ const SpeciesAutocompleteField: React.FC<{
   );
 };
 
+const WeightInputsSection: React.FC<{
+  catchIndex: number;
+  isReset: boolean;
+  catchCertificateType: string;
+  errors: any;
+  isHydrated: boolean;
+  t: any;
+  currentTotalWeightLanded: string;
+  totalWeightLanded: string;
+  currentExportWeightBeforeProcessing: string;
+  exportWeightBeforeProcessing: string;
+  currentExportWeightAfterProcessing: string;
+  exportWeightAfterProcessing: string;
+  onTotalWeightChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onExportBeforeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onExportAfterChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}> = ({
+  catchIndex,
+  isReset,
+  catchCertificateType,
+  errors,
+  isHydrated,
+  t,
+  currentTotalWeightLanded,
+  totalWeightLanded,
+  currentExportWeightBeforeProcessing,
+  exportWeightBeforeProcessing,
+  currentExportWeightAfterProcessing,
+  exportWeightAfterProcessing,
+  onTotalWeightChange,
+  onExportBeforeChange,
+  onExportAfterChange,
+}) => (
+  <>
+    {catchCertificateType !== "uk" && (
+      <WeightInput
+        id="weight"
+        totalWeight={() => {}}
+        label={t("psAddCatchCertificateWeight", { ns: "psAddCatchDetails" })}
+        hint={t("psAddCatchCertificateWeightHint", { ns: "psAddCatchDetails" })}
+        key={isReset ? `total-weight-landed-${catchIndex}-reset` : `total-weight-landed-${catchIndex}`}
+        weightKey="totalWeightLanded"
+        errorID={`catches-${catchIndex}-totalWeightLanded`}
+        inputWidth={5}
+        unit="kg"
+        errors={errors ?? {}}
+        formValue={isReset ? "" : getWeightValue(isHydrated, currentTotalWeightLanded, totalWeightLanded)}
+        speciesId={`total-weight-landed-${catchIndex}`}
+        index={catchIndex}
+        exportWeight={isReset ? "" : totalWeightLanded}
+        readOnly={false}
+        inputType="text"
+        inputName="totalWeightLanded"
+        onChange={onTotalWeightChange}
+      />
+    )}
+    <WeightInput
+      id="weight"
+      totalWeight={() => {}}
+      label={t("psAddCatchWeightsExportWeightBeforeProcessingLabel", { ns: "psAddCatchDetails" })}
+      hint={t("psAddCatchWeightsExportWeightBeforeProcessingHint", { ns: "psAddCatchDetails" })}
+      key={
+        isReset
+          ? `export-weight-before-processing-${catchIndex}-reset`
+          : `export-weight-before-processing-${catchIndex}`
+      }
+      weightKey="exportWeightBeforeProcessing"
+      errorID={`catches-${catchIndex}-exportWeightBeforeProcessing`}
+      inputWidth={5}
+      unit="kg"
+      errors={errors ?? {}}
+      formValue={
+        isReset ? "" : getWeightValue(isHydrated, currentExportWeightBeforeProcessing, exportWeightBeforeProcessing)
+      }
+      speciesId={`export-weight-before-processing-${catchIndex}`}
+      index={catchIndex}
+      exportWeight={isReset ? "" : exportWeightBeforeProcessing?.toString()}
+      readOnly={false}
+      inputType="text"
+      inputName="exportWeightBeforeProcessing"
+      onChange={onExportBeforeChange}
+    />
+    <WeightInput
+      id="weight"
+      totalWeight={() => {}}
+      label={t("psAddCatchWeightsExportWeightAfterProcessingLabel", { ns: "psAddCatchDetails" })}
+      hint={t("psAddCatchWeightsExportWeightAfterProcessingHint", { ns: "psAddCatchDetails" })}
+      key={
+        isReset ? `export-weight-after-processing-${catchIndex}-reset` : `export-weight-after-processing-${catchIndex}`
+      }
+      weightKey="exportWeightAfterProcessing"
+      errorID={`catches-${catchIndex}-exportWeightAfterProcessing`}
+      inputWidth={5}
+      unit="kg"
+      errors={errors ?? {}}
+      formValue={
+        isReset ? "" : getWeightValue(isHydrated, currentExportWeightAfterProcessing, exportWeightAfterProcessing)
+      }
+      speciesId={`export-weight-after-processing-${catchIndex}`}
+      index={catchIndex}
+      exportWeight={isReset ? "" : exportWeightAfterProcessing?.toString()}
+      readOnly={false}
+      inputType="text"
+      inputName="exportWeightAfterProcessing"
+      onChange={onExportAfterChange}
+    />
+  </>
+);
+
 const AddCatchDetailsIndex = () => {
   const { t } = useTranslation();
   const {
@@ -377,18 +495,14 @@ const AddCatchDetailsIndex = () => {
     documentCountByCertificateNumber,
     countries,
     issuingCountry,
+    speciesCommodityCode,
   } = useLoaderData<ILoaderData>();
 
   const actionData = useActionData();
   const { errors = {}, response, ...submittedFormData } = getActionData(actionData) as any;
 
-  // Helper function to get the value to display - prefer submitted form data when there are errors
-  const getFormValue = (fieldName: string, defaultValue: any) => {
-    if (!isEmpty(errors) && submittedFormData[fieldName] !== undefined) {
-      return submittedFormData[fieldName];
-    }
-    return defaultValue;
-  };
+  const getFormValue = (fieldName: string, defaultValue: any) =>
+    resolveFormValue(errors, submittedFormData, fieldName, defaultValue);
 
   const [currentCatchCertificateType, setCurrentCatchCertificateType] = useState<string>(
     getFormValue("catchCertificateType", getDefaultCatchCertificateType(catchCertificateType))
@@ -414,6 +528,9 @@ const AddCatchDetailsIndex = () => {
   const [selectedIssuingCountry, setSelectedIssuingCountry] = useState<string>(
     getFormValue("issuingCountry", getDefaultIssuingCountry(issuingCountry, catches, catchId))
   );
+  const [currentSpeciesCommodityCode, setCurrentSpeciesCommodityCode] = useState<string>(
+    getFormValue("speciesCommodityCode", isEditing ? speciesCommodityCode ?? "" : "")
+  );
 
   const actionUrl = getActionUrl(documentNumber, productId);
 
@@ -438,11 +555,9 @@ const AddCatchDetailsIndex = () => {
     }
 
     setCurrentCatchCertificateType(getDefaultCatchCertificateType(catchCertificateType));
-    const defaultIssuingCountry = getDefaultIssuingCountry(issuingCountry, catches, catchId);
-    if (defaultIssuingCountry) {
-      setSelectedIssuingCountry(defaultIssuingCountry);
-    }
+    setSelectedIssuingCountry(getDefaultIssuingCountry(issuingCountry, catches, catchId));
     setCurrentCatchCertificateNumber(isEditing ? catchCertificateNumber : "");
+    setCurrentSpeciesCommodityCode(isEditing ? speciesCommodityCode ?? "" : "");
     setSelectedSpecies(speciesSelected);
     setSelectedSpeciesCode(getDefaultSelectedSpeciesCode(speciesCode));
     setCurrentTotalWeightLanded(totalWeightLanded);
@@ -547,6 +662,7 @@ const AddCatchDetailsIndex = () => {
     setCurrentExportWeightAfterProcessing("");
     setCurrentCatchCertificateType(getDefaultCatchCertificateType(catchCertificateType));
     setCurrentCatchCertificateNumber("");
+    setCurrentSpeciesCommodityCode("");
     setSelectedSpecies("");
     setSelectedSpeciesCode("");
     setSelectedIssuingCountry("");
@@ -554,6 +670,7 @@ const AddCatchDetailsIndex = () => {
   };
 
   const ccNumberKey = `catches-${catchIndex}-catchCertificateNumber`;
+  const ccCommodityCodeKey = `catches-${catchIndex}-speciesCommodityCode`;
   const addProductDetailsConfig = getAddProductDetailsConfig(isEditing);
 
   const errorKeysInOrder = [
@@ -562,6 +679,7 @@ const AddCatchDetailsIndex = () => {
     `catches-${catchIndex}-catchCertificateType`,
     `catches-${catchIndex}-issuingCountry`,
     `catches-${catchIndex}-catchCertificateNumber`,
+    `catches-${catchIndex}-speciesCommodityCode`,
     `catches-${catchIndex}-totalWeightLanded`, // For non-UK certificates
     `catches-${catchIndex}-catchCertificateWeight`, // Add this if it exists
     `catches-${catchIndex}-exportWeightBeforeProcessing`,
@@ -638,10 +756,13 @@ const AddCatchDetailsIndex = () => {
                 })}
                 inputProps={{
                   id: `catches-${catchIndex}-catchCertificateNumber`,
-                  "aria-describedby": `hint-catches-${catchIndex}-catchCertificateNumber`,
+                  "aria-describedby": errors?.[ccNumberKey]
+                    ? `hint-catches-${catchIndex}-catchCertificateNumber ${ccNumberKey}-error`
+                    : `hint-catches-${catchIndex}-catchCertificateNumber`,
                 }}
                 labelProps={{ htmlFor: `catches-${catchIndex}-catchCertificateNumber` }}
                 errorProps={{
+                  id: `${ccNumberKey}-error`,
                   className: isEmpty(errors?.[ccNumberKey]) ? "" : "govuk-error-message",
                 }}
                 staticErrorMessage={
@@ -653,83 +774,87 @@ const AddCatchDetailsIndex = () => {
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
               />
               <CatchCertificateDetails />
-              {currentCatchCertificateType !== "uk" && (
-                <WeightInput
-                  id="weight"
-                  totalWeight={() => {}}
-                  label={t("psAddCatchCertificateWeight", { ns: "psAddCatchDetails" })}
-                  hint={t("psAddCatchCertificateWeightHint", { ns: "psAddCatchDetails" })}
-                  key={isReset ? `total-weight-landed-${catchIndex}-reset` : `total-weight-landed-${catchIndex}`}
-                  weightKey={`totalWeightLanded`}
-                  errorID={`catches-${catchIndex}-totalWeightLanded`}
-                  inputWidth={5}
-                  unit="kg"
-                  errors={errors ?? {}}
-                  formValue={isReset ? "" : getWeightValue(isHydrated, currentTotalWeightLanded, totalWeightLanded)}
-                  speciesId={`total-weight-landed-${catchIndex}`}
-                  index={catchIndex}
-                  exportWeight={isReset ? "" : totalWeightLanded}
-                  readOnly={false}
-                  inputType="text"
-                  inputName="totalWeightLanded"
-                  onChange={(e) => setCurrentTotalWeightLanded(e.currentTarget.value)}
-                />
-              )}
-              <WeightInput
-                id="weight"
-                totalWeight={() => {}}
-                label={t("psAddCatchWeightsExportWeightBeforeProcessingLabel", { ns: "psAddCatchDetails" })}
-                hint={t("psAddCatchWeightsExportWeightBeforeProcessingHint", { ns: "psAddCatchDetails" })}
-                key={
-                  isReset
-                    ? `export-weight-before-processing-${catchIndex}-reset`
-                    : `export-weight-before-processing-${catchIndex}`
-                }
-                weightKey={`exportWeightBeforeProcessing`}
-                errorID={`catches-${catchIndex}-exportWeightBeforeProcessing`}
-                inputWidth={5}
-                unit="kg"
-                errors={errors ?? {}}
-                formValue={
-                  isReset
+              <div className="govuk-warning-text">
+                <span className="govuk-warning-text__icon" aria-hidden="true">
+                  !
+                </span>
+                <strong className="govuk-warning-text__text">
+                  <span className="govuk-visually-hidden">Warning</span>
+                  {t("psSpeciesCommodityCodeWarning", { ns: "psAddCatchDetails" })}
+                </strong>
+              </div>
+              <FormInput
+                containerClassName="govuk-form-group"
+                label={t("psSpeciesCommodityCode", { ns: "psAddCatchDetails" })}
+                name="speciesCommodityCode"
+                type="text"
+                value={currentSpeciesCommodityCode}
+                onChange={(e) => setCurrentSpeciesCommodityCode(e.currentTarget.value)}
+                hint={{
+                  id: `hint-catches-${catchIndex}-speciesCommodityCode`,
+                  position: "above",
+                  text: `${t("psSpeciesCommodityCodeHint", { ns: "psAddCatchDetails" })}`,
+                  className: "govuk-hint govuk-!-margin-bottom-2",
+                }}
+                labelClassName="govuk-label govuk-!-font-weight-bold"
+                inputClassName={classNames("govuk-input govuk-!-width-one-half", {
+                  "govuk-input--error": errors?.[ccCommodityCodeKey]?.message,
+                })}
+                inputProps={{
+                  id: `catches-${catchIndex}-speciesCommodityCode`,
+                  "aria-describedby": errors?.[ccCommodityCodeKey]
+                    ? `hint-catches-${catchIndex}-speciesCommodityCode ${ccCommodityCodeKey}-error`
+                    : `hint-catches-${catchIndex}-speciesCommodityCode`,
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                }}
+                labelProps={{ htmlFor: `catches-${catchIndex}-speciesCommodityCode` }}
+                errorProps={{
+                  id: `${ccCommodityCodeKey}-error`,
+                  className: isEmpty(errors?.[ccCommodityCodeKey]) ? "" : "govuk-error-message",
+                }}
+                staticErrorMessage={
+                  isEmpty(errors?.[ccCommodityCodeKey])
                     ? ""
-                    : getWeightValue(isHydrated, currentExportWeightBeforeProcessing, exportWeightBeforeProcessing)
+                    : t(errors[ccCommodityCodeKey]?.message, { ns: "errorsText" })
                 }
-                speciesId={`export-weight-before-processing-${catchIndex}`}
-                index={catchIndex}
-                exportWeight={isReset ? "" : exportWeightBeforeProcessing?.toString()}
-                readOnly={false}
-                inputType="text"
-                inputName="exportWeightBeforeProcessing"
-                onChange={(e) => setCurrentExportWeightBeforeProcessing(e.currentTarget.value)}
+                errorPosition={ErrorPosition.AFTER_LABEL}
+                containerClassNameError={isEmpty(errors?.[ccCommodityCodeKey]) ? "" : "govuk-form-group--error"}
+                hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+                hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
               />
-              <WeightInput
-                id="weight"
-                totalWeight={() => {}}
-                label={t("psAddCatchWeightsExportWeightAfterProcessingLabel", { ns: "psAddCatchDetails" })}
-                hint={t("psAddCatchWeightsExportWeightAfterProcessingHint", { ns: "psAddCatchDetails" })}
-                key={
-                  isReset
-                    ? `export-weight-after-processing-${catchIndex}-reset`
-                    : `export-weight-after-processing-${catchIndex}`
-                }
-                weightKey={`exportWeightAfterProcessing`}
-                errorID={`catches-${catchIndex}-exportWeightAfterProcessing`}
-                inputWidth={5}
-                unit="kg"
-                errors={errors ?? {}}
-                formValue={
-                  isReset
-                    ? ""
-                    : getWeightValue(isHydrated, currentExportWeightAfterProcessing, exportWeightAfterProcessing)
-                }
-                speciesId={`export-weight-after-processing-${catchIndex}`}
-                index={catchIndex}
-                exportWeight={isReset ? "" : exportWeightAfterProcessing?.toString()}
-                readOnly={false}
-                inputType="text"
-                inputName="exportWeightAfterProcessing"
-                onChange={(e) => setCurrentExportWeightAfterProcessing(e.currentTarget.value)}
+              <Details
+                summary={t("psDetailsCommpdityCodeHelpTitle", { ns: "psAddCatchDetails" })}
+                detailsClassName="govuk-details"
+                summaryClassName="govuk-details__summary"
+                detailsTextClassName="govuk-details__text"
+              >
+                <>
+                  <p>{t("psDetailsCommodityCodeExampleHelpText", { ns: "psAddCatchDetails" })}</p>
+                  <p>
+                    {t("psDetailsCommodityCodeHelpText1", { ns: "psAddCatchDetails" })}{" "}
+                    <a className="govuk-link" target="_blank" href="https://www.gov.uk/trade-tariff">
+                      {t("psDetailsCommodityCodeHelpText", { ns: "psAddCatchDetails" })}
+                    </a>
+                  </p>
+                </>
+              </Details>
+              <WeightInputsSection
+                catchIndex={catchIndex}
+                isReset={isReset}
+                catchCertificateType={currentCatchCertificateType}
+                errors={errors}
+                isHydrated={isHydrated}
+                t={t}
+                currentTotalWeightLanded={currentTotalWeightLanded}
+                totalWeightLanded={totalWeightLanded}
+                currentExportWeightBeforeProcessing={currentExportWeightBeforeProcessing}
+                exportWeightBeforeProcessing={exportWeightBeforeProcessing}
+                currentExportWeightAfterProcessing={currentExportWeightAfterProcessing}
+                exportWeightAfterProcessing={exportWeightAfterProcessing}
+                onTotalWeightChange={(e) => setCurrentTotalWeightLanded(e.currentTarget.value)}
+                onExportBeforeChange={(e) => setCurrentExportWeightBeforeProcessing(e.currentTarget.value)}
+                onExportAfterChange={(e) => setCurrentExportWeightAfterProcessing(e.currentTarget.value)}
               />
               <div className="govuk-button-group">
                 <button

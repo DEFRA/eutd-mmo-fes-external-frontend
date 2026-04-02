@@ -54,6 +54,7 @@ const getLoaderData = (
   catchCertificateNumber: currentCatchDetails?.catchCertificateNumber ?? "",
   catchCertificateType: currentCatchDetails?.catchCertificateType ?? "",
   issuingCountry: currentCatchDetails?.issuingCountry?.officialCountryName ?? "",
+  speciesCommodityCode: currentCatchDetails?.speciesCommodityCode ?? "",
   totalWeightLanded: currentCatchDetails?.totalWeightLanded ?? "",
   catchCertificateWeight: getCatchCertificateWeight(currentCatchDetails),
   exportWeightBeforeProcessing: currentCatchDetails?.exportWeightBeforeProcessing ?? "",
@@ -298,8 +299,8 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
       productDescription: values["productDescription"] as string,
       issuingCountry: issuingCountry,
       productCommodityCode: values["productCommodityCode"] as string,
+      speciesCommodityCode: values["speciesCommodityCode"] as string,
     };
-    // using index 0 as new record will always be added at the top of the list
     const errorResponse = await updateProcessingStatement(
       bearerToken,
       documentNumber,
@@ -326,6 +327,7 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
         totalWeightLanded: values["totalWeightLanded"],
         exportWeightBeforeProcessing: values["exportWeightBeforeProcessing"],
         exportWeightAfterProcessing: values["exportWeightAfterProcessing"],
+        speciesCommodityCode: values["speciesCommodityCode"],
       };
 
       return new Response(JSON.stringify(combinedResponse), {
@@ -389,6 +391,7 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
       productDescription: values["productDescription"] as string,
       issuingCountry: issuingCountry,
       productCommodityCode: values["productCommodityCode"] as string,
+      speciesCommodityCode: values["speciesCommodityCode"] as string,
     };
 
     const catchIndex = findIndexByValue(catches, values["catchId"] as string);
@@ -417,6 +420,7 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
         totalWeightLanded: values["totalWeightLanded"],
         exportWeightBeforeProcessing: values["exportWeightBeforeProcessing"],
         exportWeightAfterProcessing: values["exportWeightAfterProcessing"],
+        speciesCommodityCode: values["speciesCommodityCode"],
       };
 
       return new Response(JSON.stringify(combinedResponse), {

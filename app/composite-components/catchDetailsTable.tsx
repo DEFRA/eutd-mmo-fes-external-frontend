@@ -52,6 +52,7 @@ export const CatchDetailsTable = ({
         <CatchDetailsTableHeader
           headersToRender={getCatchDetailsHeaders(
             t("speciesNameFAO", { ns: "catchDetailsTableHeader" }),
+            t("speciesCommodityCode", { ns: "catchDetailsTableHeader" }),
             t("catchCertificateWeight", { ns: "catchDetailsTableHeader" }),
             t("exportWeightBeforeProcessing", { ns: "catchDetailsTableHeader" }),
             t("exportWeightAfterProcessing", { ns: "catchDetailsTableHeader" }),
@@ -64,6 +65,7 @@ export const CatchDetailsTable = ({
               <td className="govuk-table__cell">
                 <p className="govuk-!-margin-0">{ctch.species}</p>
               </td>
+              <td className="govuk-table__cell">{ctch.speciesCommodityCode}</td>
               <td className="govuk-table__cell">{formatWeight(ctch.totalWeightLanded)}</td>
               <td className="govuk-table__cell">{formatWeight(ctch.exportWeightBeforeProcessing)}</td>
               <td className="govuk-table__cell">{formatWeight(ctch.exportWeightAfterProcessing)}</td>

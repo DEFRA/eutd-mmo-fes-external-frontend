@@ -201,6 +201,8 @@
   "psAddCatchDetailsErrorUKCCInValid": "The catch certificate entered is no longer valid",
   "sdAddCatchDetailsErrorUKDocumentInvalid": "The document entered is no longer valid",
   "psAddCatchDetailsErrorUKCCSpeciesMissing": "The species selected is not present on the catch certificate entered",
+  "psAddCatchDetailsErrorUKCCCommodityCodeMissing": "The commodity code entered is not present on the catch certificate entered",
+  "psAddCatchDetailsErrorDuplicateCatch": "Enter a different combination of catch certificate number, species and commodity code",
   "psAddHealthCertificateErrorFormatHealthCertificateNumber": "Enter Export Health Certificate number in the correct format",
   "psAddHealthCertificateErrorNullHealthCertificateNumber": "Enter the Export Health Certificate number",
   "psAddHealthCertificateErrorHealthCertificateDate": "Enter the Export Health Certificate date",
@@ -308,5 +310,8 @@
   "ccDirectLandingDateLandedFutureDateError": "Date landed must be today or within the next 7 days",
   "ccDirectLandingVesselRequiredError": "Select or enter a vessel name or port letter and number",
   "ccDirectLandingVesselInvalidError": "Select a vessel from the list",
-  "ccDirectLandingExportWeightRequiredError": "Enter the export weight in kilograms"
+  "ccDirectLandingExportWeightRequiredError": "Enter the export weight in kilograms",
+  "psAddCatchDetailsErrorEnterSpeciesCommodityCode": "Enter the commodity code",
+  "psAddCatchDetailsErrorSpeciesCommodityCodeMinLength": "The commodity code must be at least 6 characters",
+  "psAddCatchDetailsErrorSpeciesCommodityCodeMaxLength": "The commodity code must be no more than 10 characters"
 }

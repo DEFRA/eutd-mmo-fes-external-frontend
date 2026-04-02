@@ -50,6 +50,7 @@
   "psSummaryPageCertificateIssuedInTheUK": "Tystysgrif dalfa a ddyroddwyd yn y DU",
   "psSummaryPageIssuingCountry": "Gwlad dyroddi",
   "psSummaryPageCatchCertificate": "Tystysgrif dalfa",
+  "psSummaryPageSpeciesCommodityCode": "Cod nwyddau’r rhywogaeth",
   "psSummaryPageCatchCertificateWeight": "Pwysau’r dystysgrif dalfa",
   "psSummaryPageExportWeightBeforeProcessing": "Y pwysau allforio cyn prosesu",
   "psSummaryPageExportWeightAfterProcessing": "Y pwysau allforio ar ôl prosesu",
