@@ -20,6 +20,8 @@
   "issuingCountryHint": "Rhowch y wlad a ddyroddodd y dystysgrif dalfa",
   "catchCertificateGuidanceTitle": "Help gydag tystysgrif y ddalfa",
   "catchCertificateGuidanceTextOne": "Tystysgrif dal y DU yw'r gwaith papur swyddogol a ganiataodd i'r cynnyrch ddod i mewn i'r DU.",
+  "psSpeciesCommodityCode": "Cod nwyddau’r rhywogaeth",
+  "psSpeciesCommodityCodeHint": "Rhowch god nwyddau’r rhywogaeth yn union fel y mae'n ymddangos ar y dystysgrif dalfa. Mae hyn yn gymwys hyd yn oed os yw'r pysgod wedi’u prosesu ers cael eu glanio",
   "psAddCatchCertificateWeight": "Pwysau’r dystysgrif dalfa",
   "psAddCatchCertificateWeightHint": "Nodwch bwysau'r cynnyrch sy'n cael ei allforio, fel y dangosir ar y dystysgrif Dal.",
   "psAddCatchWeightsExportWeightBeforeProcessingLabel": "Y pwysau allforio cyn prosesu",
@@ -27,5 +29,10 @@
   "psAddCatchWeightsExportWeightAfterProcessingLabel": "Y pwysau allforio ar ôl prosesu",
   "psAddCatchWeightsExportWeightAfterProcessingHint": "Nodwch bwysau'r cynnyrch ar ôl unrhyw brosesu. Peidiwch â chynnwys unrhyw gynhwysion ychwanegol.",
   "psAddSpeciesButtonLabel": "Ychwanegu",
-  "psUpdateSpeciesButtonLabel": "Diweddaru"
+  "psUpdateSpeciesButtonLabel": "Diweddaru",
+  "psDetailsCommpdityCodeHelpTitle": "Help gyda chodau nwyddau",
+  "psDetailsCommodityCodeExampleHelpText": "The commodity code is shown on your catch certificate. It's typically an 8-digit number, for example: 03024310",
+  "psDetailsCommodityCodeHelpText": "UK Integrated Online Tariff (opens in new tab)",
+  "psDetailsCommodityCodeHelpText1": "If you don't have the certificate to hand, you can search for commodity codes on the ",
+  "psSpeciesCommodityCodeWarning": "Fydd yr wybodaeth yma ddim yn ymddangos ar y datganiad prosesu."
 }

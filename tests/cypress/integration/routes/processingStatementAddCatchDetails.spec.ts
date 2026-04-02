@@ -929,10 +929,11 @@ describe("PS: Add catch details - Catch Details Table", () => {
     cy.get("#yourproducts thead").should("exist");
     cy.get("#yourproducts thead th").should("have.length.greaterThan", 0);
     cy.get("#yourproducts thead th").eq(0).should("contain.text", "Species");
-    cy.get("#yourproducts thead th").eq(1).should("contain.text", "Weight on catch certificate");
-    cy.get("#yourproducts thead th").eq(2).should("contain.text", "Export weight before processing");
-    cy.get("#yourproducts thead th").eq(3).should("contain.text", "Export weight after processing");
-    cy.get("#yourproducts thead th").eq(4).should("contain.text", "Action");
+    cy.get("#yourproducts thead th").eq(1).should("contain.text", "Commodity code");
+    cy.get("#yourproducts thead th").eq(2).should("contain.text", "Weight on catch certificate");
+    cy.get("#yourproducts thead th").eq(3).should("contain.text", "Export weight before processing");
+    cy.get("#yourproducts thead th").eq(4).should("contain.text", "Export weight after processing");
+    cy.get("#yourproducts thead th").eq(5).should("contain.text", "Action");
   });
 
   it("should display correct table header with consignment description", () => {
@@ -1358,7 +1359,7 @@ describe("PS: Add catch details - Table Display and Session Persistence", () => 
     cy.get("#yourproducts").should("be.visible");
     cy.get("#yourproducts tbody tr").should("have.length.greaterThan", 0);
     cy.get("#yourproducts tbody tr").each(($row) => {
-      cy.wrap($row).find("td").should("have.length", 5);
+      cy.wrap($row).find("td").should("have.length", 6);
       cy.wrap($row).find("td").eq(0).should("not.be.empty");
     });
 
@@ -1413,7 +1414,7 @@ describe("PS: Add catch details - Table Display and Session Persistence", () => 
     cy.get("#yourproducts tbody tr").each(($row) => {
       cy.wrap($row).find("td").eq(0).should("not.be.empty");
       cy.wrap($row).find("td").eq(0).invoke("text").should("match", /\S+/);
-      cy.wrap($row).find("td").eq(4).find("button").should("have.length.greaterThan", 0);
+      cy.wrap($row).find("td").eq(5).find("button").should("have.length.greaterThan", 0);
     });
   });
 
@@ -1427,9 +1428,9 @@ describe("PS: Add catch details - Table Display and Session Persistence", () => 
     cy.get("#yourproducts").should("be.visible");
     cy.get("#yourproducts tbody tr").should("have.length.greaterThan", 0);
     cy.get("#yourproducts tbody tr").each(($row) => {
-      cy.wrap($row).find("td").should("have.length", 5);
+      cy.wrap($row).find("td").should("have.length", 6);
       cy.wrap($row).find("td").eq(0).should("not.be.empty");
-      cy.wrap($row).find("td").eq(4).find("button").should("exist");
+      cy.wrap($row).find("td").eq(5).find("button").should("exist");
     });
   });
 });
@@ -1776,5 +1777,163 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
 
     // Should succeed
     cy.url().should("include", validAddCatchDetailsUrl);
+  });
+});
+
+describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", () => {
+  it("should render the commodity code field with correct label and hint", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+
+    cy.get("label[for='catches-0-speciesCommodityCode']")
+      .should("be.visible")
+      .and("contain.text", "Species commodity code");
+    cy.get("#hint-catches-0-speciesCommodityCode")
+      .should("be.visible")
+      .and(
+        "contain.text",
+        "Enter species commodity code exactly how it appears on the catch certificate. This applies even if the fish has been processed since landing."
+      );
+  });
+
+  it("should render the commodity code input with correct id, inputmode, and pattern attributes", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+
+    cy.get("#catches-0-speciesCommodityCode")
+      .should("exist")
+      .and("be.visible")
+      .and("have.attr", "inputmode", "numeric")
+      .and("have.attr", "pattern", "[0-9]*")
+      .and("have.attr", "aria-describedby", "hint-catches-0-speciesCommodityCode");
+  });
+
+  it("should render the 'Help with commodity code' details section below the commodity code field", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+
+    cy.contains("summary, button", "Help with commodity code").should("be.visible");
+  });
+
+  it("should expand and display content in the 'Help with commodity code' details section", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+
+    cy.contains("summary, button", "Help with commodity code").click({ force: true });
+    cy.get(".govuk-details__text")
+      .should("be.visible")
+      .and("contain.text", "The commodity code is shown on your catch certificate");
+  });
+
+  it("should display an error summary and inline error when commodity code is blank on submission", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsBlankSpeciesCommodityCodeError,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+    cy.get("#addProductDetails").click();
+
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get("#error-summary-title").should("contain.text", "There is a problem");
+    cy.get(".govuk-error-summary").should("contain.text", "Enter the commodity code");
+    cy.get("#catches-0-speciesCommodityCode-error").should("contain.text", "Enter the commodity code");
+  });
+
+  it("should link the error summary item to the commodity code input when commodity code is blank", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsBlankSpeciesCommodityCodeError,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+    cy.get("#addProductDetails").click({ force: true });
+
+    cy.contains("a", "Enter the commodity code").should("have.attr", "href", "#catches-0-speciesCommodityCode");
+  });
+
+  it("should display a min-length error when commodity code is fewer than 6 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsSpeciesCommodityCodeMinLengthError,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+    cy.get("#catches-0-speciesCommodityCode").type("0302");
+    cy.get("#addProductDetails").click({ force: true });
+
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-error-summary").should("contain.text", "The commodity code must be at least 6 characters");
+    cy.get("#catches-0-speciesCommodityCode-error").should(
+      "contain.text",
+      "The commodity code must be at least 6 characters"
+    );
+  });
+
+  it("should display a max-length error when commodity code is more than 10 characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsSpeciesCommodityCodeMaxLengthError,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+    cy.get("#catches-0-speciesCommodityCode").type("030231100099");
+    cy.get("#addProductDetails").click({ force: true });
+
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-error-summary").should("contain.text", "The commodity code must be no more than 10 characters");
+    cy.get("#catches-0-speciesCommodityCode-error").should(
+      "contain.text",
+      "The commodity code must be no more than 10 characters"
+    );
+  });
+
+  it("should accept a valid commodity code without errors", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+    cy.get("#catches-0-speciesCommodityCode").type("03023110");
+    cy.get("#catches-0-catchCertificateNumber").type(ccNumber);
+    cy.get("#catches-0-totalWeightLanded").type("50");
+    cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
+    cy.get("#catches-0-exportWeightAfterProcessing").type("25");
+    cy.get("#addProductDetails").click({ force: true });
+
+    cy.get(".govuk-error-summary").should("not.exist");
+    cy.url().should("include", validAddCatchDetailsUrl);
+  });
+
+  it("should clear the commodity code field when the form is reset via Cancel", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+    cy.get("#catches-0-speciesCommodityCode").type("03023110");
+    cy.get("#catches-0-speciesCommodityCode").should("have.value", "03023110");
+
+    cy.get("#cancel").click({ force: true });
+
+    cy.get("#catches-0-speciesCommodityCode").should("have.value", "");
+  });
+
+  it("should pre-populate the commodity code field when editing an existing catch", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsUpdateCatch,
+    };
+
+    cy.visit(validEditCatchDetailsUrl, { qs: { ...testParams } });
+
+    cy.get("#catches-0-speciesCommodityCode").should("not.have.value", "").and("be.visible");
   });
 });

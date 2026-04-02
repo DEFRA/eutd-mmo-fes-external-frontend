@@ -560,25 +560,26 @@ describe("PS: Catch added", () => {
     cy.get("[data-testid='warning-message']").should("contain", "To edit product information, press change.");
   });
 
-  it("should have correct table structure with 6 columns", () => {
+  it("should have correct table structure with 7 columns", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("thead tr th").should("have.length", 6);
+    cy.get("thead tr th").should("have.length", 7);
     cy.get("thead tr").within(() => {
       cy.contains("th", "Product description").should("exist");
       cy.contains("th", "Species name (FAO)").should("exist");
       cy.contains("th", "Catch Certificate number").should("exist");
+      cy.contains("th", "Commodity code").should("exist");
       cy.contains("th", "Weight on catch certificate").should("exist");
       cy.contains("th", "Export weight before processing").should("exist");
       cy.contains("th", "Export weight after processing").should("exist");
       cy.contains("th", "Action").should("not.exist");
     });
 
-    cy.get("tbody tr").first().find("td").should("have.length", 6);
+    cy.get("tbody tr").first().find("td").should("have.length", 7);
   });
 
   // Test the Change link is in the Product Description column
@@ -1462,7 +1463,8 @@ describe("PS: Catch added - session clearing on navigation", () => {
       testCaseId: TestCaseId.PSCatchAddedHasPlantDetails,
     };
 
-    cy.visit(pageUrl, { qs: { ...testParams } });
+    const customNextUri = "/check-your-information";
+    cy.visit(pageUrl + `?nextUri=${encodeURIComponent(customNextUri)}`, { qs: { ...testParams } });
 
     cy.get('input[name="addAnotherCatch"][value="No"]').check();
     cy.contains("button", "Save and continue").click();
