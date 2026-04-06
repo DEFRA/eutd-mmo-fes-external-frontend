@@ -191,7 +191,7 @@ const Cookies = () => {
             <div id="radioButtons" className="govuk-form-group">
               <fieldset className="govuk-fieldset">
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--m">
-                  <h2 className="govuk-fieldset__heading">{t("acceptCookies")}</h2>
+                  <h3 className="govuk-fieldset__heading">{t("acceptCookies")}</h3>
                 </legend>
                 <div className="govuk-radios " data-module="govuk-radios">
                   <div className="govuk-radios__item">
