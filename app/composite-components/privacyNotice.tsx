@@ -36,7 +36,7 @@ export const PrivacyNotice = () => {
         </ul>
         <br />
         <p className="govuk-!-margin-top-0">{t("privacyPagePersonalInfoDescription2")}</p>
-        <p>{t("privacyPagePerformanceStatus")}</p>
+        <h3 className="govuk-heading-s">{t("privacyPagePerformanceStatus")}</h3>
         <ul className="govuk-list--bullet">
           <li>{t("privacyPagePerformanceStatusli1")}</li>
           <li>{t("privacyPagePerformanceStatusli2")}</li>
@@ -45,7 +45,7 @@ export const PrivacyNotice = () => {
           <li>{t("privacyPagePerformanceStatusli5")}</li>
         </ul>
         <br />
-        <p>{t("personalInformationText")}</p>
+        <h3 className="govuk-heading-s">{t("personalInformationText")}</h3>
         <ul className="govuk-list--bullet">
           <li>
             <div>{t("privacyPagePerformanceInformationUl1")}</div>
@@ -57,7 +57,7 @@ export const PrivacyNotice = () => {
             </ul>
           </li>
           <li>
-            <div>{t("privacyPagePerformanceInformationUl2")}</div>
+            <h3 className="govuk-heading-s">{t("privacyPagePerformanceInformationUl2")}</h3>
             <ul>
               <li>{t("privacyPagePerformanceInformationUl21")}</li>
               <li>{t("privacyPagePerformanceInformationUl22")}</li>
