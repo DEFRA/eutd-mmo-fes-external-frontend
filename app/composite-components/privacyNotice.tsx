@@ -83,8 +83,7 @@ export const PrivacyNotice = () => {
         <p>{t("privacyPagePerformanceInformation2")}</p>
         <h2>{t("privacyPageHeading1")}</h2>
         <p>{t("privacyPageHeading1Description")}</p>
-        <span className="govuk-label--s">{t("privacyPageProtectionOfficerText")}</span> <br />
-        <br />
+        <h3 className="govuk-heading-s">{t("privacyPageProtectionOfficerText")}</h3>
         <p>
           Defra Group DPO Office, 4th Floor, <br />
           Seacole, Marsham Street,
