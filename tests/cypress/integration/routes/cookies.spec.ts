@@ -64,6 +64,11 @@ describe("Cookie Policy page", () => {
       .click();
   });
 
+  it("should have correct heading hierarchy for cookie settings section", () => {
+    cy.contains("h2", "Change your cookie settings").should("be.visible");
+    cy.contains("h3", "Do you want to accept the analytics cookies?").should("be.visible");
+  });
+
   it("check cookie banner - check No radio button", () => {
     cy.get("form").submit();
     cy.findByRole("link", { name: "Go back to the page you were looking at." }).should("be.visible");
