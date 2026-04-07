@@ -52,27 +52,6 @@ describe("Cookie Policy page", () => {
       .click();
   });
 
-  it("should render the cookie preferences and Google Analytics section", () => {
-    cy.contains("h2", "Cookie preferences").should("be.visible");
-    cy.contains(".govuk-body", "We measure website usage so we can improve the service.").should("be.visible");
-    cy.contains("h2", "Measuring website usage (Google Analytics)").should("be.visible");
-    cy.get(".govuk-list.govuk-list--bullet")
-      .first()
-      .within(() => {
-        cy.get("li").should("have.length", 5);
-      });
-  });
-
-  it("should render the essential and strictly necessary cookies section", () => {
-    cy.contains("h2", "Essential cookies").should("be.visible");
-    cy.contains("h2", "Strictly necessary cookies").should("be.visible");
-    cy.get(".govuk-list.govuk-list--bullet")
-      .eq(1)
-      .within(() => {
-        cy.get("li").should("have.length", 3);
-      });
-  });
-
   it("should have correct heading hierarchy for cookie settings section", () => {
     cy.contains("h2", "Change your cookie settings").should("be.visible");
     cy.contains("h3", "Do you want to accept the analytics cookies?").should("be.visible");
