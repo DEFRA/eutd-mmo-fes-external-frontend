@@ -25,12 +25,6 @@ describe("Cookie Policy page", () => {
           .should("contain", "Expiry");
       });
     });
-
-    cy.get("#google-analytics-table thead.govuk-table__head tr.govuk-table__row").each(($row) => {
-      cy.wrap($row).within(() => {
-        cy.get("th").should("have.length", 4);
-      });
-    });
   });
 
   it("should render the Microsoft Clarity contents", () => {
@@ -45,12 +39,6 @@ describe("Cookie Policy page", () => {
       cy.wrap($row).within(() => {
         cy.get("th").should("have.length", 3);
         cy.get("th").should("contain", "Name").should("contain", "Purpose").should("contain", "Expires");
-      });
-    });
-
-    cy.get("#ms-clarity-table thead.govuk-table__head tr.govuk-table__row").each(($row) => {
-      cy.wrap($row).within(() => {
-        cy.get("th").should("have.length", 3);
       });
     });
 

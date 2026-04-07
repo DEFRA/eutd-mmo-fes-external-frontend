@@ -72,10 +72,10 @@ const Cookies = () => {
           <p className="govuk-body">{t("cookiePreferencesParagraph")}</p>
           <h2 className="govuk-heading-m">{t("GoogleAnalytics")}</h2>
           <p className="govuk-body">{t("GoogleAnalyticsParagraph1")}</p>
-          <p className="govuk-body"> {t("GoogleAnalyticsParagraph2")}</p>
-          <p className="govuk-body"> {t("GoogleAnalyticsParagraph3")}</p>
+          <p className="govuk-body">{t("GoogleAnalyticsParagraph2")}</p>
+          <p className="govuk-body">{t("GoogleAnalyticsParagraph3")}</p>
           <ul className="govuk-list govuk-list--bullet">
-            <li> {t("GoogleAnalyticsList1")}</li>
+            <li>{t("GoogleAnalyticsList1")}</li>
             <li>{t("GoogleAnalyticsList2")}</li>
             <li>{t("GoogleAnalyticsList3")}</li>
             <li>{t("GoogleAnalyticsList4")}</li>
@@ -168,7 +168,7 @@ const Cookies = () => {
           <p className="govuk-body">{t("cookiesRememberYourSettingsParagraph")}</p>
           <h2 className="govuk-heading-m">{t("essentialCookies")}</h2>
           <p className="govuk-body">{t("essentialCookiesParagraph")}</p>
-          <h2 className="govuk-heading-m"> {t("strictlyNecessaryCookies")}</h2>
+          <h2 className="govuk-heading-m">{t("strictlyNecessaryCookies")}</h2>
           <p className="govuk-body">{t("strictlyNecessaryCookiesParagraph1")}</p>
           <p className="govuk-body">{t("strictlyNecessaryCookiesParagraph2")}</p>
           <p className="govuk-body">{t("strictlyNecessaryCookiesParagraph3")}</p>
