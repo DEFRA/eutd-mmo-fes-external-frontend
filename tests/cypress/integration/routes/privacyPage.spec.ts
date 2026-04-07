@@ -10,6 +10,18 @@ describe("Privacy Page", () => {
     cy.contains("h1", /^Hysbysiad preifatrwydd$/).should("be.visible");
   });
 
+  it("should render performance sub-section headings as h3 elements", () => {
+    cy.visit(`${privacyNoticeUrl}?lng=en`);
+    cy.contains("h3", "Performance Statistics:").should("be.visible");
+    cy.contains("h3", "Performance information:").should("be.visible");
+    cy.contains("h3", "Company Insights").should("be.visible");
+  });
+
+  it("should render 'DEFRA Data Protection Officer' as an h3 element", () => {
+    cy.visit(`${privacyNoticeUrl}?lng=en`);
+    cy.contains("h3", "DEFRA Data Protection Officer").should("be.visible");
+  });
+
   it("should render the correct address for the Data Protection Team in 'Who collects your personal information' section", () => {
     cy.visit(`${privacyNoticeUrl}?lng=en`);
 
