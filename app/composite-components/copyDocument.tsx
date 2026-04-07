@@ -85,6 +85,7 @@ export const CopyDocumentComponent = ({ journey }: CopyDocumentType) => {
                 !
               </span>
               <strong className="govuk-warning-text__text">
+                <span className="govuk-visually-hidden">Warning</span>
                 {t(`${journey === "storageNotes" ? "storageDocument" : journey}CopyThisDocumentWarningMessage`, {
                   journeyText: t(journey, { ns: "common" }),
                   addRemoveLandingText:

@@ -337,6 +337,7 @@ const AddConsignmentDetailsIndex = () => {
               !{" "}
             </span>{" "}
             <strong className="govuk-warning-text__text">
+              <span className="govuk-visually-hidden">Warning</span>
               {t(`${isEditing ? "addConsignmentDetailsEditInfo" : "addConsignmentDetailsWarningLabel"}`)}
             </strong>
           </div>
