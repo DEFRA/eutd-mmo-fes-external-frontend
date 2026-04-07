@@ -53,9 +53,9 @@ describe("Cookie Policy page", () => {
   });
 
   it("should render the cookie preferences and Google Analytics section", () => {
-    cy.contains("h2", "Cookie preferences").should("be.visible");
-    cy.contains(".govuk-body", "We measure website usage so we can improve the service.").should("be.visible");
-    cy.contains("h2", "Measuring website usage (Google Analytics)").should("be.visible");
+    cy.contains("h2", "Cookie Preferences").should("be.visible");
+    cy.contains(".govuk-body", "This cookie is used to remember your choice about cookies.").should("be.visible");
+    cy.contains("h2", "Google Analytics").should("be.visible");
     cy.get(".govuk-list.govuk-list--bullet")
       .first()
       .within(() => {
@@ -64,8 +64,8 @@ describe("Cookie Policy page", () => {
   });
 
   it("should render the essential and strictly necessary cookies section", () => {
-    cy.contains("h2", "Essential cookies").should("be.visible");
-    cy.contains("h2", "Strictly necessary cookies").should("be.visible");
+    cy.contains("h2", "Essential Cookies and Cookies you can choose").should("be.visible");
+    cy.contains("h2", "Strictly Necessary Cookies").should("be.visible");
     cy.get(".govuk-list.govuk-list--bullet")
       .eq(1)
       .within(() => {
