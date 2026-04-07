@@ -675,6 +675,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid='warning-message']").should("be.visible");
     cy.get(".govuk-warning-text__icon").should("contain", "!");
+    cy.get("[data-testid='warning-message'] .govuk-visually-hidden").should("contain", "Warning");
   });
 
   it("should display all form fields with correct IDs and names", () => {

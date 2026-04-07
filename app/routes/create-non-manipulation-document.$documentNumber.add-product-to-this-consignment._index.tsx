@@ -623,6 +623,7 @@ const AddProductIndex = () => {
           !
         </span>
         <strong className="govuk-warning-text__text">
+          <span className="govuk-visually-hidden">Warning</span>
           {t("productDetailsInfoText", { ns: "addProductToThisConsignment" })}
         </strong>
       </div>
