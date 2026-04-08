@@ -3,7 +3,7 @@ import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction 
 
 import type { ILandingsEntryOptionGet, LandingsEntryOptionType } from "~/types";
 import { displayErrorMessages, landingsEntryOptions } from "~/helpers";
-import { Details, Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
+import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import isEmpty from "lodash/isEmpty";
 import { useTranslation } from "react-i18next";
 import { Main, ErrorSummary, NotificationBanner, ErrorMessage, SecureForm } from "~/components";
@@ -89,6 +89,7 @@ const LandingsEntry = () => {
                       <input
                         className="govuk-radios__input"
                         id={landingsEntry.id}
+                        aria-labelledby={`label-${landingsEntry.id}`}
                         name={landingsEntry.name}
                         type="radio"
                         aria-describedby={`hint-${landingsEntry.id}`}
@@ -110,17 +111,21 @@ const LandingsEntry = () => {
                 </div>
               </fieldset>
             </div>
-            <Details
-              summary={t("ccLandingsEntryPageWhatIsACSVFile")}
-              detailsClassName="govuk-details"
-              summaryClassName="govuk-details__summary"
-              detailsTextClassName="govuk-details__text"
-            >
-              <>
+            <details className="govuk-details">
+              <summary className="govuk-details__summary">
+                <span
+                  id="what-is-a-csv-file-summary-text"
+                  className="govuk-details__summary-text"
+                  aria-label={t("ccLandingsEntryPageWhatIsACSVFile")}
+                >
+                  {t("ccLandingsEntryPageWhatIsACSVFile")}
+                </span>
+              </summary>
+              <div className="govuk-details__text">
                 <p>{t("ccLandingsEntryPageWhatIsACSVFileFormatDetails")}</p>
                 <p>{t("ccLandingsEntryPageWhatIsACSVFileExportingDetails")}</p>
-              </>
-            </Details>
+              </div>
+            </details>
             <Button
               id="continue"
               label={t("commonContinueButtonSaveAndContinueButton", { ns: "common" })}
