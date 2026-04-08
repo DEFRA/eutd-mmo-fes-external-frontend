@@ -13,6 +13,7 @@ import processingStatementNoCatches from "@/fixtures/processingStatementApi/proc
 import processingStatementMultipleCatches from "@/fixtures/processingStatementApi/processingStatementCatchWithMultipleUkType.json";
 import processingStatementNoCatchCertificateNumber from "@/fixtures/processingStatementApi/processingStatementNoCatchCertificateNumber.json";
 import processingStatementBlankOneCatch from "@/fixtures/processingStatementApi/processingStatementBlankOneCatch.json";
+import processingStatementOneCatchWithCommodityCode from "@/fixtures/processingStatementApi/processingStatementOneCatchWithCommodityCode.json";
 import processingStatementUpdateOneCatch from "@/fixtures/processingStatementApi/processingStatementUpdateOneCatch.json";
 import processingStatementTwoCatches from "@/fixtures/processingStatementApi/processingStatementTwoCatches.json";
 import processingStatementBlankOneCatchNoWeights from "@/fixtures/processingStatementApi/processingStatementOneCatchNoWeights.json";
@@ -28,6 +29,9 @@ import processingStatementWithInvalidEmptyDetails from "@/fixtures/saveAndValida
 import processingStatementMultipleSameSpecies from "@/fixtures/processingStatementApi/processingStatementMultipleSameSpecies.json";
 import processingStatementWithIssuingCountryValidationError from "@/fixtures/saveAndValidateApi/processingStatementWithIssuingCountryValidationError.json";
 import processingStatementWithCatchCertificateTypeError from "@/fixtures/saveAndValidateApi/processingStatementWithCatchCertificateTypeError.json";
+import processingStatementWithBlankSpeciesCommodityCodeError from "@/fixtures/saveAndValidateApi/processingStatementWithBlankCommodityCodeError.json";
+import processingStatementWithSpeciesCommodityCodeMinLengthError from "@/fixtures/saveAndValidateApi/processingStatementWithCommodityCodeMinLengthError.json";
+import processingStatementWithSpeciesCommodityCodeMaxLengthError from "@/fixtures/saveAndValidateApi/processingStatementWithCommodityCodeMaxLengthError.json";
 import countries from "@/fixtures/referenceDataApi/countries.json";
 
 let actionCalled = false;
@@ -70,7 +74,7 @@ const psAddCatchDetailsHandler: ITestHandler = {
   [TestCaseId.PSAddCatchDetailsUpdateCatch]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
     rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
-    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementOneCatchWithCommodityCode))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.json(processingStatementUpdateOneCatch))
     ),
@@ -214,6 +218,30 @@ const psAddCatchDetailsHandler: ITestHandler = {
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(processingStatementWithCatchCertificateTypeError))
+    ),
+  ],
+  [TestCaseId.PSAddCatchDetailsBlankSpeciesCommodityCodeError]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(processingStatementWithBlankSpeciesCommodityCodeError))
+    ),
+  ],
+  [TestCaseId.PSAddCatchDetailsSpeciesCommodityCodeMinLengthError]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(processingStatementWithSpeciesCommodityCodeMinLengthError))
+    ),
+  ],
+  [TestCaseId.PSAddCatchDetailsSpeciesCommodityCodeMaxLengthError]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementBlankOneCatch))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(processingStatementWithSpeciesCommodityCodeMaxLengthError))
     ),
   ],
 };

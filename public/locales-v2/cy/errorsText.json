@@ -199,6 +199,8 @@
   "psAddCatchDetailsErrorUKCCInValid": " Nid yw’r dystysgrif ddalfa a gyflwynwyd yn ddilys mwyach",
   "sdAddCatchDetailsErrorUKDocumentInvalid": "Nid yw’r ddogfen a nodwyd yn ddilys mwyach",
   "psAddCatchDetailsErrorUKCCSpeciesMissing": "Nid yw’r rhywogaeth a ddewiswyd yn bresennol ar y dystysgrif ddalfa a gyflwynwyd",
+  "psAddCatchDetailsErrorUKCCCommodityCodeMissing": "Nid yw'r cod nwyddau a nodwyd yn bresennol ar y dystysgrif ddalfa a gyflwynwyd",
+  "psAddCatchDetailsErrorDuplicateCatch": "Mae'r dalfa hon eisoes wedi'i hychwanegu. Nodwch gyfuniad gwahanol o rif tystysgrif ddalfa, rhywogaeth a chod nwyddau",
   "psAddHealthCertificateErrorFormatHealthCertificateNumber": "Rhowch rif Tystysgrif Iechyd Allforio yn y fformat cywir",
   "psAddHealthCertificateErrorNullHealthCertificateNumber": "Rhowch rif y Dystysgrif Iechyd Allforio",
   "psAddHealthCertificateErrorHealthCertificateDate": "Rhowch rif y Dystysgrif Iechyd Allforio",
@@ -304,5 +306,8 @@
   "ccDirectLandingDateLandedFutureDateError": "Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf",
   "ccDirectLandingVesselRequiredError": "Dewiswch neu rhowch enw llong neu lythyren a rhif porthladd",
   "ccDirectLandingVesselInvalidError": "Dewiswch gwch neu long o'r rhestr",
-  "ccDirectLandingExportWeightRequiredError": "Rhowch y pwysau allforio mewn cilogramau"
+  "ccDirectLandingExportWeightRequiredError": "Rhowch y pwysau allforio mewn cilogramau",
+  "psAddCatchDetailsErrorEnterSpeciesCommodityCode": "Rhowch y cod nwyddau",
+  "psAddCatchDetailsErrorSpeciesCommodityCodeMinLength": "Rhaid i’r cod nwyddau gynnwys 6 o nodau o leiaf",
+  "psAddCatchDetailsErrorSpeciesCommodityCodeMaxLength": "Rhaid i’r cod nwyddau fod yn llai na 10 o nodau"
 }

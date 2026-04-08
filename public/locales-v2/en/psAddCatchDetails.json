@@ -20,6 +20,8 @@
   "issuingCountryHint": "Enter the country that issued the catch certificate",
   "catchCertificateGuidanceTitle": "Help with catch certificate",
   "catchCertificateGuidanceTextOne": "The UK catch certificate is the official paperwork that allowed the product to enter the UK",
+  "psSpeciesCommodityCode": "Species commodity code",
+  "psSpeciesCommodityCodeHint": "Enter species commodity code exactly how it appears on the catch certificate. This applies even if the fish has been processed since landing.",
   "psAddCatchCertificateWeight": "Weight on catch certificate",
   "psAddCatchCertificateWeightHint": "Enter the weight of the product being exported, as shown on the Catch certificate.",
   "psAddCatchWeightsExportWeightBeforeProcessingLabel": "Export weight before processing",
@@ -27,5 +29,10 @@
   "psAddCatchWeightsExportWeightAfterProcessingLabel": "Export weight after processing",
   "psAddCatchWeightsExportWeightAfterProcessingHint": "Enter the weight of the product after any processing. Do not include any additional ingredients.",
   "psAddSpeciesButtonLabel": "Add",
-  "psUpdateSpeciesButtonLabel": "Update"
+  "psUpdateSpeciesButtonLabel": "Update",
+  "psDetailsCommpdityCodeHelpTitle": "Help with commodity code",
+  "psDetailsCommodityCodeExampleHelpText": "The commodity code is shown on your catch certificate. It's typically an 8-digit number, for example: 03024310",
+  "psDetailsCommodityCodeHelpText": "UK Integrated Online Tariff (opens in new tab)",
+  "psDetailsCommodityCodeHelpText1": "If you don't have the certificate to hand, you can search for commodity codes on the ",
+  "psSpeciesCommodityCodeWarning": "This information will not appear on the processing statement."
 }

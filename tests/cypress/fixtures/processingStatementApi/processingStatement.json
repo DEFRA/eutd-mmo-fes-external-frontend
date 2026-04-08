@@ -11,6 +11,7 @@
       "exportWeightBeforeProcessing": "5",
       "exportWeightAfterProcessing": "6",
       "catchCertificateType": "uk",
+      "speciesCommodityCode": "03023110",
       "productId": "GBR-2023-PS-2305703F5-012345678",
       "productDescription": "Herring fillets and Atlantic"
     },
@@ -25,6 +26,7 @@
       "id": "8-1670420184",
       "scientificName": " Monopenchelys acuta",
       "catchCertificateType": "non_uk",
+      "speciesCommodityCode": "03023210",
       "issuingCountry": {
         "isoCodeAlpha2": "FR",
         "isoCodeAlpha3": "FRA",
