@@ -1848,3 +1848,49 @@ describe("Duplicate product error - form remains fully interactive", () => {
     cy.get("[data-testid='cancel']").should("exist").should("not.be.disabled").click({ force: true });
   });
 });
+
+describe("What are you exporting - Autocomplete aria-controls accessibility (FI0-11120)", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+  });
+
+  it("species combobox input should have role=combobox and aria-controls referencing the listbox ID", () => {
+    // input#species only matches after hydration replaces the SSR <select>
+    cy.get("input#species")
+      .should("have.attr", "role", "combobox")
+      .should("have.attr", "aria-controls", "species__listbox");
+  });
+
+  it("species listbox should appear with correct ID, role and no duplicates when suggestions open", () => {
+    cy.get("input#species").should("have.attr", "aria-controls", "species__listbox").type("A");
+    // Confirms: listbox exists, has correct role, ID is unique, aria-controls matches rendered ID
+    cy.get("#species__listbox").should("have.length", 1).should("have.attr", "role", "listbox");
+  });
+
+  it("species combobox aria-expanded should toggle false→true when suggestions open", () => {
+    cy.get("input#species")
+      .should("have.attr", "aria-expanded", "false")
+      .type("A")
+      .should("have.attr", "aria-expanded", "true");
+  });
+
+  it("favourites product combobox input should have aria-controls referencing its listbox ID", () => {
+    // wait for client hydration indicator (species input) to exist
+    cy.get("input#species", { timeout: 10000 }).should("exist");
+
+    // Click the favourites tab as a user would (avoid force to better emulate UI)
+    cy.get("[data-tab-id='favouritesTab']").click();
+    cy.get("#add-from-favourites").should("be.visible");
+
+    // Within the panel, find the combobox input, type to activate suggestions,
+    // then assert the aria-controls references the listbox id.
+    cy.get("#add-from-favourites")
+      .find("input[role='combobox']", { timeout: 10000 })
+      .should("be.visible")
+      .type("A")
+      .should("have.attr", "aria-controls", "product__listbox");
+  });
+});
