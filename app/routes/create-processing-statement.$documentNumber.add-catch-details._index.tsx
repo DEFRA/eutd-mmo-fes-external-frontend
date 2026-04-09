@@ -22,7 +22,7 @@ import {
   WeightInput,
 } from "~/composite-components";
 import type { Catch, pageLinks, ErrorResponse, Species, ICountry } from "~/types";
-import { getMeta, scrollToId, querySpecies, displayErrorMessagesInOrder } from "~/helpers";
+import { getMeta, scrollToId, querySpecies, displayErrorMessages } from "~/helpers";
 import { useIsHydrated } from "~/hooks";
 import { AddCatchDetailsAction, AddCatchDetailsLoader } from "~/models";
 
@@ -673,22 +673,9 @@ const AddCatchDetailsIndex = () => {
   const ccCommodityCodeKey = `catches-${catchIndex}-speciesCommodityCode`;
   const addProductDetailsConfig = getAddProductDetailsConfig(isEditing);
 
-  const errorKeysInOrder = [
-    `catches-${catchIndex}-species`,
-    `catches-${catchIndex}-product`,
-    `catches-${catchIndex}-catchCertificateType`,
-    `catches-${catchIndex}-issuingCountry`,
-    `catches-${catchIndex}-catchCertificateNumber`,
-    `catches-${catchIndex}-speciesCommodityCode`,
-    `catches-${catchIndex}-totalWeightLanded`, // For non-UK certificates
-    `catches-${catchIndex}-catchCertificateWeight`, // Add this if it exists
-    `catches-${catchIndex}-exportWeightBeforeProcessing`,
-    `catches-${catchIndex}-exportWeightAfterProcessing`,
-  ];
-
   return (
     <Main backUrl={`/create-processing-statement/${documentNumber}/add-consignment-details/${productId}`}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} />}
+      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <Title title={t("psAddCatchDetailsHeading", { ns: "psAddCatchDetails" })} />
@@ -805,8 +792,6 @@ const AddCatchDetailsIndex = () => {
                   "aria-describedby": errors?.[ccCommodityCodeKey]
                     ? `hint-catches-${catchIndex}-speciesCommodityCode ${ccCommodityCodeKey}-error`
                     : `hint-catches-${catchIndex}-speciesCommodityCode`,
-                  inputMode: "numeric",
-                  pattern: "[0-9]*",
                 }}
                 labelProps={{ htmlFor: `catches-${catchIndex}-speciesCommodityCode` }}
                 errorProps={{

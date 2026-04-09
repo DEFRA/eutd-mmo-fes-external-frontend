@@ -1799,21 +1799,6 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
       );
   });
 
-  it("should render the commodity code input with correct id, inputmode, and pattern attributes", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
-    };
-
-    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-
-    cy.get("#catches-0-speciesCommodityCode")
-      .should("exist")
-      .and("be.visible")
-      .and("have.attr", "inputmode", "numeric")
-      .and("have.attr", "pattern", "[0-9]*")
-      .and("have.attr", "aria-describedby", "hint-catches-0-speciesCommodityCode");
-  });
-
   it("should render the 'Help with commodity code' details section below the commodity code field", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
