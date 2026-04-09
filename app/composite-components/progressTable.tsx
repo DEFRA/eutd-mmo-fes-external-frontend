@@ -39,7 +39,7 @@ export const ProgressTable = (props: Props) => {
                 className={`app-task-list__item ${row.error ? "govuk-form-group--error" : ""}`}
                 data-testid={`progress-${row.testId}-wrapper`}
                 key={row.testId}
-                id={row.testId}
+                id={`progress-${row.testId}`}
               >
                 {row.error && (
                   <ErrorMessage
@@ -49,7 +49,11 @@ export const ProgressTable = (props: Props) => {
                   />
                 )}
                 {row.status === "CANNOT START" ? (
-                  <span id={row.testId} data-testid={`progress-${row.testId}-title-blocked`} aria-label={t(row.title)}>
+                  <span
+                    id={`progress-${row.testId}-status`}
+                    data-testid={`progress-${row.testId}-title-blocked`}
+                    aria-label={t(row.title)}
+                  >
                     {t(row.title)}
                   </span>
                 ) : (
@@ -57,7 +61,7 @@ export const ProgressTable = (props: Props) => {
                     href={row.url.replace(":documentNumber", documentNumber)}
                     data-testid={`progress-${row.testId}-title`}
                     className="govuk-link"
-                    id={row.testId}
+                    id={`progress-${row.testId}-link`}
                     aria-label={t(row.title)}
                   >
                     {t(row.title)}

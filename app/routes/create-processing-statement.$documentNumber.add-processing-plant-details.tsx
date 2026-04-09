@@ -140,7 +140,7 @@ const AddProcessingPlantDetails = () => {
               >
                 {!isEmpty(errors?.plantName) && (
                   <ErrorMessage
-                    id="consignmentDescription-error"
+                    id="plantName-error"
                     text={t(errors?.plantName?.message, { ns: "errorsText" })}
                     visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                   />
@@ -169,7 +169,7 @@ const AddProcessingPlantDetails = () => {
               >
                 {!isEmpty(errors?.plantApprovalNumber) && (
                   <ErrorMessage
-                    id="consignmentDescription-error"
+                    id="plantApprovalNumber-error"
                     text={t(errors?.plantApprovalNumber?.message, { ns: "errorsText" })}
                     visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                   />
@@ -207,7 +207,7 @@ const AddProcessingPlantDetails = () => {
               >
                 {!isEmpty(errors?.personResponsibleForConsignment) && (
                   <ErrorMessage
-                    id="consignmentDescription-error"
+                    id="personResponsibleForConsignment-error"
                     text={t(errors?.personResponsibleForConsignment?.message, { ns: "errorsText" })}
                     visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                   />

@@ -71,6 +71,22 @@ describe("Add Processing Plant Details return error response if the back end ret
 
     cy.get("[data-testid=save-and-continue").click({ force: true });
   });
+
+  it("should not render duplicate id attributes when validation errors are shown", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
+    };
+
+    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue").click({ force: true });
+
+    cy.get("[id]").then(($elements) => {
+      const ids = [...$elements].map((element) => element.id).filter(Boolean);
+      const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
+
+      cy.wrap(duplicateIds, { log: false }).should("deep.equal", []);
+    });
+  });
 });
 
 describe("Get Processing Plant Details: unauthorised access", () => {
