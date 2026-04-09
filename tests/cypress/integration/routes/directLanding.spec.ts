@@ -506,7 +506,7 @@ describe("DirectLanding page when javascript is disabled", () => {
 
   it("should render a select box with pre-populated vessel names when valid date landed exists", () => {
     cy.get(String.raw`select#vessel\.vesselName`).should("exist");
-    cy.get("select#vessel\\.vesselName option").should("not.have.length", 0);
+    cy.get(String.raw`select#vessel\.vesselName option`).should("not.have.length", 0);
   });
 
   it("should retain existing vessel name when date landed is added", () => {
@@ -1307,5 +1307,42 @@ describe("Direct Landing - Amending gear category updates gear type options", ()
     cy.get("#gearType").should("have.value", "");
     cy.get("#gearType option").should("contain.text", "Towed dredges (DRB)");
     cy.get("#gearType option").should("not.contain.text", "Fyke nets (FYK)");
+  });
+});
+
+describe("Direct Landing - Autocomplete aria-controls accessibility (FI0-11120)", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLanding,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+  });
+
+  it("vessel name combobox input should have role=combobox and aria-controls referencing the listbox ID", () => {
+    cy.get('input[id="vessel.vesselName"]')
+      .should("have.attr", "role", "combobox")
+      .should("have.attr", "aria-controls", "vessel.vesselName__listbox");
+  });
+
+  it("vessel name listbox should appear with correct ID, role and no duplicates when suggestions open", () => {
+    // vessel minCharsBeforeSearch requires 2+ chars (consistent with existing spec)
+    cy.get('input[id="vessel.vesselName"]')
+      .should("have.attr", "aria-controls", "vessel.vesselName__listbox")
+      .type("ff");
+    // Confirms: listbox exists, has correct role, ID is unique, aria-controls matches rendered ID
+    cy.get('[id="vessel.vesselName__listbox"]').should("have.length", 1).should("have.attr", "role", "listbox");
+  });
+
+  it("vessel name combobox aria-expanded should toggle false→true when suggestions open", () => {
+    cy.get('input[id="vessel.vesselName"]')
+      .should("have.attr", "aria-expanded", "false")
+      .type("ff")
+      .should("have.attr", "aria-expanded", "true");
+  });
+
+  it("EEZ combobox input should have role=combobox and aria-controls referencing the listbox ID", () => {
+    cy.get("input#eez-0")
+      .should("have.attr", "role", "combobox")
+      .should("have.attr", "aria-controls", "eez-0__listbox");
   });
 });

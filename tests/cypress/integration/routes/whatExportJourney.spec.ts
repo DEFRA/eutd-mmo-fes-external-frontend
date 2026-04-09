@@ -375,3 +375,31 @@ describe("Point of destination field", () => {
     cy.url().should("include", "/catch-certificates");
   });
 });
+
+describe("What export journey - Autocomplete aria-controls accessibility (FI0-11120)", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatExportJourneyDirectLanding,
+    };
+    cy.visit(documentUrl + "/what-export-journey", { qs: { ...testParams } });
+  });
+
+  it("destination country combobox input should have role=combobox and aria-controls referencing the listbox ID", () => {
+    cy.get("input#exportDestination")
+      .should("have.attr", "role", "combobox")
+      .should("have.attr", "aria-controls", "exportDestination__listbox");
+  });
+
+  it("destination country listbox should appear with correct ID, role and no duplicates when suggestions open", () => {
+    cy.get("input#exportDestination").should("have.attr", "aria-controls", "exportDestination__listbox").type("Fr");
+    // Confirms: listbox exists, has correct role, ID is unique, aria-controls matches rendered ID
+    cy.get("#exportDestination__listbox").should("have.length", 1).should("have.attr", "role", "listbox");
+  });
+
+  it("destination country combobox aria-expanded should toggle false→true when suggestions open", () => {
+    cy.get("input#exportDestination")
+      .should("have.attr", "aria-expanded", "false")
+      .type("Fr")
+      .should("have.attr", "aria-expanded", "true");
+  });
+});
