@@ -1865,7 +1865,10 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
   });
 
   it("species listbox should appear with correct ID, role and no duplicates when suggestions open", () => {
-    cy.get("input#species").should("have.attr", "aria-controls", "species__listbox").type("A");
+    cy.get("input#species")
+      .should("have.attr", "aria-controls", "species__listbox")
+      .should("not.be.disabled")
+      .type("A");
     // Confirms: listbox exists, has correct role, ID is unique, aria-controls matches rendered ID
     cy.get("#species__listbox").should("have.length", 1).should("have.attr", "role", "listbox");
   });
@@ -1873,6 +1876,7 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
   it("species combobox aria-expanded should toggle false→true when suggestions open", () => {
     cy.get("input#species")
       .should("have.attr", "aria-expanded", "false")
+      .should("not.be.disabled")
       .type("A")
       .should("have.attr", "aria-expanded", "true");
   });
@@ -1890,6 +1894,7 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
     cy.get("#add-from-favourites")
       .find("input[role='combobox']", { timeout: 10000 })
       .should("be.visible")
+      .should("not.be.disabled")
       .type("A")
       .should("have.attr", "aria-controls", "product__listbox");
   });
