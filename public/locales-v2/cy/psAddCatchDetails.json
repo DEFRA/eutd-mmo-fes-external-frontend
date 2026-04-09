@@ -31,8 +31,8 @@
   "psAddSpeciesButtonLabel": "Ychwanegu",
   "psUpdateSpeciesButtonLabel": "Diweddaru",
   "psDetailsCommpdityCodeHelpTitle": "Help gyda chodau nwyddau",
-  "psDetailsCommodityCodeExampleHelpText": "The commodity code is shown on your catch certificate. It's typically an 8-digit number, for example: 03024310",
-  "psDetailsCommodityCodeHelpText": "UK Integrated Online Tariff (opens in new tab)",
-  "psDetailsCommodityCodeHelpText1": "If you don't have the certificate to hand, you can search for commodity codes on the ",
+  "psDetailsCommodityCodeExampleHelpText": "Mae'r cod nwyddau yn cael ei ddangos ar eich tystysgrif dalfa. Fel arfer mae'n rhif 8 digid, er enghraifft: 03024310",
+  "psDetailsCommodityCodeHelpText": "Tariff Ar-lein Integredig y DU (yn agor mewn tab newydd)",
+  "psDetailsCommodityCodeHelpText1": "Os nad yw’r dystysgrif gennych wrth law, gallwch chwilio am godau nwyddau ar ",
   "psSpeciesCommodityCodeWarning": "Fydd yr wybodaeth yma ddim yn ymddangos ar y datganiad prosesu."
 }
