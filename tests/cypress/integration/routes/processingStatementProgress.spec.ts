@@ -53,6 +53,15 @@ describe("ProgressPage - Incomplete Application", () => {
     cy.get("li strong:contains('INCOMPLETE')").should("have.length", 6);
   });
 
+  it("should not render duplicate id attributes in the progress list", () => {
+    cy.get(".app-task-list [id]").then(($elements) => {
+      const ids = [...$elements].map((element) => element.id).filter(Boolean);
+      const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
+
+      cy.wrap(duplicateIds, { log: false }).should("deep.equal", []);
+    });
+  });
+
   it("should redirect to the exporter processing statement dashboard", () => {
     cy.get("[data-testid=return-to-dashboard-button]").click({ force: true });
     cy.url().should("include", "/processing-statements");

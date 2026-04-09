@@ -53,6 +53,15 @@ describe("ProgressPage - Incomplete Application", () => {
     cy.get("li strong:contains('CANNOT START YET')").should("have.length", 1);
   });
 
+  it("should not render duplicate id attributes in the progress list", () => {
+    cy.get(".app-task-list [id]").then(($elements) => {
+      const ids = [...$elements].map((element) => element.id).filter(Boolean);
+      const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
+
+      cy.wrap(duplicateIds, { log: false }).should("deep.equal", []);
+    });
+  });
+
   it("should not have link on row when status is CANNOT START YET", () => {
     cy.contains("a", "UK departure transport details").should("not.exist");
     cy.contains("[data-testid='progress-transportDetails-title-blocked']", "UK departure transport details").should(
