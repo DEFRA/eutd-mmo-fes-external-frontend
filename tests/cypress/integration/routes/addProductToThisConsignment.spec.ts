@@ -24,6 +24,17 @@ describe("Add product to this consignment  page", () => {
       .should("have.attr", "href", `${documentUrl}/progress`);
   });
 
+  it("should group certificate type radios with a legend", () => {
+    cy.get("#catches-0-certificateType").within(() => {
+      cy.get("fieldset > legend")
+        .should("exist")
+        .and(($legend) => {
+          expect($legend.text().trim()).not.to.equal("");
+        });
+      cy.get("label[for='catches-0-certificateType']").should("not.exist");
+    });
+  });
+
   it("should render summary details for all relevant fields and find out the count", () => {
     cy.get(".govuk-details__summary").should("have.length", 4);
 
@@ -357,67 +368,31 @@ describe("Add product to this consignment  page", () => {
 
   describe("Accessibility", () => {
     it("should have label for all fields on the form", () => {
-      cy.get("form label").should("have.length", 12);
-      // entry document issued in uk
-      cy.get("form label")
-        .eq(0)
-        .should("have.text", "Was the entry document issued in the UK?")
-        .and("be.visible")
-        .and("have.attr", "for", "catches-0-certificateType");
-      // issuing country
-      cy.get("form label")
-        .eq(3)
-        .should("have.text", "Issuing country")
-        .and("be.visible")
-        .and("have.attr", "for", "catches-0-issuingCountry");
-      // entry document
-      cy.get("form label")
-        .eq(4)
-        .should("have.text", "Entry document")
-        .and("be.visible")
-        .and("have.attr", "for", "catches-0-certificateNumber");
-      // weight on document in kg
-      cy.get("form label")
-        .eq(5)
+      cy.get("#catches-0-certificateType fieldset > legend")
+        .should("be.visible")
+        .and("contain.text", "Was the entry document issued in the UK?");
+      cy.get("form label").should("have.length", 11);
+      cy.get("form label[for='catches-0-issuingCountry']").should("have.text", "Issuing country").and("be.visible");
+      cy.get("form label[for='catches-0-certificateNumber']").should("have.text", "Entry document").and("be.visible");
+      cy.get("form label[for='catches-0-weightOnCC']")
         .should("have.text", "Weight on document in kg")
-        .and("be.visible")
-        .and("have.attr", "for", "catches-0-weightOnCC");
-      // supporting documents
-      cy.get("form label")
-        .eq(6)
+        .and("be.visible");
+      cy.get("form label[for='catches-0-supportingDocuments-0']")
         .should("have.text", "Supporting documents (optional)")
-        .and("be.visible")
-        .and("have.attr", "for", "catches-0-supportingDocuments-0");
-      // product
-      cy.get("form label")
-        .eq(7)
+        .and("be.visible");
+      cy.get("form label[for='catches-0-product']")
         .should("have.text", "Food and Agriculture Organisation (FAO) code or species name")
-        .and("be.visible")
-        .and("have.attr", "for", "catches-0-product");
-      // commondity code
-      cy.get("form label")
-        .eq(8)
-        .should("have.text", "Commodity code")
-        .and("be.visible")
-        .and("have.attr", "for", "catches-0-commodityCode");
-      // product description
-      cy.get("form label")
-        .eq(9)
+        .and("be.visible");
+      cy.get("form label[for='catches-0-commodityCode']").should("have.text", "Commodity code").and("be.visible");
+      cy.get("form label[for='catches-0-productDescription']")
         .should("have.text", "Product description")
-        .and("be.visible")
-        .and("have.attr", "for", "catches-0-productDescription");
-      // Net weight of the product on arrival
-      cy.get("form label")
-        .eq(10)
+        .and("be.visible");
+      cy.get("form label[for='netWeightProductArrival']")
         .should("have.text", "Net weight of the product on arrival")
-        .and("be.visible")
-        .and("have.attr", "for", "netWeightProductArrival");
-      // Net weight of fishery products on arrival
-      cy.get("form label")
-        .eq(11)
+        .and("be.visible");
+      cy.get("form label[for='netWeightFisheryProductArrival']")
         .should("have.text", "Net weight of fishery products on arrival")
-        .and("be.visible")
-        .and("have.attr", "for", "netWeightFisheryProductArrival");
+        .and("be.visible");
     });
     it("should have valid aria-describedby attributes for was entry document issued in uk", () => {
       cy.get("#catches-0-certificateType fieldset").should(

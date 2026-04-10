@@ -649,9 +649,7 @@ const AddProductIndex = () => {
                     isEmpty(errors?.[certificateTypeKey]) ? `${certificateTypeKey}-hint` : "certificateType-error"
                   }
                 >
-                  <label className="govuk-label govuk-!-font-weight-bold" htmlFor={certificateTypeKey}>
-                    <b>{labelText}</b>
-                  </label>
+                  <legend className="govuk-fieldset__legend govuk-!-font-weight-bold">{labelText}</legend>
                   <div id={`${certificateTypeKey}-hint`} className="govuk-hint">
                     {hintText}
                   </div>
