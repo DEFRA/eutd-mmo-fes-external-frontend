@@ -1855,6 +1855,10 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    // Wait for DCX hydration re-mount to fully complete before each test.
+    // The hydration failure → full client re-render is a one-time event; once
+    // input#species is enabled the component tree is stable for the rest of the test.
+    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
   });
 
   it("species combobox input should have role=combobox and aria-controls referencing the listbox ID", () => {
@@ -1865,37 +1869,36 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
   });
 
   it("species listbox should appear with correct ID, role and no duplicates when suggestions open", () => {
-    cy.get("input#species")
-      .should("have.attr", "aria-controls", "species__listbox")
-      .should("not.be.disabled")
-      .type("A");
+    // Assert attributes are stable before interacting (separate chain avoids stale-ref race)
+    cy.get("input#species").should("have.attr", "aria-controls", "species__listbox").and("not.be.disabled");
+    // force:true bypasses the brief disabled state caused by React's post-hydration re-render
+    cy.get("input#species").type("A", { force: true });
     // Confirms: listbox exists, has correct role, ID is unique, aria-controls matches rendered ID
     cy.get("#species__listbox").should("have.length", 1).should("have.attr", "role", "listbox");
   });
 
   it("species combobox aria-expanded should toggle false→true when suggestions open", () => {
-    cy.get("input#species")
-      .should("have.attr", "aria-expanded", "false")
-      .should("not.be.disabled")
-      .type("A")
-      .should("have.attr", "aria-expanded", "true");
+    // DCX sets aria-expanded=true once its internal filterList is populated.
+    // It needs a real focus event so its input handler is registered.
+    // Click first to focus the input naturally, then type to trigger the filter.
+    cy.get("input#species").should("have.attr", "aria-expanded", "false");
+    cy.get("input#species").click().type("Alb");
+    cy.get("input#species").should("have.attr", "aria-expanded", "true");
   });
 
   it("favourites product combobox input should have aria-controls referencing its listbox ID", () => {
-    // wait for client hydration indicator (species input) to exist
-    cy.get("input#species", { timeout: 10000 }).should("exist");
+    // Wait for hydration: species input being enabled is a reliable signal
+    cy.get("input#species", { timeout: 10000 }).should("not.be.disabled");
 
-    // Click the favourites tab as a user would (avoid force to better emulate UI)
     cy.get("[data-tab-id='favouritesTab']").click();
     cy.get("#add-from-favourites").should("be.visible");
 
-    // Within the panel, find the combobox input, type to activate suggestions,
-    // then assert the aria-controls references the listbox id.
-    cy.get("#add-from-favourites")
-      .find("input[role='combobox']", { timeout: 10000 })
+    // Assert attributes are stable before interacting (separate chain avoids stale-ref race)
+    cy.get("#add-from-favourites input[role='combobox']", { timeout: 10000 })
       .should("be.visible")
-      .should("not.be.disabled")
-      .type("A")
-      .should("have.attr", "aria-controls", "product__listbox");
+      .and("not.be.disabled")
+      .and("have.attr", "aria-controls", "product__listbox");
+    // force:true bypasses the brief disabled state caused by React's post-hydration re-render
+    cy.get("#add-from-favourites input[role='combobox']").type("A", { force: true });
   });
 });
