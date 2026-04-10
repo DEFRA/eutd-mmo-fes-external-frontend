@@ -132,12 +132,19 @@ beforeEach(() => {
 **Rule:** Only use `{ force: true }` when you need to bypass a transient disabled state and you are **not** asserting that the dropdown opens. When you need `aria-expanded` to change to `"true"`, use `.click()` explicitly before `.type()` to guarantee a real focus event fires:
 
 ```ts
-// ❌ WRONG for aria-expanded tests — force skips focus, dropdown never opens
-cy.get("input#species").type("A", { force: true });
+// ❌ WRONG — force skips focus, DCX handler never registers, dropdown never opens
+cy.get("input#species").type("Alb", { force: true });
 cy.get("input#species").should("have.attr", "aria-expanded", "true"); // times out
 
-// ✅ CORRECT — click fires real focus event so DCX initialises, then type triggers filter
-cy.get("input#species").click().type("Alb");
+// ❌ WRONG — chaining click().type() holds a stale reference; click triggers a DCX
+// internal re-render that detaches the element before type() executes
+cy.get("input#species").click().type("Alb"); // "page updated...subject no longer attached"
+
+// ✅ CORRECT — three separate cy.get() calls:
+// 1. assert stability, 2. click to focus (may re-render), 3. fresh re-query then type
+cy.get("input#species").should("not.be.disabled");
+cy.get("input#species").click(); // fires real focus event; may cause re-render
+cy.get("input#species").type("Alb"); // fresh query gets stable post-render element
 cy.get("input#species").should("have.attr", "aria-expanded", "true"); // passes
 ```
 
