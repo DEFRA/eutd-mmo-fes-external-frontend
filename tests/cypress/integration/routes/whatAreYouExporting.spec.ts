@@ -1869,20 +1869,23 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
   });
 
   it("species listbox should appear with correct ID, role and no duplicates when suggestions open", () => {
-    // Assert attributes are stable before interacting (separate chain avoids stale-ref race)
+    // Assert attributes are stable before interacting (separate chain avoids stale-ref race).
     cy.get("input#species").should("have.attr", "aria-controls", "species__listbox").and("not.be.disabled");
-    // force:true bypasses the brief disabled state caused by React's post-hydration re-render
-    cy.get("input#species").type("A", { force: true });
+    // click() fires the real focus event DCX needs to register its input handler.
+    // Separate cy.get() re-queries the DOM fresh after any click-triggered re-render settles.
+    cy.get("input#species").click();
+    cy.get("input#species").type("Alb");
     // Confirms: listbox exists, has correct role, ID is unique, aria-controls matches rendered ID
     cy.get("#species__listbox").should("have.length", 1).should("have.attr", "role", "listbox");
   });
 
   it("species combobox aria-expanded should toggle false→true when suggestions open", () => {
-    // DCX sets aria-expanded=true once its internal filterList is populated.
-    // It needs a real focus event so its input handler is registered.
-    // Click first to focus the input naturally, then type to trigger the filter.
-    cy.get("input#species").should("have.attr", "aria-expanded", "false");
-    cy.get("input#species").click().type("Alb");
+    // click() fires real focus so DCX registers its input handler (needed for aria-expanded to change).
+    // Break click and type into separate cy.get() calls — chaining them holds a stale reference
+    // that gets detached when the click triggers a DCX internal state update and re-render.
+    cy.get("input#species").should("have.attr", "aria-expanded", "false").and("not.be.disabled");
+    cy.get("input#species").click();
+    cy.get("input#species").type("Alb");
     cy.get("input#species").should("have.attr", "aria-expanded", "true");
   });
 
