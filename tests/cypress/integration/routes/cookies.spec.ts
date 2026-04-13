@@ -88,6 +88,26 @@ describe("Cookie Policy page", () => {
     cy.get("form").submit();
     cy.findByRole("link", { name: "Go back to the page you were looking at." }).should("be.visible");
   });
+
+  it("should move focus to the success banner after saving cookie settings", () => {
+    cy.get('[type="radio"]').check("Yes");
+    cy.wait(500); // Wait for the radio button state to update
+    cy.get("form").submit();
+    cy.get(".govuk-notification-banner--success")
+      .should("be.visible")
+      .should("have.attr", "tabindex", "-1")
+      .should("have.focus");
+  });
+
+  it("should keep moving focus to the success banner on repeated saves", () => {
+    cy.get('[type="radio"]').check("Yes");
+    cy.wait(500); // Wait for the radio button state to update
+    cy.get("form").submit();
+    cy.get(".govuk-notification-banner--success").should("have.focus");
+
+    cy.get("form").submit();
+    cy.get(".govuk-notification-banner--success").should("have.focus");
+  });
 });
 
 describe("Journey dashboards should redirect to cookie page when user has not accepted cookie statement", () => {

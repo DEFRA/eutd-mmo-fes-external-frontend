@@ -1,7 +1,7 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Main, SecureForm, Title } from "~/components";
-import { useLoaderData, type ActionFunction, type LoaderFunction } from "react-router";
+import { useLoaderData, useLocation, type ActionFunction, type LoaderFunction } from "react-router";
 
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import { useTranslation } from "react-i18next";
@@ -54,26 +54,31 @@ export const action: ActionFunction = async ({ request }) => await CookieAction(
 const Cookies = () => {
   const { analyticsAccepted, showSuccessBanner, csrf } = useLoaderData<cookieLoaderDataType>();
   const { t } = useTranslation("cookies");
+  const location = useLocation();
 
   const isHydrated = useIsHydrated();
   const GoogleAnalyticsTable: Object[] = t("GoogleAnalyticsTable.tableContent", { returnObjects: true });
   const MSClarityTable: Object[] = t("MSClarityTable.tableContent", { returnObjects: true });
+  const successBannerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (showSuccessBanner) {
       window.scrollTo({ top: 0, behavior: "smooth" });
+      successBannerRef.current?.focus();
     }
-  }, [showSuccessBanner]);
+  }, [showSuccessBanner, location.key]);
 
   return (
     <Main showHelpLink={false}>
       <div className="govuk-grid-row">
         {showSuccessBanner && (
           <div
+            ref={successBannerRef}
             className="govuk-notification-banner govuk-notification-banner--success"
             role="alert"
             aria-labelledby="govuk-notification-banner-title"
             data-module="govuk-notification-banner"
+            tabIndex={-1}
           >
             <div className="govuk-notification-banner__header">
               <h2 className="govuk-notification-banner__title" id="govuk-notification-banner-title">
