@@ -68,7 +68,7 @@
   "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersError": "Container identification number must only contain letters and numbers",
   "ccAddTransportationDetailsFreightBillNumberCharExceedError": "Freight bill number must not exceed 60 characters",
   "ccAddTransportationDetailsFreightBillNumberOnlyNumLettersError": "Freight bill number must only contain letters, numbers, hyphens, full stops and forward slashes",
-  "ccContainerIdentificationNumberMaxLength": "Container identification number must not exceed 150 characters",
+  "ccContainerIdentificationNumberMaxLength": "Container identification number must not exceed 50 characters.",
   "ccContainerIdentificationNumberInvalidCharacters": "Container identification number must only contain letters, numbers and spaces",
   "ccAddTransportationDetailsDeparturePortCharExceedError": "Where the consignment departs from must not exceed 50 characters",
   "ccAddTransportationDetailsDeparturePortOnlyNumLettersError": "Where the consignment departs from must only contain letters, numbers, apostrophes, hyphens and spaces",

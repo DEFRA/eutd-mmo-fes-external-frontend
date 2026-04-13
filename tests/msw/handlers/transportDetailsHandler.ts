@@ -2474,6 +2474,19 @@ const transportDetailsHandler: ITestHandler = {
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
+  [TestCaseId.PlaneTransportContainerMaxLength]: () => [
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(planeTransportAllowedDetails))),
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
+    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          "containerNumbers.0": "error.containerNumbers.0.string.max",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
   [TestCaseId.PlaneTransportMultipleContainers]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(planeTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),

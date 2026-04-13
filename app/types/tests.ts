@@ -451,6 +451,7 @@ export enum TestCaseId {
   PlaneTransportAirwaybillMaxLength = "PlaneTransportAirwaybillMaxLength",
   PlaneTransportAirwaybillInvalidCharacters = "PlaneTransportAirwaybillInvalidCharacters",
   PlaneTransportContainerInvalidCharacters = "PlaneTransportContainerInvalidCharacters",
+  PlaneTransportContainerMaxLength = "PlaneTransportContainerMaxLength",
   PlaneTransportContainerErrors = "PlaneTransportContainerErrors",
   PlaneTransportMultipleContainers = "PlaneTransportMultipleContainers",
   PlaneTransportEmptyContainers = "PlaneTransportEmptyContainers",
