@@ -12,7 +12,6 @@ import { backUri, displayErrorMessages, scrollToId } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
 import { ErrorSummary } from "~/components/errorSummary";
 import { useScrollOnPageLoad } from "~/hooks";
-import { ImportantIcon } from "~/components/icons/ImportantIcon";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import {
   createCSRFToken,
@@ -371,19 +370,14 @@ const DepartureProductSummary = () => {
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <Title title={t("sdDepartureProductSummaryHeading")} />
-          <div className="govuk-!-display-inline-block">
-            <div className="govuk-!-display-inline-block govuk-!-margin-bottom-4">
-              <ImportantIcon />
-            </div>
-            <div
-              className="govuk-!-display-inline-block govuk-!-padding-left-2 govuk-phase-banner__text"
-              style={{ width: "90%" }}
-              id="sdProductSummaryGuidanceMessage"
-            >
-              <Trans i18nKey="multiline">
-                <strong>{t("sdDepartureProductSummaryInfo")}</strong>
-              </Trans>
-            </div>
+          <div className="govuk-warning-text">
+            <span className="govuk-warning-text__icon" aria-hidden="true">
+              !
+            </span>
+            <strong className="govuk-warning-text__text">
+              <span className="govuk-visually-hidden">Warning</span>
+              <Trans i18nKey="multiline">{t("sdDepartureProductSummaryInfo")}</Trans>
+            </strong>
           </div>
           <div className="govuk-tabs" data-module="govuk-tabs" id="productTabs">
             <SecureForm method="post" csrf={csrf}>

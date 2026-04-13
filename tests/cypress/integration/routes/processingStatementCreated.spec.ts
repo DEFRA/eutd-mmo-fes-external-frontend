@@ -59,8 +59,9 @@ describe("Processing statement created page: rendering", () => {
   });
 
   it("should render important notice with exclamation icon", () => {
-    cy.get("svg title").contains("icon important").should("exist");
-    cy.contains("strong", "Do not amend the processing statement.").should("be.visible");
+    cy.get(".govuk-warning-text").should("be.visible");
+    cy.get(".govuk-warning-text__icon").should("contain", "!");
+    cy.get(".govuk-warning-text__text").should("contain.text", "Do not amend the processing statement.");
   });
 
   it("should render PDF download link with correct href", () => {
@@ -106,10 +107,8 @@ describe("Processing statement created page: rendering", () => {
   });
 
   it("should render important notice icon correctly", () => {
-    cy.get('svg[viewBox="0 0 35.000000 35.000000"]')
-      .should("be.visible")
-      .find("title")
-      .should("contain", "icon important");
+    cy.get(".govuk-warning-text").should("be.visible");
+    cy.get(".govuk-warning-text__text").should("contain", "Do not amend the processing statement.");
   });
 
   it("should call renderDownloadLink function", () => {
@@ -121,9 +120,9 @@ describe("Processing statement created page: rendering", () => {
   });
 
   it("should call renderImportantNotice function", () => {
-    cy.get(".govuk-\\!-margin-bottom-4").within(() => {
-      cy.get("svg").should("exist");
-      cy.get(".govuk-\\!-display-inline-block").should("exist");
+    cy.get(String.raw`.govuk-\!-margin-bottom-4`).within(() => {
+      cy.get(".govuk-warning-text").should("exist");
+      cy.get(".govuk-warning-text__icon").should("exist");
     });
   });
 
