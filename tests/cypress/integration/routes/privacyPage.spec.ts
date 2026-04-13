@@ -51,4 +51,18 @@ describe("Privacy Page", () => {
         cy.contains("NE4 7AR").should("be.visible");
       });
   });
+
+  it("should render the MMO link with correct text and attributes in the 'Legal Basis' section", () => {
+    cy.visit(`${privacyNoticeUrl}?lng=en`);
+
+    cy.contains("h2", "Legal Basis for Processing Your Personal Information").should("be.visible");
+
+    cy.contains("a", "Find out more about the Marine Management Organisation (MMO)")
+      .should("be.visible")
+      .should("have.attr", "href", "https://www.gov.uk/government/organisations/marine-management-organisation")
+      .should("have.attr", "target", "_blank")
+      .should("have.attr", "rel", "noreferrer noopener");
+
+    cy.contains("More information about the MMO can be found at").should("not.exist");
+  });
 });

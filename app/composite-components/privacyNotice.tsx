@@ -190,15 +190,13 @@ export const PrivacyNotice = () => {
         <p>{t("privacyPageHeading2Desc1")}</p>
         <p>{t("privacyPageHeading2Desc2")}</p>
         <p>
-          {t("privacyPageHeading2Desc3")} <br />
           <a
             className="govuk-link"
             href="https://www.gov.uk/government/organisations/marine-management-organisation"
-            target="blank"
-            aria-label="Opens link for information about MMO"
+            target="_blank"
+            rel="noreferrer noopener"
           >
-            https://www.gov.uk/government/organisations/marine-management-organisation{" "}
-            {t("commonHelpLinkOpenInNewTab", { ns: "common" })}
+            {t("privacyPageHeading2MMOLink")} {t("commonHelpLinkOpenInNewTab", { ns: "common" })}
           </a>
         </p>
         <p>{t("privacyPageHeading2Desc4")}</p>
