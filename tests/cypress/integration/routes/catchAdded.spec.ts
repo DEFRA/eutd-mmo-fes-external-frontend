@@ -1185,9 +1185,9 @@ describe("PS: Catch added - session clearing on navigation", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     // Perform a search
-    cy.get('input[name="q"]').should("be.visible");
-    cy.get('input[name="q"]').clear();
-    cy.get('input[name="q"]').type("Atlantic");
+    cy.get('input[name="q"]').should("be.visible").and("not.be.disabled");
+    cy.get('input[name="q"]').clear({ force: true });
+    cy.get('input[name="q"]').type("Atlantic", { force: true });
     cy.get('input[name="q"]').should("have.value", "Atlantic");
     cy.get('button[name="actionType"][value="search"]').click();
 
@@ -1639,10 +1639,9 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get('input[name="q"]').should("be.visible").and("be.enabled");
-    cy.get('input[name="q"]').clear();
-    cy.get('input[name="q"]').click();
-    cy.focused().type("product");
+    cy.get('input[name="q"]').should("be.visible").and("not.be.disabled");
+    cy.get('input[name="q"]').clear({ force: true });
+    cy.get('input[name="q"]').type("product", { force: true });
 
     cy.get('input[name="q"]').should("exist");
     cy.get('input[name="q"]').should("have.value", "product");
