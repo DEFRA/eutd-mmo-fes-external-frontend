@@ -388,10 +388,10 @@ describe("Add product to this consignment  page", () => {
         .should("have.text", "Product description")
         .and("be.visible");
       cy.get("form label[for='netWeightProductArrival']")
-        .should("have.text", "Net weight of the product on arrival")
+        .should("have.text", "Net weight of the product on arrival (kg)")
         .and("be.visible");
       cy.get("form label[for='netWeightFisheryProductArrival']")
-        .should("have.text", "Net weight of fishery products on arrival")
+        .should("have.text", "Net weight of fishery products on arrival (kg)")
         .and("be.visible");
     });
     it("should have valid aria-describedby attributes for was entry document issued in uk", () => {
@@ -461,7 +461,7 @@ describe("Add product to this consignment  page", () => {
       );
       cy.get("#catches-0-netWeightProductArrival-hint").should(
         "have.text",
-        "This is the weight of the whole product, including all ingredients – not just the fish. For example, a fish pie weighing 350g."
+        "This is the weight of the whole product, including all ingredients – not just the fish. For example, a fish pie weighing 0.35kg (350g)."
       );
     });
     it("should have valid aria-describedby attributes for net weight of fishery products on arrival field", () => {
@@ -472,7 +472,7 @@ describe("Add product to this consignment  page", () => {
       );
       cy.get("#catches-0-netWeightFisheryProductArrival-hint").should(
         "have.text",
-        "This is the weight of the fish only – do not include any other ingredients. For example, 200g of cod used in a fish pie."
+        "This is the weight of the fish only – do not include any other ingredients. For example, 0.20kg (200g) of cod used in a fish pie."
       );
     });
   });

@@ -37,12 +37,12 @@
   "productDescription": "Disgrifiad o'r cynnyrch",
   "productDescriptionHint": "Bydd y manylion a gofnodir yma yn ymddangos ar eich dogfen a rhaid iddyn nhw fod yn ddarllenadwy yn Saesneg. Er enghraifft, Battered cod fillets",
   "productDescriptionOptional": "Disgrifiad o'r cynnyrch (dewisol)",
-  "netWeightOfProductOnArrival": "Pwysau net y cynnyrch wrth gyrraedd",
-  "netWeightOfProductOnArrivalOptional": "Pwysau net y cynnyrch wrth gyrraedd (dewisol)",
-  "netWeightOfProductOnArrivalHint": "Dyma bwysau'r cynnyrch cyfan, gan gynnwys yr holl gynhwysion – nid y pysgod yn unig. Er enghraifft, pastai pysgod sy'n pwyso 350g.",
-  "netWeightOfFisheryProductOnArrival": "Pwysau net cynhyrchion pysgodfeydd wrth gyrraedd",
-  "netWeightOfFisheryProductOnArrivalOptional": "Pwysau net cynhyrchion pysgodfeydd wrth gyrraedd (dewisol)",
-  "netWeightOfFisheryProductOnArrivalHint": "Dyma bwysau'r pysgod yn unig – peidiwch â chynnwys unrhyw gynhwysion eraill. Er enghraifft, 200g o benfras wedi’i ddefnyddio mewn pastai pysgod.",
+  "netWeightOfProductOnArrival": "Pwysau net y cynnyrch wrth gyrraedd (kg)",
+  "netWeightOfProductOnArrivalOptional": "Pwysau net y cynnyrch wrth gyrraedd (kg) (dewisol)",
+  "netWeightOfProductOnArrivalHint": "Dyma bwysau'r cynnyrch cyfan, gan gynnwys yr holl gynhwysion – nid y pysgod yn unig. Er enghraifft, pastai pysgod sy'n pwyso 0.35kg (350g).",
+  "netWeightOfFisheryProductOnArrival": "Pwysau net cynhyrchion pysgodfeydd wrth gyrraedd (kg)",
+  "netWeightOfFisheryProductOnArrivalOptional": "Pwysau net cynhyrchion pysgodfeydd wrth gyrraedd (kg) (dewisol)",
+  "netWeightOfFisheryProductOnArrivalHint": "Dyma bwysau'r pysgod yn unig – peidiwch â chynnwys unrhyw gynhwysion eraill. Er enghraifft, 0.20kg (200g) o benfras wedi’i ddefnyddio mewn pastai pysgod.",
   "weightOnDocumentLabel": "Pwysau ar y ddogfen mewn kg",
   "weightOnCcHint": "Cyfanswm y pwysau ar y ddogfen ar gyfer y cod nwyddau a ddewiswyd mewn kg"
 }
