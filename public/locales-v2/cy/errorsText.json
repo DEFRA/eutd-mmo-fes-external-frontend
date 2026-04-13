@@ -72,6 +72,7 @@
   "ccAddTransportationDetailsDeparturePortCharExceedError": "Rhaid i O ble mae'r lori’n ymadael fod yn llai na 50 o nodau",
   "ccAddTransportationDetailsDeparturePortOnlyNumLettersError": "Rhaid i O ble mae'r lori’n ymadael gynnwys llythrennau, rhifau, collnodau, cysylltnodau a bylchau yn unig",
   "ccContainerIdentificationNumberMaxLength": "Does dim modd i rif y cynhwysydd fod yn fwy na 150 nod",
+  "ccPlaneContainerIdentificationNumberMaxLength": "Does dim modd i rif y cynhwysydd fod yn fwy na 50 nod",
   "ccContainerIdentificationNumberInvalidCharacters": "Rhaid i rif y cynhwysydd gynnwys dim ond llythrennau, rhifau a bylchau",
   "sdTransportDepatureDateInvalidError": "Rhaid i'r dyddiad ymadael fod yn ddyddiad go iawn",
   "sdTransportDepatureDateRequiredError": "Rhowch y dyddiad ymadael",
