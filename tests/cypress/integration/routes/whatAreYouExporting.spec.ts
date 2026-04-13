@@ -1874,7 +1874,7 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
     // click() fires the real focus event DCX needs to register its input handler.
     // Separate cy.get() re-queries the DOM fresh after any click-triggered re-render settles.
     cy.get("input#species").click();
-    cy.get("input#species").type("Alb");
+    cy.get("input#species").type("AES");
     // Confirms: listbox exists, has correct role, ID is unique, aria-controls matches rendered ID
     cy.get("#species__listbox").should("have.length", 1).should("have.attr", "role", "listbox");
   });
@@ -1885,7 +1885,9 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
     // that gets detached when the click triggers a DCX internal state update and re-render.
     cy.get("input#species").should("have.attr", "aria-expanded", "false").and("not.be.disabled");
     cy.get("input#species").click();
-    cy.get("input#species").type("Alb");
+    cy.get("input#species").type("AES");
+    // Synchronize on rendered suggestions first to avoid CI timing races before asserting expanded state.
+    cy.get("#species__listbox", { timeout: 10000 }).should("be.visible");
     cy.get("input#species").should("have.attr", "aria-expanded", "true");
   });
 
