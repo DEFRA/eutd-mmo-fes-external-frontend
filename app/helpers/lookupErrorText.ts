@@ -89,6 +89,7 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.plane.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.plane.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.plane.string.max": "ccPlaneContainerIdentificationNumberMaxLength",
     "error.containerNumbers.string.pattern.base": "ccShippingContainerNumberPatternError",
     "error.containerNumbers.containerVessel.any.required": "ccContainerVesselContainerNumberRequiredError",
     "error.containerNumbers.containerVessel.string.empty": "ccContainerVesselContainerNumberRequiredError",
@@ -105,6 +106,7 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.0.string.pattern.base": "ccShippingContainerNumberPatternError",
     "error.containerNumbers.plane.0.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.plane.0.string.max": "ccPlaneContainerIdentificationNumberMaxLength",
     "error.containerNumbers.plane.array.min": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     "error.containerNumbers.container-vessel.array.min": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.1.any.required": "ccContainerVesselContainerNumberLabelError",
@@ -114,6 +116,7 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.1.string.pattern.base": "ccShippingContainerNumberPatternError",
     "error.containerNumbers.plane.1.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.plane.1.string.max": "ccPlaneContainerIdentificationNumberMaxLength",
     "error.containerNumbers.2.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.2.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.2.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
@@ -121,6 +124,7 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.2.string.pattern.base": "ccShippingContainerNumberPatternError",
     "error.containerNumbers.plane.2.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.plane.2.string.max": "ccPlaneContainerIdentificationNumberMaxLength",
     "error.containerNumbers.3.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.3.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.3.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
@@ -128,6 +132,7 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.3.string.pattern.base": "ccShippingContainerNumberPatternError",
     "error.containerNumbers.plane.3.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.plane.3.string.max": "ccPlaneContainerIdentificationNumberMaxLength",
     "error.containerNumbers.4.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.4.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.4.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
@@ -135,6 +140,7 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.4.string.pattern.base": "ccShippingContainerNumberPatternError",
     "error.containerNumbers.plane.4.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.plane.4.string.max": "ccPlaneContainerIdentificationNumberMaxLength",
     "error.containerNumbers.5.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.5.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.5.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
@@ -142,6 +148,7 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.5.string.pattern.base": "ccShippingContainerNumberPatternError",
     "error.containerNumbers.plane.5.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.plane.5.string.max": "ccPlaneContainerIdentificationNumberMaxLength",
     "error.containerNumbers.6.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.6.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.6.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
@@ -149,6 +156,7 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.6.string.pattern.base": "ccShippingContainerNumberPatternError",
     "error.containerNumbers.plane.6.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.plane.6.string.max": "ccPlaneContainerIdentificationNumberMaxLength",
     "error.containerNumbers.7.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.7.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.7.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
@@ -156,6 +164,7 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.7.string.pattern.base": "ccShippingContainerNumberPatternError",
     "error.containerNumbers.plane.7.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.plane.7.string.max": "ccPlaneContainerIdentificationNumberMaxLength",
     "error.containerNumbers.8.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.8.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.8.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
@@ -163,6 +172,7 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.8.string.pattern.base": "ccShippingContainerNumberPatternError",
     "error.containerNumbers.plane.8.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.plane.8.string.max": "ccPlaneContainerIdentificationNumberMaxLength",
     "error.containerNumbers.9.any.required": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.9.string.empty": "ccContainerVesselContainerNumberLabelError",
     "error.containerNumbers.plane.9.string.empty": "commonAddTransportationDetailsPlaneContainerNumberLabelError",
@@ -170,6 +180,7 @@ export const getErrorMessage = (key: string): string => {
     "error.containerNumbers.9.string.pattern.base": "ccShippingContainerNumberPatternError",
     "error.containerNumbers.plane.9.string.pattern.base":
       "commonAddTransportationDetailsPlaneContainerOnlyNumLettersError",
+    "error.containerNumbers.plane.9.string.max": "ccPlaneContainerIdentificationNumberMaxLength",
     commonAddTransportationDetailsPlaneContainerNumberLabelError:
       "commonAddTransportationDetailsPlaneContainerNumberLabelError",
     ccContainerVesselContainerNumberRequiredError: "ccContainerVesselContainerNumberRequiredError",
