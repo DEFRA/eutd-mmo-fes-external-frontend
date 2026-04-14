@@ -1276,21 +1276,31 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    // Hydration-complete gate
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
     // Get initial count of rows
-    cy.get("tbody tr").then(($rows) => {
-      const initialCount = $rows.length;
+    cy.get("tbody tr").its("length").as("initialCount");
 
-      // Search for a specific species
-      cy.get('input[name="q"]').type("Atlantic");
-      cy.get('[data-testid="filter-search-submit"]').click();
+    // Search for a specific species
+    cy.get('input[name="q"]').should("be.visible").and("be.enabled");
+    cy.get('input[name="q"]').click();
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("Atlantic");
+    cy.get('input[name="q"]').should("have.value", "Atlantic");
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
+    cy.get('[data-testid="filter-search-submit"]').click();
+    cy.wait("@filterSubmit");
 
-      // Verify table still exists and has filtered results
-      cy.get("tbody").should("exist");
+    // Verify table still exists and has filtered results
+    cy.get("tbody").should("exist");
 
-      // Reset and verify all rows return
-      cy.get('[data-testid="filter-search-reset"]').click();
-      cy.get("tbody tr").should("have.length", initialCount);
+    // Reset and verify all rows return
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterReset");
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.wait("@filterReset");
+    cy.get("@initialCount").then((initialCount) => {
+      cy.get("tbody tr").should("have.length", Number(initialCount));
     });
   });
 
@@ -1300,16 +1310,26 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    // Hydration-complete gate
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
     // Search for something that won't match any catches
+    cy.get('input[name="q"]').should("be.visible").and("be.enabled");
+    cy.get('input[name="q"]').click();
+    cy.get('input[name="q"]').clear();
     cy.get('input[name="q"]').type("ZZZZNONEXISTENT12345");
+    cy.get('input[name="q"]').should("have.value", "ZZZZNONEXISTENT12345");
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
     cy.get('[data-testid="filter-search-submit"]').click();
+    cy.wait("@filterSubmit");
 
     // Verify the page handles empty results gracefully
     cy.get("tbody").should("exist");
 
     // Reset should restore the original data
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterReset");
     cy.get('[data-testid="filter-search-reset"]').click();
+    cy.wait("@filterReset");
     cy.get("tbody tr").should("have.length.greaterThan", 0);
   });
 
