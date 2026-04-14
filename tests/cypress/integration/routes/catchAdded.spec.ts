@@ -1635,14 +1635,20 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
       testCaseId: TestCaseId.PSCatchAddedFilterByProductDescription,
     };
 
+    // Intercept before visit so CI captures form submissions during page load
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
+    // Hydration-complete gate: root.tsx useEffect calls span[tabIndex=-1].focus() after
+    // React's initial render. Waiting for this focus event confirms hydrateRoot() has
+    // run and the DOM is stable — preventing the defaultValue reset race on CI.
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
     // Search for product-specific term
     cy.get('input[name="q"]').should("be.visible");
-    cy.get('input[name="q"]').clear({ force: true });
-    cy.get('input[name="q"]').type("product", { force: true });
+    cy.get('input[name="q"]').click();
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("product");
     cy.get('input[name="q"]').should("have.value", "product");
     cy.get('[data-testid="filter-search-submit"]').click();
 
@@ -1721,14 +1727,20 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
       testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName,
     };
 
+    // Intercept before visit so CI captures form submissions during page load
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
+    // Hydration-complete gate: root.tsx useEffect calls span[tabIndex=-1].focus() after
+    // React's initial render. Waiting for this focus event confirms hydrateRoot() has
+    // run and the DOM is stable — preventing the defaultValue reset race on CI.
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
     // Apply search
     cy.get('input[name="q"]').should("be.visible");
-    cy.get('input[name="q"]').clear({ force: true });
-    cy.get('input[name="q"]').type("test", { force: true });
+    cy.get('input[name="q"]').click();
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("test");
     cy.get('input[name="q"]').should("have.value", "test");
     cy.get('[data-testid="filter-search-submit"]').click();
 
