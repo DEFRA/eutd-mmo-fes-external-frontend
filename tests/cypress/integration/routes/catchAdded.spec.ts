@@ -1183,11 +1183,14 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    // Hydration-complete gate
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
-    // Perform a search
+    // Perform a search — each step uses a fresh cy.get() to avoid stale-element errors
     cy.get('input[name="q"]').should("be.visible").and("be.enabled");
     cy.get('input[name="q"]').click();
-    cy.focused().clear().type("Atlantic");
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("Atlantic");
     cy.get('input[name="q"]').should("have.value", "Atlantic");
     cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
     cy.get('button[name="actionType"][value="search"]').click();
@@ -1213,11 +1216,14 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    // Hydration-complete gate
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
-    // Perform a search
+    // Perform a search — each step uses a fresh cy.get() to avoid stale-element errors
     cy.get('input[name="q"]').should("be.visible").and("be.enabled");
     cy.get('input[name="q"]').click();
-    cy.focused().clear().type("Tuna");
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("Tuna");
     cy.get('input[name="q"]').should("have.value", "Tuna");
     cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
     cy.get('button[name="actionType"][value="search"]').click();
@@ -1239,11 +1245,15 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    // Hydration-complete gate
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
-    // Perform a search
+    // Perform a search — each step uses a fresh cy.get() to avoid stale-element errors
     cy.get('input[name="q"]').should("be.visible").and("be.enabled");
     cy.get('input[name="q"]').click();
-    cy.focused().clear().type("Salmon");
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("Salmon");
+    cy.wait(500); // Wait for re-render if needed we should not have to do this but is the only way around flaky test right now
     cy.get('input[name="q"]').should("have.value", "Salmon");
     cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
     cy.get('button[name="actionType"][value="search"]').click();
