@@ -28,6 +28,22 @@ For BDD, follow `.github/instructions/bdd-tests.instructions.md`.
 - `defaultCommandTimeout` is `20000ms`. Tests must not rely on long implicit retries to “eventually pass”; use deterministic waits and stable readiness signals.
 - Retries are enabled (runMode/openMode). **Do not lean on retries to mask flakiness**—fix determinism.
 
+## Developer-Agent Compatibility (MANDATORY)
+
+- Keep this agent performance-first, but apply the same project test workflow used by the developer agent when writing or changing route journeys.
+- If a test requires MSW-backed API mocking for Remix loaders/actions, follow this sequence:
+  1.  Add test case ID to `app/types/tests.ts`
+  2.  Add fixtures in `tests/cypress/fixtures/`
+  3.  Add MSW handlers in `tests/msw/handlers/` and wire into `rootTestHandler`
+  4.  Ensure route loaders used by the journey call `setApiMock(request.url)` as the first loader statement for test-mode mocking
+  5.  Add/update Cypress spec in `tests/cypress/integration/routes/`
+  6.  Use instrumented flow: `npm run pre:test:start` -> `npm run :test:start` -> `npm run :test:all`
+- Mock **all** API calls in the tested journey, including destination page loaders, to avoid unmatched requests and flake. This project does not use separate real-backend smoke test suites — all network calls must be mocked via MSW in every spec.
+- Do not ignore `[MSW] Warning: captured a request without a matching request handler`; treat as test setup failure.
+- Coverage target remains aligned with the developer workflow: aim for >90% overall unless the user explicitly sets a narrower task scope.
+- Conflict rule for production edits: do not make non-test production changes; only make minimum required test-enablement edits (for example loader `setApiMock(request.url)` integration) and ask before proceeding if broader production changes are needed.
+
+
 ## Core Responsibilities
 
 - **Write Efficient E2E Tests**: Cover critical user journeys with minimal steps and minimal UI interactions.
@@ -72,6 +88,17 @@ Execute user requests **completely and autonomously**. Never stop halfway - iter
 Azure Pipeline agents are slower than developer machines. Tests that pass locally can fail in CI due to hydration timing.
 Apply all rules in this section whenever writing or reviewing tests that interact with hydrated components.
 
+### Input Interaction — Which Pattern to Use
+
+This app has two distinct input types that require different interaction patterns. **Always identify which type you are targeting before writing an interaction.** Applying the wrong pattern is the most common source of CI-only flakiness.
+
+| Input type                    | Selector                                  | Pattern                                                                                                                      | `force: true`?                                                |
+| ----------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| **DCX Autocomplete combobox** | `input[role="combobox"]`, `input#species` | Assert → separate `.get()` → `.type({ force: true })`. For aria-expanded: assert → `.get().click()` → `.get().type()`        | ✅ on `.type()` only, to bypass the hydration disabled-window |
+| **Plain HTML form input**     | `input[name="q"]`, `input[type="search"]` | `.should("be.visible").and("be.enabled")` → `.click()` → `cy.focused().clear().type("...")` → `.should("have.value", "...")` | ❌ never — use `.click()` + `cy.focused()` instead            |
+
+Detailed rationale and examples for each pattern follow below.
+
 ### React Hydration Failure & Full Client Re-render Race
 
 When React SSR hydration fails (e.g. a mismatch between server and client markup), React falls back to full client-side rendering. This causes a re-mount of the entire tree. During this re-mount:
@@ -95,7 +122,9 @@ cy.get("input#species").should("not.be.disabled").and("have.attr", "role", "comb
 cy.get("input#species").type("A", { force: true }); // force bypasses narrow disabled window
 ```
 
-### Mandatory Pattern: Use `force: true` on `.type()` for DCX combobox inputs
+### Mandatory Pattern: Use `force: true` on `.type()` for DCX combobox inputs (`input[role="combobox"]` only)
+
+> **Scope:** This pattern applies to DCX Autocomplete comboboxes only (`input[role="combobox"]`, e.g. `input#species`). For plain HTML form inputs (`input[name="q"]`, `input[type="search"]`), use the `cy.focused()` pattern instead — see "Plain HTML filter/search inputs" section. Do **not** use `cy.focused()` for DCX comboboxes; always use a fresh `cy.get()` after `.click()`.
 
 Even after the assertion chain is broken, a narrow disabled window may remain. Use `{ force: true }` on `.type()` calls targeting DCX Autocomplete inputs. This is a deliberate, documented exception to the general no-force rule, solely to handle the post-hydration re-render race:
 
@@ -176,7 +205,104 @@ cy.get('#add-from-favourites input[role="combobox"]').type("A", { force: true })
 - After clicking a tab, assert the panel is visible before querying elements inside it: `cy.get('#add-from-favourites').should('be.visible')`.
 - Do not chain `.click()` directly into panel assertions — use a separate `cy.get()` after the click.
 
-  </CRITICAL_REQUIREMENT>
+### Mandatory Pattern: Plain HTML filter/search inputs in SSR Remix forms
+
+**Selector preference:** Use a `data-testid` attribute selector when one exists on the input (e.g. `cy.get('[data-testid="search-input"]')`). When no `data-testid` is present, `input[name="q"]` or `input[type="search"]` are acceptable stable semantic alternatives — they are not brittle CSS chains.
+
+This applies to any plain `<input>` (e.g. `<input name="q" type="search">`) inside a server-rendered `<form>`. These inputs are **uncontrolled** (`defaultValue`) — React can reset their DOM value during hydration or on a state change triggered by `.focus()`. Never use `{ force: true }` on these inputs; instead, establish real focus first so React processes the event before you type.
+
+**The canonical four-step input pattern:**
+
+```ts
+// 1. Prove the element is rendered and interactive — do NOT chain into type() from here
+cy.get('input[name="q"]').should("be.visible").and("be.enabled");
+
+// 2. Click to establish real browser focus (may trigger a React state update/re-render)
+cy.get('input[name="q"]').click();
+
+// 3. Operate on cy.focused() — this re-queries the currently-focused element in the
+//    stable post-render state, so the value sticks
+cy.focused().clear().type("Atlantic");
+
+// 4. Assert the value is committed before proceeding
+cy.get('input[name="q"]').should("have.value", "Atlantic");
+```
+
+**Why `cy.focused()` instead of a third `cy.get()`?**
+After `.click()`, React may re-render the component. `cy.focused()` always targets the element that actually has focus at query time — it is immune to reference staleness.
+
+**Intercept registration — always immediately before the submit click:**
+
+Register `cy.intercept()` as late as possible: after the value assertion, immediately before `.click()` on the submit button. Registering it before the input chain means it may expire or create timing windows in CI.
+
+```ts
+// ❌ WRONG — intercept registered before input, may timeout or create CI race
+cy.intercept("POST", "**/catch-added*").as("search");
+cy.get('input[name="q"]').click();
+cy.focused().clear().type("Atlantic");
+cy.get('[data-testid="filter-search-submit"]').click();
+
+// ✅ CORRECT — intercept registered after value is confirmed, immediately before submit
+cy.get('input[name="q"]').should("be.visible").and("be.enabled");
+cy.get('input[name="q"]').click();
+cy.focused().clear().type("Atlantic");
+cy.get('input[name="q"]').should("have.value", "Atlantic");
+cy.intercept("POST", "**/catch-added*").as("search");
+cy.get('[data-testid="filter-search-submit"]').click();
+cy.wait("@search");
+```
+
+**Always `cy.wait("@alias")` after form submission** — never assume a POST completed because the UI looks updated. In CI, React may not have re-rendered yet when your next assertion runs.
+
+**Full reference pattern:**
+
+```ts
+// Prove readiness
+cy.get('input[name="q"]').should("be.visible").and("be.enabled");
+// Establish real focus
+cy.get('input[name="q"]').click();
+// Type via focused() to avoid stale reference after React re-render
+cy.focused().clear().type("Atlantic");
+// Confirm value committed
+cy.get('input[name="q"]').should("have.value", "Atlantic");
+// Register intercept just before submit
+cy.intercept("POST", "**/catch-added*").as("search");
+cy.get('[data-testid="filter-search-submit"]').click();
+// Prove the request was made before asserting outcomes
+cy.wait("@search");
+```
+
+**Prohibited sub-patterns for plain form inputs:**
+
+```ts
+// ❌ WRONG — force bypasses focus; React resets uncontrolled value on next render
+cy.get('input[name="q"]').clear({ force: true }).type("Atlantic", { force: true });
+
+// ❌ WRONG — assumes request completed without proof
+cy.get('[data-testid="filter-search-submit"]').click();
+cy.get("tbody tr").should(...); // may assert stale DOM
+
+// ❌ WRONG — chaining type() after an assertion holds a stale element reference
+cy.get('input[name="q"]').should("be.visible").type("Atlantic");
+```
+
+</CRITICAL_REQUIREMENT>
+
+## Prohibited Architecture Patterns
+
+<CRITICAL_REQUIREMENT type="MANDATORY">
+
+**Do not introduce the Page Object pattern.** This codebase uses inline, flat spec files — selectors and actions are written directly in `describe`/`it` blocks. Do not create:
+
+- Page Object classes (`LoginPage`, `CatchAddedPage`, etc.)
+- Dedicated `cypress/pages/` or `cypress/page-objects/` directories
+- Abstraction layers that wrap `cy.get()` calls in methods
+
+Reusable setup (login, session, common intercepts) belongs in `tests/cypress/support/e2e.js` as custom Cypress commands, which is the established pattern in this codebase. Adding a Page Object layer diverges from that and creates two competing abstraction strategies.
+
+If you recognise advice recommending Page Objects from a general Cypress skill or reference, **that advice does not apply here**. Follow the existing flat-spec pattern instead.
+
+</CRITICAL_REQUIREMENT>
 
 ## Required Patterns for Route Specs (Fast-By-Default)
 
@@ -218,7 +344,17 @@ cy.get('#add-from-favourites input[role="combobox"]').type("A", { force: true })
 
 ### Network & Data
 
-- Alias and wait on loader/action calls only when needed; do not blanket-wait on every request.
+**`cy.intercept()` timing — when to register relative to `cy.visit()`:**
+
+| Request type                              | When to register `cy.intercept()`                           | Reason                                                                                                                                                                                              |
+| ----------------------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET XHR/fetch (loader, API)               | **Before `cy.visit()`**                                     | Cypress can only intercept XHR/fetch; registering before the visit ensures the request is captured on page load                                                                                     |
+| POST form action (native `<form>` submit) | **After `cy.visit()`, immediately before the submit click** | Native HTML form POSTs are not XHR — `cy.intercept()` only captures the server-side `.data` route fetch that Remix fires after hydration; placing it before `cy.visit()` is harmless but misleading |
+
+> **Note for general Cypress skill guidance**: The rule "always set up intercepts before `cy.visit()`" applies correctly to XHR/fetch GET requests. For Remix SSR POST form submissions in this codebase, the intercept must go before the submit action (which is after `cy.visit()`), not before the page load.
+
+- **GET loader requests**: alias and wait only when needed — do not blanket-wait on every loader.
+- **POST form action requests**: always register `cy.intercept()` immediately before the submit click and `cy.wait('@alias')` after it. This is the only way to prove the action fired and completed in CI, where React may not have re-rendered by the time the next assertion runs.
 - Keep fixtures small; avoid large payloads unless testing performance explicitly.
 - Do not stub `/coverage` endpoint.
 
@@ -264,6 +400,10 @@ When generating Cypress tests, always include:
 - UI-driven setup for large datasets (use API)
 - Reliance on third-party services
 - Brittle selectors (positional CSS, long DOM chains, dynamic classes)
+- `{ force: true }` on `.type()`, `.click()`, or `.clear()` — **except** the two documented exceptions below:
+  - **DCX Autocomplete combobox `.type()`**: `force: true` is required to bypass the post-hydration disabled-window race. See the DCX combobox pattern in the Azure CI section.
+  - **Tab clicks when an intentional overlay covers the tab**: document the reason inline.
+  - All other uses of `force: true` are prohibited — they mask actionability problems and produce false-positive tests.
 
 ## Debugging & Refactoring Workflow (Speed Focus)
 
@@ -300,6 +440,20 @@ Use this decision tree when a test passes locally but fails on the Azure Pipelin
 - **Impact on tests:** React falls back to full client render, causing a full tree re-mount. Tests that interact with re-mounted components will face the disabled-input race described above.
 - **Handling in tests:** The global `Cypress.on('uncaught:exception', () => false)` in `tests/cypress/support/e2e.js` silences the exception so tests don't fail due to the error itself — but you **must still** apply the chain-breaking + `force: true` patterns to handle the re-mount side-effect.
 - **Resolution:** The production SSR mismatch should be fixed in application code; tests should not mask it permanently.
+
+### `cy.wait("@alias")` times out — "No request ever occurred"
+
+- **Cause 1:** `cy.intercept()` was registered before `cy.visit()` or before the input chain, then the SSR form submitted via native browser navigation (not XHR/fetch) because React had not yet hydrated. `cy.intercept()` only captures XHR/fetch — not native form POSTs.
+- **Cause 2:** `cy.intercept()` was registered after the `.click()` on the submit button — the request already fired.
+- **Fix:**
+  1. Register `cy.intercept()` immediately before the submit button `.click()`, after asserting the input value.
+  2. Use `cy.wait("@alias")` to prove the request completed before asserting outcomes.
+  3. If the route is SSR-only (no JS hydration), assert `cy.url()` state instead of waiting on an XHR alias.
+
+### Assertion timeout on `should("have.value", "...")` after `type()`
+
+- **Cause:** `type({ force: true })` or chained `.type()` on an uncontrolled input — React resets the DOM value during or after the type, so the value assertion sees an empty or partial string.
+- **Fix:** Use the four-step focused pattern: `.should("be.visible").and("be.enabled")` → `.click()` → `cy.focused().clear().type("...")` → `.should("have.value", "...")`. Never use `{ force: true }` on plain HTML inputs.
 
 ### `cy.click()` on a tab has no visible effect
 
