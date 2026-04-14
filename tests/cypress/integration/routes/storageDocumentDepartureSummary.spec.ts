@@ -32,7 +32,7 @@ const visitDepartureSummary = (
       ...testParams,
       ...(lng ? { lng } : {}),
     },
-    ...(failOnStatusCode !== undefined ? { failOnStatusCode } : {}),
+    ...(typeof failOnStatusCode === "boolean" ? { failOnStatusCode } : {}),
   });
 };
 
@@ -42,6 +42,10 @@ const assertEnglishHeading = () => {
 
 const assertAnyHeading = () => {
   cy.findByRole("heading", { level: 1 }).should("be.visible");
+};
+
+const assertGuidanceMessage = () => {
+  cy.get(".govuk-warning-text__text").should("contain.text", EN_GUIDANCE);
 };
 
 const clickSaveAndContinue = () => {
@@ -118,7 +122,7 @@ describe("Storage document departure summary: rendering", () => {
 
   it("should render the correct content", () => {
     assertEnglishHeading();
-    cy.get("#sdProductSummaryGuidanceMessage").contains(EN_GUIDANCE);
+    assertGuidanceMessage();
   });
 
   it("should check the tabs", () => {
@@ -169,7 +173,7 @@ describe("Storage document departure summary: arrival tab", () => {
 
   it("loads the page with catches", () => {
     assertEnglishHeading();
-    cy.get("#sdProductSummaryGuidanceMessage").contains(EN_GUIDANCE);
+    assertGuidanceMessage();
 
     openArrivalTab();
 
@@ -208,7 +212,7 @@ describe("Storage document departure summary: arrival tab", () => {
 
   it("loads the edit page with catches", () => {
     assertEnglishHeading();
-    cy.get("#sdProductSummaryGuidanceMessage").contains(EN_GUIDANCE);
+    assertGuidanceMessage();
 
     openArrivalTab();
 
@@ -232,7 +236,7 @@ describe("Storage document departure summary: arrival tab", () => {
 
   it("should remove catch", () => {
     assertEnglishHeading();
-    cy.get("#sdProductSummaryGuidanceMessage").contains(EN_GUIDANCE);
+    assertGuidanceMessage();
 
     openArrivalTab();
 
@@ -288,7 +292,7 @@ describe("Storage document departure summary: departure tab", () => {
 
   it("loads the page with catches", () => {
     assertEnglishHeading();
-    cy.get("#sdProductSummaryGuidanceMessage").contains(EN_GUIDANCE);
+    assertGuidanceMessage();
 
     openDepartureTab();
 
@@ -384,7 +388,7 @@ describe("Storage document departure summary: tab with empty departure and load 
 
   it("loads the page with catches", () => {
     assertEnglishHeading();
-    cy.get("#sdProductSummaryGuidanceMessage").contains(EN_GUIDANCE);
+    assertGuidanceMessage();
 
     openDepartureTab();
 

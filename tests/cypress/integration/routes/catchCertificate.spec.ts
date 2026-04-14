@@ -28,8 +28,9 @@ describe("Catch certificate created page: rendering", () => {
   });
 
   it("should render important notice with icon and text", () => {
-    cy.contains("strong", /^Do not amend the catch certificate\.$/).should("be.visible");
-    cy.get("svg title").should("contain", "icon important");
+    cy.get(".govuk-warning-text").should("be.visible");
+    cy.get(".govuk-warning-text__icon").should("contain", "!");
+    cy.get(".govuk-warning-text__text").should("contain.text", "Do not amend the catch certificate.");
   });
 
   it("should render email section with two bullet points", () => {
@@ -94,11 +95,8 @@ describe("Catch certificate created page: rendering", () => {
   });
 
   it("should render important notice icon and text", () => {
-    cy.get('svg[viewBox="0 0 35.000000 35.000000"]')
-      .should("be.visible")
-      .find("title")
-      .should("contain", "icon important");
-    cy.contains("strong", "Do not amend the catch certificate.").should("be.visible");
+    cy.get(".govuk-warning-text").should("be.visible");
+    cy.get(".govuk-warning-text__text").should("contain.text", "Do not amend the catch certificate.");
   });
 
   it("should render email instructions with proper heading", () => {
@@ -132,14 +130,14 @@ describe("Catch certificate created page: rendering", () => {
   });
 
   it("should call renderImportantNotice function", () => {
-    cy.get(".govuk-\\!-margin-bottom-4").within(() => {
-      cy.get("svg").should("exist");
-      cy.get(".govuk-\\!-display-inline-block").should("exist");
+    cy.get(String.raw`.govuk-\!-margin-bottom-4`).within(() => {
+      cy.get(".govuk-warning-text").should("exist");
+      cy.get(".govuk-warning-text__icon").should("exist");
     });
   });
 
   it("should call renderCatchCertificateSteps function", () => {
-    cy.get(".govuk-\\!-margin-bottom-6").should("have.length.at.least", 2);
+    cy.get(String.raw`.govuk-\!-margin-bottom-6`).should("have.length.at.least", 2);
   });
 
   it("should render Main component with feedback link", () => {
