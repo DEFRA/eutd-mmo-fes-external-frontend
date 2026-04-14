@@ -1507,14 +1507,17 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
       testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName,
     };
 
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
+    // Hydration-complete gate: root.tsx useEffect focuses this span after hydrateRoot() settles
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
     // Enter search term for species
     cy.get('input[name="q"]').should("be.visible");
-    cy.get('input[name="q"]').clear({ force: true });
-    cy.get('input[name="q"]').type("Atlantic", { force: true });
+    cy.get('input[name="q"]').click();
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("Atlantic");
     cy.get('input[name="q"]').should("have.value", "Atlantic");
     cy.get('[data-testid="filter-search-submit"]').click();
 
@@ -1530,14 +1533,17 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
       testCaseId: TestCaseId.PSCatchAddedFilterByProductDescription,
     };
 
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
+    // Hydration-complete gate: root.tsx useEffect focuses this span after hydrateRoot() settles
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
     // Search by product description
     cy.get('input[name="q"]').should("be.visible");
-    cy.get('input[name="q"]').clear({ force: true });
-    cy.get('input[name="q"]').type("Frozen", { force: true });
+    cy.get('input[name="q"]').click();
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("Frozen");
     cy.get('input[name="q"]').should("have.value", "Frozen");
     cy.get('[data-testid="filter-search-submit"]').click();
 
@@ -1553,14 +1559,17 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
       testCaseId: TestCaseId.PSCatchAddedResetFilter,
     };
 
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
+    // Hydration-complete gate: root.tsx useEffect focuses this span after hydrateRoot() settles
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
     // Apply filter
     cy.get('input[name="q"]').should("be.visible");
-    cy.get('input[name="q"]').clear({ force: true });
-    cy.get('input[name="q"]').type("test", { force: true });
+    cy.get('input[name="q"]').click();
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("test");
     cy.get('input[name="q"]').should("have.value", "test");
     cy.get('[data-testid="filter-search-submit"]').click();
     cy.wait("@filterSubmit").then(({ request }) => {
@@ -1613,14 +1622,17 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
       testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName,
     };
 
+    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
+    // Hydration-complete gate: root.tsx useEffect focuses this span after hydrateRoot() settles
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
     // Search by species code (FAO27)
     cy.get('input[name="q"]').should("be.visible");
-    cy.get('input[name="q"]').clear({ force: true });
-    cy.get('input[name="q"]').type("FAO27", { force: true });
+    cy.get('input[name="q"]').click();
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("FAO27");
     cy.get('input[name="q"]').should("have.value", "FAO27");
     cy.get('[data-testid="filter-search-submit"]').click();
 
@@ -1665,10 +1677,14 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
     cy.visit(`${pageUrl}?pageNo=2`, { qs: { ...testParams } });
 
+    // Hydration-complete gate: root.tsx useEffect focuses this span after hydrateRoot() settles
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
+
     // Apply search
     cy.get('input[name="q"]').should("be.visible");
-    cy.get('input[name="q"]').clear({ force: true });
-    cy.get('input[name="q"]').type("test", { force: true });
+    cy.get('input[name="q"]').click();
+    cy.get('input[name="q"]').clear();
+    cy.get('input[name="q"]').type("test");
     cy.get('input[name="q"]').should("have.value", "test");
     cy.get('[data-testid="filter-search-submit"]').click();
 
