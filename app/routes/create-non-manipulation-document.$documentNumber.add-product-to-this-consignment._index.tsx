@@ -40,13 +40,14 @@ import type {
   LabelAndValue,
   CodeAndDescription,
   StorageDocument,
-  IUnauthorised,
   StorageDocumentCatch,
   DocIssuedInUkRadioSelectOptionType,
   DocIssuedInUkRadioSelectType,
   ICountry,
+  ErrorResponse,
 } from "~/types";
 import { querySpecies, getCodeFromLabel, displayErrorMessagesInOrder, scrollToId } from "~/helpers";
+import { reindexDocumentErrors } from "~/helpers/errorReindexing";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { route } from "routes-gen";
 import isEmpty from "lodash/isEmpty";
@@ -77,21 +78,27 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   setApiMock(request.url);
 
   const { documentNumber } = params;
-  const species = await getAllSpecies();
-  const countries = await getCountries();
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
   const backThroughProducts = url.searchParams.get("backThroughProducts") === "true";
   const productIndex = Number.parseInt(params["*"] ?? "") || 0;
-  const commodities: CodeAndDescription[] = await getCommodities();
   const speciesExemptLink = getEnv().SPECIES_EXEMPT_LINK;
   const commodityCodeLink = getEnv().COMMODITY_CODE_LINK;
+
+  // Fetch bearer token first so it can be used in the parallel storageDocument fetch.
   const bearerToken = await getBearerTokenForRequest(request);
-  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
   const displayOptionalSuffix = getEnv().EU_CATCH_FIELDS_OPTIONAL === "true";
   const maximumEntryDocsAllowed = getEnv().EU_SD_MAX_ENTRY_DOCS;
 
-  const session = await getSessionFromRequest(request);
+  // FI0-10854: parallelize independent API calls
+  const [species, countries, commodities, storageDocument, session] = await Promise.all([
+    getAllSpecies(),
+    getCountries(),
+    getCommodities(),
+    getStorageDocument(bearerToken, documentNumber),
+    getSessionFromRequest(request),
+  ]);
+
   const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
@@ -107,6 +114,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   let updatedSupportingDocuments: string[] =
     ((currentCatchDetails as StorageDocumentCatch) || undefined)?.supportingDocuments ?? [];
+  /* istanbul ignore if */
   if (isAddSupportingDocumentButtonClicked) {
     updatedSupportingDocuments = [...updatedSupportingDocuments, ""];
     session.unset("addSupportingDoc");
@@ -123,7 +131,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       speciesExemptLink,
       commodityCodeLink,
       productIndex,
-      catchDetails: currentCatchDetails || {},
+      catchDetails: currentCatchDetails || /* istanbul ignore next */ {},
       updatedSupportingDocuments: updatedSupportingDocuments,
       catchIndex: validCatchIndex,
       nextUri,
@@ -177,6 +185,12 @@ const getUpdateStorageDocumentData = (
       values.netWeightFisheryProductArrival && !isEmpty(values.netWeightFisheryProductArrival)
         ? (values.netWeightFisheryProductArrival as string)
         : undefined,
+    // Clear departure weights when arrival weights are updated so that the
+    // departure-product-summary page recalculates them from the new arrival values.
+    // Without this, departure weights copied from an NMD document are retained even
+    // after arrival weights change.
+    netWeightProductDeparture: undefined,
+    netWeightFisheryProductDeparture: undefined,
   };
 };
 
@@ -200,7 +214,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   let scientificName;
 
-  const allSpecies: Species[] = await getAllSpecies();
+  // FI0-10854: parallelize independent reference data calls
+  const [allSpecies, countries] = await Promise.all([getAllSpecies(), getCountries()]);
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
@@ -214,7 +229,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     supportingDocumentsFromForm.splice(removeIndex, 1);
   }
 
-  const countries = await getCountries();
   const updateData: Partial<StorageDocument | StorageDocumentCatch> = getUpdateStorageDocumentData(
     commodityCode,
     values,
@@ -222,24 +236,32 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     supportingDocumentsFromForm,
     countries
   );
-  const saveToRedisIfErrors = isDraft;
+  // First validation pass – always validate without saving so we can inspect errors
   const errorResponse = await updateStorageDocumentCatchDetails(
     bearerToken,
     documentNumber,
     { ...updateData },
     `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment${productIndexUrlFragment}`,
     productIndex,
-    saveToRedisIfErrors,
+    false, // saveToRedisIfErrors = false (validate only)
     false,
     isNonJs
   );
   if (isDraft) {
-    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
+    return handleSaveAsDraftConsignment(
+      bearerToken,
+      documentNumber,
+      errorResponse,
+      updateData,
+      productIndex,
+      productIndexUrlFragment,
+      isNonJs
+    );
   }
   if (errorResponse) {
     // When there are errors and JavaScript is disabled, include the submitted form values
     // so they can be used to repopulate the form fields
-    const responseData = typeof errorResponse.json === "function" ? await errorResponse.json() : errorResponse;
+    const responseData = errorResponse instanceof Response ? await errorResponse.json() : errorResponse;
 
     // Explicitly include the form values in the response
     const combinedResponse = {
@@ -281,11 +303,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     });
   }
 
-  return redirect(
-    isEmpty(nextUri)
-      ? `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?productIndex=${productIndex}`
-      : `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?nextUri=${nextUri}&productIndex=${productIndex}`
-  );
+  return redirect(getProductNextRedirectUrl(nextUri, documentNumber as string, productIndex));
 };
 
 const getRemoveSupportingDoc = (form: FormData, action: string): boolean =>
@@ -293,6 +311,69 @@ const getRemoveSupportingDoc = (form: FormData, action: string): boolean =>
 
 const getRemoveIndex = (removeSupportingDoc: boolean, action: string): number =>
   removeSupportingDoc ? Number.parseInt(action.split("-")[1], 10) : -1;
+
+const getProductNextRedirectUrl = (nextUri: string, documentNumber: string, productIndex: number): string =>
+  isEmpty(nextUri)
+    ? `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?productIndex=${productIndex}`
+    : `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product?nextUri=${nextUri}&productIndex=${productIndex}`;
+
+const handleSaveAsDraftConsignment = async (
+  bearerToken: string,
+  documentNumber: string | undefined,
+  errorResponse: Response | ErrorResponse | undefined,
+  updateData: Partial<StorageDocument | StorageDocumentCatch>,
+  productIndex: number,
+  productIndexUrlFragment: string,
+  isNonJs: boolean
+): Promise<Response> => {
+  const sdUrl = `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment${productIndexUrlFragment}`;
+  if (errorResponse) {
+    // Filter out invalid fields and save only valid ones as draft
+    const responseData = errorResponse instanceof Response ? await errorResponse.clone().json() : errorResponse;
+    let errorKeys: string[] = [];
+    /* istanbul ignore else */
+    if (responseData?.errors) {
+      errorKeys = Object.keys(responseData.errors);
+    }
+    const catchPrefix = `catches-${productIndex}-`;
+    const invalidFieldNames = new Set(
+      errorKeys.filter((k) => k.startsWith(catchPrefix)).map((k) => k.slice(catchPrefix.length).split("-")[0])
+    );
+    // Start with all submitted fields, then null out invalid ones so the
+    // client-side Redis merge clears any previously-saved bad values.
+    const filteredData = { ...updateData } as Partial<StorageDocumentCatch>;
+    for (const invalidField of invalidFieldNames) {
+      (filteredData as any)[invalidField] = null;
+    }
+    // If species is invalid, also clear the derived scientificName field
+    if (invalidFieldNames.has("product")) {
+      (filteredData as any).scientificName = null;
+    }
+    await updateStorageDocumentCatchDetails(
+      bearerToken,
+      documentNumber,
+      { ...filteredData },
+      sdUrl,
+      productIndex,
+      true, // saveToRedisIfErrors = true (nulls clear invalid values in Redis)
+      false,
+      isNonJs
+    );
+  } else {
+    // No errors – save all data as draft
+    await updateStorageDocumentCatchDetails(
+      bearerToken,
+      documentNumber,
+      { ...updateData },
+      sdUrl,
+      productIndex,
+      true, // saveToRedisIfErrors = true
+      false,
+      isNonJs
+    );
+  }
+  return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
+};
 
 // Helper functions to reduce cognitive complexity
 const hasError = (errors: any, fieldKey: string): boolean => !!errors?.[fieldKey]?.message;
@@ -437,18 +518,8 @@ const AddProductIndex = () => {
     functionToGetInitialState(initialSupportingDocs, isHydrated, maximumEntryDocsAllowed)
   );
 
-  // Track which original indices have been removed so we can map display indices to original error keys
-  const [removedIndices, setRemovedIndices] = useState<Set<number>>(new Set());
-
   // Track if we've already done the initial reset to prevent it from running repeatedly
   const hasPerformedInitialReset = useRef(false);
-
-  // Reset the removed indices when new errors come in (after form submission)
-  useEffect(() => {
-    if (errors && Object.keys(errors).length > 0) {
-      setRemovedIndices(new Set());
-    }
-  }, [errors]);
 
   // Reset to 1 field after hydration if it was initialized with 5 empty fields (non-JS mode)
   // ONLY do this ONCE on initial hydration - use ref to track and prevent repeated resets
@@ -484,30 +555,16 @@ const AddProductIndex = () => {
 
   const handleRemoveDoc = (index: number) => {
     if (supportingDocuments.length > 1) {
-      // Map current display index to original index
-      const originalIndex = getOriginalIndex(index, removedIndices);
-
       setSupportingDocuments((prev) => prev.filter((_, i) => i !== index));
 
-      // Track that this original index has been removed
-      const newRemovedIndices = new Set(removedIndices);
-      newRemovedIndices.add(originalIndex);
-      setRemovedIndices(newRemovedIndices);
-    }
-  };
-
-  // Helper function to map current display index to original error index
-  const getOriginalIndex = (displayIndex: number, removed: Set<number>): number => {
-    let originalIndex = displayIndex;
-    const sortedRemoved = Array.from(removed).sort((a, b) => a - b);
-
-    for (const removedIdx of sortedRemoved) {
-      if (removedIdx <= originalIndex) {
-        originalIndex++;
+      if (!isEmpty(errors)) {
+        // Remove any errors associated with the removed supporting document and reindex higher ones
+        const updatedErrors = reindexDocumentErrors(errors, index, supportingDocumentsKey);
+        // Update actionData errors to reflect the reindexed state
+        Object.keys(errors).forEach((key) => delete errors[key]);
+        Object.assign(errors, updatedErrors);
       }
     }
-
-    return originalIndex;
   };
 
   const handleInputChange = (index: number, value: string) => {
@@ -540,7 +597,7 @@ const AddProductIndex = () => {
 
   // Deduplicate error keys to prevent duplicate error messages in error summary
   const errorKeysInOrder = Array.from(new Set(allErrorKeysInOrder));
-  const allErrorMessages = displayErrorMessagesInOrder(allErrors, errorKeysInOrder);
+  const allErrorMessages = displayErrorMessagesInOrder(allErrors, errorKeysInOrder, true);
 
   // Remove duplicate errors by key to handle cases where the same field error appears multiple times
   const seenErrorKeys = new Set<string>();
@@ -565,6 +622,7 @@ const AddProductIndex = () => {
           !
         </span>
         <strong className="govuk-warning-text__text">
+          <span className="govuk-visually-hidden">Warning</span>
           {t("productDetailsInfoText", { ns: "addProductToThisConsignment" })}
         </strong>
       </div>
@@ -590,9 +648,7 @@ const AddProductIndex = () => {
                     isEmpty(errors?.[certificateTypeKey]) ? `${certificateTypeKey}-hint` : "certificateType-error"
                   }
                 >
-                  <label className="govuk-label govuk-!-font-weight-bold" htmlFor={certificateTypeKey}>
-                    <b>{labelText}</b>
-                  </label>
+                  <legend className="govuk-fieldset__legend govuk-!-font-weight-bold">{labelText}</legend>
                   <div id={`${certificateTypeKey}-hint`} className="govuk-hint">
                     {hintText}
                   </div>
@@ -712,9 +768,7 @@ const AddProductIndex = () => {
               <EntryDocumentGuidanceText />
               <fieldset className="govuk-fieldset" aria-describedby={`${supportingDocumentsKey}-0-hint`}>
                 {supportingDocuments.map((value: string, index: number) => {
-                  // Map current display index to original error index to show correct errors after removals
-                  const originalIndex = getOriginalIndex(index, removedIndices);
-                  const errorKey = `${supportingDocumentsKey}-${originalIndex}`;
+                  const errorKey = `${supportingDocumentsKey}-${index}`;
                   const hasError = errors?.[errorKey];
 
                   return (

@@ -1,0 +1,15 @@
+{
+  "_id": "63efe46129033c34d8d50c4c",
+  "__t": "storageDocument",
+  "requestByAdmin": false,
+  "exportData": {
+    "exporterDetails": {},
+    "catches": [],
+    "facilityName": "Valid Facility Name",
+    "facilityAddressOne": ""
+  },
+  "errors": {
+    "storageFacilities-facilityArrivalDate": "sdAddStorageFacilityArrivalDateErrorInvalidDate"
+  },
+  "errorsUrl": "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility-details"
+}

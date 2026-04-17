@@ -160,10 +160,12 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
         <div className="govuk-grid-column-full">
           <Title className="govuk-!-margin-bottom-0" dataTestId={titleTestId} title={t("progressTitleText")} />
           <p
-            className="govuk-!-margin-top-0 govuk-!-font-weight-bold govuk-!-font-size-36"
+            className={`govuk-!-margin-top-2 govuk-!-font-size-36${journey === "storageNotes" ? "" : " govuk-!-font-weight-bold"}`}
             data-testid={progressHeadingTestId}
           >
-            {t(translations[journey].progressApplication)}: {documentNumber}
+            <span className="govuk-caption-xl">
+              {t(translations[journey].progressApplication)}: {documentNumber}
+            </span>
           </p>
           <div>
             <p className="govuk-!-font-weight-bold govuk-!-font-size-36" data-testid="Progress-completed-heading">

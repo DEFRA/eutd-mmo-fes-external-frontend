@@ -6,6 +6,7 @@ import { getReferenceData, get, post } from "~/communication.server";
 import type { CommodityCode, IError, LabelAndValue, Product, SearchState, Species } from "~/types";
 import logger from "~/logger.server";
 import moment from "moment";
+import { cacheGet, cacheSet } from "./referenceDataCache";
 
 export const getAddSpeciesLoaderData = async (
   bearerToken: string,
@@ -118,6 +119,12 @@ export const getAddedSpeciesPerUser = async (
 };
 
 export const getAllSpecies = async (ukOnly: boolean = false): Promise<Species[]> => {
+  const cacheKey = `ref:species:${ukOnly ? "uk" : "all"}`;
+  const cached = cacheGet<Species[]>(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   const getAllSpeciesStartTime = moment();
   const response: Response = await getReferenceData(`${SPECIES_URL}${ukOnly ? "?uk=Y" : ""}`);
   const getAllSpeciesEndTime = moment();
@@ -128,6 +135,9 @@ export const getAllSpecies = async (ukOnly: boolean = false): Promise<Species[]>
     )}`
   );
   const species = await response.json();
+  if (Array.isArray(species) && species.length > 0) {
+    cacheSet(cacheKey, species);
+  }
   return species;
 };
 

@@ -11,9 +11,9 @@ import {
 } from "react-router";
 import { useTranslation } from "react-i18next";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
-import type { ErrorResponse, ITransport } from "~/types";
+import type { ErrorResponse, ITransport, IErrorsTransformed } from "~/types";
 import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";
-import { useTransportationDetailsPage, getTransportErrorKeys } from "~/hooks";
+import { useTransportationDetailsPage, getTransportErrorKeys, useErrorsOverride } from "~/hooks";
 
 export const meta: MetaFunction = (args) => getMeta(args);
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -36,20 +36,22 @@ const ContainerVesselTransportDetailsPage = () => {
     csrf,
     id,
     displayOptionalSuffix,
+    maximumNumberOfContainerNumbers,
   } = useLoaderData<
     ITransport & {
       documentNumber: string;
       nextUri: string;
       displayOptionalSuffix: boolean;
       csrf: string;
+      maximumNumberOfContainerNumbers: number;
     }
   >();
   const actionData = useActionData() ?? {};
-  const { errors = {} } = actionData;
+  const { errors, setErrorsOverride } = useErrorsOverride((actionData as { errors?: IErrorsTransformed })?.errors);
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-container-vessel/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
-  const errorKeysInOrder = getTransportErrorKeys(TransportType.CONTAINER_VESSEL);
+  const errorKeysInOrder = getTransportErrorKeys(TransportType.CONTAINER_VESSEL, maximumNumberOfContainerNumbers);
   useTransportationDetailsPage(errors);
 
   return (
@@ -69,6 +71,8 @@ const ContainerVesselTransportDetailsPage = () => {
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
               errors={errors}
               displayOptionalSuffix={displayOptionalSuffix}
+              maximumNumberOfContainerNumbers={maximumNumberOfContainerNumbers}
+              onErrorsChange={setErrorsOverride}
             />
             <ButtonGroup />
             <input type="hidden" name="nextUri" value={nextUri} />

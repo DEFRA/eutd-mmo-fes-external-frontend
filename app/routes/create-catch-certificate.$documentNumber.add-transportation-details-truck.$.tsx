@@ -13,7 +13,7 @@ import type { ITransport, ErrorResponse, ICountry } from "~/types";
 import { CatchCertificateTransportationDetailsLoader, CatchCertificateTransportationDetailsAction } from "~/.server";
 import { displayErrorMessagesInOrder, getMeta, TransportType, getContainerNumbers } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
-import { useTransportationDetailsPage, getTransportErrorKeys } from "~/hooks";
+import { useTransportationDetailsPage, getTransportErrorKeys, useErrorsOverride } from "~/hooks";
 
 export const meta: MetaFunction = (args) => getMeta(args);
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -37,6 +37,7 @@ const TruckTransportDetailsPage = () => {
     id,
     displayOptionalSuffix,
     countries,
+    maximumNumberOfContainerNumbers,
   } = useLoaderData<
     ITransport & {
       documentNumber: string;
@@ -44,14 +45,15 @@ const TruckTransportDetailsPage = () => {
       displayOptionalSuffix: boolean;
       csrf: string;
       countries: ICountry[];
+      maximumNumberOfContainerNumbers: number;
     }
   >();
   const actionData = useActionData<any>() ?? {};
-  const { errors = {} } = actionData;
+  const { errors, setErrorsOverride } = useErrorsOverride(actionData?.errors);
   const actionUrl = `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${id}`;
   const backUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk/${id}`;
 
-  const errorKeysInOrder = getTransportErrorKeys(TransportType.TRUCK);
+  const errorKeysInOrder = getTransportErrorKeys(TransportType.TRUCK, maximumNumberOfContainerNumbers);
   useTransportationDetailsPage(errors);
 
   return (
@@ -73,7 +75,9 @@ const TruckTransportDetailsPage = () => {
               freightBillNumber={!isEmpty(errors) ? actionData.freightBillNumber : freightBillNumber}
               containerNumbers={getContainerNumbers(errors, actionData, containerNumbers)}
               displayOptionalSuffix={displayOptionalSuffix}
+              maximumNumberOfContainerNumbers={maximumNumberOfContainerNumbers}
               countries={countries}
+              onErrorsChange={setErrorsOverride}
             />
             <ButtonGroup />
             <input type="hidden" name="nextUri" value={nextUri} />

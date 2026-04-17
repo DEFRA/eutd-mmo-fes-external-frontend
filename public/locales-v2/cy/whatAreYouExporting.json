@@ -21,7 +21,7 @@
   "ccFavouritesPageFormStateFieldPlaceholder": "Dewis…",
   "ccFavouritesPageProductTableRowPresentation": "Cyflwyniad",
   "ccFavouritesPageFormCommodityCodeField": "Cod Nwyddau",
-  "ccFavouritesPageFormCommodityCodeDetails": " Ffoniwch {{contactInfo}} os na ddangosir y cod nwyddau sydd ei angen arnoch.",
+  "ccFavouritesPageFormCommodityCodeDetails": " Ffoniwch {{contactNumber}} os na ddangosir y cod nwyddau sydd ei angen arnoch.",
   "ccFavouritesPageFormCommodityCodeSummary": "Dydw i ddim yn gallu dod o hyd i’r cod nwyddau",
   "ccAddSpeciesPageAddButtonText": "Ychwanegu cynnyrch",
   "ccFavouritesPageProductTableHeaderTwo": "Cynnyrch",

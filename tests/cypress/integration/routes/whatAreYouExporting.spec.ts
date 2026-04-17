@@ -1215,8 +1215,10 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
       cy.get("#species").invoke("val");
 
-      // Clear and type new species (force: true required as autocomplete disables input after selection)
-      cy.get("#species").clear({ force: true }).type("Atlantic cod", { force: true });
+      // Clear and type new species - break the chain to avoid detached DOM errors
+      cy.get("#species").clear({ force: true });
+      cy.wait(500);
+      cy.get("#species").type("Atlantic cod", { force: true });
       cy.wait(1000);
 
       // Select from autocomplete if available
@@ -1782,9 +1784,9 @@ describe("Duplicate product error - form remains fully interactive", () => {
   it("should display the duplicate product error inline on the species field", () => {
     cy.get("[data-testid='add-product']").eq(0).click({ force: true });
     cy.get("#errorIsland").should("exist");
-    cy.contains(
-      /The combination of species, state, presentation and commodity code must be unique/
-    ).should("be.visible");
+    cy.contains(/The combination of species, state, presentation and commodity code must be unique/).should(
+      "be.visible"
+    );
   });
 
   it("should keep the state dropdown enabled after a duplicate product error", () => {
@@ -1844,5 +1846,161 @@ describe("Duplicate product error - form remains fully interactive", () => {
     cy.get("#errorIsland").should("exist");
 
     cy.get("[data-testid='cancel']").should("exist").should("not.be.disabled").click({ force: true });
+  });
+});
+
+describe("What are you exporting - Autocomplete aria-controls accessibility (FI0-11120)", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+    // Wait for DCX hydration re-mount to fully complete before each test.
+    // The hydration failure → full client re-render is a one-time event; once
+    // input#species is enabled the component tree is stable for the rest of the test.
+    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
+  });
+
+  it("species combobox input should have role=combobox and aria-controls referencing the listbox ID", () => {
+    // input#species only matches after hydration replaces the SSR <select>
+    cy.get("input#species")
+      .should("have.attr", "role", "combobox")
+      .should("have.attr", "aria-controls", "species__listbox");
+  });
+
+  it("species listbox should appear with correct ID, role and no duplicates when suggestions open", () => {
+    // Assert attributes are stable before interacting (separate chain avoids stale-ref race).
+    cy.get("input#species").should("have.attr", "aria-controls", "species__listbox").and("not.be.disabled");
+    // click() fires the real focus event DCX needs to register its input handler.
+    // Separate cy.get() re-queries the DOM fresh after any click-triggered re-render settles.
+    cy.get("input#species").click();
+    cy.get("input#species").type("Alb");
+    // Confirms: listbox exists, has correct role, ID is unique, aria-controls matches rendered ID
+    cy.get("#species__listbox").should("have.length", 1).should("have.attr", "role", "listbox");
+  });
+
+  it("species combobox aria-expanded should toggle false→true when suggestions open", () => {
+    // click() fires real focus so DCX registers its input handler (needed for aria-expanded to change).
+    // Break click and type into separate cy.get() calls — chaining them holds a stale reference
+    // that gets detached when the click triggers a DCX internal state update and re-render.
+    cy.get("input#species").should("have.attr", "aria-expanded", "false").and("not.be.disabled");
+    cy.get("input#species").click();
+    cy.get("input#species").type("Alb");
+    cy.get("input#species").should("have.attr", "aria-expanded", "true");
+  });
+
+  it("favourites product combobox input should have aria-controls referencing its listbox ID", () => {
+    // Wait for hydration: species input being enabled is a reliable signal
+    cy.get("input#species", { timeout: 10000 }).should("not.be.disabled");
+
+    cy.get("[data-tab-id='favouritesTab']").click();
+    cy.get("#add-from-favourites").should("be.visible");
+
+    // Assert attributes are stable before interacting (separate chain avoids stale-ref race)
+    cy.get("#add-from-favourites input[role='combobox']", { timeout: 10000 })
+      .should("be.visible")
+      .and("not.be.disabled")
+      .and("have.attr", "aria-controls", "product__listbox");
+    // force:true bypasses the brief disabled state caused by React's post-hydration re-render
+    cy.get("#add-from-favourites input[role='combobox']").type("A", { force: true });
+  });
+});
+
+// WCAG SC 3.1.2 – Language of Parts
+// State, presentation, and commodity code options are always English-language content.
+// When the UI is in Welsh mode the <option> elements must carry lang="en" so assistive
+// technology can select the correct pronunciation engine.  In English mode the attribute
+// must be absent to avoid redundant markup.
+
+describe("WCAG SC 3.1.2 - lang='en' on English-language select options (hydrated)", () => {
+  it("sets lang='en' on all non-placeholder state, presentation and commodity code options when Welsh is active", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+      lng: "cy",
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+    // Hydration-complete gate: passes once React's full client re-render has settled
+    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
+
+    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    // Wait for the edit page to hydrate and populate its select options
+    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
+    cy.get("#state").should("contain", "Fresh");
+
+    // Every non-placeholder option must carry lang="en" (no option without it should exist)
+    cy.get('#state option[value!=""]').should("have.length.gt", 0);
+    cy.get('#state option[value!=""]:not([lang="en"])').should("not.exist");
+
+    cy.get('#presentation option[value!=""]').should("have.length.gt", 0);
+    cy.get('#presentation option[value!=""]:not([lang="en"])').should("not.exist");
+
+    cy.get('#commodity_code option[value!=""]').should("have.length.gt", 0);
+    cy.get('#commodity_code option[value!=""]:not([lang="en"])').should("not.exist");
+  });
+
+  it("does not set lang on any non-placeholder select options when English is active", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
+
+    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
+    cy.get("#state").should("contain", "Fresh");
+
+    // No non-placeholder option should carry a lang attribute in English mode
+    cy.get('#state option[value!=""]').should("have.length.gt", 0);
+    cy.get('#state option[value!=""][lang="en"]').should("not.exist");
+
+    cy.get('#presentation option[value!=""]').should("have.length.gt", 0);
+    cy.get('#presentation option[value!=""][lang="en"]').should("not.exist");
+
+    cy.get('#commodity_code option[value!=""]').should("have.length.gt", 0);
+    cy.get('#commodity_code option[value!=""][lang="en"]').should("not.exist");
+  });
+});
+
+describe("WCAG SC 3.1.2 - lang='en' on English-language select options (non-JS)", () => {
+  it("sets lang='en' on all non-placeholder state, presentation and commodity code options when Welsh is active", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+      disableScripts: true,
+      lng: "cy",
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    // Server re-renders with the product's state data — wait for options to be present
+    cy.get("#state").should("contain", "Fresh");
+
+    cy.get('#state option[value!=""]').should("have.length.gt", 0);
+    cy.get('#state option[value!=""]:not([lang="en"])').should("not.exist");
+
+    cy.get('#presentation option[value!=""]').should("have.length.gt", 0);
+    cy.get('#presentation option[value!=""]:not([lang="en"])').should("not.exist");
+
+    cy.get('#commodity_code option[value!=""]').should("have.length.gt", 0);
+    cy.get('#commodity_code option[value!=""]:not([lang="en"])').should("not.exist");
+  });
+
+  it("does not set lang on any non-placeholder select options when English is active", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+      disableScripts: true,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    cy.get("#state").should("contain", "Fresh");
+
+    cy.get('#state option[value!=""]').should("have.length.gt", 0);
+    cy.get('#state option[value!=""][lang="en"]').should("not.exist");
+
+    cy.get('#presentation option[value!=""]').should("have.length.gt", 0);
+    cy.get('#presentation option[value!=""][lang="en"]').should("not.exist");
+
+    cy.get('#commodity_code option[value!=""]').should("have.length.gt", 0);
+    cy.get('#commodity_code option[value!=""][lang="en"]').should("not.exist");
   });
 });

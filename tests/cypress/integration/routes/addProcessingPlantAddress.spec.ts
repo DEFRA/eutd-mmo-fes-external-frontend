@@ -45,6 +45,10 @@ describe("Add Processing Plant Address", () => {
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("h1").should("contain", "processing plant address");
     cy.get('[data-testid="goToAddAddress-button"]').should("be.visible").contains("Change");
+    cy.get('[data-testid="goToAddAddress-button"] .govuk-visually-hidden').should(
+      "contain",
+      "processing plant address"
+    );
   });
 
   it("should redirect to health certificate page when nextUri is empty", () => {

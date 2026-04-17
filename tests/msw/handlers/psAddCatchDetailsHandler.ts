@@ -6,6 +6,7 @@ import {
   mockSaveAndValidateDocument,
   mockGetAllDocumentsUrl,
   COUNTRIES_URL,
+  getProgressUrl,
 } from "~/urls.server";
 
 import species from "@/fixtures/referenceDataApi/species.json";
@@ -32,6 +33,7 @@ import processingStatementWithCatchCertificateTypeError from "@/fixtures/saveAnd
 import processingStatementWithBlankSpeciesCommodityCodeError from "@/fixtures/saveAndValidateApi/processingStatementWithBlankCommodityCodeError.json";
 import processingStatementWithSpeciesCommodityCodeMinLengthError from "@/fixtures/saveAndValidateApi/processingStatementWithCommodityCodeMinLengthError.json";
 import processingStatementWithSpeciesCommodityCodeMaxLengthError from "@/fixtures/saveAndValidateApi/processingStatementWithCommodityCodeMaxLengthError.json";
+import psCatchDetailsIncomplete from "@/fixtures/progressApi/psCatchDetailsIncomplete.json";
 import countries from "@/fixtures/referenceDataApi/countries.json";
 
 let actionCalled = false;
@@ -219,6 +221,16 @@ const psAddCatchDetailsHandler: ITestHandler = {
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(processingStatementWithCatchCertificateTypeError))
     ),
+  ],
+  [TestCaseId.PSAddCatchDetailsSaveAsDraftScenario3]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementUpdateOneCatch))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(processingStatementUpdateOneCatch))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocument))),
+    rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psCatchDetailsIncomplete))),
   ],
   [TestCaseId.PSAddCatchDetailsBlankSpeciesCommodityCodeError]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),

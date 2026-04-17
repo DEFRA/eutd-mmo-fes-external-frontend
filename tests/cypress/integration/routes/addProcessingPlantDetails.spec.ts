@@ -71,6 +71,22 @@ describe("Add Processing Plant Details return error response if the back end ret
 
     cy.get("[data-testid=save-and-continue").click({ force: true });
   });
+
+  it("should not render duplicate id attributes when validation errors are shown", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
+    };
+
+    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue").click({ force: true });
+
+    cy.get("[id]").then(($elements) => {
+      const ids = [...$elements].map((element) => element.id).filter(Boolean);
+      const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
+
+      cy.wrap(duplicateIds, { log: false }).should("deep.equal", []);
+    });
+  });
 });
 
 describe("Get Processing Plant Details: unauthorised access", () => {
@@ -195,5 +211,25 @@ describe("Add Processing Plant Details: Save as Draft functionality", () => {
       .should("contain.text", "Save as draft")
       .should("not.be.disabled");
     cy.get("[data-testid=save-and-continue]").should("be.visible").should("not.contain.text", "Save as draft");
+  });
+});
+
+describe("Add Processing Plant Details (PS): save as draft retains valid fields", () => {
+  it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftWithErrors,
+    };
+    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+  });
+
+  it("should redirect to dashboard when no validation errors on save as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftNoErrors,
+    };
+    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });

@@ -4,6 +4,10 @@ import { ProgressPageComponent } from "~/composite-components";
 import { progressPageLoader, progressAction } from "~/.server";
 import type { ErrorResponse } from "~/types";
 
+export const headers = () => ({
+  "Cache-Control": "no-store",
+});
+
 export const loader: LoaderFunction = async ({ request, params }) =>
   progressPageLoader(request, params, "storageNotes");
 

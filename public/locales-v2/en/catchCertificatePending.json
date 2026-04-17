@@ -2,7 +2,7 @@
   "ccPendingPanel": "The catch certificate is being processed",
   "ccNumber": "Catch certificate number",
   "ccTextTitle": "What you need to do next",
-  "ccPendingTextOne": "Your catch certificate submission is being processed. You can check its progress on your exporter dashboard. Processing should take no more than {{offlineValidationTime}} minutes. If it takes significantly longer, please contact support on 0330 159 1989.",
+  "ccPendingTextOne": "Your catch certificate submission is being processed. You can check its progress on your exporter dashboard. Processing should take no more than {{offlineValidationTime}} minutes. If it takes significantly longer, please contact support on {{contactNumber}}.",
   "ccPendingTexTwo": "Once processing is complete, your submission will appear on your dashboard as either a successfully completed catch certificate or a draft document that has failed validation.",
   "ccPendingTitleTwo": "Successfully completed catch certificates",
   "ccPendingTextLiOne": "Find the document in the ‘Completed’ list on your exporter dashboard.",

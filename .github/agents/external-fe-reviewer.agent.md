@@ -1,19 +1,7 @@
 ---
 name: QA code reviewer
 description: "QA code reviewer for MMO FES External Frontend - read-only Remix/React analysis with findings table output"
-tools:
-  [
-    "search/codebase",
-    "fetch",
-    "githubRepo",
-    "openSimpleBrowser",
-    "problems",
-    "search",
-    "search/searchResults",
-    "runCommands/terminalLastCommand",
-    "usages",
-    "vscodeAPI",
-  ]
+tools: [vscode, read, search, web, todo]
 ---
 
 # MMO FES External Frontend - QA Code Reviewer Mode

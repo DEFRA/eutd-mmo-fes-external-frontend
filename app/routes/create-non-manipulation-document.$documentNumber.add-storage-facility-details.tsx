@@ -5,7 +5,7 @@ import { Button, BUTTON_TYPE, ErrorPosition, FormInput } from "@capgeminiuk/dcx-
 import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
 
 import { route } from "routes-gen";
-import type { StorageDocument, IUnauthorised, IErrorsTransformed } from "~/types";
+import type { StorageDocument, IUnauthorised, IErrorsTransformed, ErrorResponse } from "~/types";
 import {
   getBearerTokenForRequest,
   validateResponseData,
@@ -28,9 +28,11 @@ import {
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { DateFieldWithPicker } from "~/composite-components";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
-import classNames from "classnames/bind";
+import classNames from "classnames";
 import { useScrollOnPageError } from "~/hooks";
 import i18next from "~/i18next.server";
+import type { Session } from "@remix-run/node";
+import type { TFunction } from "i18next";
 
 type loaderStorageFacility = {
   documentNumber: string;
@@ -84,36 +86,36 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
     const arrivalVehicle = arrivalVehicleParam ?? storageDocument?.arrivalTransport?.vehicle;
 
-    if (!arrivalVehicle) {
-      return route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
-        documentNumber,
-      });
+    if (arrivalVehicle) {
+      const arrivalTransportRoutes: Record<string, string> = {
+        truck: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-truck", {
+          documentNumber,
+        }),
+        train: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-train", {
+          documentNumber,
+        }),
+        plane: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-plane", {
+          documentNumber,
+        }),
+        containerVessel: route(
+          "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-container-vessel",
+          {
+            documentNumber,
+          }
+        ),
+      };
+
+      return (
+        arrivalTransportRoutes[arrivalVehicle] ??
+        route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
+          documentNumber,
+        })
+      );
     }
 
-    const arrivalTransportRoutes: Record<string, string> = {
-      truck: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-truck", {
-        documentNumber,
-      }),
-      train: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-train", {
-        documentNumber,
-      }),
-      plane: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-plane", {
-        documentNumber,
-      }),
-      containerVessel: route(
-        "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-container-vessel",
-        {
-          documentNumber,
-        }
-      ),
-    };
-
-    return (
-      arrivalTransportRoutes[arrivalVehicle] ??
-      route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
-        documentNumber,
-      })
-    );
+    return route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
+      documentNumber,
+    });
   };
 
   return new Response(
@@ -174,7 +176,7 @@ const handleGoToAddAddress = async (
   t: TFunction,
   documentNumber: string
 ): Promise<Response> => {
-  session.set("facilityName", String(getStrOrDefault(values["facilityName"])));
+  session.set("facilityName", String(getStrOrDefault(values["facilityName"] as string)));
   session.set("selectedArrivalDate", selectedDate);
 
   const fieldPrefixName = "storageFacilities-facilityName";
@@ -203,6 +205,72 @@ const handleGoToAddAddress = async (
   });
 };
 
+// Helper to extract valid facility fields after a draft validation response
+const getValidFacilityData = async (
+  validationResponse: Response | ErrorResponse | null | undefined,
+  storageFacilityData: Partial<StorageDocument>
+): Promise<Partial<StorageDocument>> => {
+  if (!validationResponse || !(validationResponse instanceof Response)) {
+    return storageFacilityData;
+  }
+
+  const responseData = await validationResponse.clone().json();
+  const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+
+  const filteredFacility = { ...storageFacilityData };
+
+  if (errorKeys.some((k) => k.includes("facilityName"))) {
+    filteredFacility.facilityName = null as unknown as string;
+  }
+
+  if (errorKeys.some((k) => k.includes("facilityArrivalDate"))) {
+    filteredFacility.facilityArrivalDate = null as unknown as string;
+  }
+
+  return filteredFacility;
+};
+
+// Helper function to handle save as draft action
+const handleSaveAsDraft = async (
+  bearerToken: string,
+  documentNumber: string,
+  values: Record<string, FormDataEntryValue>,
+  selectedDate: string | undefined,
+  session: Session
+): Promise<Response> => {
+  session.unset("facilityName");
+  session.unset("selectedArrivalDate");
+
+  const storageFacilityData = {
+    facilityName: String(getStrOrDefault(values["facilityName"] as string)),
+    facilityArrivalDate: selectedDate as string,
+  };
+
+  const validationResponse = await updateStorageDocumentFacility(
+    bearerToken,
+    documentNumber,
+    "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
+    false,
+    false,
+    storageFacilityData
+  );
+
+  const dataToSave = await getValidFacilityData(validationResponse, storageFacilityData);
+
+  await updateStorageDocumentFacility(
+    bearerToken,
+    documentNumber,
+    "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
+    true,
+    false,
+    dataToSave
+  );
+
+  return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
+    headers: { "Set-Cookie": await commitSession(session) },
+  });
+};
+
 // Helper function to handle save and continue action
 const handleSaveAndContinue = async (
   bearerToken: string,
@@ -221,21 +289,21 @@ const handleSaveAndContinue = async (
     saveToRedisIfErrors,
     undefined,
     {
-      facilityName: String(getStrOrDefault(values["facilityName"])),
+      facilityName: String(getStrOrDefault(values["facilityName"] as string)),
       facilityArrivalDate: selectedDate as string,
     }
   );
 
-  if (errorResponse) {
+  if (errorResponse instanceof Response) {
     // When there are errors and JavaScript is disabled, include the submitted form values
     // so they can be used to repopulate the form fields
-    const responseData = typeof errorResponse.json === "function" ? await errorResponse.json() : errorResponse;
+    const responseData = await errorResponse.json();
 
     // Explicitly include the form values in the response under 'values' key
     const combinedResponse = {
       ...responseData,
       values: {
-        facilityName: String(getStrOrDefault(values["facilityName"])),
+        facilityName: String(getStrOrDefault(values["facilityName"] as string)),
         facilityArrivalDate: selectedDate,
         facilityArrivalDateDay: values["facilityArrivalDateDay"],
         facilityArrivalDateMonth: values["facilityArrivalDateMonth"],
@@ -308,13 +376,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   }
 
   if (_action === "saveAsDraft") {
-    session.unset("facilityName");
-    session.unset("selectedArrivalDate");
-    await handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri, true);
-    // Always redirect to dashboard when saving as draft, regardless of errors
-    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
-      headers: { "Set-Cookie": await commitSession(session) },
-    });
+    return handleSaveAsDraft(bearerToken, documentNumber, values, selectedDate, session);
   }
 
   return handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri, false);
@@ -324,10 +386,7 @@ const getArrivalDateFromAction = (actionData: any, type: string): string => {
   const year = actionData?.values?.[`${type}Year`] ?? "";
   const month = actionData?.values?.[`${type}Month`] ?? "";
   const day = actionData?.values?.[`${type}Day`] ?? "";
-  if (year || month || day) {
-    return `${year ?? ""}-${month ?? ""}-${day ?? ""}`;
-  }
-  return "";
+  return year || month || day ? `${year}-${month}-${day}` : "";
 };
 
 const AddStorageFacilityDetails = () => {
@@ -357,15 +416,9 @@ const AddStorageFacilityDetails = () => {
 
   const arrivalDateFromAction = getArrivalDateFromAction(actionData, "facilityArrivalDate");
 
-  const getDateFromActionOrLoader = (dateFromAction: string, dateFromLoader: string | undefined) => {
-    if (dateFromAction && dateFromAction.trim() !== "") {
-      return dateFromAction;
-    }
-    if (dateFromLoader && dateFromLoader.trim() !== "") {
-      return dateFromLoader;
-    }
-    return "";
-  };
+  const getDateFromActionOrLoader = (dateFromAction: string, dateFromLoader: string | undefined): string =>
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- intentionally use || so empty strings fall through to the loader date
+    dateFromAction?.trim() || dateFromLoader?.trim() || "";
 
   const [daySelected = "", monthSelected = "", yearSelected = ""] =
     selectedArrivalDate && typeof selectedArrivalDate === "string" ? selectedArrivalDate.split("/") : " ";
@@ -382,30 +435,14 @@ const AddStorageFacilityDetails = () => {
             action={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details`}
             csrf={csrf}
           >
-            <div className="govuk-!-margin-bottom-6 centered">
-              <div className="govuk-!-display-inline-block">
-                <svg
-                  version="1.1"
-                  fill="currentColor"
-                  width="35"
-                  height="35"
-                  viewBox="0 0 35.000000 35.000000"
-                  preserveAspectRatio="xMidYMid meet"
-                >
-                  <title>icon important</title>
-                  <g transform="translate(0.000000,35.000000) scale(0.100000,-0.100000)">
-                    <path
-                      d="M100 332 c-87 -48 -125 -155 -82 -232 48 -87 155 -125 232 -82 87 48
-                        125 155 82 232 -48 87 -155 125 -232 82z m100 -122 c0 -53 -2 -60 -20 -60 -18
-                        0 -20 7 -20 60 0 53 2 60 20 60 18 0 20 -7 20 -60z m0 -111 c0 -12 -7 -19 -20
-                        -19 -19 0 -28 28 -14 43 11 11 34 -5 34 -24z"
-                    ></path>
-                  </g>
-                </svg>
-              </div>
-              <div className="govuk-!-display-inline-block govuk-!-padding-left-2 govuk-phase-banner__text">
-                <strong>{t("sdAddStorageAddressRequired")}</strong>
-              </div>
+            <div className="govuk-warning-text">
+              <span className="govuk-warning-text__icon" aria-hidden="true">
+                !
+              </span>
+              <strong className="govuk-warning-text__text">
+                <span className="govuk-visually-hidden">Warning</span>
+                {t("sdAddStorageAddressRequired")}
+              </strong>
             </div>
             <DateFieldWithPicker
               id={"storageFacilities-facilityArrivalDate"}
@@ -458,7 +495,7 @@ const AddStorageFacilityDetails = () => {
                 "govuk-input--error": errors?.["storageFacilities-facilityName"],
               })}
               errorProps={{
-                className: !isEmpty(errors?.["storageFacilities-facilityName"]) ? "govuk-error-message" : "",
+                className: isEmpty(errors?.["storageFacilities-facilityName"]) ? "" : "govuk-error-message",
               }}
               staticErrorMessage={t(errors?.["storageFacilities-facilityName"]?.message, {
                 ns: "errorsText",
@@ -488,6 +525,14 @@ const AddStorageFacilityDetails = () => {
                   hasFacility
                     ? t("commonWhatExportersAddressChangeLink", { ns: "common" })
                     : t("sdAddStorageFacilityDetailsAddAddressText")
+                }
+                visuallyHiddenText={
+                  hasFacility
+                    ? {
+                        text: t("sdChangeStorageFacilityAddressHiddenText", { ns: "addStorageFacilityDetails" }),
+                        className: "govuk-visually-hidden",
+                      }
+                    : undefined
                 }
                 className="govuk-button govuk-button--secondary"
                 type={BUTTON_TYPE.SUBMIT}

@@ -1,7 +1,7 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Main, SecureForm, Title } from "~/components";
-import { useLoaderData, type ActionFunction, type LoaderFunction } from "react-router";
+import { useLoaderData, useLocation, type ActionFunction, type LoaderFunction } from "react-router";
 
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import { useTranslation } from "react-i18next";
@@ -9,6 +9,37 @@ import { useIsHydrated } from "~/hooks";
 import { CookieAction, CookieLoader } from "~/models/cookie.server";
 
 const cookiePreferenceField = "saveCookiePreference";
+
+type CookieSectionProps = {
+  paragraph: string;
+  heading1: string;
+  paragraph1: string;
+  heading2: string;
+  paragraphs2: string[];
+  listItems: string[];
+};
+
+const CookieSection = ({ paragraph, heading1, paragraph1, heading2, paragraphs2, listItems }: CookieSectionProps) => {
+  const { t } = useTranslation("cookies");
+  return (
+    <>
+      <p className="govuk-body">{t(paragraph)}</p>
+      <h2 className="govuk-heading-m">{t(heading1)}</h2>
+      <p className="govuk-body">{t(paragraph1)}</p>
+      <h2 className="govuk-heading-m">{t(heading2)}</h2>
+      {paragraphs2.map((key) => (
+        <p key={key} className="govuk-body">
+          {t(key)}
+        </p>
+      ))}
+      <ul className="govuk-list govuk-list--bullet">
+        {listItems.map((key) => (
+          <li key={key}>{t(key)}</li>
+        ))}
+      </ul>
+    </>
+  );
+};
 
 type cookieLoaderDataType = {
   analyticsAccepted: boolean;
@@ -23,26 +54,31 @@ export const action: ActionFunction = async ({ request }) => await CookieAction(
 const Cookies = () => {
   const { analyticsAccepted, showSuccessBanner, csrf } = useLoaderData<cookieLoaderDataType>();
   const { t } = useTranslation("cookies");
+  const location = useLocation();
 
   const isHydrated = useIsHydrated();
   const GoogleAnalyticsTable: Object[] = t("GoogleAnalyticsTable.tableContent", { returnObjects: true });
   const MSClarityTable: Object[] = t("MSClarityTable.tableContent", { returnObjects: true });
+  const successBannerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (showSuccessBanner) {
       window.scrollTo({ top: 0, behavior: "smooth" });
+      successBannerRef.current?.focus();
     }
-  }, [showSuccessBanner]);
+  }, [showSuccessBanner, location.key]);
 
   return (
     <Main showHelpLink={false}>
       <div className="govuk-grid-row">
         {showSuccessBanner && (
           <div
+            ref={successBannerRef}
             className="govuk-notification-banner govuk-notification-banner--success"
             role="alert"
             aria-labelledby="govuk-notification-banner-title"
             data-module="govuk-notification-banner"
+            tabIndex={-1}
           >
             <div className="govuk-notification-banner__header">
               <h2 className="govuk-notification-banner__title" id="govuk-notification-banner-title">
@@ -67,20 +103,20 @@ const Cookies = () => {
         <div className="govuk-grid-column-full">
           <Title title={t("cookiesPolicyTitle")} />
           <p className="govuk-body">{t("cookiesPolicyParagraph1")}</p>
-          <p className="govuk-body">{t("cookiesPolicyParagraph2")}</p>
-          <h2 className="govuk-heading-m">{t("cookiePreferences")}</h2>
-          <p className="govuk-body">{t("cookiePreferencesParagraph")}</p>
-          <h2 className="govuk-heading-m">{t("GoogleAnalytics")}</h2>
-          <p className="govuk-body">{t("GoogleAnalyticsParagraph1")}</p>
-          <p className="govuk-body"> {t("GoogleAnalyticsParagraph2")}</p>
-          <p className="govuk-body"> {t("GoogleAnalyticsParagraph3")}</p>
-          <ul className="govuk-list govuk-list--bullet">
-            <li> {t("GoogleAnalyticsList1")}</li>
-            <li>{t("GoogleAnalyticsList2")}</li>
-            <li>{t("GoogleAnalyticsList3")}</li>
-            <li>{t("GoogleAnalyticsList4")}</li>
-            <li>{t("GoogleAnalyticsList5")}</li>
-          </ul>
+          <CookieSection
+            paragraph="cookiesPolicyParagraph2"
+            heading1="cookiePreferences"
+            paragraph1="cookiePreferencesParagraph"
+            heading2="GoogleAnalytics"
+            paragraphs2={["GoogleAnalyticsParagraph1", "GoogleAnalyticsParagraph2", "GoogleAnalyticsParagraph3"]}
+            listItems={[
+              "GoogleAnalyticsList1",
+              "GoogleAnalyticsList2",
+              "GoogleAnalyticsList3",
+              "GoogleAnalyticsList4",
+              "GoogleAnalyticsList5",
+            ]}
+          />
           <p className="govuk-body">
             {t("GoogleAnalyticsParagraph4")}
             <a href="https://tools.google.com/dlpage/gaoptout" className="govuk-link">
@@ -165,18 +201,18 @@ const Cookies = () => {
           <h2 className="govuk-heading-m">{t("introductoryCookieMessage")}</h2>
           <p className="govuk-body">{t("introductoryCookieMessageParagraph")}</p>
           <h2 className="govuk-heading-m">{t("cookiesRememberYourSettings")}</h2>
-          <p className="govuk-body">{t("cookiesRememberYourSettingsParagraph")}</p>
-          <h2 className="govuk-heading-m">{t("essentialCookies")}</h2>
-          <p className="govuk-body">{t("essentialCookiesParagraph")}</p>
-          <h2 className="govuk-heading-m"> {t("strictlyNecessaryCookies")}</h2>
-          <p className="govuk-body">{t("strictlyNecessaryCookiesParagraph1")}</p>
-          <p className="govuk-body">{t("strictlyNecessaryCookiesParagraph2")}</p>
-          <p className="govuk-body">{t("strictlyNecessaryCookiesParagraph3")}</p>
-          <ul className="govuk-list govuk-list--bullet">
-            <li>{t("strictlyNecessaryList1")}</li>
-            <li>{t("strictlyNecessaryList2")}</li>
-            <li>{t("strictlyNecessaryList3")}</li>
-          </ul>
+          <CookieSection
+            paragraph="cookiesRememberYourSettingsParagraph"
+            heading1="essentialCookies"
+            paragraph1="essentialCookiesParagraph"
+            heading2="strictlyNecessaryCookies"
+            paragraphs2={[
+              "strictlyNecessaryCookiesParagraph1",
+              "strictlyNecessaryCookiesParagraph2",
+              "strictlyNecessaryCookiesParagraph3",
+            ]}
+            listItems={["strictlyNecessaryList1", "strictlyNecessaryList2", "strictlyNecessaryList3"]}
+          />
           <h2 className="govuk-heading-m">{t("functionalCookies")}</h2>
           <p className="govuk-body">{t("functionalCookiesPsragraph")}</p>
           <ul className="govuk-list govuk-list--bullet">
@@ -191,7 +227,7 @@ const Cookies = () => {
             <div id="radioButtons" className="govuk-form-group">
               <fieldset className="govuk-fieldset">
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--m">
-                  <h2 className="govuk-fieldset__heading">{t("acceptCookies")}</h2>
+                  <h3 className="govuk-fieldset__heading">{t("acceptCookies")}</h3>
                 </legend>
                 <div className="govuk-radios " data-module="govuk-radios">
                   <div className="govuk-radios__item">

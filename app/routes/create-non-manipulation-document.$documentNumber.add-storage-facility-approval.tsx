@@ -77,53 +77,53 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const form = await request.formData();
 
   const isValid = await validateCSRFToken(request, form);
-  if (!isValid) {
-    return redirect("/forbidden");
-  }
+  if (isValid) {
+    const { _action, ...values } = Object.fromEntries(form);
 
-  const { _action, ...values } = Object.fromEntries(form);
+    const isDraft = _action === "saveAsDraft";
+    const saveToRedisIfErrors = isDraft;
+    const errorResponse = await updateStorageDocumentFacility(
+      bearerToken,
+      documentNumber,
+      "/create-non-manipulation-document/:documentNumber/add-storage-facility-approval",
+      saveToRedisIfErrors,
+      undefined,
+      {
+        facilityApprovalNumber: isEmpty(values["approvalNumber"]) ? undefined : (values["approvalNumber"] as string),
+        facilityStorage: isEmpty(values["facilityStorage"]) ? undefined : (values["facilityStorage"] as string),
+      }
+    );
 
-  const isDraft = _action === "saveAsDraft";
-  const saveToRedisIfErrors = isDraft;
-  const errorResponse = await updateStorageDocumentFacility(
-    bearerToken,
-    documentNumber,
-    "/create-non-manipulation-document/:documentNumber/add-storage-facility-approval",
-    saveToRedisIfErrors,
-    undefined,
-    {
-      facilityApprovalNumber: isEmpty(values["approvalNumber"]) ? undefined : (values["approvalNumber"] as string),
-      facilityStorage: isEmpty(values["facilityStorage"]) ? undefined : (values["facilityStorage"] as string),
+    const session = await getSessionFromRequest(request);
+    if (isDraft) {
+      return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
+        headers: { "Set-Cookie": await commitSession(session) },
+      });
     }
-  );
 
-  const session = await getSessionFromRequest(request);
-  if (isDraft) {
-    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
-      headers: { "Set-Cookie": await commitSession(session) },
-    });
-  }
-
-  if (errorResponse) {
-    return errorResponse as Response;
-  }
-
-  session.set(
-    "backLinkForFacilityAdded",
-    `/create-non-manipulation-document/${documentNumber}/add-storage-facility-approval`
-  );
-
-  const nextUri = form.get("nextUri") as string;
-  return redirect(
-    isEmpty(nextUri)
-      ? `/create-non-manipulation-document/${documentNumber}/how-does-the-consignment-leave-the-uk`
-      : nextUri,
-    {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
+    if (errorResponse) {
+      return errorResponse as Response;
     }
-  );
+
+    session.set(
+      "backLinkForFacilityAdded",
+      `/create-non-manipulation-document/${documentNumber}/add-storage-facility-approval`
+    );
+
+    const nextUri = form.get("nextUri") as string;
+    return redirect(
+      isEmpty(nextUri)
+        ? `/create-non-manipulation-document/${documentNumber}/how-does-the-consignment-leave-the-uk`
+        : nextUri,
+      {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      }
+    );
+  }
+
+  return redirect("/forbidden");
 };
 
 const AddStorageFacilityApproval = () => {

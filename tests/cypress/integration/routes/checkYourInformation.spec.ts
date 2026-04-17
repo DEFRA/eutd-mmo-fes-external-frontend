@@ -582,12 +582,16 @@ describe("Check Your Information (Summary) page: Validation errors on load of CC
   it("should render the correct error", () => {
     cy.contains(
       ".govuk-error-summary__list",
-      "Contact support on 0330 159 1989 to replace ‘Vessel not found (N/A)’ for Black dogfish (CFB) caught on 04/10/2023."
+      "Contact support on 0330 159 1989 to replace 'Vessel not found (N/A)' for Black dogfish (CFB) caught on 04/10/2023."
     ).should("be.visible");
   });
 
   it("should check if the species fullname is displayed instead of species code", () => {
     cy.contains(".govuk-error-summary__list", "Black dogfish (CFB)").should("be.visible");
+  });
+
+  it("should render dynamic contact number in validation error message", () => {
+    cy.contains(".govuk-error-summary__list", "Contact support on 0330 159 1989").should("be.visible");
   });
 });
 

@@ -10,6 +10,7 @@ import {
 } from "~/urls.server";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
 import storageDocumentFacilityNameError from "@/fixtures/storageDocumentApi/storageDocumentFacilityNameError.json";
+import storageDocumentFacilityArrivalDateError from "@/fixtures/storageDocumentApi/storageDocumentFacilityArrivalDateError.json";
 import storageDocumentFacilityOne from "@/fixtures/storageDocumentApi/storageDocumentOneFacility.json";
 import storageDocumentNoFacilities from "@/fixtures/storageDocumentApi/storageDocumentNoFacilities.json";
 import storageDocumentNoCatches from "@/fixtures/storageDocumentApi/storageDocumentNoCatches.json";
@@ -106,6 +107,29 @@ const addStorageFacilityHandler: ITestHandler = {
       // Handle saveAndContinue action
       return res(ctx.status(400), ctx.json(storageDocumentFacilityNameError));
     }),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(storageDocuments))),
+  ],
+  [TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftWithErrors]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    // persistent 200 handler must come first so that after setApiMock's forEach-prepend
+    // it ends up BEHIND the res.once(400) handler in MSW's stack
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
+      res.once(ctx.status(400), ctx.json(storageDocumentFacilityNameError))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(storageDocuments))),
+  ],
+  [TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftWithArrivalDateError]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
+      res.once(ctx.status(400), ctx.json(storageDocumentFacilityArrivalDateError))
+    ),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(storageDocuments))),
+  ],
+  [TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftNoErrors]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(storageDocuments))),
   ],
 };

@@ -1,18 +1,7 @@
 ---
 name: Expert Cypress Efficiency Tester Agent (Remix SSR)
 description: "Cypress Efficiency Tester Agent (Remix SSR)"
-tools:
-  [
-    "codebase",
-    "search",
-    "editFiles",
-    "usages",
-    "problems",
-    "changes",
-    "terminalSelection",
-    "terminalLastCommand",
-    "runCommands",
-  ]
+tools: [vscode, execute, read, edit, search, web, todo]
 ---
 
 # Cypress Efficiency Tester Agent Instructions (Remix SSR)
@@ -74,6 +63,119 @@ Execute user requests **completely and autonomously**. Never stop halfway - iter
 - For Remix navigations, assert route content and loader-dependent UI, not transitional states.
 - Authentication should be established via HTTP (`cy.request`) and persisted via cookies/session storage using `cy.session()`.
 - Stub slow/noisy 3rd-party scripts and telemetry endpoints to speed hydration and reduce flake.
+  </CRITICAL_REQUIREMENT>
+
+## Azure Pipeline CI-Specific Rules (MANDATORY)
+
+<CRITICAL_REQUIREMENT type="MANDATORY">
+
+Azure Pipeline agents are slower than developer machines. Tests that pass locally can fail in CI due to hydration timing.
+Apply all rules in this section whenever writing or reviewing tests that interact with hydrated components.
+
+### React Hydration Failure & Full Client Re-render Race
+
+When React SSR hydration fails (e.g. a mismatch between server and client markup), React falls back to full client-side rendering. This causes a re-mount of the entire tree. During this re-mount:
+
+- DCX Autocomplete / combobox inputs briefly re-enter a `disabled` state.
+- Cypress may hold a stale reference to the element that passes an assertion (e.g. `not.be.disabled`) but is then re-disabled in the very next micro-task before `cy.type()` executes.
+- This manifests as: `cy.type() failed because it targeted a disabled element` — **even though the test passes locally**.
+
+The global `uncaught:exception` handler in `tests/cypress/support/e2e.js` silences the hydration error thrown into the window, but it does **not** prevent the re-mount and the resulting transient disabled state.
+
+### Mandatory Pattern: Break the assertion chain from interaction commands
+
+Never chain `.type()`, `.click()`, or `.select()` directly after `.should('not.be.disabled')` on the same subject:
+
+```ts
+// ❌ WRONG — assertion passes then React re-disables element before type() executes
+cy.get("input#species").should("not.be.disabled").type("A"); // fails in CI after hydration re-render
+
+// ✅ CORRECT — separate cy.get() re-queries the DOM at the moment of interaction
+cy.get("input#species").should("not.be.disabled").and("have.attr", "role", "combobox");
+cy.get("input#species").type("A", { force: true }); // force bypasses narrow disabled window
+```
+
+### Mandatory Pattern: Use `force: true` on `.type()` for DCX combobox inputs
+
+Even after the assertion chain is broken, a narrow disabled window may remain. Use `{ force: true }` on `.type()` calls targeting DCX Autocomplete inputs. This is a deliberate, documented exception to the general no-force rule, solely to handle the post-hydration re-render race:
+
+```ts
+cy.get("input#species").type("A", { force: true });
+```
+
+### Mandatory Pattern: Hydration-complete readiness signal
+
+Use the presence **and** enabled state of a DCX input as the hydration-complete signal before interacting with any other hydrated component on the same page:
+
+```ts
+// Wait for hydration to fully settle before switching tabs or interacting with other comboboxes
+cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
+```
+
+**Prefer adding this to `beforeEach`** rather than repeating it inside each test. The hydration re-mount is a one-time event per page load — once the input is enabled, the component tree is stable for the rest of that test:
+
+```ts
+beforeEach(() => {
+  cy.visit(productsUrl, { qs: { ...testParams } });
+  // Hydration-complete gate: only passes after React's full client re-render settles.
+  cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
+});
+```
+
+### `force: true` breaks DCX `aria-expanded` — know when NOT to use it
+
+`{ force: true }` on `.type()` bypasses Cypress's "scroll into view and focus" step. DCX Autocomplete relies on a real browser focus event to initialise its suggestion listener. Without that focus event:
+
+- The characters are typed into the input value
+- **But the dropdown never opens** — `aria-expanded` stays `"false"`
+
+**Rule:** Only use `{ force: true }` when you need to bypass a transient disabled state and you are **not** asserting that the dropdown opens. When you need `aria-expanded` to change to `"true"`, use `.click()` explicitly before `.type()` to guarantee a real focus event fires:
+
+```ts
+// ❌ WRONG — force skips focus, DCX handler never registers, dropdown never opens
+cy.get("input#species").type("Alb", { force: true });
+cy.get("input#species").should("have.attr", "aria-expanded", "true"); // times out
+
+// ❌ WRONG — chaining click().type() holds a stale reference; click triggers a DCX
+// internal re-render that detaches the element before type() executes
+cy.get("input#species").click().type("Alb"); // "page updated...subject no longer attached"
+
+// ✅ CORRECT — three separate cy.get() calls:
+// 1. assert stability, 2. click to focus (may re-render), 3. fresh re-query then type
+cy.get("input#species").should("not.be.disabled");
+cy.get("input#species").click(); // fires real focus event; may cause re-render
+cy.get("input#species").type("Alb"); // fresh query gets stable post-render element
+cy.get("input#species").should("have.attr", "aria-expanded", "true"); // passes
+```
+
+Note: DCX Autocomplete using a **client-side filter** (e.g. `querySpecies`) has no network request — `aria-expanded` updates synchronously once the filter runs. Do not use `cy.intercept()` for these. For DCX using an **async remote search**, alias the request: `cy.intercept('GET', '**/endpoint*').as('search'); cy.get('input').type('A'); cy.wait('@search');`
+
+### Mandatory Pattern: Keep assertions and interactions on separate chains for all hydrated inputs
+
+Apply this to all DCX Autocomplete comboboxes (`input[role='combobox']`), not just `#species`. Scope with a panel selector to avoid matching SSR `<select>` elements still in the DOM:
+
+```ts
+// Scoped to panel — avoids matching the SSR <select id="product"> still present in DOM
+cy.get('#add-from-favourites input[role="combobox"]', { timeout: 10000 })
+  .should("be.visible")
+  .and("not.be.disabled")
+  .and("have.attr", "aria-controls", "product__listbox");
+cy.get('#add-from-favourites input[role="combobox"]').type("A", { force: true });
+```
+
+### SSR `<select>` vs hydrated `<input>` — selector rules
+
+- Before hydration, DCX renders an SSR-safe `<select id="{id}">`. After hydration, it is replaced with `<input id="{id}" role="combobox">`.
+- **Never target `#id` alone** when you need the combobox input — a test that runs against `<select>` will fail with "targeted a disabled element" or silently assert on the wrong element.
+- Use `input#id` or `input[role='combobox']` to guarantee you are targeting the hydrated element.
+- IDs that contain dots (e.g. `vessel.vesselName`) break CSS ID selectors — use attribute selectors: `input[id='vessel.vesselName']`.
+
+### Tab / panel interaction in CI
+
+- Always click tabs **without** `{ force: true }` where possible; use `force: true` only if the element is covered by an overlay.
+- After clicking a tab, assert the panel is visible before querying elements inside it: `cy.get('#add-from-favourites').should('be.visible')`.
+- Do not chain `.click()` directly into panel assertions — use a separate `cy.get()` after the click.
+
   </CRITICAL_REQUIREMENT>
 
 ## Required Patterns for Route Specs (Fast-By-Default)
@@ -171,5 +273,37 @@ When generating Cypress tests, always include:
 4. Stub noisy endpoints and third parties with `cy.intercept()`.
 5. Remove fixed waits; wait on aliases or deterministic UI readiness signals.
 6. Split specs if runtime is still high.
+
+## CI Failure Triage Guide
+
+Use this decision tree when a test passes locally but fails on the Azure Pipeline:
+
+### `cy.type() failed because it targeted a disabled element`
+
+- **Cause:** React post-hydration re-render (or hydration fallback) briefly re-disables a DCX combobox input.
+- **Fix:**
+  1. Break the `.should('not.be.disabled')` assertion chain from the `.type()` call — use two separate `cy.get()` statements.
+  2. Add `{ force: true }` to the `.type()` call.
+  3. Add a hydration-complete readiness signal before the interaction: `cy.get('input#species', { timeout: 10000 }).should('not.be.disabled')`.
+
+### `cy.get()` or assertion times out in CI only
+
+- **Cause:** Pipeline is 2–5× slower; hydration takes longer, tabs don't render panel content instantaneously.
+- **Fix:**
+  1. Increase timeout on the initial `cy.get()` to `{ timeout: 15000 }`.
+  2. Assert panel visibility before querying children: `cy.get('#panel').should('be.visible')`.
+  3. Ensure you are not targeting the SSR `<select>` — use `input#id` selectors.
+
+### `Hydration failed because the initial UI does not match what was rendered on the server`
+
+- **Cause:** A production code mismatch between SSR and client render. This is surfaced as an uncaught window exception.
+- **Impact on tests:** React falls back to full client render, causing a full tree re-mount. Tests that interact with re-mounted components will face the disabled-input race described above.
+- **Handling in tests:** The global `Cypress.on('uncaught:exception', () => false)` in `tests/cypress/support/e2e.js` silences the exception so tests don't fail due to the error itself — but you **must still** apply the chain-breaking + `force: true` patterns to handle the re-mount side-effect.
+- **Resolution:** The production SSR mismatch should be fixed in application code; tests should not mask it permanently.
+
+### `cy.click()` on a tab has no visible effect
+
+- **Cause:** `{ force: true }` bypasses Cypress's actionability check and can click invisible/covered elements; the tab handler never fires.
+- **Fix:** Remove `{ force: true }` from tab clicks. Assert the tab element is visible and not covered before clicking. Only add `force: true` if an overlay is intentional and documented.
 
 ---

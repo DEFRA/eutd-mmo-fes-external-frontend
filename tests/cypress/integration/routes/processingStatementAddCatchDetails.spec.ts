@@ -1780,6 +1780,21 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
   });
 });
 
+describe("PS: add catch details - save as draft sets section to INCOMPLETE when invalid weight submitted", () => {
+  const progressUrl = `/create-processing-statement/GBR-2022-PS-0D12ABA0A/progress`;
+
+  it("should show processedProductDetails section as INCOMPLETE on progress page after saving draft with invalid weight", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsSaveAsDraftScenario3,
+    };
+    cy.visit(validEditCatchDetailsUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+    cy.visit(progressUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='progress-processedProductDetails-tag']").should("contain.text", "INCOMPLETE");
+  });
+});
+
 describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", () => {
   it("should render the commodity code field with correct label and hint", () => {
     const testParams: ITestParams = {

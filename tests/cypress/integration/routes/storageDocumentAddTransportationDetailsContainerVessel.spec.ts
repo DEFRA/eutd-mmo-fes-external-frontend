@@ -200,3 +200,61 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
     ).should("be.visible");
   });
 });
+
+describe("Container Vessel Save as Draft - Retain valid field values", () => {
+  it("should retain all valid vessel fields when saving as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportSaveAsDraftRetainAllValues,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Fill all valid fields
+    cy.get("#vesselName").clear({ force: true }).type("Atlantic Star", { force: true });
+    cy.get("#flagState").clear({ force: true }).type("Greece", { force: true });
+    cy.get("#departurePlace").clear({ force: true }).type("Felixstowe Port", { force: true });
+    cy.get('input[name="containerNumbers.0"]').clear({ force: true }).type("ABCJ0123456", { force: true });
+
+    // Save as draft
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return to page using CHECK handler (hardcoded saved fixture)
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportSaveAsDraftRetainAllValuesCheck,
+    };
+    cy.visit(pageUrl, { qs: { ...checkParams } });
+
+    // Verify all valid values are retained
+    cy.get("#vesselName").should("have.value", "Atlantic Star");
+    cy.get("#flagState").should("have.value", "Greece");
+    cy.get("#departurePlace").should("have.value", "Felixstowe Port");
+    cy.get('input[name="containerNumbers.0"]').should("have.value", "ABCJ0123456");
+  });
+
+  it("should clear invalid vesselName but retain valid flagState when saving as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportSaveAsDraftInvalidVesselName,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Enter invalid chars in vesselName (::::), valid value in flagState (Greece) and departurePlace
+    cy.get("#vesselName").clear({ force: true }).type("::::", { force: true });
+    cy.get("#flagState").clear({ force: true }).type("Greece", { force: true });
+    cy.get("#departurePlace").clear({ force: true }).type("Felixstowe Port", { force: true });
+
+    // Save as draft
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return to page using CHECK handler (hardcoded saved fixture)
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.ContainerVesselTransportSaveAsDraftInvalidVesselNameCheck,
+    };
+    cy.visit(pageUrl, { qs: { ...checkParams } });
+
+    // vesselName should be blank (invalid chars cleared), flagState and departurePlace retained
+    cy.get("#vesselName").should("have.value", "");
+    cy.get("#flagState").should("have.value", "Greece");
+    cy.get("#departurePlace").should("have.value", "Felixstowe Port");
+  });
+});

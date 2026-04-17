@@ -71,6 +71,7 @@ export const AutocompleteFormField = ({
 }: AutocompleteFormFieldProps) => {
   const { t } = useTranslation("common");
   const [status, setStatus] = React.useState("");
+  const listboxId = `${id}__listbox`;
   const change = (length: number, property: string, position: number) => {
     let newText = "";
     if (length === 0) {
@@ -105,10 +106,12 @@ export const AutocompleteFormField = ({
       hintClass={hintClass ?? "govuk-hint"}
       hintId={`${id}-hint`}
       selectProps={selectProps}
+      resultId={listboxId}
       inputProps={{
         // Ensure tests and controlled inputs always have a defined value/defaultValue
         defaultValue: inputProps?.defaultValue ?? inputProps?.value ?? defaultValue ?? "",
         ...inputProps,
+        "aria-controls": listboxId,
       }}
       resultUlClass={resultUlClass ?? "autocomplete__menu"}
       resultlLiClass={resultlLiClass ?? "autocomplete__option"}

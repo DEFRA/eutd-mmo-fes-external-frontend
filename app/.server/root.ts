@@ -57,5 +57,6 @@ export const getRootData = async (request: Request): Promise<IMainAppProps> => {
     gtmId,
     gaId,
     clarityProjectId,
+    supportContactNumber: ENV.SUPPORT_CONTACT_NUMBER ?? "0330 159 1989",
   };
 };

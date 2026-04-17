@@ -98,13 +98,14 @@ export const updateFishUrl = (productId: string) => `${ENV.MMO_ECC_ORCHESTRATION
 
 export const addTransportationDetailsUrl = (transportType: string, saveAsDraft: boolean = false) =>
   `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/transport/${transportType}/details${saveAsDraft ? "/saveAsDraft" : ""}`;
-export const getAllDocumentsUrl = (type: Journey, year: number, month: number) =>
+export const getAllDocumentsUrl = (type: Journey, month: number, year: number) =>
   `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/documents/${year}/${month}?type=${type}`;
 
 export const createDocumentUrl = (documentType: string) =>
   `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/document/${documentType}`;
 
-export const getAddExporterDetailsUrl = (type: Journey) => `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/exporter/${type}`;
+export const getAddExporterDetailsUrl = (type: Journey, isDraft?: boolean) =>
+  `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/exporter/${type}${isDraft ? "?draft=true" : ""}`;
 
 export const findAddress = (postcode: string | undefined) =>
   `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/addresses/search?postcode=${postcode}`;
