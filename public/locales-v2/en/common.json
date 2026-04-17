@@ -79,6 +79,7 @@
   "commonErrorPageTryagainText": "Try again later.",
   "commonErrorPagesaveText": "Everything you have done so far has been saved.",
   "commonWhatExportersAddressChangeLink": "Change",
+  "commonChangeCompanyAddressHiddenText": "company address",
   "commonCommodityCodeLabel": "Commodity code",
   "commonAddExporterDetailsExporterAddressRegistration": "Your registration address could not be accessed. Please add the exporter’s address",
   "commonAddExporterDetailsAddTheExportersAddress": "Add the exporter’s address",

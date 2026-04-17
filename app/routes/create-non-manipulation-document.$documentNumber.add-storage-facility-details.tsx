@@ -526,6 +526,14 @@ const AddStorageFacilityDetails = () => {
                     ? t("commonWhatExportersAddressChangeLink", { ns: "common" })
                     : t("sdAddStorageFacilityDetailsAddAddressText")
                 }
+                visuallyHiddenText={
+                  hasFacility
+                    ? {
+                        text: t("sdChangeStorageFacilityAddressHiddenText", { ns: "addStorageFacilityDetails" }),
+                        className: "govuk-visually-hidden",
+                      }
+                    : undefined
+                }
                 className="govuk-button govuk-button--secondary"
                 type={BUTTON_TYPE.SUBMIT}
                 data-module="govuk-button"

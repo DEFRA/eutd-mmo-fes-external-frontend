@@ -3,6 +3,7 @@
   "sdFacilityName": "Storage facility name",
   "sdAddStorageFacilityDetailsAddressText": "An address must be provided for this storage facility.",
   "sdAddStorageFacilityDetailsAddAddressText": "Add the storage facility address",
+  "sdChangeStorageFacilityAddressHiddenText": "storage facility address",
   "sdWhatStorageFacilityText": "What is the storage facility address?",
   "productStorageLegend": "How was the product stored?",
   "productStorageHint": "Select one option.",

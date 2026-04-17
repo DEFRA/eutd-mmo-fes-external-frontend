@@ -539,6 +539,10 @@ const AddProcessingPlantAddress = () => {
               <Button
                 id="goToAddAddress"
                 label={t("commonWhatExportersAddressChangeLink", { ns: "common" })}
+                visuallyHiddenText={{
+                  text: t("psChangeProcessingPlantAddressHiddenText", { ns: "addProcessingPlantAddress" }),
+                  className: "govuk-visually-hidden",
+                }}
                 className="govuk-button govuk-button--secondary"
                 type={BUTTON_TYPE.SUBMIT}
                 data-module="govuk-button"

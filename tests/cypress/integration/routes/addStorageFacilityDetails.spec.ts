@@ -70,6 +70,18 @@ describe("Add Storage Facility Address", () => {
 });
 
 describe("Add Storage Facility Address - Complete", () => {
+  it("should render change button with descriptive hidden text when address exists", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageApprovalComplete,
+    };
+    cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
+    cy.get('[data-testid="goToAddAddress-button"]').should("be.visible").contains("Change");
+    cy.get('[data-testid="goToAddAddress-button"] .govuk-visually-hidden').should(
+      "contain",
+      "storage facility address"
+    );
+  });
+
   it("should save and redirect to storage facility approval page on clicking save and continue", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageApprovalComplete,

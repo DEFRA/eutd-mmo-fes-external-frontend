@@ -28,6 +28,7 @@ describe("Add exporter details page", () => {
   });
 
   it("should click on change button and navigate to what exporter address page", () => {
+    cy.get("[data-testid='change-button'] .govuk-visually-hidden").should("contain", "company address");
     cy.get("[data-testid='change-button']").click({ force: true });
     cy.url().should("include", "/what-exporters-address");
   });
