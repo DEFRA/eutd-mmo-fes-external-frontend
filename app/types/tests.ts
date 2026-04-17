@@ -789,6 +789,7 @@ export enum TestCaseId {
   PSAddCatchDetailsBlankSpeciesCommodityCodeError = "PSAddCatchDetailsBlankSpeciesCommodityCodeError",
   PSAddCatchDetailsSpeciesCommodityCodeMinLengthError = "PSAddCatchDetailsSpeciesCommodityCodeMinLengthError",
   PSAddCatchDetailsSpeciesCommodityCodeMaxLengthError = "PSAddCatchDetailsSpeciesCommodityCodeMaxLengthError",
+  PSAddCatchDetailsSpeciesCommodityCodeNotInCatchCertificateError = "PSAddCatchDetailsSpeciesCommodityCodeNotInCatchCertificateError",
 
   SDIncompleteProgress = "sdIncompleteProgress",
   SDIncompleteProgressWithProducts = "sdIncompleteProgressWithProducts",
