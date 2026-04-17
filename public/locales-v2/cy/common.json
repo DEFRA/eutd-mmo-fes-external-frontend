@@ -79,6 +79,7 @@
   "commonErrorPageTryagainText": "Rhowch gynnig arall arni rywbryd eto",
   "commonErrorPagesaveText": "Rydyn ni wedi cadw popeth rydych chi wedi’i wneud hyd yma.",
   "commonWhatExportersAddressChangeLink": "Newid",
+  "commonChangeCompanyAddressHiddenText": "cyfeiriad y cwmni",
   "commonCommodityCodeLabel": "Cod nwyddau",
   "commonAddExporterDetailsExporterAddressRegistration": "Doedd dim modd cael gafael ar eich cyfeiriad cofrestru. Ychwanegwch gyfeiriad yr allforiwr",
   "commonAddExporterDetailsAddTheExportersAddress": "Ychwanegwch gyfeiriad yr allforiwr",

@@ -3,6 +3,7 @@
   "sdFacilityName": " Enw’r cyfleuster",
   "sdAddStorageFacilityDetailsAddressText": "Rhaid rhoi cyfeiriad ar gyfer y cyfleuster storio hwn.",
   "sdAddStorageFacilityDetailsAddAddressText": "Ychwanegwch gyfeiriad y cyfleuster storio",
+  "sdChangeStorageFacilityAddressHiddenText": "cyfeiriad y cyfleuster storio",
   "sdWhatStorageFacilityText": "Beth yw cyfeiriad y cyfleuster storio?",
   "productStorageLegend": "Sut cafodd y cynnyrch ei storio?",
   "productStorageHint": "Dewiswch un opsiwn.",
