@@ -50,6 +50,7 @@
   "ccEezSelectCountryText": "Select country",
   "eezHintText": "The area of sea where the fish were caught",
   "ccAddLandingAddAnotherZoneButtonText": "Add another",
+  "ccAddLandingAddAnotherZoneHiddenText": "exclusive economic zone",
   "ccAddLandingRemoveZoneButtonText": "Remove",
   "ccEezHelpSectionLinkText": "What is an exclusive economic zone (EEZ)?",
   "ccEezHelpSectionContentOne": "Exclusive Economic Zones extend out to 200 nautical miles (nm) from the coastline or a median line where it meets another country’s limits.",

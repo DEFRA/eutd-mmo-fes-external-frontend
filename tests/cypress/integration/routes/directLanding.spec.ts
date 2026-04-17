@@ -184,6 +184,7 @@ describe("Direct landing page render", () => {
     cy.get("#eez-0").should("be.visible").and("not.be.disabled");
     cy.wait(250);
     cy.get("#add-zone-button").should("exist");
+    cy.get("#add-zone-button .govuk-visually-hidden").should("contain", "exclusive economic zone");
     for (let i = 0; i < 4; i++) {
       cy.get("body").then(($body) => {
         if ($body.find("#add-zone-button").length > 0) {
