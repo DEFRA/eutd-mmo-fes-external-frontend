@@ -105,6 +105,7 @@ describe("Add product to this consignment  page", () => {
     cy.get("#catches-0-supportingDocuments-0").should("be.visible").and("not.be.disabled");
     cy.get('[id^="remove-supporting-doc-button"]').should("not.exist");
     cy.get("#add-supporting-doc-button").should("exist");
+    cy.get("#add-supporting-doc-button").should("have.attr", "aria-label", "Add another supporting document");
   });
 
   it("should have empty supporting documents if none are added", () => {

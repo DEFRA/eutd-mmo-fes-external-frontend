@@ -16,6 +16,7 @@ type ExclusiveEconomicZoneProps = {
   eezHelpSectionContentThreeLink: string;
   eezHint: string;
   removeButtonText: string;
+  addAnotherButtonHiddenText?: string;
   preloadedZones?: string[];
   availableExclusiveEconomicZones: ICountry[];
   onExclusiveEconomicZonesChange: (zones: string[]) => void;
@@ -33,6 +34,7 @@ export const AddExclusiveEconomicZoneComponent = ({
   eezHelpSectionContentThreeLink,
   eezHint,
   removeButtonText,
+  addAnotherButtonHiddenText,
   availableExclusiveEconomicZones,
   preloadedZones,
   onExclusiveEconomicZonesChange,
@@ -94,10 +96,17 @@ export const AddExclusiveEconomicZoneComponent = ({
 
   const showAddZoneButton = (exclusiveZones: string[], index: number) =>
     index === exclusiveZones.length - 1 && exclusiveZones.length < maximumEezPerLanding
-      ? showButton("add-zone-button", index, handleAddZone, addAnotherButtonText)
+      ? showButton("add-zone-button", index, handleAddZone, addAnotherButtonText, undefined, addAnotherButtonHiddenText)
       : null;
 
-  const showButton = (id: string, index: number, onClick: Function, buttonText: string, buttonValue?: string) => (
+  const showButton = (
+    id: string,
+    index: number,
+    onClick: Function,
+    buttonText: string,
+    buttonValue?: string,
+    hiddenText?: string
+  ) => (
     <Button
       key={`showButton-${id}-${index}`}
       id={id}
@@ -110,6 +119,7 @@ export const AddExclusiveEconomicZoneComponent = ({
       value={id}
       data-testid={`${buttonValue}-${id}`}
       {...(id === "remove-zone-button" && { style: { top: "15px" } })}
+      {...(hiddenText && { visuallyHiddenText: { text: hiddenText, className: "govuk-visually-hidden" } })}
       onClick={(e: React.MouseEvent) => {
         e.preventDefault();
         onClick(index);
