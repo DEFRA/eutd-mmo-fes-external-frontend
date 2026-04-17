@@ -1905,3 +1905,102 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
     cy.get("#add-from-favourites input[role='combobox']").type("A", { force: true });
   });
 });
+
+// WCAG SC 3.1.2 – Language of Parts
+// State, presentation, and commodity code options are always English-language content.
+// When the UI is in Welsh mode the <option> elements must carry lang="en" so assistive
+// technology can select the correct pronunciation engine.  In English mode the attribute
+// must be absent to avoid redundant markup.
+
+describe("WCAG SC 3.1.2 - lang='en' on English-language select options (hydrated)", () => {
+  it("sets lang='en' on all non-placeholder state, presentation and commodity code options when Welsh is active", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+      lng: "cy",
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+    // Hydration-complete gate: passes once React's full client re-render has settled
+    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
+
+    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    // Wait for the edit page to hydrate and populate its select options
+    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
+    cy.get("#state").should("contain", "Fresh");
+
+    // Every non-placeholder option must carry lang="en" (no option without it should exist)
+    cy.get('#state option[value!=""]').should("have.length.gt", 0);
+    cy.get('#state option[value!=""]:not([lang="en"])').should("not.exist");
+
+    cy.get('#presentation option[value!=""]').should("have.length.gt", 0);
+    cy.get('#presentation option[value!=""]:not([lang="en"])').should("not.exist");
+
+    cy.get('#commodity_code option[value!=""]').should("have.length.gt", 0);
+    cy.get('#commodity_code option[value!=""]:not([lang="en"])').should("not.exist");
+  });
+
+  it("does not set lang on any non-placeholder select options when English is active", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
+
+    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
+    cy.get("#state").should("contain", "Fresh");
+
+    // No non-placeholder option should carry a lang attribute in English mode
+    cy.get('#state option[value!=""]').should("have.length.gt", 0);
+    cy.get('#state option[value!=""][lang="en"]').should("not.exist");
+
+    cy.get('#presentation option[value!=""]').should("have.length.gt", 0);
+    cy.get('#presentation option[value!=""][lang="en"]').should("not.exist");
+
+    cy.get('#commodity_code option[value!=""]').should("have.length.gt", 0);
+    cy.get('#commodity_code option[value!=""][lang="en"]').should("not.exist");
+  });
+});
+
+describe("WCAG SC 3.1.2 - lang='en' on English-language select options (non-JS)", () => {
+  it("sets lang='en' on all non-placeholder state, presentation and commodity code options when Welsh is active", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+      disableScripts: true,
+      lng: "cy",
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    // Server re-renders with the product's state data — wait for options to be present
+    cy.get("#state").should("contain", "Fresh");
+
+    cy.get('#state option[value!=""]').should("have.length.gt", 0);
+    cy.get('#state option[value!=""]:not([lang="en"])').should("not.exist");
+
+    cy.get('#presentation option[value!=""]').should("have.length.gt", 0);
+    cy.get('#presentation option[value!=""]:not([lang="en"])').should("not.exist");
+
+    cy.get('#commodity_code option[value!=""]').should("have.length.gt", 0);
+    cy.get('#commodity_code option[value!=""]:not([lang="en"])').should("not.exist");
+  });
+
+  it("does not set lang on any non-placeholder select options when English is active", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExporting,
+      disableScripts: true,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    cy.get("#state").should("contain", "Fresh");
+
+    cy.get('#state option[value!=""]').should("have.length.gt", 0);
+    cy.get('#state option[value!=""][lang="en"]').should("not.exist");
+
+    cy.get('#presentation option[value!=""]').should("have.length.gt", 0);
+    cy.get('#presentation option[value!=""][lang="en"]').should("not.exist");
+
+    cy.get('#commodity_code option[value!=""]').should("have.length.gt", 0);
+    cy.get('#commodity_code option[value!=""][lang="en"]').should("not.exist");
+  });
+});
