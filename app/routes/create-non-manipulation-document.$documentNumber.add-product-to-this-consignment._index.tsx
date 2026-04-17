@@ -44,7 +44,6 @@ import type {
   DocIssuedInUkRadioSelectOptionType,
   DocIssuedInUkRadioSelectType,
   ICountry,
-  IUnauthorised,
   ErrorResponse,
 } from "~/types";
 import { querySpecies, getCodeFromLabel, displayErrorMessagesInOrder, scrollToId } from "~/helpers";
@@ -95,8 +94,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const [species, countries, commodities, storageDocument, session] = await Promise.all([
     getAllSpecies(),
     getCountries(),
-    getCommodities() as Promise<CodeAndDescription[]>,
-    getStorageDocument(bearerToken, documentNumber) as Promise<StorageDocument | IUnauthorised>,
+    getCommodities(),
+    getStorageDocument(bearerToken, documentNumber),
     getSessionFromRequest(request),
   ]);
 
@@ -216,7 +215,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   let scientificName;
 
   // FI0-10854: parallelize independent reference data calls
-  const [allSpecies, countries] = await Promise.all([getAllSpecies() as Promise<Species[]>, getCountries()]);
+  const [allSpecies, countries] = await Promise.all([getAllSpecies(), getCountries()]);
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
