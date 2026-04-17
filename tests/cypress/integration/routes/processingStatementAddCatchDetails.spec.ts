@@ -1927,6 +1927,42 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
     cy.get("#catches-0-speciesCommodityCode").should("have.value", "");
   });
 
+  it("should display error on speciesCommodityCode field when commodity code is not found on catch certificate", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsSpeciesCommodityCodeNotInCatchCertificateError,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+
+    // Fill in the form with valid data but commodity code not on catch certificate
+    cy.get("#catches-0-species").type("Cod");
+    cy.get("input[name='catchCertificateType'][value='uk']").click({ force: true });
+    cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-01234ABCD");
+    cy.get("#catches-0-speciesCommodityCode").type("03023110");
+    cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
+    cy.get("#catches-0-exportWeightAfterProcessing").type("25");
+    cy.get("#addProductDetails").click({ force: true });
+
+    // Error should appear in the error summary
+    cy.get(".govuk-error-summary").should("be.visible");
+
+    // Error message should appear inline next to spectrum commodity code field,NOT catch certificate field
+    cy.get("#catches-0-speciesCommodityCode-error").should(
+      "contain.text",
+      "Enter a commodity code from the catch certificate"
+    );
+
+    // Error should NOT appear next to catch certificate field
+    cy.get("#catches-0-catchCertificateNumber-error").should("not.exist");
+
+    // Error summary link should point to the commodity code field
+    cy.contains("a", "Enter a commodity code from the catch certificate").should(
+      "have.attr",
+      "href",
+      "#catches-0-speciesCommodityCode"
+    );
+  });
+
   it("should pre-populate the commodity code field when editing an existing catch", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUpdateCatch,
