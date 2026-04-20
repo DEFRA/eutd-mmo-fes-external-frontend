@@ -504,6 +504,7 @@ describe("Add Processing Plant Address", () => {
     };
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
+    cy.get('[name="_action"][value="goToAddAddress"]').click();
     cy.get('[name="_action"][value="navigateToManualAddress"]').click();
 
     cy.get("#buildingNumber").should("have.value", "Test Building Number");
