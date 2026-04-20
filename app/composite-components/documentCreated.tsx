@@ -1,5 +1,5 @@
 import type { Journey } from "~/types";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, PrefetchPageLinks, useLoaderData } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { route } from "routes-gen";
 import { Main } from "~/components";
@@ -82,6 +82,18 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
 
   useScrollOnPageLoad();
 
+  // Clear all previous history entries and only keep the dashboard URL
+  // so the browser back button always navigates to the dashboard
+  useEffect(() => {
+    const createdPageUrl = window.location.href;
+
+    // Replace the previous history entry with the dashboard URL
+    window.history.replaceState({ dashboardRedirect: true }, "", createLink);
+
+    // Push the created page back as the current visible entry
+    window.history.pushState({ createdPage: true }, "", createdPageUrl);
+  }, [createLink]);
+
   /* istanbul ignore next */
   useEffect(() => {
     if (shouldRenderGA(analyticsCookieAccepted)) {
@@ -111,31 +123,14 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
 
   const renderImportantNotice = () => (
     <div className="govuk-!-margin-bottom-4">
-      <div className="govuk-!-display-inline-block" style={{ verticalAlign: "middle" }}>
-        <svg
-          version="1.1"
-          fill="currentColor"
-          width="35"
-          height="35"
-          viewBox="0 0 35.000000 35.000000"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <title>icon important</title>
-          <g transform="translate(0.000000,35.000000) scale(0.100000,-0.100000)">
-            <path
-              d="M100 332 c-87 -48 -125 -155 -82 -232 48 -87 155 -125 232 -82 87 48
-                125 155 82 232 -48 87 -155 125 -232 82z m100 -122 c0 -53 -2 -60 -20 -60 -18
-                0 -20 7 -20 60 0 53 2 60 20 60 18 0 20 -7 20 -60z m0 -111 c0 -12 -7 -19 -20
-                -19 -19 0 -28 28 -14 43 11 11 34 -5 34 -24z"
-            ></path>
-          </g>
-        </svg>
-      </div>
-      <div
-        className="govuk-!-display-inline-block govuk-!-padding-left-2 govuk-phase-banner__text"
-        style={{ width: "90%", verticalAlign: "middle" }}
-      >
-        <strong>{t(translationTags[journey].notesSubHeading)}</strong>
+      <div className="govuk-warning-text">
+        <span className="govuk-warning-text__icon" aria-hidden="true">
+          !
+        </span>
+        <strong className="govuk-warning-text__text">
+          <span className="govuk-visually-hidden">Warning</span>
+          {t(translationTags[journey].notesSubHeading)}
+        </strong>
       </div>
     </div>
   );
@@ -156,7 +151,8 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
           <li>{t(translationTags[journey].emailToImporterText2)}</li>
         </ul>
       </div>
-      <Link to={createLink} className="govuk-link">
+      <PrefetchPageLinks page={createLink} />
+      <Link to={createLink} className="govuk-link" prefetch="render">
         {t(translationTags[journey].createNewLink)}
       </Link>
     </>
@@ -178,7 +174,8 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
           </ul>
         </li>
       </ol>
-      <Link to={createLink} className="govuk-link">
+      <PrefetchPageLinks page={createLink} />
+      <Link to={createLink} className="govuk-link" prefetch="render">
         {t(translationTags[journey].createNewLink)}
       </Link>
     </>

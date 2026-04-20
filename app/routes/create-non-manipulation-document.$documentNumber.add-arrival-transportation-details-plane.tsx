@@ -2,11 +2,11 @@ import * as React from "react";
 import { useActionData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
 
 import { route } from "routes-gen";
-import { useEffect } from "react";
-import type { ITransport, ErrorResponse } from "~/types";
-import { scrollToId, TransportType } from "~/helpers";
+import type { ITransport, ErrorResponse, ICountry } from "~/types";
+import { TransportType } from "~/helpers";
 import {
   getBearerTokenForRequest,
+  getCountries,
   getTransportDetails,
   TransportationDetailsLoaderFunction,
   commonSaveTransportDetails,
@@ -16,7 +16,6 @@ import {
   handleContainerActions,
   handleFormEmptyStringValue,
 } from "~/.server";
-import isEmpty from "lodash/isEmpty";
 import { useScrollOnPageLoad } from "~/hooks";
 import { AddTransportationArrivalDetailsComponent } from "~/composite-components/addTransportationArrivalDetailsComponent";
 
@@ -43,9 +42,13 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (!isValid) return redirect("/forbidden");
 
   const saveAsDraft = form.get("_action") === "saveAsDraft";
+  const countries: ICountry[] = await getCountries();
   const airwayBillNumber = handleFormEmptyStringValue(form, "airwayBillNumber", saveAsDraft);
   const flightNumber = handleFormEmptyStringValue(form, "flightNumber", saveAsDraft);
-  const departureCountry = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
+  const departureCountryForm = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
+  const departureCountry = countries.find(
+    (c: ICountry) => c.officialCountryName === departureCountryForm
+  )?.officialCountryName;
   const departureDate = calculateDepartureDate(form);
   const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
   const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
@@ -86,14 +89,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 };
 
 const PlaneTransportArrivalDetailsPage = () => {
-  const actionData = useActionData() ?? {};
-  const errors = actionData?.errors ?? {};
+  const actionData = useActionData<any>() ?? {};
   useScrollOnPageLoad();
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      scrollToId("errorIsland");
-    }
-  }, [errors]);
 
   return <AddTransportationArrivalDetailsComponent vehicleType={TransportType.PLANE} actionData={actionData} />;
 };

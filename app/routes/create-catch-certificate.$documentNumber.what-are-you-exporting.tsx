@@ -119,28 +119,30 @@ const WhatAreYouExporting = () => {
   return (
     <Main backUrl={backUrl}>
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
-      {isProductAddSuccess && (
-        <NotificationBanner
-          header={t("commonImportant", { ns: "common" })}
-          messages={[
-            `${t("commonProductText", { ns: "common" })} ${isProductAddSuccess} ${t(
-              "ccWhatExportingFromAddtoFavouriteNotification",
-              { ns: "whatAreYouExporting" }
-            )}`,
-          ]}
-        />
-      )}
-      {isProductAddFailure && (
-        <NotificationBanner
-          header={t("commonImportant", { ns: "common" })}
-          messages={[
-            `${t("commonProductText", { ns: "common" })} ${isProductAddFailure} ${t(
-              "ccWhatExportingFromProductExistNotification",
-              { ns: "whatAreYouExporting" }
-            )}`,
-          ]}
-        />
-      )}
+      <div aria-live="assertive" aria-atomic="true">
+        {isProductAddSuccess && (
+          <NotificationBanner
+            header={t("commonImportant", { ns: "common" })}
+            messages={[
+              `${t("commonProductText", { ns: "common" })} ${isProductAddSuccess} ${t(
+                "ccWhatExportingFromAddtoFavouriteNotification",
+                { ns: "whatAreYouExporting" }
+              )}`,
+            ]}
+          />
+        )}
+        {isProductAddFailure && (
+          <NotificationBanner
+            header={t("commonImportant", { ns: "common" })}
+            messages={[
+              `${t("commonProductText", { ns: "common" })} ${isProductAddFailure} ${t(
+                "ccWhatExportingFromProductExistNotification",
+                { ns: "whatAreYouExporting" }
+              )}`,
+            ]}
+          />
+        )}
+      </div>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <div className="govuk-inset-text" id="speciesAndLandingsGuidanceMessage">

@@ -1,0 +1,10 @@
+{
+  "currentUri": "/create-non-manipulation-document/:documentNumber/add-transportation-details-container-vessel",
+  "journey": "storageNotes",
+  "user_id": "e9980bf3-0408-4255-9a4c-887bb268a2ad",
+  "vehicle": "containerVessel",
+  "arrival": false,
+  "vesselName": "",
+  "flagState": "Greece",
+  "departurePlace": "Felixstowe Port"
+}

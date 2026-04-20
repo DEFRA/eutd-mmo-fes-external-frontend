@@ -1,9 +1,9 @@
 {
-  "ccSummaryPageDocumentLockedNotification": "Mae’r ddogfen hon wedi cael ei chloi. I’w datgloi, cysylltwch â’r adran gymorth ar 0330 159 1989.",
-  "ccSummaryPageVesselNotFound": "Cysylltwch â’r adran gymorth ar 0330 159 1989 i newid enw eich Cwch neu gofnodion PLN 'Heb gafod cwch (N/A)'.",
+  "ccSummaryPageDocumentLockedNotification": "Mae'r ddogfen hon wedi cael ei chloi. I'w datgloi, cysylltwch â'r adran gymorth ar {{contactNumber}}.",
+  "ccSummaryPageVesselNotFound": "Cysylltwch â'r adran gymorth ar {{contactNumber}} i newid enw eich Cwch neu gofnodion PLN 'Heb gafod cwch (N/A)'.",
   "ccSummaryPageOverridenByAdminNotificationDirectLanding": "Does dim modd newid glanio sydd wedi cael ei ddiwygio a'i awdurdodi gan gymorth gwasanaeth.",
   "ccSummaryPageOverridenByAdminNotificationNonDirectLanding": " Does dim modd newid glanio sydd wedi cael ei ddiwygio a'i awdurdodi gan gymorth gwasanaeth ond mae modd ei dynnu.",
-  "ccSummaryPageSystemError": "Roedd gwall wrth brosesu. Ailgyflwynwch. Os bydd y broblem yn parhau, cysylltwch â'r adran gymorth ar 0330 159 1989.",
+  "ccSummaryPageSystemError": "Roedd gwall wrth brosesu. Ailgyflwynwch. Os bydd y broblem yn parhau, cysylltwch â'r adran gymorth ar {{contactNumber}}.",
   "commonSummaryPageMainHeader": "Gwiriwch eich gwybodaeth cyn creu’r tystysgrif dalfa",
   "commonSummaryPageExporterCompanyAddress": "Cyfeiriad y cwmni",
   "ccSummaryPageLandingDetails": "Manylion glanio",

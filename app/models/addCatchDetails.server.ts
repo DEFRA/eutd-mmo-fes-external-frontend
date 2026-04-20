@@ -144,8 +144,10 @@ export const AddCatchDetailsLoader = async (request: Request, params: Params) =>
   const currentCatchDetails: Catch | undefined = getCatchDetails(processingStatement, catchIndex);
 
   const pageNo: number = parseInt(searchParams.get("pageNo") ?? "1");
-  const species = await getAllSpecies();
-  const countries = (await getCountries()).filter(
+
+  // FI0-10854: parallelize independent reference data calls
+  const [species, allCountries] = await Promise.all([getAllSpecies(), getCountries()]);
+  const countries = allCountries.filter(
     (c: ICountry) => !c.officialCountryName.includes("United Kingdom of Great Britain and Northern Ireland")
   );
   const speciesExemptLink = getEnv().SPECIES_EXEMPT_LINK;
@@ -218,10 +220,12 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
 
   const bearerToken = await getBearerTokenForRequest(request);
 
-  const processingStatement: ProcessingStatement | IUnauthorised = await getProcessingStatement(
-    bearerToken,
-    documentNumber
-  );
+  // FI0-10854: parallelize independent calls
+  const [processingStatement, allSpecies, form] = await Promise.all([
+    getProcessingStatement(bearerToken, documentNumber) as Promise<ProcessingStatement | IUnauthorised>,
+    getAllSpecies() as Promise<Species[]>,
+    request.formData(),
+  ]);
 
   if (instanceOfUnauthorised(processingStatement)) {
     return redirect("/unauthorised");
@@ -231,11 +235,9 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
 
   const catches = getCatches(processingStatement);
 
-  const form = await request.formData();
   const { _action, ...values } = Object.fromEntries(form);
   const nextUri = form.get("nextUri") as string;
 
-  const allSpecies: Species[] = await getAllSpecies();
   const selectedSpeciesName = values["species"] as string;
   const faoCode = getFaoCodeFromSelectedSpecies(allSpecies, selectedSpeciesName);
 
@@ -481,6 +483,39 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
   }
 
   if (isDraft) {
+    const catchId = values["catchId"] as string;
+    if (catchId) {
+      const catchIndex = findIndexByValue(catches, catchId);
+      if (catchIndex >= 0) {
+        const isValidWeight = (v: unknown): boolean => {
+          if (!v || typeof v !== "string") return false;
+          const num = parseFloat(v);
+          return !isNaN(num) && isFinite(num) && num >= 0;
+        };
+        const totalWeightLanded = values["totalWeightLanded"] as string;
+        const exportWeightBeforeProcessing = values["exportWeightBeforeProcessing"] as string;
+        const exportWeightAfterProcessing = values["exportWeightAfterProcessing"] as string;
+        const draftCatch = {
+          id: values["id"] as string,
+          _id: catchId,
+          totalWeightLanded: isValidWeight(totalWeightLanded) ? totalWeightLanded : (null as any),
+          exportWeightBeforeProcessing: isValidWeight(exportWeightBeforeProcessing)
+            ? exportWeightBeforeProcessing
+            : (null as any),
+          exportWeightAfterProcessing: isValidWeight(exportWeightAfterProcessing)
+            ? exportWeightAfterProcessing
+            : (null as any),
+        };
+        await updateProcessingStatement(
+          bearerToken,
+          documentNumber,
+          draftCatch,
+          `/create-processing-statement/${documentNumber}/add-catch-details/${productId}/${catchIndex}`,
+          catchIndex,
+          true
+        );
+      }
+    }
     return redirect(route("/create-processing-statement/processing-statements"));
   }
 

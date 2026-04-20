@@ -178,6 +178,10 @@ export const AddExporterDetailsComponent = ({ journey }: AddExporterDetailsProps
                   <div className="govuk-button-group">
                     <Button
                       label={t("commonWhatExportersAddressChangeLink")}
+                      visuallyHiddenText={{
+                        text: t("commonChangeCompanyAddressHiddenText"),
+                        className: "govuk-visually-hidden",
+                      }}
                       className="govuk-button govuk-button--secondary"
                       type={BUTTON_TYPE.SUBMIT}
                       data-module="govuk-button"

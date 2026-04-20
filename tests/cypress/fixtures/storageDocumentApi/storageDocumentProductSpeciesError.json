@@ -1,0 +1,10 @@
+{
+  "_id": "627bd56cd2298ef39b93c798",
+  "__t": "storageDocument",
+  "exportData": {},
+  "userReference": "",
+  "errors": {
+    "catches-0-product": "sdAddCatchDetailsErrorIncorrectFaoOrSpecies"
+  },
+  "errorsUrl": "/create-non-manipulation-document/GBR-2022-SD-9CB99F69A/add-product-to-this-consignment/0"
+}

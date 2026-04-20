@@ -12,6 +12,8 @@ import {
   transformError,
   validateCSRFToken,
 } from "~/.server";
+import { get } from "~/communication.server";
+import { GET_CLIENT_IP_URL } from "~/urls.server";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import type {
   ICatchCertificateSubmitResponse,
@@ -121,6 +123,7 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
       status: 200,
       headers: {
         "Content-Type": "application/json",
+        "Cache-Control": "no-store",
         "Set-Cookie": await commitSession(session),
       },
     }
@@ -130,7 +133,14 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
 export const CheckYourInformationAction = async (request: Request, params: Params): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
-  const form = await request.formData();
+
+  // Parallelize form data parsing and IP address fetch — both only require the
+  // bearer token and are independent of each other.
+  const [form, ipAddress] = await Promise.all([
+    request.formData(),
+    get(bearerToken, GET_CLIENT_IP_URL).then((r) => r.text()),
+  ]);
+
   const values = Object.fromEntries(form);
   const journey = form.get("journey") as Journey;
   const session = await getSessionFromRequest(request);
@@ -140,7 +150,8 @@ export const CheckYourInformationAction = async (request: Request, params: Param
   const submitCertificate: ICatchCertificateSubmitResponse = await submitExportCertificate(
     bearerToken,
     documentNumber,
-    journey
+    journey,
+    ipAddress
   );
 
   session.set(`noOfVessels`, values["noOfVessels"]);
@@ -181,13 +192,21 @@ export const CheckYourInformationPSSDAction = async (
   setApiMock(request.url);
 
   const { documentNumber } = params;
-  const form = await request.formData();
+
+  // Get bearer token first so it is available for the parallel IP fetch below.
+  const bearerToken = await getBearerTokenForRequest(request);
+
+  // Parallelise form data parsing and client IP fetch — both only require the
+  // bearer token and are independent of each other.
+  const [form, ipAddress] = await Promise.all([
+    request.formData(),
+    get(bearerToken, GET_CLIENT_IP_URL).then((r) => r.text()),
+  ]);
+
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
-  // Get bearer token for API requests
-  const bearerToken = await getBearerTokenForRequest(request);
-  const { errors }: ISubmitResponse = await submitDocument(bearerToken, documentNumber, journey);
+  const { errors }: ISubmitResponse = await submitDocument(bearerToken, documentNumber, journey, ipAddress);
 
   const filterErrors: IError[] | undefined =
     journey === "processingStatement" ? errors?.filter((error: IError) => error.key !== "dateFieldError") : errors;

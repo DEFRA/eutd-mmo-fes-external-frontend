@@ -1,0 +1,236 @@
+appSettings:
+  - key: AAD_AUTHHOST
+    value: 'https://login.microsoftonline.com'
+    type: config
+  
+  - key: AAD_CLIENTID
+    value: 'AAD-CLIENTID'
+    type: secret
+  
+  - key: AAD_CLIENTSECRET
+    value: 'AAD-CLIENTSECRET'
+    type: secret
+  
+  - key: AAD_TENANTID
+    value: '#{{ aadTenantId }}'
+    type: config
+  
+  - key: AAD_TENANTNAME
+    value: '#{{ dynamicsTenantId }}'
+    type: config
+  
+  - key: APP_USES_HTTPS
+    value: 'true'
+    type: config
+  
+  - key: BASE_URL
+    value: '#{{ externalFrontendBaseUrl }}'
+    type: config
+    stagingValue: '#{{ externalFrontendStgBaseUrl }}'
+    slotSetting: true
+  
+  - key: BLOB_STORAGE_CONNECTION
+    value: 'EXPORTCERT-STORAGE-CONNECTION-STRING'
+    type: secret
+  
+  - key: CLARITY_PROJECT_ID
+    value: '#{{ clarityProjectId }}'
+    type: config
+  
+  - key: CREATED_PAGE_FEEDBACK_URL
+    value: 'https://defragroup.eu.qualtrics.com/jfe/form/SV_734LbtQfQMrBoEu'
+    type: config
+  
+  - key: DASHBOARD_FEEDBACK_URL
+    value: 'https://defragroup.eu.qualtrics.com/jfe/form/SV_1S5DVwag5rcTrAq'
+    type: config
+  
+  - key: DISABLE_IDM
+    value: 'false'
+    type: config
+  
+  - key: DYN_AADCLIENTID
+    value: 'DYN-AADCLIENTID'
+    type: secret
+  
+  - key: DYN_AADCLIENTSECRET
+    value: 'DYN-AADCLIENTSECRET'
+    type: secret
+  
+  - key: DYNAMICS_ENDPOINTBASE
+    value: '/api/data/v9.2/'
+    type: config
+  
+  - key: DYNAMICS_RESOURCEURL
+    value: '#{{ dynamicsResourceUrl }}'
+    type: config
+  
+  - key: EU_CATCH_FIELDS_OPTIONAL
+    value: 'true'
+    type: config
+  
+  - key: EU_CATCH_MAX_EEZ
+    value: '5'
+    type: config
+  
+  - key: eventHubConnectionString
+    value: 'EVENTHUB-CONNECTION-STRING'
+    type: secret
+  
+  - key: eventHubNamespace
+    value: 'insights-application-logs'
+    type: config
+  
+  - key: GA_TRACKING_ID
+    value: '#{{ gaTrackingID }}'
+    type: config
+  
+  - key: GOOGLE_TAG_MANAGER_ID
+    value: '#{{ googleTagManagerID }}'
+    type: config
+  
+  - key: IDENTITY_APP_MGT_URL
+    value: '#{{ IDENTITY_APP_MGT_URL }}'
+    type: config
+  
+  - key: IDENTITY_APP_URL
+    value: '#{{ IDENTITY_APP_URL }}'
+    type: config
+  
+  - key: IDENTITY_APPDOMAIN
+    value: '#{{ externalFrontendBaseUrl }}'
+    type: config
+    stagingValue: '#{{ externalFrontendStgBaseUrl }}'
+    slotSetting: true
+  
+  - key: IDENTITY_SERVICEID
+    value: '#{{ IDENTITY_SERVICEID }}'
+    type: config
+  
+  - key: IDENTITY_SERVICEROLEID
+    value: '#{{ IDENTITY_SERVICEROLEID }}'
+    type: config
+  
+  - key: IDLE_TIME_OUT_IN_MILLISECONDS
+    value: '1800000'
+    type: config
+  
+  - key: IDM_CLIENTID
+    value: 'IDM-CLIENTID'
+    type: secret
+  
+  - key: IDM_CLIENTSECRET
+    value: 'IDM-CLIENTSECRET'
+    type: secret
+  
+  - key: IDM_FALLBACK_TOKEN
+    value: 'IDM-FALLBACK-TOKEN'
+    type: secret
+  
+  - key: INSTRUMENTATION_CLOUD_ROLE
+    value: '#{{ repoName2 }}'
+    type: config
+    stagingValue: '#{{ repoName2 }}-staging'
+    slotSetting: true
+  
+  - key: LANDING_LIMIT_DAYS_FUTURE
+    value: '7'
+    type: config
+  
+  - key: LIMIT_ADD_LANDINGS
+    value: '100'
+    type: config
+  
+  - key: MAX_UPLOAD_FILE_SIZE
+    value: '10000'
+    type: config
+  
+  - key: MAXIMUM_CONCURRENT_DRAFTS
+    value: '50'
+    type: config
+  
+  - key: MAXIMUM_PRODUCT_DESCRIPTION_LENGTH
+    value: '50'
+    type: config
+  
+  - key: MMO_ECC_ORCHESTRATION_SVC_URL
+    value: 'https://#{{ environment }}-#{{ repoName5 }}-#{{ nc-resource-webapp }}.azurewebsites.net'
+    type: config
+    stagingValue: 'https://#{{ environment }}-#{{ repoName5 }}-#{{ nc-resource-webapp }}-staging.azurewebsites.net'
+    slotSetting: true
+  
+  - key: MMO_ECC_REFERENCE_SVC_URL
+    value: 'https://#{{ environment }}-#{{ repoName6 }}-#{{ nc-resource-webapp }}.azurewebsites.net'
+    type: config
+    stagingValue: 'https://#{{ environment }}-#{{ repoName6 }}-#{{ nc-resource-webapp }}-staging.azurewebsites.net'
+    slotSetting: true
+  
+  - key: MOCK_ORG_ACCOUNT_ID
+    value: '8504bf69-18f9-ec11-bb3d-000d3a2f806d'
+    type: config
+  
+  - key: MOCK_ORG_COMPANY_NAME
+    value: 'Automation Testing Ltd'
+    type: config
+  
+  - key: NODE_ENV
+    value: 'production'
+    type: config
+  
+  - key: OFFLINE_PROCESSING_TIME_IN_MINUTES
+    value: '30'
+    type: config
+  
+  - key: PORT
+    value: '3001'
+    type: config
+  
+  - key: REF_SERVICE_BASIC_AUTH_PASSWORD
+    value: 'REF-SERVICE-BASIC-AUTH-PASSWORD'
+    type: secret
+  
+  - key: REF_SERVICE_BASIC_AUTH_USER
+    value: 'REF-SERVICE-BASIC-AUTH-USER'
+    type: secret
+  
+  - key: SESSION_SECRET
+    value: 'SESSION-SECRET'
+    type: secret
+  
+  - key: SPECIES_EXEMPT_LINK
+    value: '#{{ SPECIES_EXEMPT_LINK }}'
+    type: config
+  
+  - key: COMMODITY_CODE_LINK
+    value: '#{{ COMMODITY_CODE_LINK }}'
+    type: config
+  
+  - key: WARNING_T0_TIME_OUT_IN_MILLISECONDS
+    value: '1500000'
+    type: config
+  
+  - key: WEBSITE_HEALTHCHECK_MAXPINGFAILURES
+    value: '5'
+    type: config
+  
+  - key: WEBSITE_HEALTHCHECK_MAXUNHEALTHYWORKERPERCENT
+    value: '50'
+    type: config
+  
+  - key: WEBSITE_NAME
+    value: '#{{ environment }}-#{{ repoName2 }}-#{{ nc-resource-webapp }}'
+    type: config
+    stagingValue: '#{{ environment }}-#{{ repoName2 }}-#{{ nc-resource-webapp }}-staging'
+    slotSetting: true
+  
+  - key: WEBSITE_WARMUP_PATH
+    value: '/health'
+    type: config
+  
+  - key: WEBSITES_CONTAINER_START_TIME_LIMIT
+    value: '300'
+    type: config
+  
+  - key: WEBSITES_PORT
+    value: '3001'
+    type: config

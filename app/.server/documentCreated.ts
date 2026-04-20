@@ -60,6 +60,7 @@ export const documentCreatedLoader = async (request: Request, params: Params, jo
     status: 200,
     headers: {
       "Content-Type": "application/json",
+      "Cache-Control": "no-store",
     },
   });
 };

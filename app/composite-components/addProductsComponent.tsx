@@ -7,10 +7,15 @@ import type { LabelAndValue, Species } from "~/types";
 import { useTranslation } from "react-i18next";
 import { querySpecies } from "~/helpers";
 
-const getSelectOptions = (options: LabelAndValue[]) =>
+const getSelectOptions = (options: LabelAndValue[], isWelsh: boolean) =>
   Array.isArray(options)
     ? options.map((optionsData: LabelAndValue) => (
-        <option key={optionsData?.value} value={optionsData?.value} aria-label={optionsData?.label}>
+        <option
+          key={optionsData?.value}
+          value={optionsData?.value}
+          aria-label={optionsData?.label}
+          lang={isWelsh ? "en" : undefined}
+        >
           {optionsData?.label}
         </option>
       ))
@@ -54,7 +59,8 @@ export const AddProductsComponent = ({
   handlePresentationChange,
   handleCommodityCodeChange,
 }: any) => {
-  const { t } = useTranslation(["whatAreYouExporting", "common", "errorsText"]);
+  const { t, i18n } = useTranslation(["whatAreYouExporting", "common", "errorsText"]);
+  const isWelsh = i18n.language === "cy";
 
   function getHydratedValue<T>(isHydrated: boolean, fallback: T, hydratedValue: T): T {
     return !isHydrated ? fallback : hydratedValue;
@@ -149,7 +155,7 @@ export const AddProductsComponent = ({
             <option value="" aria-label={t("ccFavouritesPageFormStateFieldPlaceholder")}>
               {t("ccFavouritesPageFormStateFieldPlaceholder")}
             </option>
-            {isHydrated ? getSelectOptions(stateHolder) : getSelectOptions(states)}
+            {isHydrated ? getSelectOptions(stateHolder, isWelsh) : getSelectOptions(states, isWelsh)}
           </select>
         </div>
         {!isHydrated && (
@@ -190,7 +196,7 @@ export const AddProductsComponent = ({
             <option value="" aria-label={t("ccFavouritesPageFormStateFieldPlaceholder")}>
               {t("ccFavouritesPageFormStateFieldPlaceholder")}
             </option>
-            {isHydrated ? getSelectOptions(presentationHolder) : getSelectOptions(presentations)}
+            {isHydrated ? getSelectOptions(presentationHolder, isWelsh) : getSelectOptions(presentations, isWelsh)}
           </select>
         </div>
 
@@ -232,7 +238,7 @@ export const AddProductsComponent = ({
             <option value="" aria-label={t("ccFavouritesPageFormStateFieldPlaceholder")}>
               {t("ccFavouritesPageFormStateFieldPlaceholder")}
             </option>
-            {isHydrated ? getSelectOptions(commodityCodesHolder) : getSelectOptions(commodityCodes)}
+            {isHydrated ? getSelectOptions(commodityCodesHolder, isWelsh) : getSelectOptions(commodityCodes, isWelsh)}
           </select>
         </div>
         <Details
@@ -242,7 +248,7 @@ export const AddProductsComponent = ({
           detailsTextClassName="govuk-details__text"
           summaryTextProps={{ id: "commodity-code-details" }}
         >
-          <p>{t("ccFavouritesPageFormCommodityCodeDetails", { contactInfo: "0330 159 1989" })}</p>
+          <p>{t("ccFavouritesPageFormCommodityCodeDetails")}</p>
         </Details>
         {displayAddProduct && showFavouriteCheckbox && (
           <div className="govuk-form-group">

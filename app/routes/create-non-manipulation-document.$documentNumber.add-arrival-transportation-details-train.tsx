@@ -2,11 +2,11 @@ import * as React from "react";
 import { useActionData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
 
 import { route } from "routes-gen";
-import { useEffect } from "react";
-import type { ITransport, ErrorResponse } from "~/types";
-import { scrollToId, TransportType } from "~/helpers";
+import type { ITransport, ErrorResponse, ICountry } from "~/types";
+import { TransportType } from "~/helpers";
 import {
   getBearerTokenForRequest,
+  getCountries,
   getTransportDetails,
   commonSaveTransportDetails,
   validateCSRFToken,
@@ -15,8 +15,6 @@ import {
   handleFormEmptyStringValue,
   extractContainerNumbers,
 } from "~/.server";
-import isEmpty from "lodash/isEmpty";
-import { useScrollOnPageLoad } from "~/hooks";
 import { AddTransportationArrivalDetailsComponent } from "~/composite-components/addTransportationArrivalDetailsComponent";
 
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -32,9 +30,13 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (!isValid) return redirect("/forbidden");
 
   const saveAsDraft = form.get("_action") === "saveAsDraft";
+  const countries: ICountry[] = await getCountries();
   const railwayBillNumber = handleFormEmptyStringValue(form, "railwayBillNumber", saveAsDraft);
   const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
-  const departureCountry = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
+  const departureCountryForm = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
+  const departureCountry = countries.find(
+    (c: ICountry) => c.officialCountryName === departureCountryForm
+  )?.officialCountryName;
   const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
   const placeOfUnloading = handleFormEmptyStringValue(form, "placeOfUnloading", saveAsDraft);
 
@@ -66,16 +68,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 };
 
 const TrainTransportArrivalDetailsPage = () => {
-  const actionData = useActionData() ?? {};
-  const { errors = {} } = actionData;
-
-  useScrollOnPageLoad();
-
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      scrollToId("errorIsland");
-    }
-  }, [errors]);
+  const actionData = useActionData<any>() ?? {};
 
   return <AddTransportationArrivalDetailsComponent vehicleType={TransportType.TRAIN} actionData={actionData} />;
 };

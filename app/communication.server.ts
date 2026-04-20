@@ -20,6 +20,12 @@ const commonRequestHeaders = (bearerToken: string) => ({
 
 const ENV = getEnv();
 
+// Short timeout for lightweight GET calls (reference data, client-ip, etc.).
+const FETCH_TIMEOUT_MS = 10000;
+// Longer timeout for orchestration POST calls that run validation, persistence
+// and downstream service calls (e.g. saveAndValidate, generatePdf).
+const ORCHESTRATION_FETCH_TIMEOUT_MS = 30000;
+
 type Get = (bearerToken: string, url: string, requestHeaders?: HeadersInit) => Promise<Response>;
 type Post = (bearerToken: string, url: string, requestHeaders?: HeadersInit, requestBody?: any) => Promise<Response>;
 type Put = (bearerToken: string, url: string, requestHeaders?: HeadersInit, requestBody?: any) => Promise<Response>;
@@ -44,18 +50,30 @@ export const get: Get = async (
   url: string,
   requestHeaders: HeadersInit = {}
 ): Promise<Response> => {
-  const response = await fetchImpl(url, {
-    method: "GET",
-    headers: {
-      ...requestHeaders,
-      ...commonRequestHeaders(bearerToken),
-    },
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  try {
+    const response = await fetchImpl(url, {
+      method: "GET",
+      headers: {
+        ...requestHeaders,
+        ...commonRequestHeaders(bearerToken),
+      },
+      signal: controller.signal,
+    });
 
-  if (!response.ok && ![400, 403, 404].includes(response.status)) {
-    throw new Response(response.statusText, response);
+    if (!response.ok && ![400, 403, 404].includes(response.status)) {
+      throw new Response(response.statusText, response);
+    }
+    return response;
+  } catch (e) {
+    if (e instanceof DOMException && e.name === "AbortError") {
+      throw new Response("Gateway Timeout", { status: 504 });
+    }
+    throw e;
+  } finally {
+    clearTimeout(timeoutId);
   }
-  return response;
 };
 
 export const post: Post = async (
@@ -64,20 +82,32 @@ export const post: Post = async (
   requestHeaders: HeadersInit = {},
   requestBody: any = {}
 ): Promise<Response> => {
-  const response = await fetchImpl(url, {
-    method: "POST",
-    headers: {
-      ...requestHeaders,
-      ...commonRequestHeaders(bearerToken),
-    },
-    body: !isEmpty(requestBody) ? JSON.stringify({ ...requestBody }) : undefined,
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), ORCHESTRATION_FETCH_TIMEOUT_MS);
+  try {
+    const response = await fetchImpl(url, {
+      method: "POST",
+      headers: {
+        ...requestHeaders,
+        ...commonRequestHeaders(bearerToken),
+      },
+      body: !isEmpty(requestBody) ? JSON.stringify({ ...requestBody }) : undefined,
+      signal: controller.signal,
+    });
 
-  if (!response.ok && ![400, 403, 404].includes(response.status)) {
-    throw new Response(response.statusText, response);
+    if (!response.ok && ![400, 403, 404].includes(response.status)) {
+      throw new Response(response.statusText, response);
+    }
+
+    return response;
+  } catch (e) {
+    if (e instanceof DOMException && e.name === "AbortError") {
+      throw new Response("Gateway Timeout", { status: 504 });
+    }
+    throw e;
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  return response;
 };
 
 export const put: Put = async (

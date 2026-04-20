@@ -79,6 +79,17 @@ export const AddExclusiveEconomicZoneComponent = ({
     });
     setExclusiveEconomicZones(renumberedZones);
     setSelectedExclusiveEconomicZones(updatedSelectedZones);
+    // Remove any errors associated with the removed zone
+    if (errors) {
+      const errorKeys = Object.keys(errors);
+      const lastZoneErrorKey = errorKeys
+        .filter((key) => key.startsWith("eez."))
+        .sort()
+        .reverse()[0];
+      if (lastZoneErrorKey) {
+        delete errors[lastZoneErrorKey];
+      }
+    }
   };
 
   const showAddZoneButton = (exclusiveZones: string[], index: number) =>

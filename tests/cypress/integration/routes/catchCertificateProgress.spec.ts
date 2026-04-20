@@ -3,6 +3,17 @@ import { type ITestParams, TestCaseId } from "~/types";
 const certificateUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
 const progressUrl = `${certificateUrl}/progress`;
 
+describe("ProgressPage - Cache-Control header", () => {
+  it("should return Cache-Control: no-store to prevent stale progress state on back navigation (FI0-11073)", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadEntryIncompleteProgress,
+    };
+    cy.intercept("GET", progressUrl + "*").as("progressPage");
+    cy.visit(progressUrl, { qs: { ...testParams } });
+    cy.wait("@progressPage").its("response.headers").should("have.property", "cache-control", "no-store");
+  });
+});
+
 describe("ProgressPage - Incomplete Application", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
@@ -36,6 +47,15 @@ describe("ProgressPage - Incomplete Application", () => {
     cy.get("li strong:contains('INCOMPLETE')").should("have.length", 4);
     cy.get("li strong:contains('COMPLETE')").its("length").should("be.greaterThan", 0);
     cy.get("li strong:contains('CANNOT START YET')").should("have.length", 1);
+  });
+
+  it("should not render duplicate id attributes in the progress list", () => {
+    cy.get(".app-task-list [id]").then(($elements) => {
+      const ids = [...$elements].map((element) => element.id).filter(Boolean);
+      const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
+
+      cy.wrap(duplicateIds, { log: false }).should("deep.equal", []);
+    });
   });
 
   it("should not have link on row when status is CANNOT START YET", () => {

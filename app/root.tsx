@@ -94,6 +94,7 @@ const Template = ({
   clarityProjectId,
   children,
   analyticsCookieAccepted,
+  supportContactNumber,
 }: React.PropsWithChildren<IMainAppProps>) => {
   const ref = useRef<HTMLSpanElement>(null);
   const { pathname } = useLocation();
@@ -152,7 +153,17 @@ const Template = ({
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
-        gtag('config', '${gaId}');`;
+        gtag('config', '${gaId}', {
+          'cookie_flags': 'SameSite=None;Secure',
+          'cookie_domain': window.location.hostname,
+          'cookie_path': '/',
+          'cookie_expires': 63072000,
+          'anonymize_ip': true,
+          'allow_google_signals': false,
+          'allow_ad_personalization_signals': false,
+          'cookie_update': true,
+          'send_page_view': true
+        });`;
 
       document.head.appendChild(gtmScript);
       document.head.appendChild(gtagScript);
@@ -177,6 +188,11 @@ const Template = ({
     <html className="govuk-template govuk-template--rebranded" lang={locale} dir={i18n.dir()}>
       <head>
         <Meta />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.__contactNumber__ = ${JSON.stringify(supportContactNumber)};`,
+          }}
+        />
         <Links />
       </head>
       <body className="govuk-template__body govuk-body">

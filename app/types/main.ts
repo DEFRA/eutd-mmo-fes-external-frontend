@@ -18,6 +18,7 @@ export interface IMainAppProps {
   gaId?: string;
   analyticsCookieAccepted?: boolean;
   clarityProjectId?: string;
+  supportContactNumber: string;
 }
 
 export type Journey = "catchCertificate" | "storageNotes" | "processingStatement";

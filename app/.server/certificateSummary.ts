@@ -17,6 +17,7 @@ import type {
   ValidationFailure,
 } from "~/types";
 import moment from "moment";
+import { getEnv } from "~/env.server";
 
 export const getCatchCertificateSummary = async (
   bearerToken: string,
@@ -130,26 +131,36 @@ export const hasRequiredDataCatchCertificateSummary = (
 export const submitExportCertificate = async (
   bearerToken: string,
   documentNumber: string | undefined,
-  journey: Journey
+  journey: Journey,
+  ipAddress?: string
 ): Promise<ICatchCertificateSubmitResponse> => {
   if (!documentNumber) {
     throw new Error("catch certificate document number is required");
   }
 
-  const res: Response = await get(bearerToken, GET_CLIENT_IP_URL);
-  const ipAddress: string = await res.text();
+  // If ipAddress was not pre-fetched by the caller, fetch it now.
+  const resolvedIpAddress = ipAddress ?? (await get(bearerToken, GET_CLIENT_IP_URL).then((r) => r.text()));
 
-  const response = await fetch(CREATE_EXPORT_CERTIFICATE, {
-    method: "POST",
-    headers: {
-      documentNumber: documentNumber,
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${bearerToken}`,
-    },
-    body: JSON.stringify({ journey, data: ipAddress }),
-  });
+  const CERTIFICATE_SUBMIT_TIMEOUT_MS = 60000;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), CERTIFICATE_SUBMIT_TIMEOUT_MS);
 
-  return await onSubmitExportCertificateResponse(response);
+  try {
+    const response = await fetch(CREATE_EXPORT_CERTIFICATE, {
+      method: "POST",
+      headers: {
+        documentNumber: documentNumber,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${bearerToken}`,
+      },
+      body: JSON.stringify({ journey, data: resolvedIpAddress }),
+      signal: controller.signal,
+    });
+
+    return await onSubmitExportCertificateResponse(response);
+  } finally {
+    clearTimeout(timeoutId);
+  }
 };
 
 const onSubmitExportCertificateResponse = async (response: Response): Promise<ICatchCertificateSubmitResponse> => {
@@ -196,12 +207,20 @@ const getErrorMessage = (key: string) => {
 
 export const transformError: (errors: ValidationFailure[]) => IError[] = (errors: ValidationFailure[]): IError[] => {
   const error: IError[] = [];
+  const ENV = getEnv();
+  const contactNumber = ENV.SUPPORT_CONTACT_NUMBER ?? "0330 159 1989";
+
   errors.forEach((vError: ValidationFailure, index: number) => {
     vError.rules.forEach((rule: string) => {
       error.push({
         key: `validationError-${rule}-${index}`,
         message: getErrorMessage(rule),
-        value: { species: vError.species, vessel: vError.vessel, dateLanded: moment(vError.date).format("DD/MM/YYYY") },
+        value: {
+          species: vError.species,
+          vessel: vError.vessel,
+          dateLanded: moment(vError.date).format("DD/MM/YYYY"),
+          contactNumber,
+        },
       });
     });
   });

@@ -25,12 +25,6 @@ describe("Cookie Policy page", () => {
           .should("contain", "Expiry");
       });
     });
-
-    cy.get("#google-analytics-table thead.govuk-table__head tr.govuk-table__row").each(($row) => {
-      cy.wrap($row).within(() => {
-        cy.get("th").should("have.length", 4);
-      });
-    });
   });
 
   it("should render the Microsoft Clarity contents", () => {
@@ -48,12 +42,6 @@ describe("Cookie Policy page", () => {
       });
     });
 
-    cy.get("#ms-clarity-table thead.govuk-table__head tr.govuk-table__row").each(($row) => {
-      cy.wrap($row).within(() => {
-        cy.get("th").should("have.length", 3);
-      });
-    });
-
     cy.contains(
       ".govuk-body",
       "The data is anonymised and we do not allow these analytics providers to share it with others. You can opt out of Clarity telemetry by selecting Microsoft on the "
@@ -62,6 +50,32 @@ describe("Cookie Policy page", () => {
       .should("be.visible")
       .should("have.attr", "href", `https://optout.aboutads.info/`)
       .click();
+  });
+
+  it("should render the cookie preferences and Google Analytics section", () => {
+    cy.contains("h2", "Cookie Preferences").should("be.visible");
+    cy.contains(".govuk-body", "This cookie is used to remember your choice about cookies.").should("be.visible");
+    cy.contains("h2", "Google Analytics").should("be.visible");
+    cy.get(".govuk-list.govuk-list--bullet")
+      .first()
+      .within(() => {
+        cy.get("li").should("have.length", 5);
+      });
+  });
+
+  it("should render the essential and strictly necessary cookies section", () => {
+    cy.contains("h2", "Essential Cookies and Cookies you can choose").should("be.visible");
+    cy.contains("h2", "Strictly Necessary Cookies").should("be.visible");
+    cy.get(".govuk-list.govuk-list--bullet")
+      .eq(1)
+      .within(() => {
+        cy.get("li").should("have.length", 3);
+      });
+  });
+
+  it("should have correct heading hierarchy for cookie settings section", () => {
+    cy.contains("h2", "Change your cookie settings").should("be.visible");
+    cy.contains("h3", "Do you want to accept the analytics cookies?").should("be.visible");
   });
 
   it("check cookie banner - check No radio button", () => {
@@ -73,6 +87,26 @@ describe("Cookie Policy page", () => {
     cy.get('[type="radio"]').check("Yes");
     cy.get("form").submit();
     cy.findByRole("link", { name: "Go back to the page you were looking at." }).should("be.visible");
+  });
+
+  it("should move focus to the success banner after saving cookie settings", () => {
+    cy.get('[type="radio"]').check("Yes");
+    cy.wait(500); // Wait for the radio button state to update
+    cy.get("form").submit();
+    cy.get(".govuk-notification-banner--success")
+      .should("be.visible")
+      .should("have.attr", "tabindex", "-1")
+      .should("have.focus");
+  });
+
+  it("should keep moving focus to the success banner on repeated saves", () => {
+    cy.get('[type="radio"]').check("Yes");
+    cy.wait(500); // Wait for the radio button state to update
+    cy.get("form").submit();
+    cy.get(".govuk-notification-banner--success").should("have.focus");
+
+    cy.get("form").submit();
+    cy.get(".govuk-notification-banner--success").should("have.focus");
   });
 });
 

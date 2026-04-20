@@ -3,6 +3,17 @@ import { type ITestParams, TestCaseId } from "~/types";
 const certificateUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
 const progressUrl = `${certificateUrl}/progress`;
 
+describe("ProgressPage - Cache-Control header", () => {
+  it("should return Cache-Control: no-store to prevent stale progress state on back navigation (FI0-11073)", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSIncompleteProgress,
+    };
+    cy.intercept("GET", progressUrl + "*").as("progressPage");
+    cy.visit(progressUrl, { qs: { ...testParams } });
+    cy.wait("@progressPage").its("response.headers").should("have.property", "cache-control", "no-store");
+  });
+});
+
 describe("ProgressPage - Incomplete Application", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
@@ -40,6 +51,15 @@ describe("ProgressPage - Incomplete Application", () => {
   it("should display the correct tags", () => {
     cy.get("li strong:contains('OPTIONAL')").should("have.length", 1);
     cy.get("li strong:contains('INCOMPLETE')").should("have.length", 6);
+  });
+
+  it("should not render duplicate id attributes in the progress list", () => {
+    cy.get(".app-task-list [id]").then(($elements) => {
+      const ids = [...$elements].map((element) => element.id).filter(Boolean);
+      const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
+
+      cy.wrap(duplicateIds, { log: false }).should("deep.equal", []);
+    });
   });
 
   it("should redirect to the exporter processing statement dashboard", () => {

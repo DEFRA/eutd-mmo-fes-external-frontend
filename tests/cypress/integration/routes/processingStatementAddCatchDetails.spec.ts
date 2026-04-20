@@ -1780,6 +1780,21 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
   });
 });
 
+describe("PS: add catch details - save as draft sets section to INCOMPLETE when invalid weight submitted", () => {
+  const progressUrl = `/create-processing-statement/GBR-2022-PS-0D12ABA0A/progress`;
+
+  it("should show processedProductDetails section as INCOMPLETE on progress page after saving draft with invalid weight", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsSaveAsDraftScenario3,
+    };
+    cy.visit(validEditCatchDetailsUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+    cy.visit(progressUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='progress-processedProductDetails-tag']").should("contain.text", "INCOMPLETE");
+  });
+});
+
 describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", () => {
   it("should render the commodity code field with correct label and hint", () => {
     const testParams: ITestParams = {
@@ -1910,6 +1925,42 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
     cy.get("#cancel").click({ force: true });
 
     cy.get("#catches-0-speciesCommodityCode").should("have.value", "");
+  });
+
+  it("should display error on speciesCommodityCode field when commodity code is not found on catch certificate", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsSpeciesCommodityCodeNotInCatchCertificateError,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+
+    // Fill in the form with valid data but commodity code not on catch certificate
+    cy.get("#catches-0-species").type("Cod");
+    cy.get("input[name='catchCertificateType'][value='uk']").click({ force: true });
+    cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-01234ABCD");
+    cy.get("#catches-0-speciesCommodityCode").type("03023110");
+    cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
+    cy.get("#catches-0-exportWeightAfterProcessing").type("25");
+    cy.get("#addProductDetails").click({ force: true });
+
+    // Error should appear in the error summary
+    cy.get(".govuk-error-summary").should("be.visible");
+
+    // Error message should appear inline next to spectrum commodity code field,NOT catch certificate field
+    cy.get("#catches-0-speciesCommodityCode-error").should(
+      "contain.text",
+      "Enter a commodity code from the catch certificate"
+    );
+
+    // Error should NOT appear next to catch certificate field
+    cy.get("#catches-0-catchCertificateNumber-error").should("not.exist");
+
+    // Error summary link should point to the commodity code field
+    cy.contains("a", "Enter a commodity code from the catch certificate").should(
+      "have.attr",
+      "href",
+      "#catches-0-speciesCommodityCode"
+    );
   });
 
   it("should pre-populate the commodity code field when editing an existing catch", () => {

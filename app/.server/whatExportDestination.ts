@@ -79,22 +79,23 @@ export const WhatExportDestinationAction = async (request: Request, params: Para
     // Save valid fields as draft even when validation errors exist
     if (errors.length > 0) {
       const errorKeys = errors.map((e) => e.key);
-      const filteredRequestBody: any = {};
+      const filteredRequestBody: any = {
+        exportedTo: requestBody.exportedTo,
+        exportDestination: requestBody.exportDestination,
+        pointOfDestination: requestBody.pointOfDestination,
+      };
 
-      // Include only fields that passed validation
-      if (!errorKeys.includes("exportedTo") && !errorKeys.includes("exportDestination")) {
-        filteredRequestBody.exportedTo = requestBody.exportedTo;
-        filteredRequestBody.exportDestination = requestBody.exportDestination;
+      // Explicitly null out invalid fields so the backend clears them
+      if (errorKeys.includes("exportedTo") || errorKeys.includes("exportDestination")) {
+        filteredRequestBody.exportedTo = null;
+        filteredRequestBody.exportDestination = null;
       }
 
-      if (!errorKeys.includes("pointOfDestination")) {
-        filteredRequestBody.pointOfDestination = requestBody.pointOfDestination;
+      if (errorKeys.includes("pointOfDestination")) {
+        filteredRequestBody.pointOfDestination = null;
       }
 
-      // Save valid fields to draft (if any)
-      if (Object.keys(filteredRequestBody).length > 0) {
-        await postDraftExportLocation(bearerToken, documentNumber, filteredRequestBody);
-      }
+      await postDraftExportLocation(bearerToken, documentNumber, filteredRequestBody);
 
       return redirect(
         route(
@@ -118,7 +119,16 @@ export const WhatExportDestinationAction = async (request: Request, params: Para
 
   // for "saveAndContinue" action, show validation errors if any
   if (errors.length > 0) {
-    const values = Object.fromEntries(form);
+    const values = Object.fromEntries(form) as Record<string, FormDataEntryValue | undefined>;
+    const errorKeys = new Set(errors.map((e) => e.key));
+    // Set invalid fields to empty string so the component renders an empty field
+    // (deleting would fall back to the last saved value from the loader)
+    if (errorKeys.has("pointOfDestination")) {
+      values.pointOfDestination = "";
+    }
+    if (errorKeys.has("exportDestination")) {
+      values.exportedTo = "";
+    }
     return apiCallFailed(errors, values);
   }
 

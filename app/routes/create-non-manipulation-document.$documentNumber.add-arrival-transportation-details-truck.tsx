@@ -2,9 +2,8 @@ import * as React from "react";
 import { useActionData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
 
 import { route } from "routes-gen";
-import { useEffect } from "react";
 import type { ITransport, ErrorResponse, ICountry } from "~/types";
-import { scrollToId, TransportType } from "~/helpers";
+import { TransportType } from "~/helpers";
 import {
   getBearerTokenForRequest,
   getTransportDetails,
@@ -16,8 +15,6 @@ import {
   getCountries,
   extractContainerNumbers,
 } from "~/.server";
-import isEmpty from "lodash/isEmpty";
-import { useScrollOnPageLoad } from "~/hooks";
 import { AddTransportationArrivalDetailsComponent } from "~/composite-components/addTransportationArrivalDetailsComponent";
 
 const isArrivalTransportation = true;
@@ -52,7 +49,10 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   )?.officialCountryName;
   const registrationNumber = handleFormEmptyStringValue(form, "registrationNumber", saveAsDraft);
   const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
-  const departureCountry = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
+  const departureCountryForm = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
+  const departureCountry = countries.find(
+    (c: ICountry) => c.officialCountryName === departureCountryForm
+  )?.officialCountryName;
   const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
   const placeOfUnloading = handleFormEmptyStringValue(form, "placeOfUnloading", saveAsDraft);
   const nextUri = form.get("nextUri") as string;
@@ -84,14 +84,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 };
 
 const TruckTransportArrivalDetailsPage = () => {
-  const actionData = useActionData() ?? {};
-  const { errors = {} } = actionData;
-  useScrollOnPageLoad();
-  useEffect(() => {
-    if (!isEmpty(errors)) {
-      scrollToId("errorIsland");
-    }
-  }, [errors]);
+  const actionData = useActionData<any>() ?? {};
 
   return <AddTransportationArrivalDetailsComponent vehicleType={TransportType.TRUCK} actionData={actionData} />;
 };

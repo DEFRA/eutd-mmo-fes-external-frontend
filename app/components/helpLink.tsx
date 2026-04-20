@@ -49,6 +49,8 @@ export const HelpLink = () => {
           data-test-id="exporting-link"
           className="govuk-link"
           href="https://www.gov.uk/guidance/exporting-or-moving-fish-from-the-uk#get-help-with-fish-export-documents"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           {t("getHelpMovingFish")}&nbsp;
           {t("commonHelpLinkOpenInNewTab")}

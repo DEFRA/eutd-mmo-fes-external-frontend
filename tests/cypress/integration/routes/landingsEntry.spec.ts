@@ -44,12 +44,36 @@ describe("Landings entry page: visuals", () => {
     });
   });
 
+  it("associates every landing option radio with a matching label", () => {
+    cy.get("input[type='radio']").each(($radio) => {
+      const radioId = $radio.attr("id");
+      expect(radioId).to.not.be.undefined;
+      cy.get(`label[for='${radioId}']`).should("have.length", 1).and("be.visible");
+    });
+
+    cy.contains("label", "Upload from a CSV file")
+      .should("have.attr", "for")
+      .then((csvRadioId) => {
+        cy.get(`#${csvRadioId}`).should("exist");
+      });
+  });
+
   it("should display the save and continue button", () => {
     cy.contains("button", "Save and continue").should("be.visible");
   });
 
   it("should display the details summary", () => {
     cy.contains("summary", "What is a CSV file?").should("be.visible");
+    cy.get("#what-is-a-csv-file-summary-text")
+      .should("have.class", "govuk-details__summary-text")
+      .and("have.attr", "aria-label", "What is a CSV file?");
+
+    cy.contains("summary", "What is a CSV file?").click();
+    cy.contains(
+      "div > p",
+      "A CSV file is a text file that uses commas to separate its values. Each value in the file is a data field and each line is a data record."
+    ).should("be.visible");
+
     cy.contains(
       "div > p",
       "A CSV file is a text file that uses commas to separate its values. Each value in the file is a data field and each line is a data record."

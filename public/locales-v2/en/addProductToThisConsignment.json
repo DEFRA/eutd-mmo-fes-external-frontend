@@ -38,12 +38,12 @@
   "productDescription": "Product description",
   "productDescriptionHint": "The details entered here will appear on your document and must be legible in English. For example, Battered cod fillets",
   "productDescriptionOptional": "Product description (optional)",
-  "netWeightOfProductOnArrival": "Net weight of the product on arrival",
-  "netWeightOfProductOnArrivalOptional": "Net weight of the product on arrival (optional)",
-  "netWeightOfProductOnArrivalHint": "This is the weight of the whole product, including all ingredients – not just the fish. For example, a fish pie weighing 350g.",
-  "netWeightOfFisheryProductOnArrival": "Net weight of fishery products on arrival",
-  "netWeightOfFisheryProductOnArrivalOptional": "Net weight of fishery products on arrival (optional)",
-  "netWeightOfFisheryProductOnArrivalHint": "This is the weight of the fish only – do not include any other ingredients. For example, 200g of cod used in a fish pie.",
+  "netWeightOfProductOnArrival": "Net weight of the product on arrival (kg)",
+  "netWeightOfProductOnArrivalOptional": "Net weight of the product on arrival (kg) (optional)",
+  "netWeightOfProductOnArrivalHint": "This is the weight of the whole product, including all ingredients – not just the fish. For example, a fish pie weighing 0.35kg (350g).",
+  "netWeightOfFisheryProductOnArrival": "Net weight of fishery products on arrival (kg)",
+  "netWeightOfFisheryProductOnArrivalOptional": "Net weight of fishery products on arrival (kg) (optional)",
+  "netWeightOfFisheryProductOnArrivalHint": "This is the weight of the fish only – do not include any other ingredients. For example, 0.20kg (200g) of cod used in a fish pie.",
   "weightOnDocumentLabel": "Weight on document in kg",
   "weightOnCcHint": "Total weight on document for the selected commodity code in kg"
 }

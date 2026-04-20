@@ -3,6 +3,10 @@ import type { LoaderFunction } from "react-router";
 import { DocumentCreatedComponent } from "~/composite-components";
 import { documentCreatedLoader } from "~/.server";
 
+export const headers = () => ({
+  "Cache-Control": "no-store",
+});
+
 export const loader: LoaderFunction = async ({ request, params }) =>
   documentCreatedLoader(request, params, "catchCertificate");
 

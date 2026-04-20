@@ -3,6 +3,17 @@ import { type ITestParams, TestCaseId } from "~/types";
 const certificateUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
 const progressUrl = `${certificateUrl}/progress`;
 
+describe("ProgressPage - Cache-Control header", () => {
+  it("should return Cache-Control: no-store to prevent stale progress state on back navigation (FI0-11073)", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDIncompleteProgress,
+    };
+    cy.intercept("GET", progressUrl + "*").as("progressPage");
+    cy.visit(progressUrl, { qs: { ...testParams } });
+    cy.wait("@progressPage").its("response.headers").should("have.property", "cache-control", "no-store");
+  });
+});
+
 describe("ProgressPage - Incomplete Application", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
@@ -21,7 +32,11 @@ describe("ProgressPage - Incomplete Application", () => {
 
   it("should display the correct headings", () => {
     cy.contains("[data-testid='sd-progress-titling']", "Your Progress");
-    cy.contains("[data-testid='sd-progress-heading']", "Non-manipulation Document application: GBR-2021-SD-8EEB7E123");
+    cy.contains("[data-testid='sd-progress-heading']", "Non-manipulation document application: GBR-2021-SD-8EEB7E123");
+  });
+
+  it("should display the progress heading without bold styling", () => {
+    cy.get("[data-testid='sd-progress-heading']").should("not.have.class", "govuk-!-font-weight-bold");
   });
 
   it("should display Application incomplete when NOT all required sections have been completed", () => {
@@ -36,6 +51,15 @@ describe("ProgressPage - Incomplete Application", () => {
     cy.get("li strong:contains('INCOMPLETE')").should("have.length", 3);
     cy.get("li strong:contains('COMPLETE')").should("have.length", 3);
     cy.get("li strong:contains('CANNOT START YET')").should("have.length", 1);
+  });
+
+  it("should not render duplicate id attributes in the progress list", () => {
+    cy.get(".app-task-list [id]").then(($elements) => {
+      const ids = [...$elements].map((element) => element.id).filter(Boolean);
+      const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
+
+      cy.wrap(duplicateIds, { log: false }).should("deep.equal", []);
+    });
   });
 
   it("should not have link on row when status is CANNOT START YET", () => {

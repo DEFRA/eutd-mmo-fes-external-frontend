@@ -468,6 +468,32 @@ describe("AddArrivalContainerVesselTransport Save As Draft scenarios", () => {
     cy.get("[data-testid=save-draft-button").click({ force: true });
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
+
+  it("should not retain a future departure date when saving as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VesselContainerTransportSaveAsDraft,
+    };
+    cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
+    cy.get("#vesselName").type("Ocean Star", { force: true });
+    cy.get("#flagState").type("France", { force: true });
+    cy.get("#departureCountry").invoke("val", "France");
+    cy.get("#departurePort").type("Marseille", { force: true });
+    // Enter a future departure date (should be omitted by the draft save logic)
+    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate-month").type("12", { force: true });
+    cy.get("#departureDate-year").type("2099", { force: true });
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+
+    // Return to the page using the check fixture (which reflects that future date was NOT saved)
+    const checkParams: ITestParams = {
+      testCaseId: TestCaseId.ArrivalContainerVesselTransportSaveAsDraftFutureDateCheck,
+    };
+    cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...checkParams } });
+    cy.get("#departureDate-day").should("have.value", "");
+    cy.get("#departureDate-month").should("have.value", "");
+    cy.get("#departureDate-year").should("have.value", "");
+  });
 });
 
 describe("Container Number Validation page when javascript is disabled", () => {

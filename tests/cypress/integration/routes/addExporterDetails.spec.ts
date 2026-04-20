@@ -28,6 +28,7 @@ describe("Add exporter details page", () => {
   });
 
   it("should click on change button and navigate to what exporter address page", () => {
+    cy.get("[data-testid='change-button'] .govuk-visually-hidden").should("contain", "company address");
     cy.get("[data-testid='change-button']").click({ force: true });
     cy.url().should("include", "/what-exporters-address");
   });
@@ -928,6 +929,93 @@ describe("Add exporter details - Address validation error messages", () => {
 
       // Verify Welsh error message
       cy.get(".govuk-error-summary__list").should("contain", "Ychwanegu cyfeiriad yr allforiwr");
+    });
+  });
+});
+
+describe("FI0-10908: Add exporter details - Emoji and unsupported character prevention", () => {
+  const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+  const pageUrl = `${documentUrl}/add-exporter-details`;
+
+  describe("Scenario 2: Submission blocked when emoji present in full name field", () => {
+    it("should block submission and show error when exporterFullName contains emoji", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameEmoji,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+      cy.get("#error-summary-title").should("be.visible");
+      cy.get(".govuk-error-summary__list").should("contain", "Please only use letters and numbers");
+      cy.get("#exporterFullName").should("have.class", "govuk-input--error");
+      cy.get(".govuk-error-message").should("be.visible");
+    });
+
+    it("should highlight the full name field container when emoji error is raised", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameEmoji,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+      cy.get("#exporterFullName").closest(".govuk-form-group--error").should("exist");
+    });
+  });
+
+  describe("Scenario 2: Submission blocked when emoji present in company name field", () => {
+    it("should block submission and show error when exporterCompanyName contains emoji", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameEmoji,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+      cy.get("#error-summary-title").should("be.visible");
+      cy.get(".govuk-error-summary__list").should("contain", "Please only use letters and numbers");
+      cy.get("#exporterCompanyName").should("have.class", "govuk-input--error");
+      cy.get(".govuk-error-message").should("be.visible");
+    });
+
+    it("should highlight the company name field container when emoji error is raised", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameEmoji,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+      cy.get("#exporterCompanyName").closest(".govuk-form-group--error").should("exist");
+    });
+  });
+
+  describe("Scenario 3: Valid input without emoji submits successfully", () => {
+    it("should submit successfully when exporterFullName contains only permitted characters", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameCorrectFormat,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
+      cy.get("#exporterFullName").clear();
+      cy.get("#exporterFullName").type("Mary O'Connor Jr.");
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+      cy.url().should("include", "/what-are-you-exporting");
+    });
+
+    it("should submit successfully when exporterCompanyName contains only permitted characters", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameCorrectFormat,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
+      cy.get("#exporterCompanyName").clear();
+      cy.get("#exporterCompanyName").type("O'Reilly's Co. (UK) Ltd");
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+      cy.url().should("include", "/what-are-you-exporting");
     });
   });
 });

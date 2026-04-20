@@ -199,8 +199,8 @@ const onUpdateTransport = async (response: Response, vehicle: string): Promise<I
 
       Object.keys(errorsResponse).forEach((error) => {
         processedErrors[error] =
-          error === "containerNumber" && vehicle === "plane"
-            ? errorsResponse[error].replaceAll(".containerNumber", ".containerNumber.plane")
+          vehicle === "plane"
+            ? errorsResponse[error].replaceAll(".containerNumbers", ".containerNumbers.plane")
             : errorsResponse[error];
       });
 
@@ -403,6 +403,10 @@ const onSaveTransportDetails = async (response: Response, payload?: ITransport):
           if (!departureDate || /^[\s\-/]*$/.test(departureDate)) {
             errorsResponse[error] = "error.departureDate.any.required";
           }
+        }
+
+        if (payload?.vehicle === "plane") {
+          errorsResponse[error] = errorsResponse[error].replaceAll(".containerNumbers", ".containerNumbers.plane");
         }
       });
 

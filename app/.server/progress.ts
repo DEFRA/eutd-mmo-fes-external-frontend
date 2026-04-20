@@ -224,6 +224,7 @@ export const progressPageLoader = async (request: Request, params: Params, journ
     status: 200,
     headers: {
       "Content-Type": "application/json",
+      "Cache-Control": "no-store",
       "Set-Cookie": await commitSession(session),
     },
   });
