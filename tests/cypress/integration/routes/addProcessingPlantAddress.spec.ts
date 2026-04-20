@@ -497,4 +497,21 @@ describe("Add Processing Plant Address", () => {
 
     cy.get("input[name=postcode]").should("be.visible");
   });
+
+  it("should pre-populate the manual address form with existing address data when amending", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddProcessingPlantAddressAmend,
+    };
+
+    cy.visit(psAddressUrl, { qs: { ...testParams } });
+    cy.get('[name="_action"][value="navigateToManualAddress"]').click();
+
+    cy.get("#buildingNumber").should("have.value", "Test Building Number");
+    cy.get("#buildingName").should("have.value", "Test Building Name");
+    cy.get("#subBuildingName").should("have.value", "Test Building Name");
+    cy.get("#streetName").should("have.value", "Test Street Name");
+    cy.get("#townCity").should("have.value", "My Test City");
+    cy.get("#county").should("have.value", "Plant County");
+    cy.get("#postcode").should("have.value", "My Post Code");
+  });
 });

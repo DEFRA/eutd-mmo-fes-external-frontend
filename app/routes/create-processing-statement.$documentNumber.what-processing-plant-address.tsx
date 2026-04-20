@@ -398,8 +398,24 @@ export const action: ActionFunction = async ({ request, params }) => {
     session.set("csrf", csrf);
     session.unset("postcode");
     const updatedSession = await commitSession(session);
-    const countries: ICountry[] = await getCountries();
-    return new Response(JSON.stringify({ currentStep, postcodeaddress: {}, countries }), {
+
+    const [countries, existingStatement] = await Promise.all([
+      getCountries(),
+      getProcessingStatement(bearerToken, documentNumber),
+    ]);
+    const ps = existingStatement as ProcessingStatement;
+    const postcodeaddress: ILookUpAddressDetails = {
+      building_number: ps.plantBuildingNumber ?? "",
+      sub_building_name: ps.plantSubBuildingName ?? "",
+      building_name: ps.plantBuildingName ?? "",
+      street_name: ps.plantStreetName ?? "",
+      city: ps.plantTownCity ?? "",
+      county: ps.plantCounty ?? "",
+      postCode: ps.plantPostcode ?? "",
+      country: ps.plantCountry ?? "",
+    };
+
+    return new Response(JSON.stringify({ currentStep, postcodeaddress, countries, csrf }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

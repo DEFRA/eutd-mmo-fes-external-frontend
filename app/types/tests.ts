@@ -669,6 +669,7 @@ export enum TestCaseId {
   PSAddProcessingPlantAddressWithSessionPostcode = "psAddProcessingPlantAddressWithSessionPostcode",
   PSAddProcessingPlantAddressFindAddress = "psAddProcessingPlantAddressFindAddress",
   PSAddProcessingPlantAddressWithExistingAddress = "psAddProcessingPlantAddressWithExistingAddress",
+  PSAddProcessingPlantAddressAmend = "psAddProcessingPlantAddressAmend",
   PSPSAddProcessingPlantAddressWithErrors = "psPSPSAddProcessingPlantAddressWithErrors",
 
   SDAddStorageFacilityAddressNoArrival = "sdAddStorageFacilityAddressNoArrival",
