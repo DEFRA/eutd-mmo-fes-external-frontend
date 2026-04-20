@@ -26,3 +26,5 @@ __azurite_db_blob_extent__.json
 .idea
 /.agents
 /.react-router
+/runner-results
+/multi-reporter-config.json

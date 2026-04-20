@@ -95,6 +95,9 @@ const WhatAreYouExporting = () => {
   } = useActionData() ?? {};
   const { t } = useTranslation(["whatAreYouExporting", "common"]);
   const tabRef = useRef<{ updateActiveTab: (id: string) => boolean } | null>();
+  const hasErrors = !isEmpty(errors);
+  const hasStateLookup = !isEmpty(stateLookup);
+  const hasProductError = !isEmpty(errors?.product);
   const handleTab: (event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => void = () => {
     if (tabRef.current) {
       tabRef.current.updateActiveTab("productsTab");
@@ -106,10 +109,10 @@ const WhatAreYouExporting = () => {
   useScrollOnPageLoad();
 
   useEffect(() => {
-    if (!isEmpty(errors)) {
+    if (hasErrors) {
       scrollToId("errorIsland");
     }
-  }, [errors]);
+  }, [errors, hasErrors]);
 
   const backUrl =
     landingsEntryOption === "uploadEntry"
@@ -118,30 +121,30 @@ const WhatAreYouExporting = () => {
 
   return (
     <Main backUrl={backUrl}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
+      {hasErrors && <ErrorSummary errors={displayErrorMessages(errors)} />}
       <div aria-live="assertive" aria-atomic="true">
-        {isProductAddSuccess && (
-          <NotificationBanner
-            header={t("commonImportant", { ns: "common" })}
-            messages={[
-              `${t("commonProductText", { ns: "common" })} ${isProductAddSuccess} ${t(
-                "ccWhatExportingFromAddtoFavouriteNotification",
-                { ns: "whatAreYouExporting" }
-              )}`,
-            ]}
-          />
-        )}
-        {isProductAddFailure && (
-          <NotificationBanner
-            header={t("commonImportant", { ns: "common" })}
-            messages={[
-              `${t("commonProductText", { ns: "common" })} ${isProductAddFailure} ${t(
-                "ccWhatExportingFromProductExistNotification",
-                { ns: "whatAreYouExporting" }
-              )}`,
-            ]}
-          />
-        )}
+      {isProductAddSuccess && (
+        <NotificationBanner
+          header={t("commonImportant", { ns: "common" })}
+          messages={[
+            `${t("commonProductText", { ns: "common" })} ${isProductAddSuccess} ${t(
+              "ccWhatExportingFromAddtoFavouriteNotification",
+              { ns: "whatAreYouExporting" }
+            )}`,
+          ]}
+        />
+      )}
+      {isProductAddFailure && (
+        <NotificationBanner
+          header={t("commonImportant", { ns: "common" })}
+          messages={[
+            `${t("commonProductText", { ns: "common" })} ${isProductAddFailure} ${t(
+              "ccWhatExportingFromProductExistNotification",
+              { ns: "whatAreYouExporting" }
+            )}`,
+          ]}
+        />
+      )}
       </div>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
@@ -174,7 +177,7 @@ const WhatAreYouExporting = () => {
                       primaryButtonLabel={t("ccAddSpeciesPageAddButtonText")}
                       species={species}
                       states={
-                        !isEmpty(stateLookup)
+                        hasStateLookup
                           ? stateLookup.map((_: SearchState) => ({ label: _.state.label, value: _.state.value })) ?? []
                           : stateLookupNonJs?.map((_: SearchState) => ({
                               label: _.state.label,
@@ -182,7 +185,7 @@ const WhatAreYouExporting = () => {
                             })) ?? []
                       }
                       presentations={
-                        !isEmpty(stateLookup)
+                        hasStateLookup
                           ? stateLookup?.find((_: SearchState) => _.state.value === stateCode)?.presentations ?? []
                           : stateLookupNonJs?.find((_: SearchState) => _.state.value === selectedState)
                               ?.presentations ?? []
@@ -231,17 +234,16 @@ const WhatAreYouExporting = () => {
                       optionsId="product-option"
                       selectProps={{
                         id: "product",
-                        selectClassName: `govuk-select govuk-!-width-full ${
-                          !isEmpty(errors?.product) && "govuk-select--error"
-                        }`.trim(),
+                        selectClassName:
+                          `govuk-select govuk-!-width-full ${hasProductError && "govuk-select--error"}`.trim(),
                       }}
                       labelClassName="govuk-label govuk-!-font-weight-bold"
                       labelText={t("ccFavouritesPageProductTableHeaderTwo")}
                       containerClassName={`govuk-!-width-one-half ${
-                        isEmpty(errors?.product) ? "govuk-form-group" : "govuk-form-group--error"
+                        hasProductError ? "govuk-form-group--error" : "govuk-form-group"
                       }`}
                       inputProps={{
-                        className: `govuk-input ${!isEmpty(errors?.product) && "govuk-input--error"}`.trim(),
+                        className: `govuk-input ${hasProductError && "govuk-input--error"}`.trim(),
                       }}
                     />
                     <ManageYourProductFavouritesLink
