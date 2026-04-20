@@ -283,11 +283,26 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       "postcode",
     ]);
 
-    const countries: ICountry[] = await getCountries();
+    const [countries, existingStatement] = await Promise.all([
+      getCountries(),
+      getProcessingStatement(plantAddressBearerToken, documentNumber),
+    ]);
+    const ps = existingStatement as ProcessingStatement;
+    const postcodeaddress: ILookUpAddressDetails = {
+      building_number: ps.plantBuildingNumber ?? "",
+      sub_building_name: ps.plantSubBuildingName ?? "",
+      building_name: ps.plantBuildingName ?? "",
+      street_name: ps.plantStreetName ?? "",
+      city: ps.plantTownCity ?? "",
+      county: ps.plantCounty ?? "",
+      postCode: ps.plantPostcode ?? "",
+      country: ps.plantCountry ?? "",
+    };
+
     return createJsonResponse(
       {
         currentStep: plantAddressCurrentStep,
-        postcodeaddress: {},
+        postcodeaddress,
         countries,
         csrf,
       },
