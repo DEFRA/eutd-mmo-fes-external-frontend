@@ -101,6 +101,7 @@ export type WeightDetails = {
 export type WeightInputProps = {
   id: "weight";
   unit: "kg";
+  ariaLabel?: string;
   exportWeight?: string;
   totalWeight: (weightDetails: WeightDetails) => void;
   index: number;

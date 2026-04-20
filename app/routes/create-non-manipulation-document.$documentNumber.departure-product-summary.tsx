@@ -47,6 +47,10 @@ export const ConsignmentWeightTableForm = ({ catches, transportType }: Consignme
   const isArrival = transportType === "arrival";
   const sdDepartureProductSummaryNetWeightArrival = "sdDepartureProductSummaryNetWeightArrival";
   const sdDepartureProductSummaryNetWeightDeparture = "sdDepartureProductSummaryNetWeightDeparture";
+  const productWeightAriaLabel = isArrival
+    ? t(sdDepartureProductSummaryNetWeightArrival)
+    : t(sdDepartureProductSummaryNetWeightDeparture);
+  const fisheryProductWeightAriaLabel = t("sdDepartureProductSummaryFisheryProduct");
 
   const getNetProductWeightFromCatches = (catchItem: StorageDocumentCatch | undefined) => {
     let weight: string | number | undefined;
@@ -129,6 +133,7 @@ export const ConsignmentWeightTableForm = ({ catches, transportType }: Consignme
                   inputWidth={8}
                   id="weight"
                   unit="kg"
+                  ariaLabel={productWeightAriaLabel}
                   errors={errors ?? {}}
                   formValue={getNetProductWeightFromCatches(catchItem)}
                   speciesId={
@@ -157,6 +162,7 @@ export const ConsignmentWeightTableForm = ({ catches, transportType }: Consignme
                   inputWidth={8}
                   id="weight"
                   unit="kg"
+                  ariaLabel={fisheryProductWeightAriaLabel}
                   errors={errors ?? {}}
                   formValue={getNetFisheryWeightFromCatches(catchItem)}
                   speciesId={
