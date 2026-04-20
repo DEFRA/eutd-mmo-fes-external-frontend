@@ -834,7 +834,7 @@ const AddProductIndex = () => {
                     type={BUTTON_TYPE.BUTTON}
                     data-module="govuk-button"
                     onClick={handleAddDoc}
-                    aria-label={t("commonAddAnotherButtonText", { ns: "common" })}
+                    aria-label={t("commonAddAnotherSupportingDocAriaLabel", { ns: "common" })}
                   />
                 )}
               </fieldset>

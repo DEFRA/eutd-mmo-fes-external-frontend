@@ -137,6 +137,7 @@
   "commonCalenderButtonLabel": "Choose Date",
   "commonSpeciesDetailsOpenInNewTab": "(opens in a new tab)",
   "commonAddAnotherButtonText": "Add another",
+  "commonAddAnotherSupportingDocAriaLabel": "Add another supporting document",
   "commonAddTripDetailsWarningContent": "From 10 January 2026 the start date, catch area and gear type fields will be mandatory under new EU regulations.",
   "getHelpHeading": "Get help with your application",
   "getHelpBody": "If you have a {{documentName}} unique reference number, have it with you when you call.",

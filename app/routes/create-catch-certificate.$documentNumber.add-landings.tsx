@@ -576,6 +576,7 @@ const AddLandings = () => {
                 legendTitle={t("exclusiveZoneTitle", { ns: "addLandings" })}
                 eezHint={t("eezHintText", { ns: "addLandings" })}
                 addAnotherButtonText={t("ccAddLandingAddAnotherZoneButtonText", { ns: "addLandings" })}
+                addAnotherButtonHiddenText={t("ccAddLandingAddAnotherZoneHiddenText", { ns: "addLandings" })}
                 removeButtonText={t("ccAddLandingRemoveZoneButtonText", { ns: "addLandings" })}
                 eezSelectEmptyHeader={t("ccEezSelectCountryText", { ns: "addLandings" })}
                 eezHelpSectionLink={t("ccEezHelpSectionLinkText", { ns: "addLandings" })}
