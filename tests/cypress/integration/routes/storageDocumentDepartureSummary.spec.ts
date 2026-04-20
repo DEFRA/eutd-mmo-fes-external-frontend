@@ -83,8 +83,8 @@ const assertArrivalTableHeaders = () => {
     cy.get("tr").should("have.length", 1);
     cy.get("th").should("have.length", 4);
     cy.get("th").eq(0).contains("Product");
-    cy.get("th").eq(1).contains("Net weight on arrival");
-    cy.get("th").eq(2).contains("Fishery product weight");
+    cy.get("th").eq(1).contains("Net weight on arrival (kg)");
+    cy.get("th").eq(2).contains("Fishery product weight (kg)");
     cy.get("th").eq(3).should("exist");
   });
 };
@@ -94,8 +94,8 @@ const assertDepartureTableHeaders = () => {
     cy.get("tr").should("have.length", 1);
     cy.get("th").should("have.length", 4);
     cy.get("th").eq(0).contains("Product");
-    cy.get("th").eq(1).contains("Net weight on departure");
-    cy.get("th").eq(2).contains("Fishery product weight");
+    cy.get("th").eq(1).contains("Net weight on departure (kg)");
+    cy.get("th").eq(2).contains("Fishery product weight (kg)");
     cy.get("th").eq(3).should("exist");
   });
 };
@@ -190,8 +190,16 @@ describe("Storage document departure summary: arrival tab", () => {
             .eq(0)
             .within(() => {
               cy.get("td").eq(0).contains("Golden damselfish (ADH)");
-              cy.get("td").eq(1).find("input").should("have.value", "100.00");
-              cy.get("td").eq(2).find("input").should("have.value", "100.00");
+              cy.get("td")
+                .eq(1)
+                .find("input")
+                .should("have.value", "100.00")
+                .and("have.attr", "aria-label", "Net weight on arrival (kg)");
+              cy.get("td")
+                .eq(2)
+                .find("input")
+                .should("have.value", "100.00")
+                .and("have.attr", "aria-label", "Fishery product weight (kg)");
               cy.get("td").eq(3).find("button").eq(0).contains("Edit");
               cy.get("td").eq(3).find("button").eq(1).contains("Remove");
             });

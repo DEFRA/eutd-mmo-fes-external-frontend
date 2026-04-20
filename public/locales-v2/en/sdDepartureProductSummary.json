@@ -7,8 +7,8 @@
   "sdDepartureProductSummaryInfo1": "This could be a 3rd country catch certificate, processing statement or storage document.",
   "sdDepartureProductSummarySaveButtonLabel": "I confirm",
   "sdDepartureProductSummaryProduct": "Product",
-  "sdDepartureProductSummaryNetWeightArrival": "Net weight on arrival",
-  "sdDepartureProductSummaryNetWeightDeparture": "Net weight on departure",
-  "sdDepartureProductSummaryFisheryProduct": "Fishery product weight",
+  "sdDepartureProductSummaryNetWeightArrival": "Net weight on arrival (kg)",
+  "sdDepartureProductSummaryNetWeightDeparture": "Net weight on departure (kg)",
+  "sdDepartureProductSummaryFisheryProduct": "Fishery product weight (kg)",
   "sdDepartureProductSummaryFisheryProductOptional": "Fishery product weight (optional)"
 }

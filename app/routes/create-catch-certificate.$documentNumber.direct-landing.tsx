@@ -532,6 +532,7 @@ const DirectLanding = () => {
                         <WeightInput
                           id="weight"
                           unit="kg"
+                          ariaLabel={t("ccAddLandingExportWeightFieldLabel")}
                           errors={errors}
                           formValue={values?.[`weight-${landings?.speciesId}`]}
                           speciesId={landings?.speciesId}

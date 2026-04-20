@@ -7,8 +7,8 @@
   "sdDepartureProductSummaryInfo1": "Gallai hon fod yn dystysgrif ddalfa, datganiad prosesu neu ddogfen storio o drydedd wlad.",
   "sdDepartureProductSummarySaveButtonLabel": "Dwi'n cadarnhau",
   "sdDepartureProductSummaryProduct": "Cynnyrch",
-  "sdDepartureProductSummaryNetWeightArrival": "Pwysau net wrth gyrraedd",
-  "sdDepartureProductSummaryNetWeightDeparture": "Pwysau net wrth ymadael",
-  "sdDepartureProductSummaryFisheryProduct": "Pwysau cynnyrch pysgodfeydd",
+  "sdDepartureProductSummaryNetWeightArrival": "Pwysau net wrth gyrraedd (kg)",
+  "sdDepartureProductSummaryNetWeightDeparture": "Pwysau net wrth ymadael (kg)",
+  "sdDepartureProductSummaryFisheryProduct": "Pwysau cynnyrch pysgodfeydd (kg)",
   "sdDepartureProductSummaryFisheryProductOptional": "Pwysau cynnyrch pysgodfeydd (dewisol)"
 }
