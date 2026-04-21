@@ -11,7 +11,6 @@ import type {
 export enum ProgressStatus {
   INCOMPLETE = "INCOMPLETE",
   ERROR = "ERROR",
-  COMPLETE = "COMPLETE",
   COMPLETED = "COMPLETED",
   CANNOT_START = "CANNOT START",
   OPTIONAL = "OPTIONAL",
