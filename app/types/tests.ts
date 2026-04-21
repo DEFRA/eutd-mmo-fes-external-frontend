@@ -794,6 +794,7 @@ export enum TestCaseId {
 
   SDIncompleteProgress = "sdIncompleteProgress",
   SDIncompleteProgressWithProducts = "sdIncompleteProgressWithProducts",
+  SDIncompleteProgressWithDraftProducts = "sdIncompleteProgressWithDraftProducts",
   SDCompleteProgress = "sdCompleteProgress",
   SDCompleteUnauthorisedProgress = "sdCompleteUnauthorisedProgress",
   SDCompleteTruckProgress = "sdCompleteTruckProgress",

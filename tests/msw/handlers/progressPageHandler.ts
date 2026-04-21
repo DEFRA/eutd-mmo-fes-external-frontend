@@ -42,6 +42,7 @@ import processingStatementValidProducts from "@/fixtures/processingStatementApi/
 import exporterDetails from "@/fixtures/addExporterDetails/exporterDetails.json";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
 import storageDocumentNoCatches from "@/fixtures/storageDocumentApi/storageDocumentNoCatches.json";
+import storageDocumentCatches from "@/fixtures/storageDocumentApi/storageDocumentCatches.json";
 import sdDocuments from "@/fixtures/dashboardApi/sdDocument.json";
 import transportations from "@/fixtures/transportationApi/transportations.json";
 
@@ -142,6 +143,13 @@ const progressPageHandler: ITestHandler = {
     rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(400), ctx.json(sdCheckProgressError))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+  ],
+  [TestCaseId.SDIncompleteProgressWithDraftProducts]: () => [
+    rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
+    rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(400), ctx.json(sdCheckProgressError))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentCatches))),
   ],
   [TestCaseId.SDCompleteProgress]: () => [
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
