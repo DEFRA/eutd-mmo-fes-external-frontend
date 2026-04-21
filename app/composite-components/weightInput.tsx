@@ -56,6 +56,7 @@ export const WeightInput = ({
   const inputId = errorID ?? `weights.${index}.exportWeight`;
   const inputWidthClass = inputWidth ? `govuk-input--width-${inputWidth}` : "govuk-input--width-4";
   const hintId = hint ? `${inputId}-hint` : undefined;
+  const computedAriaLabel = ariaLabel ?? label ?? "weight";
 
   return (
     <div
@@ -95,7 +96,7 @@ export const WeightInput = ({
           minLength={0}
           maxLength={16}
           size={16}
-          aria-label={ariaLabel ?? "weight"}
+          aria-label={computedAriaLabel}
           disabled={readOnly}
           key={errorID ?? weightKey}
         />

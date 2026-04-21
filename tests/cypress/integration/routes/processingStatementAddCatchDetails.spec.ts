@@ -678,16 +678,27 @@ describe("PS: Add catch details - Weight Input Validation", () => {
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-totalWeightLanded").should("be.visible");
+    cy.get("#catches-0-totalWeightLanded").should("have.attr", "aria-label", "Weight on catch certificate (kg)");
     cy.get("#catches-0-totalWeightLanded")
       .parent(".govuk-input__wrapper")
       .find(".govuk-input__suffix")
       .should("contain.text", "kg");
     cy.get("#catches-0-exportWeightBeforeProcessing").should("be.visible");
+    cy.get("#catches-0-exportWeightBeforeProcessing").should(
+      "have.attr",
+      "aria-label",
+      "Export weight before processing (kg)"
+    );
     cy.get("#catches-0-exportWeightBeforeProcessing")
       .parent(".govuk-input__wrapper")
       .find(".govuk-input__suffix")
       .should("contain.text", "kg");
     cy.get("#catches-0-exportWeightAfterProcessing").should("be.visible");
+    cy.get("#catches-0-exportWeightAfterProcessing").should(
+      "have.attr",
+      "aria-label",
+      "Export weight after processing (kg)"
+    );
     cy.get("#catches-0-exportWeightAfterProcessing")
       .parent(".govuk-input__wrapper")
       .find(".govuk-input__suffix")
@@ -930,9 +941,9 @@ describe("PS: Add catch details - Catch Details Table", () => {
     cy.get("#yourproducts thead th").should("have.length.greaterThan", 0);
     cy.get("#yourproducts thead th").eq(0).should("contain.text", "Species");
     cy.get("#yourproducts thead th").eq(1).should("contain.text", "Species commodity code");
-    cy.get("#yourproducts thead th").eq(2).should("contain.text", "Weight on catch certificate");
-    cy.get("#yourproducts thead th").eq(3).should("contain.text", "Export weight before processing");
-    cy.get("#yourproducts thead th").eq(4).should("contain.text", "Export weight after processing");
+    cy.get("#yourproducts thead th").eq(2).should("contain.text", "Weight on catch certificate (kg)");
+    cy.get("#yourproducts thead th").eq(3).should("contain.text", "Export weight before processing (kg)");
+    cy.get("#yourproducts thead th").eq(4).should("contain.text", "Export weight after processing (kg)");
     cy.get("#yourproducts thead th").eq(5).should("contain.text", "Action");
   });
 
