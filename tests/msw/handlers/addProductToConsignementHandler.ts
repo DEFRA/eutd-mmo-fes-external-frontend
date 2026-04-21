@@ -13,6 +13,7 @@ import storageDocumentProgress from "@/fixtures/progressApi/sdIncomplete.json";
 import sdDrafts from "@/fixtures/dashboardApi/sdDrafts.json";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
 import storageDocumentWithEmptySupportingDocs from "@/fixtures/storageDocumentApi/storageDocumentWithEmptySupportingDocs.json";
+import storageDocumentTwoSupportingDocs from "@/fixtures/storageDocumentApi/storageDocumentTwoSupportingDocs.json";
 import species from "@/fixtures/referenceDataApi/species.json";
 import countries from "@/fixtures/referenceDataApi/countries.json";
 import truckDetails from "@/fixtures/transportDetailsApi/truck.json";
@@ -164,6 +165,26 @@ const addProductConsignementHandler: ITestHandler = {
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+  ],
+  // Non-JS: 1 existing supporting doc – Add another button should be visible and functional
+  [TestCaseId.SDAddProductConsignmentNonJsAddSupportingDoc]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+  ],
+  // Non-JS: 2 existing supporting docs – Remove buttons should be visible and functional
+  [TestCaseId.SDAddProductConsignmentNonJsRemoveSupportingDoc]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentTwoSupportingDocs))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocumentTwoSupportingDocs))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
 };
 
