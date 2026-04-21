@@ -4,6 +4,7 @@ import type {
   IErrorsTransformed,
   StorageDocumentCatch,
 } from "~/types";
+import { ProgressStatus } from "~/types/progress";
 
 export const sdProgressTableDataBuilder = (
   progress: IStorageDocumentProgressSteps,
@@ -17,8 +18,8 @@ export const sdProgressTableDataBuilder = (
   // A single catch in draft state (saved-as-draft) stays on add-product so the user
   // can complete the missing fields (FIO-10614).
   const productDetailsUrl =
-    (progress?.catches === "INCOMPLETE" && Array.isArray(catches) && catches.length > 1) ||
-    progress.catches === "COMPLETED"
+    (progress?.catches === ProgressStatus.INCOMPLETE && Array.isArray(catches) && catches.length > 1) ||
+    progress.catches === ProgressStatus.COMPLETE
       ? `${sdContext}/you-have-added-a-product`
       : `${sdContext}/add-product-to-this-consignment`;
 
