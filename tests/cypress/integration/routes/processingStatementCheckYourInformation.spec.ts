@@ -29,9 +29,9 @@ describe("Check Your Information (Summary) page: UI", () => {
     cy.contains("dt", "Issue date");
     cy.contains("dt", "Species");
     cy.contains("dt", "Catch certificate");
-    cy.contains("dt", "Weight on catch certificate (kg)");
-    cy.contains("dt", "Export weight before processing (kg)");
-    cy.contains("dt", "Export weight after processing (kg)");
+    cy.contains("dt", "Weight on catch certificate");
+    cy.contains("dt", "Export weight before processing");
+    cy.contains("dt", "Export weight after processing");
     cy.contains("dt", "Person responsible for consignment");
     cy.contains("dt", "Plant approval number");
     cy.contains("dt", "Processing plant name");
@@ -191,9 +191,9 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
     cy.contains("dt", "Issue date");
     cy.contains("dt", "Species");
     cy.contains("dt", "Catch certificate");
-    cy.contains("dt", "Weight on catch certificate (kg)");
-    cy.contains("dt", "Export weight before processing (kg)");
-    cy.contains("dt", "Export weight after processing (kg)");
+    cy.contains("dt", "Weight on catch certificate");
+    cy.contains("dt", "Export weight before processing");
+    cy.contains("dt", "Export weight after processing");
     cy.contains("dt", "Person responsible for consignment");
     cy.contains("dt", "Plant approval number");
     cy.contains("dt", "Processing plant name");
