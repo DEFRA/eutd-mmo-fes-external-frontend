@@ -18,7 +18,7 @@ export const sdProgressTableDataBuilder = (
   // can complete the missing fields (FIO-10614).
   const productDetailsUrl =
     (progress?.catches === "INCOMPLETE" && Array.isArray(catches) && catches.length > 1) ||
-    progress.catches === "COMPLETED"
+    progress.catches === "COMPLETE"
       ? `${sdContext}/you-have-added-a-product`
       : `${sdContext}/add-product-to-this-consignment`;
 
