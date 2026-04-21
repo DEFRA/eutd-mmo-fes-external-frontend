@@ -1930,6 +1930,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+    cy.wait(500); // Wait for page to be fully loaded and hydrated
     cy.get("#catches-0-speciesCommodityCode").type("03023110");
     cy.get("#catches-0-speciesCommodityCode").should("have.value", "03023110");
 
