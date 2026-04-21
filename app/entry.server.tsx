@@ -3,7 +3,7 @@ import { ServerRouter } from "react-router";
 import type { EntryContext } from "@react-router/node";
 import { createInstance } from "i18next";
 import Backend from "i18next-fs-backend";
-import path from "path";
+import path from "node:path";
 import { renderToPipeableStream } from "react-dom/server";
 import { I18nextProvider, initReactI18next } from "react-i18next";
 import { PassThrough } from "node:stream";
@@ -11,6 +11,7 @@ import { isProdEnv } from "./helpers";
 import i18next from "./i18next.server";
 import { initLanguages } from "./i18n";
 import { getEnv } from "./env.server";
+
 
 // Initialize MSW server for test environment
 // The server module itself checks NODE_ENV and only initializes in test mode
@@ -29,7 +30,6 @@ export default async function handleRequest(
   const instance = createInstance();
   const lng = await i18next.getLocale(request);
   const ns = i18next.getRouteNamespaces(remixContext);
-
   const ENV = getEnv();
 
   await instance

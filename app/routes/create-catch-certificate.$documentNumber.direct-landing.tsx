@@ -402,6 +402,7 @@ const DirectLanding = () => {
                 eezHint={t("eezHintText", { ns: "addLandings" })}
                 eezHelpSectionContentThreeLink={t("ccEezHelpSectionContentThreeLink", { ns: "addLandings" })}
                 addAnotherButtonText={t("ccAddLandingAddAnotherZoneButtonText", { ns: "addLandings" })}
+                addAnotherButtonHiddenText={t("ccAddLandingAddAnotherZoneHiddenText", { ns: "addLandings" })}
                 removeButtonText={t("ccAddLandingRemoveZoneButtonText", { ns: "addLandings" })}
                 eezSelectEmptyHeader={t("ccEezSelectCountryText", { ns: "addLandings" })}
                 eezHelpSectionLink={t("ccEezHelpSectionLinkText", { ns: "addLandings" })}
@@ -531,6 +532,7 @@ const DirectLanding = () => {
                         <WeightInput
                           id="weight"
                           unit="kg"
+                          ariaLabel={t("ccAddLandingExportWeightFieldLabel")}
                           errors={errors}
                           formValue={values?.[`weight-${landings?.speciesId}`]}
                           speciesId={landings?.speciesId}

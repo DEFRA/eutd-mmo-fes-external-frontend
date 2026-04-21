@@ -48,6 +48,7 @@
   "exclusiveZoneTitle": "Parth economaidd neilltuedig",
   "eezHintText": "Yr ardal o'r môr lle cafodd y pysgod eu dal",
   "ccAddLandingAddAnotherZoneButtonText": "Ychwanegu un arall",
+  "ccAddLandingAddAnotherZoneHiddenText": "parth economaidd neilltuedig",
   "ccAddLandingRemoveZoneButtonText": "Tynnu",
   "ccEezHelpSectionLinkText": "Beth yw parth economaidd neilltuedig (EEZ)?",
   "ccEezHelpSectionContentOne": "Mae Parthau Economaidd Neilltuedig yn ymestyn allan 200 môr-filltir o’r arfordir neu o linell ganolrif lle mae'n cyfarfod â therfynau gwlad arall.",

@@ -26,11 +26,16 @@ export default defineConfig({
   screenshotsFolder: "tests/cypress/screenshots",
   videosFolder: "tests/cypress/videos",
   video: false,
+  screenshotOnRunFailure: false,
+  numTestsKeptInMemory: 0, // Disable test snapshotting to reduce memory usage
   reporter: "cypress-multi-reporters",
   reporterOptions: {
     configFile: "cypress-reporter-config.json",
   },
-  defaultCommandTimeout: 20000,
+  // defaultCommandTimeout: 20000,
+  defaultCommandTimeout: 10000, // 10 seconds
+  pageLoadTimeout: 60000, // 60 seconds
+  execTimeout: 60000, // 60 seconds for system commands
   retries: {
     runMode: 3,
     openMode: 3,

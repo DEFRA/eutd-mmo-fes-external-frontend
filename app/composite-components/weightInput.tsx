@@ -20,6 +20,7 @@ const getWeightFieldValue = (
 
 export const WeightInput = ({
   unit,
+  ariaLabel,
   exportWeight,
   totalWeight,
   index,
@@ -42,7 +43,7 @@ export const WeightInput = ({
   const handleLandingWeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const weightDetails: WeightDetails = {
       id: e.target.id,
-      value: parseFloat(e.target.value),
+      value: Number.parseFloat(e.target.value),
     };
 
     setLandingsWeightInputValue(e.target.value);
@@ -55,6 +56,7 @@ export const WeightInput = ({
   const inputId = errorID ?? `weights.${index}.exportWeight`;
   const inputWidthClass = inputWidth ? `govuk-input--width-${inputWidth}` : "govuk-input--width-4";
   const hintId = hint ? `${inputId}-hint` : undefined;
+  const computedAriaLabel = ariaLabel ?? label ?? "weight";
 
   return (
     <div
@@ -81,9 +83,9 @@ export const WeightInput = ({
         )}
         <input
           className={
-            !isEmpty(errors?.[inputId])
-              ? `govuk-input ${inputWidthClass} govuk-input--error ${inputClassName ?? ""}`
-              : `govuk-input ${inputWidthClass} ${inputClassName ?? ""}`
+            isEmpty(errors?.[inputId])
+              ? `govuk-input ${inputWidthClass} ${inputClassName ?? ""}`
+              : `govuk-input ${inputWidthClass} govuk-input--error ${inputClassName ?? ""}`
           }
           id={inputId}
           name={inputName ?? `weight-${speciesId}`}
@@ -94,7 +96,7 @@ export const WeightInput = ({
           minLength={0}
           maxLength={16}
           size={16}
-          aria-label="weight"
+          aria-label={computedAriaLabel}
           disabled={readOnly}
           key={errorID ?? weightKey}
         />

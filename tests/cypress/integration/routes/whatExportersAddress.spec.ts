@@ -103,6 +103,11 @@ describe("CC: Entering the address manually with errors", () => {
     cy.get(".govuk-error-summary").contains("Enter the town or city");
     cy.get(".govuk-error-summary").contains("Select a country from the list");
     cy.get(".govuk-error-summary").contains("Enter a postcode");
+
+    // FI0-11206: verify summary messages follow visual field order.
+    cy.get(".govuk-error-summary__list li").eq(0).should("contain.text", "Enter the town or city");
+    cy.get(".govuk-error-summary__list li").eq(1).should("contain.text", "Enter a postcode");
+    cy.get(".govuk-error-summary__list li").eq(2).should("contain.text", "Select a country from the list");
   });
 
   it("should display error when all address fields are blank", () => {
