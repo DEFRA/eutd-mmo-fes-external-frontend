@@ -4,8 +4,8 @@
   "speciesNameFAO": "Species name (FAO)",
   "speciesCommodityCode": "Species commodity code",
   "catchCertificateNumber": "Catch Certificate number",
-  "catchCertificateWeight": "Weight on catch certificate",
-  "exportWeightBeforeProcessing": "Export weight before processing",
-  "exportWeightAfterProcessing": "Export weight after processing",
+  "catchCertificateWeight": "Weight on catch certificate (kg)",
+  "exportWeightBeforeProcessing": "Export weight before processing (kg)",
+  "exportWeightAfterProcessing": "Export weight after processing (kg)",
   "action": "Action"
 }

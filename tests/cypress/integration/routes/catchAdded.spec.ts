@@ -573,9 +573,9 @@ describe("PS: Catch added", () => {
       cy.contains("th", "Species name (FAO)").should("exist");
       cy.contains("th", "Catch Certificate number").should("exist");
       cy.contains("th", "Species commodity code").should("exist");
-      cy.contains("th", "Weight on catch certificate").should("exist");
-      cy.contains("th", "Export weight before processing").should("exist");
-      cy.contains("th", "Export weight after processing").should("exist");
+      cy.contains("th", "Weight on catch certificate (kg)").should("exist");
+      cy.contains("th", "Export weight before processing (kg)").should("exist");
+      cy.contains("th", "Export weight after processing (kg)").should("exist");
       cy.contains("th", "Action").should("not.exist");
     });
 
