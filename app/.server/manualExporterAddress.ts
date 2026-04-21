@@ -50,8 +50,8 @@ const sortErrors = (errors: Array<{ key: string; message: string }>) => {
     "subBuildingName",
     "streetName",
     "townCity",
-    "postcode",
     "county",
+    "postcode",
     "country",
   ];
 
