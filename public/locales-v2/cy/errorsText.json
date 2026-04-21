@@ -182,6 +182,7 @@
   "psAddCatchWeightsErrorEnterExportWeightInKGAfterProcessing": "Rhowch y pwysau allforio mewn kg (ar ôl prosesu)",
   "psAddCatchWeightsErrorEnterExportWeightMaximum2DecimalBeforeProcessing": "Rhowch y pwysau allforio (cyn prosesu) fel rhif gyda dim mwy na 2 le degol",
   "psAddCatchWeightsErrorEnterExportWeightMaximum2DecimalAfterProcessing": "Rhowch y pwysau allforio (ar l prosesu) fel rhif gyda dim mwy na 2 le degol",
+  "psAddCatchWeightsErrorExportWeightAfterProcessingExceedsBeforeProcessing": "Ni chaiff y pwysau ar ôl prosesu fod yn fwy na'r pwysau wrth gyrraedd.",
   "psAddCatchWeightsErrorEnterExportWeightInKGBeforeProcessingMoreThanTotalWeight": "Rhaid i'r pwysau allforio mewn kg (cyn prosesu) fod yr un fath neu'n llai na Chyfanswm y pwysau a ddangosir ar y dystysgrif dal mewn kg",
   "psAddCatchTypeErrorSelectCatchCertificateType": "Dewiswch DO os cafodd y dystysgrif ddalfa ei rhoi yn y DU",
   "psAddCatchTypeErrorCatchCertificateTypeInvalid": "Dewiswch DO os cafodd y dystysgrif ddalfa ei rhoi yn y DU",
