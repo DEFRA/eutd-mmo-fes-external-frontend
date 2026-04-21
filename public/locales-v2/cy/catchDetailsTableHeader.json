@@ -4,8 +4,8 @@
   "speciesNameFAO": "Enw'r rhywogaeth (FAO)",
   "speciesCommodityCode": "Cod nwyddau’r rhywogaeth",
   "catchCertificateNumber": "Rhif y dystysgrif dalfa",
-  "catchCertificateWeight": "Pwysau'r dystysgrif dalfa",
-  "exportWeightBeforeProcessing": "Y pwysau allforio cyn prosesu",
-  "exportWeightAfterProcessing": "Y pwysau allforio ar ôl prosesu",
+  "catchCertificateWeight": "Pwysau'r dystysgrif dalfa (kg)",
+  "exportWeightBeforeProcessing": "Y pwysau allforio cyn prosesu (kg)",
+  "exportWeightAfterProcessing": "Y pwysau allforio ar ôl prosesu (kg)",
   "action": "Camau i'w cymryd"
 }
