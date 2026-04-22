@@ -130,7 +130,7 @@ const getValueFromActionOrState = <T,>(
   stateValue: T,
   typeGuard?: (val: any) => T
 ): T => {
-  if (!isEmpty(errors) && actionValue !== undefined) {
+  if (!isEmpty(errors) && actionValue) {
     return typeGuard ? typeGuard(actionValue) : actionValue;
   }
   return stateValue;
@@ -692,7 +692,6 @@ const AddLandings = () => {
                 groupedErrorIds={groupedErrorIds}
                 addLandingGearTypeNullOption={t("ccAddLandingGearTypeNullOption")}
                 addLandingGearCategoryNullOption={t("ccAddLandingGearCategoryNullOption")}
-                gearType={gearType}
                 gearTypes={gearTypes}
                 gearCategories={gearCategories}
                 setSelectedGearType={setSelectedGearType}
