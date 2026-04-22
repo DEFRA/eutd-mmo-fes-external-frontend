@@ -1,4 +1,8 @@
-import { displayErrorMessagesInOrder, getTransformedError } from "~/helpers/lookupErrorText";
+import {
+  displayErrorMessagesInOrder,
+  displayErrorTransformedMessages,
+  getTransformedError,
+} from "~/helpers/lookupErrorText";
 import type { IError, IErrorsTransformed } from "~/types/errors";
 
 describe("lookupErrorText helpers", () => {
@@ -295,6 +299,54 @@ describe("lookupErrorText helpers", () => {
         expect(error.value).to.have.property("species");
         expect(error.value).to.have.property("commodityCode");
       });
+    });
+  });
+
+  describe("displayErrorTransformedMessages (Issue 1 - FI0-11205)", () => {
+    it("should return all errors even when two fields share the same error message", () => {
+      const errors: IErrorsTransformed = {
+        exporterFullName: {
+          key: "exporterFullName",
+          message: "emojiCharactersNotPermitted",
+          fieldId: "exporterFullName-error",
+        },
+        exporterCompanyName: {
+          key: "exporterCompanyName",
+          message: "emojiCharactersNotPermitted",
+          fieldId: "exporterCompanyName-error",
+        },
+      };
+
+      const result = displayErrorTransformedMessages(errors);
+
+      expect(result).to.have.length(2);
+      expect(result[0].key).to.equal("exporterFullName");
+      expect(result[1].key).to.equal("exporterCompanyName");
+    });
+
+    it("should return all errors when each has a unique message", () => {
+      const errors: IErrorsTransformed = {
+        exporterFullName: {
+          key: "exporterFullName",
+          message: "commonAddExporterDetailsPersonResponsibleError",
+          fieldId: "exporterFullName-error",
+        },
+        exporterCompanyName: {
+          key: "exporterCompanyName",
+          message: "commonAddExporterDetailsErrorCompanyName",
+          fieldId: "exporterCompanyName-error",
+        },
+      };
+
+      const result = displayErrorTransformedMessages(errors);
+
+      expect(result).to.have.length(2);
+    });
+
+    it("should return an empty array for an empty errors object", () => {
+      const errors: IErrorsTransformed = {};
+      const result = displayErrorTransformedMessages(errors);
+      expect(result).to.have.length(0);
     });
   });
 });
