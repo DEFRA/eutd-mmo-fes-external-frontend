@@ -16,7 +16,7 @@ export const sdProgressTableDataBuilder = (
   // Route to you-have-added-a-product when: INCOMPLETE with more than 1 catch (user
   // previously saved-and-continued at least once) OR the section is fully COMPLETED.
   // A single catch in draft state (saved-as-draft) stays on add-product so the user
-  // can complete the missing fields (FIO-10614).
+  // can complete the missing fields (FIO-10614)
   const productDetailsUrl =
     (progress?.catches === ProgressStatus.INCOMPLETE && Array.isArray(catches) && catches.length > 1) ||
     progress.catches === ProgressStatus.COMPLETED
