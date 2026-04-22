@@ -34,6 +34,7 @@ export const getErrorMessage = (key: string): string => {
     "error.exportDestination.any.invalid": "commonProductDestinationErrorInvalidCountry",
     "error.exportDestination.any.required": "commonProductDestinationErrorInvalidCountry",
     "error.exportDestination.string.empty": "commonProductDestinationErrorInvalidCountry",
+    "error.exportDestination.string.emoji": "emojiCharactersNotPermitted",
     "error.pointOfDestination.string.empty": "ccWhatExportJourneyErrorPointOfDestinationRequired",
     "error.pointOfDestination.any.required": "ccWhatExportJourneyErrorPointOfDestinationRequired",
     "error.pointOfDestination.string.max": "ccWhatExportJourneyErrorPointOfDestinationMaxLength",
@@ -58,6 +59,7 @@ export const getErrorMessage = (key: string): string => {
     "error.country.string.empty": "commonWhatExportersAddressErrorCountry",
     "error.country.string.base": "commonWhatExportersAddressErrorCountry",
     "error.country.any.invalid": "commonWhatExportersAddressErrorCountry",
+    "error.country.string.emoji": "emojiCharactersNotPermitted",
     "error.streetName.string.empty": "commonWhatExportersAddressErrorStreetName",
     "error.subBuildingName.string.pattern.base": "commonWhatExportersAddressErrorSubBuildingValidation",
     "error.buildingName.string.pattern.base": "commonWhatExportersAddressErrorBuildingNameValidation",
@@ -80,6 +82,7 @@ export const getErrorMessage = (key: string): string => {
     "error.flightNumber.string.empty": "commonAddTransportationDetailsPlaneFlightNumberLabelError",
     "error.flightNumber.string.max": "commonAddTransportationDetailsPlaneFlightNumberMaxCharError",
     "error.flightNumber.string.alphanum": "commonAddTransportationDetailsPlaneFlightNumberOnlyNumbersError",
+    "error.flightNumber.string.pattern.base": "commonAddTransportationDetailsPlaneFlightNumberOnlyNumbersError",
     "error.containerNumber.any.required": "ccContainerVesselContainerNumberRequiredError",
     "error.containerNumber.any.empty": "ccContainerVesselContainerNumberRequiredError",
     "error.containerNumber.string.empty": "ccContainerVesselContainerNumberRequiredError",
@@ -636,17 +639,5 @@ export const getErrorKeysInOrderForTransport = (transportType: string, isArrival
   }
 };
 
-export const displayErrorTransformedMessages = (errors: IErrorsTransformed): IError[] => {
-  const allErrors = Object.keys(errors).map((key: string) => errors[key]);
-
-  // Deduplicate errors with the same message (for addressFirstPart composite validation)
-  // Keep only the first occurrence (buildingNumber) so error summary shows it once
-  const seen = new Set<string>();
-  return allErrors.filter((error) => {
-    if (seen.has(error.message)) {
-      return false;
-    }
-    seen.add(error.message);
-    return true;
-  });
-};
+export const displayErrorTransformedMessages = (errors: IErrorsTransformed): IError[] =>
+  Object.keys(errors).map((key: string) => errors[key]);
