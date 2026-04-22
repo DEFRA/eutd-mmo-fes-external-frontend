@@ -12,7 +12,6 @@ import i18next from "./i18next.server";
 import { initLanguages } from "./i18n";
 import { getEnv } from "./env.server";
 
-
 // Initialize MSW server for test environment
 // The server module itself checks NODE_ENV and only initializes in test mode
 // Note: The MSW server.ts file patches global.fetch with cross-fetch before MSW loads
@@ -66,6 +65,8 @@ export default async function handleRequest(
           responseHeaders.set("X-Content-Type-Options", "nosniff");
 
           if (isProdEnv()) {
+            responseHeaders.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+
             responseHeaders.set(
               "permissions-policy",
               "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), display-capture=(), document-domain=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), layout-animations=(), legacy-image-formats=*, magnetometer=(), microphone=(), midi=(), oversized-images=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), sync-xhr=*, usb=(), vr=(), screen-wake-lock=(), web-share=(), xr-spatial-tracking=()"
