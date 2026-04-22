@@ -52,11 +52,11 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     { charset: "utf-8" },
     { title: pageTitle ?? "Fish Export Service - GOV.UK" },
     {
-      property: "viewport",
+      name: "viewport",
       content: "width=device-width, initial-scale=1, viewport-fit=cover",
     },
     {
-      property: "themeColor",
+      name: "theme-color",
       content: "#0b0c0c",
     },
   ];
