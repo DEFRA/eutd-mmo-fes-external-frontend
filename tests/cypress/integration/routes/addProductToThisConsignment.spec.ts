@@ -1016,8 +1016,10 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get("#add-supporting-doc-button").should("not.exist");
     });
 
-    it("should not display Remove buttons when JavaScript is disabled", () => {
-      cy.get("[id^=remove-supporting-doc-button]").should("not.exist");
+    it("should display Remove buttons when JavaScript is disabled and multiple document fields are pre-rendered", () => {
+      // With 5 pre-rendered empty fields (maximumEntryDocsAllowed=5), the
+      // non-JS remove buttons render because supportingDocuments.length > 1
+      cy.get("[id^=remove-supporting-doc-button]").should("have.length", 5);
     });
 
     it("should allow filling in all 5 supporting document fields when JavaScript is disabled", () => {
@@ -1309,5 +1311,91 @@ describe("Add product to consignment (SD): save as draft retains valid fields", 
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get('[data-testid="save-draft-button"]').click({ force: true });
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
+});
+
+describe("Add product to consignment (SD): non-JS add/remove supporting documents when editing", () => {
+  // Tests for the progressive-enhancement buttons added to fix the missing
+  // add/remove functionality when JavaScript is disabled on an existing product
+  // that already has one or more supporting documents.
+
+  describe("Add another supporting document (non-JS)", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentNonJsAddSupportingDoc,
+        disableScripts: true,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+    });
+
+    it("should display the Add another button when there is 1 existing supporting document and JS is disabled", () => {
+      // storageDocument fixture has 1 supporting doc → supportingDocuments.length = 1 < maximumEntryDocsAllowed
+      cy.get("#catches-0-supportingDocuments-0").should("exist").and("have.value", "someDocumentNumber-1683295546");
+      cy.get("#add-supporting-doc-button").should("exist");
+      cy.get("#add-supporting-doc-button").should("have.attr", "type", "submit");
+      cy.get("#add-supporting-doc-button").should("have.attr", "name", "_action");
+      cy.get("#add-supporting-doc-button").should("have.attr", "value", "addSupportingDoc");
+    });
+
+    it("should not display the Remove button when there is only 1 existing supporting document and JS is disabled", () => {
+      // supportingDocuments.length = 1, so the !isHydrated && length > 1 condition is false
+      cy.get("[id^=remove-supporting-doc-button]").should("not.exist");
+    });
+
+    it("should add an extra supporting document field after clicking Add another in non-JS mode", () => {
+      cy.get("#catches-0-supportingDocuments-0").should("exist");
+      cy.get("#catches-0-supportingDocuments-1").should("not.exist");
+
+      cy.get("#add-supporting-doc-button").click({ force: true });
+
+      // After redirect the session flag causes the loader to append an empty string
+      cy.get("#catches-0-supportingDocuments-0").should("exist");
+      cy.get("#catches-0-supportingDocuments-1").should("exist");
+    });
+
+    it("should show Remove buttons after adding an extra supporting document in non-JS mode", () => {
+      cy.get("#add-supporting-doc-button").click({ force: true });
+
+      // With 2 docs, supportingDocuments.length > 1 → remove buttons appear
+      cy.get("[id^=remove-supporting-doc-button]").should("have.length", 2);
+      cy.get("#remove-supporting-doc-button-0").should("have.attr", "type", "submit");
+      cy.get("#remove-supporting-doc-button-0").should("have.attr", "name", "_action");
+      cy.get("#remove-supporting-doc-button-0").should("have.attr", "value", "removeSupportingDoc-0");
+    });
+  });
+
+  describe("Remove a supporting document (non-JS)", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentNonJsRemoveSupportingDoc,
+        disableScripts: true,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+    });
+
+    it("should display 2 supporting document fields when the fixture has 2 existing docs", () => {
+      cy.get("#catches-0-supportingDocuments-0").should("exist").and("have.value", "someDocumentNumber-1683295546");
+      cy.get("#catches-0-supportingDocuments-1").should("exist").and("have.value", "someDocumentNumber-1683295547");
+    });
+
+    it("should display Remove buttons for each field when there are multiple supporting documents in non-JS mode", () => {
+      cy.get("[id^=remove-supporting-doc-button]").should("have.length", 2);
+      cy.get("#remove-supporting-doc-button-0").should("have.attr", "type", "submit");
+      cy.get("#remove-supporting-doc-button-0").should("have.attr", "name", "_action");
+      cy.get("#remove-supporting-doc-button-0").should("have.attr", "value", "removeSupportingDoc-0");
+      cy.get("#remove-supporting-doc-button-1").should("have.attr", "value", "removeSupportingDoc-1");
+    });
+
+    it("should display the Add another button when there are 2 existing supporting docs below the maximum", () => {
+      cy.get("#add-supporting-doc-button").should("exist");
+      cy.get("#add-supporting-doc-button").should("have.attr", "value", "addSupportingDoc");
+    });
+
+    it("should submit the remove form and redirect back to the same page when Remove is clicked in non-JS mode", () => {
+      cy.get("#remove-supporting-doc-button-0").click({ force: true });
+
+      // Action splices doc at index 0, validates, then redirects to ?#remove-supporting-doc
+      cy.url().should("include", "/add-product-to-this-consignment/0");
+    });
   });
 });
