@@ -5,3 +5,9 @@
 .form-light-grey-bg {
   background-color: rgba(245, 245, 245, 0.747);
 }
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
