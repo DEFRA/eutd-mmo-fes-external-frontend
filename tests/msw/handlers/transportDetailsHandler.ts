@@ -1485,6 +1485,20 @@ const transportDetailsHandler: ITestHandler = {
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
+  [TestCaseId.PlaneTransportSaveAsDraftWithErrors]: () => [
+    rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(planeTransportAllowedDetails))),
+    rest.put(mockPutTransportDetailsByIdUrl, (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          flightNumber: "error.flightNumber.any.required",
+          departurePlace: "error.departurePlace.any.required",
+        })
+      )
+    ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+  ],
   [TestCaseId.SavePlaneTransportDetailsFailsWith403]: () => [
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(planeTransportAllowedDetails))),
