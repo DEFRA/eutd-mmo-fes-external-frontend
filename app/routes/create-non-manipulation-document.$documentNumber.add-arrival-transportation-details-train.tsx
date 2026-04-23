@@ -2,7 +2,7 @@ import * as React from "react";
 import { useActionData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
 
 import { route } from "routes-gen";
-import type { ITransport, ErrorResponse, ICountry } from "~/types";
+import type { ITransport, ErrorResponse, ICountry, IUnauthorised, StorageDocument } from "~/types";
 import { TransportType } from "~/helpers";
 import {
   getBearerTokenForRequest,
@@ -14,6 +14,7 @@ import {
   calculateDepartureDate,
   handleFormEmptyStringValue,
   extractContainerNumbers,
+  getStorageDocument,
 } from "~/.server";
 import { AddTransportationArrivalDetailsComponent } from "~/composite-components/addTransportationArrivalDetailsComponent";
 
@@ -24,6 +25,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const bearerToken = await getBearerTokenForRequest(request);
   const { documentNumber } = params;
   const transport: ITransport = await getTransportDetails(bearerToken, "storageNotes", documentNumber, true);
+  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
   const form = await request.formData();
   const isValid = await validateCSRFToken(request, form);
 
@@ -62,6 +64,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     user_id: transport.user_id,
     vehicle: transport.vehicle,
     arrival: true,
+    facilityArrivalDate: "facilityArrivalDate" in storageDocument ? storageDocument.facilityArrivalDate : undefined,
   };
 
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);
