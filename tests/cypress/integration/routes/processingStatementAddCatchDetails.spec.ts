@@ -661,7 +661,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-totalWeightLanded").should("be.visible");
-    cy.get("#catches-0-totalWeightLanded").should("have.attr", "aria-label", "Weight on catch certificate (kg)");
+    cy.get("#catches-0-totalWeightLanded").should("have.attr", "aria-label", "Weight on catch certificate (kilograms)");
     cy.get("#catches-0-totalWeightLanded")
       .parent(".govuk-input__wrapper")
       .find(".govuk-input__suffix")
@@ -670,7 +670,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
     cy.get("#catches-0-exportWeightBeforeProcessing").should(
       "have.attr",
       "aria-label",
-      "Export weight before processing (kg)"
+      "Export weight before processing (kilograms)"
     );
     cy.get("#catches-0-exportWeightBeforeProcessing")
       .parent(".govuk-input__wrapper")
@@ -680,7 +680,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
     cy.get("#catches-0-exportWeightAfterProcessing").should(
       "have.attr",
       "aria-label",
-      "Export weight after processing (kg)"
+      "Export weight after processing (kilograms)"
     );
     cy.get("#catches-0-exportWeightAfterProcessing")
       .parent(".govuk-input__wrapper")

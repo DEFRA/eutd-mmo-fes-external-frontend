@@ -20,6 +20,7 @@
   "ccAddLandingProductWeightHeader": "Product weights",
   "ccAddLandingProductLabel": "Product",
   "ccAddLandingExportWeightFieldLabel": "Export weight (kg)",
+  "ccAddLandingExportWeightFieldAriaLabel": "Export weight (kilograms)",
   "psAddHealthCertificateDateFieldHint": "For example, 31 03 1980",
   "ccAddLandingHelpSectionLinkText": "I cannot find the vessel",
   "ccAddLandingHelpSectionContent": "If the vessel you need is not listed, select \"Vessel not found - N/A\" from the dropdown.",
