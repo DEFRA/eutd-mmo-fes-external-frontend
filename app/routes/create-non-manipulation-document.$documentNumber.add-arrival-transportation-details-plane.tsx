@@ -2,7 +2,7 @@ import * as React from "react";
 import { useActionData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
 
 import { route } from "routes-gen";
-import type { ITransport, ErrorResponse, ICountry } from "~/types";
+import type { ITransport, ErrorResponse, ICountry, IUnauthorised, StorageDocument } from "~/types";
 import { TransportType } from "~/helpers";
 import {
   getBearerTokenForRequest,
@@ -15,6 +15,7 @@ import {
   extractContainerNumbers,
   handleContainerActions,
   handleFormEmptyStringValue,
+  getStorageDocument,
 } from "~/.server";
 import { useScrollOnPageLoad } from "~/hooks";
 import { AddTransportationArrivalDetailsComponent } from "~/composite-components/addTransportationArrivalDetailsComponent";
@@ -37,6 +38,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     documentNumber,
     isArrivalTransportation
   );
+  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
   const form = await request.formData();
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
@@ -83,6 +85,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     vehicle: transport.vehicle,
     user_id: transport.user_id,
     arrival: true,
+    facilityArrivalDate: "facilityArrivalDate" in storageDocument ? storageDocument.facilityArrivalDate : undefined,
   };
 
   return commonSaveTransportDetails(bearerToken, documentNumber, payload, nextUri, form);
