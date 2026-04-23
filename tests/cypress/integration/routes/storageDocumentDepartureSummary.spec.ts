@@ -194,12 +194,12 @@ describe("Storage document departure summary: arrival tab", () => {
                 .eq(1)
                 .find("input")
                 .should("have.value", "100.00")
-                .and("have.attr", "aria-label", "Net weight on arrival (kg)");
+                .and("have.attr", "aria-label", "Net weight on arrival (kilograms)");
               cy.get("td")
                 .eq(2)
                 .find("input")
                 .should("have.value", "100.00")
-                .and("have.attr", "aria-label", "Fishery product weight (kg)");
+                .and("have.attr", "aria-label", "Fishery product weight (kilograms)");
               cy.get("td").eq(3).find("button").eq(0).contains("Edit");
               cy.get("td").eq(3).find("button").eq(1).contains("Remove");
             });
