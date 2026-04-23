@@ -8,7 +8,10 @@
   "sdDepartureProductSummarySaveButtonLabel": "I confirm",
   "sdDepartureProductSummaryProduct": "Product",
   "sdDepartureProductSummaryNetWeightArrival": "Net weight on arrival (kg)",
+  "sdDepartureProductSummaryNetWeightArrivalAriaLabel": "Net weight on arrival (kilograms)",
   "sdDepartureProductSummaryNetWeightDeparture": "Net weight on departure (kg)",
+  "sdDepartureProductSummaryNetWeightDepartureAriaLabel": "Net weight on departure (kilograms)",
   "sdDepartureProductSummaryFisheryProduct": "Fishery product weight (kg)",
+  "sdDepartureProductSummaryFisheryProductAriaLabel": "Fishery product weight (kilograms)",
   "sdDepartureProductSummaryFisheryProductOptional": "Fishery product weight (optional)"
 }
