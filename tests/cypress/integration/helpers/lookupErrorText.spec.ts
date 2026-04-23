@@ -37,6 +37,32 @@ describe("lookupErrorText helpers", () => {
       });
     });
 
+    it("should show 'select from list' error when vessel input is non-empty but vessel is not found", () => {
+      const errors: IError[] = [
+        {
+          key: "vessel.vesselName",
+          message: "ccAddLandingVesselNameUnpopulatedError",
+        },
+      ];
+
+      const result = getTransformedError(errors, "INVALID123");
+
+      expect(result["vessel.vesselName"].message).to.equal("ccAddLandingSelectVesselListNullError");
+    });
+
+    it("should keep 'unpopulated' error when vessel input is empty", () => {
+      const errors: IError[] = [
+        {
+          key: "vessel.vesselName",
+          message: "ccAddLandingVesselNameUnpopulatedError",
+        },
+      ];
+
+      const result = getTransformedError(errors, "");
+
+      expect(result["vessel.vesselName"].message).to.equal("ccAddLandingVesselNameUnpopulatedError");
+    });
+
     it("should include error values when provided", () => {
       const errors: IError[] = [
         {
