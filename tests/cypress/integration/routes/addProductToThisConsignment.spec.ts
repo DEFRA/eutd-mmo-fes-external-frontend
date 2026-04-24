@@ -457,7 +457,7 @@ describe("Add product to this consignment  page", () => {
       // Add multiple supporting documents
       for (let i = 0; i < 3; i++) {
         cy.get("#add-supporting-doc-button").click({ force: true });
-        cy.wait(100);
+        cy.wait(500);
       }
 
       // Check that fields 1-3 do not have aria-describedby with invalid IDs
