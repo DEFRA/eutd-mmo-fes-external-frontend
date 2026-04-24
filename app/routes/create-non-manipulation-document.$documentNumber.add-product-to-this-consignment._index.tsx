@@ -789,7 +789,8 @@ const AddProductIndex = () => {
                           id: `${supportingDocumentsKey}-${index}`,
                           onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                             handleInputChange(index, e.target.value),
-                          "aria-describedby": `${supportingDocumentsKey}-${index}-hint`,
+                          "aria-label": index > 0 ? `${supportingDocumentsKey}-${index}` : undefined,
+                          "aria-describedby": index === 0 ? `${supportingDocumentsKey}-${index}-hint` : undefined,
                         }}
                         hint={
                           index === 0
