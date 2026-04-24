@@ -286,7 +286,23 @@ describe("ProgressPage - Product details link behavior", () => {
     });
   });
 
-  describe("Scenario 2: At least 1 product added - links to you-have-added-a-product", () => {
+  describe("Scenario 1b (FIO-10614): 1 draft product saved-as-draft - links to add-product-to-this-consignment", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDIncompleteProgressWithDraftProducts,
+      };
+
+      cy.visit(progressUrl, { qs: { ...testParams } });
+    });
+
+    it("should link to add-product-to-this-consignment when only 1 incomplete draft product exists", () => {
+      cy.contains("a", "Product details")
+        .should("be.visible")
+        .should("have.attr", "href", `${certificateUrl}/add-product-to-this-consignment`);
+    });
+  });
+
+  describe("Scenario 2: More than 1 product present (INCOMPLETE) - links to you-have-added-a-product", () => {
     beforeEach(() => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDIncompleteProgressWithProducts,
@@ -295,7 +311,7 @@ describe("ProgressPage - Product details link behavior", () => {
       cy.visit(progressUrl, { qs: { ...testParams } });
     });
 
-    it("should link to you-have-added-a-product when at least one product has been added", () => {
+    it("should link to you-have-added-a-product when more than 1 product is present", () => {
       cy.contains("a", "Product details")
         .should("be.visible")
         .should("have.attr", "href", `${certificateUrl}/you-have-added-a-product`);

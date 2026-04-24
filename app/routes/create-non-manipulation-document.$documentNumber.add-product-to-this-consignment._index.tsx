@@ -738,6 +738,7 @@ const AddProductIndex = () => {
                 hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
               />
+              <EntryDocumentGuidanceText />
               <FormInput
                 containerClassName="govuk-form-group"
                 label={t("weightOnDocumentLabel", { ns: "addProductToThisConsignment" })}
@@ -765,7 +766,6 @@ const AddProductIndex = () => {
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
                 labelClassName="govuk-!-font-weight-bold"
               />
-              <EntryDocumentGuidanceText />
               <fieldset className="govuk-fieldset" aria-describedby={`${supportingDocumentsKey}-0-hint`}>
                 {supportingDocuments.map((value: string, index: number) => {
                   const errorKey = `${supportingDocumentsKey}-${index}`;
@@ -822,6 +822,19 @@ const AddProductIndex = () => {
                           aria-label={t("commonRemoveButton", { ns: "addProductToThisConsignment" })}
                         />
                       )}
+                      {!isHydrated && supportingDocuments.length > 1 && (
+                        <button
+                          type="submit"
+                          name="_action"
+                          value={`removeSupportingDoc-${index}`}
+                          id={`remove-supporting-doc-button-${index}`}
+                          data-testid={`remove-supporting-doc-${index}`}
+                          className="govuk-button govuk-button--secondary govuk-!-margin-left-2"
+                          data-module="govuk-button"
+                        >
+                          {t("commonRemoveButton", { ns: "common" })}
+                        </button>
+                      )}
                     </div>
                   );
                 })}
@@ -836,6 +849,19 @@ const AddProductIndex = () => {
                     onClick={handleAddDoc}
                     aria-label={t("commonAddAnotherSupportingDocAriaLabel", { ns: "common" })}
                   />
+                )}
+                {!isHydrated && supportingDocuments.length < maximumEntryDocsAllowed && (
+                  <button
+                    type="submit"
+                    name="_action"
+                    value="addSupportingDoc"
+                    id="add-supporting-doc-button"
+                    data-testid="add-supporting-doc-button"
+                    className="govuk-button govuk-button--secondary govuk-!-margin-top-2"
+                    data-module="govuk-button"
+                  >
+                    {t("commonAddAnotherButtonText", { ns: "common" })}
+                  </button>
                 )}
               </fieldset>
               <Details

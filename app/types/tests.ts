@@ -795,6 +795,7 @@ export enum TestCaseId {
 
   SDIncompleteProgress = "sdIncompleteProgress",
   SDIncompleteProgressWithProducts = "sdIncompleteProgressWithProducts",
+  SDIncompleteProgressWithDraftProducts = "sdIncompleteProgressWithDraftProducts",
   SDCompleteProgress = "sdCompleteProgress",
   SDCompleteUnauthorisedProgress = "sdCompleteUnauthorisedProgress",
   SDCompleteTruckProgress = "sdCompleteTruckProgress",
@@ -834,6 +835,8 @@ export enum TestCaseId {
   SDAddProductConsignmentSaveAsDraftWithErrors = "sdAddProductConsignmentSaveAsDraftWithErrors",
   SDAddProductConsignmentSaveAsDraftWithSpeciesError = "sdAddProductConsignmentSaveAsDraftWithSpeciesError",
   SDAddProductConsignmentSaveAsDraftNoErrors = "sdAddProductConsignmentSaveAsDraftNoErrors",
+  SDAddProductConsignmentNonJsAddSupportingDoc = "sdAddProductConsignmentNonJsAddSupportingDoc",
+  SDAddProductConsignmentNonJsRemoveSupportingDoc = "sdAddProductConsignmentNonJsRemoveSupportingDoc",
   SDFacilityTwoFacilities = "sdFacilityTwoFacilities",
   SDFacilityTwoFacilitiesDetails = "sdFacilityTwoFacilitiesDetails",
   SDAddUKEntryDocumentNoCatches = "sdAddUKEntryDocumentNoCatches",

@@ -339,7 +339,7 @@ const addLandingAction = async (
       : undefined;
     const availableGearTypes = gearCategory ? await getAllGearTypesByCategory(gearCategory as string) : undefined;
 
-    const errors = getTransformedError(response.errors);
+    const errors = getTransformedError(response.errors, vessel as string);
     return new Response(
       JSON.stringify({
         errors,

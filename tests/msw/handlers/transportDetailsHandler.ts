@@ -871,6 +871,7 @@ const transportDetailsHandler: ITestHandler = {
         })
       )
     ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.TransportSaveMaxCharsTrainPlaceOfUnloadingEmpty]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
@@ -891,6 +892,7 @@ const transportDetailsHandler: ITestHandler = {
         })
       )
     ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.TransportSaveMaxCharsTrainPlaceOfUnloadingExceedString]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
@@ -911,6 +913,7 @@ const transportDetailsHandler: ITestHandler = {
         })
       )
     ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.TransportSaveAlphanumericsRailwayBillNumber]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(trainTransportAllowedDetails))),
@@ -994,6 +997,7 @@ const transportDetailsHandler: ITestHandler = {
         })
       )
     ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.TransportSaveMaxCharsTruckPlaceOfUnloadingEmpty]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
@@ -1014,6 +1018,7 @@ const transportDetailsHandler: ITestHandler = {
         })
       )
     ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.TransportSaveMaxCharsTruckPlaceOfUnloadingExceedString]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
@@ -1034,6 +1039,7 @@ const transportDetailsHandler: ITestHandler = {
         })
       )
     ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.TransportSaveAlphanumericTruckRegNumber]: () => [
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
@@ -1191,6 +1197,7 @@ const transportDetailsHandler: ITestHandler = {
         })
       )
     ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.ContainerVesselSaveMaxCharsVesselName]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(saveAddArrivalContainerVesselDetails))),
@@ -1525,6 +1532,7 @@ const transportDetailsHandler: ITestHandler = {
         })
       )
     ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.TransportSaveMaxCharsPlanePlaceOfUnloadingEmpty]: () => [
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
@@ -1545,6 +1553,7 @@ const transportDetailsHandler: ITestHandler = {
         })
       )
     ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.TransportSaveMaxCharsPlanePlaceOfUnloadingExceedString]: () => [
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),
@@ -1565,6 +1574,7 @@ const transportDetailsHandler: ITestHandler = {
         })
       )
     ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
   ],
   [TestCaseId.TransportSaveMaxCharsPlaneFlightNumber]: () => [
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificatePlane))),

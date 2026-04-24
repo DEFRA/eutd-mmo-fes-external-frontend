@@ -290,12 +290,13 @@ const DirectLanding = () => {
 
   const faoValue = normalize(faoArea) ?? normalize(directLandings?.faoArea) ?? "FAO27";
   const { "vessel.isListed": isListedError, ...restErrors } = errors;
-  const errorsForSummary = isListedError
-    ? {
-        ...restErrors,
-        "vessel.vesselName": { ...isListedError, fieldId: "vessel.vesselName-error", key: "vessel.vesselName" },
-      }
-    : errors;
+  const errorsForSummary =
+    isListedError && !restErrors["vessel.vesselName"]
+      ? {
+          ...restErrors,
+          "vessel.vesselName": { ...isListedError, fieldId: "vessel.vesselName-error", key: "vessel.vesselName" },
+        }
+      : restErrors;
 
   return (
     <Main
@@ -532,7 +533,7 @@ const DirectLanding = () => {
                         <WeightInput
                           id="weight"
                           unit="kg"
-                          ariaLabel={t("ccAddLandingExportWeightFieldLabel")}
+                          ariaLabel={t("ccAddLandingExportWeightFieldAriaLabel")}
                           errors={errors}
                           formValue={values?.[`weight-${landings?.speciesId}`]}
                           speciesId={landings?.speciesId}
