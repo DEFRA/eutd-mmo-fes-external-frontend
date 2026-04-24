@@ -429,6 +429,50 @@ describe("Add product to this consignment  page", () => {
         "If your UK entry document is a processing statement, you must provide the reference number for any supporting documents."
       );
     });
+
+    it("should have proper accessibility attributes for first supporting document field", () => {
+      // First field should have visible label and aria-describedby
+      cy.get("label").contains("Supporting documents").should("be.visible");
+      cy.get("#catches-0-supportingDocuments-0").should("have.attr", "aria-describedby");
+      cy.get("#catches-0-supportingDocuments-0-hint").should("exist");
+    });
+
+    it("should have proper accessibility attributes for additional supporting document fields", () => {
+      // Add second supporting document
+      cy.get("#add-supporting-doc-button").click({ force: true });
+      cy.wait(300);
+
+      // Second field should have aria-label but no aria-describedby
+      cy.get("#catches-0-supportingDocuments-1").should("have.attr", "aria-label", "catches-0-supportingDocuments-1");
+      cy.get("#catches-0-supportingDocuments-1").should("not.have.attr", "aria-describedby");
+
+      // Third field should also have aria-label
+      cy.get("#add-supporting-doc-button").click({ force: true });
+      cy.wait(300);
+      cy.get("#catches-0-supportingDocuments-2").should("have.attr", "aria-label", "catches-0-supportingDocuments-2");
+      cy.get("#catches-0-supportingDocuments-2").should("not.have.attr", "aria-describedby");
+    });
+
+    it("should not reference non-existent hint IDs in aria-describedby for additional fields", () => {
+      // Add multiple supporting documents
+      for (let i = 0; i < 3; i++) {
+        cy.get("#add-supporting-doc-button").click({ force: true });
+        cy.wait(500);
+      }
+
+      // Check that fields 1-3 do not have aria-describedby with invalid IDs
+      for (let i = 1; i < 4; i++) {
+        const fieldId = `#catches-0-supportingDocuments-${i}`;
+        cy.get(fieldId).then(($field) => {
+          const ariaDescribedBy = $field.attr("aria-describedby");
+          if (ariaDescribedBy) {
+            // If aria-describedby exists, the referenced element should exist
+            cy.get(`#${ariaDescribedBy}`).should("exist");
+          }
+        });
+      }
+    });
+
     it("should have valid aria-describedby attributes for product field", () => {
       cy.get("#catches-0-product").should("have.attr", "aria-describedby", "catches-0-product-hint");
       cy.get("#catches-0-product-hint").should(
