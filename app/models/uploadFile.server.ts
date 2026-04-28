@@ -19,7 +19,7 @@ import {
 import { apiCallFailed } from "~/communication.server";
 import { getEnv } from "~/env.server";
 import { getErrorMessage } from "~/helpers";
-import { getSessionFromRequest } from "~/sessions.server";
+import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import type { IUploadedLanding, IError, IUnauthorised, IBase, ErrorResponse } from "~/types";
 
 function instanceOfIError(data: IUploadedLanding[] | IError[]): data is IError[] {
@@ -43,7 +43,7 @@ function uploadErrorHandler(err: unknown): Promise<Response | ErrorResponse> {
       {
         key: "file",
         message: getErrorMessage("error.upload.max-file-size"),
-        value: { dynamicValue: Math.round((getEnv().MAX_UPLOAD_FILE_SIZE as number) / 1000) },
+        value: { dynamicValue: Math.round(Number(getEnv().MAX_UPLOAD_FILE_SIZE) / 1000) },
       },
     ];
 
@@ -136,6 +136,7 @@ export const UploadFileLoader = async (request: Request, params: Params) => {
     status: 200,
     headers: {
       "Content-Type": "application/json",
+      "Set-Cookie": await commitSession(session),
     },
   });
 };
@@ -149,7 +150,7 @@ export const UploadFileAction = async (request: Request, params: Params): Promis
     const { documentNumber } = params;
 
     const fileUploadHandler = unstable_createMemoryUploadHandler({
-      maxPartSize: getEnv().MAX_UPLOAD_FILE_SIZE as number,
+      maxPartSize: Number(getEnv().MAX_UPLOAD_FILE_SIZE),
     });
     const multipartFormData = await unstable_parseMultipartFormData(request, fileUploadHandler);
     const data = Object.fromEntries(multipartFormData);
