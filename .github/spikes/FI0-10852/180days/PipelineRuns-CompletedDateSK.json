@@ -1,0 +1,109 @@
+{
+  "@odata.context": "https://analytics.dev.azure.com/defragovuk/e6e0e503-13ef-4d09-88fa-91a866cf6b39/_odata/v4.0-preview/$metadata#PipelineRuns(CompletedDateSK,TotalCount,PartiallySucceededCount,SucceededCount,FailedCount)",
+  "value": [
+    {
+      "@odata.id": null,
+      "CompletedDateSK": 20260416,
+      "FailedCount": 14,
+      "SucceededCount": 0,
+      "PartiallySucceededCount": 11,
+      "TotalCount": 25
+    },
+    {
+      "@odata.id": null,
+      "CompletedDateSK": 20260417,
+      "FailedCount": 13,
+      "SucceededCount": 0,
+      "PartiallySucceededCount": 17,
+      "TotalCount": 30
+    },
+    {
+      "@odata.id": null,
+      "CompletedDateSK": 20260418,
+      "FailedCount": 0,
+      "SucceededCount": 0,
+      "PartiallySucceededCount": 2,
+      "TotalCount": 2
+    },
+    {
+      "@odata.id": null,
+      "CompletedDateSK": 20260419,
+      "FailedCount": 1,
+      "SucceededCount": 0,
+      "PartiallySucceededCount": 1,
+      "TotalCount": 2
+    },
+    {
+      "@odata.id": null,
+      "CompletedDateSK": 20260420,
+      "FailedCount": 10,
+      "SucceededCount": 0,
+      "PartiallySucceededCount": 15,
+      "TotalCount": 25
+    },
+    {
+      "@odata.id": null,
+      "CompletedDateSK": 20260421,
+      "FailedCount": 14,
+      "SucceededCount": 0,
+      "PartiallySucceededCount": 17,
+      "TotalCount": 31
+    },
+    {
+      "@odata.id": null,
+      "CompletedDateSK": 20260422,
+      "FailedCount": 14,
+      "SucceededCount": 0,
+      "PartiallySucceededCount": 21,
+      "TotalCount": 35
+    },
+    {
+      "@odata.id": null,
+      "CompletedDateSK": 20260423,
+      "FailedCount": 5,
+      "SucceededCount": 0,
+      "PartiallySucceededCount": 4,
+      "TotalCount": 9
+    },
+    {
+      "@odata.id": null,
+      "CompletedDateSK": 20260424,
+      "FailedCount": 8,
+      "SucceededCount": 0,
+      "PartiallySucceededCount": 1,
+      "TotalCount": 9
+    },
+    {
+      "@odata.id": null,
+      "CompletedDateSK": 20260425,
+      "FailedCount": 4,
+      "SucceededCount": 0,
+      "PartiallySucceededCount": 0,
+      "TotalCount": 4
+    },
+    {
+      "@odata.id": null,
+      "CompletedDateSK": 20260426,
+      "FailedCount": 1,
+      "SucceededCount": 0,
+      "PartiallySucceededCount": 0,
+      "TotalCount": 1
+    },
+    {
+      "@odata.id": null,
+      "CompletedDateSK": 20260428,
+      "FailedCount": 3,
+      "SucceededCount": 0,
+      "PartiallySucceededCount": 6,
+      "TotalCount": 9
+    },
+    {
+      "@odata.id": null,
+      "CompletedDateSK": 20260429,
+      "FailedCount": 3,
+      "SucceededCount": 0,
+      "PartiallySucceededCount": 3,
+      "TotalCount": 6
+    }
+  ]
+}

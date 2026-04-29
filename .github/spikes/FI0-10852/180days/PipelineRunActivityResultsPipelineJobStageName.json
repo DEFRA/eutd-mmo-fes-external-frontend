@@ -1,0 +1,61 @@
+{
+  "@odata.context": "https://analytics.dev.azure.com/defragovuk/e6e0e503-13ef-4d09-88fa-91a866cf6b39/_odata/v4.0-preview/$metadata#PipelineRunActivityResults(PipelineJob(StageName),FailedStageCount)",
+  "value": [
+    {
+      "@odata.id": null,
+      "FailedStageCount": 91,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "FailedStageCount": 7,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "FailedStageCount": 0,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "PRD1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "FailedStageCount": 0,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "PRE1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "FailedStageCount": 0,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "PRE2"
+      }
+    },
+    {
+      "@odata.id": null,
+      "FailedStageCount": 4,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "SND1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "FailedStageCount": 13,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    }
+  ]
+}

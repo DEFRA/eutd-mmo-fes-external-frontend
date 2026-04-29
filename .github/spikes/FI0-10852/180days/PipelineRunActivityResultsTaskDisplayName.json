@@ -1,0 +1,495 @@
+{
+  "@odata.context": "https://analytics.dev.azure.com/defragovuk/e6e0e503-13ef-4d09-88fa-91a866cf6b39/_odata/v4.0-preview/$metadata#PipelineRunActivityResults(PipelineJob(StageName), ,PipelineRunCompletedDateSK,FailedCount)",
+  "value": [
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260416,
+      "TaskDisplayName": "Checkout DEFRA/eutd-mmo-fes-external-frontend@develop to /agent/_work/1/s/mmo-fes-external-fe",
+      "FailedCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260416,
+      "TaskDisplayName": "Merge code coverage files",
+      "FailedCount": 4,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260416,
+      "TaskDisplayName": "Normalise parallel test artifacts (keep latest attempt per shard)",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260416,
+      "TaskDisplayName": "Publish coverage for SonarCloud",
+      "FailedCount": 23,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260416,
+      "TaskDisplayName": "Publish test results",
+      "FailedCount": 23,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260416,
+      "TaskDisplayName": "Run Code Analysis",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260416,
+      "TaskDisplayName": "Run Cypress tests",
+      "FailedCount": 21,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260416,
+      "TaskDisplayName": "Run Docker Build",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260416,
+      "TaskDisplayName": "Run NPM Lint",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260416,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260417,
+      "TaskDisplayName": "Docker build",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260417,
+      "TaskDisplayName": "Publish coverage for SonarCloud",
+      "FailedCount": 28,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260417,
+      "TaskDisplayName": "Publish Docker test image",
+      "FailedCount": 4,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260417,
+      "TaskDisplayName": "Publish test results",
+      "FailedCount": 28,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260417,
+      "TaskDisplayName": "Run Code Analysis",
+      "FailedCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260417,
+      "TaskDisplayName": "Run Cypress tests",
+      "FailedCount": 29,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260417,
+      "TaskDisplayName": "Run NPM Lint",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260417,
+      "TaskDisplayName": "Split available test specs",
+      "FailedCount": 10,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260417,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260419,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260420,
+      "TaskDisplayName": "Publish coverage for SonarCloud",
+      "FailedCount": 6,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260420,
+      "TaskDisplayName": "Publish Docker test image",
+      "FailedCount": 2,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260420,
+      "TaskDisplayName": "Publish test results",
+      "FailedCount": 6,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260420,
+      "TaskDisplayName": "Run Cypress tests",
+      "FailedCount": 15,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260421,
+      "TaskDisplayName": "Publish coverage for SonarCloud",
+      "FailedCount": 11,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260421,
+      "TaskDisplayName": "Publish test results",
+      "FailedCount": 11,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260421,
+      "TaskDisplayName": "Run Cypress tests",
+      "FailedCount": 27,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260422,
+      "TaskDisplayName": "Run Cypress tests",
+      "FailedCount": 19,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260422,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260423,
+      "TaskDisplayName": "Run Cypress tests",
+      "FailedCount": 22,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260423,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260424,
+      "TaskDisplayName": "Run Cypress tests",
+      "FailedCount": 17,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260424,
+      "TaskDisplayName": "Approval for production slot rollback",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260424,
+      "TaskDisplayName": "Approval for production slot rollback",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "SND1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260424,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260425,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount": 4,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260425,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "SND1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260425,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260426,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260426,
+      "TaskDisplayName": "Rollback Web App Container [production]",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260426,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260427,
+      "TaskDisplayName": "Run Docker Build",
+      "FailedCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260427,
+      "TaskDisplayName": "Run NPM Lint",
+      "FailedCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260428,
+      "TaskDisplayName": "Run Cypress tests",
+      "FailedCount": 9,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260428,
+      "TaskDisplayName": "Run Docker Build",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260428,
+      "TaskDisplayName": "Run NPM Lint",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260429,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260429,
+      "TaskDisplayName": "Rollback Web App Container [production]",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260429,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    }
+  ]
+}

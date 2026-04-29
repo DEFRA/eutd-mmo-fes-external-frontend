@@ -21,6 +21,7 @@ FROM cypress/base:24.14.0 AS test
 RUN apt-get update && apt-get install -y curl
 COPY --chown=node:node . /app
 WORKDIR /app
+ENV NODE_OPTIONS=--max-old-space-size=4096
 USER node
 RUN npm ci --production=false
 CMD ["npm", "run", ":test:start"]

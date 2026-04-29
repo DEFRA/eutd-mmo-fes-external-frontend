@@ -1,0 +1,221 @@
+{
+  "@odata.context": "https://analytics.dev.azure.com/defragovuk/e6e0e503-13ef-4d09-88fa-91a866cf6b39/_odata/v4.0-preview/$metadata#PipelineRunActivityResults(PipelineRunCompletedDateSK,PipelineJob(StageName),FailedStageCount)",
+  "value": [
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260416,
+      "FailedStageCount": 14,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260416,
+      "FailedStageCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260417,
+      "FailedStageCount": 12,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260417,
+      "FailedStageCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260419,
+      "FailedStageCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260420,
+      "FailedStageCount": 11,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260421,
+      "FailedStageCount": 15,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260422,
+      "FailedStageCount": 15,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260422,
+      "FailedStageCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260423,
+      "FailedStageCount": 5,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260423,
+      "FailedStageCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260424,
+      "FailedStageCount": 6,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260424,
+      "FailedStageCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260424,
+      "FailedStageCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "SND1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260424,
+      "FailedStageCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260425,
+      "FailedStageCount": 4,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260425,
+      "FailedStageCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "SND1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260425,
+      "FailedStageCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260426,
+      "FailedStageCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260426,
+      "FailedStageCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260427,
+      "FailedStageCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260428,
+      "FailedStageCount": 5,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260429,
+      "FailedStageCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "PipelineRunCompletedDateSK": 20260429,
+      "FailedStageCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    }
+  ]
+}

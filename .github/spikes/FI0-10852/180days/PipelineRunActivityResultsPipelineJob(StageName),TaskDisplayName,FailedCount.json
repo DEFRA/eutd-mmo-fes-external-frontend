@@ -1,0 +1,185 @@
+{
+  "@odata.context": "https://analytics.dev.azure.com/defragovuk/e6e0e503-13ef-4d09-88fa-91a866cf6b39/_odata/v4.0-preview/$metadata#PipelineRunActivityResults(PipelineJob(StageName),TaskDisplayName,FailedCount)",
+  "value": [
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Run Cypress tests",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 65,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 13,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "TST1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Publish coverage for SonarCloud",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 10,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Publish test results",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 10,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 6,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Merge code coverage files",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 4,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Run Code Analysis",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 4,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Run NPM Lint",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 4,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Checkout DEFRA/eutd-mmo-fes-external-frontend@develop to /agent/_work/1/s/mmo-fes-external-fe",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Publish Docker test image",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Run Docker Build",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Job Failure For Agent",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 3,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "SND1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Rollback Web App Container [production]",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 2,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Docker build",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Normalise parallel test artifacts (keep latest attempt per shard)",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Split available test specs",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "Build"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Approval for production slot rollback",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "DEV1"
+      }
+    },
+    {
+      "@odata.id": null,
+      "TaskDisplayName": "Approval for production slot rollback",
+      "FailedCount@odata.type": "#Int64",
+      "FailedCount": 1,
+      "PipelineJob": {
+        "@odata.id": null,
+        "StageName": "SND1"
+      }
+    }
+  ]
+}
