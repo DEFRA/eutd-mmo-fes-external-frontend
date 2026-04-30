@@ -7,6 +7,7 @@ import {
   mockAddExporterDetails,
   GET_STORAGE_DOCUMENT,
   getProgressUrl,
+  checkProgressUrl,
   getTransportDetailsUrl,
   mockGetAllDocumentsUrl,
   SPECIES_URL,
@@ -90,6 +91,8 @@ const checkYourInformationSDHandler: ITestHandler = {
       rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
       rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
       rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
+      // Pre-submit completeness check (FI0-11257) — return 200 to indicate document is complete
+      rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
       rest.post(generatePdf("storageNotes"), (req, res, ctx) => {
         documentSubmitted = true;
         return res(
@@ -107,6 +110,8 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
+    // Pre-submit completeness check (FI0-11257) — return 200 to indicate document is complete
+    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
     rest.post(generatePdf("storageNotes"), (req, res, ctx) =>
       res(
         ctx.status(400),
@@ -138,6 +143,34 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
+  ],
+  // FI0-11257 regression: user lands back on check-your-information via nextUri after
+  // editing arrival weights (which clears departure weights server-side). Submitting must
+  // bounce them back to /progress instead of generating a PDF with blank departure weights.
+  [TestCaseId.SDCheckYourInformationSubmitWhenIncomplete]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
+    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          catches: "Add product details to all your products",
+        })
+      )
+    ),
+    // PDF endpoint should NOT be hit; if it is, the test will fail because the
+    // browser will navigate to /non-manipulation-document-created.
+    rest.post(generatePdf("storageNotes"), (req, res, ctx) =>
+      res(
+        ctx.status(200),
+        ctx.json({
+          documentNumber,
+          uri: "_should-not-be-generated.pdf",
+        })
+      )
+    ),
   ],
   [TestCaseId.SDCheckYourInformationTruckEdit]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),

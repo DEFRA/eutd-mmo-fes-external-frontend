@@ -7,6 +7,7 @@ import {
   getLandingsEntryOption,
   getProgress,
   hasRequiredDataCatchCertificateSummary,
+  checkProgress,
   submitDocument,
   submitExportCertificate,
   transformError,
@@ -205,6 +206,23 @@ export const CheckYourInformationPSSDAction = async (
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
+
+  // Re-validate document completeness before submitting. Editing arrival weights
+  // via the "Change" link on this page clears departure weights server-side; the
+  // user can return here directly via the nextUri parameter and would otherwise
+  // be able to submit a document with blank departure weights on the generated
+  // PDF (DEFECT-592 / FI0-11257). The orchestration /v1/progress/complete/{journey}
+  // endpoint returns 400 with per-section errors when any required section is
+  // incomplete; in that case bounce the user back to the progress page.
+  const completeness: IProgress = await checkProgress(bearerToken, journey, documentNumber);
+  if (completeness.unauthorised) return redirect("/forbidden");
+  if (Array.isArray(completeness.errors) && completeness.errors.length > 0) {
+    const progressPath =
+      journey === "processingStatement"
+        ? `/create-processing-statement/${documentNumber}/progress`
+        : `/create-non-manipulation-document/${documentNumber}/progress`;
+    return redirect(progressPath);
+  }
 
   const { errors }: ISubmitResponse = await submitDocument(bearerToken, documentNumber, journey, ipAddress);
 
