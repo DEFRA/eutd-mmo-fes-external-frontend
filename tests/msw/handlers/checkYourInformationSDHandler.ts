@@ -155,31 +155,43 @@ const checkYourInformationSDHandler: ITestHandler = {
   // FI0-11257 regression: user lands back on check-your-information via nextUri after
   // editing arrival weights (which clears departure weights server-side). Submitting must
   // bounce them back to /progress instead of generating a PDF with blank departure weights.
-  [TestCaseId.SDCheckYourInformationSubmitWhenIncomplete]: () => [
-    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
-    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) =>
-      res(
-        ctx.status(400),
-        ctx.json({
-          catches: "Add product details to all your products",
-        })
-      )
-    ),
-    // PDF endpoint should NOT be hit; if it is, the test will fail because the
-    // browser will navigate to /non-manipulation-document-created.
-    rest.post(generatePdf("storageNotes"), (req, res, ctx) =>
-      res(
-        ctx.status(200),
-        ctx.json({
-          documentNumber,
-          uri: "_should-not-be-generated.pdf",
-        })
-      )
-    ),
-  ],
+  // The loader and action both call checkProgress; the first call (loader) must return 200
+  // so the page renders, and the second call (action on submit) returns 400 to trigger the
+  // redirect — simulating state that became incomplete between page load and submit.
+  [TestCaseId.SDCheckYourInformationSubmitWhenIncomplete]: () => {
+    let progressCallCount = 0;
+    return [
+      rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
+      rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+      rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+      rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
+      rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => {
+        progressCallCount++;
+        if (progressCallCount === 1) {
+          // First call is from the loader — let the page render
+          return res(ctx.status(200));
+        }
+        // Second call is from the action on submit — bounce to /progress
+        return res(
+          ctx.status(400),
+          ctx.json({
+            catches: "Add product details to all your products",
+          })
+        );
+      }),
+      // PDF endpoint should NOT be hit; if it is, the test will fail because the
+      // browser will navigate to /non-manipulation-document-created.
+      rest.post(generatePdf("storageNotes"), (req, res, ctx) =>
+        res(
+          ctx.status(200),
+          ctx.json({
+            documentNumber,
+            uri: "_should-not-be-generated.pdf",
+          })
+        )
+      ),
+    ];
+  },
   [TestCaseId.SDCheckYourInformationTruckEdit]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumenOneFacility))),
