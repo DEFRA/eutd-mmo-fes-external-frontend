@@ -11,6 +11,7 @@ import { formatAddress } from "~/components";
 import {
   createCSRFToken,
   getBearerTokenForRequest,
+  checkProgress,
   getCompletedDocument,
   getExporterDetailsFromMongo,
   getStorageDocument,
@@ -73,6 +74,18 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const exporter: IExporter = await getExporterDetailsFromMongo(bearerToken, documentNumber, "storageNotes");
 
   if (!hasRequiredDataStorageDocumentSummary(exporter?.model, storageDocument)) {
+    return redirect(`/create-non-manipulation-document/${documentNumber}/progress`);
+  }
+
+  // Block access when the document is incomplete (e.g. departure weights cleared
+  // because arrival weights were edited after they were originally confirmed —
+  // FI0-11257 / DEFECT-592). Without this, the user can land on a page that is
+  // missing required values via the nextUri redirect chain after editing weights.
+  const completeness = await checkProgress(bearerToken, "storageNotes", documentNumber);
+  if (completeness.unauthorised) {
+    return redirect("/forbidden");
+  }
+  if (Array.isArray(completeness.errors) && completeness.errors.length > 0) {
     return redirect(`/create-non-manipulation-document/${documentNumber}/progress`);
   }
 

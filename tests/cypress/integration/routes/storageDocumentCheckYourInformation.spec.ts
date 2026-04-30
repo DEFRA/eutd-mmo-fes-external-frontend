@@ -266,6 +266,23 @@ describe("Check Your Information (Summary) page: document submission validation 
   });
 });
 
+describe("Check Your Information (Summary) page: pre-submit completeness check (FI0-11257)", () => {
+  it("should redirect user to the progress page when the document is incomplete on submit", () => {
+    // Reproduces DEFECT-592: editing arrival weights via the Change link clears
+    // departure weights server-side, but the user can still land back on this page
+    // via nextUri. Submitting must not generate a PDF with blank departure weights.
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationSubmitWhenIncomplete,
+    };
+
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid=create-sd-button]").click({ force: true });
+    cy.url().should("include", "/progress");
+    cy.url().should("not.include", "/non-manipulation-document-created");
+  });
+});
+
 describe("Check Your Information (Summary) page: guard", () => {
   it("should redirect user to the forbidden page", () => {
     const testParams: ITestParams = {
