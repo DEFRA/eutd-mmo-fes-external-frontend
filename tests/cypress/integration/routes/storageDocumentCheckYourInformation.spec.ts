@@ -267,17 +267,17 @@ describe("Check Your Information (Summary) page: document submission validation 
 });
 
 describe("Check Your Information (Summary) page: pre-submit completeness check (FI0-11257)", () => {
-  it("should redirect user to the progress page when the document is incomplete on submit", () => {
-    // Reproduces DEFECT-592: editing arrival weights via the Change link clears
-    // departure weights server-side, but the user can still land back on this page
-    // via nextUri. Submitting must not generate a PDF with blank departure weights.
+  it("should redirect user to the progress page when the document is incomplete", () => {
+    // Reproduces DEFECT-592: when departure weights are cleared (e.g. after editing arrival
+    // weights on a copied NMD), the orchestration progress endpoint now returns 400 for the
+    // catches section. The loader detects this and redirects to /progress before the user
+    // can see or submit the half-empty check-your-information page.
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDCheckYourInformationSubmitWhenIncomplete,
     };
 
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=create-sd-button]").click({ force: true });
     cy.url().should("include", "/progress");
     cy.url().should("not.include", "/non-manipulation-document-created");
   });
