@@ -261,9 +261,10 @@ describe("CC: Entering the address manually with errors", () => {
   });
 
   // Defect 445: All validation errors should appear simultaneously with field-level error styling
+  // FI0-11275: Empty form submission should show ALL errors including addressFirstPart
   it("should display ALL validation errors simultaneously on empty form submission with field-level error indicators", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.CCExporterManualAddressWithErrorsArray,
+      testCaseId: TestCaseId.CCExporterManualAddressWithAllErrorsArray,
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
@@ -282,6 +283,10 @@ describe("CC: Entering the address manually with errors", () => {
     cy.get(".govuk-error-summary").should("contain.text", "Enter the town or city");
     cy.get(".govuk-error-summary").should("contain.text", "Enter a postcode");
     cy.get(".govuk-error-summary").should("contain.text", "Select a country from the list");
+    cy.get(".govuk-error-summary").should(
+      "contain.text",
+      "Enter a sub-building name, building number, a building name or street name"
+    );
 
     // Required fields should have error styling and inline error messages
     cy.get("#townCity")
@@ -298,6 +303,40 @@ describe("CC: Entering the address manually with errors", () => {
       .should("be.visible")
       .and("contain.text", "Enter a postcode");
 
+    cy.get("#country")
+      .parents(".govuk-form-group")
+      .should("have.class", "govuk-form-group--error")
+      .find(".govuk-error-message")
+      .should("be.visible")
+      .and("contain.text", "Select a country from the list");
+  });
+
+  // FI0-11275: Entering an invalid character in country field should show a country error
+  it("should display country error when an invalid character is entered in the country field", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCExporterManualAddressWithInvalidCountry,
+    };
+
+    cy.visit(ccPageUrl, { qs: { ...testParams } });
+    cy.findByText(/^Enter the address manually$/).click({ force: true });
+
+    cy.get("#buildingNumber").type("12", { force: true });
+    cy.get("#townCity").type("Newcastle", { force: true });
+    cy.get("#postcode").type("NE4 7YH", { force: true });
+    cy.get("#country").type("@", { force: true });
+
+    cy.get("[data-testid=continue]").click({ force: true });
+
+    // Should stay on the same page
+    cy.url().should("include", "what-exporters-address");
+
+    // Error summary should be visible at the top
+    cy.get(".govuk-error-summary").should("be.visible");
+
+    // Country error should appear in the error summary
+    cy.get(".govuk-error-summary").should("contain.text", "Select a country from the list");
+
+    // Country field should have inline error
     cy.get("#country")
       .parents(".govuk-form-group")
       .should("have.class", "govuk-form-group--error")

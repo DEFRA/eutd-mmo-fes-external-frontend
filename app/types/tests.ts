@@ -20,6 +20,7 @@ export enum TestCaseId {
   CCExporterManualAddressWithSubBuildingErrorArray = "CCExporterManualAddressWithSubBuildingErrorArray",
   CCExporterManualAddressWithOnlyRequiredArray = "CCExporterManualAddressWithOnlyRequiredArray",
   CCExporterManualAddressWithAllErrorsArray = "CCExporterManualAddressWithAllErrorsArray",
+  CCExporterManualAddressWithInvalidCountry = "CCExporterManualAddressWithInvalidCountry",
   StartJourney = "startJourney",
   StartJourneyFailed = "startJourneyFailed",
   StartJourneyFailedNoErrors = "startJourneyFailedNoErrors",
