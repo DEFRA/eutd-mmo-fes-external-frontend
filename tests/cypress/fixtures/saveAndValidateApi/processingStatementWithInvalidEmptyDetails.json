@@ -3,7 +3,7 @@
   "__t": "processingStatement",
   "requestByAdmin": false,
   "errors": {
-    "catches-0-species-label": "psAddCatchDetailsErrorEnterTheFAOCodeOrSpeciesName",
+    "catches-0-species": "psAddCatchDetailsErrorEnterTheFAOCodeOrSpeciesName",
     "catches-0-catchCertificateNumber": "psAddCatchDetailsErrorEnterTheCatchCertificateNumber",
     "catches-0-totalWeightLanded": "psAddCatchWeightsErrorEnterTotalWeightLandedInKG",
     "catches-0-exportWeightBeforeProcessing": "psAddCatchWeightsErrorEnterExportWeightInKGBeforeProcessing",
