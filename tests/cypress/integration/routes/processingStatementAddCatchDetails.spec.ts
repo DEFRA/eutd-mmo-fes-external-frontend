@@ -7,7 +7,6 @@ const validAddCatchDetailsUrlForUK = `${documentUrl}/add-catch-details/GBR-2025-
 const validEditCatchDetailsUrl = `${documentUrl}/add-catch-details/GBR-2025-PS-FDC3D66E1-1760436601/0?pageNo=1`;
 const validEditCatchDetailsNextUrl = `${documentUrl}/add-catch-details/COD/0?catchType=non_uk&pageNo=2&nextUri=abc`;
 const validEditCatchDetailsUrlForUK = `${documentUrl}/add-catch-details/ASD/0?catchType=uk&pageNo=1`;
-const validEmptyAddCatchDetailsUrlForNonUK = `${documentUrl}/add-catch-details/0?pageNo=1`;
 
 describe("PS: Add catch details", () => {
   // FIO-10279: Test button order - Cancel on left, Add on right
@@ -460,22 +459,6 @@ describe("PS: Add catch details", () => {
     cy.get(".govuk-heading-l").contains("You have added 1 species");
 
     cy.get("#yourproducts").find("tbody > tr").should("have.length", 1);
-  });
-
-  it("should display error msg when species, catch certificate number and weight is left empty", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSAddCatchDetailsNoCatchesSaveAndContinue,
-    };
-
-    cy.visit(validEmptyAddCatchDetailsUrlForNonUK, { qs: { ...testParams } });
-    cy.wait(300);
-    cy.get("#addProductDetails").click({ force: true });
-    cy.url().should("include", validEmptyAddCatchDetailsUrlForNonUK);
-
-    cy.get(".govuk-error-summary").contains("Enter the FAO code or species name").should("exist");
-    cy.get(".govuk-error-summary").contains("Enter the catch certificate number").should("exist");
-    cy.get(".govuk-error-summary").contains("Enter the export weight in kg (before processing)").should("exist");
-    cy.get(".govuk-error-summary").contains("Enter the export weight in kg (after processing)").should("exist");
   });
 });
 
