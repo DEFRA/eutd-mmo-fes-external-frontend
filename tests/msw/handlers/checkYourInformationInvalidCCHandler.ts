@@ -1,6 +1,7 @@
 import { rest } from "msw";
 import { type ITestHandler, TestCaseId } from "~/types";
 import {
+  checkProgressUrl,
   generatePdf,
   GET_CLIENT_IP_URL,
   GET_PROCESSING_STATEMENT,
@@ -27,6 +28,7 @@ const checkYourInformationInvalidCCHandler: ITestHandler = {
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+    rest.get(checkProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.status(200))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
     rest.post(generatePdf("processingStatement"), (req, res, ctx) =>
       res(
@@ -51,6 +53,7 @@ const checkYourInformationInvalidCCHandler: ITestHandler = {
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+    rest.get(checkProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.status(200))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
     rest.post(generatePdf("processingStatement"), (req, res, ctx) =>
       res(
@@ -79,6 +82,7 @@ const checkYourInformationInvalidCCHandler: ITestHandler = {
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+    rest.get(checkProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.status(200))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
     rest.post(generatePdf("processingStatement"), (req, res, ctx) =>
       res(
