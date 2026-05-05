@@ -835,6 +835,8 @@ export enum TestCaseId {
   SDAddProductConsignmentSaveAsDraftWithErrors = "sdAddProductConsignmentSaveAsDraftWithErrors",
   SDAddProductConsignmentSaveAsDraftWithSpeciesError = "sdAddProductConsignmentSaveAsDraftWithSpeciesError",
   SDAddProductConsignmentSaveAsDraftNoErrors = "sdAddProductConsignmentSaveAsDraftNoErrors",
+  SDAddProductConsignmentNonJsAddSupportingDoc = "sdAddProductConsignmentNonJsAddSupportingDoc",
+  SDAddProductConsignmentNonJsRemoveSupportingDoc = "sdAddProductConsignmentNonJsRemoveSupportingDoc",
   SDFacilityTwoFacilities = "sdFacilityTwoFacilities",
   SDFacilityTwoFacilitiesDetails = "sdFacilityTwoFacilitiesDetails",
   SDAddUKEntryDocumentNoCatches = "sdAddUKEntryDocumentNoCatches",

@@ -393,7 +393,7 @@ const WeightInputsSection: React.FC<{
         id="weight"
         totalWeight={() => {}}
         label={t("psAddCatchCertificateWeight", { ns: "psAddCatchDetails" })}
-        ariaLabel={t("psAddCatchCertificateWeight", { ns: "psAddCatchDetails" })}
+        ariaLabel={t("psAddCatchCertificateWeightAriaLabel", { ns: "psAddCatchDetails" })}
         hint={t("psAddCatchCertificateWeightHint", { ns: "psAddCatchDetails" })}
         key={isReset ? `total-weight-landed-${catchIndex}-reset` : `total-weight-landed-${catchIndex}`}
         weightKey="totalWeightLanded"
@@ -415,7 +415,7 @@ const WeightInputsSection: React.FC<{
       id="weight"
       totalWeight={() => {}}
       label={t("psAddCatchWeightsExportWeightBeforeProcessingLabel", { ns: "psAddCatchDetails" })}
-      ariaLabel={t("psAddCatchWeightsExportWeightBeforeProcessingLabel", { ns: "psAddCatchDetails" })}
+      ariaLabel={t("psAddCatchWeightsExportWeightBeforeProcessingAriaLabel", { ns: "psAddCatchDetails" })}
       hint={t("psAddCatchWeightsExportWeightBeforeProcessingHint", { ns: "psAddCatchDetails" })}
       key={
         isReset
@@ -442,7 +442,7 @@ const WeightInputsSection: React.FC<{
       id="weight"
       totalWeight={() => {}}
       label={t("psAddCatchWeightsExportWeightAfterProcessingLabel", { ns: "psAddCatchDetails" })}
-      ariaLabel={t("psAddCatchWeightsExportWeightAfterProcessingLabel", { ns: "psAddCatchDetails" })}
+      ariaLabel={t("psAddCatchWeightsExportWeightAfterProcessingAriaLabel", { ns: "psAddCatchDetails" })}
       hint={t("psAddCatchWeightsExportWeightAfterProcessingHint", { ns: "psAddCatchDetails" })}
       key={
         isReset ? `export-weight-after-processing-${catchIndex}-reset` : `export-weight-after-processing-${catchIndex}`
