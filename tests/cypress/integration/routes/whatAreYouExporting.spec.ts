@@ -1869,23 +1869,21 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
   });
 
   it("species listbox should appear with correct ID, role and no duplicates when suggestions open", () => {
-    // Assert attributes are stable before interacting (separate chain avoids stale-ref race).
-    cy.get("input#species").should("have.attr", "aria-controls", "species__listbox").and("not.be.disabled");
-    // click() fires the real focus event DCX needs to register its input handler.
-    // Separate cy.get() re-queries the DOM fresh after any click-triggered re-render settles.
-    cy.get("input#species").click();
-    cy.get("input#species").type("AES");
+    // Chain type() directly on the assertion — no separate click() needed after beforeEach gates on
+    // input#species being enabled (DCX fully hydrated). A prior click() triggers a DCX internal
+    // re-render; the subsequent fresh cy.get().type() then targets a new DOM node whose React
+    // synthetic onChange is not reliably fired in React 18 concurrent mode, so showOptions never
+    // becomes true and the listbox never renders.
+    cy.get("input#species").should("have.attr", "aria-controls", "species__listbox").and("not.be.disabled").type("AES");
     // Confirms: listbox exists, has correct role, ID is unique, aria-controls matches rendered ID
     cy.get("#species__listbox").should("have.length", 1).should("have.attr", "role", "listbox");
   });
 
   it("species combobox aria-expanded should toggle false→true when suggestions open", () => {
-    // click() fires real focus so DCX registers its input handler (needed for aria-expanded to change).
-    // Break click and type into separate cy.get() calls — chaining them holds a stale reference
-    // that gets detached when the click triggers a DCX internal state update and re-render.
-    cy.get("input#species").should("have.attr", "aria-expanded", "false").and("not.be.disabled");
-    cy.get("input#species").click();
-    cy.get("input#species").type("AES");
+    // Chain type() directly — no prior click() needed. DCX's aria-expanded is bound to showOptions
+    // state, which is set by handleChange → delayedFilterResults, not by focus/click. A prior
+    // click() triggers a DCX re-render that breaks the subsequent type() event chain (see test above).
+    cy.get("input#species").should("have.attr", "aria-expanded", "false").and("not.be.disabled").type("AES");
     // Synchronize on rendered suggestions first to avoid CI timing races before asserting expanded state.
     cy.get("#species__listbox", { timeout: 10000 }).should("be.visible");
     cy.get("input#species").should("have.attr", "aria-expanded", "true");
