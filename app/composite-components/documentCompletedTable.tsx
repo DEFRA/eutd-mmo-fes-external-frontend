@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import type { IGetAllDocumentsData, ICompletedDocumentData, DashboardLinks, ICatchStatus, Journey } from "~/types";
+import type { IGetAllDocumentsData, ICompletedDocumentData, DashboardLinks, Journey } from "~/types";
 import moment from "moment";
 import { camelCaseToSpacedLowerCase } from "~/helpers/string";
 import last from "lodash/last";
@@ -100,17 +100,8 @@ export const DocumentCompletedTable = ({
             <tbody className="govuk-table__body">
               {Array.isArray(documents?.completed) &&
                 documents.completed.map((document: ICompletedDocumentData) => {
-                  const getEuCatchStatusRoute = (documentNumber: string, euCatchStatus?: ICatchStatus) => {
-                    const prefix = `/${getPrivacyNoticeJourney(journey)}/${documentNumber}/`;
-                    switch (euCatchStatus?.status?.toUpperCase()) {
-                      case "SUCCESS":
-                        return `${prefix}eu-data-integration-successful`;
-                      case "IN_PROGRESS":
-                        return `${prefix}eu-data-integration-pending`;
-                      case "FAILURE":
-                        return `${prefix}eu-data-integration-failed`;
-                    }
-                  };
+                  const getEuCatchStatusRoute = (documentNumber: string) =>
+                    `/${getPrivacyNoticeJourney(journey)}/${documentNumber}/eu-data-integration-check-status`;
 
                   return (
                     <tr className="govuk-table__row" key={document.documentNumber}>
@@ -127,7 +118,7 @@ export const DocumentCompletedTable = ({
                       <td scope="row" className="govuk-table__cell">
                         {document.catchSubmission ? (
                           <a
-                            href={getEuCatchStatusRoute(document.documentNumber, document.catchSubmission)}
+                            href={getEuCatchStatusRoute(document.documentNumber)}
                             className="govuk-link"
                             data-testid={`${journey}-check-eu-catch-status`}
                           >

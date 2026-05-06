@@ -156,10 +156,7 @@ describe("Storage Document Dashboard page for completed table: rendering", () =>
     cy.get('[data-testid="storageNotes-check-eu-catch-status"]').each(($link) => {
       cy.wrap($link)
         .should("have.attr", "href")
-        .and(
-          "match",
-          /\/create-non-manipulation-document\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/
-        );
+        .and("match", /\/create-non-manipulation-document\/[A-Z0-9-]+\/eu-data-integration-check-status/);
     });
   });
 
