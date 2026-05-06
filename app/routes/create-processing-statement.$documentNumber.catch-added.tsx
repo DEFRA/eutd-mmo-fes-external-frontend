@@ -377,7 +377,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   cleanupSession(session);
 
-  const redirectUrl = determineRedirectUrl(nextUri, psData, documentNumber);
+  const redirectUrl = determineRedirectUrl(nextUri, documentNumber);
 
   return redirect(redirectUrl, {
     headers: {
