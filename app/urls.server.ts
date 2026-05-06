@@ -144,8 +144,8 @@ export const certificatesPdfReference = (uuid: string) =>
 export const getGearTypesByCategoryUrl = (gearCategory: string) =>
   `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/gear-type/${gearCategory}`;
 
-export const getEUIntegrationStatusUrl = (euStatus: string) =>
-  `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/certificate/eu-data-integration/${euStatus}`;
+export const getEUIntegrationStatusUrl = () =>
+  `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/certificate/eu-data-integration/check-status`;
 
 // Mock urls to use with MSW in cases where the URL contains query string parameters (as MSW ignores them)
 //   or where the value of url path parameters are irrelevant
@@ -174,10 +174,7 @@ export const mockDeleteProductUrl = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/exp
 export const mockEditProductUrl = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/fish/add/:productId`;
 export const mockGetGearCategoriesUrl = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/gear-categories`;
 export const mockGetGearTypesByCategoriesUrl = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/gear-type/:gearCategory`;
-export const mockEuDataIntegrationSuccess = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/certificate/eu-data-integration-successful/:documentNumber`;
-export const mockEuDataIntegrationPending = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/certificate/eu-data-integration-pending/:documentNumber`;
-export const mockEuDataIntegrationFailed = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/certificate/eu-data-integration-failed/:documentNumber`;
-export const mockEuCatchStatus = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/certificate/eu-data-integration/:euStatus`;
+export const mockEuCatchStatus = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/certificate/eu-data-integration/check-status`;
 
 export const mockSaveAndValidateDocument = (journey: Journey) =>
   `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/${journey}/saveAndValidate`;

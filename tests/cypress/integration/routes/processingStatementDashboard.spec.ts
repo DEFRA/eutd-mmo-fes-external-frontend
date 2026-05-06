@@ -168,7 +168,7 @@ describe("Processing Statement Landing page for completed table: rendering", () 
     cy.get('[data-testid="processingStatement-check-eu-catch-status"]').each(($link) => {
       cy.wrap($link)
         .should("have.attr", "href")
-        .and("match", /\/create-processing-statement\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/);
+        .and("match", /\/create-processing-statement\/[A-Z0-9-]+\/eu-data-integration-check-status/);
     });
   });
 

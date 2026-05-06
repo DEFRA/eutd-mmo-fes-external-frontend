@@ -16,18 +16,14 @@ const getServiceNameFromDocumentNumber = (documentNumber: string) => {
   return null;
 };
 
-export const getEuDataIntegration = async (
-  bearerToken: string,
-  documentNumber: string,
-  euStatus: string
-): Promise<any> => {
+export const getEuDataIntegration = async (bearerToken: string, documentNumber: string): Promise<any> => {
   // Validate documentNumber exists before proceeding
   if (!documentNumber || documentNumber.trim() === "") {
     logger.error(new Error("Missing or invalid documentNumber in EU data integration"));
     return redirect("/forbidden");
   }
 
-  const response: Response = await get(bearerToken, getEUIntegrationStatusUrl(euStatus), {
+  const response: Response = await get(bearerToken, getEUIntegrationStatusUrl(), {
     documentnumber: documentNumber,
   });
 
@@ -53,15 +49,16 @@ const onGetEuDataIntegrationResponse = async (response: Response): Promise<any> 
   }
 };
 
-export const EuDataIntegrationLoader = async (request: Request, params: Params, euStatus: EuStatus) => {
+export const EuDataIntegrationLoader = async (request: Request, params: Params) => {
   setApiMock(request.url);
 
   const bearerToken = await getBearerTokenForRequest(request);
   const { documentNumber = "" } = params;
 
-  const euIntegrationResponse = await getEuDataIntegration(bearerToken, documentNumber, euStatus);
+  const euIntegrationResponse = await getEuDataIntegration(bearerToken, documentNumber);
   validateResponseData(euIntegrationResponse);
 
+  const euStatus: EuStatus = euIntegrationResponse.status;
   const t = await i18next.getFixedT(request, ["common", "title"]);
 
   // Get page title based on status
