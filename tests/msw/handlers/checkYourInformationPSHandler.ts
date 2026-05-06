@@ -3,6 +3,7 @@ import { type ITestHandler, TestCaseId } from "~/types";
 import {
   generatePdf,
   getProgressUrl,
+  checkProgressUrl,
   GET_CLIENT_IP_URL,
   GET_PROCESSING_STATEMENT,
   mockAddExporterDetails,
@@ -74,6 +75,7 @@ const checkYourInformationPSHandler: ITestHandler = {
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
+    rest.get(checkProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.status(200))),
     rest.post(generatePdf("processingStatement"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(processingStatementwithCatchType))
     ),
@@ -83,6 +85,7 @@ const checkYourInformationPSHandler: ITestHandler = {
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
+    rest.get(checkProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.status(200))),
     rest.post(generatePdf("processingStatement"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(processingStatementHealthCertificateError))
     ),
@@ -100,6 +103,7 @@ const checkYourInformationPSHandler: ITestHandler = {
       rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
       rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
       rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
+      rest.get(checkProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.status(200))),
       rest.post(generatePdf("processingStatement"), (req, res, ctx) => {
         documentSubmitted = true;
         return res(
