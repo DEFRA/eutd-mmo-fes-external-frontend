@@ -239,7 +239,7 @@ export function ErrorBoundary() {
   // when true, this is what used to go to `CatchBoundary`
   if (isRouteErrorResponse(error)) {
     const substring = "The request is blocked.";
-    const isWAFError = error?.data.includes(substring);
+    const isWAFError = typeof error?.data === "string" && error.data.includes(substring);
 
     return isWAFError ? (
       <Template {...templateProps} disableScripts>
