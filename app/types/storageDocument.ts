@@ -17,8 +17,8 @@ export interface StorageDocumentCatch {
   productDescription?: string;
   netWeightProductArrival?: string;
   netWeightFisheryProductArrival?: string;
-  netWeightProductDeparture?: string;
-  netWeightFisheryProductDeparture?: string;
+  netWeightProductDeparture?: string | null;
+  netWeightFisheryProductDeparture?: string | null;
   _id?: string;
 }
 
