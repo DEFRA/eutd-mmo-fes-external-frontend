@@ -20,6 +20,7 @@ export enum TestCaseId {
   CCExporterManualAddressWithSubBuildingErrorArray = "CCExporterManualAddressWithSubBuildingErrorArray",
   CCExporterManualAddressWithOnlyRequiredArray = "CCExporterManualAddressWithOnlyRequiredArray",
   CCExporterManualAddressWithAllErrorsArray = "CCExporterManualAddressWithAllErrorsArray",
+  CCExporterManualAddressWithInvalidCountry = "CCExporterManualAddressWithInvalidCountry",
   StartJourney = "startJourney",
   StartJourneyFailed = "startJourneyFailed",
   StartJourneyFailedNoErrors = "startJourneyFailedNoErrors",
@@ -669,6 +670,7 @@ export enum TestCaseId {
   PSAddProcessingPlantAddressWithSessionPostcode = "psAddProcessingPlantAddressWithSessionPostcode",
   PSAddProcessingPlantAddressFindAddress = "psAddProcessingPlantAddressFindAddress",
   PSAddProcessingPlantAddressWithExistingAddress = "psAddProcessingPlantAddressWithExistingAddress",
+  PSAddProcessingPlantAddressAmend = "psAddProcessingPlantAddressAmend",
   PSPSAddProcessingPlantAddressWithErrors = "psPSPSAddProcessingPlantAddressWithErrors",
 
   SDAddStorageFacilityAddressNoArrival = "sdAddStorageFacilityAddressNoArrival",
@@ -793,6 +795,7 @@ export enum TestCaseId {
 
   SDIncompleteProgress = "sdIncompleteProgress",
   SDIncompleteProgressWithProducts = "sdIncompleteProgressWithProducts",
+  SDIncompleteProgressWithDraftProducts = "sdIncompleteProgressWithDraftProducts",
   SDCompleteProgress = "sdCompleteProgress",
   SDCompleteUnauthorisedProgress = "sdCompleteUnauthorisedProgress",
   SDCompleteTruckProgress = "sdCompleteTruckProgress",
@@ -832,6 +835,8 @@ export enum TestCaseId {
   SDAddProductConsignmentSaveAsDraftWithErrors = "sdAddProductConsignmentSaveAsDraftWithErrors",
   SDAddProductConsignmentSaveAsDraftWithSpeciesError = "sdAddProductConsignmentSaveAsDraftWithSpeciesError",
   SDAddProductConsignmentSaveAsDraftNoErrors = "sdAddProductConsignmentSaveAsDraftNoErrors",
+  SDAddProductConsignmentNonJsAddSupportingDoc = "sdAddProductConsignmentNonJsAddSupportingDoc",
+  SDAddProductConsignmentNonJsRemoveSupportingDoc = "sdAddProductConsignmentNonJsRemoveSupportingDoc",
   SDFacilityTwoFacilities = "sdFacilityTwoFacilities",
   SDFacilityTwoFacilitiesDetails = "sdFacilityTwoFacilitiesDetails",
   SDAddUKEntryDocumentNoCatches = "sdAddUKEntryDocumentNoCatches",

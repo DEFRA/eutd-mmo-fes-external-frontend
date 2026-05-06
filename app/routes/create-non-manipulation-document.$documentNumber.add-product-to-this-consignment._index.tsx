@@ -738,6 +738,7 @@ const AddProductIndex = () => {
                 hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
               />
+              <EntryDocumentGuidanceText />
               <FormInput
                 containerClassName="govuk-form-group"
                 label={t("weightOnDocumentLabel", { ns: "addProductToThisConsignment" })}
@@ -765,7 +766,6 @@ const AddProductIndex = () => {
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
                 labelClassName="govuk-!-font-weight-bold"
               />
-              <EntryDocumentGuidanceText />
               <fieldset className="govuk-fieldset" aria-describedby={`${supportingDocumentsKey}-0-hint`}>
                 {supportingDocuments.map((value: string, index: number) => {
                   const errorKey = `${supportingDocumentsKey}-${index}`;
@@ -834,7 +834,7 @@ const AddProductIndex = () => {
                     type={BUTTON_TYPE.BUTTON}
                     data-module="govuk-button"
                     onClick={handleAddDoc}
-                    aria-label={t("commonAddAnotherButtonText", { ns: "common" })}
+                    aria-label={t("commonAddAnotherSupportingDocAriaLabel", { ns: "common" })}
                   />
                 )}
               </fieldset>

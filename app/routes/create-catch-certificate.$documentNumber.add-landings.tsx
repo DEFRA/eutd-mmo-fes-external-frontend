@@ -88,7 +88,7 @@ type AddLandingsActionDataType = {
 const addLandingActionName = "submit";
 const cancelActionName = "cancel";
 
-const clearFormActions = [addLandingActionName, cancelActionName];
+const clearFormActions = new Set([addLandingActionName, cancelActionName]);
 
 export const loader: LoaderFunction = async ({ params, request }) => await AddLandingsLoader(request, params);
 export const action: ActionFunction = async ({ request, params }): Promise<Response | ErrorResponse> =>
@@ -130,8 +130,8 @@ const getValueFromActionOrState = <T,>(
   stateValue: T,
   typeGuard?: (val: any) => T
 ): T => {
-  if (!isEmpty(errors) && actionValue !== undefined) {
-    return typeGuard ? typeGuard(actionValue) : (actionValue as T);
+  if (!isEmpty(errors) && actionValue) {
+    return typeGuard ? typeGuard(actionValue) : actionValue;
   }
   return stateValue;
 };
@@ -328,7 +328,7 @@ const AddLandings = () => {
   };
 
   useEffect(() => {
-    if (isActionReload && clearFormActions.includes(actionExecuted)) {
+    if (isActionReload && clearFormActions.has(actionExecuted)) {
       forceUpdate();
       setCurrentProduct(values.product ?? "");
       setSelectedGearCategory("");
@@ -576,6 +576,7 @@ const AddLandings = () => {
                 legendTitle={t("exclusiveZoneTitle", { ns: "addLandings" })}
                 eezHint={t("eezHintText", { ns: "addLandings" })}
                 addAnotherButtonText={t("ccAddLandingAddAnotherZoneButtonText", { ns: "addLandings" })}
+                addAnotherButtonHiddenText={t("ccAddLandingAddAnotherZoneHiddenText", { ns: "addLandings" })}
                 removeButtonText={t("ccAddLandingRemoveZoneButtonText", { ns: "addLandings" })}
                 eezSelectEmptyHeader={t("ccEezSelectCountryText", { ns: "addLandings" })}
                 eezHelpSectionLink={t("ccEezHelpSectionLinkText", { ns: "addLandings" })}
@@ -691,7 +692,6 @@ const AddLandings = () => {
                 groupedErrorIds={groupedErrorIds}
                 addLandingGearTypeNullOption={t("ccAddLandingGearTypeNullOption")}
                 addLandingGearCategoryNullOption={t("ccAddLandingGearCategoryNullOption")}
-                gearType={gearType}
                 gearTypes={gearTypes}
                 gearCategories={gearCategories}
                 setSelectedGearType={setSelectedGearType}

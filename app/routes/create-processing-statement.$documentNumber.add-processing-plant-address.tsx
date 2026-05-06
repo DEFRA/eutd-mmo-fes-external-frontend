@@ -83,6 +83,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const currentStep = session.get("currentStep");
   const postcode = session.get("postcode");
+  const hasPostcode = isEmpty(postcode) === false;
   const addressOne = session.get("addressOne");
 
   // Parallelise all independent network calls: processing statement, countries reference
@@ -99,14 +100,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   let responseData;
 
-  if (!isEmpty(postcode) && lookupResponse) {
+  if (hasPostcode && lookupResponse) {
     const postcodeaddresses: ILookUpAddressDetails[] = Array.isArray(lookupResponse.data) ? lookupResponse.data : [];
     const postcodeaddress: ILookUpAddressDetails | undefined = postcodeaddresses.find(
       (address: ILookUpAddressDetails) => address.address_line === addressOne
     );
 
     responseData = {
-      ...createResponseData(documentNumber!, session, countries, processingStatementData, {
+      ...createResponseData(documentNumber, session, countries, processingStatementData, {
         postcode,
         currentStep,
         postcodeaddress,
@@ -116,7 +117,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     };
   } else {
     responseData = {
-      ...createResponseData(documentNumber!, session, countries, processingStatementData),
+      ...createResponseData(documentNumber, session, countries, processingStatementData),
       nextUri,
     };
   }
@@ -282,11 +283,26 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       "postcode",
     ]);
 
-    const countries: ICountry[] = await getCountries();
+    const [countries, existingStatement] = await Promise.all([
+      getCountries(),
+      getProcessingStatement(plantAddressBearerToken, documentNumber),
+    ]);
+    const ps = existingStatement as ProcessingStatement;
+    const postcodeaddress: ILookUpAddressDetails = {
+      building_number: ps.plantBuildingNumber ?? "",
+      sub_building_name: ps.plantSubBuildingName ?? "",
+      building_name: ps.plantBuildingName ?? "",
+      street_name: ps.plantStreetName ?? "",
+      city: ps.plantTownCity ?? "",
+      county: ps.plantCounty ?? "",
+      postCode: ps.plantPostcode ?? "",
+      country: ps.plantCountry ?? "",
+    };
+
     return createJsonResponse(
       {
         currentStep: plantAddressCurrentStep,
-        postcodeaddress: {},
+        postcodeaddress,
         countries,
         csrf,
       },
@@ -301,7 +317,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       form,
       plantAddressFormData,
       plantAddressBearerToken,
-      documentNumber!,
+      documentNumber,
       csrf
     );
   }
@@ -331,7 +347,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   }
 
   // Handle default actions (save as draft, continue)
-  return await handleDefaultActions(form, session, plantAddressBearerToken, documentNumber!);
+  return await handleDefaultActions(form, session, plantAddressBearerToken, documentNumber);
 };
 
 const createJsonResponse = (data: any, headers: Record<string, string> = {}) =>

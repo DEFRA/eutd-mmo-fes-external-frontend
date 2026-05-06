@@ -184,6 +184,7 @@ describe("Direct landing page render", () => {
     cy.get("#eez-0").should("be.visible").and("not.be.disabled");
     cy.wait(250);
     cy.get("#add-zone-button").should("exist");
+    cy.get("#add-zone-button .govuk-visually-hidden").should("contain", "exclusive economic zone");
     for (let i = 0; i < 4; i++) {
       cy.get("body").then(($body) => {
         if ($body.find("#add-zone-button").length > 0) {
@@ -296,7 +297,8 @@ describe("Direct landing page render", () => {
   it("should check product weights table ", () => {
     cy.get(".govuk-table__head").find("th").should("have.length", 2);
     cy.get(".govuk-table__head").find("th").eq(0).contains("Product");
-    cy.get(".govuk-table__head").find("th").eq(1).contains("Export Weight");
+    cy.get(".govuk-table__head").find("th").eq(1).contains("Export weight (kg)");
+    cy.get("#weights input").first().should("have.attr", "aria-label", "Export weight (kg)");
   });
 
   it("should check start date label as Start date of fishing trip", () => {

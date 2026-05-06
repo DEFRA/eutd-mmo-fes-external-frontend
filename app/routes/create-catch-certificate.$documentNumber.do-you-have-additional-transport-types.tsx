@@ -29,6 +29,7 @@ const DoYouHaveAdditionalTransportTypes = () => {
   }>();
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
+  const hasErrors = !isEmpty(errors);
   const backUrl = transport
     ? `/create-catch-certificate/${documentNumber}/${backUri(transport, "catchCertificate")}/${transport.id}`
     : `/create-catch-certificate/${documentNumber}/what-export-journey`;
@@ -37,14 +38,14 @@ const DoYouHaveAdditionalTransportTypes = () => {
   useScrollOnPageLoad();
 
   useEffect(() => {
-    if (!isEmpty(errors)) {
+    if (hasErrors) {
       scrollToId("errorIsland");
     }
-  }, [errors]);
+  }, [errors, hasErrors]);
 
   return (
     <Main backUrl={backUrl}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
+      {hasErrors && <ErrorSummary errors={displayErrorMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <Title
@@ -131,11 +132,11 @@ const DoYouHaveAdditionalTransportTypes = () => {
           </table>
           <br />
           <SecureForm method="post" className="govuk-form-group" csrf={csrf}>
-            <div className={!isEmpty(errors) ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
+            <div className={hasErrors ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
               <fieldset
                 className="govuk-fieldset"
                 aria-describedby={
-                  isEmpty(errors) ? "addTransportation-hint" : "addTransportation-hint addTransportation-error"
+                  hasErrors ? "addTransportation-hint addTransportation-error" : "addTransportation-hint"
                 }
               >
                 <div className="govuk-grid-row">
@@ -148,7 +149,7 @@ const DoYouHaveAdditionalTransportTypes = () => {
                 <div id="addTransportation-hint" className="govuk-hint">
                   {t("doYouHaveaAdditionalTransportTypesHint", { ns: "transportation" })}
                 </div>
-                {!isEmpty(errors) && (
+                {hasErrors && (
                   <ErrorMessage
                     id="addTransportation-error"
                     text={t(errors.addTransportation.message, { ns: "errorsText" })}

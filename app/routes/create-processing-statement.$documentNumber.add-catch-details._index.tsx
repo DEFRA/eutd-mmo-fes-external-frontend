@@ -22,7 +22,7 @@ import {
   WeightInput,
 } from "~/composite-components";
 import type { Catch, pageLinks, ErrorResponse, Species, ICountry } from "~/types";
-import { getMeta, scrollToId, querySpecies, displayErrorMessages } from "~/helpers";
+import { getMeta, scrollToId, querySpecies, displayErrorMessagesInOrder } from "~/helpers";
 import { useIsHydrated } from "~/hooks";
 import { AddCatchDetailsAction, AddCatchDetailsLoader } from "~/models";
 
@@ -393,6 +393,7 @@ const WeightInputsSection: React.FC<{
         id="weight"
         totalWeight={() => {}}
         label={t("psAddCatchCertificateWeight", { ns: "psAddCatchDetails" })}
+        ariaLabel={t("psAddCatchCertificateWeightAriaLabel", { ns: "psAddCatchDetails" })}
         hint={t("psAddCatchCertificateWeightHint", { ns: "psAddCatchDetails" })}
         key={isReset ? `total-weight-landed-${catchIndex}-reset` : `total-weight-landed-${catchIndex}`}
         weightKey="totalWeightLanded"
@@ -414,6 +415,7 @@ const WeightInputsSection: React.FC<{
       id="weight"
       totalWeight={() => {}}
       label={t("psAddCatchWeightsExportWeightBeforeProcessingLabel", { ns: "psAddCatchDetails" })}
+      ariaLabel={t("psAddCatchWeightsExportWeightBeforeProcessingAriaLabel", { ns: "psAddCatchDetails" })}
       hint={t("psAddCatchWeightsExportWeightBeforeProcessingHint", { ns: "psAddCatchDetails" })}
       key={
         isReset
@@ -440,6 +442,7 @@ const WeightInputsSection: React.FC<{
       id="weight"
       totalWeight={() => {}}
       label={t("psAddCatchWeightsExportWeightAfterProcessingLabel", { ns: "psAddCatchDetails" })}
+      ariaLabel={t("psAddCatchWeightsExportWeightAfterProcessingAriaLabel", { ns: "psAddCatchDetails" })}
       hint={t("psAddCatchWeightsExportWeightAfterProcessingHint", { ns: "psAddCatchDetails" })}
       key={
         isReset ? `export-weight-after-processing-${catchIndex}-reset` : `export-weight-after-processing-${catchIndex}`
@@ -675,7 +678,24 @@ const AddCatchDetailsIndex = () => {
 
   return (
     <Main backUrl={`/create-processing-statement/${documentNumber}/add-consignment-details/${productId}`}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
+      {!isEmpty(errors) && (
+        <ErrorSummary
+          errors={displayErrorMessagesInOrder(
+            errors,
+            [
+              `catches-${catchIndex}-species`,
+              `catches-${catchIndex}-catchCertificateType`,
+              `catches-${catchIndex}-issuingCountry`,
+              `catches-${catchIndex}-catchCertificateNumber`,
+              `catches-${catchIndex}-speciesCommodityCode`,
+              `catches-${catchIndex}-totalWeightLanded`,
+              `catches-${catchIndex}-exportWeightBeforeProcessing`,
+              `catches-${catchIndex}-exportWeightAfterProcessing`,
+            ],
+            true
+          )}
+        />
+      )}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <Title title={t("psAddCatchDetailsHeading", { ns: "psAddCatchDetails" })} />

@@ -211,6 +211,11 @@ export const CheckYourInformationPSSDAction = async (
   const filterErrors: IError[] | undefined =
     journey === "processingStatement" ? errors?.filter((error: IError) => error.key !== "dateFieldError") : errors;
 
+  const redirectPath =
+    journey === "processingStatement"
+      ? `/create-processing-statement/${documentNumber}/processing-statement-created`
+      : `/create-non-manipulation-document/${documentNumber}/non-manipulation-document-created`;
+
   return Array.isArray(filterErrors) && filterErrors.length > 0
     ? new Response(JSON.stringify(filterErrors), {
         status: 200,
@@ -218,9 +223,5 @@ export const CheckYourInformationPSSDAction = async (
           "Content-Type": "application/json",
         },
       })
-    : redirect(
-        journey === "processingStatement"
-          ? `/create-processing-statement/${documentNumber}/processing-statement-created`
-          : `/create-non-manipulation-document/${documentNumber}/non-manipulation-document-created`
-      );
+    : redirect(redirectPath);
 };

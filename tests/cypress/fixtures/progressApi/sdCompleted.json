@@ -1,12 +1,12 @@
 {
   "progress": {
-    "reference": "COMPLETE",
-    "exporter": "COMPLETE",
-    "catches": "COMPLETE",
-    "storageFacilities": "COMPLETE",
-    "exportDestination": "COMPLETE",
-    "arrivalTransportationDetails": "COMPLETE",
-    "transportDetails": "COMPLETE"
+    "reference": "COMPLETED",
+    "exporter": "COMPLETED",
+    "catches": "COMPLETED",
+    "storageFacilities": "COMPLETED",
+    "exportDestination": "COMPLETED",
+    "arrivalTransportationDetails": "COMPLETED",
+    "transportDetails": "COMPLETED"
   },
   "requiredSections": 6,
   "completedSections": 6

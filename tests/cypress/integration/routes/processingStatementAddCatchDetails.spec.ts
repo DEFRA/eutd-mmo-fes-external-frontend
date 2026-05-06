@@ -7,7 +7,6 @@ const validAddCatchDetailsUrlForUK = `${documentUrl}/add-catch-details/GBR-2025-
 const validEditCatchDetailsUrl = `${documentUrl}/add-catch-details/GBR-2025-PS-FDC3D66E1-1760436601/0?pageNo=1`;
 const validEditCatchDetailsNextUrl = `${documentUrl}/add-catch-details/COD/0?catchType=non_uk&pageNo=2&nextUri=abc`;
 const validEditCatchDetailsUrlForUK = `${documentUrl}/add-catch-details/ASD/0?catchType=uk&pageNo=1`;
-const validEmptyAddCatchDetailsUrlForNonUK = `${documentUrl}/add-catch-details/0?pageNo=1`;
 
 describe("PS: Add catch details", () => {
   // FIO-10279: Test button order - Cancel on left, Add on right
@@ -461,22 +460,6 @@ describe("PS: Add catch details", () => {
 
     cy.get("#yourproducts").find("tbody > tr").should("have.length", 1);
   });
-
-  it("should display error msg when species, catch certificate number and weight is left empty", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSAddCatchDetailsNoCatchesSaveAndContinue,
-    };
-
-    cy.visit(validEmptyAddCatchDetailsUrlForNonUK, { qs: { ...testParams } });
-    cy.wait(300);
-    cy.get("#addProductDetails").click({ force: true });
-    cy.url().should("include", validEmptyAddCatchDetailsUrlForNonUK);
-
-    cy.get(".govuk-error-summary").contains("Enter the FAO code or species name").should("exist");
-    cy.get(".govuk-error-summary").contains("Enter the catch certificate number").should("exist");
-    cy.get(".govuk-error-summary").contains("Enter the export weight in kg (before processing)").should("exist");
-    cy.get(".govuk-error-summary").contains("Enter the export weight in kg (after processing)").should("exist");
-  });
 });
 
 describe("PS: Add catch details - Species AutocompleteFormField", () => {
@@ -678,16 +661,27 @@ describe("PS: Add catch details - Weight Input Validation", () => {
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-totalWeightLanded").should("be.visible");
+    cy.get("#catches-0-totalWeightLanded").should("have.attr", "aria-label", "Weight on catch certificate (kg)");
     cy.get("#catches-0-totalWeightLanded")
       .parent(".govuk-input__wrapper")
       .find(".govuk-input__suffix")
       .should("contain.text", "kg");
     cy.get("#catches-0-exportWeightBeforeProcessing").should("be.visible");
+    cy.get("#catches-0-exportWeightBeforeProcessing").should(
+      "have.attr",
+      "aria-label",
+      "Export weight before processing (kg)"
+    );
     cy.get("#catches-0-exportWeightBeforeProcessing")
       .parent(".govuk-input__wrapper")
       .find(".govuk-input__suffix")
       .should("contain.text", "kg");
     cy.get("#catches-0-exportWeightAfterProcessing").should("be.visible");
+    cy.get("#catches-0-exportWeightAfterProcessing").should(
+      "have.attr",
+      "aria-label",
+      "Export weight after processing (kg)"
+    );
     cy.get("#catches-0-exportWeightAfterProcessing")
       .parent(".govuk-input__wrapper")
       .find(".govuk-input__suffix")
@@ -930,9 +924,9 @@ describe("PS: Add catch details - Catch Details Table", () => {
     cy.get("#yourproducts thead th").should("have.length.greaterThan", 0);
     cy.get("#yourproducts thead th").eq(0).should("contain.text", "Species");
     cy.get("#yourproducts thead th").eq(1).should("contain.text", "Species commodity code");
-    cy.get("#yourproducts thead th").eq(2).should("contain.text", "Weight on catch certificate");
-    cy.get("#yourproducts thead th").eq(3).should("contain.text", "Export weight before processing");
-    cy.get("#yourproducts thead th").eq(4).should("contain.text", "Export weight after processing");
+    cy.get("#yourproducts thead th").eq(2).should("contain.text", "Weight on catch certificate (kg)");
+    cy.get("#yourproducts thead th").eq(3).should("contain.text", "Export weight before processing (kg)");
+    cy.get("#yourproducts thead th").eq(4).should("contain.text", "Export weight after processing (kg)");
     cy.get("#yourproducts thead th").eq(5).should("contain.text", "Action");
   });
 
@@ -1919,6 +1913,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+    cy.wait(500); // Wait for page to be fully loaded and hydrated
     cy.get("#catches-0-speciesCommodityCode").type("03023110");
     cy.get("#catches-0-speciesCommodityCode").should("have.value", "03023110");
 

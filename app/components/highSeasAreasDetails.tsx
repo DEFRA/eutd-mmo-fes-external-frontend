@@ -41,7 +41,11 @@ export const HighSeasAreasDetails = ({
           {!isEmpty(errors) && (
             <ErrorMessage
               id="highSeasArea-error"
-              text={t(errors?.message, { ns: "errorsText", ...(errors?.value ?? {}) })}
+              text={
+                errors?.value
+                  ? t(errors?.message, { ns: "errorsText", ...errors.value })
+                  : t(errors?.message, { ns: "errorsText" })
+              }
               visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
             />
           )}
