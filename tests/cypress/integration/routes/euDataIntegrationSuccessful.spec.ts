@@ -1,7 +1,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 const documentNumber = "GBR-2022-CC-3FE1169D1";
-const euDataIntegrationUrl = `/create-catch-certificate/${documentNumber}/eu-data-integration-successful`;
+const euDataIntegrationUrl = `/create-catch-certificate/${documentNumber}/eu-data-integration-check-status`;
 const dashboardUrl = `/create-catch-certificate/catch-certificates`;
 
 describe("EU Data Integration Successful Page", () => {

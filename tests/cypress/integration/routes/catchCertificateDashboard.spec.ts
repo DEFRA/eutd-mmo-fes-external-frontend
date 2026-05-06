@@ -80,7 +80,7 @@ describe("Catch certificate completed links", () => {
     cy.get('[data-testid="catchCertificate-check-eu-catch-status"]').each(($link) => {
       cy.wrap($link)
         .should("have.attr", "href")
-        .and("match", /\/create-catch-certificate\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/);
+        .and("match", /\/create-catch-certificate\/[A-Z0-9-]+\/eu-data-integration-check-status/);
     });
   });
 
