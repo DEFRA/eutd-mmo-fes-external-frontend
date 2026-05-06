@@ -185,28 +185,12 @@ const PAGE_MATCHERS: PageMatcher[] = [
   { test: (p) => p.includes("/add-health-certificate"), page: Page.AddProcessingHealthCertificate },
   { test: (p) => p.includes("/processing-statement-created"), page: Page.ProcessingStatementCreated },
   {
-    test: (p) => /^\/create-processing-statement\/.*\/eu-data-integration-successful$/i.test(p),
-    page: Page.ProcessingStatementEUSuccessful,
+    test: (p) => /^\/create-processing-statement\/.*\/eu-data-integration-check-status$/i.test(p),
+    page: Page.ProcessingStatementEUCheckStatus,
   },
   {
-    test: (p) => /^\/create-processing-statement\/.*\/eu-data-integration-pending$/i.test(p),
-    page: Page.ProcessingStatementEUPending,
-  },
-  {
-    test: (p) => /^\/create-processing-statement\/.*\/eu-data-integration-failed$/i.test(p),
-    page: Page.ProcessingStatementEUFailure,
-  },
-  {
-    test: (p) => /^\/create-non-manipulation-document\/.*\/eu-data-integration-successful$/i.test(p),
-    page: Page.StorageDocumentEUSuccessful,
-  },
-  {
-    test: (p) => /^\/create-non-manipulation-document\/.*\/eu-data-integration-pending$/i.test(p),
-    page: Page.StorageDocumentEUPending,
-  },
-  {
-    test: (p) => /^\/create-non-manipulation-document\/.*\/eu-data-integration-failed$/i.test(p),
-    page: Page.StorageDocumentEUFailure,
+    test: (p) => /^\/create-non-manipulation-document\/.*\/eu-data-integration-check-status$/i.test(p),
+    page: Page.StorageDocumentEUCheckStatus,
   },
   { test: (p) => p.includes("/non-manipulation-document-created"), page: Page.StorageDocumentCreated },
   { test: (p) => p.includes("/add-processing-plant-address"), page: Page.AddProcessingPlantAddress },
