@@ -96,6 +96,14 @@ const whoseWaterWereTheyCaughtInHandler: ITestHandler = {
       )
     ),
   ],
+  [TestCaseId.WhoseWatersSaveAsDraftWithInvalidOtherWaters]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingLandingsType))),
+    rest.get(CONSERVATION_URL, (req, res, ctx) => res(ctx.json(empty))),
+    rest.get(ADDED_SPECIES_URL, (req, res, ctx) => res(ctx.json(speciesAddedPerUser))),
+    // After client-side filtering (Other fields dropped, UK remains), backend accepts the save
+    rest.post(CONSERVATION_URL, (req, res, ctx) => res(ctx.status(200), ctx.json({}))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
+  ],
   [TestCaseId.WhoseWatersSuccess]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingLandingsType))),
     rest.get(CONSERVATION_URL, (req, res, ctx) => res(ctx.json(empty))),
