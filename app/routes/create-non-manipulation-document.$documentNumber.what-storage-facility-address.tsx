@@ -15,6 +15,7 @@ import {
   createCSRFToken,
   getBearerTokenForRequest,
   getCountries,
+  getStorageDocument,
   handleManualAddressErrors,
   hasLookUpAddressError,
   isCancelAddAddress,
@@ -36,6 +37,7 @@ import type {
   IExporter,
   ILookUpAddress,
   ILookUpAddressDetails,
+  StorageDocument,
   StorageFacility,
 } from "~/types";
 
@@ -295,9 +297,24 @@ export const action: ActionFunction = async ({ request, params }) => {
     session.set("csrf", csrf);
     session.unset("postcode");
     const updatedSession = await commitSession(session);
-    const countries: ICountry[] = await getCountries();
+    const [countries, existingStatement] = await Promise.all([
+      getCountries(),
+      getStorageDocument(bearerToken, documentNumber),
+    ]);
 
-    return new Response(JSON.stringify({ currentStep, postcodeaddress: {}, countries, csrf }), {
+    const sd = existingStatement as StorageDocument;
+    const postcodeaddress: ILookUpAddressDetails = {
+      building_number: sd.facilityBuildingNumber ?? "",
+      sub_building_name: sd.facilitySubBuildingName ?? "",
+      building_name: sd.facilityBuildingName ?? "",
+      street_name: sd.facilityStreetName ?? "",
+      city: sd.facilityTownCity ?? "",
+      county: sd.facilityCounty ?? "",
+      postCode: sd.facilityPostcode ?? "",
+      country: sd.facilityCountry ?? "",
+    };
+
+    return new Response(JSON.stringify({ currentStep, postcodeaddress: postcodeaddress, countries, csrf }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

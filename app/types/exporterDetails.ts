@@ -126,6 +126,7 @@ export type ExporterAddressProps = {
   countries: ICountry[];
   postcode: string;
   postcodeaddresses: ILookUpAddressDetails[];
+  postcodeaddress?: ILookUpAddressDetails;
   actionUri?: string;
 };
 

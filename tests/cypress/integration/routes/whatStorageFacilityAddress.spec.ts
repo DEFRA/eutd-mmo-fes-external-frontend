@@ -33,7 +33,10 @@ describe("SD: What storage facility address page", () => {
 
 describe("SD: Entering the address manually", () => {
   beforeEach(() => {
-    cy.visit(sdPageUrl);
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDStorageFacilityAddressManualEntry,
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.findByText(/^Enter the address manually$/).click({ force: true });
   });
 
@@ -244,5 +247,25 @@ describe("SD: On Selected Address", () => {
     cy.get("[data-testid=cancel]").click({ force: true });
 
     cy.url().should("include", "/add-storage-facility-details");
+  });
+});
+
+describe("SD: Entering the address manually pre-populates existing address", () => {
+  it("should pre-populate all address fields from the stored document", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDStorageFacilityAddressPrePopulated,
+    };
+
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+    cy.findByText(/^Enter the address manually$/).click({ force: true });
+
+    cy.get("#buildingNumber").should("have.value", "56");
+    cy.get("#buildingName").should("have.value", "Arc House");
+    cy.get("#subBuildingName").should("have.value", "3");
+    cy.get("#streetName").should("have.value", "test");
+    cy.get("#townCity").should("have.value", "Brussels");
+    cy.get("#county").should("have.value", "pre");
+    cy.get("#postcode").should("have.value", "sw11aa");
+    cy.get("#country").should("have.value", "Belgium");
   });
 });

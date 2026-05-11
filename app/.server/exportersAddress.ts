@@ -279,7 +279,18 @@ export const exportersAddressAction = async (request: Request, params: Params, j
     session.unset("postcode");
     const updatedSession = await commitSession(session);
     const countries: ICountry[] = await getCountries();
-    return new Response(JSON.stringify({ currentStep, postcodeaddress: {}, countries, csrf }), {
+    const exporter: IExporter = await getExporterDetailsFromMongo(bearerToken, documentNumber, journey);
+    const existingAddress: ILookUpAddressDetails = {
+      building_number: exporter.model?.buildingNumber ?? "",
+      building_name: exporter.model?.buildingName ?? "",
+      sub_building_name: exporter.model?.subBuildingName ?? "",
+      street_name: exporter.model?.streetName ?? "",
+      city: exporter.model?.townCity ?? "",
+      county: exporter.model?.county ?? "",
+      country: exporter.model?.country ?? "",
+      postCode: exporter.model?.postcode ?? "",
+    };
+    return new Response(JSON.stringify({ currentStep, postcodeaddress: existingAddress, countries, csrf }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
