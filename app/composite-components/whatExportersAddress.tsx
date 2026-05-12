@@ -29,8 +29,8 @@ export const WhatExportersAddress = ({ title, journey }: WhatExportersAddressPro
     errors,
     postcode: actionPostcode,
     currentStep: actionStep,
-    postcodeaddresses: actionPostcodeaddress,
-    postcodeaddress: actionPostcodeaddress2,
+    postcodeaddresses: actionPostcodeaddresses,
+    postcodeaddress: actionPostcodeaddress,
     csrf: actionCsrf,
   } = useActionData<IActionData>() ?? {
     currentStep: "",
@@ -42,8 +42,8 @@ export const WhatExportersAddress = ({ title, journey }: WhatExportersAddressPro
 
   const currentStep: ExporterAddressStep = actionStep || loaderStep;
   const postcode = actionPostcode || loaderPostcode;
-  const postcodeaddresses = loaderPostcode ? loaderPostcodeaddresses : actionPostcodeaddress;
-  const postcodeaddress = actionPostcodeaddress2 ?? loaderPostcodeaddress;
+  const postcodeaddresses = loaderPostcode ? loaderPostcodeaddresses : actionPostcodeaddresses;
+  const postcodeaddress = actionPostcodeaddress ?? loaderPostcodeaddress;
 
   useEffect(() => {
     if (!isEmpty(errors)) {
