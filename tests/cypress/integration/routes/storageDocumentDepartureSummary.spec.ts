@@ -137,7 +137,9 @@ describe("Storage document departure summary: rendering", () => {
 
   it("should toggle the tabs and find text", () => {
     openArrivalTab();
+    cy.get(".govuk-tabs__tab").contains("Storage arrival").should("be.visible");
     openDepartureTab();
+    cy.get(".govuk-tabs__tab").contains("Storage departure").should("be.visible");
   });
 });
 

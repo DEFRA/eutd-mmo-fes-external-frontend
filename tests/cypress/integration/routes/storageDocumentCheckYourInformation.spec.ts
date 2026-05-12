@@ -34,23 +34,23 @@ describe("SD: check-your-information page", () => {
   });
 
   it("should contain the required heading", () => {
-    cy.contains("dt", "Company name");
-    cy.contains("dt", "Company address");
-    cy.contains("dt", "Your reference");
-    cy.contains("div", "Consignment item");
-    cy.contains("dt", "Species");
-    cy.contains("dt", "Commodity code");
-    cy.contains("dt", "Entry document issued in the UK");
-    cy.contains("dt", "Entry document reference");
-    cy.contains("dt", "UK entry: Date");
-    cy.contains("dt", "UK entry: Place");
-    cy.contains("dt", "UK entry: Transport details");
-    cy.contains("dt", "UK entry: Weight on document");
-    cy.contains("dt", "Storage facility name");
-    cy.contains("dt", "Storage facility address");
-    cy.contains("dt", "Transport type");
-    cy.contains("dt", "Consignment destination");
-    cy.contains("dt", "Point of destination");
+    cy.contains("dt", "Company name").should("be.visible");
+    cy.contains("dt", "Company address").should("be.visible");
+    cy.contains("dt", "Your reference").should("be.visible");
+    cy.contains("div", "Consignment item").should("be.visible");
+    cy.contains("dt", "Species").should("be.visible");
+    cy.contains("dt", "Commodity code").should("be.visible");
+    cy.contains("dt", "Entry document issued in the UK").should("be.visible");
+    cy.contains("dt", "Entry document reference").should("be.visible");
+    cy.contains("dt", "UK entry: Date").should("be.visible");
+    cy.contains("dt", "UK entry: Place").should("be.visible");
+    cy.contains("dt", "UK entry: Transport details").should("be.visible");
+    cy.contains("dt", "UK entry: Weight on document").should("be.visible");
+    cy.contains("dt", "Storage facility name").should("be.visible");
+    cy.contains("dt", "Storage facility address").should("be.visible");
+    cy.contains("dt", "Transport type").should("be.visible");
+    cy.contains("dt", "Consignment destination").should("be.visible");
+    cy.contains("dt", "Point of destination").should("be.visible");
   });
 
   it("should display user reference value", () => {
@@ -103,15 +103,15 @@ describe("SD: check-your-information page", () => {
   });
 
   it("should contain the required data", () => {
-    cy.contains("dd", "GBR-2023-SD-A46E23603");
-    cy.contains("dd", "tesrt");
-    cy.contains("dd", "MO, LANCASTER HOUSE, HAMPSHIRE COURT");
-    cy.contains("dd", "03011100");
-    cy.contains("dd", "3 May 2023");
-    cy.contains("dd", "dover");
-    cy.contains("dd", "43");
-    cy.contains("dd", "10");
-    cy.contains("dd", "Calais port");
+    cy.contains("dd", "GBR-2023-SD-A46E23603").should("be.visible");
+    cy.contains("dd", "tesrt").should("be.visible");
+    cy.contains("dd", "MO, LANCASTER HOUSE, HAMPSHIRE COURT").should("be.visible");
+    cy.contains("dd", "03011100").should("be.visible");
+    cy.contains("dd", "3 May 2023").should("be.visible");
+    cy.contains("dd", "dover").should("be.visible");
+    cy.contains("dd", "43").should("be.visible");
+    cy.contains("dd", "10").should("be.visible");
+    cy.contains("dd", "Calais port").should("be.visible");
   });
 
   it("should contain change links with href", () => {
@@ -140,23 +140,23 @@ describe("SD: check-your-information page mandetory", () => {
   });
 
   it("should contain the required heading", () => {
-    cy.contains("dt", "Company name");
-    cy.contains("dt", "Company address");
-    cy.contains("dt", "Your reference");
-    cy.contains("div", "Consignment item");
-    cy.contains("dt", "Species");
-    cy.contains("dt", "Commodity code");
-    cy.contains("dt", "Export weight");
-    cy.contains("dt", "Entry document issued in the UK");
-    cy.contains("dt", "Entry document reference");
-    cy.contains("dt", "UK entry: Date");
-    cy.contains("dt", "UK entry: Place");
-    cy.contains("dt", "UK entry: Transport details");
-    cy.contains("dt", "UK entry: Weight on document");
-    cy.contains("dt", "Storage facility name");
-    cy.contains("dt", "Storage facility address");
-    cy.contains("dt", "Transport type");
-    cy.contains("dt", "Consignment destination");
+    cy.contains("dt", "Company name").should("be.visible");
+    cy.contains("dt", "Company address").should("be.visible");
+    cy.contains("dt", "Your reference").should("be.visible");
+    cy.contains("div", "Consignment item").should("be.visible");
+    cy.contains("dt", "Species").should("be.visible");
+    cy.contains("dt", "Commodity code").should("be.visible");
+    cy.contains("dt", "Export weight").should("be.visible");
+    cy.contains("dt", "Entry document issued in the UK").should("be.visible");
+    cy.contains("dt", "Entry document reference").should("be.visible");
+    cy.contains("dt", "UK entry: Date").should("be.visible");
+    cy.contains("dt", "UK entry: Place").should("be.visible");
+    cy.contains("dt", "UK entry: Transport details").should("be.visible");
+    cy.contains("dt", "UK entry: Weight on document").should("be.visible");
+    cy.contains("dt", "Storage facility name").should("be.visible");
+    cy.contains("dt", "Storage facility address").should("be.visible");
+    cy.contains("dt", "Transport type").should("be.visible");
+    cy.contains("dt", "Consignment destination").should("be.visible");
   });
 
   it("should display user reference value for mandatory fields test", () => {
@@ -164,16 +164,16 @@ describe("SD: check-your-information page mandetory", () => {
   });
 
   it("should contain the required data", () => {
-    cy.contains("dd", "GBR-2023-SD-A46E23603");
-    cy.contains("dd", "tesrt");
-    cy.contains("dd", "MO, LANCASTER HOUSE, HAMPSHIRE COURT");
-    cy.contains("dd", "03011100");
-    cy.contains("dd", "10");
-    cy.contains("dd", "20");
-    cy.contains("dd", "3 May 2023");
-    cy.contains("dd", "dover");
-    cy.contains("dd", "43");
-    cy.contains("dd", "10");
+    cy.contains("dd", "GBR-2023-SD-A46E23603").should("be.visible");
+    cy.contains("dd", "tesrt").should("be.visible");
+    cy.contains("dd", "MO, LANCASTER HOUSE, HAMPSHIRE COURT").should("be.visible");
+    cy.contains("dd", "03011100").should("be.visible");
+    cy.contains("dd", "10").should("be.visible");
+    cy.contains("dd", "20").should("be.visible");
+    cy.contains("dd", "3 May 2023").should("be.visible");
+    cy.contains("dd", "dover").should("be.visible");
+    cy.contains("dd", "43").should("be.visible");
+    cy.contains("dd", "10").should("be.visible");
   });
 });
 
@@ -183,6 +183,8 @@ describe("SD: check-your-information page transport", () => {
       testCaseId: TestCaseId.SDCheckYourInformationTrain,
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
+    cy.url().should("include", "/check-your-information");
+    cy.get("h1").should("be.visible");
   });
 
   it("should render the page with plain", () => {
@@ -190,13 +192,16 @@ describe("SD: check-your-information page transport", () => {
       testCaseId: TestCaseId.SDCheckYourInformationPlane,
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
+    cy.url().should("include", "/check-your-information");
+    cy.get("h1").should("be.visible");
   });
   it("should render the page with Truck", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDCheckYourInformationTruckCmr,
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
-    cy.contains("dd", "Dakota Hill");
+    cy.url().should("include", "/check-your-information");
+    cy.contains("dd", "Dakota Hill").should("be.visible");
   });
 });
 
