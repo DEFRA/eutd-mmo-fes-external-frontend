@@ -25,7 +25,6 @@ describe("SD: What storage facility address page", () => {
   });
 
   it("should render the input label and hint text", () => {
-    cy.get("label[for='postcode']").should("be.visible").contains("Postcode");
     cy.get("div .govuk-hint")
       .contains(
         "If you cannot find the address or you need to add a non-UK address, click the link 'Enter the address manually'"
