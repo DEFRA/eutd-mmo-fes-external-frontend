@@ -18,7 +18,7 @@ describe("Storage Document dashboard sidebar links", () => {
   });
 
   it("should display Need help? heading", () => {
-    cy.contains("h2", "Need help?");
+    cy.contains("h2", "Need help?").should("be.visible");
   });
 
   it("should render link for Guidance on exporting fish (gov.uk)", () => {
@@ -34,7 +34,7 @@ describe("Storage Document dashboard sidebar links", () => {
   });
 
   it("should display feedback headings", () => {
-    cy.contains("h3", "Send feedback");
+    cy.contains("h3", "Send feedback").should("be.visible");
   });
 });
 
@@ -67,27 +67,27 @@ describe("Storage Document Dashboard page: rendering", () => {
   });
 
   it("should render the correct page title and subtitle", () => {
-    cy.get(".govuk-heading-xl").contains("non-manipulation documents");
-    cy.get(".govuk-body").contains("You can create up to 5 draft non-manipulation documents.");
-    cy.get(".govuk-body").contains(
-      "When you reach the limit, you'll need to delete a draft before you can start a new one."
-    );
+    cy.get(".govuk-heading-xl").contains("non-manipulation documents").should("be.visible");
+    cy.get(".govuk-body").contains("You can create up to 5 draft non-manipulation documents.").should("be.visible");
+    cy.get(".govuk-body")
+      .contains("When you reach the limit, you'll need to delete a draft before you can start a new one.")
+      .should("be.visible");
   });
 
   it("should render dashboard headers", () => {
-    cy.get(".govuk-heading-l").contains("In progress");
-    cy.get(".govuk-heading-l").contains("Completed");
+    cy.get(".govuk-heading-l").contains("In progress").should("be.visible");
+    cy.get(".govuk-heading-l").contains("Completed").should("be.visible");
   });
 
   it("should render dashboard in progress table with columns and data", () => {
-    cy.get(".govuk-table__header").contains("Document number");
-    cy.get(".govuk-table__header").contains("Your reference");
-    cy.get(".govuk-table__header").contains("Date started");
-    cy.get(".govuk-table__header").contains("Action");
-    cy.get(".govuk-table__header").contains("Date Created");
+    cy.get(".govuk-table__header").contains("Document number").should("be.visible");
+    cy.get(".govuk-table__header").contains("Your reference").should("be.visible");
+    cy.get(".govuk-table__header").contains("Date started").should("be.visible");
+    cy.get(".govuk-table__header").contains("Action").should("be.visible");
+    cy.get(".govuk-table__header").contains("Date Created").should("be.visible");
 
-    cy.get(".govuk-table__cell").contains("GBR-2022-SD-F0285BD8A");
-    cy.get(".govuk-table__cell").contains("GBR-2022-SD-1C9833456");
+    cy.get(".govuk-table__cell").contains("GBR-2022-SD-F0285BD8A").should("be.visible");
+    cy.get(".govuk-table__cell").contains("GBR-2022-SD-1C9833456").should("be.visible");
   });
 
   it("should render dashboard with create button and no warning message", () => {
@@ -106,20 +106,22 @@ describe("Storage Document Dashboard page for in progress table: rendering", () 
   });
 
   it("should render dashboard in progress table with columns and data", () => {
-    cy.get(".govuk-table__header").contains("Document number");
-    cy.get(".govuk-table__header").contains("Your reference");
-    cy.get(".govuk-table__header").contains("Date started");
-    cy.get(".govuk-table__header").contains("Action");
-    cy.get(".govuk-body").contains("Your non-manipulation documents will appear here when you've submitted them.");
+    cy.get(".govuk-table__header").contains("Document number").should("be.visible");
+    cy.get(".govuk-table__header").contains("Your reference").should("be.visible");
+    cy.get(".govuk-table__header").contains("Date started").should("be.visible");
+    cy.get(".govuk-table__header").contains("Action").should("be.visible");
+    cy.get(".govuk-body")
+      .contains("Your non-manipulation documents will appear here when you've submitted them.")
+      .should("be.visible");
 
-    cy.get(".govuk-table__cell").contains("GBR-2022-SD-407EAA477");
+    cy.get(".govuk-table__cell").contains("GBR-2022-SD-407EAA477").should("be.visible");
   });
 
   it("should display guidance text for in progress section", () => {
-    cy.get(".govuk-body").contains("You can create up to 5 draft non-manipulation documents.");
-    cy.get(".govuk-body").contains(
-      "When you reach the limit, you'll need to delete a draft before you can start a new one."
-    );
+    cy.get(".govuk-body").contains("You can create up to 5 draft non-manipulation documents.").should("be.visible");
+    cy.get(".govuk-body")
+      .contains("When you reach the limit, you'll need to delete a draft before you can start a new one.")
+      .should("be.visible");
   });
 
   it("should display horizontal separator line after guidance", () => {
@@ -136,13 +138,15 @@ describe("Storage Document Dashboard page for completed table: rendering", () =>
   });
 
   it("should render dashboard complete table with columns and data", () => {
-    cy.get(".govuk-table__header").contains("Document number");
-    cy.get(".govuk-table__header").contains("Your reference");
-    cy.get(".govuk-table__header").contains("Date Created");
-    cy.get(".govuk-table__header").contains("Action");
-    cy.get(".govuk-body").contains("Your draft non-manipulation documents will appear here when you've created them.");
+    cy.get(".govuk-table__header").contains("Document number").should("be.visible");
+    cy.get(".govuk-table__header").contains("Your reference").should("be.visible");
+    cy.get(".govuk-table__header").contains("Date Created").should("be.visible");
+    cy.get(".govuk-table__header").contains("Action").should("be.visible");
+    cy.get(".govuk-body")
+      .contains("Your draft non-manipulation documents will appear here when you've created them.")
+      .should("be.visible");
 
-    cy.get(".govuk-table__cell").contains("GBR-2022-SD-1C9833456");
+    cy.get(".govuk-table__cell").contains("GBR-2022-SD-1C9833456").should("be.visible");
   });
 
   it("should render EU CATCH integration column with check status links", () => {
@@ -188,10 +192,10 @@ describe("Storage Document Dashboard page for completed table: rendering", () =>
   });
 
   it("should always display guidance text even when no drafts exist", () => {
-    cy.get(".govuk-body").contains("You can create up to 5 draft non-manipulation documents.");
-    cy.get(".govuk-body").contains(
-      "When you reach the limit, you'll need to delete a draft before you can start a new one."
-    );
+    cy.get(".govuk-body").contains("You can create up to 5 draft non-manipulation documents.").should("be.visible");
+    cy.get(".govuk-body")
+      .contains("When you reach the limit, you'll need to delete a draft before you can start a new one.")
+      .should("be.visible");
   });
 
   it("should display horizontal separator lines around no drafts message", () => {

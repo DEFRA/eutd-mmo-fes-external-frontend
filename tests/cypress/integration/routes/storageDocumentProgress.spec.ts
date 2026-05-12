@@ -31,8 +31,11 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should display the correct headings", () => {
-    cy.contains("[data-testid='sd-progress-titling']", "Your Progress");
-    cy.contains("[data-testid='sd-progress-heading']", "Non-manipulation document application: GBR-2021-SD-8EEB7E123");
+    cy.contains("[data-testid='sd-progress-titling']", "Your Progress").should("be.visible");
+    cy.contains(
+      "[data-testid='sd-progress-heading']",
+      "Non-manipulation document application: GBR-2021-SD-8EEB7E123"
+    ).should("be.visible");
   });
 
   it("should display the progress heading without bold styling", () => {
@@ -40,11 +43,13 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should display Application incomplete when NOT all required sections have been completed", () => {
-    cy.contains("[data-testid='Progress-completed-heading']", "Application incomplete");
+    cy.contains("[data-testid='Progress-completed-heading']", "Application incomplete").should("be.visible");
   });
 
   it("should display number of completed required sections", () => {
-    cy.contains("[data-testid='completedSections']", "You have completed 0 of 6 required sections.");
+    cy.contains("[data-testid='completedSections']", "You have completed 0 of 6 required sections.").should(
+      "be.visible"
+    );
   });
 
   it("should display the correct tags", () => {
@@ -103,11 +108,13 @@ describe("ProgressPage - Completed Application", () => {
   });
 
   it("should display Application completed when all required sections have been completed", () => {
-    cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
+    cy.contains("[data-testid='Progress-completed-heading']", "Application completed").should("be.visible");
   });
 
   it("should display number of completed required sections", () => {
-    cy.contains("[data-testid='completedSections']", "You have completed 6 of 6 required sections.");
+    cy.contains("[data-testid='completedSections']", "You have completed 6 of 6 required sections.").should(
+      "be.visible"
+    );
   });
 
   it("should display the correct tags", () => {
@@ -263,9 +270,11 @@ describe("should display the notificationBanner", () => {
     cy.get("#voidOriginal").click({ force: true });
     cy.get("#copyDocumentAcknowledged").click({ force: true });
     cy.get('[data-testid="continue"]').click({ force: true });
-    cy.get(".govuk-notification-banner__heading").contains(
-      "This draft was created by copying document GBR-2022-SD-F71D98A30. You are reminded that you must not use a non-manipulation document or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
-    );
+    cy.get(".govuk-notification-banner__heading")
+      .contains(
+        "This draft was created by copying document GBR-2022-SD-F71D98A30. You are reminded that you must not use a non-manipulation document or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
+      )
+      .should("be.visible");
   });
 });
 
