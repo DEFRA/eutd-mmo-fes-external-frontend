@@ -20,41 +20,46 @@ describe("SD: What storage facility address page", () => {
   });
 
   it("should render the buttons texts", () => {
-    cy.get(".govuk-button-group button").contains("Cancel");
+    cy.get(".govuk-button-group button").contains("Cancel").should("be.visible");
     cy.get('[data-testid="findaddress"]').should("be.visible").contains("Find address");
   });
 
   it("should render the input label and hint text", () => {
-    cy.get("div .govuk-hint").contains(
-      "If you cannot find the address or you need to add a non-UK address, click the link 'Enter the address manually'"
-    );
+    cy.get("div .govuk-hint")
+      .contains(
+        "If you cannot find the address or you need to add a non-UK address, click the link 'Enter the address manually'"
+      )
+      .should("be.visible");
   });
 });
 
 describe("SD: Entering the address manually", () => {
   beforeEach(() => {
-    cy.visit(sdPageUrl);
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDStorageFacilityAddressManualEntry,
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.findByText(/^Enter the address manually$/).click({ force: true });
   });
 
   it("should render header", () => {
-    cy.get(".govuk-heading-xl").contains("What is the storage facility address?");
+    cy.get(".govuk-heading-xl").should("be.visible").contains("What is the storage facility address?");
   });
 
   it("should render all input fields", () => {
-    cy.contains("label", "Sub-building name");
-    cy.contains("label", "Building number");
-    cy.contains("label", "Building name");
-    cy.contains("label", "Street name");
-    cy.contains("label", "Town or city");
-    cy.contains("label", "County/state/province (optional)");
-    cy.contains("label", "Postcode");
-    cy.contains("label", "Country");
+    cy.contains("label", "Sub-building name").should("be.visible");
+    cy.contains("label", "Building number").should("be.visible");
+    cy.contains("label", "Building name").should("be.visible");
+    cy.contains("label", "Street name").should("be.visible");
+    cy.contains("label", "Town or city").should("be.visible");
+    cy.contains("label", "County/state/province (optional)").should("be.visible");
+    cy.contains("label", "Postcode").should("be.visible");
+    cy.contains("label", "Country").should("be.visible");
   });
 
   it("should render form button", () => {
-    cy.contains("[data-testid='continue']", "Continue");
-    cy.contains("[data-testid='cancel']", "Cancel");
+    cy.contains("[data-testid='continue']", "Continue").should("be.visible");
+    cy.contains("[data-testid='cancel']", "Cancel").should("be.visible");
   });
 });
 
@@ -127,6 +132,7 @@ describe("SD: Entering the address manually with errors", () => {
 
     cy.get("[data-testid=continue]").click({ force: true });
     cy.url().should("include", "/add-storage-facility-details");
+    cy.get(".govuk-error-summary").should("not.exist");
   });
 
   it("should redirect to the forbidden page if the user is unauthorised", () => {
@@ -148,6 +154,7 @@ describe("SD: Entering the address manually with errors", () => {
 
     cy.get("[data-testid=continue]").click({ force: true });
     cy.url().should("include", "/forbidden");
+    cy.get(".govuk-heading-xl").should("be.visible").contains("Forbidden");
   });
 });
 
@@ -188,7 +195,8 @@ describe("SD: On Selected Address", () => {
     cy.get("#findaddress").click({ force: true });
     cy.get("#getaddress").click({ force: true });
 
-    cy.contains("span", "Select an address to continue");
+    cy.contains("span", "Select an address to continue").should("be.visible");
+    cy.get(".govuk-error-message").should("be.visible");
   });
 
   it("should go back to postcode input to allow searching for a different postcode", () => {
@@ -217,7 +225,8 @@ describe("SD: On Selected Address", () => {
 
     cy.get("#findaddress").click({ force: true });
 
-    cy.findByRole("link", { name: "Enter a postcode" });
+    cy.findByRole("link", { name: "Enter a postcode" }).should("be.visible");
+    cy.get(".govuk-error-summary").should("be.visible");
   });
 
   it("should display error if the entered postcode is invalid", () => {
@@ -231,7 +240,8 @@ describe("SD: On Selected Address", () => {
 
     cy.findByRole("link", {
       name: "Postcode must be between 5 and 8 characters, and contain only letters, numbers, spaces, hyphens and commas",
-    });
+    }).should("be.visible");
+    cy.get(".govuk-error-summary").should("be.visible");
   });
 
   it("should go back to add-storage-document-details if cancelling postcode search", () => {
@@ -244,5 +254,25 @@ describe("SD: On Selected Address", () => {
     cy.get("[data-testid=cancel]").click({ force: true });
 
     cy.url().should("include", "/add-storage-facility-details");
+  });
+});
+
+describe("SD: Entering the address manually pre-populates existing address", () => {
+  it("should pre-populate all address fields from the stored document", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDStorageFacilityAddressPrePopulated,
+    };
+
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+    cy.findByText(/^Enter the address manually$/).click({ force: true });
+
+    cy.get("#buildingNumber").should("have.value", "56");
+    cy.get("#buildingName").should("have.value", "Arc House");
+    cy.get("#subBuildingName").should("have.value", "3");
+    cy.get("#streetName").should("have.value", "test");
+    cy.get("#townCity").should("have.value", "Brussels");
+    cy.get("#county").should("have.value", "pre");
+    cy.get("#postcode").should("have.value", "sw11aa");
+    cy.get("#country").should("have.value", "Belgium");
   });
 });
