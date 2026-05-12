@@ -22,14 +22,15 @@ export const WhatExportersAddress = ({ title, journey }: WhatExportersAddressPro
     postcode: loaderPostcode,
     csrf,
     postcodeaddresses: loaderPostcodeaddresses,
+    postcodeaddress: loaderPostcodeaddress,
   } = useLoaderData<ExporterAddressProps>();
 
   const {
     errors,
     postcode: actionPostcode,
     currentStep: actionStep,
-    postcodeaddresses: actionPostcodeaddress,
-    postcodeaddress,
+    postcodeaddresses: actionPostcodeaddresses,
+    postcodeaddress: actionPostcodeaddress,
     csrf: actionCsrf,
   } = useActionData<IActionData>() ?? {
     currentStep: "",
@@ -41,7 +42,8 @@ export const WhatExportersAddress = ({ title, journey }: WhatExportersAddressPro
 
   const currentStep: ExporterAddressStep = actionStep || loaderStep;
   const postcode = actionPostcode || loaderPostcode;
-  const postcodeaddresses = loaderPostcode ? loaderPostcodeaddresses : actionPostcodeaddress;
+  const postcodeaddresses = loaderPostcode ? loaderPostcodeaddresses : actionPostcodeaddresses;
+  const postcodeaddress = actionPostcodeaddress ?? loaderPostcodeaddress;
 
   useEffect(() => {
     if (!isEmpty(errors)) {
