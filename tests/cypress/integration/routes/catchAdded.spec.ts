@@ -11,7 +11,8 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(progressUrl, { qs: { ...testParams } });
-    cy.contains("a", /^Back$/);
+    cy.contains("a", /^Back$/).should("be.visible");
+    cy.contains("a", /^Back$/).should("have.attr", "href");
   });
 
   it("navigating from the Progress page should redirect to add consignment details if the second catch does not have either a species or catch certificate number", () => {
