@@ -18,7 +18,7 @@ describe("Whose waters page: user Interface", () => {
   });
 
   it("should render the correct headings", () => {
-    cy.contains("h1", "Whose waters were the fish or shellfish caught in?");
+    cy.contains("h1", "Whose waters were the fish or shellfish caught in?").should("be.visible");
   });
 
   it("should render the three whose waters checkboxes and labels ", () => {
