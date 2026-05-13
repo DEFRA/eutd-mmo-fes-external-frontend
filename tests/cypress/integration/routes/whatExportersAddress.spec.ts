@@ -11,7 +11,7 @@ describe("CC: Exporter address page", () => {
   });
 
   it("should render the expected header", () => {
-    cy.get(".govuk-heading-xl").contains("What is the exporter's address").should("be.visible");
+    cy.get(".govuk-heading-xl").should("be.visible").and("contain.text", "What is the exporter’s address");
   });
 
   it("should render the buttons texts", () => {
@@ -38,7 +38,7 @@ describe("CC: Entering the address manually", () => {
   });
 
   it("should render header", () => {
-    cy.get(".govuk-heading-xl").contains("What is the exporter's address").should("be.visible");
+    cy.get(".govuk-heading-xl").should("be.visible").and("contain.text", "What is the exporter’s address");
   });
 
   it("should render all input fields", () => {
