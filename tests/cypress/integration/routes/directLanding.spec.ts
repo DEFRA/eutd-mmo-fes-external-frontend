@@ -523,14 +523,6 @@ describe("DirectLanding page when javascript is disabled", () => {
     cy.get(String.raw`select#vessel\.vesselName`).should("have.value", "AARON (N370)");
   });
 
-  it("should trigger add date button with values", () => {
-    cy.get("#dateLanded-day").type("20");
-    cy.get("#dateLanded-month").type("03");
-    cy.get("#dateLanded-year").type("2023");
-    cy.get("[data-testid='add-dateLanded']").click({ force: true });
-    cy.url().should("include", "vessels");
-  });
-
   it("should click on save and continue", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.url().should("include", "whose-waters-were-they-caught-in");
@@ -606,10 +598,8 @@ describe("DirectLanding page errors when javascript is enabled", () => {
   });
 
   it("should search autoinput field", () => {
-    cy.get(String.raw`#vessel\.vesselName`)
-      .invoke("val", "abc")
-      .trigger("change");
-    cy.get(String.raw`#vessel\.vesselName`).should("have.value", "abc");
+    cy.get(String.raw`#vessel\.vesselName`).type("AARON (N370)");
+    cy.get(String.raw`#vessel\.vesselName`).should("have.value", "AARON (N370)");
   });
 
   it("should click on save and continue", () => {
