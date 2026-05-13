@@ -44,7 +44,7 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("h1").should("contain", "processing plant address");
-    cy.get('[data-testid="goToAddAddress-button"]').should("be.visible").contains("Change");
+    cy.get('[data-testid="goToAddAddress-button"]').should("be.visible").and("contain", "Change");
     cy.get('[data-testid="goToAddAddress-button"] .govuk-visually-hidden').should(
       "contain",
       "processing plant address"
@@ -67,6 +67,7 @@ describe("Add Processing Plant Address", () => {
     };
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
+    cy.get("h1").should("exist");
     cy.get("body").then(($body) => {
       if ($body.find('[name="_action"][value="continue"]').length > 0) {
         cy.get('[name="_action"][value="continue"]').click();
@@ -112,12 +113,12 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get('[name="_action"][value="navigateToManualAddress"]').click();
-    cy.get(".dcx-form-input").contains("Building number");
-    cy.get(".dcx-form-input").contains("Building name");
-    cy.get(".dcx-form-input").contains("Sub-building name");
-    cy.get(".dcx-form-input").contains("Street name");
-    cy.get(".dcx-form-input").contains("County/state/province (optional)");
-    cy.get(".govuk-button-group button").contains("Cancel");
+    cy.get(".dcx-form-input").contains("Building number").should("be.visible");
+    cy.get(".dcx-form-input").contains("Building name").should("be.visible");
+    cy.get(".dcx-form-input").contains("Sub-building name").should("be.visible");
+    cy.get(".dcx-form-input").contains("Street name").should("be.visible");
+    cy.get(".dcx-form-input").contains("County/state/province (optional)").should("be.visible");
+    cy.get(".govuk-button-group button").contains("Cancel").should("be.visible");
     cy.get("[data-testid=continue]").should("be.visible");
     cy.contains("a", "Back to your progress").should("be.visible");
     cy.url().should("include", psAddressUrl);
@@ -167,8 +168,9 @@ describe("Add Processing Plant Address", () => {
     cy.get("#findaddress").click({ force: true });
     cy.get("#selectAddress").should("be.visible");
     const option = "MMO, LANCASTER HOUSE, HAMPSHIRE COURT, NEWCASTLE UPON TYNE, NE4 7YH";
-    cy.contains("#selectAddress option", option);
+    cy.contains("#selectAddress option", option).should("exist");
     cy.get("#selectAddress").select(option);
+    cy.get("#selectAddress").should("have.value", option);
   });
 
   it("should display an error if trying to continue without selecting an address", () => {
@@ -179,8 +181,10 @@ describe("Add Processing Plant Address", () => {
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("input[name=postcode]").type("12345", { force: true });
     cy.get("#findaddress").click({ force: true });
+    cy.get("#selectAddress").should("be.visible");
     cy.get("#getaddress").click({ force: true });
-    cy.contains("span", "Select an address to continue");
+    cy.contains("span", "Select an address to continue").should("be.visible");
+    cy.url().should("include", psAddressUrl);
   });
 
   it("should display error if no postcode has been entered", () => {
@@ -190,8 +194,10 @@ describe("Add Processing Plant Address", () => {
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("#findaddress").click({ force: true });
-    cy.contains("h2", "There is a problem");
-    cy.get(".govuk-error-summary").contains("a", "Enter a postcode");
+    cy.contains("h2", "There is a problem").should("be.visible");
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-error-summary").contains("a", "Enter a postcode").should("be.visible");
+    cy.url().should("include", psAddressUrl);
   });
 
   it("should redirect to forbidden when CSRF token validation fails", () => {
@@ -219,6 +225,7 @@ describe("Add Processing Plant Address", () => {
     };
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
+    cy.get("h1").should("exist");
     cy.get("body").then(($body) => {
       if ($body.find('[name="_action"][value="goToAddAddress"]').length > 0) {
         cy.get('[name="_action"][value="goToAddAddress"]').click();
@@ -235,12 +242,14 @@ describe("Add Processing Plant Address", () => {
     };
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
+    cy.get("h1").should("exist");
     cy.get("body").then(($body) => {
       if ($body.find('[name="_action"][value="continue"]').length > 0) {
         cy.get('[name="_action"][value="continue"]').click();
         cy.url().should("include", "add-health-certificate");
       } else {
         cy.log("Continue button not available for this test case");
+        cy.url().should("include", psAddressUrl);
       }
     });
   });
@@ -251,6 +260,7 @@ describe("Add Processing Plant Address", () => {
     };
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
+    cy.get("form").should("exist");
     cy.get("form").then(($form) => {
       $form.find('[name="_action"]').remove();
       cy.wrap($form).submit();
@@ -265,6 +275,7 @@ describe("Add Processing Plant Address", () => {
     };
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
+    cy.get("h1").should("exist");
     cy.get("body").then(($body) => {
       if ($body.find('[name="_action"][value="continue"]').length > 0) {
         cy.get('[name="_action"][value="continue"]').click();
@@ -327,9 +338,12 @@ describe("Add Processing Plant Address", () => {
 
     cy.get("input[name=postcode]").type("SW1A 1AA", { force: true });
     cy.get("#findaddress").click({ force: true });
+    cy.get("#selectAddress").should("be.visible");
     cy.get("body").then(($body) => {
       if ($body.find('[name="_action"][value="changelink"]').length > 0) {
         cy.get('[name="_action"][value="changelink"]').click();
+        cy.url().should("include", psAddressUrl);
+      } else {
         cy.url().should("include", psAddressUrl);
       }
     });

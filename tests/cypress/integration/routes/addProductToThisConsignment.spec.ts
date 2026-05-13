@@ -131,6 +131,9 @@ describe("Add product to this consignment  page", () => {
     cy.get("#remove-supporting-doc-button-3").should("exist");
     cy.get("#remove-supporting-doc-button-4").should("exist");
 
+    // Verify we have exactly 5 supporting documents (maximum allowed)
+    cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 6);
+
     // Check Add Another button exists on the last element until length is 5
     cy.get("[id^=catches-0-supportingDocuments]").then(($elements) => {
       const length = $elements.length;
@@ -178,8 +181,11 @@ describe("Add product to this consignment  page", () => {
     cy.get("#add-supporting-doc-button").click({ force: true });
     cy.get("#add-supporting-doc-button").click({ force: true });
     cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 5);
     cy.get("#remove-supporting-doc-button-0").should("be.visible");
     cy.get("#remove-supporting-doc-button-0").click({ force: true });
+    cy.wait(300);
+    cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 4);
   });
 
   it("should click on remove last doc button and select should be removed", () => {
@@ -529,7 +535,9 @@ describe("Add product to this consignment  page- save and continue", () => {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue]").should("be.visible");
     cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "/you-have-added-a-product");
   });
 
   it("should click on save and continue button with error response", () => {
@@ -537,7 +545,10 @@ describe("Add product to this consignment  page- save and continue", () => {
       testCaseId: TestCaseId.SDAddProductConsignmentDataError,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue]").should("be.visible");
     cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#error-summary-title").should("be.visible");
+    cy.get(".govuk-error-summary").should("exist");
   });
 
   it("should click on save and continue button with error response if species is empty", () => {
@@ -546,8 +557,11 @@ describe("Add product to this consignment  page- save and continue", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get("#error-summary-title").contains("There is a problem");
-    cy.get(".govuk-error-message").contains("You have entered an incorrect FAO code or species name");
+    cy.get("#error-summary-title").should("be.visible").and("contain", "There is a problem");
+    cy.get(".govuk-error-message")
+      .should("be.visible")
+      .and("contain", "You have entered an incorrect FAO code or species name");
+    cy.url().should("include", "/add-product-to-this-consignment");
   });
 
   it("should click on save and continue button with error response with species suggestions", () => {
@@ -556,10 +570,11 @@ describe("Add product to this consignment  page- save and continue", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get("#error-summary-title").contains("There is a problem");
-    cy.get(".govuk-error-message").contains(
-      "You have entered an incorrect FAO code or species name, did you mean one of the following:"
-    );
+    cy.get("#error-summary-title").should("be.visible").and("contain", "There is a problem");
+    cy.get(".govuk-error-message")
+      .should("be.visible")
+      .and("contain", "You have entered an incorrect FAO code or species name, did you mean one of the following:");
+    cy.url().should("include", "/add-product-to-this-consignment");
   });
 });
 
@@ -616,7 +631,9 @@ describe("Add product to this consignment page: form submission and interaction"
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.contains(".govuk-error-message", "Select Yes if the document was issued in the UK");
+    cy.get("#error-summary-title").should("be.visible");
+    cy.contains(".govuk-error-message", "Select Yes if the document was issued in the UK").should("be.visible");
+    cy.url().should("include", "/add-product-to-this-consignment");
   });
 
   it("should display issuing country field when 'No' is selected for UK certificate", () => {
@@ -674,7 +691,9 @@ describe("Add product to this consignment page: form submission and interaction"
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.contains(".govuk-error-message", "Enter the net weight of product on arrival");
+    cy.get("#error-summary-title").should("be.visible");
+    cy.contains(".govuk-error-message", "Enter the net weight of product on arrival").should("be.visible");
+    cy.url().should("include", "/add-product-to-this-consignment");
   });
 
   it("should show error message above net weight of fishery products on arrival when not populated", () => {
@@ -683,7 +702,9 @@ describe("Add product to this consignment page: form submission and interaction"
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.contains(".govuk-error-message", "Enter the net weight of fishery products on arrival");
+    cy.get("#error-summary-title").should("be.visible");
+    cy.contains(".govuk-error-message", "Enter the net weight of fishery products on arrival").should("be.visible");
+    cy.url().should("include", "/add-product-to-this-consignment");
   });
 });
 
@@ -863,7 +884,9 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     cy.get("#netWeightProductArrival").type("50");
     cy.get("#netWeightFisheryProductArrival").type("40");
 
+    cy.get("[data-testid=save-and-continue]").should("be.visible");
     cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "/you-have-added-a-product");
   });
 
   it("should display error state styling for invalid fields", () => {
