@@ -39,7 +39,7 @@ describe("PS: Entering the address manually", () => {
   });
 
   it("should render header", () => {
-    cy.get(".govuk-heading-xl").contains("What is the processing plant address?");
+    cy.get(".govuk-heading-xl").contains("What is the processing plant address?").should("be.visible");
   });
 
   it("should render all input fields", () => {
