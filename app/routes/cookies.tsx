@@ -194,9 +194,13 @@ const Cookies = () => {
           </table>
           <p className="govuk-body">
             {t("MSClarityParagraph3")}
-            <a href="https://optout.aboutads.info/" className="govuk-link">
-              {t("MSClarityWebChoiceServiceLinkOut")}
-            </a>
+            <a
+              href="https://optout.aboutads.info/"
+              className="govuk-link"
+              dangerouslySetInnerHTML={{
+                __html: t("MSClarityWebChoiceServiceLinkOut"),
+              }}
+            />
           </p>
           <h2 className="govuk-heading-m">{t("introductoryCookieMessage")}</h2>
           <p className="govuk-body">{t("introductoryCookieMessageParagraph")}</p>

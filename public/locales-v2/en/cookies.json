@@ -83,7 +83,7 @@
   "MSClarityParagraph1": "We use Microsoft Clarity to understand how you use The Fish Exports Service, including mouse movements, clicks, scrolling and so on. This information helps us to improve the website.",
   "MSClarityParagraph2": "Microsoft Clarity uses the following cookies:",
   "MSClarityParagraph3": "The data is anonymised and we do not allow these analytics providers to share it with others. You can opt out of Clarity telemetry by selecting Microsoft on the ",
-  "MSClarityWebChoiceServiceLinkOut": "DAA WebChoices service.",
+  "MSClarityWebChoiceServiceLinkOut": "<abbr title=\"Digital Advertising Alliance\">DAA</abbr> WebChoices service.",
   "MSClarityTable": {
     "tableHeader": {
       "header1": "Name",
