@@ -238,12 +238,9 @@ describe("Container Vessel Save as Draft - Retain valid field values", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     // Enter invalid chars in vesselName (::::), valid value in flagState (Greece) and departurePlace
-    cy.get("#vesselName").clear({ force: true });
-    cy.get("#vesselName").type("::::", { force: true });
-    cy.get("#flagState").clear({ force: true });
-    cy.get("#flagState").type("Greece", { force: true });
-    cy.get("#departurePlace").clear({ force: true });
-    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+    cy.get("#vesselName").clear({ force: true }).type("::::", { force: true });
+    cy.get("#flagState").clear({ force: true }).type("Greece", { force: true });
+    cy.get("#departurePlace").clear({ force: true }).type("Felixstowe Port", { force: true });
 
     // Save as draft
     cy.get("[data-testid=save-draft-button]").click({ force: true });
