@@ -4,9 +4,11 @@ import {
   createCSRFToken,
   getBearerTokenForRequest,
   getCatchCertificateSummary,
+  getStorageDocument,
   getLandingsEntryOption,
   getProgress,
   hasRequiredDataCatchCertificateSummary,
+  instanceOfUnauthorised,
   checkProgress,
   submitDocument,
   submitExportCertificate,
@@ -22,7 +24,11 @@ import type {
   IError,
   IProgress,
   ISubmitResponse,
+  IUnauthorised,
+  IValidationError,
   Journey,
+  StorageDocument,
+  StorageDocumentCatch,
   SystemFailure,
   ValidationFailure,
 } from "~/types";
@@ -34,6 +40,67 @@ function instanceOfSystemFailure(
 ): data is SystemFailure {
   return "error" in data;
 }
+
+const parseWeight = (value: string | number | null | undefined): number | undefined => {
+  if (value === undefined || value === null || value === "") {
+    return undefined;
+  }
+
+  const parsedWeight = Number(value);
+  return Number.isFinite(parsedWeight) ? parsedWeight : undefined;
+};
+
+const validateStorageDocumentWeightRelationships = (catches: StorageDocumentCatch[] = []): IValidationError[] => {
+  const validationErrors: IValidationError[] = [];
+
+  catches.forEach((catchItem: StorageDocumentCatch, index: number) => {
+    const arrivalProductWeight = parseWeight(catchItem.netWeightProductArrival);
+    const departureProductWeight = parseWeight(catchItem.netWeightProductDeparture);
+    const arrivalFisheryWeight = parseWeight(catchItem.netWeightFisheryProductArrival);
+    const departureFisheryWeight = parseWeight(catchItem.netWeightFisheryProductDeparture);
+
+    if (
+      arrivalProductWeight !== undefined &&
+      departureProductWeight !== undefined &&
+      departureProductWeight > arrivalProductWeight
+    ) {
+      validationErrors.push({
+        key: `validationError-product-departure-exceeds-arrival-${index}`,
+        message: "sdNetWeightProductDepartureExceedsArrival",
+        certificateNumber: catchItem.certificateNumber,
+        product: catchItem.product,
+      });
+    }
+
+    if (
+      arrivalFisheryWeight !== undefined &&
+      departureFisheryWeight !== undefined &&
+      departureFisheryWeight > arrivalFisheryWeight
+    ) {
+      validationErrors.push({
+        key: `validationError-fishery-departure-exceeds-arrival-${index}`,
+        message: "sdNetWeightProductDepartureExceedsArrival",
+        certificateNumber: catchItem.certificateNumber,
+        product: catchItem.product,
+      });
+    }
+
+    if (
+      departureProductWeight !== undefined &&
+      departureFisheryWeight !== undefined &&
+      departureFisheryWeight > departureProductWeight
+    ) {
+      validationErrors.push({
+        key: `validationError-fishery-departure-exceeds-product-${index}`,
+        message: "sdNetWeightFisheryProductDepartureExceedsProductDeparture",
+        certificateNumber: catchItem.certificateNumber,
+        product: catchItem.product,
+      });
+    }
+  });
+
+  return validationErrors;
+};
 
 export const CheckYourInformationLoader = async (request: Request, params: Params) => {
   /* istanbul ignore next */
@@ -222,6 +289,25 @@ export const CheckYourInformationPSSDAction = async (
         ? `/create-processing-statement/${documentNumber}/progress`
         : `/create-non-manipulation-document/${documentNumber}/progress`;
     return redirect(progressPath);
+  }
+
+  if (journey === "storageNotes") {
+    const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
+    if (instanceOfUnauthorised(storageDocument)) {
+      return redirect("/forbidden");
+    }
+
+    const weightRelationshipValidationErrors = validateStorageDocumentWeightRelationships(
+      storageDocument.catches ?? []
+    );
+    if (weightRelationshipValidationErrors.length > 0) {
+      return new Response(JSON.stringify(weightRelationshipValidationErrors), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
   }
 
   const { errors }: ISubmitResponse = await submitDocument(bearerToken, documentNumber, journey, ipAddress);

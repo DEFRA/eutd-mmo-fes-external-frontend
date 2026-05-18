@@ -33,6 +33,8 @@ import planeTransport from "@/fixtures/transportDetailsApi/plane.json";
 import trainTransport from "@/fixtures/transportDetailsApi/train.json";
 import containerVesselTransport from "@/fixtures/transportDetailsApi/containerVessel.json";
 import checkYourInformationAllFieldsNotProvided from "@/fixtures/storageDocumentApi/storageDocumentsFieldsNotProvided.json";
+import storageDocumentInvalidWeightRelationships from "@/fixtures/storageDocumentApi/storageDocumentInvalidWeightRelationships.json";
+import storageDocumentInvalidWeightRelationshipsCopied from "@/fixtures/storageDocumentApi/storageDocumentInvalidWeightRelationshipsCopied.json";
 import species from "@/fixtures/referenceDataApi/species.json";
 
 const documentNumber = "GBR-2023-SD-DE53D6E7C";
@@ -175,6 +177,22 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
   ],
+  [TestCaseId.SDCheckYourInformationSubmitInvalidWeightsOriginal]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentInvalidWeightRelationships))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    // Keep progress complete so loader allows submit and the new pre-submit
+    // weight-relationship guard is responsible for blocking submission.
+    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
+  ],
+  [TestCaseId.SDCheckYourInformationSubmitInvalidWeightsCopied]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentInvalidWeightRelationshipsCopied))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    // Mimic copied-document flow where arrival values were changed and stale
+    // departure values are now invalid. Submit must be blocked at this stage.
+    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
+  ],
   [TestCaseId.SDCheckYourInformationTruckEdit]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumenOneFacility))),
@@ -292,9 +310,7 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(sdProgressComplete))),
     // Transport details endpoint - match both arrival=false and arrival=undefined for departure
     rest.get(getTransportDetailsUrl("storageNotes", false), (req, res, ctx) => res(ctx.json(containerVesselTransport))),
-    rest.get(getTransportDetailsUrl("storageNotes", undefined), (req, res, ctx) =>
-      res(ctx.json(containerVesselTransport))
-    ),
+    rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(containerVesselTransport))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(containerVesselTransport))),
     // POST to save transport (no change scenario)
     rest.post(SAVE_TRANSPORT_DETAILS_URL, (req, res, ctx) => res(ctx.json(containerVesselTransport))),
