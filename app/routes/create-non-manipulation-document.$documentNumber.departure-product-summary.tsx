@@ -57,16 +57,13 @@ export const ConsignmentWeightTableForm = ({ catches, transportType }: Consignme
     if (isArrival) {
       weight = catchItem?.netWeightProductArrival;
     } else if (
-      // Only fall back to arrival weight when departure was NEVER submitted
-      // (undefined). A null value means the user explicitly cleared the field;
-      // in that case show nothing rather than re-showing the arrival weight.
-      catchItem?.netWeightProductDeparture === undefined &&
-      catchItem?.netWeightFisheryProductDeparture === undefined &&
+      !catchItem?.netWeightProductDeparture &&
+      !catchItem?.netWeightFisheryProductDeparture &&
       catchItem?.netWeightProductArrival
     ) {
       weight = catchItem.netWeightProductArrival;
     } else {
-      weight = catchItem?.netWeightProductDeparture ?? undefined;
+      weight = catchItem?.netWeightProductDeparture;
     }
     return weight === undefined ? undefined : Number(weight).toFixed(2);
   };
@@ -75,13 +72,13 @@ export const ConsignmentWeightTableForm = ({ catches, transportType }: Consignme
     if (isArrival) {
       weight = catchItem?.netWeightFisheryProductArrival;
     } else if (
-      catchItem?.netWeightProductDeparture === undefined &&
-      catchItem?.netWeightFisheryProductDeparture === undefined &&
+      !catchItem?.netWeightProductDeparture &&
+      !catchItem?.netWeightFisheryProductDeparture &&
       catchItem?.netWeightFisheryProductArrival
     ) {
       weight = catchItem.netWeightFisheryProductArrival;
     } else {
-      weight = catchItem?.netWeightFisheryProductDeparture ?? undefined;
+      weight = catchItem?.netWeightFisheryProductDeparture;
     }
     return weight === undefined ? undefined : Number(weight).toFixed(2);
   };
