@@ -303,16 +303,12 @@ export const updateStorageDocumentCatchDepartureWeights = async (
       const netWeightProductDeparture = formData[`weight-net-weight-product-departure-${index}`];
       const netWeightFisheryProductDeparture = formData[`weight-net-weight-fishery-product-departure-${index}`];
       if (netWeightProductDeparture !== undefined && netWeightFisheryProductDeparture !== undefined) {
-        // Use null (not undefined) for empty values so the field is explicitly
-        // included in the JSON body. JSON.stringify silently drops undefined,
-        // which means the orchestration never receives the clearing intent and
-        // the old departure-weight value stays in MongoDB.
         catches[index]["netWeightProductDeparture"] = !isEmpty(netWeightProductDeparture)
           ? netWeightProductDeparture
-          : null;
+          : undefined;
         catches[index]["netWeightFisheryProductDeparture"] = !isEmpty(netWeightFisheryProductDeparture)
           ? netWeightFisheryProductDeparture
-          : null;
+          : undefined;
       }
     });
   } else {
