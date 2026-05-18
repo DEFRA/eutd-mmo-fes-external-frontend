@@ -277,11 +277,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const isNonJs = form.get("isNonJs") === "true";
   const { _action, ...values } = Object.fromEntries(form);
   const isDraft = form.get("_action") === "saveAsDraft";
-  // Always persist submitted weights (even when validation fails) so that the
-  // progress page correctly reflects the current state. Without this, a failed
-  // Confirm submission reverts to the previously-saved valid weights in the DB,
-  // causing the section to appear Complete even after the user has cleared them.
-  const saveToRedisIfErrors = true;
+  const saveToRedisIfErrors = isDraft;
 
   const isEdit = (_action as string)?.startsWith("edit-");
   const isRemove = (_action as string)?.startsWith("remove-");

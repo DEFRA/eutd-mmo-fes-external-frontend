@@ -263,7 +263,6 @@
   "sdNetWeightProductDeparturePositiveMax2Decimal": "Enter the net weight on departure as a number with a maximum of 2 decimal places",
   "sdNetWeightFisheryProductDepartureErrorMax2DecimalLargerThan0": "Enter the fishery product weight with a maximum of 2 decimal places, larger than 0",
   "sdNetWeightFisheryProductDeparturePositiveMax2Decimal": "Enter the fishery product weight as a number with a maximum of 2 decimal places",
-  "sdNetWeightOrFisheryWeightProductDeparture": "Enter the net weight on departure and the fishery product weight on departure",
   "sdNetWeightProductDepartureExceedsArrival": "Departure weight cannot be greater than arrival weight",
   "sdNetWeightFisheryProductDepartureExceedsProductDeparture": "Fishery products net weight on arrival cannot exceed the product net weight",
   "sdNetWeightProductDepartureExceed12Digit": "The net weight on departure must be less than 100000000000",
