@@ -42,49 +42,41 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(checkYourInformationAllFieldsNotProvided))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
   ],
   [TestCaseId.SDCheckYourInformation]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
   ],
   [TestCaseId.SDCheckYourInformationMandatory]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentMandatory))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
   ],
   [TestCaseId.SDCheckYourInformationTrain]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentOneCatches))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
   ],
   [TestCaseId.SDCheckYourInformationPlane]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentNoFacilities))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
   ],
   [TestCaseId.SDCheckYourInformationTruckCmr]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumenOneFacility))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
   ],
   [TestCaseId.SDCheckYourInformationTruckWithContainers]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumenOneFacility))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
   ],
   [TestCaseId.SDCheckYourInformationTrainWithContainers]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentOneCatches))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
   ],
   [TestCaseId.SDCheckYourInformationValidationSuccess]: () => {
     let documentSubmitted = false;
@@ -184,7 +176,6 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumenOneFacility))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(truckTransport))),
     rest.post(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
   ],
@@ -192,7 +183,6 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentNoFacilities))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(planeTransport))),
     rest.post(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
   ],
@@ -200,7 +190,6 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentOneCatches))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(trainTransport))),
     rest.post(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
   ],
@@ -208,7 +197,6 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(containerVesselTransport))),
     rest.post(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
   ],
@@ -217,7 +205,6 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
     // Add product page
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
@@ -234,7 +221,6 @@ const checkYourInformationSDHandler: ITestHandler = {
       rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
       rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
       rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-      rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
       rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
       // Transport details endpoint - return truck before POST, plane after POST
       rest.get(getTransportDetailsUrl("storageNotes", true), (req, res, ctx) => {
@@ -254,7 +240,6 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(sdProgressComplete))),
@@ -271,7 +256,6 @@ const checkYourInformationSDHandler: ITestHandler = {
       rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
       rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
       rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-      rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
       rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
       // Transport details endpoint - return truck before POST, plane after POST
       rest.get(getTransportDetailsUrl("storageNotes", false), (req, res, ctx) => {
@@ -291,7 +275,6 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(sdProgressComplete))),
@@ -309,7 +292,6 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
     // Add storage facility page (when editing)
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
