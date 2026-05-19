@@ -59,6 +59,7 @@ describe("SD: you-have-added-a-storage-facility page", () => {
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.contains("button", "Save and continue").click({ force: true });
+    cy.url().should("include", "create-non-manipulation-document");
   });
 
   it("should have a back to progress link", () => {

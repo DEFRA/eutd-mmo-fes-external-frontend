@@ -1,5 +1,3 @@
-import { type ITestParams, TestCaseId } from "~/types";
-
 const dashboardLink = "/create-catch-certificate/catch-certificates";
 
 describe("PageNotFound", () => {
@@ -63,25 +61,5 @@ describe("PageNotFound", () => {
     cy.contains("a", /^Create a UK non-manipulation document$/)
       .should("be.visible")
       .should("have.attr", "href", dashboardLink);
-  });
-
-  it.skip("should render CatchBoundary for thrown responses", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.CatchBoundary,
-    };
-
-    cy.visit(dashboardLink, { failOnStatusCode: false, qs: { ...testParams } });
-
-    cy.findByRole("heading", { name: "Sorry, there is a problem with the service", level: 1 });
-  });
-
-  it.skip("should render ErrorBoundary for uncaught thrown errors", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.ErrorBoundary,
-    };
-
-    cy.request(dashboardLink, { failOnStatusCode: false, qs: { ...testParams } });
-
-    cy.findByRole("heading", { name: "Sorry, there is a problem with the service", level: 1 });
   });
 });
