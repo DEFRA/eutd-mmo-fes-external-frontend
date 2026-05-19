@@ -168,7 +168,11 @@ export const LandingDetailsSummary = ({
             <a
               className="govuk-link"
               data-testid={`change-${index}-${field.idAttribute}`}
-              aria-label={t("commonWhatExportersAddressChangeLink", { ns: "common" })}
+              aria-label={
+                t("commonWhatExportersAddressChangeLink", { ns: "common" }) +
+                " " +
+                lowerCase(t("ccAddLandingHeader", { ns: "addLandings" }))
+              }
               href={getChangeLink(field.idAttribute)}
             >
               {t("commonWhatExportersAddressChangeLink", { ns: "common" })}
@@ -236,7 +240,11 @@ export const LandingDetailsSummary = ({
                       documentNumber,
                     })}`
                   }
-                  aria-label={t("commonWhatExportersAddressChangeLink", { ns: "common" })}
+                  aria-label={
+                    t("commonWhatExportersAddressChangeLink", { ns: "common" }) +
+                    " " +
+                    lowerCase(t("ccLandingsEntryPageTitle", { ns: "landingsEntry" }))
+                  }
                 >
                   {t("commonWhatExportersAddressChangeLink", { ns: "common" })}
                   <span className="govuk-visually-hidden">
@@ -266,7 +274,11 @@ export const LandingDetailsSummary = ({
                         "/create-catch-certificate/:documentNumber/check-your-information",
                         { documentNumber }
                       )}`}
-                      aria-label={t("commonWhatExportersAddressChangeLink", { ns: "common" })}
+                      aria-label={
+                        t("commonWhatExportersAddressChangeLink", { ns: "common" }) +
+                        " " +
+                        lowerCase(t("commonSummaryPageCatchesSpecies", { ns: "checkYourInformation" }))
+                      }
                     >
                       {t("commonWhatExportersAddressChangeLink", { ns: "common" })}
                       <span className="govuk-visually-hidden">
