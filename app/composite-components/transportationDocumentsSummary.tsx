@@ -54,7 +54,9 @@ export const generateActions = (
 ) =>
   !isLocked && (
     <a
-      aria-label={t("commonWhatExportersAddressChangeLink", { ns: "common" })}
+      aria-label={
+        t("commonWhatExportersAddressChangeLink", { ns: "common" }) + " " + lowerCase(t(hiddenText, { ns: namespace }))
+      }
       className="govuk-link"
       href={href}
       {...(testId && { "data-testid": testId })}
