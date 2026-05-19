@@ -577,7 +577,7 @@ const CatchAdded = () => {
   const navigationLinks = populateNavigationLinks(t, documentNumber, currentPage, totalPages);
 
   return (
-    <Main backUrl={`/create-processing-statement/${documentNumber}/add-catch-details/${productId}/0`}>
+    <Main backUrl={`/create-processing-statement/${documentNumber}/add-catch-details/${productId}?pageNo=1`}>
       {Array.isArray(groupedErrors) && groupedErrors.length > 0 && <ErrorSummary errors={groupedErrors} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">

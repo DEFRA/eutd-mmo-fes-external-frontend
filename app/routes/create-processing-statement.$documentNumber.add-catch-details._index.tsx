@@ -356,6 +356,7 @@ const SpeciesAutocompleteField: React.FC<{
 
 const WeightInputsSection: React.FC<{
   catchIndex: number;
+  catchId: string;
   isReset: boolean;
   catchCertificateType: string;
   errors: any;
@@ -372,6 +373,7 @@ const WeightInputsSection: React.FC<{
   onExportAfterChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }> = ({
   catchIndex,
+  catchId,
   isReset,
   catchCertificateType,
   errors,
@@ -395,7 +397,11 @@ const WeightInputsSection: React.FC<{
         label={t("psAddCatchCertificateWeight", { ns: "psAddCatchDetails" })}
         ariaLabel={t("psAddCatchCertificateWeightAriaLabel", { ns: "psAddCatchDetails" })}
         hint={t("psAddCatchCertificateWeightHint", { ns: "psAddCatchDetails" })}
-        key={isReset ? `total-weight-landed-${catchIndex}-reset` : `total-weight-landed-${catchIndex}`}
+        key={
+          isReset
+            ? `total-weight-landed-${catchIndex}-${catchId}-reset`
+            : `total-weight-landed-${catchIndex}-${catchId}`
+        }
         weightKey="totalWeightLanded"
         errorID={`catches-${catchIndex}-totalWeightLanded`}
         inputWidth={5}
@@ -419,8 +425,8 @@ const WeightInputsSection: React.FC<{
       hint={t("psAddCatchWeightsExportWeightBeforeProcessingHint", { ns: "psAddCatchDetails" })}
       key={
         isReset
-          ? `export-weight-before-processing-${catchIndex}-reset`
-          : `export-weight-before-processing-${catchIndex}`
+          ? `export-weight-before-processing-${catchIndex}-${catchId}-reset`
+          : `export-weight-before-processing-${catchIndex}-${catchId}`
       }
       weightKey="exportWeightBeforeProcessing"
       errorID={`catches-${catchIndex}-exportWeightBeforeProcessing`}
@@ -445,7 +451,9 @@ const WeightInputsSection: React.FC<{
       ariaLabel={t("psAddCatchWeightsExportWeightAfterProcessingAriaLabel", { ns: "psAddCatchDetails" })}
       hint={t("psAddCatchWeightsExportWeightAfterProcessingHint", { ns: "psAddCatchDetails" })}
       key={
-        isReset ? `export-weight-after-processing-${catchIndex}-reset` : `export-weight-after-processing-${catchIndex}`
+        isReset
+          ? `export-weight-after-processing-${catchIndex}-${catchId}-reset`
+          : `export-weight-after-processing-${catchIndex}-${catchId}`
       }
       weightKey="exportWeightAfterProcessing"
       errorID={`catches-${catchIndex}-exportWeightAfterProcessing`}
@@ -846,6 +854,7 @@ const AddCatchDetailsIndex = () => {
               </Details>
               <WeightInputsSection
                 catchIndex={catchIndex}
+                catchId={catchId ?? ""}
                 isReset={isReset}
                 catchCertificateType={currentCatchCertificateType}
                 errors={errors}
