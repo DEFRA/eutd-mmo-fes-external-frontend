@@ -98,6 +98,7 @@ type CheckInfoExporterDetailsProps = {
   exporterDetails: Exporter;
   companyNameTitle: string;
   changeLinkText: string;
+  changeLinkHiddenText: string;
   companyAddress: string;
   exporterDetailsRoute: any;
   checkInfoRoute: any;
@@ -114,6 +115,7 @@ export const CheckInfoExporterDetails = ({
   exporterDetails,
   companyNameTitle,
   changeLinkText,
+  changeLinkHiddenText,
   companyAddress,
   exporterDetailsRoute,
   checkInfoRoute,
@@ -142,7 +144,7 @@ export const CheckInfoExporterDetails = ({
         <dd className="govuk-summary-list__actions">
           <a
             id="exporterCompanyNameChangeLink"
-            aria-label={changeLinkText}
+            aria-label={changeLinkText + " " + changeLinkHiddenText}
             className="govuk-link"
             href={`${route(exporterDetailsRoute, {
               documentNumber,
@@ -152,6 +154,7 @@ export const CheckInfoExporterDetails = ({
           >
             {changeLinkText}
           </a>
+          <span className="govuk-visually-hidden">{changeLinkHiddenText}</span>
         </dd>
       </div>
       <div className="govuk-summary-list__row">
@@ -407,7 +410,11 @@ export const StorageDocumentTransportDisplay = ({
               {itemData.hasChangeLink && (
                 <dd className="govuk-summary-list__actions">
                   <a
-                    aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                    aria-label={
+                      t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" }) +
+                      " " +
+                      lowerCase(itemData.label)
+                    }
                     className="govuk-link"
                     href={`/create-non-manipulation-document/${documentNumber}/${changeLinkUri(transportType, transport)}?nextUri=${route(
                       "/create-non-manipulation-document/:documentNumber/check-your-information",
@@ -417,6 +424,7 @@ export const StorageDocumentTransportDisplay = ({
                     )}#${itemData.backLinkId}`}
                   >
                     {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                    <span className="govuk-visually-hidden">{" " + lowerCase(itemData.label)}</span>
                   </a>
                 </dd>
               )}
@@ -527,11 +535,12 @@ export const CheckYourInformationRow = ({
     {isActionEnabled && (
       <dd className="govuk-summary-list__actions">
         <a
-          aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+          aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" }) + " " + lowerCase(label)}
           className="govuk-link"
           href={actionURL}
         >
           {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+          <span className="govuk-visually-hidden"> {lowerCase(label)}</span>
         </a>
       </dd>
     )}

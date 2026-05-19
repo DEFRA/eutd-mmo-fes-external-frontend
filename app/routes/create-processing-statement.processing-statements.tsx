@@ -39,7 +39,13 @@ const ProcessingStatements = () => {
   const refinedDocuments = PopulateLinks(journey, documents, t, linksToPopulate);
   const [searchParams] = useSearchParams();
   const journeyLink = "/create-processing-statement/processing-statements";
-  const navigationLinks = PageNavigationLinks(t, searchParams, journeyLink, journey);
+  const navigationLinks = PageNavigationLinks(
+    t,
+    searchParams,
+    journeyLink,
+    journey,
+    "commonDashboardPaginationProcessingStatements"
+  );
   const processingStatementsHeading = heading
     ? `${heading}: ${getJourneyHeader("processingStatement", t)}`
     : getJourneyHeader("processingStatement", t);

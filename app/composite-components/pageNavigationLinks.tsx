@@ -14,7 +14,8 @@ export const PageNavigationLinks = (
   t: any,
   searchParams: URLSearchParams,
   journeyLink: any,
-  journeyName: string
+  journeyName: string,
+  paginationHiddenTextKey?: string
 ): DashboardLinks => ({
   previousLink: () => (
     <a
@@ -38,6 +39,9 @@ export const PageNavigationLinks = (
         <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
       </svg>
       <span className="govuk-pagination__link-title">{t("commonDashboardPrev", { ns: "common" })}</span>
+      {paginationHiddenTextKey && (
+        <span className="govuk-visually-hidden">{t(paginationHiddenTextKey, { ns: "common" })}</span>
+      )}
     </a>
   ),
   monthlyLinks: () =>
@@ -70,9 +74,11 @@ export const PageNavigationLinks = (
         "MM"
       )}&year=${format(paginationNextLinkDate(searchParams), "y")}&position=0`}
       rel="next"
-      aria-label={t("commonDashboardNext", { ns: "common" })}
     >
       <span className="govuk-pagination__link-title ">{t("commonDashboardNext", { ns: "common" })}</span>
+      {paginationHiddenTextKey && (
+        <span className="govuk-visually-hidden">{t(paginationHiddenTextKey, { ns: "common" })}</span>
+      )}
       <svg
         className="govuk-pagination__icon govuk-pagination__icon--next"
         xmlns="http://www.w3.org/2000/svg"
