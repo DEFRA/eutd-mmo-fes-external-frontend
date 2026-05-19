@@ -40,7 +40,7 @@ describe("EU CATCH Integration - Completed Documents Table", () => {
     cy.get('[data-testid="catchCertificate-check-eu-catch-status"]')
       .first()
       .should("have.attr", "href")
-      .and("match", /\/create-catch-certificate\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/);
+      .and("match", /\/create-catch-certificate\/[A-Z0-9-]+\/eu-data-integration-check-status/);
   });
 
   it("should have accessible hidden text for screen readers on check status link", () => {
@@ -124,11 +124,10 @@ describe("EU CATCH Integration - Welsh Translation for Status Pages", () => {
       testCaseId: TestCaseId.CCDashboardWithPendingEUStatus,
     };
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
-    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-pending?lng=cy");
+    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-check-status?lng=cy");
     cy.contains("h1", "Anfon eich data i'w integreiddio â system yr UE").should("be.visible");
     cy.contains("h2", "Beth gallwch chi ei wneud nawr").should("be.visible");
     cy.contains("Mae eich tystysgrif dalfa yn dal yn ddilys ac yn barod i'w defnyddio").should("be.visible");
-    // cy.title().should("eq", "Anfon eich data i'w integreiddio â system yr UE -  Creu tystysgrif dalfa ar gyfer y DU - GOV.UK");
   });
 
   it("should render Welsh translation on failed status page", () => {
@@ -136,7 +135,7 @@ describe("EU CATCH Integration - Welsh Translation for Status Pages", () => {
       testCaseId: TestCaseId.CCDashboardWithFailedEUStatus,
     };
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
-    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-failed?lng=cy");
+    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-check-status?lng=cy");
     cy.contains("h1", "Mae yna broblem wrth integreiddio â data'r UE").should("be.visible");
   });
 });
@@ -147,8 +146,8 @@ describe("EU CATCH Integration - Status Pages", () => {
       testCaseId: TestCaseId.CCDashboard,
     };
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
-    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-successful");
-    cy.url().should("include", "/eu-data-integration-successful");
+    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-check-status");
+    cy.url().should("include", "/eu-data-integration-check-status");
     cy.contains("p", "Your catch certificate data has been sent to the EU CATCH system.").should("be.visible");
     cy.title().should("eq", "Your data has been transferred to EU CATCH - Create a UK catch certificate - GOV.UK");
   });
@@ -158,8 +157,8 @@ describe("EU CATCH Integration - Status Pages", () => {
       testCaseId: TestCaseId.CCDashboardWithPendingEUStatus,
     };
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
-    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-pending");
-    cy.url().should("include", "/eu-data-integration-pending");
+    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-check-status");
+    cy.url().should("include", "/eu-data-integration-check-status");
     cy.contains("h1", "Sending your data for EU integration").should("be.visible");
     cy.title().should("eq", "Sending your data for EU integration - Create a UK catch certificate - GOV.UK");
   });
@@ -169,8 +168,8 @@ describe("EU CATCH Integration - Status Pages", () => {
       testCaseId: TestCaseId.CCDashboardWithFailedEUStatus,
     };
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
-    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-failed");
-    cy.url().should("include", "/eu-data-integration-failed");
+    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-check-status");
+    cy.url().should("include", "/eu-data-integration-check-status");
     cy.contains("h1", "There is a problem with EU data integration").should("be.visible");
     cy.title().should("eq", "There is a problem with EU data integration - Create a UK catch certificate - GOV.UK");
   });
@@ -180,7 +179,7 @@ describe("EU CATCH Integration - Status Pages", () => {
       testCaseId: TestCaseId.CCDashboard,
     };
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
-    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-successful");
+    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-check-status");
     cy.get(".govuk-back-link")
       .should("be.visible")
       .and("have.attr", "href", "/create-catch-certificate/catch-certificates");
@@ -191,7 +190,7 @@ describe("EU CATCH Integration - Status Pages", () => {
       testCaseId: TestCaseId.CCDashboardWithPendingEUStatus,
     };
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
-    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-pending");
+    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-check-status");
     cy.get(".govuk-back-link")
       .should("be.visible")
       .and("have.attr", "href", "/create-catch-certificate/catch-certificates");
@@ -202,7 +201,7 @@ describe("EU CATCH Integration - Status Pages", () => {
       testCaseId: TestCaseId.CCDashboardWithFailedEUStatus,
     };
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
-    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-failed");
+    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-check-status");
     cy.get(".govuk-back-link")
       .should("be.visible")
       .and("have.attr", "href", "/create-catch-certificate/catch-certificates");
@@ -213,7 +212,7 @@ describe("EU CATCH Integration - Status Pages", () => {
       testCaseId: TestCaseId.CCDashboardWithPendingEUStatus,
     };
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
-    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-pending");
+    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-check-status");
     cy.contains("h1", "Sending your data for EU integration").should("be.visible");
     cy.contains("Your catch certificate data is being sent to the EU CATCH system").should("be.visible");
     cy.contains("This can take a few minutes").should("be.visible");
@@ -226,7 +225,7 @@ describe("EU CATCH Integration - Status Pages", () => {
       testCaseId: TestCaseId.CCDashboardWithFailedEUStatus,
     };
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
-    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-failed");
+    cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-check-status");
     cy.contains("h1", "There is a problem with EU data integration").should("be.visible");
     cy.contains("h2", "What this means").should("be.visible");
     cy.contains("h2", "If you need to speak to someone").should("be.visible");

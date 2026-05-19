@@ -18,7 +18,7 @@ describe("Processing Statement dashboard sidebar links", () => {
   });
 
   it("should display feedback headings", () => {
-    cy.contains("h3", "Send feedback");
+    cy.contains("h3", "Send feedback").should("be.visible");
   });
 });
 describe("Processing Statement Landing page: rendering", () => {
@@ -41,7 +41,7 @@ describe("Processing Statement Landing page: rendering", () => {
   });
 
   it("should display Need help? heading", () => {
-    cy.contains("h2", "Need help?");
+    cy.contains("h2", "Need help?").should("be.visible");
   });
 
   it("should render link for Guidance on exporting fish (gov.uk)", () => {
@@ -57,7 +57,7 @@ describe("Processing Statement Landing page: rendering", () => {
   });
 
   it("should display feedback headings", () => {
-    cy.contains("h3", "Send feedback");
+    cy.contains("h3", "Send feedback").should("be.visible");
   });
 
   it("should render links catch certificate link", () => {
@@ -70,24 +70,26 @@ describe("Processing Statement Landing page: rendering", () => {
   });
 
   it("should render the correct page title and subtitle", () => {
-    cy.get(".govuk-heading-xl").contains("processing statements");
-    cy.get(".govuk-body").contains("A maximum of 5 draft processing statements is allowed at any time.");
+    cy.get(".govuk-heading-xl").contains("processing statements").should("be.visible");
+    cy.get(".govuk-body")
+      .contains("A maximum of 5 draft processing statements is allowed at any time.")
+      .should("be.visible");
   });
 
   it("should render dashboard headers", () => {
-    cy.get(".govuk-heading-l").contains("In progress");
-    cy.get(".govuk-heading-l").contains("Completed");
+    cy.get(".govuk-heading-l").contains("In progress").should("be.visible");
+    cy.get(".govuk-heading-l").contains("Completed").should("be.visible");
   });
 
   it("should render dashboard in progress table with columns and data", () => {
-    cy.get(".govuk-table__header").contains("Document number");
-    cy.get(".govuk-table__header").contains("Your reference");
-    cy.get(".govuk-table__header").contains("Date started");
-    cy.get(".govuk-table__header").contains("Action");
-    cy.get(".govuk-table__header").contains("Date Created");
+    cy.get(".govuk-table__header").contains("Document number").should("be.visible");
+    cy.get(".govuk-table__header").contains("Your reference").should("be.visible");
+    cy.get(".govuk-table__header").contains("Date started").should("be.visible");
+    cy.get(".govuk-table__header").contains("Action").should("be.visible");
+    cy.get(".govuk-table__header").contains("Date Created").should("be.visible");
 
-    cy.get(".govuk-table__cell").contains("GBR-2022-PS-F0285BD8A");
-    cy.get(".govuk-table__cell").contains("GBR-2022-PS-1C9833456");
+    cy.get(".govuk-table__cell").contains("GBR-2022-PS-F0285BD8A").should("be.visible");
+    cy.get(".govuk-table__cell").contains("GBR-2022-PS-1C9833456").should("be.visible");
   });
 
   it("should render dashboard with create button and no warning message", () => {
@@ -106,13 +108,15 @@ describe("Processing Statement Landing page for Inprogress table: rendering", ()
   });
 
   it("should render dashboard in progress table with columns and data", () => {
-    cy.get(".govuk-table__header").contains("Document number");
-    cy.get(".govuk-table__header").contains("Your reference");
-    cy.get(".govuk-table__header").contains("Date started");
-    cy.get(".govuk-table__header").contains("Action");
-    cy.get(".govuk-grid-column-two-thirds").contains("No processing statement documents were created this month");
+    cy.get(".govuk-table__header").contains("Document number").should("be.visible");
+    cy.get(".govuk-table__header").contains("Your reference").should("be.visible");
+    cy.get(".govuk-table__header").contains("Date started").should("be.visible");
+    cy.get(".govuk-table__header").contains("Action").should("be.visible");
+    cy.get(".govuk-grid-column-two-thirds")
+      .contains("No processing statement documents were created this month")
+      .should("be.visible");
 
-    cy.get(".govuk-table__cell").contains("GBR-2022-PS-407EAA477");
+    cy.get(".govuk-table__cell").contains("GBR-2022-PS-407EAA477").should("be.visible");
   });
 });
 
@@ -168,7 +172,7 @@ describe("Processing Statement Landing page for completed table: rendering", () 
     cy.get('[data-testid="processingStatement-check-eu-catch-status"]').each(($link) => {
       cy.wrap($link)
         .should("have.attr", "href")
-        .and("match", /\/create-processing-statement\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/);
+        .and("match", /\/create-processing-statement\/[A-Z0-9-]+\/eu-data-integration-check-status/);
     });
   });
 
@@ -210,13 +214,15 @@ describe("Processing Statement Landing page for completed table with empty in pr
   });
 
   it("should render dashboard complete table with columns and data", () => {
-    cy.get(".govuk-table__header").contains("Document number");
-    cy.get(".govuk-table__header").contains("Your reference");
-    cy.get(".govuk-table__header").contains("Date Created");
-    cy.get(".govuk-table__header").contains("Action");
-    cy.get(".govuk-grid-column-two-thirds").contains("You do not have any processing statements in progress.");
+    cy.get(".govuk-table__header").contains("Document number").should("be.visible");
+    cy.get(".govuk-table__header").contains("Your reference").should("be.visible");
+    cy.get(".govuk-table__header").contains("Date Created").should("be.visible");
+    cy.get(".govuk-table__header").contains("Action").should("be.visible");
+    cy.get(".govuk-grid-column-two-thirds")
+      .contains("You do not have any processing statements in progress.")
+      .should("be.visible");
 
-    cy.get(".govuk-table__cell").contains("GBR-2022-PS-1C9833456");
+    cy.get(".govuk-table__cell").contains("GBR-2022-PS-1C9833456").should("be.visible");
   });
 });
 

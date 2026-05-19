@@ -24,7 +24,7 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
 
   const bearerToken = await getBearerTokenForRequest(request);
   const ENV = getEnv();
-  const maximumConcurrentDrafts: number = parseInt(ENV.MAXIMUM_CONCURRENT_DRAFTS);
+  const maximumConcurrentDrafts: number = Number.parseInt(ENV.MAXIMUM_CONCURRENT_DRAFTS);
   const url = new URL(request.url);
   const month = url.searchParams.get("month") ? Number(url.searchParams.get("month")) : new Date().getMonth() + 1;
   const year = url.searchParams.get("year") ? Number(url.searchParams.get("year")) : new Date().getFullYear();

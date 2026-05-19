@@ -18,7 +18,7 @@ describe("Catch certificate dashboard sidebar links", () => {
   });
 
   it("should display Need help? heading", () => {
-    cy.contains("h2", "Need help?");
+    cy.contains("h2", "Need help?").should("be.visible");
   });
 
   it("should render link for Guidance on exporting fish (gov.uk)", () => {
@@ -34,7 +34,7 @@ describe("Catch certificate dashboard sidebar links", () => {
   });
 
   it("should display feedback headings", () => {
-    cy.contains("h3", "Send feedback");
+    cy.contains("h3", "Send feedback").should("be.visible");
   });
 
   it("should render progress table without EU CATCH integration column", () => {
@@ -80,7 +80,7 @@ describe("Catch certificate completed links", () => {
     cy.get('[data-testid="catchCertificate-check-eu-catch-status"]').each(($link) => {
       cy.wrap($link)
         .should("have.attr", "href")
-        .and("match", /\/create-catch-certificate\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/);
+        .and("match", /\/create-catch-certificate\/[A-Z0-9-]+\/eu-data-integration-check-status/);
     });
   });
 
@@ -213,6 +213,8 @@ describe("Catch certificate dashboard with No completed document", () => {
       testCaseId: TestCaseId.CCDashboardNoCompleted,
     };
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
+    cy.url().should("include", "/catch-certificates");
+    cy.get("h1").should("be.visible");
   });
 });
 
@@ -252,7 +254,7 @@ describe("Catch certificate dashboard no details", () => {
   });
 
   it("should render a message which equals not have any catch certificate", () => {
-    cy.get("p.govuk-body").contains("You do not have any catch certificates in progress.");
+    cy.get("p.govuk-body").contains("You do not have any catch certificates in progress.").should("be.visible");
   });
 
   it("should render the forbidden page when a document number is undefined", () => {

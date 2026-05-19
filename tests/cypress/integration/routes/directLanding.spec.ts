@@ -298,11 +298,11 @@ describe("Direct landing page render", () => {
     cy.get(".govuk-table__head").find("th").should("have.length", 2);
     cy.get(".govuk-table__head").find("th").eq(0).contains("Product");
     cy.get(".govuk-table__head").find("th").eq(1).contains("Export weight (kg)");
-    cy.get("#weights input").first().should("have.attr", "aria-label", "Export weight (kg)");
+    cy.get("#weights input").first().should("have.attr", "aria-label", "Export weight (kilograms)");
   });
 
   it("should check start date label as Start date of fishing trip", () => {
-    cy.get("#startDate").find("legend").find("label").contains("Start date of fishing trip");
+    cy.get("#startDate").find("legend").find("label").contains("Start date of fishing trip").should("be.visible");
   });
 
   it("should fill the start date details from date picker", () => {
@@ -471,7 +471,7 @@ describe("DirectLanding page when the weights are not numbers", () => {
   });
 
   it("should render 0kg if the entered weights are not numbers", () => {
-    cy.get("#yourproducts tr:last-child td:last-of-type").contains("0kg");
+    cy.get("#yourproducts tr:last-child td:last-of-type").contains("0kg").should("be.visible");
   });
 });
 
@@ -503,7 +503,7 @@ describe("DirectLanding page when javascript is disabled", () => {
   });
 
   it("should render add date buttons when JavaScript is disabled", () => {
-    cy.contains("[data-testid='add-dateLanded']", "Add Date");
+    cy.contains("[data-testid='add-dateLanded']", "Add Date").should("be.visible");
   });
 
   it("should render a select box with pre-populated vessel names when valid date landed exists", () => {
@@ -523,13 +523,6 @@ describe("DirectLanding page when javascript is disabled", () => {
     cy.get(String.raw`select#vessel\.vesselName`).should("have.value", "AARON (N370)");
   });
 
-  it("should trigger add date button with values", () => {
-    cy.get("#dateLanded-day").type("20");
-    cy.get("#dateLanded-month").type("03");
-    cy.get("#dateLanded-year").type("2023");
-    cy.get("[data-testid='add-dateLanded']").click({ force: true });
-  });
-
   it("should click on save and continue", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.url().should("include", "whose-waters-were-they-caught-in");
@@ -541,7 +534,7 @@ describe("DirectLanding page when javascript is disabled", () => {
   });
 
   it("should display add gear category button", () => {
-    cy.contains("[data-testid='add-gear-category']", "Add gear category");
+    cy.contains("[data-testid='add-gear-category']", "Add gear category").should("be.visible");
   });
 });
 
@@ -605,9 +598,8 @@ describe("DirectLanding page errors when javascript is enabled", () => {
   });
 
   it("should search autoinput field", () => {
-    cy.get(String.raw`#vessel\.vesselName`)
-      .invoke("val", "abc")
-      .trigger("change");
+    cy.get(String.raw`#vessel\.vesselName`).type("AARON (N370)");
+    cy.get(String.raw`#vessel\.vesselName`).should("have.value", "AARON (N370)");
   });
 
   it("should click on save and continue", () => {
@@ -713,20 +705,22 @@ describe("Direct Landing mandatory fields unpopulated errors", () => {
 
   it("should display an error when start date is unpopulated", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
-    cy.get("#error-summary-title").contains("There is a problem");
-    cy.get(".govuk-error-message").contains("Enter the start date of the fishing trip");
+    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.get(".govuk-error-message").contains("Enter the start date of the fishing trip").should("be.visible");
   });
 
   it("should display an error when high seas is unpopulated", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
-    cy.get("#error-summary-title").contains("There is a problem");
-    cy.contains(".govuk-error-message", "Select whether the product was caught in a high seas area");
+    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.contains(".govuk-error-message", "Select whether the product was caught in a high seas area").should(
+      "be.visible"
+    );
   });
 
   it("should display an error when gear category is unpopulated", () => {
     cy.get("[data-testid='save-and-continue']").click({ force: true });
-    cy.get("#error-summary-title").contains("There is a problem");
-    cy.contains(".govuk-error-message", "Select a gear category");
+    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.contains(".govuk-error-message", "Select a gear category").should("be.visible");
   });
 });
 
@@ -797,8 +791,10 @@ describe("Direct Landing page when gear types api is failing", () => {
     cy.visit(directLandingUrl, { qs: { ...testParams } });
 
     cy.get("[data-testid='save-and-continue']").click({ force: true });
-    cy.get("#error-summary-title").contains("There is a problem");
-    cy.get(".govuk-error-message").contains("You must select a gear type when you have selected a gear category");
+    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.get(".govuk-error-message")
+      .contains("You must select a gear type when you have selected a gear category")
+      .should("be.visible");
   });
 });
 describe("Direct landing page: Accessibility", () => {

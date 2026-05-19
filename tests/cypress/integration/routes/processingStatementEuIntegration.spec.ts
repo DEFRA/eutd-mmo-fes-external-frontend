@@ -40,7 +40,7 @@ describe("EU CATCH Integration - Processing Statement Completed Documents Table"
     cy.get('[data-testid="processingStatement-check-eu-catch-status"]')
       .first()
       .should("have.attr", "href")
-      .and("match", /\/create-processing-statement\/[A-Z0-9-]+\/eu-data-integration-(successful|pending|failed)/);
+      .and("match", /\/create-processing-statement\/[A-Z0-9-]+\/eu-data-integration-check-status/);
   });
 
   it("should have accessible hidden text for screen readers on check status link", () => {
@@ -105,8 +105,8 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
       testCaseId: TestCaseId.PSDashboardWithSuccessEUStatus,
     };
     cy.visit(processingStatementUrl, { qs: { ...testParams } });
-    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-successful");
-    cy.url().should("include", "/eu-data-integration-successful");
+    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-check-status");
+    cy.url().should("include", "/eu-data-integration-check-status");
     cy.contains("p", "Your processing statement data has been sent to the EU CATCH system.").should("be.visible");
     cy.title().should("eq", "Your data has been transferred to EU CATCH - Create a UK processing statement - GOV.UK");
   });
@@ -116,8 +116,8 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
       testCaseId: TestCaseId.PSDashboardWithPendingEUStatus,
     };
     cy.visit(processingStatementUrl, { qs: { ...testParams } });
-    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-pending");
-    cy.url().should("include", "/eu-data-integration-pending");
+    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-check-status");
+    cy.url().should("include", "/eu-data-integration-check-status");
     cy.contains("h1", "Sending your data for EU integration").should("be.visible");
     cy.title().should("eq", "Sending your data for EU integration - Create a UK processing statement - GOV.UK");
   });
@@ -127,8 +127,8 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
       testCaseId: TestCaseId.PSDashboardWithFailedEUStatus,
     };
     cy.visit(processingStatementUrl, { qs: { ...testParams } });
-    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-failed");
-    cy.url().should("include", "/eu-data-integration-failed");
+    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-check-status");
+    cy.url().should("include", "/eu-data-integration-check-status");
     cy.contains("h1", "There is a problem with EU data integration").should("be.visible");
     cy.title().should("eq", "There is a problem with EU data integration - Create a UK processing statement - GOV.UK");
   });
@@ -138,7 +138,7 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
       testCaseId: TestCaseId.PSDashboardWithSuccessEUStatus,
     };
     cy.visit(processingStatementUrl, { qs: { ...testParams } });
-    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-successful");
+    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-check-status");
     cy.get(".govuk-back-link")
       .should("be.visible")
       .and("have.attr", "href", "/create-processing-statement/processing-statements");
@@ -149,7 +149,7 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
       testCaseId: TestCaseId.PSDashboardWithPendingEUStatus,
     };
     cy.visit(processingStatementUrl, { qs: { ...testParams } });
-    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-pending");
+    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-check-status");
     cy.get(".govuk-back-link")
       .should("be.visible")
       .and("have.attr", "href", "/create-processing-statement/processing-statements");
@@ -160,7 +160,7 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
       testCaseId: TestCaseId.PSDashboardWithFailedEUStatus,
     };
     cy.visit(processingStatementUrl, { qs: { ...testParams } });
-    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-failed");
+    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-check-status");
     cy.get(".govuk-back-link")
       .should("be.visible")
       .and("have.attr", "href", "/create-processing-statement/processing-statements");
@@ -171,7 +171,7 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
       testCaseId: TestCaseId.PSDashboardWithPendingEUStatus,
     };
     cy.visit(processingStatementUrl, { qs: { ...testParams } });
-    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-pending");
+    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-check-status");
     cy.contains("h1", "Sending your data for EU integration").should("be.visible");
     cy.contains("Your processing statement data is being sent to the EU CATCH system").should("be.visible");
     cy.contains("This can take a few minutes").should("be.visible");
@@ -184,7 +184,7 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
       testCaseId: TestCaseId.PSDashboardWithFailedEUStatus,
     };
     cy.visit(processingStatementUrl, { qs: { ...testParams } });
-    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-failed");
+    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-check-status");
     cy.contains("h1", "There is a problem with EU data integration").should("be.visible");
     cy.contains("h2", "What this means").should("be.visible");
     cy.contains("h2", "If you need to speak to someone").should("be.visible");
@@ -197,7 +197,7 @@ describe("EU CATCH Integration - Processing Statement Welsh Translation for Stat
       testCaseId: TestCaseId.PSDashboardWithPendingEUStatus,
     };
     cy.visit(processingStatementUrl, { qs: { ...testParams } });
-    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-pending?lng=cy");
+    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-check-status?lng=cy");
     cy.contains("h1", "Anfon eich data i'w integreiddio â system yr UE").should("be.visible");
     cy.contains("h2", "Beth gallwch chi ei wneud nawr").should("be.visible");
     cy.contains("Mae eich datganiad prosesu yn dal yn ddilys ac yn barod i'w ddefnyddio.").should("be.visible");
@@ -208,7 +208,7 @@ describe("EU CATCH Integration - Processing Statement Welsh Translation for Stat
       testCaseId: TestCaseId.PSDashboardWithFailedEUStatus,
     };
     cy.visit(processingStatementUrl, { qs: { ...testParams } });
-    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-failed?lng=cy");
+    cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-check-status?lng=cy");
     cy.contains("h1", "Mae yna broblem wrth integreiddio â data'r UE").should("be.visible");
   });
 });

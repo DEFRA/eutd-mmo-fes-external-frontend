@@ -23,19 +23,31 @@ const whatStorageFacilityAddressHandler: ITestHandler = {
   ],
   [TestCaseId.SDStorageFacilityAddressPostcodeEmptyError]: () => [
     rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) => res(ctx.status(400), ctx.json(manualAddressErrors))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.get(mockFindExporterAddressUrl, (req, res, ctx) => res(ctx.status(400), ctx.json(postcodeEmptyError))),
   ],
   [TestCaseId.SDStorageFacilityAddressWithSubBuildingError]: () => [
     rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) =>
       res(ctx.status(400), ctx.json(manualAddressSubBuildingError))
     ),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
   [TestCaseId.SDStorageFacilityAddressWith403]: () => [
     rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) => res(ctx.status(403), ctx.json({}))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
   [TestCaseId.SDStorageFacilityAddressPostcodeInvalidError]: () => [
     rest.get(mockFindExporterAddressUrl, (req, res, ctx) => res(ctx.status(400), ctx.json(postcodeInvalidError))),
+  ],
+  [TestCaseId.SDStorageFacilityAddressManualEntry]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json({ facilityBuildingNumber: null }))),
+    rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) => res(ctx.json(manualAddressValid))),
+  ],
+  [TestCaseId.SDStorageFacilityAddressPrePopulated]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) => res(ctx.json(manualAddressValid))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
 };
 

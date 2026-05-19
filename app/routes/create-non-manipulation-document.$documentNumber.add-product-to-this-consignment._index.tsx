@@ -789,7 +789,8 @@ const AddProductIndex = () => {
                           id: `${supportingDocumentsKey}-${index}`,
                           onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
                             handleInputChange(index, e.target.value),
-                          "aria-describedby": `${supportingDocumentsKey}-${index}-hint`,
+                          "aria-label": index > 0 ? `${supportingDocumentsKey}-${index}` : undefined,
+                          "aria-describedby": index === 0 ? `${supportingDocumentsKey}-${index}-hint` : undefined,
                         }}
                         hint={
                           index === 0
@@ -822,6 +823,19 @@ const AddProductIndex = () => {
                           aria-label={t("commonRemoveButton", { ns: "addProductToThisConsignment" })}
                         />
                       )}
+                      {!isHydrated && supportingDocuments.length > 1 && (
+                        <button
+                          type="submit"
+                          name="_action"
+                          value={`removeSupportingDoc-${index}`}
+                          id={`remove-supporting-doc-button-${index}`}
+                          data-testid={`remove-supporting-doc-${index}`}
+                          className="govuk-button govuk-button--secondary govuk-!-margin-left-2"
+                          data-module="govuk-button"
+                        >
+                          {t("commonRemoveButton", { ns: "common" })}
+                        </button>
+                      )}
                     </div>
                   );
                 })}
@@ -836,6 +850,19 @@ const AddProductIndex = () => {
                     onClick={handleAddDoc}
                     aria-label={t("commonAddAnotherSupportingDocAriaLabel", { ns: "common" })}
                   />
+                )}
+                {!isHydrated && supportingDocuments.length < maximumEntryDocsAllowed && (
+                  <button
+                    type="submit"
+                    name="_action"
+                    value="addSupportingDoc"
+                    id="add-supporting-doc-button"
+                    data-testid="add-supporting-doc-button"
+                    className="govuk-button govuk-button--secondary govuk-!-margin-top-2"
+                    data-module="govuk-button"
+                  >
+                    {t("commonAddAnotherButtonText", { ns: "common" })}
+                  </button>
                 )}
               </fieldset>
               <Details

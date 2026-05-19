@@ -14,11 +14,11 @@ export const getMeta = (argsOrData?: MetaArgs): MetaTag[] => {
     { charSet: "utf-8" },
     { title: `${pageTitle} - ${commonTitle}` },
     {
-      property: "viewport",
+      name: "viewport",
       content: "width=device-width, initial-scale=1, viewport-fit=cover",
     },
     {
-      property: "themeColor",
+      name: "theme-color",
       content: "#0b0c0c",
     },
   ];
@@ -31,11 +31,11 @@ export const getDashboardMeta = (argsOrData?: MetaArgs): MetaTag[] => {
     { charSet: "utf-8" },
     { title: pageTitle ?? "" },
     {
-      property: "viewport",
+      name: "viewport",
       content: "width=device-width, initial-scale=1, viewport-fit=cover",
     },
     {
-      property: "themeColor",
+      name: "theme-color",
       content: "#0b0c0c",
     },
   ];

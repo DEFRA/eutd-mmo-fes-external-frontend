@@ -131,6 +131,9 @@ describe("Add product to this consignment  page", () => {
     cy.get("#remove-supporting-doc-button-3").should("exist");
     cy.get("#remove-supporting-doc-button-4").should("exist");
 
+    // Verify we have exactly 5 supporting documents (maximum allowed)
+    cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 6);
+
     // Check Add Another button exists on the last element until length is 5
     cy.get("[id^=catches-0-supportingDocuments]").then(($elements) => {
       const length = $elements.length;
@@ -178,8 +181,11 @@ describe("Add product to this consignment  page", () => {
     cy.get("#add-supporting-doc-button").click({ force: true });
     cy.get("#add-supporting-doc-button").click({ force: true });
     cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 5);
     cy.get("#remove-supporting-doc-button-0").should("be.visible");
     cy.get("#remove-supporting-doc-button-0").click({ force: true });
+    cy.wait(300);
+    cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 4);
   });
 
   it("should click on remove last doc button and select should be removed", () => {
@@ -429,6 +435,50 @@ describe("Add product to this consignment  page", () => {
         "If your UK entry document is a processing statement, you must provide the reference number for any supporting documents."
       );
     });
+
+    it("should have proper accessibility attributes for first supporting document field", () => {
+      // First field should have visible label and aria-describedby
+      cy.get("label").contains("Supporting documents").should("be.visible");
+      cy.get("#catches-0-supportingDocuments-0").should("have.attr", "aria-describedby");
+      cy.get("#catches-0-supportingDocuments-0-hint").should("exist");
+    });
+
+    it("should have proper accessibility attributes for additional supporting document fields", () => {
+      // Add second supporting document
+      cy.get("#add-supporting-doc-button").click({ force: true });
+      cy.wait(300);
+
+      // Second field should have aria-label but no aria-describedby
+      cy.get("#catches-0-supportingDocuments-1").should("have.attr", "aria-label", "catches-0-supportingDocuments-1");
+      cy.get("#catches-0-supportingDocuments-1").should("not.have.attr", "aria-describedby");
+
+      // Third field should also have aria-label
+      cy.get("#add-supporting-doc-button").click({ force: true });
+      cy.wait(300);
+      cy.get("#catches-0-supportingDocuments-2").should("have.attr", "aria-label", "catches-0-supportingDocuments-2");
+      cy.get("#catches-0-supportingDocuments-2").should("not.have.attr", "aria-describedby");
+    });
+
+    it("should not reference non-existent hint IDs in aria-describedby for additional fields", () => {
+      // Add multiple supporting documents
+      for (let i = 0; i < 3; i++) {
+        cy.get("#add-supporting-doc-button").click({ force: true });
+        cy.wait(500);
+      }
+
+      // Check that fields 1-3 do not have aria-describedby with invalid IDs
+      for (let i = 1; i < 4; i++) {
+        const fieldId = `#catches-0-supportingDocuments-${i}`;
+        cy.get(fieldId).then(($field) => {
+          const ariaDescribedBy = $field.attr("aria-describedby");
+          if (ariaDescribedBy) {
+            // If aria-describedby exists, the referenced element should exist
+            cy.get(`#${ariaDescribedBy}`).should("exist");
+          }
+        });
+      }
+    });
+
     it("should have valid aria-describedby attributes for product field", () => {
       cy.get("#catches-0-product").should("have.attr", "aria-describedby", "catches-0-product-hint");
       cy.get("#catches-0-product-hint").should(
@@ -485,7 +535,9 @@ describe("Add product to this consignment  page- save and continue", () => {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue]").should("be.visible");
     cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "/you-have-added-a-product");
   });
 
   it("should click on save and continue button with error response", () => {
@@ -493,7 +545,10 @@ describe("Add product to this consignment  page- save and continue", () => {
       testCaseId: TestCaseId.SDAddProductConsignmentDataError,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue]").should("be.visible");
     cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#error-summary-title").should("be.visible");
+    cy.get(".govuk-error-summary").should("exist");
   });
 
   it("should click on save and continue button with error response if species is empty", () => {
@@ -502,8 +557,11 @@ describe("Add product to this consignment  page- save and continue", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get("#error-summary-title").contains("There is a problem");
-    cy.get(".govuk-error-message").contains("You have entered an incorrect FAO code or species name");
+    cy.get("#error-summary-title").should("be.visible").and("contain", "There is a problem");
+    cy.get(".govuk-error-message")
+      .should("be.visible")
+      .and("contain", "You have entered an incorrect FAO code or species name");
+    cy.url().should("include", "/add-product-to-this-consignment");
   });
 
   it("should click on save and continue button with error response with species suggestions", () => {
@@ -512,10 +570,11 @@ describe("Add product to this consignment  page- save and continue", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.get("#error-summary-title").contains("There is a problem");
-    cy.get(".govuk-error-message").contains(
-      "You have entered an incorrect FAO code or species name, did you mean one of the following:"
-    );
+    cy.get("#error-summary-title").should("be.visible").and("contain", "There is a problem");
+    cy.get(".govuk-error-message")
+      .should("be.visible")
+      .and("contain", "You have entered an incorrect FAO code or species name, did you mean one of the following:");
+    cy.url().should("include", "/add-product-to-this-consignment");
   });
 });
 
@@ -572,7 +631,9 @@ describe("Add product to this consignment page: form submission and interaction"
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.contains(".govuk-error-message", "Select Yes if the document was issued in the UK");
+    cy.get("#error-summary-title").should("be.visible");
+    cy.contains(".govuk-error-message", "Select Yes if the document was issued in the UK").should("be.visible");
+    cy.url().should("include", "/add-product-to-this-consignment");
   });
 
   it("should display issuing country field when 'No' is selected for UK certificate", () => {
@@ -630,7 +691,9 @@ describe("Add product to this consignment page: form submission and interaction"
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.contains(".govuk-error-message", "Enter the net weight of product on arrival");
+    cy.get("#error-summary-title").should("be.visible");
+    cy.contains(".govuk-error-message", "Enter the net weight of product on arrival").should("be.visible");
+    cy.url().should("include", "/add-product-to-this-consignment");
   });
 
   it("should show error message above net weight of fishery products on arrival when not populated", () => {
@@ -639,7 +702,9 @@ describe("Add product to this consignment page: form submission and interaction"
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
-    cy.contains(".govuk-error-message", "Enter the net weight of fishery products on arrival");
+    cy.get("#error-summary-title").should("be.visible");
+    cy.contains(".govuk-error-message", "Enter the net weight of fishery products on arrival").should("be.visible");
+    cy.url().should("include", "/add-product-to-this-consignment");
   });
 });
 
@@ -819,7 +884,9 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     cy.get("#netWeightProductArrival").type("50");
     cy.get("#netWeightFisheryProductArrival").type("40");
 
+    cy.get("[data-testid=save-and-continue]").should("be.visible");
     cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "/you-have-added-a-product");
   });
 
   it("should display error state styling for invalid fields", () => {
@@ -1016,8 +1083,10 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get("#add-supporting-doc-button").should("not.exist");
     });
 
-    it("should not display Remove buttons when JavaScript is disabled", () => {
-      cy.get("[id^=remove-supporting-doc-button]").should("not.exist");
+    it("should display Remove buttons when JavaScript is disabled and multiple document fields are pre-rendered", () => {
+      // With 5 pre-rendered empty fields (maximumEntryDocsAllowed=5), the
+      // non-JS remove buttons render because supportingDocuments.length > 1
+      cy.get("[id^=remove-supporting-doc-button]").should("have.length", 5);
     });
 
     it("should allow filling in all 5 supporting document fields when JavaScript is disabled", () => {
@@ -1309,5 +1378,91 @@ describe("Add product to consignment (SD): save as draft retains valid fields", 
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get('[data-testid="save-draft-button"]').click({ force: true });
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
+});
+
+describe("Add product to consignment (SD): non-JS add/remove supporting documents when editing", () => {
+  // Tests for the progressive-enhancement buttons added to fix the missing
+  // add/remove functionality when JavaScript is disabled on an existing product
+  // that already has one or more supporting documents.
+
+  describe("Add another supporting document (non-JS)", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentNonJsAddSupportingDoc,
+        disableScripts: true,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+    });
+
+    it("should display the Add another button when there is 1 existing supporting document and JS is disabled", () => {
+      // storageDocument fixture has 1 supporting doc → supportingDocuments.length = 1 < maximumEntryDocsAllowed
+      cy.get("#catches-0-supportingDocuments-0").should("exist").and("have.value", "someDocumentNumber-1683295546");
+      cy.get("#add-supporting-doc-button").should("exist");
+      cy.get("#add-supporting-doc-button").should("have.attr", "type", "submit");
+      cy.get("#add-supporting-doc-button").should("have.attr", "name", "_action");
+      cy.get("#add-supporting-doc-button").should("have.attr", "value", "addSupportingDoc");
+    });
+
+    it("should not display the Remove button when there is only 1 existing supporting document and JS is disabled", () => {
+      // supportingDocuments.length = 1, so the !isHydrated && length > 1 condition is false
+      cy.get("[id^=remove-supporting-doc-button]").should("not.exist");
+    });
+
+    it("should add an extra supporting document field after clicking Add another in non-JS mode", () => {
+      cy.get("#catches-0-supportingDocuments-0").should("exist");
+      cy.get("#catches-0-supportingDocuments-1").should("not.exist");
+
+      cy.get("#add-supporting-doc-button").click({ force: true });
+
+      // After redirect the session flag causes the loader to append an empty string
+      cy.get("#catches-0-supportingDocuments-0").should("exist");
+      cy.get("#catches-0-supportingDocuments-1").should("exist");
+    });
+
+    it("should show Remove buttons after adding an extra supporting document in non-JS mode", () => {
+      cy.get("#add-supporting-doc-button").click({ force: true });
+
+      // With 2 docs, supportingDocuments.length > 1 → remove buttons appear
+      cy.get("[id^=remove-supporting-doc-button]").should("have.length", 2);
+      cy.get("#remove-supporting-doc-button-0").should("have.attr", "type", "submit");
+      cy.get("#remove-supporting-doc-button-0").should("have.attr", "name", "_action");
+      cy.get("#remove-supporting-doc-button-0").should("have.attr", "value", "removeSupportingDoc-0");
+    });
+  });
+
+  describe("Remove a supporting document (non-JS)", () => {
+    beforeEach(() => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentNonJsRemoveSupportingDoc,
+        disableScripts: true,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+    });
+
+    it("should display 2 supporting document fields when the fixture has 2 existing docs", () => {
+      cy.get("#catches-0-supportingDocuments-0").should("exist").and("have.value", "someDocumentNumber-1683295546");
+      cy.get("#catches-0-supportingDocuments-1").should("exist").and("have.value", "someDocumentNumber-1683295547");
+    });
+
+    it("should display Remove buttons for each field when there are multiple supporting documents in non-JS mode", () => {
+      cy.get("[id^=remove-supporting-doc-button]").should("have.length", 2);
+      cy.get("#remove-supporting-doc-button-0").should("have.attr", "type", "submit");
+      cy.get("#remove-supporting-doc-button-0").should("have.attr", "name", "_action");
+      cy.get("#remove-supporting-doc-button-0").should("have.attr", "value", "removeSupportingDoc-0");
+      cy.get("#remove-supporting-doc-button-1").should("have.attr", "value", "removeSupportingDoc-1");
+    });
+
+    it("should display the Add another button when there are 2 existing supporting docs below the maximum", () => {
+      cy.get("#add-supporting-doc-button").should("exist");
+      cy.get("#add-supporting-doc-button").should("have.attr", "value", "addSupportingDoc");
+    });
+
+    it("should submit the remove form and redirect back to the same page when Remove is clicked in non-JS mode", () => {
+      cy.get("#remove-supporting-doc-button-0").click({ force: true });
+
+      // Action splices doc at index 0, validates, then redirects to ?#remove-supporting-doc
+      cy.url().should("include", "/add-product-to-this-consignment/0");
+    });
   });
 });

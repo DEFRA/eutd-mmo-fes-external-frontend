@@ -11,7 +11,7 @@ describe("CC: Exporter address page", () => {
   });
 
   it("should render the expected header", () => {
-    cy.get(".govuk-heading-xl").contains("What is the exporter’s address");
+    cy.get(".govuk-heading-xl").should("be.visible").and("contain.text", "What is the exporter’s address");
   });
 
   it("should render the buttons texts", () => {
@@ -20,9 +20,11 @@ describe("CC: Exporter address page", () => {
   });
 
   it("should render the input label and hint text", () => {
-    cy.get("div .govuk-hint").contains(
-      "If you cannot find the address or you need to add a non-UK address, click the link 'Enter the address manually'"
-    );
+    cy.get("div .govuk-hint")
+      .contains(
+        "If you cannot find the address or you need to add a non-UK address, click the link 'Enter the address manually'"
+      )
+      .should("be.visible");
   });
 });
 
@@ -36,23 +38,23 @@ describe("CC: Entering the address manually", () => {
   });
 
   it("should render header", () => {
-    cy.get(".govuk-heading-xl").contains("What is the exporter’s address");
+    cy.get(".govuk-heading-xl").should("be.visible").and("contain.text", "What is the exporter’s address");
   });
 
   it("should render all input fields", () => {
-    cy.contains("label", "Sub-building name");
-    cy.contains("label", "Building number");
-    cy.contains("label", "Building name");
-    cy.contains("label", "Street name");
-    cy.contains("label", "Town or city");
-    cy.contains("label", "County/state/province (optional)");
-    cy.contains("label", "Postcode");
-    cy.contains("label", "Country");
+    cy.contains("label", "Sub-building name").should("be.visible");
+    cy.contains("label", "Building number").should("be.visible");
+    cy.contains("label", "Building name").should("be.visible");
+    cy.contains("label", "Street name").should("be.visible");
+    cy.contains("label", "Town or city").should("be.visible");
+    cy.contains("label", "County/state/province (optional)").should("be.visible");
+    cy.contains("label", "Postcode").should("be.visible");
+    cy.contains("label", "Country").should("be.visible");
   });
 
   it("should render form button", () => {
-    cy.contains("[data-testid='continue']", "Continue");
-    cy.contains("[data-testid='cancel']", "Cancel");
+    cy.contains("[data-testid='continue']", "Continue").should("be.visible");
+    cy.contains("[data-testid='cancel']", "Cancel").should("be.visible");
   });
 });
 
@@ -383,7 +385,7 @@ describe("CC: On Selected Address", () => {
     cy.get("#findaddress").click({ force: true });
     cy.get("#getaddress").click({ force: true });
 
-    cy.contains("span", "Select an address to continue");
+    cy.contains("span", "Select an address to continue").should("be.visible");
   });
 
   it("should go back to postcode input to allow searching for a different postcode", () => {
@@ -412,7 +414,7 @@ describe("CC: On Selected Address", () => {
 
     cy.get("#findaddress").click({ force: true });
 
-    cy.findByRole("link", { name: "Enter a postcode" });
+    cy.findByRole("link", { name: "Enter a postcode" }).should("be.visible");
   });
 
   it("should display error if the entered postcode is invalid", () => {
@@ -426,7 +428,7 @@ describe("CC: On Selected Address", () => {
 
     cy.findByRole("link", {
       name: "Postcode must be between 5 and 8 characters, and contain only letters, numbers, spaces, hyphens and commas",
-    });
+    }).should("be.visible");
   });
 
   it("should go back to add-exporter-details if cancelling postcode search", () => {

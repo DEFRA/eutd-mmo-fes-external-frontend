@@ -29,7 +29,7 @@ describe("What are you exporting page", () => {
   });
 
   it("should render the correct page title", () => {
-    cy.findByRole("heading", { name: "What are you exporting?", level: 1 });
+    cy.findByRole("heading", { name: "What are you exporting?", level: 1 }).should("be.visible");
   });
 
   it("should check the tabs", () => {
@@ -44,9 +44,9 @@ describe("What are you exporting page", () => {
 
   it("should toggle the tabs and find text", () => {
     cy.get("[data-tab-id='favouritesTab']").click({ force: true });
-    cy.get(".govuk-tabs__tab").contains("Add products from favourites");
+    cy.get(".govuk-tabs__tab").contains("Add products from favourites").should("be.visible");
     cy.get("[data-tab-id='productsTab']").click({ force: true });
-    cy.get(".govuk-tabs__tab").contains("Add products");
+    cy.get(".govuk-tabs__tab").contains("Add products").should("be.visible");
   });
 
   it("should submit product with out any errors", () => {
@@ -56,6 +56,7 @@ describe("What are you exporting page", () => {
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("16051000");
     cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get(".govuk-error-summary").should("not.exist");
   });
 
   it("should submit product with out any errors without adding to favourites", () => {
@@ -65,24 +66,25 @@ describe("What are you exporting page", () => {
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("16051000");
     cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get(".govuk-error-summary").should("not.exist");
   });
 
   it("should check for field labels", () => {
-    cy.contains("label", "Common name or FAO code");
-    cy.contains("label", "State");
-    cy.contains("label", "Presentation");
-    cy.contains("label", "Commodity Code");
-    cy.contains("label", "Product");
+    cy.contains("label", "Common name or FAO code").should("be.visible");
+    cy.contains("label", "State").should("be.visible");
+    cy.contains("label", "Presentation").should("be.visible");
+    cy.contains("label", "Commodity Code").should("be.visible");
+    cy.contains("label", "Product").should("be.visible");
   });
 
   it("should render the input label and hint text", () => {
-    cy.get("div .govuk-hint").contains("For example, Lobster or LBE.");
+    cy.get("div .govuk-hint").contains("For example, Lobster or LBE.").should("be.visible");
   });
 
   it("should render form button", () => {
-    cy.contains("[data-testid='add-product']", "Add product");
-    cy.contains("#add-product", "Add product");
-    cy.contains("[data-testid='cancel']", "Cancel");
+    cy.contains("[data-testid='add-product']", "Add product").should("be.visible");
+    cy.contains("#add-product", "Add product").should("be.visible");
+    cy.contains("[data-testid='cancel']", "Cancel").should("be.visible");
   });
 
   it("should render mangage favourites link", () => {
@@ -91,11 +93,12 @@ describe("What are you exporting page", () => {
 
   it("should select the checkbox", () => {
     cy.get("#addToFavourites").check();
-    cy.contains("label", "Add to product favourites");
+    cy.get("#addToFavourites").should("be.checked");
+    cy.contains("label", "Add to product favourites").should("be.visible");
   });
 
   it("should check for your products section", () => {
-    cy.findByRole("heading", { name: "Your products", level: 2 });
+    cy.findByRole("heading", { name: "Your products", level: 2 }).should("be.visible");
   });
 
   it("should check your products table", () => {
@@ -106,9 +109,9 @@ describe("What are you exporting page", () => {
   });
 
   it("should render the  Edit and remove buttons", () => {
-    cy.contains("[data-testid*='edit-button']", "Edit");
+    cy.contains("[data-testid*='edit-button']", "Edit").should("be.visible");
     cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
-    cy.contains("[data-testid*='remove-button']", "Remove");
+    cy.contains("[data-testid*='remove-button']", "Remove").should("be.visible");
   });
 
   it("should check the products are visible and remove button functionality", () => {
@@ -124,6 +127,7 @@ describe("What are you exporting page", () => {
   });
 
   it("should render the  cancel button", () => {
+    cy.get("[data-testid='cancel']").should("be.visible");
     cy.get("[data-testid='cancel']").click({ force: true });
   });
 
@@ -135,7 +139,9 @@ describe("What are you exporting page", () => {
 
   it("check input typing for finding the species", () => {
     cy.get("[data-tab-id='productsTab']").click({ force: true });
+    cy.get("#add-products").should("be.visible");
     cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("#add-from-favourites").should("be.visible");
   });
 
   it("should change the species information and select state, presentation", () => {
@@ -291,6 +297,7 @@ describe("Add a product when addedToFavourites is false", () => {
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     cy.get("#add-product").click({ force: true });
+    cy.get(".govuk-error-summary").should("not.exist");
   });
 });
 
@@ -352,6 +359,7 @@ describe("What are you exporting page: add Product to favourites", () => {
 
   it("should add product to favourites when add product button is clicked", () => {
     cy.get("#add-product").click({ force: true });
+    cy.get(".govuk-error-summary").should("not.exist");
   });
   it("click on save and continue with unauthorised response", () => {
     cy.get("[data-testid=save-and-continue]").click({ force: true });
@@ -789,11 +797,17 @@ describe("What are you exporting page: Error object transformation", () => {
 
     cy.get("[data-testid='add-product']").eq(0).click({ force: true });
 
-    // Verify all expected error links are present
-    cy.get(".govuk-error-summary__list a").contains("Enter the common name or FAO code");
-    cy.get(".govuk-error-summary__list a").contains("Select the state");
-    cy.get(".govuk-error-summary__list a").contains("Select the presentation");
-    cy.get(".govuk-error-summary__list a").contains("Select a commodity code");
+    // Verify all expected error links are present and properly transformed
+    cy.get(".govuk-error-summary__list a")
+      .contains("Enter the common name or FAO code")
+      .should("have.attr", "href", "#species");
+    cy.get(".govuk-error-summary__list a").contains("Select the state").should("have.attr", "href", "#state");
+    cy.get(".govuk-error-summary__list a")
+      .contains("Select the presentation")
+      .should("have.attr", "href", "#presentation");
+    cy.get(".govuk-error-summary__list a")
+      .contains("Select a commodity code")
+      .should("have.attr", "href", "#commodity_code");
   });
 });
 

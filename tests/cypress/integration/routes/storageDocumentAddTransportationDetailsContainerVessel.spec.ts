@@ -28,13 +28,13 @@ describe("Add Transportation Details: Container Vessel", () => {
   });
 
   it("should render the input label and hint text", () => {
-    cy.contains("label", "Vessel name");
-    cy.contains("label", "Flag state");
-    cy.contains("label", "Shipping container identification number");
-    cy.contains("label", "Where the container vessel departs from the UK");
-    cy.get("div .govuk-hint").contains(
-      "For example, Felixstowe Port, London Gateway, or the place the container vessel departs from the UK"
-    );
+    cy.contains("label", "Vessel name").should("be.visible");
+    cy.contains("label", "Flag state").should("be.visible");
+    cy.contains("label", "Shipping container identification number").should("be.visible");
+    cy.contains("label", "Where the container vessel departs from the UK").should("be.visible");
+    cy.get("div .govuk-hint")
+      .contains("For example, Felixstowe Port, London Gateway, or the place the container vessel departs from the UK")
+      .should("be.visible");
   });
 
   it("should render labels with bold font weight for NMD departure transport", () => {

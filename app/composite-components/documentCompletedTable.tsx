@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import type { IGetAllDocumentsData, ICompletedDocumentData, DashboardLinks, ICatchStatus, Journey } from "~/types";
+import type { IGetAllDocumentsData, ICompletedDocumentData, DashboardLinks, Journey } from "~/types";
 import moment from "moment";
 import { camelCaseToSpacedLowerCase } from "~/helpers/string";
 import last from "lodash/last";
@@ -91,76 +91,69 @@ export const DocumentCompletedTable = ({
   return (
     <>
       {Array.isArray(documents?.completed) && documents.completed.length > 0 ? (
-        <table className="govuk-table" data-testid={`${journey}-completed-table`}>
-          <caption className="tablecaption">
-            <h2 className="govuk-heading-l">{t("completed")}</h2>
-          </caption>
-          <DocumentTableHeader journey={journey} />
-          <tbody className="govuk-table__body">
-            {Array.isArray(documents?.completed) &&
-              documents.completed.map((document: ICompletedDocumentData) => {
-                const getEuCatchStatusRoute = (documentNumber: string, euCatchStatus?: ICatchStatus) => {
-                  const prefix = `/${getPrivacyNoticeJourney(journey)}/${documentNumber}/`;
-                  switch (euCatchStatus?.status?.toUpperCase()) {
-                    case "SUCCESS":
-                      return `${prefix}eu-data-integration-successful`;
-                    case "IN_PROGRESS":
-                      return `${prefix}eu-data-integration-pending`;
-                    case "FAILURE":
-                      return `${prefix}eu-data-integration-failed`;
-                  }
-                };
+        <div className="tablewrapper">
+          <table className="govuk-table" data-testid={`${journey}-completed-table`}>
+            <caption className="tablecaption">
+              <h2 className="govuk-heading-l">{t("completed")}</h2>
+            </caption>
+            <DocumentTableHeader journey={journey} />
+            <tbody className="govuk-table__body">
+              {Array.isArray(documents?.completed) &&
+                documents.completed.map((document: ICompletedDocumentData) => {
+                  const getEuCatchStatusRoute = (documentNumber: string) =>
+                    `/${getPrivacyNoticeJourney(journey)}/${documentNumber}/eu-data-integration-check-status`;
 
-                return (
-                  <tr className="govuk-table__row" key={document.documentNumber}>
-                    <td scope="row" className="govuk-table__cell govuk-!-width-one-quarter">
-                      {document.documentNumber}
-                    </td>
-                    <td scope="row" className="govuk-table__cell tablerowuserref">
-                      {document.userReference}
-                    </td>
-                    <td scope="row" className="govuk-table__cell">
-                      {moment(document.createdAt).format("DD MMM YYYY") || "Unknown"}
-                    </td>
+                  return (
+                    <tr className="govuk-table__row" key={document.documentNumber}>
+                      <td scope="row" className="govuk-table__cell govuk-!-width-one-quarter">
+                        {document.documentNumber}
+                      </td>
+                      <td scope="row" className="govuk-table__cell tablerowuserref">
+                        {document.userReference}
+                      </td>
+                      <td scope="row" className="govuk-table__cell">
+                        {moment(document.createdAt).format("DD MMM YYYY") || "Unknown"}
+                      </td>
 
-                    <td scope="row" className="govuk-table__cell">
-                      {document.catchSubmission ? (
-                        <a
-                          href={getEuCatchStatusRoute(document.documentNumber, document.catchSubmission)}
+                      <td scope="row" className="govuk-table__cell">
+                        {document.catchSubmission ? (
+                          <a
+                            href={getEuCatchStatusRoute(document.documentNumber)}
+                            className="govuk-link"
+                            data-testid={`${journey}-check-eu-catch-status`}
+                          >
+                            {t("commonCheckStatus")}
+                            <span className="govuk-visually-hidden">
+                              {` ${t("commonForDocument")} ${document.documentNumber}`}
+                            </span>
+                          </a>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                      <td scope="row" className="govuk-table__cell govuk-table__cell--numeric">
+                        <Link
+                          data-testid={`${journey}-viewcompleted`}
+                          reloadDocument
+                          to={`/pdf/export-certificates/${document.documentUri}`}
                           className="govuk-link"
-                          data-testid={`${journey}-check-eu-catch-status`}
                         >
-                          {t("commonCheckStatus")}
+                          {t("commonDashboardView", { ns: "common" })}
                           <span className="govuk-visually-hidden">
-                            {` ${t("commonForDocument")} ${document.documentNumber}`}
+                            {`${t(journey)} ${document.documentNumber} ${document.userReference ? document.userReference : ""}`}
                           </span>
-                        </a>
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                    <td scope="row" className="govuk-table__cell govuk-table__cell--numeric">
-                      <Link
-                        data-testid={`${journey}-viewcompleted`}
-                        reloadDocument
-                        to={`/pdf/export-certificates/${document.documentUri}`}
-                        className="govuk-link"
-                      >
-                        {t("commonDashboardView", { ns: "common" })}
-                        <span className="govuk-visually-hidden">
-                          {`${t(journey)} ${document.documentNumber} ${document.userReference ? document.userReference : ""}`}
-                        </span>
-                      </Link>
-                      <br />
-                      {document.links?.voidLink?.()}
-                      <br />
-                      {showCopyButton && document.links?.copyLink?.()}
-                    </td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
+                        </Link>
+                        <br />
+                        {document.links?.voidLink?.()}
+                        <br />
+                        {showCopyButton && document.links?.copyLink?.()}
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <div className="govuk-grid-row">
           <div className="govuk-grid-column">
