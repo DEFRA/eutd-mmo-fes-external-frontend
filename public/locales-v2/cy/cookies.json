@@ -83,7 +83,7 @@
   "MSClarityParagraph1": "Rydyn ni’n defnyddio Microsoft Clarity i ddeall sut rydych chi'n defnyddio'r Gwasanaeth Allforio Pysgod, gan gynnwys symudiadau’r llygoden, cliciau, sgrolio ac yn y blaen. Mae'r wybodaeth hon yn ein helpu i wella'r wefan.",
   "MSClarityParagraph2": "Mae Microsoft Clarity yn defnyddio’r cwcis a ganlyn:",
   "MSClarityParagraph3": "Mae'r data yn ddienw ac nid ydym yn caniatáu i'r darparwyr dadansoddeg hyn ei rannu ag eraill. Gallwch optio allan o delemetreg Clarity trwy ddewis Microsoft ar wasanaeth ",
-  "MSClarityWebChoiceServiceLinkOut": "DAA WebChoices.",
+  "MSClarityWebChoiceServiceLinkOut": "<abbr title=\"Digital Advertising Alliance\">DAA</abbr> WebChoices.",
   "MSClarityTable": {
     "tableHeader": {
       "header1": "Enw",

@@ -40,7 +40,7 @@ describe("PS: Add catch details", () => {
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
-    cy.get(".govuk-heading-xl ").contains("Add species to your processed product");
+    cy.get(".govuk-heading-xl ").contains("Add species to your processed product").should("be.visible");
   });
 
   it("should expand and display content in the 'Help with species names' section", () => {
@@ -265,7 +265,10 @@ describe("PS: Add catch details", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
     cy.get("#addProductDetails").click({ force: true });
-    cy.get(".govuk-error-summary__list").find("li > a").contains("Enter the catch certificate number");
+    cy.get(".govuk-error-summary__list")
+      .find("li > a")
+      .contains("Enter the catch certificate number")
+      .should("be.visible");
   });
 
   it("should display an error if the catch certificate number is in the is in the wrong format for a UK catch certificate", () => {
@@ -415,8 +418,8 @@ describe("PS: Add catch details", () => {
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("[data-testid=add-product-details").click({ force: true });
-    cy.get("#error-summary-title").contains("There is a problem");
-    cy.get(".govuk-error-message").contains("Add at least one species to your processed product");
+    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.get(".govuk-error-message").contains("Add at least one species to your processed product").should("be.visible");
   });
 
   it("should clear the table when we click cancel", () => {
@@ -733,7 +736,8 @@ describe("PS: Add catch details - Weight Input Validation", () => {
     cy.get("#catches-0-exportWeightBeforeProcessing").type("60");
     cy.get("#catches-0-exportWeightAfterProcessing").type("30");
     cy.get("#addProductDetails").click({ force: true });
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.get(".govuk-error-message").should("exist");
   });
 
   it("should show export weight before processing value when form is not reset", () => {
