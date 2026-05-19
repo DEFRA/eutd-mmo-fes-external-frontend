@@ -231,7 +231,7 @@ describe("Add exporter details: processingStatement journey", () => {
   });
 
   it("should display processingStatement specific warning content", () => {
-    cy.contains("h1", "Add exporter details");
+    cy.contains("h1", "Add exporter details").should("be.visible");
   });
 
   it("should have back link for processingStatement journey", () => {
@@ -250,7 +250,7 @@ describe("Add exporter details: storageDocument journey", () => {
   });
 
   it("should display storageDocument specific warning content", () => {
-    cy.contains("h1", "Add exporter details");
+    cy.contains("h1", "Add exporter details").should("be.visible");
   });
 
   it("should have back link for storageDocument journey", () => {
