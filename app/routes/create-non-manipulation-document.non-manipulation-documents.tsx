@@ -40,7 +40,13 @@ const StorageDocuments = () => {
   const [searchParams] = useSearchParams();
   const journeyLink = "/create-non-manipulation-document/non-manipulation-documents";
   const journeyName = "storageDocument";
-  const navigationLinks = PageNavigationLinks(t, searchParams, journeyLink, journeyName);
+  const navigationLinks = PageNavigationLinks(
+    t,
+    searchParams,
+    journeyLink,
+    journeyName,
+    "commonDashboardPaginationStorageNotes"
+  );
   const storageDocumentsHeading = heading
     ? `${heading}: ${getJourneyHeader("storageNotes", t)}`
     : getJourneyHeader("storageNotes", t);

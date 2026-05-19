@@ -28,6 +28,7 @@ import {
 } from "~/composite-components";
 import { getSessionFromRequest, commitSession } from "~/sessions.server";
 import { CheckYourInformationPSSDAction } from "~/models";
+import lowerCase from "lodash/lowerCase";
 
 type loaderDataProps = {
   documentNumber: string;
@@ -174,6 +175,7 @@ const CheckYourInformation = () => {
           exporterDetails={exporterDetails}
           companyNameTitle={t("commonAddExporterDetailsCompanyName", { ns: "common" })}
           changeLinkText={t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
+          changeLinkHiddenText={lowerCase(t("commonAddExporterDetailsCompanyName", { ns: "common" }))}
           companyAddress={t("commonSummaryPageExporterCompanyAddress", { ns: "checkYourInformation" })}
           exporterDetailsRoute="/create-processing-statement/:documentNumber/add-exporter-details"
           checkInfoRoute="/create-processing-statement/:documentNumber/check-your-information"
@@ -214,6 +216,10 @@ const CheckYourInformation = () => {
                         )}`}
                       >
                         {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
+                        <span className="govuk-visually-hidden">
+                          {" "}
+                          {lowerCase(t("psSummaryPageProductDescription", { ns: "psCheckYourInformation" }))}
+                        </span>
                       </a>
                     }
                   </dd>
@@ -336,6 +342,10 @@ const CheckYourInformation = () => {
                   })}`}
                 >
                   {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
+                  <span className="govuk-visually-hidden">
+                    {" "}
+                    {lowerCase(t("psSummaryPageProcessingPlantName", { ns: "psCheckYourInformation" }))}
+                  </span>
                 </a>
               }
             </dd>
@@ -374,6 +384,10 @@ const CheckYourInformation = () => {
                 }
               >
                 {t("commonChangeLink", { ns: "common" })}
+                <span className="govuk-visually-hidden">
+                  {" "}
+                  {lowerCase(t("psSummaryPagePlantAddress", { ns: "psCheckYourInformation" }))}
+                </span>
               </Link>
             </dd>
           </div>
@@ -413,6 +427,12 @@ const CheckYourInformation = () => {
                         })}`}
                       >
                         {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
+                        <span className="govuk-visually-hidden">
+                          {" "}
+                          {lowerCase(
+                            t("psSummaryPageConfirmationExportHealthCertificate", { ns: "psCheckYourInformation" })
+                          )}
+                        </span>
                       </a>
                     }
                   </dd>
@@ -440,6 +460,12 @@ const CheckYourInformation = () => {
                         })}`}
                       >
                         {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
+                        <span className="govuk-visually-hidden">
+                          {" "}
+                          {lowerCase(
+                            t("psSummaryPageConfirmationDestinationCountry", { ns: "psCheckYourInformation" })
+                          )}
+                        </span>
                       </a>
                     }
                   </dd>
@@ -462,6 +488,10 @@ const CheckYourInformation = () => {
                           })}#pointOfDestination`}
                         >
                           {t("psSummaryPageChangeLinkText", { ns: "psCheckYourInformation" })}
+                          <span className="govuk-visually-hidden">
+                            {" "}
+                            {lowerCase(t("psPointOfDestination", { ns: "psCheckYourInformation" }))}
+                          </span>
                         </a>
                       }
                     </dd>

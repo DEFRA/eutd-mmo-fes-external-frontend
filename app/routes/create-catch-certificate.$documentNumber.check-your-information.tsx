@@ -697,8 +697,7 @@ const CheckYourInformation = () => {
                     >
                       {t("commonWhatExportersAddressChangeLink", { ns: "common" })}
                       <span className="govuk-visually-hidden">
-                        {" "}
-                        {lowerCase(t("commonProgressPageExporterYourReference", { ns: "progress" }))}
+                        {" " + lowerCase(t("commonProgressPageExporterYourReference", { ns: "progress" }))}
                       </span>
                     </a>
                   )}
@@ -813,7 +812,7 @@ const CheckYourInformation = () => {
                       routeLink="/create-catch-certificate/:documentNumber/whose-waters-were-they-caught-in"
                       documentNumber={documentNumber}
                       textOne={t("commonWhatExportersAddressChangeLink", { ns: "common" })}
-                      textTwo={t("ccWhoseWatersWereTheyCaughtInHeaderText", { ns: "checkYourInformation" })}
+                      textTwo={t("ccWhoseWatersWereTheyCaughtInHeaderText", { ns: "whoseWatersWereTheyCaughtIn" })}
                     />
                   )}
                 </dd>
