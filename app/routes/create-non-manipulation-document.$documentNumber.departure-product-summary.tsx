@@ -272,6 +272,32 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   );
 };
 
+const getValidDepartureWeightValues = async (
+  validationResponse: Response | undefined,
+  values: Record<string, FormDataEntryValue>
+): Promise<Record<string, FormDataEntryValue>> => {
+  if (!(validationResponse instanceof Response)) {
+    return values;
+  }
+
+  const responseData = await validationResponse.clone().json();
+  const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
+  const cleanedValues = { ...values };
+
+  errorKeys.forEach((key) => {
+    const productMatch = /^catches-(\d+)-netWeightProductDeparture$/.exec(key);
+    const fisheryMatch = /^catches-(\d+)-netWeightFisheryProductDeparture$/.exec(key);
+    if (productMatch) {
+      cleanedValues[`weight-net-weight-product-departure-${productMatch[1]}`] = "";
+    }
+    if (fisheryMatch) {
+      cleanedValues[`weight-net-weight-fishery-product-departure-${fisheryMatch[1]}`] = "";
+    }
+  });
+
+  return cleanedValues;
+};
+
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
@@ -305,7 +331,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       documentNumber,
       "",
       removeIndex,
-      saveToRedisIfErrors,
+      false,
       false,
       isNonJs
     );
@@ -317,19 +343,40 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     return redirect(`/create-non-manipulation-document/${documentNumber}/departure-product-summary`);
   }
 
+  const departureUrl = `/create-non-manipulation-document/${documentNumber}/departure-product-summary`;
+
+  if (isDraft) {
+    const validationResponse = await updateStorageDocumentCatchDepartureWeights(
+      bearerToken,
+      documentNumber,
+      values,
+      departureUrl,
+      false,
+      false,
+      isNonJs
+    );
+    const cleanedValues = await getValidDepartureWeightValues(validationResponse as Response | undefined, values);
+    await updateStorageDocumentCatchDepartureWeights(
+      bearerToken,
+      documentNumber,
+      cleanedValues,
+      departureUrl,
+      true,
+      false,
+      isNonJs
+    );
+    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
+  }
+
   const errorResponse = await updateStorageDocumentCatchDepartureWeights(
     bearerToken,
     documentNumber,
     values,
-    `/create-non-manipulation-document/${documentNumber}/departure-product-summary`,
+    departureUrl,
     saveToRedisIfErrors,
     false,
     isNonJs
   );
-
-  if (isDraft) {
-    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"));
-  }
 
   // If errorResponse is a Response, extract its body as text
   if (errorResponse instanceof Response) {
