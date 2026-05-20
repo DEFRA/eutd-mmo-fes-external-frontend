@@ -38,6 +38,7 @@ declare global {
 
   interface Window {
     gtag: any;
+    clarity: (...args: unknown[]) => void;
   }
 }
 
@@ -123,6 +124,11 @@ const Template = ({
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "${clarityProjectId}");`;
       document.head.appendChild(clarity);
+
+      const clarityConsent = document.createElement("script");
+      clarityConsent.id = "clarity-consent";
+      clarityConsent.innerHTML = `window.clarity('consentv2', { ad_Storage: "granted", analytics_Storage: "granted" });`;
+      document.head.appendChild(clarityConsent);
     }
 
     if (gtmId?.length && shouldRenderGA(analyticsCookieAccepted)) {
@@ -186,6 +192,10 @@ const Template = ({
       document.head.appendChild(gtagExternal);
 
       return () => {
+        document.getElementById("clarity-consent")?.remove();
+        if (typeof window.clarity === "function") {
+          window.clarity("consent", false);
+        }
         if (document.head.contains(clarity)) document.head.removeChild(clarity);
         if (document.head.contains(gtmScript)) document.head.removeChild(gtmScript);
         if (document.head.contains(gtagScript)) document.head.removeChild(gtagScript);
