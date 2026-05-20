@@ -132,6 +132,20 @@ const Template = ({
 
       gtmScript.id = "gtm-script";
       gtmScript.innerHTML = `
+        (function() {
+          var _open = XMLHttpRequest.prototype.open;
+          XMLHttpRequest.prototype.open = function(method, url) {
+            if (typeof url === 'string' && url.indexOf('google-analytics.com/j/collect') !== -1) {
+              this._uaBlocked = true;
+            }
+            return _open.apply(this, arguments);
+          };
+          var _send = XMLHttpRequest.prototype.send;
+          XMLHttpRequest.prototype.send = function() {
+            if (this._uaBlocked) return;
+            return _send.apply(this, arguments);
+          };
+        })();
         window['ga-disable-${gaId}'] = true;
         (function(w, d, s, l, i) {
           w[l] = w[l] || [];
