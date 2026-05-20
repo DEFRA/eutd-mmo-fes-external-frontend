@@ -1,11 +1,11 @@
 import moment from "moment";
-import { ErrorPosition, FormInput } from "@capgeminiuk/dcx-react-library";
+import { ErrorPosition } from "@capgeminiuk/dcx-react-library";
 import classNames from "classnames";
 import isEmpty from "lodash/isEmpty";
 import { useTranslation } from "react-i18next";
 import type { ICountry, IErrorsTransformed, ITransport } from "~/types";
 import { DateFieldWithPicker } from "./dateFieldWithPicker";
-import { AutocompleteFormField, Title } from "~/components";
+import { AutocompleteFormField, Title, EmojiBlockingInput as FormInput } from "~/components";
 import { getContainerErrorClassName, getErrorMessageClassName } from "~/helpers";
 import { ContainerIdentificationNumber } from "./containerIdentificationNumber";
 import { TruckNationalityField } from "~/composite-components";

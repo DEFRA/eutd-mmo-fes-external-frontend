@@ -1,4 +1,5 @@
-import { FormInput, Button, BUTTON_TYPE, ErrorPosition } from "@capgeminiuk/dcx-react-library";
+import { Button, BUTTON_TYPE, ErrorPosition } from "@capgeminiuk/dcx-react-library";
+import { EmojiBlockingInput as FormInput } from "~/components";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import classNames from "classnames";

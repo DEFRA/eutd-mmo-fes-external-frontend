@@ -1,4 +1,5 @@
-import { Button, BUTTON_TYPE, ErrorPosition, FormInput } from "@capgeminiuk/dcx-react-library";
+import { Button, BUTTON_TYPE, ErrorPosition } from "@capgeminiuk/dcx-react-library";
+import { EmojiBlockingInput as FormInput } from "~/components";
 import classNames from "classnames/bind";
 import isEmpty from "lodash/isEmpty";
 import startCase from "lodash/startCase";
