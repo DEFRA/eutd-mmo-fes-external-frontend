@@ -162,7 +162,8 @@ const Template = ({
           'allow_google_signals': false,
           'allow_ad_personalization_signals': false,
           'cookie_update': true,
-          'send_page_view': true
+          'send_page_view': true,
+          'transport_type': 'beacon'
         });`;
 
       document.head.appendChild(gtmScript);
