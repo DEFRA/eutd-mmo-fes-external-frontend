@@ -65,6 +65,8 @@ export default async function handleRequest(
           responseHeaders.set("X-Content-Type-Options", "nosniff");
 
           if (isProdEnv()) {
+            responseHeaders.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+
             responseHeaders.set(
               "permissions-policy",
               "accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), camera=(), display-capture=(), document-domain=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), layout-animations=(), legacy-image-formats=*, magnetometer=(), microphone=(), midi=(), oversized-images=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), sync-xhr=*, usb=(), vr=(), screen-wake-lock=(), web-share=(), xr-spatial-tracking=()"
