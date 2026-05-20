@@ -54,6 +54,7 @@ export const allNamespaces = [
   "accessibility",
   "serviceImprovement",
   "cookies",
+  "cookieBanner",
   "catchAdded",
   "sdYouHaveAddedAProduct",
   "psAddCatchDetails",
