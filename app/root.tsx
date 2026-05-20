@@ -132,6 +132,7 @@ const Template = ({
 
       gtmScript.id = "gtm-script";
       gtmScript.innerHTML = `
+        window['ga-disable-${gaId}'] = true;
         (function(w, d, s, l, i) {
           w[l] = w[l] || [];
           w[l].push({
