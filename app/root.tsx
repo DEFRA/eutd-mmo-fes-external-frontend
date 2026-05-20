@@ -127,7 +127,7 @@ const Template = ({
 
       const clarityConsent = document.createElement("script");
       clarityConsent.id = "clarity-consent";
-      clarityConsent.innerHTML = `window.clarity('consentv2', { ad_Storage: "denied", analytics_Storage: "granted" });`;
+      clarityConsent.innerHTML = `window.clarity('consentv2', { ad_Storage: "granted", analytics_Storage: "granted" });`;
       document.head.appendChild(clarityConsent);
     }
 
