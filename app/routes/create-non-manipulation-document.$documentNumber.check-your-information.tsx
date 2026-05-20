@@ -39,6 +39,7 @@ import {
 } from "~/composite-components";
 import { getSessionFromRequest, commitSession } from "~/sessions.server";
 import { CheckYourInformationPSSDAction } from "~/models";
+import lowerCase from "lodash/lowerCase";
 
 type loaderProps = {
   documentNumber: string;
@@ -171,6 +172,7 @@ const CheckYourInformation = () => {
           exporterDetails={exporterDetails}
           companyNameTitle={t("commonAddExporterDetailsCompanyName", { ns: "common" })}
           changeLinkText={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+          changeLinkHiddenText={lowerCase(t("commonAddExporterDetailsCompanyName", { ns: "common" }))}
           companyAddress={t("commonSummaryPageExporterCompanyAddress", { ns: "checkYourInformation" })}
           exporterDetailsRoute="/create-non-manipulation-document/:documentNumber/add-exporter-details"
           checkInfoRoute="/create-non-manipulation-document/:documentNumber/check-your-information"
@@ -266,7 +268,11 @@ const CheckYourInformation = () => {
             <dd className="govuk-summary-list__value">{storageDocument.facilityName}</dd>
             <dd className="govuk-summary-list__actions">
               <a
-                aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                aria-label={
+                  t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" }) +
+                  " " +
+                  lowerCase(t("sdCommonFacilityNameTitle", { ns: "sdCheckYourInformation" }))
+                }
                 className="govuk-link"
                 href={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details?nextUri=${route(
                   "/create-non-manipulation-document/:documentNumber/check-your-information",
@@ -274,6 +280,9 @@ const CheckYourInformation = () => {
                 )}`}
               >
                 {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                <span className="govuk-visually-hidden">
+                  {" " + lowerCase(t("sdCommonFacilityNameTitle", { ns: "sdCheckYourInformation" }))}
+                </span>
               </a>
             </dd>
           </div>
@@ -302,7 +311,11 @@ const CheckYourInformation = () => {
             </dd>
             <dd className="govuk-summary-list__actions">
               <a
-                aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                aria-label={
+                  t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" }) +
+                  " " +
+                  lowerCase(t("sdCheckYourInformationApprovalNumber", { ns: "sdCheckYourInformation" }))
+                }
                 className="govuk-link"
                 href={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-approval?nextUri=${route(
                   "/create-non-manipulation-document/:documentNumber/check-your-information",
@@ -310,6 +323,9 @@ const CheckYourInformation = () => {
                 )}`}
               >
                 {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                <span className="govuk-visually-hidden">
+                  {" " + lowerCase(t("sdCheckYourInformationApprovalNumber", { ns: "sdCheckYourInformation" }))}
+                </span>
               </a>
             </dd>
           </div>
@@ -321,7 +337,11 @@ const CheckYourInformation = () => {
               <dd className="govuk-summary-list__value">{storageDocument.facilityStorage}</dd>
               <dd className="govuk-summary-list__actions">
                 <a
-                  aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                  aria-label={
+                    t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" }) +
+                    " " +
+                    t("sdCheckYourInformationProductStorage", { ns: "sdCheckYourInformation" })
+                  }
                   className="govuk-link"
                   href={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-approval?nextUri=${route(
                     "/create-non-manipulation-document/:documentNumber/check-your-information",
@@ -329,6 +349,9 @@ const CheckYourInformation = () => {
                   )}`}
                 >
                   {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                  <span className="govuk-visually-hidden">
+                    {" " + lowerCase(t("sdCheckYourInformationProductStorage", { ns: "sdCheckYourInformation" }))}
+                  </span>
                 </a>
               </dd>
             </div>
@@ -381,7 +404,11 @@ const CheckYourInformation = () => {
               <dd className="govuk-summary-list__value">{t("commonYesLabel", { ns: "common" })}</dd>
               <dd className="govuk-summary-list__actions">
                 <a
-                  aria-label={t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                  aria-label={
+                    t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" }) +
+                    " " +
+                    t("doYouHaveaRoadTransportDocumentHeader", { ns: "transportation" })
+                  }
                   className="govuk-link"
                   href={`/create-non-manipulation-document/${documentNumber}/${backUri(
                     transport,
@@ -391,6 +418,9 @@ const CheckYourInformation = () => {
                   })}`}
                 >
                   {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
+                  <span className="govuk-visually-hidden">
+                    {" " + lowerCase(t("doYouHaveaRoadTransportDocumentHeader", { ns: "transportation" }))}
+                  </span>
                 </a>
               </dd>
             </div>
