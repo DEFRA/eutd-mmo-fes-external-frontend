@@ -653,6 +653,7 @@ const CatchAdded = () => {
                                 data-testid="change-link"
                               >
                                 {t("commonChangeLink", { ns: "common" })}
+                                <span className="govuk-visually-hidden">{" " + product.description}</span>
                               </Link>
                             </div>
                           </td>
@@ -693,6 +694,7 @@ const CatchAdded = () => {
                                     data-testid="change-link"
                                   >
                                     {t("commonChangeLink", { ns: "common" })}
+                                    <span className="govuk-visually-hidden">{" " + product.description}</span>
                                   </Link>
                                 </SecureForm>
                               </div>
