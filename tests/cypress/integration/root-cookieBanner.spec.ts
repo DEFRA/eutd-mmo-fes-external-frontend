@@ -44,6 +44,7 @@ describe("Cookie Banner Integration in Root", () => {
     it("should not load analytics scripts before cookie acceptance", () => {
       cy.clearCookies();
       cy.visit("/");
+      cy.url().should("include", "/");
 
       // Check that GA scripts are not loaded
       cy.window().then((win) => {
