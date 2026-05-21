@@ -10,6 +10,7 @@ describe("Cookie Banner Integration in Root", () => {
       // Clear cookies to ensure banner shows
       cy.clearCookies();
       cy.visit("/", { qs: { ...testParams } });
+      cy.url().should("include", "/");
 
       // Verify both elements exist
       cy.get(".govuk-cookie-banner").should("exist");
