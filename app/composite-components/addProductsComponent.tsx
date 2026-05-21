@@ -88,33 +88,43 @@ export const AddProductsComponent = ({
   return (
     <>
       <div id="0">
-        <AutocompleteFormField
-          id="species"
-          name="species"
-          errorMessageText={t(errors?.species?.message, { ns: "errorsText" })}
-          defaultValue={commonSpeciesNojs}
-          options={isHydrated ? species : ["", ...species.map((s: Species) => `${s.faoName} (${s.faoCode})`)]}
-          optionsId="species-option"
-          labelClassName="govuk-label govuk-!-font-weight-bold"
-          labelText={t("ccFavouritesPageFormCommonNameField")}
-          hintText={t("ccSpeciesBlockHintText")}
-          containerClassName={classNames("govuk-form-group govuk-!-width-one-half", {
+        <div
+          className={classNames("govuk-form-group govuk-!-width-one-half", {
             "govuk-form-group--error": errors?.species?.message,
           })}
-          selectProps={{
-            selectClassName: classNames("govuk-select govuk-!-width-full", {
-              "govuk-select--error": errors?.species?.message,
-            }),
-          }}
-          inputProps={{
-            className: classNames("govuk-input", {
-              "govuk-input--error": errors?.species?.message,
-            }),
-            "aria-describedby": "species-hint",
-          }}
-          onSelected={handleSpeciesSelection}
-          searchHandler={querySpecies}
-        />
+        >
+          <label
+            className="govuk-label govuk-!-font-weight-bold"
+            htmlFor="species"
+            aria-label="Common name or Food and Agriculture Organisation FAO code"
+            dangerouslySetInnerHTML={{ __html: t("ccFavouritesPageFormCommonNameField") }}
+          />
+          <AutocompleteFormField
+            id="species"
+            name="species"
+            errorMessageText={t(errors?.species?.message, { ns: "errorsText" })}
+            defaultValue={commonSpeciesNojs}
+            options={isHydrated ? species : ["", ...species.map((s: Species) => `${s.faoName} (${s.faoCode})`)]}
+            optionsId="species-option"
+            labelClassName="govuk-visually-hidden"
+            labelText={t("ccFavouritesPageFormCommonNameField").replace(/<[^>]*>/g, "")}
+            hintText={t("ccSpeciesBlockHintText")}
+            containerClassName=""
+            selectProps={{
+              selectClassName: classNames("govuk-select govuk-!-width-full", {
+                "govuk-select--error": errors?.species?.message,
+              }),
+            }}
+            inputProps={{
+              className: classNames("govuk-input", {
+                "govuk-input--error": errors?.species?.message,
+              }),
+              "aria-describedby": "species-hint",
+            }}
+            onSelected={handleSpeciesSelection}
+            searchHandler={querySpecies}
+          />
+        </div>
         <SpeciesDetails
           speciesExemptLink={speciesExemptLink}
           documentType={t("ccFavouritesDetailsExemptFromCatchCertificate")}
