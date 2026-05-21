@@ -23,7 +23,7 @@ import {
 import { useChangeLanguage } from "remix-i18next/react";
 import { IdleTimerProvider } from "react-idle-timer";
 import { shouldRenderGA, isProdEnv } from "./helpers";
-import { Header, Footer, Banner, Main, Title } from "./components";
+import { Header, Footer, Banner, Main, Title, CookieBanner } from "./components";
 import { getRootData } from "./.server";
 import i18next from "~/i18next.server";
 import { i18nextCookie, analyticsAcceptedCookie, parseCookie, type IAnalyticsAcceptedCookie } from "./cookies.server";
@@ -205,6 +205,7 @@ const Template = ({
           ></noscript>
         )}
         <span ref={ref} tabIndex={-1} />
+        <CookieBanner hasAcceptedCookies={analyticsCookieAccepted} />
         <a href="#main-content" className="govuk-skip-link" data-module="govuk-skip-link">
           Skip to main content
         </a>
