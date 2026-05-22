@@ -32,6 +32,8 @@ import planeTransport from "@/fixtures/transportDetailsApi/plane.json";
 import trainTransport from "@/fixtures/transportDetailsApi/train.json";
 import containerVesselTransport from "@/fixtures/transportDetailsApi/containerVessel.json";
 import checkYourInformationAllFieldsNotProvided from "@/fixtures/storageDocumentApi/storageDocumentsFieldsNotProvided.json";
+import storageDocumentInvalidWeightRelationships from "@/fixtures/storageDocumentApi/storageDocumentInvalidWeightRelationships.json";
+import storageDocumentInvalidWeightRelationshipsCopied from "@/fixtures/storageDocumentApi/storageDocumentInvalidWeightRelationshipsCopied.json";
 import species from "@/fixtures/referenceDataApi/species.json";
 
 const documentNumber = "GBR-2023-SD-DE53D6E7C";
@@ -138,6 +140,81 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
+  ],
+  // FI0-11257 regression: loader redirects to /progress when checkProgress returns 400
+  // (departure weights missing after editing arrival weights on a copied NMD).
+  // Uses a complete storageDocument so hasRequiredDataStorageDocumentSummary() passes —
+  // ensuring it is the new checkProgress guard that triggers the redirect, not the old one.
+  // Progress page mocks are included so /progress renders after the redirect.
+  [TestCaseId.SDCheckYourInformationSubmitWhenIncomplete]: () => [
+    // Check-your-information loader
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          catches: "Add product details to all your products",
+        })
+      )
+    ),
+    // /progress page loader (needed after the loader redirect)
+    rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
+    rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDocuments))),
+  ],
+  [TestCaseId.SDCheckYourInformationSubmitInvalidWeightsOriginal]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentInvalidWeightRelationships))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
+    // Keep progress complete so loader allows submit and the new pre-submit
+    // weight-relationship guard is responsible for blocking submission.
+    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
+    // Safety net for this test case: if submit is reached, still return the
+    // expected validation error so the page remains blocked with clear feedback.
+    rest.post(generatePdf("storageNotes"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          validationErrors: [
+            {
+              message: "sdNetWeightProductDepartureExceedsArrival",
+              key: "validationError",
+              certificateNumber: "GBR-2023-SD-A46E23603",
+              product: "Golden damselfish (ADH)",
+            },
+          ],
+        })
+      )
+    ),
+  ],
+  [TestCaseId.SDCheckYourInformationSubmitInvalidWeightsCopied]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentInvalidWeightRelationshipsCopied))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
+    // Mimic copied-document flow where arrival values were changed and stale
+    // departure values are now invalid. Submit must be blocked at this stage.
+    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
+    // Safety net for this test case: if submit is reached, still return the
+    // expected validation error so the page remains blocked with clear feedback.
+    rest.post(generatePdf("storageNotes"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          validationErrors: [
+            {
+              message: "sdNetWeightProductDepartureExceedsArrival",
+              key: "validationError",
+              certificateNumber: "GBR-2023-SD-A46E23603",
+              product: "Peacock sole (ADJ)",
+            },
+          ],
+        })
+      )
+    ),
   ],
   [TestCaseId.SDCheckYourInformationTruckEdit]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
@@ -247,9 +324,7 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(sdProgressComplete))),
     // Transport details endpoint - match both arrival=false and arrival=undefined for departure
     rest.get(getTransportDetailsUrl("storageNotes", false), (req, res, ctx) => res(ctx.json(containerVesselTransport))),
-    rest.get(getTransportDetailsUrl("storageNotes", undefined), (req, res, ctx) =>
-      res(ctx.json(containerVesselTransport))
-    ),
+    rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(containerVesselTransport))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(containerVesselTransport))),
     // POST to save transport (no change scenario)
     rest.post(SAVE_TRANSPORT_DETAILS_URL, (req, res, ctx) => res(ctx.json(containerVesselTransport))),

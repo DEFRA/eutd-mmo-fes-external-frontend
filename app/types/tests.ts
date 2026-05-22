@@ -758,6 +758,9 @@ export enum TestCaseId {
   SDCheckYourInformationValidationGuard = "sdCheckYourInformationValidationGuard",
   SDCheckYourInformationValidationComplete = "sdCheckYourInformationValidationComplete",
   SDCheckYourInformationValidationProgress = "sdCheckYourInformationValidationProgress",
+  SDCheckYourInformationSubmitWhenIncomplete = "sdCheckYourInformationSubmitWhenIncomplete",
+  SDCheckYourInformationSubmitInvalidWeightsOriginal = "sdCheckYourInformationSubmitInvalidWeightsOriginal",
+  SDCheckYourInformationSubmitInvalidWeightsCopied = "sdCheckYourInformationSubmitInvalidWeightsCopied",
 
   PrivacyAccepted = "PrivacyAccepted",
   PrivacyEmpty = "PrivacyEmpty",
