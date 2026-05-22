@@ -435,7 +435,7 @@ type CheckYourInformationLayoutProps = {
   documentNumber: string;
   notificationMessages: string[];
   hasErrors: boolean;
-  errors: IError[];
+  errors: (IError | IValidationError)[];
   children: JSX.Element;
   backUrl: any;
   summaryHeading: string;
