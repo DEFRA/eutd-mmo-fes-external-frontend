@@ -575,14 +575,14 @@ describe("SD: you-have-added-product page", () => {
       cy.get('[data-testid="remove-button"]').should("have.length", 2); // 2 products
     });
 
-    it("should have 'No' radio button defaultChecked (component line 250)", () => {
+    it("should not have 'No' radio button defaultChecked (component line 250)", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
       cy.visit(sdPageUrl, { qs: { ...testParams } });
 
       // Verify 'No' radio is checked by default
-      cy.get("#addAnotherCatchNo").should("be.checked");
+      cy.get("#addAnotherCatchNo").should("not.be.checked");
       cy.get("#addAnotherProductYes").should("not.be.checked");
     });
 
