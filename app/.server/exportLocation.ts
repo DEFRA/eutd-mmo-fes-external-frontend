@@ -58,7 +58,7 @@ export const postDraftExportLocation = async (
 
   const response: Response = await post(
     bearerToken,
-    `${EXPORT_LOCATION_DRAFT_URL}`,
+    EXPORT_LOCATION_DRAFT_URL,
     {
       documentnumber: documentNumber,
     },
@@ -84,6 +84,12 @@ const onPostDraftExportLocationResponse = async (response: Response): Promise<IE
     case 400: {
       const data = await response.json();
       const errors = [];
+      if (data.exportedFrom) {
+        errors.push({
+          key: "exportedFrom",
+          message: getErrorMessage(data.exportedFrom),
+        });
+      }
       if (data.exportDestination) {
         errors.push({
           key: "exportDestination",
@@ -119,6 +125,12 @@ const onExportLocationResponse = async (response: Response): Promise<IExportLoca
     case 400: {
       const data = await response.json();
       const errors = [];
+      if (data.exportedFrom) {
+        errors.push({
+          key: "exportedFromUK",
+          message: getErrorMessage(data.exportedFrom),
+        });
+      }
       if (data.exportDestination) {
         errors.push({
           key: "exportDestination",

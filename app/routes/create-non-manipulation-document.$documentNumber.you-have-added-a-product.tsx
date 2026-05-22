@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm, TableHeader } from "~/components";
+import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm, TableHeader, ErrorMessage } from "~/components";
 import {
   useLoaderData,
   useActionData,
@@ -150,6 +150,9 @@ const YouHaveAddedAProduct = () => {
 
   return (
     <Main backUrl={backUrl}>
+      {Array.isArray(groupedErrors) && groupedErrors.flat().length > 0 && (
+        <ErrorSummary errors={groupedErrors.flat()} />
+      )}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           {catches.length > 1 ? (
@@ -221,13 +224,27 @@ const YouHaveAddedAProduct = () => {
           <br />
           <SecureForm method="post" csrf={csrf}>
             <input type="hidden" name="nextUri" value={nextUri} />
-            <div id="radioButtons" className={`govuk-form-group`}>
+            <div
+              id="addAnotherProduct"
+              className={
+                Array.isArray(groupedErrors) && groupedErrors.flat().some((error) => error.key === "addAnotherProduct")
+                  ? "govuk-form-group govuk-form-group--error"
+                  : "govuk-form-group"
+              }
+            >
               <fieldset className="govuk-fieldset">
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--l">
                   <h2 className="govuk-fieldset__heading">
                     {t("sdYouAddedProductNeedToAddProductTitle", { ns: "sdYouHaveAddedAProduct" })}
                   </h2>
                 </legend>
+                {Array.isArray(groupedErrors) &&
+                groupedErrors.flat().some((error) => error.key === "addAnotherProduct") ? (
+                  <ErrorMessage
+                    text={groupedErrors.flat().find((error) => error.key === "addAnotherProduct")?.message ?? ""}
+                    visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                  />
+                ) : null}
                 <br />
                 <div className="govuk-radios govuk-radios--inline" data-module="govuk-radios">
                   <div className="govuk-radios__item">
@@ -249,7 +266,6 @@ const YouHaveAddedAProduct = () => {
                       name="addAnotherProduct"
                       type="radio"
                       value="No"
-                      defaultChecked
                     />
                     <label className="govuk-label govuk-radios__label" htmlFor="addAnotherCatchNo">
                       {t("commonNoLabel")}
