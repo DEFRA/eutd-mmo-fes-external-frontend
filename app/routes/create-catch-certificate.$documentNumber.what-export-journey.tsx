@@ -3,11 +3,11 @@ import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction 
 
 import { route } from "routes-gen";
 import { useEffect } from "react";
-import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
+import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm, ErrorMessage } from "~/components";
 import { PointOfDestinationField } from "~/composite-components/pointOfDestinationField";
 import { ExportDestinationField } from "~/composite-components/exportDestinationField";
 import { displayErrorMessages, scrollToId } from "~/helpers";
-import type { IExportLocation, ICountry, LandingEntryType } from "~/types";
+import type { IExportLocation, ICountry, LandingEntryType, ErrorResponse } from "~/types";
 import isEmpty from "lodash/isEmpty";
 import { useTranslation } from "react-i18next";
 import { ButtonGroup } from "~/composite-components";
@@ -25,7 +25,7 @@ type WhatExportJourneyProps = {
 
 export const loader: LoaderFunction = async ({ request, params }) => WhatExportJourneyLoader(request, params);
 
-export const action: ActionFunction = async ({ request, params }): Promise<Response> =>
+export const action: ActionFunction = async ({ request, params }): Promise<Response | ErrorResponse> =>
   WhatExportJourneyAction(request, params);
 
 const WhatExportJourney = () => {
@@ -73,11 +73,17 @@ const WhatExportJourney = () => {
         <div className="govuk-grid-column-full">
           <Title title={t("ccWhatExportJourneyExportJourneyHeader", { ns: "whatExportJourney" })} />
           <SecureForm method="post" csrf={csrf}>
-            <div className="govuk-form-group">
+            <div className={errors?.exportedFromUK ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
               <fieldset className="govuk-fieldset" aria-describedby="departure-country-hint">
                 <legend className="govuk-fieldset__legend">
                   {t("ccWhatExportJourneyDepartureCountry", { ns: "whatExportJourney" })}
                 </legend>
+                {errors?.exportedFromUK ? (
+                  <ErrorMessage
+                    text={t(errors?.exportedFromUK.message, { ns: "errorsText" })}
+                    visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                  />
+                ) : null}
                 <div id="departure-country-hint" className="govuk-hint">
                   {t("ccWhatExportJourneyDepartureCountryHint", { ns: "whatExportJourney" })}
                 </div>
@@ -90,9 +96,7 @@ const WhatExportJourney = () => {
                       type="radio"
                       value={country.value}
                       defaultChecked={
-                        formData.exportedFrom === country.value ||
-                        "United Kingdom" === country.value ||
-                        exportLocation.exportedFrom === country.value
+                        formData.exportedFrom === country.value || exportLocation.exportedFrom === country.value
                       }
                     />
                     <label id={`label-${country.id}`} className="govuk-label govuk-radios__label" htmlFor={country.id}>

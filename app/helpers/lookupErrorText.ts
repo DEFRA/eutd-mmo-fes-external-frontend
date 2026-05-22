@@ -33,6 +33,7 @@ export const getErrorMessage = (key: string): string => {
     "error.postcode.string.pattern.base": "commonLookupAddressPageErrorPostcodeValidation",
     "error.exporterAddress.any.required": "commonAddExporterDetailsAddTheExportersAddress",
     "error.exportDestination.any.invalid": "commonProductDestinationErrorInvalidCountry",
+    "error.exportedFrom.string.base": "sdTransportDepatureCountryInvalidError",
     "error.exportDestination.any.required": "commonProductDestinationErrorInvalidCountry",
     "error.exportDestination.string.empty": "commonProductDestinationErrorInvalidCountry",
     "error.exportDestination.string.emoji": "emojiCharactersNotPermitted",
