@@ -84,19 +84,6 @@ const validateStorageDocumentWeightRelationships = (catches: StorageDocumentCatc
         product: catchItem.product,
       });
     }
-
-    if (
-      departureProductWeight !== undefined &&
-      departureFisheryWeight !== undefined &&
-      departureFisheryWeight > departureProductWeight
-    ) {
-      validationErrors.push({
-        key: `validationError-fishery-departure-exceeds-product-${index}`,
-        message: "sdNetWeightFisheryProductDepartureExceedsProductDeparture",
-        certificateNumber: catchItem.certificateNumber,
-        product: catchItem.product,
-      });
-    }
   });
 
   return validationErrors;

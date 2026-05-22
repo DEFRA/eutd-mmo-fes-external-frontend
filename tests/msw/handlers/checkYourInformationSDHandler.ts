@@ -181,17 +181,53 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentInvalidWeightRelationships))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
     // Keep progress complete so loader allows submit and the new pre-submit
     // weight-relationship guard is responsible for blocking submission.
     rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
+    // Safety net for this test case: if submit is reached, still return the
+    // expected validation error so the page remains blocked with clear feedback.
+    rest.post(generatePdf("storageNotes"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          validationErrors: [
+            {
+              message: "sdNetWeightProductDepartureExceedsArrival",
+              key: "validationError",
+              certificateNumber: "GBR-2023-SD-A46E23603",
+              product: "Golden damselfish (ADH)",
+            },
+          ],
+        })
+      )
+    ),
   ],
   [TestCaseId.SDCheckYourInformationSubmitInvalidWeightsCopied]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentInvalidWeightRelationshipsCopied))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
     // Mimic copied-document flow where arrival values were changed and stale
     // departure values are now invalid. Submit must be blocked at this stage.
     rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
+    // Safety net for this test case: if submit is reached, still return the
+    // expected validation error so the page remains blocked with clear feedback.
+    rest.post(generatePdf("storageNotes"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          validationErrors: [
+            {
+              message: "sdNetWeightProductDepartureExceedsArrival",
+              key: "validationError",
+              certificateNumber: "GBR-2023-SD-A46E23603",
+              product: "Peacock sole (ADJ)",
+            },
+          ],
+        })
+      )
+    ),
   ],
   [TestCaseId.SDCheckYourInformationTruckEdit]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),

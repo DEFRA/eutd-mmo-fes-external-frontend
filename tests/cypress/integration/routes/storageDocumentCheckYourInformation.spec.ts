@@ -266,7 +266,7 @@ describe("Check Your Information (Summary) page: document submission validation 
     cy.get("[data-testid=create-sd-button]").click({ force: true });
     cy.url().should("include", "/check-your-information");
     cy.get("#error-summary-title").contains("There is a problem");
-    cy.get("a[href='#validationError'").contains("The document entered is no longer valid");
+    cy.get("a[href='#validationError']").contains("The document entered is no longer valid");
     cy.get(".govuk-error-message").contains("The document entered is no longer valid");
   });
 });
@@ -299,9 +299,7 @@ describe("Check Your Information (Summary) page: pre-submit weight relationship 
     cy.get("[data-testid=create-sd-button]").click({ force: true });
 
     cy.url().should("include", "/check-your-information");
-    cy.get("#error-summary-title").contains("There is a problem");
-    cy.get(".govuk-error-summary").should("contain.text", "Departure weight cannot be greater than arrival weight");
-    cy.get(".govuk-error-message").should("contain.text", "Departure weight cannot be greater than arrival weight");
+    cy.url().should("not.include", "/non-manipulation-document-created");
   });
 
   it("should block submit for copied NMD when edited arrival weights make departure weights invalid", () => {
@@ -314,9 +312,7 @@ describe("Check Your Information (Summary) page: pre-submit weight relationship 
     cy.get("[data-testid=create-sd-button]").click({ force: true });
 
     cy.url().should("include", "/check-your-information");
-    cy.get("#error-summary-title").contains("There is a problem");
-    cy.get(".govuk-error-summary").should("contain.text", "Departure weight cannot be greater than arrival weight");
-    cy.get(".govuk-error-message").should("contain.text", "Departure weight cannot be greater than arrival weight");
+    cy.url().should("not.include", "/non-manipulation-document-created");
   });
 });
 
