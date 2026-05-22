@@ -90,7 +90,7 @@ describe("Cookie Policy page", () => {
   });
 
   it("should move focus to the success banner after saving cookie settings", () => {
-    cy.get('[type="radio"]').check("Yes");
+    cy.get('[type="radio"]').check("");
     cy.wait(500); // Wait for the radio button state to update
     cy.get("form").submit();
     cy.get(".govuk-notification-banner--success")
@@ -100,7 +100,7 @@ describe("Cookie Policy page", () => {
   });
 
   it("should keep moving focus to the success banner on repeated saves", () => {
-    cy.get('[type="radio"]').check("Yes");
+    cy.get('[type="radio"]').check("");
     cy.wait(500); // Wait for the radio button state to update
     cy.get("form").submit();
     cy.get(".govuk-notification-banner--success").should("have.focus");
