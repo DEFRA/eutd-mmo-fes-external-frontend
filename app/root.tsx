@@ -326,11 +326,15 @@ export default function App() {
   useChangeLanguage(data.locale);
 
   const { revalidate } = useRevalidator();
+  const { pathname } = useLocation();
 
-  // invoke the loader function to revalidate page data
+  // invoke the loader function to revalidate page data, except on the root route
+  // to avoid triple-loading caused by revalidation on hydration
   useEffect(() => {
-    revalidate();
-  }, [revalidate]);
+    if (pathname !== "/") {
+      revalidate();
+    }
+  }, [revalidate, pathname]);
 
   useEffect(() => {
     const htmlScriptPrototype = "noModule" in HTMLScriptElement.prototype ? "govuk-frontend-supported" : "";

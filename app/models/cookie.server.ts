@@ -1,3 +1,4 @@
+import isEmpty from "lodash/isEmpty";
 import { redirect } from "react-router";
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";
@@ -10,6 +11,7 @@ import {
   validateCSRFToken,
 } from "~/.server";
 import { analyticsAcceptedCookie, type IAnalyticsAcceptedCookie, parseCookie } from "~/cookies.server";
+import { getTransformedError } from "~/helpers";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import type { UserAttribute, UserAttributePayload } from "~/types";
 const cookiePreferenceField = "saveCookiePreference";
@@ -20,6 +22,7 @@ export const CookieLoader = async (request: Request): Promise<Response> => {
 
   await getBearerTokenForRequest(request);
   const session = await getSessionFromRequest(request);
+  const errors = session.get("errors") ?? {};
   const analyticsCookie = (await parseCookie(analyticsAcceptedCookie, request)) as IAnalyticsAcceptedCookie;
   const bearerToken = await getBearerTokenForRequest(request);
   const userAttributes: UserAttribute[] = await getAllUserAttributes(bearerToken);
@@ -34,6 +37,7 @@ export const CookieLoader = async (request: Request): Promise<Response> => {
       analyticsAccepted: analyticsCookie?.analyticsAccepted || hasAcceptedCookies,
       showSuccessBanner: hasActionExecuted,
       csrf,
+      errors,
     }),
     {
       status: 200,
@@ -56,6 +60,23 @@ export const CookieAction = async (request: Request): Promise<Response> => {
     key: "accepts_cookies",
     value: (form.get(cookiePreferenceField) as string)?.toLowerCase(),
   };
+
+  if (isEmpty(form.get(cookiePreferenceField))) {
+    const session = await getSessionFromRequest(request);
+    session.flash(
+      "errors",
+      getTransformedError([
+        {
+          key: "cookieAnalyticsAccept",
+          message: "ccLandingTypeSelectOption",
+        },
+      ])
+    );
+    return redirect(route("/cookies"), {
+      headers: { "Set-Cookie": await commitSession(session) },
+    });
+  }
+
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
   await saveUserAttribute(bearerToken, payload);

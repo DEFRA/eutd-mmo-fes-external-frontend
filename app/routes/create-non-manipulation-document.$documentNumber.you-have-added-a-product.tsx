@@ -94,10 +94,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   // Priority: URL parameter > last product index (for direct navigation or cloned documents)
   const productIndex = productIndexParam ? Number.parseInt(productIndexParam) : sdData.catches.length - 1;
 
-  // When returning from check-your-information (editing an existing product),
-  // default to "No" since the user is not adding a new product
-  const defaultAddAnotherProduct = nextUri.includes("check-your-information") ? "No" : "";
-
   return new Response(
     JSON.stringify({
       documentNumber,
@@ -107,7 +103,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       nextUri,
       csrf,
       productIndex,
-      defaultAddAnotherProduct,
     }),
     {
       headers: {
@@ -121,9 +116,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => executeAction(request, params);
 
 const YouHaveAddedAProduct = () => {
-  const { documentNumber, catches, nextUri, csrf, productIndex, defaultAddAnotherProduct } = useLoaderData<
-    CatchesLoaderData & { defaultAddAnotherProduct: string }
-  >();
+  const { documentNumber, catches, nextUri, csrf, productIndex } = useLoaderData<CatchesLoaderData>();
   const { groupedErrors = [] } = useActionData<ActionDataWithErrors>() ?? {};
 
   const { t } = useTranslation("common");
@@ -261,7 +254,6 @@ const YouHaveAddedAProduct = () => {
                       name="addAnotherProduct"
                       type="radio"
                       value="Yes"
-                      defaultChecked={defaultAddAnotherProduct === "Yes"}
                     />
                     <label className="govuk-label govuk-radios__label" htmlFor="addAnotherProductYes">
                       {t("commonYesLabel")}
@@ -274,7 +266,6 @@ const YouHaveAddedAProduct = () => {
                       name="addAnotherProduct"
                       type="radio"
                       value="No"
-                      defaultChecked={defaultAddAnotherProduct === "No"}
                     />
                     <label className="govuk-label govuk-radios__label" htmlFor="addAnotherCatchNo">
                       {t("commonNoLabel")}
