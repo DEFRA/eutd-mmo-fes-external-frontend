@@ -24,6 +24,7 @@ export enum TestCaseId {
   StartJourney = "startJourney",
   StartJourneyFailed = "startJourneyFailed",
   StartJourneyFailedNoErrors = "startJourneyFailedNoErrors",
+  StartJourneyNullSelection = "startJourneyNullSelection",
 
   adminLogin = "adminlogin",
   idmLogin = "idmLogin",
