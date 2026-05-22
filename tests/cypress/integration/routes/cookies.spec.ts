@@ -89,6 +89,24 @@ describe("Cookie Policy page", () => {
     cy.findByRole("link", { name: "Go back to the page you were looking at." }).should("be.visible");
   });
 
+  it("should display an inline error message when save is clicked without selecting a cookie preference", () => {
+    cy.get("#saveCookieSettings").click();
+
+    cy.get(".govuk-error-message").should("be.visible");
+  });
+
+  it("should apply the error class to the radio button form group when no cookie preference is selected", () => {
+    cy.get("#saveCookieSettings").click();
+
+    cy.get("#radioButtons").should("have.class", "govuk-form-group--error");
+  });
+
+  it("should display an error summary when no cookie preference is selected", () => {
+    cy.get("#saveCookieSettings").click();
+
+    cy.get(".govuk-error-summary").should("be.visible");
+  });
+
   it("should redirect back to /cookies and not show the success banner when there is a validation error", () => {
     cy.get("#saveCookieSettings").click();
 
