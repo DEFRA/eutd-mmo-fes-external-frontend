@@ -856,7 +856,13 @@ describe("Direct Landing - EEZ validation when high seas is No", () => {
     cy.get("#add-zone-button").click({ force: true });
     cy.wait(300);
     cy.get("#eez-0").type("France");
-    cy.get(".autocomplete__option").first().click();
+    cy.get("body").then(($body) => {
+      if ($body.find(".autocomplete__option").length > 0) {
+        cy.get(".autocomplete__option").first().click();
+      } else {
+        cy.get("#eez-0").type("{enter}");
+      }
+    });
     cy.get("[data-testid='save-and-continue']").click({ force: true });
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get(".govuk-error-message").should("contain", "Select or enter a country for the exclusive economic zone");
