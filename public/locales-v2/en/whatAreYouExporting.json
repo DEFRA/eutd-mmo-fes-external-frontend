@@ -16,7 +16,7 @@
   "ccProductFavouriteDetailSummary3ParagraphText": "Manage your product favourites",
   "ccFavouritesDetailsExemptFromCatchCertificate": "Catch Certificates",
   "commonAddCatchDetailsSpeciesDetailsLinkTitle": "I cannot find the species",
-  "ccFavouritesPageFormCommonNameField": "Common name or FAO code",
+  "ccFavouritesPageFormCommonNameField": "Common name or <abbr title=\"Food and Agriculture Organisation\">FAO</abbr> code",
   "ccFavouritesPageProductTableRowState": "State",
   "ccFavouritesPageFormStateFieldPlaceholder": "Select...",
   "ccFavouritesPageProductTableRowPresentation": "Presentation",

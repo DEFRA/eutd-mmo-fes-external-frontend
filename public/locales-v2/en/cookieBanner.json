@@ -1,0 +1,13 @@
+{
+  "cookieBannerLabel": "Cookies on Fish Export Service",
+  "heading": "Cookies on Fish Export Service",
+  "message": "We use some essential cookies to make this service work. We'd also like to use analytics cookies so we can understand how you use the service and make improvements.",
+  "cookiesLink": "View cookies",
+  "acceptButton": "Accept analytics cookies",
+  "rejectButton": "Reject analytics cookies",
+  "viewCookiesLink": "View cookies",
+  "acceptedMessage": "You've accepted analytics cookies. You can change your cookie settings at any time.",
+  "rejectedMessage": "You've rejected analytics cookies. You can change your cookie settings at any time.",
+  "changeCookieSettings": "change your cookie settings",
+  "hideButton": "Hide cookie message"
+}
