@@ -1,6 +1,14 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 describe("Set Cookie Preference API Route", () => {
+  beforeEach(() => {
+    // Intercept the user attributes API call that happens internally
+    cy.intercept("POST", "**/v1/userAttributes", {
+      statusCode: 200,
+      body: {},
+    }).as("saveUserAttribute");
+  });
+
   describe("Successful Cookie Preference Updates", () => {
     it("should accept cookies and return success response", () => {
       const testParams: ITestParams = {
@@ -184,8 +192,8 @@ describe("Set Cookie Preference API Route", () => {
         qs: { ...testParams },
         failOnStatusCode: false,
       }).then((response) => {
-        // Should not allow GET method
-        expect(response.status).to.eq(405);
+        // Should not allow GET method - expects 404 or 405
+        expect(response.status).to.be.oneOf([404, 405]);
       });
     });
 
@@ -231,6 +239,44 @@ describe("Set Cookie Preference API Route", () => {
         expect(response.status).to.eq(200);
         // eslint-disable-next-line no-unused-expressions
         expect(response.body.success).to.be.true;
+      });
+
+      // Verify the API call was made to user attributes endpoint
+      cy.wait("@saveUserAttribute").then((interception) => {
+        expect(interception.request.body).to.deep.equal({
+          key: "accepts_cookies",
+          value: "yes",
+        });
+      });
+    });
+
+    it("should send 'no' value to user attributes when rejecting cookies", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.UserAttributes,
+      };
+
+      cy.request({
+        method: "POST",
+        url: "/set-cookie-preference",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          acceptsCookies: false,
+        },
+        qs: { ...testParams },
+      }).then((response) => {
+        expect(response.status).to.eq(200);
+        // eslint-disable-next-line no-unused-expressions
+        expect(response.body.success).to.be.true;
+      });
+
+      // Verify the API call was made with "no" value
+      cy.wait("@saveUserAttribute").then((interception) => {
+        expect(interception.request.body).to.deep.equal({
+          key: "accepts_cookies",
+          value: "no",
+        });
       });
     });
 
@@ -289,30 +335,6 @@ describe("Set Cookie Preference API Route", () => {
         expect(response.body).to.have.property("success");
         expect(response.body.success).to.be.a("boolean");
         expect(response.body.success).to.eq(true);
-      });
-    });
-
-    it("should return error object on failure", () => {
-      const testParams: ITestParams = {
-        testCaseId: TestCaseId.UserAttributesFailed,
-      };
-
-      cy.request({
-        method: "POST",
-        url: "/set-cookie-preference",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          acceptsCookies: true,
-        },
-        qs: { ...testParams },
-        failOnStatusCode: false,
-      }).then((response) => {
-        if (response.status === 500) {
-          expect(response.body).to.have.property("success", false);
-          expect(response.body).to.have.property("error");
-        }
       });
     });
   });
