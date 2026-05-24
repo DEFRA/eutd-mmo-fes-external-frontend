@@ -15,9 +15,27 @@ export const CookieBanner = ({ hasAcceptedCookies }: CookieBannerProps) => {
   const [acceptedChoice, setAcceptedChoice] = useState(false);
 
   useEffect(() => {
-    // Show banner only if cookie preference hasn't been set
-    setIsHidden(hasAcceptedCookies !== undefined);
+    // Check if URL contains loggedIn=yes parameter
+    const searchParams = new URLSearchParams(globalThis.location.search);
+    const isLoggedIn = searchParams.get("loggedIn") === "yes";
+
+    // Show banner only if loggedIn=yes AND cookie preference hasn't been set
+    setIsHidden(!isLoggedIn || hasAcceptedCookies !== undefined);
   }, [hasAcceptedCookies]);
+
+  const saveCookiePreference = async (acceptsCookies: boolean) => {
+    try {
+      await fetch(route("/set-cookie-preference"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ acceptsCookies }),
+      });
+    } catch {
+      // Silent fail - cookie is still set locally for immediate UX
+    }
+  };
 
   const handleAccept = () => {
     // Set cookie client-side
@@ -25,10 +43,8 @@ export const CookieBanner = ({ hasAcceptedCookies }: CookieBannerProps) => {
     setAcceptedChoice(true);
     setShowConfirmation(true);
 
-    // Reload to apply cookie preference
-    setTimeout(() => {
-      globalThis.location.reload();
-    }, 1000);
+    // Save to database
+    saveCookiePreference(true);
   };
 
   const handleReject = () => {
@@ -37,10 +53,8 @@ export const CookieBanner = ({ hasAcceptedCookies }: CookieBannerProps) => {
     setAcceptedChoice(false);
     setShowConfirmation(true);
 
-    // Reload to apply cookie preference
-    setTimeout(() => {
-      globalThis.location.reload();
-    }, 1000);
+    // Save to database
+    saveCookiePreference(false);
   };
 
   const handleHideBanner = () => {

@@ -28,18 +28,39 @@ describe("Cookie Banner", () => {
       cy.get(".govuk-cookie-banner a.govuk-link").should("have.attr", "href", "/cookies");
     });
 
+    it("should only display when URL contains loggedIn=yes parameter", () => {
+      // Visit without parameter
+      cy.visit("/");
+
+      // Banner should not be visible without the parameter
+      cy.get(".govuk-cookie-banner").should("not.exist");
+
+      // Visit with loggedIn=yes parameter
+      cy.visit("/?loggedIn=yes");
+
+      // Banner should be visible with the parameter
+      cy.get(".govuk-cookie-banner").should("be.visible");
+    });
+
+    it("should not display when loggedIn parameter has different value", () => {
+      cy.visit("/?loggedIn=no");
+
+      // Banner should not be visible
+      cy.get(".govuk-cookie-banner").should("not.exist");
+    });
+
     it("should not display the cookie banner when cookie preference is already set", () => {
       // Set cookie preference
       cy.setCookie("analytics_cookies_accepted", JSON.stringify({ analyticsAccepted: true }));
 
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Banner should not be visible
       cy.get(".govuk-cookie-banner").should("not.exist");
     });
 
     it("should display cookie banner above 'Skip to main content' link", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Get positions of both elements
       cy.get(".govuk-cookie-banner").then(($banner) => {
@@ -54,9 +75,131 @@ describe("Cookie Banner", () => {
     });
   });
 
+  describe("Database Integration", () => {
+    beforeEach(() => {
+      // Intercept API calls to set-cookie-preference
+      cy.intercept("POST", "/set-cookie-preference", {
+        statusCode: 200,
+        body: { success: true },
+      }).as("saveCookiePreference");
+    });
+
+    it("should call API to save preference when accepting cookies", () => {
+      cy.visit("/?loggedIn=yes");
+
+      // Click accept button
+      cy.contains("button", "Accept analytics cookies").click();
+
+      // Wait for API call
+      cy.wait("@saveCookiePreference").then((interception) => {
+        // Verify request body
+        expect(interception.request.body).to.deep.equal({ acceptsCookies: true });
+        // Verify request headers
+        expect(interception.request.headers["content-type"]).to.include("application/json");
+      });
+    });
+
+    it("should call API to save preference when rejecting cookies", () => {
+      cy.visit("/?loggedIn=yes");
+
+      // Click reject button
+      cy.contains("button", "Reject analytics cookies").click();
+
+      // Wait for API call
+      cy.wait("@saveCookiePreference").then((interception) => {
+        // Verify request body
+        expect(interception.request.body).to.deep.equal({ acceptsCookies: false });
+        // Verify request headers
+        expect(interception.request.headers["content-type"]).to.include("application/json");
+      });
+    });
+
+    it("should handle API failure gracefully when accepting cookies", () => {
+      // Override intercept to simulate failure
+      cy.intercept("POST", "/set-cookie-preference", {
+        statusCode: 500,
+        body: { success: false, error: "Internal server error" },
+      }).as("saveCookiePreferenceFail");
+
+      cy.visit("/?loggedIn=yes");
+
+      // Click accept button
+      cy.contains("button", "Accept analytics cookies").click();
+
+      // Should still show confirmation message even if API fails
+      cy.get(".govuk-cookie-banner__content").should(
+        "contain",
+        "You've accepted analytics cookies. You can change your cookie settings at any time."
+      );
+
+      // Cookie should still be set locally
+      cy.getCookie("analytics_cookies_accepted").should("exist");
+    });
+
+    it("should handle network error gracefully", () => {
+      // Simulate network failure
+      cy.intercept("POST", "/set-cookie-preference", { forceNetworkError: true }).as("networkError");
+
+      cy.visit("/?loggedIn=yes");
+
+      // Click accept button
+      cy.contains("button", "Accept analytics cookies").click();
+
+      // Should still show confirmation message
+      cy.get(".govuk-cookie-banner__content").should("contain", "You've accepted analytics cookies");
+
+      // Cookie should still be set locally
+      cy.getCookie("analytics_cookies_accepted").should("exist");
+    });
+  });
+
+  describe("No Page Reload Behavior", () => {
+    it("should not reload page after accepting cookies", () => {
+      cy.visit("/?loggedIn=yes");
+
+      // Add a marker to the page to detect if it reloads
+      cy.window().then((win) => {
+        (win as Window & { testMarker?: string }).testMarker = "page-loaded";
+      });
+
+      // Click accept button
+      cy.contains("button", "Accept analytics cookies").click();
+
+      // Wait a moment
+      cy.wait(500);
+
+      // Check that marker still exists (page didn't reload)
+      cy.window().its("testMarker").should("equal", "page-loaded");
+
+      // Confirmation should be visible without reload
+      cy.get(".govuk-cookie-banner__content").should("contain", "You've accepted analytics cookies");
+    });
+
+    it("should not reload page after rejecting cookies", () => {
+      cy.visit("/?loggedIn=yes");
+
+      // Add a marker to the page
+      cy.window().then((win) => {
+        (win as Window & { testMarker?: string }).testMarker = "page-loaded";
+      });
+
+      // Click reject button
+      cy.contains("button", "Reject analytics cookies").click();
+
+      // Wait a moment
+      cy.wait(500);
+
+      // Check that marker still exists (page didn't reload)
+      cy.window().its("testMarker").should("equal", "page-loaded");
+
+      // Confirmation should be visible without reload
+      cy.get(".govuk-cookie-banner__content").should("contain", "You've rejected analytics cookies");
+    });
+  });
+
   describe("Accept Analytics Cookies", () => {
     it("should set cookie and show confirmation message when accepting cookies", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Click accept button
       cy.contains("button", "Accept analytics cookies").click();
@@ -75,7 +218,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should allow user to hide confirmation message", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Accept cookies
       cy.contains("button", "Accept analytics cookies").click();
@@ -88,7 +231,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should provide link to change cookie settings in confirmation", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Accept cookies
       cy.contains("button", "Accept analytics cookies").click();
@@ -102,7 +245,7 @@ describe("Cookie Banner", () => {
 
   describe("Reject Analytics Cookies", () => {
     it("should set cookie and show confirmation message when rejecting cookies", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Click reject button
       cy.contains("button", "Reject analytics cookies").click();
@@ -121,7 +264,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should allow user to hide confirmation message after rejecting", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Reject cookies
       cy.contains("button", "Reject analytics cookies").click();
@@ -134,7 +277,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should provide link to change cookie settings in rejection confirmation", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Reject cookies
       cy.contains("button", "Reject analytics cookies").click();
@@ -148,7 +291,7 @@ describe("Cookie Banner", () => {
 
   describe("Navigation to Cookies Page", () => {
     it("should allow navigation to cookies page via 'View cookies' link", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Click on "View cookies" link
       cy.get(".govuk-cookie-banner").contains("a.govuk-link", "View cookies").click();
@@ -160,19 +303,19 @@ describe("Cookie Banner", () => {
 
   describe("Accessibility", () => {
     it("should have proper ARIA label on the banner", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       cy.get(".govuk-cookie-banner").should("have.attr", "aria-label", "Cookies on Fish Export Service");
     });
 
     it("should use semantic HTML with section element", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       cy.get("section.govuk-cookie-banner").should("exist");
     });
 
     it("should have data-nosnippet attribute to prevent indexing", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       cy.get(".govuk-cookie-banner").should("have.attr", "data-nosnippet");
     });
@@ -180,7 +323,7 @@ describe("Cookie Banner", () => {
 
   describe("Cookie Persistence", () => {
     it("should remember user choice after page reload", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Accept cookies
       cy.contains("button", "Accept analytics cookies").click();
@@ -188,8 +331,8 @@ describe("Cookie Banner", () => {
       // Hide banner
       cy.contains("button", "Hide cookie message").click();
 
-      // Reload page
-      cy.reload();
+      // Reload page with loggedIn parameter
+      cy.visit("/?loggedIn=yes");
 
       // Banner should not appear
       cy.get(".govuk-cookie-banner").should("not.exist");
@@ -199,7 +342,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should maintain rejection choice after page reload", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Reject cookies
       cy.contains("button", "Reject analytics cookies").click();
@@ -207,8 +350,25 @@ describe("Cookie Banner", () => {
       // Hide banner
       cy.contains("button", "Hide cookie message").click();
 
-      // Reload page
-      cy.reload();
+      // Reload page with loggedIn parameter
+      cy.visit("/?loggedIn=yes");
+
+      // Banner should not appear
+      cy.get(".govuk-cookie-banner").should("not.exist");
+
+      // Cookie should still be set
+      cy.getCookie("analytics_cookies_accepted").should("exist");
+    });
+
+    it("should persist cookie across different routes", () => {
+      cy.visit("/?loggedIn=yes");
+
+      // Accept cookies
+      cy.contains("button", "Accept analytics cookies").click();
+      cy.contains("button", "Hide cookie message").click();
+
+      // Navigate to cookies page
+      cy.visit("/cookies?loggedIn=yes");
 
       // Banner should not appear
       cy.get(".govuk-cookie-banner").should("not.exist");
@@ -220,23 +380,30 @@ describe("Cookie Banner", () => {
 
   describe("Multiple Pages", () => {
     it("should not show banner on subsequent page navigation if preference is set", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Accept cookies and hide banner
       cy.contains("button", "Accept analytics cookies").click();
       cy.contains("button", "Hide cookie message").click();
 
       // Navigate to cookies page
-      cy.visit("/cookies");
+      cy.visit("/cookies?loggedIn=yes");
 
       // Banner should not appear
+      cy.get(".govuk-cookie-banner").should("not.exist");
+    });
+
+    it("should not show banner without loggedIn parameter even if no cookie is set", () => {
+      cy.visit("/cookies");
+
+      // Banner should not appear without the parameter
       cy.get(".govuk-cookie-banner").should("not.exist");
     });
   });
 
   describe("GOV.UK Design System Compliance", () => {
     it("should use correct GOV.UK CSS classes", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Check main banner classes
       cy.get(".govuk-cookie-banner").should("exist");
@@ -257,9 +424,82 @@ describe("Cookie Banner", () => {
     });
 
     it("should have proper button modules", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       cy.get("button.govuk-button").should("have.attr", "data-module", "govuk-button");
+    });
+  });
+
+  describe("Edge Cases", () => {
+    it("should handle rapid clicks on accept button", () => {
+      cy.visit("/?loggedIn=yes");
+
+      // Click accept button multiple times rapidly
+      cy.contains("button", "Accept analytics cookies").click().click().click();
+
+      // Should only show confirmation once
+      cy.get(".govuk-cookie-banner__content").should("contain", "You've accepted analytics cookies");
+
+      // Cookie should be set
+      cy.getCookie("analytics_cookies_accepted").should("exist");
+    });
+
+    it("should handle switching between accept and reject", () => {
+      cy.visit("/?loggedIn=yes");
+
+      // Accept first
+      cy.contains("button", "Accept analytics cookies").click();
+
+      // Hide confirmation
+      cy.contains("button", "Hide cookie message").click();
+
+      // Clear cookie to test again
+      cy.clearCookies();
+      cy.visit("/?loggedIn=yes");
+
+      // Now reject
+      cy.contains("button", "Reject analytics cookies").click();
+
+      // Should show reject confirmation
+      cy.get(".govuk-cookie-banner__content").should("contain", "You've rejected analytics cookies");
+    });
+
+    it("should handle page navigation with loggedIn parameter in different positions", () => {
+      // Test with parameter at the end
+      cy.visit("/cookies?someParam=value&loggedIn=yes");
+
+      // If no cookie is set, banner should not show on cookies page
+      cy.get(".govuk-cookie-banner").should("not.exist");
+    });
+
+    it("should maintain cookie value structure", () => {
+      cy.visit("/?loggedIn=yes");
+
+      // Accept cookies
+      cy.contains("button", "Accept analytics cookies").click();
+
+      // Check cookie value structure
+      cy.getCookie("analytics_cookies_accepted").then((cookie) => {
+        const value = JSON.parse(cookie?.value ?? "{}");
+        expect(value).to.have.property("analyticsAccepted");
+        // eslint-disable-next-line no-unused-expressions
+        expect(value.analyticsAccepted).to.be.true;
+      });
+    });
+
+    it("should maintain cookie value structure for rejection", () => {
+      cy.visit("/?loggedIn=yes");
+
+      // Reject cookies
+      cy.contains("button", "Reject analytics cookies").click();
+
+      // Check cookie value structure
+      cy.getCookie("analytics_cookies_accepted").then((cookie) => {
+        const value = JSON.parse(cookie?.value ?? "{}");
+        expect(value).to.have.property("analyticsAccepted");
+        // eslint-disable-next-line no-unused-expressions
+        expect(value.analyticsAccepted).to.be.false;
+      });
     });
   });
 });

@@ -4,7 +4,7 @@ export const i18nextCookie = createCookie("i18next", { path: "/", sameSite: "str
 export const analyticsAcceptedCookie = createCookie("analytics_cookies_accepted", {
   path: "/",
   sameSite: "strict",
-  httpOnly: true,
+  httpOnly: false,
   secure: true,
 });
 
