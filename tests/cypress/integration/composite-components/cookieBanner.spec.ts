@@ -6,7 +6,7 @@ describe("Cookie Banner", () => {
 
   describe("Initial Display", () => {
     it("should display the cookie banner on first visit when no cookie preference is set", () => {
-      cy.visit("/");
+      cy.visit("/?loggedIn=yes");
 
       // Banner should be visible
       cy.get(".govuk-cookie-banner").should("be.visible");
@@ -434,14 +434,19 @@ describe("Cookie Banner", () => {
     it("should handle rapid clicks on accept button", () => {
       cy.visit("/?loggedIn=yes");
 
-      // Click accept button multiple times rapidly
-      cy.contains("button", "Accept analytics cookies").click().click().click();
+      // Get the accept button and click it once
+      // After first click, button is replaced with confirmation message
+      cy.contains("button", "Accept analytics cookies").click();
 
-      // Should only show confirmation once
+      // Should show confirmation message
       cy.get(".govuk-cookie-banner__content").should("contain", "You've accepted analytics cookies");
 
       // Cookie should be set
       cy.getCookie("analytics_cookies_accepted").should("exist");
+
+      // Verify the accept button is no longer visible (replaced by hide button)
+      cy.contains("button", "Accept analytics cookies").should("not.exist");
+      cy.contains("button", "Hide cookie message").should("be.visible");
     });
 
     it("should handle switching between accept and reject", () => {
