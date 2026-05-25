@@ -4,11 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { route } from "routes-gen";
 
-type CookieBannerProps = {
-  hasAcceptedCookies?: boolean;
-};
-
-export const CookieBanner = ({ hasAcceptedCookies }: CookieBannerProps) => {
+export const CookieBanner = () => {
   const { t } = useTranslation("cookieBanner");
   const [isHidden, setIsHidden] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -19,13 +15,13 @@ export const CookieBanner = ({ hasAcceptedCookies }: CookieBannerProps) => {
     const searchParams = new URLSearchParams(globalThis.location.search);
     const isLoggedIn = searchParams.get("loggedIn") === "yes";
 
-    // Show banner only if loggedIn=yes AND cookie preference hasn't been set
-    setIsHidden(!isLoggedIn || hasAcceptedCookies !== undefined);
-  }, [hasAcceptedCookies]);
+    // Show banner only if loggedIn=yes parameter is present
+    setIsHidden(!isLoggedIn);
+  }, []);
 
   const saveCookiePreference = async (acceptsCookies: boolean) => {
     try {
-      await fetch(route("/set-cookie-preference"), {
+      await fetch("/set-cookie-preference", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

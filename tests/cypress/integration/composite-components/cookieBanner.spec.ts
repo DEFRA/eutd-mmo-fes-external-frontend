@@ -49,14 +49,14 @@ describe("Cookie Banner", () => {
       cy.get(".govuk-cookie-banner").should("not.exist");
     });
 
-    it("should not display the cookie banner when cookie preference is already set", () => {
+    it("should display the cookie banner even when cookie preference is already set", () => {
       // Set cookie preference
       cy.setCookie("analytics_cookies_accepted", JSON.stringify({ analyticsAccepted: true }));
 
       cy.visit("/?loggedIn=yes");
 
-      // Banner should not be visible
-      cy.get(".govuk-cookie-banner").should("not.exist");
+      // Banner should still be visible when loggedIn=yes is present
+      cy.get(".govuk-cookie-banner").should("be.visible");
     });
 
     it("should display cookie banner above 'Skip to main content' link", () => {
@@ -322,7 +322,7 @@ describe("Cookie Banner", () => {
   });
 
   describe("Cookie Persistence", () => {
-    it("should remember user choice after page reload", () => {
+    it("should show banner again after page reload when loggedIn=yes is present", () => {
       cy.visit("/?loggedIn=yes");
 
       // Accept cookies
@@ -334,14 +334,14 @@ describe("Cookie Banner", () => {
       // Reload page with loggedIn parameter
       cy.visit("/?loggedIn=yes");
 
-      // Banner should not appear
-      cy.get(".govuk-cookie-banner").should("not.exist");
+      // Banner should appear again with loggedIn=yes
+      cy.get(".govuk-cookie-banner").should("be.visible");
 
       // Cookie should still be set
       cy.getCookie("analytics_cookies_accepted").should("exist");
     });
 
-    it("should maintain rejection choice after page reload", () => {
+    it("should show banner again after page reload for rejection when loggedIn=yes is present", () => {
       cy.visit("/?loggedIn=yes");
 
       // Reject cookies
@@ -353,25 +353,25 @@ describe("Cookie Banner", () => {
       // Reload page with loggedIn parameter
       cy.visit("/?loggedIn=yes");
 
-      // Banner should not appear
-      cy.get(".govuk-cookie-banner").should("not.exist");
+      // Banner should appear again with loggedIn=yes
+      cy.get(".govuk-cookie-banner").should("be.visible");
 
       // Cookie should still be set
       cy.getCookie("analytics_cookies_accepted").should("exist");
     });
 
-    it("should persist cookie across different routes", () => {
+    it("should persist cookie across different routes and show banner when loggedIn=yes", () => {
       cy.visit("/?loggedIn=yes");
 
       // Accept cookies
       cy.contains("button", "Accept analytics cookies").click();
       cy.contains("button", "Hide cookie message").click();
 
-      // Navigate to cookies page
+      // Navigate to cookies page with loggedIn parameter
       cy.visit("/cookies?loggedIn=yes");
 
-      // Banner should not appear
-      cy.get(".govuk-cookie-banner").should("not.exist");
+      // Banner should appear again with loggedIn=yes
+      cy.get(".govuk-cookie-banner").should("be.visible");
 
       // Cookie should still be set
       cy.getCookie("analytics_cookies_accepted").should("exist");
@@ -379,18 +379,18 @@ describe("Cookie Banner", () => {
   });
 
   describe("Multiple Pages", () => {
-    it("should not show banner on subsequent page navigation if preference is set", () => {
+    it("should show banner on subsequent page navigation when loggedIn=yes is present", () => {
       cy.visit("/?loggedIn=yes");
 
       // Accept cookies and hide banner
       cy.contains("button", "Accept analytics cookies").click();
       cy.contains("button", "Hide cookie message").click();
 
-      // Navigate to cookies page
+      // Navigate to cookies page with loggedIn parameter
       cy.visit("/cookies?loggedIn=yes");
 
-      // Banner should not appear
-      cy.get(".govuk-cookie-banner").should("not.exist");
+      // Banner should appear again with loggedIn=yes
+      cy.get(".govuk-cookie-banner").should("be.visible");
     });
 
     it("should not show banner without loggedIn parameter even if no cookie is set", () => {

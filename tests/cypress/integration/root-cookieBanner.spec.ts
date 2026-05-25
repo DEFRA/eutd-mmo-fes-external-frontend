@@ -53,7 +53,7 @@ describe("Cookie Banner Integration in Root", () => {
       });
     });
 
-    it("should have analytics cookie acceptance prop from root loader", () => {
+    it("should show cookie banner even when cookie preference is set", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.UserAttributes,
       };
@@ -63,13 +63,13 @@ describe("Cookie Banner Integration in Root", () => {
 
       cy.visit("/?loggedIn=yes", { qs: { ...testParams } });
 
-      // Banner should not be visible when cookie is accepted
-      cy.get(".govuk-cookie-banner").should("not.exist");
+      // Banner should be visible when loggedIn=yes is present, regardless of cookie
+      cy.get(".govuk-cookie-banner").should("be.visible");
     });
   });
 
   describe("Banner Behavior Across Routes", () => {
-    it("should show cookie banner on all routes when no preference is set", () => {
+    it("should show cookie banner on all routes when loggedIn=yes is present", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.UserAttributes,
       };
@@ -85,7 +85,7 @@ describe("Cookie Banner Integration in Root", () => {
       });
     });
 
-    it("should not show cookie banner on any route when preference is set", () => {
+    it("should show cookie banner on all routes when loggedIn=yes even if preference is set", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.UserAttributes,
       };
@@ -97,7 +97,7 @@ describe("Cookie Banner Integration in Root", () => {
 
       routes.forEach((route) => {
         cy.visit(route, { qs: { ...testParams } });
-        cy.get(".govuk-cookie-banner").should("not.exist");
+        cy.get(".govuk-cookie-banner").should("be.visible");
       });
     });
   });
