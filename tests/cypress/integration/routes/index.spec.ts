@@ -29,6 +29,14 @@ describe("JourneySelection", () => {
     cy.get("#createCatchCertificate").should("have.attr", "aria-describedby", "createCatchCertificate-hint");
   });
 
+  it("should have catch certificate option checked by default", () => {
+    cy.visit("/");
+
+    cy.get("#createCatchCertificate").should("be.checked");
+    cy.get("#createProcessingStatement").should("not.be.checked");
+    cy.get("#createStorageDocument").should("not.be.checked");
+  });
+
   it("displays hint text for storage document radio option", () => {
     cy.visit("/");
 

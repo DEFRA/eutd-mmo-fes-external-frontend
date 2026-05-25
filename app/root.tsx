@@ -220,7 +220,7 @@ const Template = ({
           ></noscript>
         )}
         <span ref={ref} tabIndex={-1} />
-        <CookieBanner hasAcceptedCookies={analyticsCookieAccepted} />
+        <CookieBanner />
         <a href="#main-content" className="govuk-skip-link" data-module="govuk-skip-link">
           Skip to main content
         </a>
