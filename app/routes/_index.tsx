@@ -10,15 +10,15 @@ import {
 } from "~/.server";
 import { route } from "routes-gen";
 import { redirect, useLoaderData, type ActionFunction, type LoaderFunction } from "react-router";
-import { apiCallFailed } from "~/communication.server";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import { useTranslation } from "react-i18next";
-import { Main, SecureForm } from "~/components";
+import { ErrorMessage, ErrorSummary, Main, SecureForm } from "~/components";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { getSessionFromRequest, commitSession } from "~/sessions.server";
 import * as React from "react";
+import { displayErrorMessages, getTransformedError } from "~/helpers";
+import isEmpty from "lodash/isEmpty";
 
-/* istanbul ignore next */
 export const loader: LoaderFunction = async ({ request }) => {
   // All this loader function does is set up API mocking for tests
   //   so the entire function is annotated with "ignore next"
@@ -26,8 +26,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   //   "ignore next" annotation down to just above setApiMock()
   //   and return a proper Response
   setApiMock(request.url);
-  const csrf = await createCSRFToken(request);
   const session = await getSessionFromRequest(request);
+  const errors = session.get("errors") ?? {};
+  const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
   const url = new URL(request.url);
   const loggedIn = url.searchParams.get("loggedIn");
@@ -36,7 +37,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     await getBearerTokenForRequest(request);
   }
 
-  return new Response(JSON.stringify({ csrf }), {
+  /* istanbul ignore next */
+  setApiMock(request.url);
+
+  return new Response(JSON.stringify({ csrf, errors }), {
     headers: {
       "Content-Type": "application/json",
       "Set-Cookie": await commitSession(session),
@@ -64,7 +68,8 @@ export const action: ActionFunction = async ({ request }) => {
   const hasAcceptedCookies = isAcceptedCookies(userAttributes);
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
-  if (!response.errors && response.journeySelection) {
+
+  if (response.journeySelection) {
     switch (response.journeySelection) {
       case "catchCertificate":
         return redirect(route("/create-catch-certificate/catch-certificates"), {
@@ -81,84 +86,104 @@ export const action: ActionFunction = async ({ request }) => {
     }
   }
 
-  if (Array.isArray(response.errors) && response.errors.length > 0) {
-    return apiCallFailed(response.errors);
+  if (response.journeySelection === null) {
+    const session = await getSessionFromRequest(request);
+    session.flash(
+      "errors",
+      getTransformedError([
+        {
+          key: "createCatchCertificate",
+          message: "ccLandingTypeSelectOption",
+        },
+      ])
+    );
+    return redirect("/", {
+      headers: { "Set-Cookie": await commitSession(session) },
+    });
   }
-
-  return redirect(route("/"));
 };
 
 const Home = () => {
-  const { t } = useTranslation(["journeySelection", "common"]);
-  const { csrf } = useLoaderData<{ csrf: string }>();
+  const { t } = useTranslation(["journeySelection", "common", "errorsText"]);
+  const { csrf, errors = {} } = useLoaderData<{ csrf: string; errors?: any }>();
+  const hasError = !isEmpty(errors);
 
   return (
     <Main showHelpLink={false}>
+      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm reloadDocument method="post" csrf={csrf}>
-            <fieldset className="govuk-fieldset">
-              <legend className="govuk-fieldset__legend govuk-fieldset__legend govuk-!-margin-bottom-0">
-                <h1 className="govuk-heading-xl">{t("commonHomePageWhatDoYouWant")}</h1>
-              </legend>
-              <div className="govuk-radios__item">
-                <input
-                  className="govuk-radios__input"
-                  id="createCatchCertificate"
-                  name="journeySelection"
-                  type="radio"
-                  value="catchCertificate"
-                  defaultChecked={true}
-                  aria-describedby="createCatchCertificate-hint"
-                />
-                <label
-                  id="label-createCatchCertificate"
-                  className="govuk-label govuk-radios__label"
-                  htmlFor="createCatchCertificate"
-                >
-                  {t("commonDashboardCreateAUkCatchCertificate")}
-                </label>
-                <div id="createCatchCertificate-hint" className="govuk-hint govuk-radios__hint">
-                  {t("commonDashboardCreateAUkCatchCertificateHint")}
+            <div className={hasError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
+              <fieldset className="govuk-fieldset">
+                <legend className="govuk-fieldset__legend govuk-fieldset__legend govuk-!-margin-bottom-0">
+                  <h1 className="govuk-heading-xl">{t("commonHomePageWhatDoYouWant")}</h1>
+                </legend>
+                {hasError ? (
+                  <ErrorMessage
+                    text={t("ccLandingTypeSelectOption", { ns: "errorsText" })}
+                    visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                  />
+                ) : null}
+                <div className="govuk-radios__item">
+                  <input
+                    className="govuk-radios__input"
+                    id="createCatchCertificate"
+                    name="journeySelection"
+                    type="radio"
+                    value="catchCertificate"
+                    aria-describedby="createCatchCertificate-hint"
+                    defaultChecked
+                  />
+                  <label
+                    id="label-createCatchCertificate"
+                    className="govuk-label govuk-radios__label"
+                    htmlFor="createCatchCertificate"
+                  >
+                    {t("commonDashboardCreateAUkCatchCertificate")}
+                  </label>
+                  <div id="createCatchCertificate-hint" className="govuk-hint govuk-radios__hint">
+                    {t("commonDashboardCreateAUkCatchCertificateHint")}
+                  </div>
                 </div>
-              </div>
-              <div className="govuk-radios__item">
-                <input
-                  className="govuk-radios__input"
-                  id="createProcessingStatement"
-                  name="journeySelection"
-                  type="radio"
-                  value="processingStatement"
-                />
-                <label
-                  id="label-createProcessingStatement"
-                  className="govuk-label govuk-radios__label"
-                  htmlFor="createProcessingStatement"
-                >
-                  {t("processingStatementRendererHeaderSectionTitle")}
-                </label>
-              </div>
-              <div className="govuk-radios__item">
-                <input
-                  className="govuk-radios__input"
-                  id="createStorageDocument"
-                  name="journeySelection"
-                  type="radio"
-                  value="storageNotes"
-                  aria-describedby="createStorageDocument-hint"
-                />
-                <label
-                  id="label-createStorageDocument"
-                  className="govuk-label govuk-radios__label"
-                  htmlFor="createStorageDocument"
-                >
-                  {t("commonDashboardCreateaUkStorageDocument")}
-                </label>
-                <div id="createStorageDocument-hint" className="govuk-hint govuk-radios__hint">
-                  {t("commonDashboardCreateaUkStorageDocumentHint")}
+                <div className="govuk-radios__item">
+                  <input
+                    className="govuk-radios__input"
+                    id="createProcessingStatement"
+                    name="journeySelection"
+                    type="radio"
+                    value="processingStatement"
+                  />
+                  <label
+                    id="label-createProcessingStatement"
+                    className="govuk-label govuk-radios__label"
+                    htmlFor="createProcessingStatement"
+                  >
+                    {t("processingStatementRendererHeaderSectionTitle")}
+                  </label>
                 </div>
-              </div>
-            </fieldset>
+                <div className="govuk-radios__item">
+                  <input
+                    className="govuk-radios__input"
+                    id="createStorageDocument"
+                    name="journeySelection"
+                    type="radio"
+                    value="storageNotes"
+                    aria-describedby="createStorageDocument-hint"
+                  />
+                  <label
+                    id="label-createStorageDocument"
+                    className="govuk-label govuk-radios__label"
+                    htmlFor="createStorageDocument"
+                  >
+                    {t("commonDashboardCreateaUkStorageDocument")}
+                  </label>
+                  <div id="createStorageDocument-hint" className="govuk-hint govuk-radios__hint">
+                    {t("commonDashboardCreateaUkStorageDocumentHint")}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
             <br />
             <Button
               label={t("commonContinueButtonContinueButtonText", { ns: "common" })}

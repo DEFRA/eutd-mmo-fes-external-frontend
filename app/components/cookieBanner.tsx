@@ -4,20 +4,34 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { route } from "routes-gen";
 
-type CookieBannerProps = {
-  hasAcceptedCookies?: boolean;
-};
-
-export const CookieBanner = ({ hasAcceptedCookies }: CookieBannerProps) => {
+export const CookieBanner = () => {
   const { t } = useTranslation("cookieBanner");
   const [isHidden, setIsHidden] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [acceptedChoice, setAcceptedChoice] = useState(false);
 
   useEffect(() => {
-    // Show banner only if cookie preference hasn't been set
-    setIsHidden(hasAcceptedCookies !== undefined);
-  }, [hasAcceptedCookies]);
+    // Check if URL contains loggedIn=yes parameter
+    const searchParams = new URLSearchParams(globalThis.location.search);
+    const isLoggedIn = searchParams.get("loggedIn") === "yes";
+
+    // Show banner only if loggedIn=yes parameter is present
+    setIsHidden(!isLoggedIn);
+  }, []);
+
+  const saveCookiePreference = async (acceptsCookies: boolean) => {
+    try {
+      await fetch("/set-cookie-preference", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ acceptsCookies }),
+      });
+    } catch {
+      // Silent fail - cookie is still set locally for immediate UX
+    }
+  };
 
   const handleAccept = () => {
     // Set cookie client-side
@@ -25,10 +39,8 @@ export const CookieBanner = ({ hasAcceptedCookies }: CookieBannerProps) => {
     setAcceptedChoice(true);
     setShowConfirmation(true);
 
-    // Reload to apply cookie preference
-    setTimeout(() => {
-      globalThis.location.reload();
-    }, 1000);
+    // Save to database
+    saveCookiePreference(true);
   };
 
   const handleReject = () => {
@@ -37,10 +49,8 @@ export const CookieBanner = ({ hasAcceptedCookies }: CookieBannerProps) => {
     setAcceptedChoice(false);
     setShowConfirmation(true);
 
-    // Reload to apply cookie preference
-    setTimeout(() => {
-      globalThis.location.reload();
-    }, 1000);
+    // Save to database
+    saveCookiePreference(false);
   };
 
   const handleHideBanner = () => {
