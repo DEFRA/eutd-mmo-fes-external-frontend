@@ -133,6 +133,7 @@ const Home = () => {
                     type="radio"
                     value="catchCertificate"
                     aria-describedby="createCatchCertificate-hint"
+                    defaultChecked
                   />
                   <label
                     id="label-createCatchCertificate"
