@@ -108,8 +108,8 @@ const Home = () => {
                   name="journeySelection"
                   type="radio"
                   value="catchCertificate"
-                  defaultChecked={true}
                   aria-describedby="createCatchCertificate-hint"
+                  defaultChecked
                 />
                 <label
                   id="label-createCatchCertificate"
