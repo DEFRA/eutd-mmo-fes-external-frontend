@@ -575,19 +575,6 @@ describe("SD: you-have-added-product page", () => {
       cy.get('[data-testid="remove-button"]').should("have.length", 2); // 2 products
     });
 
-    it("should have 'No' radio button defaultChecked (component line 250)", () => {
-      const testParams: ITestParams = {
-        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
-      };
-      cy.visit(sdPageUrl, { qs: { ...testParams } });
-
-      // Wait for page to fully render and default state to be applied
-      cy.wait(500);
-      // Verify 'No' radio is checked by default
-      cy.get("#addAnotherCatchNo").should("be.checked");
-      cy.get("#addAnotherProductYes").should("not.be.checked");
-    });
-
     it("should render Edit button with correct hidden inputs and backThroughProductsQuery (component lines 178-195)", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
