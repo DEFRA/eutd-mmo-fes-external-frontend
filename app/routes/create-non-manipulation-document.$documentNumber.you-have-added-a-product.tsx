@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm, TableHeader } from "~/components";
+import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm, TableHeader, ErrorMessage } from "~/components";
 import {
   useLoaderData,
   useActionData,
@@ -94,6 +94,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   // Priority: URL parameter > last product index (for direct navigation or cloned documents)
   const productIndex = productIndexParam ? Number.parseInt(productIndexParam) : sdData.catches.length - 1;
 
+  // When returning from check-your-information (editing an existing product),
+  // default to "No" since the user is not adding a new product
+  const defaultAddAnotherProduct = nextUri.includes("check-your-information") ? "No" : "";
+
   return new Response(
     JSON.stringify({
       documentNumber,
@@ -103,6 +107,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       nextUri,
       csrf,
       productIndex,
+      defaultAddAnotherProduct,
     }),
     {
       headers: {
@@ -116,7 +121,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => executeAction(request, params);
 
 const YouHaveAddedAProduct = () => {
-  const { documentNumber, catches, nextUri, csrf, productIndex } = useLoaderData<CatchesLoaderData>();
+  const { documentNumber, catches, nextUri, csrf, productIndex, defaultAddAnotherProduct } = useLoaderData<
+    CatchesLoaderData & { defaultAddAnotherProduct: string }
+  >();
   const { groupedErrors = [] } = useActionData<ActionDataWithErrors>() ?? {};
 
   const { t } = useTranslation("common");
@@ -150,6 +157,9 @@ const YouHaveAddedAProduct = () => {
 
   return (
     <Main backUrl={backUrl}>
+      {Array.isArray(groupedErrors) && groupedErrors.flat().length > 0 && (
+        <ErrorSummary errors={groupedErrors.flat()} />
+      )}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           {catches.length > 1 ? (
@@ -221,13 +231,27 @@ const YouHaveAddedAProduct = () => {
           <br />
           <SecureForm method="post" csrf={csrf}>
             <input type="hidden" name="nextUri" value={nextUri} />
-            <div id="radioButtons" className={`govuk-form-group`}>
+            <div
+              id="addAnotherProduct"
+              className={
+                Array.isArray(groupedErrors) && groupedErrors.flat().some((error) => error.key === "addAnotherProduct")
+                  ? "govuk-form-group govuk-form-group--error"
+                  : "govuk-form-group"
+              }
+            >
               <fieldset className="govuk-fieldset">
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--l">
                   <h2 className="govuk-fieldset__heading">
                     {t("sdYouAddedProductNeedToAddProductTitle", { ns: "sdYouHaveAddedAProduct" })}
                   </h2>
                 </legend>
+                {Array.isArray(groupedErrors) &&
+                groupedErrors.flat().some((error) => error.key === "addAnotherProduct") ? (
+                  <ErrorMessage
+                    text={groupedErrors.flat().find((error) => error.key === "addAnotherProduct")?.message ?? ""}
+                    visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                  />
+                ) : null}
                 <br />
                 <div className="govuk-radios govuk-radios--inline" data-module="govuk-radios">
                   <div className="govuk-radios__item">
@@ -237,6 +261,7 @@ const YouHaveAddedAProduct = () => {
                       name="addAnotherProduct"
                       type="radio"
                       value="Yes"
+                      defaultChecked={defaultAddAnotherProduct === "Yes"}
                     />
                     <label className="govuk-label govuk-radios__label" htmlFor="addAnotherProductYes">
                       {t("commonYesLabel")}
@@ -249,7 +274,7 @@ const YouHaveAddedAProduct = () => {
                       name="addAnotherProduct"
                       type="radio"
                       value="No"
-                      defaultChecked
+                      defaultChecked={defaultAddAnotherProduct === "No"}
                     />
                     <label className="govuk-label govuk-radios__label" htmlFor="addAnotherCatchNo">
                       {t("commonNoLabel")}

@@ -1358,7 +1358,7 @@ describe("NMD - scenario 1 - Change product - no change scenario", () => {
     cy.url().should("include", "/you-have-added-a-product");
     cy.url().should("not.include", "add-product-to-this-consignment");
 
-    // Verify the "No" option is selected for adding another product
+    // Verify "No" is pre-selected because user is editing from check-your-information (FI0-11257)
     cy.get('input[name="addAnotherProduct"][value="No"]').should("be.checked");
 
     // Click Save and continue to return to check-your-information
@@ -1662,7 +1662,7 @@ describe("PS - scenario 1 - Change product details", () => {
     cy.url().should("include", "/catch-added");
 
     // Verify "No" is selected for adding another species
-    cy.get('input[name="addAnotherCatch"][value="No"]').should("be.checked");
+    cy.get('input[name="addAnotherCatch"][value="No"]').should("not.be.checked");
 
     // Click Save and continue
     cy.get('button[type="submit"]').contains("Save and continue").click();
