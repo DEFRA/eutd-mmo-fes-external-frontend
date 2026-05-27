@@ -89,7 +89,8 @@ describe("Add Storage Facility Approval - Max Length Save as Draft", () => {
     };
     const longApprovalNumber = "A".repeat(60);
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
-    cy.get("#storageFacilities-facilityApproval").clear().type(longApprovalNumber);
+    cy.get("#storageFacilities-facilityApproval").clear();
+    cy.get("#storageFacilities-facilityApproval").type(longApprovalNumber);
     cy.get("#chilled").check();
 
     // Save as draft should not show validation error despite exceeding max length
@@ -128,7 +129,8 @@ describe("Add Storage Facility Approval - Invalid Characters Save as Draft", () 
     };
     const invalidApprovalNumber = "UK/ABC/001@#$";
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
-    cy.get("#storageFacilities-facilityApproval").clear().type(invalidApprovalNumber);
+    cy.get("#storageFacilities-facilityApproval").clear();
+    cy.get("#storageFacilities-facilityApproval").type(invalidApprovalNumber);
     cy.get("#frozen").check();
 
     // Save as draft should not show validation error despite invalid characters
