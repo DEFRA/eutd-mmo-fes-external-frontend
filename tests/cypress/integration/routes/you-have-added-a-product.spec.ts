@@ -581,6 +581,8 @@ describe("SD: you-have-added-product page", () => {
       };
       cy.visit(sdPageUrl, { qs: { ...testParams } });
 
+      // Wait for page to fully render and default state to be applied
+      cy.wait(500);
       // Verify 'No' radio is checked by default
       cy.get("#addAnotherCatchNo").should("be.checked");
       cy.get("#addAnotherProductYes").should("not.be.checked");

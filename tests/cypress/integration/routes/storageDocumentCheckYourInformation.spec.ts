@@ -283,8 +283,10 @@ describe("Check Your Information (Summary) page: pre-submit completeness check (
 
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
-    cy.url().should("include", "/progress");
+    // Wait for the redirect to complete
+    cy.url({ timeout: 10000 }).should("include", "/progress");
     cy.url().should("not.include", "/non-manipulation-document-created");
+    cy.url().should("not.include", "/check-your-information");
   });
 });
 
@@ -296,10 +298,17 @@ describe("Check Your Information (Summary) page: pre-submit weight relationship 
 
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=create-sd-button]").click({ force: true });
+    cy.get("[data-testid=create-sd-button]").should("be.visible").click({ force: true });
 
+    // Wait for any potential navigation or validation to complete
+    cy.wait(500);
+
+    // Verify we remain on check-your-information page
     cy.url().should("include", "/check-your-information");
     cy.url().should("not.include", "/non-manipulation-document-created");
+
+    // Verify error message is displayed
+    cy.get("#error-summary-title, .govuk-error-summary__title").should("exist");
   });
 
   it("should block submit for copied NMD when edited arrival weights make departure weights invalid", () => {
@@ -309,10 +318,17 @@ describe("Check Your Information (Summary) page: pre-submit weight relationship 
 
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=create-sd-button]").click({ force: true });
+    cy.get("[data-testid=create-sd-button]").should("be.visible").click({ force: true });
 
+    // Wait for any potential navigation or validation to complete
+    cy.wait(500);
+
+    // Verify we remain on check-your-information page
     cy.url().should("include", "/check-your-information");
     cy.url().should("not.include", "/non-manipulation-document-created");
+
+    // Verify error message is displayed
+    cy.get("#error-summary-title, .govuk-error-summary__title").should("exist");
   });
 });
 

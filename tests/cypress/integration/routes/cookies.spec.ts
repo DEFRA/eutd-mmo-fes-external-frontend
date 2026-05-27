@@ -92,19 +92,25 @@ describe("Cookie Policy page", () => {
   it("should display an inline error message when save is clicked without selecting a cookie preference", () => {
     cy.get("#saveCookieSettings").click();
 
-    cy.get(".govuk-error-message").should("be.visible");
+    // Wait for form submission and validation to process
+    cy.location("pathname", { timeout: 10000 }).should("eq", "/cookies");
+    cy.get(".govuk-error-message", { timeout: 10000 }).should("be.visible");
   });
 
   it("should apply the error class to the radio button form group when no cookie preference is selected", () => {
     cy.get("#saveCookieSettings").click();
 
-    cy.get("#radioButtons").should("have.class", "govuk-form-group--error");
+    // Wait for form submission and validation to process
+    cy.location("pathname", { timeout: 10000 }).should("eq", "/cookies");
+    cy.get("#radioButtons", { timeout: 10000 }).should("have.class", "govuk-form-group--error");
   });
 
   it("should display an error summary when no cookie preference is selected", () => {
     cy.get("#saveCookieSettings").click();
 
-    cy.get(".govuk-error-summary").should("be.visible");
+    // Wait for form submission and validation to process
+    cy.location("pathname", { timeout: 10000 }).should("eq", "/cookies");
+    cy.get(".govuk-error-summary", { timeout: 10000 }).should("be.visible");
   });
 
   it("should redirect back to /cookies and not show the success banner when there is a validation error", () => {
