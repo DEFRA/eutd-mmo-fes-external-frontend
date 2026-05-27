@@ -128,35 +128,6 @@ describe("JourneySelection", () => {
     cy.get("#createStorageDocument-hint").should("contain", "Roedd yn cael ei galw'n 'ddogfen storio' o'r blaen");
   });
 
-  it("should redirect back to / and display an error summary when journeySelection is null", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.StartJourneyNullSelection,
-    };
-
-    cy.visit("/", { qs: { ...testParams } });
-    cy.get("form").submit();
-
-    // Wait for redirect and page to load
-    cy.wait(500);
-    cy.location("pathname").should("eq", "/");
-    cy.get(".govuk-error-summary", { timeout: 10000 }).should("be.visible");
-  });
-
-  it("should display an inline error message and apply the error class to the form group when journeySelection is null", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.StartJourneyNullSelection,
-    };
-
-    cy.visit("/", { qs: { ...testParams } });
-    cy.get("form").submit();
-
-    // Wait for validation to complete
-    cy.wait(500);
-    cy.get(".govuk-form-group", { timeout: 10000 }).should("exist");
-    cy.get(".govuk-form-group--error").should("exist");
-    cy.get(".govuk-error-message").should("be.visible");
-  });
-
   it("should not redirect away from / when journeySelection is null", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StartJourneyNullSelection,

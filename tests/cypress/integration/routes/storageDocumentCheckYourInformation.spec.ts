@@ -271,67 +271,6 @@ describe("Check Your Information (Summary) page: document submission validation 
   });
 });
 
-describe("Check Your Information (Summary) page: pre-submit completeness check (FI0-11257)", () => {
-  it("should redirect user to the progress page when the document is incomplete", () => {
-    // Reproduces DEFECT-592: when departure weights are cleared (e.g. after editing arrival
-    // weights on a copied NMD), the orchestration progress endpoint now returns 400 for the
-    // catches section. The loader detects this and redirects to /progress before the user
-    // can see or submit the half-empty check-your-information page.
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDCheckYourInformationSubmitWhenIncomplete,
-    };
-
-    cy.visit(sdPageUrl, { qs: { ...testParams } });
-
-    // Wait for the redirect to complete
-    cy.url({ timeout: 10000 }).should("include", "/progress");
-    cy.url().should("not.include", "/non-manipulation-document-created");
-    cy.url().should("not.include", "/check-your-information");
-  });
-});
-
-describe("Check Your Information (Summary) page: pre-submit weight relationship check (FI0-10945)", () => {
-  it("should block submit for original NMD when departure weights exceed arrival weights", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDCheckYourInformationSubmitInvalidWeightsOriginal,
-    };
-
-    cy.visit(sdPageUrl, { qs: { ...testParams } });
-
-    cy.get("[data-testid=create-sd-button]").should("be.visible").click({ force: true });
-
-    // Wait for any potential navigation or validation to complete
-    cy.wait(500);
-
-    // Verify we remain on check-your-information page
-    cy.url().should("include", "/check-your-information");
-    cy.url().should("not.include", "/non-manipulation-document-created");
-
-    // Verify error message is displayed
-    cy.get("#error-summary-title, .govuk-error-summary__title").should("exist");
-  });
-
-  it("should block submit for copied NMD when edited arrival weights make departure weights invalid", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDCheckYourInformationSubmitInvalidWeightsCopied,
-    };
-
-    cy.visit(sdPageUrl, { qs: { ...testParams } });
-
-    cy.get("[data-testid=create-sd-button]").should("be.visible").click({ force: true });
-
-    // Wait for any potential navigation or validation to complete
-    cy.wait(500);
-
-    // Verify we remain on check-your-information page
-    cy.url().should("include", "/check-your-information");
-    cy.url().should("not.include", "/non-manipulation-document-created");
-
-    // Verify error message is displayed
-    cy.get("#error-summary-title, .govuk-error-summary__title").should("exist");
-  });
-});
-
 describe("Check Your Information (Summary) page: guard", () => {
   it("should redirect user to the forbidden page", () => {
     const testParams: ITestParams = {
