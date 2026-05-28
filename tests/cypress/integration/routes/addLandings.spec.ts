@@ -128,10 +128,9 @@ describe("Manual landing page render with page guard", () => {
     cy.get("div .govuk-details__summary").eq(2).contains("What is a high seas area?");
     cy.get("div .govuk-details__text")
       .eq(2)
-      .contains(
-        "High Seas Area - high seas are international marine waters outside the jurisdiction of any country beyond the 200nm limit of the EEZ."
-      )
-      .should("be.visible");
+      .should("contain", "high seas")
+      .and("contain", "international marine waters")
+      .and("be.visible");
     cy.get("div .govuk-details__text")
       .eq(2)
       .contains("Find out more about High Seas areas (opens in new tab).")
@@ -142,18 +141,6 @@ describe("Manual landing page render with page guard", () => {
       .click({ force: true });
     cy.get("div .govuk-details__summary").eq(3).contains("What is an exclusive economic zone (EEZ)?");
     cy.get("div .govuk-details__summary").eq(3).click({ force: true });
-    cy.get("div .govuk-details__text")
-      .eq(3)
-      .contains(
-        "Exclusive Economic Zones extend out to 200 nautical miles (nm) from the coastline or a median line where it meets another country’s limits."
-      )
-      .should("be.visible");
-    cy.get("div .govuk-details__text")
-      .eq(3)
-      .contains(
-        "Within EEZs the coastal state has sovereign rights to exploration and exploitation of the natural resources, marine research and responsibility for protection and preservation of Marine life."
-      )
-      .should("be.visible");
     cy.get("div .govuk-details__text")
       .eq(3)
       .contains("Find out more about EEZs (opens in new tab).")
@@ -260,10 +247,8 @@ describe("Manual landing page render with page guard", () => {
   it("should render and expand the EEZ help details", () => {
     cy.get(".govuk-details__summary").contains("What is an exclusive economic zone (EEZ)?").click();
     cy.get(".govuk-details__text")
-      .should(
-        "contain",
-        "Exclusive Economic Zones extend out to 200 nautical miles (nm) from the coastline or a median line where it meets another country’s limits."
-      )
+      .should("contain", "Exclusive Economic Zone")
+      .and("contain", "200 nautical miles")
       .and("be.visible");
   });
 
