@@ -8,10 +8,13 @@ export const PrivacyNotice = () => {
       <div className="govuk-grid-column-full">
         <Title className="govuk-!-margin-bottom-5" title={t("privacyPageTitleText")} />
         <p>{t("privacyPageDescription1")}</p>
-        <p>{t("privacyPageDescription2")}</p>
+        <p dangerouslySetInnerHTML={{ __html: t("privacyPageDescription2") }} />
         <p>&nbsp;</p>
         <h2 className="govuk-heading-l">{t("privacyPagePersonalInfoText")}</h2>
-        <p className="govuk-!-margin-bottom-1">{t("privacyPagePersonalInfoDescription")}</p>
+        <p
+          className="govuk-!-margin-bottom-1"
+          dangerouslySetInnerHTML={{ __html: t("privacyPagePersonalInfoDescription") }}
+        />
         <p>{t("privacyPagePersonalInfoUlText")}</p>
         <ul className="govuk-list--bullet">
           <li>{t("privacyPagePersonalInfoLiText1")}</li>
@@ -98,8 +101,8 @@ export const PrivacyNotice = () => {
             DefraGroupDataProtectionOfficer@defra.gov.uk
           </a>
         </p>
-        <p>{t("privacyPageProtectionMarineFisheriesAuthorities")}</p>
-        <p>{t("privacyPageProtectionAddressDataProtectionTeam")}</p>
+        <p dangerouslySetInnerHTML={{ __html: t("privacyPageProtectionMarineFisheriesAuthorities") }} />
+        <p dangerouslySetInnerHTML={{ __html: t("privacyPageProtectionAddressDataProtectionTeam") }} />
         <p>
           Tyneside House
           <br />
@@ -195,18 +198,19 @@ export const PrivacyNotice = () => {
             href="https://www.gov.uk/government/organisations/marine-management-organisation"
             target="_blank"
             rel="noreferrer noopener"
-          >
-            {t("privacyPageHeading2MMOLink")} {t("commonHelpLinkOpenInNewTab", { ns: "common" })}
-          </a>
+            dangerouslySetInnerHTML={{
+              __html: t("privacyPageHeading2MMOLink") + " " + t("commonHelpLinkOpenInNewTab", { ns: "common" }),
+            }}
+          />
         </p>
         <p>{t("privacyPageHeading2Desc4")}</p>
-        <p>{t("privacyPageHeading2Desc5")}</p>
+        <p dangerouslySetInnerHTML={{ __html: t("privacyPageHeading2Desc5") }} />
         <p>{t("privacyPageHeading2Desc6")}</p>
         <p>{t("privacyPageHeading2Desc7")}</p>
         <p>{t("privacyPageHeading2Desc8")}</p>
         <br />
         <h2>{t("privacyPageHeading3")}</h2>
-        <p>{t("privacyPageHeading3Desc1")}</p>
+        <p dangerouslySetInnerHTML={{ __html: t("privacyPageHeading3Desc1") }} />
         <p>{t("privacyPageHeading3Desc2")}</p>
         <p>{t("privacyPageHeading3Desc3")}</p>
         <ul className="govuk-list--bullet">
@@ -230,7 +234,7 @@ export const PrivacyNotice = () => {
         <p>{t("privacyPageHeading6Desc")}</p>
         <br />
         <h2>{t("youRights")}</h2>
-        <p>{t("youRightDescription1")}</p>
+        <p dangerouslySetInnerHTML={{ __html: t("youRightDescription1") }} />
         <p>{t("youRightDescription2")}</p>
         <p>{t("youRightDescription3")}</p>
         <p>{t("youRightDescription4")}</p>
@@ -245,7 +249,7 @@ export const PrivacyNotice = () => {
         <br />
         <h2>{t("HowDoIContact")}</h2>
         <p>{t("HowDoIContactDesc1")}</p>
-        <p>{t("HowDoIContactDesc2")}</p>
+        <p dangerouslySetInnerHTML={{ __html: t("HowDoIContactDesc2") }} />
         <p>
           Tyneside House
           <br />

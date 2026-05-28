@@ -596,6 +596,7 @@ const AddLandings = () => {
                 rfmoNullOption={t("ccRfmoNullOption")}
                 rfmoHintText={t("ccRfmoHintText")}
                 optionalLabel={t("ccRfmoOptionalLabel")}
+                ccRfmoNullOptionAriaLabel={t("ccRfmoNullOptionAriaLabel")}
                 selectedRfmo={currentRfmo}
                 setRfmo={setRfmo}
                 rfmos={rfmos}
