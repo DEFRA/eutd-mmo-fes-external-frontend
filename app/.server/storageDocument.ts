@@ -96,7 +96,9 @@ export const addStorageDocument = async (
     }
   );
 
-  return onAddStorageDocument(response);
+  const result = await onAddStorageDocument(response);
+
+  return result;
 };
 
 const onAddStorageDocument = async (response: Response): Promise<StorageDocument | IUnauthorised> => {
