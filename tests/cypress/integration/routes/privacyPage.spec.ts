@@ -61,7 +61,9 @@ describe("Privacy Page", () => {
       .should("be.visible")
       .should("have.attr", "href", "https://www.gov.uk/government/organisations/marine-management-organisation")
       .should("have.attr", "target", "_blank")
-      .should("have.attr", "rel", "noreferrer noopener");
+      .invoke("attr", "rel")
+      .should("match", /noreferrer/)
+      .and("match", /noopener/);
 
     cy.contains("More information about the MMO can be found at").should("not.exist");
   });

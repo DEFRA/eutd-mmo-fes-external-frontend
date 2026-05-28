@@ -4,6 +4,9 @@ const documentUrl = "/create-catch-certificate";
 const documentNumber = "GBR-2023-CC-2323EC498";
 const manualLandingUrl = `${documentUrl}/${documentNumber}/add-landings`;
 
+// Helper function for padding date values
+const pad2 = (n: number | string) => (n.toString().length === 1 ? "0" + n : n.toString());
+
 const verifyLandingFormIsReset = (isProductEmpty: boolean) => {
   if (isProductEmpty) {
     cy.get("select#product option:selected").should("have.value", "");
@@ -18,7 +21,7 @@ const verifyLandingFormIsReset = (isProductEmpty: boolean) => {
   cy.get("#dateLanded-day").should("have.value", "");
   cy.get("#select-faoArea").should("have.value", "FAO27");
   cy.get("#highSeasArea").should("not.be.checked");
-  cy.get("#vessel\\.vesselName").should("have.value", "");
+  cy.get(String.raw`#vessel\.vesselName`).should("have.value", "");
   cy.get("#weight").should("have.value", "");
   cy.get("select#gearCategory option:selected").should("have.value", "");
   cy.get("select#gearType option:selected").should("have.value", "");
@@ -52,8 +55,10 @@ const populateLandingForm = () => {
   //High Seas Area
   cy.get("#highSeasArea").check();
   // vessel
-  cy.get("#vessel\\.vesselName").invoke("val", "CARINA (BF803)");
-  cy.get("#vessel\\.vesselName").should("have.prop", "value").and("not.be.empty");
+  cy.get(String.raw`#vessel\.vesselName`).invoke("val", "CARINA (BF803)");
+  cy.get(String.raw`#vessel\.vesselName`)
+    .should("have.prop", "value")
+    .and("not.be.empty");
   // weight
   cy.get("#weight").invoke("val", 4).should("have.prop", "value").and("not.be.empty");
   // gear info
@@ -462,7 +467,7 @@ describe("Manual landing page render with page guard", () => {
 
   it("Set the environment vaiable for dispalying optional fields as false", () => {
     cy.window().then((win) => {
-      win.process = { env: { EU_CATCH_FIELDS_OPTIONAL: "false" } };
+      (win as any).process = { env: { EU_CATCH_FIELDS_OPTIONAL: "false" } };
     });
     cy.get(".form-light-grey-bg .govuk-fieldset__heading b").contains("High seas area").should("be.visible");
   });
@@ -494,7 +499,7 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.get("#dateLanded-day").should("not.have.value", "");
     cy.get("#dateLanded-day").should("not.have.value", "");
     cy.get("#select-faoArea").should("have.value", "FAO27");
-    cy.get("#vessel\\.vesselName").should("not.have.value", "");
+    cy.get(String.raw`#vessel\.vesselName`).should("not.have.value", "");
     cy.get("#weight").should("not.have.value", "");
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
@@ -526,7 +531,7 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.get("#dateLanded-day").should("not.have.value", "");
     cy.get("#dateLanded-day").should("not.have.value", "");
     cy.get("#select-faoArea").should("have.value", "FAO27");
-    cy.get("#vessel\\.vesselName").should("not.have.value", "");
+    cy.get(String.raw`#vessel\.vesselName`).should("not.have.value", "");
     cy.get("#weight").should("not.have.value", "");
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
@@ -550,7 +555,7 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.get("#dateLanded-day").should("not.have.value", "");
     cy.get("#dateLanded-day").should("not.have.value", "");
     cy.get("#select-faoArea").should("have.value", "FAO27");
-    cy.get("#vessel\\.vesselName").should("not.have.value", "");
+    cy.get(String.raw`#vessel\.vesselName`).should("not.have.value", "");
     cy.get("#weight").should("not.have.value", "");
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
@@ -574,7 +579,7 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.get("#dateLanded-day").should("not.have.value", "");
     cy.get("#dateLanded-day").should("not.have.value", "");
     cy.get("#select-faoArea").should("have.value", "FAO27");
-    cy.get("#vessel\\.vesselName").should("not.have.value", "");
+    cy.get(String.raw`#vessel\.vesselName`).should("not.have.value", "");
     cy.get("#weight").should("not.have.value", "");
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
@@ -1179,21 +1184,18 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
   });
 
   it("should not allow vessel selection until Date Landed is valid", () => {
-    cy.get("#vessel\\.vesselName").type("SHOULDNOTWORK", { force: true });
-    cy.get("#vessel\\.vesselName").should("have.value", "");
+    cy.get(String.raw`#vessel\.vesselName`).type("SHOULDNOTWORK", { force: true });
+    cy.get(String.raw`#vessel\.vesselName`).should("have.value", "");
     cy.get("#dateLanded-day").type("12");
     cy.get("#dateLanded-month").type("05");
-    cy.get("#vessel\\.vesselName").type("SHOULDNOTWORK", { force: true });
-    cy.get("#vessel\\.vesselName").should("have.value", "");
+    cy.get(String.raw`#vessel\.vesselName`).type("SHOULDNOTWORK", { force: true });
+    cy.get(String.raw`#vessel\.vesselName`).should("have.value", "");
     const today = new Date();
     cy.get("#dateLanded-year").type(today.getFullYear().toString());
-    cy.get("#vessel\\.vesselName").type("SHOULDWORK", { force: true });
+    cy.get(String.raw`#vessel\.vesselName`).type("SHOULDWORK", { force: true });
   });
 
   it("should clear vessel input if Date Landed is changed to invalid", () => {
-    function pad2(n: number | string) {
-      return n.toString().length === 1 ? "0" + n : n.toString();
-    }
     const today = new Date();
     cy.get("#dateLanded-day").type(pad2(today.getDate()));
     cy.get("#dateLanded-month").type(pad2(today.getMonth() + 1));
@@ -1205,9 +1207,6 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
   });
 
   it("should not show vessel error if vessel is entered and date is valid", () => {
-    function pad2(n: number | string) {
-      return n.toString().length === 1 ? "0" + n : n.toString();
-    }
     const today = new Date();
     cy.get("#dateLanded-day").type(pad2(today.getDate()));
     cy.get("#dateLanded-month").type(pad2(today.getMonth() + 1));
