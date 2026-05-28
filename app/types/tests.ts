@@ -165,8 +165,10 @@ export enum TestCaseId {
   PostWhoseWatersFailsWith403 = "postWhoseWatersFailsWith403",
   GetWhoseWatersFailsWith403 = "getWhoseWatersFailsWith403",
   WhoseWatersTypePageGuard = "whoseWatersTypePageGuard",
+  WhoseWatersSaveAsDraftWithInvalidOtherWaters = "whoseWatersSaveAsDraftWithInvalidOtherWaters",
 
   HowDoesTheExportLeaveNoTransportDetails = "howDoesTheExportLeaveNoTransportDetails",
+  HowDoesTheExportLeaveSaveAsDraftNoVehicle = "howDoesTheExportLeaveSaveAsDraftNoVehicle",
   HowDoesTheExportLeaveTruck = "howDoesTheExportLeaveTruck",
   HowDoesTheExportLeavePlane = "howDoesTheExportLeavePlane",
   HowDoesTheExportLeaveTrain = "howDoesTheExportLeaveTrain",
@@ -867,6 +869,7 @@ export enum TestCaseId {
   SDDepartureSummarySaveAsDraftWithErrors = "sdDepartureSummarySaveAsDraftWithErrors",
   SDDepartureSummaryProductWeightExceedsArrival = "sdDepartureSummaryProductWeightExceedsArrival",
   SDDepartureSummaryFisheryWeightExceedsProduct = "sdDepartureSummaryFisheryWeightExceedsProduct",
+  SDDepartureSummaryFisheryWeightExceedsArrival = "sdDepartureSummaryFisheryWeightExceedsArrival",
   SDDepartureSummaryCopiedDocUpdatedArrival = "sdDepartureSummaryCopiedDocUpdatedArrival",
 
   // FI0-10296: Remove Product Page

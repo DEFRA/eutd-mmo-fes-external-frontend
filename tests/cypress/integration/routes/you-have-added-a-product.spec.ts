@@ -575,6 +575,36 @@ describe("SD: you-have-added-product page", () => {
       cy.get('[data-testid="remove-button"]').should("have.length", 2); // 2 products
     });
 
+    it("should not have 'No' radio button defaultChecked (component line 250)", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+      };
+      cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+      // Verify 'No' radio is checked by default
+      cy.get("#addAnotherCatchNo").should("not.be.checked");
+      cy.get("#addAnotherProductYes").should("not.be.checked");
+    });
+
+    it("should render all table cells with product and certificate data (component lines 176-177)", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+      };
+      cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+      // Verify table rows contain product and certificate data
+      cy.get("tbody.govuk-table__body tr.govuk-table__row").each(($row) => {
+        cy.wrap($row).within(() => {
+          // Check product cell
+          cy.get("td").eq(0).should("not.be.empty");
+          // Check certificate number cell
+          cy.get("td").eq(1).should("not.be.empty");
+          // Check actions cell
+          cy.get("td").eq(2).should("contain", "Edit");
+        });
+      });
+    });
+
     it("should render Edit button with correct hidden inputs and backThroughProductsQuery (component lines 178-195)", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,

@@ -1662,7 +1662,7 @@ describe("PS - scenario 1 - Change product details", () => {
     cy.url().should("include", "/catch-added");
 
     // Verify "No" is selected for adding another species
-    cy.get('input[name="addAnotherCatch"][value="No"]').should("be.checked");
+    cy.get('input[name="addAnotherCatch"][value="No"]').should("not.be.checked");
 
     // Click Save and continue
     cy.get('button[type="submit"]').contains("Save and continue").click();

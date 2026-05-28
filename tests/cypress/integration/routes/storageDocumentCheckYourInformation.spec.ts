@@ -271,6 +271,51 @@ describe("Check Your Information (Summary) page: document submission validation 
   });
 });
 
+describe("Check Your Information (Summary) page: pre-submit completeness check (FI0-11257)", () => {
+  it("should redirect user to the progress page when the document is incomplete", () => {
+    // Reproduces DEFECT-592: when departure weights are cleared (e.g. after editing arrival
+    // weights on a copied NMD), the orchestration progress endpoint now returns 400 for the
+    // catches section. The loader detects this and redirects to /progress before the user
+    // can see or submit the half-empty check-your-information page.
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationSubmitWhenIncomplete,
+    };
+
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    cy.url().should("include", "/progress");
+    cy.url().should("not.include", "/non-manipulation-document-created");
+  });
+});
+
+describe("Check Your Information (Summary) page: pre-submit weight relationship check (FI0-10945)", () => {
+  it("should block submit for original NMD when departure weights exceed arrival weights", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationSubmitInvalidWeightsOriginal,
+    };
+
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid=create-sd-button]").click({ force: true });
+
+    cy.url().should("include", "/check-your-information");
+    cy.url().should("not.include", "/non-manipulation-document-created");
+  });
+
+  it("should block submit for copied NMD when edited arrival weights make departure weights invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationSubmitInvalidWeightsCopied,
+    };
+
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid=create-sd-button]").click({ force: true });
+
+    cy.url().should("include", "/check-your-information");
+    cy.url().should("not.include", "/non-manipulation-document-created");
+  });
+});
+
 describe("Check Your Information (Summary) page: guard", () => {
   it("should redirect user to the forbidden page", () => {
     const testParams: ITestParams = {

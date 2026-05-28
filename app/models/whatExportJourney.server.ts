@@ -71,7 +71,7 @@ export const WhatExportJourneyAction = async (request: Request, params: Params):
   const { documentNumber } = params;
   // Parallelize form parsing and indexed countries Map fetch — they are independent.
   const [body, countriesByName] = await Promise.all([request.formData(), getCountriesByName()]);
-  const exportedFrom = (body.get("exportedFrom") as string) ?? "United Kingdom";
+  const exportedFrom = body.get("exportedFrom") as string;
   const exportedTo = body.get("exportedTo");
   const pointOfDestination = body.get("pointOfDestination");
   const landingsEntryOption = body.get("landingsEntryOption");
