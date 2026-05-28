@@ -91,14 +91,14 @@ export const CatchCertificateTransportationDocumentsAction = async (request: Req
       return redirect("/forbidden");
     }
 
-    if (saveDraft) {
-      return redirect(route("/create-catch-certificate/catch-certificates"));
-    }
-
     if (errors.length > 0) {
       const values = Object.fromEntries(form);
       const errorsTransformed = checkForDocumentObjectErrors(errors, values);
       return apiCallFailed(errorsTransformed, { ...values, ...{ additionalFormDocuments: additionalDocuments } });
+    }
+
+    if (saveDraft) {
+      return redirect(route("/create-catch-certificate/catch-certificates"));
     }
 
     const session = await getSessionFromRequest(request);
