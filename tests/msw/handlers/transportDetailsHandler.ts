@@ -2022,7 +2022,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          containerIdentificationNumber: "error.containerIdentificationNumber.string.max",
+          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
         })
       )
     ),
@@ -2030,7 +2030,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          containerIdentificationNumber: "error.containerIdentificationNumber.string.max",
+          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
         })
       )
     ),
@@ -2044,7 +2044,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          containerIdentificationNumber: "error.containerIdentificationNumber.string.pattern.base",
+          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
         })
       )
     ),
@@ -2052,7 +2052,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          containerIdentificationNumber: "error.containerIdentificationNumber.string.pattern.base",
+          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
         })
       )
     ),
@@ -2155,7 +2155,7 @@ const transportDetailsHandler: ITestHandler = {
       res(
         ctx.status(400),
         ctx.json({
-          "containerNumbers.0": "Container identification number must only contain letters and numbers",
+          "containerNumbers.0": "error.containerNumbers.0.string.pattern.base",
         })
       )
     ),

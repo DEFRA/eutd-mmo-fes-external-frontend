@@ -499,3 +499,78 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     cy.get('input[name="containerNumbers.2"]').should("have.value", "EXISTING003");
   });
 });
+
+describe("Add Transportation Details Truck: Container Identification Number Validation", () => {
+  it("should display format error when container identification number has invalid format regardless of length", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportContainerIdentificationNumberMaxLength,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get("#nationalityOfVehicle").type("United Kingdom", { force: true });
+    cy.get("#registrationNumber").type("AB123CD", { force: true });
+    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+    ).should("be.visible");
+  });
+
+  it("should display error when container identification number contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportContainerIdentificationNumberInvalidCharacters,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get("#nationalityOfVehicle").type("United Kingdom", { force: true });
+    cy.get("#registrationNumber").type("AB123CD", { force: true });
+    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABC123!@#", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+    ).should("be.visible");
+  });
+
+  it("should save successfully when container identification number is not provided", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSave,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get("#nationalityOfVehicle").type("France", { force: true });
+    cy.get("#registrationNumber").type("AB123CD", { force: true });
+    cy.get("#departurePlace").type("Dover", { force: true });
+    // containerNumbers.0 not filled - should be optional
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "/add-additional-transport-documents-truck/0");
+  });
+
+  it("should save successfully when container identification number is valid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSave,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get("#nationalityOfVehicle").type("France", { force: true });
+    cy.get("#registrationNumber").type("AB123CD", { force: true });
+    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "/add-additional-transport-documents-truck/0");
+  });
+
+  it("should save successfully when container identification number is entered in lowercase", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportSave,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get("#nationalityOfVehicle").type("France", { force: true });
+    cy.get("#registrationNumber").type("AB123CD", { force: true });
+    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("abcu1234567", { force: true });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.url().should("include", "/add-additional-transport-documents-truck/0");
+  });
+});
