@@ -7,6 +7,7 @@ import {
   CatchDetailsTableHeader,
   SecureForm,
   FilterSearch,
+  ErrorMessage,
 } from "~/components";
 import { useLoaderData, useActionData, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -136,7 +137,7 @@ const performProductSearch = (q: string, psData: ProcessingStatement): string[] 
   return matchingProducts.map((p: ProcessingStatementProduct) => p.id).filter((id): id is string => Boolean(id));
 };
 
-const buildRedirectUrl = (documentNumber: string, params: URLSearchParams): string => {
+const buildRedirectUrl = (documentNumber: string | undefined, params: URLSearchParams): string => {
   const baseUrl = route("/create-processing-statement/:documentNumber/catch-added", {
     documentNumber,
   });
@@ -305,7 +306,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   );
   validateResponseData(processingStatement);
 
-  const psData = processingStatement as ProcessingStatement;
   const form = await request.formData();
 
   const isValid = await validateCSRFToken(request, form);
@@ -314,7 +314,13 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const { _action, ...values } = Object.fromEntries(form);
   const nextUri = (form.get("nextUri") as string) || "";
 
-  const maybeHandled = await handleFilterAction(values, session, psData, documentNumber, request);
+  const maybeHandled = await handleFilterAction(
+    values,
+    session,
+    processingStatement as ProcessingStatement,
+    documentNumber,
+    request
+  );
   if (maybeHandled) return maybeHandled;
 
   const isDraft = _action === "saveAsDraft";
@@ -328,7 +334,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   // Validate products have catches when saving and continuing
   if (isSaveAndContinue) {
-    const validationError = validateProductsHaveCatches(psData, documentNumber);
+    const validationError = validateProductsHaveCatches(processingStatement as ProcessingStatement, documentNumber);
     if (validationError) {
       return new Response(JSON.stringify(validationError), {
         status: 400,
@@ -345,7 +351,10 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     errorData = await updateProcessingStatement(
       bearerToken,
       documentNumber,
-      { catches: psData.catches },
+      {
+        catches: (processingStatement as ProcessingStatement).catches,
+        addAnotherCatch: values.addAnotherCatch as string,
+      },
       `/create-processing-statement/${documentNumber}/catch-added`,
       undefined,
       isDraft,
@@ -362,7 +371,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     });
   }
 
-  if (errorData && Array.isArray(psData?.catches)) {
+  if (errorData && Array.isArray((processingStatement as ProcessingStatement)?.catches)) {
     return createErrorResponse(errorData as ErrorResponse, session);
   }
 
@@ -395,7 +404,7 @@ const cleanupSession = (session: any) => {
 
 const validateProductsHaveCatches = (
   psData: ProcessingStatement,
-  documentNumber: string
+  documentNumber: string | undefined
 ): { groupedErrors: IError[]; errorsUrl: string } | null => {
   const products = psData.products ?? [];
   const catches = psData.catches ?? [];
@@ -447,7 +456,7 @@ const createErrorResponse = async (errorData: ErrorResponse, session: any): Prom
   );
 };
 
-const determineRedirectUrl = (nextUri: string, documentNumber: string): string =>
+const determineRedirectUrl = (nextUri: string, documentNumber?: string): string =>
   !nextUri || isEmpty(nextUri)
     ? `/create-processing-statement/${documentNumber}/add-processing-plant-details`
     : nextUri;
@@ -577,7 +586,7 @@ const CatchAdded = () => {
   const navigationLinks = populateNavigationLinks(t, documentNumber, currentPage, totalPages);
 
   return (
-    <Main backUrl={`/create-processing-statement/${documentNumber}/add-catch-details/${productId}/0`}>
+    <Main backUrl={`/create-processing-statement/${documentNumber}/add-catch-details/${productId}?pageNo=1`}>
       {Array.isArray(groupedErrors) && groupedErrors.length > 0 && <ErrorSummary errors={groupedErrors} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
@@ -653,6 +662,7 @@ const CatchAdded = () => {
                                 data-testid="change-link"
                               >
                                 {t("commonChangeLink", { ns: "common" })}
+                                <span className="govuk-visually-hidden">{" " + product.description}</span>
                               </Link>
                             </div>
                           </td>
@@ -693,6 +703,7 @@ const CatchAdded = () => {
                                     data-testid="change-link"
                                   >
                                     {t("commonChangeLink", { ns: "common" })}
+                                    <span className="govuk-visually-hidden">{" " + product.description}</span>
                                   </Link>
                                 </SecureForm>
                               </div>
@@ -776,11 +787,26 @@ const CatchAdded = () => {
 
           <br />
           <SecureForm method="post" csrf={csrf}>
-            <div id="radioButtons" className="govuk-form-group">
+            <div
+              id="addAnotherCatch"
+              className={
+                Array.isArray(groupedErrors) && groupedErrors.some((error) => error.key === "addAnotherCatch")
+                  ? "govuk-form-group govuk-form-group--error"
+                  : "govuk-form-group"
+              }
+            >
               <fieldset className="govuk-fieldset">
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--l">
                   <h2 className="govuk-fieldset__heading">{t("psAddAnotherSpecies", { ns: "catchAdded" })}</h2>
                 </legend>
+                {Array.isArray(groupedErrors) && groupedErrors.some((error) => error.key === "addAnotherCatch") ? (
+                  <ErrorMessage
+                    text={t(groupedErrors.find((error) => error.key === "addAnotherCatch")?.message ?? "", {
+                      ns: "errorsText",
+                    })}
+                    visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                  />
+                ) : null}
                 <div className="govuk-radios govuk-radios--inline" data-module="govuk-radios">
                   <div className="govuk-radios__item">
                     <input
@@ -801,7 +827,6 @@ const CatchAdded = () => {
                       name="addAnotherCatch"
                       type="radio"
                       value="No"
-                      defaultChecked
                     />
                     <label className="govuk-label govuk-radios__label" htmlFor="addAnotherCatchNo">
                       {t("commonNoLabel", { ns: "common" })}

@@ -1,12 +1,14 @@
 import * as React from "react";
 import { useEffect, useRef } from "react";
-import { Main, SecureForm, Title } from "~/components";
+import { ErrorMessage, ErrorSummary, Main, SecureForm, Title } from "~/components";
 import { useLoaderData, useLocation, type ActionFunction, type LoaderFunction } from "react-router";
 
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import { useTranslation } from "react-i18next";
 import { useIsHydrated } from "~/hooks";
 import { CookieAction, CookieLoader } from "~/models/cookie.server";
+import isEmpty from "lodash/isEmpty";
+import { displayErrorMessages } from "~/helpers";
 
 const cookiePreferenceField = "saveCookiePreference";
 
@@ -52,8 +54,9 @@ export const loader: LoaderFunction = async ({ request }) => await CookieLoader(
 export const action: ActionFunction = async ({ request }) => await CookieAction(request);
 
 const Cookies = () => {
-  const { analyticsAccepted, showSuccessBanner, csrf } = useLoaderData<cookieLoaderDataType>();
-  const { t } = useTranslation("cookies");
+  const { showSuccessBanner, csrf, errors = {} } = useLoaderData<cookieLoaderDataType>();
+  const hasError = !isEmpty(errors);
+  const { t } = useTranslation(["cookies", "errorsText"]);
   const location = useLocation();
 
   const isHydrated = useIsHydrated();
@@ -70,6 +73,7 @@ const Cookies = () => {
 
   return (
     <Main showHelpLink={false}>
+      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
       <div className="govuk-grid-row">
         {showSuccessBanner && (
           <div
@@ -194,9 +198,13 @@ const Cookies = () => {
           </table>
           <p className="govuk-body">
             {t("MSClarityParagraph3")}
-            <a href="https://optout.aboutads.info/" className="govuk-link">
-              {t("MSClarityWebChoiceServiceLinkOut")}
-            </a>
+            <a
+              href="https://optout.aboutads.info/"
+              className="govuk-link"
+              dangerouslySetInnerHTML={{
+                __html: t("MSClarityWebChoiceServiceLinkOut"),
+              }}
+            />
           </p>
           <h2 className="govuk-heading-m">{t("introductoryCookieMessage")}</h2>
           <p className="govuk-body">{t("introductoryCookieMessageParagraph")}</p>
@@ -224,11 +232,20 @@ const Cookies = () => {
           <h2 className="govuk-heading-m">{t("changeyourCookieSettings")}</h2>
           <br />
           <SecureForm method="post" csrf={csrf} replace>
-            <div id="radioButtons" className="govuk-form-group">
+            <div
+              id="radioButtons"
+              className={hasError ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}
+            >
               <fieldset className="govuk-fieldset">
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--m">
                   <h3 className="govuk-fieldset__heading">{t("acceptCookies")}</h3>
                 </legend>
+                {hasError ? (
+                  <ErrorMessage
+                    text={t("ccLandingTypeSelectOption", { ns: "errorsText" })}
+                    visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                  />
+                ) : null}
                 <div className="govuk-radios " data-module="govuk-radios">
                   <div className="govuk-radios__item">
                     <input
@@ -237,7 +254,6 @@ const Cookies = () => {
                       name={cookiePreferenceField}
                       type="radio"
                       value="Yes"
-                      defaultChecked={analyticsAccepted}
                     />
                     <label
                       id="label-cookieAnalyticsAccept"
@@ -254,7 +270,6 @@ const Cookies = () => {
                       name={cookiePreferenceField}
                       type="radio"
                       value="No"
-                      defaultChecked={!analyticsAccepted}
                     />
                     <label
                       id="label-cookieAnalyticsReject"

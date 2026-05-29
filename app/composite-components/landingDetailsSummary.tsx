@@ -95,7 +95,7 @@ export const LandingDetailsSummary = ({
             },
           ]),
       {
-        label: t("ccRFMOlabel", { ns: "checkYourInformation" }),
+        label: <span dangerouslySetInnerHTML={{ __html: t("ccRFMOlabel", { ns: "checkYourInformation" }) }} />,
         value: model?.rfmo ?? t("commonNotProvided", { ns: "common" }),
         hasChangeLink: true,
         idAttribute: "rfmo",
@@ -164,7 +164,11 @@ export const LandingDetailsSummary = ({
             <a
               className="govuk-link"
               data-testid={`change-${index}-${field.idAttribute}`}
-              aria-label={t("commonWhatExportersAddressChangeLink", { ns: "common" })}
+              aria-label={
+                t("commonWhatExportersAddressChangeLink", { ns: "common" }) +
+                " " +
+                lowerCase(t("ccAddLandingHeader", { ns: "addLandings" }))
+              }
               href={getChangeLink(field.idAttribute)}
             >
               {t("commonWhatExportersAddressChangeLink", { ns: "common" })}
@@ -232,7 +236,11 @@ export const LandingDetailsSummary = ({
                       documentNumber,
                     })}`
                   }
-                  aria-label={t("commonWhatExportersAddressChangeLink", { ns: "common" })}
+                  aria-label={
+                    t("commonWhatExportersAddressChangeLink", { ns: "common" }) +
+                    " " +
+                    lowerCase(t("ccLandingsEntryPageTitle", { ns: "landingsEntry" }))
+                  }
                 >
                   {t("commonWhatExportersAddressChangeLink", { ns: "common" })}
                   <span className="govuk-visually-hidden">
@@ -262,7 +270,11 @@ export const LandingDetailsSummary = ({
                         "/create-catch-certificate/:documentNumber/check-your-information",
                         { documentNumber }
                       )}`}
-                      aria-label={t("commonWhatExportersAddressChangeLink", { ns: "common" })}
+                      aria-label={
+                        t("commonWhatExportersAddressChangeLink", { ns: "common" }) +
+                        " " +
+                        lowerCase(t("commonSummaryPageCatchesSpecies", { ns: "checkYourInformation" }))
+                      }
                     >
                       {t("commonWhatExportersAddressChangeLink", { ns: "common" })}
                       <span className="govuk-visually-hidden">

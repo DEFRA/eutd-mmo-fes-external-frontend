@@ -77,9 +77,26 @@ describe("Cookie Policy page", () => {
     cy.contains("h2", "Change your cookie settings").should("be.visible");
     cy.contains("h3", "Do you want to accept the analytics cookies?").should("be.visible");
   });
+});
+
+describe("Cookie Radio Updates", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.UserAttributes,
+    };
+
+    cy.visit(cookieUrl, { qs: { ...testParams } });
+  });
+
+  it("should move focus to the success banner after saving cookie settings", () => {
+    cy.get("#cookieAnalyticsAccept").click();
+    cy.get("#saveCookieSettings").click();
+    cy.get(".govuk-notification-banner--success").should("be.visible").should("have.attr", "tabindex", "-1");
+  });
 
   it("check cookie banner - check No radio button", () => {
-    cy.get("form").submit();
+    cy.get("#cookieAnalyticsReject").click();
+    cy.get("#saveCookieSettings").click();
     cy.findByRole("link", { name: "Go back to the page you were looking at." }).should("be.visible");
   });
 
@@ -89,24 +106,21 @@ describe("Cookie Policy page", () => {
     cy.findByRole("link", { name: "Go back to the page you were looking at." }).should("be.visible");
   });
 
-  it("should move focus to the success banner after saving cookie settings", () => {
-    cy.get('[type="radio"]').check("Yes");
-    cy.wait(500); // Wait for the radio button state to update
-    cy.get("form").submit();
-    cy.get(".govuk-notification-banner--success")
-      .should("be.visible")
-      .should("have.attr", "tabindex", "-1")
-      .should("have.focus");
+  it("should redirect back to /cookies and not show the success banner when there is a validation error", () => {
+    cy.get("#saveCookieSettings").click();
+
+    cy.location("pathname").should("eq", "/cookies");
+    cy.get(".govuk-notification-banner--success").should("not.exist");
   });
 
   it("should keep moving focus to the success banner on repeated saves", () => {
-    cy.get('[type="radio"]').check("Yes");
-    cy.wait(500); // Wait for the radio button state to update
-    cy.get("form").submit();
-    cy.get(".govuk-notification-banner--success").should("have.focus");
+    cy.get("#cookieAnalyticsAccept").click();
+    cy.get("#saveCookieSettings").click();
+    cy.get(".govuk-notification-banner--success").should("be.visible").should("have.attr", "tabindex", "-1");
 
-    cy.get("form").submit();
-    cy.get(".govuk-notification-banner--success").should("have.focus");
+    cy.get("#cookieAnalyticsAccept").click();
+    cy.get("#saveCookieSettings").click();
+    cy.get(".govuk-notification-banner--success").should("be.visible").should("have.attr", "tabindex", "-1");
   });
 });
 

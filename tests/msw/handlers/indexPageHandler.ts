@@ -55,6 +55,9 @@ const indexPageHandler: ITestHandler = {
       )
     ),
   ],
+  [TestCaseId.StartJourneyNullSelection]: () => [
+    rest.post(SAVE_AND_VALIDATE_URL, (req, res, ctx) => res(ctx.json({ journeySelection: null }))),
+  ],
   [TestCaseId.UserAttributes]: () => [
     rest.get(USER_ATTRIBUTES, (req, res, ctx) => res(ctx.json(userAttributes))),
     rest.post(USER_ATTRIBUTES, (req, res, ctx) => res(ctx.json(userAttributes))),

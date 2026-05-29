@@ -119,4 +119,42 @@ describe("JourneySelection", () => {
     cy.get("#createCatchCertificate-hint").should("contain", "Gan gynnwys dolenni at ddogfennau glanio uniongyrchol");
     cy.get("#createStorageDocument-hint").should("contain", "Roedd yn cael ei galw'n 'ddogfen storio' o'r blaen");
   });
+
+  it("should redirect back to / and display an error summary when journeySelection is null", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.StartJourneyNullSelection,
+    };
+
+    cy.visit("/", { qs: { ...testParams } });
+    cy.get("form").submit();
+
+    cy.location("pathname").should("eq", "/");
+    cy.get(".govuk-error-summary").should("be.visible");
+  });
+
+  it("should display an inline error message and apply the error class to the form group when journeySelection is null", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.StartJourneyNullSelection,
+    };
+
+    cy.visit("/", { qs: { ...testParams } });
+    cy.get("form").submit();
+
+    cy.get(".govuk-form-group").should("have.class", "govuk-form-group--error");
+    cy.get(".govuk-error-message").should("be.visible");
+  });
+
+  it("should not redirect away from / when journeySelection is null", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.StartJourneyNullSelection,
+    };
+
+    cy.visit("/", { qs: { ...testParams } });
+    cy.get("form").submit();
+
+    cy.location("pathname").should("eq", "/");
+    cy.location("pathname").should("not.include", "catch-certificate");
+    cy.location("pathname").should("not.include", "processing-statement");
+    cy.location("pathname").should("not.include", "non-manipulation-document");
+  });
 });

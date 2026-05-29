@@ -24,6 +24,7 @@ export enum TestCaseId {
   StartJourney = "startJourney",
   StartJourneyFailed = "startJourneyFailed",
   StartJourneyFailedNoErrors = "startJourneyFailedNoErrors",
+  StartJourneyNullSelection = "startJourneyNullSelection",
 
   adminLogin = "adminlogin",
   idmLogin = "idmLogin",
@@ -164,8 +165,10 @@ export enum TestCaseId {
   PostWhoseWatersFailsWith403 = "postWhoseWatersFailsWith403",
   GetWhoseWatersFailsWith403 = "getWhoseWatersFailsWith403",
   WhoseWatersTypePageGuard = "whoseWatersTypePageGuard",
+  WhoseWatersSaveAsDraftWithInvalidOtherWaters = "whoseWatersSaveAsDraftWithInvalidOtherWaters",
 
   HowDoesTheExportLeaveNoTransportDetails = "howDoesTheExportLeaveNoTransportDetails",
+  HowDoesTheExportLeaveSaveAsDraftNoVehicle = "howDoesTheExportLeaveSaveAsDraftNoVehicle",
   HowDoesTheExportLeaveTruck = "howDoesTheExportLeaveTruck",
   HowDoesTheExportLeavePlane = "howDoesTheExportLeavePlane",
   HowDoesTheExportLeaveTrain = "howDoesTheExportLeaveTrain",
@@ -758,6 +761,9 @@ export enum TestCaseId {
   SDCheckYourInformationValidationGuard = "sdCheckYourInformationValidationGuard",
   SDCheckYourInformationValidationComplete = "sdCheckYourInformationValidationComplete",
   SDCheckYourInformationValidationProgress = "sdCheckYourInformationValidationProgress",
+  SDCheckYourInformationSubmitWhenIncomplete = "sdCheckYourInformationSubmitWhenIncomplete",
+  SDCheckYourInformationSubmitInvalidWeightsOriginal = "sdCheckYourInformationSubmitInvalidWeightsOriginal",
+  SDCheckYourInformationSubmitInvalidWeightsCopied = "sdCheckYourInformationSubmitInvalidWeightsCopied",
 
   PrivacyAccepted = "PrivacyAccepted",
   PrivacyEmpty = "PrivacyEmpty",
@@ -863,6 +869,7 @@ export enum TestCaseId {
   SDDepartureSummarySaveAsDraftWithErrors = "sdDepartureSummarySaveAsDraftWithErrors",
   SDDepartureSummaryProductWeightExceedsArrival = "sdDepartureSummaryProductWeightExceedsArrival",
   SDDepartureSummaryFisheryWeightExceedsProduct = "sdDepartureSummaryFisheryWeightExceedsProduct",
+  SDDepartureSummaryFisheryWeightExceedsArrival = "sdDepartureSummaryFisheryWeightExceedsArrival",
   SDDepartureSummaryCopiedDocUpdatedArrival = "sdDepartureSummaryCopiedDocUpdatedArrival",
 
   // FI0-10296: Remove Product Page
