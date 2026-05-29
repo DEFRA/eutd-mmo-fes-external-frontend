@@ -50,6 +50,7 @@
   "ccRfmoOptionalLabel": "Sefydliad rheoli pysgodfeydd rhanbarthol (dewisol)",
   "ccRfmoHintText": "Y sefydliad sy'n gyfrifol am reoli pysgota yn yr ardal lle cafodd y pysgod eu dal",
   "ccRfmoNullOption": "Dewiswch RFMO",
+  "ccRfmoNullOptionAriaLabel": "Dewiswch Sefydliad Rheoli Pysgodfeydd Rhanbarthol (RFMO)",
   "ccRfmoHelpSectionLinkText": "Beth yw sefydliad rheoli pysgodfeydd rhanbarthol (RFMO)?",
   "ccRfmoHelpSectionContentOne": "Sefydliadau Rheoli Pysgodfeydd Rhanbarthol (RFMOs) - mae RFMOs yn sefydliadau rhyngwladol sy'n sefydlu mesurau rhwymol ar gyfer cadwraeth a rheolaeth gynaliadwy i rywogaethau pysgod sy’n fudol iawn neu sy'n croesi ffiniau.",
   "ccRfmoHelpSectionContentTwoLink": "Rhagor o wybodaeth am RFMOs (yn agor mewn tab newydd).",

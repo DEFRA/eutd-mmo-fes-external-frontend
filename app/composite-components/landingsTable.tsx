@@ -48,20 +48,13 @@ export const LandingsTable = ({ landings, csrf }: LandingsTableProps) => {
       )}
       {data.eez && data.eez.length > 0 && (
         <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">
-          <b>
-            <abbr title="Exclusive Economic Zone">{t("ccLandingDetailsEezLabel", { ns: "addLandings" })}</abbr>:
-          </b>{" "}
+          <b dangerouslySetInnerHTML={{ __html: t("ccLandingDetailsEezLabel", { ns: "addLandings" }) + ":" }} />{" "}
           {toDelimitedStr(data.eez)}
         </span>
       )}
       {data.rfmo && (
         <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">
-          <b>
-            <abbr title="Regional Fisheries Management Organisation">
-              {t("ccLandingDetailsRfmoLabel", { ns: "addLandings" })}
-            </abbr>
-            :
-          </b>{" "}
+          <b dangerouslySetInnerHTML={{ __html: t("ccLandingDetailsRfmoLabel", { ns: "addLandings" }) + ":" }} />{" "}
           {data.rfmo}
         </span>
       )}

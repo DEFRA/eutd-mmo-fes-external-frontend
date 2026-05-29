@@ -193,23 +193,22 @@ export const AddExclusiveEconomicZoneComponent = ({
         );
       })}
       <Details
-        summary={eezHelpSectionLink}
+        summary={eezHelpSectionLink.replace(/<[^>]*>/g, "")}
         detailsClassName="govuk-details"
         summaryClassName="govuk-details__summary"
         detailsTextClassName="govuk-details__text"
       >
         <div>
-          <p>{eezHelpSectionContentOne}</p>
-          <p>{eezHelpSectionContentTwo}</p>
+          <p dangerouslySetInnerHTML={{ __html: eezHelpSectionContentOne }} />
+          <p dangerouslySetInnerHTML={{ __html: eezHelpSectionContentTwo }} />
           <p>
             <a
               href="https://www.gov.uk/government/publications/eu-iuu-regulation-2026-changes-guidance/fishing-area#exclusive-economic-zone-eez"
               target="_blank"
               rel="noopener noreferrer"
               className="govuk-link govuk-link--no-visited-state"
-            >
-              {eezHelpSectionContentThreeLink}
-            </a>
+              dangerouslySetInnerHTML={{ __html: eezHelpSectionContentThreeLink }}
+            />
           </p>
         </div>
       </Details>
