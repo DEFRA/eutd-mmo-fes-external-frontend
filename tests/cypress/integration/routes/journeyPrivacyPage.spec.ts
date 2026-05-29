@@ -35,6 +35,20 @@ describe("Privacy page for cc journey", () => {
       cy.contains("a", /^Back$/).click({ force: true });
       cy.get(".govuk-heading-xl").contains("What do you want to do?");
     });
+
+    it("Back link should be outside the main content region (AAA accessibility)", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.PrivacyEmpty,
+      };
+      cy.visit("/create-catch-certificate/privacy-notice", { qs: { ...testParams } });
+
+      // Verify back link exists but is not inside main element
+      cy.get("main#main-content").find("a.govuk-back-link").should("not.exist");
+      cy.get("a.govuk-back-link").should("exist").and("be.visible");
+
+      // Verify the first element inside main is not the back link
+      cy.get("main#main-content").children().first().should("not.have.class", "govuk-back-link");
+    });
   });
 });
 
@@ -59,6 +73,20 @@ describe("Privacy page for PS journey", () => {
         .should("be.visible")
         .should("have.attr", "href", "/");
     });
+
+    it("Back link should be outside the main content region (AAA accessibility)", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.PrivacyEmpty,
+      };
+      cy.visit("/create-processing-statement/privacy-notice", { qs: { ...testParams } });
+
+      // Verify back link exists but is not inside main element
+      cy.get("main#main-content").find("a.govuk-back-link").should("not.exist");
+      cy.get("a.govuk-back-link").should("exist").and("be.visible");
+
+      // Verify the first element inside main is not the back link
+      cy.get("main#main-content").children().first().should("not.have.class", "govuk-back-link");
+    });
   });
 });
 
@@ -82,6 +110,20 @@ describe("Privacy page for sd journey", () => {
       cy.contains("a", /^Back$/)
         .should("be.visible")
         .should("have.attr", "href", "/");
+    });
+
+    it("Back link should be outside the main content region (AAA accessibility)", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.PrivacyEmpty,
+      };
+      cy.visit("/create-non-manipulation-document/privacy-notice", { qs: { ...testParams } });
+
+      // Verify back link exists but is not inside main element
+      cy.get("main#main-content").find("a.govuk-back-link").should("not.exist");
+      cy.get("a.govuk-back-link").should("exist").and("be.visible");
+
+      // Verify the first element inside main is not the back link
+      cy.get("main#main-content").children().first().should("not.have.class", "govuk-back-link");
     });
   });
 });

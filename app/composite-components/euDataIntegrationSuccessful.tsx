@@ -21,10 +21,7 @@ export const EuDataIntegrationSuccessful = ({
   useScrollOnPageLoad();
 
   return (
-    <Main feedbackLink={feedbackURL}>
-      <Link to={dashboardUrl} className="govuk-back-link">
-        {t("commonBackLinkBackButtonLabel", { ns: "common" })}
-      </Link>
+    <Main feedbackLink={feedbackURL} backUrl={dashboardUrl}>
       <div className="govuk-panel govuk-panel--confirmation" data-testid="eu-integration-success-banner">
         <h1 className="govuk-panel__title">{t("euDataIntegrationSuccessful")}</h1>
         <div className="govuk-panel__body">

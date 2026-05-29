@@ -142,6 +142,21 @@ describe("EU Data Integration Successful Page", () => {
       cy.get("a.govuk-back-link").should("be.visible").should("contain.text", "Back");
       cy.contains("a", /view or download it from your dashboard/).should("be.visible");
     });
+
+    it("Back link should be outside the main content region (AAA accessibility)", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.EuDataIntegrationSuccessful,
+      };
+
+      cy.visit(euDataIntegrationUrl, { qs: { ...testParams } });
+
+      // Verify back link exists but is not inside main element
+      cy.get("main#main-content").find("a.govuk-back-link").should("not.exist");
+      cy.get("a.govuk-back-link").should("exist").and("be.visible");
+
+      // Verify the first element inside main is not the back link
+      cy.get("main#main-content").children().first().should("not.have.class", "govuk-back-link");
+    });
   });
 
   describe("Error handling", () => {
