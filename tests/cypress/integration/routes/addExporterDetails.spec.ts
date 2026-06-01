@@ -528,6 +528,35 @@ describe("Add exporter details: branch coverage - conditional rendering branches
     cy.get(".govuk-error-summary__list").should("be.visible");
   });
 
+  it("should handle clicking error summary links to scroll to fields", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+    // Get the first error link
+    cy.get(".govuk-error-summary__list a")
+      .first()
+      .then(($link) => {
+        const href = $link.attr("href");
+        const fieldId = href?.replace("#", "");
+
+        // Click on the error link
+        $link.trigger("click");
+
+        // Verify the target field exists and can be focused
+        if (fieldId) {
+          cy.get(`#${fieldId}`).should("exist");
+        }
+      });
+
+    // Verify error summary has correct structure
+    cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 0);
+  });
+
   it("should display full name field on page for catchCertificate journey", () => {
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
