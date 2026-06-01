@@ -11,7 +11,7 @@ export const ProductFavouritesTable = ({ products, csrf }: ProductTableProps) =>
   const { t } = useTranslation(["favourites"]);
   return (
     <>
-      <Title title={t("ccProductFavouritesTableTitle")} />
+      <Title title={t("ccProductFavouritesTableTitle")} level="h2" />
       <table className="govuk-table" id="yourproducts">
         <thead className="govuk-table__head">
           <tr className="govuk-table__row">
