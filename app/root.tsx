@@ -23,7 +23,7 @@ import {
 import { useChangeLanguage } from "remix-i18next/react";
 import { IdleTimerProvider } from "react-idle-timer";
 import { shouldRenderGA, isProdEnv } from "./helpers";
-import { Header, Footer, Banner, Main, Title } from "./components";
+import { Header, Footer, Banner, Main, Title, CookieBanner } from "./components";
 import { getRootData } from "./.server";
 import i18next from "~/i18next.server";
 import { i18nextCookie, analyticsAcceptedCookie, parseCookie, type IAnalyticsAcceptedCookie } from "./cookies.server";
@@ -132,6 +132,21 @@ const Template = ({
 
       gtmScript.id = "gtm-script";
       gtmScript.innerHTML = `
+        (function() {
+          var _open = XMLHttpRequest.prototype.open;
+          XMLHttpRequest.prototype.open = function(method, url) {
+            if (typeof url === 'string' && url.indexOf('google-analytics.com/j/collect') !== -1) {
+              this._uaBlocked = true;
+            }
+            return _open.apply(this, arguments);
+          };
+          var _send = XMLHttpRequest.prototype.send;
+          XMLHttpRequest.prototype.send = function() {
+            if (this._uaBlocked) return;
+            return _send.apply(this, arguments);
+          };
+        })();
+        window['ga-disable-${gaId}'] = true;
         (function(w, d, s, l, i) {
           w[l] = w[l] || [];
           w[l].push({
@@ -205,6 +220,7 @@ const Template = ({
           ></noscript>
         )}
         <span ref={ref} tabIndex={-1} />
+        <CookieBanner />
         <a href="#main-content" className="govuk-skip-link" data-module="govuk-skip-link">
           Skip to main content
         </a>
@@ -325,11 +341,16 @@ export default function App() {
   useChangeLanguage(data.locale);
 
   const { revalidate } = useRevalidator();
+  const { pathname } = useLocation();
+  const exclusionPaths = new Set(["/", "/cookies"]);
 
-  // invoke the loader function to revalidate page data
+  // invoke the loader function to revalidate page data, except on the root route
+  // to avoid triple-loading caused by revalidation on hydration
   useEffect(() => {
-    revalidate();
-  }, [revalidate]);
+    if (!exclusionPaths.has(pathname)) {
+      revalidate();
+    }
+  }, [revalidate, pathname]);
 
   useEffect(() => {
     const htmlScriptPrototype = "noModule" in HTMLScriptElement.prototype ? "govuk-frontend-supported" : "";

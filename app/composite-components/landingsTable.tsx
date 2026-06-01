@@ -48,12 +48,14 @@ export const LandingsTable = ({ landings, csrf }: LandingsTableProps) => {
       )}
       {data.eez && data.eez.length > 0 && (
         <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">
-          <b>{t("ccLandingDetailsEezLabel", { ns: "addLandings" })}:</b> {toDelimitedStr(data.eez)}
+          <b dangerouslySetInnerHTML={{ __html: t("ccLandingDetailsEezLabel", { ns: "addLandings" }) + ":" }} />{" "}
+          {toDelimitedStr(data.eez)}
         </span>
       )}
       {data.rfmo && (
         <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">
-          <b>{t("ccLandingDetailsRfmoLabel", { ns: "addLandings" })}:</b> {data.rfmo}
+          <b dangerouslySetInnerHTML={{ __html: t("ccLandingDetailsRfmoLabel", { ns: "addLandings" }) + ":" }} />{" "}
+          {data.rfmo}
         </span>
       )}
       <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">

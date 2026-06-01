@@ -524,6 +524,24 @@ describe("Storage document departure summary: fishery product weight exceeds pro
   });
 });
 
+describe("Storage document departure summary: fishery departure weight exceeds fishery arrival weight (FI0-11277)", () => {
+  it("should display EN and CY error when the fishery departure weight exceeds the fishery arrival weight", () => {
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival);
+    assertEnglishHeading();
+    submitDepartureSummary("savePostEn");
+    assertErrorSummaryContains(
+      "Fishery product departure weight cannot be greater than fishery product arrival weight"
+    );
+
+    visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival, { lng: "cy" });
+    assertAnyHeading();
+    submitDepartureSummaryAndAssertStatus("savePostCy");
+    assertErrorSummaryContains(
+      "Ni chaiff pwysau cynnyrch pysgodfeydd wrth ymadael fod yn fwy na phwysau cynnyrch pysgodfeydd wrth gyrraedd."
+    );
+  });
+});
+
 describe("Storage document departure summary: departure weights reflect updated arrival weights (FI0-10714)", () => {
   beforeEach(() => {
     visitDepartureSummary(TestCaseId.SDDepartureSummaryCopiedDocUpdatedArrival);

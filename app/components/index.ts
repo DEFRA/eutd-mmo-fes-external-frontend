@@ -2,6 +2,7 @@ export { Main } from "./main";
 export { Title } from "./title";
 export { LanguageToggle } from "./languageToggle";
 export { Banner } from "./banner";
+export { CookieBanner } from "./cookieBanner";
 export { ErrorSummary } from "./errorSummary";
 export { ErrorMessage } from "./errorMessage";
 export { Notification } from "./notification";

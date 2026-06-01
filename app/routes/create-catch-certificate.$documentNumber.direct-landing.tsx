@@ -418,6 +418,7 @@ const DirectLanding = () => {
                 optionalLabel={t("ccRfmoOptionalLabel")}
                 rfmoHintText={t("ccRfmoHintText")}
                 rfmoNullOption={t("ccRfmoNullOption")}
+                ccRfmoNullOptionAriaLabel={t("ccRfmoNullOptionAriaLabel")}
                 rfmoHelpSectionLink={t("ccRfmoHelpSectionLinkText")}
                 rfmoHelpSectionContentOne={t("ccRfmoHelpSectionContentOne")}
                 rfmoHelpSectionContentTwoLink={t("ccRfmoHelpSectionContentTwoLink")}

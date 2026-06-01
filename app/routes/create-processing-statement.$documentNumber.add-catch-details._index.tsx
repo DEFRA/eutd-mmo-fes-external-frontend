@@ -356,6 +356,7 @@ const SpeciesAutocompleteField: React.FC<{
 
 const WeightInputsSection: React.FC<{
   catchIndex: number;
+  catchId: string;
   isReset: boolean;
   catchCertificateType: string;
   errors: any;
@@ -372,6 +373,7 @@ const WeightInputsSection: React.FC<{
   onExportAfterChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }> = ({
   catchIndex,
+  catchId,
   isReset,
   catchCertificateType,
   errors,
@@ -395,7 +397,11 @@ const WeightInputsSection: React.FC<{
         label={t("psAddCatchCertificateWeight", { ns: "psAddCatchDetails" })}
         ariaLabel={t("psAddCatchCertificateWeightAriaLabel", { ns: "psAddCatchDetails" })}
         hint={t("psAddCatchCertificateWeightHint", { ns: "psAddCatchDetails" })}
-        key={isReset ? `total-weight-landed-${catchIndex}-reset` : `total-weight-landed-${catchIndex}`}
+        key={
+          isReset
+            ? `total-weight-landed-${catchIndex}-${catchId}-reset`
+            : `total-weight-landed-${catchIndex}-${catchId}`
+        }
         weightKey="totalWeightLanded"
         errorID={`catches-${catchIndex}-totalWeightLanded`}
         inputWidth={5}
@@ -419,8 +425,8 @@ const WeightInputsSection: React.FC<{
       hint={t("psAddCatchWeightsExportWeightBeforeProcessingHint", { ns: "psAddCatchDetails" })}
       key={
         isReset
-          ? `export-weight-before-processing-${catchIndex}-reset`
-          : `export-weight-before-processing-${catchIndex}`
+          ? `export-weight-before-processing-${catchIndex}-${catchId}-reset`
+          : `export-weight-before-processing-${catchIndex}-${catchId}`
       }
       weightKey="exportWeightBeforeProcessing"
       errorID={`catches-${catchIndex}-exportWeightBeforeProcessing`}
@@ -445,7 +451,9 @@ const WeightInputsSection: React.FC<{
       ariaLabel={t("psAddCatchWeightsExportWeightAfterProcessingAriaLabel", { ns: "psAddCatchDetails" })}
       hint={t("psAddCatchWeightsExportWeightAfterProcessingHint", { ns: "psAddCatchDetails" })}
       key={
-        isReset ? `export-weight-after-processing-${catchIndex}-reset` : `export-weight-after-processing-${catchIndex}`
+        isReset
+          ? `export-weight-after-processing-${catchIndex}-${catchId}-reset`
+          : `export-weight-after-processing-${catchIndex}-${catchId}`
       }
       weightKey="exportWeightAfterProcessing"
       errorID={`catches-${catchIndex}-exportWeightAfterProcessing`}
@@ -602,6 +610,7 @@ const AddCatchDetailsIndex = () => {
         <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
       </svg>
       <span className="govuk-pagination__link-title">{t("commonDashboardPrev", { ns: "common" })}</span>
+      <span className="govuk-visually-hidden">{t("commonDashboardPaginationCatchDetails", { ns: "common" })}</span>
     </a>
   );
   const nextLinkLayout = (
@@ -611,7 +620,8 @@ const AddCatchDetailsIndex = () => {
       rel="previous"
       data-testid="next-link"
     >
-      <span className="govuk-pagination__link-title ">{t("commonDashboardNext", { ns: "common" })}</span>{" "}
+      <span className="govuk-pagination__link-title ">{t("commonDashboardNext", { ns: "common" })}</span>
+      <span className="govuk-visually-hidden">{t("commonDashboardPaginationCatchDetails", { ns: "common" })}</span>{" "}
       <svg
         className="govuk-pagination__icon govuk-pagination__icon--next"
         xmlns="http://www.w3.org/2000/svg"
@@ -846,6 +856,7 @@ const AddCatchDetailsIndex = () => {
               </Details>
               <WeightInputsSection
                 catchIndex={catchIndex}
+                catchId={catchId ?? ""}
                 isReset={isReset}
                 catchCertificateType={currentCatchCertificateType}
                 errors={errors}

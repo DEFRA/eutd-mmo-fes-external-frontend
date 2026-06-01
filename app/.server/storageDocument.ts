@@ -453,7 +453,10 @@ export const executeAction = async (request: Request, params: Params): Promise<R
     errorData = await updateStorageDocumentCatchDetails(
       bearerToken,
       documentNumber,
-      { catches: [...(Array.isArray(sdData.catches) ? sdData.catches : [])] },
+      {
+        catches: [...(Array.isArray(sdData.catches) ? sdData.catches : [])],
+        addAnotherProduct: values.addAnotherProduct as string,
+      },
       `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product`,
       undefined,
       isDraft,
@@ -477,6 +480,10 @@ export const executeAction = async (request: Request, params: Params): Promise<R
 
     for (let index = 0; index < sdData.catches.length; index++) {
       groupedErrors.push(transformedErrors.filter(({ key }) => key.includes(`${index}`)));
+    }
+
+    if (errors["addAnotherProduct"]) {
+      groupedErrors.push([errors["addAnotherProduct"]]);
     }
 
     return new Response(

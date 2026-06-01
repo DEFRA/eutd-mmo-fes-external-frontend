@@ -1,9 +1,9 @@
-import type { IError, LinkData } from "~/types";
+import type { IError, IValidationError, LinkData } from "~/types";
 import { useTranslation } from "react-i18next";
 import { scrollToId } from "~/helpers";
 
 export interface IErrorSummaryProps {
-  errors: IError[];
+  errors: (IError | IValidationError)[];
   containerClassName?: string;
   linkData?: LinkData[];
 }
@@ -36,16 +36,18 @@ export const ErrorSummary = ({
       </h2>
       <div className="govuk-error-summary__body">
         <ul className="govuk-list govuk-error-summary__list">
-          {errors.map((error: IError, index: number) => {
+          {errors.map((error: IError | IValidationError, index: number) => {
             const hasLinkData = linkData?.[index]?.href;
+            const errorKey = error.key;
+            const errorHasValue = "value" in error && error.value;
 
             return (
-              <li key={error.key}>
+              <li key={errorKey}>
                 <a
-                  href={hasLinkData ? linkData[index].href : `#${error.key}`}
+                  href={hasLinkData ? linkData[index].href : `#${errorKey}`}
                   {...(!hasLinkData && { onClick: onChangeHandler })}
                 >
-                  {error.value
+                  {errorHasValue
                     ? t(error.message, { ...error.value, interpolation: { escapeValue: false } })
                     : t(error.message)}
                 </a>

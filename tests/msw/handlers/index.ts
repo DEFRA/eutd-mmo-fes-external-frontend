@@ -50,7 +50,6 @@ import processingStatementCreatedHandler from "./processingStatementCreatedHandl
 import storageDocumentCreatedHandler from "./storageDocumentCreatedHandler";
 import addStorageFacilityHandler from "./addStorageFacilityHandler";
 import addLandingsHandler from "./addLandingsHandler";
-import youHaveAddedStorageFacility from "./youHaveAddedStorageFacilityHandler";
 import addProductToConsignementHandler from "./addProductToConsignementHandler";
 import loginHandler from "./loginHandler";
 import transportDocumentsHandler from "./transportDocumentsHandler";
@@ -102,7 +101,6 @@ const rootTestHandler: ITestHandler = {
   ...journeyPrivacyPageHandler,
   ...catchAddedHandler,
   ...storageProductAddedHandler,
-  ...youHaveAddedStorageFacility,
   ...psAddCatchDetailsHandler,
   ...whatProcessingPlantAddressHandler,
   ...processingStatementCreatedHandler,
@@ -111,7 +109,6 @@ const rootTestHandler: ITestHandler = {
   ...addStorageApprovalHandler,
   ...whatStorageFacilityAddressHandler,
   ...addLandingsHandler,
-  ...youHaveAddedStorageFacility,
   ...addProductToConsignementHandler,
   ...loginHandler,
   ...transportDocumentsHandler,
