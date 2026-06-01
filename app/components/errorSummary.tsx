@@ -1,6 +1,7 @@
 import type { IError, IValidationError, LinkData } from "~/types";
 import { useTranslation } from "react-i18next";
 import { scrollToId } from "~/helpers";
+import { useEffect, useRef } from "react";
 
 export interface IErrorSummaryProps {
   errors: (IError | IValidationError)[];
@@ -14,6 +15,15 @@ export const ErrorSummary = ({
   linkData,
 }: React.PropsWithChildren<IErrorSummaryProps>) => {
   const { t } = useTranslation(["errorsText", "common"]);
+  const errorSummaryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Focus the error summary when it mounts
+    if (errorSummaryRef.current) {
+      errorSummaryRef.current.focus();
+      errorSummaryRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, []);
 
   const onChangeHandler: (e: React.FormEvent<HTMLAnchorElement>) => void = (e: React.FormEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -24,11 +34,12 @@ export const ErrorSummary = ({
 
   return (
     <div
+      ref={errorSummaryRef}
       id="errorIsland"
       className={`govuk-error-summary ${containerClassName}`}
       aria-labelledby="error-summary-title"
       role="alert"
-      data-disable-auto-focus="true"
+      tabIndex={-1}
       data-module="govuk-error-summary"
     >
       <h2 className="govuk-error-summary__title" id="error-summary-title">
