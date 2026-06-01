@@ -122,6 +122,8 @@ describe("PS: Catch added", () => {
     cy.contains("button", "Save and continue").click();
     cy.get("#errorIsland").should("exist");
     cy.get("#errorIsland").should("be.visible");
+
+    // Verify error island is scrolled into view
     cy.get("#errorIsland").then(($errorIsland) => {
       const errorIslandTop = $errorIsland[0].getBoundingClientRect().top;
       const viewportHeight = Cypress.config("viewportHeight");
@@ -129,7 +131,8 @@ describe("PS: Catch added", () => {
       expect(errorIslandTop).to.be.at.most(viewportHeight);
     });
 
-    cy.get("#errorIsland").scrollIntoView().should("be.visible");
+    // Verify the error summary has the correct attributes for accessibility and focus management
+    cy.get("#errorIsland").should("have.attr", "tabIndex", "-1").and("have.attr", "role", "alert");
   });
 
   it("should not scroll when no errors are present", () => {
