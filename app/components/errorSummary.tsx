@@ -18,12 +18,12 @@ export const ErrorSummary = ({
   const errorSummaryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Focus the error summary when it mounts
+    // Focus the error summary when it mounts or when errors change
     if (errorSummaryRef.current) {
       errorSummaryRef.current.focus();
       errorSummaryRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, []);
+  }, [errors]);
 
   const onChangeHandler: (e: React.FormEvent<HTMLAnchorElement>) => void = (e: React.FormEvent<HTMLAnchorElement>) => {
     e.preventDefault();

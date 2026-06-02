@@ -652,7 +652,7 @@ const AddCatchDetailsIndex = () => {
     if (hasErrors) {
       scrollToId("errorIsland");
     }
-  }, [hasErrors]); // Boolean primitive, safe to use as dependency
+  }, [actionData, hasErrors]); // actionData changes on every action response, ensuring focus moves on repeated error submissions
 
   useEffect(() => {
     if (response) {
