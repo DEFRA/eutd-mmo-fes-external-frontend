@@ -32,7 +32,7 @@ describe("Manage favourites page", () => {
   });
 
   it("should render Your product favourites as h2 heading", () => {
-    cy.findByRole("heading", { name: "Your product favourites", level: 2 });
+    cy.findByRole("heading", { name: "Your product favourites", level: 2 }).should("be.visible");
   });
 
   it("should check for field labels", () => {
