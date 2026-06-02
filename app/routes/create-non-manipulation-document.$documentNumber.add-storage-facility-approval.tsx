@@ -254,7 +254,7 @@ const AddStorageFacilityApproval = () => {
                   <div className="govuk-radios__item">
                     <input
                       className="govuk-radios__input"
-                      id="chilled"
+                      id="storageFacilities-facilityStorage"
                       name="facilityStorage"
                       type="radio"
                       value="Chilled"

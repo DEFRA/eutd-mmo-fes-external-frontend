@@ -583,7 +583,7 @@ describe("SD: you-have-added-product page", () => {
 
       // Verify 'No' radio is checked by default
       cy.get("#addAnotherCatchNo").should("not.be.checked");
-      cy.get("#addAnotherProductYes").should("not.be.checked");
+      cy.get("#addAnotherProduct").should("not.be.checked");
     });
 
     it("should render all table cells with product and certificate data (component lines 176-177)", () => {
@@ -855,7 +855,7 @@ describe("SD: you-have-added-product page", () => {
 
       // Verify radio inputs
       cy.get('input[type="radio"][name="addAnotherProduct"]').should("have.length", 2);
-      cy.get("#addAnotherProductYes").should("have.attr", "value", "Yes");
+      cy.get("#addAnotherProduct").should("have.attr", "value", "Yes");
       cy.get("#addAnotherCatchNo").should("have.attr", "value", "No");
     });
 
@@ -866,7 +866,7 @@ describe("SD: you-have-added-product page", () => {
       cy.visit(sdPageUrl, { qs: { ...testParams } });
 
       // Verify labels
-      cy.get('label[for="addAnotherProductYes"]').should("contain", "Yes");
+      cy.get('label[for="addAnotherProduct"]').should("contain", "Yes");
       cy.get('label[for="addAnotherCatchNo"]').should("contain", "No");
     });
 

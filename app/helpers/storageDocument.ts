@@ -4,7 +4,7 @@ export const confirmDocIssuedInUkRadioSelectTypeOptions: DocIssuedInUkRadioSelec
   {
     label: "commonThereIs",
     value: "uk",
-    id: "docIssuedInUkRadioSelectYes",
+    id: "",
   },
   {
     label: "commonThereIsNot",

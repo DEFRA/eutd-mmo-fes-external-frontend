@@ -83,7 +83,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departureCountry").should("exist");
     cy.get("#departurePort").should("exist");
     cy.get("#placeOfUnloading").should("exist");
-    cy.get("#departureDate-day").should("exist");
+    cy.get("#departureDate").should("exist");
     cy.get("#departureDate-month").should("exist");
     cy.get("#departureDate-year").should("exist");
   });
@@ -321,7 +321,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").type("Calais Port", { force: true });
     cy.get("#placeOfUnloading").type("Dover Port", { force: true });
-    cy.get("#departureDate-day").type("15", { force: true });
+    cy.get("#departureDate").type("15", { force: true });
     cy.get("#departureDate-month").type("12", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
     cy.get('[id="containerNumbers.0"]').type("ABCU1234567", { force: true });
@@ -343,7 +343,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departureCountry").should("have.value", "France");
     cy.get("#departurePort").should("have.value", "Calais Port");
     cy.get("#placeOfUnloading").should("have.value", "Dover Port");
-    cy.get("#departureDate-day").should("have.value", "15");
+    cy.get("#departureDate").should("have.value", "15");
     cy.get("#departureDate-month").should("have.value", "12");
     cy.get("#departureDate-year").should("have.value", "2025");
     cy.get('[id="containerNumbers.0"]').should("have.value", "ABCU1234567");
@@ -360,7 +360,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#registrationNumber").type("REG456", { force: true });
     cy.get("#departureCountry").invoke("val", "Belgium");
     cy.get("#departurePort").type("Antwerp", { force: true });
-    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate").type("25", { force: true });
     cy.get("#departureDate-month").type("11", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
     cy.get('[id="containerNumbers.0"]').type("INVALID", { force: true }); // Invalid ISO 6346 format
@@ -374,7 +374,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       testCaseId: TestCaseId.ArrivalTruckTransportSaveAsDraftRetainDateCheck,
     };
     cy.visit(truckPageUrl, { qs: { ...checkParams } });
-    cy.get("#departureDate-day").should("have.value", "25");
+    cy.get("#departureDate").should("have.value", "25");
     cy.get("#departureDate-month").should("have.value", "11");
     cy.get("#departureDate-year").should("have.value", "2025");
     cy.get('[id="containerNumbers.0"]').should("have.value", "INVALID");
@@ -399,7 +399,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
     // Return and verify empty date fields
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("#departureDate-day").should("have.value", "");
+    cy.get("#departureDate").should("have.value", "");
     cy.get("#departureDate-month").should("have.value", "");
     cy.get("#departureDate-year").should("have.value", "");
   });
@@ -414,7 +414,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#freightBillNumber").type("Freight bill", { force: true });
     cy.get("#departureCountry").invoke("val", "Ireland");
     cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("#departureDate-day").type("15", { force: true });
+    cy.get("#departureDate").type("15", { force: true });
     cy.get("#departureDate-month").type("11", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
     cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
@@ -487,7 +487,7 @@ describe("Add Transportation Details Truck: Invalid year in departure date", () 
     cy.get("#departureCountry").invoke("val", "Ireland");
     cy.get("#departurePort").type("Calais port", { force: true });
     cy.get("#placeOfUnloading").type("Dover port", { force: true });
-    cy.get("#departureDate-day").clear().type("01", { force: true });
+    cy.get("#departureDate").clear().type("01", { force: true });
     cy.get("#departureDate-month").clear().type("01", { force: true });
     cy.get("#departureDate-year").clear().type("0000", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });

@@ -497,7 +497,7 @@ const AddStorageFacilityDetails = () => {
                 "govuk-input--error": errors?.["storageFacilities-facilityName"],
               })}
               errorProps={{
-                className: !isEmpty(errors?.["storageFacilities-facilityName"]) ? "govuk-error-message" : "",
+                className: isEmpty(errors?.["storageFacilities-facilityName"]) ? "" : "govuk-error-message",
               }}
               staticErrorMessage={t(errors?.["storageFacilities-facilityName"]?.message, {
                 ns: "errorsText",
@@ -522,7 +522,7 @@ const AddStorageFacilityDetails = () => {
             <br />
             <div className="govuk-button-group">
               <Button
-                id="goToAddAddress"
+                id="storageFacilities-facilityAddressOne"
                 label={
                   hasFacility
                     ? t("commonWhatExportersAddressChangeLink", { ns: "common" })

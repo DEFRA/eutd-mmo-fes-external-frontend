@@ -136,7 +136,7 @@ describe("Add Storage Facility Details: pre-populated arrival date from stored d
     };
 
     cy.visit(pagePath, { qs: { ...testParams } });
-    cy.get("#storageFacilities-facilityArrivalDate-day").should("have.value", "09");
+    cy.get("#storageFacilities-facilityArrivalDate").should("have.value", "09");
     cy.get("#storageFacilities-facilityArrivalDate-month").should("have.value", "11");
     cy.get("#storageFacilities-facilityArrivalDate-year").should("have.value", "2024");
   });

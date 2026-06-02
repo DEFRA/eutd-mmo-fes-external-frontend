@@ -72,7 +72,7 @@ export const transportOptions: TransportOptionType[] = [
   {
     label: "truck",
     value: "truck",
-    id: "truck",
+    id: "vehicle",
   },
   {
     label: "plane",
