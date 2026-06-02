@@ -104,7 +104,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("#departureCountry").should("exist");
       cy.get("#departurePort").should("exist");
       cy.get("#placeOfUnloading").should("exist");
-      cy.get("#departureDate-day").should("exist");
+      cy.get("#departureDate").should("exist");
       cy.get("#departureDate-month").should("exist");
       cy.get("#departureDate-year").should("exist");
     });
@@ -360,7 +360,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidDepartureDate,
       };
       cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
-      cy.get("#departureDate-day").type("32", { force: true });
+      cy.get("#departureDate").type("32", { force: true });
       cy.get("#departureDate-month").type("13", { force: true });
       cy.get("#departureDate-year").type("2025", { force: true });
       cy.get("[data-testid=save-and-continue]").click({ force: true });
@@ -380,7 +380,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").type("Port of Calais", { force: true });
     cy.get("#placeOfUnloading").type("Dover", { force: true });
-    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate").type("25", { force: true });
     cy.get("#departureDate-month").type("07", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
@@ -396,7 +396,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").type("Port of Calais", { force: true });
     cy.get("#placeOfUnloading").type("Dover", { force: true });
-    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate").type("25", { force: true });
     cy.get("#departureDate-month").type("07", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
@@ -412,7 +412,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureCountry").should("have.value", "");
     cy.get("#departurePort").type("Port of Calais", { force: true });
     cy.get("#placeOfUnloading").type("Dover", { force: true });
-    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate").type("25", { force: true });
     cy.get("#departureDate-month").type("07", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
@@ -428,7 +428,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").should("have.value", "");
     cy.get("#placeOfUnloading").type("Dover", { force: true });
-    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate").type("25", { force: true });
     cy.get("#departureDate-month").type("07", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });
@@ -462,7 +462,7 @@ describe("AddArrivalContainerVesselTransport Save As Draft scenarios", () => {
     cy.get("#freightBillNumber").type("Freight bill", { force: true });
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
-    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate").type("25", { force: true });
     cy.get("#departureDate-month").type("07", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
     cy.get("[data-testid=save-draft-button").click({ force: true });
@@ -479,7 +479,7 @@ describe("AddArrivalContainerVesselTransport Save As Draft scenarios", () => {
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").type("Marseille", { force: true });
     // Enter a future departure date (should be omitted by the draft save logic)
-    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate").type("25", { force: true });
     cy.get("#departureDate-month").type("12", { force: true });
     cy.get("#departureDate-year").type("2099", { force: true });
     cy.get("[data-testid=save-draft-button]").click({ force: true });
@@ -490,7 +490,7 @@ describe("AddArrivalContainerVesselTransport Save As Draft scenarios", () => {
       testCaseId: TestCaseId.ArrivalContainerVesselTransportSaveAsDraftFutureDateCheck,
     };
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...checkParams } });
-    cy.get("#departureDate-day").should("have.value", "");
+    cy.get("#departureDate").should("have.value", "");
     cy.get("#departureDate-month").should("have.value", "");
     cy.get("#departureDate-year").should("have.value", "");
   });

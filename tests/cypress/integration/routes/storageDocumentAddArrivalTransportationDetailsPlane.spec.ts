@@ -82,7 +82,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departureCountry").should("exist");
     cy.get("#departurePort").should("exist");
     cy.get("#placeOfUnloading").should("exist");
-    cy.get("#departureDate-day").should("exist");
+    cy.get("#departureDate").should("exist");
     cy.get("#departureDate-month").should("exist");
     cy.get("#departureDate-year").should("exist");
   });
@@ -113,7 +113,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departureCountry").invoke("val", "Germany");
     cy.get("#departurePort").type("Frankfurt Airport", { force: true });
     cy.get("#placeOfUnloading").type("Heathrow Airport", { force: true });
-    cy.get("#departureDate-day").type("20", { force: true });
+    cy.get("#departureDate").type("20", { force: true });
     cy.get("#departureDate-month").type("01", { force: true });
     cy.get("#departureDate-year").type("2026", { force: true });
     cy.get('[id="containerNumbers.0"]').type("DEFG2345678", { force: true });
@@ -135,7 +135,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departureCountry").should("have.value", "Germany");
     cy.get("#departurePort").should("have.value", "Frankfurt Airport");
     cy.get("#placeOfUnloading").should("have.value", "Heathrow Airport");
-    cy.get("#departureDate-day").should("have.value", "20");
+    cy.get("#departureDate").should("have.value", "20");
     cy.get("#departureDate-month").should("have.value", "01");
     cy.get("#departureDate-year").should("have.value", "2026");
     cy.get('[id="containerNumbers.0"]').should("have.value", "DEFG2345678");
@@ -152,7 +152,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#flightNumber").type("LH500", { force: true });
     cy.get("#departureCountry").invoke("val", "Spain");
     cy.get("#departurePort").type("Madrid Airport", { force: true });
-    cy.get("#departureDate-day").type("05", { force: true });
+    cy.get("#departureDate").type("05", { force: true });
     cy.get("#departureDate-month").type("03", { force: true });
     cy.get("#departureDate-year").type("2026", { force: true });
     cy.get('[id="containerNumbers.0"]').type("TOO-SHORT", { force: true }); // Invalid format
@@ -166,7 +166,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.ArrivalPlaneTransportSaveAsDraftRetainDateCheck,
     };
     cy.visit(planePageUrl, { qs: { ...checkParams } });
-    cy.get("#departureDate-day").should("have.value", "05");
+    cy.get("#departureDate").should("have.value", "05");
     cy.get("#departureDate-month").should("have.value", "03");
     cy.get("#departureDate-year").should("have.value", "2026");
     cy.get('[id="containerNumbers.0"]').should("have.value", "TOO-SHORT");

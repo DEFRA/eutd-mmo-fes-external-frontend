@@ -80,7 +80,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#departureCountry").should("exist");
     cy.get("#departurePort").should("exist");
     cy.get("#placeOfUnloading").should("exist");
-    cy.get("#departureDate-day").should("exist");
+    cy.get("#departureDate").should("exist");
     cy.get("#departureDate-month").should("exist");
     cy.get("#departureDate-year").should("exist");
   });
@@ -259,7 +259,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#railwayBillNumber").type("AB12345C", { force: true });
     cy.get("#departurePort").type("Calais port", { force: true });
     cy.get("#placeOfUnloading").type("Dover", { force: true });
-    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate").type("25", { force: true });
     cy.get("#departureDate-month").type("07", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
 
@@ -281,7 +281,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#railwayBillNumber").type("AB12345C", { force: true });
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#placeOfUnloading").type("Dover", { force: true });
-    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate").type("25", { force: true });
     cy.get("#departureDate-month").type("07", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
 
@@ -324,7 +324,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").type("Calais port", { force: true });
     cy.get("#placeOfUnloading").type("Dover", { force: true });
-    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate").type("25", { force: true });
     cy.get("#departureDate-month").type("07", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
 
