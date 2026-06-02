@@ -24,6 +24,10 @@ describe("Product favourites page", () => {
     cy.findByRole("heading", { name: "Product Favourites", level: 1 });
   });
 
+  it("should render Your product favourites as h2 heading", () => {
+    cy.findByRole("heading", { name: "Your product favourites", level: 2 }).should("be.visible");
+  });
+
   it("should check for field labels", () => {
     cy.contains("label", "Common name or FAO code");
     cy.contains("label", "State");
