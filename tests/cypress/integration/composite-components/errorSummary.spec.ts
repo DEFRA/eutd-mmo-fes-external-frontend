@@ -120,12 +120,16 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       cy.visit(pageUrl, { qs: { ...testParams } });
       cy.contains("button", "Save and continue").click({ force: true });
 
-      // If error summary appears with linkData, verify href structure
-      cy.get("body").then(($body) => {
-        if ($body.find(".govuk-error-summary__list a").length > 0) {
-          cy.get(".govuk-error-summary__list a").first().should("have.attr", "href");
-        }
-      });
+      cy.get('.govuk-error-summary__list a[href*="/add-product-to-this-consignment/"]')
+        .first()
+        .should("have.attr", "href")
+        .then((href) => {
+          expect(href).to.include("/add-product-to-this-consignment/");
+          expect(href).not.to.include("#");
+
+          cy.get('.govuk-error-summary__list a[href*="/add-product-to-this-consignment/"]').first().click();
+          cy.url().should("include", href);
+        });
     });
   });
 

@@ -153,7 +153,7 @@ describe("SD: you-have-added-product page", () => {
       });
     });
 
-    it("should create error summary with correct link data (component lines 132-136)", () => {
+    it("should create error summary with linkData navigation for product errors (component lines 132-136)", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedInvalid,
       };
@@ -171,14 +171,16 @@ describe("SD: you-have-added-product page", () => {
           cy.get("#errorIsland").should("exist");
           cy.get(".govuk-error-summary").should("be.visible");
 
-          // Verify error summary has links with correct href attributes
-          cy.get(".govuk-error-summary__list a").should("have.length.at.least", 1);
+          cy.get('.govuk-error-summary__list a[href*="/add-product-to-this-consignment/"]')
+            .first()
+            .should("have.attr", "href")
+            .then((href) => {
+              expect(href).to.include("/add-product-to-this-consignment/");
+              expect(href).not.to.include("#");
 
-          // Verify links have proper href format pointing to product errors
-          cy.get(".govuk-error-summary__list a").each(($link) => {
-            cy.wrap($link).should("have.attr", "href");
-            cy.wrap($link).invoke("attr", "href").should("match", /#/);
-          });
+              cy.get('.govuk-error-summary__list a[href*="/add-product-to-this-consignment/"]').first().click();
+              cy.url().should("include", href);
+            });
         } else {
           // If no error summary, verify the page hasn't navigated (which would indicate validation passed)
           cy.url().should("include", "/you-have-added-a-product");
