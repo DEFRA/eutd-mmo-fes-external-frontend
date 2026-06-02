@@ -95,11 +95,7 @@ export const LandingDetailsSummary = ({
             },
           ]),
       {
-        label: (
-          <abbr title="Regional Fisheries Management Organisation">
-            {t("ccRFMOlabel", { ns: "checkYourInformation" })}
-          </abbr>
-        ),
+        label: <span dangerouslySetInnerHTML={{ __html: t("ccRFMOlabel", { ns: "checkYourInformation" }) }} />,
         value: model?.rfmo ?? t("commonNotProvided", { ns: "common" }),
         hasChangeLink: true,
         idAttribute: "rfmo",

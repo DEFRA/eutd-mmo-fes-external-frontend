@@ -16,10 +16,7 @@ export const EuDataIntegrationPending = ({ dashboardUrl, feedbackURL, journey }:
   useScrollOnPageLoad();
 
   return (
-    <Main feedbackLink={feedbackURL}>
-      <Link to={dashboardUrl} className="govuk-back-link">
-        {t("commonBackLinkBackButtonLabel", { ns: "common" })}
-      </Link>
+    <Main feedbackLink={feedbackURL} backUrl={dashboardUrl}>
       <h1 className="govuk-heading-xl">{t("euIntegrationPendingTitle")}</h1>
 
       <p className="govuk-body" style={{ whiteSpace: "pre-line" }}>

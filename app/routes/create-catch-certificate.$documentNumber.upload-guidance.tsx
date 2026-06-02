@@ -139,7 +139,7 @@ const UploadGuidance = () => {
                 <li>{t("ccUploadGuidanceCsvDataStructureLineOne")}</li>
                 <li>{t("ccUploadGuidanceCsvDataStructureLineTwo")}</li>
                 <div className="govuk-inset-text">
-                  <b>{t("ccUploadGuidanceCsvDataStructureLineThreeBold")}</b>
+                  <b dangerouslySetInnerHTML={{ __html: t("ccUploadGuidanceCsvDataStructureLineThreeBold") }} />
                   <br />
                   <span className="example-data-structure-short">{t("ccUploadGuidanceCsvDataStructureLineFour")}</span>
                 </div>
@@ -250,8 +250,8 @@ const UploadGuidance = () => {
             </th>
             <td className="govuk-table__cell td-width">
               <ol className="govuk-list govuk-list--bullet">
-                <li>{t("ccUploadGuidanceDataRequirmentEEZLineOne")}</li>
-                <li>{t("ccUploadGuidanceDataRequirmentEEZLineTwo")}</li>
+                <li dangerouslySetInnerHTML={{ __html: t("ccUploadGuidanceDataRequirmentEEZLineOne") }} />
+                <li dangerouslySetInnerHTML={{ __html: t("ccUploadGuidanceDataRequirmentEEZLineTwo") }} />
               </ol>
             </td>
             <td className="govuk-table__cell td-width">GBR</td>
@@ -264,7 +264,7 @@ const UploadGuidance = () => {
             <td className="govuk-table__cell td-width">
               <ol className="govuk-list govuk-list--bullet">
                 <li>{t("ccUploadGuidanceDataRequirmentRFMOLineOne")}</li>
-                <li>{t("ccUploadGuidanceDataRequirmentRFMOLineTwo")}</li>
+                <li dangerouslySetInnerHTML={{ __html: t("ccUploadGuidanceDataRequirmentRFMOLineTwo") }} />
               </ol>
             </td>
             <td className="govuk-table__cell td-width">IOTC</td>
