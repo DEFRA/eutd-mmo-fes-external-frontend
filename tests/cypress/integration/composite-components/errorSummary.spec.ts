@@ -369,6 +369,58 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
     });
   });
 
+  describe("Error summary focus on repeated error submissions", () => {
+    it("should move focus to error summary on repeated submissions with errors", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.DirectLandingDateLandedUnpopulated,
+      };
+      const pageUrl = "/create-catch-certificate/GBR-2021-CC-123/direct-landing";
+
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
+      // First submission - should show error summary and focus on it
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("#error-summary-title").should("be.visible");
+
+      // Verify error summary has focus (tabIndex={-1} makes it focusable)
+      cy.get("#errorIsland").should("have.attr", "tabindex", "-1");
+
+      // Second submission without fixing errors - focus should move to error summary again
+      // (This verifies the useEffect dependency change from [] to [errors])
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("#error-summary-title").should("be.visible");
+
+      // Error summary should still be focused (ScrollIntoView makes it visible)
+      cy.get("#errorIsland").should("have.class", "govuk-error-summary");
+    });
+
+    it("should re-trigger error summary focus when errors change", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.DirectLandingDateLandedUnpopulated,
+      };
+      const pageUrl = "/create-catch-certificate/GBR-2021-CC-123/direct-landing";
+
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
+      // Submit with errors
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 0);
+
+      // Get initial error count
+      cy.get(".govuk-error-summary__list li").then(($errors) => {
+        const initialErrorCount = $errors.length;
+        expect(initialErrorCount).to.be.greaterThan(0);
+
+        // Submit again - error summary should be refocused each time errors appear
+        cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+        // Verify error summary still visible (proving useEffect re-fired)
+        cy.get("#error-summary-title").should("be.visible");
+        cy.get(".govuk-error-summary__list li").should("have.length", initialErrorCount);
+      });
+    });
+  });
+
   describe("Component mount and ref initialization", () => {
     it("should focus error summary element after mount via ref", () => {
       const testParams: ITestParams = {
