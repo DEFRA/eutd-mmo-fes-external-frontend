@@ -44,6 +44,15 @@ function instanceOfIError(data: IDirectLandings | IError[]): data is IError[] {
   return Array.isArray(data) && "key" in data[0];
 }
 
+// helper function to ensure form number is actually a number
+function isNumeric(str: string | number) {
+  return (
+    /^-?[\d.]+$/.test(str as string) && // ensure only numbers and dots(negative numbers will be caught later validation)
+    !Number.isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+    !Number.isNaN(Number.parseFloat(str as string))
+  ); // ...and ensure strings of whitespace fail
+}
+
 const saveActionBase: any = async (values: any, landings: IDirectLandings, isNumeric: (i: any) => boolean) => {
   const filterWeights: { [key: string]: string } = Object.keys(values)
     .filter((key) => key.includes("weight"))
@@ -69,7 +78,7 @@ const saveActionBase: any = async (values: any, landings: IDirectLandings, isNum
   // This prevents invalid date errors from causing spurious vessel errors
   const isDateValid = isValidDate(date, ["YYYY-M-D", "YYYY-MM-DD"]);
   const dateForVesselLookup = isDateValid ? date : moment().format("YYYY-MM-DD");
-  const vessels: IVessel[] = !isEmpty(pln) ? await getVessels(pln.toString(), dateForVesselLookup) : [];
+  const vessels: IVessel[] = isEmpty(pln) ? [] : await getVessels(pln.toString(), dateForVesselLookup);
   const selectedVessel: IVessel | undefined = vessels.find((_: IVessel) => _.pln === pln);
   const previousVessel: (IVessel & { isListed?: boolean }) | undefined = {};
   let exclusiveEconomicZones: ICountry[] = [];
@@ -395,7 +404,7 @@ export const DirectLandingsLoader = async (params: Params, request: Request) => 
         (totals: number, weight: IDirectLandingsDetails) =>
           weight.exportWeight === undefined || weight.exportWeight === null || !isNumber(weight.exportWeight)
             ? totals
-            : totals + parseFloat(weight.exportWeight),
+            : totals + Number.parseFloat(weight.exportWeight),
         0
       )
     : 0;
@@ -434,7 +443,7 @@ export const DirectLandingsLoader = async (params: Params, request: Request) => 
       selectedRfmo: directLandings?.rfmo,
       availableExclusiveEconomicZones,
       selectedExclusiveEconomicZones: directLandings?.exclusiveEconomicZones,
-      maximumEezPerLanding: parseInt(maximumEezPerLanding, 10),
+      maximumEezPerLanding: Number.parseInt(maximumEezPerLanding, 10),
       isAddAnotherEEZButtonClicked: isAddAnotherEEZButtonClicked,
       faoArea: getSessionData(session, "selectedFaoArea"),
     }),
@@ -461,14 +470,6 @@ export const DirectLandingsAction = async (params: Params, request: Request): Pr
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
   const saveToSession = (data: any) => Object.keys(data).forEach((k) => session.set(k, data[k]));
-  // helper function to ensure form number is actually a number
-  function isNumeric(str: string | number) {
-    return (
-      /^-?[\d.]+$/.test(str as string) && // ensure only numbers and dots(negative numbers will be caught later validation)
-      !isNaN(str as number) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-      !isNaN(parseFloat(str as string))
-    ); // ...and ensure strings of whitespace fail
-  }
   const {
     dateLandedDay,
     dateLandedMonth,

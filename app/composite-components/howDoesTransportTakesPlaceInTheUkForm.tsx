@@ -89,7 +89,7 @@ export const HowDoesTransportTakesPlaceInTheUkForm = ({
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" csrf={csrf}>
-            <div className={!isEmpty(errors) ? "govuk-form-group govuk-form-group--error" : "govuk-form-group"}>
+            <div className={isEmpty(errors) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"}>
               <fieldset
                 className="govuk-fieldset"
                 aria-describedby={isEmpty(errors) ? "vehicle-hint" : "vehicle-hint vehicle-error"}
@@ -118,7 +118,7 @@ export const HowDoesTransportTakesPlaceInTheUkForm = ({
                       </div>
                     )}
                     {type === Page.StorageDocumentHowDoesTheExportLeaveTheUk && transportOption.value === "truck" && (
-                      <div id="truck-item-hint" className="govuk-hint govuk-radios__hint">
+                      <div id="vehicle-item-hint" className="govuk-hint govuk-radios__hint">
                         {t("transportSelectionTruckGuidance", { ns: "transportation" })}
                       </div>
                     )}

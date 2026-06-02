@@ -788,7 +788,7 @@ const CatchAdded = () => {
           <br />
           <SecureForm method="post" csrf={csrf}>
             <div
-              id="addAnotherCatch"
+              id={`${documentNumber}-addAnotherCatch`}
               className={
                 Array.isArray(groupedErrors) && groupedErrors.some((error) => error.key === "addAnotherCatch")
                   ? "govuk-form-group govuk-form-group--error"
@@ -811,12 +811,12 @@ const CatchAdded = () => {
                   <div className="govuk-radios__item">
                     <input
                       className="govuk-radios__input"
-                      id="addAnotherCatchYes"
+                      id="addAnotherCatch"
                       name="addAnotherCatch"
                       type="radio"
                       value="Yes"
                     />
-                    <label className="govuk-label govuk-radios__label" htmlFor="addAnotherCatchYes">
+                    <label className="govuk-label govuk-radios__label" htmlFor="addAnotherCatch">
                       {t("commonYesLabel", { ns: "common" })}
                     </label>
                   </div>

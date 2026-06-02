@@ -31,7 +31,7 @@ describe("Add Storage Facility Address", () => {
     cy.contains("strong", "A storage facility address must be added here.");
 
     // Arrival date label should not show the optional suffix and should show the new hint/info text
-    cy.get("#storageFacilities-facilityArrivalDate").should("contain", "Arrival date");
+    cy.get("#storageFacilities-facilityArrivalDate-container").should("contain", "Arrival date");
     cy.contains("This should be the date the product arrives at the storage facility. For example, 25/07/2025.").should(
       "be.visible"
     );

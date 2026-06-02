@@ -49,7 +49,7 @@ describe("Add Storage Facility Approval - Complete", () => {
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
 
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001");
-    cy.get("#chilled").check();
+    cy.get("#storageFacilities-facilityStorage").check();
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.url().should("include", storageFacilityUrl);
   });
@@ -91,7 +91,7 @@ describe("Add Storage Facility Approval - Max Length Save as Draft", () => {
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
     cy.get("#storageFacilities-facilityApproval").clear();
     cy.get("#storageFacilities-facilityApproval").type(longApprovalNumber);
-    cy.get("#chilled").check();
+    cy.get("#storageFacilities-facilityStorage").check();
 
     // Save as draft should not show validation error despite exceeding max length
     cy.get("[data-testid=save-draft-button]").click({ force: true });
@@ -109,7 +109,7 @@ describe("Add Storage Facility Approval - Invalid Characters", () => {
     };
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001@#$");
-    cy.get("#chilled").check();
+    cy.get("#storageFacilities-facilityStorage").check();
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", "There is a problem");
     cy.contains(
@@ -184,7 +184,7 @@ describe("Add Storage Facility Approval - Welsh Translations", () => {
     };
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001@#$");
-    cy.get("#chilled").check();
+    cy.get("#storageFacilities-facilityStorage").check();
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.contains("h2", "Mae yna broblem");
     cy.contains(
@@ -206,7 +206,7 @@ describe("Add Storage Facility Approval - Non JavaScript", () => {
 
     cy.get(".govuk-heading-xl").contains("Add storage facility details");
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001");
-    cy.get("#chilled").check();
+    cy.get("#storageFacilities-facilityStorage").check();
     cy.get("[data-testid=save-and-continue]").click({ force: true });
     cy.url().should("include", "/how-does-the-consignment-leave-the-uk");
   });

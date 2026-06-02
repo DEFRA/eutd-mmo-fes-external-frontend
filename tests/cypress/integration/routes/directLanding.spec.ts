@@ -287,35 +287,39 @@ describe("Direct landing page render", () => {
   });
 
   it("should check start date label as Start date of fishing trip", () => {
-    cy.get("#startDate").find("legend").find("label").contains("Start date of fishing trip").should("be.visible");
+    cy.get("#startDate-container")
+      .find("legend")
+      .find("label")
+      .contains("Start date of fishing trip")
+      .should("be.visible");
   });
 
   it("should fill the start date details from date picker", () => {
-    cy.get("#startDate-day").invoke("val").should("be.empty");
+    cy.get("#startDate").invoke("val").should("be.empty");
     cy.get("#startDate-month").invoke("val").should("be.empty");
     cy.get("#startDate-year").invoke("val").should("be.empty");
     // use picker
-    cy.get("#startDate img").should("be.visible");
-    cy.get("#startDate img").click({ force: true });
+    cy.get("#startDate-container img").should("be.visible");
+    cy.get("#startDate-container img").click({ force: true });
     cy.get(".react-datepicker-popper").should("be.visible");
     cy.get(".react-datepicker__day").eq(0).trigger("click");
     // check fields now have values
-    cy.get("#startDate-day").invoke("val").and("not.be.empty");
+    cy.get("#startDate").invoke("val").and("not.be.empty");
     cy.get("#startDate-month").invoke("val").and("not.be.empty");
     cy.get("#startDate-year").invoke("val").and("not.be.empty");
   });
 
   it("should change the date landed details from picker", () => {
-    cy.get("#dateLanded-day").invoke("val").should("eq", "11");
+    cy.get("#dateLanded").invoke("val").should("eq", "11");
     cy.get("#dateLanded-month").invoke("val").should("eq", "12");
     cy.get("#dateLanded-year").invoke("val").should("eq", "2021");
     // use picker
-    cy.get("#dateLanded img").should("be.visible");
-    cy.get("#dateLanded img").click({ force: true });
+    cy.get("#dateLanded-container img").should("be.visible");
+    cy.get("#dateLanded-container img").click({ force: true });
     cy.get(".react-datepicker-popper").should("be.visible");
     cy.get(".react-datepicker__day").eq(0).trigger("click");
     // check fields have values
-    cy.get("#dateLanded-day").invoke("val").should("not.eq", "11");
+    cy.get("#dateLanded").invoke("val").should("not.eq", "11");
     cy.get("#dateLanded-month").invoke("val").should("not.eq", "12");
     cy.get("#dateLanded-year").invoke("val").should("eq", "2021");
   });
@@ -326,8 +330,8 @@ describe("Direct landing page render", () => {
     cy.get(String.raw`#vessel\.vesselName`)
       .invoke("val")
       .should("eq", "");
-    cy.get("#dateLanded-day").clear();
-    cy.get("#dateLanded-day").invoke("val").should("eq", "");
+    cy.get("#dateLanded").clear();
+    cy.get("#dateLanded").invoke("val").should("eq", "");
     cy.get("#dateLanded-month").clear();
     cy.get("#dateLanded-month").invoke("val").should("eq", "");
     cy.get("#dateLanded-year").clear();
@@ -338,7 +342,7 @@ describe("Direct landing page render", () => {
       .invoke("val")
       .should("eq", "");
     // populate valid landed date
-    cy.get("#dateLanded-day").type("11");
+    cy.get("#dateLanded").type("11");
     cy.get("#dateLanded-month").type("12");
     cy.get("#dateLanded-year").type("2021");
     // attempt to change vessel
@@ -350,11 +354,11 @@ describe("Direct landing page render", () => {
 
   it("should fill the form fields with gear details", () => {
     // start date
-    cy.get("#startDate").find("img").click({ force: true });
+    cy.get("#startDate-container").find("img").click({ force: true });
     cy.get(".react-datepicker-popper").should("be.visible");
     cy.get(".react-datepicker__day").eq(0).trigger("click");
     // date landed
-    cy.get("#dateLanded").find("img").click({ force: true });
+    cy.get("#dateLanded-container").find("img").click({ force: true });
     cy.get(".react-datepicker-popper").should("be.visible");
     cy.get(".react-datepicker__day").eq(10).trigger("click");
     // Fao
@@ -908,8 +912,8 @@ describe("Direct Landing Error Messages - English", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     // Enter invalid date: Day 23 Month 14 Year 2026
-    cy.get("#dateLanded-day").clear();
-    cy.get("#dateLanded-day").type("23");
+    cy.get("#dateLanded").clear();
+    cy.get("#dateLanded").type("23");
     cy.get("#dateLanded-month").clear();
     cy.get("#dateLanded-month").type("14");
     cy.get("#dateLanded-year").clear();
@@ -926,8 +930,8 @@ describe("Direct Landing Error Messages - English", () => {
     };
     // Passes in dev localhost:3000
     cy.visit(directLandingUrl, { qs: { ...testParams } });
-    cy.get("#dateLanded-day").clear();
-    cy.get("#dateLanded-day").type("1");
+    cy.get("#dateLanded").clear();
+    cy.get("#dateLanded").type("1");
     cy.get("#dateLanded-month").clear();
     cy.get("#dateLanded-month").type("1");
     cy.get("#dateLanded-year").clear();

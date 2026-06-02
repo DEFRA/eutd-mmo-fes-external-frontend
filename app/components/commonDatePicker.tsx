@@ -85,7 +85,10 @@ export const CommonDatePicker = ({
   }, [day, month, year]);
 
   return (
-    <div id={id} className={isEmpty(errors) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"}>
+    <div
+      id={`${id}-container`}
+      className={isEmpty(errors) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"}
+    >
       <fieldset className="govuk-fieldset" role="group" aria-describedby={errorMessageText(hintText, errors)}>
         <legend className="govuk-fieldset__legend govuk-fieldset__legend">
           {labelStyle === "bold" ? (
