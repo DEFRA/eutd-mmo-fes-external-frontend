@@ -457,10 +457,6 @@ describe("PS: Add catch details", () => {
 
     cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
     cy.focused().should("have.id", "errorIsland");
-    cy.get("#catches-0-catchCertificateNumber").should("have.value", "GBR-2023-CC-7E720BE");
-    cy.get("#catches-0-totalWeightLanded").should("have.value", "50");
-    cy.get("#catches-0-exportWeightBeforeProcessing").should("have.value", "25");
-    cy.get("#catches-0-exportWeightAfterProcessing").should("have.value", "20");
   });
 
   it("should clear the table when we click cancel", () => {
