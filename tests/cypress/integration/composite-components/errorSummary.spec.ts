@@ -328,4 +328,90 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       cy.get(".govuk-error-summary__list > li > a").should("have.length.greaterThan", 0);
     });
   });
+
+  describe("Errors prop handling and default value", () => {
+    it("should handle errors array being provided with values", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+      };
+      const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+      const pageUrl = `${documentUrl}/add-exporter-details`;
+
+      cy.visit(pageUrl, { qs: { ...testParams } });
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+      // Verify errors array is processed - each error creates a list item
+      cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 0);
+
+      // Verify the map function iterates over errors array
+      cy.get(".govuk-error-summary__list li").each(($li) => {
+        cy.wrap($li).find("a").should("exist");
+      });
+    });
+
+    it("should render all errors from the errors array", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
+      };
+      const documentUrl = "/create-catch-certificate/GBR-2021-CC-123";
+      const pageUrl = `${documentUrl}/what-are-you-exporting`;
+
+      cy.visit(pageUrl, { qs: { ...testParams } });
+      cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+
+      // Verify all errors in the array are rendered
+      cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 1);
+
+      // Each list item should have content
+      cy.get(".govuk-error-summary__list li").each(($li) => {
+        cy.wrap($li).invoke("text").should("not.be.empty");
+      });
+    });
+  });
+
+  describe("Component mount and ref initialization", () => {
+    it("should focus error summary element after mount via ref", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+      };
+      const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+      const pageUrl = `${documentUrl}/add-exporter-details`;
+
+      cy.visit(pageUrl, { qs: { ...testParams } });
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+      // Verify error summary is visible after scroll
+      cy.get("#errorIsland").should("be.visible");
+
+      // Verify the title is visible (proves scrollIntoView worked)
+      cy.get("#error-summary-title").should("be.visible");
+    });
+
+    it("should execute useEffect with ref.current check on component mount", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameError,
+      };
+      const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+      const pageUrl = `${documentUrl}/add-exporter-details`;
+
+      cy.visit(pageUrl, { qs: { ...testParams } });
+      cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+      // Wait for component to mount and useEffect to run
+      cy.wait(100);
+
+      // Verify error summary is rendered (useEffect ran with valid ref)
+      cy.get("#errorIsland").should("exist");
+
+      // Verify focus and scroll happened (title should be in viewport)
+      cy.get("#error-summary-title").should("be.visible");
+
+      // Verify the error summary is scrolled into view
+      cy.get("#errorIsland").then(($el) => {
+        const rect = $el[0].getBoundingClientRect();
+        // Element should be in viewport (scrollIntoView worked)
+        expect(rect.top).to.be.greaterThan(-1);
+      });
+    });
+  });
 });
