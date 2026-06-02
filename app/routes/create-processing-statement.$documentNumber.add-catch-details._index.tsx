@@ -660,6 +660,31 @@ const AddCatchDetailsIndex = () => {
     }
   }, [actionData, hasErrors]); // actionData changes on every action response, ensuring focus moves on repeated error submissions
 
+  // Restore submitted form values into controlled-input state after a save-and-continue validation error.
+  // useState initialises only on mount, so when actionData changes we must explicitly sync state here.
+  useEffect(() => {
+    if (!isEmpty(errors)) {
+      if (submittedFormData.catchCertificateNumber !== undefined) {
+        setCurrentCatchCertificateNumber(submittedFormData.catchCertificateNumber);
+      }
+      if (submittedFormData.catchCertificateType) {
+        setCurrentCatchCertificateType(submittedFormData.catchCertificateType);
+      }
+      if (submittedFormData.totalWeightLanded !== undefined) {
+        setCurrentTotalWeightLanded(submittedFormData.totalWeightLanded);
+      }
+      if (submittedFormData.exportWeightBeforeProcessing !== undefined) {
+        setCurrentExportWeightBeforeProcessing(submittedFormData.exportWeightBeforeProcessing);
+      }
+      if (submittedFormData.exportWeightAfterProcessing !== undefined) {
+        setCurrentExportWeightAfterProcessing(submittedFormData.exportWeightAfterProcessing);
+      }
+      if (submittedFormData.speciesCommodityCode !== undefined) {
+        setCurrentSpeciesCommodityCode(submittedFormData.speciesCommodityCode);
+      }
+    }
+  }, [actionData]);
+
   useEffect(() => {
     if (response) {
       setCurrentTotalWeightLanded(response.totalWeightLanded);
