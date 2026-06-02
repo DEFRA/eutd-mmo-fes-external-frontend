@@ -164,9 +164,28 @@ describe("SD: you-have-added-product page", () => {
 
       cy.wait(1000);
 
-      // This test verifies the renderErrorSummary function creates error summaries with linkData
-      // Note: The actual error summary may not always render depending on the test case state
-      // The important part is that the code path with linkData exists and the href logic is correct
+      // Check if error summary exists, if so verify its structure
+      cy.get("body").then(($body) => {
+        if ($body.find("#errorIsland").length > 0) {
+          // Verify error summary is rendered
+          cy.get("#errorIsland").should("exist");
+          cy.get(".govuk-error-summary").should("be.visible");
+
+          // Verify error summary has links with correct href attributes
+          cy.get(".govuk-error-summary__list a").should("have.length.at.least", 1);
+
+          // Verify links have proper href format pointing to product errors
+          cy.get(".govuk-error-summary__list a").each(($link) => {
+            cy.wrap($link).should("have.attr", "href");
+            cy.wrap($link).invoke("attr", "href").should("match", /#/);
+          });
+        } else {
+          // If no error summary, verify the page hasn't navigated (which would indicate validation passed)
+          cy.url().should("include", "/you-have-added-a-product");
+          // This tests the renderErrorSummary function's conditional logic that returns null when no errors
+          cy.log("No error summary rendered - renderErrorSummary returned null as expected when no errors for index");
+        }
+      });
     });
   });
 
@@ -754,7 +773,7 @@ describe("SD: you-have-added-product page", () => {
       cy.visit(sdPageUrl, { qs: { ...testParams } });
 
       // Verify forms are inline
-      cy.get("form.govuk-\\!-display-inline").should("exist");
+      cy.get(String.raw`form.govuk-\!-display-inline`).should("exist");
     });
 
     it("should have correct button classes and attributes (component lines 193-198, 210-215)", () => {

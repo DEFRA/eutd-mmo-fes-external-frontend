@@ -231,7 +231,8 @@ describe("Add exporter details: processingStatement journey", () => {
   });
 
   it("should display processingStatement specific warning content", () => {
-    cy.contains("h1", "Add exporter details").should("be.visible");
+    cy.contains("h1", "Add exporter details");
+    cy.get(".govuk-warning-text__text").should("contain", "This information will appear on the processing statement.");
   });
 
   it("should have back link for processingStatement journey", () => {
@@ -250,7 +251,11 @@ describe("Add exporter details: storageDocument journey", () => {
   });
 
   it("should display storageDocument specific warning content", () => {
-    cy.contains("h1", "Add exporter details").should("be.visible");
+    cy.contains("h1", "Add exporter details");
+    cy.get(".govuk-warning-text__text").should(
+      "contain",
+      "This information will appear on the non-manipulation document."
+    );
   });
 
   it("should have back link for storageDocument journey", () => {
