@@ -10,7 +10,7 @@ export interface IErrorSummaryProps {
 }
 
 export const ErrorSummary = ({
-  errors = [],
+  errors,
   containerClassName = "",
   linkData,
 }: React.PropsWithChildren<IErrorSummaryProps>) => {
@@ -19,10 +19,8 @@ export const ErrorSummary = ({
 
   useEffect(() => {
     // Focus the error summary when it mounts or when errors change
-    if (errorSummaryRef.current) {
-      errorSummaryRef.current.focus();
-      errorSummaryRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    errorSummaryRef.current?.focus();
+    errorSummaryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [errors]);
 
   const onChangeHandler: (e: React.FormEvent<HTMLAnchorElement>) => void = (e: React.FormEvent<HTMLAnchorElement>) => {
