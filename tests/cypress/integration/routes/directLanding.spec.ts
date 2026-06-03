@@ -326,8 +326,8 @@ describe("Direct landing page render", () => {
 
   it("should disable vessel input until date landed is populated", () => {
     waitForHydration();
-    cy.get(String.raw`#vessel\.vesselName`).clear();
-    cy.get(String.raw`#vessel\.vesselName`)
+    cy.get(String.raw`#vessel-vesselName`).clear();
+    cy.get(String.raw`#vessel-vesselName`)
       .invoke("val")
       .should("eq", "");
     cy.get("#dateLanded").clear();
@@ -337,8 +337,8 @@ describe("Direct landing page render", () => {
     cy.get("#dateLanded-year").clear();
     cy.get("#dateLanded-year").invoke("val").should("eq", "");
     // attempt to change vessel
-    cy.get(String.raw`#vessel\.vesselName`).type("CARINA (BF803)");
-    cy.get(String.raw`#vessel\.vesselName`)
+    cy.get(String.raw`#vessel-vesselName`).type("CARINA (BF803)");
+    cy.get(String.raw`#vessel-vesselName`)
       .invoke("val")
       .should("eq", "");
     // populate valid landed date
@@ -346,8 +346,8 @@ describe("Direct landing page render", () => {
     cy.get("#dateLanded-month").type("12");
     cy.get("#dateLanded-year").type("2021");
     // attempt to change vessel
-    cy.get(String.raw`#vessel\.vesselName`).type("CARINA (BF803)");
-    cy.get(String.raw`#vessel\.vesselName`)
+    cy.get(String.raw`#vessel-vesselName`).type("CARINA (BF803)");
+    cy.get(String.raw`#vessel-vesselName`)
       .invoke("val")
       .should("eq", "CARINA (BF803)");
   });
@@ -370,7 +370,7 @@ describe("Direct landing page render", () => {
       cy.get("#rfmo").select(2, { force: true });
     });
     // vessel
-    cy.get(String.raw`#vessel\.vesselName`).invoke("val", "CARINA (BF803)");
+    cy.get(String.raw`#vessel-vesselName`).invoke("val", "CARINA (BF803)");
     // weight
     cy.get(String.raw`#weights\.0\.exportWeight`).invoke("val", 4);
     cy.get(String.raw`#weights\.1\.exportWeight`).invoke("val", 8);
@@ -426,14 +426,14 @@ describe("Direct landing page render", () => {
 
   it("should trigger vessel dropdown when user types", () => {
     waitForHydration();
-    cy.get(String.raw`#vessel\.vesselName`)
+    cy.get(String.raw`#vessel-vesselName`)
       .invoke("val")
       .should("eq", "AARON (N370)");
-    cy.get(String.raw`#vessel\.vesselName`).clear();
-    cy.get(String.raw`#vessel\.vesselName`)
+    cy.get(String.raw`#vessel-vesselName`).clear();
+    cy.get(String.raw`#vessel-vesselName`)
       .invoke("val")
       .should("be.empty");
-    cy.get(String.raw`#vessel\.vesselName`).type("ff");
+    cy.get(String.raw`#vessel-vesselName`).type("ff");
     cy.get(".autocomplete__option").should("have.length", 5501);
   });
 });
@@ -496,20 +496,20 @@ describe("DirectLanding page when javascript is disabled", () => {
   });
 
   it("should render a select box with pre-populated vessel names when valid date landed exists", () => {
-    cy.get(String.raw`select#vessel\.vesselName`).should("exist");
-    cy.get(String.raw`select#vessel\.vesselName option`).should("not.have.length", 0);
+    cy.get(String.raw`select#vessel-vesselName`).should("exist");
+    cy.get(String.raw`select#vessel-vesselName option`).should("not.have.length", 0);
   });
 
   it("should retain existing vessel name when date landed is added", () => {
     cy.get("[data-testid='add-dateLanded']").click({ force: true });
-    cy.get(String.raw`select#vessel\.vesselName`).should("have.length.at.least", 1);
-    cy.get(String.raw`select#vessel\.vesselName`).should("have.value", "AARON (N370)");
+    cy.get(String.raw`select#vessel-vesselName`).should("have.length.at.least", 1);
+    cy.get(String.raw`select#vessel-vesselName`).should("have.value", "AARON (N370)");
   });
 
   it("should retain existing vessel name when date landed is added", () => {
     cy.get("[data-testid='add-dateLanded']").click({ force: true });
-    cy.get(String.raw`select#vessel\.vesselName`).should("have.length.at.least", 1);
-    cy.get(String.raw`select#vessel\.vesselName`).should("have.value", "AARON (N370)");
+    cy.get(String.raw`select#vessel-vesselName`).should("have.length.at.least", 1);
+    cy.get(String.raw`select#vessel-vesselName`).should("have.value", "AARON (N370)");
   });
 
   it("should click on save and continue", () => {
@@ -539,7 +539,7 @@ describe("DirectLanding page errors when javascript is disabled", () => {
   it("should trigger add date button", () => {
     cy.get("[data-testid='add-dateLanded']").click({ force: true });
     cy.url().should("include", "vessels");
-    cy.get(String.raw`#vessel\.vesselName`).should("have.length.at.least", 1);
+    cy.get(String.raw`#vessel-vesselName`).should("have.length.at.least", 1);
   });
 
   it("should click on save and continue", () => {
@@ -587,8 +587,8 @@ describe("DirectLanding page errors when javascript is enabled", () => {
   });
 
   it("should search autoinput field", () => {
-    cy.get(String.raw`#vessel\.vesselName`).type("AARON (N370)");
-    cy.get(String.raw`#vessel\.vesselName`).should("have.value", "AARON (N370)");
+    cy.get(String.raw`#vessel-vesselName`).type("AARON (N370)");
+    cy.get(String.raw`#vessel-vesselName`).should("have.value", "AARON (N370)");
   });
 
   it("should click on save and continue", () => {
@@ -876,7 +876,7 @@ describe("Direct Landing - Invalid date validation without vessel name error (FI
 
   it("should load the page with invalid pre-populated dates without a vessel field error", () => {
     cy.get(".govuk-heading-xl").contains("Add your trip").should("be.visible");
-    cy.get(String.raw`#vessel\.vesselName`).should("exist");
+    cy.get(String.raw`#vessel-vesselName`).should("exist");
   });
 
   it("should display date errors but not a vessel error when invalid dates are submitted (FIO-10474)", () => {
@@ -950,7 +950,7 @@ describe("Direct Landing Error Messages - English", () => {
       testCaseId: TestCaseId.DirectLandingVesselInvalid,
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
-    cy.get(String.raw`#vessel\.vesselName`)
+    cy.get(String.raw`#vessel-vesselName`)
       .invoke("val", "")
       .type(invalidVesselValue);
     cy.wait(500);
@@ -969,7 +969,7 @@ describe("Direct Landing Error Messages - English", () => {
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Select a vessel from the list");
     cy.get(".govuk-error-message").should("contain.text", "Select a vessel from the list");
-    cy.get(String.raw`#vessel\.vesselName`)
+    cy.get(String.raw`#vessel-vesselName`)
       .closest(".govuk-form-group")
       .should("have.class", "govuk-form-group--error");
   });
@@ -1107,7 +1107,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
       lng: "cy",
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
-    cy.get(String.raw`#vessel\.vesselName`)
+    cy.get(String.raw`#vessel-vesselName`)
       .invoke("val", "")
       .type(invalidVesselValue);
     cy.wait(500);
@@ -1127,7 +1127,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
     cy.get("#error-summary-title").contains("Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
     cy.get(".govuk-error-message").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
-    cy.get(String.raw`#vessel\.vesselName`)
+    cy.get(String.raw`#vessel-vesselName`)
       .closest(".govuk-form-group")
       .should("have.class", "govuk-form-group--error");
   });
@@ -1205,11 +1205,11 @@ describe("Direct Landing - Client-side fetch error resilience", () => {
   it("should handle vessel search fetch network errors gracefully and keep the vessel input rendered", () => {
     cy.intercept("GET", "/get-vessels*", { forceNetworkError: true }).as("vesselFetchError");
     // Clear vessel and type to trigger the useEffect which fetches /get-vessels
-    cy.get(String.raw`#vessel\.vesselName`).clear();
-    cy.get(String.raw`#vessel\.vesselName`).type("ab");
+    cy.get(String.raw`#vessel-vesselName`).clear();
+    cy.get(String.raw`#vessel-vesselName`).type("ab");
     cy.wait("@vesselFetchError");
     // After the error, the vessel input should still be in the DOM
-    cy.get(String.raw`#vessel\.vesselName`).should("exist");
+    cy.get(String.raw`#vessel-vesselName`).should("exist");
   });
 });
 
@@ -1311,22 +1311,22 @@ describe("Direct Landing - Autocomplete aria-controls accessibility (FI0-11120)"
   });
 
   it("vessel name combobox input should have role=combobox and aria-controls referencing the listbox ID", () => {
-    cy.get('input[id="vessel.vesselName"]')
+    cy.get('input[id="vessel-vesselName"]')
       .should("have.attr", "role", "combobox")
-      .should("have.attr", "aria-controls", "vessel.vesselName__listbox");
+      .should("have.attr", "aria-controls", "vessel-vesselName__listbox");
   });
 
   it("vessel name listbox should appear with correct ID, role and no duplicates when suggestions open", () => {
     // vessel minCharsBeforeSearch requires 2+ chars (consistent with existing spec)
-    cy.get('input[id="vessel.vesselName"]')
-      .should("have.attr", "aria-controls", "vessel.vesselName__listbox")
+    cy.get('input[id="vessel-vesselName"]')
+      .should("have.attr", "aria-controls", "vessel-vesselName__listbox")
       .type("ff");
     // Confirms: listbox exists, has correct role, ID is unique, aria-controls matches rendered ID
-    cy.get('[id="vessel.vesselName__listbox"]').should("have.length", 1).should("have.attr", "role", "listbox");
+    cy.get('[id="vessel-vesselName__listbox"]').should("have.length", 1).should("have.attr", "role", "listbox");
   });
 
   it("vessel name combobox aria-expanded should toggle false→true when suggestions open", () => {
-    cy.get('input[id="vessel.vesselName"]')
+    cy.get('input[id="vessel-vesselName"]')
       .should("have.attr", "aria-expanded", "false")
       .type("ff")
       .should("have.attr", "aria-expanded", "true");
