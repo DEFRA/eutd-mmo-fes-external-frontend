@@ -112,7 +112,7 @@ const hasMaxLandingExceeded = (errors: any, maxLandingExceeded: boolean) => {
     };
   }
 };
-const getVesselClassName = (errors: any) => errors["vessel.vesselName"] ?? "";
+const getVesselClassName = (errors: any) => errors["vessel-vesselName"] ?? "";
 
 const intialProcessedValues = (
   values: Pick<AddLandingsType, "gearCategory" | "availableGearTypes" | "gearType" | "selectedRfmo">
@@ -397,7 +397,7 @@ const AddLandings = () => {
     "eez.2",
     "eez.3",
     "eez.4",
-    "vessel.vesselName",
+    "vessel-vesselName",
     "exportWeight",
     "gearCategory",
     "gearType",
@@ -602,11 +602,11 @@ const AddLandings = () => {
                 rfmos={rfmos}
               />
               <AutocompleteFormField
-                id="vessel.vesselName"
+                id="vessel-vesselName"
                 name="vessel"
                 errorMessageText={
-                  errors["vessel.vesselName"]?.message
-                    ? t(errors["vessel.vesselName"].message, { ns: "errorsText" })
+                  errors["vessel-vesselName"]?.message
+                    ? t(errors["vessel-vesselName"].message, { ns: "errorsText" })
                     : ""
                 }
                 defaultValue={values.vessel ?? selectedVessel ?? ""}
@@ -626,7 +626,7 @@ const AddLandings = () => {
                 labelText={t("ccAddLandingVesselNameLabel", { ns: "directLandings" })}
                 hintText={t("ccAddLandingVesselNameHint", { ns: "directLandings" })}
                 containerClassName={
-                  isEmpty(errors["vessel.vesselName"])
+                  isEmpty(errors["vessel-vesselName"])
                     ? "govuk-form-group govuk-!-width-one-half"
                     : "govuk-form-group govuk-!-width-one-half govuk-form-group--error"
                 }
@@ -635,9 +635,9 @@ const AddLandings = () => {
                   selectClassName: vesselClassName,
                 }}
                 inputProps={{
-                  id: "vessel.vesselName",
+                  id: "vessel-vesselName",
                   className: vesselClassName,
-                  "aria-describedby": "vessel.vesselName-hint",
+                  "aria-describedby": "vessel-vesselName-hint",
                 }}
                 onChange={enableChange ? handleVesselChange : undefined}
                 onSelected={handleVesselSelected}

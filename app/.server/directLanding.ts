@@ -171,14 +171,16 @@ const transformError = (
       },
     };
   } else if (errorKey === "vessel.vesselName") {
+    // FI0-11239: DAC_Error_Focus_Usability_02 (AAA)
+    const vesselNameErrorKey = errorKey.replaceAll(".", "-");
     // FIO-10474: Handle vessel errors separately without date-related params
     return {
-      [errorKey]: {
+      [vesselNameErrorKey]: {
         key: errors[errorKey],
       },
     };
   } else if (errorKey.includes("exportWeight")) {
-    const index: number = parseInt(errorKey.split(".")[1]);
+    const index: number = Number.parseInt(errorKey.split(".")[1]);
     const product = products.items[index].product;
 
     return {

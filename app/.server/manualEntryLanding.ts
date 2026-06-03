@@ -204,7 +204,7 @@ const onAddLandingResponse = async (
     case 200:
     case 204:
       return await response.json();
-    case 400:
+    case 400: {
       const errorsResponse = await response.json();
       const products: ProductLanded[] = errorsResponse?.items ?? [];
       const product: string =
@@ -228,7 +228,7 @@ const onAddLandingResponse = async (
           }
 
           return {
-            key: error,
+            key: error === "vessel.vesselName" ? error.replaceAll(".", "-") : error,
             message: getErrorMessage(messageKey),
             ...(messageKey === "error.dateLanded.date.max" && {
               value: { dynamicValue: getEnv().LANDING_LIMIT_DAYS_FUTURE },
@@ -242,6 +242,7 @@ const onAddLandingResponse = async (
           };
         }),
       };
+    }
     case 403:
       return {
         unauthorised: true,

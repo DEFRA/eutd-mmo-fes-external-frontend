@@ -160,7 +160,7 @@ const DirectLanding = () => {
 
   // vessel input
   const getVesselErrorText = () => {
-    const vesselNameError = errors?.["vessel.vesselName"]?.message ?? "";
+    const vesselNameError = errors?.["vessel-vesselName"]?.message ?? "";
     const vesselIsListedError = errors?.["vessel.isListed"]?.message ?? "";
     const error = vesselNameError || vesselIsListedError;
     return isEmpty(error) ? "" : t(error, { ns: "errorsText" });
@@ -292,10 +292,10 @@ const DirectLanding = () => {
   const faoValue = normalize(faoArea) ?? normalize(directLandings?.faoArea) ?? "FAO27";
   const { "vessel.isListed": isListedError, ...restErrors } = errors;
   const errorsForSummary =
-    isListedError && !restErrors["vessel.vesselName"]
+    isListedError && !restErrors["vessel-vesselName"]
       ? {
           ...restErrors,
-          "vessel.vesselName": { ...isListedError, fieldId: "vessel.vesselName-error", key: "vessel.vesselName" },
+          "vessel-vesselName": { ...isListedError, fieldId: "vessel-vesselName-error", key: "vessel-vesselName" },
         }
       : restErrors;
 
@@ -317,7 +317,7 @@ const DirectLanding = () => {
             "eez.2",
             "eez.3",
             "eez.4",
-            "vessel.vesselName",
+            "vessel-vesselName",
             "gearCategory",
             "gearType",
             "weight",
@@ -425,7 +425,7 @@ const DirectLanding = () => {
                 rfmoHelpSectionContentTwoLink={t("ccRfmoHelpSectionContentTwoLink")}
               />
               <AutocompleteFormField
-                id="vessel.vesselName"
+                id="vessel-vesselName"
                 name="vessel"
                 errorMessageText={getVesselErrorText()}
                 defaultValue={values?.vessels ?? vesselSelected ?? ""}
@@ -445,16 +445,16 @@ const DirectLanding = () => {
                 }}
                 containerClassName={classNames("govuk-form-group", "govuk-!-width-one-half", {
                   "govuk-form-group--error":
-                    !isEmpty(errors["vessel.vesselName"]) || !isEmpty(errors["vessel.isListed"]),
+                    !isEmpty(errors["vessel-vesselName"]) || !isEmpty(errors["vessel.isListed"]),
                 })}
                 selectProps={{
                   selectClassName: classNames("govuk-select", {
-                    "govuk-select--error": !isEmpty(errors["vessel.vesselName"]) || !isEmpty(errors["vessel.isListed"]),
+                    "govuk-select--error": !isEmpty(errors["vessel-vesselName"]) || !isEmpty(errors["vessel.isListed"]),
                   }),
                 }}
                 inputProps={{
                   className: classNames("govuk-input", {
-                    "govuk-input--error": !isEmpty(errors["vessel.vesselName"]) || !isEmpty(errors["vessel.isListed"]),
+                    "govuk-input--error": !isEmpty(errors["vessel-vesselName"]) || !isEmpty(errors["vessel.isListed"]),
                   }),
                 }}
                 onChange={enableChange ? handleVesselChange : undefined}
