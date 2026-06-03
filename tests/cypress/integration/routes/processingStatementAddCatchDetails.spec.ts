@@ -63,7 +63,7 @@ describe("PS: Add catch details", () => {
     cy.get("legend").contains("Was the catch certificate issued in the UK?");
     cy.get("#catches-0-catchCertificateType-hint").should("be.visible");
     cy.get("input[type='radio'][name='catchCertificateType']").should("have.length", 2);
-    cy.get("label[for='catchCertificateType-uk']").should("contain.text", "Yes");
+    cy.get("label[for='catches-0-catchCertificateType']").should("contain.text", "Yes");
     cy.get("label[for='catchCertificateType-non_uk']").should("contain.text", "No");
   });
 
@@ -441,8 +441,8 @@ describe("PS: Add catch details", () => {
     };
 
     cy.visit(validAddCatchDetailsUrlForUK, { qs: { ...testParams } });
-    cy.get("#catchCertificateType-uk").check({ force: true });
-    cy.get("#catchCertificateType-uk").should("be.checked");
+    cy.get("#catches-0-catchCertificateType").check({ force: true });
+    cy.get("#catches-0-catchCertificateType").should("be.checked");
     cy.get('[data-testid="issuing-country-0"]').should("not.exist");
     cy.get("#catches-0-catchCertificateNumber").clear({ force: true });
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2023-CC-7E720BE", { force: true });
