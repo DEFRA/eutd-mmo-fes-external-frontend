@@ -471,7 +471,7 @@ export const getTransformedError = (errors: IError[], vesselInput?: string): IEr
     // Vessel fallback: if error is 'ccAddLandingVesselNameUnpopulatedError' but vessel field is not empty, show 'ccAddLandingSelectVesselListNullError'
     let errorMessage = error.message;
     if (
-      errorKey === "vessel.vesselName" &&
+      errorKey === "vessel-vesselName" &&
       error.message === "ccAddLandingVesselNameUnpopulatedError" &&
       vesselInput !== undefined &&
       vesselInput.trim() !== ""

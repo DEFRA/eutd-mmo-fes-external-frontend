@@ -21,7 +21,7 @@ const verifyLandingFormIsReset = (isProductEmpty: boolean) => {
   cy.get("#dateLanded").should("have.value", "");
   cy.get("#select-faoArea").should("have.value", "FAO27");
   cy.get("#highSeasArea").should("not.be.checked");
-  cy.get(String.raw`#vessel\.vesselName`).should("have.value", "");
+  cy.get(String.raw`#vessel-vesselName`).should("have.value", "");
   cy.get("#weight").should("have.value", "");
   cy.get("select#gearCategory option:selected").should("have.value", "");
   cy.get("select#gearType option:selected").should("have.value", "");
@@ -55,8 +55,8 @@ const populateLandingForm = () => {
   //High Seas Area
   cy.get("#highSeasArea").check();
   // vessel
-  cy.get(String.raw`#vessel\.vesselName`).invoke("val", "CARINA (BF803)");
-  cy.get(String.raw`#vessel\.vesselName`)
+  cy.get(String.raw`#vessel-vesselName`).invoke("val", "CARINA (BF803)");
+  cy.get(String.raw`#vessel-vesselName`)
     .should("have.prop", "value")
     .and("not.be.empty");
   // weight
@@ -484,7 +484,7 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.get("#dateLanded").should("not.have.value", "");
     cy.get("#dateLanded").should("not.have.value", "");
     cy.get("#select-faoArea").should("have.value", "FAO27");
-    cy.get(String.raw`#vessel\.vesselName`).should("not.have.value", "");
+    cy.get(String.raw`#vessel-vesselName`).should("not.have.value", "");
     cy.get("#weight").should("not.have.value", "");
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
@@ -516,7 +516,7 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.get("#dateLanded").should("not.have.value", "");
     cy.get("#dateLanded").should("not.have.value", "");
     cy.get("#select-faoArea").should("have.value", "FAO27");
-    cy.get(String.raw`#vessel\.vesselName`).should("not.have.value", "");
+    cy.get(String.raw`#vessel-vesselName`).should("not.have.value", "");
     cy.get("#weight").should("not.have.value", "");
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
@@ -540,7 +540,7 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.get("#dateLanded").should("not.have.value", "");
     cy.get("#dateLanded").should("not.have.value", "");
     cy.get("#select-faoArea").should("have.value", "FAO27");
-    cy.get(String.raw`#vessel\.vesselName`).should("not.have.value", "");
+    cy.get(String.raw`#vessel-vesselName`).should("not.have.value", "");
     cy.get("#weight").should("not.have.value", "");
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
@@ -564,7 +564,7 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.get("#dateLanded").should("not.have.value", "");
     cy.get("#dateLanded").should("not.have.value", "");
     cy.get("#select-faoArea").should("have.value", "FAO27");
-    cy.get(String.raw`#vessel\.vesselName`).should("not.have.value", "");
+    cy.get(String.raw`#vessel-vesselName`).should("not.have.value", "");
     cy.get("#weight").should("not.have.value", "");
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
@@ -1169,15 +1169,15 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
   });
 
   it("should not allow vessel selection until Date Landed is valid", () => {
-    cy.get(String.raw`#vessel\.vesselName`).type("SHOULDNOTWORK", { force: true });
-    cy.get(String.raw`#vessel\.vesselName`).should("have.value", "");
+    cy.get(String.raw`#vessel-vesselName`).type("SHOULDNOTWORK", { force: true });
+    cy.get(String.raw`#vessel-vesselName`).should("have.value", "");
     cy.get("#dateLanded").type("12");
     cy.get("#dateLanded-month").type("05");
-    cy.get(String.raw`#vessel\.vesselName`).type("SHOULDNOTWORK", { force: true });
-    cy.get(String.raw`#vessel\.vesselName`).should("have.value", "");
+    cy.get(String.raw`#vessel-vesselName`).type("SHOULDNOTWORK", { force: true });
+    cy.get(String.raw`#vessel-vesselName`).should("have.value", "");
     const today = new Date();
     cy.get("#dateLanded-year").type(today.getFullYear().toString());
-    cy.get(String.raw`#vessel\.vesselName`).type("SHOULDWORK", { force: true });
+    cy.get(String.raw`#vessel-vesselName`).type("SHOULDWORK", { force: true });
   });
 
   it("should clear vessel input if Date Landed is changed to invalid", () => {
