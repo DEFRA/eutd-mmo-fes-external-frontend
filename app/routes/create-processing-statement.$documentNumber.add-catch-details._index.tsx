@@ -162,7 +162,7 @@ const CatchCertificateTypeRadios: React.FC<{
 
   return (
     <div
-      id={`${currentCatchCertificateType}-catches-${catchIndex}-catchCertificateType`}
+      id={fieldKey}
       className={classNames("govuk-form-group", {
         "govuk-form-group--error": hasError(errors, fieldKey),
       })}
@@ -184,7 +184,7 @@ const CatchCertificateTypeRadios: React.FC<{
           <div className="govuk-radios__item">
             <input
               className="govuk-radios__input"
-              id={`catches-${catchIndex}-catchCertificateType`}
+              id="catchCertificateType-uk"
               name="catchCertificateType"
               type="radio"
               value="uk"
@@ -196,7 +196,7 @@ const CatchCertificateTypeRadios: React.FC<{
               }}
               defaultChecked={defaultCertType === "uk"}
             />
-            <label className="govuk-label govuk-radios__label" htmlFor={`catches-${catchIndex}-catchCertificateType`}>
+            <label className="govuk-label govuk-radios__label" htmlFor="catchCertificateType-uk">
               {t("commonYesLabel", { ns: "common" })}
             </label>
           </div>
@@ -716,10 +716,6 @@ const AddCatchDetailsIndex = () => {
   const ccNumberKey = `catches-${catchIndex}-catchCertificateNumber`;
   const ccCommodityCodeKey = `catches-${catchIndex}-speciesCommodityCode`;
   const addProductDetailsConfig = getAddProductDetailsConfig(isEditing);
-  const displayedCatchCertificateType =
-    !isEmpty(errors) && submittedFormData.catchCertificateType
-      ? submittedFormData.catchCertificateType
-      : currentCatchCertificateType;
 
   return (
     <Main backUrl={`/create-processing-statement/${documentNumber}/add-consignment-details/${productId}`}>
@@ -765,14 +761,14 @@ const AddCatchDetailsIndex = () => {
               <ProductArrivalSpeciesDetails speciesExemptLink={speciesExemptLink} />
               <CatchCertificateTypeRadios
                 catchIndex={catchIndex}
-                currentCatchCertificateType={displayedCatchCertificateType}
+                currentCatchCertificateType={currentCatchCertificateType}
                 catchCertificateType={catchCertificateType}
                 errors={errors}
                 t={t}
                 handleCatchCertificateTypeChange={handleCatchCertificateTypeChange}
                 submittedCatchCertificateType={submittedFormData.catchCertificateType}
               />
-              {shouldShowIssuingCountry(isHydrated, displayedCatchCertificateType) && (
+              {shouldShowIssuingCountry(isHydrated, currentCatchCertificateType) && (
                 <IssuingCountryField
                   catchIndex={catchIndex}
                   isReset={isReset}
@@ -893,7 +889,7 @@ const AddCatchDetailsIndex = () => {
                 catchIndex={catchIndex}
                 catchId={catchId ?? ""}
                 isReset={isReset}
-                catchCertificateType={displayedCatchCertificateType}
+                catchCertificateType={currentCatchCertificateType}
                 errors={errors}
                 isHydrated={isHydrated}
                 t={t}
