@@ -14,7 +14,7 @@ describe("lookupErrorText helpers", () => {
           message: "ccAddLandingForProductError",
         },
         {
-          key: "vessel.vesselName",
+          key: "vessel-vesselName",
           message: "ccAddVesselFormVesselNameError",
         },
       ];
@@ -28,11 +28,11 @@ describe("lookupErrorText helpers", () => {
           value: undefined,
           fieldId: "product-error",
         },
-        "vessel.vesselName": {
-          key: "vessel.vesselName",
+        "vessel-vesselName": {
+          key: "vessel-vesselName",
           message: "ccAddVesselFormVesselNameError",
           value: undefined,
-          fieldId: "vessel.vesselName-error",
+          fieldId: "vessel-vesselName-error",
         },
       });
     });
@@ -40,27 +40,27 @@ describe("lookupErrorText helpers", () => {
     it("should show 'select from list' error when vessel input is non-empty but vessel is not found", () => {
       const errors: IError[] = [
         {
-          key: "vessel.vesselName",
+          key: "vessel-vesselName",
           message: "ccAddLandingVesselNameUnpopulatedError",
         },
       ];
 
       const result = getTransformedError(errors, "INVALID123");
 
-      expect(result["vessel.vesselName"].message).to.equal("ccAddLandingSelectVesselListNullError");
+      expect(result["vessel-vesselName"].message).to.equal("ccAddLandingSelectVesselListNullError");
     });
 
     it("should keep 'unpopulated' error when vessel input is empty", () => {
       const errors: IError[] = [
         {
-          key: "vessel.vesselName",
+          key: "vessel-vesselName",
           message: "ccAddLandingVesselNameUnpopulatedError",
         },
       ];
 
       const result = getTransformedError(errors, "");
 
-      expect(result["vessel.vesselName"].message).to.equal("ccAddLandingVesselNameUnpopulatedError");
+      expect(result["vessel-vesselName"].message).to.equal("ccAddLandingVesselNameUnpopulatedError");
     });
 
     it("should include error values when provided", () => {
@@ -91,10 +91,10 @@ describe("lookupErrorText helpers", () => {
   describe("displayErrorMessagesInOrder", () => {
     it("should return errors in the specified order", () => {
       const errors: IErrorsTransformed = {
-        "vessel.vesselName": {
-          key: "vessel.vesselName",
+        "vessel-vesselName": {
+          key: "vessel-vesselName",
           message: "ccAddVesselFormVesselNameError",
-          fieldId: "vessel.vesselName-error",
+          fieldId: "vessel-vesselName-error",
         },
         product: {
           key: "product",
@@ -108,14 +108,14 @@ describe("lookupErrorText helpers", () => {
         },
       };
 
-      const errorKeysInOrder = ["product", "dateLanded", "vessel.vesselName"];
+      const errorKeysInOrder = ["product", "dateLanded", "vessel-vesselName"];
 
       const result = displayErrorMessagesInOrder(errors, errorKeysInOrder);
 
       expect(result).to.have.length(3);
       expect(result[0].key).to.equal("product");
       expect(result[1].key).to.equal("dateLanded");
-      expect(result[2].key).to.equal("vessel.vesselName");
+      expect(result[2].key).to.equal("vessel-vesselName");
     });
 
     it("should handle errors with the same prefix (e.g., multiple products)", () => {
@@ -276,7 +276,7 @@ describe("lookupErrorText helpers", () => {
         "eez.2",
         "eez.3",
         "eez.4",
-        "vessel.vesselName",
+        "vessel-vesselName",
         "exportWeight",
         "gearCategory",
         "gearType",
