@@ -20,6 +20,7 @@ export const ErrorSummary = ({
   useEffect(() => {
     if (errors.length > 0) {
       summaryRef.current?.focus();
+      summaryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [errors]);
 
