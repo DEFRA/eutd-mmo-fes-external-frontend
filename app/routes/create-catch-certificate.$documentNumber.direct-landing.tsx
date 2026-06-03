@@ -122,7 +122,7 @@ const DirectLanding = () => {
       ? directLandings?.weights.map((weight: IDirectLandingsDetails) => ({
           exportWeight: (() => {
             const val = weight.exportWeight;
-            const parsed = typeof val === "number" ? val : parseFloat(String(val));
+            const parsed = typeof val === "number" ? val : Number.parseFloat(String(val));
             return !Number.isNaN(parsed) && parsed !== null ? parsed : 0;
           })(),
         }))
@@ -209,9 +209,9 @@ const DirectLanding = () => {
   };
 
   const getTotalWeight = (weightDetail: WeightDetails) => {
-    const weightDetailIndex = parseInt(weightDetail?.id.split(".")[1]);
+    const weightDetailIndex = Number.parseInt(weightDetail?.id.split(".")[1]);
 
-    if (!isNaN(weightDetailIndex)) {
+    if (!Number.isNaN(weightDetailIndex)) {
       const totalWeights: { exportWeight: number }[] = Array.isArray(exportWeights)
         ? exportWeights.map((weight: { exportWeight: number }, index: number) => {
             if (index === weightDetailIndex) {
@@ -231,7 +231,8 @@ const DirectLanding = () => {
 
       setCalculatedWeight(
         totalWeights.reduce(
-          (curr: number, acc: { exportWeight: number }) => (isNaN(acc.exportWeight) ? curr : curr + acc.exportWeight),
+          (curr: number, acc: { exportWeight: number }) =>
+            Number.isNaN(acc.exportWeight) ? curr : curr + acc.exportWeight,
           0
         )
       );

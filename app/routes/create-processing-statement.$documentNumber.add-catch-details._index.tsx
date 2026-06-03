@@ -162,7 +162,7 @@ const CatchCertificateTypeRadios: React.FC<{
 
   return (
     <div
-      id={fieldKey}
+      id={`${currentCatchCertificateType}-catches-${catchIndex}-catchCertificateType`}
       className={classNames("govuk-form-group", {
         "govuk-form-group--error": hasError(errors, fieldKey),
       })}
@@ -184,7 +184,7 @@ const CatchCertificateTypeRadios: React.FC<{
           <div className="govuk-radios__item">
             <input
               className="govuk-radios__input"
-              id="catchCertificateType-uk"
+              id={`catches-${catchIndex}-catchCertificateType`}
               name="catchCertificateType"
               type="radio"
               value="uk"
@@ -196,7 +196,7 @@ const CatchCertificateTypeRadios: React.FC<{
               }}
               defaultChecked={defaultCertType === "uk"}
             />
-            <label className="govuk-label govuk-radios__label" htmlFor="catchCertificateType-uk">
+            <label className="govuk-label govuk-radios__label" htmlFor={`catches-${catchIndex}-catchCertificateType`}>
               {t("commonYesLabel", { ns: "common" })}
             </label>
           </div>

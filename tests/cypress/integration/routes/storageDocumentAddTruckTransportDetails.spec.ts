@@ -93,7 +93,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#nationalityOfVehicle").should("exist");
     cy.get("#registrationNumber").should("exist");
     cy.get("#freightBillNumber").should("exist");
-    cy.get("#exportDate-day").should("exist");
+    cy.get("#exportDate").should("exist");
     cy.get("#exportDate-month").should("exist");
     cy.get("#exportDate-year").should("exist");
   });
@@ -174,8 +174,8 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#registrationNumber").type("DEP789", { force: true });
     cy.get("#departurePlace").clear({ force: true });
     cy.get("#departurePlace").type("Southampton Port", { force: true });
-    cy.get("#exportDate-day").clear({ force: true });
-    cy.get("#exportDate-day").type("10", { force: true });
+    cy.get("#exportDate").clear({ force: true });
+    cy.get("#exportDate").type("10", { force: true });
     cy.get("#exportDate-month").clear({ force: true });
     cy.get("#exportDate-month").type("02", { force: true });
     cy.get("#exportDate-year").clear({ force: true });
@@ -197,7 +197,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#nationalityOfVehicle").should("have.value", "Belgium");
     cy.get("#registrationNumber").should("have.value", "DEP789");
     cy.get("#departurePlace").should("have.value", "Southampton Port");
-    cy.get("#exportDate-day").should("have.value", "10");
+    cy.get("#exportDate").should("have.value", "10");
     cy.get("#exportDate-month").should("have.value", "02");
     cy.get("#exportDate-year").should("have.value", "2026");
     cy.get('input[name="containerNumbers.0"]').should("have.value", "GHIJ3456789");
@@ -217,8 +217,8 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#registrationNumber").type("NL999", { force: true });
     cy.get("#departurePlace").clear({ force: true });
     cy.get("#departurePlace").type("Rotterdam", { force: true });
-    cy.get("#exportDate-day").clear({ force: true });
-    cy.get("#exportDate-day").type("31", { force: true });
+    cy.get("#exportDate").clear({ force: true });
+    cy.get("#exportDate").type("31", { force: true });
     cy.get("#exportDate-month").clear({ force: true });
     cy.get("#exportDate-month").type("12", { force: true });
     cy.get("#exportDate-year").clear({ force: true });
@@ -235,7 +235,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       testCaseId: TestCaseId.TruckTransportSaveAsDraftRetainDateCheck,
     };
     cy.visit(truckPageUrl, { qs: { ...checkParams } });
-    cy.get("#exportDate-day").should("have.value", "31");
+    cy.get("#exportDate").should("have.value", "31");
     cy.get("#exportDate-month").should("have.value", "12");
     cy.get("#exportDate-year").should("have.value", "2025");
     cy.get('input[name="containerNumbers.0"]').should("have.value", "BAD-FORMAT");
@@ -457,7 +457,7 @@ describe("Add Transportation Details Truck: Invalid year in export date", () => 
     cy.get("#nationalityOfVehicle").type("France", { force: true });
     cy.get("#registrationNumber").type("AB12 3CD", { force: true });
     cy.get("#departurePlace").type("Dover port", { force: true });
-    cy.get("#exportDate-day").clear().type("01", { force: true });
+    cy.get("#exportDate").clear().type("01", { force: true });
     cy.get("#exportDate-month").clear().type("01", { force: true });
     cy.get("#exportDate-year").clear().type("0000", { force: true });
     cy.get("[data-testid=save-and-continue]").click({ force: true });

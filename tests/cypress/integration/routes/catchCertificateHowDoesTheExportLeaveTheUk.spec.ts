@@ -43,7 +43,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
 
     cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
 
-    cy.get("#truck").click({ force: true });
+    cy.get("#vehicle").click({ force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
 
     cy.url().should("include", "/add-transportation-details-truck");
@@ -155,7 +155,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
 
     cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
 
-    cy.get("#truck-item-hint").should(
+    cy.get("#vehicle-item-hint").should(
       "contain",
       "Select truck if your vehicle travels by ferry or through the Eurotunnel."
     );

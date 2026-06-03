@@ -17,7 +17,7 @@ describe("Storage facility back link after arrival transport save", () => {
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").type("Calais port", { force: true });
     cy.get("#placeOfUnloading").type("Dover", { force: true });
-    cy.get("#departureDate-day").type("25", { force: true });
+    cy.get("#departureDate").type("25", { force: true });
     cy.get("#departureDate-month").type("07", { force: true });
     cy.get("#departureDate-year").type("2025", { force: true });
 

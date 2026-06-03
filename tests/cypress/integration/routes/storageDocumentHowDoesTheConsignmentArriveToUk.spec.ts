@@ -48,7 +48,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
 
     cy.visit(howDoesTheConsignmentArriveToUkUrl, { qs: { ...testParams } });
 
-    cy.get("#truck").click({ force: true });
+    cy.get("#vehicle").click({ force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
 
     cy.url().should("include", "/add-arrival-transportation-details-truck");

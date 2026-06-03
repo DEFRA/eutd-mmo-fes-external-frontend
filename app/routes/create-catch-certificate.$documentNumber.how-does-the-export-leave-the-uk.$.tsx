@@ -100,7 +100,7 @@ const HowDoesTheExportLeaveTheUk = () => {
                       <label htmlFor={option.id} className="govuk-label govuk-radios__label">
                         {t(option.label, { ns: "transportation" })}
                       </label>
-                      {option.id === "truck" && (
+                      {option.value === "truck" && (
                         <div id={`${option.id}-item-hint`} className="govuk-hint govuk-radios__hint">
                           {t("transportSelectionTruckGuidance", { ns: "transportation" })}
                         </div>

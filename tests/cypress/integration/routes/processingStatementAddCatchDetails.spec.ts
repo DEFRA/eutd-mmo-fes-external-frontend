@@ -63,7 +63,7 @@ describe("PS: Add catch details", () => {
     cy.get("legend").contains("Was the catch certificate issued in the UK?");
     cy.get("#catches-0-catchCertificateType-hint").should("be.visible");
     cy.get("input[type='radio'][name='catchCertificateType']").should("have.length", 2);
-    cy.get("label[for='catchCertificateType-uk']").should("contain.text", "Yes");
+    cy.get("label[for='catches-0-catchCertificateType']").should("contain.text", "Yes");
     cy.get("label[for='catchCertificateType-non_uk']").should("contain.text", "No");
   });
 
@@ -1731,7 +1731,7 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.get('input[name="catchCertificateType"]').should("exist");
 
     // 1. First click UK to ensure we're starting from a known state
-    cy.get('label[for="catchCertificateType-uk"]').click();
+    cy.get("#catches-0-catchCertificateType").click();
     cy.wait(500); // Wait for React state update
     cy.get('[data-testid="issuing-country-0"]').should("not.exist");
 
@@ -1741,7 +1741,7 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.get('[data-testid="issuing-country-0"]', { timeout: 10000 }).should("exist");
 
     // 3. Select UK radio to hide issuing country field again
-    cy.get('label[for="catchCertificateType-uk"]').click();
+    cy.get("#catches-0-catchCertificateType").click();
     cy.wait(500); // Wait for React state update
     cy.get('[data-testid="issuing-country-0"]').should("not.exist");
 

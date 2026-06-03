@@ -218,7 +218,7 @@ export const StorageDocumentTransportDisplay = ({
       label: t("sdCheckYourInformationDepartureDate", { ns: "sdCheckYourInformation" }),
       value: transport.exportDate,
       hasChangeLink: true,
-      backLinkId: "exportDate-day",
+      backLinkId: "exportDate",
     },
     {
       label: t(`sdCheckYourInformationVehicleDepartureFrom${capitalize(transport.vehicle)}`, {
@@ -246,7 +246,7 @@ export const StorageDocumentTransportDisplay = ({
       label: t("sdCheckYourInformationDepartureDate", { ns: "sdCheckYourInformation" }),
       value: transport.departureDate,
       hasChangeLink: true,
-      backLinkId: "departureDate-day",
+      backLinkId: "departureDate",
     },
   ];
 

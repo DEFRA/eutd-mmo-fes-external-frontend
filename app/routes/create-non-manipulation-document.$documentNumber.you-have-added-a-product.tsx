@@ -232,7 +232,7 @@ const YouHaveAddedAProduct = () => {
           <SecureForm method="post" csrf={csrf}>
             <input type="hidden" name="nextUri" value={nextUri} />
             <div
-              id="addAnotherProduct"
+              id={`${documentNumber}-addAnotherProduct`}
               className={
                 Array.isArray(groupedErrors) && groupedErrors.flat().some((error) => error.key === "addAnotherProduct")
                   ? "govuk-form-group govuk-form-group--error"
@@ -257,13 +257,13 @@ const YouHaveAddedAProduct = () => {
                   <div className="govuk-radios__item">
                     <input
                       className="govuk-radios__input"
-                      id="addAnotherProductYes"
+                      id="addAnotherProduct"
                       name="addAnotherProduct"
                       type="radio"
                       value="Yes"
                       defaultChecked={defaultAddAnotherProduct === "Yes"}
                     />
-                    <label className="govuk-label govuk-radios__label" htmlFor="addAnotherProductYes">
+                    <label className="govuk-label govuk-radios__label" htmlFor="addAnotherProduct">
                       {t("commonYesLabel")}
                     </label>
                   </div>
