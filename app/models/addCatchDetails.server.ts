@@ -246,6 +246,7 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
   const addCatch = _action === "addCatch";
   const updateCatch = _action === "updateCatch";
   const editCatch = (_action as string).includes("editButton");
+  const saveAndContinue = _action === "saveAndContinue";
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
@@ -267,7 +268,10 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
   const saveToRedisIfErrors = false;
   const countries: ICountry[] = await getCountries();
 
-  if (addCatch) {
+  if (
+    addCatch ||
+    (saveAndContinue && (catches.length === 0 || catches.filter((c) => c.productId === productId).length <= 0))
+  ) {
     const catchCertificateType = values["catchCertificateType"] as CertificateType;
     const catchCertificateNumber = values["catchCertificateNumber"] as string;
     const totalWeightLanded = values["totalWeightLanded"] as string;
