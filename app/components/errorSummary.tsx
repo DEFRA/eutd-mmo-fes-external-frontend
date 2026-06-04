@@ -10,7 +10,7 @@ export interface IErrorSummaryProps {
 }
 
 export const ErrorSummary = ({
-  errors,
+  errors = [],
   containerClassName = "",
   linkData,
 }: React.PropsWithChildren<IErrorSummaryProps>) => {
