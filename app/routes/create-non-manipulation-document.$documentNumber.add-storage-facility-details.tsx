@@ -150,17 +150,17 @@ const validateFacilityFields = (
 ): Array<{ key: string; message: string }> => {
   const errorsArr: Array<{ key: string; message: string }> = [];
 
+  if (result !== null) {
+    errorsArr.push({
+      key: "storageFacilities-facilityArrivalDate",
+      message: t(getErrorMessage(`error.${fieldPrefixDate}.date.isoDate`)),
+    });
+  }
+
   if (!values["facilityName"] || String(values["facilityName"]).trim() === "") {
     errorsArr.push({
       key: fieldPrefixName,
       message: "sdAddStorageFacilityDetailsErrorEnterTheFacilityName",
-    });
-  }
-
-  if (result !== null) {
-    errorsArr.push({
-      key: fieldPrefixDate,
-      message: t(getErrorMessage(`error.${fieldPrefixDate}.date.isoDate`)),
     });
   }
 
