@@ -70,7 +70,13 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   AddCatchDetailsAction(request, params);
 
 export const shouldRevalidate: ShouldRevalidateFunction = ({ actionResult, defaultShouldRevalidate }) => {
-  if (actionResult) return isEmpty(actionResult.errors);
+  if (actionResult instanceof Response) {
+    return actionResult.ok;
+  }
+
+  if (actionResult) {
+    return isEmpty(actionResult.errors);
+  }
 
   return defaultShouldRevalidate;
 };
@@ -645,6 +651,31 @@ const AddCatchDetailsIndex = () => {
 
   const navigationLinks = populateNavigationLinks(previousLinkLayout, nextLinkLayout);
   useScrollOnPageError(errors);
+
+  // Restore submitted form values into controlled-input state after a save-and-continue validation error.
+  // useState initialises only on mount, so when actionData changes we must explicitly sync state here.
+  useEffect(() => {
+    if (!isEmpty(errors)) {
+      if (submittedFormData.catchCertificateNumber !== undefined) {
+        setCurrentCatchCertificateNumber(submittedFormData.catchCertificateNumber);
+      }
+      if (submittedFormData.catchCertificateType) {
+        setCurrentCatchCertificateType(submittedFormData.catchCertificateType);
+      }
+      if (submittedFormData.totalWeightLanded !== undefined) {
+        setCurrentTotalWeightLanded(submittedFormData.totalWeightLanded);
+      }
+      if (submittedFormData.exportWeightBeforeProcessing !== undefined) {
+        setCurrentExportWeightBeforeProcessing(submittedFormData.exportWeightBeforeProcessing);
+      }
+      if (submittedFormData.exportWeightAfterProcessing !== undefined) {
+        setCurrentExportWeightAfterProcessing(submittedFormData.exportWeightAfterProcessing);
+      }
+      if (submittedFormData.speciesCommodityCode !== undefined) {
+        setCurrentSpeciesCommodityCode(submittedFormData.speciesCommodityCode);
+      }
+    }
+  }, [actionData]);
 
   useEffect(() => {
     if (response) {

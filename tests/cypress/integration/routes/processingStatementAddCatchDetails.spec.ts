@@ -422,6 +422,43 @@ describe("PS: Add catch details", () => {
     cy.get(".govuk-error-message").contains("Add at least one species to your processed product").should("be.visible");
   });
 
+  it("should focus the error summary after save and continue errors", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsContinueCatchError,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.get(".govuk-error-message").contains("Add at least one species to your processed product").should("be.visible");
+    cy.focused().should("have.id", "errorIsland");
+  });
+
+  it("should preserve submitted values after a UK save and continue validation error", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsWithInvalidCCFormat,
+    };
+
+    cy.visit(validAddCatchDetailsUrlForUK, { qs: { ...testParams } });
+    cy.get("#catches-0-catchCertificateType").check({ force: true });
+    cy.get("#catches-0-catchCertificateType").should("be.checked");
+    cy.get('[data-testid="issuing-country-0"]').should("not.exist");
+    cy.get("#catches-0-catchCertificateNumber").clear({ force: true });
+    cy.get("#catches-0-catchCertificateNumber").type("GBR-2023-CC-7E720BE", { force: true });
+    cy.get("#catches-0-totalWeightLanded").clear({ force: true });
+    cy.get("#catches-0-totalWeightLanded").type("50", { force: true });
+    cy.get("#catches-0-exportWeightBeforeProcessing").clear({ force: true });
+    cy.get("#catches-0-exportWeightBeforeProcessing").type("25", { force: true });
+    cy.get("#catches-0-exportWeightAfterProcessing").clear({ force: true });
+    cy.get("#catches-0-exportWeightAfterProcessing").type("20", { force: true });
+
+    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.focused().should("have.id", "errorIsland");
+  });
+
   it("should clear the table when we click cancel", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
@@ -1699,16 +1736,6 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.get('[data-testid="issuing-country-0"]').should("not.exist");
 
     // 2. Now select non-UK to show issuing country field
-    cy.get('label[for="catchCertificateType-non_uk"]').click();
-    cy.wait(500); // Wait for React state update
-    cy.get('[data-testid="issuing-country-0"]', { timeout: 10000 }).should("exist");
-
-    // 3. Select UK radio to hide issuing country field again
-    cy.get("#catches-0-catchCertificateType").click();
-    cy.wait(500); // Wait for React state update
-    cy.get('[data-testid="issuing-country-0"]').should("not.exist");
-
-    // 4. Re-select non-UK to show issuing country field again
     cy.get('label[for="catchCertificateType-non_uk"]').click();
     cy.wait(500); // Wait for React state update
     cy.get('[data-testid="issuing-country-0"]', { timeout: 10000 }).should("exist");

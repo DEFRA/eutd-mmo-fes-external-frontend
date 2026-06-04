@@ -232,6 +232,7 @@ describe("Add exporter details: processingStatement journey", () => {
 
   it("should display processingStatement specific warning content", () => {
     cy.contains("h1", "Add exporter details");
+    cy.get(".govuk-warning-text__text").should("contain", "This information will appear on the processing statement.");
   });
 
   it("should have back link for processingStatement journey", () => {
@@ -251,6 +252,10 @@ describe("Add exporter details: storageDocument journey", () => {
 
   it("should display storageDocument specific warning content", () => {
     cy.contains("h1", "Add exporter details");
+    cy.get(".govuk-warning-text__text").should(
+      "contain",
+      "This information will appear on the non-manipulation document."
+    );
   });
 
   it("should have back link for storageDocument journey", () => {
@@ -526,6 +531,35 @@ describe("Add exporter details: branch coverage - conditional rendering branches
     cy.get("#error-summary-title").should("be.visible");
     // Verify error summary contains error messages
     cy.get(".govuk-error-summary__list").should("be.visible");
+  });
+
+  it("should handle clicking error summary links to scroll to fields", () => {
+    const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
+    const pageUrl = `${documentUrl}/add-exporter-details`;
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click({ force: true });
+
+    // Get the first error link
+    cy.get(".govuk-error-summary__list a")
+      .first()
+      .then(($link) => {
+        const href = $link.attr("href");
+        const fieldId = href?.replace("#", "");
+
+        // Click on the error link
+        $link.trigger("click");
+
+        // Verify the target field exists and can be focused
+        if (fieldId) {
+          cy.get(`#${fieldId}`).should("exist");
+        }
+      });
+
+    // Verify error summary has correct structure
+    cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 0);
   });
 
   it("should display full name field on page for catchCertificate journey", () => {
