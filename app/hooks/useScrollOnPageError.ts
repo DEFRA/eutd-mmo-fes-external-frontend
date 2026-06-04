@@ -7,6 +7,8 @@ export const useScrollOnPageError = (errors: IError[] | IErrorsTransformed | und
   useEffect(() => {
     if (!isEmpty(errors)) {
       scrollToId("errorIsland");
+      const el = globalThis.document.getElementById("errorIsland") as HTMLDivElement | null;
+      el?.focus();
     }
   }, [errors]);
 };

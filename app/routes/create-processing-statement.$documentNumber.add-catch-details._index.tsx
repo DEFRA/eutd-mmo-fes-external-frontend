@@ -23,7 +23,7 @@ import {
 } from "~/composite-components";
 import type { Catch, pageLinks, ErrorResponse, Species, ICountry } from "~/types";
 import { getMeta, scrollToId, querySpecies, displayErrorMessagesInOrder } from "~/helpers";
-import { useIsHydrated } from "~/hooks";
+import { useIsHydrated, useScrollOnPageError } from "~/hooks";
 import { AddCatchDetailsAction, AddCatchDetailsLoader } from "~/models";
 
 interface ILoaderData {
@@ -650,15 +650,7 @@ const AddCatchDetailsIndex = () => {
   });
 
   const navigationLinks = populateNavigationLinks(previousLinkLayout, nextLinkLayout);
-
-  // Derive a boolean from errors to avoid object reference issues in useEffect
-  const hasErrors = !isEmpty(errors);
-
-  useEffect(() => {
-    if (hasErrors) {
-      scrollToId("errorIsland");
-    }
-  }, [hasErrors]); // Boolean primitive, safe to use as dependency
+  useScrollOnPageError(errors);
 
   // Restore submitted form values into controlled-input state after a save-and-continue validation error.
   // useState initialises only on mount, so when actionData changes we must explicitly sync state here.
