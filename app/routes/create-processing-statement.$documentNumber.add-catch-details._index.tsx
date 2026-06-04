@@ -658,7 +658,7 @@ const AddCatchDetailsIndex = () => {
     if (hasErrors) {
       scrollToId("errorIsland");
     }
-  }, [actionData, hasErrors]); // actionData changes on every action response, ensuring focus moves on repeated error submissions
+  }, [hasErrors]); // Boolean primitive, safe to use as dependency
 
   // Restore submitted form values into controlled-input state after a save-and-continue validation error.
   // useState initialises only on mount, so when actionData changes we must explicitly sync state here.
