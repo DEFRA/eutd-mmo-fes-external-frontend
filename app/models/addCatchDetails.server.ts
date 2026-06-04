@@ -462,7 +462,7 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
       return redirect("/forbidden");
     }
 
-    const recordsPerPage: number = parseInt(getEnv().PROCESSING_STATEMENT_CATCH_PER_PAGE, 10);
+    const recordsPerPage: number = Number.parseInt(getEnv().PROCESSING_STATEMENT_CATCH_PER_PAGE, 10);
     const ctches = getUpdatedCatches(updatedProcessingStatement, productId);
     const totalPages = Math.ceil(ctches.length / recordsPerPage);
 
@@ -472,7 +472,7 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
 
   if (cancelCatch) {
     if (values["species"]) {
-      session.set("retainedSpecies", values["species"] as string);
+      session.set("retainedSpecies", values["species"]);
     }
     const redirectUrl = `/create-processing-statement/${documentNumber}/add-catch-details/${productId}?pageNo=${goToPage}`;
     return redirect(redirectUrl, {
