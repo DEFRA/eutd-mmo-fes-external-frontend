@@ -16,10 +16,12 @@ export const ErrorSummary = ({
 }: React.PropsWithChildren<IErrorSummaryProps>) => {
   const { t } = useTranslation(["errorsText", "common"]);
   const summaryRef = useRef<HTMLDivElement>(null);
+  const hasFocusedRef = useRef(false);
 
   useEffect(() => {
-    if (errors.length > 0) {
+    if (errors.length > 0 && !hasFocusedRef.current) {
       summaryRef.current?.focus();
+      hasFocusedRef.current = true;
     }
   }, [errors]);
 
