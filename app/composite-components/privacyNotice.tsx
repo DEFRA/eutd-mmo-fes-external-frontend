@@ -98,7 +98,7 @@ export const PrivacyNotice = () => {
           SW1P 4DF
           <br />
           <a className="govuk-link" href="mailto:DefraGroupDataProtectionOfficer@defra.gov.uk">
-            DefraGroupDataProtectionOfficer@defra.gov.uk
+            Contact the Defra Data Protection Officer
           </a>
         </p>
         <p dangerouslySetInnerHTML={{ __html: t("privacyPageProtectionMarineFisheriesAuthorities") }} />
@@ -113,7 +113,7 @@ export const PrivacyNotice = () => {
           NE4 7AR
           <br />
           <a className="govuk-link" href="mailto:data.protection@marinemanagement.org.uk">
-            dataprotection@marinemanagement.org.uk
+            Contact the Marine Management Data Protection Officer
           </a>
         </p>
         <p>
@@ -130,7 +130,7 @@ export const PrivacyNotice = () => {
           IM4 3AS
           <br />
           <a className="govuk-link" href="fisheries@gov.im">
-            fisheries@gov.im
+            Contact the Department of Environment, Food and Agriculture
           </a>
         </p>
         <p>
@@ -149,7 +149,7 @@ export const PrivacyNotice = () => {
           EH11 3XD
           <br />
           <a className="govuk-link" href="mailto:dpa@gov.scot">
-            dpa@gov.scot
+            Contact the Data Protection and Information Assets Team
           </a>
         </p>
         <p>
@@ -166,7 +166,7 @@ export const PrivacyNotice = () => {
           CF10 3NQ
           <br />
           <a className="govuk-link" href="mailto:Data.ProtectionOfficer@gov.wales">
-            Data.ProtectionOfficer@gov.wales
+            Contact the Welsh Government
           </a>
         </p>
         <p>
@@ -185,7 +185,7 @@ export const PrivacyNotice = () => {
           {t("telephone")}: 028 7744 2350
           <br />
           <a className="govuk-link" href="mailto:dataprotectionofficer@daera-ni.gov.uk">
-            dataprotectionofficer@daera-ni.gov.uk
+            Contact the Department of Agriculture, Environment and Rural Affair
           </a>
         </p>
         <p>&nbsp;</p>
@@ -262,7 +262,7 @@ export const PrivacyNotice = () => {
         <p>
           {t("email")}:{" "}
           <a className="govuk-link" href="mailto:dataprotection@marinemanagement.org.uk">
-            dataprotection@marinemanagement.org.uk
+            Contact the Marine Management Data Protection Officer
           </a>
         </p>
         <p>{t("HowDoIContactDesc3")}</p>
@@ -283,7 +283,7 @@ export const PrivacyNotice = () => {
         <p>
           {t("email")}:{" "}
           <a className="govuk-link" href="mailto:DefraGroupDataProtectionOfficer@defra.gov.uk">
-            DefraGroupDataProtectionOfficer@defra.gov.uk
+            Contact the Defra Data Protection Officer
           </a>
         </p>
         <br />
@@ -306,7 +306,7 @@ export const PrivacyNotice = () => {
         <p>
           {t("email")}:
           <a className="govuk-link" href="mailto:casework@ico.org.uk">
-            casework@ico.org.uk
+            Contact the Information Commissioner's Office
           </a>
         </p>
         <p>
