@@ -317,5 +317,6 @@
   "psAddCatchDetailsErrorEnterSpeciesCommodityCode": "Enter the commodity code",
   "psAddCatchDetailsErrorValidSpeciesCommodityCode": "Enter a valid commodity code",
   "psAddCatchDetailsErrorSpeciesCommodityCodeMinLength": "The commodity code must be at least 6 characters",
-  "psAddCatchDetailsErrorSpeciesCommodityCodeMaxLength": "The commodity code must be no more than 10 characters"
+  "psAddCatchDetailsErrorSpeciesCommodityCodeMaxLength": "The commodity code must be no more than 10 characters",
+  "addAnotherProductNullError": "Select yes if you need to add another product"
 }

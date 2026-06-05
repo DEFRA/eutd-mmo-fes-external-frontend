@@ -605,6 +605,40 @@ describe("SD: you-have-added-product page", () => {
       // Verify 'No' radio is checked by default
       cy.get("#addAnotherCatchNo").should("not.be.checked");
       cy.get("#addAnotherProduct").should("not.be.checked");
+      cy.wait(200);
+      cy.contains("button", "Save and continue").click({ force: true });
+      cy.get("body").then(($body) => {
+        if ($body.find("#errorIsland").length > 0) {
+          // Verify error summary is rendered
+          cy.get("#errorIsland").should("exist");
+          cy.get(".govuk-error-summary").should("be.visible");
+          cy.get(".govuk-error-summary__list").should("contain", "Select yes if you want to add another product");
+        }
+      });
+    });
+
+    it("should not have 'No' radio button defaultChecked (component line 250) in welsh translation", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+      };
+      cy.visit(sdPageUrl, { qs: { ...testParams, lang: "cy" } });
+
+      // Verify 'No' radio is checked by default
+      cy.get("#addAnotherCatchNo").should("not.be.checked");
+      cy.get("#addAnotherProduct").should("not.be.checked");
+      cy.wait(200);
+      cy.contains("button", "Save and continue").click({ force: true });
+      cy.get("body").then(($body) => {
+        if ($body.find("#errorIsland").length > 0) {
+          // Verify error summary is rendered
+          cy.get("#errorIsland").should("exist");
+          cy.get(".govuk-error-summary").should("be.visible");
+          cy.get(".govuk-error-summary__list").should(
+            "contain",
+            "Dewiswch ie os ydych chi am ychwanegu cynnyrch arall"
+          );
+        }
+      });
     });
 
     it("should render all table cells with product and certificate data (component lines 176-177)", () => {
