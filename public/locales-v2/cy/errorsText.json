@@ -317,5 +317,6 @@
   "psAddCatchDetailsErrorEnterSpeciesCommodityCode": "Rhowch y cod nwyddau",
   "psAddCatchDetailsErrorValidSpeciesCommodityCode": "Rhowch god nwyddau dilys",
   "psAddCatchDetailsErrorSpeciesCommodityCodeMinLength": "Rhaid i’r cod nwyddau gynnwys 6 o nodau o leiaf",
-  "psAddCatchDetailsErrorSpeciesCommodityCodeMaxLength": "Rhaid i’r cod nwyddau fod yn llai na 10 o nodau"
+  "psAddCatchDetailsErrorSpeciesCommodityCodeMaxLength": "Rhaid i’r cod nwyddau fod yn llai na 10 o nodau",
+  "addAnotherProductNullError": "Dewiswch ydw os oes angen ichi ychwanegu cynnyrch arall"
 }
