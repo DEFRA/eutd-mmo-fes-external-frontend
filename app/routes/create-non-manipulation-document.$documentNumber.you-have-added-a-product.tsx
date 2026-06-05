@@ -248,7 +248,9 @@ const YouHaveAddedAProduct = () => {
                 {Array.isArray(groupedErrors) &&
                 groupedErrors.flat().some((error) => error.key === "addAnotherProduct") ? (
                   <ErrorMessage
-                    text={groupedErrors.flat().find((error) => error.key === "addAnotherProduct")?.message ?? ""}
+                    text={t(groupedErrors.flat().find((error) => error.key === "addAnotherProduct")?.message ?? "", {
+                      ns: "errorsText",
+                    })}
                     visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                   />
                 ) : null}
