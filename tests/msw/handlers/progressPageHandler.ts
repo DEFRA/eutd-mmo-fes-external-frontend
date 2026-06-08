@@ -7,6 +7,7 @@ import {
   checkProgressUrl,
   mockGetAllDocumentsUrl,
   GET_CERTIFICATE_SUMMARY,
+  GET_CC_PRE_SUBMIT_BUNDLE,
   mockCheckProgressUrl,
   GET_PROCESSING_STATEMENT,
   mockAddExporterDetails,
@@ -46,9 +47,16 @@ import storageDocumentCatches from "@/fixtures/storageDocumentApi/storageDocumen
 import sdDocuments from "@/fixtures/dashboardApi/sdDocument.json";
 import transportations from "@/fixtures/transportationApi/transportations.json";
 
+const summaryForCatchCertificate = (landingsEntryOption: string) => ({
+  landingsEntryOption,
+  transportSummary: null,
+});
+
 const progressPageHandler: ITestHandler = {
   [TestCaseId.CCUploadEntryIncompleteProgress]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
+    rest.get(GET_CC_PRE_SUBMIT_BUNDLE, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(summaryForCatchCertificate("uploadEntry")))),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressIncomplete))),
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json(transportations))),
     rest.get(getTransportDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(truckTransportDetails))),
@@ -107,6 +115,8 @@ const progressPageHandler: ITestHandler = {
 
   [TestCaseId.CCUploadEntryCompleteProgress]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
+    rest.get(GET_CC_PRE_SUBMIT_BUNDLE, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(summaryForCatchCertificate("uploadEntry")))),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json(transportations))),
     rest.get(getTransportDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(truckTransportDetails))),
@@ -114,6 +124,7 @@ const progressPageHandler: ITestHandler = {
   ],
   [TestCaseId.CCDirectLandingCompleteProgress]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingLandingsType))),
+    rest.get(GET_CC_PRE_SUBMIT_BUNDLE, (req, res, ctx) => res(ctx.json({}))),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json(transportations))),
     rest.get(getTransportDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(truckTransportDetails))),
@@ -122,14 +133,22 @@ const progressPageHandler: ITestHandler = {
   ],
   [TestCaseId.CCManualEntryCompleteProgress]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
+    rest.get(GET_CC_PRE_SUBMIT_BUNDLE, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(summaryForCatchCertificate("manualEntry")))),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json(transportations))),
     rest.get(getTransportDetailsUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(planeTransportDetails))),
   ],
   [TestCaseId.CCLandingsTypeNull]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(nullLandingsType))),
+    rest.get(GET_CC_PRE_SUBMIT_BUNDLE, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json({}))),
   ],
-  [TestCaseId.CCLandingsTypeUnauthorised]: () => [rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.status(403)))],
+  [TestCaseId.CCLandingsTypeUnauthorised]: () => [
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.status(403))),
+    rest.get(GET_CC_PRE_SUBMIT_BUNDLE, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json({}))),
+  ],
   [TestCaseId.SDIncompleteProgress]: () => [
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json({}))),

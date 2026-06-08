@@ -28,6 +28,7 @@ import {
   mockGetGearTypesByCategoriesUrl,
   GET_RFMO_AREAS_URL,
   SAVE_TRANSPORT_DETAILS_URL,
+  GET_CC_PRE_SUBMIT_BUNDLE,
 } from "~/urls.server";
 
 import ccCreatedDetails from "@/fixtures/documentsApi/catchCertificate.json";
@@ -77,6 +78,11 @@ import getGearCategories from "@/fixtures/addLandings/getGearCategories.json";
 import getGearTypesByCategory from "@/fixtures/addLandings/getGearTypesByCategory.json";
 import getRfmos from "@/fixtures/directLanding/getRfmos.json";
 
+const summaryForCatchCertificate = (landingsEntryOption: string) => ({
+  landingsEntryOption,
+  transportSummary: null,
+});
+
 const documentNumber = "GBR-2022-CC-D1630FF88";
 
 const preSubmitBundle = (summary: any, completeness: any = progressComplete) =>
@@ -93,8 +99,9 @@ const checkYourInformationCCHandler: ITestHandler = {
   [TestCaseId.CCCheckYourInformation]: () => [
     preSubmitBundle(ccTruck, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
-    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccTruck))),
+    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(summaryForCatchCertificate("ccTruck")))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
+    rest.get(GET_CC_PRE_SUBMIT_BUNDLE, (req, res, ctx) => res(ctx.json({}))),
     rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(EXPORT_LOCATION_URL, (req, res, ctx) => res(ctx.json({}))),
     rest.get(CONSERVATION_URL, (req, res, ctx) => res(ctx.json(whoseWatersSuccess))),
