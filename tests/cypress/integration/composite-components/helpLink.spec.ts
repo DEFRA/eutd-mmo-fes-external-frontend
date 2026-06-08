@@ -36,7 +36,7 @@ describe("HelpSection", () => {
     });
   });
 
-  it("does not display on the create pages ore the manage pages", () => {
+  it("does not display on the create pages or the manage pages", () => {
     const urls = [
       "/create-catch-certificate/catch-certificates",
       "/create-processing-statement/processing-statements",
@@ -47,7 +47,7 @@ describe("HelpSection", () => {
     urls.forEach((url) => {
       it(`Should not display the help section on ${url}`, () => {
         cy.visit(url);
-        cy.get("[data-testid=help-section]").should("exist");
+        cy.get("[data-testid=help-section]").should("not.exist");
       });
     });
   });
