@@ -5,6 +5,7 @@ import {
   getProgressUrl,
   getTransportDetailsUrl,
   GET_CERTIFICATE_SUMMARY,
+  GET_CC_PRE_SUBMIT_BUNDLE,
   CREATE_EXPORT_CERTIFICATE,
   GET_CLIENT_IP_URL,
   ADDED_SPECIES_URL,
@@ -84,8 +85,19 @@ const summaryForCatchCertificate = (landingsEntryOption: string) => ({
 
 const documentNumber = "GBR-2022-CC-D1630FF88";
 
+const preSubmitBundle = (summary: any, completeness: any = progressComplete) =>
+  rest.get(GET_CC_PRE_SUBMIT_BUNDLE, (_req, res, ctx) =>
+    res(
+      ctx.json({
+        summary,
+        completeness,
+      })
+    )
+  );
+
 const checkYourInformationCCHandler: ITestHandler = {
   [TestCaseId.CCCheckYourInformation]: () => [
+    preSubmitBundle(ccTruck, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(summaryForCatchCertificate("ccTruck")))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
@@ -102,11 +114,13 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(truckTransportDetails))),
   ],
   [TestCaseId.CCCheckYourInformationPageGuardCaseOne]: () => [
+    preSubmitBundle(ccNoLandingType, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccNoLandingType))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(nullLandingsType))),
   ],
   [TestCaseId.CCCheckYourInformationPageGuardCaseTwo]: () => [
+    preSubmitBundle(ccTruck, progressIncomplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressIncomplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccTruck))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
@@ -114,6 +128,7 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([]))),
   ],
   [TestCaseId.CCCheckYourInformationPageGuardCaseThree]: () => [
+    preSubmitBundle(ccNoExporter, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccNoExporter))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
@@ -121,10 +136,12 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([]))),
   ],
   [TestCaseId.CCCheckYourInformationLocked]: () => [
+    preSubmitBundle(ccLocked, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccLocked))),
   ],
   [TestCaseId.CCCheckYourInformationDirectLanding]: () => [
+    preSubmitBundle(ccDirectLanding, progressComplete),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingLandingsType))),
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([]))),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
@@ -133,18 +150,21 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
   ],
   [TestCaseId.CCCheckYourInformationDirectLandingGearInfo]: () => [
+    preSubmitBundle(ccDirectLandingGearInfo, progressComplete),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingLandingsType))),
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([]))),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (_, res, ctx) => res(ctx.json(ccDirectLandingGearInfo))),
   ],
   [TestCaseId.CCCheckYourInformationDirectLandingRFMO]: () => [
+    preSubmitBundle(ccDirectLandingGearInfo, progressComplete),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingLandingsType))),
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([]))),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (_, res, ctx) => res(ctx.json(ccDirectLandingGearInfo))),
   ],
   [TestCaseId.CCCheckYourInformationManualLanding]: () => [
+    preSubmitBundle(ccManualLanding, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccManualLanding))),
     rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json(addLandingsSavedData))),
@@ -168,6 +188,7 @@ const checkYourInformationCCHandler: ITestHandler = {
     ),
   ],
   [TestCaseId.CCCheckYourInformationManualLandingGearInfo]: () => [
+    preSubmitBundle(ccManualLandingGearInfo, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (_, res, ctx) => res(ctx.json(ccManualLandingGearInfo))),
     rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json(addLandingsSavedData))),
@@ -176,18 +197,22 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(mockSearchVesselName, (req, res, ctx) => res(ctx.json(getVessels))),
   ],
   [TestCaseId.CCCheckYourInformationManualLandingTruckContainerNumber]: () => [
+    preSubmitBundle(ccManualLandingTruckContainerNumber, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccManualLandingTruckContainerNumber))),
   ],
   [TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumber]: () => [
+    preSubmitBundle(ccManualLandingTrainContainerNumber, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccManualLandingTrainContainerNumber))),
   ],
   [TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumberNull]: () => [
+    preSubmitBundle(ccManualLandingTrainContainerNumberNull, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccManualLandingTrainContainerNumberNull))),
   ],
   [TestCaseId.CCCheckYourInformationPlaneNoFreightBillNumber]: () => [
+    preSubmitBundle(ccPlaneNoFreightBillNumber, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccPlaneNoFreightBillNumber))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
@@ -203,32 +228,39 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(planeTransportDetails))),
   ],
   [TestCaseId.CCCheckYourInformationContainerVesselNoFreightBillNumber]: () => [
+    preSubmitBundle(ccContainerVesselNoFreightBillNumber, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccContainerVesselNoFreightBillNumber))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
   ],
   [TestCaseId.CCCheckYourInformationWithPointOfDestination]: () => [
+    preSubmitBundle(ccWithPointOfDestination, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccWithPointOfDestination))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
   ],
   [TestCaseId.CCCheckYourInformationVesselNotFound]: () => [
+    preSubmitBundle(ccVesselNotFound, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccVesselNotFound))),
   ],
   [TestCaseId.CCCheckYourInformationVesselOverridenDirectLanding]: () => [
+    preSubmitBundle(ccVesselOverriddenByAdminDirectLanding, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccVesselOverriddenByAdminDirectLanding))),
   ],
   [TestCaseId.CCCheckYourInformationVesselOverriden]: () => [
+    preSubmitBundle(ccVesselOverriddenByAdmin, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccVesselOverriddenByAdmin))),
   ],
   [TestCaseId.CCCheckYourInformationExporterUpdated]: () => [
+    preSubmitBundle(ccExporterUpdated, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccExporterUpdated))),
   ],
   [TestCaseId.CCCheckYourInformationValidationError]: () => [
+    preSubmitBundle(ccValidationError, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccValidationError))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
@@ -244,18 +276,21 @@ const checkYourInformationCCHandler: ITestHandler = {
     ),
   ],
   [TestCaseId.CCCheckYourInformationRuleValidationErrors]: () => [
+    preSubmitBundle(ccValidationError, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccValidationError))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
     rest.post(CREATE_EXPORT_CERTIFICATE, (req, res, ctx) => res(ctx.status(400), ctx.json(ccSpeciesError))),
   ],
   [TestCaseId.CCCheckYourInformationOnLoadValidationErrors]: () => [
+    preSubmitBundle(ccOnLoadValidationError, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccOnLoadValidationError))),
     rest.get(GET_CLIENT_IP_URL, (req, res, ctx) => res(ctx.text("127.0.0.1"))),
     rest.post(CREATE_EXPORT_CERTIFICATE, (req, res, ctx) => res(ctx.status(400), ctx.json(ccSpeciesError))),
   ],
   [TestCaseId.CCCheckYourInformationValidationSuccess]: () => [
+    preSubmitBundle(ccValidationError, progressComplete),
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json(ccCreatedDetails))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
@@ -273,6 +308,7 @@ const checkYourInformationCCHandler: ITestHandler = {
     ),
   ],
   [TestCaseId.CCCheckYourInformationOfflineValidation]: () => [
+    preSubmitBundle(ccExporterUpdated, progressComplete),
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json(ccCreatedDetails))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
@@ -290,6 +326,7 @@ const checkYourInformationCCHandler: ITestHandler = {
     ),
   ],
   [TestCaseId.CCCheckYourInformationNotProvidedFields]: () => [
+    preSubmitBundle(ccNotProvidedFields, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccNotProvidedFields))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(mannualLandingType))),
@@ -315,6 +352,7 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
   ],
   [TestCaseId.CCCheckYourInformationInvalidCatchCert]: () => [
+    preSubmitBundle(ccExporterUpdated, progressComplete),
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json(ccCreatedDetails))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
@@ -337,6 +375,7 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
   ],
   [TestCaseId.CCCheckYourInformationInvalidCatchCertDirectLanding]: () => [
+    preSubmitBundle(ccExporterUpdated, progressComplete),
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json(ccCreatedDetails))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingLandingsType))),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
@@ -361,6 +400,7 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
   ],
   [TestCaseId.CCCheckYourInformationLockedCatchCert]: () => [
+    preSubmitBundle(ccExporterUpdated, progressComplete),
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json(ccCreatedDetails))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
@@ -380,6 +420,7 @@ const checkYourInformationCCHandler: ITestHandler = {
     ),
   ],
   [TestCaseId.CCCheckYourInformationChangeTransportModeNoChange]: () => [
+    preSubmitBundle(ccTruck, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccTruck))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
@@ -389,6 +430,7 @@ const checkYourInformationCCHandler: ITestHandler = {
   [TestCaseId.CCCheckYourInformationChangeTransportMode]: () => {
     let postCallCount = 0;
     return [
+      preSubmitBundle(ccTruck, progressComplete),
       rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
       rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccTruck))),
       rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
@@ -417,6 +459,7 @@ const checkYourInformationCCHandler: ITestHandler = {
     ];
   },
   [TestCaseId.CCCheckYourInformationMultipleTransports]: () => [
+    preSubmitBundle(ccTruck, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccTruck))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
@@ -424,6 +467,13 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([truckTransportDetails, planeTransportDetails]))),
   ],
   [TestCaseId.CCCheckYourInformationTruckNoCMR]: () => [
+    preSubmitBundle(
+      {
+        ...ccTruck,
+        transportations: [{ ...ccTruck.transportations[0], cmr: "false" }],
+      },
+      progressComplete
+    ),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) =>
       res(
@@ -436,6 +486,21 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
   ],
   [TestCaseId.CCCheckYourInformationTrain]: () => [
+    preSubmitBundle(
+      {
+        ...ccTruck,
+        transportations: [
+          {
+            id: "1",
+            vehicle: "train",
+            railwayBillNumber: "RB123456",
+            departurePlace: "London St Pancras",
+            freightBillNumber: "FB789012",
+          },
+        ],
+      },
+      progressComplete
+    ),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) =>
       res(
@@ -456,16 +521,19 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
   ],
   [TestCaseId.CCCheckYourInformationContainerVessel]: () => [
+    preSubmitBundle(ccContainerVesselNoFreightBillNumber, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccContainerVesselNoFreightBillNumber))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
   ],
   [TestCaseId.CCCheckYourInformationPlane]: () => [
+    preSubmitBundle(ccPlaneNoFreightBillNumber, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json(ccPlaneNoFreightBillNumber))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
   ],
   [TestCaseId.CCCheckYourInformationDirectLandingLocked]: () => [
+    preSubmitBundle({ ...ccDirectLanding, status: "LOCKED" }, progressComplete),
     rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
     rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) => res(ctx.json({ ...ccDirectLanding, status: "LOCKED" }))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(directLandingLandingsType))),
