@@ -33,6 +33,7 @@ export const SPECIES_STATE_LOOK_UP = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/specie
 export const COMMODITY_CODE_LOOK_UP = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/commodities/search`;
 export const COMMODITY_CODES = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/commodities`;
 export const GET_CERTIFICATE_SUMMARY = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/certificate/catchCertificate`;
+export const GET_CC_PRE_SUBMIT_BUNDLE = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/certificate/catchCertificate/pre-submit`;
 export const UPLOAD_LANDINGS_URL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v2/uploads/landings`;
 export const EXPORT_PAYLOAD_URL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/export-certificates/export-payload`;
 export const GET_DIRECT_LANDINGS_URL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/export-certificates/export-payload/direct-landings`;
