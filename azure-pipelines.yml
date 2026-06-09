@@ -17,6 +17,10 @@ parameters:
     displayName: "Deploy App Settings Only"
     type: boolean
     default: false 
+  - name: runPostDeploymentTests
+    displayName: "Run Post-Deployment Tests"
+    type: boolean
+    default: false
 
 trigger:
   branches:
@@ -44,7 +48,8 @@ resources:
       name: "DEFRA/eutd-mmo-fes-pipeline-common"
       endpoint: DEFRA
       type: github
-      ref: refs/heads/main
+      # ref: refs/heads/main
+      ref: feature/post-depl-testing
 
 extends:
   template: /includes/app-deployment.yaml@MMOPipelineCommon
@@ -56,3 +61,4 @@ extends:
     deployToSecondaryRegion: ${{ parameters.deployToSecondaryRegion }}
     skipPRE1: ${{ parameters.skipPRE1 }}
     deployAppConfigOnly: ${{ parameters.deployAppConfigOnly }}
+    runPostDeploymentTests: ${{ parameters.runPostDeploymentTests }}
