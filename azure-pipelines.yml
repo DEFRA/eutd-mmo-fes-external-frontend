@@ -50,6 +50,11 @@ resources:
       type: github
       # ref: refs/heads/main
       ref: feature/post-depl-testing
+    - repository: TestAutomation
+      name: "DEFRA/eutd-mmo-fes-frontend-test-automation"
+      type: github
+      endpoint: DEFRA
+      ref: refs/heads/main
 
 extends:
   template: /includes/app-deployment.yaml@MMOPipelineCommon
