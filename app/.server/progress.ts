@@ -20,11 +20,11 @@ import setApiMock from "tests/msw/helpers/setApiMock";
 import {
   getBearerTokenForRequest,
   getTransportDetails,
-  getLandingsEntryOption,
-  getTransportations,
   createCSRFToken,
   validateCSRFToken,
   getProcessingStatement,
+  getCatchCertificatePreSubmitBundle,
+  getCatchCertificateSummary,
 } from "~/.server";
 import { route } from "routes-gen";
 import { getEnv } from "~/env.server";
@@ -119,29 +119,36 @@ export const progressPageLoader = async (request: Request, params: Params, journ
   const bearerToken = await getBearerTokenForRequest(request);
   const { documentNumber } = params;
   const csrf = await createCSRFToken(request);
+
   let landingsEntry: ILandingsEntryOptionGet | null = null;
+  let progressData!: IProgress;
+  let transportFromSummary: ITransport | undefined;
+  let summary: any;
+
   if (journey === "catchCertificate") {
-    landingsEntry = await getLandingsEntryOption(bearerToken, documentNumber);
+    const preSubmitBundle = await getCatchCertificatePreSubmitBundle(bearerToken, documentNumber);
+    summary = preSubmitBundle?.summary ?? (await getCatchCertificateSummary(bearerToken, documentNumber));
+
+    landingsEntry = summary?.landingsEntryOption
+      ? { landingsEntryOption: summary.landingsEntryOption, generatedByContent: false }
+      : null;
+
     if (!landingsEntry?.landingsEntryOption) {
       return redirect(route("/create-catch-certificate/:documentNumber/landings-entry", { documentNumber }));
     }
-  }
 
-  const { progress, completedSections, requiredSections }: IProgress = await getProgress(
-    bearerToken,
-    journey,
-    documentNumber
-  );
+    progressData = preSubmitBundle?.completeness ?? (await getProgress(bearerToken, journey, documentNumber));
 
-  let getTransportRes: ITransport | undefined = undefined;
-  if (journey === "catchCertificate") {
-    const transportations: ITransport[] = await getTransportations(bearerToken, documentNumber);
-    const transport: ITransport | undefined = transportations.findLast((transport: ITransport) => transport.id);
-    getTransportRes = transport;
-    if (progress === null) {
+    transportFromSummary =
+      summary?.transport ?? summary?.transportations?.findLast((transport: ITransport) => transport.id);
+    if (progressData.progress === null) {
       return redirect(route("/create-catch-certificate/:documentNumber/landings-entry", { documentNumber }));
     }
+  } else {
+    progressData = await getProgress(bearerToken, journey, documentNumber);
   }
+
+  const { progress, completedSections, requiredSections }: IProgress = progressData;
 
   const session = await getSessionFromRequest(request);
   session.set("csrf", csrf);
@@ -152,7 +159,7 @@ export const progressPageLoader = async (request: Request, params: Params, journ
   const copyDocumentAcknowledged = session.get(`copyDocumentAcknowledged-${documentNumber}`) === "Y";
   const copyDocumentNumber = session.get(`documentNumber-${documentNumber}`);
   const voidDocumentConfirm = session.get(`voidOriginal-${documentNumber}`)
-    ? session.get(`voidOriginal-${documentNumber}`) == true
+    ? session.get(`voidOriginal-${documentNumber}`) === true
     : session.get(`copyVoidDocument-${documentNumber}`) === "voidDocumentConfirm";
   session.unset("exporterCompanyName");
   if (journey === "catchCertificate") {
@@ -182,7 +189,8 @@ export const progressPageLoader = async (request: Request, params: Params, journ
       progress,
       completedSections,
       requiredSections,
-      transport: { ...getTransportRes },
+      transport: transportFromSummary ? { ...transportFromSummary } : undefined,
+      transportSummary: summary?.transportSummary ?? null,
       documentNumber,
     };
   } else if (journey === "storageNotes") {

@@ -1271,7 +1271,9 @@ describe("CC - scenario 2 - Change transport mode", () => {
     cy.get("body").then(($body) => {
       const links = $body.find('[href*="how-does-the-export-leave-the-uk"]');
       cy.log(`STEP #2A - Found ${links.length} transport links`);
-      links.each((idx, link) => cy.log(`STEP #2B - Link ${idx}: ${link.getAttribute("href")}`));
+      links.each((idx, link) => {
+        cy.log(`STEP #2B - Link ${idx}: ${link.getAttribute("href")}`);
+      });
     });
 
     cy.log("STEP #3 - Click the change link for transport mode");
@@ -1294,7 +1296,8 @@ describe("CC - scenario 2 - Change transport mode", () => {
     cy.get('input[name="vehicle"]').then(($inputs) => {
       cy.log(`STEP #6B - Found ${$inputs.length} vehicle radio buttons`);
       $inputs.each((idx, input) => {
-        cy.log(`STEP #6C - Radio ${idx}: value="${input.value}" checked=${input.checked} id="${input.id}"`);
+        const radio = input as HTMLInputElement;
+        cy.log(`STEP #6C - Radio ${idx}: value="${radio.value}" checked=${radio.checked} id="${radio.id}"`);
       });
     });
 
@@ -1421,7 +1424,8 @@ describe("NMD - scenario 4 - Change arrival transport mode", () => {
     cy.get('input[name="vehicle"]').then(($inputs) => {
       cy.log(`STEP #5B - Found ${$inputs.length} vehicle radio buttons`);
       $inputs.each((index, input) => {
-        cy.log(`STEP #5C - Radio ${index}: value="${input.value}" checked=${input.checked}`);
+        const radio = input as HTMLInputElement;
+        cy.log(`STEP #5C - Radio ${index}: value="${radio.value}" checked=${radio.checked}`);
       });
     });
 
