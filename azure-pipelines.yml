@@ -48,8 +48,7 @@ resources:
       name: "DEFRA/eutd-mmo-fes-pipeline-common"
       endpoint: DEFRA
       type: github
-      # ref: refs/heads/main
-      ref: feature/post-depl-testing
+      ref: refs/heads/main
     - repository: TestAutomation
       name: "DEFRA/eutd-mmo-fes-frontend-test-automation"
       type: github
