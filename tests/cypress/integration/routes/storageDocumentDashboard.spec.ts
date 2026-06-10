@@ -248,7 +248,9 @@ describe("Storage Document Dashboard page: continue a document", () => {
     };
     cy.visit(storageDocumentDashboardUrl, { qs: { ...testParams } });
 
-    cy.get("a#continue[href='/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/progress']").click({
+    cy.get(
+      "a#continue-GBR-2022-SD-F0285BD8A[href='/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/progress']"
+    ).click({
       force: true,
     });
     cy.url().should("include", "/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/progress");
@@ -263,7 +265,7 @@ describe("Storage Document Dashboard page: delete a document", () => {
     cy.visit(storageDocumentDashboardUrl, { qs: { ...testParams } });
 
     cy.get(
-      "a#delete[href='/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/delete-this-non-manipulation-document']"
+      "a#delete-GBR-2022-SD-F0285BD8A[href='/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/delete-this-non-manipulation-document']"
     ).click({
       force: true,
     });

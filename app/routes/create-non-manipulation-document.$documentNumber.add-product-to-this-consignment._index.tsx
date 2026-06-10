@@ -991,7 +991,7 @@ const AddProductIndex = () => {
               })}
               id={`${documentNumber}-${netWeightProductArrivalKey}`}
             >
-              <label className="govuk-label govuk-!-font-weight-bold" htmlFor="netWeightProductArrival">
+              <label className="govuk-label govuk-!-font-weight-bold" htmlFor={netWeightProductArrivalKey}>
                 {t(netWeightProductLabelKey, {
                   ns: "addProductToThisConsignment",
                 })}
@@ -1036,7 +1036,7 @@ const AddProductIndex = () => {
               })}
               id={`${documentNumber}-${netWeightFisheryProductArrivalKey}`}
             >
-              <label className="govuk-label govuk-!-font-weight-bold" htmlFor="netWeightFisheryProductArrival">
+              <label className="govuk-label govuk-!-font-weight-bold" htmlFor={netWeightFisheryProductArrivalKey}>
                 {t(netWeightFisheryLabelKey, {
                   ns: "addProductToThisConsignment",
                 })}

@@ -394,10 +394,10 @@ describe("Add product to this consignment  page", () => {
       cy.get("form label[for='catches-0-productDescription']")
         .should("have.text", "Product description")
         .and("be.visible");
-      cy.get("form label[for='netWeightProductArrival']")
+      cy.get("form label[for='catches-0-netWeightProductArrival']")
         .should("have.text", "Net weight of the product on arrival (kg)")
         .and("be.visible");
-      cy.get("form label[for='netWeightFisheryProductArrival']")
+      cy.get("form label[for='catches-0-netWeightFisheryProductArrival']")
         .should("have.text", "Net weight of fishery products on arrival (kg)")
         .and("be.visible");
     });

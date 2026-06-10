@@ -58,6 +58,7 @@ const populateRecordLinks = (documents: IGetAllDocumentsData, t: TFunction<"comm
         document.links = {
           voidLink: () => (
             <Link
+              id={`void-${document.documentNumber}`}
               data-testid={`${journey}-voidcompleted`}
               to={route("/create-catch-certificate/:documentNumber/void-this-catch-certificate", {
                 documentNumber: document.documentNumber,
@@ -72,6 +73,7 @@ const populateRecordLinks = (documents: IGetAllDocumentsData, t: TFunction<"comm
           copyLink: () => (
             <Link
               data-testid={`${journey}-copycompleted`}
+              id={`copy-${document.documentNumber}`}
               to={route("/create-catch-certificate/:documentNumber/copy-this-catch-certificate", {
                 documentNumber: document.documentNumber,
               })}
@@ -95,7 +97,7 @@ const populateRecordLinks = (documents: IGetAllDocumentsData, t: TFunction<"comm
         document.links = {
           continueLink: () => (
             <Link
-              id="continue"
+              id={`continue-${document.documentNumber}`}
               to={
                 document.isFailed || document.status === "LOCKED"
                   ? route("/create-catch-certificate/:documentNumber/check-your-information", {
@@ -114,7 +116,7 @@ const populateRecordLinks = (documents: IGetAllDocumentsData, t: TFunction<"comm
           ),
           deleteLink: () => (
             <Link
-              id="delete"
+              id={`delete-${document.documentNumber}`}
               to={route("/create-catch-certificate/:documentNumber/delete-this-draft-catch-certificate", {
                 documentNumber: document.documentNumber,
               })}
