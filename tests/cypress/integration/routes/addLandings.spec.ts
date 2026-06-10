@@ -436,7 +436,10 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render a hint for start date", () => {
-    cy.get("#startDate-container").find("#date-hint").contains("For example, 31 03 1980").should("be.visible");
+    cy.get("#startDate-container")
+      .find("#startDate-date-hint")
+      .contains("For example, 31 03 1980")
+      .should("be.visible");
     cy.get("#startDate").invoke("val", "24");
     cy.get("#startDate-month").invoke("val", "10");
     cy.get("#startDate-year").invoke("val", "20");

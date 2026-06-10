@@ -13,9 +13,9 @@ export function scrollToId(id: string) {
   }, 100);
 }
 
-export function errorMessageText(hintText: any, errors: IError) {
+export function errorMessageText(hintText: any, errors: IError, id: string = "date-hint") {
   if (hintText) {
-    return isEmpty(errors) ? "date-hint" : "date-hint error-message";
+    return isEmpty(errors) ? id : `${id} error-message`;
   } else {
     return isEmpty(errors) ? "" : "error-message";
   }

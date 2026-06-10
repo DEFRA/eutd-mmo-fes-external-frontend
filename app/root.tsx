@@ -67,7 +67,7 @@ export const links: LinksFunction = () => getStyles();
 export const shouldRevalidate: ShouldRevalidateFunction = ({ actionResult, defaultShouldRevalidate }) => {
   const errorStr = document.getElementsByTagName("html")[0].getAttribute("lang") === "cy" ? "Gwall: " : "Error: ";
   if (actionResult?.errors) {
-    document.title = !document.title.includes(errorStr) ? `${errorStr} ${document.title}` : document.title;
+    document.title = document.title.includes(errorStr) ? document.title : `${errorStr} ${document.title}`;
     return defaultShouldRevalidate;
   }
 

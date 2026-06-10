@@ -14,9 +14,14 @@
   border: none;
   cursor: pointer;
 }
-.date-picker:hover,
+.date-picker:hover {
+  background-color: #cccccc;
+}
 .date-picker:focus {
   background-color: #cccccc;
+  outline: 3px solid #ffdd00;
+  outline-offset: 0;
+  box-shadow: 0 2px 0 #0b0c0c;
 }
 .date-picker img {
   width: 22px;

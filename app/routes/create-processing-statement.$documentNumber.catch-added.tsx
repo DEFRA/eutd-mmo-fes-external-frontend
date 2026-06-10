@@ -656,10 +656,10 @@ const CatchAdded = () => {
                             </strong>
                             <div className="govuk-!-margin-top-2">
                               <Link
-                                id="change-link"
+                                id={`change-${product.id}`}
                                 className="govuk-link"
                                 to={`/create-processing-statement/${documentNumber}/add-consignment-details/${product.id}`}
-                                data-testid="change-link"
+                                data-testid={`change-${product.id}`}
                               >
                                 {t("commonChangeLink", { ns: "common" })}
                                 <span className="govuk-visually-hidden">{" " + product.description}</span>
@@ -697,10 +697,10 @@ const CatchAdded = () => {
                                     value={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
                                   />
                                   <Link
-                                    id="change-link"
+                                    id={`change-${item.productId}`}
                                     className="govuk-link"
                                     to={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
-                                    data-testid="change-link"
+                                    data-testid={`change-${item.productId}`}
                                   >
                                     {t("commonChangeLink", { ns: "common" })}
                                     <span className="govuk-visually-hidden">{" " + product.description}</span>

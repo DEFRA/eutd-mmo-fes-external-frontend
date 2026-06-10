@@ -37,7 +37,7 @@ describe("PS: Catch added", () => {
     cy.contains("a", /^Back$/)
       .should("have.attr", "href")
       .and("include", "add-catch-details");
-    cy.get("[data-testid='change-link']").should("have.length", 1);
+    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").should("have.length", 1);
   });
 
   it("should render with only Change links for at least one catch", () => {
@@ -51,7 +51,7 @@ describe("PS: Catch added", () => {
       "You have added 1 processed products to this consignment - Create a UK processing statement - GOV.UK"
     );
 
-    cy.get("a[id^=change-link]").should("have.length", 3);
+    cy.get("a[id^=change-GBR-2023-PS-2305703F5-012345678]").should("have.length", 3);
     cy.contains("button", "Save and continue").click({ force: true });
     cy.url().should("include", "/add-processing-plant-details");
   });
@@ -67,7 +67,7 @@ describe("PS: Catch added", () => {
       "You have added 1 processed products to this consignment - Create a UK processing statement - GOV.UK"
     );
 
-    cy.get("[data-testid='change-link']").eq(0).click({ force: true });
+    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").eq(0).click({ force: true });
     cy.url().should("include", "create-processing-statement");
     cy.url().should("include", "add-consignment-details");
   });
@@ -176,7 +176,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='change-link']").first().click({ force: true });
+    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").first().click({ force: true });
     cy.url().should("include", "add-consignment-details");
   });
 
@@ -601,8 +601,8 @@ describe("PS: Catch added", () => {
         cy.get("td")
           .first()
           .within(() => {
-            cy.get("[data-testid='change-link']").should("exist");
-            cy.get("[data-testid='change-link']").should("contain", "Change");
+            cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").should("exist");
+            cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").should("contain", "Change");
           });
       });
   });
@@ -713,11 +713,14 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='change-link']").first().should("have.class", "govuk-link");
-    cy.get("[data-testid='change-link']").first().should("not.have.class", "govuk-button");
-    cy.get("[data-testid='change-link']").first().should("match", "a");
-    cy.get("[data-testid='change-link']").first().should("have.attr", "href");
-    cy.get("[data-testid='change-link']").first().should("have.attr", "href").and("include", "add-consignment-details");
+    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").first().should("have.class", "govuk-link");
+    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").first().should("not.have.class", "govuk-button");
+    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").first().should("match", "a");
+    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").first().should("have.attr", "href");
+    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']")
+      .first()
+      .should("have.attr", "href")
+      .and("include", "add-consignment-details");
   });
 
   it("should display product description above Change link", () => {
@@ -734,9 +737,9 @@ describe("PS: Catch added", () => {
           .first()
           .within(() => {
             cy.get("strong.govuk-tag").should("exist");
-            cy.get("[data-testid='change-link']").should("exist");
+            cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").should("exist");
             cy.get("strong.govuk-tag").should("be.visible");
-            cy.get("[data-testid='change-link']").should("be.visible");
+            cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").should("be.visible");
           });
       });
   });
@@ -833,10 +836,10 @@ describe("PS: Catch added - Pagination", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get('td[id="catches-0-productDescription"]').should("exist");
-    cy.get('a[id="change-link"]').should("exist");
+    cy.get('a[id="change-GBR-2023-PS-2305703F5-012345678"]').should("exist");
     cy.get(".govuk-pagination__link").contains("2").click();
     cy.get('td[id="catches-15-productDescription"]').should("exist");
-    cy.get('a[id="change-link"]').should("exist");
+    cy.get('a[id="change-GBR-2023-PS-2305703F5-987654321"]').should("exist");
   });
 
   it("should handle edit actions correctly with pagination", () => {
@@ -846,7 +849,7 @@ describe("PS: Catch added - Pagination", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get(".govuk-pagination__link").contains("2").click();
-    cy.get("[data-testid='change-link']").first().click({ force: true });
+    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-987654321']").first().click({ force: true });
     cy.url().should("include", "/add-consignment-details");
   });
 
