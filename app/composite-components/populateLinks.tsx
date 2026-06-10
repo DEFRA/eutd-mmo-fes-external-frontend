@@ -14,7 +14,7 @@ const getInProgressLinks = (
         document.links = {
           continueLink: () => (
             <Link
-              id="continue"
+              id={`continue-${document.documentNumber}`}
               to={route(linksToPopulate.continueLink, {
                 documentNumber: document.documentNumber,
               })}
@@ -29,7 +29,7 @@ const getInProgressLinks = (
           ),
           deleteLink: () => (
             <Link
-              id="delete"
+              id={`delete-${document.documentNumber}`}
               to={route(linksToPopulate.deleteLink, {
                 documentNumber: document.documentNumber,
               })}
@@ -58,6 +58,7 @@ const getCompletedLinks = (
         document.links = {
           voidLink: () => (
             <Link
+              id={`void-${document.documentNumber}`}
               to={route(linksToPopulate.voidLink, {
                 documentNumber: document.documentNumber,
               })}
@@ -72,6 +73,7 @@ const getCompletedLinks = (
           ),
           copyLink: () => (
             <Link
+              id={`copy-${document.documentNumber}`}
               to={route(linksToPopulate.copyLink, {
                 documentNumber: document.documentNumber,
               })}
