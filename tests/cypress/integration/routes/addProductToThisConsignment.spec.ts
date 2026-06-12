@@ -1286,7 +1286,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
 
       cy.contains(
         ".govuk-error-message",
-        "Fishery products net weight on arrival cannot exceed the product net weight on arrival."
+        "The net weight of fish on arrival cannot be higher than the net weight of product on arrival. You must enter the fish weight only."
       ).should("be.visible");
     });
 
@@ -1300,7 +1300,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
 
       cy.get(".govuk-error-summary__list").should(
         "contain",
-        "Fishery products net weight on arrival cannot exceed the product net weight on arrival."
+        "The net weight of fish on arrival cannot be higher than the net weight of product on arrival. You must enter the fish weight only."
       );
     });
 
@@ -1349,7 +1349,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
 
       cy.contains(
         ".govuk-error-message",
-        "Fishery products net weight on arrival cannot exceed the product net weight on arrival."
+        "The net weight of fish on arrival cannot be higher than the net weight of product on arrival. You must enter the fish weight only."
       ).should("not.exist");
     });
   });
