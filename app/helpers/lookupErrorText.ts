@@ -28,6 +28,7 @@ export const getErrorMessage = (key: string): string => {
     "error.watersCaughtIn.object.missing": "ccWhoseWatersWereTheyCaughtInErrorRequired",
     "error.otherWaters.any.required": "ccWhoseWatersWereTheyCaughtInErrorOtherWatersRequired",
     "error.otherWaters.string.empty": "ccWhoseWatersWereTheyCaughtInErrorOtherWatersRequired",
+    "error.otherWaters.string.pattern.base": "ccWhoseWatersWereTheyCaughtInErrorOtherWatersInvalidCharacters",
     "error.otherWaters.string.emoji": "emojiCharactersNotPermitted",
     "error.postcode.string.empty": "commonLookupAddressPageErrorPostcodeEmpty",
     "error.postcode.string.pattern.base": "commonLookupAddressPageErrorPostcodeValidation",
