@@ -9,7 +9,7 @@ const EN_HEADING = "Check and confirm your consignment weight";
 const EN_GUIDANCE = "If the product weight has changed or remained the same since storage, confirm the details below.";
 
 const CY_FISHERY_WEIGHT_ERROR =
-  "Ni chaiff pwysau net cynhyrchion pysgodfeydd wrth gyrraedd fod yn fwy na phwysau net y cynhyrchion";
+  "Ni chaiff pwysau net cynhyrchion pysgodfeydd wrth ymadael fod yn uwch na'r cynnyrch cyfan wrth ymadael. Rhaid ichi roi pwysau’r pysgod yn unig.";
 
 const visitDepartureSummary = (
   testCaseId: TestCaseId,
@@ -515,7 +515,9 @@ describe("Storage document departure summary: fishery product weight exceeds pro
     visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsProduct);
     assertEnglishHeading();
     submitDepartureSummary("savePostEn");
-    assertErrorSummaryContains("Fishery products net weight on arrival cannot exceed the product net weight");
+    assertErrorSummaryContains(
+      "The net weight of fishery products on departure cannot be higher than the whole product on departure. You must enter the fish weight only."
+    );
 
     visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsProduct, { lng: "cy" });
     assertAnyHeading();
