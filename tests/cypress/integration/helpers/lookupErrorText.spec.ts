@@ -1,11 +1,26 @@
 import {
   displayErrorMessagesInOrder,
   displayErrorTransformedMessages,
+  getErrorMessage,
   getTransformedError,
 } from "~/helpers/lookupErrorText";
 import type { IError, IErrorsTransformed } from "~/types/errors";
 
 describe("lookupErrorText helpers", () => {
+  describe("getErrorMessage", () => {
+    it("should map otherWaters pattern.base to the invalid characters translation key", () => {
+      const result = getErrorMessage("error.otherWaters.string.pattern.base");
+
+      expect(result).to.equal("ccWhoseWatersWereTheyCaughtInErrorOtherWatersInvalidCharacters");
+    });
+
+    it("should return the same key when a mapping does not exist", () => {
+      const result = getErrorMessage("error.unknown.field");
+
+      expect(result).to.equal("error.unknown.field");
+    });
+  });
+
   describe("getTransformedError", () => {
     it("should transform an array of errors into an object with error keys", () => {
       const errors: IError[] = [
