@@ -343,11 +343,21 @@ export default function App() {
   const { revalidate } = useRevalidator();
   const { pathname } = useLocation();
   const exclusionPaths = new Set(["/", "/cookies"]);
+  const exclusionPathPatterns = [
+    /^\/create-processing-statement\/[^/]+\/progress$/,
+    /^\/create-non-manipulation-document\/[^/]+\/progress$/,
+    /^\/create-catch-certificate\/[^/]+\/landings-entry$/,
+    /^\/create-processing-statement\/[^/]+\/add-catch-details\/[^/]+$/,
+    /^\/create-non-manipulation-document\/[^/]+\/add-product-to-this-consignment$/,
+  ];
+
+  const isExcludedPath = (path: string) =>
+    exclusionPaths.has(path) || exclusionPathPatterns.some((pattern) => pattern.test(path));
 
   // invoke the loader function to revalidate page data, except on the root route
   // to avoid triple-loading caused by revalidation on hydration
   useEffect(() => {
-    if (!exclusionPaths.has(pathname)) {
+    if (!isExcludedPath(pathname)) {
       revalidate();
     }
   }, [revalidate, pathname]);
