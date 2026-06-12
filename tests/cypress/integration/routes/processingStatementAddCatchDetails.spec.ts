@@ -1056,7 +1056,7 @@ describe("PS: Add catch details - Error Handling", () => {
     cy.get("#addProductDetails").click({ force: true });
     cy.get(".govuk-error-summary").should("be.visible");
     cy.get("#error-summary-title").should("contain", "There is a problem");
-    cy.get(".govuk-error-message").should("have.length", 3);
+    cy.get(".govuk-error-message").should("have.length", 4);
   });
 
   it("should handle server errors gracefully", () => {
