@@ -25,6 +25,7 @@
   "commonAddExporterDetailsAddTheExportersAddress": "Ychwanegu cyfeiriad yr allforiwr",
   "ccWhoseWatersWereTheyCaughtInErrorRequired": "Dewiswch yn nyfroedd pwy y daliwyd y pysgod neu’r pysgod cregyn",
   "ccWhoseWatersWereTheyCaughtInErrorOtherWatersRequired": "Rhowch yn nyfroedd pwy y daliwyd y pysgod neu’r pysgod cregyn",
+  "ccWhoseWatersWereTheyCaughtInErrorOtherWatersInvalidCharacters": "Rhaid i’r maes nodi yn nyfroedd pwy y daliwyd y pysgod neu’r pysgod cregyn gynnwys llythrennau, rhifau, collnodau, cysylltnodau a bylchau yn unig",
   "commonLookupAddressPageErrorSelectedAddress": "Dewiswch gyfeiriad i fwrw ymlaen neu cliciwch 'Dydy fy nghyfeiriad ddim ar y rhestr’",
   "commonLookupAddressPageErrorPostcodeValidation": "Rhaid i god post fod rhwng 5 ac 8 nod, a rhaid iddo gynnwys llythrennau, rhifau, bylchau, cysylltnodau ac atalnodau yn unig",
   "commonLookupAddressPageErrorPostcodeEmpty": "Rhowch god post",

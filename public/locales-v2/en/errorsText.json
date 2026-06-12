@@ -25,6 +25,7 @@
   "commonAddExporterDetailsAddTheExportersAddress": "Add the exporter's address",
   "ccWhoseWatersWereTheyCaughtInErrorRequired": "Select whose waters the fish or shellfish were caught in",
   "ccWhoseWatersWereTheyCaughtInErrorOtherWatersRequired": "Enter whose waters the fish or shellfish were caught in",
+  "ccWhoseWatersWereTheyCaughtInErrorOtherWatersInvalidCharacters": "Whose waters the fish or shellfish were caught in must only contain letters, numbers, apostrophes, hyphens and spaces",
   "commonLookupAddressPageErrorSelectedAddress": "Select an address to continue or click 'I cannot find my address in the list'",
   "commonLookupAddressPageErrorPostcodeValidation": "Postcode must be between 5 and 8 characters, and contain only letters, numbers, spaces, hyphens and commas",
   "commonLookupAddressPageErrorPostcodeEmpty": "Enter a postcode",
