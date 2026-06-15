@@ -344,11 +344,14 @@ export default function App() {
   const { pathname } = useLocation();
   const exclusionPaths = new Set(["/", "/cookies"]);
   const exclusionPathPatterns = [
+    /^\/create-catch-certificate\/[^/]+\/progress$/,
     /^\/create-processing-statement\/[^/]+\/progress$/,
     /^\/create-non-manipulation-document\/[^/]+\/progress$/,
     /^\/create-catch-certificate\/[^/]+\/landings-entry$/,
+    /^\/create-processing-statement\/[^/]+\/add-catch-details$/,
     /^\/create-processing-statement\/[^/]+\/add-catch-details\/[^/]+$/,
     /^\/create-non-manipulation-document\/[^/]+\/add-product-to-this-consignment$/,
+    /^\/create-non-manipulation-document\/[^/]+\/add-product-to-this-consignment\/[^/]+$/,
   ];
 
   const isExcludedPath = (path: string) =>
