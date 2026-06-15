@@ -61,7 +61,7 @@ export const ProgressTable = (props: Props) => {
                     href={row.url.replace(":documentNumber", documentNumber)}
                     data-testid={`progress-${row.testId}-title`}
                     className="govuk-link"
-                    id={`progress-${row.testId}-link`}
+                    id={row.error ? row.error.key : `progress-${row.testId}-link`}
                     aria-label={t(row.title)}
                   >
                     {t(row.title)}
