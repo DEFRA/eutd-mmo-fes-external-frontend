@@ -1272,6 +1272,33 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.url().should("include", "/you-have-added-a-product");
       cy.url().should("include", "productIndex=0");
     });
+
+    it("should successfully save when arrival weights are changed on a catch that already has departure weights", () => {
+      // The fixture (SDAddProductConsignmentData) contains a catch with both
+      // netWeightProductArrival:"10" and netWeightProductDeparture:"10".
+      // Editing the arrival weight exercises the new server-side branch that
+      // clears stale departure weights from updateStorageDocumentCatchDetails.
+      // The POST to saveAndValidate is a server→orchestration call (not a
+      // browser request), so we validate the observable outcome: a successful
+      // redirect to you-have-added-a-product.
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentData,
+      };
+
+      cy.visit(`${documentUrl}/add-product-to-this-consignment/0`, { qs: { ...testParams } });
+
+      // Re-query each field after typing to avoid detached-DOM errors caused
+      // by React re-renders triggered by the input event.
+      cy.get("#catches-0-netWeightProductArrival").clear();
+      cy.get("#catches-0-netWeightProductArrival").type("9");
+      cy.get("#catches-0-netWeightFisheryProductArrival").clear();
+      cy.get("#catches-0-netWeightFisheryProductArrival").type("8");
+      cy.get('[data-testid="save-and-continue"]').click({ force: true });
+
+      // Successful redirect proves the server action (and the new clearing
+      // logic inside updateStorageDocumentCatchDetails) ran without error.
+      cy.url().should("include", "/you-have-added-a-product");
+    });
   });
 
   // FI0-10949: Fishery products net weight on arrival cannot exceed product net weight on arrival
