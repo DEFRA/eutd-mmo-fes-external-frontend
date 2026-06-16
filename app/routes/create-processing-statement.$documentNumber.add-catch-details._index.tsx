@@ -23,7 +23,7 @@ import {
 } from "~/composite-components";
 import type { Catch, pageLinks, ErrorResponse, Species, ICountry } from "~/types";
 import { getMeta, scrollToId, querySpecies, displayErrorMessagesInOrder } from "~/helpers";
-import { useIsHydrated } from "~/hooks";
+import { useIsHydrated, useScrollOnPageError } from "~/hooks";
 import { AddCatchDetailsAction, AddCatchDetailsLoader } from "~/models";
 
 interface ILoaderData {
@@ -70,7 +70,13 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   AddCatchDetailsAction(request, params);
 
 export const shouldRevalidate: ShouldRevalidateFunction = ({ actionResult, defaultShouldRevalidate }) => {
-  if (actionResult) return isEmpty(actionResult.errors);
+  if (actionResult instanceof Response) {
+    return actionResult.ok;
+  }
+
+  if (actionResult) {
+    return isEmpty(actionResult.errors);
+  }
 
   return defaultShouldRevalidate;
 };
@@ -156,7 +162,7 @@ const CatchCertificateTypeRadios: React.FC<{
 
   return (
     <div
-      id={fieldKey}
+      id={`${currentCatchCertificateType}-catches-${catchIndex}-catchCertificateType`}
       className={classNames("govuk-form-group", {
         "govuk-form-group--error": hasError(errors, fieldKey),
       })}
@@ -178,7 +184,7 @@ const CatchCertificateTypeRadios: React.FC<{
           <div className="govuk-radios__item">
             <input
               className="govuk-radios__input"
-              id="catchCertificateType-uk"
+              id={`catches-${catchIndex}-catchCertificateType`}
               name="catchCertificateType"
               type="radio"
               value="uk"
@@ -190,7 +196,7 @@ const CatchCertificateTypeRadios: React.FC<{
               }}
               defaultChecked={defaultCertType === "uk"}
             />
-            <label className="govuk-label govuk-radios__label" htmlFor="catchCertificateType-uk">
+            <label className="govuk-label govuk-radios__label" htmlFor={`catches-${catchIndex}-catchCertificateType`}>
               {t("commonYesLabel", { ns: "common" })}
             </label>
           </div>
@@ -644,15 +650,32 @@ const AddCatchDetailsIndex = () => {
   });
 
   const navigationLinks = populateNavigationLinks(previousLinkLayout, nextLinkLayout);
+  useScrollOnPageError(errors);
 
-  // Derive a boolean from errors to avoid object reference issues in useEffect
-  const hasErrors = !isEmpty(errors);
-
+  // Restore submitted form values into controlled-input state after a save-and-continue validation error.
+  // useState initialises only on mount, so when actionData changes we must explicitly sync state here.
   useEffect(() => {
-    if (hasErrors) {
-      scrollToId("errorIsland");
+    if (!isEmpty(errors)) {
+      if (submittedFormData.catchCertificateNumber !== undefined) {
+        setCurrentCatchCertificateNumber(submittedFormData.catchCertificateNumber);
+      }
+      if (submittedFormData.catchCertificateType) {
+        setCurrentCatchCertificateType(submittedFormData.catchCertificateType);
+      }
+      if (submittedFormData.totalWeightLanded !== undefined) {
+        setCurrentTotalWeightLanded(submittedFormData.totalWeightLanded);
+      }
+      if (submittedFormData.exportWeightBeforeProcessing !== undefined) {
+        setCurrentExportWeightBeforeProcessing(submittedFormData.exportWeightBeforeProcessing);
+      }
+      if (submittedFormData.exportWeightAfterProcessing !== undefined) {
+        setCurrentExportWeightAfterProcessing(submittedFormData.exportWeightAfterProcessing);
+      }
+      if (submittedFormData.speciesCommodityCode !== undefined) {
+        setCurrentSpeciesCommodityCode(submittedFormData.speciesCommodityCode);
+      }
     }
-  }, [hasErrors]); // Boolean primitive, safe to use as dependency
+  }, [actionData]);
 
   useEffect(() => {
     if (response) {

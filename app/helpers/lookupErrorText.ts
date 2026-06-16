@@ -28,6 +28,7 @@ export const getErrorMessage = (key: string): string => {
     "error.watersCaughtIn.object.missing": "ccWhoseWatersWereTheyCaughtInErrorRequired",
     "error.otherWaters.any.required": "ccWhoseWatersWereTheyCaughtInErrorOtherWatersRequired",
     "error.otherWaters.string.empty": "ccWhoseWatersWereTheyCaughtInErrorOtherWatersRequired",
+    "error.otherWaters.string.pattern.base": "ccWhoseWatersWereTheyCaughtInErrorOtherWatersInvalidCharacters",
     "error.otherWaters.string.emoji": "emojiCharactersNotPermitted",
     "error.postcode.string.empty": "commonLookupAddressPageErrorPostcodeEmpty",
     "error.postcode.string.pattern.base": "commonLookupAddressPageErrorPostcodeValidation",
@@ -471,7 +472,7 @@ export const getTransformedError = (errors: IError[], vesselInput?: string): IEr
     // Vessel fallback: if error is 'ccAddLandingVesselNameUnpopulatedError' but vessel field is not empty, show 'ccAddLandingSelectVesselListNullError'
     let errorMessage = error.message;
     if (
-      errorKey === "vessel.vesselName" &&
+      errorKey === "vessel-vesselName" &&
       error.message === "ccAddLandingVesselNameUnpopulatedError" &&
       vesselInput !== undefined &&
       vesselInput.trim() !== ""

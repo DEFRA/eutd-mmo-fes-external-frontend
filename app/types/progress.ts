@@ -79,6 +79,7 @@ export interface ProgressLoaderProps {
   copyDocumentNumber: string;
   csrf: string;
   landingsEntryOption?: LandingEntryType;
+  transportSummary?: string | null;
   products?: ProcessingStatementProduct[];
   catches?: StorageDocumentCatch[];
 }

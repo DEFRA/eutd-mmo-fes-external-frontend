@@ -1,5 +1,10 @@
 import { get } from "~/communication.server";
-import { GET_CERTIFICATE_SUMMARY, GET_CLIENT_IP_URL, CREATE_EXPORT_CERTIFICATE } from "~/urls.server";
+import {
+  GET_CERTIFICATE_SUMMARY,
+  GET_CLIENT_IP_URL,
+  CREATE_EXPORT_CERTIFICATE,
+  GET_CC_PRE_SUBMIT_BUNDLE,
+} from "~/urls.server";
 import isEmpty from "lodash/isEmpty";
 import type {
   ErrorLookup,
@@ -27,6 +32,20 @@ export const getCatchCertificateSummary = async (
 
   const response: Response = await get(bearerToken, GET_CERTIFICATE_SUMMARY, {
     documentNumber: documentNumber,
+  });
+
+  const res = await response.text();
+  return res ? JSON.parse(res) : undefined;
+};
+
+export const getCatchCertificatePreSubmitBundle = async (
+  bearerToken: string,
+  documentNumber: string | undefined
+): Promise<{ summary?: ICatchCertificateSummary; completeness?: any } | undefined> => {
+  if (!documentNumber) throw new Error("Document number is required");
+
+  const response: Response = await get(bearerToken, GET_CC_PRE_SUBMIT_BUNDLE, {
+    documentnumber: documentNumber,
   });
 
   const res = await response.text();

@@ -13,15 +13,15 @@ const verifyLandingFormIsReset = (isProductEmpty: boolean) => {
   } else {
     cy.get("select#product").select(1, { force: true }).invoke("val").should("not.eq", "");
   }
-  cy.get("#startDate-day").should("have.value", "");
+  cy.get("#startDate").should("have.value", "");
   cy.get("#startDate-month").should("have.value", "");
   cy.get("#startDate-year").should("have.value", "");
-  cy.get("#dateLanded-day").should("have.value", "");
-  cy.get("#dateLanded-day").should("have.value", "");
-  cy.get("#dateLanded-day").should("have.value", "");
+  cy.get("#dateLanded").should("have.value", "");
+  cy.get("#dateLanded").should("have.value", "");
+  cy.get("#dateLanded").should("have.value", "");
   cy.get("#select-faoArea").should("have.value", "FAO27");
   cy.get("#highSeasArea").should("not.be.checked");
-  cy.get(String.raw`#vessel\.vesselName`).should("have.value", "");
+  cy.get(String.raw`#vessel-vesselName`).should("have.value", "");
   cy.get("#weight").should("have.value", "");
   cy.get("select#gearCategory option:selected").should("have.value", "");
   cy.get("select#gearType option:selected").should("have.value", "");
@@ -30,23 +30,23 @@ const verifyLandingFormIsReset = (isProductEmpty: boolean) => {
 
 const populateLandingForm = () => {
   // Wait for hydration - date pickers are a good indicator
-  cy.get("#startDate").find("button.date-picker").should("be.visible");
+  cy.get("#startDate-container").find("button.date-picker").should("be.visible");
   cy.wait(300); // Allow hydration to complete
 
   // product
   cy.get("select#product").select(1).invoke("val").should("not.eq", "");
   // start date
-  cy.get("#startDate").find("button.date-picker").click({ force: true });
+  cy.get("#startDate-container").find("button.date-picker").click({ force: true });
   cy.get(".react-datepicker-popper", { timeout: 5000 }).should("be.visible");
   cy.get(".react-datepicker__day").eq(0).trigger("click");
-  cy.get("#startDate-day").should("have.prop", "value").and("not.be.empty");
+  cy.get("#startDate").should("have.prop", "value").and("not.be.empty");
   cy.get("#startDate-month").should("have.prop", "value").and("not.be.empty");
   cy.get("#startDate-year").should("have.prop", "value").and("not.be.empty");
   // date landed
-  cy.get("#dateLanded").find("button.date-picker").click({ force: true });
+  cy.get("#dateLanded-container").find("button.date-picker").click({ force: true });
   cy.get(".react-datepicker-popper", { timeout: 5000 }).should("be.visible");
   cy.get(".react-datepicker__day").eq(10).trigger("click");
-  cy.get("#dateLanded-day").should("have.prop", "value").and("not.be.empty");
+  cy.get("#dateLanded").should("have.prop", "value").and("not.be.empty");
   cy.get("#dateLanded-month").should("have.prop", "value").and("not.be.empty");
   cy.get("#dateLanded-year").should("have.prop", "value").and("not.be.empty");
   // Fao
@@ -55,8 +55,8 @@ const populateLandingForm = () => {
   //High Seas Area
   cy.get("#highSeasArea").check();
   // vessel
-  cy.get(String.raw`#vessel\.vesselName`).invoke("val", "CARINA (BF803)");
-  cy.get(String.raw`#vessel\.vesselName`)
+  cy.get(String.raw`#vessel-vesselName`).invoke("val", "CARINA (BF803)");
+  cy.get(String.raw`#vessel-vesselName`)
     .should("have.prop", "value")
     .and("not.be.empty");
   // weight
@@ -391,9 +391,9 @@ describe("Manual landing page render with page guard", () => {
     });
     cy.get("#product").contains("Longnose velvet dogfish (CYP), Fresh, Other presentations, 03045690");
     // Start Date
-    cy.get("#startDate").find("img").click({ force: true });
+    cy.get("#startDate-container").find("img").click({ force: true });
     // Date
-    cy.get("#dateLanded").find("img").click({ force: true });
+    cy.get("#dateLanded-container").find("img").click({ force: true });
     cy.get(".react-datepicker-popper").should("be.visible");
     cy.get(".react-datepicker__day").eq(0).trigger("click");
     // Fao
@@ -436,11 +436,14 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render a hint for start date", () => {
-    cy.get("#startDate").find("#date-hint").contains("For example, 31 03 1980").should("be.visible");
-    cy.get("#startDate-day").invoke("val", "24");
+    cy.get("#startDate-container")
+      .find("#startDate-date-hint")
+      .contains("For example, 31 03 1980")
+      .should("be.visible");
+    cy.get("#startDate").invoke("val", "24");
     cy.get("#startDate-month").invoke("val", "10");
     cy.get("#startDate-year").invoke("val", "20");
-    cy.get("#startDate-day").should("have.value", "24");
+    cy.get("#startDate").should("have.value", "24");
     cy.get("#startDate-month").should("have.value", "10");
     cy.get("#startDate-year").should("have.value", "20");
   });
@@ -480,11 +483,11 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.get('[data-testid="edit_GBR-2023-CC-B2DFABFDE-1321338481"]').click({ force: true });
     // confirm form is populated
     cy.get("select#product option:selected").should("not.have.value", "");
-    cy.get("#dateLanded-day").should("not.have.value", "");
-    cy.get("#dateLanded-day").should("not.have.value", "");
-    cy.get("#dateLanded-day").should("not.have.value", "");
+    cy.get("#dateLanded").should("not.have.value", "");
+    cy.get("#dateLanded").should("not.have.value", "");
+    cy.get("#dateLanded").should("not.have.value", "");
     cy.get("#select-faoArea").should("have.value", "FAO27");
-    cy.get(String.raw`#vessel\.vesselName`).should("not.have.value", "");
+    cy.get(String.raw`#vessel-vesselName`).should("not.have.value", "");
     cy.get("#weight").should("not.have.value", "");
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
@@ -512,11 +515,11 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
     // confirm form is pre-populated
     cy.get("select#product option:selected").should("not.have.value", "");
-    cy.get("#dateLanded-day").should("not.have.value", "");
-    cy.get("#dateLanded-day").should("not.have.value", "");
-    cy.get("#dateLanded-day").should("not.have.value", "");
+    cy.get("#dateLanded").should("not.have.value", "");
+    cy.get("#dateLanded").should("not.have.value", "");
+    cy.get("#dateLanded").should("not.have.value", "");
     cy.get("#select-faoArea").should("have.value", "FAO27");
-    cy.get(String.raw`#vessel\.vesselName`).should("not.have.value", "");
+    cy.get(String.raw`#vessel-vesselName`).should("not.have.value", "");
     cy.get("#weight").should("not.have.value", "");
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
@@ -536,11 +539,11 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
     // confirm form is pre-populated
     cy.get("select#product option:selected").should("not.have.value", "");
-    cy.get("#dateLanded-day").should("not.have.value", "");
-    cy.get("#dateLanded-day").should("not.have.value", "");
-    cy.get("#dateLanded-day").should("not.have.value", "");
+    cy.get("#dateLanded").should("not.have.value", "");
+    cy.get("#dateLanded").should("not.have.value", "");
+    cy.get("#dateLanded").should("not.have.value", "");
     cy.get("#select-faoArea").should("have.value", "FAO27");
-    cy.get(String.raw`#vessel\.vesselName`).should("not.have.value", "");
+    cy.get(String.raw`#vessel-vesselName`).should("not.have.value", "");
     cy.get("#weight").should("not.have.value", "");
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
@@ -560,11 +563,11 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
     // confirm form is pre-populated
     cy.get("select#product option:selected").should("not.have.value", "");
-    cy.get("#dateLanded-day").should("not.have.value", "");
-    cy.get("#dateLanded-day").should("not.have.value", "");
-    cy.get("#dateLanded-day").should("not.have.value", "");
+    cy.get("#dateLanded").should("not.have.value", "");
+    cy.get("#dateLanded").should("not.have.value", "");
+    cy.get("#dateLanded").should("not.have.value", "");
     cy.get("#select-faoArea").should("have.value", "FAO27");
-    cy.get(String.raw`#vessel\.vesselName`).should("not.have.value", "");
+    cy.get(String.raw`#vessel-vesselName`).should("not.have.value", "");
     cy.get("#weight").should("not.have.value", "");
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
@@ -589,8 +592,8 @@ describe("Manual landing page: submit unauthorised access", () => {
       cy.get("#product").select(1, { force: true });
     });
     cy.get("#product").contains("Longnose velvet dogfish (CYP), Fresh, Other presentations, 03045690");
-    cy.get("#startDate").find("img").click({ force: true });
-    cy.get("#dateLanded").find("img").click({ force: true });
+    cy.get("#startDate-container").find("img").click({ force: true });
+    cy.get("#dateLanded-container").find("img").click({ force: true });
     cy.get(".react-datepicker-popper").should("be.visible");
     cy.get(".react-datepicker__day").eq(0).trigger("click");
     cy.get("#select-faoArea").contains("FAO27");
@@ -624,8 +627,8 @@ describe("Manual landing page: submit unauthorised access", () => {
       cy.get("#product").select(1, { force: true });
     });
     cy.get("#product").contains("Longnose velvet dogfish (CYP), Fresh, Other presentations, 03045690");
-    cy.get("#startDate").find("img").click({ force: true });
-    cy.get("#dateLanded").find("img").click({ force: true });
+    cy.get("#startDate-container").find("img").click({ force: true });
+    cy.get("#dateLanded-container").find("img").click({ force: true });
     cy.get(".react-datepicker-popper").should("be.visible");
     cy.get(".react-datepicker__day").eq(0).trigger("click");
     cy.get("#select-faoArea").contains("FAO27");
@@ -980,10 +983,10 @@ describe("Manual page errors when javascript is disabled", () => {
 
   it("should trigger add date button", () => {
     cy.contains("[data-testid='add-dateLanded']", "Add Date");
-    cy.get("#dateLanded-day").invoke("val", "25");
+    cy.get("#dateLanded").invoke("val", "25");
     cy.get("#dateLanded-month").invoke("val", "10");
     cy.get("#dateLanded-year").invoke("val", "2020");
-    cy.get("#startDate-day").invoke("val", "25");
+    cy.get("#startDate").invoke("val", "25");
     cy.get("#startDate-month").invoke("val", "10");
     cy.get("#startDate-year").invoke("val", "2020");
     cy.get("[data-testid='add-dateLanded']").click({ force: true });
@@ -993,10 +996,10 @@ describe("Manual page errors when javascript is disabled", () => {
 
   it("should trigger add date button with wrong format YY-MM-DD", () => {
     cy.contains("[data-testid='add-dateLanded']", "Add Date");
-    cy.get("#dateLanded-day").invoke("val", "24");
+    cy.get("#dateLanded").invoke("val", "24");
     cy.get("#dateLanded-month").invoke("val", "10");
     cy.get("#dateLanded-year").invoke("val", "20");
-    cy.get("#startDate-day").invoke("val", "24");
+    cy.get("#startDate").invoke("val", "24");
     cy.get("#startDate-month").invoke("val", "10");
     cy.get("#startDate-year").invoke("val", "20");
     cy.get("[data-testid='add-dateLanded']").click({ force: true });
@@ -1073,9 +1076,9 @@ describe("Manual Landing page when gear types api is failing", () => {
     });
     cy.get("#product").contains("Longnose velvet dogfish (CYP), Fresh, Other presentations, 03045690");
     // Start Date
-    cy.get("#startDate").find("img").click({ force: true });
+    cy.get("#startDate-container").find("img").click({ force: true });
     // Date
-    cy.get("#dateLanded").find("img").click({ force: true });
+    cy.get("#dateLanded-container").find("img").click({ force: true });
     cy.get(".react-datepicker-popper").should("be.visible");
     cy.get(".react-datepicker__day").eq(0).trigger("click");
     // Fao
@@ -1149,7 +1152,7 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
   });
 
   it("should show an error if any Date Landed input is empty when Add Landing is clicked", () => {
-    cy.get("#dateLanded-day").type("12");
+    cy.get("#dateLanded").type("12");
     cy.get("#dateLanded-month").type("05");
     cy.get("#dateLanded-year").clear();
     cy.get("[data-testid=submit]").click({ force: true });
@@ -1157,11 +1160,11 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
   });
 
   it("should show an error if Date Landed is in an invalid format", () => {
-    cy.get("#startDate-day").type("01");
+    cy.get("#startDate").type("01");
     cy.get("#startDate-month").type("09");
     cy.get("#startDate-year").type("2020");
 
-    cy.get("#dateLanded-day").type("99");
+    cy.get("#dateLanded").type("99");
     cy.get("#dateLanded-month").type("99");
     cy.get("#dateLanded-year").type("2020");
     cy.get("[data-testid=submit]").click();
@@ -1169,31 +1172,31 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
   });
 
   it("should not allow vessel selection until Date Landed is valid", () => {
-    cy.get(String.raw`#vessel\.vesselName`).type("SHOULDNOTWORK", { force: true });
-    cy.get(String.raw`#vessel\.vesselName`).should("have.value", "");
-    cy.get("#dateLanded-day").type("12");
+    cy.get(String.raw`#vessel-vesselName`).type("SHOULDNOTWORK", { force: true });
+    cy.get(String.raw`#vessel-vesselName`).should("have.value", "");
+    cy.get("#dateLanded").type("12");
     cy.get("#dateLanded-month").type("05");
-    cy.get(String.raw`#vessel\.vesselName`).type("SHOULDNOTWORK", { force: true });
-    cy.get(String.raw`#vessel\.vesselName`).should("have.value", "");
+    cy.get(String.raw`#vessel-vesselName`).type("SHOULDNOTWORK", { force: true });
+    cy.get(String.raw`#vessel-vesselName`).should("have.value", "");
     const today = new Date();
     cy.get("#dateLanded-year").type(today.getFullYear().toString());
-    cy.get(String.raw`#vessel\.vesselName`).type("SHOULDWORK", { force: true });
+    cy.get(String.raw`#vessel-vesselName`).type("SHOULDWORK", { force: true });
   });
 
   it("should clear vessel input if Date Landed is changed to invalid", () => {
     const today = new Date();
-    cy.get("#dateLanded-day").type(pad2(today.getDate()));
+    cy.get("#dateLanded").type(pad2(today.getDate()));
     cy.get("#dateLanded-month").type(pad2(today.getMonth() + 1));
     cy.get("#dateLanded-year").type(today.getFullYear().toString());
     cy.get("input[name='vessel']").type("CARINA (BF803)");
-    cy.get("#dateLanded-day").clear({ force: true });
-    cy.get("#dateLanded-day").type("99", { force: true });
+    cy.get("#dateLanded").clear({ force: true });
+    cy.get("#dateLanded").type("99", { force: true });
     cy.get("input[name='vessel']").should("have.value", "");
   });
 
   it("should not show vessel error if vessel is entered and date is valid", () => {
     const today = new Date();
-    cy.get("#dateLanded-day").type(pad2(today.getDate()));
+    cy.get("#dateLanded").type(pad2(today.getDate()));
     cy.get("#dateLanded-month").type(pad2(today.getMonth() + 1));
     cy.get("#dateLanded-year").type(today.getFullYear().toString());
     cy.get("input[name='vessel']").type("K373");
@@ -1227,8 +1230,8 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when High Seas Area is not selected", () => {
-    cy.get("input#startDate-day").clear({ force: true });
-    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate").clear({ force: true });
+    cy.get("input#startDate").type("01", { force: true });
     cy.get("input#startDate-month").clear({ force: true });
     cy.get("input#startDate-month").type("09", { force: true });
     cy.get("input#startDate-year").clear({ force: true });
@@ -1244,8 +1247,8 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when Exclusive Economic Zone is not provided", () => {
-    cy.get("input#startDate-day").clear({ force: true });
-    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate").clear({ force: true });
+    cy.get("input#startDate").type("01", { force: true });
     cy.get("input#startDate-month").clear({ force: true });
     cy.get("input#startDate-month").type("09", { force: true });
     cy.get("input#startDate-year").clear({ force: true });
@@ -1269,8 +1272,8 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when Gear Category is not selected", () => {
-    cy.get("input#startDate-day").clear({ force: true });
-    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate").clear({ force: true });
+    cy.get("input#startDate").type("01", { force: true });
     cy.get("input#startDate-month").clear({ force: true });
     cy.get("input#startDate-month").type("09", { force: true });
     cy.get("input#startDate-year").clear({ force: true });
@@ -1288,8 +1291,8 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when Gear Type is not selected", () => {
-    cy.get("input#startDate-day").clear({ force: true });
-    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate").clear({ force: true });
+    cy.get("input#startDate").type("01", { force: true });
     cy.get("input#startDate-month").clear({ force: true });
     cy.get("input#startDate-month").type("09", { force: true });
     cy.get("input#startDate-year").clear({ force: true });
@@ -1332,8 +1335,8 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display error when EEZ is selected as 'No' but no country is provided", () => {
-    cy.get("input#startDate-day").clear({ force: true });
-    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate").clear({ force: true });
+    cy.get("input#startDate").type("01", { force: true });
     cy.get("input#startDate-month").clear({ force: true });
     cy.get("input#startDate-month").type("09", { force: true });
     cy.get("input#startDate-year").clear({ force: true });
@@ -1352,11 +1355,11 @@ describe("Mandatory field validation tests", () => {
 
   it("should apply correct CSS classes to EEZ fields based on error state", () => {
     // Wait for form to hydrate
-    cy.get("input#startDate-day").should("be.visible");
+    cy.get("input#startDate").should("be.visible");
     cy.wait(200);
 
-    cy.get("input#startDate-day").clear({ force: true });
-    cy.get("input#startDate-day").type("01", { force: true });
+    cy.get("input#startDate").clear({ force: true });
+    cy.get("input#startDate").type("01", { force: true });
     cy.get("input#startDate-month").clear({ force: true });
     cy.get("input#startDate-month").type("09", { force: true });
     cy.get("input#startDate-year").clear({ force: true });

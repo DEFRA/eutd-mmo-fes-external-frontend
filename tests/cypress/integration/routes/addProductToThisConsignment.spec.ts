@@ -25,13 +25,13 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should group certificate type radios with a legend", () => {
-    cy.get("#catches-0-certificateType").within(() => {
+    cy.get("#GBR-2023-SD-83552D3E5-catches-0-certificateType").within(() => {
       cy.get("fieldset > legend")
         .should("exist")
         .and(($legend) => {
           expect($legend.text().trim()).not.to.equal("");
         });
-      cy.get("label[for='catches-0-certificateType']").should("not.exist");
+      cy.get("label[for='GBR-2023-SD-83552D3E5-catches-0-certificateType']").should("not.exist");
     });
   });
 
@@ -375,7 +375,7 @@ describe("Add product to this consignment  page", () => {
 
   describe("Accessibility", () => {
     it("should have label for all fields on the form", () => {
-      cy.get("#catches-0-certificateType fieldset > legend")
+      cy.get("#GBR-2023-SD-83552D3E5-catches-0-certificateType fieldset > legend")
         .should("be.visible")
         .and("contain.text", "Was the entry document issued in the UK?");
       cy.get("form label").should("have.length", 11);
@@ -394,15 +394,15 @@ describe("Add product to this consignment  page", () => {
       cy.get("form label[for='catches-0-productDescription']")
         .should("have.text", "Product description")
         .and("be.visible");
-      cy.get("form label[for='netWeightProductArrival']")
+      cy.get("form label[for='catches-0-netWeightProductArrival']")
         .should("have.text", "Net weight of the product on arrival (kg)")
         .and("be.visible");
-      cy.get("form label[for='netWeightFisheryProductArrival']")
+      cy.get("form label[for='catches-0-netWeightFisheryProductArrival']")
         .should("have.text", "Net weight of fishery products on arrival (kg)")
         .and("be.visible");
     });
     it("should have valid aria-describedby attributes for was entry document issued in uk", () => {
-      cy.get("#catches-0-certificateType fieldset").should(
+      cy.get("#GBR-2023-SD-83552D3E5-catches-0-certificateType fieldset").should(
         "have.attr",
         "aria-describedby",
         "catches-0-certificateType-hint"
@@ -731,8 +731,8 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     cy.get("#catches-0-product").should("exist");
     cy.get("#catches-0-commodityCode").should("exist");
     cy.get("#catches-0-productDescription").should("exist");
-    cy.get("#netWeightProductArrival").should("exist");
-    cy.get("#netWeightFisheryProductArrival").should("exist");
+    cy.get("#catches-0-netWeightProductArrival").should("exist");
+    cy.get("#catches-0-netWeightFisheryProductArrival").should("exist");
   });
 
   it("should validate weight field has kg suffix", () => {
@@ -751,8 +751,8 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("#netWeightProductArrival").should("have.attr", "maxLength", "16");
-    cy.get("#netWeightFisheryProductArrival").should("have.attr", "maxLength", "16");
+    cy.get("#catches-0-netWeightProductArrival").should("have.attr", "maxLength", "16");
+    cy.get("#catches-0-netWeightFisheryProductArrival").should("have.attr", "maxLength", "16");
   });
 
   it("should handle errors for all fields", () => {
@@ -881,8 +881,8 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     cy.get("#catches-0-product").type("Atlantic cod (COD)");
     cy.get("#catches-0-commodityCode").type("03011100 - Fresh or chilled trout");
     cy.get("#catches-0-productDescription").type("Test description");
-    cy.get("#netWeightProductArrival").type("50");
-    cy.get("#netWeightFisheryProductArrival").type("40");
+    cy.get("#catches-0-netWeightProductArrival").type("50");
+    cy.get("#catches-0-netWeightFisheryProductArrival").type("40");
 
     cy.get("[data-testid=save-and-continue]").should("be.visible");
     cy.get("[data-testid=save-and-continue]").click({ force: true });
@@ -1017,8 +1017,8 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("#netWeightProductArrival").should("have.attr", "spellCheck", "false");
-    cy.get("#netWeightFisheryProductArrival").should("have.attr", "spellCheck", "false");
+    cy.get("#catches-0-netWeightProductArrival").should("have.attr", "spellCheck", "false");
+    cy.get("#catches-0-netWeightFisheryProductArrival").should("have.attr", "spellCheck", "false");
   });
 
   it("should handle error visibility for net weight fields", () => {
@@ -1286,7 +1286,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
 
       cy.contains(
         ".govuk-error-message",
-        "Fishery products net weight on arrival cannot exceed the product net weight on arrival."
+        "The net weight of fish on arrival cannot be higher than the net weight of product on arrival. You must enter the fish weight only."
       ).should("be.visible");
     });
 
@@ -1300,7 +1300,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
 
       cy.get(".govuk-error-summary__list").should(
         "contain",
-        "Fishery products net weight on arrival cannot exceed the product net weight on arrival."
+        "The net weight of fish on arrival cannot be higher than the net weight of product on arrival. You must enter the fish weight only."
       );
     });
 
@@ -1312,8 +1312,11 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
 
       cy.get("[data-testid=save-and-continue]").click({ force: true });
 
-      cy.get("#catches-0-netWeightFisheryProductArrival").should("have.class", "govuk-form-group--error");
-      cy.get("#netWeightFisheryProductArrival").should("have.class", "govuk-input--error");
+      cy.get("#GBR-2023-SD-83552D3E5-catches-0-netWeightFisheryProductArrival").should(
+        "have.class",
+        "govuk-form-group--error"
+      );
+      cy.get("#catches-0-netWeightFisheryProductArrival").should("have.class", "govuk-input--error");
     });
 
     it("should scroll to error island when fishery product weight exceeds product weight", () => {
@@ -1339,14 +1342,14 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get("#catches-0-product").type("Atlantic cod (COD)");
       cy.get("#catches-0-commodityCode").type("03011100 - Fresh or chilled trout");
       cy.get("#catches-0-productDescription").type("Test description");
-      cy.get("#netWeightProductArrival").type("100");
-      cy.get("#netWeightFisheryProductArrival").type("100");
+      cy.get("#catches-0-netWeightProductArrival").type("100");
+      cy.get("#catches-0-netWeightFisheryProductArrival").type("100");
 
       cy.get("[data-testid=save-and-continue]").click({ force: true });
 
       cy.contains(
         ".govuk-error-message",
-        "Fishery products net weight on arrival cannot exceed the product net weight on arrival."
+        "The net weight of fish on arrival cannot be higher than the net weight of product on arrival. You must enter the fish weight only."
       ).should("not.exist");
     });
   });

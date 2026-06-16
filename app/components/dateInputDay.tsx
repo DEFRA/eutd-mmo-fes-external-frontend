@@ -24,7 +24,7 @@ export const DateInputDay = ({
   label,
 }: DateInputDayProps) => (
   <div className="govuk-form-group">
-    <label className="govuk-label govuk-date-input__label" htmlFor={`${id}-day`}>
+    <label className="govuk-label govuk-date-input__label" htmlFor={id}>
       {label}
     </label>
     {isHydrated ? (
@@ -34,7 +34,7 @@ export const DateInputDay = ({
             ? "govuk-input govuk-date-input__input govuk-input--width-2"
             : "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
         }
-        id={`${id}-day`}
+        id={id}
         name={`${name}Day`}
         type="number"
         onChange={handleDayChange}
@@ -48,7 +48,7 @@ export const DateInputDay = ({
             ? "govuk-input govuk-date-input__input govuk-input--width-2"
             : "govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
         }
-        id={`${id}-day`}
+        id={id}
         name={`${name}Day`}
         type="number"
         defaultValue={daySelected}

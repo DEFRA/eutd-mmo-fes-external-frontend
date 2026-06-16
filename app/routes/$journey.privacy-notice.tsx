@@ -29,10 +29,7 @@ const Privacy = () => {
   const { t } = useTranslation(["privacyNotice"]);
 
   return (
-    <Main showHelpLink={false}>
-      <a href="/" className="govuk-back-link govuk-!-margin-top-0 govuk-!-margin-bottom-10">
-        {t("commonBackLinkBackButtonLabel", { ns: "common" })}
-      </a>
+    <Main showHelpLink={false} backUrl="/">
       <SecureForm method="post" csrf={csrf}>
         <PrivacyNotice />
         <Button

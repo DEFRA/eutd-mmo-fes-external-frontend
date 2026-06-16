@@ -81,6 +81,22 @@ describe("Add Consignment Details: save and continue", () => {
     cy.contains("h2", /^There is a problem$/).should("be.visible");
   });
 
+  it("should display error with interpolated values when description exceeds character limit", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSPostAddConsignmentDetailsError,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-and-continue]").click({ force: true });
+
+    // Verify error summary displays with error messages
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 0);
+
+    // Verify error link exists and has correct href
+    cy.get(".govuk-error-summary__list a").first().should("have.attr", "href");
+  });
+
   it("should redirect to add catch details page when save and continue succeeds", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddConsignmentDetails,

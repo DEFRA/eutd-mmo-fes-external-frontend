@@ -179,7 +179,11 @@
   background-color: #1d70b8;
   border-color: #1d70b8;
   color: white;
-  outline: none;
+}
+
+.autocomplete__option--focused {
+  outline: 3px solid #ffdd00;
+  outline-offset: -3px;
 }
 
 @media (-ms-high-contrast: active), (forced-colors: active) {

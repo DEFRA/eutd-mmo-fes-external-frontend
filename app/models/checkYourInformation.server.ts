@@ -3,6 +3,7 @@ import { redirect, type Params } from "react-router";
 import {
   createCSRFToken,
   getBearerTokenForRequest,
+  getCatchCertificatePreSubmitBundle,
   getCatchCertificateSummary,
   getLandingsEntryOption,
   getProgress,
@@ -45,6 +46,7 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
   session.set("csrf", csrf);
 
   const { documentNumber } = params;
+  const preSubmitBundle = await getCatchCertificatePreSubmitBundle(bearerToken, documentNumber);
   const {
     status,
     transport,
@@ -56,7 +58,8 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
     validationErrors,
     landingsEntryOption,
     userReference,
-  }: ICatchCertificateSummary = (await getCatchCertificateSummary(bearerToken, documentNumber)) ?? {};
+  }: ICatchCertificateSummary =
+    preSubmitBundle?.summary ?? (await getCatchCertificateSummary(bearerToken, documentNumber)) ?? {};
   if (status === "COMPLETE") {
     return redirect("/create-catch-certificate/catch-certificates");
   }
@@ -81,11 +84,8 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
     );
 
   if (status !== "LOCKED") {
-    const { requiredSections, completedSections }: IProgress = await getProgress(
-      bearerToken,
-      "catchCertificate",
-      documentNumber
-    );
+    const { requiredSections, completedSections }: IProgress =
+      preSubmitBundle?.completeness ?? (await getProgress(bearerToken, "catchCertificate", documentNumber));
 
     if (landingsEntryOption === null) {
       return redirect(`/create-catch-certificate/${documentNumber}/landings-entry`);

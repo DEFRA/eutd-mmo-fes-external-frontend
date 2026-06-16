@@ -629,7 +629,7 @@ const AddProductIndex = () => {
           >
             <div className="add-landings-form">
               <div
-                id={certificateTypeKey}
+                id={`${documentNumber}-${certificateTypeKey}`}
                 className={
                   isEmpty(errors?.[certificateTypeKey])
                     ? "govuk-form-group"
@@ -657,7 +657,7 @@ const AddProductIndex = () => {
                     {confirmTypeOptions.map((option: DocIssuedInUkRadioSelectOptionType) => (
                       <div key={option.id} className="govuk-radios__item">
                         <input
-                          id={option.id}
+                          id={`${certificateTypeKey}${option.id}`}
                           type="radio"
                           name="docIssuedInUk"
                           className="govuk-radios__input"
@@ -666,7 +666,10 @@ const AddProductIndex = () => {
                           aria-describedby={`${certificateTypeKey}-hint`}
                           onChange={(e) => setSelectedCertificateType(e.target.value)}
                         />
-                        <label htmlFor={option.id} className="govuk-label govuk-radios__label">
+                        <label
+                          htmlFor={`${certificateTypeKey}${option.id}`}
+                          className="govuk-label govuk-radios__label"
+                        >
                           {getOptionLabel(option)}
                         </label>
                       </div>
@@ -986,14 +989,9 @@ const AddProductIndex = () => {
               className={classNames("govuk-form-group", {
                 "govuk-form-group--error": errors?.[netWeightProductArrivalKey]?.message,
               })}
-              id={netWeightProductArrivalKey}
-              aria-describedby={
-                isEmpty(errors?.[netWeightProductArrivalKey])
-                  ? `${netWeightProductArrivalKey}-hint`
-                  : "netWeightProductArrival-error"
-              }
+              id={`${documentNumber}-${netWeightProductArrivalKey}`}
             >
-              <label className="govuk-label govuk-!-font-weight-bold" htmlFor="netWeightProductArrival">
+              <label className="govuk-label govuk-!-font-weight-bold" htmlFor={netWeightProductArrivalKey}>
                 {t(netWeightProductLabelKey, {
                   ns: "addProductToThisConsignment",
                 })}
@@ -1013,7 +1011,12 @@ const AddProductIndex = () => {
                   className={classNames("govuk-input govuk-input--width-10", {
                     "govuk-input--error": errors?.[netWeightProductArrivalKey]?.message,
                   })}
-                  id="netWeightProductArrival"
+                  id={netWeightProductArrivalKey}
+                  aria-describedby={
+                    isEmpty(errors?.[netWeightProductArrivalKey])
+                      ? `${netWeightProductArrivalKey}-hint`
+                      : "netWeightProductArrival-error"
+                  }
                   name="netWeightProductArrival"
                   type="text"
                   spellCheck="false"
@@ -1031,14 +1034,9 @@ const AddProductIndex = () => {
               className={classNames("govuk-form-group", {
                 "govuk-form-group--error": errors?.[netWeightFisheryProductArrivalKey]?.message,
               })}
-              id={netWeightFisheryProductArrivalKey}
-              aria-describedby={
-                isEmpty(errors?.[netWeightFisheryProductArrivalKey])
-                  ? `${netWeightFisheryProductArrivalKey}-hint`
-                  : "netWeightFisheryProductArrival-error"
-              }
+              id={`${documentNumber}-${netWeightFisheryProductArrivalKey}`}
             >
-              <label className="govuk-label govuk-!-font-weight-bold" htmlFor="netWeightFisheryProductArrival">
+              <label className="govuk-label govuk-!-font-weight-bold" htmlFor={netWeightFisheryProductArrivalKey}>
                 {t(netWeightFisheryLabelKey, {
                   ns: "addProductToThisConsignment",
                 })}
@@ -1058,7 +1056,12 @@ const AddProductIndex = () => {
                   className={classNames("govuk-input govuk-input--width-10", {
                     "govuk-input--error": errors?.[netWeightFisheryProductArrivalKey]?.message,
                   })}
-                  id="netWeightFisheryProductArrival"
+                  id={netWeightFisheryProductArrivalKey}
+                  aria-describedby={
+                    isEmpty(errors?.[netWeightFisheryProductArrivalKey])
+                      ? `${netWeightFisheryProductArrivalKey}-hint`
+                      : "netWeightFisheryProductArrival-error"
+                  }
                   name="netWeightFisheryProductArrival"
                   type="text"
                   spellCheck="false"

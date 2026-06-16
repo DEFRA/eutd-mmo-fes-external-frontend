@@ -246,6 +246,7 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
   const addCatch = _action === "addCatch";
   const updateCatch = _action === "updateCatch";
   const editCatch = (_action as string).includes("editButton");
+  const saveAndContinue = _action === "saveAndContinue";
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
@@ -267,7 +268,10 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
   const saveToRedisIfErrors = false;
   const countries: ICountry[] = await getCountries();
 
-  if (addCatch) {
+  if (
+    addCatch ||
+    (saveAndContinue && (catches.length === 0 || catches.filter((c) => c.productId === productId).length <= 0))
+  ) {
     const catchCertificateType = values["catchCertificateType"] as CertificateType;
     const catchCertificateNumber = values["catchCertificateNumber"] as string;
     const totalWeightLanded = values["totalWeightLanded"] as string;
@@ -462,7 +466,7 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
       return redirect("/forbidden");
     }
 
-    const recordsPerPage: number = parseInt(getEnv().PROCESSING_STATEMENT_CATCH_PER_PAGE, 10);
+    const recordsPerPage: number = Number.parseInt(getEnv().PROCESSING_STATEMENT_CATCH_PER_PAGE, 10);
     const ctches = getUpdatedCatches(updatedProcessingStatement, productId);
     const totalPages = Math.ceil(ctches.length / recordsPerPage);
 
@@ -472,7 +476,7 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
 
   if (cancelCatch) {
     if (values["species"]) {
-      session.set("retainedSpecies", values["species"] as string);
+      session.set("retainedSpecies", values["species"]);
     }
     const redirectUrl = `/create-processing-statement/${documentNumber}/add-catch-details/${productId}?pageNo=${goToPage}`;
     return redirect(redirectUrl, {
@@ -519,17 +523,71 @@ export const AddCatchDetailsAction = async (request: Request, params: Params): P
     return redirect(route("/create-processing-statement/processing-statements"));
   }
 
+  const catchCertificateType = values["catchCertificateType"] as CertificateType;
+  const catchCertificateNumber = values["catchCertificateNumber"] as string;
+  const totalWeightLanded = values["totalWeightLanded"] as string;
+  const inputCatchCertificateWeight = values["catchCertificateWeight"] as string;
+  const issuingCountryName = values["issuingCountry"] as string;
+
+  let catchCertificateWeight = "";
+  let issuingCountry: ICountry | undefined = undefined;
+
+  if (catchCertificateType === "uk") {
+    catchCertificateWeight = totalWeightLanded;
+  } else {
+    catchCertificateWeight = inputCatchCertificateWeight ?? totalWeightLanded;
+    issuingCountry = countries.find((c) => c.officialCountryName === issuingCountryName);
+  }
+
+  const saveAndContinueCatch = {
+    species: values["species"] as string,
+    speciesCode: faoCode,
+    catchCertificateNumber: catchCertificateNumber,
+    catchCertificateType: catchCertificateType,
+    totalWeightLanded: totalWeightLanded,
+    catchCertificateWeight: catchCertificateWeight,
+    exportWeightBeforeProcessing: values["exportWeightBeforeProcessing"] as string,
+    exportWeightAfterProcessing: values["exportWeightAfterProcessing"] as string,
+    scientificName: getScientificName(allSpecies, faoCode),
+    productId: productId,
+    productDescription: values["productDescription"] as string,
+    issuingCountry: issuingCountry,
+    productCommodityCode: values["productCommodityCode"] as string,
+    speciesCommodityCode: values["speciesCommodityCode"] as string,
+  };
+
   const errorResponse = await updateProcessingStatement(
     bearerToken,
     documentNumber,
-    {
-      speciesCode: faoCode,
-    },
-    `/create-processing-statement/${documentNumber}/add-catch-details/${productId}`
+    saveAndContinueCatch,
+    `/create-processing-statement/${documentNumber}/add-catch-details/${productId}`,
+    Number.NaN,
+    false,
+    true,
+    false
   );
 
   if (errorResponse) {
-    return errorResponse;
+    const responseData = errorResponse instanceof Response ? await errorResponse.json() : errorResponse;
+
+    const combinedResponse = {
+      ...responseData,
+      species: values["species"],
+      catchCertificateType: values["catchCertificateType"],
+      catchCertificateNumber: values["catchCertificateNumber"],
+      issuingCountry: values["issuingCountry"],
+      totalWeightLanded: values["totalWeightLanded"],
+      exportWeightBeforeProcessing: values["exportWeightBeforeProcessing"],
+      exportWeightAfterProcessing: values["exportWeightAfterProcessing"],
+      speciesCommodityCode: values["speciesCommodityCode"],
+    };
+
+    return new Response(JSON.stringify(combinedResponse), {
+      status: 400,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 
   session.set(

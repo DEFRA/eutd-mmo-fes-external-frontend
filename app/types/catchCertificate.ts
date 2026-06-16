@@ -50,6 +50,7 @@ export interface ICatchCertificateSummary {
   transportations?: ITransport[];
   exportLocation?: IExportLocation;
   landingsEntryOption?: LandingEntryType;
+  transportSummary?: string | null;
   validationErrors?: (ValidationFailure | SystemFailure)[];
   userReference?: string;
 }

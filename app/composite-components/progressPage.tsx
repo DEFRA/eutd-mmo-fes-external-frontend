@@ -10,6 +10,7 @@ import type {
   IStorageDocumentProgressSteps,
   IProcessingStatementProgressSteps,
   ICatchCertificateProgressSteps,
+  IProgressDataSection,
 } from "~/types";
 import { useEffect } from "react";
 import { ProgressTable } from "./progressTable";
@@ -114,36 +115,23 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
     return notificationMsgs.length ? notificationMsgs : [];
   };
 
-  const selectProgressTable = () => {
+  const getProgressData = (): Array<IProgressDataSection> => {
     if (journey === "catchCertificate") {
-      return (
-        <ProgressTable
-          progressData={progressTableDataBuilder(
-            dataUpload,
-            directLanding,
-            progress as ICatchCertificateProgressSteps,
-            transport,
-            errors
-          )}
-          documentNumber={documentNumber}
-        />
-      );
-    } else if (journey === "processingStatement") {
-      return (
-        <ProgressTable
-          progressData={psProgressTableDataBuilder(progress as IProcessingStatementProgressSteps, errors, products)}
-          documentNumber={documentNumber}
-        />
-      );
-    } else if (journey === "storageNotes") {
-      return (
-        <ProgressTable
-          progressData={sdProgressTableDataBuilder(progress as IStorageDocumentProgressSteps, errors, catches)}
-          documentNumber={documentNumber}
-        />
+      return progressTableDataBuilder(
+        dataUpload,
+        directLanding,
+        progress as ICatchCertificateProgressSteps,
+        transport,
+        errors
       );
     }
+    if (journey === "processingStatement") {
+      return psProgressTableDataBuilder(progress as IProcessingStatementProgressSteps, errors, products);
+    }
+    return sdProgressTableDataBuilder(progress as IStorageDocumentProgressSteps, errors, catches);
   };
+
+  const progressData = getProgressData();
 
   useScrollOnPageLoad();
   return (
@@ -180,7 +168,7 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
               })}
             </p>
           </div>
-          {selectProgressTable()}
+          <ProgressTable progressData={progressData} documentNumber={documentNumber} />
         </div>
       </div>
       <SecureForm method="post" csrf={csrf}>

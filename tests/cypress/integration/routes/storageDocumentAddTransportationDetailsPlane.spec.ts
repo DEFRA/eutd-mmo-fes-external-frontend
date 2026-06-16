@@ -97,7 +97,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#flightNumber").should("exist");
     cy.get("#airwayBillNumber").should("exist");
     cy.get("#freightBillNumber").should("exist");
-    cy.get("#exportDate-day").should("exist");
+    cy.get("#exportDate").should("exist");
     cy.get("#exportDate-month").should("exist");
     cy.get("#exportDate-year").should("exist");
   });
@@ -197,7 +197,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     // Fill all fields including export date and container
     cy.get("#flightNumber").type("EK215", { force: true });
     cy.get("#departurePlace").type("Gatwick Airport", { force: true });
-    cy.get("#exportDate-day").type("18", { force: true });
+    cy.get("#exportDate").type("18", { force: true });
     cy.get("#exportDate-month").type("04", { force: true });
     cy.get("#exportDate-year").type("2026", { force: true });
     cy.get('input[name="containerNumbers.0"]').type("KLMN4567890", { force: true });
@@ -215,7 +215,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     // Verify all values retained
     cy.get("#flightNumber").should("have.value", "EK215");
     cy.get("#departurePlace").should("have.value", "Gatwick Airport");
-    cy.get("#exportDate-day").should("have.value", "18");
+    cy.get("#exportDate").should("have.value", "18");
     cy.get("#exportDate-month").should("have.value", "04");
     cy.get("#exportDate-year").should("have.value", "2026");
     cy.get('input[name="containerNumbers.0"]').should("have.value", "KLMN4567890");
@@ -230,7 +230,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     // Fill with invalid container numbers (would fail validation on save & continue)
     cy.get("#flightNumber").type("QR123", { force: true });
     cy.get("#departurePlace").type("Manchester Airport", { force: true });
-    cy.get("#exportDate-day").type("01", { force: true });
+    cy.get("#exportDate").type("01", { force: true });
     cy.get("#exportDate-month").type("06", { force: true });
     cy.get("#exportDate-year").type("2026", { force: true });
     cy.get('input[name="containerNumbers.0"]').type("TOOSHORT", { force: true }); // Invalid format
@@ -244,7 +244,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraftRetainDateCheck,
     };
     cy.visit(planePageUrl, { qs: { ...checkParams } });
-    cy.get("#exportDate-day").should("have.value", "01");
+    cy.get("#exportDate").should("have.value", "01");
     cy.get("#exportDate-month").should("have.value", "06");
     cy.get("#exportDate-year").should("have.value", "2026");
     cy.get('input[name="containerNumbers.0"]').should("have.value", "TOOSHORT");

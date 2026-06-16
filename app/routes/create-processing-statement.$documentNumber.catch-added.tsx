@@ -656,10 +656,10 @@ const CatchAdded = () => {
                             </strong>
                             <div className="govuk-!-margin-top-2">
                               <Link
-                                id="change-link"
+                                id={`change-${product.id}`}
                                 className="govuk-link"
                                 to={`/create-processing-statement/${documentNumber}/add-consignment-details/${product.id}`}
-                                data-testid="change-link"
+                                data-testid={`change-${product.id}`}
                               >
                                 {t("commonChangeLink", { ns: "common" })}
                                 <span className="govuk-visually-hidden">{" " + product.description}</span>
@@ -697,10 +697,10 @@ const CatchAdded = () => {
                                     value={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
                                   />
                                   <Link
-                                    id="change-link"
+                                    id={`change-${item.productId}`}
                                     className="govuk-link"
                                     to={`/create-processing-statement/${documentNumber}/add-consignment-details/${item.productId}`}
-                                    data-testid="change-link"
+                                    data-testid={`change-${item.productId}`}
                                   >
                                     {t("commonChangeLink", { ns: "common" })}
                                     <span className="govuk-visually-hidden">{" " + product.description}</span>
@@ -788,7 +788,7 @@ const CatchAdded = () => {
           <br />
           <SecureForm method="post" csrf={csrf}>
             <div
-              id="addAnotherCatch"
+              id={`${documentNumber}-addAnotherCatch`}
               className={
                 Array.isArray(groupedErrors) && groupedErrors.some((error) => error.key === "addAnotherCatch")
                   ? "govuk-form-group govuk-form-group--error"
@@ -811,12 +811,12 @@ const CatchAdded = () => {
                   <div className="govuk-radios__item">
                     <input
                       className="govuk-radios__input"
-                      id="addAnotherCatchYes"
+                      id="addAnotherCatch"
                       name="addAnotherCatch"
                       type="radio"
                       value="Yes"
                     />
-                    <label className="govuk-label govuk-radios__label" htmlFor="addAnotherCatchYes">
+                    <label className="govuk-label govuk-radios__label" htmlFor="addAnotherCatch">
                       {t("commonYesLabel", { ns: "common" })}
                     </label>
                   </div>

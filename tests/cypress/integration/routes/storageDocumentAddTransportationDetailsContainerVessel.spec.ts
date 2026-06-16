@@ -61,7 +61,7 @@ describe("Add Transportation Details: Container Vessel", () => {
     cy.get("#flagState").should("exist");
     cy.get("#departurePlace").should("exist");
     cy.get("#freightBillNumber").should("exist");
-    cy.get("#exportDate-day").should("exist");
+    cy.get("#exportDate").should("exist");
     cy.get("#exportDate-month").should("exist");
     cy.get("#exportDate-year").should("exist");
   });

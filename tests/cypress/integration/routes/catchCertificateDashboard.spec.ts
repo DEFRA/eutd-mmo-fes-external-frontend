@@ -169,8 +169,9 @@ describe("Catch certificate dashboard", () => {
 
     const slugs = ["progress", "progress", "progress", "check-your-information", "check-your-information"];
 
-    cy.get("a#continue").each(($ele, index) => {
+    cy.get("a[id^='continue-']").each(($ele, index) => {
       cy.wrap($ele)
+        .should("have.attr", "id", `continue-${documentNumbers[index]}`)
         .contains("Continue")
         .should("have.attr", "href", `/create-catch-certificate/${documentNumbers[index]}/${slugs[index]}`);
     });

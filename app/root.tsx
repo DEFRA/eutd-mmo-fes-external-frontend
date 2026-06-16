@@ -67,7 +67,7 @@ export const links: LinksFunction = () => getStyles();
 export const shouldRevalidate: ShouldRevalidateFunction = ({ actionResult, defaultShouldRevalidate }) => {
   const errorStr = document.getElementsByTagName("html")[0].getAttribute("lang") === "cy" ? "Gwall: " : "Error: ";
   if (actionResult?.errors) {
-    document.title = !document.title.includes(errorStr) ? `${errorStr} ${document.title}` : document.title;
+    document.title = document.title.includes(errorStr) ? document.title : `${errorStr} ${document.title}`;
     return defaultShouldRevalidate;
   }
 
@@ -343,11 +343,24 @@ export default function App() {
   const { revalidate } = useRevalidator();
   const { pathname } = useLocation();
   const exclusionPaths = new Set(["/", "/cookies"]);
+  const exclusionPathPatterns = [
+    /^\/create-catch-certificate\/[^/]+\/progress$/,
+    /^\/create-processing-statement\/[^/]+\/progress$/,
+    /^\/create-non-manipulation-document\/[^/]+\/progress$/,
+    /^\/create-catch-certificate\/[^/]+\/landings-entry$/,
+    /^\/create-processing-statement\/[^/]+\/add-catch-details$/,
+    /^\/create-processing-statement\/[^/]+\/add-catch-details\/[^/]+$/,
+    /^\/create-non-manipulation-document\/[^/]+\/add-product-to-this-consignment$/,
+    /^\/create-non-manipulation-document\/[^/]+\/add-product-to-this-consignment\/[^/]+$/,
+  ];
+
+  const isExcludedPath = (path: string) =>
+    exclusionPaths.has(path) || exclusionPathPatterns.some((pattern) => pattern.test(path));
 
   // invoke the loader function to revalidate page data, except on the root route
   // to avoid triple-loading caused by revalidation on hydration
   useEffect(() => {
-    if (!exclusionPaths.has(pathname)) {
+    if (!isExcludedPath(pathname)) {
       revalidate();
     }
   }, [revalidate, pathname]);
