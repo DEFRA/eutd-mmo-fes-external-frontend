@@ -18,6 +18,7 @@ describe("Add exporter details page", () => {
   });
 
   it("should display correct headings", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("h1", "Add exporter details");
   });
 

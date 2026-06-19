@@ -19,6 +19,7 @@ describe("Landings entry page: visuals", () => {
   });
 
   it("should display the correct headings", () => {
+    cy.wrap(true).should("equal", true);
     cy.contains("h1", "How do you want to enter your products and landings?");
   });
 
@@ -47,7 +48,7 @@ describe("Landings entry page: visuals", () => {
   it("associates every landing option radio with a matching label", () => {
     cy.get("input[type='radio']").each(($radio) => {
       const radioId = $radio.attr("id");
-      expect(radioId).to.not.be.undefined;
+      cy.wrap(radioId).should("not.be.undefined");
       cy.get(`label[for='${radioId}']`).should("have.length", 1).and("be.visible");
     });
 

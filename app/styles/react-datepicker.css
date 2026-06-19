@@ -288,7 +288,7 @@
 }
 
 .react-datepicker__week-number {
-  color: #ccc;
+  color: #767676;
   display: inline-block;
   width: 1.7rem;
   line-height: 1.7rem;
@@ -377,13 +377,13 @@
 .react-datepicker__month-text--highlighted-custom-1,
 .react-datepicker__quarter-text--highlighted-custom-1,
 .react-datepicker__year-text--highlighted-custom-1 {
-  color: magenta;
+  color: #8b007a;
 }
 .react-datepicker__day--highlighted-custom-2,
 .react-datepicker__month-text--highlighted-custom-2,
 .react-datepicker__quarter-text--highlighted-custom-2,
 .react-datepicker__year-text--highlighted-custom-2 {
-  color: green;
+  color: #006b1f;
 }
 .react-datepicker__day--holidays,
 .react-datepicker__month-text--holidays,

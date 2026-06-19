@@ -146,7 +146,6 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
     };
 
     cy.visit(doYouHaveAdditionalTransportTypesUrl, { qs: { ...testParams } });
-    // eslint-disable-next-line
     cy.get("#addTransportation").click({ force: true });
     cy.get("[data-testid=save-and-continue").click({ force: true });
     cy.url().should("include", "/how-does-the-export-leave-the-uk");

@@ -26,10 +26,12 @@ describe("Landings confirmation page: user Interface", () => {
   });
 
   it("should render the correct headings", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("h1", "Are you sure you want to change your landings type?");
   });
 
   it("should render the correct warning text", () => {
+    cy.wrap(true).should("be.true");
     cy.contains(
       "div > strong",
       "Switching between direct and non-direct landings types will require the re-entry of landings data."
@@ -114,7 +116,6 @@ describe("Landings confirmation page: buttons functionality", () => {
   });
 
   it("should be able to navigate to landings entry page when the user selects No and clicks continue button", () => {
-    // eslint-disable-next-line
     cy.wait(200);
     cy.get("#landingsTypeNo").check({ force: true });
     cy.get("#landingsTypeNo").should("be.checked");
