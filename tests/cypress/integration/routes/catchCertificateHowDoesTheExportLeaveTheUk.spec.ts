@@ -81,7 +81,6 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
     };
 
     cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
-    // eslint-disable-next-line
     cy.wait(200);
 
     cy.get("#containerVessel").click({ force: true });

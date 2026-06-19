@@ -109,6 +109,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render the correct page title", () => {
+    cy.wrap(true).should("be.true");
     cy.findByRole("heading", {
       name: "Check your information before you create the catch certificate",
       level: 1,

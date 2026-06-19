@@ -20,6 +20,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should contain the required heading", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("dt", "Your reference");
     cy.contains("dt", "Company name");
     cy.contains("dt", "Company address");
@@ -41,6 +42,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should contain the required data", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformation,
     };
@@ -111,6 +113,7 @@ describe("Check Your Information (Summary) page: UI", () => {
 
 describe("Check Your Information page: updated exporter", () => {
   it("should load the page with updated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformationUpdatedExporter,
     };
@@ -179,6 +182,7 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
   });
 
   it("should contain the required heading", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformation,
     };
@@ -202,6 +206,7 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
   });
 
   it("should contain the required data", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformation,
     };

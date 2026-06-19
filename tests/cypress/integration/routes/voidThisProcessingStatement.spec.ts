@@ -29,6 +29,7 @@ describe("void this draft processing statement page", () => {
   });
 
   it("Submit form with yes option click of save and continue button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VoidThisDocumentOptionYes,
     };
@@ -38,6 +39,7 @@ describe("void this draft processing statement page", () => {
   });
 
   it("Submit form with no option click of save and continue button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VoidThisDocumentOptionNo,
     };

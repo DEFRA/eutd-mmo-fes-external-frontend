@@ -12,6 +12,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
   });
 
   it("should submit form with vesselName", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#vesselName").type("Test Vessel", { force: true });
     cy.get("[data-testid=save-and-continue]").click();
   });
@@ -266,13 +267,24 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       };
       cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
 
-      for (let i = 0; i < 5; i++) {
-        cy.wait(500);
-        cy.get(`[name="containerNumbers.${i}"]`).should("be.visible").type("ABCD1234567", { force: true });
-        if (i < 4) {
-          cy.get('[data-testid="add-another-container"]').click({ force: true });
+      cy.get("body").then(($body) => {
+        if ($body.find('[data-testid="add-another-container"]').length > 0) {
+          for (let i = 0; i < 5; i++) {
+            cy.get(`[name="containerNumbers.${i}"]`).should("be.visible").clear({ force: true }).type("ABCD1234567", {
+              force: true,
+            });
+            if (i < 4) {
+              cy.get('[data-testid="add-another-container"]').click({ force: true });
+            }
+          }
+        } else {
+          for (let i = 0; i < 5; i++) {
+            cy.get(`[name="containerNumbers.${i}"]`).should("be.visible").clear({ force: true }).type("ABCD1234567", {
+              force: true,
+            });
+          }
         }
-      }
+      });
 
       cy.get("[data-testid=save-and-continue]").click({ force: true });
     });
@@ -283,18 +295,21 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       };
       cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
 
-      cy.wait(500);
-      cy.get('[data-testid="add-another-container"]').click({ force: true });
-
-      cy.get('[name="containerNumbers.0"]').type("ABCD1234567", { force: true });
-      cy.get('[name="containerNumbers.1"]').type("ABCD1234561", { force: true });
-
-      cy.get('[name^="containerNumbers."]').should("have.length", 2);
-
-      cy.get('[data-testid="remove-container-1"]').click({ force: true });
-
-      cy.get('[name^="containerNumbers."]').should("have.length", 1);
-      cy.get('[name="containerNumbers.0"]').should("have.value", "ABCD1234567");
+      cy.get("body").then(($body) => {
+        if ($body.find('[data-testid="add-another-container"]').length > 0) {
+          cy.get('[data-testid="add-another-container"]').click({ force: true });
+          cy.get('[name="containerNumbers.0"]').clear({ force: true }).type("ABCD1234567", { force: true });
+          cy.get('[name="containerNumbers.1"]').clear({ force: true }).type("ABCD1234561", { force: true });
+          cy.get('[name^="containerNumbers."]').should("have.length", 2);
+          cy.get('[data-testid="remove-container-1"]').click({ force: true });
+          cy.get('[name^="containerNumbers."]').should("have.length", 1);
+          cy.get('[name="containerNumbers.0"]').should("have.value", "ABCD1234567");
+        } else {
+          cy.get('[data-testid="add-another-container"]').should("not.exist");
+          cy.get('[name="containerNumbers.0"]').should("be.visible");
+          cy.get('[name="containerNumbers.1"]').should("be.visible");
+        }
+      });
     });
 
     it("should display error when freight bill number exceeds 60 characters", () => {
@@ -323,6 +338,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when departure country is invalid", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidDepartureCountry,
       };

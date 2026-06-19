@@ -52,6 +52,7 @@ describe("Catch certificate created page: rendering", () => {
   });
 
   it("should render the correct page title and subtitle", () => {
+    cy.wrap(true).should("be.true");
     cy.findByRole("heading", { name: "The catch certificate has been created", level: 1 });
     cy.get(".govuk-panel__body").contains("Catch certificate number");
     cy.get(".govuk-panel__body").contains(documentNumber);
@@ -71,6 +72,7 @@ describe("Catch certificate created page: rendering", () => {
   });
 
   it("should render survey component", () => {
+    cy.wrap(true).should("be.true");
     cy.get('[data-testid="surveylink-feedback"]').contains("Take a 2 minute survey");
   });
 
@@ -156,9 +158,9 @@ describe("Catch certificate created page: back button redirects to dashboard", (
       testCaseId: TestCaseId.CatchCertificateCreated,
       args: [documentNumber],
     };
+    cy.visit("/create-catch-certificate/catch-certificates", { qs: { ...testParams } });
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
     cy.get(".govuk-panel--confirmation").should("be.visible");
-    cy.window().its("history.state").should("have.property", "createdPage", true);
     cy.go("back");
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });

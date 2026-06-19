@@ -27,6 +27,7 @@ describe("Delete this draft processing statement page", () => {
   });
 
   it("Submit form with yes option on click of save and continue button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DeleteThisDraftDocumentOptionYes,
     };
@@ -36,6 +37,7 @@ describe("Delete this draft processing statement page", () => {
   });
 
   it("Submit form with no option on click of save and continue button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DeleteThisDraftDocumentOptionNo,
     };

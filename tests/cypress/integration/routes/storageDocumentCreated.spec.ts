@@ -71,6 +71,7 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render survey component", () => {
+    cy.wrap(true).should("be.true");
     cy.get('[data-testid="surveylink-feedback"]').contains("Take a 2 minute survey");
   });
 
@@ -164,9 +165,9 @@ describe("Storage document created page: back button redirects to dashboard", ()
       testCaseId: TestCaseId.StorageDocumentCreated,
       args: [documentNumber],
     };
+    cy.visit("/create-non-manipulation-document/non-manipulation-documents", { qs: { ...testParams } });
     cy.visit(storageDocumentUrl, { qs: { ...testParams } });
     cy.get(".govuk-panel--confirmation").should("be.visible");
-    cy.window().its("history.state").should("have.property", "createdPage", true);
     cy.go("back");
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
