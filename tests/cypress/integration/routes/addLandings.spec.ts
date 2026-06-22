@@ -707,7 +707,11 @@ describe("Manual landing page: submit unauthorised access", () => {
         cy.get("@selectVesselUnauth1").invoke("val", "AALSKERE(K373)");
         cy.get("@selectVesselUnauth1").trigger("change");
       } else {
-        cy.get("input[role='combobox']", { timeout: 20000 }).clear().type("AALSKERE(K373)");
+        cy.get("input[role='combobox']", { timeout: 20000 }).filter(":visible").first().clear({ force: true });
+        cy.get("input[role='combobox']", { timeout: 20000 })
+          .filter(":visible")
+          .first()
+          .type("AALSKERE(K373)", { force: true });
       }
     });
     cy.get("#exportWeight").invoke("val", "25");
@@ -768,7 +772,11 @@ describe("Manual landing page: submit unauthorised access", () => {
         cy.get("@selectVesselUnauth2").invoke("val", "AALSKERE");
         cy.get("@selectVesselUnauth2").trigger("change");
       } else {
-        cy.get("input[role='combobox']", { timeout: 20000 }).clear().type("AALSKERE");
+        cy.get("input[role='combobox']", { timeout: 20000 }).filter(":visible").first().clear({ force: true });
+        cy.get("input[role='combobox']", { timeout: 20000 })
+          .filter(":visible")
+          .first()
+          .type("AALSKERE", { force: true });
       }
     });
     cy.get("#exportWeight").invoke("val", "25");
@@ -1217,12 +1225,18 @@ describe("Manual Landing page when gear types api is failing", () => {
     });
     cy.get("#product").contains("Longnose velvet dogfish (CYP), Fresh, Other presentations, 03045690");
     // Start Date / Date Landed
-    cy.get("#startDate").clear({ force: true }).type("01", { force: true });
-    cy.get("#startDate-month").clear({ force: true }).type("01", { force: true });
-    cy.get("#startDate-year").clear({ force: true }).type("2025", { force: true });
-    cy.get("#dateLanded").clear({ force: true }).type("02", { force: true });
-    cy.get("#dateLanded-month").clear({ force: true }).type("01", { force: true });
-    cy.get("#dateLanded-year").clear({ force: true }).type("2025", { force: true });
+    cy.get("#startDate").clear({ force: true });
+    cy.get("#startDate").type("01", { force: true });
+    cy.get("#startDate-month").clear({ force: true });
+    cy.get("#startDate-month").type("01", { force: true });
+    cy.get("#startDate-year").clear({ force: true });
+    cy.get("#startDate-year").type("2025", { force: true });
+    cy.get("#dateLanded").clear({ force: true });
+    cy.get("#dateLanded").type("02", { force: true });
+    cy.get("#dateLanded-month").clear({ force: true });
+    cy.get("#dateLanded-month").type("01", { force: true });
+    cy.get("#dateLanded-year").clear({ force: true });
+    cy.get("#dateLanded-year").type("2025", { force: true });
     // Fao
     cy.get("#select-faoArea").contains("FAO27");
     // vessel
