@@ -264,29 +264,54 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     it("should add 5 container numbers with correct format", () => {
       const testParams = {
         testCaseId: TestCaseId.ContainerVesselSaveContainerNumber,
+        disableScripts: true,
       };
       cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
 
+      // Ensure there are up to 5 container inputs, then fill them using a stable query
       cy.get("body").then(($body) => {
-        if ($body.find('[data-testid="add-another-container"]').length > 0) {
-          for (let i = 0; i < 5; i++) {
-            cy.get(`[name="containerNumbers.${i}"]`).should("be.visible").clear({ force: true }).type("ABCD1234567", {
-              force: true,
-            });
-            if (i < 4) {
-              cy.get('[data-testid="add-another-container"]').click({ force: true });
-            }
-          }
-        } else {
-          for (let i = 0; i < 5; i++) {
-            cy.get(`[name="containerNumbers.${i}"]`).should("be.visible").clear({ force: true }).type("ABCD1234567", {
-              force: true,
-            });
+        const addBtnExists = $body.find('[data-testid="add-another-container"]').length > 0;
+        if (addBtnExists) {
+          // click add until at least 5 inputs exist (click 4 times)
+          for (let i = 1; i < 5; i++) {
+            cy.get('[data-testid="add-another-container"]').click({ force: true });
+            cy.wait(150);
           }
         }
       });
 
+      // Query current inputs and fill up to 5 of them using each() to avoid detached subjects
+      cy.get('[name^="containerNumbers."]', { timeout: 10000 })
+        .should("have.length.at.least", 1)
+        .then(($inputs) => {
+          const toFill = Math.min(5, $inputs.length);
+          cy.get('[name^="containerNumbers."]').each(($el, idx) => {
+            if (idx < toFill) {
+              cy.wrap($el).should("be.visible").invoke("val", "ABCJ1234567").trigger("input").trigger("change");
+            }
+          });
+          if ($inputs.length < 5) cy.log(`Only ${$inputs.length} container inputs rendered`);
+        });
+
+      // Intercept the form POST and assert the payload contains 5 container numbers
+      cy.intercept("POST", "**/add-arrival-transportation-details-container-vessel*").as("saveContainerVessel");
       cy.get("[data-testid=save-and-continue]").click({ force: true });
+      cy.wait("@saveContainerVessel", { timeout: 10000 }).then((interception) => {
+        const body = interception.request.body as any;
+        if (typeof body === "string") {
+          // form-encoded payload (server-rendered), parse and assert
+          const params = new URLSearchParams(body);
+          const containers = [] as string[];
+          for (let i = 0; i < 10; i++) {
+            const key = `containerNumbers.${i}`;
+            if (params.has(key)) containers.push(params.get(key) as string);
+          }
+          expect(containers).to.have.length(5);
+        } else {
+          expect(body).to.have.property("containerNumbers");
+          expect(body.containerNumbers).to.have.length(5);
+        }
+      });
     });
 
     it("should remove a container input when the remove button is clicked", () => {

@@ -17,6 +17,7 @@ import {
   mockGetGearTypesByCategoriesUrl,
   GET_RFMO_AREAS_URL,
   COUNTRIES_URL,
+  mockValidateLandingURL,
 } from "~/urls.server";
 import speciesAddedPerUser from "@/fixtures/whatAreYouExportingApi/speciesAddedPerUser.json";
 import addLandings from "@/fixtures/addLandings/addLandings.json";
@@ -101,6 +102,8 @@ const addLandingsHandler: ITestHandler = {
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
     rest.get(mockSearchVesselName, (req, res, ctx) => res(ctx.json(getVessels))),
     rest.post(VALIDATE_LANDINGS_URL, (req, res, ctx) => res(ctx.status(400), ctx.json(addLandingsErrors))),
+    // Also handle requests made directly to localhost during test runs
+    rest.post(mockValidateLandingURL, (req, res, ctx) => res(ctx.status(400), ctx.json(addLandingsErrors))),
     rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),

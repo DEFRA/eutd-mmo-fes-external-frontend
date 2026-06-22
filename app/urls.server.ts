@@ -176,6 +176,7 @@ export const mockEditProductUrl = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/fish/
 export const mockGetGearCategoriesUrl = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/gear-categories`;
 export const mockGetGearTypesByCategoriesUrl = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/gear-type/:gearCategory`;
 export const mockEuCatchStatus = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/certificate/eu-data-integration/check-status`;
+export const mockValidateLandingURL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/export-certificates/landing/validate`;
 
 export const mockSaveAndValidateDocument = (journey: Journey) =>
   `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/${journey}/saveAndValidate`;
