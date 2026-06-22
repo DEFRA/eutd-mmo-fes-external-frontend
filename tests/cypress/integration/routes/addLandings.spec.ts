@@ -1209,49 +1209,6 @@ describe("Manual Landing page guard when javascript is disabled", () => {
   });
 });
 
-describe("Manual Landing page when gear types api is failing", () => {
-  beforeEach(() => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.LandingPageErrors,
-    };
-    cy.visit(manualLandingUrl, { qs: { ...testParams } });
-  });
-  // (moved to flaky spec)
-  it("should behave when gear types api is failing", () => {
-    // Product
-    cy.get("#product").contains("Select a product");
-    cy.get("#product").then(() => {
-      cy.get("#product").select(1, { force: true });
-    });
-    cy.get("#product").contains("Longnose velvet dogfish (CYP), Fresh, Other presentations, 03045690");
-    // Start Date / Date Landed
-    cy.get("#startDate").clear({ force: true });
-    cy.get("#startDate").type("01", { force: true });
-    cy.get("#startDate-month").clear({ force: true });
-    cy.get("#startDate-month").type("01", { force: true });
-    cy.get("#startDate-year").clear({ force: true });
-    cy.get("#startDate-year").type("2025", { force: true });
-    cy.get("#dateLanded").clear({ force: true });
-    cy.get("#dateLanded").type("02", { force: true });
-    cy.get("#dateLanded-month").clear({ force: true });
-    cy.get("#dateLanded-month").type("01", { force: true });
-    cy.get("#dateLanded-year").clear({ force: true });
-    cy.get("#dateLanded-year").type("2025", { force: true });
-    // Fao
-    cy.get("#select-faoArea").contains("FAO27");
-    // vessel
-    cy.get("#select-vessel").invoke("val", "K373").trigger("change");
-    // weight
-    cy.get("#exportWeight").invoke("val", "25");
-    cy.get("#gearCategory").contains("Select gear category");
-    cy.get("#gearCategory").then(() => {
-      cy.get("#gearCategory").select(4, { force: true });
-    });
-    cy.get("#gearCategory").contains("Dredges");
-    cy.get("#gearType").contains("Select gear type");
-  });
-});
-
 describe("Manual landing page: Accessibility", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
