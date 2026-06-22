@@ -66,7 +66,7 @@ describe("Storage document created page: rendering", () => {
   it("should link to the storage document dashboard", () => {
     cy.findByRole("link", {
       name: "View completed non-manipulation documents or create a new export document",
-    }).click({ force: true });
+    }).click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 

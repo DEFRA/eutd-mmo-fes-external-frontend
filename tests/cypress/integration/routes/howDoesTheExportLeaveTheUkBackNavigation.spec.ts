@@ -153,7 +153,7 @@ describe("How does the export leave the UK - Save as draft (FI0-10577)", () => {
     cy.contains("h1", "How do you transport the export?").should("be.visible");
 
     // Click save as draft without selecting a vehicle — should redirect to dashboard
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
 });

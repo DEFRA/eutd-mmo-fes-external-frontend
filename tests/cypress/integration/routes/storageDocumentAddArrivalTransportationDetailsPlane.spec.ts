@@ -91,12 +91,12 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type("123-45678901", { force: true });
-    cy.get("#flightNumber").type("AF296Q", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill", { force: true });
+    cy.get("#airwayBillNumber").type("123-45678901");
+    cy.get("#flightNumber").type("AF296Q");
+    cy.get("#freightBillNumber").type("Freight bill");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("#departurePort").type("Charles de Gaulle airport");
+    cy.get("[data-testid=save-draft-button").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
@@ -107,19 +107,19 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.visit(planePageUrl, { qs: { ...testParams } });
 
     // Fill all fields including date and container
-    cy.get("#airwayBillNumber").type("456-78901234", { force: true });
-    cy.get("#flightNumber").type("BA101", { force: true });
-    cy.get("#freightBillNumber").type("FR123456", { force: true });
+    cy.get("#airwayBillNumber").type("456-78901234");
+    cy.get("#flightNumber").type("BA101");
+    cy.get("#freightBillNumber").type("FR123456");
     cy.get("#departureCountry").invoke("val", "Germany");
-    cy.get("#departurePort").type("Frankfurt Airport", { force: true });
-    cy.get("#placeOfUnloading").type("Heathrow Airport", { force: true });
-    cy.get("#departureDate").type("20", { force: true });
-    cy.get("#departureDate-month").type("01", { force: true });
-    cy.get("#departureDate-year").type("2026", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("DEFG2345678", { force: true });
+    cy.get("#departurePort").type("Frankfurt Airport");
+    cy.get("#placeOfUnloading").type("Heathrow Airport");
+    cy.get("#departureDate").type("20");
+    cy.get("#departureDate-month").type("01");
+    cy.get("#departureDate-year").type("2026");
+    cy.get('[id="containerNumbers.0"]').type("DEFG2345678");
 
     // Save as draft
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
     // Return to the page using CHECK testCaseId (hardcoded saved fixture — immune to double-GET state loss)
@@ -148,17 +148,17 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.visit(planePageUrl, { qs: { ...testParams } });
 
     // Fill with invalid container number (would fail validation on save & continue)
-    cy.get("#airwayBillNumber").type("999-11111111", { force: true });
-    cy.get("#flightNumber").type("LH500", { force: true });
+    cy.get("#airwayBillNumber").type("999-11111111");
+    cy.get("#flightNumber").type("LH500");
     cy.get("#departureCountry").invoke("val", "Spain");
-    cy.get("#departurePort").type("Madrid Airport", { force: true });
-    cy.get("#departureDate").type("05", { force: true });
-    cy.get("#departureDate-month").type("03", { force: true });
-    cy.get("#departureDate-year").type("2026", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("TOO-SHORT", { force: true }); // Invalid format
+    cy.get("#departurePort").type("Madrid Airport");
+    cy.get("#departureDate").type("05");
+    cy.get("#departureDate-month").type("03");
+    cy.get("#departureDate-year").type("2026");
+    cy.get('[id="containerNumbers.0"]').type("TOO-SHORT"); // Invalid format
 
     // Save as draft should accept invalid containers
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
     // Return and verify values retained including invalid containers using CHECK testCaseId
@@ -178,12 +178,12 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type("123-45678901", { force: true });
-    cy.get("#flightNumber").type("AF296Q", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill", { force: true });
+    cy.get("#airwayBillNumber").type("123-45678901");
+    cy.get("#flightNumber").type("AF296Q");
+    cy.get("#freightBillNumber").type("Freight bill");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Charles de Gaulle airport");
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", storageFacilityUrl);
   });
 
@@ -192,7 +192,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", storageFacilityUrl);
   });
 
@@ -202,7 +202,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     };
 
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", "/forbidden");
   });
 
@@ -212,14 +212,13 @@ describe("Add Transportation Details Plane: Allowed", () => {
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
     cy.get("#airwayBillNumber").type(
-      "This air waybill number is way too long and exceeds the maximum character limit",
-      { force: true }
+      "This air waybill number is way too long and exceeds the maximum character limit"
     );
-    cy.get("#flightNumber").type("AF296Q", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#flightNumber").type("AF296Q");
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Charles de Gaulle airport");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Air waybill number must not exceed 50 characters$/).should("be.visible");
@@ -230,12 +229,12 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.TransportSavePlaneFlightNumberEmpty,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type("123-45678901", { force: true });
+    cy.get("#airwayBillNumber").type("123-45678901");
     cy.get("#flightNumber").should("have.value", "");
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Charles de Gaulle airport");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the flight number$/).should("be.visible");
@@ -246,14 +245,12 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveMaxCharsPlaneFlightNumber,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type("123-45678901", { force: true });
-    cy.get("#flightNumber").type("This flight number is way too long and exceeds the maximum character limit", {
-      force: true,
-    });
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#airwayBillNumber").type("123-45678901");
+    cy.get("#flightNumber").type("This flight number is way too long and exceeds the maximum character limit");
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Charles de Gaulle airport");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Flight number must not exceed 15 characters$/).should("be.visible");
@@ -264,12 +261,12 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveAlphanumericPlaneFlightNumber,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type("123-45678901", { force: true });
-    cy.get("#flightNumber").type("AF296Q@#$", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#airwayBillNumber").type("123-45678901");
+    cy.get("#flightNumber").type("AF296Q@#$");
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Charles de Gaulle airport");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Flight number must only contain letters and numbers$/).should("be.visible");
@@ -280,17 +277,14 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.PlaneTransportSaveMaxCharsFreightBillNumber,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type("123-45678901", { force: true });
-    cy.get("#flightNumber").type("AF296Q", { force: true });
+    cy.get("#airwayBillNumber").type("123-45678901");
+    cy.get("#flightNumber").type("AF296Q");
     cy.get("#freightBillNumber").type(
-      "Freight bill number which is way way way way way way way way way more than 60 characters",
-      {
-        force: true,
-      }
+      "Freight bill number which is way way way way way way way way way more than 60 characters"
     );
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Charles de Gaulle airport");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Freight bill number must not exceed 60 characters$/).should("be.visible");
@@ -301,12 +295,12 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.PlaneTransportSaveAlphanumericsFreightBillNumber,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type("123-45678901", { force: true });
-    cy.get("#flightNumber").type("AF296Q", { force: true });
-    cy.get("#freightBillNumber").type("Freight...", { force: true });
+    cy.get("#airwayBillNumber").type("123-45678901");
+    cy.get("#flightNumber").type("AF296Q");
+    cy.get("#freightBillNumber").type("Freight...");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Charles de Gaulle airport");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains(
@@ -320,13 +314,13 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveMaxCharsPlanePlaceOfUnloadingEmpty,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type("123-45678901", { force: true });
-    cy.get("#flightNumber").type("AF296Q", { force: true });
-    cy.get("#freightBillNumber").type("Freight", { force: true });
+    cy.get("#airwayBillNumber").type("123-45678901");
+    cy.get("#flightNumber").type("AF296Q");
+    cy.get("#freightBillNumber").type("Freight");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
+    cy.get("#departurePort").type("Charles de Gaulle airport");
     cy.get("#placeOfUnloading").should("have.value", "");
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the place where the consignment was unloaded$/).should("be.visible");
@@ -337,16 +331,15 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveMaxCharsPlanePlaceOfUnloadingExceedString,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type("123-45678901", { force: true });
-    cy.get("#flightNumber").type("AF296Q", { force: true });
-    cy.get("#freightBillNumber").type("Freight", { force: true });
+    cy.get("#airwayBillNumber").type("123-45678901");
+    cy.get("#flightNumber").type("AF296Q");
+    cy.get("#freightBillNumber").type("Freight");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
+    cy.get("#departurePort").type("Charles de Gaulle airport");
     cy.get("#placeOfUnloading").type(
-      "Place of unloading which is way way way way way way way way way way way way way more than 50 words",
-      { force: true }
+      "Place of unloading which is way way way way way way way way way way way way way more than 50 words"
     );
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.wait(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -358,14 +351,14 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.ArrivalPlaneTransportContainerNumberEmpty,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type("123-45678901", { force: true });
-    cy.get("#flightNumber").type("AF296Q", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill", { force: true });
+    cy.get("#airwayBillNumber").type("123-45678901");
+    cy.get("#flightNumber").type("AF296Q");
+    cy.get("#freightBillNumber").type("Freight bill");
     cy.get('[id="containerNumbers.0"]').should("have.value", "");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
-    cy.get("#placeOfUnloading").type("Heathrow", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Charles de Gaulle airport");
+    cy.get("#placeOfUnloading").type("Heathrow");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the shipping container identification number$/).should("be.visible");
@@ -376,14 +369,14 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.ArrivalPlaneTransportDepartureCountryEmpty,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type("123-45678901", { force: true });
-    cy.get("#flightNumber").type("AF296Q", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get("#airwayBillNumber").type("123-45678901");
+    cy.get("#flightNumber").type("AF296Q");
+    cy.get("#freightBillNumber").type("Freight bill");
+    cy.get('[id="containerNumbers.0"]').type("ABCD1234567");
     cy.get("#departureCountry").should("have.value", "");
-    cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
-    cy.get("#placeOfUnloading").type("Heathrow", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Charles de Gaulle airport");
+    cy.get("#placeOfUnloading").type("Heathrow");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the country of departure$/).should("be.visible");
@@ -394,14 +387,14 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.ArrivalPlaneTransportDeparturePortEmpty,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type("123-45678901", { force: true });
-    cy.get("#flightNumber").type("AF296Q", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get("#airwayBillNumber").type("123-45678901");
+    cy.get("#flightNumber").type("AF296Q");
+    cy.get("#freightBillNumber").type("Freight bill");
+    cy.get('[id="containerNumbers.0"]').type("ABCD1234567");
     cy.get("#departureCountry").invoke("val", "France");
     cy.get("#departurePort").should("have.value", "");
-    cy.get("#placeOfUnloading").type("Heathrow", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#placeOfUnloading").type("Heathrow");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter where the consignment departs from$/).should("be.visible");
@@ -413,14 +406,14 @@ describe("Add Transportation Details Plane: Allowed", () => {
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
     // Fill in all form fields except departure date
-    cy.get("#airwayBillNumber").type("123-45678901", { force: true });
-    cy.get("#flightNumber").type("AF296Q", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("ABCD1234567", { force: true });
+    cy.get("#airwayBillNumber").type("123-45678901");
+    cy.get("#flightNumber").type("AF296Q");
+    cy.get("#freightBillNumber").type("Freight bill");
+    cy.get('[id="containerNumbers.0"]').type("ABCD1234567");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Charles de Gaulle airport", { force: true });
-    cy.get("#placeOfUnloading").type("Heathrow", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Charles de Gaulle airport");
+    cy.get("#placeOfUnloading").type("Heathrow");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the departure date$/).should("be.visible");
@@ -439,17 +432,17 @@ describe("Add Transportation Details Plane: Allowed", () => {
       cy.get("#add-container-button").should("be.visible").should("contain.text", "Add another container");
       cy.get("#remove-container-button-0").should("not.exist");
 
-      cy.get("#add-container-button").click({ force: true });
+      cy.get("#add-container-button").click();
       cy.get('input[name="containerNumbers.1"]').should("be.visible");
       cy.get("#remove-container-button-0").should("be.visible");
       cy.get("#remove-container-button-0").should("be.visible").should("contain.text", "Remove");
 
-      cy.get('[id="containerNumbers.0"]').type("CONT123", { force: true });
-      cy.get('[id="containerNumbers.1"]').type("CONT456", { force: true });
+      cy.get('[id="containerNumbers.0"]').type("CONT123");
+      cy.get('[id="containerNumbers.1"]').type("CONT456");
       cy.get('[id="containerNumbers.0"]').should("exist");
       cy.get('[id="containerNumbers.1"]').should("exist");
 
-      cy.get("#remove-container-button-0").click({ force: true });
+      cy.get("#remove-container-button-0").click();
       cy.get('input[name="containerNumbers.1"]').should("not.exist");
       cy.get("#remove-container-button-0").should("not.exist");
 

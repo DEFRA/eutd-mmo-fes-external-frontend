@@ -45,8 +45,8 @@ describe("HowDoesTheExportLeaveTheUk", () => {
 
     cy.visit(howDoesTheExportLeaveUrl, { qs: { ...testParams } });
 
-    cy.get("#vehicle").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#vehicle").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/add-transportation-details-truck");
   });
@@ -58,8 +58,8 @@ describe("HowDoesTheExportLeaveTheUk", () => {
 
     cy.visit(howDoesTheExportLeaveUrl, { qs: { ...testParams } });
 
-    cy.get("#plane").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#plane").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/add-transportation-details-plane");
   });
@@ -71,8 +71,8 @@ describe("HowDoesTheExportLeaveTheUk", () => {
 
     cy.visit(howDoesTheExportLeaveUrl, { qs: { ...testParams } });
 
-    cy.get("#train").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#train").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/add-transportation-details-train");
   });
@@ -84,8 +84,8 @@ describe("HowDoesTheExportLeaveTheUk", () => {
 
     cy.visit(howDoesTheExportLeaveUrl, { qs: { ...testParams } });
 
-    cy.get("#containerVessel").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#containerVessel").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/add-transportation-details-container-vessel");
   });
@@ -96,8 +96,8 @@ describe("HowDoesTheExportLeaveTheUk", () => {
     };
 
     cy.visit(howDoesTheExportLeaveUrl, { qs: { ...testParams } });
-    cy.get("#train").click({ force: true });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("#train").click();
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
@@ -108,8 +108,8 @@ describe("HowDoesTheExportLeaveTheUk", () => {
     };
 
     cy.visit(howDoesTheExportLeaveUrl, { qs: { ...testParams } });
-    cy.get("#train").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#train").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/forbidden");
   });

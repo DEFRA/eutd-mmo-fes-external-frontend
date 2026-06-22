@@ -64,8 +64,8 @@ describe("Add Consignment Details: save as draft", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("#consignmentDescription").type("Test product description", { force: true });
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("#consignmentDescription").type("Test product description");
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });
@@ -77,7 +77,7 @@ describe("Add Consignment Details: save and continue", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
   });
 
@@ -87,7 +87,7 @@ describe("Add Consignment Details: save and continue", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error summary displays with error messages
     cy.get(".govuk-error-summary").should("be.visible");
@@ -103,8 +103,8 @@ describe("Add Consignment Details: save and continue", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("#consignmentDescription").type("Farmed Atlantic Salmon", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#consignmentDescription").type("Farmed Atlantic Salmon");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", `/${baseUrl}/add-catch-details`);
   });
 
@@ -114,7 +114,7 @@ describe("Add Consignment Details: save and continue", () => {
     };
 
     cy.visit(editPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=remove-product-button]").click({ force: true });
+    cy.get("[data-testid=remove-product-button]").click();
     cy.url().should("include", `/${baseUrl}/remove-product`);
   });
 });
@@ -125,7 +125,7 @@ describe("Add Consignment Details (PS): save as draft retains valid fields", () 
       testCaseId: TestCaseId.PSAddConsignmentDetailsSaveAsDraftWithErrors,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });

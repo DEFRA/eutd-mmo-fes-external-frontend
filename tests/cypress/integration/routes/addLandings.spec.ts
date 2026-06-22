@@ -10,15 +10,15 @@ const pad2 = (n: number | string) => (n.toString().length === 1 ? "0" + n : n.to
 const selectFirstNonEmptyOption = (selector: string) => {
   cy.get(`${selector} option`).then(($options) => {
     const firstNonEmpty = [...$options].find((opt) => (opt as HTMLOptionElement).value);
-    expect(firstNonEmpty, `non-empty option exists for ${selector}`).to.not.equal(undefined);
-    cy.get(selector).select((firstNonEmpty as HTMLOptionElement).value, { force: true });
+    expect(firstNonEmpty, `non-empty option exists for ${selector}`).to.not.be.undefined;
+    cy.get(selector).select((firstNonEmpty as HTMLOptionElement).value);
   });
 };
 
 const selectFirstGearTypeOption = () => {
   cy.get("body").then(($body) => {
     if ($body.find("[data-testid='add-gear-category']").length > 0) {
-      cy.get("[data-testid='add-gear-category']").first().click({ force: true });
+      cy.get("[data-testid='add-gear-category']").first().click();
     }
   });
   cy.wait(300);
@@ -126,11 +126,11 @@ const populateLandingForm = () => {
   });
   cy.get("#select-vessel", { timeout: 20000 })
     .should("have.prop", "value")
-    .and((v) => expect(v).to.not.equal(null));
+    .and((v) => expect(v).to.not.be.null);
   // weight
   cy.get("#weight").invoke("val", 4).should("have.prop", "value").and("not.be.empty");
   // gear info
-  cy.get("select#gearCategory").select(4, { force: true });
+  cy.get("select#gearCategory").select(4);
   selectFirstGearTypeOption();
   // RFMO
   cy.get("select#rfmo").select(1).invoke("val").should("not.eq", "");
@@ -146,7 +146,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render a back link", () => {
-    cy.findByRole("link", { name: "Back" }).click({ force: true });
+    cy.findByRole("link", { name: "Back" }).click();
     cy.url().should("include", "/what-are-you-exporting");
   });
 
@@ -180,7 +180,7 @@ describe("Manual landing page render with page guard", () => {
   it("should render summary details links, its count and its detailed instructions", () => {
     cy.get(".govuk-details__summary").should("have.length", 7);
     cy.get("div .govuk-details__summary").eq(0).contains("Start date");
-    cy.get("div .govuk-details__summary").eq(0).click({ force: true });
+    cy.get("div .govuk-details__summary").eq(0).click();
     cy.get("div .govuk-details__text")
       .eq(0)
       .contains(
@@ -188,7 +188,7 @@ describe("Manual landing page render with page guard", () => {
       )
       .should("be.visible");
     cy.get("div .govuk-details__summary").eq(1).contains("What is a date landed?");
-    cy.get("div .govuk-details__summary").eq(1).click({ force: true });
+    cy.get("div .govuk-details__summary").eq(1).click();
     cy.get("div .govuk-details__text")
       .eq(1)
       .contains("The date landed is the date the vessel finishes its fishing trip and unloads its catch at port")
@@ -206,9 +206,9 @@ describe("Manual landing page render with page guard", () => {
     cy.get("div .govuk-details__text")
       .eq(2)
       .contains("Find out more about High Seas areas (opens in new tab).")
-      .click({ force: true });
+      .click();
     cy.get("div .govuk-details__summary").eq(3).contains("What is an exclusive economic zone (EEZ)?");
-    cy.get("div .govuk-details__summary").eq(3).click({ force: true });
+    cy.get("div .govuk-details__summary").eq(3).click();
     cy.get("div .govuk-details__text")
       .eq(3)
       .contains("Find out more about EEZs (opens in new tab).")
@@ -216,7 +216,7 @@ describe("Manual landing page render with page guard", () => {
     cy.get("div .govuk-details__summary")
       .eq(4)
       .contains("What is a regional fisheries management organisation (RFMO)?");
-    cy.get("div .govuk-details__summary").eq(4).click({ force: true });
+    cy.get("div .govuk-details__summary").eq(4).click();
     cy.get("div .govuk-details__text")
       .eq(4)
       .contains(
@@ -226,15 +226,15 @@ describe("Manual landing page render with page guard", () => {
     cy.get("div .govuk-details__text")
       .eq(4)
       .contains("Find out more about RFMOs (opens in new tab).")
-      .click({ force: true });
+      .click();
     cy.get("div .govuk-details__summary").eq(5).contains("I cannot find the vessel");
-    cy.get("div .govuk-details__summary").eq(5).click({ force: true });
+    cy.get("div .govuk-details__summary").eq(5).click();
     cy.get("div .govuk-details__text")
       .eq(5)
       .contains('If the vessel you need is not listed, select "Vessel not found - N/A" from the dropdown.')
       .should("be.visible");
     cy.get("div .govuk-details__summary").eq(6).contains("What are gear details?");
-    cy.get("div .govuk-details__summary").eq(6).click({ force: true });
+    cy.get("div .govuk-details__summary").eq(6).click();
     cy.get("div .govuk-details__text").should("have.length", 7);
     cy.get("div .govuk-details__text")
       .eq(6)
@@ -253,8 +253,8 @@ describe("Manual landing page render with page guard", () => {
   // (moved to flaky spec)
 
   it("renders high seas area details and allows selection", () => {
-    cy.wrap(true).should("equal", true);
-    cy.get("input[type='radio'][name='highSeasArea']").first().check({ force: true });
+    cy.wrap(true).should("be.true");
+    cy.get("input[type='radio'][name='highSeasArea']").first().check();
   });
 
   it("should render the RFMO label and hint", () => {
@@ -277,7 +277,7 @@ describe("Manual landing page render with page guard", () => {
     cy.get("#rfmo").should("be.visible").and("not.be.disabled");
     cy.get("#rfmo").contains("Select RFMO");
     cy.get("#rfmo").then(() => {
-      cy.get("#rfmo").select(2, { force: true });
+      cy.get("#rfmo").select(2);
     });
     cy.get("#rfmo").contains("General Fisheries Commission for the Mediterranean (GFCM)");
   });
@@ -331,7 +331,7 @@ describe("Manual landing page render with page guard", () => {
         for (let i = 0; i < 5; i++) {
           cy.get("body").then(($b) => {
             if ($b.find("#add-zone-button").length > 0) {
-              cy.get("#add-zone-button").first().click({ force: true });
+              cy.get("#add-zone-button").first().click();
             }
           });
         }
@@ -345,11 +345,11 @@ describe("Manual landing page render with page guard", () => {
   it("should show Remove and Add Another buttons correctly", () => {
     cy.get("#eez-0").should("be.visible").and("not.be.disabled");
     cy.get("#add-zone-button").should("exist");
-    cy.get("#add-zone-button").click({ force: true });
+    cy.get("#add-zone-button").click();
     cy.get("#eez-1").should("exist");
     cy.get("#remove-zone-button").should("exist");
     cy.get("#add-zone-button").should("exist");
-    cy.get("#add-zone-button").last().click({ force: true });
+    cy.get("#add-zone-button").last().click();
     cy.get("#eez-2").should("exist");
     cy.get("#remove-zone-button").should("exist");
   });
@@ -368,16 +368,16 @@ describe("Manual landing page render with page guard", () => {
   it("should remove the last zone and update selectedZones", () => {
     // Wait for all zones to be added
     cy.get("#add-zone-button").should("exist");
-    cy.get("#add-zone-button").last().click({ force: true });
-    cy.get("#add-zone-button").last().click({ force: true });
-    cy.get("#add-zone-button").last().click({ force: true });
+    cy.get("#add-zone-button").last().click();
+    cy.get("#add-zone-button").last().click();
+    cy.get("#add-zone-button").last().click();
     cy.get("#remove-zone-button").last().should("be.visible");
-    cy.get("#remove-zone-button").last().click({ force: true });
+    cy.get("#remove-zone-button").last().click();
   });
 
   it("should click on remove last zone button and select should be removed", () => {
     //checking remove button exist or not
-    cy.get("#add-zone-button").click({ force: true });
+    cy.get("#add-zone-button").click();
     cy.get("#eez-0").should("have.length", 1);
     cy.get("#remove-zone-button").should("exist");
   });
@@ -419,7 +419,7 @@ describe("Manual landing page render with page guard", () => {
 
   it("should render the  cancel button and click on cancel reset the form", () => {
     cy.contains("button", "Cancel").should("be.visible");
-    cy.get("#cancel").click({ force: true });
+    cy.get("#cancel").click();
     cy.get("#product").contains("Select a product");
     cy.get("#select-faoArea").contains("FAO27");
     cy.get("#exportWeight").invoke("val", "");
@@ -433,17 +433,17 @@ describe("Manual landing page render with page guard", () => {
 
   it("should click on cancel button with a value", () => {
     cy.get("#product").then(() => {
-      cy.get("#product").select(1, { force: true });
+      cy.get("#product").select(1);
     });
     cy.get("#product").contains("Longnose velvet dogfish (CYP), Fresh, Other presentations, 03045690");
     cy.contains("button", "Cancel").should("be.visible");
-    cy.get("#cancel").click({ force: true });
+    cy.get("#cancel").click();
     cy.get("#product").contains("Select a product");
     cy.url().should("include", "/add-landings");
   });
 
   it("should render the add Product button", () => {
-    cy.wrap(true).should("equal", true);
+    cy.wrap(true).should("be.true");
     cy.get("#submit").contains("Add Landing");
   });
   // (moved to flaky spec)
@@ -451,7 +451,7 @@ describe("Manual landing page render with page guard", () => {
     // Product
     cy.get("#product").contains("Select a product");
     cy.get("#product").then(() => {
-      cy.get("#product").select(1, { force: true });
+      cy.get("#product").select(1);
     });
     cy.get("#product").contains("Longnose velvet dogfish (CYP), Fresh, Other presentations, 03045690");
     // Start Date / Date Landed
@@ -482,7 +482,7 @@ describe("Manual landing page render with page guard", () => {
     // Fao
     cy.get("#select-faoArea").contains("FAO27");
     //High Seas Area
-    cy.get("#highSeasArea").click({ force: true });
+    cy.get("#highSeasArea").click();
     // vessel
     cy.get("body", { timeout: 20000 }).then(($b) => {
       if ($b.find("#select-vessel").length) {
@@ -497,17 +497,17 @@ describe("Manual landing page render with page guard", () => {
     cy.get("#exportWeight").invoke("val", "25");
     cy.get("#gearCategory").contains("Select gear category");
     cy.get("#gearCategory").then(() => {
-      cy.get("#gearCategory").select(4, { force: true });
+      cy.get("#gearCategory").select(4);
     });
-    cy.get("#gearCategory").select(4, { force: true });
+    cy.get("#gearCategory").select(4);
     selectFirstGearTypeOption();
 
     // RFMO
     cy.get("#rfmo").then(() => {
-      cy.get("#rfmo").select(2, { force: true });
+      cy.get("#rfmo").select(2);
     });
     // Click the 'Add Landing' button
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
     cy.get("#product").contains("Select a product");
     cy.get("#gearCategory").contains("Select gear category");
     cy.get("#gearType").contains("Select gear type");
@@ -518,7 +518,7 @@ describe("Manual landing page render with page guard", () => {
 
   it("should redirect to the upload file page", () => {
     cy.get("#upload-product-landing").contains("Upload products and landings");
-    cy.get("#upload-product-landing").click({ force: true });
+    cy.get("#upload-product-landing").click();
     cy.url().should("include", "/upload-file");
   });
 
@@ -561,7 +561,7 @@ describe("Manual landing page: post-action behaviour", () => {
 
   it("should clear the form when landing is updated", () => {
     // click edit existing landing
-    cy.get('[data-testid="edit_GBR-2023-CC-B2DFABFDE-1321338481"]').click({ force: true });
+    cy.get('[data-testid="edit_GBR-2023-CC-B2DFABFDE-1321338481"]').click();
     // confirm form is populated
     cy.get("select#product option:selected").should("not.have.value", "");
     cy.get("#dateLanded").should("not.have.value", "");
@@ -573,7 +573,7 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
     // update the landing
-    cy.get("button[value=submit]").click({ force: true });
+    cy.get("button[value=submit]").click();
     // comfirm form is now empty
     verifyLandingFormIsReset(false);
   });
@@ -600,7 +600,7 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
     // cancel the landing
-    cy.get("button#submit").click({ force: true });
+    cy.get("button#submit").click();
     verifyLandingFormIsReset(false);
   });
 
@@ -624,7 +624,7 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
     // cancel the landing
-    cy.get("button#cancel").click({ force: true });
+    cy.get("button#cancel").click();
     verifyLandingFormIsReset(false);
   });
 
@@ -648,14 +648,14 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.get("select#gearCategory option:selected").should("not.have.value", "");
     cy.get("select#gearType option:selected").should("not.have.value", "");
     // cancel the landing
-    cy.get("button#cancel").click({ force: true });
+    cy.get("button#cancel").click();
     verifyLandingFormIsReset(false);
     cy.get("#product").then(($product) => {
       if ($product.is(":disabled")) {
         cy.get("#product").should("be.disabled");
       } else {
         populateLandingForm();
-        cy.get("button#submit").click({ force: true });
+        cy.get("button#submit").click();
         verifyLandingFormIsReset(false);
       }
     });
@@ -672,7 +672,7 @@ describe("Manual landing page: submit unauthorised access", () => {
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
 
     cy.get("#product").then(() => {
-      cy.get("#product").select(1, { force: true });
+      cy.get("#product").select(1);
     });
     cy.get("#product").contains("Longnose velvet dogfish (CYP), Fresh, Other presentations, 03045690");
     cy.get("#startDate").as("startDateLocal2");
@@ -700,31 +700,31 @@ describe("Manual landing page: submit unauthorised access", () => {
     cy.get("@dateLandedYearLocal2").trigger("input");
     cy.get("@dateLandedYearLocal2").trigger("change");
     cy.get("#select-faoArea").contains("FAO27");
-    cy.get("#highSeasArea").click({ force: true });
+    cy.get("#highSeasArea").click();
     cy.get("body", { timeout: 20000 }).then(($b) => {
       if ($b.find("#select-vessel").length) {
         cy.get("#select-vessel", { timeout: 20000 }).as("selectVesselUnauth1");
         cy.get("@selectVesselUnauth1").invoke("val", "AALSKERE(K373)");
         cy.get("@selectVesselUnauth1").trigger("change");
       } else {
-        cy.get("input[role='combobox']", { timeout: 20000 }).filter(":visible").first().clear({ force: true });
+        cy.get("input[role='combobox']", { timeout: 20000 }).filter(":visible").first().clear();
         cy.get("input[role='combobox']", { timeout: 20000 })
           .filter(":visible")
           .first()
-          .type("AALSKERE(K373)", { force: true });
+          .type("AALSKERE(K373)");
       }
     });
     cy.get("#exportWeight").invoke("val", "25");
     cy.get("#gearCategory").then(() => {
-      cy.get("#gearCategory").select(4, { force: true });
+      cy.get("#gearCategory").select(4);
     });
-    cy.get("#gearCategory").select(4, { force: true });
+    cy.get("#gearCategory").select(4);
     selectFirstGearTypeOption();
     cy.get("#rfmo").then(() => {
-      cy.get("#rfmo").select(2, { force: true });
+      cy.get("#rfmo").select(2);
     });
     cy.get("#rfmo").contains("North East Atlantic Fisheries Commission (NEAFC)");
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
     cy.url().should("include", "/forbidden");
   });
 
@@ -737,7 +737,7 @@ describe("Manual landing page: submit unauthorised access", () => {
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
 
     cy.get("#product").then(() => {
-      cy.get("#product").select(1, { force: true });
+      cy.get("#product").select(1);
     });
     cy.get("#product").contains("Longnose velvet dogfish (CYP), Fresh, Other presentations, 03045690");
     cy.get("#startDate").as("startDateLocal3");
@@ -765,31 +765,31 @@ describe("Manual landing page: submit unauthorised access", () => {
     cy.get("@dateLandedYearLocal3").trigger("input");
     cy.get("@dateLandedYearLocal3").trigger("change");
     cy.get("#select-faoArea").contains("FAO27");
-    cy.get("#highSeasArea").click({ force: true });
+    cy.get("#highSeasArea").click();
     cy.get("body", { timeout: 20000 }).then(($b) => {
       if ($b.find("#select-vessel").length) {
         cy.get("#select-vessel", { timeout: 20000 }).as("selectVesselUnauth2");
         cy.get("@selectVesselUnauth2").invoke("val", "AALSKERE");
         cy.get("@selectVesselUnauth2").trigger("change");
       } else {
-        cy.get("input[role='combobox']", { timeout: 20000 }).filter(":visible").first().clear({ force: true });
+        cy.get("input[role='combobox']", { timeout: 20000 }).filter(":visible").first().clear();
         cy.get("input[role='combobox']", { timeout: 20000 })
           .filter(":visible")
           .first()
-          .type("AALSKERE", { force: true });
+          .type("AALSKERE");
       }
     });
     cy.get("#exportWeight").invoke("val", "25");
     cy.get("#gearCategory").then(() => {
-      cy.get("#gearCategory").select(4, { force: true });
+      cy.get("#gearCategory").select(4);
     });
-    cy.get("#gearCategory").select(4, { force: true });
+    cy.get("#gearCategory").select(4);
     selectFirstGearTypeOption();
     cy.get("#rfmo").then(() => {
-      cy.get("#rfmo").select(2, { force: true });
+      cy.get("#rfmo").select(2);
     });
     cy.get("#rfmo").contains("North East Atlantic Fisheries Commission (NEAFC)");
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
     cy.url().should("include", "/forbidden/supportId123");
   });
 });
@@ -802,7 +802,7 @@ describe("Manual landing page: delete", () => {
 
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
 
-    cy.get(`[data-testid=remove_GBR-2023-CC-B2DFABFDE-1321338481]`).click({ force: true });
+    cy.get(`[data-testid=remove_GBR-2023-CC-B2DFABFDE-1321338481]`).click();
     cy.url().should("include", "/add-landings");
   });
 });
@@ -814,9 +814,7 @@ describe("Manual landing page: delete landing", () => {
     };
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
 
-    cy.get(`[data-testid=remove-button-GBR-2023-CC-2323EC498-81368201-50c5-4347-bf1f-5802be97b58b]`).click({
-      force: true,
-    });
+    cy.get(`[data-testid=remove-button-GBR-2023-CC-2323EC498-81368201-50c5-4347-bf1f-5802be97b58b]`).click();
     cy.url().should("include", "/add-landings");
   });
 });
@@ -832,13 +830,13 @@ describe("Manual landing page when javascript is disabled", () => {
 
   it("should render add date buttons", () => {
     cy.contains("[data-testid='add-dateLanded']", "Add Date");
-    cy.get("[data-testid='add-dateLanded']").click({ force: true });
+    cy.get("[data-testid='add-dateLanded']").click();
     cy.get("#select-vessel").should("have.length.at.least", 1);
     cy.get("#select-vessel").invoke("val", "K373");
   });
 
   it("should render add gear category button", () => {
-    cy.wrap(true).should("equal", true);
+    cy.wrap(true).should("be.true");
     // button exists
     cy.contains("[data-testid='add-gear-category']", "Add gear category");
   });
@@ -848,48 +846,48 @@ describe("Manual landing page when javascript is disabled", () => {
     cy.get("select#gearCategory option:selected").should("have.text", "Select gear category");
     cy.get("select#gearCategory option").should("have.length", 11);
     // select a gear category
-    cy.get("select#gearCategory").select("Surrounding nets", { force: true });
-    cy.get("[data-testid='add-gear-category']").click({ force: true });
+    cy.get("select#gearCategory").select("Surrounding nets");
+    cy.get("[data-testid='add-gear-category']").click();
     // Wait for the server-side action to complete and page to reload
     cy.wait(500);
     // check the gear type combo now has additional options
     cy.get("select#gearType option:selected").should("have.text", "Select gear type");
     cy.get("select#gearType option").should("have.length", 6);
-    cy.get("select#gearType").select("Purse seines (PS)", { force: true });
+    cy.get("select#gearType").select("Purse seines (PS)");
     // Re-query to avoid detachment after selection
     cy.get("select#gearType").should("have.value", "Purse seines (PS)");
   });
 
   it("should render a page-level error when the add gear category button is clicked when no category is selected", () => {
     cy.get("select#gearCategory option:selected").should("have.text", "Select gear category");
-    cy.get("[data-testid='add-gear-category']").click({ force: true });
+    cy.get("[data-testid='add-gear-category']").click();
     cy.get("body").should("exist");
   });
 
   it("should remove button and add another button should be visible and EEZ field should be removed", () => {
     cy.get("#add-zone-button").should("exist");
-    cy.get("#add-zone-button").click({ force: true });
+    cy.get("#add-zone-button").click();
     cy.get("#eez-0").should("have.length", 1);
     cy.get("#remove-zone-button").should("exist");
     cy.get("#remove-zone-button").last().should("be.visible");
-    cy.get("#remove-zone-button").last().click({ force: true });
+    cy.get("#remove-zone-button").last().click();
     cy.get("#eez-0").should("have.length", 1);
     cy.get("#add-zone-button").should("exist");
   });
 
   it("should render a field-level error when the add gear category button is clicked when no category is selected", () => {
     cy.get("select#gearCategory option:selected").should("have.text", "Select gear category");
-    cy.get("[data-testid='add-gear-category']").click({ force: true });
+    cy.get("[data-testid='add-gear-category']").click();
     cy.get("body").should("exist");
   });
 
   it("should click on save as draft", () => {
-    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "catch-certificates");
   });
 
   it("should click on save and continue", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "whose-waters-were-they-caught-in");
   });
 
@@ -899,7 +897,7 @@ describe("Manual landing page when javascript is disabled", () => {
     };
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
 
-    cy.get(`[data-testid=remove_GBR-2023-CC-B2DFABFDE-1321338481]`).click({ force: true });
+    cy.get(`[data-testid=remove_GBR-2023-CC-B2DFABFDE-1321338481]`).click();
     cy.url().should("include", "/add-landings");
   });
 
@@ -909,9 +907,7 @@ describe("Manual landing page when javascript is disabled", () => {
     };
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
 
-    cy.get(`[data-testid=remove-button-GBR-2023-CC-2323EC498-81368201-50c5-4347-bf1f-5802be97b58b]`).click({
-      force: true,
-    });
+    cy.get(`[data-testid=remove-button-GBR-2023-CC-2323EC498-81368201-50c5-4347-bf1f-5802be97b58b]`).click();
     cy.url().should("include", "/add-landings");
   });
 
@@ -925,7 +921,7 @@ describe("Manual landing page when javascript is disabled", () => {
     });
 
     it("should render add gear category button label", () => {
-      cy.wrap(true).should("equal", true);
+      cy.wrap(true).should("be.true");
       // button exists
       cy.contains("[data-testid='add-gear-category']", "Ychwanegu categori’r gêr");
     });
@@ -935,20 +931,20 @@ describe("Manual landing page when javascript is disabled", () => {
       cy.get("select#gearCategory option:selected").should("have.text", "Dewiswch gategori’r gêr");
       cy.get("select#gearCategory option").should("have.length", 11);
       // select a gear category
-      cy.get("select#gearCategory").select("Surrounding nets", { force: true });
-      cy.get("[data-testid='add-gear-category']").click({ force: true });
+      cy.get("select#gearCategory").select("Surrounding nets");
+      cy.get("[data-testid='add-gear-category']").click();
       // workaround for Remix hydration issues, if we don't wait the UI simply isn't ready
       cy.wait(250);
       // check the gear type combo now has additional options
       cy.get("select#gearType option:selected").should("have.text", "Dewiswch y math o gêr");
       cy.get("select#gearType option").should("have.length", 6);
-      cy.get("select#gearType").select("Purse seines (PS)", { force: true });
+      cy.get("select#gearType").select("Purse seines (PS)");
       cy.get("select#gearType").should("have.value", "Purse seines (PS)");
     });
 
     it("should render an error prompt if the add gear category button is clicked when no category is selected", () => {
       cy.get("select#gearCategory option:selected").should("have.text", "Dewiswch gategori’r gêr");
-      cy.get("[data-testid='add-gear-category']").click({ force: true });
+      cy.get("[data-testid='add-gear-category']").click();
       cy.get("body").should("exist");
     });
 
@@ -959,10 +955,10 @@ describe("Manual landing page when javascript is disabled", () => {
       };
       cy.visit(manualLandingUrl, { qs: { ...testParams } });
       cy.get("#gearCategory").then(() => {
-        cy.get("#gearCategory").select(4, { force: true });
+        cy.get("#gearCategory").select(4);
       });
       cy.get("#gearCategory").contains("Dredges");
-      cy.get("[data-testid=submit]").click({ force: true });
+      cy.get("[data-testid=submit]").click();
       cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
       cy.contains("a", /^Rhaid ichi ddewis y math o gêr ar ôl ichi ddewis categori gêr$/).should("be.visible");
     });
@@ -979,19 +975,19 @@ describe("Manual Landing page errors when javascript is disabled", () => {
   });
 
   it("should search autoinput field", () => {
-    cy.wrap(true).should("equal", true);
+    cy.wrap(true).should("be.true");
     cy.get("#select-vessel").as("selectVesselAuto");
     cy.get("@selectVesselAuto").invoke("val", "abc");
     cy.get("@selectVesselAuto").trigger("change");
   });
 
   it("should click on save and continue", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "whose-waters-were-they-caught-in");
   });
 
   it("should reset form", () => {
-    cy.wrap(true).should("equal", true);
+    cy.wrap(true).should("be.true");
     cy.get("#product").contains("Select a product");
     cy.get("#select-faoArea").contains("FAO27");
     cy.get("#exportWeight").invoke("val", "");
@@ -1006,12 +1002,12 @@ describe("Manual Landing page errors when javascript is disabled", () => {
 
 describe("Manual Landing page onclick of edit", () => {
   it("should display edited record in the form on click of edit button", () => {
-    cy.wrap(true).should("equal", true);
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.MannualEditLanding,
     };
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
-    cy.get(`[data-testid=edit_GBR-2023-CC-B2DFABFDE-1321338481]`).click({ force: true });
+    cy.get(`[data-testid=edit_GBR-2023-CC-B2DFABFDE-1321338481]`).click();
     cy.get("#product").contains("Longnose velvet dogfish (CYP), Fresh, Other presentations, 03045690");
     cy.get("#select-faoArea").contains("FAO27");
     cy.get("#select-vessel").contains("BANANA SPLIT (J357)");
@@ -1024,7 +1020,7 @@ describe("Manual Landing page onclick of edit", () => {
       testCaseId: TestCaseId.MannuaLandingPageGuardForbidden,
     };
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
-    cy.get(`[data-testid=edit_GBR-2023-CC-B2DFABFDE-1321338481]`).click({ force: true });
+    cy.get(`[data-testid=edit_GBR-2023-CC-B2DFABFDE-1321338481]`).click();
     cy.url().should("include", "/forbidden");
   });
 });
@@ -1035,7 +1031,7 @@ describe("Manual landings page: Error summary on click of add Product", () => {
       testCaseId: TestCaseId.AddLandingPageFailsWithErrors,
     };
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select a product from the list$/).should("be.visible");
     cy.contains("a", /^Select or enter a vessel name or port letter and number$/).should("be.visible");
@@ -1051,10 +1047,10 @@ describe("Manual landings page: Error summary on click of add Product", () => {
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
 
     cy.get("#gearCategory").then(() => {
-      cy.get("#gearCategory").select(4, { force: true });
+      cy.get("#gearCategory").select(4);
     });
     cy.get("#gearCategory").contains("Dredges");
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.get("#gearCategory option:selected")
       .invoke("text")
@@ -1075,7 +1071,7 @@ describe("Manual landings page: Error summary on click of add Product", () => {
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
     cy.get("#gearCategory").contains("Select gear category");
     cy.get("#gearType").contains("Select gear type");
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
     cy.contains("a", /^Select a gear type$/).should("be.visible");
   });
 
@@ -1084,7 +1080,7 @@ describe("Manual landings page: Error summary on click of add Product", () => {
       testCaseId: TestCaseId.AddLandingPageFailsWithErrors,
     };
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
-    cy.get("#submit").click({ force: true });
+    cy.get("#submit").click();
     cy.get(".govuk-error-summary__list").should("exist");
   });
 });
@@ -1112,7 +1108,7 @@ describe("Manual landings page: Error with total combined export weight exceeded
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
 
     // Trigger form submit which will hit the VALIDATE_LANDINGS_URL MSW endpoint and return 400
-    cy.get("[data-testid='submit']").click({ force: true });
+    cy.get("[data-testid='submit']").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^The total combined weight for all products must be less than 10,000,000$/).should("be.visible");
@@ -1136,13 +1132,13 @@ describe("Manual page errors when javascript is disabled", () => {
     cy.get("#startDate").invoke("val", "25");
     cy.get("#startDate-month").invoke("val", "10");
     cy.get("#startDate-year").invoke("val", "2020");
-    cy.get("[data-testid='add-dateLanded']").click({ force: true });
+    cy.get("[data-testid='add-dateLanded']").click();
     cy.url().should("include", "vessels");
     cy.get("#select-vessel").should("have.length.at.least", 1);
   });
 
   it("should trigger add date button with wrong format YY-MM-DD", () => {
-    cy.wrap(true).should("equal", true);
+    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='add-dateLanded']", "Add Date");
     cy.get("#dateLanded").invoke("val", "24");
     cy.get("#dateLanded-month").invoke("val", "10");
@@ -1150,11 +1146,11 @@ describe("Manual page errors when javascript is disabled", () => {
     cy.get("#startDate").invoke("val", "24");
     cy.get("#startDate-month").invoke("val", "10");
     cy.get("#startDate-year").invoke("val", "20");
-    cy.get("[data-testid='add-dateLanded']").click({ force: true });
+    cy.get("[data-testid='add-dateLanded']").click();
   });
 
   it("should click on save and continue", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "add-landing");
     cy.get(".govuk-error-summary__list > li").should("have.length.at.least", 1);
   });
@@ -1170,7 +1166,7 @@ describe("Manual page forbidden when javascript is disabled", () => {
   });
 
   it("should click on save and continue", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/forbidden");
   });
 });
@@ -1268,7 +1264,7 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
     cy.get("#dateLanded").type("12");
     cy.get("#dateLanded-month").type("05");
     cy.get("#dateLanded-year").clear();
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
     cy.contains(/^Enter the date landed$/).should("be.visible");
   });
 
@@ -1299,13 +1295,13 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
         cy.get("#select-vessel", { timeout: 10000 }).invoke("val", "K373").trigger("change");
       } else if ($body.find('input[id="select-vessel"]').length > 0) {
         // fallback: if rendered as input (autocomplete), type and select first suggestion
-        cy.get("input#select-vessel", { timeout: 10000 }).type("K373", { force: true });
+        cy.get("input#select-vessel", { timeout: 10000 }).type("K373");
       } else {
         cy.log("vessel selector not found; continuing without selecting vessel");
       }
     });
     cy.get("#exportWeight").invoke("val", "25");
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
     cy.contains("a", /^Select a vessel from the list$/).should("not.exist");
   });
 });
@@ -1319,12 +1315,12 @@ describe("Mandatory field validation tests", () => {
 
     // select a product first (required for form submission)
     cy.get("select#product").then(() => {
-      cy.get("select#product").select(1, { force: true });
+      cy.get("select#product").select(1);
     });
   });
 
   it("should display validation error when Start Date is not provided", () => {
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
 
     cy.get(".govuk-error-summary", { timeout: 10000 }).should("be.visible");
 
@@ -1334,14 +1330,14 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when High Seas Area is not selected", () => {
-    cy.get("input#startDate").clear({ force: true });
-    cy.get("input#startDate").type("01", { force: true });
-    cy.get("input#startDate-month").clear({ force: true });
-    cy.get("input#startDate-month").type("09", { force: true });
-    cy.get("input#startDate-year").clear({ force: true });
-    cy.get("input#startDate-year").type("2020", { force: true });
+    cy.get("input#startDate").clear();
+    cy.get("input#startDate").type("01");
+    cy.get("input#startDate-month").clear();
+    cy.get("input#startDate-month").type("09");
+    cy.get("input#startDate-year").clear();
+    cy.get("input#startDate-year").type("2020");
 
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
 
     cy.contains("h2", "There is a problem").should("be.visible");
 
@@ -1351,16 +1347,16 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when Exclusive Economic Zone is not provided", () => {
-    cy.get("input#startDate").clear({ force: true });
-    cy.get("input#startDate").type("01", { force: true });
-    cy.get("input#startDate-month").clear({ force: true });
-    cy.get("input#startDate-month").type("09", { force: true });
-    cy.get("input#startDate-year").clear({ force: true });
-    cy.get("input#startDate-year").type("2020", { force: true });
+    cy.get("input#startDate").clear();
+    cy.get("input#startDate").type("01");
+    cy.get("input#startDate-month").clear();
+    cy.get("input#startDate-month").type("09");
+    cy.get("input#startDate-year").clear();
+    cy.get("input#startDate-year").type("2020");
 
-    cy.get("input#separateHighSeasAreaFalse").check({ force: true });
+    cy.get("input#separateHighSeasAreaFalse").check();
 
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
 
     cy.contains("h2", "There is a problem").should("be.visible");
 
@@ -1376,16 +1372,16 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when Gear Category is not selected", () => {
-    cy.get("input#startDate").clear({ force: true });
-    cy.get("input#startDate").type("01", { force: true });
-    cy.get("input#startDate-month").clear({ force: true });
-    cy.get("input#startDate-month").type("09", { force: true });
-    cy.get("input#startDate-year").clear({ force: true });
-    cy.get("input#startDate-year").type("2020", { force: true });
+    cy.get("input#startDate").clear();
+    cy.get("input#startDate").type("01");
+    cy.get("input#startDate-month").clear();
+    cy.get("input#startDate-month").type("09");
+    cy.get("input#startDate-year").clear();
+    cy.get("input#startDate-year").type("2020");
 
-    cy.get("input#highSeasArea").check({ force: true });
+    cy.get("input#highSeasArea").check();
 
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
 
     cy.contains("h2", "There is a problem").should("be.visible");
 
@@ -1395,18 +1391,18 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when Gear Type is not selected", () => {
-    cy.get("input#startDate").clear({ force: true });
-    cy.get("input#startDate").type("01", { force: true });
-    cy.get("input#startDate-month").clear({ force: true });
-    cy.get("input#startDate-month").type("09", { force: true });
-    cy.get("input#startDate-year").clear({ force: true });
-    cy.get("input#startDate-year").type("2020", { force: true });
+    cy.get("input#startDate").clear();
+    cy.get("input#startDate").type("01");
+    cy.get("input#startDate-month").clear();
+    cy.get("input#startDate-month").type("09");
+    cy.get("input#startDate-year").clear();
+    cy.get("input#startDate-year").type("2020");
 
-    cy.get("input#highSeasArea").check({ force: true });
+    cy.get("input#highSeasArea").check();
 
-    cy.get("select#gearCategory").select(4, { force: true });
+    cy.get("select#gearCategory").select(4);
 
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
 
     cy.contains("h2", "There is a problem").should("be.visible");
     cy.get("#gearCategory option:selected")
@@ -1427,7 +1423,7 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display multiple validation errors when multiple mandatory fields are empty", () => {
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
 
     cy.contains("h2", "There is a problem").should("be.visible");
 
@@ -1439,16 +1435,16 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display error when EEZ is selected as 'No' but no country is provided", () => {
-    cy.get("input#startDate").clear({ force: true });
-    cy.get("input#startDate").type("01", { force: true });
-    cy.get("input#startDate-month").clear({ force: true });
-    cy.get("input#startDate-month").type("09", { force: true });
-    cy.get("input#startDate-year").clear({ force: true });
-    cy.get("input#startDate-year").type("2020", { force: true });
+    cy.get("input#startDate").clear();
+    cy.get("input#startDate").type("01");
+    cy.get("input#startDate-month").clear();
+    cy.get("input#startDate-month").type("09");
+    cy.get("input#startDate-year").clear();
+    cy.get("input#startDate-year").type("2020");
 
-    cy.get("input#separateHighSeasAreaFalse").check({ force: true });
+    cy.get("input#separateHighSeasAreaFalse").check();
 
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
 
     cy.contains("h2", "There is a problem").should("be.visible");
 
@@ -1462,21 +1458,21 @@ describe("Mandatory field validation tests", () => {
     cy.get("input#startDate").should("be.visible");
     cy.wait(200);
 
-    cy.get("input#startDate").clear({ force: true });
-    cy.get("input#startDate").type("01", { force: true });
-    cy.get("input#startDate-month").clear({ force: true });
-    cy.get("input#startDate-month").type("09", { force: true });
-    cy.get("input#startDate-year").clear({ force: true });
-    cy.get("input#startDate-year").type("2020", { force: true });
+    cy.get("input#startDate").clear();
+    cy.get("input#startDate").type("01");
+    cy.get("input#startDate-month").clear();
+    cy.get("input#startDate-month").type("09");
+    cy.get("input#startDate-year").clear();
+    cy.get("input#startDate-year").type("2020");
 
-    cy.get("input#separateHighSeasAreaFalse").check({ force: true });
+    cy.get("input#separateHighSeasAreaFalse").check();
 
     // Re-query the DOM after interactions to avoid detachment
     cy.get("body").then(() => {
       cy.get("#eez-0").should("be.visible");
     });
 
-    cy.get("[data-testid=submit]").click({ force: true });
+    cy.get("[data-testid=submit]").click();
 
     // Wait for error to appear and re-query DOM
     cy.get("body").then(() => {
@@ -1491,7 +1487,7 @@ describe("Mandatory field validation tests", () => {
 
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
 
-    cy.get("select#gearCategory").select(1, { force: true });
+    cy.get("select#gearCategory").select(1);
 
     cy.get("select#gearType option").should("have.length", 1);
     cy.get("select#gearType option").should("contain.text", "Select gear type");

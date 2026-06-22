@@ -36,7 +36,7 @@ describe("Copy void confirmation page", () => {
         "No, create a copy of the processing statement only",
       ]);
     });
-    cy.get("[data-testid=cancel]").click({ force: true });
+    cy.get("[data-testid=cancel]").click();
     cy.url().should("include", "/processing-statements");
   });
 
@@ -47,7 +47,7 @@ describe("Copy void confirmation page", () => {
     };
     copyvoidpage(testParams);
     cy.contains("h1", "Are you sure you want to void the original processing statement?");
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select an option to continue$/).should("be.visible");
   });
@@ -58,8 +58,8 @@ describe("Copy void confirmation page", () => {
       disableScripts: true,
     };
     copyvoidpage(testParams);
-    cy.get("#documentVoidOriginalNo").click({ force: true });
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("#documentVoidOriginalNo").click();
+    cy.get("[data-testid=continue]").click();
     cy.url().should("include", "/progress");
   });
 });

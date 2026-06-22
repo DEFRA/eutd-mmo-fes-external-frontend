@@ -11,7 +11,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     };
 
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", "/forbidden");
   });
 
@@ -20,10 +20,10 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveMaxCharsRailwayBillNumber,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railway bill number", { force: true });
-    cy.get("#departurePlace").type("Hull", { force: true });
-    cy.get("#freightBillNumber").type("AA1234567", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#railwayBillNumber").type("Railway bill number");
+    cy.get("#departurePlace").type("Hull");
+    cy.get("#freightBillNumber").type("AA1234567");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Railway bill number must not exceed 15 characters$/).should("be.visible");
@@ -34,12 +34,10 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveMaxCharsFreightBillNumber,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railbill", { force: true });
-    cy.get("#departurePlace").type("Hull", { force: true });
-    cy.get("#freightBillNumber").type("Very Very Very Very Very Very Very Lengthy Freight Bill Number", {
-      force: true,
-    });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#railwayBillNumber").type("Railbill");
+    cy.get("#departurePlace").type("Hull");
+    cy.get("#freightBillNumber").type("Very Very Very Very Very Very Very Lengthy Freight Bill Number");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Freight bill number must not exceed 60 characters$/).should("be.visible");
@@ -50,10 +48,10 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveAlphanumericsRailwayBillNumber,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railway..", { force: true });
-    cy.get("#departurePlace").type("Hull", { force: true });
-    cy.get("#freightBillNumber").type("AA1234567", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#railwayBillNumber").type("Railway..");
+    cy.get("#departurePlace").type("Hull");
+    cy.get("#freightBillNumber").type("AA1234567");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Railway bill number must only contain letters and numbers$/).should("be.visible");
@@ -64,7 +62,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TrainTransportErrors,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
@@ -76,10 +74,10 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TrainTransportSave,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railbill", { force: true });
-    cy.get("#departurePlace").type("Hull", { force: true });
-    cy.get("#freightBillNumber").type("AA1234567", { force: true });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("#railwayBillNumber").type("Railbill");
+    cy.get("#departurePlace").type("Hull");
+    cy.get("#freightBillNumber").type("AA1234567");
+    cy.get("[data-testid=save-draft-button").click();
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
 
@@ -88,10 +86,10 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TrainTransportSave,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railbill", { force: true });
+    cy.get("#railwayBillNumber").type("Railbill");
     cy.get("#departurePlace").type("Hull");
-    cy.get("#freightBillNumber").type("AA1234567", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#freightBillNumber").type("AA1234567");
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", progressUrl);
   });
 
@@ -114,10 +112,10 @@ describe("Add Transportation Details Train: Allowed", () => {
     };
 
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("RB123456", { force: true });
-    cy.get("#departurePlace").type("Liverpool", { force: true });
-    cy.get("#freightBillNumber").type("FB789012", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#railwayBillNumber").type("RB123456");
+    cy.get("#departurePlace").type("Liverpool");
+    cy.get("#freightBillNumber").type("FB789012");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", progressUrl);
     cy.get(".govuk-error-summary").should("not.exist");
     cy.get(".govuk-error-message").should("not.exist");
@@ -129,10 +127,10 @@ describe("Add Transportation Details Train: Allowed", () => {
     };
 
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("RB123456", { force: true });
-    cy.get("#departurePlace").type("Liverpool", { force: true });
-    cy.get("#freightBillNumber").type("FB789012", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#railwayBillNumber").type("RB123456");
+    cy.get("#departurePlace").type("Liverpool");
+    cy.get("#freightBillNumber").type("FB789012");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", progressUrl);
     cy.get(".govuk-error-summary").should("not.exist");
     cy.get("p.govuk-error-message").should("not.exist");
@@ -182,10 +180,10 @@ describe("Add Transportation Details Train: Container Identification Number Vali
       testCaseId: TestCaseId.TrainTransportContainerIdentificationNumberMaxLength,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("RB123456", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#railwayBillNumber").type("RB123456");
+    cy.get("#departurePlace").type("Dover");
+    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51));
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains(
       "a",
@@ -198,10 +196,10 @@ describe("Add Transportation Details Train: Container Identification Number Vali
       testCaseId: TestCaseId.TrainTransportContainerIdentificationNumberInvalidCharacters,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("RB123456", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABC123!@#", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#railwayBillNumber").type("RB123456");
+    cy.get("#departurePlace").type("Dover");
+    cy.get('input[name="containerNumbers.0"]').type("ABC123!@#");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains(
       "a",
@@ -213,10 +211,10 @@ describe("Add Transportation Details Train: Container Identification Number Vali
       testCaseId: TestCaseId.TrainTransportSave,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("RB123456", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#railwayBillNumber").type("RB123456");
+    cy.get("#departurePlace").type("Dover");
     // containerNumbers.0 is not filled - should be optional
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", progressUrl);
   });
 
@@ -225,10 +223,10 @@ describe("Add Transportation Details Train: Container Identification Number Vali
       testCaseId: TestCaseId.TrainTransportSave,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("RB123456", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#railwayBillNumber").type("RB123456");
+    cy.get("#departurePlace").type("Dover");
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", progressUrl);
   });
 
@@ -237,10 +235,10 @@ describe("Add Transportation Details Train: Container Identification Number Vali
       testCaseId: TestCaseId.TrainTransportSave,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("RB123456", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("abcu1234567", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#railwayBillNumber").type("RB123456");
+    cy.get("#departurePlace").type("Dover");
+    cy.get('input[name="containerNumbers.0"]').type("abcu1234567");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", progressUrl);
   });
 });
@@ -252,18 +250,18 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
-    cy.get("#railwayBillNumber").type("RB123456", { force: true });
+    cy.get("#railwayBillNumber").type("RB123456");
 
     // Add and fill container fields
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("DEFJ9876543", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("GHIR5555555", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567");
+    cy.get('[data-testid="add-another-container"]').click();
+    cy.get('input[name="containerNumbers.1"]').type("DEFJ9876543");
+    cy.get('[data-testid="add-another-container"]').click();
+    cy.get('input[name="containerNumbers.2"]').type("GHIR5555555");
 
-    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#departurePlace").type("Dover");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", progressUrl);
   });
 
@@ -273,18 +271,18 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
-    cy.get("#railwayBillNumber").type("RB123456", { force: true });
+    cy.get("#railwayBillNumber").type("RB123456");
 
     // Add multiple fields but leave some empty
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567");
+    cy.get('[data-testid="add-another-container"]').click();
     // Leave containerNumbers.1 empty
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("GHIR5555555", { force: true });
+    cy.get('[data-testid="add-another-container"]').click();
+    cy.get('input[name="containerNumbers.2"]').type("GHIR5555555");
 
-    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#departurePlace").type("Dover");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", progressUrl);
   });
 
@@ -297,14 +295,14 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     // Leave railwayBillNumber empty to trigger validation error
 
     // Add container values
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567", { force: true });
-    cy.get('input[name="containerNumbers.1"]').type("DEFJ9876543", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567");
+    cy.get('[data-testid="add-another-container"]').click();
+    cy.get('input[name="containerNumbers.0"]').type("ABCU1234567");
+    cy.get('input[name="containerNumbers.1"]').type("DEFJ9876543");
 
-    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#departurePlace").type("Dover");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Check error is displayed
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -332,11 +330,11 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
-    cy.get("#railwayBillNumber").type("RB123456", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("INVALID!", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#railwayBillNumber").type("RB123456");
+    cy.get('input[name="containerNumbers.0"]').type("INVALID!");
+    cy.get("#departurePlace").type("Dover");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Check error is displayed
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -349,13 +347,11 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
-    cy.get("#railwayBillNumber").type("RB123456", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890123456789012", {
-      force: true,
-    });
-    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#railwayBillNumber").type("RB123456");
+    cy.get('input[name="containerNumbers.0"]').type("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890123456789012");
+    cy.get("#departurePlace").type("Dover");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Container identification number must only contain letters and numbers$/).should("be.visible");

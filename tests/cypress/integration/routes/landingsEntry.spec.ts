@@ -19,7 +19,7 @@ describe("Landings entry page: visuals", () => {
   });
 
   it("should display the correct headings", () => {
-    cy.wrap(true).should("equal", true);
+    cy.wrap(true).should("be.true");
     cy.contains("h1", "How do you want to enter your products and landings?");
   });
 
@@ -93,7 +93,7 @@ describe("Landings entry page: choosing an option", () => {
 
     cy.visit(landingsUrl, { qs: { ...testParams } });
 
-    cy.get("#manualOptionEntry").click({ force: true });
+    cy.get("#manualOptionEntry").click();
     cy.get("form").submit();
     cy.url().should("include", progressUrl);
   });
@@ -140,7 +140,7 @@ describe("Landings entry page: changing landings type", () => {
 
     cy.visit(landingsUrl, { qs: { ...testParams } });
 
-    cy.get("#manualOptionEntry").click({ force: true });
+    cy.get("#manualOptionEntry").click();
     cy.get("form").submit();
     cy.url().should("not.include", landingsTypeConfirmationUrl);
     cy.url().should("include", progressUrl);
@@ -205,7 +205,7 @@ describe("Landings entry page: form submission and errors", () => {
 
     cy.visit(landingsUrl, { qs: { ...testParams } });
 
-    cy.get("#manualOptionEntry").click({ force: true });
+    cy.get("#manualOptionEntry").click();
     cy.get("form").submit();
     cy.url().should("include", progressUrl);
   });

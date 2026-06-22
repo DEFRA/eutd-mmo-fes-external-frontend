@@ -58,7 +58,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
 
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
@@ -72,10 +72,10 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     cy.wait(500);
     cy.get("#cmr").should("exist");
-    cy.get("#cmr").check({ force: true });
+    cy.get("#cmr").check();
     cy.get("#cmr").should("be.checked");
     cy.wait(200);
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url({ timeout: 10000 }).should("include", "/departure-product-summary");
   });
@@ -88,10 +88,10 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     cy.wait(500); // Wait for hydration
     cy.get("#separateCmrFalse").should("exist");
-    cy.get("#separateCmrFalse").check({ force: true });
+    cy.get("#separateCmrFalse").check();
     cy.get("#separateCmrFalse").should("be.checked");
     cy.wait(200); // Allow React to process state change
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url({ timeout: 10000 }).should("include", "/add-transportation-details-truck");
   });
@@ -104,10 +104,10 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     cy.wait(500); // Wait for hydration
     cy.get("#cmr").should("exist");
-    cy.get("#cmr").check({ force: true });
+    cy.get("#cmr").check();
     cy.get("#cmr").should("be.checked");
     cy.wait(200);
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url({ timeout: 10000 }).should("include", "/forbidden");
   });
@@ -118,7 +118,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     };
 
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
   });

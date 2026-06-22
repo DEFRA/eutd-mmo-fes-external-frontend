@@ -74,7 +74,7 @@ describe("Save and Continue button - UnHappy path", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", "/forbidden");
   });
 
@@ -84,7 +84,7 @@ describe("Save and Continue button - UnHappy path", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.get(".govuk-error-summary__list").contains("Enter the vessel name");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
@@ -100,11 +100,11 @@ describe("Save and Continue button - Happy path", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
-    cy.get("#vesselName").type("Vessel", { force: true });
-    cy.get("#flagState").type("flag State", { force: true });
-    cy.get("#departurePlace").type("Place export", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get('input[name="containerNumbers.0"]').type("Container");
+    cy.get("#vesselName").type("Vessel");
+    cy.get("#flagState").type("flag State");
+    cy.get("#departurePlace").type("Place export");
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", "/departure-product-summary");
   });
 
@@ -117,12 +117,12 @@ describe("Save and Continue button - Happy path", () => {
     // Fill in all required fields
     cy.get('input[id="exportedTo"]').type("France");
     cy.get(".autocomplete__option").first().click();
-    cy.get("#pointOfDestination").type("Valid Point of Destination", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
-    cy.get("#vesselName").type("Vessel", { force: true });
-    cy.get("#flagState").type("flag State", { force: true });
-    cy.get("#departurePlace").type("Place export", { force: true });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("#pointOfDestination").type("Valid Point of Destination");
+    cy.get('input[name="containerNumbers.0"]').type("Container");
+    cy.get("#vesselName").type("Vessel");
+    cy.get("#flagState").type("flag State");
+    cy.get("#departurePlace").type("Place export");
+    cy.get("[data-testid=save-draft-button").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 });
@@ -143,7 +143,7 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
       testCaseId: TestCaseId.VesselContainerTransportPointOfDestinationRequired,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the point of destination$/).should("be.visible");
   });
@@ -154,8 +154,8 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     const longString = new Array(102).join("a");
-    cy.get("#pointOfDestination").type(longString, { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#pointOfDestination").type(longString);
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Point of destination must not exceed 100 characters$/).should("be.visible");
   });
@@ -169,18 +169,18 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
     // Fill in all valid fields
     cy.get('input[id="exportedTo"]').type("France");
     cy.get(".autocomplete__option").first().click();
-    cy.get('input[name="containerNumbers.0"]').type("ABCD1234567", { force: true });
-    cy.get("#vesselName").type("Valid Vessel Name", { force: true });
-    cy.get("#flagState").type("Valid Flag State", { force: true });
-    cy.get("#departurePlace").type("Valid Departure Place", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABCD1234567");
+    cy.get("#vesselName").type("Valid Vessel Name");
+    cy.get("#flagState").type("Valid Flag State");
+    cy.get("#departurePlace").type("Valid Departure Place");
 
     // Fill in invalid pointOfDestination (>101 chars)
     const longString =
       "q7N2vX9wL4kP1mR8zB3tY5jS0hG6fD9cA2xB7nV1mQ8wL4kP0zR5tY2jS9hG3fD6cA1xB8nV4mQ0wL7kP2zR5tY8jS3hG1fD4cA9dfsdfsdfsdf7644456";
-    cy.get("#pointOfDestination").type(longString, { force: true });
+    cy.get("#pointOfDestination").type(longString);
 
     // Click save as draft
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
 
     // Should redirect to NMD dashboard without errors
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
@@ -191,8 +191,8 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
       testCaseId: TestCaseId.VesselContainerTransportPointOfDestinationInvalidCharacters,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("#pointOfDestination").type("Invalid@#$%", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#pointOfDestination").type("Invalid@#$%");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains(
       "a",
@@ -209,13 +209,13 @@ describe("Container Vessel Save as Draft - Retain valid field values", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     // Fill all valid fields
-    cy.get("#vesselName").clear({ force: true }).type("Atlantic Star", { force: true });
-    cy.get("#flagState").clear({ force: true }).type("Greece", { force: true });
-    cy.get("#departurePlace").clear({ force: true }).type("Felixstowe Port", { force: true });
-    cy.get('input[name="containerNumbers.0"]').clear({ force: true }).type("ABCJ0123456", { force: true });
+    cy.get("#vesselName").clear().type("Atlantic Star");
+    cy.get("#flagState").clear().type("Greece");
+    cy.get("#departurePlace").clear().type("Felixstowe Port");
+    cy.get('input[name="containerNumbers.0"]').clear().type("ABCJ0123456");
 
     // Save as draft
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
     // Return to page using CHECK handler (hardcoded saved fixture)
@@ -238,15 +238,15 @@ describe("Container Vessel Save as Draft - Retain valid field values", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     // Enter invalid chars in vesselName (::::), valid value in flagState (Greece) and departurePlace
-    cy.get("#vesselName").clear({ force: true });
-    cy.get("#vesselName").type("::::", { force: true });
-    cy.get("#flagState").clear({ force: true });
-    cy.get("#flagState").type("Greece", { force: true });
-    cy.get("#departurePlace").clear({ force: true });
-    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+    cy.get("#vesselName").clear();
+    cy.get("#vesselName").type("::::");
+    cy.get("#flagState").clear();
+    cy.get("#flagState").type("Greece");
+    cy.get("#departurePlace").clear();
+    cy.get("#departurePlace").type("Felixstowe Port");
 
     // Save as draft
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
     // Return to page using CHECK handler (hardcoded saved fixture)

@@ -40,7 +40,7 @@ describe("Processing statement: add processing plant details - save and continue
   });
 
   it("should show validation errors when save and continue is clicked with invalid data", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").should("be.visible");
     cy.url().should("include", "/add-processing-plant-details");
   });
@@ -55,7 +55,7 @@ describe("Processing statement: add processing plant details - save and continue
   });
 
   it("should redirect to add processing plant address after successful save and continue", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/add-processing-plant-address");
   });
 });
@@ -69,7 +69,7 @@ describe("Processing statement: add processing plant details - save as draft", (
   });
 
   it("should redirect to the processing statements dashboard after save as draft", () => {
-    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });
@@ -80,7 +80,7 @@ describe("Processing statement: add processing plant details - save as draft wit
       testCaseId: TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftWithErrors,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });

@@ -235,7 +235,7 @@ describe("Catch certificate dashboard with user details", () => {
   });
 
   it("should render the landings entry page after creating a document", () => {
-    cy.get("#create-export-document").click({ force: true });
+    cy.get("#create-export-document").click();
 
     cy.url().should("include", "/landings-entry");
   });
@@ -259,7 +259,7 @@ describe("Catch certificate dashboard no details", () => {
   });
 
   it("should render the forbidden page when a document number is undefined", () => {
-    cy.get("#create-export-document").click({ force: true });
+    cy.get("#create-export-document").click();
 
     cy.url().should("include", "/forbidden");
   });

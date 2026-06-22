@@ -95,14 +95,12 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get(".govuk-heading-xl").should("be.visible");
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
-    cy.get("#registrationNumber").type("Registration number which is way way way way way way way more than 50 words", {
-      force: true,
-    });
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#registrationNumber").type("Registration number which is way way way way way way way more than 50 words");
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("#placeOfUnloading").type("Place of unloading");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Registration number must not exceed 50 characters$/).should("be.visible");
   });
@@ -113,11 +111,11 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
-    cy.get("#registrationNumber").type("Registartion..", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#registrationNumber").type("Registartion..");
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Registration number must only contain letters, numbers, hyphens, and spaces$/).should(
@@ -132,11 +130,11 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
     cy.get("#registrationNumber").should("have.value", "");
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("#placeOfUnloading").type("Place of unloading");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.wait(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -149,14 +147,12 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
-    cy.get("#registrationNumber").type("Registration number", {
-      force: true,
-    });
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#registrationNumber").type("Registration number");
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
     cy.get("#placeOfUnloading").should("have.value", "");
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.wait(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -169,17 +165,14 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
-    cy.get("#registrationNumber").type("Registration number", {
-      force: true,
-    });
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#registrationNumber").type("Registration number");
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
     cy.get("#placeOfUnloading").type(
-      "Place of unloading which is way way way way way way way way way way way way way more than 50 words",
-      { force: true }
+      "Place of unloading which is way way way way way way way way way way way way way more than 50 words"
     );
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.wait(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -192,16 +185,13 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
-    cy.get("#registrationNumber").type("Registration number", { force: true });
+    cy.get("#registrationNumber").type("Registration number");
     cy.get("#freightBillNumber").type(
-      "Freight bill number which is way way way way way way way way way more than 60 words",
-      {
-        force: true,
-      }
+      "Freight bill number which is way way way way way way way way way more than 60 words"
     );
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Freight bill number must not exceed 60 characters$/).should("be.visible");
@@ -213,11 +203,11 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
-    cy.get("#registrationNumber").type("Registartion number", { force: true });
-    cy.get("#freightBillNumber").type("Freight...", { force: true });
+    cy.get("#registrationNumber").type("Registartion number");
+    cy.get("#freightBillNumber").type("Freight...");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains(
@@ -232,11 +222,11 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#nationalityOfVehicle").should("have.value", "");
-    cy.get("#registrationNumber").type("Registration number", { force: true });
+    cy.get("#registrationNumber").type("Registration number");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("#placeOfUnloading").type("Place of unloading");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.wait(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -249,11 +239,11 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
-    cy.get("#registrationNumber").type("Registration number", { force: true });
+    cy.get("#registrationNumber").type("Registration number");
     cy.get("#departureCountry").should("have.value", "");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("#placeOfUnloading").type("Place of unloading");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.wait(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -266,11 +256,11 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
-    cy.get("#registrationNumber").type("Registration number", { force: true });
+    cy.get("#registrationNumber").type("Registration number");
     cy.get("#departureCountry").invoke("val", "Ireland");
     cy.get("#departurePort").should("have.value", "");
-    cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#placeOfUnloading").type("Place of unloading");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.wait(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -283,11 +273,11 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
-    cy.get("#registrationNumber").type("Registration number", { force: true });
+    cy.get("#registrationNumber").type("Registration number");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("#placeOfUnloading").type("Place of unloading");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.wait(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -300,11 +290,11 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
-    cy.get("#registrationNumber").type("Registration number", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill", { force: true });
+    cy.get("#registrationNumber").type("Registration number");
+    cy.get("#freightBillNumber").type("Freight bill");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("[data-testid=save-draft-button").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
@@ -316,18 +306,18 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
     // Fill all fields including date and container
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
-    cy.get("#registrationNumber").type("ABC123", { force: true });
-    cy.get("#freightBillNumber").type("FREIGHT001", { force: true });
+    cy.get("#registrationNumber").type("ABC123");
+    cy.get("#freightBillNumber").type("FREIGHT001");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Calais Port", { force: true });
-    cy.get("#placeOfUnloading").type("Dover Port", { force: true });
-    cy.get("#departureDate").type("15", { force: true });
-    cy.get("#departureDate-month").type("12", { force: true });
-    cy.get("#departureDate-year").type("2025", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("ABCU1234567", { force: true });
+    cy.get("#departurePort").type("Calais Port");
+    cy.get("#placeOfUnloading").type("Dover Port");
+    cy.get("#departureDate").type("15");
+    cy.get("#departureDate-month").type("12");
+    cy.get("#departureDate-year").type("2025");
+    cy.get('[id="containerNumbers.0"]').type("ABCU1234567");
 
     // Save as draft
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
     // Return to the page using CHECK testCaseId (hardcoded saved fixture — immune to double-GET state loss)
@@ -357,16 +347,16 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
     // Fill with invalid container number (would fail validation on save & continue)
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
-    cy.get("#registrationNumber").type("REG456", { force: true });
+    cy.get("#registrationNumber").type("REG456");
     cy.get("#departureCountry").invoke("val", "Belgium");
-    cy.get("#departurePort").type("Antwerp", { force: true });
-    cy.get("#departureDate").type("25", { force: true });
-    cy.get("#departureDate-month").type("11", { force: true });
-    cy.get("#departureDate-year").type("2025", { force: true });
-    cy.get('[id="containerNumbers.0"]').type("INVALID", { force: true }); // Invalid ISO 6346 format
+    cy.get("#departurePort").type("Antwerp");
+    cy.get("#departureDate").type("25");
+    cy.get("#departureDate-month").type("11");
+    cy.get("#departureDate-year").type("2025");
+    cy.get('[id="containerNumbers.0"]').type("INVALID"); // Invalid ISO 6346 format
 
     // Save as draft should accept invalid container
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
     // Return and verify values retained including invalid container using CHECK testCaseId
@@ -388,13 +378,13 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
     // Fill only required fields, leave date empty
     cy.get("#nationalityOfVehicle").invoke("val", "Ireland");
-    cy.get("#registrationNumber").type("NOREG789", { force: true });
+    cy.get("#registrationNumber").type("NOREG789");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Dublin", { force: true });
+    cy.get("#departurePort").type("Dublin");
     // Leave date fields empty
 
     // Save as draft
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
     // Return and verify empty date fields
@@ -409,16 +399,16 @@ describe("Add Transportation Details Truck: Allowed", () => {
       testCaseId: TestCaseId.TruckTransportSave,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("#nationalityOfVehicle").type("Truck nationality", { force: true });
-    cy.get("#registrationNumber").type("Registration number", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill", { force: true });
+    cy.get("#nationalityOfVehicle").type("Truck nationality");
+    cy.get("#registrationNumber").type("Registration number");
+    cy.get("#freightBillNumber").type("Freight bill");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("#departureDate").type("15", { force: true });
-    cy.get("#departureDate-month").type("11", { force: true });
-    cy.get("#departureDate-year").type("2025", { force: true });
-    cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("#departureDate").type("15");
+    cy.get("#departureDate-month").type("11");
+    cy.get("#departureDate-year").type("2025");
+    cy.get("#placeOfUnloading").type("Place of unloading");
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", storageFacilityUrl);
   });
 
@@ -436,19 +426,19 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#remove-container-button-0").should("not.exist");
 
     // Add another container
-    cy.get("#add-container-button").click({ force: true });
+    cy.get("#add-container-button").click();
     cy.get('input[name="containerNumbers.1"]').should("be.visible");
     cy.get("#remove-container-button-0").should("be.visible");
     cy.get("#remove-container-button-0").should("be.visible").should("contain.text", "Remove");
 
     // Fill in container values
-    cy.get('[id="containerNumbers.0"]').type("ABCJ0123456", { force: true });
-    cy.get('[id="containerNumbers.1"]').type("XYZU9876543", { force: true });
+    cy.get('[id="containerNumbers.0"]').type("ABCJ0123456");
+    cy.get('[id="containerNumbers.1"]').type("XYZU9876543");
     cy.get('[id="containerNumbers.0"]').should("exist");
     cy.get('[id="containerNumbers.1"]').should("exist");
 
     // Remove one container
-    cy.get("#remove-container-button-0").click({ force: true });
+    cy.get("#remove-container-button-0").click();
     cy.get('input[name="containerNumbers.1"]').should("not.exist");
 
     // Verify the remaining container still exists
@@ -482,15 +472,15 @@ describe("Add Transportation Details Truck: Invalid year in departure date", () 
       testCaseId: TestCaseId.ArrivalTruckTransportSaveInvalidYearDepartureDate,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("#nationalityOfVehicle").type("France", { force: true });
-    cy.get("#registrationNumber").type("AB12 3CD", { force: true });
+    cy.get("#nationalityOfVehicle").type("France");
+    cy.get("#registrationNumber").type("AB12 3CD");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Calais port", { force: true });
-    cy.get("#placeOfUnloading").type("Dover port", { force: true });
-    cy.get("#departureDate").clear().type("01", { force: true });
-    cy.get("#departureDate-month").clear().type("01", { force: true });
-    cy.get("#departureDate-year").clear().type("0000", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#departurePort").type("Calais port");
+    cy.get("#placeOfUnloading").type("Dover port");
+    cy.get("#departureDate").clear().type("01");
+    cy.get("#departureDate-month").clear().type("01");
+    cy.get("#departureDate-year").clear().type("0000");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.wait(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Departure date must be a real date$/).should("be.visible");

@@ -53,17 +53,17 @@ describe("Add Storage Facility Address", () => {
 
     cy.get("#backToProgress").should("be.visible").should("have.attr", "href", progressUrl);
 
-    cy.get("[data-testid=goToAddAddress-button]").click({ force: true });
+    cy.get("[data-testid=goToAddAddress-button]").click();
     cy.url().should("include", addStorageFacilityUrl);
   });
 
   it("should redirect to progress page", () => {
-    cy.get("#backToProgress").click({ force: true });
+    cy.get("#backToProgress").click();
     cy.url().should("include", "/progress");
   });
 
   it("should save and redirect to what storage facility address page on clicking save and continue", () => {
-    cy.get("[data-testid=goToAddAddress-button]").click({ force: true });
+    cy.get("[data-testid=goToAddAddress-button]").click();
     cy.contains("Arrival date must be a real date").should("be.visible");
     cy.url().should("include", "/add-storage-facility-details");
   });
@@ -87,7 +87,7 @@ describe("Add Storage Facility Address - Complete", () => {
       testCaseId: TestCaseId.SDAddStorageApprovalComplete,
     };
     cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", storageFacilityUrl);
   });
 
@@ -96,7 +96,7 @@ describe("Add Storage Facility Address - Complete", () => {
       testCaseId: TestCaseId.SDAddStorageApprovalComplete,
     };
     cy.visit(addStorageFacilityUrl + `?nextUri=${checkYourInformationUrl}`, { qs: { ...testParams } });
-    cy.get(`[data-testid="save-and-continue"]`).click({ force: true });
+    cy.get(`[data-testid="save-and-continue"]`).click();
     cy.url().should("include", "/check-your-information");
   });
 });
@@ -110,7 +110,7 @@ describe("Add Storage Facility Address - Error", () => {
   });
 
   it("should show facility name validation error", () => {
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "There is a problem");
     cy.contains("a", /^Enter the facility name$/)
       .should("be.visible")
@@ -119,7 +119,7 @@ describe("Add Storage Facility Address - Error", () => {
   });
 
   it("should show address validation error", () => {
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "There is a problem");
     cy.contains("a", /^Enter the address$/)
       .should("be.visible")
@@ -134,7 +134,7 @@ describe("Add Storage Facility Address - Error", () => {
     cy.get('input[name="facilityArrivalDateMonth"]').type("09");
     cy.get('input[name="facilityArrivalDateYear"]').clear();
     cy.get('input[name="facilityArrivalDateYear"]').type("2025");
-    cy.get("[data-testid=goToAddAddress-button]").click({ force: true });
+    cy.get("[data-testid=goToAddAddress-button]").click();
     cy.url().should("include", "/what-storage-facility-address");
   });
 });
@@ -214,7 +214,7 @@ describe("Add Storage Facility page when javascript is disabled", () => {
 
     it("should not show validation errors when clicking on draft", () => {
       cy.wait(5000);
-      cy.get("[data-testid=save-draft-button]").click({ force: true });
+      cy.get("[data-testid=save-draft-button]").click();
       cy.url().should("include", "create-non-manipulation-document/non-manipulation-documents");
     });
   });
@@ -236,7 +236,7 @@ describe("Add Storage Facility Address - Error Both Name and Date", () => {
     cy.get('input[name="facilityArrivalDateYear"]').clear();
     cy.wait(100);
     cy.get('input[name="facilityName"]').clear();
-    cy.get("[data-testid=goToAddAddress-button]").click({ force: true });
+    cy.get("[data-testid=goToAddAddress-button]").click();
 
     cy.url({ timeout: 10000 }).should("include", "/add-storage-facility-details");
     cy.get(".govuk-error-summary", { timeout: 10000 }).should("be.visible");
@@ -331,7 +331,7 @@ describe("Add Storage Facility Details: save as draft retains valid fields", () 
       testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftWithErrors,
     };
     cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
@@ -340,7 +340,7 @@ describe("Add Storage Facility Details: save as draft retains valid fields", () 
       testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftWithArrivalDateError,
     };
     cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
@@ -349,7 +349,7 @@ describe("Add Storage Facility Details: save as draft retains valid fields", () 
       testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftNoErrors,
     };
     cy.visit(addStorageFacilityUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 });

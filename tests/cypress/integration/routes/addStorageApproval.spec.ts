@@ -36,7 +36,7 @@ describe("Add Storage Facility Approval", () => {
   });
 
   it("should redirect to progress page", () => {
-    cy.get("#backToProgress").click({ force: true });
+    cy.get("#backToProgress").click();
     cy.url().should("include", "/progress");
   });
 });
@@ -50,7 +50,7 @@ describe("Add Storage Facility Approval - Complete", () => {
 
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001");
     cy.get("#storageFacilities-facilityStorage").check();
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", storageFacilityUrl);
   });
 
@@ -59,7 +59,7 @@ describe("Add Storage Facility Approval - Complete", () => {
       testCaseId: TestCaseId.SDAddStorageApprovalComplete,
     };
     cy.visit(addStorageApprovalUrl + `?nextUri=${checkYourInformationUrl}`, { qs: { ...testParams } });
-    cy.get(`[data-testid="save-and-continue"]`).click({ force: true });
+    cy.get(`[data-testid="save-and-continue"]`).click();
     cy.url().should("include", "/check-your-information");
   });
 });
@@ -73,7 +73,7 @@ describe("Add Storage Facility Approval - Error (Max Length)", () => {
   });
 
   it("should show approval number max length validation error on save and continue", () => {
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "There is a problem");
     cy.contains("a", /Approval number must not exceed 50 characters$/)
       .should("be.visible")
@@ -94,7 +94,7 @@ describe("Add Storage Facility Approval - Max Length Save as Draft", () => {
     cy.get("#storageFacilities-facilityStorage").check();
 
     // Save as draft should not show validation error despite exceeding max length
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "create-non-manipulation-document/non-manipulation-documents");
 
     // Verify no error summary was shown
@@ -110,7 +110,7 @@ describe("Add Storage Facility Approval - Invalid Characters", () => {
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001@#$");
     cy.get("#storageFacilities-facilityStorage").check();
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "There is a problem");
     cy.contains(
       "a",
@@ -134,7 +134,7 @@ describe("Add Storage Facility Approval - Invalid Characters Save as Draft", () 
     cy.get("#frozen").check();
 
     // Save as draft should not show validation error despite invalid characters
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "create-non-manipulation-document/non-manipulation-documents");
 
     // Verify no error summary was shown
@@ -148,7 +148,7 @@ describe("Add Storage Facility Approval - How product is stored error", () => {
       testCaseId: TestCaseId.SDAddStorageProductStorageError,
     };
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "There is a problem");
     cy.contains("a", /Select how the product was stored$/)
       .should("be.visible")
@@ -170,7 +170,7 @@ describe("Add Storage Facility Approval - Welsh Translations", () => {
     cy.get(".govuk-heading-xl").should("exist");
     cy.get(".govuk-label").contains("Rhif cymeradwyo");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "Mae yna broblem");
     cy.contains("a", /Ni chaiff rhif y gymeradwyaeth fod yn fwy na 50 o gymeriadau$/)
       .should("be.visible")
@@ -185,7 +185,7 @@ describe("Add Storage Facility Approval - Welsh Translations", () => {
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001@#$");
     cy.get("#storageFacilities-facilityStorage").check();
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "Mae yna broblem");
     cy.contains(
       "a",
@@ -207,7 +207,7 @@ describe("Add Storage Facility Approval - Non JavaScript", () => {
     cy.get(".govuk-heading-xl").contains("Add storage facility details");
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001");
     cy.get("#storageFacilities-facilityStorage").check();
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/how-does-the-consignment-leave-the-uk");
   });
 });

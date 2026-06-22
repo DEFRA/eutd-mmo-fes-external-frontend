@@ -14,12 +14,12 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
 
     cy.get("#catches-0-species").then(($el) => {
       if ($el.is("select")) cy.wrap($el).should("be.enabled").select("Bigeye tuna (BET)");
-      else cy.wrap($el).clear({ force: true }).type("Bigeye tuna", { force: true });
+      else cy.wrap($el).clear().type("Bigeye tuna");
     });
     cy.get('input[name="catchCertificateType"][value="non_uk"]').check();
     cy.get("#catches-0-issuingCountry").then(($el) => {
       if ($el.is("select")) cy.wrap($el).should("be.enabled").select("Spain");
-      else cy.wrap($el).clear({ force: true }).type("Spain", { force: true });
+      else cy.wrap($el).clear().type("Spain");
     });
     cy.get('input[name="catchCertificateNumber"]').type("CERT12345");
     cy.get('input[name="totalWeightLanded"]').type("10");
@@ -62,10 +62,10 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
       if ($el.is("select")) {
         cy.wrap($el).should("be.enabled").select("Bigeye tuna (BET)");
       } else if ($el.is("input")) {
-        cy.wrap($el).should("be.enabled").clear({ force: true }).type("Bigeye tuna", { force: true });
+        cy.wrap($el).should("be.enabled").clear().type("Bigeye tuna");
         // if suggestions appear, pick the first one
         cy.get("#catches-0-species__listbox", { timeout: 2000 }).then(($list) => {
-          if ($list.length > 0) cy.get("#catches-0-species__listbox li").first().click({ force: true });
+          if ($list.length > 0) cy.get("#catches-0-species__listbox li").first().click();
         });
       }
     });
