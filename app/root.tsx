@@ -108,6 +108,7 @@ const Template = ({
     const gtagScript = document.createElement("script");
     const gtagExternal = document.createElement("script");
     const clarity = document.createElement("script");
+    const clarityConsent = document.createElement("script");
 
     if (shouldRenderGA(analyticsCookieAccepted)) {
       document.getElementById("gtm-script")?.remove();
@@ -125,7 +126,6 @@ const Template = ({
     })(window, document, "clarity", "script", "${clarityProjectId}");`;
       document.head.appendChild(clarity);
 
-      const clarityConsent = document.createElement("script");
       clarityConsent.id = "clarity-consent";
       clarityConsent.innerHTML = `window.clarity('consentv2', { ad_Storage: "denied", analytics_Storage: "granted" });`;
       document.head.appendChild(clarityConsent);
@@ -195,6 +195,8 @@ const Template = ({
         if (typeof window.clarity === "function") {
           window.clarity("consent", false);
         }
+
+        if (document.head.contains(clarityConsent)) document.head.removeChild(clarityConsent);
         if (document.head.contains(clarity)) document.head.removeChild(clarity);
         if (document.head.contains(gtmScript)) document.head.removeChild(gtmScript);
         if (document.head.contains(gtagScript)) document.head.removeChild(gtagScript);
