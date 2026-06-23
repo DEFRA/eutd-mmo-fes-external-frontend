@@ -192,7 +192,6 @@ const Template = ({
       document.head.appendChild(gtagExternal);
 
       return () => {
-        document.getElementById("clarity-consent")?.remove();
         if (typeof window.clarity === "function") {
           window.clarity("consent", false);
         }
