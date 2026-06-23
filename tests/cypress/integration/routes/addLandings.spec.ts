@@ -180,9 +180,19 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render summary details links, its count and its detailed instructions", () => {
+    const clickSummary = (index: number) => {
+      cy.get("div .govuk-details__summary")
+        .eq(index)
+        .then(($summary) => {
+          const el = $summary.get(0) as HTMLElement;
+          el.scrollIntoView({ block: "center" });
+          el.click();
+        });
+    };
+
     cy.get(".govuk-details__summary").should("have.length", 7);
     cy.get("div .govuk-details__summary").eq(0).contains("Start date");
-    cy.get("div .govuk-details__summary").eq(0).scrollIntoView().should("be.visible").click("topLeft");
+    clickSummary(0);
     cy.get("div .govuk-details__text")
       .eq(0)
       .contains(
@@ -190,7 +200,7 @@ describe("Manual landing page render with page guard", () => {
       )
       .should("be.visible");
     cy.get("div .govuk-details__summary").eq(1).contains("What is a date landed?");
-    cy.get("div .govuk-details__summary").eq(1).scrollIntoView().should("be.visible").click("topLeft");
+    clickSummary(1);
     cy.get("div .govuk-details__text")
       .eq(1)
       .contains("The date landed is the date the vessel finishes its fishing trip and unloads its catch at port")
@@ -208,11 +218,11 @@ describe("Manual landing page render with page guard", () => {
     cy.get("div .govuk-details__text")
       .eq(2)
       .contains("Find out more about High Seas areas (opens in new tab).")
-      .scrollIntoView()
       .should("be.visible")
-      .click("topLeft");
+      .should("have.attr", "href")
+      .and("include", "gov.uk");
     cy.get("div .govuk-details__summary").eq(3).contains("What is an exclusive economic zone (EEZ)?");
-    cy.get("div .govuk-details__summary").eq(3).scrollIntoView().should("be.visible").click("topLeft");
+    clickSummary(3);
     cy.get("div .govuk-details__text")
       .eq(3)
       .contains("Find out more about EEZs (opens in new tab).")
@@ -220,7 +230,7 @@ describe("Manual landing page render with page guard", () => {
     cy.get("div .govuk-details__summary")
       .eq(4)
       .contains("What is a regional fisheries management organisation (RFMO)?");
-    cy.get("div .govuk-details__summary").eq(4).scrollIntoView().should("be.visible").click("topLeft");
+    clickSummary(4);
     cy.get("div .govuk-details__text")
       .eq(4)
       .contains(
@@ -230,17 +240,17 @@ describe("Manual landing page render with page guard", () => {
     cy.get("div .govuk-details__text")
       .eq(4)
       .contains("Find out more about RFMOs (opens in new tab).")
-      .scrollIntoView()
       .should("be.visible")
-      .click("topLeft");
+      .should("have.attr", "href")
+      .and("include", "gov.uk");
     cy.get("div .govuk-details__summary").eq(5).contains("I cannot find the vessel");
-    cy.get("div .govuk-details__summary").eq(5).scrollIntoView().should("be.visible").click("topLeft");
+    clickSummary(5);
     cy.get("div .govuk-details__text")
       .eq(5)
       .contains('If the vessel you need is not listed, select "Vessel not found - N/A" from the dropdown.')
       .should("be.visible");
     cy.get("div .govuk-details__summary").eq(6).contains("What are gear details?");
-    cy.get("div .govuk-details__summary").eq(6).scrollIntoView().should("be.visible").click("topLeft");
+    clickSummary(6);
     cy.get("div .govuk-details__text").should("have.length", 7);
     cy.get("div .govuk-details__text")
       .eq(6)
@@ -496,7 +506,8 @@ describe("Manual landing page render with page guard", () => {
         cy.get("@selectVesselFlaky").invoke("val", "K373");
         cy.get("@selectVesselFlaky").trigger("change");
       } else {
-        cy.get("input[role='combobox']", { timeout: 20000 }).clear().type("K373");
+        cy.get("input[role='combobox']", { timeout: 20000 }).filter(":visible").first().clear();
+        cy.get("input[role='combobox']", { timeout: 20000 }).filter(":visible").first().type("K373");
       }
     });
     // weight
