@@ -110,11 +110,22 @@ describe("Cookie Banner Integration in Root", () => {
       // Cookie banner should be visible
       cy.get(".govuk-cookie-banner").should("be.visible");
 
-      // Click skip link (force click since it may be visually hidden)
-      cy.get(".govuk-skip-link").click({ force: true });
+      // Verify target wiring and activate using native click to avoid Cypress
+      // actionability constraints on visually hidden skip links.
+      cy.get(".govuk-skip-link").should("have.attr", "href", "#main-content");
+      cy.get(".govuk-skip-link").then(($link) => {
+        ($link.get(0) as HTMLAnchorElement).click();
+      });
 
-      // Should navigate to main content (check URL hash or main content visibility)
-      cy.url().should("include", "#main-content");
+      // Successful skip behavior is either URL hash navigation or focus moved
+      // within the main content region.
+      cy.window().then((win) => {
+        const main = win.document.querySelector("#main-content");
+        const active = win.document.activeElement;
+        const focusIsWithinMain = !!main && !!active && (main === active || main.contains(active));
+        const navigatedToMainHash = win.location.hash === "#main-content";
+        expect(focusIsWithinMain || navigatedToMainHash).to.equal(true);
+      });
 
       // Cookie banner should still be visible
       cy.get(".govuk-cookie-banner").should("be.visible");

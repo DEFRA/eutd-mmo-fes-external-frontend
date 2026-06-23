@@ -55,7 +55,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
     cy.get("#nationalityOfVehicle-hint").should("be.visible").should("contain.text", "For example, United Kingdom");
 
-    cy.get("#nationalityOfVehicle").type("United", { force: true });
+    cy.get("#nationalityOfVehicle").type("United");
     cy.get(".autocomplete__menu").should("exist");
   });
 
@@ -117,16 +117,16 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get("#nationalityOfVehicle").type("United Kingdom", { force: true });
-    cy.get("#registrationNumber").type("AB123CD", { force: true });
+    cy.get("#nationalityOfVehicle").type("United Kingdom");
+    cy.get("#registrationNumber").type("AB123CD");
 
-    cy.get('input[name="containerNumbers.0"]').type("FIRST0001111", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("SECOND001111", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("THIRD0001111", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("FIRST0001111");
+    cy.get('[data-testid="add-another-container"]').click();
+    cy.get('input[name="containerNumbers.1"]').type("SECOND001111");
+    cy.get('[data-testid="add-another-container"]').click();
+    cy.get('input[name="containerNumbers.2"]').type("THIRD0001111");
 
-    cy.get('[data-testid="remove-container-1"]').click({ force: true });
+    cy.get('[data-testid="remove-container-1"]').click();
 
     cy.get('input[name="containerNumbers.0"]').should("have.value", "FIRST0001111");
     cy.get('input[name="containerNumbers.1"]').should("have.value", "THIRD0001111");
@@ -139,7 +139,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
 
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/forbidden");
   });
 
@@ -149,10 +149,9 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#registrationNumber").type(
-      "registrationNumberregistrationNumberregistrationNumberregistrationNumberregistrationNumberregistrationNumberregistrationNumber",
-      { force: true }
+      "registrationNumberregistrationNumberregistrationNumberregistrationNumberregistrationNumberregistrationNumberregistrationNumber"
     );
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Registration number must not exceed 50 characters$/).should("be.visible");
@@ -163,8 +162,8 @@ describe("Add Transportation Details Truck: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveAlphanumericTruckRegNumber,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("#registrationNumber").type("registrationNumber..", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#registrationNumber").type("registrationNumber..");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Registration number must only contain letters, numbers, hyphens, and spaces$/).should(
@@ -177,7 +176,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       testCaseId: TestCaseId.TruckTransportErrors,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the nationality of vehicle$/).should("be.visible");
@@ -190,11 +189,11 @@ describe("Add Transportation Details Truck: Allowed", () => {
       testCaseId: TestCaseId.TruckTransportSave,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("#nationalityOfVehicle").type("France", { force: true });
-    cy.get("#registrationNumber").type("Registration", { force: true });
-    cy.get("#departurePlace").type("Hull", { force: true });
-    cy.get("#freightBillNumber").type("AA1234567", { force: true });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("#nationalityOfVehicle").type("France");
+    cy.get("#registrationNumber").type("Registration");
+    cy.get("#departurePlace").type("Hull");
+    cy.get("#freightBillNumber").type("AA1234567");
+    cy.get("[data-testid=save-draft-button").click();
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
 
@@ -203,11 +202,11 @@ describe("Add Transportation Details Truck: Allowed", () => {
       testCaseId: TestCaseId.TruckTransportSave,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("#nationalityOfVehicle").type("France", { force: true });
-    cy.get("#registrationNumber").type("Registration", { force: true });
-    cy.get("#departurePlace").type("Hull", { force: true });
-    cy.get("#freightBillNumber").type("AA1234567", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#nationalityOfVehicle").type("France");
+    cy.get("#registrationNumber").type("Registration");
+    cy.get("#departurePlace").type("Hull");
+    cy.get("#freightBillNumber").type("AA1234567");
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", "/add-additional-transport-documents-truck/0");
   });
 });
@@ -238,7 +237,7 @@ describe("Add Transportation Details Truck: Nationality Field Error State", () =
       testCaseId: TestCaseId.TruckTransportErrors,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
 
     cy.get("#nationalityOfVehicle").parents(".govuk-form-group").should("have.class", "govuk-form-group--error");
@@ -251,10 +250,10 @@ describe("Add Transportation Details Truck: Nationality Field Error State", () =
       testCaseId: TestCaseId.TruckTransportErrors,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
 
-    cy.get("#nationalityOfVehicle").type("United", { force: true });
+    cy.get("#nationalityOfVehicle").type("United");
     cy.get(".autocomplete__menu").should("exist");
   });
 
@@ -275,11 +274,11 @@ describe("Add Transportation Details Truck: Invalid Nationality Validation", () 
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get("#nationalityOfVehicle").type("InvalidCountry123", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#nationalityOfVehicle").type("InvalidCountry123");
+    cy.get("#registrationNumber").type("ABC123");
+    cy.get("#departurePlace").type("Dover");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Backend validation should return error
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -299,11 +298,11 @@ describe("Add Transportation Details Truck: Invalid Nationality Validation", () 
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
     // Type invalid nationality - save as draft should still work
-    cy.get("#nationalityOfVehicle").type("InvalidCountry123", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#nationalityOfVehicle").type("InvalidCountry123");
+    cy.get("#registrationNumber").type("ABC123");
+    cy.get("#departurePlace").type("Dover");
 
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
 
@@ -313,11 +312,11 @@ describe("Add Transportation Details Truck: Invalid Nationality Validation", () 
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get("#nationalityOfVehicle").type("France", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#nationalityOfVehicle").type("France");
+    cy.get("#registrationNumber").type("ABC123");
+    cy.get("#departurePlace").type("Dover");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     cy.url().should("include", "/add-additional-transport-documents-truck/0");
   });
@@ -329,18 +328,17 @@ describe("Add Transportation Details Truck: Invalid Nationality Validation", () 
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
     // First, trigger the error
-    cy.get("#nationalityOfVehicle").type("InvalidCountry", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#nationalityOfVehicle").type("InvalidCountry");
+    cy.get("#registrationNumber").type("ABC123");
+    cy.get("#departurePlace").type("Dover");
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error is shown
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.get("#nationalityOfVehicle").parents(".govuk-form-group").should("have.class", "govuk-form-group--error");
 
     // Now correct the value
-    cy.get("#nationalityOfVehicle").clear({ force: true });
-    cy.get("#nationalityOfVehicle").type("France", { force: true });
+    cy.get("#nationalityOfVehicle").click().type("{selectall}{backspace}France").blur();
 
     // Verify the field value is updated
     cy.get("#nationalityOfVehicle").should("have.value", "France");
@@ -352,11 +350,11 @@ describe("Add Transportation Details Truck: Invalid Nationality Validation", () 
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get("#nationalityOfVehicle").type("XYZ Invalid", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
-    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#nationalityOfVehicle").type("XYZ Invalid");
+    cy.get("#registrationNumber").type("ABC123");
+    cy.get("#departurePlace").type("Dover");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Check for error summary
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -400,11 +398,11 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
     // Add a second field
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    cy.get('[data-testid="add-another-container"]').click();
     cy.get('input[name="containerNumbers.1"]').should("be.visible");
 
     // Remove the second field
-    cy.get('[data-testid="remove-container-1"]').click({ force: true });
+    cy.get('[data-testid="remove-container-1"]').click();
     cy.get('input[name="containerNumbers.1"]').should("not.exist");
   });
 
@@ -423,19 +421,19 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get("#nationalityOfVehicle").type("United Kingdom", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
+    cy.get("#nationalityOfVehicle").type("United Kingdom");
+    cy.get("#registrationNumber").type("ABC123");
 
     // Add and fill container fields
-    cy.get('input[name="containerNumbers.0"]').type("CONT001", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("CONT002", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("CONT003", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("CONT001");
+    cy.get('[data-testid="add-another-container"]').click();
+    cy.get('input[name="containerNumbers.1"]').type("CONT002");
+    cy.get('[data-testid="add-another-container"]').click();
+    cy.get('input[name="containerNumbers.2"]').type("CONT003");
 
-    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#departurePlace").type("Dover");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/add-additional-transport-documents-truck/0");
   });
 
@@ -445,19 +443,19 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get("#nationalityOfVehicle").type("United Kingdom", { force: true });
-    cy.get("#registrationNumber").type("ABC123", { force: true });
+    cy.get("#nationalityOfVehicle").type("United Kingdom");
+    cy.get("#registrationNumber").type("ABC123");
 
     // Add multiple fields but leave some empty
-    cy.get('input[name="containerNumbers.0"]').type("CONT001", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    cy.get('input[name="containerNumbers.0"]').type("CONT001");
+    cy.get('[data-testid="add-another-container"]').click();
     // Leave containerNumbers.1 empty
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.2"]').type("CONT003", { force: true });
+    cy.get('[data-testid="add-another-container"]').click();
+    cy.get('input[name="containerNumbers.2"]').type("CONT003");
 
-    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#departurePlace").type("Dover");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/add-additional-transport-documents-truck/0");
   });
 
@@ -467,17 +465,17 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.get("#nationalityOfVehicle").type("United Kingdom", { force: true });
+    cy.get("#nationalityOfVehicle").type("United Kingdom");
     // Leave registrationNumber empty to trigger validation error
 
     // Add container values
-    cy.get('input[name="containerNumbers.0"]').type("CONT001", { force: true });
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
-    cy.get('input[name="containerNumbers.1"]').type("CONT002", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("CONT001");
+    cy.get('[data-testid="add-another-container"]').click();
+    cy.get('input[name="containerNumbers.1"]').type("CONT002");
 
-    cy.get("#departurePlace").type("Dover", { force: true });
+    cy.get("#departurePlace").type("Dover");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Check error is displayed
     cy.contains("h2", /^There is a problem$/).should("be.visible");

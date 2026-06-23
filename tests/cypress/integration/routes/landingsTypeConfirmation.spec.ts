@@ -14,7 +14,7 @@ describe("Landings confirmation page: user Interface", () => {
     cy.wait(500); // Wait for hydration
     // GOV.UK radios have opacity:0, use check() and verify
     cy.get("#manualOptionEntry").should("exist");
-    cy.get("#manualOptionEntry").check({ force: true });
+    cy.get("#manualOptionEntry").check();
     cy.get("#manualOptionEntry").should("be.checked");
     cy.wait(200);
     cy.get("form").submit();
@@ -72,7 +72,7 @@ describe("Landings confirmation page: Error summary", () => {
     cy.wait(500); // Wait for hydration
     // GOV.UK radios have opacity:0, use check() and verify
     cy.get("#manualOptionEntry").should("exist");
-    cy.get("#manualOptionEntry").check({ force: true });
+    cy.get("#manualOptionEntry").check();
     cy.get("#manualOptionEntry").should("be.checked");
     cy.wait(200);
     cy.get("form").submit();
@@ -80,7 +80,7 @@ describe("Landings confirmation page: Error summary", () => {
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select an option to continue$/).should("be.visible");
@@ -97,7 +97,7 @@ describe("Landings confirmation page: buttons functionality", () => {
     cy.wait(500); // Wait for hydration
     // GOV.UK radios have opacity:0, use check() and verify
     cy.get("#manualOptionEntry").should("exist");
-    cy.get("#manualOptionEntry").check({ force: true });
+    cy.get("#manualOptionEntry").check();
     cy.get("#manualOptionEntry").should("be.checked");
     cy.wait(200);
     cy.get("form").submit();
@@ -107,27 +107,26 @@ describe("Landings confirmation page: buttons functionality", () => {
   it("should be able to navigate to the progress page when the user selects Yes and clicks continue button", () => {
     cy.wait(200); // Allow any client-side state updates
     cy.get("#confirmLandingsTypes").should("exist");
-    cy.get("#confirmLandingsTypes").check({ force: true });
+    cy.get("#confirmLandingsTypes").check();
     cy.get("#confirmLandingsTypes").should("be.checked");
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
     cy.url({ timeout: 10000 }).should("include", progressUrl);
   });
 
   it("should be able to navigate to landings entry page when the user selects No and clicks continue button", () => {
-    // eslint-disable-next-line
     cy.wait(200);
-    cy.get("#landingsTypeNo").check({ force: true });
+    cy.get("#landingsTypeNo").check();
     cy.get("#landingsTypeNo").should("be.checked");
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
     cy.url().should("include", landingsUrl);
   });
 
   it("should be able to navigate to landings entry page when the user clicks cancel button", () => {
     cy.wait(200);
     cy.get("#landingsTypeNo").should("exist");
-    cy.get("#landingsTypeNo").check({ force: true });
+    cy.get("#landingsTypeNo").check();
     cy.get("#landingsTypeNo").should("be.checked");
-    cy.get("[data-testid=cancel]").click({ force: true });
+    cy.get("[data-testid=cancel]").click();
     cy.url({ timeout: 10000 }).should("include", landingsUrl);
   });
 });
@@ -153,7 +152,7 @@ describe("Landings confirmation page: redirect to forbidden page", () => {
     cy.visit(landingsUrl, { qs: { ...testParams } });
     cy.wait(500); // Wait for hydration
     cy.get("#manualOptionEntry").should("exist");
-    cy.get("#manualOptionEntry").check({ force: true });
+    cy.get("#manualOptionEntry").check();
     cy.get("#manualOptionEntry").should("be.checked");
     cy.wait(200);
     cy.get("form").submit();
@@ -161,7 +160,7 @@ describe("Landings confirmation page: redirect to forbidden page", () => {
   });
 
   it("should redirect to the forbidden page when unauthorised is true", () => {
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
 
     cy.url().should("include", "/forbidden");
   });

@@ -10,11 +10,11 @@ describe("SD: you-have-added-product page", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.get(".govuk-heading-xl").contains("You have added 2 products to this consignment");
 
-    cy.contains("button", "Remove").click({ force: true });
+    cy.contains("button", "Remove").click();
 
     cy.get("#errorIsland").should("not.exist");
 
-    cy.contains("button", "Save as draft").click({ force: true });
+    cy.contains("button", "Save as draft").click();
     cy.url().should("include", "/non-manipulation-documents");
   });
 
@@ -51,7 +51,7 @@ describe("SD: you-have-added-product page", () => {
     cy.get(".govuk-details__summary").should("have.length", 1);
 
     cy.get("div .govuk-details__summary").eq(0).contains("Why add another product?");
-    cy.get("div .govuk-details__summary").eq(0).click({ force: true });
+    cy.get("div .govuk-details__summary").eq(0).click();
     cy.get("div .govuk-details__text")
       .contains(
         "You may need to add another product if your UK entry document covers multiple species or product types."
@@ -65,7 +65,7 @@ describe("SD: you-have-added-product page", () => {
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.get(".govuk-heading-xl").contains("You have added 2 products to this consignment");
-    cy.contains("button", "Remove").click({ force: true });
+    cy.contains("button", "Remove").click();
   });
 
   it("Edit a product", () => {
@@ -74,7 +74,7 @@ describe("SD: you-have-added-product page", () => {
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.get(".govuk-heading-xl").contains("You have added 2 products to this consignment");
-    cy.contains("button", "Edit").click({ force: true });
+    cy.contains("button", "Edit").click();
     cy.url().should(
       "eq",
       "http://localhost:3000/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/0?backThroughProducts=true"
@@ -88,10 +88,10 @@ describe("SD: you-have-added-product page", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.wait(500);
     cy.get('[type="radio"]').first().should("exist");
-    cy.get('[type="radio"]').first().check({ force: true });
+    cy.get('[type="radio"]').first().check();
     cy.get('[type="radio"]').first().should("be.checked");
     cy.wait(200);
-    cy.contains("button", "Save and continue").click({ force: true });
+    cy.contains("button", "Save and continue").click();
     cy.url({ timeout: 10000 }).should("include", "/add-product-to-this-consignment");
   });
 
@@ -104,7 +104,7 @@ describe("SD: you-have-added-product page", () => {
       "eq",
       "You have added 1 product to this consignment - Create a UK non-manipulation document - GOV.UK"
     );
-    cy.contains("button", "Save and continue").click({ force: true });
+    cy.contains("button", "Save and continue").click();
     cy.url().should("include", "/how-does-the-consignment-arrive-to-the-uk");
   });
 
@@ -115,7 +115,7 @@ describe("SD: you-have-added-product page", () => {
 
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
-    cy.contains("button", "Save and continue").click({ force: true });
+    cy.contains("button", "Save and continue").click();
   });
 
   // Error handling coverage tests
@@ -160,7 +160,7 @@ describe("SD: you-have-added-product page", () => {
       cy.visit(sdPageUrl, { qs: { ...testParams } });
 
       // Submit to trigger errors
-      cy.contains("button", "Save and continue").click({ force: true });
+      cy.contains("button", "Save and continue").click();
 
       cy.wait(1000);
 
@@ -403,7 +403,7 @@ describe("SD: you-have-added-product page", () => {
       cy.visit(`${sdPageUrl}?productIndex=${productIndex}`, { qs: { ...testParams } });
 
       // Click the back link
-      cy.contains("a", /^Back$/).click({ force: true });
+      cy.contains("a", /^Back$/).click();
 
       // Should navigate to the correct product page
       cy.url().should(
@@ -419,13 +419,13 @@ describe("SD: you-have-added-product page", () => {
 
       cy.visit(`${sdPageUrl}?productIndex=1`, { qs: { ...testParams } });
 
-      cy.contains("a", /^Back$/).click({ force: true });
+      cy.contains("a", /^Back$/).click();
       cy.url().should(
         "include",
         "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/1?backThroughProducts=true"
       );
 
-      cy.contains("a", /^Back$/).click({ force: true });
+      cy.contains("a", /^Back$/).click();
       cy.url().should(
         "include",
         "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-product-to-this-consignment/0?backThroughProducts=true"
@@ -606,7 +606,7 @@ describe("SD: you-have-added-product page", () => {
       cy.get("#addAnotherCatchNo").should("not.be.checked");
       cy.get("#addAnotherProduct").should("not.be.checked");
       cy.wait(200);
-      cy.contains("button", "Save and continue").click({ force: true });
+      cy.contains("button", "Save and continue").click();
       cy.get("body").then(($body) => {
         if ($body.find("#errorIsland").length > 0) {
           // Verify error summary is rendered
@@ -627,7 +627,7 @@ describe("SD: you-have-added-product page", () => {
       cy.get("#addAnotherCatchNo").should("not.be.checked");
       cy.get("#addAnotherProduct").should("not.be.checked");
       cy.wait(200);
-      cy.contains("button", "Save and continue").click({ force: true });
+      cy.contains("button", "Save and continue").click();
       cy.get("body").then(($body) => {
         if ($body.find("#errorIsland").length > 0) {
           // Verify error summary is rendered
@@ -700,7 +700,7 @@ describe("SD: you-have-added-product page", () => {
       cy.get("#you-added-product-details").should("contain", "Why add another product?");
 
       // Click to expand and verify content
-      cy.get("#you-added-product-details").click({ force: true });
+      cy.get("#you-added-product-details").click();
       cy.get(".govuk-details__text").should("be.visible");
       cy.get(".govuk-details__text").should(
         "contain",

@@ -249,7 +249,7 @@ describe("Processing Statement Landing page: create a new document", () => {
     };
     cy.visit(processingStatementLandingUrl, { qs: { ...testParams } });
 
-    cy.get("#create-export-document").click({ force: true });
+    cy.get("#create-export-document").click();
     cy.url().should("include", "/create-processing-statement/GBR-2022-PS-0123456789/progress");
   });
 
@@ -259,7 +259,7 @@ describe("Processing Statement Landing page: create a new document", () => {
     };
     cy.visit(processingStatementLandingUrl, { qs: { ...testParams } });
 
-    cy.get("#create-export-document").click({ force: true });
+    cy.get("#create-export-document").click();
     cy.url().should("include", "/forbidden");
   });
 });

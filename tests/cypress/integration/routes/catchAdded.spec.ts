@@ -21,7 +21,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(progressUrl, { qs: { ...testParams } });
-    cy.findByRole("link", { name: "Processed product details" }).click({ force: true });
+    cy.findByRole("link", { name: "Processed product details" }).click();
     cy.url().should("include", "/add-consignment-details");
   });
 
@@ -31,7 +31,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(progressUrl, { qs: { ...testParams } });
-    cy.findByRole("link", { name: "Processed product details" }).click({ force: true });
+    cy.findByRole("link", { name: "Processed product details" }).click();
     cy.url().should("include", "/catch-added");
 
     cy.contains("a", /^Back$/)
@@ -52,7 +52,7 @@ describe("PS: Catch added", () => {
     );
 
     cy.get("a[id^=change-GBR-2023-PS-2305703F5-012345678]").should("have.length", 3);
-    cy.contains("button", "Save and continue").click({ force: true });
+    cy.contains("button", "Save and continue").click();
     cy.url().should("include", "/add-processing-plant-details");
   });
 
@@ -67,7 +67,7 @@ describe("PS: Catch added", () => {
       "You have added 1 processed products to this consignment - Create a UK processing statement - GOV.UK"
     );
 
-    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").eq(0).click({ force: true });
+    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").eq(0).click();
     cy.url().should("include", "create-processing-statement");
     cy.url().should("include", "add-consignment-details");
   });
@@ -83,7 +83,7 @@ describe("PS: Catch added", () => {
       "You have added 1 processed product to this consignment - Create a UK processing statement - GOV.UK"
     );
 
-    cy.contains("button", "Save and continue").click({ force: true });
+    cy.contains("button", "Save and continue").click();
     cy.url().should("include", "/add-processing-plant-details");
     cy.url().should("not.include", "/add-catch-details");
   });
@@ -96,9 +96,9 @@ describe("PS: Catch added", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.wait(500); // Wait for hydration
     cy.get('[type="radio"]').first().should("exist");
-    cy.get('[type="radio"]').first().check({ force: true });
+    cy.get('[type="radio"]').first().check();
     cy.wait(200); // Allow React to process the state change
-    cy.contains("button", "Save and continue").click({ force: true });
+    cy.contains("button", "Save and continue").click();
     cy.url({ timeout: 10000 }).should("include", "/add-consignment-details");
   });
 
@@ -108,7 +108,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.contains("button", "Save and continue").click({ force: true });
+    cy.contains("button", "Save and continue").click();
     cy.get("#errorIsland").should("exist");
     cy.url().should("include", "/catch-added");
   });
@@ -176,7 +176,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").first().click({ force: true });
+    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").first().click();
     cy.url().should("include", "add-consignment-details");
   });
 
@@ -823,7 +823,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get(".govuk-pagination__link").contains("2").click({ force: true });
+    cy.get(".govuk-pagination__link").contains("2").click();
     cy.get("tbody tr").should("have.length", 7);
     cy.get('td[id$="-productDescription"]').should("exist");
     cy.get(".govuk-pagination__item--current").should("contain", "2");
@@ -849,7 +849,7 @@ describe("PS: Catch added - Pagination", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get(".govuk-pagination__link").contains("2").click();
-    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-987654321']").first().click({ force: true });
+    cy.get("[data-testid='change-GBR-2023-PS-2305703F5-987654321']").first().click();
     cy.url().should("include", "/add-consignment-details");
   });
 
@@ -1207,7 +1207,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     cy.url().should("include", "catch-added");
 
     // Click Save and Continue to navigate away
-    cy.contains("button", "Save and continue").click({ force: true });
+    cy.contains("button", "Save and continue").click();
     cy.url().should("include", "/add-processing-plant-details");
 
     // Navigate back to the catch-added page

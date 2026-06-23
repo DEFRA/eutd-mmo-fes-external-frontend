@@ -65,7 +65,7 @@ describe("What Export Destination page: UI", () => {
     cy.get("#pointOfDestination").type(new Array(102).join("A"));
 
     // Click save as draft
-    cy.get('[data-testid="save-draft-button"]').should("be.visible").click({ force: true });
+    cy.get('[data-testid="save-draft-button"]').should("be.visible").click();
 
     // Should redirect to dashboard without showing errors and without saving invalid data
     cy.url().should("include", "/create-processing-statement/processing-statements");

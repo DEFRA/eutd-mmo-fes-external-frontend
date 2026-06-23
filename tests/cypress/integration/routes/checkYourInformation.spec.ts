@@ -455,7 +455,7 @@ describe("Check Your Information (Summary) page: ManualLanding CC", () => {
       .should("be.visible")
       .should("have.attr", "href", `${documentUrl}/progress`);
     cy.get("[data-testid='change-0-vessel-label']").should("be.visible");
-    cy.get("[data-testid='change-0-vessel-label']").click({ force: true });
+    cy.get("[data-testid='change-0-vessel-label']").click();
     cy.url().should("include", "/add-landings");
   });
 
@@ -562,7 +562,7 @@ describe("Check Your Information (Summary) page: Validation errors for species",
   });
 
   it("should click on accept and create catch certificate", () => {
-    cy.get("[data-testid=create-cc-button]").click({ force: true });
+    cy.get("[data-testid=create-cc-button]").click();
     cy.contains(
       ".govuk-notification-banner__heading",
       "There was an error in processing. Please resubmit. If the problem persists, contact support on 0330 159 1989."
@@ -611,7 +611,7 @@ describe("Check Your Information (Summary) page: Validation errors CC", () => {
   });
 
   it("should click on accept and create catch certificate", () => {
-    cy.get("[data-testid=create-cc-button]").click({ force: true });
+    cy.get("[data-testid=create-cc-button]").click();
     cy.contains(
       ".govuk-notification-banner__heading",
       "There was an error in processing. Please resubmit. If the problem persists, contact support on 0330 159 1989."
@@ -628,7 +628,7 @@ describe("Check Your Information (Summary) page: Validation success CC", () => {
   });
 
   it("should click on accept and create catch certificate", () => {
-    cy.get("[data-testid=create-cc-button]").click({ force: true });
+    cy.get("[data-testid=create-cc-button]").click();
     cy.url().should("include", "catch-certificate-created");
   });
 });
@@ -642,7 +642,7 @@ describe("Check Your Information (Summary) page: offline validation set to true"
   });
 
   it("should click on accept and create catch certificate", () => {
-    cy.get("[data-testid=create-cc-button]").click({ force: true });
+    cy.get("[data-testid=create-cc-button]").click();
     cy.url().should("include", "catch-certificate-pending");
   });
 });
@@ -656,7 +656,7 @@ describe("Check Your Information (Summary) page: invalid catch certificate", () 
   });
 
   it("should click on accept and create catch certificate and redirect to add-landings", () => {
-    cy.get("[data-testid=create-cc-button]").click({ force: true });
+    cy.get("[data-testid=create-cc-button]").click();
     cy.url().should("include", "add-landings");
   });
 });
@@ -670,7 +670,7 @@ describe("Check Your Information (Summary) page: invalid catch certificate with 
   });
 
   it("should click on accept and create catch certificate and redirect to direct-landing", () => {
-    cy.get("[data-testid=create-cc-button]").click({ force: true });
+    cy.get("[data-testid=create-cc-button]").click();
     cy.url().should("include", "direct-landing");
   });
 });
@@ -684,7 +684,7 @@ describe("Check Your Information (Summary) page: catch certificate is LOCKED", (
   });
 
   it("should click on accept and create catch certificate and redirect to catch-certificates", () => {
-    cy.get("[data-testid=create-cc-button]").click({ force: true });
+    cy.get("[data-testid=create-cc-button]").click();
     cy.url().should("include", "catch-certificates");
   });
 });
@@ -1308,7 +1308,7 @@ describe("CC - scenario 2 - Change transport mode", () => {
     });
 
     cy.log("STEP #8 - Change the mode to Plane using cy.check()");
-    cy.get('input[name="vehicle"][value="plane"]').check({ force: true });
+    cy.get('input[name="vehicle"][value="plane"]').check();
 
     cy.log("STEP #9 - Verify plane is selected");
     cy.get('input[name="vehicle"][value="plane"]').should("be.checked");
@@ -1430,9 +1430,9 @@ describe("NMD - scenario 4 - Change arrival transport mode", () => {
     });
 
     cy.log("STEP #6 - Using .check() to select and verify plane radio button");
-    // Use .check({ force: true }) to actively check the radio button
+    // Use .check() to actively check the radio button
     // This handles GOVUK's opacity: 0 styling and form resets from data fetch
-    cy.get('input[name="vehicle"][value="plane"]').check({ force: true });
+    cy.get('input[name="vehicle"][value="plane"]').check();
 
     cy.log("STEP #7 - Verifying plane is selected");
     // Verify plane is selected
@@ -1553,7 +1553,7 @@ describe("NMD - scenario 5 - Change departure transport mode - no change scenari
 
     cy.log("STEP #6 - Ensure containerVessel is checked using .check()");
     // Use .check() to ensure it's checked, even if it should already be pre-filled
-    cy.get('input[name="vehicle"][value="containerVessel"]').check({ force: true });
+    cy.get('input[name="vehicle"][value="containerVessel"]').check();
 
     // Verify it's now checked
     cy.get('input[name="vehicle"][value="containerVessel"]').should("be.checked");
@@ -1601,7 +1601,7 @@ describe("NMD - scenario 6 - Change departure transport mode", () => {
     cy.wait(200);
 
     // Change the mode to Plane using cy.check()
-    cy.get('input[name="vehicle"][value="plane"]').check({ force: true });
+    cy.get('input[name="vehicle"][value="plane"]').check();
 
     // Verify plane is selected
     cy.get('input[name="vehicle"][value="plane"]').should("be.checked");

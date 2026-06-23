@@ -13,16 +13,16 @@ describe("Storage facility back link after arrival transport save", () => {
     cy.visit(trainArrivalPageUrl, { qs: { ...testParams } });
 
     // Fill mandatory fields
-    cy.get("#railwayBillNumber").type("AB12345C", { force: true });
+    cy.get("#railwayBillNumber").type("AB12345C");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Calais port", { force: true });
-    cy.get("#placeOfUnloading").type("Dover", { force: true });
-    cy.get("#departureDate").type("25", { force: true });
-    cy.get("#departureDate-month").type("07", { force: true });
-    cy.get("#departureDate-year").type("2025", { force: true });
+    cy.get("#departurePort").type("Calais port");
+    cy.get("#placeOfUnloading").type("Dover");
+    cy.get("#departureDate").type("25");
+    cy.get("#departureDate-month").type("07");
+    cy.get("#departureDate-year").type("2025");
 
     // Submit
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Confirm URL includes storage facility and arrivalVehicle query param
     cy.url().should("include", storageFacilityUrl);

@@ -91,7 +91,7 @@ describe("Add Storage Facility Details: validation errors", () => {
     };
 
     cy.visit(pagePath, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
   });
 
@@ -101,7 +101,7 @@ describe("Add Storage Facility Details: validation errors", () => {
     };
 
     cy.visit(pagePath, { qs: { ...testParams } });
-    cy.get("[data-testid=goToAddAddress-button]").click({ force: true });
+    cy.get("[data-testid=goToAddAddress-button]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
   });
 });
@@ -113,7 +113,7 @@ describe("Add Storage Facility Details: save as draft retains valid fields", () 
     };
 
     cy.visit(pagePath, { qs: { ...testParams } });
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
@@ -123,7 +123,7 @@ describe("Add Storage Facility Details: save as draft retains valid fields", () 
     };
 
     cy.visit(pagePath, { qs: { ...testParams } });
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 });

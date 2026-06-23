@@ -48,8 +48,8 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
 
     cy.visit(howDoesTheConsignmentArriveToUkUrl, { qs: { ...testParams } });
 
-    cy.get("#vehicle").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#vehicle").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/add-arrival-transportation-details-truck");
   });
@@ -61,8 +61,8 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
 
     cy.visit(howDoesTheConsignmentArriveToUkUrl, { qs: { ...testParams } });
 
-    cy.get("#plane").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#plane").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/add-arrival-transportation-details-plane");
   });
@@ -74,8 +74,8 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
 
     cy.visit(howDoesTheConsignmentArriveToUkUrl, { qs: { ...testParams } });
 
-    cy.get("#train").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#train").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/add-arrival-transportation-details-train");
   });
@@ -87,8 +87,8 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
 
     cy.visit(howDoesTheConsignmentArriveToUkUrl, { qs: { ...testParams } });
 
-    cy.get("#containerVessel").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#containerVessel").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/add-arrival-transportation-details-container-vessel");
   });
@@ -99,8 +99,8 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
     };
 
     cy.visit(howDoesTheConsignmentArriveToUkUrl, { qs: { ...testParams } });
-    cy.get("#train").click({ force: true });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("#train").click();
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
@@ -111,7 +111,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
     };
 
     cy.visit(howDoesTheConsignmentArriveToUkUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
@@ -122,7 +122,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
     };
 
     cy.visit(howDoesTheConsignmentArriveToUkUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select how the consignment arrives to the UK$/).should("be.visible");

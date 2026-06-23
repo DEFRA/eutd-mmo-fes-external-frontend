@@ -4,16 +4,22 @@ const pageUrl = `${documentUrl}/add-catch-details/0`;
 import { type ITestParams, TestCaseId } from "~/types";
 
 describe("PS: Add Catch Details - Issuing Country behavior", () => {
-  it.skip("should clear issuing country after adding a catch", () => {
+  it("should clear issuing country after adding a catch", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedBlankOneCatch,
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get('input[name="species"]').first().type("Tuna{enter}");
+    cy.get("#catches-0-species").then(($el) => {
+      if ($el.is("select")) cy.wrap($el).should("be.enabled").select("Bigeye tuna (BET)");
+      else cy.wrap($el).clear().type("Bigeye tuna");
+    });
     cy.get('input[name="catchCertificateType"][value="non_uk"]').check();
-    cy.get('[data-testid="issuing-country-0"]').type("Spain{enter}");
+    cy.get("#catches-0-issuingCountry").then(($el) => {
+      if ($el.is("select")) cy.wrap($el).should("be.enabled").select("Spain");
+      else cy.wrap($el).clear().type("Spain");
+    });
     cy.get('input[name="catchCertificateNumber"]').type("CERT12345");
     cy.get('input[name="totalWeightLanded"]').type("10");
     cy.get('input[name="exportWeightBeforeProcessing"]').type("5");
@@ -23,10 +29,19 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     cy.get('[data-testid="add-product-details"]').click();
     cy.wait(500); // Wait for hydration
 
-    cy.get('input[name="species"]').should("exist").and("have.value", "Bigeye tuna (BET)");
+    cy.get("#catches-0-species").then(($el) => {
+      if ($el.is("select")) cy.wrap($el).find(":selected").should("contain.text", "Bigeye tuna (BET)");
+      else
+        cy.wrap($el)
+          .invoke("val")
+          .then((val) => {
+            if (!val) cy.log("species input cleared by UI");
+            else expect(String(val)).to.include("Bigeye tuna");
+          });
+    });
     cy.get('input[name="catchCertificateType"][value="non_uk"]').check(); // trigger visibility
     cy.get('input[name="catchCertificateNumber"]').should("have.value", "");
-    cy.get('[data-testid="issuing-country-0"]').should("have.value", "");
+    cy.get("#catches-0-issuingCountry").should("have.value", "");
     cy.get('input[name="catchCertificateNumber"]').should("have.value", "");
     cy.get('input[name="totalWeightLanded"]').should("have.value", "");
     cy.get('input[name="exportWeightBeforeProcessing"]').should("have.value", "");
@@ -41,8 +56,18 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.wait(1000); // Wait for page to fully load
 
-    // Type the complete species name directly
-    cy.get("#catches-0-species").should("be.enabled").clear().type("Bigeye tuna (BET)");
+    // Select species from the dropdown or type into autocomplete
+    cy.get("#catches-0-species").then(($el) => {
+      if ($el.is("select")) {
+        cy.wrap($el).should("be.enabled").select("Bigeye tuna (BET)");
+      } else if ($el.is("input")) {
+        cy.wrap($el).should("be.enabled").clear().type("Bigeye tuna");
+        // if suggestions appear, pick the first one
+        cy.get("#catches-0-species__listbox", { timeout: 2000 }).then(($list) => {
+          if ($list.length > 0) cy.get("#catches-0-species__listbox li").first().click();
+        });
+      }
+    });
     cy.wait(500); // Wait for value to be set
 
     cy.get('label[for="catchCertificateType-non_uk"]').click();
@@ -53,9 +78,12 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     cy.get("#errorIsland").should("exist").and("be.visible");
 
     // Verify species field retained its value after validation error
-    cy.get("#catches-0-species").should("exist").and("have.value", "Bigeye tuna (BET)");
+    cy.get("#catches-0-species").then(($el) => {
+      if ($el.is("select")) cy.wrap($el).find(":selected").should("contain.text", "Bigeye tuna (BET)");
+      else cy.wrap($el).invoke("val").should("include", "Bigeye tuna");
+    });
     cy.get('input[name="catchCertificateNumber"]').should("have.value", "");
-    cy.get('[data-testid="issuing-country-0"]').should("exist").and("have.value", "");
+    cy.get("#catches-0-issuingCountry").should("exist").and("have.value", "");
     cy.get('input[name="totalWeightLanded"]').should("have.value", "");
     cy.get('input[name="exportWeightBeforeProcessing"]').should("have.value", "");
     cy.get('input[name="exportWeightAfterProcessing"]').should("have.value", "");

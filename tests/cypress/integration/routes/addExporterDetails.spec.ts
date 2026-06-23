@@ -29,7 +29,7 @@ describe("Add exporter details page", () => {
 
   it("should click on change button and navigate to what exporter address page", () => {
     cy.get("[data-testid='change-button'] .govuk-visually-hidden").should("contain", "company address");
-    cy.get("[data-testid='change-button']").click({ force: true });
+    cy.get("[data-testid='change-button']").click();
     cy.url().should("include", "/what-exporters-address");
   });
 });
@@ -63,7 +63,7 @@ describe("Add exporter details on save with idm", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/what-are-you-exporting");
   });
 });
@@ -79,7 +79,7 @@ describe("Add exporter details on save for manual entry", () => {
   });
 
   it("should trigger submit and navigate to what are you exporting page", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/what-are-you-exporting");
   });
 });
@@ -95,7 +95,7 @@ describe("Add exporter details on save for upload entry", () => {
   });
 
   it("should trigger submit and navigate to upload file page", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/upload-file");
   });
 });
@@ -111,7 +111,7 @@ describe("Add exporter details on save for direct landing", () => {
   });
 
   it("should trigger submit and naviagate to what are you exporting page.", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/what-are-you-exporting");
   });
 });
@@ -127,7 +127,7 @@ describe("Add exporter details on save as draft clicking", () => {
   });
 
   it("should click on save as draft and should navigate to catch certificates page", () => {
-    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "/create-catch-certificate/catch-certificate");
   });
 });
@@ -143,7 +143,7 @@ describe("Add exporter details: page guard", () => {
   });
 
   it("should trigger submit and navigate to forbidden page", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/forbidden");
   });
 });
@@ -173,17 +173,17 @@ describe("Add exporter details: with errors", () => {
   });
 
   it("should display error summary when validation fails", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").should("be.visible");
   });
 
   it("should display error messages with error styling", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.get(".govuk-form-group--error").should("exist");
   });
 
   it("should scroll to error island when errors are present", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").should("be.visible");
   });
 });
@@ -200,21 +200,21 @@ describe("Add exporter details: mock error on load (useEffect trigger)", () => {
 
   it("should trigger useEffect and scroll to error when form submission fails", () => {
     // Submit form which returns 400 error
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     // Error should appear and useEffect should have scrolled to it
     cy.get("#error-summary-title").should("be.visible");
   });
 
   it("should trigger useEffect scroll on error response from form submission", () => {
     // Submit form to trigger error
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     // Verify page has scrolled to error (error-summary-title should be visible)
     cy.get("#error-summary-title").should("be.visible");
   });
 
   it("should display error styling on fields when form submission returns errors", () => {
     // Submit form to get error response
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     // Error styling should be applied from useEffect handling
     cy.get(".govuk-form-group--error").should("exist");
   });
@@ -288,7 +288,7 @@ describe("Add exporter details: branch coverage - error display", () => {
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     // Verify error summary is displayed
     cy.get("#error-summary-title").should("be.visible");
   });
@@ -512,7 +512,7 @@ describe("Add exporter details: branch coverage - form field error states", () =
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     // Verify error state is applied
     cy.get(".govuk-form-group--error").should("be.visible");
   });
@@ -526,7 +526,7 @@ describe("Add exporter details: branch coverage - conditional rendering branches
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     // Trigger error path
     cy.get("#error-summary-title").should("be.visible");
     // Verify error summary contains error messages
@@ -540,7 +540,7 @@ describe("Add exporter details: branch coverage - conditional rendering branches
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
 
     // Get the first error link
     cy.get(".govuk-error-summary__list a")
@@ -580,7 +580,7 @@ describe("Add exporter details: branch coverage - conditional rendering branches
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     // Check error class applied when error exists
     cy.get("#exporterCompanyName").should("have.class", "govuk-input--error");
   });
@@ -616,7 +616,7 @@ describe("Add exporter details: branch coverage - conditional rendering branches
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     // Verify visually hidden error text exists
     cy.get(".govuk-visually-hidden").should("be.visible");
   });
@@ -679,7 +679,7 @@ describe("Add exporter details: errorsTransformed?.exporterFullName not empty", 
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     // Submit form to trigger errors from server
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     // This covers line 98: isEmpty(errorsTransformed?.exporterFullName) = FALSE
     // So the input gets: "govuk-input govuk-input--error"
     cy.get("#exporterFullName").should("have.class", "govuk-input--error");
@@ -693,7 +693,7 @@ describe("Add exporter details: errorsTransformed?.exporterFullName not empty", 
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     // Submit to trigger error
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     // Verify error styling and message are applied
     cy.get("#exporterFullName").closest(".govuk-form-group--error").should("exist");
     cy.get(".govuk-error-message").should("be.visible");
@@ -757,7 +757,7 @@ describe("FI0-679: Add exporter details - Full name validation", () => {
     cy.get("#exporterFullName").clear();
     cy.get("#exporterFullName").invoke("val", longName);
     cy.get("#exporterFullName").trigger("input");
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
 
     // Should display error
     cy.get("#error-summary-title").should("be.visible");
@@ -775,7 +775,7 @@ describe("FI0-679: Add exporter details - Full name validation", () => {
     cy.get("#exporterFullName").clear();
     cy.get("#exporterFullName").invoke("val", "John@Doe#123");
     cy.get("#exporterFullName").trigger("input");
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
 
     // Should display error
     cy.get("#error-summary-title").should("be.visible");
@@ -792,7 +792,7 @@ describe("FI0-679: Add exporter details - Full name validation", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("#exporterFullName").clear();
     cy.get("#exporterFullName").type("Mary O'Connor Jr.");
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
 
     // Should navigate successfully (no validation error)
     cy.url().should("include", "/what-are-you-exporting");
@@ -814,7 +814,7 @@ describe("FI0-679: Add exporter details - Company name validation", () => {
     }
     cy.get("#exporterCompanyName").clear();
     cy.get("#exporterCompanyName").type(longCompanyName);
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
 
     // Should display error
     cy.get("#error-summary-title").should("be.visible");
@@ -828,7 +828,7 @@ describe("FI0-679: Add exporter details - Company name validation", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("#exporterCompanyName").clear();
     cy.get("#exporterCompanyName").type("Bob & Co!");
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
 
     // Should display error
     cy.get("#error-summary-title").should("be.visible");
@@ -845,7 +845,7 @@ describe("FI0-679: Add exporter details - Company name validation", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("#exporterCompanyName").clear();
     cy.get("#exporterCompanyName").type("O'Reilly's Co. (UK) Ltd [2024]");
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
 
     // Should navigate successfully (no validation error)
     cy.url().should("include", "/what-are-you-exporting");
@@ -978,7 +978,7 @@ describe("FI0-10908: Add exporter details - Emoji and unsupported character prev
       };
       cy.visit(pageUrl, { qs: { ...testParams } });
 
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       cy.get("#error-summary-title").should("be.visible");
       cy.get(".govuk-error-summary__list").should("contain", "Please only use letters and numbers");
@@ -992,7 +992,7 @@ describe("FI0-10908: Add exporter details - Emoji and unsupported character prev
       };
       cy.visit(pageUrl, { qs: { ...testParams } });
 
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       cy.get("#exporterFullName").closest(".govuk-form-group--error").should("exist");
     });
@@ -1005,7 +1005,7 @@ describe("FI0-10908: Add exporter details - Emoji and unsupported character prev
       };
       cy.visit(pageUrl, { qs: { ...testParams } });
 
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       cy.get("#error-summary-title").should("be.visible");
       cy.get(".govuk-error-summary__list").should("contain", "Please only use letters and numbers");
@@ -1019,7 +1019,7 @@ describe("FI0-10908: Add exporter details - Emoji and unsupported character prev
       };
       cy.visit(pageUrl, { qs: { ...testParams } });
 
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       cy.get("#exporterCompanyName").closest(".govuk-form-group--error").should("exist");
     });
@@ -1034,7 +1034,7 @@ describe("FI0-10908: Add exporter details - Emoji and unsupported character prev
 
       cy.get("#exporterFullName").clear();
       cy.get("#exporterFullName").type("Mary O'Connor Jr.");
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       cy.url().should("include", "/what-are-you-exporting");
     });
@@ -1047,7 +1047,7 @@ describe("FI0-10908: Add exporter details - Emoji and unsupported character prev
 
       cy.get("#exporterCompanyName").clear();
       cy.get("#exporterCompanyName").type("O'Reilly's Co. (UK) Ltd");
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       cy.url().should("include", "/what-are-you-exporting");
     });

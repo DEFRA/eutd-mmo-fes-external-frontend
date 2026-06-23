@@ -54,8 +54,8 @@ describe("DoYouHaveARoadTransportDocument", () => {
     // .should("be.visible") does not seem to do the job
     cy.wait(500);
 
-    cy.get('input[type="radio"][value="true"]').check({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get('input[type="radio"][value="true"]').check();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/do-you-have-additional-transport-types");
   });
@@ -71,7 +71,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.wait(500);
 
     cy.get('input[type="radio"][value="false"]').check();
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/add-transportation-details-truck/0");
   });
@@ -88,7 +88,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
 
     cy.get("form input[type=hidden][name=csrf]").should("exist").invoke("val", "abc123");
     cy.get('input[type="radio"][value="false"]').check();
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
   });
 
   it("should redirect user to certificate summary page when saved as draft", () => {
@@ -101,7 +101,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     // .should("be.visible") does not seem to do the job
     cy.wait(500);
 
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
@@ -122,7 +122,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     };
 
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
   });

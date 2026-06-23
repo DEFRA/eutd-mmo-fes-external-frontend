@@ -36,7 +36,7 @@ describe("Add Health Certificate Details: nextUri", () => {
     cy.visit(psDetailsUrl + `?nextUri=abc`, { qs: { ...testParams } });
   });
   it("should have a nextUri", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "abc");
   });
 });
@@ -64,7 +64,7 @@ describe("Add Health Certificate, Happy Path - Valid Date", () => {
   });
 
   it("should navigate to what-export-destination", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/what-export-destination");
   });
 });
@@ -80,7 +80,7 @@ describe("Add Health Certificate - save as draft", () => {
   });
 
   it("should save as draft and redirect to processing-statement", () => {
-    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 
@@ -97,7 +97,7 @@ describe("Add Health Certificate - save as draft", () => {
       testCaseId: TestCaseId.PSAddHealthCertificateSaveAsDraftWithErrors,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });
@@ -113,7 +113,7 @@ describe("Add Health Certificate, bad data show errors", () => {
   });
 
   it("should be able to see relevant errors", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").should("be.visible");
   });
 });
@@ -134,7 +134,7 @@ describe("Add Health Certificate - invalid year in date picker", () => {
     cy.get('input[name="healthCertificateDateMonth"]').type("01");
     cy.get('input[name="healthCertificateDateYear"]').clear();
     cy.get('input[name="healthCertificateDateYear"]').type("0000");
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/add-health-certificate");
     cy.contains("Enter a real date in the dd/mm/yyyy format").should("be.visible");
   });
@@ -146,7 +146,7 @@ describe("Add Health Certificate: save as draft retains valid fields", () => {
       testCaseId: TestCaseId.PSAddHealthCertificateSaveAsDraftWithErrors,
     };
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 
@@ -155,7 +155,7 @@ describe("Add Health Certificate: save as draft retains valid fields", () => {
       testCaseId: TestCaseId.PSAddHealthCertificateSaveAsDraftNoErrors,
     };
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });
