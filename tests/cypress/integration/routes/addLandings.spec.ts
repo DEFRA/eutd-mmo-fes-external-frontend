@@ -10,7 +10,9 @@ const pad2 = (n: number | string) => (n.toString().length === 1 ? "0" + n : n.to
 const selectFirstNonEmptyOption = (selector: string) => {
   cy.get(`${selector} option`).then(($options) => {
     const firstNonEmpty = [...$options].find((opt) => (opt as HTMLOptionElement).value);
-    expect(firstNonEmpty, `non-empty option exists for ${selector}`).to.not.be.undefined;
+    if (!firstNonEmpty) {
+      throw new Error(`non-empty option exists for ${selector}`);
+    }
     cy.get(selector).select((firstNonEmpty as HTMLOptionElement).value);
   });
 };
@@ -180,7 +182,7 @@ describe("Manual landing page render with page guard", () => {
   it("should render summary details links, its count and its detailed instructions", () => {
     cy.get(".govuk-details__summary").should("have.length", 7);
     cy.get("div .govuk-details__summary").eq(0).contains("Start date");
-    cy.get("div .govuk-details__summary").eq(0).click();
+    cy.get("div .govuk-details__summary").eq(0).scrollIntoView().should("be.visible").click("topLeft");
     cy.get("div .govuk-details__text")
       .eq(0)
       .contains(
@@ -188,7 +190,7 @@ describe("Manual landing page render with page guard", () => {
       )
       .should("be.visible");
     cy.get("div .govuk-details__summary").eq(1).contains("What is a date landed?");
-    cy.get("div .govuk-details__summary").eq(1).click();
+    cy.get("div .govuk-details__summary").eq(1).scrollIntoView().should("be.visible").click("topLeft");
     cy.get("div .govuk-details__text")
       .eq(1)
       .contains("The date landed is the date the vessel finishes its fishing trip and unloads its catch at port")
@@ -206,9 +208,11 @@ describe("Manual landing page render with page guard", () => {
     cy.get("div .govuk-details__text")
       .eq(2)
       .contains("Find out more about High Seas areas (opens in new tab).")
-      .click();
+      .scrollIntoView()
+      .should("be.visible")
+      .click("topLeft");
     cy.get("div .govuk-details__summary").eq(3).contains("What is an exclusive economic zone (EEZ)?");
-    cy.get("div .govuk-details__summary").eq(3).click();
+    cy.get("div .govuk-details__summary").eq(3).scrollIntoView().should("be.visible").click("topLeft");
     cy.get("div .govuk-details__text")
       .eq(3)
       .contains("Find out more about EEZs (opens in new tab).")
@@ -216,7 +220,7 @@ describe("Manual landing page render with page guard", () => {
     cy.get("div .govuk-details__summary")
       .eq(4)
       .contains("What is a regional fisheries management organisation (RFMO)?");
-    cy.get("div .govuk-details__summary").eq(4).click();
+    cy.get("div .govuk-details__summary").eq(4).scrollIntoView().should("be.visible").click("topLeft");
     cy.get("div .govuk-details__text")
       .eq(4)
       .contains(
@@ -226,15 +230,17 @@ describe("Manual landing page render with page guard", () => {
     cy.get("div .govuk-details__text")
       .eq(4)
       .contains("Find out more about RFMOs (opens in new tab).")
-      .click();
+      .scrollIntoView()
+      .should("be.visible")
+      .click("topLeft");
     cy.get("div .govuk-details__summary").eq(5).contains("I cannot find the vessel");
-    cy.get("div .govuk-details__summary").eq(5).click();
+    cy.get("div .govuk-details__summary").eq(5).scrollIntoView().should("be.visible").click("topLeft");
     cy.get("div .govuk-details__text")
       .eq(5)
       .contains('If the vessel you need is not listed, select "Vessel not found - N/A" from the dropdown.')
       .should("be.visible");
     cy.get("div .govuk-details__summary").eq(6).contains("What are gear details?");
-    cy.get("div .govuk-details__summary").eq(6).click();
+    cy.get("div .govuk-details__summary").eq(6).scrollIntoView().should("be.visible").click("topLeft");
     cy.get("div .govuk-details__text").should("have.length", 7);
     cy.get("div .govuk-details__text")
       .eq(6)
@@ -708,10 +714,7 @@ describe("Manual landing page: submit unauthorised access", () => {
         cy.get("@selectVesselUnauth1").trigger("change");
       } else {
         cy.get("input[role='combobox']", { timeout: 20000 }).filter(":visible").first().clear();
-        cy.get("input[role='combobox']", { timeout: 20000 })
-          .filter(":visible")
-          .first()
-          .type("AALSKERE(K373)");
+        cy.get("input[role='combobox']", { timeout: 20000 }).filter(":visible").first().type("AALSKERE(K373)");
       }
     });
     cy.get("#exportWeight").invoke("val", "25");
@@ -773,10 +776,7 @@ describe("Manual landing page: submit unauthorised access", () => {
         cy.get("@selectVesselUnauth2").trigger("change");
       } else {
         cy.get("input[role='combobox']", { timeout: 20000 }).filter(":visible").first().clear();
-        cy.get("input[role='combobox']", { timeout: 20000 })
-          .filter(":visible")
-          .first()
-          .type("AALSKERE");
+        cy.get("input[role='combobox']", { timeout: 20000 }).filter(":visible").first().type("AALSKERE");
       }
     });
     cy.get("#exportWeight").invoke("val", "25");

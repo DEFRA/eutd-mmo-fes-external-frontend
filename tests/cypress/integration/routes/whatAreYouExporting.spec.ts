@@ -374,13 +374,13 @@ describe("What are you exporting page: editing product with errors", () => {
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid*='edit-button'").eq(0).click();
+    cy.get("[data-testid*='edit-button'").eq(0).scrollIntoView().should("be.visible").click("topLeft");
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
     cy.get("#state").contains("Fresh");
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("16051000");
-    cy.get("select#commodity_code option").eq(0).click();
-    cy.get("[data-testid='add-product']").eq(0).click();
+    cy.get("#commodity_code").select("");
+    cy.get("[data-testid='add-product']").eq(0).scrollIntoView().should("be.visible").click("topLeft");
     cy.get("#errorIsland").contains("Select a commodity code");
     // Double checks that even after a submission and error the values are displayed correctly
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
@@ -724,7 +724,7 @@ describe("What are you exporting page: Selected values from action data", () => 
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Edit a product
-    cy.get("[data-testid*='edit-button']").eq(0).click();
+    cy.get("[data-testid*='edit-button']").eq(0).scrollIntoView().should("be.visible").click("topLeft");
 
     // Verify all fields populated from loader data initially
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
@@ -732,8 +732,8 @@ describe("What are you exporting page: Selected values from action data", () => 
     cy.get("#presentation").should("contain", "Whole");
 
     // Submit with invalid data to trigger action with errors
-    cy.get("select#commodity_code option").eq(0).click();
-    cy.get("[data-testid='add-product']").eq(0).click();
+    cy.get("#commodity_code").select("");
+    cy.get("[data-testid='add-product']").eq(0).scrollIntoView().should("be.visible").click("topLeft");
 
     // After form submission with errors, action data should preserve values
     // This tests the left side of ?? operators: selectedSpecies ?? loaderSpecies, etc.
