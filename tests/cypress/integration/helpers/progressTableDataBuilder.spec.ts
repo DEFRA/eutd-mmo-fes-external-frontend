@@ -157,10 +157,9 @@ describe("progressTableDataBuilder", () => {
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const exporterSection = result.find((s) => s.testId === "Exporter");
 
-      // eslint-disable-next-line no-unused-expressions
-      expect(exporterSection?.rows.find((r) => r.testId === "exporter")).to.not.be.undefined;
-      // eslint-disable-next-line no-unused-expressions
-      expect(exporterSection?.rows.find((r) => r.testId === "yourReference")).to.not.be.undefined;
+      expect(exporterSection?.testId).to.equal("Exporter");
+      expect(exporterSection?.rows.some((r) => r.testId === "exporter")).to.equal(true);
+      expect(exporterSection?.rows.some((r) => r.testId === "yourReference")).to.equal(true);
     });
 
     it("should pass errors through to relevant rows", () => {
