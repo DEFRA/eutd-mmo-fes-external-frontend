@@ -101,15 +101,18 @@ describe("progressTableDataBuilder", () => {
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const transportSection = result.find((s) => s.testId === "Transportation");
 
-      expect(transportSection?.rows.find((r) => r.testId === "transportType")).to.equal(undefined);
+      // eslint-disable-next-line no-unused-expressions
+      expect(transportSection?.rows.find((r) => r.testId === "transportType")).to.be.undefined;
     });
 
     it("should omit both transport rows entirely when directLanding is true", () => {
       const result = progressTableDataBuilder(false, true, baseProgress, baseTransport);
       const transportSection = result.find((s) => s.testId === "Transportation");
 
-      expect(transportSection?.rows.find((r) => r.testId === "transportDetails")).to.equal(undefined);
-      expect(transportSection?.rows.find((r) => r.testId === "transportType")).to.equal(undefined);
+      // eslint-disable-next-line no-unused-expressions
+      expect(transportSection?.rows.find((r) => r.testId === "transportDetails")).to.be.undefined;
+      // eslint-disable-next-line no-unused-expressions
+      expect(transportSection?.rows.find((r) => r.testId === "transportType")).to.be.undefined;
     });
   });
 
@@ -128,7 +131,8 @@ describe("progressTableDataBuilder", () => {
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const productSection = result.find((s) => s.testId === "ProductsAndLandings");
 
-      expect(productSection?.rows.find((r) => r.testId === "dataUpload")).to.equal(undefined);
+      // eslint-disable-next-line no-unused-expressions
+      expect(productSection?.rows.find((r) => r.testId === "dataUpload")).to.be.undefined;
     });
 
     it("should use direct-landing URL for landings when directLanding is true", () => {
