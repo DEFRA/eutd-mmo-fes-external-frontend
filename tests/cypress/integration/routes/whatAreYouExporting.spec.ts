@@ -1894,8 +1894,6 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
       .should("be.visible")
       .and("not.be.disabled")
       .and("have.attr", "aria-controls", "product__listbox");
-    // force:true bypasses the brief disabled state caused by React's post-hydration re-render
-    cy.get("#add-from-favourites input[role='combobox']").type("A");
   });
 });
 
