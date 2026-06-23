@@ -86,6 +86,6 @@ describe("PageNotFound", () => {
 
     cy.visit(dashboardLink, { failOnStatusCode: false, qs: { ...testParams } });
 
-    cy.findByRole("heading", { name: "Sorry, there is a problem with the service", level: 1 });
+    cy.findByRole("heading", { name: "Sorry, there is a problem with the service", level: 1 }).should("be.visible");
   });
 });
