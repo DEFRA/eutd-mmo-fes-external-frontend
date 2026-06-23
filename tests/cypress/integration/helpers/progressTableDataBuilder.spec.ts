@@ -100,19 +100,19 @@ describe("progressTableDataBuilder", () => {
     it("should NOT include the transportType row when transportDetails is INCOMPLETE", () => {
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const transportSection = result.find((s) => s.testId === "Transportation");
+      const transportTypeRows = transportSection?.rows.filter((r) => r.testId === "transportType") ?? [];
 
-      // eslint-disable-next-line no-unused-expressions
-      expect(transportSection?.rows.find((r) => r.testId === "transportType")).to.be.undefined;
+      expect(transportTypeRows).to.have.length(0);
     });
 
     it("should omit both transport rows entirely when directLanding is true", () => {
       const result = progressTableDataBuilder(false, true, baseProgress, baseTransport);
       const transportSection = result.find((s) => s.testId === "Transportation");
+      const transportDetailsRows = transportSection?.rows.filter((r) => r.testId === "transportDetails") ?? [];
+      const transportTypeRows = transportSection?.rows.filter((r) => r.testId === "transportType") ?? [];
 
-      // eslint-disable-next-line no-unused-expressions
-      expect(transportSection?.rows.find((r) => r.testId === "transportDetails")).to.be.undefined;
-      // eslint-disable-next-line no-unused-expressions
-      expect(transportSection?.rows.find((r) => r.testId === "transportType")).to.be.undefined;
+      expect(transportDetailsRows).to.have.length(0);
+      expect(transportTypeRows).to.have.length(0);
     });
   });
 
@@ -130,9 +130,9 @@ describe("progressTableDataBuilder", () => {
     it("should NOT include a dataUpload row when dataUpload is false", () => {
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const productSection = result.find((s) => s.testId === "ProductsAndLandings");
+      const dataUploadRows = productSection?.rows.filter((r) => r.testId === "dataUpload") ?? [];
 
-      // eslint-disable-next-line no-unused-expressions
-      expect(productSection?.rows.find((r) => r.testId === "dataUpload")).to.be.undefined;
+      expect(dataUploadRows).to.have.length(0);
     });
 
     it("should use direct-landing URL for landings when directLanding is true", () => {
