@@ -17,7 +17,6 @@ describe("Delete this draft catch certificate page", () => {
     cy.contains("p > span", /^Error:$/).should("be.visible");
   });
   it("Submit form with yes option on click of save and continue button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DeleteThisDraftDocumentOptionYes,
     };
@@ -26,7 +25,6 @@ describe("Delete this draft catch certificate page", () => {
     cy.get("form").submit();
   });
   it("Submit form with no option on click of save and continue button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DeleteThisDraftDocumentOptionNo,
     };

@@ -29,14 +29,12 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("check and click on add product from favourites", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-tab-id='favouritesTab']").click();
     cy.get('select[name="favourite"]').select("Aesop shrimp (AES) Fresh,Whole, 03063590");
     cy.get("[data-testid='add-product']").eq(1).click();
   });
 
   it("should render add species, state and presentation buttons when JavaScript is disabled", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='add-species']", "Add species");
     cy.contains("[data-testid='add-state']", "Add state");
     cy.contains("[data-testid='add-presentation']", "Add presentation");
@@ -51,7 +49,6 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("should click and edit and check if the data is populated in input fields", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid*='edit-button'").eq(0).click();
     cy.get("#species").contains("Albacore (ALB)");
     cy.get("#state").contains("Fresh");

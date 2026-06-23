@@ -33,7 +33,6 @@ describe("what export destination page", () => {
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportDestinationBadRequest,
     };

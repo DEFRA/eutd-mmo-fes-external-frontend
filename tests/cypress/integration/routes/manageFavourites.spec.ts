@@ -20,7 +20,6 @@ describe("Manage favourites page", () => {
   });
 
   it("should render the correct page title", () => {
-    cy.wrap(true).should("be.true");
     cy.findByRole("heading", { name: "Product Favourites", level: 1 });
   });
 
@@ -29,7 +28,6 @@ describe("Manage favourites page", () => {
   });
 
   it("should check for field labels", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("label", "Common name or FAO code");
     cy.contains("label", "State");
     cy.contains("label", "Presentation");
@@ -37,18 +35,15 @@ describe("Manage favourites page", () => {
   });
 
   it("should render the input label and hint text", () => {
-    cy.wrap(true).should("be.true");
     cy.get("div .govuk-hint").contains("For example, Lobster or LBE.");
   });
 
   it("should render form button", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='add-product']", "Add product favourite");
     cy.contains("[data-testid='cancel']", "Cancel");
   });
 
   it("should show errors click of add product button", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-product']").click();
   });
 
@@ -60,7 +55,6 @@ describe("Manage favourites page", () => {
   });
 
   it("should render the  Edit and remove buttons", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='remove-button-PRD465']", "Remove");
   });
 });
@@ -76,7 +70,6 @@ describe("Manage favourites page: when JavaScript is disabled", () => {
   });
 
   it("should render add species, state and presentation buttons when JavaScript is disabled", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='add-species']", "Add species");
     cy.contains("[data-testid='add-state']", "Add state");
     cy.contains("[data-testid='add-presentation']", "Add presentation");

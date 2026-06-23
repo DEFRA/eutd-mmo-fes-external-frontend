@@ -63,7 +63,6 @@ describe("Add Processing Plant Details", () => {
 
 describe("Add Processing Plant Details return error response if the back end returns an error", () => {
   it("will return error response if the back end returns an error", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
     };

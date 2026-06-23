@@ -20,12 +20,10 @@ describe("Copy this storage document address page: Allowed", () => {
   });
 
   it("should render Acknowledgement text", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='ackid']", "Acknowledgement");
   });
 
   it("should render the correct warning text", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(
       "div > strong",
       "You must not use a non-manipulation document or data for catches that have already been exported. Knowingly reusing non-manipulation documents or using data that relate to a previous export is a serious offence and may result in enforcement action being taken."

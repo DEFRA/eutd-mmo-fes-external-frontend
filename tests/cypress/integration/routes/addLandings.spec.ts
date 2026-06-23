@@ -269,7 +269,6 @@ describe("Manual landing page render with page guard", () => {
   // (moved to flaky spec)
 
   it("renders high seas area details and allows selection", () => {
-    cy.wrap(true).should("be.true");
     cy.get("input[type='radio'][name='highSeasArea']").first().check();
   });
 
@@ -459,7 +458,6 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render the add Product button", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#submit").contains("Add Landing");
   });
   // (moved to flaky spec)
@@ -847,7 +845,6 @@ describe("Manual landing page when javascript is disabled", () => {
   });
 
   it("should render add gear category button", () => {
-    cy.wrap(true).should("be.true");
     // button exists
     cy.contains("[data-testid='add-gear-category']", "Add gear category");
   });
@@ -932,7 +929,6 @@ describe("Manual landing page when javascript is disabled", () => {
     });
 
     it("should render add gear category button label", () => {
-      cy.wrap(true).should("be.true");
       // button exists
       cy.contains("[data-testid='add-gear-category']", "Ychwanegu categori’r gêr");
     });
@@ -986,7 +982,6 @@ describe("Manual Landing page errors when javascript is disabled", () => {
   });
 
   it("should search autoinput field", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#select-vessel").as("selectVesselAuto");
     cy.get("@selectVesselAuto").invoke("val", "abc");
     cy.get("@selectVesselAuto").trigger("change");
@@ -998,7 +993,6 @@ describe("Manual Landing page errors when javascript is disabled", () => {
   });
 
   it("should reset form", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#product").contains("Select a product");
     cy.get("#select-faoArea").contains("FAO27");
     cy.get("#exportWeight").invoke("val", "");
@@ -1013,7 +1007,6 @@ describe("Manual Landing page errors when javascript is disabled", () => {
 
 describe("Manual Landing page onclick of edit", () => {
   it("should display edited record in the form on click of edit button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.MannualEditLanding,
     };
@@ -1149,7 +1142,6 @@ describe("Manual page errors when javascript is disabled", () => {
   });
 
   it("should trigger add date button with wrong format YY-MM-DD", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='add-dateLanded']", "Add Date");
     cy.get("#dateLanded").invoke("val", "24");
     cy.get("#dateLanded-month").invoke("val", "10");

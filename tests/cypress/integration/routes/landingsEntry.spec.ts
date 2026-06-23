@@ -19,7 +19,6 @@ describe("Landings entry page: visuals", () => {
   });
 
   it("should display the correct headings", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h1", "How do you want to enter your products and landings?");
   });
 

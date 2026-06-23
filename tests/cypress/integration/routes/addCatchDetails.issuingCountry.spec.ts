@@ -5,7 +5,6 @@ import { type ITestParams, TestCaseId } from "~/types";
 
 describe("PS: Add Catch Details - Issuing Country behavior", () => {
   it("should clear issuing country after adding a catch", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedBlankOneCatch,
     };

@@ -26,12 +26,10 @@ describe("Landings confirmation page: user Interface", () => {
   });
 
   it("should render the correct headings", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h1", "Are you sure you want to change your landings type?");
   });
 
   it("should render the correct warning text", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(
       "div > strong",
       "Switching between direct and non-direct landings types will require the re-entry of landings data."
