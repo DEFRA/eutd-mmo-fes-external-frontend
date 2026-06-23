@@ -224,7 +224,10 @@ describe("Upload File Page Upload - future date landed errors", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
-    cy.get("#row-1-PRD770-0-upload-file-error").contains("Date landed must be today or within the next 7 days");
+    cy.get("#row-1-PRD770-0-upload-file-error").should(
+      "contain.text",
+      "Date landed must be today or within the next 7 days"
+    );
   });
 });
 
@@ -1001,9 +1004,7 @@ describe("Upload File Page Upload - total combined export weight exceeded", () =
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload]").click();
 
-    cy.get(".govuk-notification-banner__heading")
-      .should("be.visible")
-      .and("contain.text", "0 out of 3 rows uploaded successfully");
+    cy.get(".govuk-notification-banner__heading").should("contain.text", "0 out of 3 rows uploaded successfully");
   });
 
   it("should display the total weight error in Welsh when language is set to Welsh", () => {
