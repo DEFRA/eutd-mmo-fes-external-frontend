@@ -12,7 +12,6 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
   });
 
   it("should submit form with vesselName", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#vesselName").type("Test Vessel");
     cy.get("[data-testid=save-and-continue]").click();
   });
@@ -359,7 +358,6 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when departure country is invalid", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidDepartureCountry,
       };

@@ -71,7 +71,6 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render survey component", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="surveylink-feedback"]').contains("Take a 2 minute survey");
   });
 

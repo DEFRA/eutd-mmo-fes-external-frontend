@@ -36,18 +36,15 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should display the correct headings", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='ps-progress-titling']", "Your Progress");
     cy.contains("[data-testid='ps-progress-heading']", "Processing Statement application: GBR-2021-PS-8EEB7E123");
   });
 
   it("should display Application incomplete when NOT all required sections have been completed", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='Progress-completed-heading']", "Application incomplete");
   });
 
   it("should display number of completed required sections", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='completedSections']", "You have completed 0 of 6 required sections.");
   });
 
@@ -105,12 +102,10 @@ describe("ProgressPage - Completed Application", () => {
   });
 
   it("should display Application completed when all required sections have been completed", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
   });
 
   it("should display number of completed required sections", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='completedSections']", "You have completed 6 of 6 required sections.");
   });
 
@@ -119,7 +114,6 @@ describe("ProgressPage - Completed Application", () => {
   });
 
   it("should redirect to check-your-information page when click on Check your answers button", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="continue-button"]').click();
   });
 });
@@ -141,7 +135,6 @@ describe("ProgressPage - Completed Application Unauthorised", () => {
 
 describe("should display the notificationBanner", () => {
   it("first visit copy page then click on green button to navigate progress page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSSDCopyAllData,
       disableScripts: true,
@@ -173,7 +166,6 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should display application completed status", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
     });
 
@@ -212,7 +204,6 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should display application completed status", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
     });
 
@@ -251,7 +242,6 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should display application completed status", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
     });
 

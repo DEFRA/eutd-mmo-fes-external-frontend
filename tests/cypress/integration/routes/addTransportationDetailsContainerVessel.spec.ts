@@ -17,7 +17,6 @@ describe("Add Transportation Details: Container Vessel", () => {
   });
 
   it("should render the expected header", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-heading-xl").contains("Add transportation details: container vessel");
   });
 
@@ -33,7 +32,6 @@ describe("Add Transportation Details: Container Vessel", () => {
   });
 
   it("should render the input label and hint text", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("label", "Vessel name");
     cy.contains("label", "Flag state");
     cy.contains("label", "Shipping container identification number");

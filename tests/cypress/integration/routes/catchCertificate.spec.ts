@@ -52,7 +52,6 @@ describe("Catch certificate created page: rendering", () => {
   });
 
   it("should render the correct page title and subtitle", () => {
-    cy.wrap(true).should("be.true");
     cy.findByRole("heading", { name: "The catch certificate has been created", level: 1 });
     cy.get(".govuk-panel__body").contains("Catch certificate number");
     cy.get(".govuk-panel__body").contains(documentNumber);
@@ -72,7 +71,6 @@ describe("Catch certificate created page: rendering", () => {
   });
 
   it("should render survey component", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="surveylink-feedback"]').contains("Take a 2 minute survey");
   });
 

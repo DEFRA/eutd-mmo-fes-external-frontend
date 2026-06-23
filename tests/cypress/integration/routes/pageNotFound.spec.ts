@@ -66,7 +66,6 @@ describe("PageNotFound", () => {
   });
 
   it("should render CatchBoundary for thrown responses", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CatchBoundary,
     };
@@ -81,7 +80,6 @@ describe("PageNotFound", () => {
   });
 
   it("should render ErrorBoundary for uncaught thrown errors", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ErrorBoundary,
     };

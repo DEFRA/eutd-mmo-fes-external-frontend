@@ -60,7 +60,6 @@ describe("SD: you-have-added-product page", () => {
   });
 
   it("Remove a product", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDYouHaveAddedAProduct,
     };
@@ -110,7 +109,6 @@ describe("SD: you-have-added-product page", () => {
   });
 
   it("should prevent continuing and display errors if one or more catches are invalid", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDProductAddedInvalid,
     };

@@ -33,7 +33,6 @@ describe("what export journey page for Direct Landing", () => {
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportDirectLandingJourneyBadRequest,
     };
@@ -62,7 +61,6 @@ describe("what export journey page for Direct Landing", () => {
   });
 
   it("should redirect to the progess page if the user click on draft button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyDirectLandingDraft,
     };
@@ -72,7 +70,6 @@ describe("what export journey page for Direct Landing", () => {
   });
 
   it("should redirect to the landings-entry if the if landing entry is null", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyDirectLandingNull,
     };
@@ -122,7 +119,6 @@ describe("what export journey page for Manual Entry", () => {
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportManualEntryJourneyBadRequest,
     };
@@ -150,7 +146,6 @@ describe("what export journey page for Manual Entry", () => {
   });
 
   it("should redirect to the progess page if the user click on draft button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyManualEntryDraft,
     };
@@ -160,7 +155,6 @@ describe("what export journey page for Manual Entry", () => {
   });
 
   it("should redirect to the landings-entry if the if landing entry is null", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyManualEntryNull,
     };
