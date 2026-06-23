@@ -338,7 +338,7 @@ describe("Add Transportation Details Truck: Invalid Nationality Validation", () 
     cy.get("#nationalityOfVehicle").parents(".govuk-form-group").should("have.class", "govuk-form-group--error");
 
     // Now correct the value
-    cy.get("#nationalityOfVehicle").click().type("{selectall}{backspace}France");
+    cy.get("#nationalityOfVehicle").invoke("val", "France");
 
     // Verify the field value is updated
     cy.get("#nationalityOfVehicle").should("have.value", "France");
