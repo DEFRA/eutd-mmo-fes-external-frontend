@@ -166,7 +166,7 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should display application completed status", () => {
-      cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
+      cy.contains("[data-testid='Progress-completed-heading']", "Application completed").should("be.visible");
     });
 
     it("should display error when attempting to continue with description-only products", () => {
@@ -204,7 +204,7 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should display application completed status", () => {
-      cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
+      cy.contains("[data-testid='Progress-completed-heading']", "Application completed").should("be.visible");
     });
 
     it("should display error when attempting to continue with mixed products", () => {
@@ -242,7 +242,7 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should display application completed status", () => {
-      cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
+      cy.contains("[data-testid='Progress-completed-heading']", "Application completed").should("be.visible");
     });
 
     it("should allow progression to check-your-information when all products have catches", () => {
