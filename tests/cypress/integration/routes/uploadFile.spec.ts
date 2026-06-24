@@ -176,7 +176,7 @@ describe("Upload File Page Upload", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("[data-testid=upload").click();
     cy.url().should("include", "/forbidden");
     cy.get("h1").contains("Forbidden");
   });
@@ -212,7 +212,7 @@ describe("Upload File Page Upload - date errors", () => {
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Date landed is missing");
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Date landed must be a real date");
     cy.get("#row-1-PRD765-2-upload-file-error").contains("Enter a valid date landed");
@@ -227,10 +227,8 @@ describe("Upload File Page Upload - future date landed errors", () => {
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload").click({ force: true });
-    cy.get("#row-1-PRD770-0-upload-file-error")
-      .should("be.visible")
-      .and("contain.text", "Date landed must be today or within the next 7 days");
+    cy.get("[data-testid=upload").click();
+    cy.get("#row-1-PRD770-0-upload-file-error").contains("Date landed must be today or within the next 7 days");
   });
 });
 
@@ -242,7 +240,7 @@ describe("Upload File Page Upload - export weight errors", () => {
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Export weight is missing");
     cy.get("#row-1-PRD765-1-upload-file-error").contains(
       "Enter the export weight as a number with a maximum of 2 decimal places"
@@ -259,7 +257,7 @@ describe("Upload File Page Upload - High Seas Area errors", () => {
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("FAO High seas area invalid");
   });
 });
@@ -272,7 +270,7 @@ describe("Upload File Page Upload - EEZ errors", () => {
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("EEZ does not exist");
   });
   it("should display an error for a upload with a invalid EEZ", () => {
@@ -282,7 +280,7 @@ describe("Upload File Page Upload - EEZ errors", () => {
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("EEZ does not exist");
   });
 });
@@ -295,7 +293,7 @@ describe("Upload File Page Upload - RFMO errors", () => {
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("RFMO does not exist");
   });
 });
@@ -308,7 +306,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Vessel PLN is missing");
   });
 
@@ -319,7 +317,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Vessel PLN does not exist");
   });
 
@@ -330,7 +328,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Date landed must correspond to when the vessel was licensed");
   });
 
@@ -343,7 +341,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
       };
 
       cy.visit(uploadFileUrl, { qs: { ...testParams } });
-      cy.get("[data-testid=upload").click({ force: true });
+      cy.get("[data-testid=upload").click();
       cy.get("#row-1-PRD765-0-upload-file-error").contains("Mae PLN y cwch ar goll");
     });
 
@@ -355,7 +353,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
       };
 
       cy.visit(uploadFileUrl, { qs: { ...testParams } });
-      cy.get("[data-testid=upload").click({ force: true });
+      cy.get("[data-testid=upload").click();
       cy.get("#row-1-PRD765-1-upload-file-error").contains("Nid yw PLN y llong neu’r cwch yn bodoli");
     });
 
@@ -367,7 +365,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
       };
 
       cy.visit(uploadFileUrl, { qs: { ...testParams } });
-      cy.get("[data-testid=upload").click({ force: true });
+      cy.get("[data-testid=upload").click();
       cy.get("#row-1-PRD765-0-upload-file-error").contains(
         "Rhaid i’r dyddiad glanio gyfateb i’r adeg y cafodd y cwch ei drwyddedu"
       );
@@ -383,7 +381,7 @@ describe("Upload File Page Upload - product errors", () => {
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD-UNKNOWN-0-upload-file-error").contains("Product ID is missing");
     cy.get("#row-1-PRD-UNKNOWN-1-upload-file-error").contains("Product ID does not exist");
     cy.get("#row-1-PRD-UNKNOWN-2-upload-file-error").contains(
@@ -403,7 +401,7 @@ describe("Upload File Page Upload - gearCode errors", () => {
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload").click({ force: true });
+    cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Gear type does not exist");
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Gear type does not exist");
   });
@@ -466,7 +464,7 @@ describe("Upload File Page - clear", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=clear").click({ force: true });
+    cy.get("[data-testid=clear").click();
 
     cy.url().should("include", "/upload");
     cy.get(".govuk-table__cell").should("not.exist");
@@ -479,7 +477,7 @@ describe("Upload File Page - clear", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=clear").click({ force: true });
+    cy.get("[data-testid=clear").click();
 
     cy.url().should("include", "/forbidden");
   });
@@ -493,7 +491,7 @@ describe("Upload File Page - cancel", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=cancel").click({ force: true });
+    cy.get("[data-testid=cancel").click();
 
     cy.url().should("include", "/add-exporter-details");
   });
@@ -505,7 +503,7 @@ describe("Upload File Page - cancel", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=cancel").click({ force: true });
+    cy.get("[data-testid=cancel").click();
 
     cy.url().should("include", "/forbidden");
   });
@@ -519,7 +517,7 @@ describe("Upload File Page - save and continue with errors", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=continue").click({ force: true });
+    cy.get("[data-testid=continue").click();
 
     cy.url().should("include", "/upload-file");
     cy.get("#error-summary-title").contains("There is a problem");
@@ -887,7 +885,7 @@ describe("Upload File Page - save and continue success", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=continue").click({ force: true });
+    cy.get("[data-testid=continue").click();
 
     cy.url().should("include", "/what-are-you-exporting");
     cy.get("h1").contains("What are you exporting?");
@@ -902,7 +900,7 @@ describe("Upload File Page - save and continue forbidden", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=continue").click({ force: true });
+    cy.get("[data-testid=continue").click();
 
     cy.url().should("include", "/forbidden");
     cy.get("h1").contains("Forbidden");
@@ -957,7 +955,7 @@ describe("Upload File Page - clear button functionality", () => {
     cy.get(".govuk-table__body .govuk-table__row").should("have.length.greaterThan", 0);
 
     // Click clear button - this triggers server-side form submission with _action=clear
-    cy.get('[data-testid="clear"]').click({ force: true });
+    cy.get('[data-testid="clear"]').click();
 
     // Wait for page reload after clear action completes
     cy.get(".govuk-notification-banner", { timeout: 5000 }).should("not.exist");
@@ -974,7 +972,7 @@ describe("Upload File Page Upload - EEZ max length string error", () => {
     };
 
     cy.visit("/create-catch-certificate/GBR-2021-CC-8EEB7E123/upload-file", { qs: { ...testParams } });
-    cy.get("[data-testid=upload]").click({ force: true });
+    cy.get("[data-testid=upload]").click();
     cy.get("#row-1-PRD765-0-upload-file-error")
       .should("exist")
       .and("contain.text", "You are only able to add maximum of 5 EEZ");
@@ -986,7 +984,7 @@ describe("Upload File Page Upload - EEZ max length string error", () => {
     };
 
     cy.visit("/create-catch-certificate/GBR-2021-CC-8EEB7E123/upload-file", { qs: { ...testParams } });
-    cy.get("[data-testid=upload]").click({ force: true });
+    cy.get("[data-testid=upload]").click();
     cy.get("#row-1-PRD765-0-upload-file-error")
       .should("exist")
       .and("contain.text", "You are only able to add maximum of 5 EEZ");
@@ -1000,7 +998,7 @@ describe("Upload File Page Upload - total combined export weight exceeded", () =
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload]").click({ force: true });
+    cy.get("[data-testid=upload]").click();
 
     cy.get("#row-1-PRD765-0-upload-file-error")
       .should("exist")
@@ -1020,7 +1018,7 @@ describe("Upload File Page Upload - total combined export weight exceeded", () =
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload]").click({ force: true });
+    cy.get("[data-testid=upload]").click();
 
     cy.get(".govuk-notification-banner__heading")
       .should("be.visible")
@@ -1034,7 +1032,7 @@ describe("Upload File Page Upload - total combined export weight exceeded", () =
     };
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=upload]").click({ force: true });
+    cy.get("[data-testid=upload]").click();
 
     cy.get("#row-1-PRD765-0-upload-file-error")
       .should("exist")

@@ -19,7 +19,7 @@ describe("Catch certificate created page: rendering", () => {
       .should("have.attr", "href", "/create-catch-certificate/catch-certificates");
     cy.findByRole("link", {
       name: "View completed catch certificates or create a new export document",
-    }).click({ force: true });
+    }).click();
     cy.url().should("include", "/catch-certificates");
   });
 

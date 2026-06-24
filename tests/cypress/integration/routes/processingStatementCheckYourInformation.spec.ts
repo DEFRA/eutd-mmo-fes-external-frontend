@@ -128,7 +128,7 @@ describe("Check Your Information (Summary) page: Validation", () => {
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=create-ps-button]").click({ force: true });
+    cy.get("[data-testid=create-ps-button]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains(
       "a",
@@ -142,7 +142,7 @@ describe("Check Your Information (Summary) page: Validation", () => {
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=create-ps-button]").click({ force: true });
+    cy.get("[data-testid=create-ps-button]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^The health certificate date must be today or in the past.$/).should("be.visible");
   });
@@ -153,7 +153,7 @@ describe("Check Your Information (Summary) page: Validation", () => {
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=create-ps-button]").click({ force: true });
+    cy.get("[data-testid=create-ps-button]").click();
     cy.url().should("include", "/processing-statement-created");
   });
 

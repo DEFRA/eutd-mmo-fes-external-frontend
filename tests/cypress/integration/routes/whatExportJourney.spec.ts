@@ -40,7 +40,7 @@ describe("what export journey page for Direct Landing", () => {
     cy.visit(whatExportJourneyUrl, {
       qs: { ...testParams },
     });
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-list > li > a").contains("Select a valid destination country");
     cy.get(".govuk-error-message").contains("Select a valid destination country");
   });
@@ -57,7 +57,7 @@ describe("what export journey page for Direct Landing", () => {
       testCaseId: TestCaseId.WhatExportDirectLandingJourney403,
     };
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
     cy.url().should("include", "/forbidden");
   });
 
@@ -68,7 +68,7 @@ describe("what export journey page for Direct Landing", () => {
     };
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
     cy.get("#exportedFromGU").check();
-    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+    cy.get('[data-testid="save-draft-button"]').click();
   });
 
   it("should redirect to the landings-entry if the if landing entry is null", () => {
@@ -86,7 +86,7 @@ describe("what export journey page for Direct Landing", () => {
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
     cy.get("#exportedFromIOM").check();
     cy.get("#exportDestination").invoke("val", "Pakistan");
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
     cy.url().should("include", "/progress");
   });
 });
@@ -129,7 +129,7 @@ describe("what export journey page for Manual Entry", () => {
     cy.visit(whatExportJourneyUrl, {
       qs: { ...testParams },
     });
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-list > li > a").contains("Select a valid destination country");
     cy.get(".govuk-error-message").contains("Select a valid destination country");
   });
@@ -145,7 +145,7 @@ describe("what export journey page for Manual Entry", () => {
       testCaseId: TestCaseId.WhatExportManualEntryJourney403,
     };
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
     cy.url().should("include", "/forbidden");
   });
 
@@ -156,7 +156,7 @@ describe("what export journey page for Manual Entry", () => {
     };
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
     cy.get("#exportedFromGU").check();
-    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+    cy.get('[data-testid="save-draft-button"]').click();
   });
 
   it("should redirect to the landings-entry if the if landing entry is null", () => {
@@ -174,7 +174,7 @@ describe("what export journey page for Manual Entry", () => {
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
     cy.get("#exportedFromIOM").check();
     cy.get("#exportDestination").invoke("val", "Pakistan");
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
     cy.url().should("include", "/how-does-the-export-leave-the-uk");
   });
 });
@@ -208,7 +208,7 @@ describe("Destination country field validation", () => {
 
     cy.get("#exportedFromUK").check();
     cy.get("#pointOfDestination").type("Calais Port");
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-error-summary").should("be.visible");
     cy.get(".govuk-error-summary__title").should("contain", "There is a problem");
     cy.get(".govuk-list > li > a").should("contain", "Select a valid destination country");
@@ -227,7 +227,7 @@ describe("Destination country field validation", () => {
 
     cy.get("#exportedFromUK").check();
     cy.get("#pointOfDestination").type("Calais Port");
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
 
     cy.get(".govuk-error-summary").should("be.visible");
     cy.get(".govuk-list > li > a").should("contain", "Select a valid destination country");
@@ -243,13 +243,13 @@ describe("Destination country field validation", () => {
     cy.get("#exportedFromUK").check();
     cy.get("#exportDestination").then(($el) => {
       if ($el.is("select")) {
-        cy.wrap($el).select("France", { force: true });
+        cy.wrap($el).select("France");
       } else {
         cy.wrap($el).invoke("val", "France");
       }
     });
     cy.get("#pointOfDestination").type("Calais Port");
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-error-summary").should("not.exist");
   });
 
@@ -260,7 +260,7 @@ describe("Destination country field validation", () => {
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
 
     cy.get("#exportedFromUK").check();
-    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+    cy.get('[data-testid="save-draft-button"]').click();
     cy.url().should("include", "/catch-certificates");
   });
 });
@@ -297,12 +297,12 @@ describe("Point of destination field", () => {
     cy.get("#exportedFromUK").check();
     cy.get("#exportDestination").then(($el) => {
       if ($el.is("select")) {
-        cy.wrap($el).select("France", { force: true });
+        cy.wrap($el).select("France");
       } else {
         cy.wrap($el).invoke("val", "France");
       }
     });
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
 
     // Check error summary
     cy.get(".govuk-error-summary").should("be.visible");
@@ -325,7 +325,7 @@ describe("Point of destination field", () => {
     cy.get("#exportedFromUK").check();
     cy.get("#exportDestination").invoke("val", "France");
     cy.get("#pointOfDestination").type(longDestination);
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
 
     // Check error summary
     cy.get(".govuk-error-summary").should("be.visible");
@@ -344,7 +344,7 @@ describe("Point of destination field", () => {
     cy.get("#exportedFromUK").check();
     cy.get("#exportDestination").invoke("val", "France");
     cy.get("#pointOfDestination").type("Calais port @ terminal 3");
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
 
     // Check error summary
     cy.get(".govuk-error-summary").should("be.visible");
@@ -369,7 +369,7 @@ describe("Point of destination field", () => {
     cy.get("#exportedFromUK").check();
     cy.get("#exportDestination").invoke("val", "France");
     cy.get("#pointOfDestination").type("Calais-Dunkerque A/B Terminal O'Hare 123");
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
 
     // Should not show errors
     cy.get(".govuk-error-summary").should("not.exist");
@@ -385,7 +385,7 @@ describe("Point of destination field", () => {
     cy.get("#exportedFromUK").check();
     cy.get("#exportDestination").invoke("val", "France");
     cy.get("#pointOfDestination").type(new Array(102).join("A"));
-    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+    cy.get('[data-testid="save-draft-button"]').click();
 
     // Should redirect to dashboard without showing errors and without saving invalid data
     cy.url().should("include", "/catch-certificates");

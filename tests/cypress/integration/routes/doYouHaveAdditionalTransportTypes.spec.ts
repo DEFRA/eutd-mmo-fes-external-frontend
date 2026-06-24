@@ -64,7 +64,7 @@ describe("Transport Details Table", () => {
       cy.wrap($btn).should("contain.text", "Edit");
     });
 
-    cy.get('[data-testid^="edit-button"]').first().click({ force: true });
+    cy.get('[data-testid^="edit-button"]').first().click();
     cy.url().should("include", "/how-does-the-export-leave-the-uk");
   });
 
@@ -73,7 +73,7 @@ describe("Transport Details Table", () => {
       cy.wrap($btn).should("contain.text", "Remove");
     });
 
-    cy.get('[data-testid^="remove-button"]').first().click({ force: true });
+    cy.get('[data-testid^="remove-button"]').first().click();
     cy.url().should("include", "/do-you-have-additional-transport-types");
   });
 
@@ -136,7 +136,7 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
 
     cy.visit(doYouHaveAdditionalTransportTypesUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
 
@@ -146,8 +146,8 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
     };
 
     cy.visit(doYouHaveAdditionalTransportTypesUrl, { qs: { ...testParams } });
-    cy.get("#addTransportation").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#addTransportation").click();
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", "/how-does-the-export-leave-the-uk");
   });
 
@@ -158,8 +158,8 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
 
     cy.visit(doYouHaveAdditionalTransportTypesUrl, { qs: { ...testParams } });
 
-    cy.get("#separateAddTransportationFalse").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#separateAddTransportationFalse").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/progress");
   });
@@ -170,7 +170,7 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
     };
 
     cy.visit(doYouHaveAdditionalTransportTypesUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
   });
@@ -181,7 +181,7 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
     };
 
     cy.visit(doYouHaveAdditionalTransportTypesUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/forbidden");
   });

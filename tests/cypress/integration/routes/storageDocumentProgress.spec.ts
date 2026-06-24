@@ -75,12 +75,12 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should redirect to the exporter Storage Document dashboard", () => {
-    cy.get("[data-testid=return-to-dashboard-button]").click({ force: true });
+    cy.get("[data-testid=return-to-dashboard-button]").click();
     cy.url().should("include", "/non-manipulation-documents");
   });
 
   it("should display errors", () => {
-    cy.get("[data-testid=continue-button]").click({ force: true });
+    cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/progress");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^You must complete the exporter details section before being able to continue$/).should(
@@ -122,7 +122,7 @@ describe("ProgressPage - Completed Application", () => {
   });
 
   it("should redirect to the exporter to the check your information page", () => {
-    cy.get("[data-testid=continue-button]").click({ force: true });
+    cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/check-your-information");
   });
 });
@@ -188,7 +188,7 @@ describe("ProgressPage - Links with transport selected", () => {
   });
 
   it("should redirect to the exporter forbidden", () => {
-    cy.get("[data-testid=continue-button]").click({ force: true });
+    cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/forbidden");
   });
 });
@@ -267,9 +267,9 @@ describe("should display the notificationBanner", () => {
       qs: { ...testParams },
     });
     cy.wait(250);
-    cy.get("#voidOriginal").click({ force: true });
-    cy.get("#copyDocumentAcknowledged").click({ force: true });
-    cy.get('[data-testid="continue"]').click({ force: true });
+    cy.get("#voidOriginal").click();
+    cy.get("#copyDocumentAcknowledged").click();
+    cy.get('[data-testid="continue"]').click();
     cy.get(".govuk-notification-banner__heading")
       .contains(
         "This draft was created by copying document GBR-2022-SD-F71D98A30. You are reminded that you must not use a non-manipulation document or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."

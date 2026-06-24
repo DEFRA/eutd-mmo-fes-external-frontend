@@ -17,7 +17,7 @@ describe("what export destination page", () => {
       testCaseId: TestCaseId.WhatExportDestination403,
     };
     cy.visit(whatExportDestinationUrl, { qs: { ...testParams } });
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
     cy.url().should("include", "/forbidden");
   });
 
@@ -27,8 +27,8 @@ describe("what export destination page", () => {
     };
     cy.visit(whatExportDestinationUrl, { qs: { ...testParams } });
 
-    cy.get("#exportDestination").should("be.visible").select("France", { force: true });
-    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+    cy.get("#exportDestination").should("be.visible").select("France");
+    cy.get('[data-testid="save-draft-button"]').click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 
@@ -40,7 +40,7 @@ describe("what export destination page", () => {
     cy.visit(whatExportDestinationUrl, {
       qs: { ...testParams },
     });
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-list > li > a").contains("Select a valid destination country");
     cy.get(".govuk-error-message").contains("Select a valid destination country");
   });

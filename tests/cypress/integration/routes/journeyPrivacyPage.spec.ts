@@ -33,7 +33,7 @@ describe("Privacy page for cc journey", () => {
       };
       cy.visit("/create-catch-certificate/privacy-notice", { qs: { ...testParams } });
 
-      cy.contains("a", /^Back$/).click({ force: true });
+      cy.contains("a", /^Back$/).click();
       cy.get(".govuk-heading-xl").contains("What do you want to do?");
     });
 
@@ -172,7 +172,7 @@ describe("Journey dashboards should redirect to privacy page when user has not a
     cy.url().should("include", "/privacy-notice");
 
     cy.get("#acceptAndContinue").should("be.visible");
-    cy.get("#acceptAndContinue").click({ force: true });
+    cy.get("#acceptAndContinue").click();
   });
 
   it("PS dashboard privacy notice - click on Submit button - jsenable set to true", () => {
@@ -185,6 +185,6 @@ describe("Journey dashboards should redirect to privacy page when user has not a
 
     cy.get("#acceptAndContinue").should("be.visible");
     cy.get("form").find("input").invoke("val", "true");
-    cy.get("#acceptAndContinue").click({ force: true });
+    cy.get("#acceptAndContinue").click();
   });
 });

@@ -100,7 +100,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     };
 
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", "/forbidden");
   });
 
@@ -109,9 +109,9 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveMaxCharsRailwayBillNumber,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railway bill number", { force: true });
-    cy.get("#departurePlace").type("Hull", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#railwayBillNumber").type("Railway bill number");
+    cy.get("#departurePlace").type("Hull");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Railway bill number must not exceed 15 characters$/).should("be.visible");
@@ -122,9 +122,9 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveAlphanumericsRailwayBillNumber,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railway..", { force: true });
-    cy.get("#departurePlace").type("Hull", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#railwayBillNumber").type("Railway..");
+    cy.get("#departurePlace").type("Hull");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Railway bill number must only contain letters and numbers$/).should("be.visible");
@@ -135,7 +135,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TrainTransportErrors,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
@@ -147,10 +147,10 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TrainTransportSaveAsDraft,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
-    cy.get("#railwayBillNumber").type("Railbill", { force: true });
-    cy.get("#departurePlace").type("Hull", { force: true });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get('input[name="containerNumbers.0"]').type("Container");
+    cy.get("#railwayBillNumber").type("Railbill");
+    cy.get("#departurePlace").type("Hull");
+    cy.get("[data-testid=save-draft-button").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
@@ -161,15 +161,15 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
     // Fill all fields including export date and container
-    cy.get("#railwayBillNumber").type("RAIL9876", { force: true });
-    cy.get("#departurePlace").type("Channel Tunnel UK Terminal", { force: true });
-    cy.get("#exportDate").type("28", { force: true });
-    cy.get("#exportDate-month").type("07", { force: true });
-    cy.get("#exportDate-year").type("2026", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("OPQR5678901", { force: true });
+    cy.get("#railwayBillNumber").type("RAIL9876");
+    cy.get("#departurePlace").type("Channel Tunnel UK Terminal");
+    cy.get("#exportDate").type("28");
+    cy.get("#exportDate-month").type("07");
+    cy.get("#exportDate-year").type("2026");
+    cy.get('input[name="containerNumbers.0"]').type("OPQR5678901");
 
     // Save as draft
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
     // Return to the page using CHECK testCaseId (hardcoded saved fixture — immune to double-GET and retry state issues)
@@ -194,15 +194,15 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
     // Fill with invalid container numbers (would fail validation on save & continue)
-    cy.get("#railwayBillNumber").type("EURO123", { force: true });
-    cy.get("#departurePlace").type("St Pancras International", { force: true });
-    cy.get("#exportDate").type("14", { force: true });
-    cy.get("#exportDate-month").type("09", { force: true });
-    cy.get("#exportDate-year").type("2026", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("WRONG", { force: true }); // Invalid format
+    cy.get("#railwayBillNumber").type("EURO123");
+    cy.get("#departurePlace").type("St Pancras International");
+    cy.get("#exportDate").type("14");
+    cy.get("#exportDate-month").type("09");
+    cy.get("#exportDate-year").type("2026");
+    cy.get('input[name="containerNumbers.0"]').type("WRONG"); // Invalid format
 
     // Save as draft should accept invalid containers
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
     // Return and verify values retained including invalid containers using CHECK testCaseId
@@ -222,9 +222,9 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TrainTransportSave,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railbill", { force: true });
-    cy.get("#departurePlace").type("Hull", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#railwayBillNumber").type("Railbill");
+    cy.get("#departurePlace").type("Hull");
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", "/departure-product-summary");
   });
 });
@@ -255,8 +255,8 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
       testCaseId: TestCaseId.TrainSaveInvalidFormatContainerNumber,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get('[name="containerNumbers.0"]').should("be.visible").type("INVALID@#", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get('[name="containerNumbers.0"]').should("be.visible").type("INVALID@#");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "There is a problem").should("be.visible");
   });
 
@@ -267,10 +267,8 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     cy.get('[name="containerNumbers.0"]')
       .should("be.visible")
-      .type("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", {
-        force: true,
-      });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+      .type("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "There is a problem").should("be.visible");
   });
 
@@ -282,13 +280,13 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
 
     for (let i = 0; i < 5; i++) {
       cy.wait(500);
-      cy.get(`[name="containerNumbers.${i}"]`).should("be.visible").type("ABCD1234567", { force: true });
+      cy.get(`[name="containerNumbers.${i}"]`).should("be.visible").type("ABCD1234567");
       if (i < 4) {
-        cy.get('[data-testid="add-another-container"]').click({ force: true });
+        cy.get('[data-testid="add-another-container"]').click();
       }
     }
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
   });
 
   it("should remove a container input when the remove button is clicked", () => {
@@ -298,14 +296,14 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
     cy.wait(500);
-    cy.get('[data-testid="add-another-container"]').click({ force: true });
+    cy.get('[data-testid="add-another-container"]').click();
 
-    cy.get('[name="containerNumbers.0"]').type("ABCD1234567", { force: true });
-    cy.get('[name="containerNumbers.1"]').type("ABCD1234561", { force: true });
+    cy.get('[name="containerNumbers.0"]').type("ABCD1234567");
+    cy.get('[name="containerNumbers.1"]').type("ABCD1234561");
 
     cy.get('[name^="containerNumbers."]').should("have.length", 2);
 
-    cy.get('[data-testid="remove-container-1"]').click({ force: true });
+    cy.get('[data-testid="remove-container-1"]').click();
 
     cy.get('[name^="containerNumbers."]').should("have.length", 1);
     cy.get('[name="containerNumbers.0"]').should("have.value", "ABCD1234567");
@@ -318,7 +316,7 @@ describe("Train Point of Destination - Validation Scenarios", () => {
       testCaseId: TestCaseId.TrainTransportPointOfDestinationRequired,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the point of destination$/).should("be.visible");
   });
@@ -329,8 +327,8 @@ describe("Train Point of Destination - Validation Scenarios", () => {
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     const longString = new Array(102).join("a");
-    cy.get("#pointOfDestination").type(longString, { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#pointOfDestination").type(longString);
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Point of destination must not exceed 100 characters$/).should("be.visible");
   });
@@ -340,8 +338,8 @@ describe("Train Point of Destination - Validation Scenarios", () => {
       testCaseId: TestCaseId.TrainTransportPointOfDestinationInvalidCharacters,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#pointOfDestination").type("Invalid@#$%", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#pointOfDestination").type("Invalid@#$%");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains(
       "a",

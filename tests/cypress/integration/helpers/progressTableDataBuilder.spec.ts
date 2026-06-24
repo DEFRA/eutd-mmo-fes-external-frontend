@@ -92,7 +92,7 @@ describe("progressTableDataBuilder", () => {
       const transportSection = result.find((s) => s.testId === "Transportation");
       const transportTypeRow = transportSection?.rows.find((r) => r.testId === "transportType");
 
-      expect(transportTypeRow).to.not.equal(undefined);
+      expect(transportTypeRow).to.not.be.undefined;
       expect(transportTypeRow?.url).to.equal(`${ccContext}/do-you-have-additional-transport-types`);
     });
 
@@ -118,7 +118,7 @@ describe("progressTableDataBuilder", () => {
       const productSection = result.find((s) => s.testId === "ProductsAndLandings");
       const dataUploadRow = productSection?.rows.find((r) => r.testId === "dataUpload");
 
-      expect(dataUploadRow).to.not.equal(undefined);
+      expect(dataUploadRow).to.not.be.undefined;
       expect(dataUploadRow?.url).to.equal(`${ccContext}/upload-file`);
     });
 
@@ -151,8 +151,8 @@ describe("progressTableDataBuilder", () => {
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const exporterSection = result.find((s) => s.testId === "Exporter");
 
-      expect(exporterSection?.rows.find((r) => r.testId === "exporter")).to.not.equal(undefined);
-      expect(exporterSection?.rows.find((r) => r.testId === "yourReference")).to.not.equal(undefined);
+      expect(exporterSection?.rows.find((r) => r.testId === "exporter")).to.not.be.undefined;
+      expect(exporterSection?.rows.find((r) => r.testId === "yourReference")).to.not.be.undefined;
     });
 
     it("should pass errors through to relevant rows", () => {

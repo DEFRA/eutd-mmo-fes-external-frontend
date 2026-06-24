@@ -15,7 +15,7 @@ describe("Copy this catch certificate address page: Allowed", () => {
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", `/create-catch-certificate/catch-certificates`);
-    cy.findByRole("link", { name: "Back" }).click({ force: true });
+    cy.findByRole("link", { name: "Back" }).click();
     cy.url().should("include", "/catch-certificates");
   });
 
@@ -34,7 +34,7 @@ describe("Copy this catch certificate address page: Allowed", () => {
 
   it("should render the  cancel button and on click should navigate to cc dashboard page", () => {
     cy.contains("button", "Cancel").should("be.visible");
-    cy.get("[data-testid=cancel]").click({ force: true });
+    cy.get("[data-testid=cancel]").click();
     cy.url().should("include", "/catch-certificates");
   });
 
@@ -71,7 +71,7 @@ describe("Error summary", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select an option to continue$/).should("be.visible");
@@ -86,9 +86,9 @@ describe("Submit form with copy all certificate data option on click of continue
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("#voidOriginal").click({ force: true });
+    cy.get("#voidOriginal").click();
     cy.get("#copyDocumentAcknowledged").check();
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
     cy.url().should("include", "/landings-entry");
   });
 });
@@ -100,9 +100,9 @@ describe("Submit form with copy excludeLandings option on click of continue butt
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("#copyExcludeLandings").click({ force: true });
+    cy.get("#copyExcludeLandings").click();
     cy.get("#copyDocumentAcknowledged").check();
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
     cy.url().should("include", "/landings-entry");
   });
 });
@@ -117,7 +117,7 @@ describe("Submit form with copy all certificate data AND void the original optio
 
     cy.get("#voidDocumentConfirm").click();
     cy.get("#copyDocumentAcknowledged").check();
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
     cy.url().should("include", "/copy-void-confirmation");
   });
 });

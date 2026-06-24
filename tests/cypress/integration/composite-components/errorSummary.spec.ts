@@ -26,7 +26,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/add-exporter-details`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Verify error summary exists and has base class
       cy.get("#errorIsland").should("exist").should("have.class", "govuk-error-summary");
@@ -42,7 +42,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/add-exporter-details`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Verify error summary renders error messages
       cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 0);
@@ -57,7 +57,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/what-are-you-exporting`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+      cy.get("[data-testid='add-product']").eq(0).click();
 
       // Verify error summary renders with translated messages
       cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 0);
@@ -77,7 +77,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/add-exporter-details`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Verify error links use default href pattern (#errorKey)
       cy.get(".govuk-error-summary__list a").first().should("have.attr", "href").and("include", "#");
@@ -91,7 +91,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/add-exporter-details`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Click on error link (should trigger onChangeHandler)
       cy.get(".govuk-error-summary__list a")
@@ -118,7 +118,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/you-have-added-a-product`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.contains("button", "Save and continue").click({ force: true });
+      cy.contains("button", "Save and continue").click();
 
       cy.get('.govuk-error-summary__list a[href*="/add-product-to-this-consignment/"]')
         .first()
@@ -141,7 +141,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = "/create-catch-certificate/GBR-2021-CC-123/direct-landing";
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Verify error summary is visible (proves scrollIntoView worked)
       cy.get("#error-summary-title").should("be.visible");
@@ -174,7 +174,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/add-exporter-details`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Click error link
       cy.get(".govuk-error-summary__list a").first().click();
@@ -191,7 +191,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/add-exporter-details`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Get the first error link
       cy.get(".govuk-error-summary__list a")
@@ -220,7 +220,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/what-are-you-exporting`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+      cy.get("[data-testid='add-product']").eq(0).click();
 
       // Verify error links are properly formatted
       cy.get(".govuk-error-summary__list a").each(($link) => {
@@ -239,7 +239,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/what-are-you-exporting`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+      cy.get("[data-testid='add-product']").eq(0).click();
 
       // Verify multiple errors are rendered
       cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 1);
@@ -253,7 +253,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/what-are-you-exporting`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+      cy.get("[data-testid='add-product']").eq(0).click();
 
       // Verify each error has unique link
       cy.get(".govuk-error-summary__list a").each(($link) => {
@@ -271,7 +271,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/add-exporter-details`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Verify common namespace translation (commonErrorHeading)
       cy.get("#error-summary-title").should("exist").and("have.text", "There is a problem");
@@ -290,7 +290,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/what-are-you-exporting`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+      cy.get("[data-testid='add-product']").eq(0).click();
 
       // Verify error summary contains translated error messages
       cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 0);
@@ -306,7 +306,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/add-exporter-details`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Verify GOV.UK Design System classes
       cy.get("#errorIsland").should("have.class", "govuk-error-summary");
@@ -324,7 +324,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/add-exporter-details`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Verify correct nesting: ul > li > a
       cy.get(".govuk-error-summary__list").should("exist");
@@ -342,7 +342,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/add-exporter-details`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Verify errors array is processed - each error creates a list item
       cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 0);
@@ -361,7 +361,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/what-are-you-exporting`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+      cy.get("[data-testid='add-product']").eq(0).click();
 
       // Verify all errors in the array are rendered
       cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 1);
@@ -383,7 +383,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       cy.visit(pageUrl, { qs: { ...testParams } });
 
       // First submission - should show error summary and focus on it
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
       cy.get("#error-summary-title").should("be.visible");
 
       // Verify error summary has focus (tabIndex={-1} makes it focusable)
@@ -391,7 +391,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
       // Second submission without fixing errors - focus should move to error summary again
       // (This verifies the useEffect dependency change from [] to [errors])
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
       cy.get("#error-summary-title").should("be.visible");
 
       // Error summary should still be focused (ScrollIntoView makes it visible)
@@ -407,7 +407,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       cy.visit(pageUrl, { qs: { ...testParams } });
 
       // Submit with errors
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
       cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 0);
 
       // Get initial error count
@@ -416,7 +416,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
         expect(initialErrorCount).to.be.greaterThan(0);
 
         // Submit again - error summary should be refocused each time errors appear
-        cy.get("[data-testid='save-and-continue']").click({ force: true });
+        cy.get("[data-testid='save-and-continue']").click();
 
         // Verify error summary still visible (proving useEffect re-fired)
         cy.get("#error-summary-title").should("be.visible");
@@ -434,7 +434,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/add-exporter-details`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Verify error summary is visible after scroll
       cy.get("#errorIsland").should("be.visible");
@@ -451,7 +451,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       const pageUrl = `${documentUrl}/add-exporter-details`;
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='save-and-continue']").click({ force: true });
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Wait for component to mount and useEffect to run
       cy.wait(100);

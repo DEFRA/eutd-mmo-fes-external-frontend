@@ -13,7 +13,7 @@ describe("What are you exporting page", () => {
   });
 
   it("should render a back link to add-exporter-details for non-CSV upload", () => {
-    cy.findByRole("link", { name: "Back" }).click({ force: true });
+    cy.findByRole("link", { name: "Back" }).click();
     cy.url().should("eq", `http://localhost:3000${documentUrl}/add-exporter-details`);
   });
 
@@ -43,29 +43,29 @@ describe("What are you exporting page", () => {
   });
 
   it("should toggle the tabs and find text", () => {
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
     cy.get(".govuk-tabs__tab").contains("Add products from favourites").should("be.visible");
-    cy.get("[data-tab-id='productsTab']").click({ force: true });
+    cy.get("[data-tab-id='productsTab']").click();
     cy.get(".govuk-tabs__tab").contains("Add products").should("be.visible");
   });
 
   it("should submit product with out any errors", () => {
-    cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button'").eq(0).click();
     cy.get("#species").contains("Albacore (ALB)");
     cy.get("#state").contains("Fresh");
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("16051000");
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.get(".govuk-error-summary").should("not.exist");
   });
 
   it("should submit product with out any errors without adding to favourites", () => {
-    cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button'").eq(0).click();
     cy.get("#species").contains("Albacore (ALB)");
     cy.get("#state").contains("Fresh");
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("16051000");
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.get(".govuk-error-summary").should("not.exist");
   });
 
@@ -110,37 +110,37 @@ describe("What are you exporting page", () => {
 
   it("should render the  Edit and remove buttons", () => {
     cy.contains("[data-testid*='edit-button']", "Edit").should("be.visible");
-    cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button'").eq(0).click();
     cy.contains("[data-testid*='remove-button']", "Remove").should("be.visible");
   });
 
   it("should check the products are visible and remove button functionality", () => {
     cy.get(".govuk-table__row").should("be.visible");
     cy.get(".govuk-table__row").find("td").should("have.length", 15);
-    cy.get("[data-testid*='remove-button']").eq(0).click({ force: true });
+    cy.get("[data-testid*='remove-button']").eq(0).click();
   });
 
   it("should render the  save as draft button", () => {
     cy.findByRole("button", { name: "Save as draft" });
-    cy.get("#saveAsDraft").click({ force: true });
+    cy.get("#saveAsDraft").click();
     cy.url().should("include", "/catch-certificates");
   });
 
   it("should render the  cancel button", () => {
     cy.get("[data-testid='cancel']").should("be.visible");
-    cy.get("[data-testid='cancel']").click({ force: true });
+    cy.get("[data-testid='cancel']").click();
   });
 
   it("should render the  Save and continue button", () => {
     cy.findByRole("button", { name: "Save and continue" });
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/add-landings");
   });
 
   it("check input typing for finding the species", () => {
-    cy.get("[data-tab-id='productsTab']").click({ force: true });
+    cy.get("[data-tab-id='productsTab']").click();
     cy.get("#add-products").should("be.visible");
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
     cy.get("#add-from-favourites").should("be.visible");
   });
 
@@ -152,7 +152,7 @@ describe("What are you exporting page", () => {
   it("should render summary details species link and find out the count", () => {
     cy.get(".govuk-details__summary").should("have.length", 2);
     cy.get("div .govuk-details__summary").eq(0).contains("I cannot find the species");
-    cy.get("div .govuk-details__summary").eq(0).click({ force: true });
+    cy.get("div .govuk-details__summary").eq(0).click();
     cy.get("div .govuk-details__text")
       .contains(
         "For best results, search for the common English name or the FAO code (if known) as species nicknames are not supported."
@@ -169,21 +169,21 @@ describe("What are you exporting page", () => {
   it("should render summary details commodity code link and find out the count", () => {
     cy.get(".govuk-details__summary").should("have.length", 2);
     cy.get("div .govuk-details__summary").eq(1).contains("I cannot find the commodity code");
-    cy.get("div .govuk-details__summary").eq(1).click({ force: true });
+    cy.get("div .govuk-details__summary").eq(1).click();
     cy.get("div .govuk-details__text")
       .contains("Call 0330 159 1989 if the commodity code you need is not shown.")
       .should("be.visible");
   });
 
   it("should show redirect to manual landings page if landing type is manual landing", () => {
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/add-landings");
   });
 
   it("should display pre-populated product fields when editing", () => {
     // This test verifies that when editing an existing product (Aesop shrimp),
     // all fields (species, state, presentation, commodity code) are displayed
-    cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button'").eq(0).click();
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
     cy.get("#state").contains("Fresh");
     cy.get("#presentation").contains("Whole");
@@ -200,12 +200,12 @@ describe("What are you exporting page when js is enabled", () => {
   });
 
   it("should submit product and display any errors", () => {
-    cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button'").eq(0).click();
     cy.get("#species").contains("Albacore (ALB)");
     cy.get("#state").contains("Fresh");
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("16051000");
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
   });
 });
@@ -219,7 +219,7 @@ describe("What are you exporting page direct landing", () => {
   });
   it("should render the  Save and continue button and redirect to direct-landing", () => {
     cy.findByRole("button", { name: "Save and continue" });
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/direct-landing");
   });
 });
@@ -233,7 +233,7 @@ describe("Errors on click of add product button", () => {
   });
 
   it("should show errors click of add product button", () => {
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the common name or FAO code$/).should("be.visible");
     cy.contains("a", /^Select the state$/).should("be.visible");
@@ -248,9 +248,9 @@ describe("Errors on click of add product button from favourites", () => {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnSaveFromFavourites,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
     cy.get("#add-from-favourites").should("be.visible");
-    cy.get("#add-from-favourites [data-testid='add-product']").click({ force: true });
+    cy.get("#add-from-favourites [data-testid='add-product']").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select a product favourite from the list$/).should("be.visible");
@@ -266,9 +266,9 @@ describe("Errors on click of add product button from favourites", () => {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnSaveFromFavourites,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
     cy.get("#add-from-favourites").should("be.visible");
-    cy.get("#add-from-favourites [data-testid='add-product']").click({ force: true });
+    cy.get("#add-from-favourites [data-testid='add-product']").click();
 
     // Error summary should be visible (triggers useEffect scrollToId on line 110)
     cy.get("#errorIsland").should("exist");
@@ -296,7 +296,7 @@ describe("Add a product when addedToFavourites is false", () => {
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
 
-    cy.get("#add-product").click({ force: true });
+    cy.get("#add-product").click();
     cy.get(".govuk-error-summary").should("not.exist");
   });
 });
@@ -358,11 +358,11 @@ describe("What are you exporting page: add Product to favourites", () => {
   });
 
   it("should add product to favourites when add product button is clicked", () => {
-    cy.get("#add-product").click({ force: true });
+    cy.get("#add-product").click();
     cy.get(".govuk-error-summary").should("not.exist");
   });
   it("click on save and continue with unauthorised response", () => {
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/forbidden");
   });
 });
@@ -374,13 +374,13 @@ describe("What are you exporting page: editing product with errors", () => {
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button'").eq(0).click();
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
     cy.get("#state").contains("Fresh");
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("16051000");
-    cy.get("select#commodity_code option").eq(0).click({ force: true });
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("select#commodity_code option").eq(0).click();
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").contains("Select a commodity code");
     // Double checks that even after a submission and error the values are displayed correctly
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
@@ -396,7 +396,7 @@ describe("What are you exporting page: CSV upload journey back button", () => {
       testCaseId: TestCaseId.WhatAreYouExportingUploadEntry,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
-    cy.findByRole("link", { name: "Back" }).click({ force: true });
+    cy.findByRole("link", { name: "Back" }).click();
     cy.url().should("eq", `http://localhost:3000${documentUrl}/upload-file`);
   });
 });
@@ -423,7 +423,7 @@ describe("What are you exporting page: Additional coverage for component renderi
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Submit without filling form to trigger errors
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
 
     // Verify error summary appears
     cy.get(".govuk-error-summary").should("be.visible");
@@ -466,7 +466,7 @@ describe("What are you exporting page: Additional coverage for component renderi
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Switch to favourites tab
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
 
     // Verify favourites content is visible
     cy.get("#add-from-favourites").should("be.visible");
@@ -559,7 +559,7 @@ describe("What are you exporting page: Favourites tab with product limit", () =>
       testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
     cy.get("[data-testid='add-product']").should("not.exist");
   });
 });
@@ -590,7 +590,7 @@ describe("What are you exporting page: Tab interaction and handleTab function", 
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Switch to favourites tab first
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
 
     // Click edit button WITHOUT force to trigger onClick handler
     cy.get("[data-testid*='edit-button']").first().should("be.visible");
@@ -608,7 +608,7 @@ describe("What are you exporting page: Tab interaction and handleTab function", 
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Start on favourites tab
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
     cy.get("#add-from-favourites").should("be.visible");
 
     // Edit a product - trigger the onClick without force
@@ -627,7 +627,7 @@ describe("What are you exporting page: Error scrolling behavior", () => {
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
 
     // Verify error summary is visible
     cy.get("#errorIsland").should("be.visible");
@@ -661,7 +661,7 @@ describe("What are you exporting page: State and presentation lookup for non-JS"
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Submit form to trigger action and get action data
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
 
     // Verify error summary renders (indicating action was processed)
     cy.get(".govuk-error-summary").should("be.visible");
@@ -713,7 +713,7 @@ describe("What are you exporting page: Selected values from action data", () => 
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button']").eq(0).click();
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
   });
 
@@ -724,7 +724,7 @@ describe("What are you exporting page: Selected values from action data", () => 
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Edit a product
-    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button']").eq(0).click();
 
     // Verify all fields populated from loader data initially
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
@@ -732,8 +732,8 @@ describe("What are you exporting page: Selected values from action data", () => 
     cy.get("#presentation").should("contain", "Whole");
 
     // Submit with invalid data to trigger action with errors
-    cy.get("select#commodity_code option").eq(0).click({ force: true });
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("select#commodity_code option").eq(0).click();
+    cy.get("[data-testid='add-product']").eq(0).click();
 
     // After form submission with errors, action data should preserve values
     // This tests the left side of ?? operators: selectedSpecies ?? loaderSpecies, etc.
@@ -766,7 +766,7 @@ describe("What are you exporting page: Error object transformation", () => {
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Submit form to trigger errors
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
 
     // Verify error summary displays correctly transformed errors
     cy.get(".govuk-error-summary").should("be.visible");
@@ -795,7 +795,7 @@ describe("What are you exporting page: Error object transformation", () => {
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
 
     // Verify all expected error links are present and properly transformed
     cy.get(".govuk-error-summary__list a")
@@ -819,11 +819,11 @@ describe("What are you exporting page: TabRef and handleTab functionality", () =
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Start on favourites tab
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
     cy.get("#add-from-favourites").should("be.visible");
 
     // Click edit button to trigger handleTab via onClickHandler
-    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+    cy.get("[data-testid*='edit-button']").first().click();
 
     // Verify we're back on products tab
     cy.wait(300);
@@ -837,10 +837,10 @@ describe("What are you exporting page: TabRef and handleTab functionality", () =
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Switch to favourites tab
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
 
     // Edit a product to trigger handleTab
-    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+    cy.get("[data-testid*='edit-button']").first().click();
 
     // Verify productsTab is visible (scrolled to)
     cy.get("#productsTab").should("be.visible");
@@ -854,14 +854,14 @@ describe("What are you exporting page: TabRef and handleTab functionality", () =
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Switch tabs to ensure tabRef is working
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
     cy.get("#add-from-favourites").should("be.visible");
 
-    cy.get("[data-tab-id='productsTab']").click({ force: true });
+    cy.get("[data-tab-id='productsTab']").click();
     cy.get("#add-products").should("be.visible");
 
     // Click edit to trigger handleTab through onClickHandler
-    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+    cy.get("[data-testid*='edit-button']").first().click();
     cy.get(".govuk-tabs__list-item--selected").should("exist");
   });
 });
@@ -874,7 +874,7 @@ describe("What are you exporting page: useEffect error scrolling", () => {
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Trigger validation errors
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
 
     // useEffect should scroll to errorIsland
     cy.get("#errorIsland").should("be.visible");
@@ -892,8 +892,8 @@ describe("What are you exporting page: useEffect error scrolling", () => {
     cy.get(".govuk-error-summary").should("not.exist");
 
     // Navigate around without triggering errors
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
-    cy.get("[data-tab-id='productsTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
+    cy.get("[data-tab-id='productsTab']").click();
 
     // Still no errorIsland
     cy.get("#errorIsland").should("not.exist");
@@ -918,7 +918,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Submit to get action data with stateLookupNonJs
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
 
     // State dropdown should still render using fallback
     cy.get("#state").should("exist");
@@ -964,7 +964,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
     cy.get("#addToFavourites").should("not.exist");
 
     // Favourites tab button should not render
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
     cy.get("#add-from-favourites [data-testid='add-product']").should("not.exist");
   });
 
@@ -1000,7 +1000,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Click edit to enable edit mode
-    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+    cy.get("[data-testid*='edit-button']").first().click();
 
     // Form should be populated with product data
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
@@ -1043,7 +1043,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
 
     // Verify error classes are applied via transformed errors object
     cy.get(".govuk-form-group--error").should("exist");
@@ -1108,7 +1108,7 @@ describe("AddProducts Component: Basic Rendering and Integration", () => {
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Click edit on existing product
-    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+    cy.get("[data-testid*='edit-button']").first().click();
 
     // Verify form is populated with existing data
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
@@ -1127,13 +1127,13 @@ describe("AddProducts Component: Basic Rendering and Integration", () => {
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Edit a product
-    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+    cy.get("[data-testid*='edit-button']").first().click();
 
     // Verify form has data
     cy.get("#species").should("not.have.value", "");
 
     // Click cancel
-    cy.get("[data-testid='cancel']").click({ force: true });
+    cy.get("[data-testid='cancel']").click();
 
     // Form should be reset
     cy.get("#species").should("have.value", "");
@@ -1147,7 +1147,7 @@ describe("AddProducts Component: Basic Rendering and Integration", () => {
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     // Edit product to populate hidden fields
-    cy.get("[data-testid*='edit-button']").first().click({ force: true });
+    cy.get("[data-testid*='edit-button']").first().click();
 
     // Verify hidden inputs exist
     cy.get("input[name='scientificName']").should("exist");
@@ -1183,14 +1183,14 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
   describe("useEffect for isReset - Form reset on navigation actions", () => {
     it("should reset all form fields when cancel button is clicked", () => {
       // Edit an existing product to populate form
-      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.get("[data-testid*='edit-button']").first().click();
 
       // Verify form is populated
       cy.get("#species").should("have.value", "Aesop shrimp (AES)");
       cy.get("#state").should("not.have.value", "");
 
       // Click cancel to trigger isReset = true
-      cy.get("[data-testid='cancel']").click({ force: true });
+      cy.get("[data-testid='cancel']").click();
 
       // Verify useEffect reset all fields
       cy.get("#species").should("have.value", "");
@@ -1207,13 +1207,13 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
       // Check if autocomplete appears and select if available
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.get(".autocomplete__option").first().click();
           cy.wait(1000);
         }
       });
 
       // Submit the form (triggers navigation with addProduct action)
-      cy.get("[data-testid='add-product']").click({ force: true });
+      cy.get("[data-testid='add-product']").click();
       cy.wait(500);
 
       // Verify form was reset by useEffect (isReset = true after submit)
@@ -1224,21 +1224,21 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
   describe("useEffect for commonSpecies - Fetch states when species change", () => {
     it("should handle species change by updating states", () => {
       // Edit first product
-      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.get("[data-testid*='edit-button']").first().click();
       cy.wait(500);
 
       cy.get("#species").invoke("val");
 
       // Clear and type new species - break the chain to avoid detached DOM errors
-      cy.get("#species").clear({ force: true });
+      cy.get("#species").clear();
       cy.wait(500);
-      cy.get("#species").type("Atlantic cod", { force: true });
+      cy.get("#species").type("Atlantic cod");
       cy.wait(1000);
 
       // Select from autocomplete if available
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.get(".autocomplete__option").first().click();
           cy.wait(2000);
 
           // Verify species code changed
@@ -1255,7 +1255,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
   describe("useEffect for [commonSpecies, currentState] - Fetch presentations", () => {
     it("should update presentations when state changes", () => {
       // Edit a product
-      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.get("[data-testid*='edit-button']").first().click();
       cy.wait(1000);
 
       // Get current presentation count
@@ -1281,7 +1281,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
   describe("useEffect for currentPresentation - Fetch commodity codes", () => {
     it("should populate commodity codes when presentation is selected", () => {
       // Edit a product with all fields
-      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.get("[data-testid*='edit-button']").first().click();
       cy.wait(1000);
 
       // Verify commodity codes are populated by useEffect
@@ -1290,7 +1290,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
     it("should auto-select commodity code when only one is available", () => {
       // Edit a product
-      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.get("[data-testid*='edit-button']").first().click();
       cy.wait(1000);
 
       // Check if commodity code is auto-selected
@@ -1306,7 +1306,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
     it("should update commodity codes when presentation changes", () => {
       // Edit a product
-      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.get("[data-testid*='edit-button']").first().click();
       cy.wait(1000);
 
       // Get current commodity code
@@ -1333,7 +1333,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
       cy.get("#species").should("have.value", "");
 
       // Edit a product (selectedSpecies prop changes)
-      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.get("[data-testid*='edit-button']").first().click();
 
       // useEffect should update commonSpecies from selectedSpecies prop
       cy.get("#species").should("have.value", "Aesop shrimp (AES)");
@@ -1343,7 +1343,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
   describe("useEffect for [commodityCodes, selectedCommodityCode] - Update commodity code holders from props", () => {
     it("should update commodityCodesHolder when commodityCodes prop changes", () => {
       // Edit a product (commodityCodes prop is passed)
-      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.get("[data-testid*='edit-button']").first().click();
       cy.wait(1000);
 
       // useEffect should populate commodityCodesHolder from commodityCodes prop
@@ -1356,7 +1356,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
         .its("length")
         .then(() => {
           // Edit product
-          cy.get("[data-testid*='edit-button']").first().click({ force: true });
+          cy.get("[data-testid*='edit-button']").first().click();
           cy.wait(1000);
 
           // useEffect should handle commodityCodes prop even if empty initially
@@ -1368,11 +1368,11 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
   describe("useEffect cleanup functions - Abort controller management", () => {
     it("should cleanup on cancel action", () => {
       // Edit a product to trigger useEffect hooks
-      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.get("[data-testid*='edit-button']").first().click();
       cy.wait(1000);
 
       // Cancel triggers navigation and cleanup
-      cy.get("[data-testid='cancel']").click({ force: true });
+      cy.get("[data-testid='cancel']").click();
       cy.wait(500);
 
       // Form should be clean
@@ -1384,7 +1384,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
   describe("useEffect integration - Multiple hooks working together", () => {
     it("should maintain state consistency across useEffect executions", () => {
       // Edit product
-      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.get("[data-testid*='edit-button']").first().click();
       cy.wait(1000);
 
       // Capture initial state
@@ -1426,7 +1426,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
       // Select the first option from autocomplete dropdown
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.get(".autocomplete__option").first().click();
           cy.wait(500);
 
           // Verify species was set (setCommonSpecies called)
@@ -1442,7 +1442,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.get(".autocomplete__option").first().click();
           cy.wait(500);
 
           // Verify setCommonSpecies was called with correct value
@@ -1460,7 +1460,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.get(".autocomplete__option").first().click();
           cy.wait(1500);
 
           cy.get("#species").invoke("val").as("firstSpecies");
@@ -1471,7 +1471,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
           cy.get("body").then(($body2) => {
             if ($body2.find(".autocomplete__option").length > 0) {
-              cy.get(".autocomplete__option").first().click({ force: true });
+              cy.get(".autocomplete__option").first().click();
               cy.wait(500);
 
               // Verify species changed
@@ -1491,7 +1491,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
     it("should handle empty species selection (clearing species)", () => {
       // Edit a product
-      cy.get("[data-testid*='edit-button']").first().click({ force: true });
+      cy.get("[data-testid*='edit-button']").first().click();
       cy.wait(1000);
 
       // Clear species field (simulates selecting empty value)
@@ -1504,7 +1504,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.get(".autocomplete__option").first().click();
           cy.wait(500);
 
           // handleSpeciesSelection should set all fields correctly
@@ -1523,7 +1523,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.get(".autocomplete__option").first().click();
           cy.wait(1500);
 
           // After handleSpeciesSelection, verify form is in consistent state
@@ -1546,7 +1546,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.get(".autocomplete__option").first().click();
           cy.wait(2000);
 
           // After species selection and reset, state should be populated by useEffect
@@ -1575,7 +1575,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.get(".autocomplete__option").first().click();
           cy.wait(500);
 
           // handleSpeciesSelection should work regardless of species name format
@@ -1594,7 +1594,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click({ force: true });
+          cy.get(".autocomplete__option").first().click();
           cy.wait(500);
 
           // Every line in the function should be executed:
@@ -1626,7 +1626,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
         cy.get("body").then(($body) => {
           if ($body.find(".autocomplete__option").length > 0) {
-            cy.get(".autocomplete__option").first().click({ force: true });
+            cy.get(".autocomplete__option").first().click();
             cy.wait(index === speciesNames.length - 1 ? 500 : 300);
 
             // Function should execute successfully for each input
@@ -1663,7 +1663,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
   describe("stateInputProps.defaultValue assignment (line 298)", () => {
     it("should use defaultValue for state when component receives selectedState prop", () => {
       // Edit existing product to trigger defaultValue path in non-hydrated state
-      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+      cy.get("[data-testid*='edit-button'").eq(0).click();
 
       // Verify state field has the pre-populated value (tests defaultValue = selectedState)
       cy.get("#state").should("exist");
@@ -1678,7 +1678,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
 
     it("should assign selectedState to defaultValue in edit mode", () => {
       // Edit a product where selectedState prop is passed from server
-      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+      cy.get("[data-testid*='edit-button'").eq(0).click();
 
       // The state dropdown should show the correct default selection
       cy.get("#state").should("not.have.value", "");
@@ -1689,7 +1689,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
   describe("presentationInputProps.defaultValue assignment (line 299)", () => {
     it("should use defaultValue for presentation when component receives selectedPresentation prop", () => {
       // Edit existing product to trigger defaultValue path
-      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+      cy.get("[data-testid*='edit-button'").eq(0).click();
 
       // Verify presentation field has the pre-populated value (tests defaultValue = selectedPresentation)
       cy.get("#presentation").should("exist");
@@ -1704,7 +1704,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
 
     it("should assign selectedPresentation to defaultValue in edit mode", () => {
       // Edit a product where selectedPresentation prop is passed from server
-      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+      cy.get("[data-testid*='edit-button'").eq(0).click();
 
       // The presentation dropdown should show the correct default selection
       cy.get("#presentation").should("not.have.value", "");
@@ -1721,7 +1721,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
 
     it("should handle commodityCodes array with multiple values and find matching selectedCommodityCode", () => {
       // Edit existing product which has multiple commodity codes
-      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+      cy.get("[data-testid*='edit-button'").eq(0).click();
 
       // Verify commodity code field shows pre-selected value
       // Tests: comodityCodeValue = commodityCodes.find(c => c.value === selectedCommodityCode)?.value
@@ -1731,7 +1731,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
 
     it("should assign commodityCodeValue to defaultValue in edit mode", () => {
       // Edit a product where commodityCodes array is populated
-      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+      cy.get("[data-testid*='edit-button'").eq(0).click();
 
       // Verify the commodity code dropdown has the correct default value
       cy.get("#commodity_code").should("not.have.value", "");
@@ -1749,7 +1749,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
   describe("Complete defaultValue flow - All three input props (lines 298-300)", () => {
     it("should set all three defaultValues when editing an existing product", () => {
       // Edit product - this triggers the else block where defaultValue is used
-      cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+      cy.get("[data-testid*='edit-button'").eq(0).click();
 
       // Verify all three fields have defaultValues set correctly
       // Line 298: stateInputProps.defaultValue = selectedState
@@ -1788,7 +1788,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should display the duplicate product error message in the error summary", () => {
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /The combination of species, state, presentation and commodity code must be unique/).should(
       "be.visible"
@@ -1796,7 +1796,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should display the duplicate product error inline on the species field", () => {
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
     cy.contains(/The combination of species, state, presentation and commodity code must be unique/).should(
       "be.visible"
@@ -1804,35 +1804,35 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should keep the state dropdown enabled after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
     cy.get("select#state").should("exist");
     cy.get("select#state").should("not.be.disabled");
   });
 
   it("should keep the presentation dropdown enabled after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
     cy.get("select#presentation").should("exist");
     cy.get("select#presentation").should("not.be.disabled");
   });
 
   it("should keep the commodity code dropdown enabled after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
     cy.get("select#commodity_code").should("exist");
     cy.get("select#commodity_code").should("not.be.disabled");
   });
 
   it("should keep the species autocomplete field usable after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
     cy.get("#species").should("exist");
     cy.get("#species").should("not.be.disabled");
   });
 
   it("should not clear pre-populated state options after a duplicate product error", () => {
-    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button']").eq(0).click();
 
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
     cy.get("select#state option").should("have.length.greaterThan", 1);
@@ -1842,24 +1842,24 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should allow the user to re-select a state value after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
 
-    cy.get("select#state").should("not.be.disabled").select(0, { force: true });
+    cy.get("select#state").should("not.be.disabled").select(0);
   });
 
   it("should allow the user to attempt re-submission after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
 
     cy.get("[data-testid='add-product']").eq(0).should("exist").should("not.be.disabled");
   });
 
   it("should allow the user to cancel after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
 
-    cy.get("[data-testid='cancel']").should("exist").should("not.be.disabled").click({ force: true });
+    cy.get("[data-testid='cancel']").should("exist").should("not.be.disabled").click();
   });
 });
 
@@ -1895,7 +1895,7 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
       .and("not.be.disabled")
       .and("have.attr", "aria-controls", "product__listbox");
     // force:true bypasses the brief disabled state caused by React's post-hydration re-render
-    cy.get("#add-from-favourites input[role='combobox']").type("A", { force: true });
+    cy.get("#add-from-favourites input[role='combobox']").type("A");
   });
 });
 
@@ -1915,7 +1915,7 @@ describe("WCAG SC 3.1.2 - lang='en' on English-language select options (hydrated
     // Hydration-complete gate: passes once React's full client re-render has settled
     cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
 
-    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button']").eq(0).click();
     // Wait for the edit page to hydrate and populate its select options
     cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
     cy.get("#state").should("contain", "Fresh");
@@ -1938,7 +1938,7 @@ describe("WCAG SC 3.1.2 - lang='en' on English-language select options (hydrated
     cy.visit(productsUrl, { qs: { ...testParams } });
     cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
 
-    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button']").eq(0).click();
     cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
     cy.get("#state").should("contain", "Fresh");
 
@@ -1963,7 +1963,7 @@ describe("WCAG SC 3.1.2 - lang='en' on English-language select options (non-JS)"
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button']").eq(0).click();
     // Server re-renders with the product's state data — wait for options to be present
     cy.get("#state").should("contain", "Fresh");
 
@@ -1984,7 +1984,7 @@ describe("WCAG SC 3.1.2 - lang='en' on English-language select options (non-JS)"
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid*='edit-button']").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button']").eq(0).click();
     cy.get("#state").should("contain", "Fresh");
 
     cy.get('#state option[value!=""]').should("have.length.gt", 0);
