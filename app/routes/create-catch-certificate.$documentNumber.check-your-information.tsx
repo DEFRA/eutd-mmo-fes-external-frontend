@@ -579,14 +579,6 @@ const CheckYourInformation = () => {
     }
   };
 
-  const getBackToRoutes = () => {
-    if (isLocked) {
-      return route("/create-catch-certificate/catch-certificates");
-    } else {
-      return route("/create-catch-certificate/:documentNumber/progress", { documentNumber });
-    }
-  };
-
   const getNotificationMsg = (exporterDetails: Exporter, _errors: SystemFailure | IError[]) => {
     let notificationMsgs: string[] = [];
 
@@ -606,7 +598,6 @@ const CheckYourInformation = () => {
     return notificationMsgs;
   };
   const journey: Journey = "catchCertificate";
-  const backTo = getBackToRoutes();
   const actionData = useActionData();
   const validationErrorsFromLoader = actionData?.submitCertificate?.errors ?? validationErrors;
 
@@ -652,7 +643,7 @@ const CheckYourInformation = () => {
 
   const notificationMessages = getNotificationMsg(exporterDetails, errors);
   return (
-    <Main backUrl={backTo}>
+    <Main useHistoryBack>
       {Array.isArray(notificationMessages) && notificationMessages.length > 0 && (
         <NotificationBanner
           header={t("commonImportant", { ns: "common" })}
