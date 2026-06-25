@@ -131,9 +131,10 @@ describe("CC: Entering the address manually with errors", () => {
 
     // Should display the address first part error
     cy.get(".govuk-error-summary").should("be.visible");
-    cy.get(".govuk-error-summary").contains(
-      "Enter a sub-building name, building number, a building name or street name"
-    );
+    cy.get(".govuk-error-summary").contains("Enter Building number");
+    cy.get(".govuk-error-summary").contains("Enter Building name");
+    cy.get(".govuk-error-summary").contains("Enter Sub-building name");
+    cy.get(".govuk-error-summary").contains("Enter Street name");
   });
 
   it("should not display error when sub-building name is populated", () => {
