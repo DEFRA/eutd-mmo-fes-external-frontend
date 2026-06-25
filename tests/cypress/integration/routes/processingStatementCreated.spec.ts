@@ -18,7 +18,7 @@ describe("Processing statement created page: rendering", () => {
       .should("have.attr", "href", "/create-processing-statement/processing-statements");
     cy.findByRole("link", {
       name: "View completed processing statements or create a new export document",
-    }).click({ force: true });
+    }).click();
     cy.url().should("include", "/processing-statements");
   });
 

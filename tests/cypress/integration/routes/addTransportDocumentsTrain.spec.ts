@@ -43,7 +43,7 @@ describe("Add Transportation Documents Train", () => {
 
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
 
@@ -52,7 +52,7 @@ describe("Add Transportation Documents Train", () => {
       testCaseId: TestCaseId.TrainTransportDocumentsErrors,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
   });
 
@@ -61,7 +61,7 @@ describe("Add Transportation Documents Train", () => {
       testCaseId: TestCaseId.TrainTransportDocumentsOptionalError,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", `${certificateUrl}/do-you-have-additional-transport-types`);
   });
 
@@ -70,7 +70,7 @@ describe("Add Transportation Documents Train", () => {
       testCaseId: TestCaseId.TrainTransportDocumentsOptionalError,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=add-another-document-button]").click({ force: true });
+    cy.get("[data-testid=add-another-document-button]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter at least one additional transport document$/).should("be.visible");
   });
@@ -99,7 +99,7 @@ describe("Add Transportation Documents Train", () => {
     };
 
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/forbidden");
   });
 
@@ -108,9 +108,9 @@ describe("Add Transportation Documents Train", () => {
       testCaseId: TestCaseId.TrainTransportDocumentsSave,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#documents").get("input[name=documentName1]").type("Invoice", { force: true });
-    cy.get("#documents").get("input[name=documentReference1]").type("INV0001", { force: true });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("#documents").get("input[name=documentName1]").type("Invoice");
+    cy.get("#documents").get("input[name=documentReference1]").type("INV0001");
+    cy.get("[data-testid=save-draft-button").click();
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
 
@@ -119,9 +119,9 @@ describe("Add Transportation Documents Train", () => {
       testCaseId: TestCaseId.TrainTransportDocumentsErrors,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=add-another-document-button]").click({ force: true });
+    cy.get("[data-testid=add-another-document-button]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("h2", /^There is a problem$/).click({ force: true });
+    cy.contains("h2", /^There is a problem$/).click();
   });
 
   it("should not display errors when click adding document name and reference", () => {
@@ -129,9 +129,9 @@ describe("Add Transportation Documents Train", () => {
       testCaseId: TestCaseId.TrainTransportDocuments,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#documents").get("input[name=documentName1]").type("Invoice", { force: true });
-    cy.get("#documents").get("input[name=documentReference1]").type("INV0001", { force: true });
-    cy.get("[data-testid=add-another-document-button]").click({ force: true });
+    cy.get("#documents").get("input[name=documentName1]").type("Invoice");
+    cy.get("#documents").get("input[name=documentReference1]").type("INV0001");
+    cy.get("[data-testid=add-another-document-button]").click();
     cy.get("form").should(($form) => {
       expect($form.find("input[type='text']")).to.have.lengthOf(4);
 

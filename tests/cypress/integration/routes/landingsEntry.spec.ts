@@ -47,7 +47,7 @@ describe("Landings entry page: visuals", () => {
   it("associates every landing option radio with a matching label", () => {
     cy.get("input[type='radio']").each(($radio) => {
       const radioId = $radio.attr("id");
-      expect(radioId).to.not.be.undefined;
+      cy.wrap(radioId).should("not.be.undefined");
       cy.get(`label[for='${radioId}']`).should("have.length", 1).and("be.visible");
     });
 
@@ -92,7 +92,7 @@ describe("Landings entry page: choosing an option", () => {
 
     cy.visit(landingsUrl, { qs: { ...testParams } });
 
-    cy.get("#manualOptionEntry").click({ force: true });
+    cy.get("#manualOptionEntry").click();
     cy.get("form").submit();
     cy.url().should("include", progressUrl);
   });
@@ -139,7 +139,7 @@ describe("Landings entry page: changing landings type", () => {
 
     cy.visit(landingsUrl, { qs: { ...testParams } });
 
-    cy.get("#manualOptionEntry").click({ force: true });
+    cy.get("#manualOptionEntry").click();
     cy.get("form").submit();
     cy.url().should("not.include", landingsTypeConfirmationUrl);
     cy.url().should("include", progressUrl);
@@ -204,7 +204,7 @@ describe("Landings entry page: form submission and errors", () => {
 
     cy.visit(landingsUrl, { qs: { ...testParams } });
 
-    cy.get("#manualOptionEntry").click({ force: true });
+    cy.get("#manualOptionEntry").click();
     cy.get("form").submit();
     cy.url().should("include", progressUrl);
   });

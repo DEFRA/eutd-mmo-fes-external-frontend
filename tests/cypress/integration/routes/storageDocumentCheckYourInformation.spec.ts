@@ -250,7 +250,7 @@ describe("Check Your Information (Summary) page: document submission", () => {
 
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=create-sd-button]").click({ force: true });
+    cy.get("[data-testid=create-sd-button]").click();
     cy.url().should("include", "/non-manipulation-document-created");
   });
 });
@@ -263,7 +263,7 @@ describe("Check Your Information (Summary) page: document submission validation 
 
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=create-sd-button]").click({ force: true });
+    cy.get("[data-testid=create-sd-button]").click();
     cy.url().should("include", "/check-your-information");
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get("a[href='#validationError']").contains("The document entered is no longer valid");
@@ -296,7 +296,7 @@ describe("Check Your Information (Summary) page: pre-submit weight relationship 
 
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=create-sd-button]").click({ force: true });
+    cy.get("[data-testid=create-sd-button]").click();
 
     cy.url().should("include", "/check-your-information");
     cy.url().should("not.include", "/non-manipulation-document-created");
@@ -309,7 +309,7 @@ describe("Check Your Information (Summary) page: pre-submit weight relationship 
 
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=create-sd-button]").click({ force: true });
+    cy.get("[data-testid=create-sd-button]").click();
 
     cy.url().should("include", "/check-your-information");
     cy.url().should("not.include", "/non-manipulation-document-created");
@@ -492,14 +492,14 @@ describe("SD: Point of destination - Edit from check-your-information", () => {
     });
 
     it("should navigate to truck transport page when clicking point of destination change link", () => {
-      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.url().should("include", "/add-transportation-details-truck");
       cy.url().should("include", "#pointOfDestination");
     });
 
     it("should pre-populate point of destination field with existing value", () => {
-      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.get("#pointOfDestination").should("have.value", "Brussels Central Station");
     });
@@ -514,14 +514,14 @@ describe("SD: Point of destination - Edit from check-your-information", () => {
     });
 
     it("should navigate to plane transport page when clicking point of destination change link", () => {
-      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.url().should("include", "/add-transportation-details-plane");
       cy.url().should("include", "#pointOfDestination");
     });
 
     it("should pre-populate point of destination field with existing value", () => {
-      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.get("#pointOfDestination").should("have.value", "Amsterdam Schiphol Airport");
     });
@@ -536,14 +536,14 @@ describe("SD: Point of destination - Edit from check-your-information", () => {
     });
 
     it("should navigate to train transport page when clicking point of destination change link", () => {
-      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.url().should("include", "/add-transportation-details-train");
       cy.url().should("include", "#pointOfDestination");
     });
 
     it("should pre-populate point of destination field with existing value", () => {
-      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.get("#pointOfDestination").should("have.value", "Paris Gare du Nord");
     });
@@ -558,14 +558,14 @@ describe("SD: Point of destination - Edit from check-your-information", () => {
     });
 
     it("should navigate to container vessel transport page when clicking point of destination change link", () => {
-      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.url().should("include", "/add-transportation-details-container-vessel");
       cy.url().should("include", "#pointOfDestination");
     });
 
     it("should pre-populate point of destination field with existing value", () => {
-      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click({ force: true });
+      cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.get("#pointOfDestination").should("have.value", "Rotterdam Port");
     });

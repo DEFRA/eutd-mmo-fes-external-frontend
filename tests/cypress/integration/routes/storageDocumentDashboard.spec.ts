@@ -226,7 +226,7 @@ describe("Storage Document Dashboard page: create a new document", () => {
     };
     cy.visit(storageDocumentDashboardUrl, { qs: { ...testParams } });
 
-    cy.get("#create-export-document").click({ force: true });
+    cy.get("#create-export-document").click();
     cy.url().should("include", "/create-non-manipulation-document/GBR-2022-SD-0123456789/progress");
   });
 
@@ -236,7 +236,7 @@ describe("Storage Document Dashboard page: create a new document", () => {
     };
     cy.visit(storageDocumentDashboardUrl, { qs: { ...testParams } });
 
-    cy.get("#create-export-document").click({ force: true });
+    cy.get("#create-export-document").click();
     cy.url().should("include", "/forbidden");
   });
 });
@@ -250,9 +250,7 @@ describe("Storage Document Dashboard page: continue a document", () => {
 
     cy.get(
       "a#continue-GBR-2022-SD-F0285BD8A[href='/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/progress']"
-    ).click({
-      force: true,
-    });
+    ).click();
     cy.url().should("include", "/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/progress");
   });
 });
@@ -266,9 +264,7 @@ describe("Storage Document Dashboard page: delete a document", () => {
 
     cy.get(
       "a#delete-GBR-2022-SD-F0285BD8A[href='/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/delete-this-non-manipulation-document']"
-    ).click({
-      force: true,
-    });
+    ).click();
     cy.url().should(
       "include",
       "/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/delete-this-non-manipulation-document"
@@ -285,9 +281,7 @@ describe("Storage Document Dashboard page: void a document", () => {
 
     cy.get(
       "a[href='/create-non-manipulation-document/GBR-2022-SD-1C9833456/void-this-non-manipulation-document']"
-    ).click({
-      force: true,
-    });
+    ).click();
     cy.url().should(
       "include",
       "/create-non-manipulation-document/GBR-2022-SD-1C9833456/void-this-non-manipulation-document"
@@ -304,9 +298,7 @@ describe("Storage Document Dashboard page: copy a document", () => {
 
     cy.get(
       "a[href='/create-non-manipulation-document/GBR-2022-SD-1C9833456/copy-this-non-manipulation-document']"
-    ).click({
-      force: true,
-    });
+    ).click();
     cy.url().should(
       "include",
       "/create-non-manipulation-document/GBR-2022-SD-1C9833456/copy-this-non-manipulation-document"
@@ -339,7 +331,7 @@ describe("Storage document dashboard with user details", () => {
   });
 
   it("should render the progress page after creating a document", () => {
-    cy.get("#create-export-document").click({ force: true });
+    cy.get("#create-export-document").click();
 
     cy.url().should("include", "/progress");
   });

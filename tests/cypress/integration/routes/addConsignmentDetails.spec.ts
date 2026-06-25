@@ -41,12 +41,12 @@ describe("Add consignment details page", () => {
   });
 
   it("will link to the processing statement progress page", () => {
-    cy.get("#backToProgress").click({ force: true });
+    cy.get("#backToProgress").click();
     cy.url().should("include", "/create-processing-statement/GBR-2021-PS-8EEB7E123/progress");
   });
 
   it("should show validation errors once adding commodity code and product description with no values", () => {
-    cy.get("[data-testid*='save-and-continue'").eq(0).click({ force: true });
+    cy.get("[data-testid*='save-and-continue'").eq(0).click();
     cy.url().should("include", "/add-consignment-details");
     cy.get("#error-summary-title").contains("There is a problem");
 
@@ -71,7 +71,7 @@ describe("Add consignment details when updating product description", () => {
       .should("have.value", "Herring fillets and Atlantic cod fishcakes");
 
     cy.get("#continue").should("be.visible").should("have.text", "Save and continue");
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
     cy.url().should("contain", "/add-consignment-details");
   });
 });
@@ -116,7 +116,7 @@ describe("Add consignment details page: post unauthorised access", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/forbidden");
   });
@@ -133,7 +133,7 @@ describe("Add consignment details: save consignment details", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 
@@ -144,7 +144,7 @@ describe("Add consignment details: save consignment details", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/create-processing-statement/GBR-2021-PS-8EEB7E123/add-catch-details");
   });
 
@@ -155,7 +155,7 @@ describe("Add consignment details: save consignment details", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    // cy.get("[data-testid=save-and-continue]").should("be.visible").click({ force: true });
+    // cy.get("[data-testid=save-and-continue]").should("be.visible").click();
     cy.url().should("include", "/forbidden");
   });
 
@@ -166,7 +166,7 @@ describe("Add consignment details: save consignment details", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/add-consignment-details");
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get("a").contains("Enter at least one product");
@@ -290,7 +290,7 @@ describe("Add consignment details: save as draft retains valid fields", () => {
       testCaseId: TestCaseId.PSAddConsignmentDetailsSaveAsDraftWithErrors,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });

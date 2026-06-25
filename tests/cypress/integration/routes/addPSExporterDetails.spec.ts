@@ -13,7 +13,7 @@ describe("PS: add exporter details page", () => {
   it("should render successfully & change address button works", () => {
     cy.contains("a", /^Back$/).should("have.attr", "href", `${documentUrl}/add-your-reference`);
     cy.contains("h1", "Add exporter details");
-    cy.get("[data-testid='change-button']").click({ force: true });
+    cy.get("[data-testid='change-button']").click();
     cy.url().should("include", "/what-exporters-address");
   });
 
@@ -173,7 +173,7 @@ describe("PS: add exporter details - happy path", () => {
   });
 
   it("should navigate to add consignment details", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/add-consignment-details");
   });
 });
@@ -189,7 +189,7 @@ describe("PS: add exporter details - save as draft", () => {
   });
 
   it("should save as draft", () => {
-    cy.get("[data-testid='save-draft-button'").click({ force: true });
+    cy.get("[data-testid='save-draft-button'").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });
@@ -205,7 +205,7 @@ describe("PS: add exporter details - forbidden", () => {
   });
 
   it("should navigate to forbidden page", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/forbidden");
   });
 });
@@ -221,7 +221,7 @@ describe("PS: add exporter details - errors", () => {
   });
 
   it("should show errors", () => {
-    cy.get("[data-testid='save-and-continue']").click({ force: true });
+    cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").should("be.visible");
   });
 });
@@ -249,7 +249,7 @@ describe("PS: add exporter details - save as draft retains valid fields", () => 
       testCaseId: TestCaseId.PSAddExporterDetailsSaveAsDraftWithErrors,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });
@@ -264,7 +264,7 @@ describe("PS: add exporter details - save as draft sets section to INCOMPLETE wh
       testCaseId: TestCaseId.PSAddExporterDetailsSaveAsDraftScenario3,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid='save-draft-button']").click({ force: true });
+    cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
     cy.visit(progressUrl, { qs: { ...testParams } });
     cy.get("[data-testid='progress-exporter-tag']").should("contain.text", "INCOMPLETE");

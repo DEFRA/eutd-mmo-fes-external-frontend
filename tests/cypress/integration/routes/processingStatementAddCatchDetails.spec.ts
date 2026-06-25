@@ -49,7 +49,7 @@ describe("PS: Add catch details", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.contains("button, summary", "Help with species names").click({ force: true });
+    cy.contains("button, summary", "Help with species names").click();
     cy.get(".govuk-details__text")
       .should("be.visible")
       .and("contain.text", "Some species are exempt from this requirement:");
@@ -79,7 +79,7 @@ describe("PS: Add catch details", () => {
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     // Should show validation error
     cy.get(".govuk-error-summary").should("be.visible");
@@ -96,7 +96,7 @@ describe("PS: Add catch details", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.contains("button, summary", "Help with catch certificate").click({ force: true });
+    cy.contains("button, summary", "Help with catch certificate").click();
     cy.get(".govuk-details__text")
       .should("be.visible")
       .and(
@@ -117,7 +117,7 @@ describe("PS: Add catch details", () => {
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
 
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     cy.url().should("include", `${validAddCatchDetailsUrl}`);
   });
@@ -145,7 +145,7 @@ describe("PS: Add catch details", () => {
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
 
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     cy.url().should("include", `${validAddCatchDetailsUrl}`);
   });
@@ -162,7 +162,7 @@ describe("PS: Add catch details", () => {
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
 
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     cy.url().should("include", `${validAddCatchDetailsUrl}`);
   });
@@ -179,7 +179,7 @@ describe("PS: Add catch details", () => {
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
 
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     cy.url().should("include", validAddCatchDetailsUrl);
   });
@@ -196,7 +196,7 @@ describe("PS: Add catch details", () => {
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
 
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     cy.url().should("include", `${validAddCatchDetailsUrl}`);
   });
@@ -213,7 +213,7 @@ describe("PS: Add catch details", () => {
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
 
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     cy.url().should("include", `${validAddCatchDetailsUrl}`);
   });
@@ -234,7 +234,7 @@ describe("PS: Add catch details", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.url().should("include", "/unauthorised");
   });
 
@@ -252,7 +252,7 @@ describe("PS: Add catch details", () => {
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
 
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     cy.url().should("include", "/forbidden");
   });
@@ -264,7 +264,7 @@ describe("PS: Add catch details", () => {
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.get(".govuk-error-summary__list")
       .find("li > a")
       .contains("Enter the catch certificate number")
@@ -278,8 +278,8 @@ describe("PS: Add catch details", () => {
 
     cy.visit(validAddCatchDetailsUrlForUK, { qs: { ...testParams } });
 
-    cy.get("#catches-0-catchCertificateNumber").type("GBR-2023-CC-7E720BE", { force: true });
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#catches-0-catchCertificateNumber").type("GBR-2023-CC-7E720BE");
+    cy.get("#addProductDetails").click();
 
     const ccNumberFieldId = "#catches-0-catchCertificateNumber";
     const ccNumberError = "A catch certificate must be in a format for example GBR-2024-CC-BEFCD6036";
@@ -295,7 +295,7 @@ describe("PS: Add catch details", () => {
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
-    cy.contains("a", "Back").click({ force: true });
+    cy.contains("a", "Back").click();
 
     cy.url().should("include", "/add-consignment-details");
   });
@@ -307,7 +307,7 @@ describe("PS: Add catch details", () => {
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
@@ -317,7 +317,7 @@ describe("PS: Add catch details", () => {
       testCaseId: TestCaseId.PSAddCatchDetailsSingleCatch,
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=edit-button-0]").eq(0).click({ force: true });
+    cy.get("[data-testid=edit-button-0]").eq(0).click();
     cy.url().should("include", `${validEditCatchDetailsUrl}`);
   });
 
@@ -327,7 +327,7 @@ describe("PS: Add catch details", () => {
     };
     cy.visit(validEditCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#addProductDetails").should("have.text", "Update");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.url().should("include", `${validAddCatchDetailsUrl}`);
   });
 
@@ -338,7 +338,7 @@ describe("PS: Add catch details", () => {
 
     cy.visit(validEditCatchDetailsNextUrl, { qs: { ...testParams } });
     cy.get("#addProductDetails").should("have.text", "Update");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.url().should("include", `abc`);
   });
 
@@ -348,7 +348,7 @@ describe("PS: Add catch details", () => {
     };
     cy.visit(validEditCatchDetailsUrlForUK, { qs: { ...testParams } });
     cy.get("#addProductDetails").should("have.text", "Update");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get(".govuk-error-message").contains("Enter the catch certificate number");
   });
@@ -359,9 +359,9 @@ describe("PS: Add catch details", () => {
     };
     cy.visit(validEditCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("[data-testid=edit-button-0]").should("contain", "Edit");
-    cy.get("[data-testid=edit-button-0]").click({ force: true });
+    cy.get("[data-testid=edit-button-0]").click();
     cy.get("#cancel").should("have.text", "Cancel");
-    cy.get("#cancel").click({ force: true });
+    cy.get("#cancel").click();
     cy.url().should("include", `${validAddCatchDetailsUrl}`);
   });
 
@@ -371,7 +371,7 @@ describe("PS: Add catch details", () => {
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#yourproducts").find("tbody > tr").should("have.length", 2);
-    cy.get("[data-testid=remove-button-0]").eq(0).click({ force: true });
+    cy.get("[data-testid=remove-button-0]").eq(0).click();
     cy.url().should("include", `${documentUrl}/add-catch-details/GBR-2025-PS-FDC3D66E1-1760436601?pageNo=1`);
   });
 
@@ -381,7 +381,7 @@ describe("PS: Add catch details", () => {
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#yourproducts").find("tbody > tr").should("have.length", 2);
-    cy.get("[data-testid=remove-button-0]").eq(0).click({ force: true });
+    cy.get("[data-testid=remove-button-0]").eq(0).click();
     cy.url().should("include", `/forbidden`);
   });
 
@@ -396,9 +396,9 @@ describe("PS: Add catch details", () => {
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.url().should("include", validAddCatchDetailsUrl);
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", "GBR-2022-PS-0D12ABA0A/catch-added");
   });
 
@@ -417,7 +417,7 @@ describe("PS: Add catch details", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=add-product-details").click({ force: true });
+    cy.get("[data-testid=add-product-details").click();
     cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
     cy.get(".govuk-error-message").contains("Add at least one species to your processed product").should("be.visible");
   });
@@ -428,7 +428,7 @@ describe("PS: Add catch details", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
 
     cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
     cy.get(".govuk-error-message").contains("Add at least one species to your processed product").should("be.visible");
@@ -441,19 +441,19 @@ describe("PS: Add catch details", () => {
     };
 
     cy.visit(validAddCatchDetailsUrlForUK, { qs: { ...testParams } });
-    cy.get("#catches-0-catchCertificateType").check({ force: true });
+    cy.get("#catches-0-catchCertificateType").check();
     cy.get("#catches-0-catchCertificateType").should("be.checked");
     cy.get('[data-testid="issuing-country-0"]').should("not.exist");
-    cy.get("#catches-0-catchCertificateNumber").clear({ force: true });
-    cy.get("#catches-0-catchCertificateNumber").type("GBR-2023-CC-7E720BE", { force: true });
-    cy.get("#catches-0-totalWeightLanded").clear({ force: true });
-    cy.get("#catches-0-totalWeightLanded").type("50", { force: true });
-    cy.get("#catches-0-exportWeightBeforeProcessing").clear({ force: true });
-    cy.get("#catches-0-exportWeightBeforeProcessing").type("25", { force: true });
-    cy.get("#catches-0-exportWeightAfterProcessing").clear({ force: true });
-    cy.get("#catches-0-exportWeightAfterProcessing").type("20", { force: true });
+    cy.get("#catches-0-catchCertificateNumber").clear();
+    cy.get("#catches-0-catchCertificateNumber").type("GBR-2023-CC-7E720BE");
+    cy.get("#catches-0-totalWeightLanded").clear();
+    cy.get("#catches-0-totalWeightLanded").type("50");
+    cy.get("#catches-0-exportWeightBeforeProcessing").clear();
+    cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
+    cy.get("#catches-0-exportWeightAfterProcessing").clear();
+    cy.get("#catches-0-exportWeightAfterProcessing").type("20");
 
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
 
     cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
     cy.focused().should("have.id", "errorIsland");
@@ -471,7 +471,7 @@ describe("PS: Add catch details", () => {
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
     cy.get("#cancel").should("have.text", "Cancel");
-    cy.get("#cancel").click({ force: true });
+    cy.get("#cancel").click();
 
     cy.reload();
     cy.get("#catches-0-catchCertificateNumber").should("have.value", "");
@@ -492,7 +492,7 @@ describe("PS: Add catch details", () => {
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
 
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     cy.url().should("include", `${validAddCatchDetailsUrl}`);
 
@@ -541,7 +541,7 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-species").should("be.visible");
     cy.get("#catches-0-species").invoke("val", "");
-    cy.get("#catches-0-species").type("Atlantic cod", { force: true });
+    cy.get("#catches-0-species").type("Atlantic cod");
     cy.wait(500);
     cy.get("#catches-0-species").should("be.visible");
 
@@ -570,18 +570,18 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-species").should("be.visible");
     cy.get("#catches-0-species").invoke("val", "");
-    cy.get("#catches-0-species").type("ASD", { force: true });
+    cy.get("#catches-0-species").type("ASD");
     cy.wait(500);
     cy.get("#catches-0-species").should("be.visible");
 
     cy.get("body").then(($body) => {
       if ($body.find(".autocomplete__option").length > 0) {
         cy.get(".autocomplete__option").should("have.length.greaterThan", 0);
-        cy.get(".autocomplete__option").first().click({ force: true });
+        cy.get(".autocomplete__option").first().click();
         cy.get("#catches-0-species").should("not.have.value", "");
       } else if ($body.find('[role="option"]').length > 0) {
         cy.get('[role="option"]').should("have.length.greaterThan", 0);
-        cy.get('[role="option"]').first().click({ force: true });
+        cy.get('[role="option"]').first().click();
         cy.get("#catches-0-species").should("not.have.value", "");
       } else if ($body.find('select[name="species"] option').length > 1) {
         cy.get('select[name="species"]').select(1);
@@ -611,14 +611,14 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-species").invoke("val", "");
-    cy.get("#catches-0-species").type("Atlantic cod", { force: true });
+    cy.get("#catches-0-species").type("Atlantic cod");
     cy.wait(500);
     cy.get("#catches-0-species").should("be.visible");
     cy.get("body").then(($body) => {
       if ($body.find(".autocomplete__option").length > 0) {
-        cy.get(".autocomplete__option").first().click({ force: true });
+        cy.get(".autocomplete__option").first().click();
       } else if ($body.find('[role="option"]').length > 0) {
-        cy.get('[role="option"]').first().click({ force: true });
+        cy.get('[role="option"]').first().click();
       } else if ($body.find('select[name="species"] option').length > 1) {
         cy.get('select[name="species"]').select(1);
       } else if ($body.find(".govuk-select option").length > 1) {
@@ -626,7 +626,7 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
       }
     });
     cy.get("#catches-0-species").should("have.value", "");
-    cy.get("#cancel").click({ force: true });
+    cy.get("#cancel").click();
     cy.get("#catches-0-species").should("have.value", "");
   });
 
@@ -639,15 +639,15 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
     cy.reload(); // Force a clean page load
     cy.wait(500); // Wait for hydration
     cy.get("#catches-0-species").should("be.visible").and("be.enabled");
-    cy.get("#catches-0-species").clear({ force: true });
+    cy.get("#catches-0-species").clear();
     cy.wait(200);
-    cy.get("#catches-0-species").type("A", { force: true });
+    cy.get("#catches-0-species").type("A");
     cy.wait(500); // Wait for autocomplete debouncing
     cy.get("#catches-0-species").should("be.visible");
     cy.get("#catches-0-species").should("have.value", "A");
-    cy.get("#catches-0-species").clear({ force: true });
+    cy.get("#catches-0-species").clear();
     cy.wait(200);
-    cy.get("#catches-0-species").type("AT", { force: true });
+    cy.get("#catches-0-species").type("AT");
     cy.wait(800);
     // Re-query the element to avoid detachment issues
     cy.get("#catches-0-species").should("have.value", "AT");
@@ -734,8 +734,8 @@ describe("PS: Add catch details - Weight Input Validation", () => {
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-totalWeightLanded").should("be.visible").and("be.enabled");
-    cy.get("#catches-0-totalWeightLanded").clear({ force: true });
-    cy.get("#catches-0-totalWeightLanded").type("50", { force: true });
+    cy.get("#catches-0-totalWeightLanded").clear();
+    cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-totalWeightLanded").should("have.value", "50");
   });
 
@@ -747,7 +747,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
     cy.get("#catches-0-totalWeightLanded").clear();
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-totalWeightLanded").should("have.value", "50");
-    cy.get("#cancel").click({ force: true });
+    cy.get("#cancel").click();
     cy.get("#catches-0-totalWeightLanded").should("have.value", "");
   });
 
@@ -772,7 +772,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("60");
     cy.get("#catches-0-exportWeightAfterProcessing").type("30");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
     cy.get(".govuk-error-message").should("exist");
   });
@@ -782,8 +782,8 @@ describe("PS: Add catch details - Weight Input Validation", () => {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-exportWeightBeforeProcessing").clear({ force: true });
-    cy.get("#catches-0-exportWeightBeforeProcessing").type("50", { force: true });
+    cy.get("#catches-0-exportWeightBeforeProcessing").clear();
+    cy.get("#catches-0-exportWeightBeforeProcessing").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing")
       .should("have.value", "50")
       .invoke("val")
@@ -801,8 +801,8 @@ describe("PS: Add catch details - Weight Input Validation", () => {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-exportWeightAfterProcessing").clear({ force: true });
-    cy.get("#catches-0-exportWeightAfterProcessing").type("50", { force: true });
+    cy.get("#catches-0-exportWeightAfterProcessing").clear();
+    cy.get("#catches-0-exportWeightAfterProcessing").type("50");
     cy.get("#catches-0-exportWeightAfterProcessing")
       .should("have.value", "50")
       .invoke("val")
@@ -819,10 +819,10 @@ describe("PS: Add catch details - Weight Input Validation", () => {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-exportWeightBeforeProcessing").clear({ force: true });
-    cy.get("#catches-0-exportWeightBeforeProcessing").type("25", { force: true });
+    cy.get("#catches-0-exportWeightBeforeProcessing").clear();
+    cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightBeforeProcessing").should("have.value", "25");
-    cy.get("#cancel").click({ force: true });
+    cy.get("#cancel").click();
     cy.get("#catches-0-exportWeightBeforeProcessing").should("have.value", "");
   });
 
@@ -832,10 +832,10 @@ describe("PS: Add catch details - Weight Input Validation", () => {
     };
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-exportWeightAfterProcessing").should("be.visible").and("be.enabled");
-    cy.get("#catches-0-exportWeightAfterProcessing").clear({ force: true });
-    cy.get("#catches-0-exportWeightAfterProcessing").type("25", { force: true });
+    cy.get("#catches-0-exportWeightAfterProcessing").clear();
+    cy.get("#catches-0-exportWeightAfterProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").should("have.value", "25");
-    cy.get("#cancel").click({ force: true });
+    cy.get("#cancel").click();
     cy.get("#catches-0-exportWeightAfterProcessing").should("be.visible");
     cy.get("#catches-0-exportWeightAfterProcessing").should("have.value", "");
   });
@@ -850,7 +850,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
     cy.get("#catches-0-totalWeightLanded").type("50.5");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25.25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("24.75");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.url().should("include", `${validAddCatchDetailsUrl}`);
   });
 });
@@ -885,11 +885,11 @@ describe("PS: Add catch details - Species Code Validation", () => {
     cy.wait(500);
     cy.get("body").then(($body) => {
       if ($body.find(".autocomplete__option").length > 0) {
-        cy.get(".autocomplete__option").first().click({ force: true });
+        cy.get(".autocomplete__option").first().click();
         cy.get("#catches-0-species").should("not.have.value", "Atlan");
         cy.get("#catches-0-species").invoke("val").should("have.length.greaterThan", 5);
       } else if ($body.find('[role="option"]').length > 0) {
-        cy.get('[role="option"]').first().click({ force: true });
+        cy.get('[role="option"]').first().click();
         cy.get("#catches-0-species").should("not.have.value", "Atlan");
       } else {
         cy.log("Autocomplete not available - testing manual input validation");
@@ -901,7 +901,7 @@ describe("PS: Add catch details - Species Code Validation", () => {
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("20");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     cy.get("body").then(($body) => {
       if ($body.find(".govuk-error-summary").length > 0) {
@@ -926,7 +926,7 @@ describe("PS: Add catch details - Catch Certificate Weight Logic", () => {
     cy.get("#catches-0-totalWeightLanded").should("exist");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("20");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.get("#yourproducts tbody tr").should("have.length", 1);
   });
 });
@@ -990,7 +990,7 @@ describe("PS: Add catch details - Accessibility", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.get(".govuk-visually-hidden").should("contain", "Error");
     cy.get(".govuk-error-summary").should("have.attr", "role", "alert");
   });
@@ -1041,7 +1041,7 @@ describe("PS: Add catch details - Data Persistence", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-catchCertificateNumber").type(ccNumber);
     cy.get("#catches-0-totalWeightLanded").type("50");
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });
@@ -1053,7 +1053,7 @@ describe("PS: Add catch details - Error Handling", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.get(".govuk-error-summary").should("be.visible");
     cy.get("#error-summary-title").should("contain", "There is a problem");
     cy.get(".govuk-error-message").should("have.length", 4);
@@ -1069,7 +1069,7 @@ describe("PS: Add catch details - Error Handling", () => {
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.get(".govuk-error-summary").should("be.visible");
   });
 });
@@ -1085,7 +1085,7 @@ describe("PS: Add catch details - Unique Species and Document Counting", () => {
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
   });
 
@@ -1098,7 +1098,7 @@ describe("PS: Add catch details - Unique Species and Document Counting", () => {
     cy.get("#yourproducts tbody tr").should("have.length.greaterThan", 0);
     cy.get("#yourproducts tbody tr").then(($rows) => {
       const initialRowCount = $rows.length;
-      cy.get("[data-testid=remove-button-0]").eq(0).click({ force: true });
+      cy.get("[data-testid=remove-button-0]").eq(0).click();
       cy.get("#yourproducts tbody tr").should("have.length", initialRowCount - 1);
       cy.get("h2").should("contain", "You have added");
       cy.get("h2").should("not.contain", "undefined");
@@ -1115,7 +1115,7 @@ describe("PS: Add catch details - Unique Species and Document Counting", () => {
     };
 
     cy.visit(validEditCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.url().should("include", validAddCatchDetailsUrl);
     cy.get("h2").should("contain", "You have added");
     cy.get("h2").should("contain", "species and");
@@ -1165,7 +1165,7 @@ describe("PS: Add catch details - Edge Cases for Unique Counting", () => {
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
   });
 
@@ -1237,7 +1237,7 @@ describe("PS: Add catch details - Server Response Integration", () => {
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.url().should("include", validAddCatchDetailsUrl);
     cy.get("h2").should("contain", "You have added");
   });
@@ -1276,7 +1276,7 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.wait(500); // Wait for form to reset
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
     cy.get("#yourproducts tbody tr").should("have.length", 1);
@@ -1291,7 +1291,7 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     cy.get("#catches-0-exportWeightBeforeProcessing").type("15");
     cy.get("#catches-0-exportWeightAfterProcessing").clear();
     cy.get("#catches-0-exportWeightAfterProcessing").type("15");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
   });
 
   it("should not increment unique documents count when using same certificate number", () => {
@@ -1305,19 +1305,19 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
-    cy.get("#catches-0-species").clear({ force: true });
-    cy.get("#catches-0-species").type("European seabass (BSS)", { force: true });
-    cy.get("#catches-0-catchCertificateNumber").clear({ force: true });
-    cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-123456", { force: true });
-    cy.get("#catches-0-totalWeightLanded").clear({ force: true });
-    cy.get("#catches-0-totalWeightLanded").type("30", { force: true });
-    cy.get("#catches-0-exportWeightBeforeProcessing").clear({ force: true });
-    cy.get("#catches-0-exportWeightBeforeProcessing").type("15", { force: true });
-    cy.get("#catches-0-exportWeightAfterProcessing").clear({ force: true });
-    cy.get("#catches-0-exportWeightAfterProcessing").type("15", { force: true });
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#catches-0-species").clear();
+    cy.get("#catches-0-species").type("European seabass (BSS)");
+    cy.get("#catches-0-catchCertificateNumber").clear();
+    cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-123456");
+    cy.get("#catches-0-totalWeightLanded").clear();
+    cy.get("#catches-0-totalWeightLanded").type("30");
+    cy.get("#catches-0-exportWeightBeforeProcessing").clear();
+    cy.get("#catches-0-exportWeightBeforeProcessing").type("15");
+    cy.get("#catches-0-exportWeightAfterProcessing").clear();
+    cy.get("#catches-0-exportWeightAfterProcessing").type("15");
+    cy.get("#addProductDetails").click();
   });
 });
 
@@ -1336,7 +1336,7 @@ describe("PS: Add catch details - Remove Functionality and Count Updates", () =>
         const documentsMatch = initialText.match(/(\d+)\s+documents/);
         const initialSpeciesCount = speciesMatch ? parseInt(speciesMatch[1]) : 0;
         const initialDocumentCount = documentsMatch ? parseInt(documentsMatch[1]) : 0;
-        cy.get("[data-testid=remove-button-0]").eq(0).click({ force: true });
+        cy.get("[data-testid=remove-button-0]").eq(0).click();
         cy.get("h2")
           .invoke("text")
           .then((newText) => {
@@ -1365,7 +1365,7 @@ describe("PS: Add catch details - Remove Functionality and Count Updates", () =>
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.wait(500); // Wait for form to reset
 
     // Second catch - requery and fill species field
@@ -1379,7 +1379,7 @@ describe("PS: Add catch details - Remove Functionality and Count Updates", () =>
     cy.get("#catches-0-totalWeightLanded").clear().type("30");
     cy.get("#catches-0-exportWeightBeforeProcessing").clear().type("15");
     cy.get("#catches-0-exportWeightAfterProcessing").clear().type("15");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.get("#yourproducts tbody tr").eq(0).should("exist");
   });
 });
@@ -1496,9 +1496,9 @@ describe("PS: Add catch details - Session Data Integrity", () => {
         const speciesCount = speciesMatch ? parseInt(speciesMatch[1]) : 0;
         const documentCount = documentsMatch ? parseInt(documentsMatch[1]) : 0;
         cy.log(`Initial counts - Species: ${speciesCount}, Documents: ${documentCount}`);
-        cy.get("[data-testid=edit-button-0]").eq(0).click({ force: true });
+        cy.get("[data-testid=edit-button-0]").eq(0).click();
         cy.url().should("include", "add-catch-details");
-        cy.get("#cancel").click({ force: true });
+        cy.get("#cancel").click();
         cy.get("h2")
           .invoke("text")
           .then((newHeaderText) => {
@@ -1530,7 +1530,7 @@ describe("PS: Add catch details - Error Scenarios with Session Data", () => {
         const documentsMatch = initialText.match(/(\d+)\s+documents/);
         const initialSpeciesCount = speciesMatch ? parseInt(speciesMatch[1]) : 0;
         const initialDocumentCount = documentsMatch ? parseInt(documentsMatch[1]) : 0;
-        cy.get("#addProductDetails").click({ force: true });
+        cy.get("#addProductDetails").click();
         cy.get(".govuk-error-summary").should("be.visible");
         cy.get("h2")
           .invoke("text")
@@ -1558,9 +1558,9 @@ describe("PS: Add catch details - Integration with Existing Functionality", () =
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("a", /^Back$/)
       .should("have.attr", "href")
       .and("include", "add-catch-details/GBR-2025-PS-FDC3D66E1-1760436601");
@@ -1607,7 +1607,7 @@ describe("PS: Add catch details - Integration with Existing Functionality", () =
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-species").type("Atlantic cod (COD)");
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-123456");
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 
@@ -1618,7 +1618,7 @@ describe("PS: Add catch details - Integration with Existing Functionality", () =
 
     cy.visit(validEditCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#addProductDetails").should("have.text", "Update");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
     cy.url().should("include", validAddCatchDetailsUrl);
     cy.get("h2").should("contain", "You have added");
     cy.get("h2").should("contain", "species");
@@ -1646,7 +1646,7 @@ describe("PS: Add catch details - Species State Management", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
     // Type a species with FAO code
-    cy.get("#catches-0-species").type("Atlantic cod (COD)", { force: true });
+    cy.get("#catches-0-species").type("Atlantic cod (COD)");
 
     // The species code should be extracted (hidden input would contain it)
     // This test verifies the onSelected handler works correctly
@@ -1692,7 +1692,7 @@ describe("PS: Add catch details - Species State Management", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
     // Type a species with FAO code
-    cy.get("#catches-0-species").type("Atlantic cod (COD)", { force: true });
+    cy.get("#catches-0-species").type("Atlantic cod (COD)");
 
     // The species code should be extracted (hidden input would contain it)
     // This test verifies the onSelected handler works correctly
@@ -1749,12 +1749,12 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
     // Select non-UK and submit without issuing country
-    cy.get('input[name="catchCertificateType"][value="non_uk"]').check({ force: true });
+    cy.get('input[name="catchCertificateType"][value="non_uk"]').check();
     cy.get("#catches-0-catchCertificateNumber").type(ccNumber);
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     // Should show validation error
     cy.get(".govuk-error-summary").should("be.visible");
@@ -1769,12 +1769,12 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
     // Select UK certificate and submit without issuing country
-    cy.get('input[name="catchCertificateType"][value="uk"]').check({ force: true });
+    cy.get('input[name="catchCertificateType"][value="uk"]').check();
     cy.get("#catches-0-catchCertificateNumber").type(ccNumber);
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     // Should succeed without issuing country
     cy.url().should("include", validAddCatchDetailsUrl);
@@ -1790,15 +1790,15 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.wait(1000);
 
     // Fill out all required fields including issuing country
-    cy.get('input[name="catchCertificateType"][value="non_uk"]').check({ force: true });
+    cy.get('input[name="catchCertificateType"][value="non_uk"]').check();
     cy.wait(200); // Wait for React state update and field to appear
     cy.get('input[name="issuingCountry"]').should("exist").should("be.visible");
-    cy.get('input[name="issuingCountry"]').type("France{enter}", { force: true });
+    cy.get('input[name="issuingCountry"]').type("France{enter}");
     cy.get("#catches-0-catchCertificateNumber").type(ccNumber);
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     // Should succeed
     cy.url().should("include", validAddCatchDetailsUrl);
@@ -1813,7 +1813,7 @@ describe("PS: add catch details - save as draft sets section to INCOMPLETE when 
       testCaseId: TestCaseId.PSAddCatchDetailsSaveAsDraftScenario3,
     };
     cy.visit(validEditCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
     cy.visit(progressUrl, { qs: { ...testParams } });
     cy.get("[data-testid='progress-processedProductDetails-tag']").should("contain.text", "INCOMPLETE");
@@ -1856,7 +1856,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
 
-    cy.contains("summary, button", "Help with commodity code").click({ force: true });
+    cy.contains("summary, button", "Help with commodity code").click();
     cy.get(".govuk-details__text")
       .should("be.visible")
       .and("contain.text", "The commodity code is shown on your catch certificate");
@@ -1882,7 +1882,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     cy.contains("a", "Enter the commodity code").should("have.attr", "href", "#catches-0-speciesCommodityCode");
   });
@@ -1894,7 +1894,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-speciesCommodityCode").type("0302");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     cy.get(".govuk-error-summary").should("be.visible");
     cy.get(".govuk-error-summary").should("contain.text", "The commodity code must be at least 6 characters");
@@ -1911,7 +1911,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-speciesCommodityCode").type("030231100099");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     cy.get(".govuk-error-summary").should("be.visible");
     cy.get(".govuk-error-summary").should("contain.text", "The commodity code must be no more than 10 characters");
@@ -1932,7 +1932,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     cy.get(".govuk-error-summary").should("not.exist");
     cy.url().should("include", validAddCatchDetailsUrl);
@@ -1948,7 +1948,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
     cy.get("#catches-0-speciesCommodityCode").type("03023110");
     cy.get("#catches-0-speciesCommodityCode").should("have.value", "03023110");
 
-    cy.get("#cancel").click({ force: true });
+    cy.get("#cancel").click();
 
     cy.get("#catches-0-speciesCommodityCode").should("have.value", "");
   });
@@ -1962,12 +1962,12 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
 
     // Fill in the form with valid data but commodity code not on catch certificate
     cy.get("#catches-0-species").type("Cod");
-    cy.get("input[name='catchCertificateType'][value='uk']").click({ force: true });
+    cy.get("input[name='catchCertificateType'][value='uk']").click();
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-01234ABCD");
     cy.get("#catches-0-speciesCommodityCode").type("03023110");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
-    cy.get("#addProductDetails").click({ force: true });
+    cy.get("#addProductDetails").click();
 
     // Error should appear in the error summary
     cy.get(".govuk-error-summary").should("be.visible");

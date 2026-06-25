@@ -34,7 +34,7 @@ describe("CC: Entering the address manually", () => {
       testCaseId: TestCaseId.CCExporterManualAddressValid,
     };
     cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
   });
 
   it("should render header", () => {
@@ -65,9 +65,9 @@ describe("CC: Entering the address manually with errors", () => {
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
 
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
     cy.url().should("include", "what-exporters-address");
     cy.get(".govuk-error-summary").should("be.visible");
   });
@@ -78,10 +78,10 @@ describe("CC: Entering the address manually with errors", () => {
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
 
-    cy.get("#subBuildingName").type("#$!!&&", { force: true });
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("#subBuildingName").type("#$!!&&");
+    cy.get("[data-testid=continue]").click();
 
     cy.url().should("include", "what-exporters-address");
     cy.get(".govuk-error-message").should("be.visible");
@@ -96,9 +96,9 @@ describe("CC: Entering the address manually with errors", () => {
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
 
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
 
     cy.url().should("include", "what-exporters-address");
     cy.get(".govuk-error-summary").should("be.visible");
@@ -118,16 +118,16 @@ describe("CC: Entering the address manually with errors", () => {
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
 
     // Leave all address fields blank but fill in required fields
-    cy.get("#townCity").type("Test City", { force: true });
-    cy.get("#postcode").type("12345", { force: true });
+    cy.get("#townCity").type("Test City");
+    cy.get("#postcode").type("12345");
     cy.get("#country").type("Albania");
     cy.get("[id^='country-option']").contains("Albania").click();
     cy.get("#country").should("have.value", "Albania");
 
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
 
     // Should display all 4 address-field required errors
     cy.get(".govuk-error-summary").should("be.visible");
@@ -143,15 +143,15 @@ describe("CC: Entering the address manually with errors", () => {
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
 
     // Only populate sub-building name (other address fields blank)
-    cy.get("#subBuildingName").type("Flat 1", { force: true });
-    cy.get("#townCity").type("Test City", { force: true });
-    cy.get("#postcode").type("12345", { force: true });
-    cy.get("#country").type("Albania", { force: true });
+    cy.get("#subBuildingName").type("Flat 1");
+    cy.get("#townCity").type("Test City");
+    cy.get("#postcode").type("12345");
+    cy.get("#country").type("Albania");
 
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
 
     cy.get(".govuk-error-summary").should("be.visible");
     cy.get(".govuk-error-summary").contains("Enter Building number");
@@ -166,15 +166,15 @@ describe("CC: Entering the address manually with errors", () => {
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
 
     // Only populate building number (other address fields blank)
-    cy.get("#buildingNumber").type("123", { force: true });
-    cy.get("#townCity").type("Test City", { force: true });
-    cy.get("#postcode").type("12345", { force: true });
-    cy.get("#country").type("Albania", { force: true });
+    cy.get("#buildingNumber").type("123");
+    cy.get("#townCity").type("Test City");
+    cy.get("#postcode").type("12345");
+    cy.get("#country").type("Albania");
 
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
 
     cy.get(".govuk-error-summary").should("be.visible");
     cy.get(".govuk-error-summary").contains("Enter building name");
@@ -189,15 +189,15 @@ describe("CC: Entering the address manually with errors", () => {
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
 
     // Only populate building name (other address fields blank)
-    cy.get("#buildingName").type("Test Villa", { force: true });
-    cy.get("#townCity").type("Test City", { force: true });
-    cy.get("#postcode").type("12345", { force: true });
-    cy.get("#country").type("Albania", { force: true });
+    cy.get("#buildingName").type("Test Villa");
+    cy.get("#townCity").type("Test City");
+    cy.get("#postcode").type("12345");
+    cy.get("#country").type("Albania");
 
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
 
     cy.get(".govuk-error-summary").should("be.visible");
     cy.get(".govuk-error-summary").contains("Enter Building number");
@@ -212,15 +212,15 @@ describe("CC: Entering the address manually with errors", () => {
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
 
     // Only populate street name (other address fields blank)
-    cy.get("#streetName").type("Main Street", { force: true });
-    cy.get("#townCity").type("Test City", { force: true });
-    cy.get("#postcode").type("12345", { force: true });
-    cy.get("#country").type("Albania", { force: true });
+    cy.get("#streetName").type("Main Street");
+    cy.get("#townCity").type("Test City");
+    cy.get("#postcode").type("12345");
+    cy.get("#country").type("Albania");
 
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
 
     cy.get(".govuk-error-summary").should("be.visible");
     cy.get(".govuk-error-summary").contains("Enter Building number");
@@ -235,18 +235,18 @@ describe("CC: Entering the address manually with errors", () => {
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
 
-    cy.get("#subBuildingName").type("Test Bldg", { force: true });
-    cy.get("#buildingNumber").type("123", { force: true });
-    cy.get("#buildingName").type("Test Villa", { force: true });
-    cy.get("#streetName").type("Street 1", { force: true });
-    cy.get("#townCity").type("Test", { force: true });
-    cy.get("#county").type("Test", { force: true });
-    cy.get("#postcode").type("12345", { force: true });
-    cy.get("#country").type("Albania", { force: true });
+    cy.get("#subBuildingName").type("Test Bldg");
+    cy.get("#buildingNumber").type("123");
+    cy.get("#buildingName").type("Test Villa");
+    cy.get("#streetName").type("Street 1");
+    cy.get("#townCity").type("Test");
+    cy.get("#county").type("Test");
+    cy.get("#postcode").type("12345");
+    cy.get("#country").type("Albania");
 
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
     cy.url().should("include", "/add-exporter-details");
   });
 
@@ -256,18 +256,18 @@ describe("CC: Entering the address manually with errors", () => {
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
 
-    cy.get("#subBuildingName").type("Test Bldg", { force: true });
-    cy.get("#buildingNumber").type("123", { force: true });
-    cy.get("#buildingName").type("Test Villa", { force: true });
-    cy.get("#streetName").type("Street 1", { force: true });
-    cy.get("#townCity").type("Test", { force: true });
-    cy.get("#county").type("Test", { force: true });
-    cy.get("#postcode").type("12345", { force: true });
-    cy.get("#country").type("Albania", { force: true });
+    cy.get("#subBuildingName").type("Test Bldg");
+    cy.get("#buildingNumber").type("123");
+    cy.get("#buildingName").type("Test Villa");
+    cy.get("#streetName").type("Street 1");
+    cy.get("#townCity").type("Test");
+    cy.get("#county").type("Test");
+    cy.get("#postcode").type("12345");
+    cy.get("#country").type("Albania");
 
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
     cy.url().should("include", "/forbidden");
   });
 
@@ -279,10 +279,10 @@ describe("CC: Entering the address manually with errors", () => {
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
 
     // Submit the form without filling any fields
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
 
     // Should stay on the same page
     cy.url().should("include", "what-exporters-address");
@@ -329,14 +329,14 @@ describe("CC: Entering the address manually with errors", () => {
     };
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
 
-    cy.get("#buildingNumber").type("12", { force: true });
-    cy.get("#townCity").type("Newcastle", { force: true });
-    cy.get("#postcode").type("NE4 7YH", { force: true });
-    cy.get("#country").type("@", { force: true });
+    cy.get("#buildingNumber").type("12");
+    cy.get("#townCity").type("Newcastle");
+    cy.get("#postcode").type("NE4 7YH");
+    cy.get("#country").type("@");
 
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
 
     // Should stay on the same page
     cy.url().should("include", "what-exporters-address");
@@ -365,14 +365,14 @@ describe("CC: On Selected Address", () => {
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
-    cy.get("input[name=postcode]").type("12345", { force: true });
-    cy.get("#findaddress").click({ force: true });
+    cy.get("input[name=postcode]").type("12345");
+    cy.get("#findaddress").click();
     cy.get("#selectAddress").should("be.visible");
 
     const option = "MMO, LANCASTER HOUSE, HAMPSHIRE COURT, NEWCASTLE UPON TYNE, NE4 7YH";
     cy.contains("#selectAddress option", option);
     cy.get("#selectAddress").select(option);
-    cy.get("#getaddress").click({ force: true });
+    cy.get("#getaddress").click();
 
     cy.get("#subBuildingName").should("have.value", "MMO");
     cy.get("#buildingName").should("have.value", "LANCASTER HOUSE");
@@ -390,9 +390,9 @@ describe("CC: On Selected Address", () => {
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
-    cy.get("input[name=postcode]").type("12345", { force: true });
-    cy.get("#findaddress").click({ force: true });
-    cy.get("#getaddress").click({ force: true });
+    cy.get("input[name=postcode]").type("12345");
+    cy.get("#findaddress").click();
+    cy.get("#getaddress").click();
 
     cy.contains("span", "Select an address to continue").should("be.visible");
   });
@@ -404,12 +404,12 @@ describe("CC: On Selected Address", () => {
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
-    cy.get("input[name=postcode]").type("12345", { force: true });
-    cy.get("#findaddress").click({ force: true });
+    cy.get("input[name=postcode]").type("12345");
+    cy.get("#findaddress").click();
 
     cy.get("input[name=postcode]").should("not.be.visible");
 
-    cy.get("[data-testid=change-postcode]").click({ force: true });
+    cy.get("[data-testid=change-postcode]").click();
 
     cy.get("input[name=postcode]").should("be.visible");
   });
@@ -421,7 +421,7 @@ describe("CC: On Selected Address", () => {
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
-    cy.get("#findaddress").click({ force: true });
+    cy.get("#findaddress").click();
 
     cy.findByRole("link", { name: "Enter a postcode" }).should("be.visible");
   });
@@ -433,7 +433,7 @@ describe("CC: On Selected Address", () => {
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
-    cy.get("#findaddress").click({ force: true });
+    cy.get("#findaddress").click();
 
     cy.findByRole("link", {
       name: "Postcode must be between 5 and 8 characters, and contain only letters, numbers, spaces, hyphens and commas",
@@ -447,7 +447,7 @@ describe("CC: On Selected Address", () => {
 
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=cancel]").click({ force: true });
+    cy.get("[data-testid=cancel]").click();
 
     cy.url().should("include", "/add-exporter-details");
   });

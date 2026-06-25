@@ -29,9 +29,9 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("check and click on add product from favourites", () => {
-    cy.get("[data-tab-id='favouritesTab']").click({ force: true });
+    cy.get("[data-tab-id='favouritesTab']").click();
     cy.get('select[name="favourite"]').select("Aesop shrimp (AES) Fresh,Whole, 03063590");
-    cy.get("[data-testid='add-product']").eq(1).click({ force: true });
+    cy.get("[data-testid='add-product']").eq(1).click();
   });
 
   it("should render add species, state and presentation buttons when JavaScript is disabled", () => {
@@ -49,7 +49,7 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("should click and edit and check if the data is populated in input fields", () => {
-    cy.get("[data-testid*='edit-button'").eq(0).click({ force: true });
+    cy.get("[data-testid*='edit-button'").eq(0).click();
     cy.get("#species").contains("Albacore (ALB)");
     cy.get("#state").contains("Fresh");
     cy.get("#presentation").contains("Whole");
@@ -58,15 +58,15 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("should display and allow clicking the Add state button", () => {
-    cy.get("[data-testid='add-state']").should("exist").and("be.visible").click({ force: true });
+    cy.get("[data-testid='add-state']").should("exist").and("be.visible").click();
   });
 
   it("should display and allow clicking the Add presentation button", () => {
-    cy.get("[data-testid='add-presentation']").should("exist").and("be.visible").click({ force: true });
+    cy.get("[data-testid='add-presentation']").should("exist").and("be.visible").click();
   });
 
   it("should display an error validation at the form input when add species is clicked without selecting a value", () => {
-    cy.get("[data-testid='add-species']").click({ force: true });
+    cy.get("[data-testid='add-species']").click();
 
     cy.contains("span", /^Enter the common name or FAO code$/).should("be.visible");
   });
@@ -74,11 +74,11 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   it("should set the form input when add species is clicked with selected value", () => {
     cy.get("#species").invoke("val", "Atlantic bluefin tuna (BFT)").trigger("change");
     cy.get("#species").should("have.value", "Atlantic bluefin tuna (BFT)");
-    cy.get("[data-testid='add-species']").click({ force: true });
+    cy.get("[data-testid='add-species']").click();
   });
 
   it("should display an error validation at the form input when add state is clicked without selecting a value", () => {
-    cy.get("[data-testid='add-state']").click({ force: true });
+    cy.get("[data-testid='add-state']").click();
     cy.contains("span", /^Enter the common name or FAO code$/).should("be.visible");
     cy.get("#state-error-message").should("have.class", "govuk-error-message");
     cy.get("#state-error-message > span")
@@ -87,7 +87,7 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("should display an error validations at the form inputs when add presentation is clicked without selecting a value", () => {
-    cy.get("[data-testid='add-presentation']").click({ force: true });
+    cy.get("[data-testid='add-presentation']").click();
 
     cy.contains("span", /^Enter the common name or FAO code$/).should("be.visible");
     cy.get("#state-error-message > span")
@@ -100,11 +100,11 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
 
   it("should set the selected input value when 'Add state' button is clicked", () => {
     cy.get("#species").invoke("val", "Atlantic bluefin tuna (BFT)").trigger("change");
-    cy.get("[data-testid='add-species']").click({ force: true });
+    cy.get("[data-testid='add-species']").click();
     // Wait for page to reload and state dropdown to be populated
     cy.get("#state", { timeout: 10000 }).should("exist");
     cy.get("#state option", { timeout: 5000 }).should("have.length.greaterThan", 1);
-    cy.get("#state").select(1, { force: true });
+    cy.get("#state").select(1);
   });
 
   it("should show state hint when JavaScript is disabled", () => {

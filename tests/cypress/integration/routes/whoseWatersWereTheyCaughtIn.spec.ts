@@ -91,7 +91,7 @@ describe("Whose waters page: redirect to forbidden page", () => {
     };
 
     cy.visit(WhoseWaterUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/forbidden");
   });
 });
@@ -102,7 +102,7 @@ describe("Whose waters page page: Error summary", () => {
       testCaseId: TestCaseId.WhoseWatersFailsWithErrors,
     };
     cy.visit(WhoseWaterUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select whose waters the fish or shellfish were caught in$/).should("be.visible");
@@ -120,7 +120,7 @@ describe("Whose waters page page: buttons functionality", () => {
   });
 
   it("should be able to navigate to the dashboard when the user clicks save-as-draft button", () => {
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
 
@@ -129,7 +129,7 @@ describe("Whose waters page page: buttons functionality", () => {
     cy.get("[name=caughtInEUWaters]").check();
     cy.get("#caughtInOtherWaters").check();
     cy.get("#otherWaters").type("canada");
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", WhatExportUrl);
   });
 });
@@ -170,7 +170,7 @@ describe("Whose waters page: back button", () => {
     };
 
     cy.visit(WhoseWaterUrl, { qs: { ...testParams } });
-    cy.contains("a", /^Back$/).click({ force: true });
+    cy.contains("a", /^Back$/).click();
     cy.url().should("include", "/create-catch-certificate/GBR-2022-CC-24F279E85/what-are-you-exporting");
   });
 
@@ -180,7 +180,7 @@ describe("Whose waters page: back button", () => {
     };
 
     cy.visit(WhoseWaterUrl, { qs: { ...testParams } });
-    cy.contains("a", /^Back$/).click({ force: true });
+    cy.contains("a", /^Back$/).click();
     cy.url().should("include", "/create-catch-certificate/GBR-2022-CC-24F279E85/add-landings");
   });
 
@@ -190,7 +190,7 @@ describe("Whose waters page: back button", () => {
     };
 
     cy.visit(WhoseWaterUrl, { qs: { ...testParams } });
-    cy.contains("a", /^Back$/).click({ force: true });
+    cy.contains("a", /^Back$/).click();
     cy.url().should("include", "/create-catch-certificate/GBR-2022-CC-24F279E85/direct-landing");
   });
 });
@@ -208,7 +208,7 @@ describe("Whose waters page: save as draft — valid fields only (FI0-10577)", (
     cy.get("#other").check();
     // Intentionally leave otherWaters text empty
 
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
 });

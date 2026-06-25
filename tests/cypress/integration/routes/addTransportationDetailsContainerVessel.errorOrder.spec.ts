@@ -20,10 +20,10 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
     cy.get("#vesselName", { timeout: 10000 }).should("be.visible");
 
     // Fill only the container field with an invalid value
-    cy.get('input[name="containerNumbers.0"]').type("££££££££££", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("££££££££££");
 
     // Submit form without filling required fields
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error summary appears
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -50,10 +50,10 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
     // Wait for page to load completely
     cy.get("#vesselName", { timeout: 10000 }).should("be.visible");
 
-    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51), { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("A".repeat(51));
 
     // Submit form without filling required fields
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error summary appears
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -78,14 +78,14 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
     cy.visit(ccPageUrl, { qs: { ...testParams } });
 
     // Fill all required fields
-    cy.get("#vesselName").type("Felicity Ace", { force: true });
-    cy.get("#flagState").type("Greece", { force: true });
-    cy.get("#departurePlace").type("Felixstowe Port", { force: true });
+    cy.get("#vesselName").type("Felicity Ace");
+    cy.get("#flagState").type("Greece");
+    cy.get("#departurePlace").type("Felixstowe Port");
 
     // Add container with invalid format
-    cy.get('input[name="containerNumbers.0"]').type("ABC123!@#", { force: true });
+    cy.get('input[name="containerNumbers.0"]').type("ABC123!@#");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.get(".govuk-error-summary__list li")
