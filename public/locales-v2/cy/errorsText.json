@@ -31,7 +31,7 @@
   "commonLookupAddressPageErrorPostcodeEmpty": "Rhowch god post",
   "commonWhatExportersAddressErrorEnterTheBuilding": "Rhowch yr adeilad a’r stryd (llinell cyfeiriad 1 o 2)",
   "commonWhatExportersAddressErrorCountry": "Dewiswch wlad o’r rhestr",
-  "commonWhatExportersAddressErrorStreetName": "Rhowch enw stryd",
+  "commonWhatExportersAddressErrorStreetName": "Rhowch enw’r stryd",
   "commonWhatExportersAddressErrorBuildingNumber": "Rhowch rif yr adeilad",
   "commonWhatExportersAddressErrorBuildingName": "Rhowch enw'r adeilad",
   "commonWhatExportersAddressErrorSubBuildingName": "Rhowch enw'r is-adeilad",
