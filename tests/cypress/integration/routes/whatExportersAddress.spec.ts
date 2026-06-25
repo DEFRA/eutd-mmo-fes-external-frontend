@@ -129,14 +129,15 @@ describe("CC: Entering the address manually with errors", () => {
 
     cy.get("[data-testid=continue]").click({ force: true });
 
-    // Should display the address first part error
+    // Should display all 4 address-field required errors
     cy.get(".govuk-error-summary").should("be.visible");
-    cy.get(".govuk-error-summary").contains(
-      "Enter a sub-building name, building number, a building name or street name"
-    );
+    cy.get(".govuk-error-summary").contains("Enter Building number");
+    cy.get(".govuk-error-summary").contains("Enter building name");
+    cy.get(".govuk-error-summary").contains("Enter Sub-building name");
+    cy.get(".govuk-error-summary").contains("Enter Street name");
   });
 
-  it("should not display error when sub-building name is populated", () => {
+  it("should display errors when only sub-building name is populated", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressValid,
     };
@@ -152,12 +153,14 @@ describe("CC: Entering the address manually with errors", () => {
 
     cy.get("[data-testid=continue]").click({ force: true });
 
-    // Should not display address first part error
-    cy.get(".govuk-error-summary").should("not.exist");
-    cy.url().should("include", "/add-exporter-details");
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-error-summary").contains("Enter Building number");
+    cy.get(".govuk-error-summary").contains("Enter building name");
+    cy.get(".govuk-error-summary").contains("Enter Street name");
+    cy.url().should("include", "what-exporters-address");
   });
 
-  it("should not display error when building number is populated", () => {
+  it("should display errors when only building number is populated", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressValid,
     };
@@ -173,12 +176,14 @@ describe("CC: Entering the address manually with errors", () => {
 
     cy.get("[data-testid=continue]").click({ force: true });
 
-    // Should not display address first part error
-    cy.get(".govuk-error-summary").should("not.exist");
-    cy.url().should("include", "/add-exporter-details");
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-error-summary").contains("Enter building name");
+    cy.get(".govuk-error-summary").contains("Enter Sub-building name");
+    cy.get(".govuk-error-summary").contains("Enter Street name");
+    cy.url().should("include", "what-exporters-address");
   });
 
-  it("should not display error when building name is populated", () => {
+  it("should display errors when only building name is populated", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressValid,
     };
@@ -194,12 +199,14 @@ describe("CC: Entering the address manually with errors", () => {
 
     cy.get("[data-testid=continue]").click({ force: true });
 
-    // Should not display address first part error
-    cy.get(".govuk-error-summary").should("not.exist");
-    cy.url().should("include", "/add-exporter-details");
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-error-summary").contains("Enter Building number");
+    cy.get(".govuk-error-summary").contains("Enter Sub-building name");
+    cy.get(".govuk-error-summary").contains("Enter Street name");
+    cy.url().should("include", "what-exporters-address");
   });
 
-  it("should not display error when street name is populated", () => {
+  it("should display errors when only street name is populated", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressValid,
     };
@@ -215,9 +222,11 @@ describe("CC: Entering the address manually with errors", () => {
 
     cy.get("[data-testid=continue]").click({ force: true });
 
-    // Should not display address first part error
-    cy.get(".govuk-error-summary").should("not.exist");
-    cy.url().should("include", "/add-exporter-details");
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-error-summary").contains("Enter Building number");
+    cy.get(".govuk-error-summary").contains("Enter building name");
+    cy.get(".govuk-error-summary").contains("Enter Sub-building name");
+    cy.url().should("include", "what-exporters-address");
   });
 
   it("should not display errors on validation passed", () => {
@@ -282,13 +291,13 @@ describe("CC: Entering the address manually with errors", () => {
     cy.get(".govuk-error-summary").should("be.visible");
 
     // All required field errors should appear in the error summary simultaneously
+    cy.get(".govuk-error-summary").should("contain.text", "Enter Building number");
+    cy.get(".govuk-error-summary").should("contain.text", "Enter building name");
+    cy.get(".govuk-error-summary").should("contain.text", "Enter Sub-building name");
+    cy.get(".govuk-error-summary").should("contain.text", "Enter Street name");
     cy.get(".govuk-error-summary").should("contain.text", "Enter the town or city");
     cy.get(".govuk-error-summary").should("contain.text", "Enter a postcode");
     cy.get(".govuk-error-summary").should("contain.text", "Select a country from the list");
-    cy.get(".govuk-error-summary").should(
-      "contain.text",
-      "Enter a sub-building name, building number, a building name or street name"
-    );
 
     // Required fields should have error styling and inline error messages
     cy.get("#townCity")

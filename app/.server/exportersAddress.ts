@@ -325,6 +325,51 @@ export const exportersAddressAction = async (request: Request, params: Params, j
       postCode: formData.postcode ?? "",
     };
 
+    const requiredAddressErrors: IError[] = [];
+    if (isEmpty((formData.buildingNumber ?? "").trim())) {
+      requiredAddressErrors.push({
+        key: "buildingNumber",
+        message: "commonWhatExportersAddressErrorBuildingNumber",
+      });
+    }
+    if (isEmpty((formData.buildingName ?? "").trim())) {
+      requiredAddressErrors.push({
+        key: "buildingName",
+        message: "commonWhatExportersAddressErrorBuildingName",
+      });
+    }
+    if (isEmpty((formData.subBuildingName ?? "").trim())) {
+      requiredAddressErrors.push({
+        key: "subBuildingName",
+        message: "commonWhatExportersAddressErrorSubBuildingName",
+      });
+    }
+    if (isEmpty((formData.streetName ?? "").trim())) {
+      requiredAddressErrors.push({
+        key: "streetName",
+        message: "commonWhatExportersAddressErrorStreetName",
+      });
+    }
+
+    if (requiredAddressErrors.length > 0) {
+      const updatedSession = await commitSession(session);
+      return new Response(
+        JSON.stringify({
+          errors: getTransformedError(requiredAddressErrors),
+          currentStep,
+          postcodeaddress: lookUpAddress,
+          csrf,
+        }),
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+            "Set-Cookie": updatedSession,
+          },
+        }
+      );
+    }
+
     formData["addressOne"] = getAddressOne(lookUpAddress);
 
     const isAdminSupport = isAdminUser(bearerToken);

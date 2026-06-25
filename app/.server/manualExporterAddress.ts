@@ -32,14 +32,23 @@ export const addManualExporterAddress = async (
 const getFieldFromErrorKey = (errorKey: string): string => {
   const parts = errorKey.split(".");
   if (parts[0] === "error" && parts.length > 1) {
-    const fieldName = parts[1];
-    // Map composite addressFirstPart error to buildingNumber (first field in the group)
-    if (fieldName === "addressFirstPart") {
-      return "buildingNumber";
-    }
-    return fieldName;
+    return parts[1];
   }
   return errorKey;
+};
+
+const mapErrorKeyToFieldErrors = (errorKey: string): Array<{ key: string; message: string }> => {
+  if (errorKey.includes("addressFirstPart")) {
+    return [
+      { key: "buildingNumber", message: "commonWhatExportersAddressErrorBuildingNumber" },
+      { key: "buildingName", message: "commonWhatExportersAddressErrorBuildingName" },
+      { key: "subBuildingName", message: "commonWhatExportersAddressErrorSubBuildingName" },
+      { key: "streetName", message: "commonWhatExportersAddressErrorStreetName" },
+    ];
+  }
+
+  const fieldName = getFieldFromErrorKey(errorKey);
+  return [{ key: fieldName, message: getErrorMessage(errorKey) }];
 };
 
 const sortErrors = (errors: Array<{ key: string; message: string }>) => {
@@ -87,22 +96,7 @@ const onAddManualExporterAddress = async (response: Response, formData: Exporter
     case 204:
       if (Array.isArray(data)) {
         // New way: errors as array of strings
-        const errors = data.flatMap((errorKey: string) => {
-          const fieldName = getFieldFromErrorKey(errorKey);
-          const message = getErrorMessage(errorKey);
-
-          // If this is the addressFirstPart error, map it to all four fields
-          if (errorKey.includes("addressFirstPart")) {
-            return [
-              { key: "buildingNumber", message },
-              { key: "buildingName", message },
-              { key: "subBuildingName", message },
-              { key: "streetName", message },
-            ];
-          }
-
-          return [{ key: fieldName, message }];
-        });
+        const errors = data.flatMap((errorKey: string) => mapErrorKeyToFieldErrors(errorKey));
 
         return {
           model: formData,
@@ -129,22 +123,7 @@ const onAddManualExporterAddress = async (response: Response, formData: Exporter
       // Handle both array and object formats
       if (Array.isArray(data)) {
         // New way: errors as array of strings
-        const errors = data.flatMap((errorKey: string) => {
-          const fieldName = getFieldFromErrorKey(errorKey);
-          const message = getErrorMessage(errorKey);
-
-          // If this is the addressFirstPart error, map it to all four fields
-          if (errorKey.includes("addressFirstPart")) {
-            return [
-              { key: "buildingNumber", message },
-              { key: "buildingName", message },
-              { key: "subBuildingName", message },
-              { key: "streetName", message },
-            ];
-          }
-
-          return [{ key: fieldName, message }];
-        });
+        const errors = data.flatMap((errorKey: string) => mapErrorKeyToFieldErrors(errorKey));
 
         return {
           model: formData,
