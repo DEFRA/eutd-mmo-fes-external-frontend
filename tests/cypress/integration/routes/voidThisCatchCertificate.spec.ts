@@ -20,7 +20,7 @@ describe("void this draft catch certificate page", () => {
       testCaseId: TestCaseId.VoidThisDocumentBadRequest,
     };
     cy.visit(voidThisCatchCertificateUrl, { qs: { ...testParams } });
-    cy.get('[data-testid="continue"]').click({ force: true });
+    cy.get('[data-testid="continue"]').click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
 
     cy.get(".govuk-list > li > a").contains("Select yes if you want to void the current document").should("be.visible");
@@ -33,7 +33,7 @@ describe("void this draft catch certificate page", () => {
     };
     cy.visit(voidThisCatchCertificateUrl, { qs: { ...testParams } });
     cy.get("#documentVoid").check();
-    cy.get('[data-testid="continue"]').click({ force: true });
+    cy.get('[data-testid="continue"]').click();
   });
 
   it("Submit form with no option click of save and continue button", () => {
@@ -42,7 +42,7 @@ describe("void this draft catch certificate page", () => {
     };
     cy.visit(voidThisCatchCertificateUrl, { qs: { ...testParams } });
     cy.get("#documentVoidNo").check();
-    cy.get('[data-testid="continue"]').click({ force: true });
+    cy.get('[data-testid="continue"]').click();
   });
 
   it("forbidden 403", () => {

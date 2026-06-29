@@ -179,15 +179,38 @@ export const updateStorageDocumentCatchDetails = async (
   // Check if the catches array needs to be updated or initialised
   if (Array.isArray(currentStorageDocument?.catches)) {
     if (isUpdatingCatch) {
+      const incomingCatchData = data as StorageDocumentCatch;
+      const existingCatch = currentStorageDocument.catches[catchIndex];
+      const hasExplicitDepartureWeightUpdate =
+        Object.prototype.hasOwnProperty.call(incomingCatchData, "netWeightProductDeparture") ||
+        Object.prototype.hasOwnProperty.call(incomingCatchData, "netWeightFisheryProductDeparture");
+
+      // When arrival weights are edited (for example after copying an NMD),
+      // clear stale departure weights so departure defaults rehydrate from arrival.
+      if (!hasExplicitDepartureWeightUpdate && existingCatch) {
+        if (
+          Object.prototype.hasOwnProperty.call(incomingCatchData, "netWeightProductArrival") &&
+          incomingCatchData.netWeightProductArrival !== existingCatch.netWeightProductArrival
+        ) {
+          incomingCatchData.netWeightProductDeparture = undefined;
+        }
+        if (
+          Object.prototype.hasOwnProperty.call(incomingCatchData, "netWeightFisheryProductArrival") &&
+          incomingCatchData.netWeightFisheryProductArrival !== existingCatch.netWeightFisheryProductArrival
+        ) {
+          incomingCatchData.netWeightFisheryProductDeparture = undefined;
+        }
+      }
+
       if (currentStorageDocument.catches[catchIndex]) {
         // Update a catch in the existing catches array
         currentStorageDocument.catches[catchIndex] = {
           ...currentStorageDocument.catches[catchIndex],
-          ...(data as StorageDocumentCatch),
+          ...incomingCatchData,
         };
       } else {
         // Add a new catch to the existing catches array
-        currentStorageDocument.catches.push({ ...(data as StorageDocumentCatch) });
+        currentStorageDocument.catches.push({ ...incomingCatchData });
       }
     }
   } else {

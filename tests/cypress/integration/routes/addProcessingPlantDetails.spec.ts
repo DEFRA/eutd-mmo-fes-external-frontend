@@ -69,7 +69,7 @@ describe("Add Processing Plant Details return error response if the back end ret
 
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
   });
 
   it("should not render duplicate id attributes when validation errors are shown", () => {
@@ -78,7 +78,7 @@ describe("Add Processing Plant Details return error response if the back end ret
     };
 
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.get("[id]").then(($elements) => {
       const ids = [...$elements].map((element) => element.id).filter(Boolean);
@@ -109,7 +109,7 @@ describe("Add Processing Plant Details: save processing plant details", () => {
 
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 
@@ -120,7 +120,7 @@ describe("Add Processing Plant Details: save processing plant details", () => {
 
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", "/create-processing-statement/GBR-2022-PS-3FE1169D1/add-processing-plant-address");
   });
 
@@ -132,9 +132,9 @@ describe("Add Processing Plant Details: save processing plant details", () => {
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
     cy.get("#plantName").clear();
     cy.get("#plantApprovalNumber").clear();
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "add-processing-plant-details");
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });
@@ -160,7 +160,7 @@ describe("Add Processing Plant Details: Save as Draft functionality", () => {
     cy.get("#plantApprovalNumber").type("UK/TEST/123");
     cy.get("#personResponsibleForConsignment").clear();
     cy.get("#personResponsibleForConsignment").type("John Doe");
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 
@@ -172,7 +172,7 @@ describe("Add Processing Plant Details: Save as Draft functionality", () => {
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
     cy.get("#plantName").clear();
     cy.get("#plantName").type("Partial Plant Name");
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
     cy.get(".govuk-error-summary").should("not.exist");
     cy.get(".govuk-error-message").should("not.exist");
@@ -187,7 +187,7 @@ describe("Add Processing Plant Details: Save as Draft functionality", () => {
     cy.get("#plantName").clear();
     cy.get("#plantApprovalNumber").clear();
     cy.get("#personResponsibleForConsignment").clear();
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
     cy.get(".govuk-error-summary").should("not.exist");
     cy.get(".govuk-error-message").should("not.exist");
@@ -201,7 +201,7 @@ describe("Add Processing Plant Details: Save as Draft functionality", () => {
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
     cy.get("#plantName").clear();
     cy.get("#plantName").type("Error Test Plant");
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 
@@ -220,7 +220,7 @@ describe("Add Processing Plant Details (PS): save as draft retains valid fields"
       testCaseId: TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftWithErrors,
     };
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 
@@ -229,7 +229,7 @@ describe("Add Processing Plant Details (PS): save as draft retains valid fields"
       testCaseId: TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftNoErrors,
     };
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });

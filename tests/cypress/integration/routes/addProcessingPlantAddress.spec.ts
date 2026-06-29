@@ -144,7 +144,7 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("input[name=postcode]").clear();
-    cy.get("input[name=postcode]").type("SW1A 1AA", { force: true });
+    cy.get("input[name=postcode]").type("SW1A 1AA");
     cy.get('[name="_action"][value="findaddress"]').click();
     cy.get("[name=postcode]").should("not.be.visible");
   });
@@ -164,8 +164,8 @@ describe("Add Processing Plant Address", () => {
     };
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
-    cy.get("input[name=postcode]").type("12345", { force: true });
-    cy.get("#findaddress").click({ force: true });
+    cy.get("input[name=postcode]").type("12345");
+    cy.get("#findaddress").click();
     cy.get("#selectAddress").should("be.visible");
     const option = "MMO, LANCASTER HOUSE, HAMPSHIRE COURT, NEWCASTLE UPON TYNE, NE4 7YH";
     cy.contains("#selectAddress option", option).should("exist");
@@ -179,10 +179,10 @@ describe("Add Processing Plant Address", () => {
     };
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
-    cy.get("input[name=postcode]").type("12345", { force: true });
-    cy.get("#findaddress").click({ force: true });
+    cy.get("input[name=postcode]").type("12345");
+    cy.get("#findaddress").click();
     cy.get("#selectAddress").should("be.visible");
-    cy.get("#getaddress").click({ force: true });
+    cy.get("#getaddress").click();
     cy.contains("span", "Select an address to continue").should("be.visible");
     cy.url().should("include", psAddressUrl);
   });
@@ -193,7 +193,7 @@ describe("Add Processing Plant Address", () => {
     };
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
-    cy.get("#findaddress").click({ force: true });
+    cy.get("#findaddress").click();
     cy.contains("h2", "There is a problem").should("be.visible");
     cy.get(".govuk-error-summary").should("be.visible");
     cy.get(".govuk-error-summary").contains("a", "Enter a postcode").should("be.visible");
@@ -296,9 +296,9 @@ describe("Add Processing Plant Address", () => {
     };
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
-    cy.get("input[name=postcode]").type("SW1A 1AA", { force: true });
-    cy.get("#findaddress").click({ force: true });
-    cy.get("#getaddress").click({ force: true });
+    cy.get("input[name=postcode]").type("SW1A 1AA");
+    cy.get("#findaddress").click();
+    cy.get("#getaddress").click();
     cy.url().should("include", psAddressUrl);
     cy.get("[data-testid=manualAddress]").should("be.visible");
     cy.get("select[name=selectaddress]").should("exist");
@@ -310,13 +310,13 @@ describe("Add Processing Plant Address", () => {
     };
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
-    cy.get('[name="_action"][value="navigateToManualAddress"]').click({ force: true });
+    cy.get('[name="_action"][value="navigateToManualAddress"]').click();
     cy.get("[data-testid=manualAddress]").should("be.visible");
     cy.get('[id="buildingNumber"]').type("123");
     cy.get('[name="streetName"]').type("Test Street");
     cy.get('[name="townCity"]').type("Test City");
     cy.get("input[name=postcode]").type("SW1A 1AA");
-    cy.get('[name="_action"][value="continueManualAddress"]').click({ force: true });
+    cy.get('[name="_action"][value="continueManualAddress"]').click();
     cy.url().should("include", psAddressUrl);
   });
 
@@ -325,8 +325,8 @@ describe("Add Processing Plant Address", () => {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressMissingPlantAddressError,
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
-    cy.get("input[name=postcode]").type("?@444", { force: true });
-    cy.get("#findaddress").click({ force: true });
+    cy.get("input[name=postcode]").type("?@444");
+    cy.get("#findaddress").click();
     cy.contains("h2", "There is a problem").should("be.visible");
   });
 
@@ -336,8 +336,8 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
 
-    cy.get("input[name=postcode]").type("SW1A 1AA", { force: true });
-    cy.get("#findaddress").click({ force: true });
+    cy.get("input[name=postcode]").type("SW1A 1AA");
+    cy.get("#findaddress").click();
     cy.get("#selectAddress").should("be.visible");
     cy.get("body").then(($body) => {
       if ($body.find('[name="_action"][value="changelink"]').length > 0) {
@@ -363,11 +363,11 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
 
-    cy.get("input[name=postcode]").type("SW1A 1AA", { force: true });
-    cy.get("#findaddress").click({ force: true });
+    cy.get("input[name=postcode]").type("SW1A 1AA");
+    cy.get("#findaddress").click();
     const option = "MMO, LANCASTER HOUSE, HAMPSHIRE COURT, NEWCASTLE UPON TYNE, NE4 7YH";
     cy.get("#selectAddress").select(option);
-    cy.get("#getaddress").click({ force: true });
+    cy.get("#getaddress").click();
     cy.url().should("include", psAddressUrl);
   });
 
@@ -414,8 +414,8 @@ describe("Add Processing Plant Address", () => {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
-    cy.get("input[name=postcode]").type("SW1A 1AA", { force: true });
-    cy.get("#findaddress").click({ force: true });
+    cy.get("input[name=postcode]").type("SW1A 1AA");
+    cy.get("#findaddress").click();
     cy.request({
       method: "POST",
       url: psAddressUrl,
@@ -438,8 +438,8 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
 
-    cy.get("input[name=postcode]").type("SW1A 1AA", { force: true });
-    cy.get("#findaddress").click({ force: true });
+    cy.get("input[name=postcode]").type("SW1A 1AA");
+    cy.get("#findaddress").click();
     cy.get('[name="_action"][value="cancel"]').click();
     cy.url().should("include", psProgressUrl);
   });
@@ -471,17 +471,17 @@ describe("Add Processing Plant Address", () => {
     };
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
-    cy.findByText(/^Enter the address manually$/).click({ force: true });
+    cy.findByText(/^Enter the address manually$/).click();
 
-    cy.get("#subBuildingName").type("Test Bldg", { force: true });
-    cy.get("#buildingNumber").type("123", { force: true });
-    cy.get("#buildingName").type("Test Villa", { force: true });
-    cy.get("#streetName").type("Street 1", { force: true });
-    cy.get("#townCity").type("Test", { force: true });
-    cy.get("#county").type("Test", { force: true });
-    cy.get("#postcode").type("12345", { force: true });
-    cy.get("#country").type("Albania", { force: true });
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("#subBuildingName").type("Test Bldg");
+    cy.get("#buildingNumber").type("123");
+    cy.get("#buildingName").type("Test Villa");
+    cy.get("#streetName").type("Street 1");
+    cy.get("#townCity").type("Test");
+    cy.get("#county").type("Test");
+    cy.get("#postcode").type("12345");
+    cy.get("#country").type("Albania");
+    cy.get("[data-testid=continue]").click();
     cy.url().should("include", "/add-processing-plant-address");
   });
 
@@ -502,12 +502,12 @@ describe("Add Processing Plant Address", () => {
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
 
-    cy.get("input[name=postcode]").type("12345", { force: true });
-    cy.get("#findaddress").click({ force: true });
+    cy.get("input[name=postcode]").type("12345");
+    cy.get("#findaddress").click();
 
     cy.get("input[name=postcode]").should("not.be.visible");
 
-    cy.get("[data-testid=change-postcode]").click({ force: true });
+    cy.get("[data-testid=change-postcode]").click();
 
     cy.get("input[name=postcode]").should("be.visible");
   });

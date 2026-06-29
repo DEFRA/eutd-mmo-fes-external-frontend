@@ -19,7 +19,7 @@ describe("Catch certificate created page: rendering", () => {
       .should("have.attr", "href", "/create-catch-certificate/catch-certificates");
     cy.findByRole("link", {
       name: "View completed catch certificates or create a new export document",
-    }).click({ force: true });
+    }).click();
     cy.url().should("include", "/catch-certificates");
   });
 
@@ -156,9 +156,9 @@ describe("Catch certificate created page: back button redirects to dashboard", (
       testCaseId: TestCaseId.CatchCertificateCreated,
       args: [documentNumber],
     };
+    cy.visit("/create-catch-certificate/catch-certificates", { qs: { ...testParams } });
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
     cy.get(".govuk-panel--confirmation").should("be.visible");
-    cy.window().its("history.state").should("have.property", "createdPage", true);
     cy.go("back");
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });

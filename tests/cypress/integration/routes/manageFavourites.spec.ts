@@ -15,7 +15,7 @@ describe("Manage favourites page", () => {
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", "/create-catch-certificate/catch-certificates");
-    cy.findByRole("link", { name: "Back" }).click({ force: true });
+    cy.findByRole("link", { name: "Back" }).click();
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
 
@@ -44,7 +44,7 @@ describe("Manage favourites page", () => {
   });
 
   it("should show errors click of add product button", () => {
-    cy.get("[data-testid='add-product']").click({ force: true });
+    cy.get("[data-testid='add-product']").click();
   });
 
   it("should check your products table", () => {
@@ -76,36 +76,36 @@ describe("Manage favourites page: when JavaScript is disabled", () => {
   });
 
   it("should return an error when a species has not been selected", () => {
-    cy.get("[data-testid='add-species']").click({ force: true });
+    cy.get("[data-testid='add-species']").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the common name or FAO code$/).should("be.visible");
   });
 
   it("should return an error when a state has not been selected", () => {
-    cy.get("[data-testid='add-state']").click({ force: true });
+    cy.get("[data-testid='add-state']").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select the state$/).should("be.visible");
   });
 
   it("should return an error when a presentation has not been selected", () => {
-    cy.get("[data-testid='add-presentation']").click({ force: true });
+    cy.get("[data-testid='add-presentation']").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select the presentation$/).should("be.visible");
   });
 
   it("should return to current page when clicking cancel", () => {
-    cy.get("[data-testid='cancel']").click({ force: true });
+    cy.get("[data-testid='cancel']").click();
     cy.url().should("include", "/manage-favourite");
   });
 
   it("should return to current page when clicking remove", () => {
-    cy.get("[data-testid='remove-button-PRD465']").click({ force: true });
+    cy.get("[data-testid='remove-button-PRD465']").click();
     cy.url().should("include", "/manage-favourite");
   });
 
   it("should redirect to #add-state", () => {
     cy.get("[name='species'").select("Albacore (ALB)");
-    cy.get("[data-testid='add-species']").click({ force: true });
+    cy.get("[data-testid='add-species']").click();
     cy.url().should("include", "/manage-favourites#add-state");
   });
 });
@@ -120,7 +120,7 @@ describe("Manage favourites page with errors", () => {
   });
 
   it("should show errors click of add product button", () => {
-    cy.get("[data-testid='add-product']").click({ force: true });
+    cy.get("[data-testid='add-product']").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.url().should("include", "/manage-favourites");
   });

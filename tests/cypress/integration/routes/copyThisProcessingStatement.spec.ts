@@ -15,7 +15,7 @@ describe("Copy this processing statement address page: Allowed", () => {
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", "/create-processing-statement/processing-statements");
-    cy.findByRole("link", { name: "Back" }).click({ force: true });
+    cy.findByRole("link", { name: "Back" }).click();
     cy.url().should("include", "/processing-statements");
   });
 
@@ -32,7 +32,7 @@ describe("Copy this processing statement address page: Allowed", () => {
 
   it("should render the  cancel button and on click should navigate to cc dashboard page", () => {
     cy.contains("button", "Cancel").should("be.visible");
-    cy.get("[data-testid=cancel]").click({ force: true });
+    cy.get("[data-testid=cancel]").click();
     cy.url().should("include", "/processing-statements");
   });
 
@@ -68,7 +68,7 @@ describe("Error summary", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select an option to continue$/).should("be.visible");
@@ -83,9 +83,9 @@ describe("Submit form with copy all certificate data option on click of continue
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("#voidOriginal").click({ force: true });
+    cy.get("#voidOriginal").click();
     cy.get("#copyDocumentAcknowledged").check();
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
     cy.url().should("include", "/progress");
   });
 });
@@ -98,9 +98,9 @@ describe("Submit form with copy all certificate data AND void the original optio
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("#voidDocumentConfirm").click({ force: true });
+    cy.get("#voidDocumentConfirm").click();
     cy.get("#copyDocumentAcknowledged").check();
-    cy.get("[data-testid=continue]").click({ force: true });
+    cy.get("[data-testid=continue]").click();
     cy.url().should("include", "/copy-void-confirmation");
   });
 });

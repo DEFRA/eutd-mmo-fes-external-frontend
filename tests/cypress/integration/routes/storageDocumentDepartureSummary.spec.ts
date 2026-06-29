@@ -69,12 +69,12 @@ const assertErrorSummaryContains = (message: string) => {
 };
 
 const openArrivalTab = () => {
-  cy.get("[data-tab-id='storageArrivalTab']").click({ force: true });
+  cy.get("[data-tab-id='storageArrivalTab']").click();
   cy.get(".govuk-tabs__tab").contains("Storage arrival");
 };
 
 const openDepartureTab = () => {
-  cy.get("[data-tab-id='storageDepartureTab']").click({ force: true });
+  cy.get("[data-tab-id='storageDepartureTab']").click();
   cy.get(".govuk-tabs__tab").contains("Storage departure");
 };
 
@@ -235,7 +235,7 @@ describe("Storage document departure summary: arrival tab", () => {
           cy.get("tr")
             .eq(0)
             .within(() => {
-              cy.get("td").eq(3).find("button").eq(0).contains("Edit").click({ force: true });
+              cy.get("td").eq(3).find("button").eq(0).contains("Edit").click();
             });
         });
       });
@@ -259,7 +259,7 @@ describe("Storage document departure summary: arrival tab", () => {
           cy.get("tr")
             .eq(0)
             .within(() => {
-              cy.get("td").eq(3).find("button").eq(1).contains("Remove").click({ force: true });
+              cy.get("td").eq(3).find("button").eq(1).contains("Remove").click();
             });
         });
       });

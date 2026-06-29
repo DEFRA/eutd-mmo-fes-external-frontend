@@ -91,16 +91,6 @@ const onAddManualExporterAddress = async (response: Response, formData: Exporter
           const fieldName = getFieldFromErrorKey(errorKey);
           const message = getErrorMessage(errorKey);
 
-          // If this is the addressFirstPart error, map it to all four fields
-          if (errorKey.includes("addressFirstPart")) {
-            return [
-              { key: "buildingNumber", message },
-              { key: "buildingName", message },
-              { key: "subBuildingName", message },
-              { key: "streetName", message },
-            ];
-          }
-
           return [{ key: fieldName, message }];
         });
 

@@ -92,23 +92,27 @@ describe("progressTableDataBuilder", () => {
       const transportSection = result.find((s) => s.testId === "Transportation");
       const transportTypeRow = transportSection?.rows.find((r) => r.testId === "transportType");
 
-      expect(transportTypeRow).to.not.equal(undefined);
+      // eslint-disable-next-line no-unused-expressions
+      expect(transportTypeRow).to.not.be.undefined;
       expect(transportTypeRow?.url).to.equal(`${ccContext}/do-you-have-additional-transport-types`);
     });
 
     it("should NOT include the transportType row when transportDetails is INCOMPLETE", () => {
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const transportSection = result.find((s) => s.testId === "Transportation");
+      const transportTypeRows = transportSection?.rows.filter((r) => r.testId === "transportType") ?? [];
 
-      expect(transportSection?.rows.find((r) => r.testId === "transportType")).to.equal(undefined);
+      expect(transportTypeRows).to.have.length(0);
     });
 
     it("should omit both transport rows entirely when directLanding is true", () => {
       const result = progressTableDataBuilder(false, true, baseProgress, baseTransport);
       const transportSection = result.find((s) => s.testId === "Transportation");
+      const transportDetailsRows = transportSection?.rows.filter((r) => r.testId === "transportDetails") ?? [];
+      const transportTypeRows = transportSection?.rows.filter((r) => r.testId === "transportType") ?? [];
 
-      expect(transportSection?.rows.find((r) => r.testId === "transportDetails")).to.equal(undefined);
-      expect(transportSection?.rows.find((r) => r.testId === "transportType")).to.equal(undefined);
+      expect(transportDetailsRows).to.have.length(0);
+      expect(transportTypeRows).to.have.length(0);
     });
   });
 
@@ -118,15 +122,17 @@ describe("progressTableDataBuilder", () => {
       const productSection = result.find((s) => s.testId === "ProductsAndLandings");
       const dataUploadRow = productSection?.rows.find((r) => r.testId === "dataUpload");
 
-      expect(dataUploadRow).to.not.equal(undefined);
+      // eslint-disable-next-line no-unused-expressions
+      expect(dataUploadRow).to.not.be.undefined;
       expect(dataUploadRow?.url).to.equal(`${ccContext}/upload-file`);
     });
 
     it("should NOT include a dataUpload row when dataUpload is false", () => {
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const productSection = result.find((s) => s.testId === "ProductsAndLandings");
+      const dataUploadRows = productSection?.rows.filter((r) => r.testId === "dataUpload") ?? [];
 
-      expect(productSection?.rows.find((r) => r.testId === "dataUpload")).to.equal(undefined);
+      expect(dataUploadRows).to.have.length(0);
     });
 
     it("should use direct-landing URL for landings when directLanding is true", () => {
@@ -151,8 +157,9 @@ describe("progressTableDataBuilder", () => {
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const exporterSection = result.find((s) => s.testId === "Exporter");
 
-      expect(exporterSection?.rows.find((r) => r.testId === "exporter")).to.not.equal(undefined);
-      expect(exporterSection?.rows.find((r) => r.testId === "yourReference")).to.not.equal(undefined);
+      expect(exporterSection?.testId).to.equal("Exporter");
+      expect(exporterSection?.rows.some((r) => r.testId === "exporter")).to.equal(true);
+      expect(exporterSection?.rows.some((r) => r.testId === "yourReference")).to.equal(true);
     });
 
     it("should pass errors through to relevant rows", () => {

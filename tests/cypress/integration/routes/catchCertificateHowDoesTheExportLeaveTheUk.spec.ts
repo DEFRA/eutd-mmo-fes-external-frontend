@@ -43,8 +43,8 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
 
     cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
 
-    cy.get("#vehicle").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#vehicle").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/add-transportation-details-truck");
   });
@@ -56,8 +56,8 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
 
     cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
 
-    cy.get("#plane").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#plane").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/add-transportation-details-plane/0");
   });
@@ -69,8 +69,8 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
 
     cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
 
-    cy.get("#train").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#train").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/add-transportation-details-train");
   });
@@ -81,11 +81,10 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
     };
 
     cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
-    // eslint-disable-next-line
     cy.wait(200);
 
-    cy.get("#containerVessel").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#containerVessel").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/add-transportation-details-container-vessel");
   });
@@ -116,8 +115,8 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
     };
 
     cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
-    cy.get("#train").click({ force: true });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("#train").click();
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
@@ -128,8 +127,8 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
     };
 
     cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
-    cy.get("#train").click({ force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#train").click();
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/forbidden");
   });
@@ -140,7 +139,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
     };
     cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select how the export leaves the UK$/).should("be.visible");

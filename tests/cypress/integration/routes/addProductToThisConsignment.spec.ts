@@ -39,7 +39,7 @@ describe("Add product to this consignment  page", () => {
     cy.get(".govuk-details__summary").should("have.length", 4);
 
     cy.get("div .govuk-details__summary").eq(0).contains("Help with entry document reference");
-    cy.get("div .govuk-details__summary").eq(0).click({ force: true });
+    cy.get("div .govuk-details__summary").eq(0).click();
     cy.get("div .govuk-details__text")
       .contains("The UK entry document is the official paperwork that allowed the product to enter the UK.")
       .should("be.visible");
@@ -49,7 +49,7 @@ describe("Add product to this consignment  page", () => {
     cy.get("div .govuk-details__text").contains("A non-manipulation document").should("be.visible");
 
     cy.get("div .govuk-details__summary").eq(1).contains("Help with supporting documents");
-    cy.get("div .govuk-details__summary").eq(1).click({ force: true });
+    cy.get("div .govuk-details__summary").eq(1).click();
     cy.get("div .govuk-details__text")
       .contains("Supporting documents are additional records that back up the information in your UK entry document.")
       .should("be.visible");
@@ -64,14 +64,14 @@ describe("Add product to this consignment  page", () => {
     cy.get("div .govuk-details__text").contains("Non-manipulation documents").should("be.visible");
 
     cy.get("div .govuk-details__summary").eq(2).contains("Help with species names");
-    cy.get("div .govuk-details__summary").eq(2).click({ force: true });
+    cy.get("div .govuk-details__summary").eq(2).click();
     cy.get("div .govuk-details__text").contains("Some species are exempt from this requirement:").should("be.visible");
     cy.get("div .govuk-details__text")
       .contains("See the list of exempt species on europa.eu (opens in new tab)")
       .should("be.visible");
 
     cy.get("div .govuk-details__summary").eq(3).contains("Help with commodity codes");
-    cy.get("div .govuk-details__summary").eq(3).click({ force: true });
+    cy.get("div .govuk-details__summary").eq(3).click();
     cy.get("div .govuk-details__text")
       .contains("You can use the UK Integrated Online Tariff to find the correct commodity code (opens in new tab)")
       .should("be.visible");
@@ -84,7 +84,7 @@ describe("Add product to this consignment  page", () => {
 
     cy.get("#catches-0-productDescription", { timeout: 10000 }).should("exist").clear();
 
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
 
     cy.get(".govuk-error-summary__list").should("contain", "Enter a description of the product");
 
@@ -92,12 +92,12 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should redirect to dashboard on click of save as draft button", () => {
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should redirect to progress page", () => {
-    cy.get("#backToProgress").click({ force: true });
+    cy.get("#backToProgress").click();
     cy.url().should("include", "/progress");
   });
 
@@ -115,13 +115,13 @@ describe("Add product to this consignment  page", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("#catches-0-supportingDocuments-0").should("be.visible").and("not.be.disabled");
     cy.get("#catches-0-supportingDocuments-0").should("have.value", "");
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/you-have-added-a-product");
   });
   it("should show Remove and Add Another buttons correctly based on selection length", () => {
     cy.wait(500); // Adding a wait to ensure the button is interactable
     for (let i = 0; i < 4; i++) {
-      cy.get("#add-supporting-doc-button").click({ force: true });
+      cy.get("#add-supporting-doc-button").click();
     }
     // Check Remove button exists on the last element
     cy.get("[id^=catches-0-supportingDocuments]").should("have.length.greaterThan", 0);
@@ -152,12 +152,12 @@ describe("Add product to this consignment  page", () => {
     cy.get("#add-supporting-doc-button").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("not.exist");
     cy.wait(500); // Adding a wait to ensure the button is interactable
-    cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.get("#add-supporting-doc-button").click();
     cy.get("#catches-0-supportingDocuments-1").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("exist");
     cy.get("#remove-supporting-doc-button-1").should("exist");
     cy.get("#add-supporting-doc-button").should("exist");
-    cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.get("#add-supporting-doc-button").click();
     cy.get("#catches-0-supportingDocuments-2").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("exist");
     cy.get("#remove-supporting-doc-button-1").should("exist");
@@ -166,7 +166,7 @@ describe("Add product to this consignment  page", () => {
   it("should render the add another doc button and click on it", () => {
     cy.get("#add-supporting-doc-button").should("exist");
     cy.wait(500); // Adding a wait to ensure the button is interactable
-    cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.get("#add-supporting-doc-button").click();
     cy.get("#catches-0-supportingDocuments-0").should("exist");
     cy.get("#catches-0-supportingDocuments-1").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("exist");
@@ -178,20 +178,20 @@ describe("Add product to this consignment  page", () => {
   it("should remove the last doc and update selectedSupportingDocuments", () => {
     cy.get("#add-supporting-doc-button").should("exist");
     cy.wait(500); // Adding a wait to ensure the button is interactable
-    cy.get("#add-supporting-doc-button").click({ force: true });
-    cy.get("#add-supporting-doc-button").click({ force: true });
-    cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.get("#add-supporting-doc-button").click();
+    cy.get("#add-supporting-doc-button").click();
+    cy.get("#add-supporting-doc-button").click();
     cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 5);
     cy.get("#remove-supporting-doc-button-0").should("be.visible");
-    cy.get("#remove-supporting-doc-button-0").click({ force: true });
+    cy.get("#remove-supporting-doc-button-0").click();
     cy.wait(300);
     cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 4);
   });
 
   it("should click on remove last doc button and select should be removed", () => {
-    cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.get("#add-supporting-doc-button").click();
     cy.get("#catches-0-supportingDocuments-1").should("exist");
-    cy.get("#remove-supporting-doc-button-1").click({ force: true });
+    cy.get("#remove-supporting-doc-button-1").click();
     cy.get("#catches-0-supportingDocuments-0").should("exist");
     cy.get("[id^=remove-supporting-doc-button]").should("not.exist");
   });
@@ -227,7 +227,7 @@ describe("Add product to this consignment  page", () => {
 
     // Add supporting documents up to the maximum
     for (let i = 0; i < 4; i++) {
-      cy.get("#add-supporting-doc-button").should("exist").click({ force: true });
+      cy.get("#add-supporting-doc-button").should("exist").click();
       cy.wait(100);
     }
 
@@ -300,9 +300,9 @@ describe("Add product to this consignment  page", () => {
     cy.wait(500);
 
     // Add 3 supporting documents
-    cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.get("#add-supporting-doc-button").click();
     cy.wait(100);
-    cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.get("#add-supporting-doc-button").click();
     cy.wait(100);
 
     // We should now have 3 fields (indices 0, 1, 2)
@@ -316,7 +316,7 @@ describe("Add product to this consignment  page", () => {
     cy.get("#catches-0-supportingDocuments-2").clear().type("Third Document");
 
     // Remove the middle one (index 1) - this triggers getRemoveIndex which parses "removeSupportingDoc-1"
-    cy.get("#remove-supporting-doc-button-1").should("exist").click({ force: true });
+    cy.get("#remove-supporting-doc-button-1").should("exist").click();
     cy.wait(200);
 
     // Now we should have 2 fields remaining
@@ -327,7 +327,7 @@ describe("Add product to this consignment  page", () => {
     cy.get("#catches-0-supportingDocuments-1").should("have.value", "Third Document");
 
     // Remove another one by index (index 0)
-    cy.get("#remove-supporting-doc-button-0").should("exist").click({ force: true });
+    cy.get("#remove-supporting-doc-button-0").should("exist").click();
     cy.wait(200);
 
     // Now only 1 field should remain
@@ -349,7 +349,7 @@ describe("Add product to this consignment  page", () => {
     cy.wait(500);
 
     // Add supporting documents
-    cy.get("#add-supporting-doc-button").click({ force: true });
+    cy.get("#add-supporting-doc-button").click();
     cy.wait(100);
 
     // Fill in some values
@@ -358,7 +358,7 @@ describe("Add product to this consignment  page", () => {
 
     // Fill in required fields to submit the form
     cy.get("#catches-0-certificateType").should("exist");
-    cy.get('input[value="uk"]').check({ force: true });
+    cy.get('input[value="uk"]').check();
     cy.get("#catches-0-certificateNumber").type("TEST123");
     cy.get("#catches-0-weightOnCC").type("100");
     cy.get("#catches-0-product").type("COD");
@@ -367,7 +367,7 @@ describe("Add product to this consignment  page", () => {
 
     // Submit form with "Save and continue" (not a remove action)
     // This ensures the form submission doesn't trigger getRemoveIndex with removeSupportingDoc=true
-    cy.get('[data-testid="save-and-continue"]').click({ force: true });
+    cy.get('[data-testid="save-and-continue"]').click();
 
     // Should successfully navigate away (the action didn't try to remove anything)
     cy.url().should("include", "/you-have-added-a-product");
@@ -445,7 +445,7 @@ describe("Add product to this consignment  page", () => {
 
     it("should have proper accessibility attributes for additional supporting document fields", () => {
       // Add second supporting document
-      cy.get("#add-supporting-doc-button").click({ force: true });
+      cy.get("#add-supporting-doc-button").click();
       cy.wait(300);
 
       // Second field should have aria-label but no aria-describedby
@@ -453,7 +453,7 @@ describe("Add product to this consignment  page", () => {
       cy.get("#catches-0-supportingDocuments-1").should("not.have.attr", "aria-describedby");
 
       // Third field should also have aria-label
-      cy.get("#add-supporting-doc-button").click({ force: true });
+      cy.get("#add-supporting-doc-button").click();
       cy.wait(300);
       cy.get("#catches-0-supportingDocuments-2").should("have.attr", "aria-label", "catches-0-supportingDocuments-2");
       cy.get("#catches-0-supportingDocuments-2").should("not.have.attr", "aria-describedby");
@@ -462,7 +462,7 @@ describe("Add product to this consignment  page", () => {
     it("should not reference non-existent hint IDs in aria-describedby for additional fields", () => {
       // Add multiple supporting documents
       for (let i = 0; i < 3; i++) {
-        cy.get("#add-supporting-doc-button").click({ force: true });
+        cy.get("#add-supporting-doc-button").click();
         cy.wait(500);
       }
 
@@ -536,7 +536,7 @@ describe("Add product to this consignment  page- save and continue", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").should("be.visible");
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/you-have-added-a-product");
   });
 
@@ -546,7 +546,7 @@ describe("Add product to this consignment  page- save and continue", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").should("be.visible");
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("#error-summary-title").should("be.visible");
     cy.get(".govuk-error-summary").should("exist");
   });
@@ -556,7 +556,7 @@ describe("Add product to this consignment  page- save and continue", () => {
       testCaseId: TestCaseId.SDAddProductConsignmentDataSpeicesError,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("#error-summary-title").should("be.visible").and("contain", "There is a problem");
     cy.get(".govuk-error-message")
       .should("be.visible")
@@ -569,7 +569,7 @@ describe("Add product to this consignment  page- save and continue", () => {
       testCaseId: TestCaseId.SDAddProductConsignmentDataSpeicesSuggestError,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("#error-summary-title").should("be.visible").and("contain", "There is a problem");
     cy.get(".govuk-error-message")
       .should("be.visible")
@@ -630,7 +630,7 @@ describe("Add product to this consignment page: form submission and interaction"
       testCaseId: TestCaseId.SDAddProductConsignmentDataError,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("#error-summary-title").should("be.visible");
     cy.contains(".govuk-error-message", "Select Yes if the document was issued in the UK").should("be.visible");
     cy.url().should("include", "/add-product-to-this-consignment");
@@ -643,7 +643,7 @@ describe("Add product to this consignment page: form submission and interaction"
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     // Select 'No' for UK-issued certificate
-    cy.get("input[name='docIssuedInUk'][value='non_uk']").click({ force: true });
+    cy.get("input[name='docIssuedInUk'][value='non_uk']").click();
 
     // Check that issuing country field appears
     cy.get("label").contains("Issuing country").should("be.visible");
@@ -670,10 +670,10 @@ describe("Add product to this consignment page: form submission and interaction"
     cy.get("#catches-0-weightOnCC").type("10");
 
     // Select 'No' for UK-issued certificate
-    cy.get("input[name='docIssuedInUk'][value='non_uk']").click({ force: true });
+    cy.get("input[name='docIssuedInUk'][value='non_uk']").click();
 
     // Try to submit without entering issuing country
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Check error appears in error summary
     cy.get("#error-summary-title").contains("There is a problem");
@@ -690,7 +690,7 @@ describe("Add product to this consignment page: form submission and interaction"
       testCaseId: TestCaseId.SDAddProductConsignmentDataError,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("#error-summary-title").should("be.visible");
     cy.contains(".govuk-error-message", "Enter the net weight of product on arrival").should("be.visible");
     cy.url().should("include", "/add-product-to-this-consignment");
@@ -701,7 +701,7 @@ describe("Add product to this consignment page: form submission and interaction"
       testCaseId: TestCaseId.SDAddProductConsignmentDataError,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("#error-summary-title").should("be.visible");
     cy.contains(".govuk-error-message", "Enter the net weight of fishery products on arrival").should("be.visible");
     cy.url().should("include", "/add-product-to-this-consignment");
@@ -761,7 +761,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Check error summary
     cy.get("#error-summary-title").should("be.visible");
@@ -777,7 +777,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get(".govuk-error-message").should("be.visible");
   });
 
@@ -818,7 +818,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get(".govuk-error-message").should("be.visible");
   });
 
@@ -828,7 +828,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("input[name='docIssuedInUk'][value='non_uk']").click({ force: true });
+    cy.get("input[name='docIssuedInUk'][value='non_uk']").click();
     cy.get("#catches-0-issuingCountry").should("be.visible");
   });
 
@@ -875,7 +875,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("input[name='docIssuedInUk'][value='uk']").click({ force: true });
+    cy.get("input[name='docIssuedInUk'][value='uk']").click();
     cy.get("#catches-0-certificateNumber").type("GBR-2024-CC-TEST123");
     cy.get("#catches-0-weightOnCC").type("100");
     cy.get("#catches-0-product").type("Atlantic cod (COD)");
@@ -885,7 +885,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     cy.get("#catches-0-netWeightFisheryProductArrival").type("40");
 
     cy.get("[data-testid=save-and-continue]").should("be.visible");
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/you-have-added-a-product");
   });
 
@@ -895,7 +895,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     cy.get(".govuk-input--error").should("have.length.greaterThan", 0);
   });
@@ -921,9 +921,9 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     cy.get('[id^="catches-0-supportingDocuments-"]')
       .its("length")
       .then((initialCount) => {
-        cy.get("#add-supporting-doc-button").click({ force: true });
+        cy.get("#add-supporting-doc-button").click();
         cy.wait(300);
-        cy.get("#add-supporting-doc-button").click({ force: true });
+        cy.get("#add-supporting-doc-button").click();
         cy.wait(300);
         cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", initialCount + 2);
       });
@@ -958,7 +958,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error island is visible (scroll behavior)
     cy.get("#errorIsland").should("be.visible");
@@ -979,10 +979,10 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     cy.get("#catches-0-weightOnCC").type("10");
 
     // Select 'No' for UK-issued certificate
-    cy.get("input[name='docIssuedInUk'][value='non_uk']").click({ force: true });
+    cy.get("input[name='docIssuedInUk'][value='non_uk']").click();
 
     // Try to submit without entering issuing country
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Verify issuing country error appears in error summary
     cy.get(".govuk-error-summary__list").should("exist");
@@ -1027,7 +1027,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Check if net weight errors are displayed when applicable
     cy.get("#catches-0-netWeightProductArrival, #catches-0-netWeightFisheryProductArrival").should("exist");
@@ -1059,7 +1059,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get(".govuk-details__summary").eq(1).click({ force: true });
+    cy.get(".govuk-details__summary").eq(1).click();
     cy.get(".govuk-details__text").should("be.visible");
   });
 
@@ -1105,7 +1105,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
 
     it("should submit supporting documents correctly when JavaScript is disabled", () => {
       cy.get("#catches-0-supportingDocuments-0").type("Supporting Doc 1");
-      cy.get("[data-testid=save-and-continue]").click({ force: true });
+      cy.get("[data-testid=save-and-continue]").click();
 
       cy.url().should("include", "/you-have-added-a-product");
     });
@@ -1133,7 +1133,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should display Remove button after adding a second supporting document field", () => {
-      cy.get("#add-supporting-doc-button").click({ force: true });
+      cy.get("#add-supporting-doc-button").click();
 
       cy.get("#remove-supporting-doc-button-0").should("exist").and("be.visible");
       cy.get("#remove-supporting-doc-button-1").should("exist").and("be.visible");
@@ -1146,7 +1146,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
 
       for (let i = 0; i < 4; i++) {
         cy.get("#add-supporting-doc-button")
-          .click({ force: true })
+          .click()
           .then(() => {
             cy.wait(100);
           });
@@ -1166,7 +1166,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.visit(`${documentUrl}/add-product-to-this-consignment/0`, { qs: { ...testParams } });
 
       // Fill in required fields
-      cy.get('input[value="uk"]').check({ force: true });
+      cy.get('input[value="uk"]').check();
       cy.get("#catches-0-certificateNumber").type("TEST123");
       cy.get("#catches-0-weightOnCC").type("100");
       cy.get("#catches-0-product").type("COD");
@@ -1174,7 +1174,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get("#catches-0-commodityCode").type("03");
 
       // Submit form
-      cy.get('[data-testid="save-and-continue"]').click({ force: true });
+      cy.get('[data-testid="save-and-continue"]').click();
 
       // Should redirect with productIndex=0
       cy.url().should("include", "/you-have-added-a-product");
@@ -1188,7 +1188,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.visit(`${documentUrl}/add-product-to-this-consignment/1`, { qs: { ...testParams } });
 
       // Fill in required fields
-      cy.get('input[value="uk"]').check({ force: true });
+      cy.get('input[value="uk"]').check();
       cy.get("#catches-1-certificateNumber").type("TEST456");
       cy.get("#catches-1-weightOnCC").type("200");
       cy.get("#catches-1-product").type("HAD");
@@ -1196,7 +1196,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get("#catches-1-commodityCode").type("03");
 
       // Submit form
-      cy.get('[data-testid="save-and-continue"]').click({ force: true });
+      cy.get('[data-testid="save-and-continue"]').click();
 
       // Should redirect with productIndex=1
       cy.url().should("include", "/you-have-added-a-product");
@@ -1211,7 +1211,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.visit(`${documentUrl}/add-product-to-this-consignment/${editIndex}`, { qs: { ...testParams } });
 
       // Fill in required fields
-      cy.get('input[value="uk"]').check({ force: true });
+      cy.get('input[value="uk"]').check();
       cy.get(`#catches-${editIndex}-certificateNumber`).clear();
       cy.get(`#catches-${editIndex}-certificateNumber`).type("EDITED123");
       cy.get(`#catches-${editIndex}-weightOnCC`).clear();
@@ -1221,7 +1221,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get(`#catches-${editIndex}-commodityCode`).type("03");
 
       // Submit form
-      cy.get('[data-testid="save-and-continue"]').click({ force: true });
+      cy.get('[data-testid="save-and-continue"]').click();
 
       // Should redirect with the edited productIndex
       cy.url().should("include", "/you-have-added-a-product");
@@ -1242,7 +1242,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       );
 
       // Fill in required fields
-      cy.get('input[value="uk"]').check({ force: true });
+      cy.get('input[value="uk"]').check();
       cy.get(`#catches-${productIndex}-certificateNumber`).type("TEST789");
       cy.get(`#catches-${productIndex}-weightOnCC`).type("100");
       cy.get(`#catches-${productIndex}-product`).type("COD");
@@ -1250,7 +1250,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get(`#catches-${productIndex}-commodityCode`).type("03");
 
       // Submit form
-      cy.get('[data-testid="save-and-continue"]').click({ force: true });
+      cy.get('[data-testid="save-and-continue"]').click();
 
       // Should redirect with both parameters
       cy.url().should("include", "/you-have-added-a-product");
@@ -1266,11 +1266,38 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.visit(`${documentUrl}/add-product-to-this-consignment/0`, { qs: { ...testParams } });
 
       // Submit with minimal data (test case handles validation)
-      cy.get('[data-testid="save-and-continue"]').click({ force: true });
+      cy.get('[data-testid="save-and-continue"]').click();
 
       // Should redirect with productIndex=0
       cy.url().should("include", "/you-have-added-a-product");
       cy.url().should("include", "productIndex=0");
+    });
+
+    it("should successfully save when arrival weights are changed on a catch that already has departure weights", () => {
+      // The fixture (SDAddProductConsignmentData) contains a catch with both
+      // netWeightProductArrival:"10" and netWeightProductDeparture:"10".
+      // Editing the arrival weight exercises the new server-side branch that
+      // clears stale departure weights from updateStorageDocumentCatchDetails.
+      // The POST to saveAndValidate is a server→orchestration call (not a
+      // browser request), so we validate the observable outcome: a successful
+      // redirect to you-have-added-a-product.
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentData,
+      };
+
+      cy.visit(`${documentUrl}/add-product-to-this-consignment/0`, { qs: { ...testParams } });
+
+      // Re-query each field after typing to avoid detached-DOM errors caused
+      // by React re-renders triggered by the input event.
+      cy.get("#catches-0-netWeightProductArrival").clear();
+      cy.get("#catches-0-netWeightProductArrival").type("9");
+      cy.get("#catches-0-netWeightFisheryProductArrival").clear();
+      cy.get("#catches-0-netWeightFisheryProductArrival").type("8");
+      cy.get('[data-testid="save-and-continue"]').click();
+
+      // Successful redirect proves the server action (and the new clearing
+      // logic inside updateStorageDocumentCatchDetails) ran without error.
+      cy.url().should("include", "/you-have-added-a-product");
     });
   });
 
@@ -1282,7 +1309,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       };
       cy.visit(pageUrl, { qs: { ...testParams } });
 
-      cy.get("[data-testid=save-and-continue]").click({ force: true });
+      cy.get("[data-testid=save-and-continue]").click();
 
       cy.contains(
         ".govuk-error-message",
@@ -1296,7 +1323,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       };
       cy.visit(pageUrl, { qs: { ...testParams } });
 
-      cy.get("[data-testid=save-and-continue]").click({ force: true });
+      cy.get("[data-testid=save-and-continue]").click();
 
       cy.get(".govuk-error-summary__list").should(
         "contain",
@@ -1310,7 +1337,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       };
       cy.visit(pageUrl, { qs: { ...testParams } });
 
-      cy.get("[data-testid=save-and-continue]").click({ force: true });
+      cy.get("[data-testid=save-and-continue]").click();
 
       cy.get("#GBR-2023-SD-83552D3E5-catches-0-netWeightFisheryProductArrival").should(
         "have.class",
@@ -1325,7 +1352,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       };
       cy.visit(pageUrl, { qs: { ...testParams } });
 
-      cy.get("[data-testid=save-and-continue]").click({ force: true });
+      cy.get("[data-testid=save-and-continue]").click();
 
       cy.get("#errorIsland").should("be.visible");
     });
@@ -1336,7 +1363,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       };
       cy.visit(pageUrl, { qs: { ...testParams } });
 
-      cy.get('input[value="uk"]').check({ force: true });
+      cy.get('input[value="uk"]').check();
       cy.get("#catches-0-certificateNumber").type("GBR-2024-CC-TEST123");
       cy.get("#catches-0-weightOnCC").type("100");
       cy.get("#catches-0-product").type("Atlantic cod (COD)");
@@ -1345,7 +1372,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get("#catches-0-netWeightProductArrival").type("100");
       cy.get("#catches-0-netWeightFisheryProductArrival").type("100");
 
-      cy.get("[data-testid=save-and-continue]").click({ force: true });
+      cy.get("[data-testid=save-and-continue]").click();
 
       cy.contains(
         ".govuk-error-message",
@@ -1361,7 +1388,7 @@ describe("Add product to consignment (SD): save as draft retains valid fields", 
       testCaseId: TestCaseId.SDAddProductConsignmentSaveAsDraftWithErrors,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+    cy.get('[data-testid="save-draft-button"]').click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
@@ -1370,7 +1397,7 @@ describe("Add product to consignment (SD): save as draft retains valid fields", 
       testCaseId: TestCaseId.SDAddProductConsignmentSaveAsDraftWithSpeciesError,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+    cy.get('[data-testid="save-draft-button"]').click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
@@ -1379,7 +1406,7 @@ describe("Add product to consignment (SD): save as draft retains valid fields", 
       testCaseId: TestCaseId.SDAddProductConsignmentSaveAsDraftNoErrors,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.get('[data-testid="save-draft-button"]').click({ force: true });
+    cy.get('[data-testid="save-draft-button"]').click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 });
@@ -1416,7 +1443,7 @@ describe("Add product to consignment (SD): non-JS add/remove supporting document
       cy.get("#catches-0-supportingDocuments-0").should("exist");
       cy.get("#catches-0-supportingDocuments-1").should("not.exist");
 
-      cy.get("#add-supporting-doc-button").click({ force: true });
+      cy.get("#add-supporting-doc-button").click();
 
       // After redirect the session flag causes the loader to append an empty string
       cy.get("#catches-0-supportingDocuments-0").should("exist");
@@ -1424,7 +1451,7 @@ describe("Add product to consignment (SD): non-JS add/remove supporting document
     });
 
     it("should show Remove buttons after adding an extra supporting document in non-JS mode", () => {
-      cy.get("#add-supporting-doc-button").click({ force: true });
+      cy.get("#add-supporting-doc-button").click();
 
       // With 2 docs, supportingDocuments.length > 1 → remove buttons appear
       cy.get("[id^=remove-supporting-doc-button]").should("have.length", 2);
@@ -1462,7 +1489,7 @@ describe("Add product to consignment (SD): non-JS add/remove supporting document
     });
 
     it("should submit the remove form and redirect back to the same page when Remove is clicked in non-JS mode", () => {
-      cy.get("#remove-supporting-doc-button-0").click({ force: true });
+      cy.get("#remove-supporting-doc-button-0").click();
 
       // Action splices doc at index 0, validates, then redirects to ?#remove-supporting-doc
       cy.url().should("include", "/add-product-to-this-consignment/0");

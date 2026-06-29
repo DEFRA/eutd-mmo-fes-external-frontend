@@ -90,11 +90,11 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveMaxCharsRailwayBillNumber,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railway bill number", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#railwayBillNumber").type("Railway bill number");
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Railway bill number must not exceed 15 characters$/).should("be.visible");
@@ -106,10 +106,10 @@ describe("Add Transportation Details Train: Allowed", () => {
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     cy.get("#railwayBillNumber").should("have.value", "");
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the railway bill number$/).should("be.visible");
@@ -120,12 +120,12 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveMaxCharsTrainPlaceOfUnloadingEmpty,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railway bill number", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#railwayBillNumber").type("Railway bill number");
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
     cy.get("#placeOfUnloading").should("have.value", "");
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the place where the consignment was unloaded$/).should("be.visible");
@@ -136,15 +136,14 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveMaxCharsTrainPlaceOfUnloadingExceedString,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railway bill number", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#railwayBillNumber").type("Railway bill number");
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
     cy.get("#placeOfUnloading").type(
-      "Place of unloading which is way way way way way way way way way way way way way more than 50 words",
-      { force: true }
+      "Place of unloading which is way way way way way way way way way way way way way more than 50 words"
     );
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.wait(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -156,11 +155,11 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveAlphanumericsRailwayBillNumber,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railway..", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill number", { force: true });
+    cy.get("#railwayBillNumber").type("Railway..");
+    cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Railway bill number must only contain letters and numbers$/).should("be.visible");
@@ -171,7 +170,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TrainTransportErrors,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
@@ -183,13 +182,13 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TrainTransportSaveAsDraft,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railway Bill", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill", { force: true });
+    cy.get("#railwayBillNumber").type("Railway Bill");
+    cy.get("#freightBillNumber").type("Freight bill");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("#placeOfUnloading").type("Place of unloading", { force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("#placeOfUnloading").type("Place of unloading");
     cy.get("[data-testid=save-draft-button]").should("be.visible").should("not.be.disabled");
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
@@ -198,11 +197,11 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TrainTransportSave,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("#railwayBillNumber").type("Railway Bill", { force: true });
-    cy.get("#freightBillNumber").type("Freight bill", { force: true });
+    cy.get("#railwayBillNumber").type("Railway Bill");
+    cy.get("#freightBillNumber").type("Freight bill");
     cy.get("#departureCountry").invoke("val", "Ireland");
-    cy.get("#departurePort").type("Where the consignment departs from", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#departurePort").type("Where the consignment departs from");
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", storageFacilityUrl);
   });
 
@@ -211,7 +210,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       testCaseId: TestCaseId.TrainTransportSave,
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", storageFacilityUrl);
   });
 
@@ -256,14 +255,14 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
     // Fill other required fields but leave departureCountry blank
-    cy.get("#railwayBillNumber").type("AB12345C", { force: true });
-    cy.get("#departurePort").type("Calais port", { force: true });
-    cy.get("#placeOfUnloading").type("Dover", { force: true });
-    cy.get("#departureDate").type("25", { force: true });
-    cy.get("#departureDate-month").type("07", { force: true });
-    cy.get("#departureDate-year").type("2025", { force: true });
+    cy.get("#railwayBillNumber").type("AB12345C");
+    cy.get("#departurePort").type("Calais port");
+    cy.get("#placeOfUnloading").type("Dover");
+    cy.get("#departureDate").type("25");
+    cy.get("#departureDate-month").type("07");
+    cy.get("#departureDate-year").type("2025");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error is displayed
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -278,14 +277,14 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
     // Fill other required fields but leave departurePort blank
-    cy.get("#railwayBillNumber").type("AB12345C", { force: true });
+    cy.get("#railwayBillNumber").type("AB12345C");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#placeOfUnloading").type("Dover", { force: true });
-    cy.get("#departureDate").type("25", { force: true });
-    cy.get("#departureDate-month").type("07", { force: true });
-    cy.get("#departureDate-year").type("2025", { force: true });
+    cy.get("#placeOfUnloading").type("Dover");
+    cy.get("#departureDate").type("25");
+    cy.get("#departureDate-month").type("07");
+    cy.get("#departureDate-year").type("2025");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error is displayed
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -300,12 +299,12 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
     // Fill other required fields but leave departureDate blank
-    cy.get("#railwayBillNumber").type("AB12345C", { force: true });
+    cy.get("#railwayBillNumber").type("AB12345C");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Calais port", { force: true });
-    cy.get("#placeOfUnloading").type("Dover", { force: true });
+    cy.get("#departurePort").type("Calais port");
+    cy.get("#placeOfUnloading").type("Dover");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error is displayed
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -320,15 +319,15 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
     // Fill all mandatory fields
-    cy.get("#railwayBillNumber").type("AB12345C", { force: true });
+    cy.get("#railwayBillNumber").type("AB12345C");
     cy.get("#departureCountry").invoke("val", "France");
-    cy.get("#departurePort").type("Calais port", { force: true });
-    cy.get("#placeOfUnloading").type("Dover", { force: true });
-    cy.get("#departureDate").type("25", { force: true });
-    cy.get("#departureDate-month").type("07", { force: true });
-    cy.get("#departureDate-year").type("2025", { force: true });
+    cy.get("#departurePort").type("Calais port");
+    cy.get("#placeOfUnloading").type("Dover");
+    cy.get("#departureDate").type("25");
+    cy.get("#departureDate-month").type("07");
+    cy.get("#departureDate-year").type("2025");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Verify navigation to storage facility page
     cy.url().should("include", storageFacilityUrl);
@@ -364,10 +363,10 @@ describe("Add Transportation Details Train: Welsh Translations", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams, lng: "cy" } });
 
     // Fill only railway bill number and place of unloading, leave other required fields blank
-    cy.get("#railwayBillNumber").type("AB12345C", { force: true });
-    cy.get("#placeOfUnloading").type("Dover", { force: true });
+    cy.get("#railwayBillNumber").type("AB12345C");
+    cy.get("#placeOfUnloading").type("Dover");
 
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error summary header in Welsh
     cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
@@ -397,19 +396,19 @@ describe("Add Transportation Details Train: Welsh Translations", () => {
     cy.get("#remove-container-button-0").should("not.exist");
 
     // Add another container
-    cy.get("#add-container-button").click({ force: true });
+    cy.get("#add-container-button").click();
     cy.get('input[name="containerNumbers.1"]').should("be.visible");
     cy.get("#remove-container-button-0").should("be.visible");
     cy.get("#remove-container-button-0").should("be.visible").should("contain.text", "Remove");
 
     // Fill in container values
-    cy.get('[id="containerNumbers.0"]').type("ABCJ0123456", { force: true });
-    cy.get('[id="containerNumbers.1"]').type("XYZU9876543", { force: true });
+    cy.get('[id="containerNumbers.0"]').type("ABCJ0123456");
+    cy.get('[id="containerNumbers.1"]').type("XYZU9876543");
     cy.get('[id="containerNumbers.0"]').should("exist");
     cy.get('[id="containerNumbers.1"]').should("exist");
 
     // Remove one container
-    cy.get("#remove-container-button-0").click({ force: true });
+    cy.get("#remove-container-button-0").click();
     cy.get('input[name="containerNumbers.1"]').should("not.exist");
 
     // Verify the remaining container still exists

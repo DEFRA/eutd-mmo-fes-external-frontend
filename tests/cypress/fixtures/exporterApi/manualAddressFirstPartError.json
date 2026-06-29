@@ -1,1 +1,6 @@
-["error.addressFirstPart.any.required"]
+[
+  "error.buildingNumber.any.required",
+  "error.buildingName.any.required",
+  "error.subBuildingName.any.required",
+  "error.streetName.any.required"
+]

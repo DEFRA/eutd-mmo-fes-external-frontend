@@ -9,7 +9,7 @@ describe("Sign Out Page", () => {
     );
 
     cy.get("button#continue").should("be.visible");
-    cy.get("button#continue").click({ force: true });
+    cy.get("button#continue").click();
     cy.url().should("eq", "http://localhost:3000/");
   });
   it("should redirect to logout page after 5s", () => {

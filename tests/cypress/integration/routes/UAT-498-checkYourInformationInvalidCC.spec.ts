@@ -19,7 +19,7 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
     });
 
     it("should show error in error summary at the top when invalid CC is submitted", () => {
-      cy.get("[data-testid=create-ps-button]").click({ force: true });
+      cy.get("[data-testid=create-ps-button]").click();
 
       // Error summary should be visible
       cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -29,7 +29,7 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
     });
 
     it("should display inline error message next to the catch certificate field", () => {
-      cy.get("[data-testid=create-ps-button]").click({ force: true });
+      cy.get("[data-testid=create-ps-button]").click();
 
       // Check for inline error message next to the catch certificate field
       cy.get(".govuk-error-message")
@@ -38,7 +38,7 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
     });
 
     it("should apply error styling to the catch certificate field", () => {
-      cy.get("[data-testid=create-ps-button]").click({ force: true });
+      cy.get("[data-testid=create-ps-button]").click();
 
       // The field should have error class
       cy.get(".govuk-form-group--error").should("exist");
@@ -57,7 +57,7 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
     });
 
     it("should display both catch certificate and species errors", () => {
-      cy.get("[data-testid=create-ps-button]").click({ force: true });
+      cy.get("[data-testid=create-ps-button]").click();
 
       // Error summary should contain both errors
       cy.contains("a", /^The catch certificate entered is no longer valid$/).should("be.visible");
@@ -77,7 +77,7 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
     });
 
     it("should display format error next to the catch certificate field", () => {
-      cy.get("[data-testid=create-ps-button]").click({ force: true });
+      cy.get("[data-testid=create-ps-button]").click();
 
       cy.contains("h2", /^There is a problem$/).should("be.visible");
       cy.contains("a", /^Catch certificate number must only contain letters, numbers/).should("be.visible");

@@ -108,7 +108,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     };
 
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("button#continue").click({ force: true });
+    cy.get("button#continue").click();
     cy.url().should("include", "/forbidden");
   });
 
@@ -118,10 +118,9 @@ describe("Add Transportation Details Plane: Allowed", () => {
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
     cy.get("#flightNumber").type(
-      "flightNumberflightNumberflightNumberflightNumberflightNumberflightNumberflightNumberflightNumberflightNumberflightNumber",
-      { force: true }
+      "flightNumberflightNumberflightNumberflightNumberflightNumberflightNumberflightNumberflightNumberflightNumberflightNumber"
     );
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Flight number must not exceed 15 characters$/).should("be.visible");
@@ -132,8 +131,8 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.TransportSaveAlphanumericPlaneFlightNumber,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#flightNumber").type("TestNumber..$@@", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#flightNumber").type("TestNumber..$@@");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Flight number must only contain letters and numbers$/).should("be.visible");
@@ -144,7 +143,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.PlaneTransportErrors,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the flight number$/).should("be.visible");
@@ -157,7 +156,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.PlaneTransportErrors,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
 
@@ -181,10 +180,10 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#flightNumber").type("Plane", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
-    cy.get("#departurePlace").type("Hull", { force: true });
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("#flightNumber").type("Plane");
+    cy.get('input[name="containerNumbers.0"]').type("Container");
+    cy.get("#departurePlace").type("Hull");
+    cy.get("[data-testid=save-draft-button").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
@@ -195,15 +194,15 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.visit(planePageUrl, { qs: { ...testParams } });
 
     // Fill all fields including export date and container
-    cy.get("#flightNumber").type("EK215", { force: true });
-    cy.get("#departurePlace").type("Gatwick Airport", { force: true });
-    cy.get("#exportDate").type("18", { force: true });
-    cy.get("#exportDate-month").type("04", { force: true });
-    cy.get("#exportDate-year").type("2026", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("KLMN4567890", { force: true });
+    cy.get("#flightNumber").type("EK215");
+    cy.get("#departurePlace").type("Gatwick Airport");
+    cy.get("#exportDate").type("18");
+    cy.get("#exportDate-month").type("04");
+    cy.get("#exportDate-year").type("2026");
+    cy.get('input[name="containerNumbers.0"]').type("KLMN4567890");
 
     // Save as draft
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
     // Return to the page using CHECK testCaseId (hardcoded saved fixture — immune to double-GET and retry state issues)
@@ -228,15 +227,15 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.visit(planePageUrl, { qs: { ...testParams } });
 
     // Fill with invalid container numbers (would fail validation on save & continue)
-    cy.get("#flightNumber").type("QR123", { force: true });
-    cy.get("#departurePlace").type("Manchester Airport", { force: true });
-    cy.get("#exportDate").type("01", { force: true });
-    cy.get("#exportDate-month").type("06", { force: true });
-    cy.get("#exportDate-year").type("2026", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("TOOSHORT", { force: true }); // Invalid format
+    cy.get("#flightNumber").type("QR123");
+    cy.get("#departurePlace").type("Manchester Airport");
+    cy.get("#exportDate").type("01");
+    cy.get("#exportDate-month").type("06");
+    cy.get("#exportDate-year").type("2026");
+    cy.get('input[name="containerNumbers.0"]').type("TOOSHORT"); // Invalid format
 
     // Save as draft should accept invalid containers
-    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
 
     // Return and verify values retained including invalid containers using CHECK testCaseId
@@ -256,10 +255,10 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#flightNumber").type("Plane", { force: true });
-    cy.get('input[name="containerNumbers.0"]').type("Container", { force: true });
-    cy.get("#departurePlace").type("Hull", { force: true });
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("#flightNumber").type("Plane");
+    cy.get('input[name="containerNumbers.0"]').type("Container");
+    cy.get("#departurePlace").type("Hull");
+    cy.get("[data-testid=save-and-continue").click();
     cy.url().should("include", "/departure-product-summary");
   });
 });
@@ -290,7 +289,7 @@ describe("Plane Point of Destination - Validation Scenarios", () => {
       testCaseId: TestCaseId.PlaneTransportPointOfDestinationRequired,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the point of destination$/).should("be.visible");
   });
@@ -301,8 +300,8 @@ describe("Plane Point of Destination - Validation Scenarios", () => {
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
     const longString = new Array(102).join("a");
-    cy.get("#pointOfDestination").type(longString, { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#pointOfDestination").type(longString);
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Point of destination must not exceed 100 characters$/).should("be.visible");
   });
@@ -312,8 +311,8 @@ describe("Plane Point of Destination - Validation Scenarios", () => {
       testCaseId: TestCaseId.PlaneTransportPointOfDestinationInvalidCharacters,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#pointOfDestination").type("Invalid@#$%", { force: true });
-    cy.get("[data-testid=save-and-continue]").click({ force: true });
+    cy.get("#pointOfDestination").type("Invalid@#$%");
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains(
       "a",

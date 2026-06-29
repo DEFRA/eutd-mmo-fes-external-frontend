@@ -63,12 +63,12 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should redirect to the exporter processing statement dashboard", () => {
-    cy.get("[data-testid=return-to-dashboard-button]").click({ force: true });
+    cy.get("[data-testid=return-to-dashboard-button]").click();
     cy.url().should("include", "/processing-statements");
   });
 
   it("should display errors", () => {
-    cy.get("[data-testid=continue-button]").click({ force: true });
+    cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/progress");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^You must complete the exporter details section before being able to continue$/).should(
@@ -114,7 +114,7 @@ describe("ProgressPage - Completed Application", () => {
   });
 
   it("should redirect to check-your-information page when click on Check your answers button", () => {
-    cy.get('[data-testid="continue-button"]').click({ force: true });
+    cy.get('[data-testid="continue-button"]').click();
   });
 });
 
@@ -128,7 +128,7 @@ describe("ProgressPage - Completed Application Unauthorised", () => {
   });
 
   it("should redirect to forbidden page when click on Check your answers button", () => {
-    cy.get('[data-testid="continue-button"]').click({ force: true });
+    cy.get('[data-testid="continue-button"]').click();
     cy.url().should("contain", "/forbidden");
   });
 });
@@ -143,9 +143,9 @@ describe("should display the notificationBanner", () => {
       qs: { ...testParams },
     });
     cy.wait(500);
-    cy.get("#voidOriginal").click({ force: true });
+    cy.get("#voidOriginal").click();
     cy.get("#copyDocumentAcknowledged").check();
-    cy.get('[data-testid="continue"]').click({ force: true });
+    cy.get('[data-testid="continue"]').click();
     cy.get(".govuk-notification-banner__heading").contains(
       "This draft was created by copying document GBR-2022-PS-F71D98A30. You are reminded that you must not use a processing statememt or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
     );
@@ -170,7 +170,7 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should display error when attempting to continue with description-only products", () => {
-      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.get('[data-testid="continue-button"]').click();
       cy.url().should("include", "/progress");
 
       // Check for error summary at the top
@@ -189,7 +189,7 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should remain on progress page after validation error", () => {
-      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.get('[data-testid="continue-button"]').click();
       cy.url().should("include", "/progress");
       cy.url().should("not.include", "/check-your-information");
     });
@@ -208,7 +208,7 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should display error when attempting to continue with mixed products", () => {
-      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.get('[data-testid="continue-button"]').click();
       cy.url().should("include", "/progress");
 
       // Check for error summary at the top
@@ -227,7 +227,7 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should remain on progress page after validation error", () => {
-      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.get('[data-testid="continue-button"]').click();
       cy.url().should("include", "/progress");
       cy.url().should("not.include", "/check-your-information");
     });
@@ -246,13 +246,13 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should allow progression to check-your-information when all products have catches", () => {
-      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.get('[data-testid="continue-button"]').click();
       // Should redirect successfully (no error)
       cy.url().should("not.include", "/progress");
     });
 
     it("should not display validation errors", () => {
-      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.get('[data-testid="continue-button"]').click();
       cy.contains("h2", /^There is a problem$/).should("not.exist");
     });
   });
@@ -266,7 +266,7 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should display multiple inline errors for incomplete sections", () => {
-      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.get('[data-testid="continue-button"]').click();
       cy.url().should("include", "/progress");
 
       // Check for error summary at the top
@@ -289,7 +289,7 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should ensure all errors are accessible and visible", () => {
-      cy.get('[data-testid="continue-button"]').click({ force: true });
+      cy.get('[data-testid="continue-button"]').click();
 
       // Verify error summary links are functional
       cy.get(".govuk-error-summary__list a").first().click();

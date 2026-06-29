@@ -40,7 +40,7 @@ describe("Add Your Reference", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "add-exporter-details");
   });
@@ -53,7 +53,7 @@ describe("Add Your Reference", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
@@ -76,7 +76,7 @@ describe("Add Your Reference", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "add-your-reference");
     cy.get(".govuk-error-summary").should("be.visible");
@@ -91,7 +91,7 @@ describe("Add Your Reference", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("contain", "/create-catch-certificate/catch-certificates");
   });
@@ -104,7 +104,7 @@ describe("Add Your Reference", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/forbidden");
   });
@@ -192,7 +192,7 @@ describe("Add Your Reference - Processing Statement", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "add-exporter-details");
   });
@@ -205,7 +205,7 @@ describe("Add Your Reference - Processing Statement", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/create-processing-statement/processing-statement");
   });
@@ -228,7 +228,7 @@ describe("Add Your Reference - Processing Statement", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "add-your-reference");
     cy.get(".govuk-error-summary").should("be.visible");
@@ -243,7 +243,7 @@ describe("Add Your Reference - Processing Statement", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("contain", "/create-processing-statement/processing-statement");
   });
@@ -256,7 +256,7 @@ describe("Add Your Reference - Processing Statement", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/forbidden");
   });
@@ -344,7 +344,7 @@ describe("Add Your Reference - Storage Document", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "add-exporter-details");
   });
@@ -357,7 +357,7 @@ describe("Add Your Reference - Storage Document", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
@@ -380,7 +380,7 @@ describe("Add Your Reference - Storage Document", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-and-continue").click({ force: true });
+    cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "add-your-reference");
     cy.get(".govuk-error-summary").should("be.visible");
@@ -395,7 +395,7 @@ describe("Add Your Reference - Storage Document", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("contain", "/create-non-manipulation-document/non-manipulation-documents");
   });
@@ -408,7 +408,7 @@ describe("Add Your Reference - Storage Document", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#userReference").type("qwerty");
-    cy.get("[data-testid=save-draft-button").click({ force: true });
+    cy.get("[data-testid=save-draft-button").click();
 
     cy.url().should("include", "/forbidden");
   });
