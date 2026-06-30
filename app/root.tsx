@@ -31,6 +31,7 @@ import { getStyles } from "./styles/styles";
 import type { IMainAppProps } from "./types";
 import clientLogger from "./logger";
 import { allNamespaces, supportedLanguages } from "./i18n";
+import { useNonce } from "./nonce";
 
 declare global {
   // Injected by Vite define config for cache-busting
@@ -39,6 +40,7 @@ declare global {
   interface Window {
     gtag: any;
     clarity: (...args: unknown[]) => void;
+    dataLayer: unknown[];
   }
 }
 
@@ -47,7 +49,8 @@ export const handle = {
 };
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  const { pageTitle } = data ?? {};
+  const rootData = (data ?? {}) as Partial<IMainAppProps> & { pageTitle?: string };
+  const { pageTitle } = rootData;
 
   return [
     { charset: "utf-8" },
@@ -59,6 +62,10 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     {
       name: "theme-color",
       content: "#0b0c0c",
+    },
+    {
+      name: "support-contact-number",
+      content: rootData.supportContactNumber ?? "0330 159 1989",
     },
   ];
 };
@@ -95,114 +102,114 @@ const Template = ({
   clarityProjectId,
   children,
   analyticsCookieAccepted,
-  supportContactNumber,
 }: React.PropsWithChildren<IMainAppProps>) => {
   const ref = useRef<HTMLSpanElement>(null);
   const { pathname } = useLocation();
   const { i18n } = useTranslation();
+  const nonce = useNonce();
 
   useChangeLanguage(locale);
 
   useEffect(() => {
-    const gtmScript = document.createElement("script");
-    const gtagScript = document.createElement("script");
-    const gtagExternal = document.createElement("script");
-    const clarity = document.createElement("script");
-    const clarityConsent = document.createElement("script");
-
-    if (shouldRenderGA(analyticsCookieAccepted)) {
-      document.getElementById("gtm-script")?.remove();
-      document.getElementById("gtm-external")?.remove();
-      document.getElementById("gtag-script")?.remove();
-      document.getElementById("clarity-script")?.remove();
+    const analyticsAllowed = shouldRenderGA(analyticsCookieAccepted);
+    if (!analyticsAllowed) {
+      return;
     }
 
-    if (clarityProjectId?.length && shouldRenderGA(analyticsCookieAccepted)) {
-      clarity.id = "clarity-script";
-      clarity.innerHTML = `(function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "${clarityProjectId}");`;
-      document.head.appendChild(clarity);
+    const injectedScripts: HTMLScriptElement[] = [];
 
-      clarityConsent.id = "clarity-consent";
-      clarityConsent.innerHTML = `window.clarity('consentv2', { ad_Storage: "denied", analytics_Storage: "granted" });`;
-      document.head.appendChild(clarityConsent);
+    const appendScript = (id: string, src: string): HTMLScriptElement => {
+      const script = document.createElement("script");
+      script.id = id;
+      script.async = true;
+      script.src = src;
+      script.nonce = nonce;
+      document.head.appendChild(script);
+      injectedScripts.push(script);
+      return script;
+    };
+
+    if (clarityProjectId?.length) {
+      if (typeof globalThis.window.clarity !== "function") {
+        globalThis.window.clarity = (...args: unknown[]) => {
+          const clarityFn = globalThis.window.clarity as ((...params: unknown[]) => void) & { q?: unknown[][] };
+          clarityFn.q = clarityFn.q ?? [];
+          clarityFn.q.push(args);
+        };
+      }
+
+      appendScript("clarity-script", `https://www.clarity.ms/tag/${clarityProjectId}`);
+      globalThis.window.clarity("consentv2", { ad_Storage: "denied", analytics_Storage: "granted" });
     }
 
-    if (gtmId?.length && shouldRenderGA(analyticsCookieAccepted)) {
-      gtagExternal.async = true;
-      gtagExternal.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
-      gtagExternal.id = "gtag-external";
+    const originalOpen = XMLHttpRequest.prototype.open;
+    const originalSend = XMLHttpRequest.prototype.send;
 
-      gtmScript.id = "gtm-script";
-      gtmScript.innerHTML = `
-        (function() {
-          var _open = XMLHttpRequest.prototype.open;
-          XMLHttpRequest.prototype.open = function(method, url) {
-            if (typeof url === 'string' && url.indexOf('google-analytics.com/j/collect') !== -1) {
-              this._uaBlocked = true;
-            }
-            return _open.apply(this, arguments);
-          };
-          var _send = XMLHttpRequest.prototype.send;
-          XMLHttpRequest.prototype.send = function() {
-            if (this._uaBlocked) return;
-            return _send.apply(this, arguments);
-          };
-        })();
-        window['ga-disable-${gaId}'] = true;
-        (function(w, d, s, l, i) {
-          w[l] = w[l] || [];
-          w[l].push({
-              'gtm.start': new Date().getTime(),
-              event: 'gtm.js'
-          });
-          var f = d.getElementsByTagName(s)[0],
-              j = d.createElement(s),
-              dl = l != 'dataLayer' ? '&l=' + l : '';
-          j.async = true;
-          j.src =
-              'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-          f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', '${gtmId}');`;
+    XMLHttpRequest.prototype.open = function (method: string, url: string | URL): any {
+      if (typeof url === "string" && url.includes("google-analytics.com/j/collect")) {
+        (this as any)._uaBlocked = true;
+      }
+      return originalOpen.apply(this, arguments as any);
+    };
 
-      gtagScript.id = "gtag-script";
-      gtagScript.innerHTML = `
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+    XMLHttpRequest.prototype.send = function (): any {
+      if ((this as any)._uaBlocked) {
+        return;
+      }
+      return originalSend.apply(this, arguments as any);
+    };
 
-        gtag('config', '${gaId}', {
-          'cookie_flags': 'SameSite=None;Secure',
-          'cookie_domain': window.location.hostname,
-          'cookie_path': '/',
-          'cookie_expires': 63072000,
-          'anonymize_ip': true,
-          'allow_google_signals': false,
-          'allow_ad_personalization_signals': false,
-          'cookie_update': true,
-          'send_page_view': true
-        });`;
+    if (gtmId?.length) {
+      const disableKey = `ga-disable-${gaId}`;
+      (globalThis as any)[disableKey] = true;
 
-      document.head.appendChild(gtmScript);
-      document.head.appendChild(gtagScript);
-      document.head.appendChild(gtagExternal);
+      globalThis.window.dataLayer = globalThis.window.dataLayer || [];
+      globalThis.window.dataLayer.push({
+        "gtm.start": Date.now(),
+        event: "gtm.js",
+      });
 
-      return () => {
-        if (typeof window.clarity === "function") {
-          window.clarity("consent", false);
-        }
+      appendScript("gtm-external", `https://www.googletagmanager.com/gtm.js?id=${gtmId}`);
+    }
 
-        if (document.head.contains(clarityConsent)) document.head.removeChild(clarityConsent);
-        if (document.head.contains(clarity)) document.head.removeChild(clarity);
-        if (document.head.contains(gtmScript)) document.head.removeChild(gtmScript);
-        if (document.head.contains(gtagScript)) document.head.removeChild(gtagScript);
-        if (document.head.contains(gtagExternal)) document.head.removeChild(gtagExternal);
+    if (gaId?.length) {
+      appendScript("gtag-external", `https://www.googletagmanager.com/gtag/js?id=${gaId}`);
+
+      globalThis.window.dataLayer = globalThis.window.dataLayer || [];
+      globalThis.window.gtag = (...args: unknown[]) => {
+        globalThis.window.dataLayer.push(args);
       };
+
+      globalThis.window.gtag("js", new Date());
+      globalThis.window.gtag("config", gaId, {
+        cookie_flags: "SameSite=None;Secure",
+        cookie_domain: globalThis.window.location.hostname,
+        cookie_path: "/",
+        cookie_expires: 63072000,
+        anonymize_ip: true,
+        allow_google_signals: false,
+        allow_ad_personalization_signals: false,
+        cookie_update: true,
+        send_page_view: true,
+        transport_type: "beacon",
+      });
     }
-  }, [analyticsCookieAccepted]);
+
+    return () => {
+      if (typeof globalThis.window.clarity === "function") {
+        globalThis.window.clarity("consent", false);
+      }
+
+      XMLHttpRequest.prototype.open = originalOpen;
+      XMLHttpRequest.prototype.send = originalSend;
+
+      injectedScripts.forEach((script) => {
+        if (document.head.contains(script)) {
+          script.remove();
+        }
+      });
+    };
+  }, [analyticsCookieAccepted, clarityProjectId, gaId, gtmId, nonce]);
 
   useEffect(() => {
     ref.current?.focus();
@@ -214,11 +221,6 @@ const Template = ({
     <html className="govuk-template govuk-template--rebranded" lang={locale} dir={i18n.dir()}>
       <head>
         <Meta />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.__contactNumber__ = ${JSON.stringify(supportContactNumber)};`,
-          }}
-        />
         <Links />
       </head>
       <body className="govuk-template__body govuk-body">
@@ -249,8 +251,8 @@ const Template = ({
           {children}
         </div>
         <Footer />
-        <ScrollRestoration />
-        {!disableScripts && <Scripts />}
+        <ScrollRestoration nonce={nonce} />
+        {!disableScripts && <Scripts nonce={nonce} />}
       </body>
     </html>
   );

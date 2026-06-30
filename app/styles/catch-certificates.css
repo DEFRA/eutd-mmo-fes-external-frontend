@@ -1,0 +1,40 @@
+/* Sidebar component */
+.sidebar-divider {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.sidebar-section-header {
+  margin-bottom: 0;
+}
+
+.sidebar-govuk-link {
+  margin: 4px 0;
+  display: inline-block;
+}
+
+.sidebar-govuk-link--narrow {
+  margin: 2px 0;
+  display: inline-block;
+}
+
+/* DocumentProgressTable component */
+.document-progress-storage-notes {
+  white-space: pre-line;
+}
+
+/* Notification component */
+.notification-banner {
+  border: 0;
+  margin-bottom: 30px;
+}
+
+.notification-banner__heading {
+  color: white;
+  margin-bottom: 15px;
+}
+
+.notification-banner__message {
+  color: white;
+  margin-top: 0;
+}
