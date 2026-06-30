@@ -21,7 +21,7 @@ export const DocumentProgressTable = ({
   return (
     <>
       <h2 className="govuk-heading-l">{t("commonDashboardInProgress")}</h2>
-      <p className="govuk-body" style={journey === "storageNotes" ? { whiteSpace: "pre-line" } : undefined}>
+      <p className={`govuk-body${journey === "storageNotes" ? " document-progress-storage-notes" : ""}`}>
         {t(`${journey}DashboardGuidance`, { maximumConcurrentDrafts: maximumDraftsLength, ns: "dashboard" })}
         {journey === "catchCertificate" && (
           <>
