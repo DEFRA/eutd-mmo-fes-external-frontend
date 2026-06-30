@@ -10,10 +10,8 @@ export const Sidebar = ({ journey, dashboardFeedbackURL }: SidebarProps) => {
   function renderLandingLinks() {
     return (
       <>
-        <hr style={{ marginTop: 0, marginBottom: 0 }} />
-        <h3 className="sectionheader" style={{ marginBottom: "0" }}>
-          {t("commonDashboardlandingLinksHeader")}
-        </h3>
+        <hr className="sidebar-divider" />
+        <h3 className="sectionheader sidebar-section-header">{t("commonDashboardlandingLinksHeader")}</h3>
         <p>
           <a
             data-testid="prior-notification-form"
@@ -39,7 +37,7 @@ export const Sidebar = ({ journey, dashboardFeedbackURL }: SidebarProps) => {
           </a>{" "}
           (PDF)
         </p>
-        <hr style={{ marginTop: 0, marginBottom: 0 }} />
+        <hr className="sidebar-divider" />
       </>
     );
   }
@@ -47,9 +45,7 @@ export const Sidebar = ({ journey, dashboardFeedbackURL }: SidebarProps) => {
   function renderCatchCertSubSection() {
     return (
       <>
-        <h3 className="sectionheader" style={{ marginBottom: "0" }}>
-          {t("commonDashboardCatchCertSubSectionHeader")}
-        </h3>
+        <h3 className="sectionheader sidebar-section-header">{t("commonDashboardCatchCertSubSectionHeader")}</h3>
         <p>
           {t("commonDashboardForFishNotCaught")}
           <br />
@@ -61,14 +57,7 @@ export const Sidebar = ({ journey, dashboardFeedbackURL }: SidebarProps) => {
             className="govuk-link"
           >
             {t("processingStatementRendererHeaderSectionTitle", { ns: "dashboard" })}{" "}
-            <span
-              style={{
-                margin: "4px 0",
-                display: "inline-block",
-              }}
-            >
-              (gov.uk)
-            </span>{" "}
+            <span className="sidebar-govuk-link">(gov.uk)</span>{" "}
             <span className="govuk-visually-hidden">{t("commonHelpLinkOpenInNewTab")}</span>
           </a>
           <br />
@@ -79,15 +68,7 @@ export const Sidebar = ({ journey, dashboardFeedbackURL }: SidebarProps) => {
             target="_blank"
             className="govuk-link"
           >
-            {t("commonDashboardCreateaUkStorageDocument")}{" "}
-            <span
-              style={{
-                margin: "4px 0",
-                display: "inline-block",
-              }}
-            >
-              (gov.uk)
-            </span>{" "}
+            {t("commonDashboardCreateaUkStorageDocument")} <span className="sidebar-govuk-link">(gov.uk)</span>{" "}
             <span className="govuk-visually-hidden">{t("commonHelpLinkOpenInNewTab")}</span>
           </a>
         </p>
@@ -100,8 +81,8 @@ export const Sidebar = ({ journey, dashboardFeedbackURL }: SidebarProps) => {
   function renderProcessingStatementSubSection() {
     return (
       <>
-        <hr style={{ marginTop: 0, marginBottom: 0 }} />
-        <h3 className="sectionheader" style={{ marginBottom: "0" }}>
+        <hr className="sidebar-divider" />
+        <h3 className="sectionheader sidebar-section-header">
           {t("psDashboardOtherFishExportServices", { ns: "dashboard" })}
         </h3>
         <p>
@@ -113,14 +94,7 @@ export const Sidebar = ({ journey, dashboardFeedbackURL }: SidebarProps) => {
             className="govuk-link"
           >
             {t("commonDashboardCreateAUkCatchCertificate")}
-            <span
-              style={{
-                margin: "4px 0", // Apply vertical margin of 2px
-                display: "inline-block", // Ensure margin affects layout
-              }}
-            >
-              (gov.uk)
-            </span>{" "}
+            <span className="sidebar-govuk-link">(gov.uk)</span>{" "}
             <span className="govuk-visually-hidden">({t("commonHelpLinkOpenInNewTab")})</span>
           </a>
           <br />
@@ -132,14 +106,7 @@ export const Sidebar = ({ journey, dashboardFeedbackURL }: SidebarProps) => {
             className="govuk-link"
           >
             {t("commonDashboardCreateaUkStorageDocument")}
-            <span
-              style={{
-                margin: "4px 0",
-                display: "inline-block",
-              }}
-            >
-              (gov.uk)
-            </span>{" "}
+            <span className="sidebar-govuk-link">(gov.uk)</span>{" "}
             <span className="govuk-visually-hidden">({t("commonHelpLinkOpenInNewTab")})</span>
           </a>
         </p>
@@ -152,8 +119,8 @@ export const Sidebar = ({ journey, dashboardFeedbackURL }: SidebarProps) => {
   function renderStorageNoteSubSection() {
     return (
       <>
-        <hr style={{ marginTop: 0, marginBottom: 0 }} />
-        <h3 className="sectionheader" style={{ marginBottom: "0" }}>
+        <hr className="sidebar-divider" />
+        <h3 className="sectionheader sidebar-section-header">
           {t("psDashboardOtherFishExportServices", { ns: "dashboard" })}
         </h3>
         <p>
@@ -163,15 +130,7 @@ export const Sidebar = ({ journey, dashboardFeedbackURL }: SidebarProps) => {
             target="_blank"
             className="govuk-link"
           >
-            {t("commonDashboardCreateAUkCatchCertificate")}{" "}
-            <span
-              style={{
-                margin: "4px 0",
-                display: "inline-block",
-              }}
-            >
-              (gov.uk)
-            </span>{" "}
+            {t("commonDashboardCreateAUkCatchCertificate")} <span className="sidebar-govuk-link">(gov.uk)</span>{" "}
             <span className="govuk-visually-hidden">{t("commonHelpLinkOpenInNewTab")}</span>
           </a>
           <br />
@@ -182,14 +141,7 @@ export const Sidebar = ({ journey, dashboardFeedbackURL }: SidebarProps) => {
             className="govuk-link"
           >
             {t("processingStatementRendererHeaderSectionTitle", { ns: "dashboard" })}{" "}
-            <span
-              style={{
-                margin: "2px 0",
-                display: "inline-block",
-              }}
-            >
-              (gov.uk)
-            </span>{" "}
+            <span className="sidebar-govuk-link--narrow">(gov.uk)</span>{" "}
             <span className="govuk-visually-hidden">{t("commonHelpLinkOpenInNewTab")}</span>
           </a>
         </p>
@@ -201,10 +153,8 @@ export const Sidebar = ({ journey, dashboardFeedbackURL }: SidebarProps) => {
   function renderDashboardFeedbackLinkSubSection() {
     return (
       <>
-        <hr style={{ marginTop: 0, marginBottom: 0 }} />
-        <h3 className="sectionheader" style={{ marginBottom: "0" }}>
-          {t("commonDashboardFeedbackHeading")}
-        </h3>
+        <hr className="sidebar-divider" />
+        <h3 className="sectionheader sidebar-section-header">{t("commonDashboardFeedbackHeading")}</h3>
         <p>
           {t("commonDashboardFeedbackText")}
           <a
