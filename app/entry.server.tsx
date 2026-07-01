@@ -28,18 +28,12 @@ const SCRIPT_HASH_ALLOWLIST = [
   "'sha256-p7GE78bbMHDrE4IWzpiMSttAsTpUu7wwi5/wvnH54Os='",
 ].join(" ");
 
-const STYLE_HASH_ALLOWLIST = [
-  "'sha256-KpSV7LuPYEu58+3u9LJr9v5Drm0uIKEv0h3u/+NVNm8='",
-  "'sha256-Nu2RxE/9Zt9hH6ikBf5LpcS5TLaEV4FbdBNuKALa0ZA='",
-  "'sha256-aqNNdDLnnrDOnTNdkJpYlAxKVJtLt9CtFLklmInuUAE='",
-].join(" ");
-
 const buildCspHeader = (nonce: string, isProduction: boolean): string => {
   if (isProduction) {
     return [
       "default-src 'self'",
       `script-src 'self' 'nonce-${nonce}' ${SCRIPT_HASH_ALLOWLIST} www.googletagmanager.com www.google-analytics.com *.clarity.ms`,
-      `style-src 'self' 'unsafe-hashes' ${STYLE_HASH_ALLOWLIST}`,
+      "style-src 'self'",
       "connect-src 'self' dc.services.visualstudio.com js.monitor.azure.com region1.google-analytics.com www.google-analytics.com *.clarity.ms",
       "img-src 'self' www.googletagmanager.com www.google-analytics.com *.clarity.ms *.bing.com",
       "frame-src 'self' www.googletagmanager.com",
@@ -54,7 +48,7 @@ const buildCspHeader = (nonce: string, isProduction: boolean): string => {
   return [
     "default-src 'self'",
     "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-    `style-src 'self' 'unsafe-hashes' ${STYLE_HASH_ALLOWLIST}`,
+    "style-src 'self'",
     "connect-src 'self' ws://localhost:*",
   ].join("; ");
 };

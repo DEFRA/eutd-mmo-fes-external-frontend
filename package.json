@@ -40,7 +40,7 @@
     "@azure/event-hubs": "^5.12.0",
     "@azure/msal-node": "2.11.0",
     "@azure/storage-blob": "12.23.0",
-    "@capgeminiuk/dcx-react-library": "^1.1.0-beta-7",
+    "@capgeminiuk/dcx-react-library": "1.1.0-beta-8",
     "@microsoft/applicationinsights-web": "3.3.0",
     "@mjackson/file-storage": "^0.7.0",
     "@mjackson/form-data-parser": "^0.9.1",
