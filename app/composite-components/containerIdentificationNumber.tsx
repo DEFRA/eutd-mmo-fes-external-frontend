@@ -96,7 +96,7 @@ export const ContainerIdentificationNumber = ({
         const hasError = errors?.[errorKey];
 
         return (
-          <div key={input.id} className="govuk-button-group" style={{ display: "flex", alignItems: "flex-end" }}>
+          <div key={input.id} className="govuk-button-group supporting-document-row">
             <FormInput
               containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
               labelClassName={index === 0 ? "govuk-label govuk-!-font-weight-bold" : "govuk-visually-hidden"}
@@ -138,11 +138,10 @@ export const ContainerIdentificationNumber = ({
                 id={`remove-container-button-${index}`}
                 data-testid={`remove-container-${index}`}
                 label={t("removeContainerButton")}
-                className="govuk-button govuk-button--secondary govuk-!-margin-left-2"
+                className="govuk-button govuk-button--secondary govuk-!-margin-left-2 supporting-document-remove-btn"
                 type={BUTTON_TYPE.BUTTON}
                 data-module="govuk-button"
                 onClick={() => handleRemoveContainer(input.id)}
-                style={{ top: "15px" }}
               />
             )}
           </div>

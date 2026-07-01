@@ -648,10 +648,7 @@ const CatchAdded = () => {
                       return (
                         <tr className="govuk-table__row" key={`product-${product.id}`}>
                           <td className="govuk-table__cell">
-                            <strong
-                              className="govuk-tag govuk-tag--grey govuk-!-margin-bottom-2"
-                              style={{ display: "block" }}
-                            >
+                            <strong className="govuk-tag govuk-tag--grey govuk-tag--block govuk-!-margin-bottom-2">
                               {product.description}
                             </strong>
                             <div className="govuk-!-margin-top-2">
@@ -683,9 +680,8 @@ const CatchAdded = () => {
                           <tr className="govuk-table__row" key={`catches-data-${item._id}`}>
                             <td className="govuk-table__cell" id={`catches-${actualIndex}-productDescription`}>
                               <strong
-                                className={`govuk-tag ${item.tagClass} govuk-!-margin-bottom-2`}
+                                className={`govuk-tag ${item.tagClass} govuk-tag--block govuk-!-margin-bottom-2`}
                                 data-testid={`catches-${actualIndex}-tag`}
-                                style={{ display: "block" }}
                               >
                                 {item.productDescription}
                               </strong>

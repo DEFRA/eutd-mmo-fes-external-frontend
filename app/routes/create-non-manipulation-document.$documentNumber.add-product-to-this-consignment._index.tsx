@@ -771,8 +771,7 @@ const AddProductIndex = () => {
                   return (
                     <div
                       key={`supporting-document-${index + 1}`}
-                      className="govuk-button-group govuk-!-margin-bottom-4"
-                      style={{ display: "flex", alignItems: "flex-end", gap: "8px" }}
+                      className="govuk-button-group govuk-!-margin-bottom-4 supporting-document-row"
                     >
                       <FormInput
                         containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
@@ -812,11 +811,10 @@ const AddProductIndex = () => {
                           id={`remove-supporting-doc-button-${index}`}
                           data-testid={`remove-supporting-doc-${index}`}
                           label={t("commonRemoveButton", { ns: "common" })}
-                          className="govuk-button govuk-button--secondary govuk-!-margin-left-2"
+                          className="govuk-button govuk-button--secondary govuk-!-margin-left-2 supporting-document-remove-btn"
                           type={BUTTON_TYPE.BUTTON}
                           data-module="govuk-button"
                           onClick={() => handleRemoveDoc(index)}
-                          style={{ top: "15px" }}
                           aria-label={t("commonRemoveButton", { ns: "addProductToThisConsignment" })}
                         />
                       )}

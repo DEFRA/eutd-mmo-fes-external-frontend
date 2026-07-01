@@ -315,7 +315,7 @@ export function ErrorBoundary() {
         {!isProdEnv() && (
           <>
             <p>{errorMessage}</p>
-            {isError && <pre style={{ overflowY: "scroll" }}>{error.stack}</pre>}
+            {isError && <pre className="error-stack-pre">{error.stack}</pre>}
           </>
         )}
       </Main>

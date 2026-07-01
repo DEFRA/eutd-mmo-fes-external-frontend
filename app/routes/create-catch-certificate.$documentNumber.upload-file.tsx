@@ -8,6 +8,7 @@ import { useIsHydrated, useScrollOnPageError, useScrollOnPageLoad } from "~/hook
 import { type LoaderFunction, type ActionFunction } from "react-router";
 import { useTranslation } from "react-i18next";
 import isEmpty from "lodash/isEmpty";
+import classNames from "classnames";
 import {
   displayErrorTransformedMessages,
   getErrorMessage,
@@ -211,16 +212,13 @@ const UploadFile = () => {
                 {rows?.map((landing: IUploadedLanding) => (
                   <tr
                     key={`rows-${landing.rowNumber}-${landing.productId}`}
-                    className="govuk-table__row"
+                    className={classNames("govuk-table__row", { "upload-row--error": !isEmpty(landing.errors) })}
                     data-testid={landing.productId}
-                    style={{ color: isEmpty(landing.errors) ? "" : "#b10e1e" }}
                   >
                     <td scope="row" className="govuk-table__cell">
                       {landing.rowNumber}
                     </td>
-                    <td className="govuk-table__cell" style={{ wordBreak: "break-word" }}>
-                      {landing.originalRow}
-                    </td>
+                    <td className="govuk-table__cell upload-cell--break-word">{landing.originalRow}</td>
                     {!isEmpty(landing.errors) || landing.product === undefined ? (
                       <td className="govuk-table__cell">
                         <strong>{t("ccUploadFilePageTableFailedInfo")}</strong>:{" "}
