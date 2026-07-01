@@ -111,14 +111,15 @@ export const AddExclusiveEconomicZoneComponent = ({
       key={`showButton-${id}-${index}`}
       id={id}
       label={buttonText}
-      className="govuk-button govuk-button--secondary"
       type={BUTTON_TYPE.SUBMIT}
       data-module="govuk-button"
       name="_action"
       //@ts-ignore
       value={id}
       data-testid={`${buttonValue}-${id}`}
-      {...(id === "remove-zone-button" && { style: { top: "15px" } })}
+      className={classNames("govuk-button govuk-button--secondary", {
+        "supporting-document-remove-btn": id === "remove-zone-button",
+      })}
       {...(hiddenText && { visuallyHiddenText: { text: hiddenText, className: "govuk-visually-hidden" } })}
       onClick={(e: React.MouseEvent) => {
         e.preventDefault();
@@ -149,8 +150,7 @@ export const AddExclusiveEconomicZoneComponent = ({
         return (
           <>
             <div
-              className={`${isEmpty(errorForIndex) ? "govuk-button-group" : "govuk-button-group govuk-form-group--error"}`}
-              style={{ display: "flex", alignItems: "flex-end", gap: "8px" }}
+              className={`${isEmpty(errorForIndex) ? "govuk-button-group" : "govuk-button-group govuk-form-group--error"} supporting-document-row`}
             >
               <AutocompleteFormField
                 containerClassName={classNames("govuk-!-width-one-half govuk-!-margin-right-3")}

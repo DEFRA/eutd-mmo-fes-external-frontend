@@ -31,43 +31,43 @@ export const LandingsTable = ({ landings, csrf }: LandingsTableProps) => {
   const getLandingTableRow = (data: landingTableRow) => (
     <>
       {data.startDate && (
-        <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">
+        <span className="govuk-tag--block govuk-!-font-size-19 table-adjust-font">
           <b>{t("ccAddLandingStartdateLabel", { ns: "addLandings" })}:</b> {data.startDate}
         </span>
       )}
-      <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">
+      <span className="govuk-tag--block govuk-!-font-size-19 table-adjust-font">
         <b>{t("ccAddLandingDateLandedLabel", { ns: "directLandings" })}:</b> {data.dateLanded}
       </span>
-      <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">
+      <span className="govuk-tag--block govuk-!-font-size-19 table-adjust-font">
         <b>{t("ccAddLandingCatchAreaLabel", { ns: "directLandings" })}:</b> {data.faoArea}
       </span>
       {data.highSeasArea && (
-        <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">
+        <span className="govuk-tag--block govuk-!-font-size-19 table-adjust-font">
           <b>{t("ccAddLandingHighSeasAreaLabel", { ns: "checkYourInformation" })}:</b> {data.highSeasArea}
         </span>
       )}
       {data.eez && data.eez.length > 0 && (
-        <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">
+        <span className="govuk-tag--block govuk-!-font-size-19 table-adjust-font">
           <b dangerouslySetInnerHTML={{ __html: t("ccLandingDetailsEezLabel", { ns: "addLandings" }) + ":" }} />{" "}
           {toDelimitedStr(data.eez)}
         </span>
       )}
       {data.rfmo && (
-        <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">
+        <span className="govuk-tag--block govuk-!-font-size-19 table-adjust-font">
           <b dangerouslySetInnerHTML={{ __html: t("ccLandingDetailsRfmoLabel", { ns: "addLandings" }) + ":" }} />{" "}
           {data.rfmo}
         </span>
       )}
-      <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">
+      <span className="govuk-tag--block govuk-!-font-size-19 table-adjust-font">
         <b>{t("ccAddLandingVesselLabel", { ns: "addLandings" })}:</b> {data.vesselName}
       </span>
       {data.gearCategory && (
-        <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">
+        <span className="govuk-tag--block govuk-!-font-size-19 table-adjust-font">
           <b>{t("ccAddLandingGearCategoryLabel", { ns: "addLandings" })}:</b> {data.gearCategory}
         </span>
       )}
       {data.gearType && (
-        <span style={{ display: "block" }} className="govuk-!-font-size-19 table-adjust-font">
+        <span className="govuk-tag--block govuk-!-font-size-19 table-adjust-font">
           <b>{t("ccAddLandingGearTypeLabel", { ns: "addLandings" })}:</b> {data.gearType}
         </span>
       )}
@@ -109,16 +109,10 @@ export const LandingsTable = ({ landings, csrf }: LandingsTableProps) => {
         <tbody>
           {landings.map((landing: LandingTableProps) => (
             <tr key={landing.id} className="govuk-table__row" data-testid={`landings-row-${landing.id}`}>
-              <td
-                className="govuk-table__cell tablerowuserref govuk-!-padding-0 govuk-!-padding-top-2 govuk-!-padding-right-2 govuk-!-padding-bottom-2 govuk-!-font-size-19 table-adjust-font"
-                style={{ width: "40%" }}
-              >
+              <td className="govuk-table__cell tablerowuserref govuk-!-padding-0 govuk-!-padding-top-2 govuk-!-padding-right-2 govuk-!-padding-bottom-2 govuk-!-font-size-19 table-adjust-font landings-table-cell--product">
                 {landing.product}
               </td>
-              <td
-                className="govuk-table__cell tablerowuserref govuk-!-padding-0 govuk-!-padding-top-2 govuk-!-padding-right-2 govuk-!-padding-bottom-2 govuk-!-font-size-19 table-adjust-font"
-                style={{ width: "30%" }}
-              >
+              <td className="govuk-table__cell tablerowuserref govuk-!-padding-0 govuk-!-padding-top-2 govuk-!-padding-right-2 govuk-!-padding-bottom-2 govuk-!-font-size-19 table-adjust-font landings-table-cell--landing">
                 {getLandingTableRow({
                   dateLanded: landing.dateLanded,
                   faoArea: landing.faoArea,
@@ -131,18 +125,12 @@ export const LandingsTable = ({ landings, csrf }: LandingsTableProps) => {
                   eez: landing.exclusiveEconomicZones?.map((c: ICountry) => c.officialCountryName),
                 })}
               </td>
-              <td
-                className="govuk-table__cell tablerowuserref govuk-!-padding-0 govuk-!-padding-top-2 govuk-!-padding-right-2 govuk-!-padding-bottom-2 govuk-!-font-size-19 table-adjust-font"
-                style={{ width: "10%", whiteSpace: "nowrap" }}
-              >
+              <td className="govuk-table__cell tablerowuserref govuk-!-padding-0 govuk-!-padding-top-2 govuk-!-padding-right-2 govuk-!-padding-bottom-2 govuk-!-font-size-19 table-adjust-font landings-table-cell--weight">
                 {landing.exportWeight !== undefined && landing.exportWeight !== null
                   ? Number(landing.exportWeight).toFixed(2)
                   : ""}
               </td>
-              <td
-                className="govuk-table__cell govuk-!-text-align-right govuk-!-padding-top-2 govuk-!-padding-bottom-2"
-                style={{ width: "20%" }}
-              >
+              <td className="govuk-table__cell govuk-!-text-align-right govuk-!-padding-top-2 govuk-!-padding-bottom-2 landings-table-cell--action">
                 {!landing.isOverriddenByAdmin && (
                   <SecureForm method="post" className="govuk-!-display-inline" csrf={csrf}>
                     <input type="hidden" name="landingId" value={landing.id} />
