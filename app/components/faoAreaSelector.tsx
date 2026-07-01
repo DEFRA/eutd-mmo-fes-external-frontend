@@ -11,11 +11,10 @@ export const FaoAreaSelector = ({ legendTitle, defaultValue, faoAreas }: foaArea
     </label>
     <div className="govuk-form-group">
       <select
-        className="govuk-select govuk-!-width-one-third"
+        className="govuk-select govuk-!-width-one-third fao-area-select"
         id="select-faoArea"
         name="faoArea"
         defaultValue={defaultValue}
-        style={{ backgroundColor: "white" }}
       >
         {faoAreas.map((area) => (
           <option key={`fao-${area}`} id={"faoArea_" + area} value={area}>

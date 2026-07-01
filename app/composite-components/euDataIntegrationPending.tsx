@@ -19,9 +19,7 @@ export const EuDataIntegrationPending = ({ dashboardUrl, feedbackURL, journey }:
     <Main feedbackLink={feedbackURL} backUrl={dashboardUrl}>
       <h1 className="govuk-heading-xl">{t("euIntegrationPendingTitle")}</h1>
 
-      <p className="govuk-body" style={{ whiteSpace: "pre-line" }}>
-        {t(`euIntegrationPendingDescription${journey}`)}
-      </p>
+      <p className="govuk-body document-progress-storage-notes">{t(`euIntegrationPendingDescription${journey}`)}</p>
 
       <h2 className="govuk-heading-m">{t("euIntegrationWhatCanYouDoNow")}</h2>
 

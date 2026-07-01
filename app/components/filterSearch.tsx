@@ -43,7 +43,7 @@ export const FilterSearch = ({
         </div>
       ) : null}
 
-      <div className="govuk-grid-row" style={{ alignItems: "end" }}>
+      <div className="govuk-grid-row filter-search-row">
         <div className="govuk-grid-column-one-half">
           <input
             ref={inputRef}
@@ -57,7 +57,7 @@ export const FilterSearch = ({
           />
         </div>
         <div className="govuk-grid-column-one-half">
-          <div style={{ display: "flex", gap: "0.5rem" }}>
+          <div className="filter-search-buttons">
             <button
               type="submit"
               name="actionType"
