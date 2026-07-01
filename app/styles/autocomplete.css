@@ -2,6 +2,42 @@
 /* So this file has been initially copied-and-pasted from GDS govuk-input and applied to autocomplete__input */
 /* There are few overides to bring it closer to GDS look-and-feel */
 
+#dcx-autocomplete-wrapper {
+  position: relative;
+}
+
+#dcx-autocomplete-status-container {
+  border: 0px;
+  clip: rect(0px, 0px, 0px, 0px);
+  height: 1px;
+  margin-bottom: -1px;
+  margin-right: -1px;
+  overflow: hidden;
+  padding: 0px;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+#dcx-autocomplete-multiselect-wrapper {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: relative;
+  width: 100%;
+}
+
+#dcx-autocomplete-remove-all {
+  font-weight: bold;
+  margin-left: 5px;
+  vertical-align: -webkit-baseline-middle;
+}
+
+#dcx-autocomplete-assistiveHint {
+  display: none;
+}
+
+
 .autocomplete__input {
   font-family: "GDS Transport", arial, sans-serif;
   -webkit-font-smoothing: antialiased;

@@ -128,6 +128,7 @@ export const AutocompleteFormField = ({
       accessibilityHintText={t("autocompleteAccessibilityHintText", { ns: "accessibility" })}
       optionsId={optionsId}
       customNonJSComp={customNonJSComp}
+      useDefaultStyles={false}
     />
   );
 };
