@@ -395,7 +395,9 @@ describe("Check Your Information (Summary) page: DirectLanding CC", () => {
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", `${documentUrl}/progress`);
+      .should("have.attr", "href")
+      .and("include", `${documentUrl}/progress?backUri=`)
+      .and("include", "what-export-journey");
   });
 
   it("should render a single transportation", () => {
@@ -453,7 +455,9 @@ describe("Check Your Information (Summary) page: ManualLanding CC", () => {
   it("should redirect to add-landings page when change vessel name or pln link is clicked", () => {
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", `${documentUrl}/progress`);
+      .should("have.attr", "href")
+      .and("include", `${documentUrl}/progress?backUri=`)
+      .and("include", "do-you-have-additional-transport-types");
     cy.get("[data-testid='change-0-vessel-label']").should("be.visible");
     cy.get("[data-testid='change-0-vessel-label']").click();
     cy.url().should("include", "/add-landings");
@@ -2184,5 +2188,46 @@ describe("Check Your Information: Exporter details section", () => {
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
     cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(3)").find("a").should("not.exist");
+  });
+});
+
+describe("Check Your Information: Back link navigation with landing entry options", () => {
+  it("should have back link to progress with backUri to do-you-have-additional-transport-types for manual entry", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationManualLanding,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href")
+      .and("include", `${documentUrl}/progress?backUri=`)
+      .and("include", "do-you-have-additional-transport-types");
+  });
+
+  it("should have back link to progress with backUri to what-export-journey for upload entry", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformation,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href")
+      .and("include", `${documentUrl}/progress?backUri=`)
+      .and("include", "what-export-journey");
+  });
+
+  it("should have back link to progress with backUri to what-export-journey for direct landing", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCheckYourInformationDirectLanding,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href")
+      .and("include", `${documentUrl}/progress?backUri=`)
+      .and("include", "what-export-journey");
   });
 });

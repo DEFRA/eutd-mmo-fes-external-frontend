@@ -342,7 +342,7 @@ describe("ProgressPage - landings entry type: null", () => {
 });
 
 describe("ProgressPage - Back link from copied catch certificate", () => {
-  it("should point Back to landings entry when no backUri is provided", () => {
+  it("should point Back to landings-entry with backUri to copy-this-catch-certificate when document is copied", () => {
     const copyParams: ITestParams = {
       testCaseId: TestCaseId.CCCopyThisCatchCertAllData,
       disableScripts: true,
@@ -370,9 +370,40 @@ describe("ProgressPage - Back link from copied catch certificate", () => {
         qs: { ...progressParams },
       });
 
+      // Check that back link includes backUri with copy-this-catch-certificate
       cy.contains("a", /^Back$/)
         .should("be.visible")
-        .should("have.attr", "href", `/create-catch-certificate/${newDocumentNumber}/landings-entry`);
+        .should("have.attr", "href")
+        .and("include", `/create-catch-certificate/${newDocumentNumber}/landings-entry?backUri=`)
+        .and("include", `copy-this-catch-certificate`);
     });
+  });
+
+  it("should point Back to landings-entry without backUri when no copy context exists", () => {
+    const progressParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadEntryIncompleteProgress,
+    };
+
+    cy.visit(progressUrl, { qs: { ...progressParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .invoke("attr", "href")
+      .should("eq", `${certificateUrl}/landings-entry`)
+      .and("not.include", "?backUri=");
+  });
+
+  it("should respect backUri query parameter when provided", () => {
+    const progressParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadEntryIncompleteProgress,
+    };
+
+    const customBackUri = encodeURIComponent(`${certificateUrl}/custom-page`);
+
+    cy.visit(`${progressUrl}?backUri=${customBackUri}`, { qs: { ...progressParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href", `${certificateUrl}/custom-page`);
   });
 });
