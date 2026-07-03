@@ -85,6 +85,7 @@ describe("what export journey page for Direct Landing", () => {
     cy.get("#exportDestination").invoke("val", "Pakistan");
     cy.get('[data-testid="save-and-continue"]').click();
     cy.url().should("include", "/progress");
+    cy.url().should("include", "backUri=%2Fcreate-catch-certificate%2FGBR-2022-CC-A2BC627FE%2Fwhat-export-journey");
   });
 });
 

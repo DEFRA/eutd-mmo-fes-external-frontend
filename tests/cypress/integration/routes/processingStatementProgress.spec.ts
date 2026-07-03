@@ -35,6 +35,20 @@ describe("ProgressPage - Incomplete Application", () => {
       .should("have.attr", "href", "/create-processing-statement/processing-statements");
   });
 
+  it("should use backUri query parameter when present", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSIncompleteProgress,
+    };
+
+    cy.visit(`${progressUrl}?backUri=/create-processing-statement/GBR-2021-PS-8EEB7E123/what-export-destination`, {
+      qs: { ...testParams },
+    });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href", "/create-processing-statement/GBR-2021-PS-8EEB7E123/what-export-destination");
+  });
+
   it("should display the correct headings", () => {
     cy.contains("[data-testid='ps-progress-titling']", "Your Progress");
     cy.contains("[data-testid='ps-progress-heading']", "Processing Statement application: GBR-2021-PS-8EEB7E123");
@@ -147,6 +161,37 @@ describe("should display the notificationBanner", () => {
     cy.get(".govuk-notification-banner__heading").contains(
       "This draft was created by copying document GBR-2022-PS-F71D98A30. You are reminded that you must not use a processing statememt or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
     );
+  });
+});
+
+describe("ProgressPage - Back link from copied processing statement", () => {
+  it("should point Back to copy screen when no backUri is provided", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSSDCopyAllData,
+      disableScripts: true,
+    };
+
+    cy.visit("create-processing-statement/GBR-2022-PS-F71D98A30/copy-this-processing-statement", {
+      qs: { ...testParams },
+    });
+    cy.get("#voidOriginal").click();
+    cy.get("#copyDocumentAcknowledged").check();
+    cy.get('[data-testid="continue"]').click();
+
+    cy.url().then((currentUrl) => {
+      const match = currentUrl.match(/\/create-processing-statement\/([^/]+)\/progress/);
+      if (!match) {
+        throw new Error("new processing statement document number should be present in URL");
+      }
+
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .should(
+          "have.attr",
+          "href",
+          "/create-processing-statement/GBR-2022-PS-F71D98A30/copy-this-processing-statement"
+        );
+    });
   });
 });
 
