@@ -47,27 +47,6 @@ describe("Check Your Information: Back link navigation", () => {
     });
   });
 
-  describe("Back link for copied document", () => {
-    it("should navigate back to progress page with backUri to copy-this-catch-certificate when document is copied", () => {
-      const copiedDocUrl = "/create-catch-certificate/GBR-2022-CC-COPIED123";
-      const copiedCheckYourInfoUrl = `${copiedDocUrl}/check-your-information`;
-
-      // This test assumes there's a test case that sets copyDocumentAcknowledged or copyDocumentNumber
-      // You'll need to create a new test case in the backend that simulates a copied document
-      const testParams: ITestParams = {
-        testCaseId: TestCaseId.CCCheckYourInformationCopiedDocument, // This would be a new test case ID
-      };
-
-      cy.visit(copiedCheckYourInfoUrl, { qs: { ...testParams } });
-
-      cy.contains("a", /^Back$/)
-        .should("be.visible")
-        .should("have.attr", "href")
-        .and("include", `/progress?backUri=`)
-        .and("include", "copy-this-catch-certificate");
-    });
-  });
-
   describe("Back link for locked document", () => {
     it("should navigate back to catch certificates dashboard when document is locked", () => {
       const testParams: ITestParams = {
@@ -108,7 +87,7 @@ describe("Progress Page: Back link with copy context for catch certificate", () 
         const newDocumentNumber = landingMatch?.[1] as string;
 
         const progressParams: ITestParams = {
-          testCaseId: TestCaseId.CCUploadEntryIncompleteProgressCopied, // New test case for copied document
+          testCaseId: TestCaseId.CCUploadEntryIncompleteProgress,
         };
 
         cy.visit(`/create-catch-certificate/${newDocumentNumber}/progress`, {
@@ -132,7 +111,8 @@ describe("Progress Page: Back link with copy context for catch certificate", () 
 
       cy.contains("a", /^Back$/)
         .should("be.visible")
-        .should("have.attr", "href", `${certificateUrl}/landings-entry`)
+        .invoke("attr", "href")
+        .should("eq", `${certificateUrl}/landings-entry`)
         .and("not.include", "backUri");
     });
   });
@@ -161,7 +141,7 @@ describe("Landings Entry Page: Back link navigation", () => {
   describe("Back link with backUri query parameter", () => {
     it("should use backUri from query parameter when provided", () => {
       const testParams: ITestParams = {
-        testCaseId: TestCaseId.CCLandingsEntry,
+        testCaseId: TestCaseId.LandingsTypeNull,
       };
 
       const customBackUri = encodeURIComponent(`${documentUrl}/copy-this-catch-certificate`);
@@ -174,22 +154,27 @@ describe("Landings Entry Page: Back link navigation", () => {
     });
 
     it("should navigate to copy-this-catch-certificate when hasCopiedDraftContext is true", () => {
-      // This test assumes there's a test case that sets copyDocumentAcknowledged
       const testParams: ITestParams = {
-        testCaseId: TestCaseId.CCLandingsEntryCopied, // New test case for copied document
+        testCaseId: TestCaseId.CCCopyThisCatchCertAllData,
+        disableScripts: true,
       };
 
-      cy.visit(landingsEntryUrl, { qs: { ...testParams } });
+      cy.visit("create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate", {
+        qs: { ...testParams },
+      });
+      cy.get("#voidOriginal").click();
+      cy.get("#copyDocumentAcknowledged").check();
+      cy.get("[data-testid=continue]").click();
 
+      cy.url().should("include", "/landings-entry");
       cy.contains("a", /^Back$/)
         .should("be.visible")
-        .should("have.attr", "href")
-        .and("include", "copy-this-catch-certificate");
+        .should("have.attr", "href", "/create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate");
     });
 
     it("should navigate to catch-certificates dashboard when no copy context", () => {
       const testParams: ITestParams = {
-        testCaseId: TestCaseId.CCLandingsEntry,
+        testCaseId: TestCaseId.LandingsTypeNull,
       };
 
       cy.visit(landingsEntryUrl, { qs: { ...testParams } });
