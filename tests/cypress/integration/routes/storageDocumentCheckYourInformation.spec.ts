@@ -14,7 +14,9 @@ describe("SD: check-your-information page", () => {
   it("should render the correct back link", () => {
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", sdProgressUrl);
+      .should("have.attr", "href")
+      .and("include", `${sdProgressUrl}?backUri=`)
+      .and("include", "departure-product-summary");
   });
 
   it("should display the correct page heading", () => {
