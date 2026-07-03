@@ -68,7 +68,16 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
   switch (journey) {
     case "catchCertificate":
       backUrl =
-        backUriFromQuery ?? route("/create-catch-certificate/:documentNumber/landings-entry", { documentNumber });
+        backUriFromQuery ??
+        (hasCopiedDraftContext
+          ? route(
+              "/create-catch-certificate/:documentNumber/landings-entry?backUri=" +
+                route("/create-catch-certificate/:documentNumber/copy-this-catch-certificate", {
+                  documentNumber: copiedFromDocumentNumber,
+                }),
+              { documentNumber }
+            )
+          : route("/create-catch-certificate/:documentNumber/landings-entry", { documentNumber }));
       titleTestId = "progress-titling";
       progressHeadingTestId = "Progress-heading";
       break;

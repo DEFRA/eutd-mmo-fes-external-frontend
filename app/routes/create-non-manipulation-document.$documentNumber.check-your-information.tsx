@@ -139,7 +139,10 @@ const CheckYourInformation = () => {
       notificationMessages={notificationMessages}
       hasErrors={hasErrors}
       errors={errors}
-      backUrl={`/create-non-manipulation-document/:documentNumber/progress`}
+      backUrl={`/create-non-manipulation-document/:documentNumber/progress?backUri=${route(
+        "/create-non-manipulation-document/:documentNumber/departure-product-summary",
+        { documentNumber }
+      )}`}
       summaryHeading="sdSummaryPageHeading"
       headingTranslation="sdCheckYourInformation"
       checkInformationHeader="sdSummaryPageDocumentDetailsHeader"

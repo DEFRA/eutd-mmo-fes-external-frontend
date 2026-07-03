@@ -157,7 +157,10 @@ const CheckYourInformation = () => {
       notificationMessages={notificationMessages}
       hasErrors={hasErrors}
       errors={errors}
-      backUrl={"/create-processing-statement/:documentNumber/progress"}
+      backUrl={
+        "/create-processing-statement/:documentNumber/progress?backUri=" +
+        route("/create-processing-statement/:documentNumber/what-export-destination", { documentNumber })
+      }
       summaryHeading="psSummaryPageHeading"
       headingTranslation="psCheckYourInformation"
       checkInformationHeader="psSummaryPageDocumentDetailsHeader"
