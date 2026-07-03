@@ -539,6 +539,8 @@ const CheckYourInformation = () => {
     validationErrors,
     csrf,
     userReference,
+    copyDocumentAcknowledged,
+    copyDocumentNumber,
   } = useLoaderData();
   const exporterDetails: Exporter = exporter.model;
 
@@ -583,7 +585,17 @@ const CheckYourInformation = () => {
     if (isLocked) {
       return route("/create-catch-certificate/catch-certificates");
     } else {
-      return route("/create-catch-certificate/:documentNumber/progress", { documentNumber });
+      const hasCopiedDraftContext = copyDocumentAcknowledged ?? Boolean(copyDocumentNumber);
+      const backRoute = hasCopiedDraftContext
+        ? "/create-catch-certificate/:documentNumber/copy-this-catch-certificate"
+        : landingsEntryOption === "manualEntry"
+          ? "/create-catch-certificate/:documentNumber/do-you-have-additional-transport-types"
+          : "/create-catch-certificate/:documentNumber/what-export-journey";
+      return route(
+        "/create-catch-certificate/:documentNumber/progress?backUri=" +
+          route(backRoute, { documentNumber: copyDocumentNumber ?? documentNumber }),
+        { documentNumber }
+      );
     }
   };
 
