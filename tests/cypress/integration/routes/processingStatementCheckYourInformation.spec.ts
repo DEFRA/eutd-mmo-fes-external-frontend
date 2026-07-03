@@ -16,7 +16,9 @@ describe("Check Your Information (Summary) page: UI", () => {
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", progressUrl);
+      .should("have.attr", "href")
+      .and("include", `${progressUrl}?backUri=`)
+      .and("include", "what-export-destination");
   });
 
   it("should contain the required heading", () => {
@@ -175,7 +177,9 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", progressUrl);
+      .should("have.attr", "href")
+      .and("include", `${progressUrl}?backUri=`)
+      .and("include", "what-export-destination");
   });
 
   it("should contain the required heading", () => {
