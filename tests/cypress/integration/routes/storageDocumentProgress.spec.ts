@@ -30,6 +30,21 @@ describe("ProgressPage - Incomplete Application", () => {
       .should("have.attr", "href", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
+  it("should use backUri query parameter when present", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDIncompleteProgress,
+    };
+
+    cy.visit(
+      `${progressUrl}?backUri=/create-non-manipulation-document/GBR-2021-SD-8EEB7E123/departure-product-summary`,
+      { qs: { ...testParams } }
+    );
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href", "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123/departure-product-summary");
+  });
+
   it("should display the correct headings", () => {
     cy.contains("[data-testid='sd-progress-titling']", "Your Progress").should("be.visible");
     cy.contains(
@@ -275,6 +290,37 @@ describe("should display the notificationBanner", () => {
         "This draft was created by copying document GBR-2022-SD-F71D98A30. You are reminded that you must not use a non-manipulation document or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
       )
       .should("be.visible");
+  });
+});
+
+describe("ProgressPage - Back link from copied non-manipulation document", () => {
+  it("should point Back to copy screen when no backUri is provided", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSSDCopyAllData,
+      disableScripts: true,
+    };
+
+    cy.visit("create-non-manipulation-document/GBR-2022-SD-F71D98A30/copy-this-non-manipulation-document", {
+      qs: { ...testParams },
+    });
+    cy.get("#voidOriginal").click();
+    cy.get("#copyDocumentAcknowledged").check();
+    cy.get('[data-testid="continue"]').click();
+
+    cy.url().then((currentUrl) => {
+      const match = currentUrl.match(/\/create-non-manipulation-document\/([^/]+)\/progress/);
+      if (!match) {
+        throw new Error("new non-manipulation document number should be present in URL");
+      }
+
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .should(
+          "have.attr",
+          "href",
+          "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/copy-this-non-manipulation-document"
+        );
+    });
   });
 });
 

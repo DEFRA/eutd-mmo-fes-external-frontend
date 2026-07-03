@@ -113,8 +113,13 @@ export const DoYouHaveAddtionalTransportTypesAction = async (
   if (Array.isArray(errors) && errors.length > 0) {
     return apiCallFailed(errors, Object.fromEntries(form));
   }
+  const backUri = route("/create-catch-certificate/:documentNumber/do-you-have-additional-transport-types", {
+    documentNumber,
+  });
 
-  const progressUrl = route("/create-catch-certificate/:documentNumber/progress", { documentNumber });
+  const progressUrl = `${route("/create-catch-certificate/:documentNumber/progress", {
+    documentNumber,
+  })}?backUri=${encodeURIComponent(backUri)}`;
   const whatExportJourneyUrl = `/create-catch-certificate/${documentNumber}/how-does-the-export-leave-the-uk?fromAdditionalTransport=true`;
 
   return redirect(addTransportation === "yes" ? whatExportJourneyUrl : progressUrl);

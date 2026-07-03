@@ -340,3 +340,39 @@ describe("ProgressPage - landings entry type: null", () => {
     cy.url().should("include", "forbidden");
   });
 });
+
+describe("ProgressPage - Back link from copied catch certificate", () => {
+  it("should point Back to landings entry when no backUri is provided", () => {
+    const copyParams: ITestParams = {
+      testCaseId: TestCaseId.CCCopyThisCatchCertAllData,
+      disableScripts: true,
+    };
+
+    cy.visit("create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate", {
+      qs: { ...copyParams },
+    });
+    cy.get("#voidOriginal").click();
+    cy.get("#copyDocumentAcknowledged").check();
+    cy.get("[data-testid=continue]").click();
+
+    cy.url().then((landingUrl) => {
+      const landingMatch = landingUrl.match(/\/create-catch-certificate\/([^/]+)\/landings-entry/);
+      if (!landingMatch) {
+        throw new Error("new catch certificate document number should be present in URL");
+      }
+      const newDocumentNumber = landingMatch?.[1] as string;
+
+      const progressParams: ITestParams = {
+        testCaseId: TestCaseId.CCUploadEntryIncompleteProgress,
+      };
+
+      cy.visit(`/create-catch-certificate/${newDocumentNumber}/progress`, {
+        qs: { ...progressParams },
+      });
+
+      cy.contains("a", /^Back$/)
+        .should("be.visible")
+        .should("have.attr", "href", `/create-catch-certificate/${newDocumentNumber}/landings-entry`);
+    });
+  });
+});

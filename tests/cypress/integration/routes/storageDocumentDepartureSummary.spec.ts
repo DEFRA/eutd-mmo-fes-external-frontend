@@ -355,6 +355,10 @@ describe("Storage document departure summary: departure tab", () => {
 
     clickSaveAndContinue();
     cy.url().should("include", "/progress");
+    cy.url().should(
+      "include",
+      "backUri=%2Fcreate-non-manipulation-document%2FGBR-2023-SD-97DA962EC%2Fdeparture-product-summary"
+    );
   });
 
   it("loads the page with catches and save wrong weight", () => {
