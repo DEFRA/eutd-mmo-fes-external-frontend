@@ -162,6 +162,10 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
     cy.get("[data-testid=save-and-continue").click();
 
     cy.url().should("include", "/progress");
+    cy.url().should(
+      "include",
+      "backUri=%2Fcreate-catch-certificate%2FGBR-2025-CC-136BEC4E4%2Fdo-you-have-additional-transport-types"
+    );
   });
 
   it("should display error summary and inline error message when saving fails with an error", () => {

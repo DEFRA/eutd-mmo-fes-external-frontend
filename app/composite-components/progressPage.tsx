@@ -1,7 +1,7 @@
 import { route } from "routes-gen";
 import { useTranslation } from "react-i18next";
 import { Main, Title, ErrorSummary, NotificationBanner, SecureForm } from "~/components";
-import { useLoaderData, useActionData } from "react-router";
+import { useLoaderData, useActionData, useLocation } from "react-router";
 import type {
   IProgress,
   IErrorsTransformed,
@@ -60,20 +60,38 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
   let notificationDataTestId = "";
   let titleTestId = "";
   let progressHeadingTestId = "";
+  const location = useLocation();
+  const url = new URLSearchParams(location.search);
+  const backUriFromQuery = url.get("backUri");
+  const copiedFromDocumentNumber = copyDocumentNumber || documentNumber;
+  const hasCopiedDraftContext = copyDocumentAcknowledged || Boolean(copyDocumentNumber);
   switch (journey) {
     case "catchCertificate":
-      backUrl = route("/create-catch-certificate/:documentNumber/landings-entry", { documentNumber });
+      backUrl =
+        backUriFromQuery ?? route("/create-catch-certificate/:documentNumber/landings-entry", { documentNumber });
       titleTestId = "progress-titling";
       progressHeadingTestId = "Progress-heading";
       break;
     case "processingStatement":
-      backUrl = route("/create-processing-statement/processing-statements");
+      backUrl =
+        backUriFromQuery ??
+        (hasCopiedDraftContext
+          ? route("/create-processing-statement/:documentNumber/copy-this-processing-statement", {
+              documentNumber: copiedFromDocumentNumber,
+            })
+          : route("/create-processing-statement/processing-statements"));
       notificationDataTestId = "processingStatement-CopyVoid";
       titleTestId = "ps-progress-titling";
       progressHeadingTestId = "ps-progress-heading";
       break;
     case "storageNotes":
-      backUrl = route("/create-non-manipulation-document/non-manipulation-documents");
+      backUrl =
+        backUriFromQuery ??
+        (hasCopiedDraftContext
+          ? route("/create-non-manipulation-document/:documentNumber/copy-this-non-manipulation-document", {
+              documentNumber: copiedFromDocumentNumber,
+            })
+          : route("/create-non-manipulation-document/non-manipulation-documents"));
       notificationDataTestId = "storageDocument-CopyVoid";
       titleTestId = "sd-progress-titling";
       progressHeadingTestId = "sd-progress-heading";

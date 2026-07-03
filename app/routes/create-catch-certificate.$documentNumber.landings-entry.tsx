@@ -55,7 +55,13 @@ const LandingsEntry = () => {
   const showNotificationBanner = copyDocumentAcknowledged || generatedByContent;
 
   return (
-    <Main backUrl={route("/create-catch-certificate/catch-certificates")}>
+    <Main
+      backUrl={
+        copyDocumentAcknowledged
+          ? route("/create-catch-certificate/:documentNumber/copy-this-catch-certificate", { documentNumber })
+          : route("/create-catch-certificate/catch-certificates")
+      }
+    >
       {showNotificationBanner && (
         <NotificationBanner
           header={t("commonImportant", { ns: "common" })}

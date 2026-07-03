@@ -335,9 +335,13 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     });
   }
 
-  return isEmpty(values.nextUri)
-    ? redirect(`/create-non-manipulation-document/${documentNumber}/progress`)
-    : redirect(values.nextUri as string);
+  const backUri = route("/create-non-manipulation-document/:documentNumber/departure-product-summary", {
+    documentNumber,
+  });
+  const progressUrl = `${route("/create-non-manipulation-document/:documentNumber/progress", {
+    documentNumber,
+  })}?backUri=${encodeURIComponent(backUri)}`;
+  return isEmpty(values.nextUri) ? redirect(progressUrl) : redirect(values.nextUri as string);
 };
 
 const DepartureProductSummary = () => {

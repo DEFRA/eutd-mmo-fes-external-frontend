@@ -182,6 +182,25 @@ describe("Landings entry page: notification messages", () => {
 
     cy.contains("div", notifMsg).should("be.visible");
   });
+
+  it("should point Back to copy screen when opened from copied catch certificate flow", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCopyThisCatchCertAllData,
+      disableScripts: true,
+    };
+
+    cy.visit("create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate", {
+      qs: { ...testParams },
+    });
+    cy.get("#voidOriginal").click();
+    cy.get("#copyDocumentAcknowledged").check();
+    cy.get("[data-testid=continue]").click();
+
+    cy.url().should("include", "/landings-entry");
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href", "/create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate");
+  });
 });
 
 describe("Landings entry page: form submission and errors", () => {
