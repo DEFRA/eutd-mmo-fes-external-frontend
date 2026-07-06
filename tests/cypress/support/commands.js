@@ -27,3 +27,16 @@ Cypress.Commands.add("findGovUkLabel", (textToFind) => {
 Cypress.Commands.add("findGovUkHint", (textToFind) => {
   cy.get(".govuk-hint").contains(textToFind);
 });
+
+Cypress.Commands.add("waitForUiUpdate", (timeout = Cypress.config("defaultCommandTimeout")) => {
+  cy.document({ log: false, timeout }).its("readyState").should("eq", "complete");
+  cy.get("body", { log: false, timeout }).should("be.visible");
+  cy.wrap(null, { log: false, timeout }).then(
+    () =>
+      new Cypress.Promise((resolve) => {
+        globalThis.requestAnimationFrame(() => {
+          globalThis.requestAnimationFrame(resolve);
+        });
+      })
+  );
+});

@@ -10,18 +10,18 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.wait(1000); // Wait for page to fully load
+    cy.waitForUiUpdate(1000); // Wait for page to fully load
 
     // Fill species field
     cy.get("#catches-0-species", { timeout: 8000 }).then(($el) => {
       if ($el.is("select")) cy.wrap($el).should("be.enabled").select("Bigeye tuna (BET)");
       else cy.wrap($el).clear().type("Bigeye tuna");
     });
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
 
     // Click the label to check the non_uk radio button (the input itself is hidden with opacity: 0)
     cy.get('label[for="catchCertificateType-non_uk"]', { timeout: 8000 }).should("be.visible").click();
-    cy.wait(500); // Wait for conditional rendering of issuing country field
+    cy.waitForUiUpdate(500); // Wait for conditional rendering of issuing country field
 
     // Fill issuing country field
     cy.get("#catches-0-issuingCountry", { timeout: 8000 }).then(($el) => {
@@ -37,7 +37,7 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
 
     // Click Add button
     cy.get('[data-testid="add-product-details"]').click();
-    cy.wait(1000); // Wait for form to process
+    cy.waitForUiUpdate(1000); // Wait for form to process
 
     // Verify fields are cleared after successful add
     cy.get('input[name="catchCertificateNumber"]', { timeout: 10000 }).should("have.value", "");
@@ -54,7 +54,7 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.wait(1000); // Wait for page to fully load
+    cy.waitForUiUpdate(1000); // Wait for page to fully load
 
     // Select species from the dropdown or type into autocomplete
     cy.get("#catches-0-species").then(($el) => {
@@ -68,11 +68,11 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
         });
       }
     });
-    cy.wait(500); // Wait for value to be set
+    cy.waitForUiUpdate(500); // Wait for value to be set
 
     // Click the label to check the non_uk radio button
     cy.get('label[for="catchCertificateType-non_uk"]', { timeout: 8000 }).should("be.visible").click();
-    cy.wait(300); // Wait for issuing country field to render
+    cy.waitForUiUpdate(300); // Wait for issuing country field to render
 
     // Verify issuing country field is now visible (since non_uk is selected)
     cy.get("#catches-0-issuingCountry", { timeout: 5000 }).should("exist");
@@ -88,7 +88,7 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
 
     // Click Add button without required certificate number
     cy.get('[data-testid="add-product-details"]').click();
-    cy.wait(1000); // Wait for form to process
+    cy.waitForUiUpdate(1000); // Wait for form to process
 
     // The form should show validation errors or prevent submission
     // Either errorIsland appears or fields are cleared (depending on backend response)

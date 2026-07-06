@@ -279,7 +279,7 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
     for (let i = 0; i < 5; i++) {
-      cy.wait(500);
+      cy.waitForUiUpdate(500);
       cy.get(`[name="containerNumbers.${i}"]`).should("be.visible").type("ABCD1234567");
       if (i < 4) {
         cy.get('[data-testid="add-another-container"]').click();
@@ -295,7 +295,7 @@ describe("Train Container Identification Number - Validation Scenarios", () => {
     };
     cy.visit(trainPageUrl, { qs: { ...testParams } });
 
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get('[data-testid="add-another-container"]').click();
 
     cy.get('[name="containerNumbers.0"]').type("ABCD1234567");

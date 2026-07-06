@@ -86,11 +86,11 @@ describe("SD: you-have-added-product page", () => {
       testCaseId: TestCaseId.SDYouHaveAddedAProduct,
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get('[type="radio"]').first().should("exist");
     cy.get('[type="radio"]').first().check();
     cy.get('[type="radio"]').first().should("be.checked");
-    cy.wait(200);
+    cy.waitForUiUpdate(200);
     cy.contains("button", "Save and continue").click();
     cy.url({ timeout: 10000 }).should("include", "/add-product-to-this-consignment");
   });
@@ -162,7 +162,7 @@ describe("SD: you-have-added-product page", () => {
       // Submit to trigger errors
       cy.contains("button", "Save and continue").click();
 
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       // Check if error summary exists, if so verify its structure
       cy.get("body").then(($body) => {
@@ -605,7 +605,7 @@ describe("SD: you-have-added-product page", () => {
       // Verify 'No' radio is checked by default
       cy.get("#addAnotherCatchNo").should("not.be.checked");
       cy.get("#addAnotherProduct").should("not.be.checked");
-      cy.wait(200);
+      cy.waitForUiUpdate(200);
       cy.contains("button", "Save and continue").click();
       cy.get("body").then(($body) => {
         if ($body.find("#errorIsland").length > 0) {
@@ -626,7 +626,7 @@ describe("SD: you-have-added-product page", () => {
       // Verify 'No' radio is checked by default
       cy.get("#addAnotherCatchNo").should("not.be.checked");
       cy.get("#addAnotherProduct").should("not.be.checked");
-      cy.wait(200);
+      cy.waitForUiUpdate(200);
       cy.contains("button", "Save and continue").click();
       cy.get("body").then(($body) => {
         if ($body.find("#errorIsland").length > 0) {
