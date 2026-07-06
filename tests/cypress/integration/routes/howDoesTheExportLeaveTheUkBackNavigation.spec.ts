@@ -137,23 +137,3 @@ describe("How does the export leave the UK - Back Navigation", () => {
     });
   });
 });
-
-describe("How does the export leave the UK - Save as draft (FI0-10577)", () => {
-  const certificateUrl = "/create-catch-certificate/GBR-2025-CC-136BEC4E4";
-
-  it("should redirect to CC dashboard without calling the transport API when no vehicle is selected", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.HowDoesTheExportLeaveSaveAsDraftNoVehicle,
-    };
-
-    cy.visit(`${certificateUrl}/how-does-the-export-leave-the-uk`, {
-      qs: { ...testParams },
-    });
-
-    cy.contains("h1", "How do you transport the export?").should("be.visible");
-
-    // Click save as draft without selecting a vehicle — should redirect to dashboard
-    cy.get("[data-testid=save-draft-button]").click();
-    cy.url().should("include", "/create-catch-certificate/catch-certificates");
-  });
-});

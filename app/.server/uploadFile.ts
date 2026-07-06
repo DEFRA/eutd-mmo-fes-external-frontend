@@ -28,10 +28,11 @@ export const uploadLandings = async (
 
 const onUploadLandings = async (response: Response): Promise<IUploadedLanding[] | IError[] | IUnauthorised> => {
   switch (response.status) {
-    case 200:
+    case 200: {
       const data = await response.json();
       return data;
-    case 400:
+    }
+    case 400: {
       const errors = (await response.json()) ?? {};
       return Object.keys(errors).map((key: string) => {
         const errorCode = errors[key]?.["key"];
@@ -57,6 +58,7 @@ const onUploadLandings = async (response: Response): Promise<IUploadedLanding[] 
           };
         }
       });
+    }
     case 403:
       return {
         unauthorised: true,

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import type { IUploadedLanding } from "~/types";
-import _ from "lodash";
+import capitalize from "lodash/capitalize";
 
 type renderUploadFileLandingsDataProps = {
   landing: IUploadedLanding;
@@ -13,7 +13,7 @@ export const RenderUploadFileLandingsData = ({ landing }: renderUploadFileLandin
       <strong>{t("ccUploadFilePageTableProductInfo")}:</strong> {landing.product!.species},{" "}
       {landing.product!.stateLabel}, {landing.product!.presentationLabel}, {landing.product!.commodity_code} <br />
       <strong>{t("commonLandingLabel", { ns: "common" })}:</strong> {landing.startDate ? landing.startDate + "," : ""}
-      {landing.landingDate}, {landing.faoArea},{landing.highSeasArea ? ` ${_.capitalize(landing.highSeasArea)},` : ""}
+      {landing.landingDate}, {landing.faoArea},{landing.highSeasArea ? ` ${capitalize(landing.highSeasArea)},` : ""}
       {landing.eezCode ? ` ${landing.eezCode},` : ""}
       {landing.rfmoCode ? ` ${landing.rfmoCode},` : ""} {landing.vessel.vesselName} ({landing.vessel.pln})
       {landing.gearCode ? `, ${landing.gearCode} ` : " "}

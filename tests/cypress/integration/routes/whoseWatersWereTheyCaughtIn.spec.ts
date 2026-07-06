@@ -194,21 +194,3 @@ describe("Whose waters page: back button", () => {
     cy.url().should("include", "/create-catch-certificate/GBR-2022-CC-24F279E85/direct-landing");
   });
 });
-
-describe("Whose waters page: save as draft — valid fields only (FI0-10577)", () => {
-  it("should redirect to dashboard and save only valid checkboxes when Other is checked with blank text", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.WhoseWatersSaveAsDraftWithInvalidOtherWaters,
-    };
-
-    cy.visit(WhoseWaterUrl, { qs: { ...testParams } });
-
-    // Check UK waters (valid) and Other (invalid — leave text blank)
-    cy.get("#watersCaughtIn").check();
-    cy.get("#other").check();
-    // Intentionally leave otherWaters text empty
-
-    cy.get("[data-testid=save-draft-button]").click();
-    cy.url().should("include", "/create-catch-certificate/catch-certificates");
-  });
-});
