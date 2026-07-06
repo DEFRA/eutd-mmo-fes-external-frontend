@@ -67,48 +67,6 @@ export const WhoseWatersWereTheyCaughtInLoader = async (request: Request, params
   );
 };
 
-// Saves only valid conservation fields when saving as draft.
-// Removes the "Other waters" pair when the text field is blank — don't persist
-// a partially-filled Other entry. Blank text would fail backend validation
-// and cause the entire save to fail, losing the valid checkbox selections too.
-// If the first save attempt fails due to e.g. emoji in otherWaters text,
-// strips those fields and retries once to preserve the valid checkbox selections.
-const saveConservationAsDraft = async (
-  bearerToken: string,
-  documentNumber: string,
-  conservation: conservationProps,
-  currentUri: string,
-  nextUri: string
-): Promise<Response | null> => {
-  const filtered: conservationProps = { ...conservation };
-
-  if (filtered.caughtInOtherWaters === "Y" && !String(filtered.otherWaters ?? "").trim()) {
-    delete filtered.caughtInOtherWaters;
-    delete filtered.otherWaters;
-  }
-
-  const hasCheckboxes = filtered.caughtInUKWaters || filtered.caughtInEUWaters || filtered.caughtInOtherWaters;
-  if (!hasCheckboxes) return null;
-
-  const firstResponse: IBase = await saveConservation(bearerToken, documentNumber, filtered, currentUri, nextUri, true);
-  const firstErrors: IError[] = (firstResponse.errors as IError[]) || [];
-
-  if (firstErrors.length === 0) return null;
-  if (firstResponse.unauthorised) return redirect("/forbidden");
-
-  const errorKeys = new Set(firstErrors.map((e: IError) => e.key));
-  if (errorKeys.has("otherWaters")) {
-    delete filtered.caughtInOtherWaters;
-    delete filtered.otherWaters;
-  }
-
-  if (filtered.caughtInUKWaters || filtered.caughtInEUWaters) {
-    await saveConservation(bearerToken, documentNumber, filtered, currentUri, nextUri, true);
-  }
-
-  return null;
-};
-
 export const WhoseWatersWereTheyCaughtInAction = async (
   request: Request,
   params: Params
@@ -138,35 +96,32 @@ export const WhoseWatersWereTheyCaughtInAction = async (
     : (form.get("nextUri") as string);
   const isConservationSavedAsDraft: boolean = buttonClicked === "saveAsDraft";
 
-  const isValid = await validateCSRFToken(request, form);
-  if (!isValid) return redirect("/forbidden");
+  if (buttonClicked === "saveAndContinue" || buttonClicked === "saveAsDraft") {
+    const conservationResponse: IBase = await saveConservation(
+      bearerToken,
+      documentNumber,
+      { ...conservation },
+      currentUri,
+      nextUri,
+      isConservationSavedAsDraft
+    );
+    const errors: IError[] | IErrorsTransformed = (conservationResponse.errors as IError[]) || [];
+    const unauthorised = conservationResponse.unauthorised as boolean;
 
-  if (isConservationSavedAsDraft) {
-    const earlyReturn = await saveConservationAsDraft(bearerToken, documentNumber!, conservation, currentUri, nextUri);
-    if (earlyReturn) return earlyReturn;
-    return redirect(route("/create-catch-certificate/catch-certificates"));
+    const isValid = await validateCSRFToken(request, form);
+    if (!isValid) return redirect("/forbidden");
+
+    if (unauthorised) {
+      return redirect("/forbidden");
+    }
+
+    if (buttonClicked === "saveAndContinue" && errors.length > 0) {
+      const values = Object.fromEntries(form);
+      return apiCallFailed(errors, values);
+    }
   }
 
-  // saveAndContinue path
-  const conservationResponse: IBase = await saveConservation(
-    bearerToken,
-    documentNumber,
-    { ...conservation },
-    currentUri,
-    nextUri,
-    false
-  );
-  const errors: IError[] | IErrorsTransformed = (conservationResponse.errors as IError[]) || [];
-  const unauthorised = conservationResponse.unauthorised as boolean;
-
-  if (unauthorised) {
-    return redirect("/forbidden");
-  }
-
-  if (errors.length > 0) {
-    const values = Object.fromEntries(form);
-    return apiCallFailed(errors, values);
-  }
-
-  return redirect(nextUri);
+  return buttonClicked === "saveAsDraft"
+    ? redirect(route("/create-catch-certificate/catch-certificates"))
+    : redirect(nextUri);
 };

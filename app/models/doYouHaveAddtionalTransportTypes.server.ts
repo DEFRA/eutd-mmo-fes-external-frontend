@@ -80,15 +80,6 @@ export const DoYouHaveAddtionalTransportTypesAction = async (
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
-  if (_action === "saveAsDraft") {
-    // Only persist when the user has made a selection; skip the API call when
-    // no option is chosen to prevent saving an invalid/empty state.
-    if (transport.addTransportation) {
-      await addAdditionalTransportTypes(bearerToken, transport, documentNumber);
-    }
-    return redirect("/create-catch-certificate/catch-certificates");
-  }
-
   const { errors, unauthorised, addTransportation }: IAddTransportationCheck = await addAdditionalTransportTypes(
     bearerToken,
     transport,
@@ -97,6 +88,10 @@ export const DoYouHaveAddtionalTransportTypesAction = async (
 
   if (unauthorised) {
     return redirect("/forbidden");
+  }
+
+  if (_action === "saveAsDraft") {
+    return redirect("/create-catch-certificate/catch-certificates");
   }
 
   const transportId = form.get("transportId") as string;

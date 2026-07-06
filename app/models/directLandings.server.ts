@@ -130,41 +130,6 @@ const saveActionBase: any = async (values: any, landings: IDirectLandings, isNum
   };
 };
 
-// FI0-10577: Build a payload with all fields the backend flagged as invalid removed,
-// so the second validation pass can persist whatever the user entered that is valid.
-const SAVE_AS_DRAFT_TOP_LEVEL_FIELDS = [
-  "vessel",
-  "faoArea",
-  "highSeasArea",
-  "dateLanded",
-  "startDate",
-  "gearCategory",
-  "gearType",
-  "gearCode",
-  "rfmo",
-] as const;
-
-const stripInvalidDirectLandingFields = (responseBody: any, errorKeys: Set<string>): any => {
-  const cleaned: any = { ...responseBody };
-
-  for (const field of SAVE_AS_DRAFT_TOP_LEVEL_FIELDS) {
-    if (errorKeys.has(field)) cleaned[field] = undefined;
-  }
-
-  if (errorKeys.has("exclusiveEconomicZones")) {
-    cleaned.exclusiveEconomicZones = [];
-  }
-
-  // Clear any individual weight that errored — keep the rest with their valid values.
-  if (Array.isArray(cleaned.weights)) {
-    cleaned.weights = cleaned.weights.map((w: IDirectLandingsDetails) =>
-      w.speciesId && errorKeys.has(`weights.${w.speciesId}.exportWeight`) ? { ...w, exportWeight: null } : w
-    );
-  }
-
-  return cleaned;
-};
-
 const saveAsDraftAction = async (
   values: any,
   bearerToken: string,
@@ -203,16 +168,7 @@ const saveAsDraftAction = async (
     exclusiveEconomicZones,
   };
 
-  // FI0-10577: Save as Draft must persist only valid fields. Validate first;
-  // if the backend rejects the payload, strip the invalid fields and retry once
-  // so any valid fields the user entered are still saved.
-  const firstResult = await validateDirectLandings(bearerToken, documentNumber, responseBody);
-
-  if (Array.isArray(firstResult) && firstResult.length > 0) {
-    const errorKeys = new Set(firstResult.map((e: IError) => e.key));
-    const cleanedBody = stripInvalidDirectLandingFields(responseBody, errorKeys);
-    await validateDirectLandings(bearerToken, documentNumber, cleanedBody);
-  }
+  await validateDirectLandings(bearerToken, documentNumber, responseBody);
 
   session.unset("selectedDate");
 
