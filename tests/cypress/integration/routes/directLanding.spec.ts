@@ -108,10 +108,7 @@ describe("Direct landing page render", () => {
         "Regional Fisheries Management Organisations (RFMO) - RFMOs are international organisations establishing binding measures for conservation and sustainable management of highly migratory or straddling fish species."
       )
       .should("be.visible");
-    cy.get("div .govuk-details__text")
-      .eq(4)
-      .contains("Find out more about RFMOs (opens in new tab).")
-      .click();
+    cy.get("div .govuk-details__text").eq(4).contains("Find out more about RFMOs (opens in new tab).").click();
     cy.get("div .govuk-details__summary").eq(5).contains("I cannot find the vessel");
     cy.get("div .govuk-details__summary").eq(5).click();
     cy.get("div .govuk-details__text")
@@ -157,7 +154,7 @@ describe("Direct landing page render", () => {
 
   it("should render the 'Add Another EEZ' button after the last select dropdown", () => {
     cy.get("#eez-0").should("be.visible").and("not.be.disabled");
-    cy.wait(250);
+    cy.waitForUiUpdate(250);
     for (let i = 0; i < 2; i++) {
       cy.get("#remove-zone-button").click();
     }
@@ -167,14 +164,14 @@ describe("Direct landing page render", () => {
 
   it("should display 'Remove' and 'Add Another' buttons appropriately depending on selection count", () => {
     cy.get("#eez-0").should("be.visible").and("not.be.disabled");
-    cy.wait(250);
+    cy.waitForUiUpdate(250);
     cy.get("#add-zone-button").should("exist");
     cy.get("#add-zone-button .govuk-visually-hidden").should("contain", "exclusive economic zone");
     for (let i = 0; i < 4; i++) {
       cy.get("body").then(($body) => {
         if ($body.find("#add-zone-button").length > 0) {
           cy.get("#add-zone-button").click();
-          cy.wait(250);
+          cy.waitForUiUpdate(250);
         }
       });
     }
@@ -191,9 +188,9 @@ describe("Direct landing page render", () => {
 
   it("should correctly display 'Remove' and 'Add Another' buttons based on EEZ selection state", () => {
     cy.get("#eez-0").should("be.visible").and("not.be.disabled");
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
     cy.get("#add-zone-button").trigger("click");
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
     cy.get("#eez-1").should("exist");
     cy.get("#remove-zone-button").should("exist");
     cy.get("#add-zone-button").should("exist");
@@ -203,9 +200,9 @@ describe("Direct landing page render", () => {
   });
 
   it("should render the add another zone button and click on it", () => {
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
     cy.get("#add-zone-button").trigger("click");
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
     cy.get("#eez-0").should("have.length", 1);
     cy.get("#eez-1").should("exist");
     cy.get("#remove-zone-button").should("exist");
@@ -215,7 +212,7 @@ describe("Direct landing page render", () => {
   });
 
   it("should correctly render and respond to click on the 'Add Another Zone' button", () => {
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
     cy.get("#add-zone-button").should("exist");
     cy.get("#add-zone-button").last().click();
     cy.get("#remove-zone-button").last().should("be.visible");
@@ -224,7 +221,7 @@ describe("Direct landing page render", () => {
 
   it("should remove the last EEZ select field when the 'Remove Zone' button is clicked", () => {
     waitForHydration();
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
 
     cy.get('[id^="eez-"]').then(($eez) => {
       const initialCount = $eez.length;
@@ -232,14 +229,14 @@ describe("Direct landing page render", () => {
       if (initialCount >= 3) {
         cy.get("#remove-zone-button").last().should("be.visible");
         cy.get("#remove-zone-button").last().click();
-        cy.wait(200);
+        cy.waitForUiUpdate(200);
       }
 
       cy.get("#add-zone-button").should("be.visible");
       cy.get("#add-zone-button").click();
-      cy.wait(200);
+      cy.waitForUiUpdate(200);
       cy.get("#add-zone-button").click();
-      cy.wait(200);
+      cy.waitForUiUpdate(200);
 
       cy.get("#remove-zone-button").last().should("be.visible");
       cy.get("#remove-zone-button").last().click();
@@ -841,9 +838,9 @@ describe("Direct Landing - EEZ validation when high seas is No", () => {
   });
 
   it("should display error when EEZ field is empty", () => {
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
     cy.get("#add-zone-button").click();
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
     cy.get("#eez-0").type("France");
     cy.get("body").then(($body) => {
       if ($body.find(".autocomplete__option").length > 0) {
@@ -858,7 +855,7 @@ describe("Direct Landing - EEZ validation when high seas is No", () => {
   });
 
   it("should display error when EEZ field has invalid country", () => {
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
     cy.get("#eez-0").type("Invalid Country Name XYZ");
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").contains("There is a problem");
@@ -953,7 +950,7 @@ describe("Direct Landing Error Messages - English", () => {
     cy.get(String.raw`#vessel-vesselName`)
       .invoke("val", "")
       .type(invalidVesselValue);
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Select a vessel from the list");
@@ -1110,7 +1107,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
     cy.get(String.raw`#vessel-vesselName`)
       .invoke("val", "")
       .type(invalidVesselValue);
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").contains("Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Dewiswch gwch neu long o'r rhestr");

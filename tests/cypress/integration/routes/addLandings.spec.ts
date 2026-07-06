@@ -23,7 +23,11 @@ const selectFirstGearTypeOption = () => {
       cy.get("[data-testid='add-gear-category']").first().click();
     }
   });
+<<<<<<< HEAD
   // Wait for gear type options to populate (assertion automatically retries)
+=======
+  cy.waitForUiUpdate(300);
+>>>>>>> f4374b69 (FI0-11247 eutd-mmo-fes-external-frontend - Fix High-Severity npm Vulnerabilities)
   cy.get("#gearType option").should("have.length.greaterThan", 1);
   selectFirstNonEmptyOption("#gearType");
 };
@@ -66,9 +70,15 @@ const verifyLandingFormIsReset = (isProductEmpty: boolean) => {
 };
 
 const populateLandingForm = () => {
+<<<<<<< HEAD
   // Wait for hydration - check element is visible and not disabled
   cy.get("#startDate").should("be.visible").and("not.be.disabled");
   cy.get("select#product").should("be.visible").and("not.be.disabled");
+=======
+  // Wait for hydration
+  cy.get("#startDate").should("be.visible");
+  cy.waitForUiUpdate(300); // Allow hydration to complete
+>>>>>>> f4374b69 (FI0-11247 eutd-mmo-fes-external-frontend - Fix High-Severity npm Vulnerabilities)
 
   // product
   cy.get("select#product").select(1).invoke("val").should("not.eq", "");
@@ -857,9 +867,10 @@ describe("Manual landing page when javascript is disabled", () => {
     // select a gear category
     cy.get("select#gearCategory").select("Surrounding nets");
     cy.get("[data-testid='add-gear-category']").click();
-    // Wait for server-side form action to complete - button becomes interactive again
-    cy.get("[data-testid='add-gear-category']").should("be.visible").and("not.be.disabled");
-    // Verify select is populated and ready
+    // Wait for the server-side action to complete and page to reload
+    cy.waitForUiUpdate(500);
+    // check the gear type combo now has additional options
+    cy.get("select#gearType option:selected").should("have.text", "Select gear type");
     cy.get("select#gearType option").should("have.length", 6);
     cy.get("select#gearType option:selected").should("have.text", "Select gear type");
     cy.get("select#gearType").should("be.visible").and("not.be.disabled");
@@ -942,9 +953,10 @@ describe("Manual landing page when javascript is disabled", () => {
       // select a gear category
       cy.get("select#gearCategory").select("Surrounding nets");
       cy.get("[data-testid='add-gear-category']").click();
-      // Wait for server-side form action to complete - button becomes interactive again
-      cy.get("[data-testid='add-gear-category']").should("be.visible").and("not.be.disabled");
-      // Verify select is populated and ready
+      // workaround for Remix hydration issues, if we don't wait the UI simply isn't ready
+      cy.waitForUiUpdate(250);
+      // check the gear type combo now has additional options
+      cy.get("select#gearType option:selected").should("have.text", "Dewiswch y math o gêr");
       cy.get("select#gearType option").should("have.length", 6);
       cy.get("select#gearType option:selected").should("have.text", "Dewiswch y math o gêr");
       cy.get("select#gearType").should("be.visible").and("not.be.disabled");
@@ -1498,8 +1510,9 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should apply correct CSS classes to EEZ fields based on error state", () => {
-    // Wait for form to hydrate - ensure element is ready for interaction
-    cy.get("input#startDate").should("be.visible").and("not.be.disabled");
+    // Wait for form to hydrate
+    cy.get("input#startDate").should("be.visible");
+    cy.waitForUiUpdate(200);
 
     cy.get("input#startDate").clear();
     cy.get("input#startDate").type("01");

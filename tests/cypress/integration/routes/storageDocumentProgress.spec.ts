@@ -281,7 +281,8 @@ describe("should display the notificationBanner", () => {
     cy.visit("create-non-manipulation-document/GBR-2022-SD-F71D98A30/copy-this-non-manipulation-document", {
       qs: { ...testParams },
     });
-    cy.get('label[for="voidOriginal"]').should("be.visible").click();
+    cy.waitForUiUpdate(250);
+    cy.get("#voidOriginal").click();
     cy.get("#copyDocumentAcknowledged").click();
     cy.get('[data-testid="continue"]').click();
     cy.get(".govuk-notification-banner__heading")

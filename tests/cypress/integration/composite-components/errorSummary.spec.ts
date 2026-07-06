@@ -461,6 +461,9 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       cy.visit(pageUrl, { qs: { ...testParams } });
       cy.get("[data-testid='save-and-continue']").click();
 
+      // Wait for component to mount and useEffect to run
+      cy.waitForUiUpdate(100);
+
       // Verify error summary is rendered (useEffect ran with valid ref)
       // Cypress automatically retries until the element exists
       cy.get("#errorIsland").should("exist");

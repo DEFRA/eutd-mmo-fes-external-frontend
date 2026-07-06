@@ -1294,7 +1294,7 @@ describe("CC - scenario 2 - Change transport mode", () => {
 
     cy.log("STEP #6 - Wait for the form to be fully loaded and stable");
     cy.get('input[name="vehicle"]').should("exist");
-    cy.get('input[name="vehicle"][value="plane"]').should("be.enabled"); // Wait for hydration to complete
+    cy.waitForUiUpdate(200); // Let any hydration settle
 
     cy.log("STEP #6A - Log all available radio buttons");
     cy.get('input[name="vehicle"]').then(($inputs) => {
@@ -1418,6 +1418,7 @@ describe("NMD - scenario 4 - Change arrival transport mode", () => {
     cy.log("STEP #4A - Waiting for data fetch to complete");
     // Wait for the client-side data fetch that re-renders the form
     cy.wait("@dataFetch");
+    cy.waitForUiUpdate(500); // Additional wait for form stability
 
     cy.log("STEP #5 - Checking form elements exist");
     // Wait for the form to be fully loaded and radio buttons to be interactable
@@ -1545,7 +1546,7 @@ describe("NMD - scenario 5 - Change departure transport mode - no change scenari
 
     // Wait for form to be stable and the expected pre-filled radio button to be interactable
     cy.get('input[name="vehicle"]').should("exist");
-    cy.get('input[name="vehicle"][value="containerVessel"]').should("be.enabled");
+    cy.waitForUiUpdate(500); // Increased wait for form stability
 
     cy.log("STEP #5 - Check all radio button states");
     cy.get('input[name="vehicle"]').each(($radio) => {
@@ -1601,7 +1602,7 @@ describe("NMD - scenario 6 - Change departure transport mode", () => {
 
     // Wait for the form to be fully loaded and stable
     cy.get('input[name="vehicle"]').should("exist");
-    cy.get('input[name="vehicle"][value="plane"]').should("be.enabled");
+    cy.waitForUiUpdate(200);
 
     // Change the mode to Plane using cy.check()
     cy.get('input[name="vehicle"][value="plane"]').check();

@@ -81,7 +81,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
     };
 
     cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
-    cy.wait(200);
+    cy.waitForUiUpdate(200);
 
     cy.get("#containerVessel").click();
     cy.get("[data-testid=save-and-continue").click();

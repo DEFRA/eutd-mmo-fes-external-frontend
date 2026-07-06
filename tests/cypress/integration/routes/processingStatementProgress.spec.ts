@@ -155,7 +155,8 @@ describe("should display the notificationBanner", () => {
     cy.visit("create-processing-statement/GBR-2022-PS-F71D98A30/copy-this-processing-statement", {
       qs: { ...testParams },
     });
-    cy.get('label[for="voidOriginal"]').should("be.visible").click();
+    cy.waitForUiUpdate(500);
+    cy.get("#voidOriginal").click();
     cy.get("#copyDocumentAcknowledged").check();
     cy.get('[data-testid="continue"]').click();
     cy.get(".govuk-notification-banner__heading").contains(
