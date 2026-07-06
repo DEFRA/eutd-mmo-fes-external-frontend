@@ -166,7 +166,7 @@ describe("Cookie Banner", () => {
       cy.contains("button", "Accept analytics cookies").click();
 
       // Wait a moment
-      cy.wait(500);
+      cy.waitForUiUpdate(500);
 
       // Check that marker still exists (page didn't reload)
       cy.window().its("testMarker").should("equal", "page-loaded");
@@ -187,7 +187,7 @@ describe("Cookie Banner", () => {
       cy.contains("button", "Reject analytics cookies").click();
 
       // Wait a moment
-      cy.wait(500);
+      cy.waitForUiUpdate(500);
 
       // Check that marker still exists (page didn't reload)
       cy.window().its("testMarker").should("equal", "page-loaded");

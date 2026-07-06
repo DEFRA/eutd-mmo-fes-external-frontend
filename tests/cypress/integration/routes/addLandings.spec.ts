@@ -23,7 +23,7 @@ const selectFirstGearTypeOption = () => {
       cy.get("[data-testid='add-gear-category']").first().click();
     }
   });
-  cy.wait(300);
+  cy.waitForUiUpdate(300);
   cy.get("#gearType option").should("have.length.greaterThan", 1);
   selectFirstNonEmptyOption("#gearType");
 };
@@ -68,7 +68,7 @@ const verifyLandingFormIsReset = (isProductEmpty: boolean) => {
 const populateLandingForm = () => {
   // Wait for hydration
   cy.get("#startDate").should("be.visible");
-  cy.wait(300); // Allow hydration to complete
+  cy.waitForUiUpdate(300); // Allow hydration to complete
 
   // product
   cy.get("select#product").select(1).invoke("val").should("not.eq", "");
@@ -857,7 +857,7 @@ describe("Manual landing page when javascript is disabled", () => {
     cy.get("select#gearCategory").select("Surrounding nets");
     cy.get("[data-testid='add-gear-category']").click();
     // Wait for the server-side action to complete and page to reload
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     // check the gear type combo now has additional options
     cy.get("select#gearType option:selected").should("have.text", "Select gear type");
     cy.get("select#gearType option").should("have.length", 6);
@@ -941,7 +941,7 @@ describe("Manual landing page when javascript is disabled", () => {
       cy.get("select#gearCategory").select("Surrounding nets");
       cy.get("[data-testid='add-gear-category']").click();
       // workaround for Remix hydration issues, if we don't wait the UI simply isn't ready
-      cy.wait(250);
+      cy.waitForUiUpdate(250);
       // check the gear type combo now has additional options
       cy.get("select#gearType option:selected").should("have.text", "Dewiswch y math o gêr");
       cy.get("select#gearType option").should("have.length", 6);
@@ -1459,7 +1459,7 @@ describe("Mandatory field validation tests", () => {
   it("should apply correct CSS classes to EEZ fields based on error state", () => {
     // Wait for form to hydrate
     cy.get("input#startDate").should("be.visible");
-    cy.wait(200);
+    cy.waitForUiUpdate(200);
 
     cy.get("input#startDate").clear();
     cy.get("input#startDate").type("01");

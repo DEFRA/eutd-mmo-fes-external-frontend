@@ -454,7 +454,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       cy.get("[data-testid='save-and-continue']").click();
 
       // Wait for component to mount and useEffect to run
-      cy.wait(100);
+      cy.waitForUiUpdate(100);
 
       // Verify error summary is rendered (useEffect ran with valid ref)
       cy.get("#errorIsland").should("exist");

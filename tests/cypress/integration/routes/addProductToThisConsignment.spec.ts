@@ -119,7 +119,7 @@ describe("Add product to this consignment  page", () => {
     cy.url().should("include", "/you-have-added-a-product");
   });
   it("should show Remove and Add Another buttons correctly based on selection length", () => {
-    cy.wait(500); // Adding a wait to ensure the button is interactable
+    cy.waitForUiUpdate(500); // Adding a wait to ensure the button is interactable
     for (let i = 0; i < 4; i++) {
       cy.get("#add-supporting-doc-button").click();
     }
@@ -151,7 +151,7 @@ describe("Add product to this consignment  page", () => {
     cy.get("#catches-0-supportingDocuments-0").should("be.visible").and("not.be.disabled");
     cy.get("#add-supporting-doc-button").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("not.exist");
-    cy.wait(500); // Adding a wait to ensure the button is interactable
+    cy.waitForUiUpdate(500); // Adding a wait to ensure the button is interactable
     cy.get("#add-supporting-doc-button").click();
     cy.get("#catches-0-supportingDocuments-1").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("exist");
@@ -165,26 +165,26 @@ describe("Add product to this consignment  page", () => {
   });
   it("should render the add another doc button and click on it", () => {
     cy.get("#add-supporting-doc-button").should("exist");
-    cy.wait(500); // Adding a wait to ensure the button is interactable
+    cy.waitForUiUpdate(500); // Adding a wait to ensure the button is interactable
     cy.get("#add-supporting-doc-button").click();
     cy.get("#catches-0-supportingDocuments-0").should("exist");
     cy.get("#catches-0-supportingDocuments-1").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("exist");
     cy.get("#remove-supporting-doc-button-1").should("exist");
     cy.get("#remove-supporting-doc-button-1").click();
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get("#catches-0-supportingDocuments-1").should("not.exist");
   });
   it("should remove the last doc and update selectedSupportingDocuments", () => {
     cy.get("#add-supporting-doc-button").should("exist");
-    cy.wait(500); // Adding a wait to ensure the button is interactable
+    cy.waitForUiUpdate(500); // Adding a wait to ensure the button is interactable
     cy.get("#add-supporting-doc-button").click();
     cy.get("#add-supporting-doc-button").click();
     cy.get("#add-supporting-doc-button").click();
     cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 5);
     cy.get("#remove-supporting-doc-button-0").should("be.visible");
     cy.get("#remove-supporting-doc-button-0").click();
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
     cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 4);
   });
 
@@ -201,7 +201,7 @@ describe("Add product to this consignment  page", () => {
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get("#catches-0-supportingDocuments-0").should("exist");
     cy.get("#catches-0-supportingDocuments-0").type("Supporting Document 1");
     cy.get("#catches-0-supportingDocuments-0").should("have.value", "Supporting Document 1");
@@ -223,12 +223,12 @@ describe("Add product to this consignment  page", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
 
     // Add supporting documents up to the maximum
     for (let i = 0; i < 4; i++) {
       cy.get("#add-supporting-doc-button").should("exist").click();
-      cy.wait(100);
+      cy.waitForUiUpdate(100);
     }
 
     // Verify we now have exactly 5 supporting document fields (0-4 indices)
@@ -297,13 +297,13 @@ describe("Add product to this consignment  page", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
 
     // Add 3 supporting documents
     cy.get("#add-supporting-doc-button").click();
-    cy.wait(100);
+    cy.waitForUiUpdate(100);
     cy.get("#add-supporting-doc-button").click();
-    cy.wait(100);
+    cy.waitForUiUpdate(100);
 
     // We should now have 3 fields (indices 0, 1, 2)
     cy.get("#catches-0-supportingDocuments-0").should("exist");
@@ -317,7 +317,7 @@ describe("Add product to this consignment  page", () => {
 
     // Remove the middle one (index 1) - this triggers getRemoveIndex which parses "removeSupportingDoc-1"
     cy.get("#remove-supporting-doc-button-1").should("exist").click();
-    cy.wait(200);
+    cy.waitForUiUpdate(200);
 
     // Now we should have 2 fields remaining
     cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", 3);
@@ -328,7 +328,7 @@ describe("Add product to this consignment  page", () => {
 
     // Remove another one by index (index 0)
     cy.get("#remove-supporting-doc-button-0").should("exist").click();
-    cy.wait(200);
+    cy.waitForUiUpdate(200);
 
     // Now only 1 field should remain
     cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", 2);
@@ -346,11 +346,11 @@ describe("Add product to this consignment  page", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
 
     // Add supporting documents
     cy.get("#add-supporting-doc-button").click();
-    cy.wait(100);
+    cy.waitForUiUpdate(100);
 
     // Fill in some values
     cy.get("#catches-0-supportingDocuments-0").clear().type("First Document");
@@ -362,7 +362,7 @@ describe("Add product to this consignment  page", () => {
     cy.get("#catches-0-certificateNumber").type("TEST123");
     cy.get("#catches-0-weightOnCC").type("100");
     cy.get("#catches-0-product").type("COD");
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
     cy.get("#catches-0-commodityCode").type("03");
 
     // Submit form with "Save and continue" (not a remove action)
@@ -446,7 +446,7 @@ describe("Add product to this consignment  page", () => {
     it("should have proper accessibility attributes for additional supporting document fields", () => {
       // Add second supporting document
       cy.get("#add-supporting-doc-button").click();
-      cy.wait(300);
+      cy.waitForUiUpdate(300);
 
       // Second field should have aria-label but no aria-describedby
       cy.get("#catches-0-supportingDocuments-1").should("have.attr", "aria-label", "catches-0-supportingDocuments-1");
@@ -454,7 +454,7 @@ describe("Add product to this consignment  page", () => {
 
       // Third field should also have aria-label
       cy.get("#add-supporting-doc-button").click();
-      cy.wait(300);
+      cy.waitForUiUpdate(300);
       cy.get("#catches-0-supportingDocuments-2").should("have.attr", "aria-label", "catches-0-supportingDocuments-2");
       cy.get("#catches-0-supportingDocuments-2").should("not.have.attr", "aria-describedby");
     });
@@ -463,7 +463,7 @@ describe("Add product to this consignment  page", () => {
       // Add multiple supporting documents
       for (let i = 0; i < 3; i++) {
         cy.get("#add-supporting-doc-button").click();
-        cy.wait(500);
+        cy.waitForUiUpdate(500);
       }
 
       // Check that fields 1-3 do not have aria-describedby with invalid IDs
@@ -916,15 +916,15 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#add-supporting-doc-button").should("be.visible");
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
 
     cy.get('[id^="catches-0-supportingDocuments-"]')
       .its("length")
       .then((initialCount) => {
         cy.get("#add-supporting-doc-button").click();
-        cy.wait(300);
+        cy.waitForUiUpdate(300);
         cy.get("#add-supporting-doc-button").click();
-        cy.wait(300);
+        cy.waitForUiUpdate(300);
         cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", initialCount + 2);
       });
   });
@@ -1148,7 +1148,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
         cy.get("#add-supporting-doc-button")
           .click()
           .then(() => {
-            cy.wait(100);
+            cy.waitForUiUpdate(100);
           });
       }
 
@@ -1170,7 +1170,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get("#catches-0-certificateNumber").type("TEST123");
       cy.get("#catches-0-weightOnCC").type("100");
       cy.get("#catches-0-product").type("COD");
-      cy.wait(300);
+      cy.waitForUiUpdate(300);
       cy.get("#catches-0-commodityCode").type("03");
 
       // Submit form
@@ -1192,7 +1192,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get("#catches-1-certificateNumber").type("TEST456");
       cy.get("#catches-1-weightOnCC").type("200");
       cy.get("#catches-1-product").type("HAD");
-      cy.wait(300);
+      cy.waitForUiUpdate(300);
       cy.get("#catches-1-commodityCode").type("03");
 
       // Submit form
@@ -1217,7 +1217,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get(`#catches-${editIndex}-weightOnCC`).clear();
       cy.get(`#catches-${editIndex}-weightOnCC`).type("150");
       cy.get(`#catches-${editIndex}-product`).type("COD");
-      cy.wait(300);
+      cy.waitForUiUpdate(300);
       cy.get(`#catches-${editIndex}-commodityCode`).type("03");
 
       // Submit form
@@ -1246,7 +1246,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get(`#catches-${productIndex}-certificateNumber`).type("TEST789");
       cy.get(`#catches-${productIndex}-weightOnCC`).type("100");
       cy.get(`#catches-${productIndex}-product`).type("COD");
-      cy.wait(300);
+      cy.waitForUiUpdate(300);
       cy.get(`#catches-${productIndex}-commodityCode`).type("03");
 
       // Submit form

@@ -210,7 +210,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
     // Fill with invalid container number (would fail validation on save & continue)
     cy.get("#nationalityOfVehicle").type("Netherlands");
-    cy.wait(500); // Wait for autocomplete to stabilize
+    cy.waitForUiUpdate(500); // Wait for autocomplete to stabilize
     cy.get("#registrationNumber").click(); // Move focus to next field, closing autocomplete
     cy.get("#registrationNumber").clear();
     cy.get("#registrationNumber").type("NL999");
@@ -304,7 +304,7 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
     for (let i = 0; i < 5; i++) {
-      cy.wait(500);
+      cy.waitForUiUpdate(500);
       cy.get(`[name="containerNumbers.${i}"]`).should("be.visible").type("ABCD1234567");
       if (i < 4) {
         cy.get('[data-testid="add-another-container"]').click();
@@ -320,7 +320,7 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get('[data-testid="add-another-container"]').click();
 
     cy.get('[name="containerNumbers.0"]').type("ABCD1234567");
@@ -394,13 +394,13 @@ describe("AutocompleteFormField: minCharsBeforeSearch validation", () => {
     describe("Truck nationality field with minCharsBeforeSearch=2", () => {
       it("should not show dropdown when typing 1 character in nationality field", () => {
         cy.get("#nationalityOfVehicle").focus().type("U");
-        cy.wait(500);
+        cy.waitForUiUpdate(500);
         cy.get(".autocomplete__menu").should("not.exist");
       });
 
       it("should show dropdown when typing 2 or more characters in nationality field", () => {
         cy.get("#nationalityOfVehicle").parent().find('input[type="text"]').focus().type("Un");
-        cy.wait(1000);
+        cy.waitForUiUpdate(1000);
         cy.get('[class*="autocomplete"]').should("be.visible");
         cy.get('[role="listbox"]').should("be.visible");
       });
@@ -458,7 +458,7 @@ describe("Add Transportation Details Truck: Invalid year in export date", () => 
     cy.get("#exportDate-month").clear().type("01");
     cy.get("#exportDate-year").clear().type("0000");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.wait(250);
+    cy.waitForUiUpdate(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Export date must be a real date$/).should("be.visible");
   });
