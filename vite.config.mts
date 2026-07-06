@@ -59,6 +59,11 @@ export default defineConfig({
     reactRouter(),
     tsconfigPaths(),
   ],
+  css: {
+    lightningcss: {
+      errorRecovery: true,
+    },
+  },
   optimizeDeps: {
     force: true,
     esbuildOptions: {
