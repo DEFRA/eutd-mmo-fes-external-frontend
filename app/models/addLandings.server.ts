@@ -581,28 +581,8 @@ export const AddLandingsAction = async (request: Request, params: Params): Promi
       });
     case "uploadProductAndLanding":
       return redirect(route("/create-catch-certificate/:documentNumber/upload-file", { documentNumber }));
-    case "saveAsDraft": {
-      // FI0-10577: Attempt to persist any in-progress landing the user has typed
-      // before redirecting. The backend validates the entry and only persists if
-      // valid; invalid entries are silently dropped so the user keeps already-saved
-      // landings without surfacing errors when they return to the page.
-      const inProgressFields = ["product", "vessel", "weight", "faoArea", "highSeasArea", "gearCategory", "gearType"];
-      const hasInProgressLanding =
-        inProgressFields.some((k) => !isEmpty(values[k] as string)) ||
-        Boolean(values.dateLandedDay || values.dateLandedMonth || values.dateLandedYear);
-      if (hasInProgressLanding) {
-        await addLandingAction(values, bearerToken, session, documentNumber);
-        // Discard any error state that addLandingAction may have set in session
-        // — saveAsDraft must not surface in-progress errors on the next visit.
-        addLandingSessionKeys.forEach((k) => session.unset(k));
-        session.unset("hasLandingError");
-      }
-      return redirect(route("/create-catch-certificate/catch-certificates"), {
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      });
-    }
+    case "saveAsDraft":
+      return redirect(route("/create-catch-certificate/catch-certificates"));
     case "saveAndContinue": {
       const addLandingResp = await saveAndContinueAction(bearerToken, documentNumber);
       if (addLandingResp) {

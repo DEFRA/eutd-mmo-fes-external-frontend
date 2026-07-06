@@ -128,14 +128,6 @@ const howDoesTheExportLeaveTheUkHandler: ITestHandler = {
     ),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
-  // FI0-10577: Save as draft with no vehicle selected - should skip API call
-  [TestCaseId.HowDoesTheExportLeaveSaveAsDraftNoVehicle]: () => [
-    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
-    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(empty))),
-    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
-    // No POST mock needed — the action skips the transport API call when no vehicle is selected
-  ],
   // FI0-10616: Back navigation scenarios
   [TestCaseId.HowDoesTheExportLeaveTheUkBackFromAdditionalTransport]: () => [
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(manualEntryLandingsType))),
