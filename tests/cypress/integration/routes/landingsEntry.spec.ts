@@ -201,6 +201,32 @@ describe("Landings entry page: notification messages", () => {
       .should("be.visible")
       .should("have.attr", "href", "/create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate");
   });
+
+  it("should respect backUri query parameter when provided", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.LandingsTypeNull,
+    };
+
+    const customBackUri = encodeURIComponent(`${documentUrl}/custom-page`);
+
+    cy.visit(`${landingsUrl}?backUri=${customBackUri}`, { qs: { ...testParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href", `${documentUrl}/custom-page`);
+  });
+
+  it("should point Back to catch-certificates dashboard when no copy context or backUri", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.LandingsTypeNull,
+    };
+
+    cy.visit(landingsUrl, { qs: { ...testParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href", "/create-catch-certificate/catch-certificates");
+  });
 });
 
 describe("Landings entry page: form submission and errors", () => {
