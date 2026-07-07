@@ -1627,7 +1627,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
         cy.get("body").then(($body) => {
           if ($body.find(".autocomplete__option").length > 0) {
             cy.get(".autocomplete__option").first().click();
-            cy.wait(index === speciesNames.length - 1 ? 500 : 300);
+            cy.waitForUiUpdate(index === speciesNames.length - 1 ? 500 : 300);
 
             // Function should execute successfully for each input
             cy.get("#state").should("have.value", "");
