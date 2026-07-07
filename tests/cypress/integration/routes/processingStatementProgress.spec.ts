@@ -156,7 +156,7 @@ describe("should display the notificationBanner", () => {
     cy.visit("create-processing-statement/GBR-2022-PS-F71D98A30/copy-this-processing-statement", {
       qs: { ...testParams },
     });
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get("#voidOriginal").click();
     cy.get("#copyDocumentAcknowledged").check();
     cy.get('[data-testid="continue"]').click();

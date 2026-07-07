@@ -597,7 +597,7 @@ describe("What are you exporting page: Tab interaction and handleTab function", 
     cy.get("[data-testid*='edit-button']").first().trigger("click");
 
     // Verify products tab is active and we scrolled to it
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get("#add-products").should("be.visible");
   });
 
@@ -615,7 +615,7 @@ describe("What are you exporting page: Tab interaction and handleTab function", 
     cy.get("[data-testid*='edit-button']").first().should("be.visible").trigger("click");
 
     // Should switch to products tab and scroll to #productsTab
-    cy.wait(500); // Allow for scroll animation
+    cy.waitForUiUpdate(500); // Allow for scroll animation
     cy.get("#add-products").should("be.visible");
   });
 });
@@ -826,7 +826,7 @@ describe("What are you exporting page: TabRef and handleTab functionality", () =
     cy.get("[data-testid*='edit-button']").first().click();
 
     // Verify we're back on products tab
-    cy.wait(300);
+    cy.waitForUiUpdate(300);
     cy.get("#add-products").should("be.visible");
   });
 
@@ -987,7 +987,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
 
     // Select a species and state to populate presentations
     cy.get("#species").invoke("val", "Albacore (ALB)").trigger("change");
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
 
     // Presentation field should exist
     cy.get("#presentation").should("exist");
@@ -1202,19 +1202,19 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should reset form fields when add product button is clicked after filling form", () => {
       // Fill in the form
       cy.get("#species").type("Albacore");
-      cy.wait(500);
+      cy.waitForUiUpdate(500);
 
       // Check if autocomplete appears and select if available
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(1000);
+          cy.waitForUiUpdate(1000);
         }
       });
 
       // Submit the form (triggers navigation with addProduct action)
       cy.get("[data-testid='add-product']").click();
-      cy.wait(500);
+      cy.waitForUiUpdate(500);
 
       // Verify form was reset by useEffect (isReset = true after submit)
       cy.get("#species").should("have.value", "");
@@ -1225,21 +1225,21 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should handle species change by updating states", () => {
       // Edit first product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(500);
+      cy.waitForUiUpdate(500);
 
       cy.get("#species").invoke("val");
 
       // Clear and type new species - break the chain to avoid detached DOM errors
       cy.get("#species").clear();
-      cy.wait(500);
+      cy.waitForUiUpdate(500);
       cy.get("#species").type("Atlantic cod");
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       // Select from autocomplete if available
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(2000);
+          cy.waitForUiUpdate(2000);
 
           // Verify species code changed
           cy.get("input[name='speciesCode']")
@@ -1256,7 +1256,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should update presentations when state changes", () => {
       // Edit a product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       // Get current presentation count
       cy.get("#presentation option")
@@ -1268,7 +1268,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
             .then((stateCount) => {
               if (stateCount > 2) {
                 cy.get("#state").select(1);
-                cy.wait(1000);
+                cy.waitForUiUpdate(1000);
 
                 // Presentations should be updated by useEffect
                 cy.get("#presentation option").should("exist");
@@ -1282,7 +1282,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should populate commodity codes when presentation is selected", () => {
       // Edit a product with all fields
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       // Verify commodity codes are populated by useEffect
       cy.get("#commodity_code option").should("have.length.greaterThan", 0);
@@ -1291,7 +1291,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should auto-select commodity code when only one is available", () => {
       // Edit a product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       // Check if commodity code is auto-selected
       cy.get("#commodity_code option")
@@ -1307,7 +1307,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should update commodity codes when presentation changes", () => {
       // Edit a product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       // Get current commodity code
       cy.get("#commodity_code").invoke("val");
@@ -1318,7 +1318,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
         .then((count) => {
           if (count > 2) {
             cy.get("#presentation").select(1);
-            cy.wait(2000);
+            cy.waitForUiUpdate(2000);
 
             // Commodity codes should be updated by useEffect
             cy.get("#commodity_code option").should("exist");
@@ -1344,7 +1344,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should update commodityCodesHolder when commodityCodes prop changes", () => {
       // Edit a product (commodityCodes prop is passed)
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       // useEffect should populate commodityCodesHolder from commodityCodes prop
       cy.get("#commodity_code option").should("have.length.greaterThan", 0);
@@ -1357,7 +1357,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
         .then(() => {
           // Edit product
           cy.get("[data-testid*='edit-button']").first().click();
-          cy.wait(1000);
+          cy.waitForUiUpdate(1000);
 
           // useEffect should handle commodityCodes prop even if empty initially
           cy.get("#commodity_code").should("exist");
@@ -1369,11 +1369,11 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should cleanup on cancel action", () => {
       // Edit a product to trigger useEffect hooks
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       // Cancel triggers navigation and cleanup
       cy.get("[data-testid='cancel']").click();
-      cy.wait(500);
+      cy.waitForUiUpdate(500);
 
       // Form should be clean
       cy.get("#species").should("have.value", "");
@@ -1385,7 +1385,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should maintain state consistency across useEffect executions", () => {
       // Edit product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       // Capture initial state
       cy.get("#species").invoke("val").as("originalSpecies");
@@ -1397,7 +1397,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
         .then((count) => {
           if (count > 2) {
             cy.get("#state").select(1);
-            cy.wait(2000);
+            cy.waitForUiUpdate(2000);
 
             // Species should remain the same (useEffect for presentations shouldn't affect species)
             cy.get("@originalSpecies").then((original) => {
@@ -1421,13 +1421,13 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     it("should call handleSpeciesSelection when a species is selected from autocomplete", () => {
       // Type into species field to trigger autocomplete
       cy.get("#species").type("Albacore");
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       // Select the first option from autocomplete dropdown
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(500);
+          cy.waitForUiUpdate(500);
 
           // Verify species was set (setCommonSpecies called)
           cy.get("#species").should("contain.value", "Albacore");
@@ -1438,12 +1438,12 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     it("should set the selected species value correctly", () => {
       // Test with different species
       cy.get("#species").type("Atlantic cod");
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(500);
+          cy.waitForUiUpdate(500);
 
           // Verify setCommonSpecies was called with correct value
           cy.get("#species").invoke("val").should("not.be.empty");
@@ -1456,23 +1456,23 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     it("should handle selecting species multiple times in succession", () => {
       // Select first species
       cy.get("#species").type("Cod");
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(1500);
+          cy.waitForUiUpdate(1500);
 
           cy.get("#species").invoke("val").as("firstSpecies");
 
           // Select second species
           cy.get("#species").clear().type("Haddock");
-          cy.wait(1000);
+          cy.waitForUiUpdate(1000);
 
           cy.get("body").then(($body2) => {
             if ($body2.find(".autocomplete__option").length > 0) {
               cy.get(".autocomplete__option").first().click();
-              cy.wait(500);
+              cy.waitForUiUpdate(500);
 
               // Verify species changed
               cy.get("@firstSpecies").then((first) => {
@@ -1492,20 +1492,20 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     it("should handle empty species selection (clearing species)", () => {
       // Edit a product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       // Clear species field (simulates selecting empty value)
       cy.get("#species").clear();
-      cy.wait(500);
+      cy.waitForUiUpdate(500);
 
       // Type and select again
       cy.get("#species").type("Whiting");
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(500);
+          cy.waitForUiUpdate(500);
 
           // handleSpeciesSelection should set all fields correctly
           cy.get("#species").invoke("val").should("not.be.empty");
@@ -1519,12 +1519,12 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     it("should maintain form consistency after species selection", () => {
       // Type and select species
       cy.get("#species").type("Pollock");
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(1500);
+          cy.waitForUiUpdate(1500);
 
           // After handleSpeciesSelection, verify form is in consistent state
           cy.get("#species").invoke("val").should("not.be.empty");
@@ -1542,12 +1542,12 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     it("should allow subsequent field population after species selection", () => {
       // Select species
       cy.get("#species").type("Hake");
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(2000);
+          cy.waitForUiUpdate(2000);
 
           // After species selection and reset, state should be populated by useEffect
           cy.get("#state option")
@@ -1556,7 +1556,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
               if (count > 1) {
                 // States were fetched, select one
                 cy.get("#state").select(1);
-                cy.wait(1000);
+                cy.waitForUiUpdate(1000);
 
                 // Should be able to continue populating form
                 cy.get("#state").invoke("val").should("not.be.empty");
@@ -1571,12 +1571,12 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     it("should handle species selection with special characters", () => {
       // Some species names may have special characters
       cy.get("#species").type("Ray");
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(500);
+          cy.waitForUiUpdate(500);
 
           // handleSpeciesSelection should work regardless of species name format
           cy.get("#species").invoke("val").should("not.be.empty");
@@ -1590,12 +1590,12 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     it("should execute all statements in handleSpeciesSelection", () => {
       // This test ensures 100% statement coverage by triggering the function
       cy.get("#species").type("Scallop");
-      cy.wait(1000);
+      cy.waitForUiUpdate(1000);
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(500);
+          cy.waitForUiUpdate(500);
 
           // Every line in the function should be executed:
           // Line 136: setSearchState([])
@@ -1622,12 +1622,12 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
       // Test function with different input values to ensure all branches
       speciesNames.forEach((species, index) => {
         cy.get("#species").type(species);
-        cy.wait(1000);
+        cy.waitForUiUpdate(1000);
 
         cy.get("body").then(($body) => {
           if ($body.find(".autocomplete__option").length > 0) {
             cy.get(".autocomplete__option").first().click();
-            cy.wait(index === speciesNames.length - 1 ? 500 : 300);
+            cy.waitForUiUpdate(index === speciesNames.length - 1 ? 500 : 300);
 
             // Function should execute successfully for each input
             cy.get("#state").should("have.value", "");

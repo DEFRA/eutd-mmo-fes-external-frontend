@@ -542,7 +542,7 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
     cy.get("#catches-0-species").should("be.visible");
     cy.get("#catches-0-species").invoke("val", "");
     cy.get("#catches-0-species").type("Atlantic cod");
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get("#catches-0-species").should("be.visible");
 
     cy.get("body").then(($body) => {
@@ -571,7 +571,7 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
     cy.get("#catches-0-species").should("be.visible");
     cy.get("#catches-0-species").invoke("val", "");
     cy.get("#catches-0-species").type("ASD");
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get("#catches-0-species").should("be.visible");
 
     cy.get("body").then(($body) => {
@@ -612,7 +612,7 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-species").invoke("val", "");
     cy.get("#catches-0-species").type("Atlantic cod");
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get("#catches-0-species").should("be.visible");
     cy.get("body").then(($body) => {
       if ($body.find(".autocomplete__option").length > 0) {
@@ -637,18 +637,18 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.reload(); // Force a clean page load
-    cy.wait(500); // Wait for hydration
+    cy.waitForUiUpdate(500); // Wait for hydration
     cy.get("#catches-0-species").should("be.visible").and("be.enabled");
     cy.get("#catches-0-species").clear();
-    cy.wait(200);
+    cy.waitForUiUpdate(200);
     cy.get("#catches-0-species").type("A");
-    cy.wait(500); // Wait for autocomplete debouncing
+    cy.waitForUiUpdate(500); // Wait for autocomplete debouncing
     cy.get("#catches-0-species").should("be.visible");
     cy.get("#catches-0-species").should("have.value", "A");
     cy.get("#catches-0-species").clear();
-    cy.wait(200);
+    cy.waitForUiUpdate(200);
     cy.get("#catches-0-species").type("AT");
-    cy.wait(800);
+    cy.waitForUiUpdate(800);
     // Re-query the element to avoid detachment issues
     cy.get("#catches-0-species").should("have.value", "AT");
 
@@ -865,7 +865,7 @@ describe("PS: Add catch details - Species Code Validation", () => {
     cy.get("#catches-0-species").type("COD");
     cy.get("#catches-0-species").should("be.visible");
     cy.get("#catches-0-species").invoke("val", "Atlantic");
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get("body").then(($body) => {
       if ($body.find(".autocomplete__menu").length > 0 || $body.find('[role="listbox"]').length > 0) {
         cy.log("Autocomplete suggestions found");
@@ -882,7 +882,7 @@ describe("PS: Add catch details - Species Code Validation", () => {
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#catches-0-species").type("Atlan");
-    cy.wait(500);
+    cy.waitForUiUpdate(500);
     cy.get("body").then(($body) => {
       if ($body.find(".autocomplete__option").length > 0) {
         cy.get(".autocomplete__option").first().click();
@@ -1270,18 +1270,18 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.wait(1000); // Wait for page to fully load
+    cy.waitForUiUpdate(1000); // Wait for page to fully load
     cy.get("#catches-0-species").should("be.enabled").type("Atlantic cod (COD)");
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-123456");
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
     cy.get("#addProductDetails").click();
-    cy.wait(500); // Wait for form to reset
+    cy.waitForUiUpdate(500); // Wait for form to reset
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
     cy.get("#yourproducts tbody tr").should("have.length", 1);
     cy.get("#catches-0-species").should("be.enabled").clear();
-    cy.wait(100);
+    cy.waitForUiUpdate(100);
     cy.get("#catches-0-species").should("be.enabled").type("European seabass (BSS)");
     cy.get("#catches-0-catchCertificateNumber").clear();
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-654321");
@@ -1356,25 +1356,25 @@ describe("PS: Add catch details - Remove Functionality and Count Updates", () =>
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.wait(1000); // Wait for page to fully load
+    cy.waitForUiUpdate(1000); // Wait for page to fully load
 
     // First catch - fill species field
     cy.get("#catches-0-species").should("be.enabled").type("Atlantic cod (COD)");
-    cy.wait(200); // Wait for autocomplete to settle
+    cy.waitForUiUpdate(200); // Wait for autocomplete to settle
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-111111");
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
     cy.get("#catches-0-exportWeightAfterProcessing").type("25");
     cy.get("#addProductDetails").click();
-    cy.wait(500); // Wait for form to reset
+    cy.waitForUiUpdate(500); // Wait for form to reset
 
     // Second catch - requery and fill species field
     cy.get("#catches-0-species").should("be.enabled").clear();
-    cy.wait(100);
+    cy.waitForUiUpdate(100);
     cy.get("#catches-0-species").should("be.enabled").type("Atlantic cod (COD)");
-    cy.wait(200); // Wait for autocomplete to settle
+    cy.waitForUiUpdate(200); // Wait for autocomplete to settle
     cy.get("#catches-0-catchCertificateNumber").clear();
-    cy.wait(100);
+    cy.waitForUiUpdate(100);
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-222222");
     cy.get("#catches-0-totalWeightLanded").clear().type("30");
     cy.get("#catches-0-exportWeightBeforeProcessing").clear().type("15");
@@ -1725,19 +1725,19 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.wait(1000);
+    cy.waitForUiUpdate(1000);
 
     // Wait for page to be fully loaded and hydrated
     cy.get('input[name="catchCertificateType"]').should("exist");
 
     // 1. First click UK to ensure we're starting from a known state
     cy.get("#catches-0-catchCertificateType").click();
-    cy.wait(500); // Wait for React state update
+    cy.waitForUiUpdate(500); // Wait for React state update
     cy.get('[data-testid="issuing-country-0"]').should("not.exist");
 
     // 2. Now select non-UK to show issuing country field
     cy.get('label[for="catchCertificateType-non_uk"]').click();
-    cy.wait(500); // Wait for React state update
+    cy.waitForUiUpdate(500); // Wait for React state update
     cy.get('[data-testid="issuing-country-0"]', { timeout: 10000 }).should("exist");
   });
 
@@ -1787,11 +1787,11 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.wait(1000);
+    cy.waitForUiUpdate(1000);
 
     // Fill out all required fields including issuing country
     cy.get('input[name="catchCertificateType"][value="non_uk"]').check();
-    cy.wait(200); // Wait for React state update and field to appear
+    cy.waitForUiUpdate(200); // Wait for React state update and field to appear
     cy.get('input[name="issuingCountry"]').should("exist").should("be.visible");
     cy.get('input[name="issuingCountry"]').type("France{enter}");
     cy.get("#catches-0-catchCertificateNumber").type(ccNumber);
@@ -1944,7 +1944,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.wait(500); // Wait for page to be fully loaded and hydrated
+    cy.waitForUiUpdate(500); // Wait for page to be fully loaded and hydrated
     cy.get("#catches-0-speciesCommodityCode").type("03023110");
     cy.get("#catches-0-speciesCommodityCode").should("have.value", "03023110");
 
