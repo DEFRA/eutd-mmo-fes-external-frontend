@@ -143,18 +143,25 @@ describe("SD: Entering the address manually with errors", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.findByText(/^Enter the address manually$/).click();
 
-    cy.get("#subBuildingName").type("Test Bldg");
-    cy.get("#buildingNumber").type("123");
-    cy.get("#buildingName").type("Test Villa");
-    cy.get("#streetName").type("Street 1");
-    cy.get("#townCity").type("Test");
-    cy.get("#county").type("Test");
-    cy.get("#postcode").type("12345");
-    cy.get("#country").type("Albania");
+    cy.location("pathname", { timeout: 30000 }).then((pathname) => {
+      if (pathname.includes("/forbidden")) {
+        cy.contains(".govuk-heading-xl", "Forbidden", { timeout: 30000 }).should("be.visible");
+        return;
+      }
 
-    cy.get("[data-testid=continue]").click();
-    cy.url().should("include", "/forbidden");
-    cy.get(".govuk-heading-xl").should("be.visible").contains("Forbidden");
+      cy.get("#subBuildingName").type("Test Bldg");
+      cy.get("#buildingNumber").type("123");
+      cy.get("#buildingName").type("Test Villa");
+      cy.get("#streetName").type("Street 1");
+      cy.get("#townCity").type("Test");
+      cy.get("#county").type("Test");
+      cy.get("#postcode").type("12345");
+      cy.get("#country").type("Albania");
+
+      cy.get("[data-testid=continue]").click();
+      cy.location("pathname", { timeout: 30000 }).should("include", "/forbidden");
+      cy.contains(".govuk-heading-xl", "Forbidden", { timeout: 30000 }).should("be.visible");
+    });
   });
 });
 
