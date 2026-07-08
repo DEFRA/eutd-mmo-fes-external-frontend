@@ -1290,7 +1290,7 @@ describe("CC - scenario 2 - Change transport mode", () => {
 
     cy.log("STEP #6 - Wait for the form to be fully loaded and stable");
     cy.get('input[name="vehicle"]').should("exist");
-    cy.wait(200); // Let any hydration settle
+    cy.get('input[name="vehicle"][value="plane"]').should("be.enabled"); // Wait for hydration to complete
 
     cy.log("STEP #6A - Log all available radio buttons");
     cy.get('input[name="vehicle"]').then(($inputs) => {
@@ -1414,11 +1414,10 @@ describe("NMD - scenario 4 - Change arrival transport mode", () => {
     cy.log("STEP #4A - Waiting for data fetch to complete");
     // Wait for the client-side data fetch that re-renders the form
     cy.wait("@dataFetch");
-    cy.wait(500); // Additional wait for form stability
 
     cy.log("STEP #5 - Checking form elements exist");
-    // Wait for the form to be fully loaded
-    cy.get('input[name="vehicle"]').should("exist");
+    // Wait for the form to be fully loaded and radio buttons to be interactable
+    cy.get('input[name="vehicle"]').should("exist").and("be.enabled");
 
     cy.log("STEP #5A - Logging all available radio buttons");
     cy.get('input[name="vehicle"]').then(($inputs) => {
@@ -1540,9 +1539,9 @@ describe("NMD - scenario 5 - Change departure transport mode - no change scenari
     cy.wait("@dataFetch");
     cy.log("STEP #4 - Data fetch completed");
 
-    // Wait for form to be stable (radio buttons exist, even if opacity:0 per GOVUK styling)
+    // Wait for form to be stable and the expected pre-filled radio button to be interactable
     cy.get('input[name="vehicle"]').should("exist");
-    cy.wait(500); // Increased wait for form stability
+    cy.get('input[name="vehicle"][value="containerVessel"]').should("be.enabled");
 
     cy.log("STEP #5 - Check all radio button states");
     cy.get('input[name="vehicle"]').each(($radio) => {
@@ -1598,7 +1597,7 @@ describe("NMD - scenario 6 - Change departure transport mode", () => {
 
     // Wait for the form to be fully loaded and stable
     cy.get('input[name="vehicle"]').should("exist");
-    cy.wait(200);
+    cy.get('input[name="vehicle"][value="plane"]').should("be.enabled");
 
     // Change the mode to Plane using cy.check()
     cy.get('input[name="vehicle"][value="plane"]').check();
