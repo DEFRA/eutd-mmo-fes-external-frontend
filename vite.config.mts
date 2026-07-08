@@ -56,6 +56,30 @@ export default defineConfig({
         });
       },
     },
+    // Dev-only: intercept OIDC/AAD form_post callbacks before React Router's
+    // CSRF middleware. The IdP posts back from a different origin (e.g.
+    // *.cui.defra.gov.uk, *.b2clogin.com, login.microsoftonline.com), which
+    // React Router 7.12+ blocks by default. The OIDC protocol's own CSRF
+    // protection (state parameter + PKCE) covers these routes, so it is safe
+    // to let the requests through here. In production the allowedActionOrigins
+    // list in react-router.config.ts handles the same case.
+    {
+      name: "dev-oidc-csrf-bypass",
+      configureServer(server) {
+        const OIDC_CALLBACK_ROUTES = ["/login/return", "/admin-login"];
+        server.middlewares.use((req, _res, next) => {
+          if (
+            req.method === "POST" &&
+            OIDC_CALLBACK_ROUTES.some((route) => req.url?.startsWith(route))
+          ) {
+            // Remove Origin so React Router's throwIfPotentialCSRFAttack sees
+            // originDomain = null and skips the cross-origin check entirely.
+            delete req.headers["origin"];
+          }
+          next();
+        });
+      },
+    },
     reactRouter(),
     tsconfigPaths(),
   ],
