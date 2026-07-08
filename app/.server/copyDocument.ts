@@ -141,14 +141,33 @@ export const copyDocumentLoader = async (request: Request, params: Params) => {
   setApiMock(request.url);
 
   const { documentNumber = "" } = params;
+  const session = await getSessionFromRequest(request);
   const bearerToken = await getBearerTokenForRequest(request);
   const { canCopy } = await checkCopyDocument(bearerToken, documentNumber);
 
-  if (!canCopy) {
+  // If the user already copied this source document in the current session,
+  // allow loading this page for back-navigation even when current limits block new copies.
+  const hasCopiedDraftContext = Object.keys(session.data).some((key) => {
+    if (!key.startsWith("documentNumber-")) {
+      return false;
+    }
+
+    const newDocumentNumber = key.replace("documentNumber-", "");
+    const copiedFromDocumentNumber = session.get(key);
+    const copyAcknowledgedValue = session.get(`copyDocumentAcknowledged-${newDocumentNumber}`);
+    const copyAcknowledged =
+      copyAcknowledgedValue === "Y" ||
+      copyAcknowledgedValue === "on" ||
+      copyAcknowledgedValue === true ||
+      copyAcknowledgedValue === "true";
+
+    return copiedFromDocumentNumber === documentNumber && copyAcknowledged;
+  });
+
+  if (!canCopy && !hasCopiedDraftContext) {
     return redirect("/forbidden");
   }
 
-  const session = await getSessionFromRequest(request);
   const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
@@ -185,7 +204,7 @@ export const copyDocumentLoader = async (request: Request, params: Params) => {
 };
 
 export const copyDocumentAction = async (request: Request, params: Params): Promise<Response | ErrorResponse> => {
-  const { documentNumber } = params;
+  const { documentNumber = "" } = params;
   const bearerToken = await getBearerTokenForRequest(request);
   const session = await getSessionFromRequest(request);
   const form = await request.formData();
