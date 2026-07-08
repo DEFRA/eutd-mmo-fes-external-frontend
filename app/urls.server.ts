@@ -117,7 +117,9 @@ export const searchVesselName = (searchTerm: string, date: string) =>
 export const generatePdf = (journey: Journey) => `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/${journey}/generatePdf`;
 
 export const getTransportDetailsUrl = (journey: Journey, arrival?: boolean) =>
-  `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/transport/details/${journey}?arrival=${arrival}`;
+  arrival !== undefined
+    ? `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/transport/details/${journey}?arrival=${arrival}`
+    : `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/transport/details/${journey}`;
 
 export const getTransportByIdUrl = (transportId: string, subResource?: string) =>
   `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/catch-certificate/transport/${transportId}${subResource ? "/" + subResource : ""}`;
