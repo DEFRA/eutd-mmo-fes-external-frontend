@@ -17,8 +17,13 @@ export default {
   // callback receives a cross-origin POST from Azure AD.
   // allowedActionOrigins explicitly permits these IdP origins while keeping
   // CSRF protection active for all other routes.
+  //
+  // NOTE: values must be host-only patterns (no scheme). React Router extracts
+  // `new URL(origin).host` before matching, so including "https://" breaks the
+  // comparison. Use standalone "**" as the leading wildcard segment, not "**cui".
   allowedActionOrigins: [
-    "https://**cui.defra.gov.uk", // Defra CUI identity platform (all envs)
-    "https://login.microsoftonline.com", // Azure AD (admin login)
+    "**.cui.defra.gov.uk", // Defra CUI custom domain (SND/TST/PRE/PROD)
+    "**.b2clogin.com", // Azure B2C default domain (used when no custom domain)
+    "login.microsoftonline.com", // Azure AD (admin login callback)
   ],
 } satisfies Config;
