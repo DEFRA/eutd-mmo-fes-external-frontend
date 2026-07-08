@@ -200,6 +200,10 @@ describe("Landings entry page: notification messages", () => {
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", "/create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate");
+
+    cy.findByRole("link", { name: "Back" }).click();
+    cy.url().should("include", "/copy-this-catch-certificate");
+    cy.url().should("not.include", "/forbidden");
   });
 
   it("should respect backUri query parameter when provided", () => {
