@@ -182,7 +182,10 @@ const handleContinueManualAddress = async (
     sub_building_name: formData.plantSubBuildingName,
     building_name: formData.plantBuildingName,
     street_name: formData.plantStreetName,
+    county: formData.plantCounty,
+    country: formData.plantCountry,
     city: formData.plantTownCity,
+    postCode: formData.plantPostcode,
   };
 
   formData["plantAddressOne"] = getAddressOne(lookUpAddress) ?? "";
