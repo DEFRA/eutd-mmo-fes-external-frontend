@@ -1,4 +1,5 @@
 import { rest } from "msw";
+import moment from "moment";
 import {
   GET_PROCESSING_STATEMENT,
   mockGetAllDocumentsUrl,
@@ -12,9 +13,36 @@ import psDraft from "@/fixtures/dashboardApi/psDrafts.json";
 import PSAddHealthCertificateError from "@/fixtures/processingStatementApi/processingStatementAddHealthCertificateError.json";
 import processingStatementNoCertificateDate from "@/fixtures/processingStatementApi/processingStatementCatchWithMultipleUkType.json";
 
+const healthCertificateNumberPattern = /^\d{2}\/\d\/\d{6}$/;
+
+const isValidHealthCertificateDate = (date?: string) => {
+  if (!date) {
+    return false;
+  }
+
+  const parsedDate = moment(date, ["DD/MM/YYYY", "DD/M/YYYY", "D/MM/YYYY", "D/M/YYYY"], true);
+  return parsedDate.isValid() && parsedDate.year() > 0;
+};
+
 const addPSHealthCertificateHandler: ITestHandler = {
   [TestCaseId.PSAddHealthCertificate]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), async (req, res, ctx) => {
+      const body = (await req.json()) as { healthCertificateNumber?: string; healthCertificateDate?: string };
+      const errors: Record<string, string> = {};
+
+      if (!healthCertificateNumberPattern.test(body.healthCertificateNumber ?? "")) {
+        errors.healthCertificateNumber = "psAddHealthCertificateErrorFormatHealthCertificateNumber";
+      }
+
+      if (!body.healthCertificateDate) {
+        errors.healthCertificateDate = "psAddHealthCertificateErrorHealthCertificateDate";
+      } else if (!isValidHealthCertificateDate(body.healthCertificateDate)) {
+        errors.healthCertificateDate = "psAddHealthCertificateErrorRealDateHealthCertificateDate";
+      }
+
+      return res(ctx.json(Object.keys(errors).length > 0 ? { ...processingStatement, errors } : processingStatement));
+    }),
   ],
   [TestCaseId.PSAddHealthCertificateHappyPath]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(empty))),
