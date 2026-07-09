@@ -1921,6 +1921,32 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
     );
   });
 
+  it("should display an invalid characters error when commodity code contains non-numeric characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsSpeciesCommodityCodeInvalidCharactersError,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+    cy.get("#catches-0-speciesCommodityCode").type("@@@@");
+    cy.get("#addProductDetails").click();
+
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-error-summary").should("contain.text", "Enter a valid commodity code");
+    cy.get("#catches-0-speciesCommodityCode-error").should("contain.text", "Enter a valid commodity code");
+  });
+
+  it("should link the error summary item to the commodity code input when commodity code contains invalid characters", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsSpeciesCommodityCodeInvalidCharactersError,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+    cy.get("#catches-0-speciesCommodityCode").type("@@@@");
+    cy.get("#addProductDetails").click();
+
+    cy.contains("a", "Enter a valid commodity code").should("have.attr", "href", "#catches-0-speciesCommodityCode");
+  });
+
   it("should accept a valid commodity code without errors", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
