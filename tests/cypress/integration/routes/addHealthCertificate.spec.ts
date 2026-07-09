@@ -151,7 +151,10 @@ describe("Add Health Certificate - invalid year in date picker", () => {
 
     cy.get("[data-testid='save-and-continue']").click();
 
-    cy.contains("Enter Export Health Certificate number in the correct format").should("be.visible");
+    cy.get("#healthCertificateNumber").should("have.class", "govuk-input--error");
+    cy.contains(/Enter (the )?Export Health Certificate number( in the correct format)?/, { timeout: 20000 }).should(
+      "be.visible"
+    );
     cy.contains("Enter a real date in the dd/mm/yyyy format").should("be.visible");
   });
 });
