@@ -845,8 +845,6 @@ const AddCatchDetailsIndex = () => {
                   "aria-describedby": errors?.[ccCommodityCodeKey]
                     ? `hint-catches-${catchIndex}-speciesCommodityCode ${ccCommodityCodeKey}-error`
                     : `hint-catches-${catchIndex}-speciesCommodityCode`,
-                  inputMode: "numeric",
-                  pattern: "[0-9]*",
                 }}
                 labelProps={{ htmlFor: `catches-${catchIndex}-speciesCommodityCode` }}
                 errorProps={{
