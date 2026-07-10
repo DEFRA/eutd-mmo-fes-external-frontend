@@ -856,10 +856,13 @@ describe("PS: Add catch details - Species Code Validation", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-species").type("COD");
-    cy.get("#catches-0-species").should("be.visible");
-    cy.get("#catches-0-species").invoke("val", "Atlantic");
-    cy.get("#catches-0-species").should("have.value", "Atlantic");
+    cy.get("#catches-0-species").should("be.visible").and("be.enabled").type("COD");
+    cy.get("#catches-0-species").should("be.visible").and("be.enabled");
+
+    cy.get("#catches-0-species").type("{selectall}{backspace}");
+    cy.get("#catches-0-species").should("be.visible").type("Atlantic");
+    cy.get("#catches-0-species").should("contain.value", "Atlantic");
+
     cy.get("body").then(($body) => {
       if ($body.find(".autocomplete__menu").length > 0 || $body.find('[role="listbox"]').length > 0) {
         cy.log("Autocomplete suggestions found");
