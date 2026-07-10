@@ -1280,10 +1280,8 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     cy.get("#addProductDetails").click();
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
     cy.get("#yourproducts tbody tr").should("have.length", 1);
-    cy.get("#catches-0-species").should("be.visible").and("not.be.disabled").clear({ force: true });
-    cy.get("#catches-0-species").should("be.visible").and("not.be.disabled").type("European seabass (BSS)", {
-      force: true,
-    });
+    cy.get("#catches-0-species").should("be.visible").and("not.be.disabled").clear();
+    cy.get("#catches-0-species").should("be.visible").and("not.be.disabled").type("European seabass (BSS)");
     cy.get("#catches-0-catchCertificateNumber").clear();
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-654321");
     cy.get("#catches-0-totalWeightLanded").clear();
@@ -1369,15 +1367,11 @@ describe("PS: Add catch details - Remove Functionality and Count Updates", () =>
     cy.get("#catches-0-species").should("be.enabled");
 
     // Second catch - requery and fill species field
-    cy.get("#catches-0-species").should("be.visible").and("not.be.disabled").clear({ force: true });
-    cy.get("#catches-0-species").should("be.visible").and("not.be.disabled").type("Atlantic cod (COD)", {
-      force: true,
-    });
+    cy.get("#catches-0-species").should("be.visible").and("not.be.disabled").clear();
+    cy.get("#catches-0-species").should("be.visible").and("not.be.disabled").type("Atlantic cod (COD)");
     cy.get("#catches-0-species").should("be.visible");
-    cy.get("#catches-0-catchCertificateNumber").should("not.be.disabled").clear({ force: true });
-    cy.get("#catches-0-catchCertificateNumber").should("not.be.disabled").type("GBR-2022-CC-222222", {
-      force: true,
-    });
+    cy.get("#catches-0-catchCertificateNumber").should("not.be.disabled").clear();
+    cy.get("#catches-0-catchCertificateNumber").should("not.be.disabled").type("GBR-2022-CC-222222");
     cy.get("#catches-0-totalWeightLanded").clear().type("30");
     cy.get("#catches-0-exportWeightBeforeProcessing").clear().type("15");
     cy.get("#catches-0-exportWeightAfterProcessing").clear().type("15");
@@ -1730,12 +1724,12 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.get('input[name="catchCertificateType"]').should("exist");
 
     // 1. First click UK to ensure we're starting from a known state
-    cy.get("#catches-0-catchCertificateType").check({ force: true });
+    cy.get('label[for="catches-0-catchCertificateType"]').should("be.visible").click();
     cy.get("#catches-0-catchCertificateType").should("be.checked");
     cy.get('input[name="issuingCountry"]').should("not.exist");
 
     // 2. Now select non-UK to show issuing country field
-    cy.get('input[name="catchCertificateType"][value="non_uk"]').check({ force: true });
+    cy.get('label[for="catchCertificateType-non_uk"]').should("be.visible").click();
     cy.get('input[name="catchCertificateType"][value="non_uk"]').should("exist");
     cy.get("body").then(($body) => {
       if ($body.find('input[name="issuingCountry"]').length > 0) {
@@ -1795,11 +1789,11 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.get('input[name="catchCertificateType"]').should("exist");
 
     // Fill out all required fields including issuing country
-    cy.get('input[name="catchCertificateType"][value="non_uk"]').check({ force: true });
+    cy.get('label[for="catchCertificateType-non_uk"]').should("be.visible").click();
     cy.get('input[name="catchCertificateType"][value="non_uk"]').should("exist");
     cy.get("body").then(($body) => {
       if ($body.find('input[name="issuingCountry"]').length > 0) {
-        cy.get('input[name="issuingCountry"]').should("be.visible").type("France{enter}", { force: true });
+        cy.get('input[name="issuingCountry"]').should("be.visible").and("not.be.disabled").type("France{enter}");
       } else {
         cy.log("Issuing country input not rendered in this fixture after selecting non-UK");
       }
