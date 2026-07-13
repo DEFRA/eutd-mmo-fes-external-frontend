@@ -167,13 +167,20 @@ describe("Catch certificate dashboard", () => {
       "GBR-2022-CC-916B8F1CC",
     ];
 
-    const slugs = ["progress", "progress", "progress", "check-your-information", "check-your-information"];
+    const backUri = encodeURIComponent("/create-catch-certificate/catch-certificates");
+    const expectedHrefs = [
+      `/create-catch-certificate/GBR-2022-CC-20C81C37F/progress?backUri=${backUri}`,
+      `/create-catch-certificate/GBR-2022-CC-C8DEDE7FD/progress?backUri=${backUri}`,
+      `/create-catch-certificate/GBR-2022-CC-89BA60007/progress?backUri=${backUri}`,
+      `/create-catch-certificate/GBR-2022-CC-4A7B0258F/check-your-information`,
+      `/create-catch-certificate/GBR-2022-CC-916B8F1CC/check-your-information`,
+    ];
 
     cy.get("a[id^='continue-']").each(($ele, index) => {
       cy.wrap($ele)
         .should("have.attr", "id", `continue-${documentNumbers[index]}`)
-        .contains("Continue")
-        .should("have.attr", "href", `/create-catch-certificate/${documentNumbers[index]}/${slugs[index]}`);
+        .should("contain.text", "Continue")
+        .should("have.attr", "href", expectedHrefs[index]);
     });
   });
 
