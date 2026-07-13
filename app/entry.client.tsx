@@ -11,6 +11,8 @@ import { initLanguages } from "./i18n";
 // Global BUILD_ID injected by Vite define config
 declare const __BUILD_ID__: string;
 
+const supportContactNumberMeta = document.querySelector('meta[name="support-contact-number"]')?.getAttribute("content");
+
 i18next
   .use(initReactI18next)
   .use(LanguageDetector)
@@ -20,7 +22,7 @@ i18next
     ns: getInitialNamespaces(),
     interpolation: {
       defaultVariables: {
-        contactNumber: (window as any).__contactNumber__ ?? "0330 159 1989",
+        contactNumber: supportContactNumberMeta ?? "0330 159 1989",
       },
     },
     backend: {

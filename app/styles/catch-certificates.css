@@ -1,0 +1,114 @@
+/* Sidebar component */
+.sidebar-divider {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.sidebar-section-header {
+  margin-bottom: 0;
+}
+
+.sidebar-govuk-link {
+  margin: 4px 0;
+  display: inline-block;
+}
+
+.sidebar-govuk-link--narrow {
+  margin: 2px 0;
+  display: inline-block;
+}
+
+/* DocumentProgressTable component */
+.document-progress-storage-notes {
+  white-space: pre-line;
+}
+
+/* catch-added route */
+.govuk-tag--block {
+  display: block;
+}
+
+/* Notification component */
+.notification-banner {
+  border: 0;
+  margin-bottom: 30px;
+}
+
+.notification-banner__heading {
+  color: white;
+  margin-bottom: 15px;
+}
+
+.notification-banner__message {
+  color: white;
+  margin-top: 0;
+}
+
+/* add-product-to-this-consignment route */
+.supporting-document-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.supporting-document-remove-btn {
+  position: relative;
+  top: 15px;
+}
+
+/* filterSearch component */
+.filter-search-row {
+  align-items: end;
+}
+
+.filter-search-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* faoAreaSelector component */
+.fao-area-select {
+  background-color: white;
+}
+
+/* weightInput component */
+.govuk-input__suffix--weight {
+  line-height: 1.4;
+}
+
+/* landingsTable component */
+.landings-table-cell--product {
+  width: 40%;
+}
+
+.landings-table-cell--landing {
+  width: 30%;
+}
+
+.landings-table-cell--weight {
+  width: 10%;
+  white-space: nowrap;
+}
+
+.landings-table-cell--action {
+  width: 20%;
+}
+
+/* landingDetailsSummary component */
+.govuk-summary-list__value--no-border {
+  border-bottom: none;
+}
+
+/* upload-file route */
+.upload-row--error {
+  color: #b10e1e;
+}
+
+.upload-cell--break-word {
+  overflow-wrap: break-word;
+}
+
+/* error boundary */
+.error-stack-pre {
+  overflow-y: scroll;
+}

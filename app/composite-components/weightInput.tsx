@@ -100,7 +100,7 @@ export const WeightInput = ({
           disabled={readOnly}
           key={errorID ?? weightKey}
         />
-        <div className="govuk-input__suffix" style={{ lineHeight: 1.4 }} aria-hidden="true">
+        <div className="govuk-input__suffix govuk-input__suffix--weight" aria-hidden="true">
           {unit}
         </div>
       </div>

@@ -137,13 +137,11 @@ describe("should display the notificationBanner", () => {
   it("first visit copy page then click on green button to navigate progress page", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSSDCopyAllData,
-      disableScripts: true,
     };
     cy.visit("create-processing-statement/GBR-2022-PS-F71D98A30/copy-this-processing-statement", {
       qs: { ...testParams },
     });
-    cy.wait(500);
-    cy.get("#voidOriginal").click();
+    cy.get('label[for="voidOriginal"]').should("be.visible").click();
     cy.get("#copyDocumentAcknowledged").check();
     cy.get('[data-testid="continue"]').click();
     cy.get(".govuk-notification-banner__heading").contains(

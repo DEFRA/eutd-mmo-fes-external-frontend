@@ -14,7 +14,7 @@ import {
   processingStatemenGenericLoader,
   validateCSRFToken,
 } from "~/.server";
-import { displayErrorMessages, getStrOrDefault, isValidDate, getTransformedError } from "~/helpers";
+import { displayErrorMessages, getStrOrDefault } from "~/helpers";
 import type { IErrorsTransformed } from "~/types";
 
 export const loader: LoaderFunction = async ({ request, params }) =>
@@ -56,36 +56,12 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const bearerToken = await getBearerTokenForRequest(request);
 
   const form = await request.formData();
-  const { _action, ...values } = Object.fromEntries(form);
+  const values = Object.fromEntries(form);
   const nextUri = form.get("nextUri") as string;
   const isDraft = form.get("_action") === "saveAsDraft";
 
   const isValid = await validateCSRFToken(request, form);
   if (isValid === false) return redirect("/forbidden");
-
-  const healthCertificateDateYear = values["healthCertificateDateYear"] as string;
-  const healthCertificateDateMonth = values["healthCertificateDateMonth"] as string;
-  const healthCertificateDateDay = values["healthCertificateDateDay"] as string;
-  const isoHealthCertificateDate = `${healthCertificateDateYear}-${healthCertificateDateMonth}-${healthCertificateDateDay}`;
-  const hasFullHealthCertificateDate =
-    !!healthCertificateDateYear && !!healthCertificateDateMonth && !!healthCertificateDateDay;
-  const healthCertificateDateIsValid = isValidDate(isoHealthCertificateDate, ["YYYY-M-D", "YYYY-MM-DD"]);
-  if (hasFullHealthCertificateDate && healthCertificateDateIsValid === false) {
-    return new Response(
-      JSON.stringify({
-        errors: getTransformedError([
-          {
-            key: "healthCertificateDate",
-            message: "psAddHealthCertificateErrorRealDateHealthCertificateDate",
-          },
-        ]),
-      }),
-      {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-  }
 
   const healthCertData = {
     healthCertificateNumber: values["healthCertificateNumber"] as string,
