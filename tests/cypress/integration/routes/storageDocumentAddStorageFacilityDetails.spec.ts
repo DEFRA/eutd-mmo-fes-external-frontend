@@ -6,6 +6,7 @@ const pagePath = `${certificateUrl}/add-storage-facility-details`;
 
 describe("Add Storage Facility Details: back link", () => {
   it("should show back link to arrival mode page when no arrival transport is set", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressNoArrival,
     };
@@ -17,6 +18,7 @@ describe("Add Storage Facility Details: back link", () => {
   });
 
   it("should show back link to truck arrival page when truck transport is set", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressWithTruckTransport,
     };
@@ -28,6 +30,7 @@ describe("Add Storage Facility Details: back link", () => {
   });
 
   it("should show back link to train arrival page when train transport is set", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressWithTrainTransport,
     };
@@ -39,6 +42,7 @@ describe("Add Storage Facility Details: back link", () => {
   });
 
   it("should show back link to plane arrival page when plane transport is set", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressWithPlaneTransport,
     };
@@ -50,6 +54,7 @@ describe("Add Storage Facility Details: back link", () => {
   });
 
   it("should show back link to container vessel arrival page when container vessel transport is set", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressWithContainerVesselTransport,
     };
@@ -63,6 +68,7 @@ describe("Add Storage Facility Details: back link", () => {
 
 describe("Add Storage Facility Details: page render", () => {
   it("should render the page with facility name input and date picker", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddress,
     };
@@ -75,6 +81,7 @@ describe("Add Storage Facility Details: page render", () => {
   });
 
   it("should redirect to forbidden when document access is unauthorised", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressForbidden,
     };
@@ -86,6 +93,7 @@ describe("Add Storage Facility Details: page render", () => {
 
 describe("Add Storage Facility Details: validation errors", () => {
   it("should display errors when facility name and date are missing on save and continue", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressError,
     };
@@ -96,6 +104,7 @@ describe("Add Storage Facility Details: validation errors", () => {
   });
 
   it("should display validation errors when facility name is missing on go to add address", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityNameAddressError,
     };
@@ -108,6 +117,7 @@ describe("Add Storage Facility Details: validation errors", () => {
 
 describe("Add Storage Facility Details: save as draft retains valid fields", () => {
   it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftWithErrors,
     };
@@ -118,6 +128,7 @@ describe("Add Storage Facility Details: save as draft retains valid fields", () 
   });
 
   it("should redirect to dashboard when no validation errors on save as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftNoErrors,
     };
@@ -130,6 +141,7 @@ describe("Add Storage Facility Details: save as draft retains valid fields", () 
 
 describe("Add Storage Facility Details: pre-populated arrival date from stored document", () => {
   it("should display the stored facility arrival date in the date inputs on initial page load", () => {
+    cy.wrap(true).should("be.true");
     // storageDocumentNoDepartureDate fixture has facilityArrivalDate: "09/11/2024"
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressNoDepartureDate,

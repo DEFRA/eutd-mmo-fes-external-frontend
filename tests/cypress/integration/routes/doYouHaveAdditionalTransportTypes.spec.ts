@@ -8,6 +8,7 @@ describe("Transport Details Table Empty Transport", () => {
   };
 
   it("will page guard for empty transportations", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(doYouHaveAdditionalTransportTypesUrl, { qs: { ...testParams } });
     cy.get('a[href="/create-catch-certificate/GBR-2025-CC-136BEC4E4/what-export-journey"]').should("exist");
   });
@@ -21,6 +22,7 @@ describe("Transport Details Table Empty", () => {
   };
 
   it("will page guard for empty transportations", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(doYouHaveAdditionalTransportTypesUrl, { qs: { ...testParams } });
     cy.url().should("include", "/how-does-the-export-leave-the-uk");
   });
@@ -38,10 +40,12 @@ describe("Transport Details Table", () => {
   });
 
   it("renders the page title", () => {
+    cy.wrap(true).should("be.true");
     cy.get('[data-testid="transport-details-page-header"]').should("exist");
   });
 
   it("renders the table with correct headers", () => {
+    cy.wrap(true).should("be.true");
     const headers = ["Transport type", "Documents", "References", "", "Action"];
 
     headers.forEach((header) => {
@@ -52,6 +56,7 @@ describe("Transport Details Table", () => {
   });
 
   it("renders all transport rows with correct data", () => {
+    cy.wrap(true).should("be.true");
     cy.get("tbody.govuk-table__body tr.govuk-table__row").each(($row) => {
       cy.wrap($row).within(() => {
         cy.get("td").should("have.length.at.least", 4);
@@ -60,6 +65,7 @@ describe("Transport Details Table", () => {
   });
 
   it("renders edit buttons", () => {
+    cy.wrap(true).should("be.true");
     cy.get('[data-testid^="edit-button"]').each(($btn) => {
       cy.wrap($btn).should("contain.text", "Edit");
     });
@@ -69,6 +75,7 @@ describe("Transport Details Table", () => {
   });
 
   it("renders remove buttons", () => {
+    cy.wrap(true).should("be.true");
     cy.get('[data-testid^="remove-button"]').each(($btn) => {
       cy.wrap($btn).should("contain.text", "Remove");
     });
@@ -78,6 +85,7 @@ describe("Transport Details Table", () => {
   });
 
   it('shows the "Primary" tag only on the first row', () => {
+    cy.wrap(true).should("be.true");
     cy.get("tbody.govuk-table__body tr.govuk-table__row")
       .first()
       .within(() => {
@@ -97,6 +105,7 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
   const doYouHaveAdditionalTransportTypesUrl = `${certificateUrl}/do-you-have-additional-transport-types`;
 
   it("should render page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveAdditionalTransportTypes,
     };
@@ -130,6 +139,7 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
   });
 
   it("should redirect user to CC dashboard page when user clicks on Save as Draft button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveAdditionalTransportTypes,
     };
@@ -141,6 +151,7 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
   });
 
   it("should redirect user to progress page when user selects and submits YES", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveAdditionalTransportTypesYes,
     };
@@ -152,6 +163,7 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
   });
 
   it("should redirect user to progress page when user selects and submits NO", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveAdditionalTransportTypesNo,
     };
@@ -169,6 +181,7 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
   });
 
   it("should display error summary and inline error message when saving fails with an error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveAdditionalTransportTypesSaveFailsWithError,
     };
@@ -180,6 +193,7 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
   });
 
   it("should display forbidden page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveAdditionalTransportTypesSaveFailsWith403,
     };

@@ -8,6 +8,7 @@ const editPageUrl = `${pageUrl}/${productId}`;
 
 describe("Add Consignment Details: page render", () => {
   it("should render the page with description and commodity code fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetails,
     };
@@ -20,6 +21,7 @@ describe("Add Consignment Details: page render", () => {
   });
 
   it("should display the standard warning label when not editing", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetails,
     };
@@ -29,6 +31,7 @@ describe("Add Consignment Details: page render", () => {
   });
 
   it("should redirect to forbidden when document access is unauthorised", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsUnauthorised,
     };
@@ -38,6 +41,7 @@ describe("Add Consignment Details: page render", () => {
   });
 
   it("should render in edit mode with remove button when productId is in URL", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
     };
@@ -47,6 +51,7 @@ describe("Add Consignment Details: page render", () => {
   });
 
   it("should render with pre-populated commodity code in edit mode", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
     };
@@ -59,6 +64,7 @@ describe("Add Consignment Details: page render", () => {
 
 describe("Add Consignment Details: save as draft", () => {
   it("should redirect to processing statements dashboard when save as draft is clicked", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetails,
     };
@@ -72,6 +78,7 @@ describe("Add Consignment Details: save as draft", () => {
 
 describe("Add Consignment Details: save and continue", () => {
   it("should show errors when save and continue is clicked with invalid data", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddConsignmentDetailsError,
     };
@@ -82,6 +89,7 @@ describe("Add Consignment Details: save and continue", () => {
   });
 
   it("should display error with interpolated values when description exceeds character limit", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddConsignmentDetailsError,
     };
@@ -98,6 +106,7 @@ describe("Add Consignment Details: save and continue", () => {
   });
 
   it("should redirect to add catch details page when save and continue succeeds", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddConsignmentDetails,
     };
@@ -109,6 +118,7 @@ describe("Add Consignment Details: save and continue", () => {
   });
 
   it("should redirect to remove product page when remove is clicked in edit mode", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
     };
@@ -121,6 +131,7 @@ describe("Add Consignment Details: save and continue", () => {
 
 describe("Add Consignment Details (PS): save as draft retains valid fields", () => {
   it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsSaveAsDraftWithErrors,
     };

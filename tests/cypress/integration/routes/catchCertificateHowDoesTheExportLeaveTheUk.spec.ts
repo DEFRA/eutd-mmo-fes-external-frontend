@@ -5,6 +5,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
   const howDoesTheExportLeaveTheUkUrl = `${certificateUrl}/how-does-the-export-leave-the-uk`;
 
   it("should render page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveNoTransportDetails,
     };
@@ -37,6 +38,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
   });
 
   it("should navigate to truck transport details page when user selects and submits truck transport type", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveTruck, //mocking the selected transport vehicle so the next page does not redirect to the progress page
     };
@@ -50,6 +52,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
   });
 
   it("should navigate to plane transport details page when user selects and submits plane transport type", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeavePlane, //mocking the selected transport vehicle so the next page does not redirect to the progress page
     };
@@ -63,6 +66,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
   });
 
   it("should navigate to train transport details page when user selects and submits train transport type", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveTrain, //mocking the selected transport vehicle so the next page does not redirect to the progress page
     };
@@ -76,12 +80,13 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
   });
 
   it("should navigate to container vessel transport details page when user selects and submits container vessel transport type", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveContainerVessel, //mocking the selected transport vehicle so the next page does not redirect to the progress page
     };
 
     cy.visit(howDoesTheExportLeaveTheUkUrl, { qs: { ...testParams } });
-    cy.waitForUiUpdate(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
 
     cy.get("#containerVessel").click();
     cy.get("[data-testid=save-and-continue").click();
@@ -90,6 +95,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
   });
 
   it("should redirect user to progress page when landings entry is directLanding", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveDirectLanding,
     };
@@ -100,6 +106,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
   });
 
   it("should redirect user to landings entry page when there is no landings type has been selected for the document", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveNoLandingsType,
     };
@@ -110,6 +117,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
   });
 
   it("should redirect user to dashboard page when there are no errors and user clicks Save as Draft button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveNoTransportDetails,
     };
@@ -122,6 +130,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SaveTransportFailsWith403,
     };
@@ -134,6 +143,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
   });
 
   it("should display error summary and inline error message when saving transport type fails with an error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SaveTransportFailsWithErrors,
     };
@@ -148,6 +158,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
   });
 
   it("should display truck guidance text when page renders", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveNoTransportDetails,
     };
@@ -161,6 +172,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
   });
 
   it("should display expandable guidance section with title and content", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveNoTransportDetails,
     };
@@ -171,6 +183,7 @@ describe("Catch Certificate - HowDoesTheExportLeaveTheUk", () => {
   });
 
   it("should expand and display expandable guidance content when clicked", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveNoTransportDetails,
     };

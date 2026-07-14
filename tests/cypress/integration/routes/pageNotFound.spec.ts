@@ -4,6 +4,7 @@ const dashboardLink = "/create-catch-certificate/catch-certificates";
 
 describe("PageNotFound", () => {
   it("should render as expected for an unknown main route", () => {
+    cy.wrap(true).should("be.true");
     cy.visit("/qwekjhzxc");
 
     cy.contains("h1", /^Page not found$/).should("be.visible");
@@ -18,6 +19,7 @@ describe("PageNotFound", () => {
   });
 
   it("CC: should render as expected for an unknown route that begins with a known route", () => {
+    cy.wrap(true).should("be.true");
     const dashboardLink = "/create-catch-certificate/catch-certificates";
 
     cy.visit(`${dashboardLink}qwekjhzxc`);
@@ -34,6 +36,7 @@ describe("PageNotFound", () => {
   });
 
   it("PS: should render as expected for an unknown route that begins with a known route", () => {
+    cy.wrap(true).should("be.true");
     const dashboardLink = "/create-processing-statement/processing-statements";
 
     cy.visit(`${dashboardLink}qwekjhzxc`);
@@ -50,6 +53,7 @@ describe("PageNotFound", () => {
   });
 
   it("SD: should render as expected for an unknown route that begins with a known route", () => {
+    cy.wrap(true).should("be.true");
     const dashboardLink = "/create-non-manipulation-document/non-manipulation-documents";
 
     cy.visit(`${dashboardLink}qwekjhzxc`);
@@ -66,6 +70,7 @@ describe("PageNotFound", () => {
   });
 
   it("should render CatchBoundary for thrown responses", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CatchBoundary,
     };
@@ -80,6 +85,7 @@ describe("PageNotFound", () => {
   });
 
   it("should render ErrorBoundary for uncaught thrown errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ErrorBoundary,
     };

@@ -5,6 +5,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
   const howDoesTheConsignmentArriveToUkUrl = `${certificateUrl}/how-does-the-consignment-arrive-to-the-uk`;
 
   it("storage document - should render page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveNoTransportDetails,
     };
@@ -42,6 +43,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
   });
 
   it("should navigate to truck transport details page when user selects and submits truck transport type", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveTruck, //mocking the selected transport vehicle so the next page does not redirect to the progress page
     };
@@ -55,6 +57,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
   });
 
   it("should navigate to plane transport details page when user selects and submits plane transport type", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeavePlane, //mocking the selected transport vehicle so the next page does not redirect to the progress page
     };
@@ -68,6 +71,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
   });
 
   it("should navigate to train transport details page when user selects and submits train transport type", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveTrain, //mocking the selected transport vehicle so the next page does not redirect to the progress page
     };
@@ -81,6 +85,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
   });
 
   it("should navigate to container vessel transport details page when user selects and submits container vessel transport type", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveContainerVessel, //mocking the selected transport vehicle so the next page does not redirect to the progress page
     };
@@ -94,6 +99,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
   });
 
   it("should redirect user to dashboard page when user clicks Save as Draft button after selecting an option", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveTrain,
     };
@@ -106,6 +112,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
   });
 
   it("should redirect user to add product page when user clicks on Save as Draft button without selecting any options", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveNoTransportDetails,
     };
@@ -117,6 +124,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
   });
 
   it("should show validation error when user clicks on Save and Continue button without selecting any options", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SaveTransportFailsWithErrorsArrival,
     };

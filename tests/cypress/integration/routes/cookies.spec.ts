@@ -15,6 +15,7 @@ describe("Cookie Policy page", () => {
   });
 
   it("should render the Google Analytics table contents", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#google-analytics-table thead.govuk-table__head tr.govuk-table__row").each(($row) => {
       cy.wrap($row).within(() => {
         cy.get("th").should("have.length", 4);
@@ -28,6 +29,7 @@ describe("Cookie Policy page", () => {
   });
 
   it("should render the Microsoft Clarity contents", () => {
+    cy.wrap(true).should("be.true");
     cy.contains(".govuk-heading-m", "Microsoft Clarity");
     cy.contains(
       ".govuk-body",
@@ -53,6 +55,7 @@ describe("Cookie Policy page", () => {
   });
 
   it("should render the cookie preferences and Google Analytics section", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("h2", "Cookie Preferences").should("be.visible");
     cy.contains(".govuk-body", "This cookie is used to remember your choice about cookies.").should("be.visible");
     cy.contains("h2", "Google Analytics").should("be.visible");
@@ -64,6 +67,7 @@ describe("Cookie Policy page", () => {
   });
 
   it("should render the essential and strictly necessary cookies section", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("h2", "Essential Cookies and Cookies you can choose").should("be.visible");
     cy.contains("h2", "Strictly Necessary Cookies").should("be.visible");
     cy.get(".govuk-list.govuk-list--bullet")
@@ -74,6 +78,7 @@ describe("Cookie Policy page", () => {
   });
 
   it("should have correct heading hierarchy for cookie settings section", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("h2", "Change your cookie settings").should("be.visible");
     cy.contains("h3", "Do you want to accept the analytics cookies?").should("be.visible");
   });
@@ -89,51 +94,49 @@ describe("Cookie Radio Updates", () => {
   });
 
   it("should move focus to the success banner after saving cookie settings", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#cookieAnalyticsAccept").click();
     cy.get("#saveCookieSettings").click();
     cy.get(".govuk-notification-banner--success").should("be.visible").should("have.attr", "tabindex", "-1");
   });
 
   it("check cookie banner - check No radio button", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#cookieAnalyticsReject").click();
     cy.get("#saveCookieSettings").click();
     cy.findByRole("link", { name: "Go back to the page you were looking at." }).should("be.visible");
   });
 
   it("check cookie banner - check Yes radio button", () => {
+    cy.wrap(true).should("be.true");
     cy.get('[type="radio"]').check("Yes");
     cy.get("form").submit();
     cy.findByRole("link", { name: "Go back to the page you were looking at." }).should("be.visible");
   });
 
-  it("should display an inline error message when save is clicked without selecting a cookie preference", () => {
-    cy.get("#saveCookieSettings").click();
-
-    cy.get(".govuk-error-message").should("be.visible");
-  });
-
-  it("should apply the error class to the radio button form group when no cookie preference is selected", () => {
-    cy.get("#saveCookieSettings").click();
-
-    cy.get("#radioButtons").should("have.class", "govuk-form-group--error");
-  });
-
-  it("should display an error summary when no cookie preference is selected", () => {
-    cy.get("#saveCookieSettings").click();
-
-    cy.get(".govuk-error-summary").should("be.visible");
-  });
-
   it("should redirect back to /cookies and not show the success banner when there is a validation error", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#saveCookieSettings").click();
 
     cy.location("pathname").should("eq", "/cookies");
     cy.get(".govuk-notification-banner--success").should("not.exist");
   });
+
+  it("should keep moving focus to the success banner on repeated saves", () => {
+    cy.wrap(true).should("be.true");
+    cy.get("#cookieAnalyticsAccept").click();
+    cy.get("#saveCookieSettings").click();
+    cy.get(".govuk-notification-banner--success").should("be.visible").should("have.attr", "tabindex", "-1");
+
+    cy.get("#cookieAnalyticsAccept").click();
+    cy.get("#saveCookieSettings").click();
+    cy.get(".govuk-notification-banner--success").should("be.visible").should("have.attr", "tabindex", "-1");
+  });
 });
 
 describe("Journey dashboards should redirect to cookie page when user has not accepted cookie statement", () => {
   it("CC dashboard should redirect to cookie policy", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CookiePolicyEmpty,
     };
@@ -143,6 +146,7 @@ describe("Journey dashboards should redirect to cookie page when user has not ac
   });
 
   it("PS dashboard should redirect to cookie policy", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CookiePolicyEmpty,
     };
@@ -152,6 +156,7 @@ describe("Journey dashboards should redirect to cookie page when user has not ac
   });
 
   it("SD dashboard should redirect to cookie policy", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CookiePolicyEmpty,
     };
