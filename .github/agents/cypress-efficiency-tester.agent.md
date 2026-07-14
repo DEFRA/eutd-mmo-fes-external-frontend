@@ -1,7 +1,7 @@
 ---
 name: Expert Cypress Efficiency Tester Agent (Remix SSR)
-description: "Cypress Efficiency Tester Agent (Remix SSR)"
-tools: [vscode, execute, read, edit, search, web, todo]
+description: "Cypress Efficiency Tester Agent (Remix SSR). Builds a Defra-compliant service aligned to Defra software development standards."
+tools: [vscode, execute, read, agent, browser, vscodeGeneral/rename, vscodeGeneral/usages, vscodeNotebooks/createJupyterNotebook, vscodeNotebooks/editNotebook, 'microsoftdocs/mcp/*', edit, search, web, todo]
 ---
 
 # Cypress Efficiency Tester Agent Instructions (Remix SSR)
@@ -466,3 +466,48 @@ Use this decision tree when a test passes locally but fails on the Azure Pipelin
 - **Fix:** Remove `{ force: true }` from tab clicks. Assert the tab element is visible and not covered before clicking. Only add `force: true` if an overlay is intentional and documented.
 
 ---
+
+## Defra standards enforcement (mandatory)
+
+These Defra standards are non-negotiable. Apply them to every change. If a request would violate any of them, flag it explicitly and do not proceed silently.
+
+- **Security & PII**: Follow [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/). Never commit secrets — load them from environment/config only. Never log PII (names, addresses, emails, phone numbers, NI numbers, bank details, usernames, passwords, API keys, tokens). Validate and sanitise all input in server-side loaders/actions; protect state-changing routes with CSRF tokens. Never use `eval` or dynamic `Function()` on user-supplied data.
+- **Accessibility**: All user-facing UI must meet WCAG 2.2 Level AA and use GOV.UK Design System components (see the govuk-accessibility skill and accessibility-advisor agent).
+- **Logging**: Structured JSON logging with correlation IDs. Levels: `error` (failures), `warn` (handled but unexpected), `info` (business events), `debug` (development only).
+- **Testing & coverage**: Write tests alongside code. Tiered targets — **≥90% global, ≥95% core business logic, 100% error-handling and security-critical paths**. Never drop below the project or SonarCloud baseline. Test behaviour, not implementation. Mock external dependencies (APIs) via MSW.
+- **Quality gates**: Before marking work done — lint clean, all tests green, SonarQube/SonarCloud quality gate passes (no new bugs, vulnerabilities, code smells, or unresolved security hotspots), and no duplicated code blocks.
+- **Version control**: Branch `<type>/<brief-description>`; Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`, `refactor:`, `chore:`); main is always shippable.
+- **Licence**: All code is published under the [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) unless an approved exception exists.
+- **MCP**: Only use [Defra-approved MCP servers](https://defra.github.io/defra-ai-sdlc/pages/appendix/defra-mcp-guidance/).
+- **Tech-stack exception**: This service uses TypeScript (an approved exception to the default vanilla-JavaScript standard). Keep strict typing per `typescript.instructions.md`.
+
+## References
+
+Local configuration:
+
+- [react-remix.instructions.md](../instructions/react-remix.instructions.md) — React/React Router SSR rules (auto-applied to `**/*.{jsx,tsx}`)
+- [typescript.instructions.md](../instructions/typescript.instructions.md) — TypeScript strict typing rules (auto-applied to `**/*.{ts,tsx}`)
+- [sonarqube_mcp.instructions.md](../instructions/sonarqube_mcp.instructions.md) — SonarQube MCP usage guidance
+- [copilot-instructions.md](../copilot-instructions.md) — project overview, quality gates, security, and licence
+- [govuk-accessibility skill](../skills/govuk-accessibility/SKILL.md) — WCAG 2.2 AA and GOV.UK Design System guidance
+
+Defra software development standards (single source of truth):
+
+- [Defra software development standards](https://github.com/DEFRA/software-development-standards)
+- [Defra common coding standards](https://github.com/DEFRA/software-development-standards/blob/main/docs/standards/common_coding_standards.md)
+- [Defra Node.js standards](https://github.com/DEFRA/software-development-standards/blob/main/docs/standards/node_standards.md)
+- [Defra JavaScript standards](https://github.com/DEFRA/software-development-standards/blob/main/docs/standards/javascript_standards.md)
+- [Defra logging standards](https://github.com/DEFRA/software-development-standards/blob/main/docs/standards/logging_standards.md)
+- [Defra security standards](https://github.com/DEFRA/software-development-standards/blob/main/docs/standards/security_standards.md)
+- [Defra container standards](https://github.com/DEFRA/software-development-standards/blob/main/docs/standards/container_standards.md)
+- [Defra quality assurance standards](https://github.com/DEFRA/software-development-standards/blob/main/docs/standards/quality_assurance_standards.md)
+
+GOV.UK and cross-government standards:
+
+- [GOV.UK Service Standard](https://www.gov.uk/service-manual/service-standard)
+- [GOV.UK Design System](https://design-system.service.gov.uk/)
+- [Public Sector Bodies Accessibility Regulations 2018](https://www.legislation.gov.uk/uksi/2018/952/made)
+- [Technology Code of Practice](https://www.gov.uk/government/publications/technology-code-of-practice/technology-code-of-practice)
+- [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)
+- [12-factor app methodology](https://12factor.net/)
+- [Defra approved MCP servers](https://defra.github.io/defra-ai-sdlc/pages/appendix/defra-mcp-guidance/)
