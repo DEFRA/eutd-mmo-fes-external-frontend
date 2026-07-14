@@ -262,3 +262,59 @@ npm run debug              # Start with Node inspector
 ## Skills
 
 Use `/develop` for implementation, coding, and research tasks. Use `/unit-tests` for writing Cypress tests, MSW handlers, and coverage.
+
+## Defra standards and governance
+
+This service must comply with [Defra software development standards](https://github.com/DEFRA/software-development-standards) — the single source of truth. The rules below encode those standards; they do not replace them. When a standard changes, update this file.
+
+### Quality gates
+
+All code must pass these checks before merging:
+
+- Linter passes (`npm run lint`)
+- All tests pass via the instrumented Cypress flow (`npm run pre:test:start` → `npm run :test:start` → `npm run :test:all`)
+- Coverage ≥90% global (Statements/Branches/Functions/Lines), ≥95% core business logic, 100% error-handling and security-critical paths — no decrease from the SonarCloud baseline
+- SonarQube/SonarCloud quality gate passes; security hotspots reviewed and resolved
+- At least one approving review from another developer
+- No unresolved security vulnerabilities in dependencies
+
+### Accessibility
+
+- This is a public-facing government service — accessibility is mandatory, not optional
+- All user-facing UI must meet [WCAG 2.2 Level AA](https://www.w3.org/TR/WCAG22/) and use [GOV.UK Design System](https://design-system.service.gov.uk/) components — never build custom UI where a GOV.UK component exists
+- Provide complete bilingual support (English + Welsh); never leave a Welsh translation as a TODO
+- See the `govuk-accessibility` skill and `accessibility-advisor` agent, and comply with the [Public Sector Bodies Accessibility Regulations 2018](https://www.legislation.gov.uk/uksi/2018/952/made)
+
+### Security and PII
+
+- Follow [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)
+- Never commit secrets — load all configuration and credentials from environment variables, never `process.env` scattered through code
+- **Never log PII**: names, addresses, emails, phone numbers, NI numbers, bank details, usernames, passwords, API keys, tokens
+- Validate and sanitise all input in server-side loaders/actions; protect state-changing routes with CSRF tokens (`<SecureForm>` + `validateCSRFToken`)
+- Avoid `eval`, dynamic `Function()`, or executing user-supplied data; validate and normalise file paths
+- Keep server-only code in `.server.ts` files — never import it into client bundles
+
+### Dependencies
+
+- New dependencies must be widely used, actively maintained, and compatible with the current Node.js LTS
+- Do not introduce a second UI framework, styling system, or i18n library — reuse GOV.UK Frontend and i18next
+- Prefer existing GOV.UK components and native platform APIs over new dependencies
+
+### Logging
+
+- Structured logging with correlation IDs propagated end-to-end (client + server via Application Insights)
+- Levels: `error` (failures), `warn` (handled but unexpected), `info` (business events), `debug` (development only)
+
+### How Copilot should respond
+
+- Follow conventions already in the codebase — check existing patterns first
+- Prefer modifying existing files over creating new ones when the change fits naturally
+- Provide minimal diffs touching only the necessary files; do not refactor unrelated code
+- Always include or update tests for changed behaviour (MSW handler + Cypress spec)
+- If a request conflicts with these instructions — a discouraged library, a skipped test, a hard-coded secret, an inaccessible component, or a broken quality gate — flag it explicitly and do not proceed silently
+
+### Licence
+
+All code is published under the [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) unless an approved exception exists.
+
+<!-- STANDARDS NOTE: These instructions reflect Defra software development standards (https://github.com/DEFRA/software-development-standards). Review this file periodically or after any Defra standards update. -->
