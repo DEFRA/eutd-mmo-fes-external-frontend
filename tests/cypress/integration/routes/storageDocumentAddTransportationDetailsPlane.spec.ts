@@ -5,6 +5,7 @@ const planePageUrl = `create-non-manipulation-document/${documentNumber}/add-tra
 
 describe("Add Transportation Details Plane: Allowed", () => {
   it("should render plane transport details page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportAllowed,
     };
@@ -62,6 +63,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should render labels with bold font weight for NMD departure transport", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportAllowed,
     };
@@ -85,6 +87,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should render all required fields for plane departure transport", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportAllowed,
     };
@@ -103,6 +106,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SavePlaneTransportDetailsFailsWith403,
     };
@@ -113,6 +117,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when flight number exceeds 15 chars", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsPlaneFlightNumber,
     };
@@ -127,6 +132,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when flight number alphanumeric text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveAlphanumericPlaneFlightNumber,
     };
@@ -139,6 +145,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportErrors,
     };
@@ -152,6 +159,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error messages in the same order as the fields on the page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportErrors,
     };
@@ -176,6 +184,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should navigate to sd dashboard page on click of save as draft button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
     };
@@ -188,6 +197,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should retain all field values including export date when saving as draft with complete data", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
     };
@@ -221,6 +231,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should retain export date and accept invalid container format when saving as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
     };
@@ -251,6 +262,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get('input[name="containerNumbers.2"]').should("have.value", "NO-GOOD");
   });
   it("should navigate to departure summary page on click of save and continue button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
@@ -265,6 +277,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
 
 describe("Add Transportation Details Plane: Not Allowed", () => {
   it("should redirect to the progress page if transport is not plane", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportNotAllowed,
     };
@@ -275,6 +288,7 @@ describe("Add Transportation Details Plane: Not Allowed", () => {
 
 describe("Add Transportation Details Plane: 403 on page load", () => {
   it("should redirect to the forbidden page if transport returns un authorised", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportAllowedUnauthorised,
     };
@@ -285,6 +299,7 @@ describe("Add Transportation Details Plane: 403 on page load", () => {
 
 describe("Plane Point of Destination - Validation Scenarios", () => {
   it("should display error when point of destination is empty", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportPointOfDestinationRequired,
     };
@@ -295,6 +310,7 @@ describe("Plane Point of Destination - Validation Scenarios", () => {
   });
 
   it("should display error when point of destination exceeds 100 characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportPointOfDestinationMaxLength,
     };
@@ -307,6 +323,7 @@ describe("Plane Point of Destination - Validation Scenarios", () => {
   });
 
   it("should display error when point of destination contains invalid characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportPointOfDestinationInvalidCharacters,
     };

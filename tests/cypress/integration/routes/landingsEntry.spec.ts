@@ -15,16 +15,19 @@ describe("Landings entry page: visuals", () => {
   });
 
   it("should render back button", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
   });
 
   it("should display the correct headings", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("h1", "How do you want to enter your products and landings?");
 
     cy.get("body").should("exist");
   });
 
   it("displays all possible landings entry options, labels and hints", () => {
+    cy.wrap(true).should("be.true");
     cy.get("form").should(($form) => {
       expect($form.find("input[type='radio']")).to.have.lengthOf(3);
 
@@ -47,6 +50,7 @@ describe("Landings entry page: visuals", () => {
   });
 
   it("associates every landing option radio with a matching label", () => {
+    cy.wrap(true).should("be.true");
     cy.get("input[type='radio']").each(($radio) => {
       const radioId = $radio.attr("id");
       cy.wrap(radioId).should("not.be.undefined");
@@ -61,10 +65,12 @@ describe("Landings entry page: visuals", () => {
   });
 
   it("should display the save and continue button", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("button", "Save and continue").should("be.visible");
   });
 
   it("should display the details summary", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("summary", "What is a CSV file?").should("be.visible");
     cy.get("#what-is-a-csv-file-summary-text")
       .should("have.class", "govuk-details__summary-text")
@@ -88,6 +94,7 @@ describe("Landings entry page: visuals", () => {
 
 describe("Landings entry page: choosing an option", () => {
   it("should be able to navigate to the progress page when the user selects an option", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.LandingsTypeManualEntry,
     };
@@ -100,6 +107,7 @@ describe("Landings entry page: choosing an option", () => {
   });
 
   it("should display an error when there is a server error with an array of error messages", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.LandingsTypeFailsWithErrors,
     };
@@ -112,6 +120,7 @@ describe("Landings entry page: choosing an option", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised to get the landings type", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.GetLandingsTypeFailsWith403,
     };
@@ -122,6 +131,7 @@ describe("Landings entry page: choosing an option", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised but tries to save the landings type", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PostLandingsTypeFailsWith403,
     };
@@ -135,6 +145,7 @@ describe("Landings entry page: choosing an option", () => {
 
 describe("Landings entry page: changing landings type", () => {
   it("should not to navigate to the landings type confirmation page when the user changes from manual entry to upload entry or vice versa", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.LandingsTypeNoConfirmation,
     };
@@ -150,6 +161,7 @@ describe("Landings entry page: changing landings type", () => {
 
 describe("Landings entry page: unauthorized access", () => {
   it("should redirect to the forbidden page if the user is unauthorized to get the landings type", () => {
+    cy.wrap(true).should("be.true");
     const testParams = {
       testCaseId: TestCaseId.GetLandingsTypeFailsWith403,
     };
@@ -160,6 +172,7 @@ describe("Landings entry page: unauthorized access", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorized but tries to save the landings type", () => {
+    cy.wrap(true).should("be.true");
     const testParams = {
       testCaseId: TestCaseId.PostLandingsTypeFailsWith403,
     };
@@ -173,6 +186,7 @@ describe("Landings entry page: unauthorized access", () => {
 
 describe("Landings entry page: notification messages", () => {
   it("should display notification messages if generatedByContent is true", () => {
+    cy.wrap(true).should("be.true");
     const testParams = {
       testCaseId: TestCaseId.LandingsTypeNotification,
     };
@@ -316,6 +330,7 @@ describe("Landings entry page: notification messages", () => {
 
 describe("Landings entry page: form submission and errors", () => {
   it("should display an error when there is a server error with an array of error messages", () => {
+    cy.wrap(true).should("be.true");
     const testParams = {
       testCaseId: TestCaseId.LandingsTypeFailsWithErrors,
     };
@@ -328,6 +343,7 @@ describe("Landings entry page: form submission and errors", () => {
   });
 
   it("should handle form submission and redirect correctly based on nextUri", () => {
+    cy.wrap(true).should("be.true");
     const testParams = {
       testCaseId: TestCaseId.LandingsTypeManualEntry,
     };

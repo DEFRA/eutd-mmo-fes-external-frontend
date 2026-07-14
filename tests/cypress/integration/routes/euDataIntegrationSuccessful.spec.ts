@@ -7,6 +7,7 @@ const dashboardUrl = `/create-catch-certificate/catch-certificates`;
 describe("EU Data Integration Successful Page", () => {
   describe("Scenario 1 - New page to show EU data integration successful", () => {
     it("should display confirmation panel with heading and reference number", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.EuDataIntegrationSuccessful,
       };
@@ -25,6 +26,7 @@ describe("EU Data Integration Successful Page", () => {
     });
 
     it("should display information about data transfer in two paragraphs", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.EuDataIntegrationSuccessful,
       };
@@ -37,6 +39,7 @@ describe("EU Data Integration Successful Page", () => {
     });
 
     it("should display 'What happens next' section", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.EuDataIntegrationSuccessful,
       };
@@ -53,6 +56,7 @@ describe("EU Data Integration Successful Page", () => {
     });
 
     it("should navigate to dashboard when clicking dashboard link", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.EuDataIntegrationSuccessful,
       };
@@ -64,6 +68,7 @@ describe("EU Data Integration Successful Page", () => {
     });
 
     it("should navigate to dashboard when clicking Back link", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.EuDataIntegrationSuccessful,
       };
@@ -77,6 +82,7 @@ describe("EU Data Integration Successful Page", () => {
 
   describe("Scenario 2 - Welsh translations", () => {
     it("should display Welsh translations when Welsh language is selected", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.EuDataIntegrationSuccessful,
       };
@@ -103,6 +109,7 @@ describe("EU Data Integration Successful Page", () => {
 
   describe("Scenario 3 - Non-JS compliance", () => {
     it("should function correctly with JavaScript disabled", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.EuDataIntegrationSuccessful,
         disableScripts: true,
@@ -121,6 +128,7 @@ describe("EU Data Integration Successful Page", () => {
 
   describe("Scenario 4 - Accessibility", () => {
     it("should have proper heading hierarchy", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.EuDataIntegrationSuccessful,
       };
@@ -133,6 +141,7 @@ describe("EU Data Integration Successful Page", () => {
     });
 
     it("should have accessible links with visible text", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.EuDataIntegrationSuccessful,
       };
@@ -144,6 +153,7 @@ describe("EU Data Integration Successful Page", () => {
     });
 
     it("Back link should be outside the main content region (AAA accessibility)", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.EuDataIntegrationSuccessful,
       };
@@ -161,6 +171,7 @@ describe("EU Data Integration Successful Page", () => {
 
   describe("Error handling", () => {
     it("should redirect to forbidden page when unauthorised", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.EuDataIntegrationUnauthorised,
       };

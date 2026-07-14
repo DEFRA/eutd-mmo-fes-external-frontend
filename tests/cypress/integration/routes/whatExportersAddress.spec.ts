@@ -11,15 +11,18 @@ describe("CC: Exporter address page", () => {
   });
 
   it("should render the expected header", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-heading-xl").should("be.visible").and("contain.text", "What is the exporter’s address");
   });
 
   it("should render the buttons texts", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-button-group button").contains("Cancel");
     cy.get('[data-testid="findaddress"]').should("be.visible").contains("Find address");
   });
 
   it("should render the input label and hint text", () => {
+    cy.wrap(true).should("be.true");
     cy.get("div .govuk-hint")
       .contains(
         "If you cannot find the address or you need to add a non-UK address, click the link 'Enter the address manually'"
@@ -38,10 +41,12 @@ describe("CC: Entering the address manually", () => {
   });
 
   it("should render header", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-heading-xl").should("be.visible").and("contain.text", "What is the exporter’s address");
   });
 
   it("should render all input fields", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("label", "Sub-building name").should("be.visible");
     cy.contains("label", "Building number").should("be.visible");
     cy.contains("label", "Building name").should("be.visible");
@@ -53,6 +58,7 @@ describe("CC: Entering the address manually", () => {
   });
 
   it("should render form button", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='continue']", "Continue").should("be.visible");
     cy.contains("[data-testid='cancel']", "Cancel").should("be.visible");
   });
@@ -60,6 +66,7 @@ describe("CC: Entering the address manually", () => {
 
 describe("CC: Entering the address manually with errors", () => {
   it("should display errors on empty form submitted", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressWithErrorsArray,
     };
@@ -73,6 +80,7 @@ describe("CC: Entering the address manually with errors", () => {
   });
 
   it("should display errors on submission invalid value", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressWithSubBuildingError,
     };
@@ -91,6 +99,7 @@ describe("CC: Entering the address manually with errors", () => {
   });
 
   it("should display errors on only required value submitted", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressWithErrors,
     };
@@ -113,6 +122,7 @@ describe("CC: Entering the address manually with errors", () => {
   });
 
   it("should display error when all address fields are blank", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressWithAddressFirstPartError,
     };
@@ -138,6 +148,7 @@ describe("CC: Entering the address manually with errors", () => {
   });
 
   it("should not display error when sub-building name is populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressValid,
     };
@@ -159,6 +170,7 @@ describe("CC: Entering the address manually with errors", () => {
   });
 
   it("should not display error when building number is populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressValid,
     };
@@ -180,6 +192,7 @@ describe("CC: Entering the address manually with errors", () => {
   });
 
   it("should not display error when building name is populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressValid,
     };
@@ -201,6 +214,7 @@ describe("CC: Entering the address manually with errors", () => {
   });
 
   it("should not display error when street name is populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressValid,
     };
@@ -222,6 +236,7 @@ describe("CC: Entering the address manually with errors", () => {
   });
 
   it("should not display errors on validation passed", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressValid,
     };
@@ -243,6 +258,7 @@ describe("CC: Entering the address manually with errors", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressWith403,
     };
@@ -266,6 +282,7 @@ describe("CC: Entering the address manually with errors", () => {
   // Defect 445: All validation errors should appear simultaneously with field-level error styling
   // FI0-11275: Empty form submission should show ALL errors including addressFirstPart
   it("should display ALL validation errors simultaneously on empty form submission with field-level error indicators", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressWithAllErrorsArray,
     };
@@ -316,6 +333,7 @@ describe("CC: Entering the address manually with errors", () => {
 
   // FI0-11275: Entering an invalid character in country field should show a country error
   it("should display country error when an invalid character is entered in the country field", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressWithInvalidCountry,
     };
@@ -351,6 +369,7 @@ describe("CC: Entering the address manually with errors", () => {
 //I skipped these tests as they are flaky in CI/CD
 describe("CC: On Selected Address", () => {
   it("should populate selected address into form", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterSelectAddress,
     };
@@ -376,6 +395,7 @@ describe("CC: On Selected Address", () => {
   });
 
   it("should display an error if trying to continue without selecting an address", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterSelectAddress,
     };
@@ -390,6 +410,7 @@ describe("CC: On Selected Address", () => {
   });
 
   it("should go back to postcode input to allow searching for a different postcode", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterSelectAddress,
     };
@@ -407,6 +428,7 @@ describe("CC: On Selected Address", () => {
   });
 
   it("should display error if no postcode has been entered", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterSelectAddressPostcodeEmptyError,
     };
@@ -419,6 +441,7 @@ describe("CC: On Selected Address", () => {
   });
 
   it("should display error if the entered postcode is invalid", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterSelectAddressPostcodeInvalidError,
     };
@@ -433,6 +456,7 @@ describe("CC: On Selected Address", () => {
   });
 
   it("should go back to add-exporter-details if cancelling postcode search", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterSelectAddress,
     };

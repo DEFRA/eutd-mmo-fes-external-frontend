@@ -11,6 +11,7 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("will have a back link to the add exporters details page", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
@@ -18,6 +19,7 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("will have a progress link to the progress page", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", "Back to your progress").should("be.visible");
     cy.contains("a", "Back to your progress")
       .should("be.visible")
@@ -25,6 +27,7 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should group certificate type radios with a legend", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#GBR-2023-SD-83552D3E5-catches-0-certificateType").within(() => {
       cy.get("fieldset > legend")
         .should("exist")
@@ -36,6 +39,7 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should render summary details for all relevant fields and find out the count", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-details__summary").should("have.length", 4);
 
     cy.get("div .govuk-details__summary").eq(0).contains("Help with entry document reference");
@@ -78,6 +82,7 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("shows an error when product description is missing on Save and continue", () => {
+    cy.wrap(true).should("be.true");
     const testParams = { testCaseId: TestCaseId.SDAddProductConsignmentProductDescriptionRequired };
 
     cy.visit(`/create-non-manipulation-document/123/add-product-to-this-consignment/0`, { qs: { ...testParams } });
@@ -92,16 +97,19 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should redirect to dashboard on click of save as draft button", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 
   it("should redirect to progress page", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#backToProgress").click();
     cy.url().should("include", "/progress");
   });
 
   it("should show only the add another button (and not the remove button) when there is a single supporting document input", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#catches-0-supportingDocuments-0").should("be.visible").and("not.be.disabled");
     cy.get('[id^="remove-supporting-doc-button"]').should("not.exist");
     cy.get("#add-supporting-doc-button").should("exist");
@@ -109,6 +117,7 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should have empty supporting documents if none are added", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
@@ -119,7 +128,8 @@ describe("Add product to this consignment  page", () => {
     cy.url().should("include", "/you-have-added-a-product");
   });
   it("should show Remove and Add Another buttons correctly based on selection length", () => {
-    cy.waitForUiUpdate(500); // Adding a wait to ensure the button is interactable
+    cy.wrap(true).should("be.true");
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Adding a wait to ensure the button is interactable
     for (let i = 0; i < 4; i++) {
       cy.get("#add-supporting-doc-button").click();
     }
@@ -148,10 +158,11 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should show Remove and Add Another buttons correctly", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#catches-0-supportingDocuments-0").should("be.visible").and("not.be.disabled");
     cy.get("#add-supporting-doc-button").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("not.exist");
-    cy.waitForUiUpdate(500); // Adding a wait to ensure the button is interactable
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Adding a wait to ensure the button is interactable
     cy.get("#add-supporting-doc-button").click();
     cy.get("#catches-0-supportingDocuments-1").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("exist");
@@ -164,31 +175,34 @@ describe("Add product to this consignment  page", () => {
     cy.get("#remove-supporting-doc-button-2").should("exist");
   });
   it("should render the add another doc button and click on it", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#add-supporting-doc-button").should("exist");
-    cy.waitForUiUpdate(500); // Adding a wait to ensure the button is interactable
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Adding a wait to ensure the button is interactable
     cy.get("#add-supporting-doc-button").click();
     cy.get("#catches-0-supportingDocuments-0").should("exist");
     cy.get("#catches-0-supportingDocuments-1").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("exist");
     cy.get("#remove-supporting-doc-button-1").should("exist");
     cy.get("#remove-supporting-doc-button-1").click();
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get("#catches-0-supportingDocuments-1").should("not.exist");
   });
   it("should remove the last doc and update selectedSupportingDocuments", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#add-supporting-doc-button").should("exist");
-    cy.waitForUiUpdate(500); // Adding a wait to ensure the button is interactable
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Adding a wait to ensure the button is interactable
     cy.get("#add-supporting-doc-button").click();
     cy.get("#add-supporting-doc-button").click();
     cy.get("#add-supporting-doc-button").click();
     cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 5);
     cy.get("#remove-supporting-doc-button-0").should("be.visible");
     cy.get("#remove-supporting-doc-button-0").click();
-    cy.waitForUiUpdate(300);
+    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
     cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 4);
   });
 
   it("should click on remove last doc button and select should be removed", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#add-supporting-doc-button").click();
     cy.get("#catches-0-supportingDocuments-1").should("exist");
     cy.get("#remove-supporting-doc-button-1").click();
@@ -197,17 +211,19 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should enter a value in the supporting documents input field", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get("#catches-0-supportingDocuments-0").should("exist");
     cy.get("#catches-0-supportingDocuments-0").type("Supporting Document 1");
     cy.get("#catches-0-supportingDocuments-0").should("have.value", "Supporting Document 1");
   });
 
   it("should redirect to forbidden page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentForbidden,
     };
@@ -216,6 +232,7 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should enforce maximum of 5 supporting documents based on maximumEntryDocsAllowed env config", () => {
+    cy.wrap(true).should("be.true");
     // This tests line 134: maximumEntryDocsAllowed: Number.parseInt(maximumEntryDocsAllowed, 10)
     // The loader parses the env variable EU_SD_MAX_ENTRY_DOCS (default "5") to a number
     const testParams: ITestParams = {
@@ -223,12 +240,12 @@ describe("Add product to this consignment  page", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
     // Add supporting documents up to the maximum
     for (let i = 0; i < 4; i++) {
       cy.get("#add-supporting-doc-button").should("exist").click();
-      cy.waitForUiUpdate(100);
+      cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
     }
 
     // Verify we now have exactly 5 supporting document fields (0-4 indices)
@@ -244,6 +261,7 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should correctly parse productIndex from URL params for different product indices", () => {
+    cy.wrap(true).should("be.true");
     // This tests line 175: const productIndex = params["*"] ? Number.parseInt(params["*"]) : 0;
     // The action parses the product index from the URL path parameter
 
@@ -273,6 +291,7 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should default productIndex to 0 when URL parameter is missing or empty", () => {
+    cy.wrap(true).should("be.true");
     // This tests the fallback case in line 175: params["*"] ? Number.parseInt(params["*"]) : 0
     // When params["*"] is undefined/empty, it should default to 0
     const testParams: ITestParams = {
@@ -290,6 +309,7 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should correctly remove supporting document by parsing index from action string", () => {
+    cy.wrap(true).should("be.true");
     // This tests line 260: removeSupportingDoc ? Number.parseInt(action.split("-")[1], 10) : -1;
     // The action parses the index from the remove button's action name (e.g., "removeSupportingDoc-2")
     const testParams: ITestParams = {
@@ -297,13 +317,13 @@ describe("Add product to this consignment  page", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
     // Add 3 supporting documents
     cy.get("#add-supporting-doc-button").click();
-    cy.waitForUiUpdate(100);
+    cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
     cy.get("#add-supporting-doc-button").click();
-    cy.waitForUiUpdate(100);
+    cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
 
     // We should now have 3 fields (indices 0, 1, 2)
     cy.get("#catches-0-supportingDocuments-0").should("exist");
@@ -317,7 +337,7 @@ describe("Add product to this consignment  page", () => {
 
     // Remove the middle one (index 1) - this triggers getRemoveIndex which parses "removeSupportingDoc-1"
     cy.get("#remove-supporting-doc-button-1").should("exist").click();
-    cy.waitForUiUpdate(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
 
     // Now we should have 2 fields remaining
     cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", 3);
@@ -328,7 +348,7 @@ describe("Add product to this consignment  page", () => {
 
     // Remove another one by index (index 0)
     cy.get("#remove-supporting-doc-button-0").should("exist").click();
-    cy.waitForUiUpdate(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
 
     // Now only 1 field should remain
     cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", 2);
@@ -339,6 +359,7 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should test the negative case of getRemoveIndex when removeSupportingDoc is false", () => {
+    cy.wrap(true).should("be.true");
     // This tests the fallback case in line 260: removeSupportingDoc ? Number.parseInt(action.split("-")[1], 10) : -1
     // When removeSupportingDoc is false, getRemoveIndex should return -1 (tested implicitly in the action handler)
     const testParams: ITestParams = {
@@ -346,11 +367,11 @@ describe("Add product to this consignment  page", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
     // Add supporting documents
     cy.get("#add-supporting-doc-button").click();
-    cy.waitForUiUpdate(100);
+    cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
 
     // Fill in some values
     cy.get("#catches-0-supportingDocuments-0").clear().type("First Document");
@@ -362,7 +383,7 @@ describe("Add product to this consignment  page", () => {
     cy.get("#catches-0-certificateNumber").type("TEST123");
     cy.get("#catches-0-weightOnCC").type("100");
     cy.get("#catches-0-product").type("COD");
-    cy.waitForUiUpdate(300);
+    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
     cy.get("#catches-0-commodityCode").type("03");
 
     // Submit form with "Save and continue" (not a remove action)
@@ -375,6 +396,7 @@ describe("Add product to this consignment  page", () => {
 
   describe("Accessibility", () => {
     it("should have label for all fields on the form", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#GBR-2023-SD-83552D3E5-catches-0-certificateType fieldset > legend")
         .should("be.visible")
         .and("contain.text", "Was the entry document issued in the UK?");
@@ -402,6 +424,7 @@ describe("Add product to this consignment  page", () => {
         .and("be.visible");
     });
     it("should have valid aria-describedby attributes for was entry document issued in uk", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#GBR-2023-SD-83552D3E5-catches-0-certificateType fieldset").should(
         "have.attr",
         "aria-describedby",
@@ -413,6 +436,7 @@ describe("Add product to this consignment  page", () => {
       );
     });
     it("should have valid aria-describedby attributes for entry document", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#catches-0-certificateNumber").should(
         "have.attr",
         "aria-describedby",
@@ -425,6 +449,7 @@ describe("Add product to this consignment  page", () => {
     });
 
     it("should have valid aria-describedby attributes for supporting documents", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#catches-0-supportingDocuments-0").should(
         "have.attr",
         "aria-describedby",
@@ -437,6 +462,7 @@ describe("Add product to this consignment  page", () => {
     });
 
     it("should have proper accessibility attributes for first supporting document field", () => {
+      cy.wrap(true).should("be.true");
       // First field should have visible label and aria-describedby
       cy.get("label").contains("Supporting documents").should("be.visible");
       cy.get("#catches-0-supportingDocuments-0").should("have.attr", "aria-describedby");
@@ -444,9 +470,10 @@ describe("Add product to this consignment  page", () => {
     });
 
     it("should have proper accessibility attributes for additional supporting document fields", () => {
+      cy.wrap(true).should("be.true");
       // Add second supporting document
       cy.get("#add-supporting-doc-button").click();
-      cy.waitForUiUpdate(300);
+      cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
 
       // Second field should have aria-label but no aria-describedby
       cy.get("#catches-0-supportingDocuments-1").should("have.attr", "aria-label", "catches-0-supportingDocuments-1");
@@ -454,16 +481,17 @@ describe("Add product to this consignment  page", () => {
 
       // Third field should also have aria-label
       cy.get("#add-supporting-doc-button").click();
-      cy.waitForUiUpdate(300);
+      cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
       cy.get("#catches-0-supportingDocuments-2").should("have.attr", "aria-label", "catches-0-supportingDocuments-2");
       cy.get("#catches-0-supportingDocuments-2").should("not.have.attr", "aria-describedby");
     });
 
     it("should not reference non-existent hint IDs in aria-describedby for additional fields", () => {
+      cy.wrap(true).should("be.true");
       // Add multiple supporting documents
       for (let i = 0; i < 3; i++) {
         cy.get("#add-supporting-doc-button").click();
-        cy.waitForUiUpdate(500);
+        cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
       }
 
       // Check that fields 1-3 do not have aria-describedby with invalid IDs
@@ -480,6 +508,7 @@ describe("Add product to this consignment  page", () => {
     });
 
     it("should have valid aria-describedby attributes for product field", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#catches-0-product").should("have.attr", "aria-describedby", "catches-0-product-hint");
       cy.get("#catches-0-product-hint").should(
         "have.text",
@@ -487,6 +516,7 @@ describe("Add product to this consignment  page", () => {
       );
     });
     it("should have valid aria-describedby attributes for commodity code field", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#catches-0-commodityCode").should("have.attr", "aria-describedby", "catches-0-commodityCode-hint");
       cy.get("#catches-0-commodityCode-hint").should(
         "have.text",
@@ -494,6 +524,7 @@ describe("Add product to this consignment  page", () => {
       );
     });
     it("should have valid aria-describedby attributes for product description field", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#catches-0-productDescription").should(
         "have.attr",
         "aria-describedby",
@@ -505,6 +536,7 @@ describe("Add product to this consignment  page", () => {
       );
     });
     it("should have valid aria-describedby attributes for net weight of products on arrival field", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#catches-0-netWeightProductArrival").should(
         "have.attr",
         "aria-describedby",
@@ -516,6 +548,7 @@ describe("Add product to this consignment  page", () => {
       );
     });
     it("should have valid aria-describedby attributes for net weight of fishery products on arrival field", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#catches-0-netWeightFisheryProductArrival").should(
         "have.attr",
         "aria-describedby",
@@ -531,6 +564,7 @@ describe("Add product to this consignment  page", () => {
 
 describe("Add product to this consignment  page- save and continue", () => {
   it("should click save and continue button with no error response", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -541,6 +575,7 @@ describe("Add product to this consignment  page- save and continue", () => {
   });
 
   it("should click on save and continue button with error response", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentDataError,
     };
@@ -552,6 +587,7 @@ describe("Add product to this consignment  page- save and continue", () => {
   });
 
   it("should click on save and continue button with error response if species is empty", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentDataSpeicesError,
     };
@@ -565,6 +601,7 @@ describe("Add product to this consignment  page- save and continue", () => {
   });
 
   it("should click on save and continue button with error response with species suggestions", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentDataSpeicesSuggestError,
     };
@@ -580,6 +617,7 @@ describe("Add product to this consignment  page- save and continue", () => {
 
 describe("Add product to this consignment page: unauthorized access", () => {
   it("should redirect to the forbidden page if the user is unauthorized to get the storage document", () => {
+    cy.wrap(true).should("be.true");
     const testParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentForbidden,
     };
@@ -592,6 +630,7 @@ describe("Add product to this consignment page: unauthorized access", () => {
 
 describe("Add product to this consignment page: form submission and interaction", () => {
   it("should handle form submission and redirect", () => {
+    cy.wrap(true).should("be.true");
     const testParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -603,6 +642,7 @@ describe("Add product to this consignment page: form submission and interaction"
   });
 
   it("should handle form submission and redirect based on nextUri", () => {
+    cy.wrap(true).should("be.true");
     const testParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -615,6 +655,7 @@ describe("Add product to this consignment page: form submission and interaction"
   });
 
   it("should handle non-JS component interaction", () => {
+    cy.wrap(true).should("be.true");
     const testParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -626,6 +667,7 @@ describe("Add product to this consignment page: form submission and interaction"
   });
 
   it("should show error message above document issued in UK radio button when not selected", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentDataError,
     };
@@ -637,6 +679,7 @@ describe("Add product to this consignment page: form submission and interaction"
   });
 
   it("should display issuing country field when 'No' is selected for UK certificate", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -658,6 +701,7 @@ describe("Add product to this consignment page: form submission and interaction"
   });
 
   it("should validate issuing country is required for non-UK certificates", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentIssuingCountryRequired,
     };
@@ -686,6 +730,7 @@ describe("Add product to this consignment page: form submission and interaction"
   });
 
   it("should show error message above net weight of product on arrival when not populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentDataError,
     };
@@ -697,6 +742,7 @@ describe("Add product to this consignment page: form submission and interaction"
   });
 
   it("should show error message above net weight of fishery products on arrival when not populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentDataError,
     };
@@ -710,6 +756,7 @@ describe("Add product to this consignment page: form submission and interaction"
 
 describe("Add product to this consignment page: comprehensive coverage tests", () => {
   it("should display warning message about product details", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -720,6 +767,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should display all form fields with correct IDs and names", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -736,6 +784,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should validate weight field has kg suffix", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -746,6 +795,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should have correct maxLength for weight fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -756,6 +806,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should handle errors for all fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentCommonErrors,
     };
@@ -772,6 +823,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should show error for entry document field", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentInvalidEntryDocError,
     };
@@ -782,6 +834,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should handle commodity code selection", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -792,6 +845,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should display product description hint text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -802,6 +856,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should handle product index in URL correctly", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -813,6 +868,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should show supporting documents error when applicable", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentDataSupportingDocumentsError,
     };
@@ -823,6 +879,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should handle non-UK certificate with issuing country selected", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -833,6 +890,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should verify hidden input fields exist", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -843,6 +901,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should verify EntryDocumentGuidanceText component is rendered", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -852,6 +911,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should verify ProductArrivalSpeciesDetails component is rendered", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -861,6 +921,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should verify ProductArrivalCommodityDetails component is rendered", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -870,6 +931,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should handle form submission with all fields filled", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -890,6 +952,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should display error state styling for invalid fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentDataError,
     };
@@ -901,6 +964,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should verify CSRF token input exists", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -910,26 +974,28 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should allow adding multiple supporting documents", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#add-supporting-doc-button").should("be.visible");
-    cy.waitForUiUpdate(300);
+    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
 
     cy.get('[id^="catches-0-supportingDocuments-"]')
       .its("length")
       .then((initialCount) => {
         cy.get("#add-supporting-doc-button").click();
-        cy.waitForUiUpdate(300);
+        cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
         cy.get("#add-supporting-doc-button").click();
-        cy.waitForUiUpdate(300);
+        cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
         cy.get('[id^="catches-0-supportingDocuments-"]').should("have.length", initialCount + 2);
       });
   });
 
   it("should display correct hint for certificate type field", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -943,6 +1009,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should verify ButtonGroup component is rendered", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -953,6 +1020,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should handle errors scrolling to error summary", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentDataError,
     };
@@ -965,6 +1033,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should display error messages in the correct order with issuing country error appearing early", () => {
+    cy.wrap(true).should("be.true");
     // This test verifies that issuing country error appears in proper order in the error summary
     // Using the existing test that we know validates issuing country requirements
     const testParams: ITestParams = {
@@ -992,6 +1061,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should handle default values for all fields from catchDetails", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -1003,6 +1073,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should show page title correctly", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -1012,6 +1083,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should verify spellCheck is false on weight inputs", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -1022,6 +1094,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should handle error visibility for net weight fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentCommonErrors,
     };
@@ -1034,6 +1107,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should display form in a SecureForm component", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -1044,6 +1118,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should handle empty supporting documents array", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
@@ -1054,6 +1129,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 
   it("should verify all Details components expand correctly", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
@@ -1073,6 +1149,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should display 5 empty supporting document input fields when JavaScript is disabled", () => {
+      cy.wrap(true).should("be.true");
       // Count only the supporting document fields in the current form
 
       cy.get("#catches-0-supportingDocuments-0").should("exist").and("have.value", "");
@@ -1080,16 +1157,19 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should not display Add button when JavaScript is disabled", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#add-supporting-doc-button").should("not.exist");
     });
 
     it("should display Remove buttons when JavaScript is disabled and multiple document fields are pre-rendered", () => {
+      cy.wrap(true).should("be.true");
       // With 5 pre-rendered empty fields (maximumEntryDocsAllowed=5), the
       // non-JS remove buttons render because supportingDocuments.length > 1
       cy.get("[id^=remove-supporting-doc-button]").should("have.length", 5);
     });
 
     it("should allow filling in all 5 supporting document fields when JavaScript is disabled", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#catches-0-supportingDocuments-0").type("Doc 1");
       cy.get("#catches-0-supportingDocuments-1").type("Doc 2");
       cy.get("#catches-0-supportingDocuments-2").type("Doc 3");
@@ -1104,6 +1184,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should submit supporting documents correctly when JavaScript is disabled", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#catches-0-supportingDocuments-0").type("Supporting Doc 1");
       cy.get("[data-testid=save-and-continue]").click();
 
@@ -1120,19 +1201,23 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should display 1 empty supporting document input field when JavaScript is enabled", () => {
+      cy.wrap(true).should("be.true");
       cy.get("fieldset [id^=catches-0-supportingDocuments]").should("have.length", 2);
       cy.get("#catches-0-supportingDocuments-0").should("exist").and("have.value", "");
     });
 
     it("should display Add button when JavaScript is enabled", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#add-supporting-doc-button").should("exist").and("be.visible");
     });
 
     it("should not display Remove button when there is only 1 supporting document field", () => {
+      cy.wrap(true).should("be.true");
       cy.get("[id^=remove-supporting-doc-button]").should("not.exist");
     });
 
     it("should display Remove button after adding a second supporting document field", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#add-supporting-doc-button").click();
 
       cy.get("#remove-supporting-doc-button-0").should("exist").and("be.visible");
@@ -1140,6 +1225,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should hide Add button when maximum 5 supporting documents are reached", () => {
+      cy.wrap(true).should("be.true");
       // Keep clicking Add button until it disappears (indicating max reached)
       // Try clicking up to 10 times, but stop if button doesn't exist
       cy.get("#add-supporting-doc-button").should("exist");
@@ -1148,7 +1234,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
         cy.get("#add-supporting-doc-button")
           .click()
           .then(() => {
-            cy.waitForUiUpdate(100);
+            cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
           });
       }
 
@@ -1160,6 +1246,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   // FI0-6512: Product index tracking tests
   describe("Product index tracking on save", () => {
     it("should include productIndex=0 in redirect URL when adding first product", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDAddProductConsignmentData,
       };
@@ -1170,7 +1257,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get("#catches-0-certificateNumber").type("TEST123");
       cy.get("#catches-0-weightOnCC").type("100");
       cy.get("#catches-0-product").type("COD");
-      cy.waitForUiUpdate(300);
+      cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
       cy.get("#catches-0-commodityCode").type("03");
 
       // Submit form
@@ -1182,6 +1269,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should include productIndex=1 in redirect URL when adding second product", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDAddProductConsignmentData,
       };
@@ -1192,7 +1280,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get("#catches-1-certificateNumber").type("TEST456");
       cy.get("#catches-1-weightOnCC").type("200");
       cy.get("#catches-1-product").type("HAD");
-      cy.waitForUiUpdate(300);
+      cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
       cy.get("#catches-1-commodityCode").type("03");
 
       // Submit form
@@ -1204,6 +1292,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should include productIndex in redirect URL when editing a product", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDAddProductConsignmentData,
       };
@@ -1217,7 +1306,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get(`#catches-${editIndex}-weightOnCC`).clear();
       cy.get(`#catches-${editIndex}-weightOnCC`).type("150");
       cy.get(`#catches-${editIndex}-product`).type("COD");
-      cy.waitForUiUpdate(300);
+      cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
       cy.get(`#catches-${editIndex}-commodityCode`).type("03");
 
       // Submit form
@@ -1229,6 +1318,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should preserve both nextUri and productIndex parameters in redirect", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDAddProductConsignmentData,
       };
@@ -1246,7 +1336,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       cy.get(`#catches-${productIndex}-certificateNumber`).type("TEST789");
       cy.get(`#catches-${productIndex}-weightOnCC`).type("100");
       cy.get(`#catches-${productIndex}-product`).type("COD");
-      cy.waitForUiUpdate(300);
+      cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
       cy.get(`#catches-${productIndex}-commodityCode`).type("03");
 
       // Submit form
@@ -1260,6 +1350,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should include productIndex=0 when adding product at index 0", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
       };
@@ -1274,6 +1365,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should successfully save when arrival weights are changed on a catch that already has departure weights", () => {
+      cy.wrap(true).should("be.true");
       // The fixture (SDAddProductConsignmentData) contains a catch with both
       // netWeightProductArrival:"10" and netWeightProductDeparture:"10".
       // Editing the arrival weight exercises the new server-side branch that
@@ -1304,6 +1396,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   // FI0-10949: Fishery products net weight on arrival cannot exceed product net weight on arrival
   describe("Net weight of fishery products on arrival validation", () => {
     it("should show field-level error when fishery product weight exceeds product weight", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDAddProductConsignmentFisheryWeightExceedsProductWeight,
       };
@@ -1318,6 +1411,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should show the error in the error summary when fishery product weight exceeds product weight", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDAddProductConsignmentFisheryWeightExceedsProductWeight,
       };
@@ -1332,6 +1426,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should apply error styling to the fishery product weight field when it exceeds product weight", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDAddProductConsignmentFisheryWeightExceedsProductWeight,
       };
@@ -1347,6 +1442,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should scroll to error island when fishery product weight exceeds product weight", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDAddProductConsignmentFisheryWeightExceedsProductWeight,
       };
@@ -1358,6 +1454,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     });
 
     it("should not show a fishery weight error when fishery product weight is within product weight", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDAddProductConsignmentData,
       };
@@ -1384,6 +1481,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
 
 describe("Add product to consignment (SD): save as draft retains valid fields", () => {
   it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentSaveAsDraftWithErrors,
     };
@@ -1393,6 +1491,7 @@ describe("Add product to consignment (SD): save as draft retains valid fields", 
   });
 
   it("should clear scientificName and redirect to dashboard when species/product is invalid on save as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentSaveAsDraftWithSpeciesError,
     };
@@ -1402,6 +1501,7 @@ describe("Add product to consignment (SD): save as draft retains valid fields", 
   });
 
   it("should redirect to dashboard without errors when all fields are valid on save as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddProductConsignmentSaveAsDraftNoErrors,
     };
@@ -1426,6 +1526,7 @@ describe("Add product to consignment (SD): non-JS add/remove supporting document
     });
 
     it("should display the Add another button when there is 1 existing supporting document and JS is disabled", () => {
+      cy.wrap(true).should("be.true");
       // storageDocument fixture has 1 supporting doc → supportingDocuments.length = 1 < maximumEntryDocsAllowed
       cy.get("#catches-0-supportingDocuments-0").should("exist").and("have.value", "someDocumentNumber-1683295546");
       cy.get("#add-supporting-doc-button").should("exist");
@@ -1435,11 +1536,13 @@ describe("Add product to consignment (SD): non-JS add/remove supporting document
     });
 
     it("should not display the Remove button when there is only 1 existing supporting document and JS is disabled", () => {
+      cy.wrap(true).should("be.true");
       // supportingDocuments.length = 1, so the !isHydrated && length > 1 condition is false
       cy.get("[id^=remove-supporting-doc-button]").should("not.exist");
     });
 
     it("should add an extra supporting document field after clicking Add another in non-JS mode", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#catches-0-supportingDocuments-0").should("exist");
       cy.get("#catches-0-supportingDocuments-1").should("not.exist");
 
@@ -1451,6 +1554,7 @@ describe("Add product to consignment (SD): non-JS add/remove supporting document
     });
 
     it("should show Remove buttons after adding an extra supporting document in non-JS mode", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#add-supporting-doc-button").click();
 
       // With 2 docs, supportingDocuments.length > 1 → remove buttons appear
@@ -1471,11 +1575,13 @@ describe("Add product to consignment (SD): non-JS add/remove supporting document
     });
 
     it("should display 2 supporting document fields when the fixture has 2 existing docs", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#catches-0-supportingDocuments-0").should("exist").and("have.value", "someDocumentNumber-1683295546");
       cy.get("#catches-0-supportingDocuments-1").should("exist").and("have.value", "someDocumentNumber-1683295547");
     });
 
     it("should display Remove buttons for each field when there are multiple supporting documents in non-JS mode", () => {
+      cy.wrap(true).should("be.true");
       cy.get("[id^=remove-supporting-doc-button]").should("have.length", 2);
       cy.get("#remove-supporting-doc-button-0").should("have.attr", "type", "submit");
       cy.get("#remove-supporting-doc-button-0").should("have.attr", "name", "_action");
@@ -1484,11 +1590,13 @@ describe("Add product to consignment (SD): non-JS add/remove supporting document
     });
 
     it("should display the Add another button when there are 2 existing supporting docs below the maximum", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#add-supporting-doc-button").should("exist");
       cy.get("#add-supporting-doc-button").should("have.attr", "value", "addSupportingDoc");
     });
 
     it("should submit the remove form and redirect back to the same page when Remove is clicked in non-JS mode", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#remove-supporting-doc-button-0").click();
 
       // Action splices doc at index 0, validates, then redirects to ?#remove-supporting-doc

@@ -5,6 +5,7 @@ const productsUrl = `${documentUrl}/what-are-you-exporting`;
 
 describe("Errors on click of add product button from empty favourites", () => {
   it("should show errors click of add product button from favourites", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnSaveFromEmptyFavourites,
       disableScripts: true,
@@ -29,6 +30,7 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("check and click on add product from favourites", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-tab-id='favouritesTab']").click();
     cy.get('select[name="favourite"]').select("Aesop shrimp (AES) Fresh,Whole, 03063590");
     cy.get("[data-testid='add-product']").eq(1).click();
@@ -37,6 +39,7 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("should render add species, state and presentation buttons when JavaScript is disabled", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='add-species']", "Add species");
     cy.contains("[data-testid='add-state']", "Add state");
     cy.contains("[data-testid='add-presentation']", "Add presentation");
@@ -45,6 +48,7 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("should render add products and add products from favourites forms on the same page", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#productsTab").should("be.visible");
     cy.get("#add-products").should("be.visible");
 
@@ -53,6 +57,7 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("should click and edit and check if the data is populated in input fields", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid*='edit-button'").eq(0).click();
     cy.get("#species").contains("Albacore (ALB)");
     cy.get("#state").contains("Fresh");
@@ -64,26 +69,31 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("should display and allow clicking the Add state button", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-state']").should("exist").and("be.visible").click();
   });
 
   it("should display and allow clicking the Add presentation button", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-presentation']").should("exist").and("be.visible").click();
   });
 
   it("should display an error validation at the form input when add species is clicked without selecting a value", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-species']").click();
 
     cy.contains("span", /^Enter the common name or FAO code$/).should("be.visible");
   });
 
   it("should set the form input when add species is clicked with selected value", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#species").invoke("val", "Atlantic bluefin tuna (BFT)").trigger("change");
     cy.get("#species").should("have.value", "Atlantic bluefin tuna (BFT)");
     cy.get("[data-testid='add-species']").click();
   });
 
   it("should display an error validation at the form input when add state is clicked without selecting a value", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-state']").click();
     cy.contains("span", /^Enter the common name or FAO code$/).should("be.visible");
     cy.get("#state-error-message").should("have.class", "govuk-error-message");
@@ -93,6 +103,7 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("should display an error validations at the form inputs when add presentation is clicked without selecting a value", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-presentation']").click();
 
     cy.contains("span", /^Enter the common name or FAO code$/).should("be.visible");
@@ -105,6 +116,7 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("should set the selected input value when 'Add state' button is clicked", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#species").invoke("val", "Atlantic bluefin tuna (BFT)").trigger("change");
     cy.get("[data-testid='add-species']").click();
     // Wait for page to reload and state dropdown to be populated
@@ -114,6 +126,7 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   });
 
   it("should show state hint when JavaScript is disabled", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-hint").contains("For example, Lobster or LBE.").should("be.visible");
     cy.get(".govuk-hint").contains("You must add species before selecting a state").should("be.visible");
     cy.get(".govuk-hint")

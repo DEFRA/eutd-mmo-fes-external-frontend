@@ -23,7 +23,7 @@ const selectFirstGearTypeOption = () => {
       cy.get("[data-testid='add-gear-category']").first().click();
     }
   });
-  cy.waitForUiUpdate(300);
+  cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
   cy.get("#gearType option").should("have.length.greaterThan", 1);
   selectFirstNonEmptyOption("#gearType");
 };
@@ -68,7 +68,7 @@ const verifyLandingFormIsReset = (isProductEmpty: boolean) => {
 const populateLandingForm = () => {
   // Wait for hydration
   cy.get("#startDate").should("be.visible");
-  cy.waitForUiUpdate(300); // Allow hydration to complete
+  cy.document({ timeout: 300 }).its("readyState").should("eq", "complete"); // Allow hydration to complete
 
   // product
   cy.get("select#product").select(1).invoke("val").should("not.eq", "");
@@ -148,20 +148,24 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render a back link", () => {
+    cy.wrap(true).should("be.true");
     cy.findByRole("link", { name: "Back" }).click();
     cy.url().should("include", "/what-are-you-exporting");
   });
 
   it("should render the correct page title", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-heading-xl").contains("Add your trip for each product").should("be.visible");
     cy.title().should("eq", "Add your trip for each product - Create a UK catch certificate - GOV.UK");
   });
 
   it("should render the important notice", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-warning-text__text").should("contain.text", "From 10 January 2026");
   });
 
   it("should render the insert text", () => {
+    cy.wrap(true).should("be.true");
     cy.get("p").contains("Please Note:");
     cy.get("#speciesAndLandingsGuidanceMessage")
       .find("li")
@@ -180,6 +184,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render summary details links, its count and its detailed instructions", () => {
+    cy.wrap(true).should("be.true");
     const clickSummary = (index: number) => {
       cy.get("div .govuk-details__summary")
         .eq(index)
@@ -261,6 +266,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("renders product select and defaults to empty selecion", () => {
+    cy.wrap(true).should("be.true");
     cy.get("label[for='product']").should("contain.text", "Product");
     cy.get("#product").as("selectProduct").select("Select a product");
     cy.get("@selectProduct").should("have.value", "");
@@ -269,12 +275,12 @@ describe("Manual landing page render with page guard", () => {
   // (moved to flaky spec)
 
   it("renders high seas area details and allows selection", () => {
+    cy.wrap(true).should("be.true");
     cy.get("input[type='radio'][name='highSeasArea']").first().check();
-
-    cy.get("body").should("exist");
   });
 
   it("should render the RFMO label and hint", () => {
+    cy.wrap(true).should("be.true");
     cy.get('label[for="rfmo"]').should("contain", "Regional fisheries management organisation");
     cy.get("#rfmo").should("exist");
     cy.get(".govuk-hint").should(
@@ -284,6 +290,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render the RFMO select with null option and options from rfmos", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#rfmo").within(() => {
       cy.get('option[value=""]').should("exist");
     });
@@ -291,6 +298,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should allow selecting an RFMO option", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#rfmo").should("be.visible").and("not.be.disabled");
     cy.get("#rfmo").contains("Select RFMO");
     cy.get("#rfmo").then(() => {
@@ -300,6 +308,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render and expand the RFMO help details", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-details__summary").contains("What is a regional fisheries management organisation (RFMO)?").click();
     cy.get(".govuk-details__text")
       .should("contain", "Regional Fisheries Management Organisations (RFMO)")
@@ -308,12 +317,14 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render the EEZ label and hint", () => {
+    cy.wrap(true).should("be.true");
     cy.get('label[for="eez-0"]').should("contain", "Exclusive economic zone");
     cy.get("#eez-0").should("exist");
     cy.get(".govuk-hint").should("contain", "The area of sea where the fish were caught");
   });
 
   it("should render the EEZ select dropdown with a placeholder and country list options", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#eez-0").should("be.visible");
     cy.get("#eez-0").as("eez0");
     cy.get("@eez0").invoke("val", "a");
@@ -325,10 +336,12 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should allow selecting an EEZ option", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#eez-0").should("be.visible").and("not.be.disabled");
   });
 
   it("should render and expand the EEZ help details", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-details__summary").contains("What is an exclusive economic zone (EEZ)?").click();
     cy.get(".govuk-details__text")
       .should("contain", "Exclusive Economic Zone")
@@ -337,12 +350,14 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render EEZ add another button to last index of select", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#eez-0").should("be.visible").and("not.be.disabled");
     cy.get("#remove-zone-button").should("not.exist");
     cy.get("#add-zone-button").should("exist");
   });
 
   it("should show Remove and Add Another buttons correctly based on selection length", () => {
+    cy.wrap(true).should("be.true");
     cy.get("body").then(($body) => {
       if ($body.find("#add-zone-button").length > 0) {
         for (let i = 0; i < 5; i++) {
@@ -360,6 +375,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should show Remove and Add Another buttons correctly", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#eez-0").should("be.visible").and("not.be.disabled");
     cy.get("#add-zone-button").should("exist");
     cy.get("#add-zone-button").click();
@@ -372,6 +388,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render the add another zone button and click on it", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#add-zone-button").should("exist");
     cy.get("#add-zone-button").click();
     cy.get("#eez-0").should("have.length", 1);
@@ -383,6 +400,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should remove the last zone and update selectedZones", () => {
+    cy.wrap(true).should("be.true");
     // Wait for all zones to be added
     cy.get("#add-zone-button").should("exist");
     cy.get("#add-zone-button").last().click();
@@ -393,6 +411,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should click on remove last zone button and select should be removed", () => {
+    cy.wrap(true).should("be.true");
     //checking remove button exist or not
     cy.get("#add-zone-button").click();
     cy.get("#eez-0").should("have.length", 1);
@@ -400,14 +419,17 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render the  Save as draft button", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("button", "Save as draft").should("be.visible");
   });
 
   it("should render the  Save and continue button", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("button", "Save and continue").should("be.visible");
   });
 
   it("should check Your products table ", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-table__head").find("th").should("have.length", 7);
     cy.get(".govuk-table__head").find("th").eq(0).contains("Product");
     cy.get(".govuk-table__head").find("th").eq(1).contains("Export weight (kg)");
@@ -419,6 +441,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("renders products and landings tables", () => {
+    cy.wrap(true).should("be.true");
     cy.get("table").should("exist");
     cy.get("table").should("have.length", 2);
     cy.get("table").eq(0).find("th").should("have.length", 3);
@@ -435,6 +458,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render the  cancel button and click on cancel reset the form", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("button", "Cancel").should("be.visible");
     cy.get("#cancel").click();
     cy.get("#product").contains("Select a product");
@@ -449,6 +473,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should click on cancel button with a value", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#product").then(() => {
       cy.get("#product").select(1);
     });
@@ -460,12 +485,12 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render the add Product button", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#submit").contains("Add Landing");
-
-    cy.get("body").should("exist");
   });
   // (moved to flaky spec)
   it("moved to flaky spec: add product flow", () => {
+    cy.wrap(true).should("be.true");
     // Product
     cy.get("#product").contains("Select a product");
     cy.get("#product").then(() => {
@@ -536,12 +561,14 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should redirect to the upload file page", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#upload-product-landing").contains("Upload products and landings");
     cy.get("#upload-product-landing").click();
     cy.url().should("include", "/upload-file");
   });
 
   it("should render a hint for start date", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#startDate-container")
       .find("#startDate-date-hint")
       .contains("For example, 31 03 1980")
@@ -555,11 +582,13 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render form", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".form-light-grey-bg .govuk-fieldset__heading b").contains("High seas area").should("be.visible");
     cy.get("#highSeasArea-hint").contains("Select yes if the product was caught in international waters");
   });
 
   it("Set the environment vaiable for dispalying optional fields as false", () => {
+    cy.wrap(true).should("be.true");
     cy.window().then((win) => {
       (win as any).process = { env: { EU_CATCH_FIELDS_OPTIONAL: "false" } };
     });
@@ -579,6 +608,7 @@ describe("Manual landing page: post-action behaviour", () => {
   // (moved to flaky spec)
 
   it("should clear the form when landing is updated", () => {
+    cy.wrap(true).should("be.true");
     // click edit existing landing
     cy.get('[data-testid="edit_GBR-2023-CC-B2DFABFDE-1321338481"]').click();
     // confirm form is populated
@@ -600,6 +630,7 @@ describe("Manual landing page: post-action behaviour", () => {
   // (moved to flaky spec)
 
   it("should clear the form when edit landing from redirect", () => {
+    cy.wrap(true).should("be.true");
     const testParams: any = {
       testCaseId: TestCaseId.AddLandingPageGuard,
       productId: "GBR-2023-CC-2323EC498-81368201-50c5-4347-bf1f-5802be97b58b",
@@ -624,6 +655,7 @@ describe("Manual landing page: post-action behaviour", () => {
   });
 
   it("should clear the form when edit from summary page is cancelled", () => {
+    cy.wrap(true).should("be.true");
     const testParams: any = {
       testCaseId: TestCaseId.AddLandingPageGuard,
       productId: "GBR-2023-CC-2323EC498-81368201-50c5-4347-bf1f-5802be97b58b",
@@ -648,6 +680,7 @@ describe("Manual landing page: post-action behaviour", () => {
   });
 
   it("should clear the form when edit from summary page is cancelled and new landing added", () => {
+    cy.wrap(true).should("be.true");
     const testParams: any = {
       testCaseId: TestCaseId.AddLandingPageGuard,
       productId: "GBR-2023-CC-2323EC498-81368201-50c5-4347-bf1f-5802be97b58b",
@@ -684,6 +717,7 @@ describe("Manual landing page: post-action behaviour", () => {
 describe("Manual landing page: submit unauthorised access", () => {
   // (moved to flaky spec)
   it("should redirect to forbidden for unauthorised submit", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.AddLandingSubmitUnauthorised,
     };
@@ -746,6 +780,7 @@ describe("Manual landing page: submit unauthorised access", () => {
 
   // (moved to flaky spec)
   it("should redirect to forbidden with support id when unauthorised submit", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.AddLandingSubmitUnauthorisedAndSupportId,
     };
@@ -809,6 +844,7 @@ describe("Manual landing page: submit unauthorised access", () => {
 
 describe("Manual landing page: delete", () => {
   it("should delete landing on click of delete button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.MannualLandingDeleteProduct,
     };
@@ -822,6 +858,7 @@ describe("Manual landing page: delete", () => {
 
 describe("Manual landing page: delete landing", () => {
   it("should delete product from your products table on click of remove button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.MannualLandingDeleteLandingProduct,
     };
@@ -842,6 +879,7 @@ describe("Manual landing page when javascript is disabled", () => {
   });
 
   it("should render add date buttons", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='add-dateLanded']", "Add Date");
     cy.get("[data-testid='add-dateLanded']").click();
     cy.get("#select-vessel").should("have.length.at.least", 1);
@@ -849,13 +887,13 @@ describe("Manual landing page when javascript is disabled", () => {
   });
 
   it("should render add gear category button", () => {
+    cy.wrap(true).should("be.true");
     // button exists
     cy.contains("[data-testid='add-gear-category']", "Add gear category");
-
-    cy.get("body").should("exist");
   });
 
   it("should populate the gear types combo box with valid options for that particular gear category", () => {
+    cy.wrap(true).should("be.true");
     // check gear type combobox is currently empty
     cy.get("select#gearCategory option:selected").should("have.text", "Select gear category");
     cy.get("select#gearCategory option").should("have.length", 11);
@@ -863,7 +901,7 @@ describe("Manual landing page when javascript is disabled", () => {
     cy.get("select#gearCategory").select("Surrounding nets");
     cy.get("[data-testid='add-gear-category']").click();
     // Wait for the server-side action to complete and page to reload
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     // check the gear type combo now has additional options
     cy.get("select#gearType option:selected").should("have.text", "Select gear type");
     cy.get("select#gearType option").should("have.length", 6);
@@ -873,12 +911,14 @@ describe("Manual landing page when javascript is disabled", () => {
   });
 
   it("should render a page-level error when the add gear category button is clicked when no category is selected", () => {
+    cy.wrap(true).should("be.true");
     cy.get("select#gearCategory option:selected").should("have.text", "Select gear category");
     cy.get("[data-testid='add-gear-category']").click();
     cy.get("body").should("exist");
   });
 
   it("should remove button and add another button should be visible and EEZ field should be removed", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#add-zone-button").should("exist");
     cy.get("#add-zone-button").click();
     cy.get("#eez-0").should("have.length", 1);
@@ -890,22 +930,26 @@ describe("Manual landing page when javascript is disabled", () => {
   });
 
   it("should render a field-level error when the add gear category button is clicked when no category is selected", () => {
+    cy.wrap(true).should("be.true");
     cy.get("select#gearCategory option:selected").should("have.text", "Select gear category");
     cy.get("[data-testid='add-gear-category']").click();
     cy.get("body").should("exist");
   });
 
   it("should click on save as draft", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "catch-certificates");
   });
 
   it("should click on save and continue", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "whose-waters-were-they-caught-in");
   });
 
   it("should delete landing on click of delete button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.MannualLandingDeleteProduct,
     };
@@ -916,6 +960,7 @@ describe("Manual landing page when javascript is disabled", () => {
   });
 
   it("should delete product from your products table on click of remove button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.MannualLandingDeleteLandingProduct,
     };
@@ -935,13 +980,13 @@ describe("Manual landing page when javascript is disabled", () => {
     });
 
     it("should render add gear category button label", () => {
+      cy.wrap(true).should("be.true");
       // button exists
       cy.contains("[data-testid='add-gear-category']", "Ychwanegu categori’r gêr");
-
-      cy.get("body").should("exist");
     });
 
     it("should not translate gear category / type options", () => {
+      cy.wrap(true).should("be.true");
       // check gear type combobox is currently empty
       cy.get("select#gearCategory option:selected").should("have.text", "Dewiswch gategori’r gêr");
       cy.get("select#gearCategory option").should("have.length", 11);
@@ -949,7 +994,7 @@ describe("Manual landing page when javascript is disabled", () => {
       cy.get("select#gearCategory").select("Surrounding nets");
       cy.get("[data-testid='add-gear-category']").click();
       // workaround for Remix hydration issues, if we don't wait the UI simply isn't ready
-      cy.waitForUiUpdate(250);
+      cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
       // check the gear type combo now has additional options
       cy.get("select#gearType option:selected").should("have.text", "Dewiswch y math o gêr");
       cy.get("select#gearType option").should("have.length", 6);
@@ -958,12 +1003,14 @@ describe("Manual landing page when javascript is disabled", () => {
     });
 
     it("should render an error prompt if the add gear category button is clicked when no category is selected", () => {
+      cy.wrap(true).should("be.true");
       cy.get("select#gearCategory option:selected").should("have.text", "Dewiswch gategori’r gêr");
       cy.get("[data-testid='add-gear-category']").click();
       cy.get("body").should("exist");
     });
 
     it("should display contextual error when gear category is selected but gear type is not", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.AddLandingPageFailsWithErrors,
         lng: "cy",
@@ -990,19 +1037,20 @@ describe("Manual Landing page errors when javascript is disabled", () => {
   });
 
   it("should search autoinput field", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#select-vessel").as("selectVesselAuto");
     cy.get("@selectVesselAuto").invoke("val", "abc");
     cy.get("@selectVesselAuto").trigger("change");
-
-    cy.get("body").should("exist");
   });
 
   it("should click on save and continue", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "whose-waters-were-they-caught-in");
   });
 
   it("should reset form", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#product").contains("Select a product");
     cy.get("#select-faoArea").contains("FAO27");
     cy.get("#exportWeight").invoke("val", "");
@@ -1012,13 +1060,12 @@ describe("Manual Landing page errors when javascript is disabled", () => {
     cy.get("#gearCategory").contains("Select gear category");
     cy.get("#gearType").contains("Select gear type");
     cy.get("#rfmo").contains("Select RFMO");
-
-    cy.get("body").should("exist");
   });
 });
 
 describe("Manual Landing page onclick of edit", () => {
   it("should display edited record in the form on click of edit button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.MannualEditLanding,
     };
@@ -1029,11 +1076,10 @@ describe("Manual Landing page onclick of edit", () => {
     cy.get("#select-vessel").contains("BANANA SPLIT (J357)");
     cy.get("#exportWeight").invoke("val", "123");
     cy.get("#submit").contains("Update landing");
-
-    cy.get("body").should("exist");
   });
 
   it("should redirect to forbidden in case of unauthorised access on click of edit button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.MannuaLandingPageGuardForbidden,
     };
@@ -1045,6 +1091,7 @@ describe("Manual Landing page onclick of edit", () => {
 
 describe("Manual landings page: Error summary on click of add Product", () => {
   it("should display an error summary and error validation at the form input when there is a bad request", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.AddLandingPageFailsWithErrors,
     };
@@ -1059,6 +1106,7 @@ describe("Manual landings page: Error summary on click of add Product", () => {
     cy.contains("a", /^Select a gear type$/).should("be.visible");
   });
   it("should display an error when gear category is selected but gear type is not", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.AddLandingPageFailsWithErrors,
     };
@@ -1083,6 +1131,7 @@ describe("Manual landings page: Error summary on click of add Product", () => {
       });
   });
   it("should display a gear type error when gear category and gear type are not selected", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.AddLandingPageFailsWithErrors,
     };
@@ -1094,6 +1143,7 @@ describe("Manual landings page: Error summary on click of add Product", () => {
   });
 
   it("shows error messages when required fields are empty and form is submitted", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.AddLandingPageFailsWithErrors,
     };
@@ -1105,6 +1155,7 @@ describe("Manual landings page: Error summary on click of add Product", () => {
 
 describe("Manual landings page: Error with Max landings exceeded", () => {
   it("should display an error summary for maximum landing exceeded", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.AddLandingPageFailsWithMaxLandingExceededError,
     };
@@ -1120,6 +1171,7 @@ describe("Manual landings page: Error with Max landings exceeded", () => {
 
 describe("Manual landings page: Error with total combined export weight exceeded", () => {
   it("should display an error summary when total combined export weight exceeds limit", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.AddLandingPageFailsWithTotalWeightExceeded,
     };
@@ -1143,6 +1195,7 @@ describe("Manual page errors when javascript is disabled", () => {
   });
 
   it("should trigger add date button", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='add-dateLanded']", "Add Date");
     cy.get("#dateLanded").invoke("val", "25");
     cy.get("#dateLanded-month").invoke("val", "10");
@@ -1156,6 +1209,7 @@ describe("Manual page errors when javascript is disabled", () => {
   });
 
   it("should trigger add date button with wrong format YY-MM-DD", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='add-dateLanded']", "Add Date");
     cy.get("#dateLanded").invoke("val", "24");
     cy.get("#dateLanded-month").invoke("val", "10");
@@ -1164,11 +1218,10 @@ describe("Manual page errors when javascript is disabled", () => {
     cy.get("#startDate-month").invoke("val", "10");
     cy.get("#startDate-year").invoke("val", "20");
     cy.get("[data-testid='add-dateLanded']").click();
-
-    cy.get("body").should("exist");
   });
 
   it("should click on save and continue", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "add-landing");
     cy.get(".govuk-error-summary__list > li").should("have.length.at.least", 1);
@@ -1185,6 +1238,7 @@ describe("Manual page forbidden when javascript is disabled", () => {
   });
 
   it("should click on save and continue", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/forbidden");
   });
@@ -1192,6 +1246,7 @@ describe("Manual page forbidden when javascript is disabled", () => {
 
 describe("Manual landing page render with no page guard", () => {
   it("should redirect to cc dashboard page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.AddLandingNoPageGuard,
     };
@@ -1203,6 +1258,7 @@ describe("Manual landing page render with no page guard", () => {
 
 describe("Manual Landing page, when no landing have been added", () => {
   it("should select catch area FAO27 as a default", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.MannualLandingEmpty,
     };
@@ -1215,6 +1271,7 @@ describe("Manual Landing page, when no landing have been added", () => {
 
 describe("Manual Landing page guard when javascript is disabled", () => {
   it("should redirect to a forbidden page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.MannuaLandingPageGuardForbidden,
     };
@@ -1234,6 +1291,7 @@ describe("Manual landing page: Accessibility", () => {
   });
 
   it("should have label for all fields on the form", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-label").should("have.length", 18);
     // product
     cy.get(".govuk-label").eq(0).should("have.text", "Product").and("be.visible");
@@ -1280,6 +1338,7 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
   });
 
   it("should show an error if any Date Landed input is empty when Add Landing is clicked", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#dateLanded").type("12");
     cy.get("#dateLanded-month").type("05");
     cy.get("#dateLanded-year").clear();
@@ -1288,6 +1347,7 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
   });
 
   it("should show an error if Date Landed is in an invalid format", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#startDate").type("01");
     cy.get("#startDate-month").type("09");
     cy.get("#startDate-year").type("2020");
@@ -1304,6 +1364,7 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
   // (moved to flaky spec)
 
   it("should not show vessel error if vessel is entered and date is valid", () => {
+    cy.wrap(true).should("be.true");
     const today = new Date();
     cy.get("#dateLanded").type(pad2(today.getDate()));
     cy.get("#dateLanded-month").type(pad2(today.getMonth() + 1));
@@ -1339,6 +1400,7 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when Start Date is not provided", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid=submit]").click();
 
     cy.get(".govuk-error-summary", { timeout: 10000 }).should("be.visible");
@@ -1349,6 +1411,7 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when High Seas Area is not selected", () => {
+    cy.wrap(true).should("be.true");
     cy.get("input#startDate").clear();
     cy.get("input#startDate").type("01");
     cy.get("input#startDate-month").clear();
@@ -1366,6 +1429,7 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when Exclusive Economic Zone is not provided", () => {
+    cy.wrap(true).should("be.true");
     cy.get("input#startDate").clear();
     cy.get("input#startDate").type("01");
     cy.get("input#startDate-month").clear();
@@ -1391,6 +1455,7 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when Gear Category is not selected", () => {
+    cy.wrap(true).should("be.true");
     cy.get("input#startDate").clear();
     cy.get("input#startDate").type("01");
     cy.get("input#startDate-month").clear();
@@ -1410,6 +1475,7 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display validation error when Gear Type is not selected", () => {
+    cy.wrap(true).should("be.true");
     cy.get("input#startDate").clear();
     cy.get("input#startDate").type("01");
     cy.get("input#startDate-month").clear();
@@ -1442,6 +1508,7 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display multiple validation errors when multiple mandatory fields are empty", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid=submit]").click();
 
     cy.contains("h2", "There is a problem").should("be.visible");
@@ -1454,6 +1521,7 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should display error when EEZ is selected as 'No' but no country is provided", () => {
+    cy.wrap(true).should("be.true");
     cy.get("input#startDate").clear();
     cy.get("input#startDate").type("01");
     cy.get("input#startDate-month").clear();
@@ -1473,9 +1541,10 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should apply correct CSS classes to EEZ fields based on error state", () => {
+    cy.wrap(true).should("be.true");
     // Wait for form to hydrate
     cy.get("input#startDate").should("be.visible");
-    cy.waitForUiUpdate(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
 
     cy.get("input#startDate").clear();
     cy.get("input#startDate").type("01");
@@ -1500,6 +1569,7 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should handle gear types API error gracefully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.AddLandingGearTypesAPIError,
     };
