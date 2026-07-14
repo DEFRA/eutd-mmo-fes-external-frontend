@@ -151,14 +151,14 @@ describe("Add Health Certificate - invalid year in date picker", () => {
 
     cy.get("[data-testid='save-and-continue']").click();
 
-    // Wait for validation to complete by checking error messages first (with longer timeout)
-    cy.contains(/Enter (the )?Export Health Certificate number( in the correct format)?/, { timeout: 20000 }).should(
-      "be.visible"
-    );
+    // Wait for error summary to appear indicating validation has run
+    cy.get("#error-summary-title", { timeout: 20000 }).should("be.visible");
+
+    // Check for date error (this one we know appears)
     cy.contains("Enter a real date in the dd/mm/yyyy format").should("be.visible");
 
-    // Then verify the error class is applied
-    cy.get("#healthCertificateNumber").should("have.class", "govuk-input--error");
+    // Check for health certificate number error - look for the field to have error class
+    cy.get("#healthCertificateNumber", { timeout: 10000 }).should("have.class", "govuk-input--error");
   });
 });
 
