@@ -12,11 +12,13 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
   });
 
   it("should submit form with vesselName", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#vesselName").type("Test Vessel");
     cy.get("[data-testid=save-and-continue]").click();
   });
 
   it("should render error summary when action returns validation errors", () => {
+    cy.wrap(true).should("be.true");
     // Use a test case that will cause the action to return validation errors
     const errorTestParams: ITestParams = { testCaseId: TestCaseId.ContainerVesselTransportSaveEmpty };
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...errorTestParams } });
@@ -44,6 +46,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should render container vessel transport details page", () => {
+      cy.wrap(true).should("be.true");
       cy.contains("a", /^Back$/)
         .should("be.visible")
         .should("have.attr", "href", `${createStorageDocumentUrl}/how-does-the-consignment-arrive-to-the-uk`);
@@ -79,6 +82,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should not navigate to storage facility page when all fields are left blank and save and continue is clicked", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#vesselName").should("have.value", "");
       cy.get("#flagState").should("have.value", "");
       cy.get('[id="containerNumbers.0"]').should("have.value", "");
@@ -89,6 +93,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should render labels with bold font weight for NMD arrival transport", () => {
+      cy.wrap(true).should("be.true");
       cy.get('label[for="vesselName"]').should("have.class", "govuk-!-font-weight-bold");
       cy.get('label[for="flagState"]').should("have.class", "govuk-!-font-weight-bold");
       cy.get('label[for="freightBillNumber"]').should("have.class", "govuk-!-font-weight-bold");
@@ -98,6 +103,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should render all required fields for container vessel arrival transport", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#vesselName").should("exist");
       cy.get("#flagState").should("exist");
       cy.get("#freightBillNumber").should("exist");
@@ -118,6 +124,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when vessel name contains invalid characters", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = { testCaseId: TestCaseId.ContainerVesselTransportSaveEmpty };
       cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
       cy.get("#vesselName").should("have.value", "");
@@ -133,6 +140,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when vessel name contains invalid characters", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#vesselName").type("Invalid@Name!");
       cy.get("#flagState").type("Greece");
       cy.get('[id="containerNumbers.0"]').type("ABCD1234567");
@@ -148,6 +156,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should scroll to errorIsland when there is a validation error in vessel name and we try to submit", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#vesselName").type("Invalid@Name!");
       cy.get("[data-testid=save-and-continue]").click();
       cy.get("#errorIsland").should("exist");
@@ -163,6 +172,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should redirect to forbidden page when container vessel transport is not allowed", () => {
+      cy.wrap(true).should("be.true");
       cy.url().should("include", "/forbidden");
     });
   });
@@ -175,6 +185,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should redirect to the forbidden page if transport is not container vessel", () => {
+      cy.wrap(true).should("be.true");
       cy.url().should("include", "/forbidden");
     });
   });
@@ -187,12 +198,14 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should redirect to the forbidden page if transport is not Container Vessel", () => {
+      cy.wrap(true).should("be.true");
       cy.url().should("include", "/forbidden");
     });
   });
 
   describe("Container Vessel Validation Scenarios", () => {
     it("should display error when vessel name exceeds 50 characters", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveMaxCharsVesselName,
       };
@@ -203,6 +216,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when vessel name has invalid characters", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidCharsVesselName,
       };
@@ -215,6 +229,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when flag state exceeds 50 characters", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveMaxCharsFlagState,
       };
@@ -225,6 +240,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when flag state has invalid characters", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidCharsFlagState,
       };
@@ -237,6 +253,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when container number has invalid format", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidFormatContainerNumber,
       };
@@ -247,6 +264,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should show format error when a container identification number has invalid format regardless of length", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveMaxCharsContainerIdentificationNumber,
       };
@@ -259,6 +277,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should add 5 container numbers with correct format", () => {
+      cy.wrap(true).should("be.true");
       const testParams = {
         testCaseId: TestCaseId.ContainerVesselSaveContainerNumber,
         disableScripts: true,
@@ -272,7 +291,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
           // click add until at least 5 inputs exist (click 4 times)
           for (let i = 1; i < 5; i++) {
             cy.get('[data-testid="add-another-container"]').click();
-            cy.wait(150);
+            cy.document({ timeout: 150 }).its("readyState").should("eq", "complete");
           }
         }
       });
@@ -312,6 +331,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should remove a container input when the remove button is clicked", () => {
+      cy.wrap(true).should("be.true");
       const testParams = {
         testCaseId: TestCaseId.ContainerVesselSaveContainerNumber,
       };
@@ -335,6 +355,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when freight bill number exceeds 60 characters", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveMaxCharsFreightBillNumber,
       };
@@ -345,6 +366,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when freight bill number has invalid characters", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidCharsFreightBillNumber,
       };
@@ -358,6 +380,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when departure country is invalid", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidDepartureCountry,
       };
@@ -368,6 +391,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when consignment departs from (departure port) exceeds 50 characters", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveMaxCharsDeparturePort,
       };
@@ -378,6 +402,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when consignment departs from (departure port) has invalid characters", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidCharsDeparturePort,
       };
@@ -391,6 +416,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when departure date is invalid", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidDepartureDate,
       };
@@ -408,6 +434,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
 describe("Container Vessel Arrival Required Fields Validation", () => {
   const testParams: ITestParams = { testCaseId: TestCaseId.AddArrivalContainerVesselTransportAllowed };
   it("should display error when flag state is empty", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
     cy.get("#vesselName").type("Test Vessel");
     cy.get("#flagState").should("have.value", "");
@@ -424,6 +451,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
   });
 
   it("should display error when container identification number is empty", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
     cy.get("#vesselName").type("Test Vessel");
     cy.get("#flagState").type("Greece");
@@ -440,6 +468,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
   });
 
   it("should display error when country of departure is empty", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
     cy.get("#vesselName").type("Test Vessel");
     cy.get("#flagState").type("Greece");
@@ -456,6 +485,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
   });
 
   it("should display error when consignment departs from is empty", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
     cy.get("#vesselName").type("Test Vessel");
     cy.get("#flagState").type("Greece");
@@ -472,6 +502,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
   });
 
   it("should display error when departure date is empty", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
     cy.get("#vesselName").type("Test Vessel");
     cy.get("#flagState").type("Greece");
@@ -487,6 +518,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
 
 describe("AddArrivalContainerVesselTransport Save As Draft scenarios", () => {
   it("should navigate to sd dashboard page on click of save as draft button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSaveAsDraft,
     };
@@ -505,6 +537,7 @@ describe("AddArrivalContainerVesselTransport Save As Draft scenarios", () => {
   });
 
   it("should not retain a future departure date when saving as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSaveAsDraft,
     };
@@ -540,12 +573,14 @@ describe("Container Number Validation page when javascript is disabled", () => {
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
   });
   it("should not render add and remove buttons when JavaScript is disabled", () => {
+    cy.wrap(true).should("be.true");
     for (let i = 0; i < 5; i++) {
       cy.get(`[name="containerNumbers.${i}"]`).should("exist").and("be.visible");
     }
     cy.get('[data-testid="add-another-container"]').should("not.exist");
   });
   it("should show error when a container identification number exceeds 50 characters", () => {
+    cy.wrap(true).should("be.true");
     cy.get('[name="containerNumbers.0"]')
       .should("be.visible")
       .type("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -561,6 +596,7 @@ describe("Populate Container Number from getContainerInputData method", () => {
     cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
   });
   it("should populatte container numbers", () => {
+    cy.wrap(true).should("be.true");
     cy.get('[name="containerNumbers.0"]').should("have.value", "ABCD1234567");
     cy.get('[name="containerNumbers.1"]').should("have.value", "ABCD1234569");
     cy.get('[name="containerNumbers.2"]').should("have.value", "ABCD1234531");

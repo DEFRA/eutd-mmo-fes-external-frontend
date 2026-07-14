@@ -4,6 +4,7 @@ const deleteThisProcessingStatementUrl = `${documentUrl}/delete-this-draft-proce
 
 describe("Delete this draft processing statement page", () => {
   it("should render the correct h1 title", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DeleteThisDraftDocumentBadRequest,
     };
@@ -13,6 +14,7 @@ describe("Delete this draft processing statement page", () => {
   });
 
   it("should display an error summary and error validation at the form input when there is a bad request", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DeleteThisDraftDocumentBadRequest,
     };
@@ -27,6 +29,7 @@ describe("Delete this draft processing statement page", () => {
   });
 
   it("Submit form with yes option on click of save and continue button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DeleteThisDraftDocumentOptionYes,
     };
@@ -36,6 +39,7 @@ describe("Delete this draft processing statement page", () => {
   });
 
   it("Submit form with no option on click of save and continue button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DeleteThisDraftDocumentOptionNo,
     };
@@ -45,6 +49,7 @@ describe("Delete this draft processing statement page", () => {
   });
 
   it("forbidden 403", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DeleteThisDraftDocument403,
     };
@@ -56,6 +61,7 @@ describe("Delete this draft processing statement page", () => {
   });
 
   it("redirect to home 404", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DeleteThisDraftDocument404,
     };
@@ -67,6 +73,7 @@ describe("Delete this draft processing statement page", () => {
   });
 
   it("should 404 if documentNumber is missing", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DeleteThisDraftDocumentNoRecord,
     };

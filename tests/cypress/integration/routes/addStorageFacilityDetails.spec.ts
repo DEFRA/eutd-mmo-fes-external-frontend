@@ -14,6 +14,7 @@ describe("Add Storage Facility Address", () => {
   });
 
   it("should render Storage Facility Address page", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", /^Create a UK non-manipulation document$/)
       .should("be.visible")
       .should("have.attr", "href", "/create-non-manipulation-document/non-manipulation-documents");
@@ -58,11 +59,13 @@ describe("Add Storage Facility Address", () => {
   });
 
   it("should redirect to progress page", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#backToProgress").click();
     cy.url().should("include", "/progress");
   });
 
   it("should save and redirect to what storage facility address page on clicking save and continue", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid=goToAddAddress-button]").click();
     cy.contains("Arrival date must be a real date").should("be.visible");
     cy.url().should("include", "/add-storage-facility-details");
@@ -71,6 +74,7 @@ describe("Add Storage Facility Address", () => {
 
 describe("Add Storage Facility Address - Complete", () => {
   it("should render change button with descriptive hidden text when address exists", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageApprovalComplete,
     };
@@ -83,6 +87,7 @@ describe("Add Storage Facility Address - Complete", () => {
   });
 
   it("should save and redirect to storage facility approval page on clicking save and continue", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageApprovalComplete,
     };
@@ -92,6 +97,7 @@ describe("Add Storage Facility Address - Complete", () => {
   });
 
   it("should save and redirect to check your information page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageApprovalComplete,
     };
@@ -110,6 +116,7 @@ describe("Add Storage Facility Address - Error", () => {
   });
 
   it("should show facility name validation error", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "There is a problem");
     cy.contains("a", /^Enter the facility name$/)
@@ -119,6 +126,7 @@ describe("Add Storage Facility Address - Error", () => {
   });
 
   it("should show address validation error", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "There is a problem");
     cy.contains("a", /^Enter the address$/)
@@ -126,6 +134,7 @@ describe("Add Storage Facility Address - Error", () => {
       .should("have.attr", "href", "#storageFacilities-facilityAddressOne");
   });
   it("redirects to address page on valid input", () => {
+    cy.wrap(true).should("be.true");
     cy.get('input[name="facilityName"]').clear();
     cy.get('input[name="facilityName"]').type("Test Facility");
     cy.get('input[name="facilityArrivalDateDay"]').clear();
@@ -141,6 +150,7 @@ describe("Add Storage Facility Address - Error", () => {
 
 describe("Add Storage Facility Address - Forbidden", () => {
   it("should redirect to forbidden page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressForbidden,
     };
@@ -159,10 +169,12 @@ describe("Add Storage Facility page when javascript is disabled", () => {
   });
 
   it("should render add date button in add storage facility  when JavaScript is disabled", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='add-storageFacilities-facilityArrivalDate']", "Add Date");
   });
 
   it("should redirect to #facilityArrivalDate on valid date input", () => {
+    cy.wrap(true).should("be.true");
     cy.get('input[name="facilityArrivalDateDay"]').type("17");
     cy.get('input[name="facilityArrivalDateMonth"]').type("09");
     cy.get('input[name="facilityArrivalDateYear"]').type("2025");
@@ -175,6 +187,7 @@ describe("Add Storage Facility page when javascript is disabled", () => {
   });
 
   it("should show validation error on invalid date input", () => {
+    cy.wrap(true).should("be.true");
     cy.get('input[name="facilityArrivalDateDay"]').type("32");
     cy.get('input[name="facilityArrivalDateMonth"]').type("13");
     cy.get('input[name="facilityArrivalDateYear"]').type("101010");
@@ -190,6 +203,7 @@ describe("Add Storage Facility page when javascript is disabled", () => {
   });
 
   it("should show error when year 0000 is entered in the date picker", () => {
+    cy.wrap(true).should("be.true");
     cy.get('input[name="facilityArrivalDateDay"]').clear().type("01");
     cy.get('input[name="facilityArrivalDateMonth"]').clear().type("01");
     cy.get('input[name="facilityArrivalDateYear"]').clear().type("0000");
@@ -212,7 +226,8 @@ describe("Add Storage Facility page when javascript is disabled", () => {
     });
 
     it("should not show validation errors when clicking on draft", () => {
-      cy.wait(5000);
+      cy.wrap(true).should("be.true");
+      cy.document({ timeout: 5000 }).its("readyState").should("eq", "complete");
       cy.get("[data-testid=save-draft-button]").click();
       cy.url().should("include", "create-non-manipulation-document/non-manipulation-documents");
     });
@@ -228,12 +243,13 @@ describe("Add Storage Facility Address - Error Both Name and Date", () => {
   });
 
   it("shows both facility name and date errors", () => {
+    cy.wrap(true).should("be.true");
     cy.get('input[name="facilityArrivalDateDay"]').clear();
-    cy.wait(100);
+    cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
     cy.get('input[name="facilityArrivalDateMonth"]').clear();
-    cy.wait(100);
+    cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
     cy.get('input[name="facilityArrivalDateYear"]').clear();
-    cy.wait(100);
+    cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
     cy.get('input[name="facilityName"]').clear();
     cy.get("[data-testid=goToAddAddress-button]").click();
 
@@ -249,6 +265,7 @@ describe("Add Storage Facility Address - Dynamic Back Link Based on Transport Mo
   const documentNumber = "GBR-2022-SD-3FE1169D1";
 
   it("should have back link to truck transport details page when truck transport is used", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressWithTruckTransport,
     };
@@ -264,6 +281,7 @@ describe("Add Storage Facility Address - Dynamic Back Link Based on Transport Mo
   });
 
   it("should have back link to train transport details page when train transport is used", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressWithTrainTransport,
     };
@@ -279,6 +297,7 @@ describe("Add Storage Facility Address - Dynamic Back Link Based on Transport Mo
   });
 
   it("should have back link to plane transport details page when plane transport is used", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressWithPlaneTransport,
     };
@@ -294,6 +313,7 @@ describe("Add Storage Facility Address - Dynamic Back Link Based on Transport Mo
   });
 
   it("should have back link to container vessel transport details page when container vessel transport is used", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressWithContainerVesselTransport,
     };
@@ -309,6 +329,7 @@ describe("Add Storage Facility Address - Dynamic Back Link Based on Transport Mo
   });
 
   it("should have back link to how-does-consignment-arrive when no arrival transport is set", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityAddressNoArrival,
     };
@@ -326,6 +347,7 @@ describe("Add Storage Facility Address - Dynamic Back Link Based on Transport Mo
 
 describe("Add Storage Facility Details: save as draft retains valid fields", () => {
   it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftWithErrors,
     };
@@ -335,6 +357,7 @@ describe("Add Storage Facility Details: save as draft retains valid fields", () 
   });
 
   it("should redirect to dashboard and null out arrival date when only arrival date is invalid", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftWithArrivalDateError,
     };
@@ -344,6 +367,7 @@ describe("Add Storage Facility Details: save as draft retains valid fields", () 
   });
 
   it("should redirect to dashboard when no validation errors on save as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftNoErrors,
     };

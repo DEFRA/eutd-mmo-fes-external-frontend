@@ -6,6 +6,7 @@ const trainPageUrl = `${certificateUrl}/add-arrival-transportation-details-train
 
 describe("Add Transportation Details Train: Allowed", () => {
   it("should render train transport details page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
     };
@@ -15,7 +16,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-arrive-to-the-uk`);
     cy.get(".govuk-heading-xl").contains("Train arriving in the UK");
-    cy.wait(250);
+    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.get("form").should(($form) => {
       expect($form.find("input[type='text']")).to.have.lengthOf(6);
 
@@ -55,6 +56,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should render labels with bold font weight for NMD arrival transport", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
     };
@@ -69,6 +71,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should render all required fields for train arrival transport", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
     };
@@ -86,6 +89,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should display error when rail bill number has more than 15 chars", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsRailwayBillNumber,
     };
@@ -101,6 +105,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should display error when railway bill has alphanumeric text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveRailwayBillNumberEmpty,
     };
@@ -116,6 +121,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should display error when place of unloading is empty", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsTrainPlaceOfUnloadingEmpty,
     };
@@ -132,6 +138,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should display error when place of unloading is empty", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsTrainPlaceOfUnloadingExceedString,
     };
@@ -145,12 +152,13 @@ describe("Add Transportation Details Train: Allowed", () => {
     );
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.wait(250);
+    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Place of unloading must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should display error when railway bill has alphanumeric text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveAlphanumericsRailwayBillNumber,
     };
@@ -166,6 +174,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should display errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportErrors,
     };
@@ -178,6 +187,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should navigate to sd dashboard page on click of save as draft button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSaveAsDraft,
     };
@@ -193,6 +203,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should navigate to storage facility page on click of save and continue button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,
     };
@@ -206,6 +217,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should navigate to storage facility page on click of save and continue button with empty values", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,
     };
@@ -216,6 +228,7 @@ describe("Add Transportation Details Train: Allowed", () => {
 
   // FI0-10289: Scenario 1 - Verify info message is removed and labels don't contain '(optional)'
   it("should not display optional info message and fields should not have optional labels", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
     };
@@ -249,6 +262,7 @@ describe("Add Transportation Details Train: Allowed", () => {
 
   // FI0-10289: Scenario 2 - Error when Country of departure not populated
   it("should display error when country of departure is not populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
     };
@@ -271,6 +285,7 @@ describe("Add Transportation Details Train: Allowed", () => {
 
   // FI0-10289: Scenario 3 - Error when Where the consignment departs from not populated
   it("should display error when where the consignment departs from is not populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
     };
@@ -293,6 +308,7 @@ describe("Add Transportation Details Train: Allowed", () => {
 
   // FI0-10289: Scenario 4 - Error when Departure date not populated
   it("should display error when departure date is not populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
     };
@@ -313,6 +329,7 @@ describe("Add Transportation Details Train: Allowed", () => {
 
   // FI0-10289: Scenario 5 - All mandatory fields populated
   it("should navigate to storage facility page when all mandatory fields are populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,
     };
@@ -336,6 +353,7 @@ describe("Add Transportation Details Train: Allowed", () => {
 
 describe("Add Transportation Details Train: Disallowed", () => {
   it("should redirect to the forbidden page if transport is not truck", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportDisAllowed,
     };
@@ -346,6 +364,7 @@ describe("Add Transportation Details Train: Disallowed", () => {
 
 describe("Add Transportation Details Train: 403 on page load", () => {
   it("should redirect to the forbidden page if transport returns un authorised", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportAllowedUnauthorised,
     };
@@ -357,6 +376,7 @@ describe("Add Transportation Details Train: 403 on page load", () => {
 // FI0-10289: Scenario 6 - Welsh Translations
 describe("Add Transportation Details Train: Welsh Translations", () => {
   it("should display error messages in Welsh when Welsh language is selected", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
     };
@@ -383,6 +403,7 @@ describe("Add Transportation Details Train: Welsh Translations", () => {
   });
 
   it("should handle adding and removing containers", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
     };
@@ -416,6 +437,7 @@ describe("Add Transportation Details Train: Welsh Translations", () => {
   });
 
   it("should display field labels in Welsh", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
     };

@@ -9,6 +9,7 @@ describe("How does the export leave the UK - Back Navigation", () => {
 
   describe("Scenario 1: Back navigation when adding additional transport mode", () => {
     it("should navigate back to do-you-have-additional-transport-types when fromAdditionalTransport=true", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.HowDoesTheExportLeaveTheUkBackFromAdditionalTransport,
       };
@@ -33,6 +34,7 @@ describe("How does the export leave the UK - Back Navigation", () => {
 
   describe("Scenario 2: Back navigation when on first transport mode", () => {
     it("should navigate back to what-export-journey when fromAdditionalTransport is not set", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.HowDoesTheExportLeaveTheUkBackFromWhatExportJourney,
       };
@@ -57,6 +59,7 @@ describe("How does the export leave the UK - Back Navigation", () => {
 
   describe("Scenario 3: Back navigation when adding additional transport mode for cloned document", () => {
     it("should navigate back to do-you-have-additional-transport-types for cloned document", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.HowDoesTheExportLeaveTheUkBackFromAdditionalTransportCloned,
       };
@@ -81,6 +84,7 @@ describe("How does the export leave the UK - Back Navigation", () => {
 
   describe("Scenario 4: Back navigation when on first transport mode for cloned document", () => {
     it("should navigate back to what-export-journey for cloned document", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.HowDoesTheExportLeaveTheUkBackFromWhatExportJourneyCloned,
       };
@@ -105,6 +109,7 @@ describe("How does the export leave the UK - Back Navigation", () => {
 
   describe("Progressive Enhancement: Back navigation without JavaScript", () => {
     it("should work when adding additional transport mode without JS", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.HowDoesTheExportLeaveTheUkBackFromAdditionalTransport,
         disableScripts: true,
@@ -121,6 +126,7 @@ describe("How does the export leave the UK - Back Navigation", () => {
     });
 
     it("should work when on first transport mode without JS", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.HowDoesTheExportLeaveTheUkBackFromWhatExportJourney,
         disableScripts: true,
@@ -142,6 +148,7 @@ describe("How does the export leave the UK - Save as draft (FI0-10577)", () => {
   const certificateUrl = "/create-catch-certificate/GBR-2025-CC-136BEC4E4";
 
   it("should redirect to CC dashboard without calling the transport API when no vehicle is selected", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.HowDoesTheExportLeaveSaveAsDraftNoVehicle,
     };

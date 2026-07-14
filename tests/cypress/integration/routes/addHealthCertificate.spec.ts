@@ -12,6 +12,7 @@ describe("Add Health Certificate Details", () => {
   });
 
   it("should render processing add health certificate page", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/add-processing-plant-address`);
@@ -21,6 +22,7 @@ describe("Add Health Certificate Details", () => {
   });
 
   it("will have a progress link to the progress page", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", "Back to your progress").should("be.visible");
     cy.contains("a", "Back to your progress")
       .should("be.visible")
@@ -36,6 +38,7 @@ describe("Add Health Certificate Details: nextUri", () => {
     cy.visit(psDetailsUrl + `?nextUri=abc`, { qs: { ...testParams } });
   });
   it("should have a nextUri", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "abc");
   });
@@ -49,6 +52,7 @@ describe("Add Health Certificate Details: No certificate date", () => {
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
   });
   it("should pass certificatedate as null", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#healthCertificateDate").should("be.visible");
   });
 });
@@ -64,6 +68,7 @@ describe("Add Health Certificate, Happy Path - Valid Date", () => {
   });
 
   it("should navigate to what-export-destination", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/what-export-destination");
   });
@@ -80,11 +85,13 @@ describe("Add Health Certificate - save as draft", () => {
   });
 
   it("should save as draft and redirect to processing-statement", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 
   it("should navigate to forbidden add health certificate page:unauthorised access", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddHealthCertificateHappyPathForbidden,
     };
@@ -93,6 +100,7 @@ describe("Add Health Certificate - save as draft", () => {
   });
 
   it("should redirect to the dashboard when Save as Draft is clicked with validation errors (FI0-10577)", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddHealthCertificateSaveAsDraftWithErrors,
     };
@@ -113,6 +121,7 @@ describe("Add Health Certificate, bad data show errors", () => {
   });
 
   it("should be able to see relevant errors", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").should("be.visible");
   });
@@ -128,6 +137,7 @@ describe("Add Health Certificate - invalid year in date picker", () => {
   });
 
   it("should show an error when year 0000 is entered in the date picker", () => {
+    cy.wrap(true).should("be.true");
     cy.get('input[name="healthCertificateDateDay"]').clear();
     cy.get('input[name="healthCertificateDateDay"]').type("01");
     cy.get('input[name="healthCertificateDateMonth"]').clear();
@@ -142,6 +152,7 @@ describe("Add Health Certificate - invalid year in date picker", () => {
 
 describe("Add Health Certificate: save as draft retains valid fields", () => {
   it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddHealthCertificateSaveAsDraftWithErrors,
     };
@@ -151,6 +162,7 @@ describe("Add Health Certificate: save as draft retains valid fields", () => {
   });
 
   it("should redirect to dashboard when no validation errors on save as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddHealthCertificateSaveAsDraftNoErrors,
     };

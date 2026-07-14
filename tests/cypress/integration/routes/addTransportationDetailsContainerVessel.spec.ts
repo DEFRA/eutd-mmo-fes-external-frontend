@@ -13,25 +13,30 @@ describe("Add Transportation Details: Container Vessel", () => {
   });
 
   it("should render the expected title", () => {
+    cy.wrap(true).should("be.true");
     cy.title().should("eq", "Add transportation details: container vessel - Create a UK catch certificate - GOV.UK");
   });
 
   it("should render the expected header", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-heading-xl").contains("Add transportation details: container vessel");
   });
 
   it("should render back link", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-export-leave-the-uk/0`);
   });
 
   it("should render the buttons texts", () => {
+    cy.wrap(true).should("be.true");
     cy.get('[data-testid="save-draft-button"]').contains("Save as draft");
     cy.get('[data-testid="save-and-continue"]').should("be.visible").contains("Save and continue");
   });
 
   it("should render the input label and hint text", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("label", "Vessel name");
     cy.contains("label", "Flag state");
     cy.contains("label", "Shipping container identification number");
@@ -47,6 +52,7 @@ describe("Add Transportation Details: Container Vessel", () => {
 
 describe("Save and Continue button - UnHappy path", () => {
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SaveVesselTransportDetailsFailsWith403,
     };
@@ -57,6 +63,7 @@ describe("Save and Continue button - UnHappy path", () => {
   });
 
   it("should display errors at top", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportErrors,
     };
@@ -73,6 +80,7 @@ describe("Save and Continue button - UnHappy path", () => {
 
 describe("Save and Continue button - Happy path", () => {
   it("should redirect to progress page on click of save and continue button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSave,
     };
@@ -88,6 +96,7 @@ describe("Save and Continue button - Happy path", () => {
   });
 
   it("should redirect to dashboard page on click of save as draft button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSaveAsDraft,
     };
@@ -105,6 +114,7 @@ describe("Save and Continue button - Happy path", () => {
 
 describe("Add Transportation Details Container Vessel : Disallowed", () => {
   it("should redirect to the progress page if transport is not Container Vessel", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportDisAllowed,
     };
@@ -115,6 +125,7 @@ describe("Add Transportation Details Container Vessel : Disallowed", () => {
 
 describe("should redirect to forbidden page it transport details return 403 on page load", () => {
   it("should redirect to the forbidden page if transport returns un authorised", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportAllowedUnauthorised,
     };
@@ -125,6 +136,7 @@ describe("should redirect to forbidden page it transport details return 403 on p
 
 describe("Add Transportation Details Container Vessel: Container Identification Number Validation", () => {
   it("should display format error when container identification number has invalid format regardless of length", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportContainerMaxLength,
     };
@@ -142,6 +154,7 @@ describe("Add Transportation Details Container Vessel: Container Identification 
   });
 
   it("should display error when container identification number contains invalid characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportContainerInvalidCharacters,
     };
@@ -159,6 +172,7 @@ describe("Add Transportation Details Container Vessel: Container Identification 
   });
 
   it("should save successfully when container identification number is not provided", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSave,
     };
@@ -172,6 +186,7 @@ describe("Add Transportation Details Container Vessel: Container Identification 
   });
 
   it("should save successfully when container identification number is valid", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSave,
     };
@@ -185,6 +200,7 @@ describe("Add Transportation Details Container Vessel: Container Identification 
   });
 
   it("should save successfully when container identification number is entered in lowercase", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSave,
     };
@@ -200,6 +216,7 @@ describe("Add Transportation Details Container Vessel: Container Identification 
 
 describe("Add Transportation Details Container Vessel: Multiple Container Numbers", () => {
   it("should save multiple container values successfully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportMultipleContainers,
     };
@@ -229,6 +246,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
   });
 
   it("should allow empty container fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportEmptyContainers,
     };
@@ -258,6 +276,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
   });
 
   it("should load pre-existing container values from backend", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportEditWithContainers,
     };
@@ -270,6 +289,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
   });
 
   it("should display format error when container number has invalid format regardless of length", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportContainerMaxLength,
     };
@@ -290,6 +310,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
   });
 
   it("should display container field label and hint text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSave,
     };
@@ -307,6 +328,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
   });
 
   it("should limit to maximum 10 containers", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSave,
     };
@@ -331,6 +353,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
   });
 
   it("should show remove button for each container except when only one exists", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSave,
     };
@@ -354,6 +377,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
   });
 
   it("should properly reindex container inputs when removing middle container", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSave,
     };
@@ -379,6 +403,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
   });
 
   it("should properly reindex container inputs when removing first container", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSave,
     };
@@ -401,6 +426,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
   });
 
   it("should properly reindex container inputs when removing last container", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSave,
     };

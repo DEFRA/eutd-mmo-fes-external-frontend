@@ -13,6 +13,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render the correct back link to progress page", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
@@ -20,6 +21,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should contain the required heading", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("dt", "Your reference");
     cy.contains("dt", "Company name");
     cy.contains("dt", "Company address");
@@ -41,6 +43,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should contain the required data", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformation,
     };
@@ -60,6 +63,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should contain all the required change tags and urls", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#yourReferenceChangeLink")
       .should("be.visible")
       .should("have.attr", "href")
@@ -87,6 +91,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should display point of destination data", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformation,
     };
@@ -96,6 +101,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should have point of destination change link", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#pointOfDestinationChangeLink")
       .should("be.visible")
       .should("have.attr", "href")
@@ -103,6 +109,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should display the document number in the Document details section", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("h2", "Document details").should("be.visible");
     cy.contains("dt", "Document number").should("be.visible");
     cy.contains("dt", "Document number").next("dd").should("contain.text", "GBR-2023-PS-DE53D6E7C");
@@ -111,6 +118,7 @@ describe("Check Your Information (Summary) page: UI", () => {
 
 describe("Check Your Information page: updated exporter", () => {
   it("should load the page with updated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformationUpdatedExporter,
     };
@@ -120,6 +128,7 @@ describe("Check Your Information page: updated exporter", () => {
 
 describe("Check Your Information (Summary) page: Validation", () => {
   it("should error and show a validation error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformationValidationError,
     };
@@ -134,6 +143,7 @@ describe("Check Your Information (Summary) page: Validation", () => {
   });
 
   it("should error and show a health validation error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformationHealthCertificateValidationError,
     };
@@ -145,6 +155,7 @@ describe("Check Your Information (Summary) page: Validation", () => {
   });
 
   it("should redirect user to processing statement created page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformationValidationSuccess,
     };
@@ -155,6 +166,7 @@ describe("Check Your Information (Summary) page: Validation", () => {
   });
 
   it("should navigate to forbidden page plant address page:unauthorised access", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformationUnauthorised,
     };
@@ -172,6 +184,7 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
   });
 
   it("should render the correct back link", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
@@ -179,6 +192,7 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
   });
 
   it("should contain the required heading", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformation,
     };
@@ -202,6 +216,7 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
   });
 
   it("should contain the required data", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformation,
     };
@@ -223,6 +238,7 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
 
 describe("Check Your Information (Summary) page: page guard", () => {
   it("should redirect to the progress page for incomplete processing statement details", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformationPageGuardCase,
     };
@@ -231,6 +247,7 @@ describe("Check Your Information (Summary) page: page guard", () => {
   });
 
   it("should redirect to the progress page for incomplete exporter details", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformationPageGuardCaseNoExporter,
     };
@@ -239,6 +256,7 @@ describe("Check Your Information (Summary) page: page guard", () => {
   });
 
   it("should redirect to dashboard when processing statement is already complete", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformationPageGuardCaseComplete,
     };
@@ -250,6 +268,7 @@ describe("Check Your Information (Summary) page: page guard", () => {
 
 describe("Check Your Information (Summary) page: with product descriptions", () => {
   it("should render check your formation page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformation,
     };
@@ -266,6 +285,7 @@ describe("Check Your Information (Summary) page: with product descriptions", () 
   });
 
   it("should render progress page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformationPageGuardProductDescriptions,
     };
@@ -283,6 +303,7 @@ describe("Check Your Information (Summary) page: non-UK catch certificate with i
   });
 
   it("should display issuing country for non-UK certificates", () => {
+    cy.wrap(true).should("be.true");
     // Check that the issuing country field is displayed
     cy.contains("dt", "Issuing country").should("be.visible");
     // Check that the issuing country value is displayed correctly
@@ -290,6 +311,7 @@ describe("Check Your Information (Summary) page: non-UK catch certificate with i
   });
 
   it("should not display issuing country for UK certificates", () => {
+    cy.wrap(true).should("be.true");
     // The first catch is UK-issued, so there should be only one issuing country field
     cy.get("dt").contains("Issuing country").should("have.length", 1);
   });

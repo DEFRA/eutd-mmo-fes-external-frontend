@@ -6,6 +6,7 @@ const storageFacilityUrl = `${certificateUrl}/add-storage-facility-details`;
 
 describe("Add Transportation Details Plane: Allowed", () => {
   it("should render plane transport details page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportAllowed,
     };
@@ -55,6 +56,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.contains("button", "Save as draft").should("be.visible");
   });
   it("should render labels with bold font weight for NMD arrival transport", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportAllowed,
     };
@@ -70,6 +72,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should render all required fields for plane arrival transport", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportAllowed,
     };
@@ -87,6 +90,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departureDate-year").should("exist");
   });
   it("should navigate to sd dashboard page on click of save as draft button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
     };
@@ -101,6 +105,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should retain all field values including dates and containers when saving as draft with complete data", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
     };
@@ -142,6 +147,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should retain dates and accept invalid container format when saving as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
     };
@@ -174,6 +180,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should navigate to storage facility page on click of save and continue button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
@@ -188,6 +195,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should navigate to storage facility page on click of save and continue button with empty values", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
@@ -197,6 +205,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SavePlaneTransportDetailsFailsWith403,
     };
@@ -207,13 +216,12 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when air waybill number exceeds 50 chars", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveMaxCharsAirwayBillNumber,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type(
-      "This air waybill number is way too long and exceeds the maximum character limit"
-    );
+    cy.get("#airwayBillNumber").type("This air waybill number is way too long and exceeds the maximum character limit");
     cy.get("#flightNumber").type("AF296Q");
     cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "France");
@@ -225,6 +233,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when flight number is empty", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSavePlaneFlightNumberEmpty,
     };
@@ -241,6 +250,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when flight number exceeds 15 chars", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsPlaneFlightNumber,
     };
@@ -257,6 +267,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when flight number has invalid characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveAlphanumericPlaneFlightNumber,
     };
@@ -273,6 +284,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when freight bill number exceeds 60 chars", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveMaxCharsFreightBillNumber,
     };
@@ -291,6 +303,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when freight bill number has alphanumeric text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveAlphanumericsFreightBillNumber,
     };
@@ -310,6 +323,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when place of unloading is empty", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsPlanePlaceOfUnloadingEmpty,
     };
@@ -327,6 +341,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when place of unloading is empty", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsPlanePlaceOfUnloadingExceedString,
     };
@@ -341,12 +356,13 @@ describe("Add Transportation Details Plane: Allowed", () => {
     );
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.wait(250);
+    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Place of unloading must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should display error when container identification number is not populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ArrivalPlaneTransportContainerNumberEmpty,
     };
@@ -365,6 +381,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when country of departure is not populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ArrivalPlaneTransportDepartureCountryEmpty,
     };
@@ -383,6 +400,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when where the consignment departs from is not populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ArrivalPlaneTransportDeparturePortEmpty,
     };
@@ -401,6 +419,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when departure date is not populated", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ArrivalPlaneTransportDepartureDateEmpty,
     };
@@ -421,11 +440,12 @@ describe("Add Transportation Details Plane: Allowed", () => {
 
   describe("Multiple Containers", () => {
     it("should handle adding and removing containers", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PlaneTransportAllowed,
       };
       cy.visit(planePageUrl, { qs: { ...testParams } });
-      cy.wait(500);
+      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
       cy.get('input[name="containerNumbers.0"]').should("be.visible");
       cy.get("#add-container-button").should("be.visible");
@@ -453,6 +473,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
 
 describe("Add Transportation Details Plane: not allowed", () => {
   it("should redirect to the progress page if transport is not plane", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportNotAllowed,
     };
@@ -463,6 +484,7 @@ describe("Add Transportation Details Plane: not allowed", () => {
 
 describe("Add Transportation Details Plane: 403 on page load", () => {
   it("should redirect to the forbidden page if transport returns un authorised", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportAllowedUnauthorised,
     };

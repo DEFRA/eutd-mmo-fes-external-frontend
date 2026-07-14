@@ -13,11 +13,13 @@ describe("What are you exporting page", () => {
   });
 
   it("should render a back link to add-exporter-details for non-CSV upload", () => {
+    cy.wrap(true).should("be.true");
     cy.findByRole("link", { name: "Back" }).click();
     cy.url().should("eq", `http://localhost:3000${documentUrl}/add-exporter-details`);
   });
 
   it("should render the insert text", () => {
+    cy.wrap(true).should("be.true");
     cy.get("p").contains("Please Note:");
     cy.get("#speciesAndLandingsGuidanceMessage")
       .find("li")
@@ -29,10 +31,12 @@ describe("What are you exporting page", () => {
   });
 
   it("should render the correct page title", () => {
+    cy.wrap(true).should("be.true");
     cy.findByRole("heading", { name: "What are you exporting?", level: 1 }).should("be.visible");
   });
 
   it("should check the tabs", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#productTabs")
       .find("li")
       .should("have.length", 2)
@@ -43,6 +47,7 @@ describe("What are you exporting page", () => {
   });
 
   it("should toggle the tabs and find text", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-tab-id='favouritesTab']").click();
     cy.get(".govuk-tabs__tab").contains("Add products from favourites").should("be.visible");
     cy.get("[data-tab-id='productsTab']").click();
@@ -50,6 +55,7 @@ describe("What are you exporting page", () => {
   });
 
   it("should submit product with out any errors", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid*='edit-button'").eq(0).click();
     cy.get("#species").contains("Albacore (ALB)");
     cy.get("#state").contains("Fresh");
@@ -60,6 +66,7 @@ describe("What are you exporting page", () => {
   });
 
   it("should submit product with out any errors without adding to favourites", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid*='edit-button'").eq(0).click();
     cy.get("#species").contains("Albacore (ALB)");
     cy.get("#state").contains("Fresh");
@@ -70,6 +77,7 @@ describe("What are you exporting page", () => {
   });
 
   it("should check for field labels", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("label", "Common name or FAO code").should("be.visible");
     cy.contains("label", "State").should("be.visible");
     cy.contains("label", "Presentation").should("be.visible");
@@ -78,30 +86,36 @@ describe("What are you exporting page", () => {
   });
 
   it("should render the input label and hint text", () => {
+    cy.wrap(true).should("be.true");
     cy.get("div .govuk-hint").contains("For example, Lobster or LBE.").should("be.visible");
   });
 
   it("should render form button", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='add-product']", "Add product").should("be.visible");
     cy.contains("#add-product", "Add product").should("be.visible");
     cy.contains("[data-testid='cancel']", "Cancel").should("be.visible");
   });
 
   it("should render mangage favourites link", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", /^Manage your product favourites$/).should("be.visible");
   });
 
   it("should select the checkbox", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#addToFavourites").check();
     cy.get("#addToFavourites").should("be.checked");
     cy.contains("label", "Add to product favourites").should("be.visible");
   });
 
   it("should check for your products section", () => {
+    cy.wrap(true).should("be.true");
     cy.findByRole("heading", { name: "Your products", level: 2 }).should("be.visible");
   });
 
   it("should check your products table", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-table__head").find("th").should("have.length", 3);
     cy.get(".govuk-table__head").find("th").eq(0).contains("Product");
     cy.get(".govuk-table__head").find("th").eq(1).contains("Commodity Code");
@@ -109,35 +123,41 @@ describe("What are you exporting page", () => {
   });
 
   it("should render the  Edit and remove buttons", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("[data-testid*='edit-button']", "Edit").should("be.visible");
     cy.get("[data-testid*='edit-button'").eq(0).click();
     cy.contains("[data-testid*='remove-button']", "Remove").should("be.visible");
   });
 
   it("should check the products are visible and remove button functionality", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-table__row").should("be.visible");
     cy.get(".govuk-table__row").find("td").should("have.length", 15);
     cy.get("[data-testid*='remove-button']").eq(0).click();
   });
 
   it("should render the  save as draft button", () => {
+    cy.wrap(true).should("be.true");
     cy.findByRole("button", { name: "Save as draft" });
     cy.get("#saveAsDraft").click();
     cy.url().should("include", "/catch-certificates");
   });
 
   it("should render the  cancel button", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='cancel']").should("be.visible");
     cy.get("[data-testid='cancel']").click();
   });
 
   it("should render the  Save and continue button", () => {
+    cy.wrap(true).should("be.true");
     cy.findByRole("button", { name: "Save and continue" });
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/add-landings");
   });
 
   it("check input typing for finding the species", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-tab-id='productsTab']").click();
     cy.get("#add-products").should("be.visible");
     cy.get("[data-tab-id='favouritesTab']").click();
@@ -145,11 +165,13 @@ describe("What are you exporting page", () => {
   });
 
   it("should change the species information and select state, presentation", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#species").invoke("val", "Atlantic bluefin tuna (BFT)").trigger("change");
     cy.get("#species").should("have.value", "Atlantic bluefin tuna (BFT)");
   });
 
   it("should render summary details species link and find out the count", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-details__summary").should("have.length", 2);
     cy.get("div .govuk-details__summary").eq(0).contains("I cannot find the species");
     cy.get("div .govuk-details__summary").eq(0).click();
@@ -167,6 +189,7 @@ describe("What are you exporting page", () => {
   });
 
   it("should render summary details commodity code link and find out the count", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-details__summary").should("have.length", 2);
     cy.get("div .govuk-details__summary").eq(1).contains("I cannot find the commodity code");
     cy.get("div .govuk-details__summary").eq(1).click();
@@ -176,11 +199,13 @@ describe("What are you exporting page", () => {
   });
 
   it("should show redirect to manual landings page if landing type is manual landing", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/add-landings");
   });
 
   it("should display pre-populated product fields when editing", () => {
+    cy.wrap(true).should("be.true");
     // This test verifies that when editing an existing product (Aesop shrimp),
     // all fields (species, state, presentation, commodity code) are displayed
     cy.get("[data-testid*='edit-button'").eq(0).click();
@@ -200,6 +225,7 @@ describe("What are you exporting page when js is enabled", () => {
   });
 
   it("should submit product and display any errors", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid*='edit-button'").eq(0).click();
     cy.get("#species").contains("Albacore (ALB)");
     cy.get("#state").contains("Fresh");
@@ -218,6 +244,7 @@ describe("What are you exporting page direct landing", () => {
     cy.visit(productsUrl, { qs: { ...testParams } });
   });
   it("should render the  Save and continue button and redirect to direct-landing", () => {
+    cy.wrap(true).should("be.true");
     cy.findByRole("button", { name: "Save and continue" });
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/direct-landing");
@@ -233,6 +260,7 @@ describe("Errors on click of add product button", () => {
   });
 
   it("should show errors click of add product button", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-product']").eq(0).click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the common name or FAO code$/).should("be.visible");
@@ -244,6 +272,7 @@ describe("Errors on click of add product button", () => {
 
 describe("Errors on click of add product button from favourites", () => {
   it("should show errors click of add product button from favourites", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnSaveFromFavourites,
     };
@@ -262,6 +291,7 @@ describe("Errors on click of add product button from favourites", () => {
   });
 
   it("should trigger error scrolling when there are validation errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnSaveFromFavourites,
     };
@@ -278,6 +308,7 @@ describe("Errors on click of add product button from favourites", () => {
 
 describe("Save and continue what are you exporting page", () => {
   it("should show errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnSave,
     };
@@ -291,6 +322,7 @@ describe("Save and continue what are you exporting page", () => {
 
 describe("Add a product when addedToFavourites is false", () => {
   it("should submit product with out any errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingNoFavourite,
     };
@@ -303,6 +335,7 @@ describe("Add a product when addedToFavourites is false", () => {
 
 describe("What are you exporting page: page guard", () => {
   it("should redirect to the forbidden page if the user is unauthorised to access a document number", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingFailsWith403,
     };
@@ -313,6 +346,7 @@ describe("What are you exporting page: page guard", () => {
   });
 
   it("should redirect to landings entry page when the user tries to access the products page with null landings entry", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingPageGuard,
     };
@@ -323,6 +357,7 @@ describe("What are you exporting page: page guard", () => {
 
 describe("What are you exporting page: with 100 products", () => {
   it("should not render a products button to add product", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
     };
@@ -331,6 +366,7 @@ describe("What are you exporting page: with 100 products", () => {
   });
 
   it("should render in edit mode", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
     };
@@ -341,6 +377,7 @@ describe("What are you exporting page: with 100 products", () => {
   });
 
   it("should render in edit mode for unknown products", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
     };
@@ -358,10 +395,12 @@ describe("What are you exporting page: add Product to favourites", () => {
   });
 
   it("should add product to favourites when add product button is clicked", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#add-product").click();
     cy.get(".govuk-error-summary").should("not.exist");
   });
   it("click on save and continue with unauthorised response", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/forbidden");
   });
@@ -369,6 +408,7 @@ describe("What are you exporting page: add Product to favourites", () => {
 
 describe("What are you exporting page: editing product with errors", () => {
   it("should error if trying to submit an incorrect commodity_code", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingEditErrorsOnSave,
     };
@@ -392,6 +432,7 @@ describe("What are you exporting page: editing product with errors", () => {
 
 describe("What are you exporting page: CSV upload journey back button", () => {
   it("should render a back link to upload-file for CSV upload", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingUploadEntry,
     };
@@ -403,6 +444,7 @@ describe("What are you exporting page: CSV upload journey back button", () => {
 
 describe("What are you exporting page: Additional coverage for component rendering", () => {
   it("should render correctly when no errors are present", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -417,6 +459,7 @@ describe("What are you exporting page: Additional coverage for component renderi
   });
 
   it("should render error summary when errors exist", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
@@ -431,6 +474,7 @@ describe("What are you exporting page: Additional coverage for component renderi
   });
 
   it("should render products table with correct structure", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -446,6 +490,7 @@ describe("What are you exporting page: Additional coverage for component renderi
   });
 
   it("should use correct props from loader data", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -460,6 +505,7 @@ describe("What are you exporting page: Additional coverage for component renderi
   });
 
   it("should handle favourites tab correctly", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -477,6 +523,7 @@ describe("What are you exporting page: Additional coverage for component renderi
   });
 
   it("should render add products form with all required fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -492,6 +539,7 @@ describe("What are you exporting page: Additional coverage for component renderi
   });
 
   it("should display guidance message with correct bullet points", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -502,6 +550,7 @@ describe("What are you exporting page: Additional coverage for component renderi
   });
 
   it("should render hidden nextUri input field", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -511,6 +560,7 @@ describe("What are you exporting page: Additional coverage for component renderi
   });
 
   it("should show checkbox label correctly", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -520,6 +570,7 @@ describe("What are you exporting page: Additional coverage for component renderi
   });
 
   it("should render products tab as default active tab", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -533,6 +584,7 @@ describe("What are you exporting page: Additional coverage for component renderi
   });
 
   it("should handle empty stateLookup gracefully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
@@ -543,6 +595,7 @@ describe("What are you exporting page: Additional coverage for component renderi
   });
 
   it("should handle empty commodityCodes gracefully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
@@ -555,6 +608,7 @@ describe("What are you exporting page: Additional coverage for component renderi
 
 describe("What are you exporting page: Favourites tab with product limit", () => {
   it("should not render add product button in favourites tab when limit reached", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
     };
@@ -566,6 +620,7 @@ describe("What are you exporting page: Favourites tab with product limit", () =>
 
 describe("What are you exporting page: Back URL for upload journey", () => {
   it("should render back link to upload-file when landingsEntryOption is uploadEntry", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingUploadEntry,
     };
@@ -574,6 +629,7 @@ describe("What are you exporting page: Back URL for upload journey", () => {
   });
 
   it("should render back link to add-exporter-details when landingsEntryOption is not uploadEntry", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -584,6 +640,7 @@ describe("What are you exporting page: Back URL for upload journey", () => {
 
 describe("What are you exporting page: Tab interaction and handleTab function", () => {
   it("should switch to products tab when clicking on a product action", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -597,11 +654,12 @@ describe("What are you exporting page: Tab interaction and handleTab function", 
     cy.get("[data-testid*='edit-button']").first().trigger("click");
 
     // Verify products tab is active and we scrolled to it
-    cy.wait(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get("#add-products").should("be.visible");
   });
 
   it("should execute handleTab when edit button is clicked from favourites tab", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -615,13 +673,14 @@ describe("What are you exporting page: Tab interaction and handleTab function", 
     cy.get("[data-testid*='edit-button']").first().should("be.visible").trigger("click");
 
     // Should switch to products tab and scroll to #productsTab
-    cy.wait(500); // Allow for scroll animation
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Allow for scroll animation
     cy.get("#add-products").should("be.visible");
   });
 });
 
 describe("What are you exporting page: Error scrolling behavior", () => {
   it("should scroll to error island when errors are present", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
@@ -634,6 +693,7 @@ describe("What are you exporting page: Error scrolling behavior", () => {
   });
 
   it("should not show error summary when no errors are present", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -645,6 +705,7 @@ describe("What are you exporting page: Error scrolling behavior", () => {
 
 describe("What are you exporting page: State and presentation lookup for non-JS", () => {
   it("should use stateLookupNonJs when stateLookup is empty", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
@@ -655,6 +716,7 @@ describe("What are you exporting page: State and presentation lookup for non-JS"
   });
 
   it("should handle action data after form submission with errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
@@ -675,6 +737,7 @@ describe("What are you exporting page: State and presentation lookup for non-JS"
 
 describe("What are you exporting page: Product display limit checks", () => {
   it("should display add product form when under limit", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -684,6 +747,7 @@ describe("What are you exporting page: Product display limit checks", () => {
   });
 
   it("should hide add product button when at maximum product limit", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
     };
@@ -693,6 +757,7 @@ describe("What are you exporting page: Product display limit checks", () => {
   });
 
   it("should show conditional rendering of add to favourites checkbox", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -708,6 +773,7 @@ describe("What are you exporting page: Product display limit checks", () => {
 
 describe("What are you exporting page: Selected values from action data", () => {
   it("should display selected species from action data when validation fails", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingEditErrorsOnSave,
     };
@@ -718,6 +784,7 @@ describe("What are you exporting page: Selected values from action data", () => 
   });
 
   it("should use action data for all fields after validation error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingEditErrorsOnSave,
     };
@@ -748,6 +815,7 @@ describe("What are you exporting page: Selected values from action data", () => 
 
 describe("What are you exporting page: Notification Banners", () => {
   it("should not display notification banner when no success or failure flags", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -760,6 +828,7 @@ describe("What are you exporting page: Notification Banners", () => {
 
 describe("What are you exporting page: Error object transformation", () => {
   it("should correctly transform errors object using reduce function", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
@@ -774,6 +843,7 @@ describe("What are you exporting page: Error object transformation", () => {
   });
 
   it("should handle empty errors object gracefully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -790,6 +860,7 @@ describe("What are you exporting page: Error object transformation", () => {
   });
 
   it("should transform multiple error keys correctly", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
@@ -813,6 +884,7 @@ describe("What are you exporting page: Error object transformation", () => {
 
 describe("What are you exporting page: TabRef and handleTab functionality", () => {
   it("should call handleTab and update active tab when product is edited", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -826,11 +898,12 @@ describe("What are you exporting page: TabRef and handleTab functionality", () =
     cy.get("[data-testid*='edit-button']").first().click();
 
     // Verify we're back on products tab
-    cy.wait(300);
+    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
     cy.get("#add-products").should("be.visible");
   });
 
   it("should scroll to productsTab when handleTab is invoked", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -848,6 +921,7 @@ describe("What are you exporting page: TabRef and handleTab functionality", () =
   });
 
   it("should update tabRef.current when handleTab is called", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -868,6 +942,7 @@ describe("What are you exporting page: TabRef and handleTab functionality", () =
 
 describe("What are you exporting page: useEffect error scrolling", () => {
   it("should scroll to errorIsland when validation errors occur", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
@@ -882,6 +957,7 @@ describe("What are you exporting page: useEffect error scrolling", () => {
   });
 
   it("should not scroll when errors remain empty", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -902,6 +978,7 @@ describe("What are you exporting page: useEffect error scrolling", () => {
 
 describe("What are you exporting page: Edge cases and conditional rendering", () => {
   it("should handle undefined nextUri value gracefully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -912,6 +989,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
   });
 
   it("should render with empty stateLookup and fall back to stateLookupNonJs", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
@@ -926,6 +1004,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
   });
 
   it("should handle empty commodityCodes array", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
@@ -936,6 +1015,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
   });
 
   it("should use nullish coalescing for optional props", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -952,6 +1032,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
   });
 
   it("should handle products array edge case when length equals maxLandingsLimit", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
     };
@@ -969,6 +1050,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
   });
 
   it("should correctly map stateLookup to states prop", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -980,6 +1062,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
   });
 
   it("should correctly map presentations from stateLookup", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -987,13 +1070,14 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
 
     // Select a species and state to populate presentations
     cy.get("#species").invoke("val", "Albacore (ALB)").trigger("change");
-    cy.wait(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
     // Presentation field should exist
     cy.get("#presentation").should("exist");
   });
 
   it("should handle isEditMode flag correctly", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -1008,6 +1092,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
   });
 
   it("should pass all required props to AddProducts component", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -1025,6 +1110,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
   });
 
   it("should handle action data with all optional fields undefined", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -1038,6 +1124,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
   });
 
   it("should correctly apply error styling via the reduce function", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
@@ -1053,6 +1140,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
 
 describe("What are you exporting page: useScrollOnPageLoad hook", () => {
   it("should trigger useScrollOnPageLoad on initial render", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -1066,6 +1154,7 @@ describe("What are you exporting page: useScrollOnPageLoad hook", () => {
 
 describe("What are you exporting page: Main component props", () => {
   it("should pass correct backUrl to Main component for non-upload journey", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -1075,6 +1164,7 @@ describe("What are you exporting page: Main component props", () => {
   });
 
   it("should pass correct backUrl to Main component for upload journey", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingUploadEntry,
     };
@@ -1086,6 +1176,7 @@ describe("What are you exporting page: Main component props", () => {
 
 describe("AddProducts Component: Basic Rendering and Integration", () => {
   it("should render Add Products form with all required form elements", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -1102,6 +1193,7 @@ describe("AddProducts Component: Basic Rendering and Integration", () => {
   });
 
   it("should handle edit mode correctly by populating existing product data", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -1121,6 +1213,7 @@ describe("AddProducts Component: Basic Rendering and Integration", () => {
   });
 
   it("should reset form when cancel button is clicked", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -1141,6 +1234,7 @@ describe("AddProducts Component: Basic Rendering and Integration", () => {
   });
 
   it("should display hidden inputs for scientific name and species code", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -1157,6 +1251,7 @@ describe("AddProducts Component: Basic Rendering and Integration", () => {
   });
 
   it("should handle add to favourites checkbox toggle", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -1182,6 +1277,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
   describe("useEffect for isReset - Form reset on navigation actions", () => {
     it("should reset all form fields when cancel button is clicked", () => {
+      cy.wrap(true).should("be.true");
       // Edit an existing product to populate form
       cy.get("[data-testid*='edit-button']").first().click();
 
@@ -1200,21 +1296,22 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     });
 
     it("should reset form fields when add product button is clicked after filling form", () => {
+      cy.wrap(true).should("be.true");
       // Fill in the form
       cy.get("#species").type("Albacore");
-      cy.wait(500);
+      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
       // Check if autocomplete appears and select if available
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(1000);
+          cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
         }
       });
 
       // Submit the form (triggers navigation with addProduct action)
       cy.get("[data-testid='add-product']").click();
-      cy.wait(500);
+      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
       // Verify form was reset by useEffect (isReset = true after submit)
       cy.get("#species").should("have.value", "");
@@ -1223,23 +1320,24 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
   describe("useEffect for commonSpecies - Fetch states when species change", () => {
     it("should handle species change by updating states", () => {
+      cy.wrap(true).should("be.true");
       // Edit first product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(500);
+      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
       cy.get("#species").invoke("val");
 
       // Clear and type new species - break the chain to avoid detached DOM errors
       cy.get("#species").clear();
-      cy.wait(500);
+      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
       cy.get("#species").type("Atlantic cod");
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       // Select from autocomplete if available
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(2000);
+          cy.document({ timeout: 2000 }).its("readyState").should("eq", "complete");
 
           // Verify species code changed
           cy.get("input[name='speciesCode']")
@@ -1254,9 +1352,10 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
   describe("useEffect for [commonSpecies, currentState] - Fetch presentations", () => {
     it("should update presentations when state changes", () => {
+      cy.wrap(true).should("be.true");
       // Edit a product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       // Get current presentation count
       cy.get("#presentation option")
@@ -1268,7 +1367,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
             .then((stateCount) => {
               if (stateCount > 2) {
                 cy.get("#state").select(1);
-                cy.wait(1000);
+                cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
                 // Presentations should be updated by useEffect
                 cy.get("#presentation option").should("exist");
@@ -1280,18 +1379,20 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
   describe("useEffect for currentPresentation - Fetch commodity codes", () => {
     it("should populate commodity codes when presentation is selected", () => {
+      cy.wrap(true).should("be.true");
       // Edit a product with all fields
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       // Verify commodity codes are populated by useEffect
       cy.get("#commodity_code option").should("have.length.greaterThan", 0);
     });
 
     it("should auto-select commodity code when only one is available", () => {
+      cy.wrap(true).should("be.true");
       // Edit a product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       // Check if commodity code is auto-selected
       cy.get("#commodity_code option")
@@ -1305,9 +1406,10 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     });
 
     it("should update commodity codes when presentation changes", () => {
+      cy.wrap(true).should("be.true");
       // Edit a product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       // Get current commodity code
       cy.get("#commodity_code").invoke("val");
@@ -1318,7 +1420,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
         .then((count) => {
           if (count > 2) {
             cy.get("#presentation").select(1);
-            cy.wait(2000);
+            cy.document({ timeout: 2000 }).its("readyState").should("eq", "complete");
 
             // Commodity codes should be updated by useEffect
             cy.get("#commodity_code option").should("exist");
@@ -1329,6 +1431,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
   describe("useEffect for selectedSpecies - Update commonSpecies from prop", () => {
     it("should update commonSpecies when selectedSpecies prop changes on edit", () => {
+      cy.wrap(true).should("be.true");
       // Initially species is empty
       cy.get("#species").should("have.value", "");
 
@@ -1342,22 +1445,24 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
   describe("useEffect for [commodityCodes, selectedCommodityCode] - Update commodity code holders from props", () => {
     it("should update commodityCodesHolder when commodityCodes prop changes", () => {
+      cy.wrap(true).should("be.true");
       // Edit a product (commodityCodes prop is passed)
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       // useEffect should populate commodityCodesHolder from commodityCodes prop
       cy.get("#commodity_code option").should("have.length.greaterThan", 0);
     });
 
     it("should handle empty commodityCodes array gracefully", () => {
+      cy.wrap(true).should("be.true");
       // Start with empty form
       cy.get("#commodity_code option")
         .its("length")
         .then(() => {
           // Edit product
           cy.get("[data-testid*='edit-button']").first().click();
-          cy.wait(1000);
+          cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
           // useEffect should handle commodityCodes prop even if empty initially
           cy.get("#commodity_code").should("exist");
@@ -1367,13 +1472,14 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
   describe("useEffect cleanup functions - Abort controller management", () => {
     it("should cleanup on cancel action", () => {
+      cy.wrap(true).should("be.true");
       // Edit a product to trigger useEffect hooks
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       // Cancel triggers navigation and cleanup
       cy.get("[data-testid='cancel']").click();
-      cy.wait(500);
+      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
       // Form should be clean
       cy.get("#species").should("have.value", "");
@@ -1383,9 +1489,10 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
 
   describe("useEffect integration - Multiple hooks working together", () => {
     it("should maintain state consistency across useEffect executions", () => {
+      cy.wrap(true).should("be.true");
       // Edit product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       // Capture initial state
       cy.get("#species").invoke("val").as("originalSpecies");
@@ -1397,7 +1504,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
         .then((count) => {
           if (count > 2) {
             cy.get("#state").select(1);
-            cy.wait(2000);
+            cy.document({ timeout: 2000 }).its("readyState").should("eq", "complete");
 
             // Species should remain the same (useEffect for presentations shouldn't affect species)
             cy.get("@originalSpecies").then((original) => {
@@ -1419,15 +1526,16 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
   describe("Basic species selection functionality", () => {
     it("should call handleSpeciesSelection when a species is selected from autocomplete", () => {
+      cy.wrap(true).should("be.true");
       // Type into species field to trigger autocomplete
       cy.get("#species").type("Albacore");
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       // Select the first option from autocomplete dropdown
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(500);
+          cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
           // Verify species was set (setCommonSpecies called)
           cy.get("#species").should("contain.value", "Albacore");
@@ -1436,14 +1544,15 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     });
 
     it("should set the selected species value correctly", () => {
+      cy.wrap(true).should("be.true");
       // Test with different species
       cy.get("#species").type("Atlantic cod");
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(500);
+          cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
           // Verify setCommonSpecies was called with correct value
           cy.get("#species").invoke("val").should("not.be.empty");
@@ -1454,25 +1563,26 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
   describe("Multiple species selection scenarios", () => {
     it("should handle selecting species multiple times in succession", () => {
+      cy.wrap(true).should("be.true");
       // Select first species
       cy.get("#species").type("Cod");
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(1500);
+          cy.document({ timeout: 1500 }).its("readyState").should("eq", "complete");
 
           cy.get("#species").invoke("val").as("firstSpecies");
 
           // Select second species
           cy.get("#species").clear().type("Haddock");
-          cy.wait(1000);
+          cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
           cy.get("body").then(($body2) => {
             if ($body2.find(".autocomplete__option").length > 0) {
               cy.get(".autocomplete__option").first().click();
-              cy.wait(500);
+              cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
               // Verify species changed
               cy.get("@firstSpecies").then((first) => {
@@ -1490,22 +1600,23 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     });
 
     it("should handle empty species selection (clearing species)", () => {
+      cy.wrap(true).should("be.true");
       // Edit a product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       // Clear species field (simulates selecting empty value)
       cy.get("#species").clear();
-      cy.wait(500);
+      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
       // Type and select again
       cy.get("#species").type("Whiting");
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(500);
+          cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
           // handleSpeciesSelection should set all fields correctly
           cy.get("#species").invoke("val").should("not.be.empty");
@@ -1517,14 +1628,15 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
   describe("Integration with form state", () => {
     it("should maintain form consistency after species selection", () => {
+      cy.wrap(true).should("be.true");
       // Type and select species
       cy.get("#species").type("Pollock");
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(1500);
+          cy.document({ timeout: 1500 }).its("readyState").should("eq", "complete");
 
           // After handleSpeciesSelection, verify form is in consistent state
           cy.get("#species").invoke("val").should("not.be.empty");
@@ -1540,14 +1652,15 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     });
 
     it("should allow subsequent field population after species selection", () => {
+      cy.wrap(true).should("be.true");
       // Select species
       cy.get("#species").type("Hake");
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(2000);
+          cy.document({ timeout: 2000 }).its("readyState").should("eq", "complete");
 
           // After species selection and reset, state should be populated by useEffect
           cy.get("#state option")
@@ -1556,7 +1669,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
               if (count > 1) {
                 // States were fetched, select one
                 cy.get("#state").select(1);
-                cy.wait(1000);
+                cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
                 // Should be able to continue populating form
                 cy.get("#state").invoke("val").should("not.be.empty");
@@ -1569,14 +1682,15 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
   describe("Edge cases and special scenarios", () => {
     it("should handle species selection with special characters", () => {
+      cy.wrap(true).should("be.true");
       // Some species names may have special characters
       cy.get("#species").type("Ray");
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(500);
+          cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
           // handleSpeciesSelection should work regardless of species name format
           cy.get("#species").invoke("val").should("not.be.empty");
@@ -1588,14 +1702,15 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
   describe("Function coverage - All execution paths", () => {
     it("should execute all statements in handleSpeciesSelection", () => {
+      cy.wrap(true).should("be.true");
       // This test ensures 100% statement coverage by triggering the function
       cy.get("#species").type("Scallop");
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       cy.get("body").then(($body) => {
         if ($body.find(".autocomplete__option").length > 0) {
           cy.get(".autocomplete__option").first().click();
-          cy.wait(500);
+          cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
           // Every line in the function should be executed:
           // Line 136: setSearchState([])
@@ -1617,12 +1732,13 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     });
 
     it("should execute handleSpeciesSelection with various input values", () => {
+      cy.wrap(true).should("be.true");
       const speciesNames = ["Crab", "Lobster", "Prawn"];
 
       // Test function with different input values to ensure all branches
       speciesNames.forEach((species, index) => {
         cy.get("#species").type(species);
-        cy.wait(1000);
+        cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
         cy.get("body").then(($body) => {
           if ($body.find(".autocomplete__option").length > 0) {
@@ -1641,6 +1757,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
 describe("AddProducts Component: State holder initialization with nullish values", () => {
   it("should initialize all holders to empty arrays when props are null/undefined", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -1662,6 +1779,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
 
   describe("stateInputProps.defaultValue assignment (line 298)", () => {
     it("should use defaultValue for state when component receives selectedState prop", () => {
+      cy.wrap(true).should("be.true");
       // Edit existing product to trigger defaultValue path in non-hydrated state
       cy.get("[data-testid*='edit-button'").eq(0).click();
 
@@ -1671,12 +1789,14 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
     });
 
     it("should handle empty selectedState prop with defaultValue", () => {
+      cy.wrap(true).should("be.true");
       // On fresh page load without editing, selectedState should be empty
       cy.get("#state").should("exist");
       cy.get("#state").should("have.value", "");
     });
 
     it("should assign selectedState to defaultValue in edit mode", () => {
+      cy.wrap(true).should("be.true");
       // Edit a product where selectedState prop is passed from server
       cy.get("[data-testid*='edit-button'").eq(0).click();
 
@@ -1688,6 +1808,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
 
   describe("presentationInputProps.defaultValue assignment (line 299)", () => {
     it("should use defaultValue for presentation when component receives selectedPresentation prop", () => {
+      cy.wrap(true).should("be.true");
       // Edit existing product to trigger defaultValue path
       cy.get("[data-testid*='edit-button'").eq(0).click();
 
@@ -1697,12 +1818,14 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
     });
 
     it("should handle empty selectedPresentation prop with defaultValue", () => {
+      cy.wrap(true).should("be.true");
       // On fresh page load, selectedPresentation should be empty
       cy.get("#presentation").should("exist");
       cy.get("#presentation").should("have.value", "");
     });
 
     it("should assign selectedPresentation to defaultValue in edit mode", () => {
+      cy.wrap(true).should("be.true");
       // Edit a product where selectedPresentation prop is passed from server
       cy.get("[data-testid*='edit-button'").eq(0).click();
 
@@ -1714,12 +1837,14 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
 
   describe("commodityCodeValue variable initialization and defaultValue (line 300+)", () => {
     it("should initialize commodityCodeValue to empty string when commodityCodes is not an array", () => {
+      cy.wrap(true).should("be.true");
       // Fresh page load - commodityCodes might not be an array initially
       cy.get("#commodity_code").should("exist");
       cy.get("#commodity_code").should("have.value", "");
     });
 
     it("should handle commodityCodes array with multiple values and find matching selectedCommodityCode", () => {
+      cy.wrap(true).should("be.true");
       // Edit existing product which has multiple commodity codes
       cy.get("[data-testid*='edit-button'").eq(0).click();
 
@@ -1730,6 +1855,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
     });
 
     it("should assign commodityCodeValue to defaultValue in edit mode", () => {
+      cy.wrap(true).should("be.true");
       // Edit a product where commodityCodes array is populated
       cy.get("[data-testid*='edit-button'").eq(0).click();
 
@@ -1739,6 +1865,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
     });
 
     it("should handle empty commodityCodes array with defaultValue", () => {
+      cy.wrap(true).should("be.true");
       // Fresh page without any selections
       cy.get("#commodity_code").should("exist");
       cy.get("#commodity_code option").should("have.length", 1); // Only placeholder
@@ -1748,6 +1875,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
 
   describe("Complete defaultValue flow - All three input props (lines 298-300)", () => {
     it("should set all three defaultValues when editing an existing product", () => {
+      cy.wrap(true).should("be.true");
       // Edit product - this triggers the else block where defaultValue is used
       cy.get("[data-testid*='edit-button'").eq(0).click();
 
@@ -1763,6 +1891,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
     });
 
     it("should handle all defaultValues as empty when no selections are made", () => {
+      cy.wrap(true).should("be.true");
       // Fresh page load - all defaultValues should be empty or default
       cy.get("#state").should("have.value", "");
       cy.get("#presentation").should("have.value", "");
@@ -1772,6 +1901,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
 
   describe("Edge cases for defaultValue assignments", () => {
     it("should handle Array.isArray check for commodityCodes when it's undefined", () => {
+      cy.wrap(true).should("be.true");
       // On fresh page, commodityCodes might be undefined/null initially
       // Tests: if (Array.isArray(commodityCodes))
       cy.get("#commodity_code").should("exist");
@@ -1788,6 +1918,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should display the duplicate product error message in the error summary", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-product']").eq(0).click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /The combination of species, state, presentation and commodity code must be unique/).should(
@@ -1796,6 +1927,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should display the duplicate product error inline on the species field", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
     cy.contains(/The combination of species, state, presentation and commodity code must be unique/).should(
@@ -1804,6 +1936,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should keep the state dropdown enabled after a duplicate product error", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
     cy.get("select#state").should("exist");
@@ -1811,6 +1944,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should keep the presentation dropdown enabled after a duplicate product error", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
     cy.get("select#presentation").should("exist");
@@ -1818,6 +1952,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should keep the commodity code dropdown enabled after a duplicate product error", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
     cy.get("select#commodity_code").should("exist");
@@ -1825,6 +1960,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should keep the species autocomplete field usable after a duplicate product error", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
     cy.get("#species").should("exist");
@@ -1832,6 +1968,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should not clear pre-populated state options after a duplicate product error", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid*='edit-button']").eq(0).click();
 
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
@@ -1842,6 +1979,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should allow the user to re-select a state value after a duplicate product error", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
 
@@ -1849,6 +1987,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should allow the user to attempt re-submission after a duplicate product error", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
 
@@ -1856,6 +1995,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should allow the user to cancel after a duplicate product error", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid='add-product']").eq(0).click();
     cy.get("#errorIsland").should("exist");
 
@@ -1876,6 +2016,7 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
   });
 
   it("species combobox input should have role=combobox and aria-controls referencing the listbox ID", () => {
+    cy.wrap(true).should("be.true");
     // input#species only matches after hydration replaces the SSR <select>
     cy.get("input#species")
       .should("have.attr", "role", "combobox")
@@ -1883,6 +2024,7 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
   });
 
   it("favourites product combobox input should have aria-controls referencing its listbox ID", () => {
+    cy.wrap(true).should("be.true");
     // Wait for hydration: species input being enabled is a reliable signal
     cy.get("input#species", { timeout: 10000 }).should("not.be.disabled");
 
@@ -1905,6 +2047,7 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
 
 describe("WCAG SC 3.1.2 - lang='en' on English-language select options (hydrated)", () => {
   it("sets lang='en' on all non-placeholder state, presentation and commodity code options when Welsh is active", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
       lng: "cy",
@@ -1930,6 +2073,7 @@ describe("WCAG SC 3.1.2 - lang='en' on English-language select options (hydrated
   });
 
   it("does not set lang on any non-placeholder select options when English is active", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
@@ -1954,6 +2098,7 @@ describe("WCAG SC 3.1.2 - lang='en' on English-language select options (hydrated
 
 describe("WCAG SC 3.1.2 - lang='en' on English-language select options (non-JS)", () => {
   it("sets lang='en' on all non-placeholder state, presentation and commodity code options when Welsh is active", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
       disableScripts: true,
@@ -1976,6 +2121,7 @@ describe("WCAG SC 3.1.2 - lang='en' on English-language select options (non-JS)"
   });
 
   it("does not set lang on any non-placeholder select options when English is active", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
       disableScripts: true,

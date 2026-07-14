@@ -7,6 +7,7 @@ const removeProductUrl = `/create-processing-statement/${documentNumber}/remove-
 describe("Remove Product Page - FI0-10296", () => {
   describe("Scenario 1 - Page Structure", () => {
     it("should display correct page title and question with product description", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductPageLoads,
       };
@@ -19,6 +20,7 @@ describe("Remove Product Page - FI0-10296", () => {
     });
 
     it("should have Yes and No radio buttons displayed inline", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductPageLoads,
       };
@@ -27,6 +29,7 @@ describe("Remove Product Page - FI0-10296", () => {
     });
 
     it("should display Back link at top", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductPageLoads,
       };
@@ -36,6 +39,7 @@ describe("Remove Product Page - FI0-10296", () => {
     });
 
     it("should display Save as draft and Save and continue buttons", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductPageLoads,
       };
@@ -46,6 +50,7 @@ describe("Remove Product Page - FI0-10296", () => {
     });
 
     it("should display Back to your progress link", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductPageLoads,
       };
@@ -57,11 +62,12 @@ describe("Remove Product Page - FI0-10296", () => {
 
   describe("Scenario 2 - Yes + Save and continue + other products remaining", () => {
     it("should remove product and navigate to catch-added", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductYesSaveAndContinueWithProducts,
       };
       cy.visit(removeProductUrl, { qs: { ...testParams } });
-      cy.wait(50); // Wait for MSW to set up
+      cy.document({ timeout: 50 }).its("readyState").should("eq", "complete"); // Wait for MSW to set up
 
       cy.get("#removeProductYes").check();
       cy.get("form").submit();
@@ -72,11 +78,12 @@ describe("Remove Product Page - FI0-10296", () => {
 
   describe("Scenario 3 - Yes + Save and continue + no other products remaining", () => {
     it("should remove product and navigate to add-consignment-details", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductYesSaveAndContinueNoProducts,
       };
       cy.visit(removeProductUrl, { qs: { ...testParams } });
-      cy.wait(50); // Wait for MSW to set up
+      cy.document({ timeout: 50 }).its("readyState").should("eq", "complete"); // Wait for MSW to set up
 
       cy.get("#removeProductYes").check();
       cy.get("form").submit();
@@ -87,11 +94,12 @@ describe("Remove Product Page - FI0-10296", () => {
 
   describe("Scenario 4 - Yes + Save as draft", () => {
     it("should not remove product and navigate to progress", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductYesSaveAsDraft,
       };
       cy.visit(removeProductUrl, { qs: { ...testParams } });
-      cy.wait(50); // Wait for MSW to set up
+      cy.document({ timeout: 50 }).its("readyState").should("eq", "complete"); // Wait for MSW to set up
 
       cy.get("#removeProductYes").check();
       cy.get('[data-testid="save-draft-button"]').click();
@@ -102,11 +110,12 @@ describe("Remove Product Page - FI0-10296", () => {
 
   describe("Scenario 5 - No + Save and continue", () => {
     it("should not remove product and navigate to catch-added", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductNoSaveAndContinue,
       };
       cy.visit(removeProductUrl, { qs: { ...testParams } });
-      cy.wait(50); // Wait for MSW to set up
+      cy.document({ timeout: 50 }).its("readyState").should("eq", "complete"); // Wait for MSW to set up
 
       cy.get("#removeProductNo").check();
       cy.get("form").submit();
@@ -117,11 +126,12 @@ describe("Remove Product Page - FI0-10296", () => {
 
   describe("Scenario 6 - No + Save as draft", () => {
     it("should not remove product and navigate to progress", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductNoSaveAsDraft,
       };
       cy.visit(removeProductUrl, { qs: { ...testParams } });
-      cy.wait(50); // Wait for MSW to set up
+      cy.document({ timeout: 50 }).its("readyState").should("eq", "complete"); // Wait for MSW to set up
 
       cy.get("#removeProductNo").check();
       cy.get('[data-testid="save-draft-button"]').click();
@@ -132,6 +142,7 @@ describe("Remove Product Page - FI0-10296", () => {
 
   describe("Scenario 7 - Welsh translations", () => {
     it("should display all text in Welsh", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductWelsh,
         lng: "cy",
@@ -149,6 +160,7 @@ describe("Remove Product Page - FI0-10296", () => {
 
   describe("Scenario 8 - Admin app access", () => {
     it("should work when accessed from Admin app", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductFromAdmin,
       };
@@ -160,6 +172,7 @@ describe("Remove Product Page - FI0-10296", () => {
 
   describe("Scenario 9 - Non-JS functionality", () => {
     it("should work without JavaScript", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductNonJS,
         disableScripts: true,
@@ -175,6 +188,7 @@ describe("Remove Product Page - FI0-10296", () => {
 
   describe("Scenario 10 - Accessibility", () => {
     it("should be accessible and comply with GDS guidelines", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductAccessibility,
       };
@@ -193,6 +207,7 @@ describe("Remove Product Page - FI0-10296", () => {
 
   describe("Error Handling - No selection", () => {
     it("should display error when no radio button selected", () => {
+      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.RemoveProductNoSelection,
       };

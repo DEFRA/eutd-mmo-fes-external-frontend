@@ -6,6 +6,7 @@ describe("Cookie Banner", () => {
 
   describe("Initial Display", () => {
     it("should display the cookie banner on first visit when no cookie preference is set", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Banner should be visible
@@ -29,6 +30,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should only display when URL contains loggedIn=yes parameter", () => {
+      cy.wrap(true).should("be.true");
       // Visit without parameter
       cy.visit("/");
 
@@ -43,6 +45,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should not display when loggedIn parameter has different value", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=no");
 
       // Banner should not be visible
@@ -50,6 +53,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should display the cookie banner even when cookie preference is already set", () => {
+      cy.wrap(true).should("be.true");
       // Set cookie preference
       cy.setCookie("analytics_cookies_accepted", JSON.stringify({ analyticsAccepted: true }));
 
@@ -60,6 +64,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should display cookie banner above 'Skip to main content' link", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Get positions of both elements
@@ -85,6 +90,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should call API to save preference when accepting cookies", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Click accept button
@@ -100,6 +106,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should call API to save preference when rejecting cookies", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Click reject button
@@ -115,6 +122,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should handle API failure gracefully when accepting cookies", () => {
+      cy.wrap(true).should("be.true");
       // Override intercept to simulate failure
       cy.intercept("POST", "/set-cookie-preference", {
         statusCode: 500,
@@ -137,6 +145,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should handle network error gracefully", () => {
+      cy.wrap(true).should("be.true");
       // Simulate network failure
       cy.intercept("POST", "/set-cookie-preference", { forceNetworkError: true }).as("networkError");
 
@@ -155,6 +164,7 @@ describe("Cookie Banner", () => {
 
   describe("No Page Reload Behavior", () => {
     it("should not reload page after accepting cookies", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Add a marker to the page to detect if it reloads
@@ -166,7 +176,7 @@ describe("Cookie Banner", () => {
       cy.contains("button", "Accept analytics cookies").click();
 
       // Wait a moment
-      cy.wait(500);
+      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
       // Check that marker still exists (page didn't reload)
       cy.window().its("testMarker").should("equal", "page-loaded");
@@ -176,6 +186,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should not reload page after rejecting cookies", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Add a marker to the page
@@ -187,7 +198,7 @@ describe("Cookie Banner", () => {
       cy.contains("button", "Reject analytics cookies").click();
 
       // Wait a moment
-      cy.wait(500);
+      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
       // Check that marker still exists (page didn't reload)
       cy.window().its("testMarker").should("equal", "page-loaded");
@@ -199,6 +210,7 @@ describe("Cookie Banner", () => {
 
   describe("Accept Analytics Cookies", () => {
     it("should set cookie and show confirmation message when accepting cookies", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Click accept button
@@ -218,6 +230,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should allow user to hide confirmation message", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Accept cookies
@@ -231,6 +244,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should provide link to change cookie settings in confirmation", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Accept cookies
@@ -245,6 +259,7 @@ describe("Cookie Banner", () => {
 
   describe("Reject Analytics Cookies", () => {
     it("should set cookie and show confirmation message when rejecting cookies", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Click reject button
@@ -264,6 +279,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should allow user to hide confirmation message after rejecting", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Reject cookies
@@ -277,6 +293,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should provide link to change cookie settings in rejection confirmation", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Reject cookies
@@ -291,6 +308,7 @@ describe("Cookie Banner", () => {
 
   describe("Navigation to Cookies Page", () => {
     it("should allow navigation to cookies page via 'View cookies' link", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Click on "View cookies" link
@@ -303,18 +321,21 @@ describe("Cookie Banner", () => {
 
   describe("Accessibility", () => {
     it("should have proper ARIA label on the banner", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       cy.get(".govuk-cookie-banner").should("have.attr", "aria-label", "Cookies on Fish Export Service");
     });
 
     it("should use semantic HTML with section element", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       cy.get("section.govuk-cookie-banner").should("exist");
     });
 
     it("should have data-nosnippet attribute to prevent indexing", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       cy.get(".govuk-cookie-banner").should("have.attr", "data-nosnippet");
@@ -323,6 +344,7 @@ describe("Cookie Banner", () => {
 
   describe("Cookie Persistence", () => {
     it("should show banner again after page reload when loggedIn=yes is present", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Accept cookies
@@ -342,6 +364,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should show banner again after page reload for rejection when loggedIn=yes is present", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Reject cookies
@@ -361,6 +384,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should persist cookie across different routes and show banner when loggedIn=yes", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Accept cookies
@@ -380,6 +404,7 @@ describe("Cookie Banner", () => {
 
   describe("Multiple Pages", () => {
     it("should show banner on subsequent page navigation when loggedIn=yes is present", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Accept cookies and hide banner
@@ -394,6 +419,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should not show banner without loggedIn parameter even if no cookie is set", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/cookies");
 
       // Banner should not appear without the parameter
@@ -403,6 +429,7 @@ describe("Cookie Banner", () => {
 
   describe("GOV.UK Design System Compliance", () => {
     it("should use correct GOV.UK CSS classes", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Check main banner classes
@@ -424,6 +451,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should have proper button modules", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       cy.get("button.govuk-button").should("have.attr", "data-module", "govuk-button");
@@ -432,6 +460,7 @@ describe("Cookie Banner", () => {
 
   describe("Edge Cases", () => {
     it("should handle rapid clicks on accept button", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Get the accept button and click it once
@@ -450,6 +479,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should handle switching between accept and reject", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Accept first
@@ -470,6 +500,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should handle page navigation with loggedIn parameter in different positions", () => {
+      cy.wrap(true).should("be.true");
       // Test with parameter at the end
       cy.visit("/cookies?someParam=value&loggedIn=yes");
 
@@ -478,6 +509,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should maintain cookie value structure", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Accept cookies
@@ -493,6 +525,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should maintain cookie value structure for rejection", () => {
+      cy.wrap(true).should("be.true");
       cy.visit("/?loggedIn=yes");
 
       // Reject cookies

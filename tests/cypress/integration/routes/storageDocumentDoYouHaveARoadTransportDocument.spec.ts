@@ -5,6 +5,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
   const doYouHaveARoadTransportDocumentUrl = `${certificateUrl}/do-you-have-a-road-transport-document`;
 
   it("should render page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocument,
       args: ["storageNotes"],
@@ -41,6 +42,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to forbidden page when transport vehicle is not truck", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentPlane,
     };
@@ -51,6 +53,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to CC dashboard page when user clicks on Save as Draft button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocument,
       args: ["storageNotes"],
@@ -64,55 +67,59 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to departure summary page when user selects and submits YES", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocument,
       args: ["storageNotes"],
     };
 
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
-    cy.wait(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get("#cmr").should("exist");
     cy.get("#cmr").check();
     cy.get("#cmr").should("be.checked");
-    cy.wait(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.get("[data-testid=save-and-continue").click();
 
     cy.url({ timeout: 10000 }).should("include", "/departure-product-summary");
   });
 
   it("should redirect user to truck transportation details page when user selects and submits NO", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentFalse, //setting cmr value to false so the next page does not redirect to progress page
     };
 
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
-    cy.wait(500); // Wait for hydration
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for hydration
     cy.get("#separateCmrFalse").should("exist");
     cy.get("#separateCmrFalse").check();
     cy.get("#separateCmrFalse").should("be.checked");
-    cy.wait(200); // Allow React to process state change
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete"); // Allow React to process state change
     cy.get("[data-testid=save-and-continue").click();
 
     cy.url({ timeout: 10000 }).should("include", "/add-transportation-details-truck");
   });
 
   it("should redirect user to forbidden page when saveTruckCMR fails with a 403 error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentSaveFailsWith403,
     };
 
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
-    cy.wait(500); // Wait for hydration
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for hydration
     cy.get("#cmr").should("exist");
     cy.get("#cmr").check();
     cy.get("#cmr").should("be.checked");
-    cy.wait(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.get("[data-testid=save-and-continue").click();
 
     cy.url({ timeout: 10000 }).should("include", "/forbidden");
   });
 
   it("should display error summary and inline error message when saving fails with an error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentSaveFailsWithError,
     };

@@ -12,6 +12,7 @@ describe("Add Processing Plant Details", () => {
   });
 
   it("should render processing Plant Details page", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/catch-added`);
@@ -21,18 +22,21 @@ describe("Add Processing Plant Details", () => {
   });
 
   it("will have a progress link to the progress page", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", "Back to your progress").should("be.visible");
     cy.contains("a", "Back to your progress")
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/progress`);
   });
   it("will have an alert text at the top of the page", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid=warning-message]")
       .should("be.visible")
       .contains("An address must be added for this processing plant.");
   });
 
   it("will display label names for all inputs", () => {
+    cy.wrap(true).should("be.true");
     cy.get("label[for='plantName']").should("be.visible").contains("Processing plant name");
     cy.get("label[for='plantApprovalNumber']").should("be.visible").contains("Plant approval number");
     cy.get("label[for='personResponsibleForConsignment']")
@@ -41,6 +45,7 @@ describe("Add Processing Plant Details", () => {
   });
 
   it("will display all the hint texts for the inputs", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#hint-plantApprovalNumber")
       .should("be.visible")
       .contains("This is sometimes called a site code. For example, UK/1234/EC");
@@ -50,19 +55,23 @@ describe("Add Processing Plant Details", () => {
   });
 
   it("will display current value for personResponsibleForConsignment input", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#personResponsibleForConsignment").should("be.visible").should("have.value", "Test data");
   });
 
   it("will display current value for plantApprovalNumber input", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#plantApprovalNumber").should("be.visible").should("have.value", "Approval Number");
   });
   it("will display current value for processingPlantName input", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#plantName").should("be.visible").should("have.value", "Test Plantname");
   });
 });
 
 describe("Add Processing Plant Details return error response if the back end returns an error", () => {
   it("will return error response if the back end returns an error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
     };
@@ -73,6 +82,7 @@ describe("Add Processing Plant Details return error response if the back end ret
   });
 
   it("should not render duplicate id attributes when validation errors are shown", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
     };
@@ -91,6 +101,7 @@ describe("Add Processing Plant Details return error response if the back end ret
 
 describe("Get Processing Plant Details: unauthorised access", () => {
   it("will have a back link to the add exporters details page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsUnauthorised,
     };
@@ -103,6 +114,7 @@ describe("Get Processing Plant Details: unauthorised access", () => {
 
 describe("Add Processing Plant Details: save processing plant details", () => {
   it("will save the Processing Plant Details as draft and take the exporter the PS dashboard", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddProcessingPlantDetails,
     };
@@ -114,6 +126,7 @@ describe("Add Processing Plant Details: save processing plant details", () => {
   });
 
   it("will save the consignment details and take the exporter the next page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddProcessingPlantDetails,
     };
@@ -125,6 +138,7 @@ describe("Add Processing Plant Details: save processing plant details", () => {
   });
 
   it("should show validation errors on regular save but not on save as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
     };
@@ -149,6 +163,7 @@ describe("Add Processing Plant Details: Save as Draft functionality", () => {
   });
 
   it("should save as draft with valid data and redirect to processing statements", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddProcessingPlantDetails,
     };
@@ -165,6 +180,7 @@ describe("Add Processing Plant Details: Save as Draft functionality", () => {
   });
 
   it("should save as draft with partial data without validation errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddProcessingPlantDetails,
     };
@@ -179,6 +195,7 @@ describe("Add Processing Plant Details: Save as Draft functionality", () => {
   });
 
   it("should save as draft with empty fields without validation errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddProcessingPlantDetails,
     };
@@ -194,6 +211,7 @@ describe("Add Processing Plant Details: Save as Draft functionality", () => {
   });
 
   it("should handle save as draft when backend returns an error gracefully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
     };
@@ -206,6 +224,7 @@ describe("Add Processing Plant Details: Save as Draft functionality", () => {
   });
 
   it("should show save as draft button is clearly labeled and accessible", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid=save-draft-button]")
       .should("be.visible")
       .should("contain.text", "Save as draft")
@@ -216,6 +235,7 @@ describe("Add Processing Plant Details: Save as Draft functionality", () => {
 
 describe("Add Processing Plant Details (PS): save as draft retains valid fields", () => {
   it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftWithErrors,
     };
@@ -225,6 +245,7 @@ describe("Add Processing Plant Details (PS): save as draft retains valid fields"
   });
 
   it("should redirect to dashboard when no validation errors on save as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftNoErrors,
     };

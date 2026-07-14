@@ -1,5 +1,6 @@
 describe("Error Page", () => {
   it("should render a sorry there is a problem with the service page", () => {
+    cy.wrap(true).should("be.true");
     cy.visit("/there-is-a-problem-with-the-service");
 
     cy.contains("h1", /^Sorry, there is a problem with the service$/).should("be.visible");

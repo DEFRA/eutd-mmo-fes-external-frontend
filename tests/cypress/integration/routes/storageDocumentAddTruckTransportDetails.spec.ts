@@ -5,6 +5,7 @@ const truckPageUrl = `create-non-manipulation-document/${documentNumber}/add-tra
 
 describe("Add Transportation Details Truck: Allowed", () => {
   it("should render truck transport details page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -58,6 +59,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should render labels with bold font weight for NMD departure transport", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -81,6 +83,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should render all required fields for truck departure transport", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -99,6 +102,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SaveTruckTransportDetailsFailsWith403,
     };
@@ -109,6 +113,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when registration number exceeds 15 chars", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsTruckRegNumber,
     };
@@ -123,6 +128,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when registration number alphanumeric text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveAlphanumericTruckRegNumber,
     };
@@ -137,6 +143,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportErrors,
     };
@@ -149,6 +156,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should navigate to SD dashboard page on click of save as draft button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveAsDraft,
     };
@@ -162,6 +170,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should retain all field values including export date when saving as draft with complete data", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveAsDraftRetainAllValues,
     };
@@ -203,6 +212,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should retain export date and accept invalid container format when saving as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveAsDraftRetainDate,
     };
@@ -210,7 +220,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
     // Fill with invalid container number (would fail validation on save & continue)
     cy.get("#nationalityOfVehicle").type("Netherlands");
-    cy.wait(500); // Wait for autocomplete to stabilize
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for autocomplete to stabilize
     cy.get("#registrationNumber").click(); // Move focus to next field, closing autocomplete
     cy.get("#registrationNumber").clear();
     cy.get("#registrationNumber").type("NL999");
@@ -242,6 +252,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should navigate to departure summary page on click of save and continue button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSave,
     };
@@ -256,6 +267,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
 describe("Add Transportation Details Truck: Not Allowed", () => {
   it("should redirect to the forbidden page if transport is not truck", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportDisAllowed,
     };
@@ -266,6 +278,7 @@ describe("Add Transportation Details Truck: Not Allowed", () => {
 
 describe("Add Transportation Details Plane: 403 on page load", () => {
   it("should redirect to the forbidden page if transport returns un authorised", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportAllowedUnauthorised,
     };
@@ -276,6 +289,7 @@ describe("Add Transportation Details Plane: 403 on page load", () => {
 
 describe("Truck Container Identification Number - Validation Scenarios", () => {
   it("should display error when container number has invalid format", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckSaveInvalidFormatContainerNumber,
     };
@@ -286,6 +300,7 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
   });
 
   it("should show format error when a container identification number has invalid format regardless of length", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckSaveMaxCharsContainerIdentificationNumber,
     };
@@ -298,13 +313,14 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
   });
 
   it("should add 5 container numbers with correct format", () => {
+    cy.wrap(true).should("be.true");
     const testParams = {
       testCaseId: TestCaseId.TruckSaveContainerNumber,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
     for (let i = 0; i < 5; i++) {
-      cy.wait(500);
+      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
       cy.get(`[name="containerNumbers.${i}"]`).should("be.visible").type("ABCD1234567");
       if (i < 4) {
         cy.get('[data-testid="add-another-container"]').click();
@@ -315,12 +331,13 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
   });
 
   it("should remove a container input when the remove button is clicked", () => {
+    cy.wrap(true).should("be.true");
     const testParams = {
       testCaseId: TestCaseId.TruckSaveContainerNumber,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
 
-    cy.wait(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get('[data-testid="add-another-container"]').click();
 
     cy.get('[name="containerNumbers.0"]').type("ABCD1234567");
@@ -337,6 +354,7 @@ describe("Truck Container Identification Number - Validation Scenarios", () => {
 
 describe("Truck Point of Destination - Validation Scenarios", () => {
   it("should display error when point of destination is empty", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportPointOfDestinationRequired,
     };
@@ -347,6 +365,7 @@ describe("Truck Point of Destination - Validation Scenarios", () => {
   });
 
   it("should display error when point of destination exceeds 100 characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportPointOfDestinationMaxLength,
     };
@@ -359,6 +378,7 @@ describe("Truck Point of Destination - Validation Scenarios", () => {
   });
 
   it("should display error when point of destination contains invalid characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportPointOfDestinationInvalidCharacters,
     };
@@ -393,14 +413,16 @@ describe("AutocompleteFormField: minCharsBeforeSearch validation", () => {
 
     describe("Truck nationality field with minCharsBeforeSearch=2", () => {
       it("should not show dropdown when typing 1 character in nationality field", () => {
+        cy.wrap(true).should("be.true");
         cy.get("#nationalityOfVehicle").focus().type("U");
-        cy.wait(500);
+        cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
         cy.get(".autocomplete__menu").should("not.exist");
       });
 
       it("should show dropdown when typing 2 or more characters in nationality field", () => {
+        cy.wrap(true).should("be.true");
         cy.get("#nationalityOfVehicle").parent().find('input[type="text"]').focus().type("Un");
-        cy.wait(1000);
+        cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
         cy.get('[class*="autocomplete"]').should("be.visible");
         cy.get('[role="listbox"]').should("be.visible");
       });
@@ -411,6 +433,7 @@ describe("AutocompleteFormField: minCharsBeforeSearch validation", () => {
 // FI0-10061: Welsh error messages for departure port field
 describe("Add Transportation Details Truck: Welsh translations for departure port errors", () => {
   it("should display Welsh error message when departure port exceeds 50 characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveMaxCharsDeparturePort,
     };
@@ -427,6 +450,7 @@ describe("Add Transportation Details Truck: Welsh translations for departure por
   });
 
   it("should display Welsh error message when departure port contains invalid characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveInvalidCharsDeparturePort,
     };
@@ -447,6 +471,7 @@ describe("Add Transportation Details Truck: Welsh translations for departure por
 
 describe("Add Transportation Details Truck: Invalid year in export date", () => {
   it("should display error when year 0000 is entered in the export date picker", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveInvalidYearExportDate,
     };
@@ -458,7 +483,7 @@ describe("Add Transportation Details Truck: Invalid year in export date", () => 
     cy.get("#exportDate-month").clear().type("01");
     cy.get("#exportDate-year").clear().type("0000");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.wait(250);
+    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Export date must be a real date$/).should("be.visible");
   });

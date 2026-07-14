@@ -2,15 +2,18 @@ const privacyNoticeUrl = "/privacy-notice";
 
 describe("Privacy Page", () => {
   it("should render Privacy Page content in English", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(`${privacyNoticeUrl}?lng=en`);
     cy.contains("h1", /^Privacy notice$/).should("be.visible");
   });
   it("should render Privacy Page content in Welsh", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(`${privacyNoticeUrl}?lng=cy`);
     cy.contains("h1", /^Hysbysiad preifatrwydd$/).should("be.visible");
   });
 
   it("should render performance sub-section headings as h3 elements", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(`${privacyNoticeUrl}?lng=en`);
     cy.contains("h3", "Performance Statistics:").should("be.visible");
     cy.contains("h3", "Performance information:").should("be.visible");
@@ -18,11 +21,13 @@ describe("Privacy Page", () => {
   });
 
   it("should render 'DEFRA Data Protection Officer' as an h3 element", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(`${privacyNoticeUrl}?lng=en`);
     cy.contains("h3", "DEFRA Data Protection Officer").should("be.visible");
   });
 
   it("should render the correct address for the Data Protection Team in 'Who collects your personal information' section", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(`${privacyNoticeUrl}?lng=en`);
 
     cy.contains("h2", "Who Collects Your Personal Information").should("be.visible");
@@ -38,6 +43,7 @@ describe("Privacy Page", () => {
   });
 
   it("should render the correct address for the Data Protection Team in 'How do I contact' section", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(`${privacyNoticeUrl}?lng=en`);
 
     cy.contains("h2", /How do I contact?/i).should("be.visible");

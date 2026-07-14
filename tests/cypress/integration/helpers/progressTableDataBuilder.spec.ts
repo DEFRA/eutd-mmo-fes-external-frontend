@@ -24,6 +24,7 @@ const baseTransport: ITransport = {
 describe("progressTableDataBuilder", () => {
   describe("Transport Details URL - fallback for undefined vehicle/id", () => {
     it("should build the correct transport URL when vehicle and id are both present", () => {
+      cy.wrap(true).should("be.true");
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const transportSection = result.find((s) => s.testId === "Transportation");
       const row = transportSection?.rows.find((r) => r.testId === "transportDetails");
@@ -32,6 +33,7 @@ describe("progressTableDataBuilder", () => {
     });
 
     it("should fall back to how-does-the-export-leave-the-uk when vehicle is undefined", () => {
+      cy.wrap(true).should("be.true");
       const transport: ITransport = { vehicle: undefined as any, id: "abc-123" };
       const result = progressTableDataBuilder(false, false, baseProgress, transport);
       const transportSection = result.find((s) => s.testId === "Transportation");
@@ -41,6 +43,7 @@ describe("progressTableDataBuilder", () => {
     });
 
     it("should fall back to how-does-the-export-leave-the-uk when id is undefined", () => {
+      cy.wrap(true).should("be.true");
       const transport: ITransport = { vehicle: "truck", id: undefined };
       const result = progressTableDataBuilder(false, false, baseProgress, transport);
       const transportSection = result.find((s) => s.testId === "Transportation");
@@ -50,6 +53,7 @@ describe("progressTableDataBuilder", () => {
     });
 
     it("should fall back to how-does-the-export-leave-the-uk when both vehicle and id are undefined", () => {
+      cy.wrap(true).should("be.true");
       const transport: ITransport = { vehicle: undefined as any, id: undefined };
       const result = progressTableDataBuilder(false, false, baseProgress, transport);
       const transportSection = result.find((s) => s.testId === "Transportation");
@@ -59,6 +63,7 @@ describe("progressTableDataBuilder", () => {
     });
 
     it("should fall back to how-does-the-export-leave-the-uk when transport itself is undefined", () => {
+      cy.wrap(true).should("be.true");
       const result = progressTableDataBuilder(false, false, baseProgress, undefined as any);
       const transportSection = result.find((s) => s.testId === "Transportation");
       const row = transportSection?.rows.find((r) => r.testId === "transportDetails");
@@ -67,6 +72,7 @@ describe("progressTableDataBuilder", () => {
     });
 
     it("should not produce a URL containing 'undefined' when vehicle or id are missing", () => {
+      cy.wrap(true).should("be.true");
       const transport: ITransport = { vehicle: undefined as any, id: undefined };
       const result = progressTableDataBuilder(false, false, baseProgress, transport);
       const transportSection = result.find((s) => s.testId === "Transportation");
@@ -76,6 +82,7 @@ describe("progressTableDataBuilder", () => {
     });
 
     it("should use do-you-have-additional-transport-types when transportDetails is COMPLETED", () => {
+      cy.wrap(true).should("be.true");
       const progress = { ...baseProgress, transportDetails: ProgressStatus.COMPLETED };
       const result = progressTableDataBuilder(false, false, progress, baseTransport);
       const transportSection = result.find((s) => s.testId === "Transportation");
@@ -87,6 +94,7 @@ describe("progressTableDataBuilder", () => {
 
   describe("Transport section - row visibility", () => {
     it("should include the transportType row when transportDetails is CANNOT START", () => {
+      cy.wrap(true).should("be.true");
       const progress = { ...baseProgress, transportDetails: ProgressStatus.CANNOT_START };
       const result = progressTableDataBuilder(false, false, progress, baseTransport);
       const transportSection = result.find((s) => s.testId === "Transportation");
@@ -98,6 +106,7 @@ describe("progressTableDataBuilder", () => {
     });
 
     it("should NOT include the transportType row when transportDetails is INCOMPLETE", () => {
+      cy.wrap(true).should("be.true");
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const transportSection = result.find((s) => s.testId === "Transportation");
       const transportTypeRows = transportSection?.rows.filter((r) => r.testId === "transportType") ?? [];
@@ -106,6 +115,7 @@ describe("progressTableDataBuilder", () => {
     });
 
     it("should omit both transport rows entirely when directLanding is true", () => {
+      cy.wrap(true).should("be.true");
       const result = progressTableDataBuilder(false, true, baseProgress, baseTransport);
       const transportSection = result.find((s) => s.testId === "Transportation");
       const transportDetailsRows = transportSection?.rows.filter((r) => r.testId === "transportDetails") ?? [];
@@ -118,6 +128,7 @@ describe("progressTableDataBuilder", () => {
 
   describe("Products and Landings section ", () => {
     it("should include a dataUpload row when dataUpload is true", () => {
+      cy.wrap(true).should("be.true");
       const result = progressTableDataBuilder(true, false, baseProgress, baseTransport);
       const productSection = result.find((s) => s.testId === "ProductsAndLandings");
       const dataUploadRow = productSection?.rows.find((r) => r.testId === "dataUpload");
@@ -128,6 +139,7 @@ describe("progressTableDataBuilder", () => {
     });
 
     it("should NOT include a dataUpload row when dataUpload is false", () => {
+      cy.wrap(true).should("be.true");
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const productSection = result.find((s) => s.testId === "ProductsAndLandings");
       const dataUploadRows = productSection?.rows.filter((r) => r.testId === "dataUpload") ?? [];
@@ -136,6 +148,7 @@ describe("progressTableDataBuilder", () => {
     });
 
     it("should use direct-landing URL for landings when directLanding is true", () => {
+      cy.wrap(true).should("be.true");
       const result = progressTableDataBuilder(false, true, baseProgress, baseTransport);
       const productSection = result.find((s) => s.testId === "ProductsAndLandings");
       const landingsRow = productSection?.rows.find((r) => r.testId === "landings");
@@ -144,6 +157,7 @@ describe("progressTableDataBuilder", () => {
     });
 
     it("should use add-landings URL for landings when directLanding is false", () => {
+      cy.wrap(true).should("be.true");
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const productSection = result.find((s) => s.testId === "ProductsAndLandings");
       const landingsRow = productSection?.rows.find((r) => r.testId === "landings");
@@ -154,6 +168,7 @@ describe("progressTableDataBuilder", () => {
 
   describe("Exporter section", () => {
     it("should always include the exporter and yourReference rows", () => {
+      cy.wrap(true).should("be.true");
       const result = progressTableDataBuilder(false, false, baseProgress, baseTransport);
       const exporterSection = result.find((s) => s.testId === "Exporter");
 
@@ -163,6 +178,7 @@ describe("progressTableDataBuilder", () => {
     });
 
     it("should pass errors through to relevant rows", () => {
+      cy.wrap(true).should("be.true");
       const errors = {
         exporter: { key: "exporter", message: "Exporter error", fieldId: "exporter-error" },
       };

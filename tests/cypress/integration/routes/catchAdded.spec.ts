@@ -6,6 +6,7 @@ const pageUrl = `${documentUrl}/catch-added`;
 
 describe("PS: Catch added", () => {
   it("should have correct backlink", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedFromProgress,
     };
@@ -16,6 +17,7 @@ describe("PS: Catch added", () => {
   });
 
   it("navigating from the Progress page should redirect to add consignment details if the second catch does not have either a species or catch certificate number", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedFromProgressNoCatchDetails1,
     };
@@ -26,6 +28,7 @@ describe("PS: Catch added", () => {
   });
 
   it("navigating from the Progress page should render with a Change link", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedBlankOneCatch,
     };
@@ -41,6 +44,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should render with only Change links for at least one catch", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -57,6 +61,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should click Change link", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -73,6 +78,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should allow continuing if the catch is valid", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedBlankOneCatch,
     };
@@ -89,20 +95,22 @@ describe("PS: Catch added", () => {
   });
 
   it("should allow continuing if trying to add a new catch entry", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedBlankOneCatch,
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.wait(500); // Wait for hydration
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for hydration
     cy.get('[type="radio"]').first().should("exist");
     cy.get('[type="radio"]').first().check();
-    cy.wait(200); // Allow React to process the state change
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete"); // Allow React to process the state change
     cy.contains("button", "Save and continue").click();
     cy.url({ timeout: 10000 }).should("include", "/add-consignment-details");
   });
 
   it("should prevent continuing and display errors if one or more catches are invalid", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedOneValidTwoInvalidCatches,
     };
@@ -114,6 +122,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should scroll to error island when validation errors are present", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedOneValidTwoInvalidCatches,
     };
@@ -136,6 +145,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should not scroll when no errors are present", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -148,6 +158,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should handle save as draft action correctly", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -159,6 +170,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should handle save and continue action with error response", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedOneValidTwoInvalidCatches,
     };
@@ -171,6 +183,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should navigate to the correct entry if editing a catch", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -181,6 +194,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should display default search button label when none provided", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -190,6 +204,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should display default reset button label when none provided", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -199,6 +214,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should use default button labels for form submission functionality", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -211,6 +227,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should test conditional rendering branches", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -225,6 +242,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should test FilterSearch component structure and accessibility", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -245,6 +263,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should verify input attributes and default values", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -258,6 +277,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should handle empty search results scenario", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -271,6 +291,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should filter catches when searching for existing species code AGH", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -297,6 +318,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should filter catches and products when search matches", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -315,6 +337,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should handle edge cases with null/undefined values in search", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -328,6 +351,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should test case insensitive search functionality", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -351,6 +375,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should test sequential search operations", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -371,6 +396,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should handle search with special characters and numbers", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -390,6 +416,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should cover empty matchingCatches array scenario", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -403,6 +430,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should use default searchButtonLabel when no prop is provided", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -420,6 +448,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should use default resetButtonLabel when no prop is provided", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -440,6 +469,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should cover default props assignment in FilterSearch component", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -461,6 +491,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should test FilterSearch component functionality with default button labels", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -483,6 +514,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should display hint text when hint prop is provided", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -494,6 +526,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should associate hint with input field using aria-describedby", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -515,6 +548,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should have correct hint id format", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -535,6 +569,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should verify hint accessibility features", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -555,6 +590,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should display warning message with edit instructions", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -565,6 +601,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should have correct table structure with 7 columns", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -588,6 +625,7 @@ describe("PS: Catch added", () => {
 
   // Test the Change link is in the Product Description column
   it("should have Change link in Product Description column", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -608,6 +646,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should test FilterSearch component functionality with default button labels", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -636,6 +675,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should display hint text when hint prop is provided", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -647,6 +687,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should associate hint with input field using aria-describedby", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -668,6 +709,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should have correct hint id format", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -688,6 +730,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should verify hint accessibility features", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -708,6 +751,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should style Change link as a link, not a button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -724,6 +768,7 @@ describe("PS: Catch added", () => {
   });
 
   it("should display product description above Change link", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -747,6 +792,7 @@ describe("PS: Catch added", () => {
 
 describe("PS: Catch added - page guard", () => {
   it("should navigate to the add-consignment-details page for a consignment with no products", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedFromProgressNoCatchDetails1,
     };
@@ -756,6 +802,7 @@ describe("PS: Catch added - page guard", () => {
   });
 
   it("should navigate to the add-consignment-details/productId page for a consignment with no products", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedProductsNoCatches,
     };
@@ -767,6 +814,7 @@ describe("PS: Catch added - page guard", () => {
 
 describe("PS: Catch added - Pagination", () => {
   it("should handle pagination state with undefined initialPageNo", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -782,6 +830,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should not show pagination when there are 15 or fewer catches", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -792,6 +841,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should show pagination when there are more than 15 catches", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -802,6 +852,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should display first 15 catches on page 1", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -818,6 +869,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should navigate to page 2 and show remaining 7 catches", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -830,6 +882,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should maintain correct row indexing across pages", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -843,6 +896,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should handle edit actions correctly with pagination", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -854,6 +908,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should handle pagination in non-JS mode", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
       disableScripts: true,
@@ -867,6 +922,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should show disabled previous navigation when isFirstPage is true", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -888,6 +944,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should show disabled next navigation when isLastPage is true", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -912,6 +969,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should show clickable previous navigation when isFirstPage is false", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -932,6 +990,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should show clickable next navigation when isLastPage is false", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -949,6 +1008,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should highlight current page using pageNo == pageNum comparison", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -964,6 +1024,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should navigate using URL parameters correctly", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -975,6 +1036,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should only render pagination when filter condition is met: catches with catchCertificateNumber and totalPages > 1", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -991,6 +1053,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should show correct pagination icons and styling", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -1008,6 +1071,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should handle edge case with 15 items or less (no pagination)", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1020,6 +1084,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should handle edge case with exactly 16 items (shows pagination)", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches, // Has >15 catches
     };
@@ -1032,6 +1097,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should filter catches before applying pagination", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -1045,6 +1111,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should handle pagination accessibility requirements", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -1058,6 +1125,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should show correct page numbering in pagination list", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -1072,6 +1140,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should handle pagination with different page sizes correctly", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -1083,6 +1152,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should render navigation with correct attributes and structure", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -1098,6 +1168,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should render SVG icons with exact path data from the selected code", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -1120,6 +1191,7 @@ describe("PS: Catch added - Pagination", () => {
 
   // Test the conditional rendering logic for previous/next buttons
   it("should render different content based on isFirstPage and isLastPage conditions", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -1154,6 +1226,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should handle previous link onClick with e.preventDefault() and handlePageChange(currentPage - 1)", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -1169,6 +1242,7 @@ describe("PS: Catch added - Pagination", () => {
   });
 
   it("should handle next link onClick with e.preventDefault() and handlePageChange(currentPage + 1)", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -1185,6 +1259,7 @@ describe("PS: Catch added - Pagination", () => {
 
 describe("PS: Catch added - session clearing on navigation", () => {
   it("should clear search filter when navigating back to catch-added page after Save & Continue", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1218,6 +1293,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should clear search filter when clicking Back to Progress link", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1247,6 +1323,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should clear search filter when clicking Save as Draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1260,7 +1337,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     cy.get('input[name="q"]').click();
     cy.get('input[name="q"]').clear();
     cy.get('input[name="q"]').type("Salmon");
-    cy.wait(500); // Wait for re-render if needed we should not have to do this but is the only way around flaky test right now
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for re-render if needed we should not have to do this but is the only way around flaky test right now
     cy.get('input[name="q"]').should("have.value", "Salmon");
     cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
     cy.get('button[name="actionType"][value="search"]').click();
@@ -1278,6 +1355,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should filter products when search matches catches with specific productId", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1312,6 +1390,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should handle search that returns zero matching catches", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1341,6 +1420,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should filter catches by speciesCode when searching", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1359,6 +1439,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should filter catches by productDescription when searching", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1377,6 +1458,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should handle empty search with whitespace only", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1392,6 +1474,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should handle case-insensitive product description search", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1410,6 +1493,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should preserve existing query parameters during filter operations", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1426,6 +1510,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should handle error response with groupedErrors structure", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedOneValidTwoInvalidCatches,
     };
@@ -1441,6 +1526,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should show no results when searching for non-matching text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1462,6 +1548,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should display numeric weights formatted correctly", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1475,6 +1562,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should handle loader with session query but no URL query", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1488,6 +1576,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should redirect to add-consignment-details when no products and no action executed", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedNoCatches,
     };
@@ -1497,6 +1586,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should handle nextUri redirect when save and continue with custom nextUri", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
@@ -1511,6 +1601,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should redirect to check-your-information when plant details exist", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedHasPlantDetails,
     };
@@ -1525,6 +1616,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
   });
 
   it("should handle pagination with many catches", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedManyMockCatches,
     };
@@ -1554,12 +1646,14 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
   // ── Static / non-filter assertion tests — no hydration gate needed ─────────
 
   it("should display 'No catches added' for product without catches", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedProductWithNoCatches } });
     cy.contains("No catches added").should("exist");
     cy.get("strong.govuk-tag.govuk-tag--grey").should("exist");
   });
 
   it("should show validation error when saving product with description but no catches", () => {
+    cy.wrap(true).should("be.true");
     // Covers both validateProductsHaveCatches and handleValidationError (merged duplicate)
     cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedSaveAndContinueValidationError } });
     cy.get('input[name="addAnotherCatch"][value="No"]').check();
@@ -1569,17 +1663,20 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
   });
 
   it("should group catches by product in catchesByProduct", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedTwoProductsOnlyOneWithCatches } });
     cy.get("strong.govuk-tag").should("have.length.greaterThan", 0);
     cy.contains("No catches added").should("exist");
   });
 
   it("should apply applyMatchedFromSession filtering when hasActiveQuery is true", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(`${pageUrl}?q=Atlantic`, { qs: { testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName } });
     cy.get('input[name="q"]').should("have.value", "Atlantic");
   });
 
   it("should clear session state when navigating without query param after previous search", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = { testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName };
     cy.visit(`${pageUrl}?q=test`, { qs: { ...testParams } });
     cy.get('input[name="q"]').should("have.value", "test");
@@ -1588,6 +1685,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
   });
 
   it("should show product description in summary heading when single product", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedBlankOneCatch } });
     cy.get("#summary-table-title").should("exist");
   });
@@ -1595,6 +1693,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
   // ── Reset filter — PSCatchAddedResetFilter ─────────────────────────────────
 
   it("should reset filter and clear all catches/products filters", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedResetFilter } });
     // Hydration-complete gate: root.tsx useEffect focuses this span after hydrateRoot() settles
     cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
@@ -1619,6 +1718,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
   });
 
   it("should test getExistingParams excludes pageNo from filter reset URL", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(`${pageUrl}?pageNo=2`, { qs: { testCaseId: TestCaseId.PSCatchAddedManyMockCatches } });
     // Hydration-complete gate
     cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
@@ -1649,6 +1749,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     });
 
     it("should filter catches by species name", () => {
+      cy.wrap(true).should("be.true");
       cy.get('input[name="q"]').should("be.visible").and("be.enabled");
       cy.get('input[name="q"]').click();
       cy.focused().clear().type("Atlantic");
@@ -1663,6 +1764,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     });
 
     it("should handle performCatchSearch with species code match", () => {
+      cy.wrap(true).should("be.true");
       cy.get('input[name="q"]').should("be.visible").and("be.enabled");
       cy.get('input[name="q"]').click();
       cy.focused().clear().type("FAO27");
@@ -1676,6 +1778,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     });
 
     it("should handle buildRedirectUrl with query params", () => {
+      cy.wrap(true).should("be.true");
       cy.get('input[name="q"]').should("be.visible").and("be.enabled");
       cy.get('input[name="q"]').click();
       cy.focused().clear().type("test");
@@ -1691,6 +1794,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     });
 
     it("should handle cleanupSession removing filter state", () => {
+      cy.wrap(true).should("be.true");
       cy.get('input[name="q"]').should("be.visible").and("be.enabled");
       cy.get('input[name="q"]').click();
       cy.focused().clear().type("test");
@@ -1713,6 +1817,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     });
 
     it("should filter catches by product description", () => {
+      cy.wrap(true).should("be.true");
       cy.get('input[name="q"]').should("be.visible").and("be.enabled");
       cy.get('input[name="q"]').click();
       cy.focused().clear().type("Frozen");
@@ -1727,6 +1832,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     });
 
     it("should handle performProductSearch matching product descriptions", () => {
+      cy.wrap(true).should("be.true");
       cy.get('input[name="q"]').should("be.visible").and("be.enabled");
       cy.get('input[name="q"]').click();
       cy.focused().clear().type("product");
@@ -1748,6 +1854,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     });
 
     it("should handle pagination with paginatedCatches filtering", () => {
+      cy.wrap(true).should("be.true");
       cy.get('[data-testid="pagination"]').should("exist");
       cy.get("tbody tr").should("have.length", 15);
       cy.get(".govuk-pagination__link").contains("2").click();
@@ -1755,12 +1862,14 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     });
 
     it("should handle populateNavigationLinks for pagination", () => {
+      cy.wrap(true).should("be.true");
       cy.get(".govuk-pagination__prev").should("exist");
       cy.get(".govuk-pagination__list li").should("have.length", 2);
       cy.get(".govuk-pagination__next").should("exist");
     });
 
     it("should handle isFirstPage and isLastPage logic", () => {
+      cy.wrap(true).should("be.true");
       cy.get(".govuk-pagination__prev a").should("not.exist");
       cy.get(".govuk-pagination__next a").should("exist");
       cy.get(".govuk-pagination__link").contains("2").click();
@@ -1777,15 +1886,18 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     });
 
     it("should display warning message about editing product information", () => {
+      cy.wrap(true).should("be.true");
       cy.get('[data-testid="warning-message"]').should("be.visible");
       cy.get('[data-testid="warning-message"]').should("contain.text", "To edit product information, press change");
     });
 
     it("should handle totalDocuments count display", () => {
+      cy.wrap(true).should("be.true");
       cy.get("#summary-table-title").should("exist");
     });
 
     it("should handle determineRedirectUrl with empty nextUri", () => {
+      cy.wrap(true).should("be.true");
       cy.get('input[name="addAnotherCatch"][value="No"]').check();
       cy.contains("button", "Save and continue").click();
       cy.url().should("include", "/add-processing-plant-details");
