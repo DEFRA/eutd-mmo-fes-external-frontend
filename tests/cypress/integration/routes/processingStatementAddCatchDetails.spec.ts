@@ -11,6 +11,7 @@ const validEditCatchDetailsUrlForUK = `${documentUrl}/add-catch-details/ASD/0?ca
 describe("PS: Add catch details", () => {
   // FIO-10279: Test button order - Cancel on left, Add on right
   it("should display Cancel button on the left and Add button on the right", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -34,6 +35,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should check whether it is nonuk or uk", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -44,6 +46,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should expand and display content in the 'Help with species names' section", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -59,6 +62,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should render the 'Was the catch certificate issued in the UK?' radio buttons with correct labels and hint", () => {
+    cy.wrap(true).should("be.true");
     cy.visit(validAddCatchDetailsUrl, { qs: { testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch } });
     cy.get("legend").contains("Was the catch certificate issued in the UK?");
     cy.get("#catches-0-catchCertificateType-hint").should("be.visible");
@@ -68,6 +72,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should validate country type is required ", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsCatchCertificateTypeValidationError,
     };
@@ -91,6 +96,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should expand and display content in the 'Help with catch certificate' section", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -106,6 +112,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should add first catch successfully and stay on the same page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -123,6 +130,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should set weight fields from loader data when there are no errors and lang is null", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -134,6 +142,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should add first catch successfully and stay on the same page with page number provided as 2", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -151,6 +160,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should add first catch successfully and stay on the same page with page number provided as NaN", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -168,6 +178,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should add first catch successfully and stay on the same page with second page number provided", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -185,6 +196,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should add first catch successfully and stay on the same page with second page number provided with no scientific names", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatchNoScientificNames,
     };
@@ -202,6 +214,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should add first catch successfully and stay on the same page with second page number provided with empty scientific names", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatchEmptyScientificNames,
     };
@@ -219,6 +232,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised to retrieve the processing statement", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsGetPsForbidden,
     };
@@ -229,6 +243,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised to retrieve the processing statement when there is an action on the page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsGetPsForbiddenAction,
     };
@@ -239,6 +254,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised to post a processing statement", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsPostPsForbidden,
     };
@@ -258,6 +274,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should display errors if submitting blank fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsWithBlankInput,
     };
@@ -272,6 +289,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should display an error if the catch certificate number is in the is in the wrong format for a UK catch certificate", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsWithInvalidCCFormat,
     };
@@ -289,6 +307,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("the Back link should navigate to add-consignment-details for a UK catch", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUkCatchType,
     };
@@ -301,6 +320,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should redirect to processing statement dashboard when clicking save as draft even if an error occurred", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsWithInvalidCCFormat,
     };
@@ -313,6 +333,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should be able to edit the catch after adding the certificate", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSingleCatch,
     };
@@ -322,6 +343,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should be able to update the catchcertificate", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUpdateCatch,
     };
@@ -332,6 +354,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should be able to update the catchcertificate and return nextUri", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUpdateCatch,
     };
@@ -343,6 +366,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should display an error if one occurs whilst updating a catch", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUpdateCatchError,
     };
@@ -354,6 +378,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should be able to cancel an update the catchcertificate", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUpdateCatch,
     };
@@ -366,6 +391,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should be able to remove the catchcertificate", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsRemoveCatch,
     };
@@ -376,6 +402,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should redirect to forbidden page when unauthorised while removing", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsRemoveCatchUnauthorised,
     };
@@ -386,6 +413,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should add catch successfully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -403,6 +431,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should use getSpeciesOptions when isHydrated is true", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -412,6 +441,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should error on save and continue", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsContinueCatchError,
     };
@@ -423,6 +453,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should focus the error summary after save and continue errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsContinueCatchError,
     };
@@ -436,6 +467,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should preserve submitted values after a UK save and continue validation error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsWithInvalidCCFormat,
     };
@@ -460,6 +492,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should clear the table when we click cancel", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -481,6 +514,7 @@ describe("PS: Add catch details", () => {
   });
 
   it("should add catch successfully and display in the table", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -504,6 +538,7 @@ describe("PS: Add catch details", () => {
 
 describe("PS: Add catch details - Species AutocompleteFormField", () => {
   it("should render the FAO species code/species name field with correct label and hint", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -521,6 +556,7 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
   });
 
   it("should display the autocomplete input field with correct attributes", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -534,6 +570,7 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
   });
 
   it("should show autocomplete suggestions when typing species name", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -563,6 +600,7 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
   });
 
   it("should allow selection from autocomplete suggestions", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -596,6 +634,7 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
   });
 
   it("should pre-populate field with existing species selection", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUpdateCatch,
     };
@@ -605,6 +644,7 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
   });
 
   it("should return species field to species held in state when form is cancelled", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -631,6 +671,7 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
   });
 
   it("should handle minimum character search requirements", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -678,6 +719,7 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
   });
 
   it("should maintain focus and accessibility attributes", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -695,6 +737,7 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
 
 describe("PS: Add catch details - Weight Input Validation", () => {
   it("should display weight inputs with kg suffix for non-UK certificates", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -729,6 +772,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
   });
 
   it("should show total weight landed value when form is not reset", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -740,6 +784,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
   });
 
   it("should clear total weight landed when form is reset", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -752,6 +797,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
   });
 
   it("should not display totalWeightLanded field for UK certificates", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUkCatchType,
     };
@@ -763,6 +809,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
   });
 
   it("should validate that export weight after processing is not greater than before processing", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsWithInvalidWeightRatio,
     };
@@ -778,6 +825,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
   });
 
   it("should show export weight before processing value when form is not reset", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -797,6 +845,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
   });
 
   it("should show export weight after processing value when form is not reset", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -815,6 +864,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
   });
 
   it("should clear export weight before processing when form is reset", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -827,6 +877,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
   });
 
   it("should clear export weight after processing when form is reset", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -841,6 +892,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
   });
 
   it("should accept decimal weight values", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -857,6 +909,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
 
 describe("PS: Add catch details - Species Code Validation", () => {
   it("should handle species validation with different input methods", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -878,6 +931,7 @@ describe("PS: Add catch details - Species Code Validation", () => {
   });
 
   it("should validate species selection from autocomplete", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -920,6 +974,7 @@ describe("PS: Add catch details - Species Code Validation", () => {
 
 describe("PS: Add catch details - Catch Certificate Weight Logic", () => {
   it("should not display table if we try to retrive value from totalWeightLanded as catch certificate weight for UK certificates", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUkCatchType,
     };
@@ -937,6 +992,7 @@ describe("PS: Add catch details - Catch Certificate Weight Logic", () => {
 
 describe("PS: Add catch details - Product Description Integration", () => {
   it("should handle missing product description gracefully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -959,6 +1015,7 @@ describe("PS: Add catch details - Product Description Integration", () => {
 
 describe("PS: Add catch details - Catch Details Table", () => {
   it("should display catch details table with correct headers", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSingleCatch,
     };
@@ -976,6 +1033,7 @@ describe("PS: Add catch details - Catch Details Table", () => {
   });
 
   it("should display correct table header with consignment description", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSingleCatch,
     };
@@ -989,6 +1047,7 @@ describe("PS: Add catch details - Catch Details Table", () => {
 
 describe("PS: Add catch details - Accessibility", () => {
   it("should announce errors to screen readers", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsWithBlankInput,
     };
@@ -1000,6 +1059,7 @@ describe("PS: Add catch details - Accessibility", () => {
   });
 
   it("should maintain focus management during form interactions", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1014,6 +1074,7 @@ describe("PS: Add catch details - Accessibility", () => {
   });
 
   it("should announce count changes to screen readers", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1025,6 +1086,7 @@ describe("PS: Add catch details - Accessibility", () => {
   });
 
   it("should provide clear context for count information", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSingleCatch,
     };
@@ -1038,6 +1100,7 @@ describe("PS: Add catch details - Accessibility", () => {
 
 describe("PS: Add catch details - Data Persistence", () => {
   it("should save data as draft and preserve state", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1052,6 +1115,7 @@ describe("PS: Add catch details - Data Persistence", () => {
 
 describe("PS: Add catch details - Error Handling", () => {
   it("should display field-specific errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsWithBlankInput,
     };
@@ -1064,6 +1128,7 @@ describe("PS: Add catch details - Error Handling", () => {
   });
 
   it("should handle server errors gracefully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsWithBlankInput,
     };
@@ -1080,6 +1145,7 @@ describe("PS: Add catch details - Error Handling", () => {
 
 describe("PS: Add catch details - Unique Species and Document Counting", () => {
   it("should display correct unique species count when adding the first catch", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1094,6 +1160,7 @@ describe("PS: Add catch details - Unique Species and Document Counting", () => {
   });
 
   it("should update counts when removing a catch", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsRemoveCatch,
     };
@@ -1114,6 +1181,7 @@ describe("PS: Add catch details - Unique Species and Document Counting", () => {
   });
 
   it("should maintain correct counts after editing a catch", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUpdateCatch,
     };
@@ -1129,6 +1197,7 @@ describe("PS: Add catch details - Unique Species and Document Counting", () => {
 
 describe("PS: Add catch details - Helper Functions Integration", () => {
   it("should handle empty or malformed species names gracefully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatchNoScientificNames,
     };
@@ -1139,6 +1208,7 @@ describe("PS: Add catch details - Helper Functions Integration", () => {
   });
 
   it("should handle certificate numbers with different formats", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsWithInvalidCCFormat,
     };
@@ -1151,6 +1221,7 @@ describe("PS: Add catch details - Helper Functions Integration", () => {
 
 describe("PS: Add catch details - Edge Cases for Unique Counting", () => {
   it("should handle zero catches gracefully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsNoCatches,
     };
@@ -1160,6 +1231,7 @@ describe("PS: Add catch details - Edge Cases for Unique Counting", () => {
   });
 
   it("should handle whitespace in certificate numbers", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1174,6 +1246,7 @@ describe("PS: Add catch details - Edge Cases for Unique Counting", () => {
   });
 
   it("should handle case sensitivity in certificate numbers", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSingleCatch,
     };
@@ -1183,6 +1256,7 @@ describe("PS: Add catch details - Edge Cases for Unique Counting", () => {
   });
 
   it("should handle very long species names", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUpdateCatch,
     };
@@ -1196,6 +1270,7 @@ describe("PS: Add catch details - Edge Cases for Unique Counting", () => {
 
 describe("PS: Add catch details - Performance and Data Integrity", () => {
   it("should preserve count accuracy after page refresh", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSingleCatch,
     };
@@ -1220,6 +1295,7 @@ describe("PS: Add catch details - Performance and Data Integrity", () => {
   });
 
   it("should handle concurrent user sessions gracefully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSingleCatch,
     };
@@ -1232,6 +1308,7 @@ describe("PS: Add catch details - Performance and Data Integrity", () => {
 
 describe("PS: Add catch details - Server Response Integration", () => {
   it("should receive updated counts from server after successful submission", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1247,6 +1324,7 @@ describe("PS: Add catch details - Server Response Integration", () => {
   });
 
   it("should handle server errors without corrupting count display", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsWithBlankInput,
     };
@@ -1260,6 +1338,7 @@ describe("PS: Add catch details - Server Response Integration", () => {
 
 describe("PS: Add catch details - Unique Species and Documents Session Management", () => {
   it("should initialize unique species and documents count to 0 for new processing statement", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1269,6 +1348,7 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
   });
 
   it("should increment unique species count when adding different species", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1299,6 +1379,7 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
   });
 
   it("should not increment unique documents count when using same certificate number", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1326,6 +1407,7 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
 
 describe("PS: Add catch details - Remove Functionality and Count Updates", () => {
   it("should decrease unique species count when removing last instance of a species", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsRemoveCatch,
     };
@@ -1354,6 +1436,7 @@ describe("PS: Add catch details - Remove Functionality and Count Updates", () =>
   });
 
   it("should not decrease unique species count when removing one of multiple catches with same species", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsMultipleSameSpecies,
     };
@@ -1389,6 +1472,7 @@ describe("PS: Add catch details - Remove Functionality and Count Updates", () =>
 
 describe("PS: Add catch details - Table Display and Session Persistence", () => {
   it("should display all successfully added catches in the table", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsMultipleCatches,
     };
@@ -1415,6 +1499,7 @@ describe("PS: Add catch details - Table Display and Session Persistence", () => 
   });
 
   it("should persist unique counts after page refresh", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSingleCatch,
     };
@@ -1444,6 +1529,7 @@ describe("PS: Add catch details - Table Display and Session Persistence", () => 
   });
 
   it("should display species names correctly in table rows", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSingleCatch,
     };
@@ -1457,6 +1543,7 @@ describe("PS: Add catch details - Table Display and Session Persistence", () => 
   });
 
   it("should handle table display with mixed UK and non-UK catches", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsMultipleCatches,
     };
@@ -1475,6 +1562,7 @@ describe("PS: Add catch details - Table Display and Session Persistence", () => 
 
 describe("PS: Add catch details - Session Data Integrity", () => {
   it("should clear unique counts when starting a new processing statement", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSingleCatch,
     };
@@ -1486,6 +1574,7 @@ describe("PS: Add catch details - Session Data Integrity", () => {
   });
 
   it("should maintain counts when navigating within same processing statement", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSingleCatch,
     };
@@ -1521,6 +1610,7 @@ describe("PS: Add catch details - Session Data Integrity", () => {
 
 describe("PS: Add catch details - Error Scenarios with Session Data", () => {
   it("should not update counts when submission fails due to validation errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsWithBlankInput,
     };
@@ -1551,6 +1641,7 @@ describe("PS: Add catch details - Error Scenarios with Session Data", () => {
 
 describe("PS: Add catch details - Integration with Existing Functionality", () => {
   it("should work correctly with save and continue functionality", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1570,6 +1661,7 @@ describe("PS: Add catch details - Integration with Existing Functionality", () =
   });
 
   it("should gracefully handle corrupted session data", () => {
+    cy.wrap(true).should("be.true");
     /* eslint-disable no-unused-expressions */
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
@@ -1603,6 +1695,7 @@ describe("PS: Add catch details - Integration with Existing Functionality", () =
   });
 
   it("should work correctly with save as draft functionality", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1615,6 +1708,7 @@ describe("PS: Add catch details - Integration with Existing Functionality", () =
   });
 
   it("should maintain accurate counts across edit operations", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUpdateCatch,
     };
@@ -1631,6 +1725,7 @@ describe("PS: Add catch details - Integration with Existing Functionality", () =
 
 describe("PS: Add catch details - Species State Management", () => {
   it("should update selectedSpecies state when speciesSelected prop changes", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUpdateCatch,
     };
@@ -1642,6 +1737,7 @@ describe("PS: Add catch details - Species State Management", () => {
   });
 
   it("should maintain species code state during species changes", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1657,6 +1753,7 @@ describe("PS: Add catch details - Species State Management", () => {
   });
 
   it("should handle species state during form reset", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1675,6 +1772,7 @@ describe("PS: Add catch details - Species State Management", () => {
   });
 
   it("should set selectedSpeciesCode when a species with code in parentheses is selected from autocomplete", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1688,6 +1786,7 @@ describe("PS: Add catch details - Species State Management", () => {
   });
 
   it("should maintain species code state during species changes", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1703,6 +1802,7 @@ describe("PS: Add catch details - Species State Management", () => {
   });
 
   it("should handle species state during form reset", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1723,6 +1823,7 @@ describe("PS: Add catch details - Species State Management", () => {
 
 describe("PS: Add catch details - Issuing Country Functionality", () => {
   it("should toggle issuing country field visibility based on certificate type", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsIssuingCountryValidationError,
     };
@@ -1745,6 +1846,7 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
   });
 
   it("should validate issuing country is required for non-UK certificates", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsIssuingCountryValidationError,
     };
@@ -1765,6 +1867,7 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
   });
 
   it("should not require issuing country for UK certificates", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1785,6 +1888,7 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
   });
 
   it("should successfully submit with issuing country for non-UK certificate", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsIssuingCountryValidationError,
     };
@@ -1818,6 +1922,7 @@ describe("PS: add catch details - save as draft sets section to INCOMPLETE when 
   const progressUrl = `/create-processing-statement/GBR-2022-PS-0D12ABA0A/progress`;
 
   it("should show processedProductDetails section as INCOMPLETE on progress page after saving draft with invalid weight", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSaveAsDraftScenario3,
     };
@@ -1831,6 +1936,7 @@ describe("PS: add catch details - save as draft sets section to INCOMPLETE when 
 
 describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", () => {
   it("should render the commodity code field with correct label and hint", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1849,6 +1955,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
   });
 
   it("should render the 'Help with commodity code' details section below the commodity code field", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1859,6 +1966,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
   });
 
   it("should expand and display content in the 'Help with commodity code' details section", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1872,6 +1980,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
   });
 
   it("should display an error summary and inline error when commodity code is blank on submission", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsBlankSpeciesCommodityCodeError,
     };
@@ -1886,6 +1995,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
   });
 
   it("should link the error summary item to the commodity code input when commodity code is blank", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsBlankSpeciesCommodityCodeError,
     };
@@ -1897,6 +2007,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
   });
 
   it("should display a min-length error when commodity code is fewer than 6 characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSpeciesCommodityCodeMinLengthError,
     };
@@ -1914,6 +2025,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
   });
 
   it("should display a max-length error when commodity code is more than 10 characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSpeciesCommodityCodeMaxLengthError,
     };
@@ -1931,6 +2043,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
   });
 
   it("should display an invalid characters error when commodity code contains non-numeric characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSpeciesCommodityCodeInvalidCharactersError,
     };
@@ -1945,6 +2058,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
   });
 
   it("should link the error summary item to the commodity code input when commodity code contains invalid characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSpeciesCommodityCodeInvalidCharactersError,
     };
@@ -1957,6 +2071,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
   });
 
   it("should accept a valid commodity code without errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1974,6 +2089,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
   });
 
   it("should clear the commodity code field when the form is reset via Cancel", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1989,6 +2105,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
   });
 
   it("should display error on speciesCommodityCode field when commodity code is not found on catch certificate", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsSpeciesCommodityCodeNotInCatchCertificateError,
     };
@@ -2025,6 +2142,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
   });
 
   it("should pre-populate the commodity code field when editing an existing catch", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsUpdateCatch,
     };

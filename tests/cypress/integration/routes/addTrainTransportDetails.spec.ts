@@ -6,6 +6,7 @@ const trainPageUrl = `/create-catch-certificate/${documentNumber}/add-transporta
 
 describe("Add Transportation Details Train: Allowed", () => {
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SaveTransportDetailsFailsWith403,
     };
@@ -16,6 +17,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should display error when railway bill number exceeds 15 chars", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsRailwayBillNumber,
     };
@@ -30,6 +32,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should display error when freight bill number exceeds 60 chars", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsFreightBillNumber,
     };
@@ -44,6 +47,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should display error when railwat bill has alphanumeric text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveAlphanumericsRailwayBillNumber,
     };
@@ -58,6 +62,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should display errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportErrors,
     };
@@ -70,6 +75,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should navigate to cc dashboard page on click of save as draft button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,
     };
@@ -82,6 +88,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should navigate to progress page on click of save and continue button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,
     };
@@ -94,6 +101,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should display railway bill number label and hint text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,
     };
@@ -107,6 +115,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should clear departurePlace and exportDate when vehicle changes from previous selection", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportVehicleChanged,
     };
@@ -122,6 +131,7 @@ describe("Add Transportation Details Train: Allowed", () => {
   });
 
   it("should preserve existing transport data when vehicle hasn't changed", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportVehicleUnchanged,
     };
@@ -139,6 +149,7 @@ describe("Add Transportation Details Train: Allowed", () => {
 
 describe("Add Transportation Details Train: Disallowed", () => {
   it("should redirect to the progress page if transport is not truck", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportDisAllowed,
     };
@@ -149,6 +160,7 @@ describe("Add Transportation Details Train: Disallowed", () => {
 
 describe("should redirect to forbidden page it transport details return 403 on page load", () => {
   it("should redirect to the forbidden page if transport returns un authorised", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportAllowedUnauthorised,
     };
@@ -159,6 +171,7 @@ describe("should redirect to forbidden page it transport details return 403 on p
 
 describe("Add Transportation Details Train: Container Identification Number Validation", () => {
   it("should display container identification number label with optional suffix and hint text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,
     };
@@ -176,6 +189,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
   });
 
   it("should display format error when container identification number has invalid format regardless of length", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportContainerIdentificationNumberMaxLength,
     };
@@ -192,6 +206,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
   });
 
   it("should display error when container identification number contains invalid characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportContainerIdentificationNumberInvalidCharacters,
     };
@@ -207,6 +222,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
     ).should("be.visible");
   });
   it("should save successfully when container identification number is not provided", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,
     };
@@ -219,6 +235,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
   });
 
   it("should save successfully when container identification number is valid", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,
     };
@@ -231,6 +248,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
   });
 
   it("should save successfully when container identification number is entered in lowercase", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,
     };
@@ -245,6 +263,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
 
 describe("Add Transportation Details Train: Multiple Container Numbers", () => {
   it("should save multiple container values successfully", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportMultipleContainers,
     };
@@ -266,6 +285,7 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
   });
 
   it("should allow empty container fields", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportEmptyContainers,
     };
@@ -287,6 +307,7 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
   });
 
   it("should persist container values when validation fails", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportContainerPersistence,
     };
@@ -313,6 +334,7 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
   });
 
   it("should load pre-existing container values from backend", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportEditWithContainers,
     };
@@ -325,6 +347,7 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
   });
 
   it("should display error when container number has invalid format", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportContainerValidationErrors,
     };
@@ -342,6 +365,7 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
   });
 
   it("should display format error when container number has invalid format regardless of length", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportContainerMaxLength,
     };

@@ -2,6 +2,7 @@ import { type ITestParams, TestCaseId } from "~/types";
 
 describe("HelpSection", () => {
   it("displays help section on three types of pages", () => {
+    cy.wrap(true).should("be.true");
     const urls = [
       "/create-catch-certificate/GBR-2022-CC-488FE89C1/progress",
       "/create-catch-certificate/GBR-2022-CC-488FE89C1/landings-entry",
@@ -30,6 +31,7 @@ describe("HelpSection", () => {
 
     urls.forEach((url) => {
       it(`Should display the help section on ${url}`, () => {
+        cy.wrap(true).should("be.true");
         cy.visit(url);
         cy.get("[data-testid=help-section]").should("exist");
       });
@@ -37,6 +39,7 @@ describe("HelpSection", () => {
   });
 
   it("does not display on the create pages or the manage pages", () => {
+    cy.wrap(true).should("be.true");
     const urls = [
       "/create-catch-certificate/catch-certificates",
       "/create-processing-statement/processing-statements",
@@ -46,6 +49,7 @@ describe("HelpSection", () => {
 
     urls.forEach((url) => {
       it(`Should not display the help section on ${url}`, () => {
+        cy.wrap(true).should("be.true");
         cy.visit(url);
         cy.get("[data-testid=help-section]").should("not.exist");
       });
@@ -53,6 +57,7 @@ describe("HelpSection", () => {
   });
 
   it("displays help section contents in English", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadEntryCompleteProgress,
     };
@@ -87,6 +92,7 @@ describe("HelpSection", () => {
   });
 
   it("displays help section contents in Welsh", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadEntryCompleteProgress,
     };

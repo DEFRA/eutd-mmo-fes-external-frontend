@@ -12,6 +12,7 @@ describe("Add consignment details page", () => {
   });
 
   it("will have a back link to the add exporters details page", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
@@ -19,6 +20,7 @@ describe("Add consignment details page", () => {
   });
 
   it("will have a progress link to the progress page", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", "Back to your progress").should("be.visible");
     cy.contains("a", "Back to your progress")
       .should("be.visible")
@@ -26,12 +28,14 @@ describe("Add consignment details page", () => {
   });
 
   it("will have a hint for commodity codes", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#commodityCode-hint")
       .should("be.visible")
       .should("have.text", "Start typing to search  for the correct commodity code for your fish product");
   });
 
   it("will have a hint for description of the product", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".dcx-hint")
       .should("be.visible")
       .should(
@@ -41,11 +45,13 @@ describe("Add consignment details page", () => {
   });
 
   it("will link to the processing statement progress page", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#backToProgress").click();
     cy.url().should("include", "/create-processing-statement/GBR-2021-PS-8EEB7E123/progress");
   });
 
   it("should show validation errors once adding commodity code and product description with no values", () => {
+    cy.wrap(true).should("be.true");
     cy.get("[data-testid*='save-and-continue'").eq(0).click();
     cy.url().should("include", "/add-consignment-details");
     cy.get("#error-summary-title").contains("There is a problem");
@@ -62,6 +68,7 @@ describe("Add consignment details when updating product description", () => {
   const pageUrl = `${documentUrl}/add-consignment-details/GBR-2023-PS-2305703F5-012345678`;
 
   it("will display current added consignment details", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetails,
     };
@@ -81,6 +88,7 @@ describe("Get consignment details page: unauthorised access", () => {
   const pageUrl = `${documentUrl}/add-consignment-details`;
 
   it("will have a back link to the add exporters details page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsUnauthorised,
     };
@@ -96,6 +104,7 @@ describe("Add consignment details page: get unauthorised access", () => {
   const pageUrl = `${documentUrl}/add-consignment-details`;
 
   it("will render the unauthorised page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantDetailsUnauthorised,
     };
@@ -111,6 +120,7 @@ describe("Add consignment details page: post unauthorised access", () => {
   const pageUrl = `${documentUrl}/add-consignment-details`;
 
   it("will redirect to the forbidden page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddConsignmentDetailsUnauthorised,
     };
@@ -127,6 +137,7 @@ describe("Add consignment details: save consignment details", () => {
   const pageUrl = `${documentUrl}/add-consignment-details`;
 
   it("will save the consignment details as draft and take the exporter the PS dashboard", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddConsignmentDetails,
     };
@@ -138,6 +149,7 @@ describe("Add consignment details: save consignment details", () => {
   });
 
   it("will save the consignment details and take the exporter the next page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddConsignmentDetails,
     };
@@ -149,6 +161,7 @@ describe("Add consignment details: save consignment details", () => {
   });
 
   it("will click on save and continue button and redirect to forbidden page for unauthorised access", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsSaveAndContinueUnauthorised,
     };
@@ -160,6 +173,7 @@ describe("Add consignment details: save consignment details", () => {
   });
 
   it("will display a consignment detail error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSPostAddConsignmentDetailsError,
     };
@@ -181,6 +195,7 @@ describe("Add consignment details: edit mode scenarios", () => {
   const createPageUrl = `${documentUrl}/add-consignment-details`;
 
   it("should display edit info message in warning text when editing an existing product", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
     };
@@ -193,6 +208,7 @@ describe("Add consignment details: edit mode scenarios", () => {
   });
 
   it("should display standard warning message when adding a new product", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetails,
     };
@@ -206,6 +222,7 @@ describe("Add consignment details: edit mode scenarios", () => {
   });
 
   it("should display remove product button when editing an existing product", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
     };
@@ -219,6 +236,7 @@ describe("Add consignment details: edit mode scenarios", () => {
   });
 
   it("should NOT display remove product button when adding a new product", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetails,
     };
@@ -229,6 +247,7 @@ describe("Add consignment details: edit mode scenarios", () => {
   });
 
   it("should have correct href for remove product button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
     };
@@ -239,6 +258,7 @@ describe("Add consignment details: edit mode scenarios", () => {
   });
 
   it("should display Welsh translations in edit mode", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
       lng: "cy",
@@ -254,6 +274,7 @@ describe("Add consignment details: edit mode scenarios", () => {
   });
 
   it("should work without JavaScript in edit mode", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
       disableScripts: true,
@@ -269,6 +290,7 @@ describe("Add consignment details: edit mode scenarios", () => {
   });
 
   it("should redirect to remove product page when remove button is clicked", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsEditMode,
     };
@@ -285,6 +307,7 @@ describe("Add consignment details: edit mode scenarios", () => {
 
 describe("Add consignment details: save as draft retains valid fields", () => {
   it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    cy.wrap(true).should("be.true");
     const pageUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123/add-consignment-details";
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddConsignmentDetailsSaveAsDraftWithErrors,

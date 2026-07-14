@@ -12,22 +12,26 @@ describe("Add Transportation Details: Container Vessel", () => {
   });
 
   it("should render the expected header", () => {
+    cy.wrap(true).should("be.true");
     cy.get(".govuk-heading-xl").contains("Container vessel departing the UK");
     cy.title().should("eq", "Container vessel departing the UK - Create a UK non-manipulation document - GOV.UK");
   });
 
   it("should render back link", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-leave-the-uk`);
   });
 
   it("should render the buttons texts", () => {
+    cy.wrap(true).should("be.true");
     cy.get('[data-testid="save-draft-button"]').contains("Save as draft");
     cy.get('[data-testid="save-and-continue"]').should("be.visible").contains("Save and continue");
   });
 
   it("should render the input label and hint text", () => {
+    cy.wrap(true).should("be.true");
     cy.contains("label", "Vessel name").should("be.visible");
     cy.contains("label", "Flag state").should("be.visible");
     cy.contains("label", "Shipping container identification number").should("be.visible");
@@ -38,6 +42,7 @@ describe("Add Transportation Details: Container Vessel", () => {
   });
 
   it("should render labels with bold font weight for NMD departure transport", () => {
+    cy.wrap(true).should("be.true");
     cy.get('label[id="exportedTo-label"]').should("have.class", "govuk-!-font-weight-bold");
     cy.get('label[for="pointOfDestination"]').should("have.class", "govuk-!-font-weight-bold");
     cy.get('label[for="vesselName"]').should("have.class", "govuk-!-font-weight-bold");
@@ -55,6 +60,7 @@ describe("Add Transportation Details: Container Vessel", () => {
   });
 
   it("should render all required fields for container vessel departure transport", () => {
+    cy.wrap(true).should("be.true");
     cy.get("#exportedTo").should("exist");
     cy.get("#pointOfDestination").should("exist");
     cy.get("#vesselName").should("exist");
@@ -69,6 +75,7 @@ describe("Add Transportation Details: Container Vessel", () => {
 
 describe("Save and Continue button - UnHappy path", () => {
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SaveVesselTransportDetailsFailsWith403,
     };
@@ -79,6 +86,7 @@ describe("Save and Continue button - UnHappy path", () => {
   });
 
   it("should display errors at top", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportErrors,
     };
@@ -95,6 +103,7 @@ describe("Save and Continue button - UnHappy path", () => {
 
 describe("Save and Continue button - Happy path", () => {
   it("should redirect to departure summary page on click of save and continue button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSave,
     };
@@ -109,6 +118,7 @@ describe("Save and Continue button - Happy path", () => {
   });
 
   it("should redirect to dashboard page on click of save as draft button", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportSaveAsDraft,
     };
@@ -129,6 +139,7 @@ describe("Save and Continue button - Happy path", () => {
 
 describe("Add Transportation Details Container Vessel:  403 on page load", () => {
   it("should redirect to the forbidden page if transport is not Container Vessel", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportAllowedUnauthorised,
     };
@@ -139,6 +150,7 @@ describe("Add Transportation Details Container Vessel:  403 on page load", () =>
 
 describe("Container Vessel Point of Destination - Validation Scenarios", () => {
   it("should display error when point of destination is empty", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportPointOfDestinationRequired,
     };
@@ -149,6 +161,7 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
   });
 
   it("should display error when point of destination exceeds 100 characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportPointOfDestinationMaxLength,
     };
@@ -161,6 +174,7 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
   });
 
   it("should save valid fields and redirect to dashboard when saving as draft with invalid pointOfDestination", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportPointOfDestinationMaxLength,
     };
@@ -187,6 +201,7 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
   });
 
   it("should display error when point of destination contains invalid characters", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VesselContainerTransportPointOfDestinationInvalidCharacters,
     };
@@ -203,6 +218,7 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
 
 describe("Container Vessel Save as Draft - Retain valid field values", () => {
   it("should retain all valid vessel fields when saving as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportSaveAsDraftRetainAllValues,
     };
@@ -232,6 +248,7 @@ describe("Container Vessel Save as Draft - Retain valid field values", () => {
   });
 
   it("should clear invalid vesselName but retain valid flagState when saving as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportSaveAsDraftInvalidVesselName,
     };

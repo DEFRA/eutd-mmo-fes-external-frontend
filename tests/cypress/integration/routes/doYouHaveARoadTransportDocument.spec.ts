@@ -6,6 +6,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
   const doYouHaveARoadTransportDocumentUrl = `${certificateUrl}/do-you-have-a-road-transport-document/0`;
 
   it("should render page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocument,
     };
@@ -45,6 +46,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to additional transport types page when user submits yes", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocument,
     };
@@ -52,7 +54,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     // need to wait for UI hydration otherwise test can fail intermittently
     // .should("be.visible") does not seem to do the job
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
     cy.get('input[type="radio"][value="true"]').check();
     cy.get("[data-testid=save-and-continue").click();
@@ -61,6 +63,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to transportation details page when user submits no", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentFalse,
     };
@@ -68,7 +71,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     // need to wait for UI hydration otherwise test can fail intermittently
     // .should("be.visible") does not seem to do the job
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
     cy.get('input[type="radio"][value="false"]').check();
     cy.get("[data-testid=save-and-continue").click();
@@ -77,6 +80,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to transportation details page when user submits no and csrf does not match session", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentFalse,
     };
@@ -84,7 +88,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     // need to wait for UI hydration otherwise test can fail intermittently
     // .should("be.visible") does not seem to do the job
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
     cy.get("form input[type=hidden][name=csrf]").should("exist").invoke("val", "abc123");
     cy.get('input[type="radio"][value="false"]').check();
@@ -92,6 +96,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to certificate summary page when saved as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocument,
     };
@@ -99,7 +104,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     // need to wait for UI hydration otherwise test can fail intermittently
     // .should("be.visible") does not seem to do the job
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
     cy.get("[data-testid=save-draft-button").click();
 
@@ -107,6 +112,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to landings entry page when no landings type has been selected previously", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentNoLandingsType,
     };
@@ -117,6 +123,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should display error summary and inline error message when user submits nothing", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentSaveFailsWithError,
     };
@@ -128,6 +135,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to forbidden page when landings type has been selected as direct landing", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentDirectLanding,
     };
@@ -138,6 +146,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to forbidden page when transport vehicle is not truck", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentPlane,
     };
@@ -148,6 +157,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to how-does-the-export-leave-the-uk page when no transport ID is present in the URL", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocument,
     };

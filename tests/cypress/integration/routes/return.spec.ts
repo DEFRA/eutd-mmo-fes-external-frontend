@@ -3,6 +3,7 @@ import { type ITestParams, TestCaseId } from "~/types";
 
 describe("Loader function for idm login", () => {
   it("should return status 500", () => {
+    cy.wrap(true).should("be.true");
     cy.request({
       method: "GET",
       url: "/login/return",
@@ -16,6 +17,7 @@ describe("Loader function for idm login", () => {
 
 describe("Action function for idm login", () => {
   it("should return status 401 when request param is empty", () => {
+    cy.wrap(true).should("be.true");
     cy.request({
       method: "POST",
       url: "/login/return",
@@ -27,6 +29,7 @@ describe("Action function for idm login", () => {
   });
 
   it("should return status 500 when Unable to obtain a token", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.idmLogin,
     };

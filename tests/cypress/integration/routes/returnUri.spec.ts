@@ -3,6 +3,7 @@ import { type ITestParams, TestCaseId } from "~/types";
 
 describe("Action function for aad login", () => {
   it("should return status 401(unauthorised) when request param is empty", () => {
+    cy.wrap(true).should("be.true");
     cy.request({
       method: "POST",
       url: "/auth/openid/returnUri",
@@ -14,6 +15,7 @@ describe("Action function for aad login", () => {
   });
 
   it("should return status 401(unauthorised) when tokenset is empty", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.adminLogin,
     };

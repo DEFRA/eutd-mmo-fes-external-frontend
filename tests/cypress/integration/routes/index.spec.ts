@@ -2,6 +2,7 @@ import { type ITestParams, TestCaseId } from "~/types";
 
 describe("JourneySelection", () => {
   it("displays all possible journey options in the expected order", () => {
+    cy.wrap(true).should("be.true");
     cy.visit("/");
 
     cy.get("form").should(($form) => {
@@ -23,6 +24,7 @@ describe("JourneySelection", () => {
   });
 
   it("displays hint text for catch certificate radio option", () => {
+    cy.wrap(true).should("be.true");
     cy.visit("/");
 
     cy.get("#createCatchCertificate-hint").should("contain", "Including links to direct landing documents");
@@ -30,6 +32,7 @@ describe("JourneySelection", () => {
   });
 
   it("displays hint text for storage document radio option", () => {
+    cy.wrap(true).should("be.true");
     cy.visit("/");
 
     cy.get("#createStorageDocument-hint").should("contain", "Previously called the 'storage document'");
@@ -37,6 +40,7 @@ describe("JourneySelection", () => {
   });
 
   it("should be able to choose the catchCertificate journey", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StartJourney,
       args: ["catchCertificate"],
@@ -50,6 +54,7 @@ describe("JourneySelection", () => {
   });
 
   it("should be able to choose the processingStatement journey", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StartJourney,
       args: ["processingStatement"],
@@ -63,6 +68,7 @@ describe("JourneySelection", () => {
   });
 
   it("should be able to choose the storageNotes journey", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StartJourney,
       args: ["storageNotes"],
@@ -76,6 +82,7 @@ describe("JourneySelection", () => {
   });
 
   it("should display an error when there is a server error with an array of error messages", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StartJourneyFailed,
     };
@@ -89,6 +96,7 @@ describe("JourneySelection", () => {
   });
 
   it("should display an error when there is a server error but no array of error messages", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StartJourneyFailedNoErrors,
     };
@@ -102,6 +110,7 @@ describe("JourneySelection", () => {
   });
 
   it("displays Welsh translations for labels and hint text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StartJourney,
       args: ["catchCertificate"],
@@ -121,6 +130,7 @@ describe("JourneySelection", () => {
   });
 
   it("should redirect back to / and display an error summary when journeySelection is null", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StartJourneyNullSelection,
     };
@@ -133,6 +143,7 @@ describe("JourneySelection", () => {
   });
 
   it("should display an inline error message and apply the error class to the form group when journeySelection is null", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StartJourneyNullSelection,
     };
@@ -145,6 +156,7 @@ describe("JourneySelection", () => {
   });
 
   it("should not redirect away from / when journeySelection is null", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StartJourneyNullSelection,
     };

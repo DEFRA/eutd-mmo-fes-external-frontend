@@ -1,5 +1,6 @@
 describe("Forbidden Page", () => {
   it("should render forbidden page content", () => {
+    cy.wrap(true).should("be.true");
     cy.visit("/forbidden");
 
     cy.get("h1").should("be.visible").contains("Forbidden");

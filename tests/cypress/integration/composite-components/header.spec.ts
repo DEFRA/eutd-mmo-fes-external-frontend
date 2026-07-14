@@ -20,6 +20,7 @@ describe("Header", () => {
   };
 
   it("Home: should display the expected title and links", () => {
+    cy.wrap(true).should("be.true");
     cy.visit("/");
 
     cy.contains("a", /^Create a UK catch certificate$/).should("be.visible");
@@ -45,6 +46,7 @@ describe("Header", () => {
   });
 
   it("CC: should display the expected title and links", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StartJourney,
       args: ["catchCertificate"],
@@ -82,6 +84,7 @@ describe("Header", () => {
   });
 
   it("PS: should display the expected title and links", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StartJourney,
       args: ["processingStatement"],
@@ -117,6 +120,7 @@ describe("Header", () => {
   });
 
   it("SD: should display the expected title and links", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StartJourney,
       args: ["storageNotes"],
@@ -152,6 +156,7 @@ describe("Header", () => {
   });
 
   it("Footer Pages: should hide the home link and favourites link on pages linked from the footer (e.g accessibility)", () => {
+    cy.wrap(true).should("be.true");
     cy.visit("/accessibility");
     assertFooterPages();
 

@@ -5,6 +5,7 @@ describe("Add Your Reference", () => {
   const pageUrl = `${documentUrl}/add-your-reference`;
 
   it("should render a valid hint message", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddReference,
     };
@@ -18,6 +19,7 @@ describe("Add Your Reference", () => {
   });
 
   it("should render the Welsh translation of the hint text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddReference,
     };
@@ -33,6 +35,7 @@ describe("Add Your Reference", () => {
   });
 
   it("should update reference and continue to the add-exporter-details page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddReference,
     };
@@ -46,6 +49,7 @@ describe("Add Your Reference", () => {
   });
 
   it("should update reference and save as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddReference,
     };
@@ -59,6 +63,7 @@ describe("Add Your Reference", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddReferenceForbidden,
     };
@@ -69,6 +74,7 @@ describe("Add Your Reference", () => {
   });
 
   it("should display an error when there is a server error with an array of error messages", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddReferenceFailsWithErrors,
     };
@@ -84,6 +90,7 @@ describe("Add Your Reference", () => {
   });
 
   it("should go to the exporter dashboard page even if save as draft errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddReferenceFailsWithErrors,
     };
@@ -97,6 +104,7 @@ describe("Add Your Reference", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised but tries to save a reference", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddReferenceFailsWith403,
     };
@@ -115,6 +123,7 @@ describe("Add Your Reference - Processing Statement", () => {
   const pageUrl = `${documentUrl}/add-your-reference`;
 
   it("should render the information notice about processing statement", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddReference,
     };
@@ -130,6 +139,7 @@ describe("Add Your Reference - Processing Statement", () => {
   });
 
   it("should render a bold field label", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddReference,
     };
@@ -142,6 +152,7 @@ describe("Add Your Reference - Processing Statement", () => {
   });
 
   it("should render the updated hint message", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddReference,
     };
@@ -155,6 +166,7 @@ describe("Add Your Reference - Processing Statement", () => {
   });
 
   it("should render the Welsh translation of the information notice", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddReference,
     };
@@ -170,6 +182,7 @@ describe("Add Your Reference - Processing Statement", () => {
   });
 
   it("should render the Welsh translation of the hint text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddReference,
     };
@@ -185,6 +198,7 @@ describe("Add Your Reference - Processing Statement", () => {
   });
 
   it("should update reference and continue to the add-exporter-details page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddReference,
     };
@@ -198,6 +212,7 @@ describe("Add Your Reference - Processing Statement", () => {
   });
 
   it("should update reference and save as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddReference,
     };
@@ -211,6 +226,7 @@ describe("Add Your Reference - Processing Statement", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddReferenceForbidden,
     };
@@ -221,6 +237,7 @@ describe("Add Your Reference - Processing Statement", () => {
   });
 
   it("should display an error when there is a server error with an array of error messages", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddReferenceFailsWithErrors,
     };
@@ -236,6 +253,7 @@ describe("Add Your Reference - Processing Statement", () => {
   });
 
   it("should go to the exporter dashboard page even if save as draft errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddReferenceFailsWithErrors,
     };
@@ -249,6 +267,7 @@ describe("Add Your Reference - Processing Statement", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised but tries to save a reference", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddReferenceFailsWith403,
     };
@@ -267,6 +286,7 @@ describe("Add Your Reference - Storage Document", () => {
   const pageUrl = `${documentUrl}/add-your-reference`;
 
   it("should render the information notice about non-manipulation document", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddReference,
     };
@@ -282,6 +302,7 @@ describe("Add Your Reference - Storage Document", () => {
   });
 
   it("should render a bold field label", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddReference,
     };
@@ -294,6 +315,7 @@ describe("Add Your Reference - Storage Document", () => {
   });
 
   it("should render the updated hint message", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddReference,
     };
@@ -307,6 +329,7 @@ describe("Add Your Reference - Storage Document", () => {
   });
 
   it("should render the Welsh translation of the information notice", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddReference,
     };
@@ -322,6 +345,7 @@ describe("Add Your Reference - Storage Document", () => {
   });
 
   it("should render the Welsh translation of the hint text", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddReference,
     };
@@ -337,6 +361,7 @@ describe("Add Your Reference - Storage Document", () => {
   });
 
   it("should update reference and continue to the add-exporter-details page", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddReference,
     };
@@ -350,6 +375,7 @@ describe("Add Your Reference - Storage Document", () => {
   });
 
   it("should update reference and save as draft", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddReference,
     };
@@ -363,6 +389,7 @@ describe("Add Your Reference - Storage Document", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddReferenceForbidden,
     };
@@ -373,6 +400,7 @@ describe("Add Your Reference - Storage Document", () => {
   });
 
   it("should display an error when there is a server error with an array of error messages", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddReferenceFailsWithErrors,
     };
@@ -388,6 +416,7 @@ describe("Add Your Reference - Storage Document", () => {
   });
 
   it("should go to the exporter dashboard page even if save as draft errors", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddReferenceFailsWithErrors,
     };
@@ -401,6 +430,7 @@ describe("Add Your Reference - Storage Document", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised but tries to save a reference", () => {
+    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddReferenceFailsWith403,
     };
