@@ -160,9 +160,11 @@ describe("should display the notificationBanner", () => {
     cy.get("#voidOriginal").click();
     cy.get("#copyDocumentAcknowledged").check();
     cy.get('[data-testid="continue"]').click();
-    cy.get(".govuk-notification-banner__heading").contains(
-      "This draft was created by copying document GBR-2022-PS-F71D98A30. You are reminded that you must not use a processing statememt or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
-    );
+    cy.get(".govuk-notification-banner__heading")
+      .contains(
+        "This draft was created by copying document GBR-2022-PS-F71D98A30. You are reminded that you must not use a processing statememt or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
+      )
+      .should("be.visible");
   });
 });
 
