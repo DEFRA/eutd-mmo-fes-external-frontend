@@ -36,6 +36,14 @@ function instanceOfSystemFailure(
   return "error" in data;
 }
 
+const clearCopyContext = (session: any, documentNumber: string | undefined) => {
+  session.unset(`copyDocumentAcknowledged-${documentNumber}`);
+  session.unset(`copyDocument-${documentNumber}`);
+  session.unset(`documentNumber-${documentNumber}`);
+  session.unset(`voidOriginal-${documentNumber}`);
+  session.unset(`copyVoidDocument-${documentNumber}`);
+};
+
 export const CheckYourInformationLoader = async (request: Request, params: Params) => {
   /* istanbul ignore next */
   setApiMock(request.url);
@@ -156,7 +164,6 @@ export const CheckYourInformationAction = async (request: Request, params: Param
   );
 
   session.set(`noOfVessels`, values["noOfVessels"]);
-  const updatedSession = await commitSession(session);
 
   if (submitCertificate?.errors !== undefined) {
     return new Response(JSON.stringify({ submitCertificate, hasSystemFailure: true }), {
@@ -174,12 +181,16 @@ export const CheckYourInformationAction = async (request: Request, params: Param
   } else if (submitCertificate?.status && submitCertificate?.status === "catch certificate is LOCKED") {
     return redirect(route("/create-catch-certificate/catch-certificates"));
   } else if (submitCertificate?.offlineValidation) {
+    clearCopyContext(session, documentNumber);
+    const successSession = await commitSession(session);
     return redirect(`/create-catch-certificate/${documentNumber}/catch-certificate-pending`, {
-      headers: { "Set-Cookie": updatedSession },
+      headers: { "Set-Cookie": successSession },
     });
   } else {
+    clearCopyContext(session, documentNumber);
+    const successSession = await commitSession(session);
     return redirect(`/create-catch-certificate/${documentNumber}/catch-certificate-created`, {
-      headers: { "Set-Cookie": updatedSession },
+      headers: { "Set-Cookie": successSession },
     });
   }
 };
@@ -206,6 +217,7 @@ export const CheckYourInformationPSSDAction = async (
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
+  const session = await getSessionFromRequest(request);
 
   // Re-validate document completeness before submitting. Editing arrival weights
   // via the "Change" link on this page clears departure weights server-side; the
@@ -234,12 +246,19 @@ export const CheckYourInformationPSSDAction = async (
       ? `/create-processing-statement/${documentNumber}/processing-statement-created`
       : `/create-non-manipulation-document/${documentNumber}/non-manipulation-document-created`;
 
-  return Array.isArray(filterErrors) && filterErrors.length > 0
-    ? new Response(JSON.stringify(filterErrors), {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-    : redirect(redirectPath);
+  if (Array.isArray(filterErrors) && filterErrors.length > 0) {
+    return new Response(JSON.stringify(filterErrors), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
+  clearCopyContext(session, documentNumber);
+  return redirect(redirectPath, {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 };
