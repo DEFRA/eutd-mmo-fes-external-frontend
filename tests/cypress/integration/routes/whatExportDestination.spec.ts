@@ -4,7 +4,6 @@ const whatExportDestinationUrl = `${documentUrl1}/what-export-destination`;
 
 describe("what export destination page", () => {
   it("it shoud render the page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportDestinationDraft,
     };
@@ -14,7 +13,6 @@ describe("what export destination page", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised to access a document number", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportDestination403,
     };
@@ -24,7 +22,6 @@ describe("what export destination page", () => {
   });
 
   it("should redirect to the progess page if the user click on draft button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportDestinationDraft,
     };
@@ -36,7 +33,6 @@ describe("what export destination page", () => {
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportDestinationBadRequest,
     };
@@ -50,7 +46,6 @@ describe("what export destination page", () => {
     cy.get("body").should("exist");
   });
   it("should redirect to the forbidden page if there is an error as page is rendered", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportDestinationFailsToRenderWith403,
     };

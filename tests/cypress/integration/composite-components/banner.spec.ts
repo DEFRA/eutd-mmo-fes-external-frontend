@@ -3,7 +3,6 @@ import { getData } from "../../helpers";
 
 describe("Banner", () => {
   it("Banner: should display the expected title in the banner", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.UserAttributes,
     };

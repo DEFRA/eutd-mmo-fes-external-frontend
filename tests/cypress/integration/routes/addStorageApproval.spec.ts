@@ -16,7 +16,6 @@ describe("Add Storage Facility Approval", () => {
   });
 
   it("should render Storage Facility Approval page", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", addStorageFacilityUrl);
@@ -37,7 +36,6 @@ describe("Add Storage Facility Approval", () => {
   });
 
   it("should redirect to progress page", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#backToProgress").click();
     cy.url().should("include", "/progress");
   });
@@ -45,7 +43,6 @@ describe("Add Storage Facility Approval", () => {
 
 describe("Add Storage Facility Approval - Complete", () => {
   it("should save and redirect to storage facility hub page on clicking save and continue", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageApprovalComplete,
     };
@@ -58,7 +55,6 @@ describe("Add Storage Facility Approval - Complete", () => {
   });
 
   it("should save and redirect to check your information page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageApprovalComplete,
     };
@@ -77,7 +73,6 @@ describe("Add Storage Facility Approval - Error (Max Length)", () => {
   });
 
   it("should show approval number max length validation error on save and continue", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "There is a problem");
     cy.contains("a", /Approval number must not exceed 50 characters$/)
@@ -89,7 +84,6 @@ describe("Add Storage Facility Approval - Error (Max Length)", () => {
 
 describe("Add Storage Facility Approval - Max Length Save as Draft", () => {
   it("should save successfully when approval number exceeds 50 characters on save as draft", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageApprovalMaxLengthSaveAsDraft,
     };
@@ -110,7 +104,6 @@ describe("Add Storage Facility Approval - Max Length Save as Draft", () => {
 
 describe("Add Storage Facility Approval - Invalid Characters", () => {
   it("should show invalid characters validation error on save and continue", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageApprovalInvalidCharactersError,
     };
@@ -131,7 +124,6 @@ describe("Add Storage Facility Approval - Invalid Characters", () => {
 
 describe("Add Storage Facility Approval - Invalid Characters Save as Draft", () => {
   it("should save successfully when approval number contains invalid characters on save as draft", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageApprovalInvalidCharactersSaveAsDraft,
     };
@@ -152,7 +144,6 @@ describe("Add Storage Facility Approval - Invalid Characters Save as Draft", () 
 
 describe("Add Storage Facility Approval - How product is stored error", () => {
   it("should show an error message when the product stored radio button is not selected", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageProductStorageError,
     };
@@ -171,7 +162,6 @@ describe("Add Storage Facility Approval - How product is stored error", () => {
 
 describe("Add Storage Facility Approval - Welsh Translations", () => {
   it("should display Welsh translations when language is set to Welsh", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageApprovalError,
     };
@@ -188,7 +178,6 @@ describe("Add Storage Facility Approval - Welsh Translations", () => {
   });
 
   it("should display Welsh invalid characters error message", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageApprovalInvalidCharactersError,
       lng: "cy",
@@ -209,7 +198,6 @@ describe("Add Storage Facility Approval - Welsh Translations", () => {
 
 describe("Add Storage Facility Approval - Non JavaScript", () => {
   it("should work correctly without JavaScript enabled", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageApprovalNoJs,
       disableScripts: true,
@@ -226,7 +214,6 @@ describe("Add Storage Facility Approval - Non JavaScript", () => {
 
 describe("Add Storage Facility Approval - Forbidden", () => {
   it("should redirect to forbidden page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageApprovalForbidden,
     };

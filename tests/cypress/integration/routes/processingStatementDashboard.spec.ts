@@ -11,7 +11,6 @@ describe("Processing Statement dashboard sidebar links", () => {
     cy.visit(processingStatementLandingUrl, { qs: { ...testParams } });
   });
   it("should render links for send feedback for storage document", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="dashboard-feedback-url-link"]').contains("Take our survey now");
     cy.contains("a", "Take our survey now")
       .should("be.visible")
@@ -19,7 +18,6 @@ describe("Processing Statement dashboard sidebar links", () => {
   });
 
   it("should display feedback headings", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h3", "Send feedback").should("be.visible");
   });
 });
@@ -32,7 +30,6 @@ describe("Processing Statement Landing page: rendering", () => {
   });
 
   it("should render a valid page title", () => {
-    cy.wrap(true).should("be.true");
     cy.title().should(
       "eq",
       "Automation Testing Ltd: processing statements - Create a UK processing statement - GOV.UK"
@@ -40,36 +37,30 @@ describe("Processing Statement Landing page: rendering", () => {
   });
 
   it("should redirect to the dashboard page if didn't got expected response", () => {
-    cy.wrap(true).should("be.true");
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 
   it("should display Need help? heading", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h2", "Need help?").should("be.visible");
   });
 
   it("should render link for Guidance on exporting fish (gov.uk)", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "Guidance on exporting fish (gov.uk)")
       .should("be.visible")
       .should("have.attr", "href", "https://www.gov.uk/guidance/exporting-and-importing-fish-if-theres-no-brexit-deal");
   });
 
   it("should render link for EU 2026 Changes Guidance (gov.uk)", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "EU 2026 Changes Guidance (gov.uk)")
       .should("be.visible")
       .should("have.attr", "href", "https://www.gov.uk/guidance/eu-iuu-regulation-2026-changes");
   });
 
   it("should display feedback headings", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h3", "Send feedback").should("be.visible");
   });
 
   it("should render links catch certificate link", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "Create a UK catch certificate")
       .should("be.visible")
       .should("have.attr", "href", "https://www.gov.uk/guidance/create-a-uk-catch-certificate");
@@ -79,7 +70,6 @@ describe("Processing Statement Landing page: rendering", () => {
   });
 
   it("should render the correct page title and subtitle", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-heading-xl").contains("processing statements").should("be.visible");
     cy.get(".govuk-body")
       .contains("A maximum of 5 draft processing statements is allowed at any time.")
@@ -87,13 +77,11 @@ describe("Processing Statement Landing page: rendering", () => {
   });
 
   it("should render dashboard headers", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-heading-l").contains("In progress").should("be.visible");
     cy.get(".govuk-heading-l").contains("Completed").should("be.visible");
   });
 
   it("should render dashboard in progress table with columns and data", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-table__header").contains("Document number").should("be.visible");
     cy.get(".govuk-table__header").contains("Your reference").should("be.visible");
     cy.get(".govuk-table__header").contains("Date started").should("be.visible");
@@ -105,7 +93,6 @@ describe("Processing Statement Landing page: rendering", () => {
   });
 
   it("should render dashboard with create button and no warning message", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-notification-banner__heading").should("not.exist");
 
     cy.contains("button", "Create a new processing statement").should("be.visible");
@@ -121,7 +108,6 @@ describe("Processing Statement Landing page for Inprogress table: rendering", ()
   });
 
   it("should render dashboard in progress table with columns and data", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-table__header").contains("Document number").should("be.visible");
     cy.get(".govuk-table__header").contains("Your reference").should("be.visible");
     cy.get(".govuk-table__header").contains("Date started").should("be.visible");
@@ -136,7 +122,6 @@ describe("Processing Statement Landing page for Inprogress table: rendering", ()
 
 describe("PS dashboard with query parameters", () => {
   it("should render a service notification banner", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSLoadDasboardWithCompletedAndInProgress,
     };
@@ -160,7 +145,6 @@ describe("PS dashboard with user details", () => {
   });
 
   it("should render a header with user details", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-notification-banner .govuk-heading-l").should("have.text", "Title");
 
     cy.get("h1.govuk-heading-xl").should("have.text", "Automation Testing Ltd: processing statements");
@@ -176,7 +160,6 @@ describe("Processing Statement Landing page for completed table: rendering", () 
   });
 
   it("should render EU CATCH integration column with check status links", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='processingStatement-completed-table']")
       .find("thead th")
       .contains("EU CATCH integration")
@@ -186,7 +169,6 @@ describe("Processing Statement Landing page for completed table: rendering", () 
   });
 
   it("should render check status links with correct href patterns for different statuses", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="processingStatement-check-eu-catch-status"]').each(($link) => {
       cy.wrap($link)
         .should("have.attr", "href")
@@ -195,7 +177,6 @@ describe("Processing Statement Landing page for completed table: rendering", () 
   });
 
   it("should render visually hidden context for screen readers on check status links", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="processingStatement-check-eu-catch-status"]')
       .first()
       .find(".govuk-visually-hidden")
@@ -204,7 +185,6 @@ describe("Processing Statement Landing page for completed table: rendering", () 
   });
 
   it("should verify column order: Document Number, Reference, Date, EU CATCH Integration, Action", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='processingStatement-completed-table'] thead tr th").then(($headers) => {
       const headerTexts = $headers.toArray().map((el) => el.textContent?.trim());
 
@@ -217,7 +197,6 @@ describe("Processing Statement Landing page for completed table: rendering", () 
   });
 
   it("should display refresh guidance text for processing statements", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-inset-text")
       .contains(
         "Refresh the page to check for updates to your processing statements. Open failed submissions to find out how to fix the problem."
@@ -235,7 +214,6 @@ describe("Processing Statement Landing page for completed table with empty in pr
   });
 
   it("should render dashboard complete table with columns and data", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-table__header").contains("Document number").should("be.visible");
     cy.get(".govuk-table__header").contains("Your reference").should("be.visible");
     cy.get(".govuk-table__header").contains("Date Created").should("be.visible");
@@ -257,7 +235,6 @@ describe("Processing Statement Landing page for 50 or more draft documents: rend
   });
 
   it("should render notifcation with warning message and hide the create document button", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-notification-banner__heading").contains(
       "You have reached the maximum limit allowed for draft processing statements."
     );
@@ -267,7 +244,6 @@ describe("Processing Statement Landing page for 50 or more draft documents: rend
 
 describe("Processing Statement Landing page: create a new document", () => {
   it("will redirect to the progress page after the document has been created", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCreateProcessingStatementSuccess,
     };
@@ -278,7 +254,6 @@ describe("Processing Statement Landing page: create a new document", () => {
   });
 
   it("will redirect to the forbidden page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCreateProcessingStatementFailure,
     };

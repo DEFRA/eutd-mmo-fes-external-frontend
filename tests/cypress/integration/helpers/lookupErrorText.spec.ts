@@ -9,14 +9,12 @@ import type { IError, IErrorsTransformed } from "~/types/errors";
 describe("lookupErrorText helpers", () => {
   describe("getErrorMessage", () => {
     it("should map otherWaters pattern.base to the invalid characters translation key", () => {
-      cy.wrap(true).should("be.true");
       const result = getErrorMessage("error.otherWaters.string.pattern.base");
 
       expect(result).to.equal("ccWhoseWatersWereTheyCaughtInErrorOtherWatersInvalidCharacters");
     });
 
     it("should return the same key when a mapping does not exist", () => {
-      cy.wrap(true).should("be.true");
       const result = getErrorMessage("error.unknown.field");
 
       expect(result).to.equal("error.unknown.field");
@@ -25,7 +23,6 @@ describe("lookupErrorText helpers", () => {
 
   describe("getTransformedError", () => {
     it("should transform an array of errors into an object with error keys", () => {
-      cy.wrap(true).should("be.true");
       const errors: IError[] = [
         {
           key: "product",
@@ -56,7 +53,6 @@ describe("lookupErrorText helpers", () => {
     });
 
     it("should show 'select from list' error when vessel input is non-empty but vessel is not found", () => {
-      cy.wrap(true).should("be.true");
       const errors: IError[] = [
         {
           key: "vessel-vesselName",
@@ -70,7 +66,6 @@ describe("lookupErrorText helpers", () => {
     });
 
     it("should keep 'unpopulated' error when vessel input is empty", () => {
-      cy.wrap(true).should("be.true");
       const errors: IError[] = [
         {
           key: "vessel-vesselName",
@@ -84,7 +79,6 @@ describe("lookupErrorText helpers", () => {
     });
 
     it("should include error values when provided", () => {
-      cy.wrap(true).should("be.true");
       const errors: IError[] = [
         {
           key: "product_123",
@@ -111,7 +105,6 @@ describe("lookupErrorText helpers", () => {
 
   describe("displayErrorMessagesInOrder", () => {
     it("should return errors in the specified order", () => {
-      cy.wrap(true).should("be.true");
       const errors: IErrorsTransformed = {
         "vessel-vesselName": {
           key: "vessel-vesselName",
@@ -141,7 +134,6 @@ describe("lookupErrorText helpers", () => {
     });
 
     it("should handle errors with the same prefix (e.g., multiple products)", () => {
-      cy.wrap(true).should("be.true");
       const errors: IErrorsTransformed = {
         "product_GBR-2026-CC-123-abc": {
           key: "product_GBR-2026-CC-123-abc",
@@ -206,7 +198,6 @@ describe("lookupErrorText helpers", () => {
     });
 
     it("should return empty array when no errors match the order keys", () => {
-      cy.wrap(true).should("be.true");
       const errors: IErrorsTransformed = {
         someOtherError: {
           key: "someOtherError",
@@ -223,7 +214,6 @@ describe("lookupErrorText helpers", () => {
     });
 
     it("should handle partial prefix matches correctly", () => {
-      cy.wrap(true).should("be.true");
       const errors: IErrorsTransformed = {
         "eez.0": {
           key: "eez.0",
@@ -253,7 +243,6 @@ describe("lookupErrorText helpers", () => {
     });
 
     it("should handle defect 501 scenario: multiple products without landings", () => {
-      cy.wrap(true).should("be.true");
       // This is the exact scenario from Defect 501
       const errors: IErrorsTransformed = {
         "product_GBR-2026-CC-6F4280A99-a5c08064-09b8-4b0a-9c0c-73d7f191ba16": {
@@ -330,7 +319,6 @@ describe("lookupErrorText helpers", () => {
 
   describe("displayErrorTransformedMessages (Issue 1 - FI0-11205)", () => {
     it("should return all errors even when two fields share the same error message", () => {
-      cy.wrap(true).should("be.true");
       const errors: IErrorsTransformed = {
         exporterFullName: {
           key: "exporterFullName",
@@ -352,7 +340,6 @@ describe("lookupErrorText helpers", () => {
     });
 
     it("should return all errors when each has a unique message", () => {
-      cy.wrap(true).should("be.true");
       const errors: IErrorsTransformed = {
         exporterFullName: {
           key: "exporterFullName",
@@ -372,7 +359,6 @@ describe("lookupErrorText helpers", () => {
     });
 
     it("should return an empty array for an empty errors object", () => {
-      cy.wrap(true).should("be.true");
       const errors: IErrorsTransformed = {};
       const result = displayErrorTransformedMessages(errors);
       expect(result).to.have.length(0);

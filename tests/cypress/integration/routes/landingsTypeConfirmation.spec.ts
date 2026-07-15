@@ -22,17 +22,14 @@ describe("Landings confirmation page: user Interface", () => {
   });
 
   it("should render back button", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
   });
 
   it("should render the correct headings", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h1", "Are you sure you want to change your landings type?");
   });
 
   it("should render the correct warning text", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(
       "div > strong",
       "Switching between direct and non-direct landings types will require the re-entry of landings data."
@@ -40,7 +37,6 @@ describe("Landings confirmation page: user Interface", () => {
   });
 
   it("should render the two landings entry confirmation options and labels ", () => {
-    cy.wrap(true).should("be.true");
     cy.get("form").should(($form) => {
       expect($form.find("input[type='radio']")).to.have.lengthOf(2);
 
@@ -59,12 +55,10 @@ describe("Landings confirmation page: user Interface", () => {
   });
 
   it("should render the  cancel button", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("button", "Cancel").should("be.visible");
   });
 
   it("should render the  continue button", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("button", "Continue").should("be.visible");
   });
 });
@@ -86,7 +80,6 @@ describe("Landings confirmation page: Error summary", () => {
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=continue]").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -112,7 +105,6 @@ describe("Landings confirmation page: buttons functionality", () => {
   });
 
   it("should be able to navigate to the progress page when the user selects Yes and clicks continue button", () => {
-    cy.wrap(true).should("be.true");
     cy.document({ timeout: 200 }).its("readyState").should("eq", "complete"); // Allow any client-side state updates
     cy.get("#confirmLandingsTypes").should("exist");
     cy.get("#confirmLandingsTypes").check();
@@ -122,7 +114,6 @@ describe("Landings confirmation page: buttons functionality", () => {
   });
 
   it("should be able to navigate to landings entry page when the user selects No and clicks continue button", () => {
-    cy.wrap(true).should("be.true");
     cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.get("#landingsTypeNo").check();
     cy.get("#landingsTypeNo").should("be.checked");
@@ -131,7 +122,6 @@ describe("Landings confirmation page: buttons functionality", () => {
   });
 
   it("should be able to navigate to landings entry page when the user clicks cancel button", () => {
-    cy.wrap(true).should("be.true");
     cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.get("#landingsTypeNo").should("exist");
     cy.get("#landingsTypeNo").check();
@@ -150,7 +140,6 @@ describe("Landings confirmation page: page guard", () => {
   });
 
   it("should redirect to the fobidden when the user tries to access the confirmation page unless arrived via landings-entry page", () => {
-    cy.wrap(true).should("be.true");
     cy.url().should("include", "/forbidden");
   });
 });
@@ -171,7 +160,6 @@ describe("Landings confirmation page: redirect to forbidden page", () => {
   });
 
   it("should redirect to the forbidden page when unauthorised is true", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=continue]").click();
 
     cy.url().should("include", "/forbidden");

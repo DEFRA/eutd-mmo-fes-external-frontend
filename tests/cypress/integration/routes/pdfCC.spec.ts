@@ -5,7 +5,6 @@ describe("CC: PDF", () => {
   const documentUrlFragment = `export-certificates/_2d89e0c5-58f8-4f34-b96e-806135faa7f7.pdf`;
 
   it("should throw 404 if the document mode is invalid", () => {
-    cy.wrap(true).should("be.true");
     const invalidDocumentMode = "text";
 
     cy.request({ url: `/${invalidDocumentMode}/${documentUrlFragment}`, failOnStatusCode: false }).as(
@@ -18,7 +17,6 @@ describe("CC: PDF", () => {
   });
 
   it("should return a VOID message if the user is authenticated but the document(mode=pdf) has been voided", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PdfCCVoided,
     };
@@ -32,7 +30,6 @@ describe("CC: PDF", () => {
   });
 
   it("should return a VOID message if the user is authenticated but the document(mode=qr) has been voided", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PdfCCVoided,
     };
@@ -46,7 +43,6 @@ describe("CC: PDF", () => {
   });
 
   it("should throw 404 when mode=pdf and journey type is unknown", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = { testCaseId: TestCaseId.PdfCCFromDifferentCreator };
 
     cy.request({
@@ -62,7 +58,6 @@ describe("CC: PDF", () => {
   });
 
   it("should throw 404 when mode=qr and journey type is unknown", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = { testCaseId: TestCaseId.PdfCCFromDifferentCreator };
 
     cy.request({

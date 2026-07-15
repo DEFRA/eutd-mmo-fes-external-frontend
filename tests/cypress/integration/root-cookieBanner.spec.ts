@@ -3,7 +3,6 @@ import { TestCaseId, type ITestParams } from "~/types";
 describe("Cookie Banner Integration in Root", () => {
   describe("Banner Positioning", () => {
     it("should render cookie banner before skip link in the DOM hierarchy", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.UserAttributes,
       };
@@ -30,7 +29,6 @@ describe("Cookie Banner Integration in Root", () => {
     });
 
     it("should render cookie banner as one of the first elements", () => {
-      cy.wrap(true).should("be.true");
       cy.clearCookies();
       cy.visit("/?loggedIn=yes");
 
@@ -44,7 +42,6 @@ describe("Cookie Banner Integration in Root", () => {
 
   describe("Banner Integration with Analytics", () => {
     it("should not load analytics scripts before cookie acceptance", () => {
-      cy.wrap(true).should("be.true");
       cy.clearCookies();
       cy.visit("/?loggedIn=yes");
       cy.url().should("include", "/");
@@ -57,7 +54,6 @@ describe("Cookie Banner Integration in Root", () => {
     });
 
     it("should show cookie banner even when cookie preference is set", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.UserAttributes,
       };
@@ -74,7 +70,6 @@ describe("Cookie Banner Integration in Root", () => {
 
   describe("Banner Behavior Across Routes", () => {
     it("should show cookie banner on all routes when loggedIn=yes is present", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.UserAttributes,
       };
@@ -91,7 +86,6 @@ describe("Cookie Banner Integration in Root", () => {
     });
 
     it("should show cookie banner on all routes when loggedIn=yes even if preference is set", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.UserAttributes,
       };
@@ -110,7 +104,6 @@ describe("Cookie Banner Integration in Root", () => {
 
   describe("Banner and Skip Link Interaction", () => {
     it("should allow skipping cookie banner to main content", () => {
-      cy.wrap(true).should("be.true");
       cy.clearCookies();
       cy.visit("/?loggedIn=yes");
 
@@ -141,7 +134,6 @@ describe("Cookie Banner Integration in Root", () => {
 
   describe("Error Boundary Handling", () => {
     it("should display cookie banner even on 404 pages", () => {
-      cy.wrap(true).should("be.true");
       cy.clearCookies();
       cy.visit("/non-existent-page?loggedIn=yes", { failOnStatusCode: false });
 
@@ -152,7 +144,6 @@ describe("Cookie Banner Integration in Root", () => {
 
   describe("Internationalization", () => {
     it("should display cookie banner in English by default", () => {
-      cy.wrap(true).should("be.true");
       cy.clearCookies();
       cy.visit("/?loggedIn=yes");
 
@@ -160,7 +151,6 @@ describe("Cookie Banner Integration in Root", () => {
     });
 
     it("should support Welsh language toggle for cookie banner", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.UserAttributes,
       };

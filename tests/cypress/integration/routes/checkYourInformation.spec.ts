@@ -109,7 +109,6 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render the correct page title", () => {
-    cy.wrap(true).should("be.true");
     cy.findByRole("heading", {
       name: "Check your information before you create the catch certificate",
       level: 1,
@@ -117,21 +116,18 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render document number in exporter details section", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Document number")
       .next("dd")
       .should("have.text", "GBR-2022-CC-24F279E85");
   });
 
   it("should render CMR field when set for transport", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Do you have a road transport document to go with this export?")
       .next("dd")
       .should("have.text", "Yes");
   });
 
   it("should render high seas area field when set for landing", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-summary-list__key")
       .filter(':contains("High seas area")')
       .eq(0)
@@ -140,7 +136,6 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render high seas area field when not set for landing", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-summary-list__key")
       .filter(':contains("High seas area")')
       .eq(1)
@@ -149,7 +144,6 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render rfmo field when set for landing", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-summary-list__key")
       .filter(':contains("RFMO")')
       .eq(1) // Second landing has RFMO set
@@ -158,7 +152,6 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render gearCateory field when set for landing", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-summary-list__key")
       .filter(':contains("Gear category")')
       .eq(0)
@@ -166,7 +159,6 @@ describe("Check Your Information (Summary) page: UI", () => {
       .should("have.text", "Trawls");
   });
   it("should render gearType field when set for landing", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-summary-list__key")
       .filter(':contains("Gear type")')
       .eq(0)
@@ -175,7 +167,6 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render startDate field when set for landing", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-summary-list__key")
       .filter(':contains("Start date")')
       .eq(0)
@@ -184,7 +175,6 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render EEZ field when set for landing", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-summary-list__row")
       .find("dt.govuk-summary-list__key")
       .filter(':contains("Exclusive economic zone")')
@@ -205,7 +195,6 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render EEZ field after High Seas area and before RFMO", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-summary-list__key").then(($keys) => {
       const keyTexts = $keys.toArray().map((el) => el.textContent?.trim());
 
@@ -233,7 +222,6 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render landings section fields in the expected order", () => {
-    cy.wrap(true).should("be.true");
     cy.get("dl")
       .eq(1)
       .find("dt.govuk-summary-list__key")
@@ -257,7 +245,6 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should show transport warning with icon and correct text", () => {
-    cy.wrap(true).should("be.true");
     const warning =
       "You may be liable to investigation and enforcement action, including prosecution, if you knowingly submit false, misleading, or otherwise inaccurate data.";
 
@@ -270,7 +257,6 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should display 'Now create your catch certificate' guidance and Accept button", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h2", "Now create your catch certificate").should("be.visible");
     cy.contains("By submitting this catch certificate, you confirm that").should("be.visible");
     cy.contains(
@@ -288,7 +274,6 @@ describe("Check Your Information (Summary) page: UI", () => {
 
   describe("Welsh translations", () => {
     it("should render translated CMR field when set for transport", () => {
-      cy.wrap(true).should("be.true");
       cy.get('a[hreflang="cy"][lang="cy"]').click();
       cy.contains("dt.govuk-summary-list__key", "Oes gennych chi ddogfen trafnidiaeth ffordd i fynd gyda’r allforion?")
         .next("dd")
@@ -296,7 +281,6 @@ describe("Check Your Information (Summary) page: UI", () => {
     });
 
     it("should render translated high seas field when set for landing", () => {
-      cy.wrap(true).should("be.true");
       cy.get('a[hreflang="cy"][lang="cy"]').click();
       cy.get(".govuk-summary-list__key")
         .filter(':contains("Ardal gefnfor")')
@@ -306,7 +290,6 @@ describe("Check Your Information (Summary) page: UI", () => {
     });
 
     it("should render translated high seas field when not set for landing", () => {
-      cy.wrap(true).should("be.true");
       cy.get('a[hreflang="cy"][lang="cy"]').click();
       cy.get(".govuk-summary-list__key")
         .filter(':contains("Ardal gefnfor")')
@@ -316,7 +299,6 @@ describe("Check Your Information (Summary) page: UI", () => {
     });
 
     it("should render EEZ field when set for landing", () => {
-      cy.wrap(true).should("be.true");
       cy.get('a[hreflang="cy"][lang="cy"]').click();
       // Find EEZ fields that have actual country values (not "Heb ei ddarparu")
       // The Welsh label is "Parth economaidd neilltuedig"
@@ -333,7 +315,6 @@ describe("Check Your Information (Summary) page: UI", () => {
     });
 
     it("should render idAttribute in RFMO change link", () => {
-      cy.wrap(true).should("be.true");
       cy.get(".govuk-summary-list__key")
         .filter(':contains("RFMO")')
         .eq(0)
@@ -344,7 +325,6 @@ describe("Check Your Information (Summary) page: UI", () => {
     });
 
     it("should render idAttribute in Vessel change link", () => {
-      cy.wrap(true).should("be.true");
       cy.get(".govuk-summary-list__key")
         .filter(':contains("Vessel name or PLN")')
         .eq(0)
@@ -355,7 +335,6 @@ describe("Check Your Information (Summary) page: UI", () => {
     });
 
     it("should render idAttribute in High Seas change link", () => {
-      cy.wrap(true).should("be.true");
       cy.get(".govuk-summary-list__key")
         .filter(':contains("High seas area")')
         .eq(0)
@@ -366,7 +345,6 @@ describe("Check Your Information (Summary) page: UI", () => {
     });
 
     it("translates the warning text to Welsh", () => {
-      cy.wrap(true).should("be.true");
       cy.get('a[hreflang="cy"][lang="cy"]').click();
       const welshWarning =
         "Efallai y byddwch chi'n agored i ymchwilio a chamau gorfodi, gan gynnwys eich erlyn, os byddwch chi'n fwriadol yn cyflwyno data sy'n ffug, yn gamarweiniol neu'n anghywir fel arall.";
@@ -376,14 +354,12 @@ describe("Check Your Information (Summary) page: UI", () => {
     });
 
     it("renders the 'Now create your catch certificate' section in Welsh", () => {
-      cy.wrap(true).should("be.true");
       cy.get('a[hreflang="cy"][lang="cy"]').click();
       cy.contains("h2", "Nawr lluniwch eich tystysgrif dalfa").should("be.visible");
       cy.contains("Drwy gyflwyno'r dystysgrif dalfa yma, rydych chi'n cadarnhau").should("be.visible");
     });
 
     it("renders the renamed 'Place export leaves the departure country' label in Welsh", () => {
-      cy.wrap(true).should("be.true");
       cy.get('a[hreflang="cy"][lang="cy"]').click();
       // The Welsh label - check it exists somewhere in the summary list keys
       cy.get("dt.govuk-summary-list__key").filter(':contains("fan lle")').should("have.length.at.least", 1);
@@ -400,7 +376,6 @@ describe("Check Your Information (Summary) page: Locked CC", () => {
   });
 
   it("should render the correct back link", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
@@ -417,7 +392,6 @@ describe("Check Your Information (Summary) page: DirectLanding CC", () => {
   });
 
   it("should render the correct back link", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
@@ -427,12 +401,10 @@ describe("Check Your Information (Summary) page: DirectLanding CC", () => {
   });
 
   it("should render a single transportation", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(".govuk-summary-list__value", "Fishing vessel").should("be.visible");
   });
 
   it("should not render gear info labels if not set", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(".govuk-summary-list__key", "Gear category").should("not.exist");
     cy.contains(".govuk-summary-list__key", "Gear type").should("not.exist");
   });
@@ -444,7 +416,6 @@ describe("Check Your Information (Summary) page: DirectLanding CC with Gear Info
   };
 
   it("should render gear info if present", () => {
-    cy.wrap(true).should("be.true");
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
     cy.contains(".govuk-summary-list__key", "Gear category").should("be.visible");
     cy.contains(".govuk-summary-list__value", "Surrounding nets").should("be.visible");
@@ -453,7 +424,6 @@ describe("Check Your Information (Summary) page: DirectLanding CC with Gear Info
   });
 
   it("should render gear labels in Welsh if present", () => {
-    cy.wrap(true).should("be.true");
     cy.visit(checkYourInformationUrl, { qs: { ...testParams, lng: "cy" } });
     cy.contains(".govuk-summary-list__key", "Categori’r gêr").should("be.visible");
     cy.contains(".govuk-summary-list__key", "Math o Gêr").should("be.visible");
@@ -466,7 +436,6 @@ describe("Check Your Information (Summary) page: DirectLanding CC with RFMO", ()
   };
 
   it("should render rfmo info if present", () => {
-    cy.wrap(true).should("be.true");
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
     cy.contains(".govuk-summary-list__key", "RFMO").should("be.visible");
     cy.contains(".govuk-summary-list__value", "General Fisheries Commission for the Mediterranean (GFCM)").should(
@@ -484,7 +453,6 @@ describe("Check Your Information (Summary) page: ManualLanding CC", () => {
   });
 
   it("should redirect to add-landings page when change vessel name or pln link is clicked", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href")
@@ -496,12 +464,10 @@ describe("Check Your Information (Summary) page: ManualLanding CC", () => {
   });
 
   it("should check if total no of vessels is holding vessel count in the hidden field", () => {
-    cy.wrap(true).should("be.true");
     cy.get('input[name="noOfVessels"]').should("have.value", "2");
   });
 
   it("should not render gear info labels if not set", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(".govuk-summary-list__key", "Gear category").should("not.exist");
     cy.contains(".govuk-summary-list__key", "Gear type").should("not.exist");
   });
@@ -513,7 +479,6 @@ describe("Check Your Information (Summary) page: ManualLanding CC with Gear Info
   };
 
   it("should render gear info if present", () => {
-    cy.wrap(true).should("be.true");
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
     cy.contains(".govuk-summary-list__key", "Gear category").should("be.visible");
     cy.contains(".govuk-summary-list__value", "Surrounding nets").should("be.visible");
@@ -522,7 +487,6 @@ describe("Check Your Information (Summary) page: ManualLanding CC with Gear Info
   });
 
   it("should render gear labels in Welsh if present", () => {
-    cy.wrap(true).should("be.true");
     cy.visit(checkYourInformationUrl, { qs: { ...testParams, lng: "cy" } });
     cy.contains(".govuk-summary-list__key", "Categori’r gêr").should("be.visible");
     cy.contains(".govuk-summary-list__key", "Math o Gêr").should("be.visible");
@@ -538,7 +502,6 @@ describe("Check Your Information (Summary) page: Vessel not Found CC", () => {
   });
 
   it("should render the correct notification banner", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(
       ".govuk-notification-banner__heading",
       "Contact support on 0330 159 1989 to replace your Vessel name or PLN entries of 'Vessel not found (N/A)'."
@@ -555,7 +518,6 @@ describe("Check Your Information (Summary) page: Vessel Overriden by admin and d
   });
 
   it("should render the correct notification banner", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(
       ".govuk-notification-banner__heading",
       "Landings amended and authorised by service support cannot be changed."
@@ -572,7 +534,6 @@ describe("Check Your Information (Summary) page: Vessel Overriden by admin CC", 
   });
 
   it("should render the correct notification banner", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(
       ".govuk-notification-banner__heading",
       "Landings amended and authorised by service support cannot be changed but can be removed."
@@ -589,7 +550,6 @@ describe("Check Your Information (Summary) page: Exporter updated CC", () => {
   });
 
   it("should render the correct notification banner", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(
       ".govuk-notification-banner__heading",
       "Due to improvements in the way addresses are managed, the exporter’s address in this document has been reloaded from your Defra account. Please check the address is correct and change if necessary"
@@ -606,7 +566,6 @@ describe("Check Your Information (Summary) page: Validation errors for species",
   });
 
   it("should click on accept and create catch certificate", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=create-cc-button]").click();
     cy.contains(
       ".govuk-notification-banner__heading",
@@ -625,7 +584,6 @@ describe("Check Your Information (Summary) page: Validation errors on load of CC
   });
 
   it("should render the correct error", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(
       ".govuk-error-summary__list",
       "Contact support on 0330 159 1989 to replace 'Vessel not found (N/A)' for Black dogfish (CFB) caught on 04/10/2023."
@@ -633,12 +591,10 @@ describe("Check Your Information (Summary) page: Validation errors on load of CC
   });
 
   it("should check if the species fullname is displayed instead of species code", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(".govuk-error-summary__list", "Black dogfish (CFB)").should("be.visible");
   });
 
   it("should render dynamic contact number in validation error message", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(".govuk-error-summary__list", "Contact support on 0330 159 1989").should("be.visible");
   });
 });
@@ -652,7 +608,6 @@ describe("Check Your Information (Summary) page: Validation errors CC", () => {
   });
 
   it("should render the correct notification banner", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(
       ".govuk-notification-banner__heading",
       "There was an error in processing. Please resubmit. If the problem persists, contact support on 0330 159 1989."
@@ -660,7 +615,6 @@ describe("Check Your Information (Summary) page: Validation errors CC", () => {
   });
 
   it("should click on accept and create catch certificate", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=create-cc-button]").click();
     cy.contains(
       ".govuk-notification-banner__heading",
@@ -678,7 +632,6 @@ describe("Check Your Information (Summary) page: Validation success CC", () => {
   });
 
   it("should click on accept and create catch certificate", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=create-cc-button]").click();
     cy.url().should("include", "catch-certificate-created");
   });
@@ -693,7 +646,6 @@ describe("Check Your Information (Summary) page: offline validation set to true"
   });
 
   it("should click on accept and create catch certificate", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=create-cc-button]").click();
     cy.url().should("include", "catch-certificate-pending");
   });
@@ -708,7 +660,6 @@ describe("Check Your Information (Summary) page: invalid catch certificate", () 
   });
 
   it("should click on accept and create catch certificate and redirect to add-landings", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=create-cc-button]").click();
     cy.url().should("include", "add-landings");
   });
@@ -723,7 +674,6 @@ describe("Check Your Information (Summary) page: invalid catch certificate with 
   });
 
   it("should click on accept and create catch certificate and redirect to direct-landing", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=create-cc-button]").click();
     cy.url().should("include", "direct-landing");
   });
@@ -738,7 +688,6 @@ describe("Check Your Information (Summary) page: catch certificate is LOCKED", (
   });
 
   it("should click on accept and create catch certificate and redirect to catch-certificates", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=create-cc-button]").click();
     cy.url().should("include", "catch-certificates");
   });
@@ -746,7 +695,6 @@ describe("Check Your Information (Summary) page: catch certificate is LOCKED", (
 
 describe("Check Your Information (Summary) page: page guard", () => {
   it("should redirect to landings entry page when the user tries to access the CC Check Your Information (Summary) page with null landings entry", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationPageGuardCaseOne,
     };
@@ -755,7 +703,6 @@ describe("Check Your Information (Summary) page: page guard", () => {
   });
 
   it("should redirect to the progress page when the user tries to access the CC Check Your Information (Summary) page with completedSections !== requiredSections", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationPageGuardCaseTwo,
     };
@@ -764,7 +711,6 @@ describe("Check Your Information (Summary) page: page guard", () => {
   });
 
   it("should redirect to the progress page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationPageGuardCaseThree,
     };
@@ -775,7 +721,6 @@ describe("Check Your Information (Summary) page: page guard", () => {
 
 describe("Check Your Information (Summary) page: change links", () => {
   it("should link to the your reference page to change the user reference", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
@@ -785,7 +730,6 @@ describe("Check Your Information (Summary) page: change links", () => {
   });
 
   it("should link to the exporter details page to change the exporter name", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
@@ -804,7 +748,6 @@ describe("Check Your Information (Summary) page: change links", () => {
   });
 
   it("should link to the exporter details page to change the exporter company name", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
@@ -823,7 +766,6 @@ describe("Check Your Information (Summary) page: change links", () => {
   });
 
   it("should link to the exporter details page to change the exporter address", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
@@ -840,7 +782,6 @@ describe("Check Your Information (Summary) page: change links", () => {
   });
 
   it("should link to the landings entry page to change the landing entry", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
@@ -857,7 +798,6 @@ describe("Check Your Information (Summary) page: change links", () => {
   });
 
   it("should link to the what export journey page to change to the departure country", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
@@ -874,7 +814,6 @@ describe("Check Your Information (Summary) page: change links", () => {
   });
 
   it("should link to the what export journey page to change the destination country", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
@@ -891,7 +830,6 @@ describe("Check Your Information (Summary) page: change links", () => {
   });
 
   it("should link to the conservation page to change the conservation", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
@@ -908,7 +846,6 @@ describe("Check Your Information (Summary) page: change links", () => {
   });
 
   it("should link to the product page to change the selected product", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
@@ -930,7 +867,6 @@ describe("Check Your Information (Summary) page: change links", () => {
   });
 
   it("should link to the respective transportation page to change the transportation document name", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
@@ -948,7 +884,6 @@ describe("Check Your Information (Summary) page: change links", () => {
   });
 
   it("should link to the respective transportation page to change the transportation document reference", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
@@ -968,7 +903,6 @@ describe("Check Your Information (Summary) page: change links", () => {
 
 describe("Check Your Information (Summary) page: Manual Landing render container identification number and change link when present", () => {
   it("should render container identification number for truck when present on manual landing journey", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationManualLandingTruckContainerNumber,
     };
@@ -979,7 +913,6 @@ describe("Check Your Information (Summary) page: Manual Landing render container
   });
 
   it("should link to the truck transportation page to change the container identification number", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationManualLandingTruckContainerNumber,
     };
@@ -993,7 +926,6 @@ describe("Check Your Information (Summary) page: Manual Landing render container
   });
 
   it("should render container identification number for train when present on manual landing journey", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumber,
     };
@@ -1004,7 +936,6 @@ describe("Check Your Information (Summary) page: Manual Landing render container
   });
 
   it("should link to the train transportation page to change the container identification number", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumber,
     };
@@ -1018,7 +949,6 @@ describe("Check Your Information (Summary) page: Manual Landing render container
   });
 
   it("should not render container identification number for train when not present on manual landing journey", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumberNull,
     };
@@ -1030,7 +960,6 @@ describe("Check Your Information (Summary) page: Manual Landing render container
 
 describe("Check Your Information (Summary) page: Manual Landing when JavaScript is disabled", () => {
   it("should render container identification number for truck transport without JavaScript", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationManualLanding,
       disableScripts: true,
@@ -1046,7 +975,6 @@ describe("Check Your Information (Summary) page: Manual Landing when JavaScript 
   });
 
   it("should render container identification number for train transport without JavaScript", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationManualLandingTrainContainerNumber,
       disableScripts: true,
@@ -1062,7 +990,6 @@ describe("Check Your Information (Summary) page: Manual Landing when JavaScript 
   });
 
   it("should allow form submission without JavaScript", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationManualLanding,
       disableScripts: true,
@@ -1083,7 +1010,6 @@ describe("Check Your Information: Point of Destination", () => {
   });
 
   it("should render Point of destination field underneath Destination country", () => {
-    cy.wrap(true).should("be.true");
     // Verify Destination country is present
     cy.contains("dt.govuk-summary-list__key", "Destination country")
       .should("be.visible")
@@ -1099,14 +1025,12 @@ describe("Check Your Information: Point of Destination", () => {
   });
 
   it("should display the Point of destination value", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Point of destination")
       .next("dd.govuk-summary-list__value")
       .should("have.text", "Calais Port");
   });
 
   it("should have a Change link for Point of destination", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Point of destination")
       .parent()
       .find("dd.govuk-summary-list__actions")
@@ -1116,7 +1040,6 @@ describe("Check Your Information: Point of Destination", () => {
   });
 
   it("should navigate to what-export-journey page when Change link is clicked", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Point of destination")
       .parent()
       .find("dd.govuk-summary-list__actions a")
@@ -1125,7 +1048,6 @@ describe("Check Your Information: Point of Destination", () => {
   });
 
   it("should include nextUri parameter in Change link to return to check-your-information", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Point of destination")
       .parent()
       .find("dd.govuk-summary-list__actions a")
@@ -1135,7 +1057,6 @@ describe("Check Your Information: Point of Destination", () => {
   });
 
   it("should include anchor for Point of destination field in Change link", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Point of destination")
       .parent()
       .find("dd.govuk-summary-list__actions a")
@@ -1153,12 +1074,10 @@ describe("Check Your Information: Not provided fields", () => {
   });
 
   it("should render Freight bill number with 'Not provided' when empty", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Freight bill number").next("dd").should("have.text", "Not provided");
   });
 
   it("should render document name with 'Not provided' when no documents added", () => {
-    cy.wrap(true).should("be.true");
     cy.get("dt.govuk-summary-list__key")
       .filter(':contains("document name")')
       .first()
@@ -1167,7 +1086,6 @@ describe("Check Your Information: Not provided fields", () => {
   });
 
   it("should render document reference with 'Not provided' when no documents added", () => {
-    cy.wrap(true).should("be.true");
     cy.get("dt.govuk-summary-list__key")
       .filter(':contains("document reference")')
       .first()
@@ -1176,17 +1094,14 @@ describe("Check Your Information: Not provided fields", () => {
   });
 
   it("should render RFMO with 'Not provided' when empty", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "RFMO").next("dd").should("have.text", "Not provided");
   });
 
   it("should render EEZ with 'Not provided' when empty", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Exclusive economic zone").next("dd").should("have.text", "Not provided");
   });
 
   it("should still show Change links for Not provided fields", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Freight bill number").parent().find("a").should("contain", "Change");
   });
 });
@@ -1201,14 +1116,12 @@ describe("Check Your Information: Not provided fields (Welsh)", () => {
   });
 
   it("should render Freight bill number with 'Heb ei ddarparu' in Welsh when empty", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Rhif y bil cludo nwyddau")
       .next("dd")
       .should("have.text", "Heb ei ddarparu");
   });
 
   it("should render document name with 'Heb ei ddarparu' in Welsh when no documents added", () => {
-    cy.wrap(true).should("be.true");
     cy.get("dt.govuk-summary-list__key")
       .filter(':contains("Enw\'r ddogfen")')
       .first()
@@ -1217,7 +1130,6 @@ describe("Check Your Information: Not provided fields (Welsh)", () => {
   });
 
   it("should render document reference with 'Heb ei ddarparu' in Welsh when no documents added", () => {
-    cy.wrap(true).should("be.true");
     cy.get("dt.govuk-summary-list__key")
       .filter(':contains("Cyfeirnod y ddogfen")')
       .first()
@@ -1226,12 +1138,10 @@ describe("Check Your Information: Not provided fields (Welsh)", () => {
   });
 
   it("should render RFMO with 'Heb ei ddarparu' in Welsh when empty", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "RFMO").next("dd").should("have.text", "Heb ei ddarparu");
   });
 
   it("should render EEZ with 'Heb ei ddarparu' in Welsh when empty", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Parth economaidd").next("dd").should("have.text", "Heb ei ddarparu");
   });
 });
@@ -1245,33 +1155,28 @@ describe("Check Your Information (Summary) page: Plane transport with no freight
   });
 
   it("should render plane transport section", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "How will the export leave the UK?")
       .next("dd")
       .should("have.text", "Plane");
   });
 
   it("should render flight number", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Flight number").next("dd").should("have.text", "AA1234567");
   });
 
   it("should render Container identification number", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Container identification number")
       .next("dd")
       .should("have.text", "CONT1234");
   });
 
   it("should render departure place", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Place export leaves the departure country")
       .next("dd")
       .should("have.text", "Joelle Rhodes");
   });
 
   it("should render 'Not provided' when freight bill number is missing", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Freight bill number").next("dd").should("have.text", "Not provided");
   });
 });
@@ -1285,38 +1190,32 @@ describe("Check Your Information (Summary) page: Container vessel transport with
   });
 
   it("should render container vessel transport section", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "How will the export leave the UK?")
       .next("dd")
       .should("have.text", "Container vessel");
   });
 
   it("should render vessel name", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Vessel name").next("dd").should("have.text", "SYLVIES GRACE (J11)");
   });
 
   it("should render flag state", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Flag state").next("dd").should("have.text", "Panama");
   });
 
   it("should render shipping container identification number", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Shipping container identification number")
       .next("dd")
       .should("have.text", "CONT5678");
   });
 
   it("should render departure place", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Place export leaves the departure country")
       .next("dd")
       .should("have.text", "Port of Southampton");
   });
 
   it("should render 'Not provided' when freight bill number is missing", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt.govuk-summary-list__key", "Freight bill number").next("dd").should("have.text", "Not provided");
   });
 });
@@ -1333,7 +1232,6 @@ describe("CC - scenario 1 - Change transport mode - no change scenario", () => {
   });
 
   it("should navigate back to check-your-information when transport mode is not changed", () => {
-    cy.wrap(true).should("be.true");
     // Click the change link for transport mode
     cy.get('[href*="how-does-the-export-leave-the-uk"]').first().click();
 
@@ -1369,7 +1267,6 @@ describe("CC - scenario 2 - Change transport mode", () => {
   });
 
   it("should navigate to plane transport details page when changing transport mode to plane", () => {
-    cy.wrap(true).should("be.true");
     cy.log("STEP #1 - Verify we're on check-your-information page");
     cy.url().should("include", "/check-your-information");
     cy.url().then((url) => cy.log(`STEP #1A - Current URL: ${url}`));
@@ -1446,7 +1343,6 @@ describe("NMD - scenario 1 - Change product - no change scenario", () => {
   });
 
   it("should navigate through product change flow and return to check-your-information when no changes are made", () => {
-    cy.wrap(true).should("be.true");
     cy.log("STEP #1 - Verifying we are on check-your-information page");
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
@@ -1494,7 +1390,6 @@ describe("NMD - scenario 4 - Change arrival transport mode", () => {
   });
 
   it("should navigate to plane transport details page when changing arrival transport mode to plane", () => {
-    cy.wrap(true).should("be.true");
     cy.log("STEP #1 - Verifying we are on check-your-information page");
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
@@ -1584,7 +1479,6 @@ describe("NMD - scenario 3 - Change arrival transport mode - no change scenario"
   });
 
   it("should navigate through arrival transport change flow and return to check-your-information when no changes are made", () => {
-    cy.wrap(true).should("be.true");
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
 
@@ -1620,7 +1514,6 @@ describe("NMD - scenario 5 - Change departure transport mode - no change scenari
   });
 
   it("should navigate through departure transport change flow and return to check-your-information when no changes are made", () => {
-    cy.wrap(true).should("be.true");
     cy.log("STEP #1 - Verify we're on check-your-information page");
     cy.url().should("include", "/check-your-information");
     cy.url().then((url) => cy.log(`STEP #1A - Current URL: ${url}`));
@@ -1692,7 +1585,6 @@ describe("NMD - scenario 6 - Change departure transport mode", () => {
   });
 
   it("should navigate to plane transport details page when changing departure transport mode to plane", () => {
-    cy.wrap(true).should("be.true");
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
 
@@ -1740,7 +1632,6 @@ describe("PS - scenario 1 - Change product details", () => {
   });
 
   it("should navigate through full flow when changing product details and return to check-your-information", () => {
-    cy.wrap(true).should("be.true");
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
     cy.url().then((url) => cy.log(`Current URL: ${url}`));
@@ -1804,7 +1695,6 @@ describe("PS - scenario 2 - Change plant address", () => {
   });
 
   it("should display Change link next to Address for Processing plant", () => {
-    cy.wrap(true).should("be.true");
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
 
@@ -1821,7 +1711,6 @@ describe("PS - scenario 2 - Change plant address", () => {
   });
 
   it("should navigate to add-processing-plant-address when Change link is clicked", () => {
-    cy.wrap(true).should("be.true");
     // Click the change link for plant address
     cy.get('a[href*="add-processing-plant-address"]').click();
 
@@ -1834,7 +1723,6 @@ describe("PS - scenario 2 - Change plant address", () => {
   });
 
   it("should return to check-your-information after completing updates and pressing Save and continue", () => {
-    cy.wrap(true).should("be.true");
     cy.log("=== TEST START ===");
 
     // Click the change link for plant address
@@ -1920,7 +1808,6 @@ describe("PS - Species display format", () => {
   });
 
   it("should display species without duplicating FAO code", () => {
-    cy.wrap(true).should("be.true");
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
 
@@ -1957,12 +1844,10 @@ describe("Check Your Information: User Reference scenarios", () => {
   });
 
   it("should display user reference when provided", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Your reference").next("dd").should("not.have.text", "Not provided");
   });
 
   it("should have correct change link with nextUri for user reference", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#yourReferenceChangeLink")
       .should("have.attr", "href")
       .and("include", "/add-your-reference")
@@ -1971,7 +1856,6 @@ describe("Check Your Information: User Reference scenarios", () => {
   });
 
   it("should have visually hidden text for accessibility in user reference change link", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#yourReferenceChangeLink")
       .find(".govuk-visually-hidden")
       .should("exist")
@@ -1988,7 +1872,6 @@ describe("Check Your Information: CommonLink component testing", () => {
   });
 
   it("should render common link for exporter address with visually hidden text", () => {
-    cy.wrap(true).should("be.true");
     cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(5)")
       .find("a")
       .should("contain", "Change")
@@ -1997,7 +1880,6 @@ describe("Check Your Information: CommonLink component testing", () => {
   });
 
   it("should render common link for conservation with visually hidden text", () => {
-    cy.wrap(true).should("be.true");
     cy.get("dl:nth-of-type(4) > .govuk-summary-list__row:nth-of-type(1)")
       .find("a")
       .should("contain", "Change")
@@ -2015,14 +1897,12 @@ describe("Check Your Information: Transportation details for multiple transports
   });
 
   it("should render multiple transportation sections when multiple transports exist", () => {
-    cy.wrap(true).should("be.true");
     cy.get("dl.govuk-summary-list")
       .filter(':has(dt:contains("How will the export leave the UK?"))')
       .should("have.length.greaterThan", 0);
   });
 
   it("should render separate sections for each transport with correct details", () => {
-    cy.wrap(true).should("be.true");
     // Verify the page contains transportation details heading
     cy.contains("h2", "Transportation details").should("exist");
   });
@@ -2037,19 +1917,16 @@ describe("Check Your Information: Truck transport with CMR true", () => {
   });
 
   it("should render CMR question when truck has CMR true", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Do you have a road transport document to go with this export?").should("be.visible");
   });
 
   it("should display Yes for CMR when value is true", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Do you have a road transport document to go with this export?")
       .next("dd")
       .should("have.text", "Yes");
   });
 
   it("should have change link for CMR that includes anchor", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[href*="do-you-have-a-road-transport-document"]').should("have.attr", "href").and("include", "#cmr");
   });
 });
@@ -2063,22 +1940,18 @@ describe("Check Your Information: Truck transport without CMR (false)", () => {
   });
 
   it("should render truck nationality when CMR is false", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Truck nationality").should("be.visible");
   });
 
   it("should render truck registration number when CMR is false", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Registration number").should("be.visible");
   });
 
   it("should render place export leaves UK for truck", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Place export leaves the departure country").should("be.visible");
   });
 
   it("should have correct change links with anchors for truck fields", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[href*="add-transportation-details-truck"]').filter('[href*="#nationalityOfVehicle"]').should("exist");
     cy.get('[href*="add-transportation-details-truck"]').filter('[href*="#registrationNumber"]').should("exist");
     cy.get('[href*="add-transportation-details-truck"]').filter('[href*="#departurePlace"]').should("exist");
@@ -2094,22 +1967,18 @@ describe("Check Your Information: Train transport details", () => {
   });
 
   it("should render railway bill number for train transport", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Railway bill number").should("be.visible");
   });
 
   it("should render place export leaves UK for train", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Place export leaves the departure country").should("be.visible");
   });
 
   it("should render freight bill number for train", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Freight bill number").should("be.visible");
   });
 
   it("should have correct change links with anchors for train fields", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[href*="add-transportation-details-train"]').filter('[href*="#railwayBillNumber"]').should("exist");
     cy.get('[href*="add-transportation-details-train"]').filter('[href*="#departurePlace"]').should("exist");
     cy.get('[href*="add-transportation-details-train"]').filter('[href*="#freightBillNumber"]').should("exist");
@@ -2125,27 +1994,22 @@ describe("Check Your Information: Container vessel transport details", () => {
   });
 
   it("should render vessel name for container vessel", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Vessel name").should("be.visible");
   });
 
   it("should render flag state for container vessel", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Flag state").should("be.visible");
   });
 
   it("should render shipping container identification number for container vessel", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Shipping container identification number").should("be.visible");
   });
 
   it("should render place export leaves UK for container vessel", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Place export leaves the departure country").should("be.visible");
   });
 
   it("should have correct change links with anchors for container vessel fields", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[href*="add-transportation-details-container-vessel"]').filter('[href*="#vesselName"]').should("exist");
     cy.get('[href*="add-transportation-details-container-vessel"]').filter('[href*="#flagState"]').should("exist");
     cy.get('[href*="add-transportation-details-container-vessel"]')
@@ -2164,27 +2028,22 @@ describe("Check Your Information: Plane transport details", () => {
   });
 
   it("should render flight number for plane transport", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Flight number").should("be.visible");
   });
 
   it("should render container identification number for plane", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Container identification number").should("be.visible");
   });
 
   it("should render place export leaves UK for plane", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Place export leaves the departure country").should("be.visible");
   });
 
   it("should render freight bill number for plane", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Freight bill number").should("be.visible");
   });
 
   it("should have correct change links with anchors for plane fields", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[href*="add-transportation-details-plane"]').filter('[href*="#flightNumber"]').should("exist");
     cy.get('[href*="add-transportation-details-plane"]').filter('[href*="#containerNumber"]').should("exist");
     cy.get('[href*="add-transportation-details-plane"]').filter('[href*="#departurePlace"]').should("exist");
@@ -2201,12 +2060,10 @@ describe("Check Your Information: getTransportationDetailsSummary for directLand
   });
 
   it("should render fishing vessel for direct landing transport", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "How will the export leave the UK?").next("dd").should("have.text", "Fishing vessel");
   });
 
   it("should not render change link for direct landing transport when locked", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationDirectLandingLocked,
     };
@@ -2224,24 +2081,20 @@ describe("Check Your Information: Hidden input fields", () => {
   });
 
   it("should have hidden journey input field", () => {
-    cy.wrap(true).should("be.true");
     cy.get('input[name="journey"]').should("have.attr", "type", "hidden").should("have.value", "catchCertificate");
   });
 
   it("should have hidden noOfVessels input field", () => {
-    cy.wrap(true).should("be.true");
     cy.get('input[name="noOfVessels"]').should("have.attr", "type", "hidden");
   });
 
   it("should calculate total number of vessels correctly", () => {
-    cy.wrap(true).should("be.true");
     cy.get('input[name="noOfVessels"]').invoke("val").should("not.be.empty");
   });
 });
 
 describe("Check Your Information: Submit button states", () => {
   it("should show submit button when not locked", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
@@ -2250,7 +2103,6 @@ describe("Check Your Information: Submit button states", () => {
   });
 
   it("should not show submit button when locked", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationLocked,
     };
@@ -2259,7 +2111,6 @@ describe("Check Your Information: Submit button states", () => {
   });
 
   it("should have correct submit button attributes", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
     };
@@ -2281,22 +2132,18 @@ describe("Check Your Information: Warning text", () => {
   });
 
   it("should display warning text section", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-warning-text").should("be.visible");
   });
 
   it("should display warning icon", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-warning-text__icon").should("be.visible").should("contain", "!");
   });
 
   it("should display warning text with visually hidden Warning label", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-warning-text__text .govuk-visually-hidden").should("have.text", "Warning");
   });
 
   it("should display the full warning message", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-warning-text__text").should(
       "contain",
       "You may be liable to investigation and enforcement action, including prosecution, if you knowingly submit false, misleading, or otherwise inaccurate data."
@@ -2313,27 +2160,22 @@ describe("Check Your Information: Exporter details section", () => {
   });
 
   it("should render exporter details heading", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h2", "Exporter details").should("be.visible");
   });
 
   it("should render exporter full name field", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Full name of responsible person").should("be.visible");
   });
 
   it("should render company name field", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Company name").should("be.visible");
   });
 
   it("should render company address field", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Company address").should("be.visible");
   });
 
   it("should have change links for all exporter fields when not locked", () => {
-    cy.wrap(true).should("be.true");
     // Skip document number (row 1) and check rows 2-5 (Your Reference, Name, Company, Address)
     cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(n+2)").each(($row) => {
       cy.wrap($row).find("a").should("contain", "Change");
@@ -2341,7 +2183,6 @@ describe("Check Your Information: Exporter details section", () => {
   });
 
   it("should not have change links when document is locked", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformationLocked,
     };

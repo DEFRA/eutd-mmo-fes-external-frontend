@@ -5,7 +5,6 @@ const containerVesselPageUrl = `create-catch-certificate/${documentNumber}/add-a
 
 describe("Add Transportation Documents Container Vessel", () => {
   it("should render container vessel transport details page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportDocuments,
     };
@@ -41,7 +40,6 @@ describe("Add Transportation Documents Container Vessel", () => {
   });
 
   it("should redirect user to CC dashboard page when user clicks on Save as Draft button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportDocuments,
     };
@@ -53,7 +51,6 @@ describe("Add Transportation Documents Container Vessel", () => {
   });
 
   it("should display errors", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportDocumentsErrors,
     };
@@ -63,7 +60,6 @@ describe("Add Transportation Documents Container Vessel", () => {
   });
 
   it("should display error for (optional) fields", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportDocumentsOptionalError,
     };
@@ -73,7 +69,6 @@ describe("Add Transportation Documents Container Vessel", () => {
   });
 
   it("should display error for adding an additional document for empty form", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportDocumentsOptionalError,
     };
@@ -84,7 +79,6 @@ describe("Add Transportation Documents Container Vessel", () => {
   });
 
   it("should display previously entered name and reference", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportDocumentsAddAnotherDocument,
     };
@@ -109,7 +103,6 @@ describe("Add Transportation Documents Container Vessel", () => {
   });
 
   it("should redirect user to forbidden page when saveTransportDocuments fails with a 403 error", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportDocumentsFailsWith403,
     };
@@ -120,7 +113,6 @@ describe("Add Transportation Documents Container Vessel", () => {
   });
 
   it("should navigate to cc dashboard page on click of save as draft button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportDocumentsSave,
     };
@@ -132,7 +124,6 @@ describe("Add Transportation Documents Container Vessel", () => {
   });
 
   it("should display errors when click without adding document name and reference", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportDocumentsErrors,
     };
@@ -143,7 +134,6 @@ describe("Add Transportation Documents Container Vessel", () => {
   });
 
   it("should not display errors when click adding document name and reference", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportDocuments,
     };
@@ -179,7 +169,6 @@ describe("Add Transportation Documents Container Vessel", () => {
   });
 
   it("should not display the Add another document button when 5 transport documents have been added", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportDocumentsRestrictAddAnotherDocument,
     };

@@ -5,7 +5,6 @@ describe("DoYouHaveARoadTransportDocument", () => {
   const doYouHaveARoadTransportDocumentUrl = `${certificateUrl}/do-you-have-a-road-transport-document`;
 
   it("should render page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocument,
       args: ["storageNotes"],
@@ -42,7 +41,6 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to forbidden page when transport vehicle is not truck", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentPlane,
     };
@@ -53,7 +51,6 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to CC dashboard page when user clicks on Save as Draft button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocument,
       args: ["storageNotes"],
@@ -67,7 +64,6 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to departure summary page when user selects and submits YES", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocument,
       args: ["storageNotes"],
@@ -85,7 +81,6 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to truck transportation details page when user selects and submits NO", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentFalse, //setting cmr value to false so the next page does not redirect to progress page
     };
@@ -102,7 +97,6 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should redirect user to forbidden page when saveTruckCMR fails with a 403 error", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentSaveFailsWith403,
     };
@@ -119,7 +113,6 @@ describe("DoYouHaveARoadTransportDocument", () => {
   });
 
   it("should display error summary and inline error message when saving fails with an error", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.DoYouHaveARoadTransportDocumentSaveFailsWithError,
     };

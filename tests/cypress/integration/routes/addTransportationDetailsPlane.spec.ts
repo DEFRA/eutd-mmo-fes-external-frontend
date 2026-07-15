@@ -5,7 +5,6 @@ const planePageUrl = `create-catch-certificate/${documentNumber}/add-transportat
 
 describe("Add Transportation Details Plane: Allowed", () => {
   it("should render plane transport details page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportAllowed,
     };
@@ -44,7 +43,6 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should render labels WITHOUT bold font weight for catch certificate transport", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportAllowed,
     };
@@ -57,7 +55,6 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SavePlaneTransportDetailsFailsWith403,
     };
@@ -68,7 +65,6 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when flight number exceeds 15 chars", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsPlaneFlightNumber,
     };
@@ -83,7 +79,6 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display error when flight number alphanumeric text", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveAlphanumericPlaneFlightNumber,
     };
@@ -96,7 +91,6 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should display errors", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportErrors,
     };
@@ -110,7 +104,6 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should navigate to cc dashboard page on click of save as draft button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraft,
     };
@@ -124,7 +117,6 @@ describe("Add Transportation Details Plane: Allowed", () => {
   });
 
   it("should navigate to progress page on click of save and continue button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
@@ -140,7 +132,6 @@ describe("Add Transportation Details Plane: Allowed", () => {
 
 describe("Add Transportation Details Plane: Not Allowed", () => {
   it("should redirect to the progress page if transport is not plane", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportNotAllowed,
     };
@@ -151,7 +142,6 @@ describe("Add Transportation Details Plane: Not Allowed", () => {
 
 describe("should redirect to forbidden page it transport details return 403 on page load", () => {
   it("should redirect to the forbidden page if transport returns un authorised", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportAllowedUnauthorised,
     };
@@ -162,7 +152,6 @@ describe("should redirect to forbidden page it transport details return 403 on p
 
 describe("Add Transportation Details Plane: Air Waybill Number Validation", () => {
   it("should display error when air waybill number exceeds 50 characters", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportAirwaybillMaxLength,
     };
@@ -177,7 +166,6 @@ describe("Add Transportation Details Plane: Air Waybill Number Validation", () =
   });
 
   it("should display error when air waybill number contains invalid characters", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportAirwaybillInvalidCharacters,
     };
@@ -195,7 +183,6 @@ describe("Add Transportation Details Plane: Air Waybill Number Validation", () =
   });
 
   it("should save successfully when air waybill number is not provided", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
@@ -209,7 +196,6 @@ describe("Add Transportation Details Plane: Air Waybill Number Validation", () =
   });
 
   it("should save successfully when air waybill number is valid", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
@@ -225,7 +211,6 @@ describe("Add Transportation Details Plane: Air Waybill Number Validation", () =
 
 describe("Add Transportation Details Plane: Container Identification Number Validation", () => {
   it("should display error when container identification number contains invalid characters", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportContainerInvalidCharacters,
     };
@@ -242,7 +227,6 @@ describe("Add Transportation Details Plane: Container Identification Number Vali
   });
 
   it("should save successfully when container identification number is not provided", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
@@ -255,7 +239,6 @@ describe("Add Transportation Details Plane: Container Identification Number Vali
   });
 
   it("should save successfully when container identification number is valid", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
@@ -270,7 +253,6 @@ describe("Add Transportation Details Plane: Container Identification Number Vali
 
 describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
   it("should save multiple container values successfully", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportMultipleContainers,
     };
@@ -292,7 +274,6 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
   });
 
   it("should allow empty container fields", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportEmptyContainers,
     };
@@ -314,7 +295,6 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
   });
 
   it("should load pre-existing container values from backend", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportEditWithContainers,
     };
@@ -327,7 +307,6 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
   });
 
   it("should display container field label and hint text", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
@@ -343,7 +322,6 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
   });
 
   it("should limit to maximum 10 containers", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
@@ -364,7 +342,6 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
   });
 
   it("should show remove button for each container except when only one exists", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,
     };
@@ -392,7 +369,6 @@ describe("Add Transportation Details Plane: Multiple Container Numbers", () => {
 
 describe("Add Transportation Details Plane: Non-JS Support", () => {
   it("should display 10 container fields when JavaScript is disabled", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportNonJS,
     };
@@ -408,7 +384,6 @@ describe("Add Transportation Details Plane: Non-JS Support", () => {
 
 describe("Add Transportation Details Plane: Optional Field Labels", () => {
   it("should show (optional) suffix for truck and train container labels", () => {
-    cy.wrap(true).should("be.true");
     // This test verifies the label differentiation requirement
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,

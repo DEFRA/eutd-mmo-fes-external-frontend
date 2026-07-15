@@ -4,7 +4,6 @@ const voidThisProcessingStatementUrl = `${documentUrl}/void-this-non-manipulatio
 
 describe("void this draft storage document page", () => {
   it("should render the correct h1 title", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VoidThisDocumentBadRequest,
     };
@@ -17,7 +16,6 @@ describe("void this draft storage document page", () => {
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VoidThisDocumentBadRequest,
     };
@@ -34,7 +32,6 @@ describe("void this draft storage document page", () => {
   });
 
   it("Submit form with yes option click of save and continue button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VoidThisDocumentOptionYes,
     };
@@ -46,7 +43,6 @@ describe("void this draft storage document page", () => {
   });
 
   it("Submit form with no option click of save and continue button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VoidThisDocumentOptionNo,
     };
@@ -58,7 +54,6 @@ describe("void this draft storage document page", () => {
   });
 
   it("forbidden 403", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VoidThisDocument403,
     };

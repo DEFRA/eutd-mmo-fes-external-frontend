@@ -4,7 +4,6 @@ import type { IErrorsTransformed } from "~/types/errors";
 describe("errorReindexing helpers", () => {
   describe("reindexContainerErrors", () => {
     it("should remove a deleted container error and shift higher indices down", () => {
-      cy.wrap(true).should("be.true");
       const currentErrors: IErrorsTransformed = {
         "containerNumbers.0": {
           key: "containerNumbers.0",
@@ -41,7 +40,6 @@ describe("errorReindexing helpers", () => {
     });
 
     it("should preserve non-container error keys unchanged", () => {
-      cy.wrap(true).should("be.true");
       const currentErrors: IErrorsTransformed = {
         "containerNumbers.0": {
           key: "containerNumbers.0",
@@ -65,7 +63,6 @@ describe("errorReindexing helpers", () => {
 
   describe("reindexDocumentErrors", () => {
     it("should remove a deleted document error and shift remaining indices", () => {
-      cy.wrap(true).should("be.true");
       const currentErrors: IErrorsTransformed = {
         "supportingDocuments-0": {
           key: "supportingDocuments-0",
@@ -90,7 +87,6 @@ describe("errorReindexing helpers", () => {
     });
 
     it("should preserve unrelated error keys for document reindexing", () => {
-      cy.wrap(true).should("be.true");
       const currentErrors: IErrorsTransformed = {
         "supportingDocuments-0": {
           key: "supportingDocuments-0",

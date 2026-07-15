@@ -2,7 +2,6 @@ import { type ITestParams, TestCaseId } from "~/types";
 
 describe("Admin to FE-V2 Login Page", () => {
   it("should call admin login loader function", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.adminLogin,
     };

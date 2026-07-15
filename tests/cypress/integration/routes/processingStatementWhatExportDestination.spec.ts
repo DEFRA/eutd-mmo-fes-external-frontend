@@ -12,7 +12,6 @@ describe("What Export Destination page: UI", () => {
   });
 
   it("should render the correct back link", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
@@ -21,12 +20,10 @@ describe("What Export Destination page: UI", () => {
   });
 
   it("should contain the page title", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h1", /^Enter the destination for the consignment$/).should("be.visible");
   });
 
   it("should contain destination country field", () => {
-    cy.wrap(true).should("be.true");
     cy.get("label")
       .contains(/^Destination country$/)
       .should("be.visible");
@@ -34,7 +31,6 @@ describe("What Export Destination page: UI", () => {
   });
 
   it("should contain point of destination field", () => {
-    cy.wrap(true).should("be.true");
     cy.get("label")
       .contains(/^Point of destination$/)
       .should("be.visible");
@@ -48,17 +44,14 @@ describe("What Export Destination page: UI", () => {
   });
 
   it("should contain Save and continue button", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("button", /^Save and continue$/).should("be.visible");
   });
 
   it("should contain Save as draft button", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("button", /^Save as draft$/).should("be.visible");
   });
 
   it("should not save invalid point of destination when save as draft is clicked", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSWhatExportDestinationSaveAsDraftWithInvalidPointOfDestination,
     };

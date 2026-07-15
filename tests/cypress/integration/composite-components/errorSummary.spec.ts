@@ -3,7 +3,6 @@ import { type ITestParams, TestCaseId } from "~/types";
 describe("ErrorSummary Component: Edge cases and code coverage", () => {
   describe("Empty errors array", () => {
     it("should render component structure with empty errors list", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetails, // A valid page without errors
       };
@@ -20,7 +19,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
   describe("containerClassName prop", () => {
     it("should apply custom containerClassName to error summary", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
       };
@@ -37,7 +35,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
   describe("Error message rendering - errorHasValue paths", () => {
     it("should render error messages for validation errors", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
       };
@@ -53,7 +50,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
     });
 
     it("should render translated error messages from errorsText namespace", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
       };
@@ -74,7 +70,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
   describe("linkData prop variations", () => {
     it("should use default href when linkData is undefined", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
       };
@@ -89,7 +84,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
     });
 
     it("should trigger onChangeHandler when linkData is not provided", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
       };
@@ -115,8 +109,8 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
         });
     });
 
-    it("should use default anchor href when no linkData provided", () => {
-      // Test case that validates anchor link behavior for error summary
+    it("should use linkData href when provided", () => {
+      // Using a test case that provides linkData for errors
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedInvalid,
       };
@@ -149,7 +143,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
   describe("useEffect focus and scroll behavior", () => {
     it("should scroll error summary into view on mount", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.DirectLandingDateLandedUnpopulated,
       };
@@ -163,7 +156,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
     });
 
     it("should handle ref being null gracefully", () => {
-      cy.wrap(true).should("be.true");
       // This tests the if (errorSummaryRef.current) guard
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetails,
@@ -183,7 +175,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
   describe("onChangeHandler - preventDefault and scrollToId", () => {
     it("should call preventDefault when error link is clicked", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
       };
@@ -201,7 +192,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
     });
 
     it("should extract field ID from href and call scrollToId", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
       };
@@ -231,7 +221,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
     });
 
     it("should handle href with # at different positions", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
       };
@@ -251,7 +240,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
   describe("Multiple errors handling", () => {
     it("should render multiple error items in list", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
       };
@@ -266,7 +254,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
     });
 
     it("should give each error a unique key based on error.key", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
       };
@@ -285,7 +272,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
   describe("Translation namespace handling", () => {
     it("should use errorsText and common namespaces for translations", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
       };
@@ -305,7 +291,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
   describe("Error interpolation with escapeValue: false", () => {
     it("should render error messages correctly with interpolation settings", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
       };
@@ -322,7 +307,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
   describe("Component structure and GOV.UK classes", () => {
     it("should have correct GOV.UK class structure", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
       };
@@ -341,7 +325,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
     });
 
     it("should nest list items correctly", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
       };
@@ -360,7 +343,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
   describe("Errors prop handling and default value", () => {
     it("should handle errors array being provided with values", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
       };
@@ -380,7 +362,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
     });
 
     it("should render all errors from the errors array", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
       };
@@ -402,7 +383,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
   describe("Error summary focus on repeated error submissions", () => {
     it("should move focus to error summary on repeated submissions with errors", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.DirectLandingDateLandedUnpopulated,
       };
@@ -427,7 +407,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
     });
 
     it("should re-trigger error summary focus when errors change", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.DirectLandingDateLandedUnpopulated,
       };
@@ -456,7 +435,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
   describe("Component mount and ref initialization", () => {
     it("should focus error summary element after mount via ref", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
       };
@@ -474,7 +452,6 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
     });
 
     it("should execute useEffect with ref.current check on component mount", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameError,
       };

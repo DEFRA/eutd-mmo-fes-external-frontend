@@ -12,7 +12,6 @@ describe("Add exporter details page", () => {
   });
 
   it("addexporter details back link check", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
@@ -20,19 +19,16 @@ describe("Add exporter details page", () => {
   });
 
   it("should display correct headings", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h1", "Add exporter details");
 
     cy.get("body").should("exist");
   });
 
   it("should display non-manipulation document warning message", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("This information will appear on the non-manipulation document.").should("be.visible");
   });
 
   it("should display warning with icon using GOV.UK warning component", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-warning-text").should("exist");
     cy.get(".govuk-warning-text__icon").should("contain", "!");
     cy.get(".govuk-warning-text__text").should(
@@ -42,19 +38,16 @@ describe("Add exporter details page", () => {
   });
 
   it("should have bold Company name label", () => {
-    cy.wrap(true).should("be.true");
     cy.get('label[for="exporterCompanyName"]').should("have.class", "govuk-!-font-weight-bold");
   });
 
   it("should check for input fields for storage document journey", () => {
-    cy.wrap(true).should("be.true");
     cy.get("form").should(($form) => {
       expect($form.find("input[type='text']")).to.have.lengthOf(1);
     });
   });
 
   it("should click on change button and navigate to what exporter address page", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='change-button']").click();
     cy.url().should("include", "/what-exporters-address");
   });
@@ -72,7 +65,6 @@ describe("Add exporter details: Idm", () => {
   });
 
   it("will populate exporter company name from user details", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#exporterCompanyName").should("have.value", "Automation Testing Ltd");
   });
 });
@@ -82,7 +74,6 @@ describe("Add exporter details on save with idm", () => {
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   it("should trigger submit and navigate to what are you exporting page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddExporterDetailsFromIdm,
     };
@@ -104,7 +95,6 @@ describe("Add exporter details on save as draft clicking", () => {
   });
 
   it("should click on save as draft and should navigate to catch certificates page", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
@@ -121,7 +111,6 @@ describe("Add exporter details: page guard", () => {
   });
 
   it("should trigger submit and navigate to forbidden page", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/forbidden");
   });
@@ -132,7 +121,6 @@ describe("Add exporter details: unauthorised access", () => {
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   it("should redirect to the forbidden page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddExporterDetails403,
     };
@@ -147,7 +135,6 @@ describe("Add exporter details (SD): save as draft retains valid fields", () => 
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddExporterDetailsSaveAsDraftWithErrors,
     };
@@ -163,7 +150,6 @@ describe("SD: add exporter details - save as draft sets section to INCOMPLETE wh
   const progressUrl = `${documentUrl}/progress`;
 
   it("should show exporter section as INCOMPLETE on progress page after saving draft with invalid company name", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddExporterDetailsSaveAsDraftScenario3,
     };

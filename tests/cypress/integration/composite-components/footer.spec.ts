@@ -2,7 +2,6 @@ import { getData } from "../../helpers";
 
 describe("Footer", () => {
   it("should display the expected links", () => {
-    cy.wrap(true).should("be.true");
     cy.visit("/");
 
     cy.get("[data-testid=footer]").should(($ul) => {

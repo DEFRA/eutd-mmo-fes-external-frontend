@@ -12,7 +12,6 @@ describe("Copy this storage document address page: Allowed", () => {
   });
 
   it("should render back button when on click should to navigate to storage document dashboard page", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", "/create-non-manipulation-document/non-manipulation-documents");
@@ -21,14 +20,12 @@ describe("Copy this storage document address page: Allowed", () => {
   });
 
   it("should render Acknowledgement text", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='ackid']", "Acknowledgement");
 
     cy.get("body").should("exist");
   });
 
   it("should render the correct warning text", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(
       "div > strong",
       "You must not use a non-manipulation document or data for catches that have already been exported. Knowingly reusing non-manipulation documents or using data that relate to a previous export is a serious offence and may result in enforcement action being taken."
@@ -38,26 +35,22 @@ describe("Copy this storage document address page: Allowed", () => {
   });
 
   it("should render the hint text for copying non-manipulation document", () => {
-    cy.wrap(true).should("be.true");
     cy.contains(
       "Enables you to quickly create a new draft non-manipulation document from a previously submitted document with similar data"
     ).should("be.visible");
   });
 
   it("should render the  cancel button and on click should navigate to cc dashboard page", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("button", "Cancel").should("be.visible");
     cy.get("[data-testid=cancel]").click();
     cy.url().should("include", "/non-manipulation-documents");
   });
 
   it("should render the  Create draft non-manipulation document button", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("button", "Create draft non-manipulation document").should("be.visible");
   });
 
   it("should render the radio and check box copy options and labels ", () => {
-    cy.wrap(true).should("be.true");
     cy.get("form").should(($form) => {
       expect($form.find("input[type='radio']")).to.have.lengthOf(2);
       expect($form.find("input[type='checkbox']")).to.have.lengthOf(1);
@@ -80,7 +73,6 @@ describe("Copy this storage document address page: Allowed", () => {
 
 describe("Error summary", () => {
   it("should display errors on empty form submitted", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSSDCopySave,
     };
@@ -96,7 +88,6 @@ describe("Error summary", () => {
 
 describe("Submit form with copy all certificate data option on click of continue button", () => {
   it("should redirect to progress page when copyAllCertificateData option is selected", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSSDCopyAllData,
     };
@@ -111,7 +102,6 @@ describe("Submit form with copy all certificate data option on click of continue
 
 describe("Submit form with copy all certificate data AND void the original option on click of continue button", () => {
   it("should redirect to copy-void-confirmation page when voidDocumentConfirm option is selected", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSSDCopyAllData,
       disableScripts: true,
@@ -127,7 +117,6 @@ describe("Submit form with copy all certificate data AND void the original optio
 
 describe("Copy this storage document address page: Disallowed", () => {
   it("should redirect to the forbidden page if copying is not permitted", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSSDCopyDisallowed,
     };
