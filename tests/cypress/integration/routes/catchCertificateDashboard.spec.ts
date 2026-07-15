@@ -11,7 +11,6 @@ describe("Catch certificate dashboard sidebar links", () => {
   });
 
   it("should render links for send feedback for storage document", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="dashboard-feedback-url-link"]').contains("Take our survey now");
     cy.contains("a", "Take our survey now")
       .should("be.visible")
@@ -19,31 +18,26 @@ describe("Catch certificate dashboard sidebar links", () => {
   });
 
   it("should display Need help? heading", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h2", "Need help?").should("be.visible");
   });
 
   it("should render link for Guidance on exporting fish (gov.uk)", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "Guidance on exporting fish (gov.uk)")
       .should("be.visible")
       .should("have.attr", "href", "https://www.gov.uk/guidance/exporting-and-importing-fish-if-theres-no-brexit-deal");
   });
 
   it("should render link for EU 2026 Changes Guidance (gov.uk)", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "EU 2026 Changes Guidance (gov.uk)")
       .should("be.visible")
       .should("have.attr", "href", "https://www.gov.uk/guidance/eu-iuu-regulation-2026-changes");
   });
 
   it("should display feedback headings", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h3", "Send feedback").should("be.visible");
   });
 
   it("should render progress table without EU CATCH integration column", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='catchCertificate-inprogress-table'] thead tr th").then(($headers) => {
       const headerTexts = $headers.toArray().map((el) => el.textContent?.trim());
 
@@ -56,7 +50,6 @@ describe("Catch certificate dashboard sidebar links", () => {
   });
 
   it("should verify progress table has correct number of columns without EU CATCH integration", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='catchCertificate-inprogress-table']").find("thead th").should("have.length", 5);
   });
 });
@@ -70,13 +63,11 @@ describe("Catch certificate completed links", () => {
   });
 
   it("should render copy links for completed documents", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="catchCertificate-copycompleted"]').contains("Copy");
     cy.contains("a", "Copy").should("be.visible");
   });
 
   it("should render EU CATCH integration column with check status links", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='catchCertificate-completed-table']")
       .find("thead th")
       .contains("EU CATCH integration")
@@ -86,7 +77,6 @@ describe("Catch certificate completed links", () => {
   });
 
   it("should render check status links with correct href patterns for different statuses", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="catchCertificate-check-eu-catch-status"]').each(($link) => {
       cy.wrap($link)
         .should("have.attr", "href")
@@ -95,7 +85,6 @@ describe("Catch certificate completed links", () => {
   });
 
   it("should render visually hidden context for screen readers on check status links", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="catchCertificate-check-eu-catch-status"]')
       .first()
       .find(".govuk-visually-hidden")
@@ -104,7 +93,6 @@ describe("Catch certificate completed links", () => {
   });
 
   it("should verify column order: Document Number, Reference, Date, EU CATCH Integration, Action", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='catchCertificate-completed-table'] thead tr th").then(($headers) => {
       const headerTexts = $headers.toArray().map((el) => el.textContent?.trim());
 
@@ -117,7 +105,6 @@ describe("Catch certificate completed links", () => {
   });
 
   it("should render completed table with EU CATCH integration column by default", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='catchCertificate-completed-table'] thead tr th").then(($headers) => {
       const headerTexts = $headers.toArray().map((el) => el.textContent?.trim());
 
@@ -130,12 +117,10 @@ describe("Catch certificate completed links", () => {
   });
 
   it("should verify completed table has correct number of columns with EU CATCH integration", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='catchCertificate-completed-table']").find("thead th").should("have.length", 5); // Document Number, Reference, Date Created, EU CATCH Integration, Action
   });
 
   it("should render EU CATCH integration column in correct position", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='catchCertificate-completed-table'] thead tr th")
       .eq(3)
       .should("contain.text", "EU CATCH integration");
@@ -151,19 +136,16 @@ describe("Catch certificate dashboard", () => {
   });
 
   it("should render a valid page title", () => {
-    cy.wrap(true).should("be.true");
     cy.title().should("eq", "Automation Testing Ltd: catch certificates - Create a UK catch certificate - GOV.UK");
   });
 
   it("should render a service notification banner", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-notification-banner .govuk-heading-l").should("have.text", "Title");
 
     cy.get(".govuk-notification-banner p").first().should("have.text", "Message");
   });
 
   it("should render a notification banner", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-notification-banner").should("be.visible");
 
     cy.get("#govuk-notification-banner-title").should("have.text", "Important");
@@ -177,7 +159,6 @@ describe("Catch certificate dashboard", () => {
   });
 
   it("should render a continue link for each in progress catch certificate", () => {
-    cy.wrap(true).should("be.true");
     const documentNumbers = [
       "GBR-2022-CC-20C81C37F",
       "GBR-2022-CC-C8DEDE7FD",
@@ -197,7 +178,6 @@ describe("Catch certificate dashboard", () => {
   });
 
   it("should render the progress table with correct columns", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='catchCertificate-inprogress-table']")
       .should("be.visible")
       .find("thead th")
@@ -205,19 +185,16 @@ describe("Catch certificate dashboard", () => {
   });
 
   it("should display document numbers in progress table", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='catchCertificate-inprogress-table']").find("tbody tr").should("have.length.at.least", 1);
   });
 
   it("should render action links in progress table", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='catchCertificate-inprogress-table']").find("tbody tr").first().find("a").should("exist");
   });
 });
 
 describe("Catch certificate dashboard with query parameters", () => {
   it("should render a service notification banner", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCDashboard,
     };
@@ -233,7 +210,6 @@ describe("Catch certificate dashboard with query parameters", () => {
 
 describe("Catch certificate dashboard with No completed document", () => {
   it("should render dashboard with No completed document", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCDashboardNoCompleted,
     };
@@ -253,14 +229,12 @@ describe("Catch certificate dashboard with user details", () => {
   });
 
   it("should render a header with user details", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-notification-banner .govuk-heading-l").should("have.text", "Title");
 
     cy.get("h1.govuk-heading-xl").should("have.text", "Automation Testing Ltd: catch certificates");
   });
 
   it("should render the landings entry page after creating a document", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#create-export-document").click();
 
     cy.url().should("include", "/landings-entry");
@@ -277,17 +251,14 @@ describe("Catch certificate dashboard no details", () => {
   });
 
   it("should render a header which equals catch certificates", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-notification-banner .govuk-heading-l").should("have.text", "Title");
   });
 
   it("should render a message which equals not have any catch certificate", () => {
-    cy.wrap(true).should("be.true");
     cy.get("p.govuk-body").contains("You do not have any catch certificates in progress.").should("be.visible");
   });
 
   it("should render the forbidden page when a document number is undefined", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#create-export-document").click();
 
     cy.url().should("include", "/forbidden");

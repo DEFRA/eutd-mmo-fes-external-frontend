@@ -12,7 +12,6 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render links", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("strong", /^Download the non-manipulation document$/).should("be.visible");
     cy.contains("a", /^View completed non-manipulation documents or create a new export document$/)
       .should("be.visible")
@@ -20,7 +19,6 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render links for user satisfaction survey feedback link for storage document", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="surveylink-feedback"]').contains("Take a 2 minute survey");
     cy.contains("a", "Take a 2 minute survey")
       .should("be.visible")
@@ -28,7 +26,6 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render the correct page title and subtitle", () => {
-    cy.wrap(true).should("be.true");
     cy.title().should(
       "eq",
       "The non-manipulation document has been created - Create a UK non-manipulation document - GOV.UK"
@@ -39,7 +36,6 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render all step-by-step instructions with correct text", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-heading-m").contains("What you need to do next").should("be.visible");
     cy.contains("strong", "Download the non-manipulation document").should("be.visible");
     cy.contains(
@@ -62,14 +58,12 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render important notice with exclamation icon", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-warning-text").should("be.visible");
     cy.get(".govuk-warning-text__icon").should("contain", "!");
     cy.get(".govuk-warning-text__text").should("contain.text", "Do not amend the non-manipulation document.");
   });
 
   it("should link to the storage document dashboard", () => {
-    cy.wrap(true).should("be.true");
     cy.findByRole("link", {
       name: "View completed non-manipulation documents or create a new export document",
     }).click();
@@ -77,12 +71,10 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render survey component", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="surveylink-feedback"]').contains("Take a 2 minute survey");
   });
 
   it("should render PDF download link with correct href", () => {
-    cy.wrap(true).should("be.true");
     cy.get("a.govuk-link")
       .contains("strong", /Download the non-manipulation document/)
       .parent()
@@ -91,7 +83,6 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render numbered list for storage document steps", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-list--number")
       .should("exist")
       .within(() => {
@@ -100,7 +91,6 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render download bullet points for Firefox and mobile", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-list--bullet")
       .first()
       .within(() => {
@@ -113,12 +103,10 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render email instructions with proper heading", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("strong", "Email the non-manipulation document to the importer.").should("be.visible");
   });
 
   it("should render all email bullet points", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-list--bullet")
       .last()
       .within(() => {
@@ -127,35 +115,29 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should render document number in panel", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-panel__body").within(() => {
       cy.contains("strong", documentNumber).should("be.visible");
     });
   });
 
   it("should render confirmation panel with correct classes", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-panel.govuk-panel--confirmation").should("exist");
   });
 
   it("should render important notice icon correctly", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-warning-text").should("be.visible");
     cy.get(".govuk-warning-text__text").should("contain", "Do not amend the non-manipulation document.");
   });
 
   it("should call renderDownloadLink function", () => {
-    cy.wrap(true).should("be.true");
     cy.get("h3.govuk-heading-s a.govuk-link strong").should("exist");
   });
 
   it("should call renderDownloadBulletPoints function", () => {
-    cy.wrap(true).should("be.true");
     cy.get("ul.govuk-list.govuk-list--bullet").should("exist").and("have.length.at.least", 1);
   });
 
   it("should call renderImportantNotice function", () => {
-    cy.wrap(true).should("be.true");
     cy.get(String.raw`.govuk-\!-margin-bottom-4`).within(() => {
       cy.get(".govuk-warning-text").should("exist");
       cy.get(".govuk-warning-text__icon").should("exist");
@@ -163,17 +145,14 @@ describe("Storage document created page: rendering", () => {
   });
 
   it("should call renderProcessingAndStorageSteps function", () => {
-    cy.wrap(true).should("be.true");
     cy.get("ol.govuk-list.govuk-list--number").should("exist");
   });
 
   it("should render Main component with feedback link", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="surveylink-feedback"]').should("exist");
   });
 
   it("should render all grid structure correctly", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-grid-row").should("have.length", 2);
     cy.get(".govuk-grid-column-full").should("have.length", 2);
   });
@@ -181,7 +160,6 @@ describe("Storage document created page: rendering", () => {
 
 describe("Storage document created page: back button redirects to dashboard", () => {
   it("should navigate to the SD dashboard when the browser back button is pressed", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StorageDocumentCreated,
       args: [documentNumber],
@@ -196,7 +174,6 @@ describe("Storage document created page: back button redirects to dashboard", ()
 
 describe("Storage document created page: pageguard", () => {
   it("should redirect to the dashboard page if didn't got expected response", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StorageDocumentPageGuard,
       args: [documentNumber],
@@ -206,7 +183,6 @@ describe("Storage document created page: pageguard", () => {
   });
 
   it("should redirect to the dashboard page when document status is pending", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.StorageDocumentPendingPageGuard,
       args: [documentNumber],

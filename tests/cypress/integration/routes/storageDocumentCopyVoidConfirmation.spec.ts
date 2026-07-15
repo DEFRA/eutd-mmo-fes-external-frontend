@@ -13,7 +13,6 @@ function copyvoidpage(testParams) {
 
 describe("Copy void confirmation page", () => {
   it("should redirect to copy-void-confirmation page when voidDocumentConfirm option is selected", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSSDCopyAllowed,
       disableScripts: true,
@@ -46,7 +45,6 @@ describe("Copy void confirmation page", () => {
   });
 
   it("Should display errors", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCopyVoidSave,
       disableScripts: true,
@@ -59,7 +57,6 @@ describe("Copy void confirmation page", () => {
   });
 
   it("Submit form with no option on click of continue button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSSDCopyAllData,
       disableScripts: true,
@@ -73,7 +70,6 @@ describe("Copy void confirmation page", () => {
 
 describe("Copy this storage document address page: Disallowed", () => {
   it("should redirect to the forbidden page if copying is not permitted", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSSDCopyDisallowed,
       disableScripts: true,

@@ -5,7 +5,6 @@ const psProgressUrl = "create-processing-statement/GBR-2025-PS-FFA360309/progres
 
 describe("Add Processing Plant Address", () => {
   it("should render processing plant address page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -14,7 +13,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle forbidden access", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressForbidden,
     };
@@ -23,7 +21,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should redirect on successful save as draft", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressComplete,
     };
@@ -33,7 +30,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should redirect on successful save and continue", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressComplete,
     };
@@ -43,7 +39,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should render page with existing address and show change button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressWithExistingAddress,
     };
@@ -57,7 +52,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should redirect to health certificate page when nextUri is empty", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressComplete,
     };
@@ -68,7 +62,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle continue action with nextUri parameter", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressComplete,
     };
@@ -86,7 +79,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle continue with manual address when clicking on choosing the option to enter the address manually", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -97,7 +89,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle address lookup functionality", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -108,7 +99,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle cancel address functionality", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -118,7 +108,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle manual address navigation", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -136,7 +125,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle continue with manual address", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -151,7 +139,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should not show postcode input after we press find address with a valid postcode", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -163,7 +150,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should redirect to forbidden when CSRF token is invalid", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressForbidden,
     };
@@ -173,7 +159,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should populate selected address into form", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -189,7 +174,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should display an error if trying to continue without selecting an address", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -204,7 +188,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should display error if no postcode has been entered", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressMissingPlantAddressError,
     };
@@ -218,7 +201,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should redirect to forbidden when CSRF token validation fails", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressForbidden,
     };
@@ -228,7 +210,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle goToAddAddress action when CSRF token is valid", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressWithExistingAddress,
     };
@@ -239,7 +220,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should process goToAddAddress form action correctly", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -257,7 +237,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle continue action when explicitly clicking continue button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressComplete,
     };
@@ -276,7 +255,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle form submission when no action button is specified", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressComplete,
     };
@@ -292,7 +270,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should redirect to next step when continue is triggered with valid address data", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressComplete,
     };
@@ -314,7 +291,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle getaddress action and update session with manual address step", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -329,7 +305,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle manual address step and update session correctly", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -346,7 +321,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle findaddress action with lookup error", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressMissingPlantAddressError,
     };
@@ -357,7 +331,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle changelink action correctly", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -377,7 +350,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle loader with existing session data", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressWithExistingAddress,
     };
@@ -386,7 +358,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle getaddress action with selected address", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -401,7 +372,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle updateSessionAndCommit with undefined values", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -413,7 +383,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle default actions", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressComplete,
     };
@@ -423,7 +392,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle save as draft with session cleanup", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressComplete,
     };
@@ -433,7 +401,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle component with hasAddress false path", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -443,7 +410,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle createJsonResponse with custom headers", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -467,7 +433,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle unsetKeys in updateSessionAndCommit", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -480,7 +445,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should handle Object.entries iteration in updateSessionAndCommit", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressComplete,
     };
@@ -489,7 +453,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should display errors on only required value submitted on manual address", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressWithErrorsArray,
     };
@@ -503,7 +466,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should not display errors on validation passed", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -524,7 +486,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should redirect to health certificate when nextUri is empty", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressComplete,
     };
@@ -535,7 +496,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should go back to postcode input to allow searching for a different postcode", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddress,
     };
@@ -553,7 +513,6 @@ describe("Add Processing Plant Address", () => {
   });
 
   it("should pre-populate the manual address form with existing address data when amending", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressAmend,
     };

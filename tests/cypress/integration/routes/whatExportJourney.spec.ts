@@ -3,7 +3,6 @@ const documentUrl = "/create-catch-certificate/GBR-2022-CC-A2BC627FE";
 const whatExportJourneyUrl = `${documentUrl}/what-export-journey`;
 describe("what export journey page for Direct Landing", () => {
   it("it shoud render the page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyDirectLanding,
     };
@@ -34,7 +33,6 @@ describe("what export journey page for Direct Landing", () => {
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportDirectLandingJourneyBadRequest,
     };
@@ -46,7 +44,6 @@ describe("what export journey page for Direct Landing", () => {
     cy.get(".govuk-error-message").contains("Select a valid destination country");
   });
   it("should redirect to the forbidden page if there is an error as page is rendered", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportDirectLandingJourneyFailsToRenderWith403,
     };
@@ -55,7 +52,6 @@ describe("what export journey page for Direct Landing", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised to access a document number", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportDirectLandingJourney403,
     };
@@ -65,7 +61,6 @@ describe("what export journey page for Direct Landing", () => {
   });
 
   it("should redirect to the progess page if the user click on draft button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyDirectLandingDraft,
     };
@@ -75,7 +70,6 @@ describe("what export journey page for Direct Landing", () => {
   });
 
   it("should redirect to the landings-entry if the if landing entry is null", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyDirectLandingNull,
     };
@@ -83,7 +77,6 @@ describe("what export journey page for Direct Landing", () => {
   });
 
   it("should redirect to the progess page if the user click on save and continue button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportDirectLandingJourneySaveAndContinue,
     };
@@ -97,7 +90,6 @@ describe("what export journey page for Direct Landing", () => {
 
 describe("what export journey page for Manual Entry", () => {
   it("it shoud render the page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyManualEntry,
     };
@@ -127,7 +119,6 @@ describe("what export journey page for Manual Entry", () => {
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportManualEntryJourneyBadRequest,
     };
@@ -139,7 +130,6 @@ describe("what export journey page for Manual Entry", () => {
     cy.get(".govuk-error-message").contains("Select a valid destination country");
   });
   it("should redirect to the forbidden page if there is an error as page is rendered m", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportManualEntryJourneyFailsToRenderWith403,
     };
@@ -147,7 +137,6 @@ describe("what export journey page for Manual Entry", () => {
     cy.url().should("include", "/forbidden");
   });
   it("should redirect to the forbidden page if the user is unauthorised to access a document number", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportManualEntryJourney403,
     };
@@ -157,7 +146,6 @@ describe("what export journey page for Manual Entry", () => {
   });
 
   it("should redirect to the progess page if the user click on draft button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyManualEntryDraft,
     };
@@ -167,7 +155,6 @@ describe("what export journey page for Manual Entry", () => {
   });
 
   it("should redirect to the landings-entry if the if landing entry is null", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyManualEntryNull,
     };
@@ -175,7 +162,6 @@ describe("what export journey page for Manual Entry", () => {
   });
 
   it("should redirect to the how-does-the-export-leave-the-uk page if the user click on save and continue button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportManualEntryJourneySaveAndContinue,
     };
@@ -189,7 +175,6 @@ describe("what export journey page for Manual Entry", () => {
 
 describe("Destination country field validation", () => {
   it("should display the destination country field with correct label and hint", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyManualEntry,
     };
@@ -210,7 +195,6 @@ describe("Destination country field validation", () => {
   });
 
   it("should display error when destination country is not selected and save and continue is clicked", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyDestinationCountryRequired,
     };
@@ -230,7 +214,6 @@ describe("Destination country field validation", () => {
   });
 
   it("should display error when destination country is empty string", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyDestinationCountryRequired,
     };
@@ -246,7 +229,6 @@ describe("Destination country field validation", () => {
   });
 
   it("should allow valid destination country selection", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyManualEntry,
     };
@@ -266,7 +248,6 @@ describe("Destination country field validation", () => {
   });
 
   it("should not save when destination country is missing and save as draft is clicked", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyManualEntryDraft,
     };
@@ -280,7 +261,6 @@ describe("Destination country field validation", () => {
 
 describe("Point of destination field", () => {
   it("should render the point of destination field with correct label and hint", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyManualEntry,
     };
@@ -303,7 +283,6 @@ describe("Point of destination field", () => {
   });
 
   it("should display error when point of destination is not provided", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyPointOfDestinationRequired,
     };
@@ -331,7 +310,6 @@ describe("Point of destination field", () => {
   });
 
   it("should display error when point of destination exceeds 100 characters", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyPointOfDestinationTooLong,
     };
@@ -352,7 +330,6 @@ describe("Point of destination field", () => {
   });
 
   it("should display error when point of destination contains invalid characters", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyPointOfDestinationInvalidChars,
     };
@@ -378,7 +355,6 @@ describe("Point of destination field", () => {
   });
 
   it("should accept valid point of destination with allowed characters", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyPointOfDestinationValid,
     };
@@ -395,7 +371,6 @@ describe("Point of destination field", () => {
   });
 
   it("should not save invalid point of destination when save as draft is clicked", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatExportJourneyPointOfDestinationDraftInvalid,
     };
@@ -420,7 +395,6 @@ describe("What export journey - Autocomplete aria-controls accessibility (FI0-11
   });
 
   it("destination country combobox input should have role=combobox and aria-controls referencing the listbox ID if using input", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#exportDestination").then(($el) => {
       if ($el.is("input")) {
         cy.wrap($el)
@@ -433,7 +407,6 @@ describe("What export journey - Autocomplete aria-controls accessibility (FI0-11
   });
 
   it("destination country listbox should appear with correct ID, role and no duplicates when suggestions open (input only)", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#exportDestination").then(($el) => {
       if ($el.is("input")) {
         cy.wrap($el).should("have.attr", "aria-controls", "exportDestination__listbox").type("Fr");
@@ -446,7 +419,6 @@ describe("What export journey - Autocomplete aria-controls accessibility (FI0-11
   });
 
   it("destination country combobox aria-expanded should toggle false→true when suggestions open (input only)", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#exportDestination").then(($el) => {
       if ($el.is("input")) {
         cy.wrap($el)

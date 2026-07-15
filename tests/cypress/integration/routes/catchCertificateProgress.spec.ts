@@ -5,7 +5,6 @@ const progressUrl = `${certificateUrl}/progress`;
 
 describe("ProgressPage - Cache-Control header", () => {
   it("should return Cache-Control: no-store to prevent stale progress state on back navigation (FI0-11073)", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadEntryIncompleteProgress,
     };
@@ -25,7 +24,6 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should display back button and back button should have correct href pointing to landings entry page", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
@@ -33,30 +31,25 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should display the correct headings", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='progress-titling']", "Your Progress");
     cy.contains("[data-testid='Progress-heading']", "Catch Certificate application: GBR-2021-CC-8EEB7E123");
   });
 
   it("should display Application incomplete when NOT all required sections have been completed", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='Progress-completed-heading']", "Application incomplete");
   });
 
   it("should display number of completed required sections", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='completedSections']", "You have completed 2 of 7 required sections.");
   });
 
   it("should display the correct tags", () => {
-    cy.wrap(true).should("be.true");
     cy.get("li strong:contains('INCOMPLETE')").should("have.length", 4);
     cy.get("li strong:contains('COMPLETE')").its("length").should("be.greaterThan", 0);
     cy.get("li strong:contains('CANNOT START YET')").should("have.length", 1);
   });
 
   it("should not render duplicate id attributes in the progress list", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".app-task-list [id]").then(($elements) => {
       const ids = [...$elements].map((element) => element.id).filter(Boolean);
       const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
@@ -66,19 +59,16 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should not have link on row when status is CANNOT START YET", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "Landings details").should("not.exist");
     cy.contains("[data-testid='progress-landings-title-blocked']", "Landings details").should("exist");
   });
 
   it("should redirect to the exporter catch certificate dashboard", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=return-to-dashboard-button]").click();
     cy.url().should("include", "/catch-certificates");
   });
 
   it("should display errors", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/progress");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -108,22 +98,18 @@ describe("ProgressPage - Completed Application", () => {
   });
 
   it("should display Application completed when all required sections have been completed", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
   });
 
   it("should display number of completed required sections", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='completedSections']", "You have completed 7 of 7 required sections.");
   });
 
   it("should display the correct tags", () => {
-    cy.wrap(true).should("be.true");
     cy.get("li strong:contains('COMPLETE')").its("length").should("be.greaterThan", 0);
   });
 
   it("should redirect to the exporter forbidden", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/forbidden");
   });
@@ -139,14 +125,12 @@ describe("ProgressPage - landings entry type: directLanding", () => {
   });
 
   it("should display correct sections", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h2", "Exporter").should("be.visible");
     cy.contains("h2", "Products/Landings").should("be.visible");
     cy.contains("h2", "Transportation").should("be.visible");
   });
 
   it("should display correct links", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "Your reference (Optional)").should("be.visible");
     cy.contains("a", "Your reference (Optional)")
       .should("be.visible")
@@ -179,18 +163,15 @@ describe("ProgressPage - landings entry type: directLanding", () => {
   });
 
   it("should not display Data upload link", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="progress-dataUpload-title"]').should("not.exist");
   });
 
   it("should not display Transport type and Transport details links", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="progress-transportType-title"]').should("not.exist");
     cy.get('[data-testid="progress-transportDetails-title"]').should("not.exist");
   });
 
   it("should redirect to the exporter to the check your information page", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/check-your-information");
   });
@@ -206,14 +187,12 @@ describe("ProgressPage - landings entry type: manualEntry", () => {
   });
 
   it("should display correct sections", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h2", "Exporter").should("be.visible");
     cy.contains("h2", "Products/Landings").should("be.visible");
     cy.contains("h2", "Transportation").should("be.visible");
   });
 
   it("should display correct links", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "Your reference (Optional)").should("be.visible");
     cy.contains("a", "Your reference (Optional)")
       .should("be.visible")
@@ -264,7 +243,6 @@ describe("ProgressPage - landings entry type: manualEntry", () => {
   });
 
   it("should not display Data upload link", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="progress-dataUpload-title"]').should("not.exist");
   });
 });
@@ -279,14 +257,12 @@ describe("ProgressPage - landings entry type: uploadEntry", () => {
   });
 
   it("should display correct sections", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h2", "Exporter").should("be.visible");
     cy.contains("h2", "Products/Landings").should("be.visible");
     cy.contains("h2", "Transportation").should("be.visible");
   });
 
   it("should display correct links", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "Your reference (Optional)").should("be.visible");
     cy.contains("a", "Your reference (Optional)")
       .should("be.visible")
@@ -342,7 +318,6 @@ describe("ProgressPage - landings entry type: uploadEntry", () => {
 
 describe("ProgressPage - landings entry type: null", () => {
   it("should redirect to landings-entry if landings entry type is empty and the user is authorised", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCLandingsTypeNull,
     };
@@ -353,7 +328,6 @@ describe("ProgressPage - landings entry type: null", () => {
   });
 
   it("should redirect to the forbidden page if the user is unauthorised to progress to the landings-entry page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCLandingsTypeUnauthorised,
     };

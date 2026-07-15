@@ -11,7 +11,6 @@ describe("Add exporter details page", () => {
   });
 
   it("add exporter details back link check", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
@@ -19,19 +18,16 @@ describe("Add exporter details page", () => {
   });
 
   it("should display correct headings", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h1", "Add exporter details");
   });
 
   it("should check for input fields for cc journey", () => {
-    cy.wrap(true).should("be.true");
     cy.get("form").should(($form) => {
       expect($form.find("input[type='text']")).to.have.lengthOf(2);
     });
   });
 
   it("should click on change button and navigate to what exporter address page", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='change-button'] .govuk-visually-hidden").should("contain", "company address");
     cy.get("[data-testid='change-button']").click();
     cy.url().should("include", "/what-exporters-address");
@@ -49,12 +45,10 @@ describe("Add exporter details: Idm", () => {
   });
 
   it("will populate exporter full name from user details", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#exporterFullName").should("have.value", "Automation Tester");
   });
 
   it("will populate exporter company name from user details", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#exporterCompanyName").should("have.value", "Automation Testing Ltd");
   });
 });
@@ -64,7 +58,6 @@ describe("Add exporter details on save with idm", () => {
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   it("should trigger submit and navigate to what are you exporting page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddExporterDetailsFromIdm,
     };
@@ -86,7 +79,6 @@ describe("Add exporter details on save for manual entry", () => {
   });
 
   it("should trigger submit and navigate to what are you exporting page", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/what-are-you-exporting");
   });
@@ -103,7 +95,6 @@ describe("Add exporter details on save for upload entry", () => {
   });
 
   it("should trigger submit and navigate to upload file page", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/upload-file");
   });
@@ -120,7 +111,6 @@ describe("Add exporter details on save for direct landing", () => {
   });
 
   it("should trigger submit and naviagate to what are you exporting page.", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/what-are-you-exporting");
   });
@@ -137,7 +127,6 @@ describe("Add exporter details on save as draft clicking", () => {
   });
 
   it("should click on save as draft and should navigate to catch certificates page", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "/create-catch-certificate/catch-certificate");
   });
@@ -154,7 +143,6 @@ describe("Add exporter details: page guard", () => {
   });
 
   it("should trigger submit and navigate to forbidden page", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/forbidden");
   });
@@ -165,7 +153,6 @@ describe("Add exporter details: unauthorised access", () => {
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   it("should redirect to the forbidden page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddExporterDetails403,
     };
@@ -186,19 +173,16 @@ describe("Add exporter details: with errors", () => {
   });
 
   it("should display error summary when validation fails", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").should("be.visible");
   });
 
   it("should display error messages with error styling", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.get(".govuk-form-group--error").should("exist");
   });
 
   it("should scroll to error island when errors are present", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").should("be.visible");
   });
@@ -215,7 +199,6 @@ describe("Add exporter details: mock error on load (useEffect trigger)", () => {
   });
 
   it("should trigger useEffect and scroll to error when form submission fails", () => {
-    cy.wrap(true).should("be.true");
     // Submit form which returns 400 error
     cy.get("[data-testid='save-and-continue']").click();
     // Error should appear and useEffect should have scrolled to it
@@ -223,7 +206,6 @@ describe("Add exporter details: mock error on load (useEffect trigger)", () => {
   });
 
   it("should trigger useEffect scroll on error response from form submission", () => {
-    cy.wrap(true).should("be.true");
     // Submit form to trigger error
     cy.get("[data-testid='save-and-continue']").click();
     // Verify page has scrolled to error (error-summary-title should be visible)
@@ -231,7 +213,6 @@ describe("Add exporter details: mock error on load (useEffect trigger)", () => {
   });
 
   it("should display error styling on fields when form submission returns errors", () => {
-    cy.wrap(true).should("be.true");
     // Submit form to get error response
     cy.get("[data-testid='save-and-continue']").click();
     // Error styling should be applied from useEffect handling
@@ -250,13 +231,11 @@ describe("Add exporter details: processingStatement journey", () => {
   });
 
   it("should display processingStatement specific warning content", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h1", "Add exporter details");
     cy.get(".govuk-warning-text__text").should("contain", "This information will appear on the processing statement.");
   });
 
   it("should have back link for processingStatement journey", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
   });
 });
@@ -272,7 +251,6 @@ describe("Add exporter details: storageDocument journey", () => {
   });
 
   it("should display storageDocument specific warning content", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h1", "Add exporter details");
     cy.get(".govuk-warning-text__text").should(
       "contain",
@@ -281,7 +259,6 @@ describe("Add exporter details: storageDocument journey", () => {
   });
 
   it("should have back link for storageDocument journey", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
   });
 });
@@ -291,7 +268,6 @@ describe("Add exporter details: component initialization", () => {
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   it("should initialize page with scroll on load", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddExporterDetails,
     };
@@ -308,7 +284,6 @@ describe("Add exporter details: branch coverage - error display", () => {
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   it("should display error summary when error exists", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
     };
@@ -319,7 +294,6 @@ describe("Add exporter details: branch coverage - error display", () => {
   });
 
   it("should not display error summary when no error exists", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddExporterDetails,
     };
@@ -331,7 +305,6 @@ describe("Add exporter details: branch coverage - error display", () => {
 
 describe("Add exporter details: branch coverage - journey warning content", () => {
   it("should display processingStatement warning content for PS journey", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -344,7 +317,6 @@ describe("Add exporter details: branch coverage - journey warning content", () =
   });
 
   it("should display storageNotes warning content for storageNotes journey", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -357,7 +329,6 @@ describe("Add exporter details: branch coverage - journey warning content", () =
   });
 
   it("should display different warning content for catchCertificate journey", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -372,7 +343,6 @@ describe("Add exporter details: branch coverage - journey warning content", () =
 
 describe("Add exporter details: branch coverage - form fields by journey", () => {
   it("should display exporterFullName field for catchCertificate journey", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -384,7 +354,6 @@ describe("Add exporter details: branch coverage - form fields by journey", () =>
   });
 
   it("should not display exporterFullName field for processingStatement journey", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-processing-statement/GBR-2021-PS-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -396,7 +365,6 @@ describe("Add exporter details: branch coverage - form fields by journey", () =>
   });
 
   it("should not display exporterFullName field for storageNotes journey", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -410,7 +378,6 @@ describe("Add exporter details: branch coverage - form fields by journey", () =>
 
 describe("Add exporter details: branch coverage - address display", () => {
   it("should display formatted address when hasAddress is true", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -423,7 +390,6 @@ describe("Add exporter details: branch coverage - address display", () => {
   });
 
   it("should display address registration message when hasAddress is false", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -436,7 +402,6 @@ describe("Add exporter details: branch coverage - address display", () => {
   });
 
   it("should have change button in address section when hasAddress is true", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -448,7 +413,6 @@ describe("Add exporter details: branch coverage - address display", () => {
   });
 
   it("should have add button in address section when hasAddress is false", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -463,7 +427,6 @@ describe("Add exporter details: branch coverage - address display", () => {
 
 describe("Add exporter details: branch coverage - company name field", () => {
   it("should display company name field for all journeys", () => {
-    cy.wrap(true).should("be.true");
     const testCases = [
       { testCaseId: TestCaseId.CCAddExporterDetails, documentUrl: "/create-catch-certificate/GBR-2021-CC-8EEB7E123" },
       {
@@ -486,7 +449,6 @@ describe("Add exporter details: branch coverage - company name field", () => {
   });
 
   it("should display company name field with correct label", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -498,7 +460,6 @@ describe("Add exporter details: branch coverage - company name field", () => {
   });
 
   it("should display company name hint text", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -512,7 +473,6 @@ describe("Add exporter details: branch coverage - company name field", () => {
 
 describe("Add exporter details: branch coverage - form field error states", () => {
   it("should have govuk-input class when exporterFullName has no error", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -524,7 +484,6 @@ describe("Add exporter details: branch coverage - form field error states", () =
   });
 
   it("should have aria-describedby on company name field", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -536,7 +495,6 @@ describe("Add exporter details: branch coverage - form field error states", () =
   });
 
   it("should render company name field with proper container class", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -548,7 +506,6 @@ describe("Add exporter details: branch coverage - form field error states", () =
   });
 
   it("should display error message class when company name field has error", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -563,7 +520,6 @@ describe("Add exporter details: branch coverage - form field error states", () =
 
 describe("Add exporter details: branch coverage - conditional rendering branches", () => {
   it("should render error summary with correct error messages on validation failure", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -578,7 +534,6 @@ describe("Add exporter details: branch coverage - conditional rendering branches
   });
 
   it("should handle clicking error summary links to scroll to fields", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -608,7 +563,6 @@ describe("Add exporter details: branch coverage - conditional rendering branches
   });
 
   it("should display full name field on page for catchCertificate journey", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -620,7 +574,6 @@ describe("Add exporter details: branch coverage - conditional rendering branches
   });
 
   it("should apply correct input classes based on error state for company name field", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -633,7 +586,6 @@ describe("Add exporter details: branch coverage - conditional rendering branches
   });
 
   it("should not apply error classes when no errors exist", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -646,7 +598,6 @@ describe("Add exporter details: branch coverage - conditional rendering branches
   });
 
   it("should display main layout with correct grid structure", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -659,7 +610,6 @@ describe("Add exporter details: branch coverage - conditional rendering branches
   });
 
   it("should render hidden error text for form inputs", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -672,7 +622,6 @@ describe("Add exporter details: branch coverage - conditional rendering branches
   });
 
   it("should render address section with correct structure regardless of hasAddress value", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -686,7 +635,6 @@ describe("Add exporter details: branch coverage - conditional rendering branches
   });
 
   it("should apply govuk-input class when no error for full name field", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -699,7 +647,6 @@ describe("Add exporter details: branch coverage - conditional rendering branches
   });
 
   it("should apply govuk-input class when no error for company name field", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -712,7 +659,6 @@ describe("Add exporter details: branch coverage - conditional rendering branches
   });
 
   it("should display field with proper container structure", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -726,7 +672,6 @@ describe("Add exporter details: branch coverage - conditional rendering branches
 
 describe("Add exporter details: errorsTransformed?.exporterFullName not empty", () => {
   it("should apply error styling when errorsTransformed?.exporterFullName has error (line 98)", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -741,7 +686,6 @@ describe("Add exporter details: errorsTransformed?.exporterFullName not empty", 
   });
 
   it("should display error message for exporterFullName field when error exists", () => {
-    cy.wrap(true).should("be.true");
     const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
     const pageUrl = `${documentUrl}/add-exporter-details`;
     const testParams: ITestParams = {
@@ -768,7 +712,6 @@ describe("FI0-679: Add exporter details - UI changes", () => {
   });
 
   it("Scenario 1: should display simplified guidance text for catch certificate", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-warning-text__text").should(
       "contain",
       "This information will appear on the final catch certificate."
@@ -776,28 +719,24 @@ describe("FI0-679: Add exporter details - UI changes", () => {
   });
 
   it("Scenario 2: should display 'Full name of responsible person' label in bold", () => {
-    cy.wrap(true).should("be.true");
     cy.get("label[for='exporterFullName']")
       .should("contain", "Full name of responsible person")
       .and("have.class", "govuk-!-font-weight-bold");
   });
 
   it("Scenario 2: should display hint text for full name field", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#hint-exporterFullName")
       .should("be.visible")
       .and("contain", "This should be a company name or the person overseeing the export process.");
   });
 
   it("Scenario 3: should display 'Company name' label in bold", () => {
-    cy.wrap(true).should("be.true");
     cy.get("label[for='exporterCompanyName']")
       .should("contain", "Company name")
       .and("have.class", "govuk-!-font-weight-bold");
   });
 
   it("Scenario 4: should display 'Company address' label with same styling as Company name", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-label").contains("Company address").should("have.class", "govuk-!-font-weight-bold");
   });
 });
@@ -807,7 +746,6 @@ describe("FI0-679: Add exporter details - Full name validation", () => {
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   it("Scenario 5: should validate max length of 70 characters for full name", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameMaxLength,
     };
@@ -830,7 +768,6 @@ describe("FI0-679: Add exporter details - Full name validation", () => {
   });
 
   it("Scenario 6: should validate allowed characters for full name", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameWithSpecialCharacters,
     };
@@ -849,7 +786,6 @@ describe("FI0-679: Add exporter details - Full name validation", () => {
   });
 
   it("should accept valid full name with letters, spaces, apostrophes and periods", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameCorrectFormat,
     };
@@ -868,7 +804,6 @@ describe("FI0-679: Add exporter details - Company name validation", () => {
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   it("Scenario 7: should validate max length of 250 characters for company name", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameMaxLength,
     };
@@ -887,7 +822,6 @@ describe("FI0-679: Add exporter details - Company name validation", () => {
   });
 
   it("Scenario 8: should validate allowed characters for company name", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameWithSpecialCharacters,
     };
@@ -905,7 +839,6 @@ describe("FI0-679: Add exporter details - Company name validation", () => {
   });
 
   it("should accept valid company name with allowed characters", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameCorrectFormat,
     };
@@ -921,7 +854,6 @@ describe("FI0-679: Add exporter details - Company name validation", () => {
 
 describe("FI0-679: Add exporter details - Journey-specific guidance", () => {
   it("should show simplified guidance for catch certificate journey", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCAddExporterDetails,
     };
@@ -934,7 +866,6 @@ describe("FI0-679: Add exporter details - Journey-specific guidance", () => {
   });
 
   it("should show storage notes guidance for storage document journey", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddExporterDetails,
     };
@@ -947,7 +878,6 @@ describe("FI0-679: Add exporter details - Journey-specific guidance", () => {
   });
 
   it("should show processing statement guidance with journey text", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddExporterDetailsFull,
     };
@@ -960,7 +890,6 @@ describe("FI0-679: Add exporter details - Journey-specific guidance", () => {
 describe("Add exporter details - Address validation error messages", () => {
   describe("Updated error message displayed if no address added on this page", () => {
     it("should display 'Add the exporter's address' error for catch certificate when no address exists", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsNoAddress,
       };
@@ -991,7 +920,6 @@ describe("Add exporter details - Address validation error messages", () => {
     });
 
     it("should display 'Add the exporter's address' error for processing statement when no address exists", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PSAddExporterDetailsNoAddress,
       };
@@ -1006,7 +934,6 @@ describe("Add exporter details - Address validation error messages", () => {
     });
 
     it("should display 'Add the exporter's address' error for storage document when no address exists", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDAddExporterDetailsNoAddress,
       };
@@ -1025,7 +952,6 @@ describe("Add exporter details - Address validation error messages", () => {
 
   describe("Welsh translation for Add exporter address error", () => {
     it("should display Welsh translation when language is set to Welsh", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsNoAddress,
         lng: "cy",
@@ -1047,7 +973,6 @@ describe("FI0-10908: Add exporter details - Emoji and unsupported character prev
 
   describe("Scenario 2: Submission blocked when emoji present in full name field", () => {
     it("should block submission and show error when exporterFullName contains emoji", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameEmoji,
       };
@@ -1062,7 +987,6 @@ describe("FI0-10908: Add exporter details - Emoji and unsupported character prev
     });
 
     it("should highlight the full name field container when emoji error is raised", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameEmoji,
       };
@@ -1076,7 +1000,6 @@ describe("FI0-10908: Add exporter details - Emoji and unsupported character prev
 
   describe("Scenario 2: Submission blocked when emoji present in company name field", () => {
     it("should block submission and show error when exporterCompanyName contains emoji", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameEmoji,
       };
@@ -1091,7 +1014,6 @@ describe("FI0-10908: Add exporter details - Emoji and unsupported character prev
     });
 
     it("should highlight the company name field container when emoji error is raised", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameEmoji,
       };
@@ -1105,7 +1027,6 @@ describe("FI0-10908: Add exporter details - Emoji and unsupported character prev
 
   describe("Scenario 3: Valid input without emoji submits successfully", () => {
     it("should submit successfully when exporterFullName contains only permitted characters", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterFullNameCorrectFormat,
       };
@@ -1119,7 +1040,6 @@ describe("FI0-10908: Add exporter details - Emoji and unsupported character prev
     });
 
     it("should submit successfully when exporterCompanyName contains only permitted characters", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCAddExporterDetailsFailsWithExporterCompanyNameCorrectFormat,
       };

@@ -6,7 +6,6 @@ const trainArrivalPageUrl = `${certificateUrl}/add-arrival-transportation-detail
 
 describe("Storage facility back link after arrival transport save", () => {
   it("should redirect to storage facility with arrivalVehicle param and back link to arrival transport page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportSave,
     };

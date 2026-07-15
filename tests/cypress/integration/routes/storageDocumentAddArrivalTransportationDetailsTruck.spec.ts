@@ -6,7 +6,6 @@ const truckPageUrl = `${certificateUrl}/add-arrival-transportation-details-truck
 
 describe("Add Transportation Details Truck: Allowed", () => {
   it("should render truck transport details page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -57,7 +56,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should render labels with bold font weight for NMD arrival transport", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -73,7 +71,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should render all required fields for truck arrival transport", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -92,7 +89,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when registration number length exceeds 50 characters", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsTruckRegNumber,
     };
@@ -110,7 +106,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when registration number has alphanumeric text", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveAlphanumericTruckRegNumber,
     };
@@ -129,7 +124,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when registration number is empty", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsTruckRegNumberEmpty,
     };
@@ -148,7 +142,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when place of unloading is empty", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsTruckPlaceOfUnloadingEmpty,
     };
@@ -167,7 +160,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when place of unloading is empty", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsTruckPlaceOfUnloadingExceedString,
     };
@@ -188,7 +180,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when freight bill number exceeds 60 chars", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveMaxCharsFreightBillNumber,
     };
@@ -207,7 +198,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when freight bill number has alphanumeric text", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveAlphanumericsFreightBillNumber,
     };
@@ -227,7 +217,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when truck nationality is empty", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveEmptyNationality,
     };
@@ -245,7 +234,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when country of departure is empty", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveEmptyDepartureCountry,
     };
@@ -263,7 +251,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when consignment origin is empty", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveEmptyConsignmentOrigin,
     };
@@ -281,7 +268,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when departure date is empty", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveEmptyDepartureDate,
     };
@@ -299,7 +285,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should navigate to sd dashboard page on click of save as draft button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveAsDraft,
     };
@@ -314,7 +299,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should retain all field values including dates when saving as draft with complete data", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveAsDraft,
     };
@@ -356,7 +340,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should retain dates and accept invalid container format when saving as draft", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveAsDraft,
     };
@@ -388,7 +371,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should retain empty date when saving as draft without departure date", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSaveAsDraft,
     };
@@ -413,7 +395,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should navigate to storage facility page on click of save and continue button when all mandatory fields are populated", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSave,
     };
@@ -432,7 +413,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should handle adding and removing containers", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -468,7 +448,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
 describe("Add Transportation Details Truck: Disallowed", () => {
   it("should redirect to the forbidden page if transport is not truck", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportDisAllowed,
     };
@@ -479,7 +458,6 @@ describe("Add Transportation Details Truck: Disallowed", () => {
 
 describe("Add Transportation Details Truck: 403 on page load", () => {
   it("should redirect to the forbidden page if transport returns un authorised", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportAllowedUnauthorised,
     };
@@ -490,7 +468,6 @@ describe("Add Transportation Details Truck: 403 on page load", () => {
 
 describe("Add Transportation Details Truck: Invalid year in departure date", () => {
   it("should display error when year 0000 is entered in the departure date picker", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ArrivalTruckTransportSaveInvalidYearDepartureDate,
     };

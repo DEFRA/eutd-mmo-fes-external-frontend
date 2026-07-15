@@ -7,7 +7,6 @@ const sdDashboardUrl = "/create-non-manipulation-document/non-manipulation-docum
 describe("Privacy page for cc journey", () => {
   describe("Privacy Page when user accepted privacy notice", () => {
     it("Should redirect to dashboard page", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyAccepted,
       };
@@ -18,7 +17,6 @@ describe("Privacy page for cc journey", () => {
 
   describe("Privacy Page when user has not accepted the privacy notice", () => {
     it("Privacy Page for catch certificate", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };
@@ -29,7 +27,6 @@ describe("Privacy page for cc journey", () => {
     });
 
     it("should redirect to home page on back link click", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };
@@ -40,7 +37,6 @@ describe("Privacy page for cc journey", () => {
     });
 
     it("Back link should be outside the main content region (AAA accessibility)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };
@@ -59,7 +55,6 @@ describe("Privacy page for cc journey", () => {
 describe("Privacy page for PS journey", () => {
   describe("Privacy Page when user accepted privacy notice", () => {
     it("Should redirect to dashboard page", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyAccepted,
       };
@@ -70,7 +65,6 @@ describe("Privacy page for PS journey", () => {
 
   describe("Privacy Page when user has not accepted the privacy notice", () => {
     it("Privacy Page for catch certificate", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };
@@ -81,7 +75,6 @@ describe("Privacy page for PS journey", () => {
     });
 
     it("Back link should be outside the main content region (AAA accessibility)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };
@@ -100,7 +93,6 @@ describe("Privacy page for PS journey", () => {
 describe("Privacy page for sd journey", () => {
   describe("Privacy Page when user accepted privacy notice", () => {
     it("Should redirect to dashboard page", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyAccepted,
       };
@@ -111,7 +103,6 @@ describe("Privacy page for sd journey", () => {
 
   describe("Privacy Page when user has not accepted the privacy notice", () => {
     it("Privacy Page for catch certificate", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };
@@ -122,7 +113,6 @@ describe("Privacy page for sd journey", () => {
     });
 
     it("Back link should be outside the main content region (AAA accessibility)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };
@@ -140,7 +130,6 @@ describe("Privacy page for sd journey", () => {
 
 describe("Journey dashboards should redirect to privacy page when user has not accepted privacy notice", () => {
   it("CC dashboard should redirect to privacy notice", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PrivacyEmpty,
     };
@@ -152,7 +141,6 @@ describe("Journey dashboards should redirect to privacy page when user has not a
   });
 
   it("PS dashboard should redirect to privacy notice", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PrivacyEmpty,
     };
@@ -164,7 +152,6 @@ describe("Journey dashboards should redirect to privacy page when user has not a
   });
 
   it("SD dashboard should redirect to privacy notice", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PrivacyEmpty,
     };
@@ -176,7 +163,6 @@ describe("Journey dashboards should redirect to privacy page when user has not a
   });
 
   it("PS dashboard privacy notice - click on Submit button - jsenable set to false", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PrivacyEmpty,
     };
@@ -189,7 +175,6 @@ describe("Journey dashboards should redirect to privacy page when user has not a
   });
 
   it("PS dashboard privacy notice - click on Submit button - jsenable set to true", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PrivacyEmpty,
     };

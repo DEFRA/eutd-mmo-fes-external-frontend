@@ -4,7 +4,6 @@ const voidThisCatchCertificateUrl = `${documentUrl}/void-this-catch-certificate`
 
 describe("void this draft catch certificate page", () => {
   it("should display a correctly typed h1", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VoidThisDocumentOptionYes,
     };
@@ -17,7 +16,6 @@ describe("void this draft catch certificate page", () => {
   });
 
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VoidThisDocumentBadRequest,
     };
@@ -30,7 +28,6 @@ describe("void this draft catch certificate page", () => {
   });
 
   it("Submit form with yes option click of save and continue button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VoidThisDocumentOptionYes,
     };
@@ -40,7 +37,6 @@ describe("void this draft catch certificate page", () => {
   });
 
   it("Submit form with no option click of save and continue button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VoidThisDocumentOptionNo,
     };
@@ -50,7 +46,6 @@ describe("void this draft catch certificate page", () => {
   });
 
   it("forbidden 403", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.VoidThisDocument403,
     };

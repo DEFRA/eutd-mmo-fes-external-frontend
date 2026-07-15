@@ -1,6 +1,5 @@
 describe("Sign Out Page", () => {
   it("should render the sign out page with a continue link", () => {
-    cy.wrap(true).should("be.true");
     cy.visit("/sign-out");
 
     cy.contains("h1", "Your application will time out soon");
@@ -14,7 +13,6 @@ describe("Sign Out Page", () => {
     cy.url().should("eq", "http://localhost:3000/");
   });
   it("should redirect to logout page after 5s", () => {
-    cy.wrap(true).should("be.true");
     cy.visit("/sign-out");
     // allow extra time for the client-side redirect to happen
     cy.url({ timeout: 10000 }).should("include", "/server-logout");

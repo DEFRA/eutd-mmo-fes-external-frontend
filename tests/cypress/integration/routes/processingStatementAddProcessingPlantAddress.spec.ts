@@ -12,7 +12,6 @@ describe("Processing statement: add processing plant address - rendering", () =>
   });
 
   it("should render the add processing plant address page", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("button", "Save and continue").should("be.visible");
     cy.contains("button", "Save as draft").should("be.visible");
   });
@@ -20,7 +19,6 @@ describe("Processing statement: add processing plant address - rendering", () =>
 
 describe("Processing statement: add processing plant address - forbidden", () => {
   it("should redirect to forbidden page when unauthorised", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressForbidden,
     };
@@ -38,7 +36,6 @@ describe("Processing statement: add processing plant address - save and continue
   });
 
   it("should show validation errors when save and continue is clicked with invalid data", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").should("be.visible");
     cy.url().should("include", "/add-processing-plant-address");
@@ -54,7 +51,6 @@ describe("Processing statement: add processing plant address - save and continue
   });
 
   it("should redirect to add health certificate after successful save and continue", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/add-health-certificate");
   });
@@ -69,7 +65,6 @@ describe("Processing statement: add processing plant address - save as draft", (
   });
 
   it("should redirect to the processing statements dashboard after save as draft", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-draft-button']").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
@@ -77,7 +72,6 @@ describe("Processing statement: add processing plant address - save as draft", (
 
 describe("Processing statement: add processing plant address - save as draft with validation errors (FI0-10577)", () => {
   it("should redirect to the dashboard when Save as Draft is clicked with validation errors", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddProcessingPlantAddressSaveAsDraftWithErrors,
     };

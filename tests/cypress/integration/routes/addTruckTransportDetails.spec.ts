@@ -5,7 +5,6 @@ const truckPageUrl = `create-catch-certificate/${documentNumber}/add-transportat
 
 describe("Add Transportation Details Truck: Allowed", () => {
   it("should render truck transport details page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -47,7 +46,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display truck nationality field with bold label, hint text, and type-ahead functionality", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -62,7 +60,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display registration number field with bold label and hint text", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -74,7 +71,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display departure country field with bold label and hint text", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -86,7 +82,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display freight bill number field with bold label and hint text", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -98,7 +93,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display container identification number field with bold label and hint text", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -118,7 +112,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should reindex container inputs when middle container is removed", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSave,
     };
@@ -141,7 +134,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should redirect user to forbidden page when saveTransportDetails fails with a 403 error", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SaveTruckTransportDetailsFailsWith403,
     };
@@ -152,7 +144,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when registration number exceeds 15 chars", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsTruckRegNumber,
     };
@@ -167,7 +158,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display error when registration number alphanumeric text", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveAlphanumericTruckRegNumber,
     };
@@ -182,7 +172,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should display errors", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportErrors,
     };
@@ -196,7 +185,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should navigate to cc dashboard page on click of save as draft button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSave,
     };
@@ -210,7 +198,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
   });
 
   it("should navigate to progress page on click of save and continue button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSave,
     };
@@ -226,7 +213,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
 
 describe("Add Transportation Details Truck: Not Allowed", () => {
   it("should redirect to the progress page if transport is not truck", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportDisAllowed,
     };
@@ -237,7 +223,6 @@ describe("Add Transportation Details Truck: Not Allowed", () => {
 
 describe("should redirect to forbidden page it transport details return 403 on page load", () => {
   it("should redirect to the forbidden page if transport returns un authorised", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportAllowedUnauthorised,
     };
@@ -248,7 +233,6 @@ describe("should redirect to forbidden page it transport details return 403 on p
 
 describe("Add Transportation Details Truck: Nationality Field Error State", () => {
   it("should display nationality field with error styling when validation fails", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportErrors,
     };
@@ -262,7 +246,6 @@ describe("Add Transportation Details Truck: Nationality Field Error State", () =
   });
 
   it("should maintain autocomplete functionality with error state", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportErrors,
     };
@@ -275,7 +258,6 @@ describe("Add Transportation Details Truck: Nationality Field Error State", () =
   });
 
   it("should have aria-describedby attribute pointing to hint", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -287,7 +269,6 @@ describe("Add Transportation Details Truck: Nationality Field Error State", () =
 
 describe("Add Transportation Details Truck: Invalid Nationality Validation", () => {
   it("should display error when invalid truck nationality is entered on save and continue", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportInvalidNationality,
     };
@@ -311,7 +292,6 @@ describe("Add Transportation Details Truck: Invalid Nationality Validation", () 
   });
 
   it("should save as draft successfully with invalid nationality", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSave,
     };
@@ -327,7 +307,6 @@ describe("Add Transportation Details Truck: Invalid Nationality Validation", () 
   });
 
   it("should not display error when valid truck nationality is entered", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportSave,
     };
@@ -343,7 +322,6 @@ describe("Add Transportation Details Truck: Invalid Nationality Validation", () 
   });
 
   it("should clear invalid nationality error after entering valid value", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportInvalidNationality,
     };
@@ -367,7 +345,6 @@ describe("Add Transportation Details Truck: Invalid Nationality Validation", () 
   });
 
   it("should display field-level error message for invalid nationality", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportInvalidNationality,
     };
@@ -393,7 +370,6 @@ describe("Add Transportation Details Truck: Invalid Nationality Validation", () 
 
 describe("Add Transportation Details Truck: Multiple Container Fields", () => {
   it("should display single container field by default", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -405,7 +381,6 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
   });
 
   it("should display label with bold styling on first container field", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -417,7 +392,6 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
   });
 
   it("should remove container field when remove button is clicked", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -433,7 +407,6 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
   });
 
   it("should not show remove button when only one field exists", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -443,7 +416,6 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
   });
 
   it("should save multiple container values successfully", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportMultipleContainers,
     };
@@ -466,7 +438,6 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
   });
 
   it("should allow empty container fields", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportEmptyContainers,
     };
@@ -489,7 +460,6 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
   });
 
   it("should persist container values when validation fails", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportContainerPersistence,
     };
@@ -516,7 +486,6 @@ describe("Add Transportation Details Truck: Multiple Container Fields", () => {
   });
 
   it("should load pre-existing container values from backend", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportEditWithContainers,
     };

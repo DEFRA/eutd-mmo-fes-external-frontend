@@ -8,7 +8,6 @@ describe("catch certificate pending page rendering", () => {
   });
 
   it("back link check", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
@@ -16,12 +15,10 @@ describe("catch certificate pending page rendering", () => {
   });
 
   it("should render document number", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-panel__body > strong").contains(documentNumber);
   });
 
   it("should render link", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "Return to your exporter dashboard")
       .should("be.visible")
       .should("have.attr", "href", dashboardUrl);

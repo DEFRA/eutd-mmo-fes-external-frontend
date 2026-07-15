@@ -6,7 +6,6 @@ const ccPageUrl = `${certificateUrl}/add-transportation-details-container-vessel
 
 describe("Container Vessel: Error Order Validation - UAT-499", () => {
   it("[UAT-499] should display required field errors before container format error in correct order", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselRequiredFieldsAndInvalidContainer,
     };
@@ -43,7 +42,6 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
   });
 
   it("[UAT-499] should display required field errors before container format error in correct order", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselRequiredFieldsAndMaxLengthContainer,
     };
@@ -74,7 +72,6 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
   });
 
   it("[UAT-499] should display container invalid format error ONLY when all required fields are filled", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportContainerInvalidCharacters,
     };
