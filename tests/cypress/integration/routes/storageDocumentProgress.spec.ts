@@ -5,7 +5,6 @@ const progressUrl = `${certificateUrl}/progress`;
 
 describe("ProgressPage - Cache-Control header", () => {
   it("should return Cache-Control: no-store to prevent stale progress state on back navigation (FI0-11073)", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDIncompleteProgress,
     };
@@ -25,7 +24,6 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should display back button and back button should have correct href pointing to landings entry page", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
@@ -48,7 +46,6 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should display the correct headings", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='sd-progress-titling']", "Your Progress").should("be.visible");
     cy.contains(
       "[data-testid='sd-progress-heading']",
@@ -57,31 +54,26 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should display the progress heading without bold styling", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='sd-progress-heading']").should("not.have.class", "govuk-!-font-weight-bold");
   });
 
   it("should display Application incomplete when NOT all required sections have been completed", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='Progress-completed-heading']", "Application incomplete").should("be.visible");
   });
 
   it("should display number of completed required sections", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='completedSections']", "You have completed 0 of 6 required sections.").should(
       "be.visible"
     );
   });
 
   it("should display the correct tags", () => {
-    cy.wrap(true).should("be.true");
     cy.get("li strong:contains('INCOMPLETE')").should("have.length", 3);
     cy.get("li strong:contains('COMPLETE')").should("have.length", 3);
     cy.get("li strong:contains('CANNOT START YET')").should("have.length", 1);
   });
 
   it("should not render duplicate id attributes in the progress list", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".app-task-list [id]").then(($elements) => {
       const ids = [...$elements].map((element) => element.id).filter(Boolean);
       const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
@@ -91,7 +83,6 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should not have link on row when status is CANNOT START YET", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "UK departure transport details").should("not.exist");
     cy.contains("[data-testid='progress-transportDetails-title-blocked']", "UK departure transport details").should(
       "exist"
@@ -99,13 +90,11 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should redirect to the exporter Storage Document dashboard", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=return-to-dashboard-button]").click();
     cy.url().should("include", "/non-manipulation-documents");
   });
 
   it("should display errors", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/progress");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -134,24 +123,20 @@ describe("ProgressPage - Completed Application", () => {
   });
 
   it("should display Application completed when all required sections have been completed", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='Progress-completed-heading']", "Application completed").should("be.visible");
   });
 
   it("should display number of completed required sections", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='completedSections']", "You have completed 6 of 6 required sections.").should(
       "be.visible"
     );
   });
 
   it("should display the correct tags", () => {
-    cy.wrap(true).should("be.true");
     cy.get("li strong:contains('COMPLETE')").should("have.length", 6);
   });
 
   it("should redirect to the exporter to the check your information page", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/check-your-information");
   });
@@ -167,7 +152,6 @@ describe("ProgressPage - Links", () => {
   });
 
   it("should display correct sections", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h2", "Exporter").should("be.visible");
     cy.contains("h2", "Products").should("be.visible");
     cy.contains("h2", "Arrival at storage facility").should("be.visible");
@@ -176,7 +160,6 @@ describe("ProgressPage - Links", () => {
   });
 
   it("should display correct links", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "Your reference (Optional)").should("be.visible");
     cy.contains("a", "Your reference (Optional)")
       .should("be.visible")
@@ -214,14 +197,12 @@ describe("ProgressPage - Links with transport selected", () => {
   });
 
   it("should display correct links", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "UK arrival transport details")
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-arrive-to-the-uk`);
   });
 
   it("should redirect to the exporter forbidden", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/forbidden");
   });
@@ -237,7 +218,6 @@ describe("ProgressPage - Links with transport selected - truck", () => {
   });
 
   it("should display correct links", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "UK arrival transport details")
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-arrive-to-the-uk`);
@@ -254,7 +234,6 @@ describe("ProgressPage - Links with transport selected - truck - No CMR", () => 
   });
 
   it("should display correct links", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "UK departure transport details")
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-leave-the-uk`);
@@ -271,7 +250,6 @@ describe("ProgressPage - Links with transport selected - train", () => {
   });
 
   it("should display correct links", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "UK departure transport details")
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-leave-the-uk`);
@@ -288,7 +266,6 @@ describe("ProgressPage - Links with transport selected - container vessel", () =
   });
 
   it("should display correct links", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", "UK departure transport details")
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-leave-the-uk`);
@@ -297,7 +274,6 @@ describe("ProgressPage - Links with transport selected - container vessel", () =
 
 describe("should display the notificationBanner", () => {
   it("first visit copy page then click on green buton to navigate progress page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSSDCopyAllData,
       disableScripts: true,
@@ -359,7 +335,6 @@ describe("ProgressPage - Product details link behavior", () => {
     });
 
     it("should link to add-product-to-this-consignment when no products have been added", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("a", "Product details")
         .should("be.visible")
         .should("have.attr", "href", `${certificateUrl}/add-product-to-this-consignment`);
@@ -376,7 +351,6 @@ describe("ProgressPage - Product details link behavior", () => {
     });
 
     it("should link to add-product-to-this-consignment when only 1 incomplete draft product exists", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("a", "Product details")
         .should("be.visible")
         .should("have.attr", "href", `${certificateUrl}/add-product-to-this-consignment`);
@@ -393,7 +367,6 @@ describe("ProgressPage - Product details link behavior", () => {
     });
 
     it("should link to you-have-added-a-product when more than 1 product is present", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("a", "Product details")
         .should("be.visible")
         .should("have.attr", "href", `${certificateUrl}/you-have-added-a-product`);
@@ -410,7 +383,6 @@ describe("ProgressPage - Product details link behavior", () => {
     });
 
     it("should link to you-have-added-a-product when document is complete with products", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("a", "Product details")
         .should("be.visible")
         .should("have.attr", "href", `${certificateUrl}/you-have-added-a-product`);

@@ -4,7 +4,6 @@ const sdPageUrl = "create-non-manipulation-document/GBR-2022-SD-F71D98A30/you-ha
 
 describe("SD: you-have-added-product page", () => {
   it("should render the page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDYouHaveAddedAProduct,
     };
@@ -20,7 +19,6 @@ describe("SD: you-have-added-product page", () => {
   });
 
   it("renders the table with correct headers", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDYouHaveAddedAProduct,
     };
@@ -35,7 +33,6 @@ describe("SD: you-have-added-product page", () => {
   });
 
   it("renders all product details rows with correct data", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDYouHaveAddedAProduct,
     };
@@ -47,7 +44,6 @@ describe("SD: you-have-added-product page", () => {
     });
   });
   it("should render guidance text", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDYouHaveAddedAProduct,
     };
@@ -64,7 +60,6 @@ describe("SD: you-have-added-product page", () => {
   });
 
   it("Remove a product", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDYouHaveAddedAProduct,
     };
@@ -74,7 +69,6 @@ describe("SD: you-have-added-product page", () => {
   });
 
   it("Edit a product", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDYouHaveAddedAProduct,
     };
@@ -88,7 +82,6 @@ describe("SD: you-have-added-product page", () => {
   });
 
   it("Add a new product radio check", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDYouHaveAddedAProduct,
     };
@@ -103,7 +96,6 @@ describe("SD: you-have-added-product page", () => {
   });
 
   it("should allow continuing if the catch is valid", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDProductAddedValid,
     };
@@ -117,7 +109,6 @@ describe("SD: you-have-added-product page", () => {
   });
 
   it("should prevent continuing and display errors if one or more catches are invalid", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDProductAddedInvalid,
     };
@@ -130,7 +121,6 @@ describe("SD: you-have-added-product page", () => {
   // Error handling coverage tests
   describe("Error handling and validation", () => {
     it("should return null from renderErrorSummary when no errors for index (component line 140)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct, // Valid products, no errors
       };
@@ -142,7 +132,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should use catchIndex when available, fallback to index (component line 173)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -165,7 +154,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should create error summary with linkData navigation for product errors (component lines 132-136)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedInvalid,
       };
@@ -204,7 +192,6 @@ describe("SD: you-have-added-product page", () => {
   });
 
   it("should redirect to add-product-to-this-consignment when no catches", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDProductAddedNoCatches,
     };
@@ -216,7 +203,6 @@ describe("SD: you-have-added-product page", () => {
   // Loader-specific coverage tests
   describe("Loader behavior coverage", () => {
     it("should handle productIndexParam parsing with Number.parseInt (loader line 93)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -232,7 +218,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should default to last product index when productIndexParam is null (loader line 93)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -248,7 +233,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should set correct page title for single product (loader line 89)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedValid,
       };
@@ -259,7 +243,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should set correct page title for multiple products (loader line 89)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -270,7 +253,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should handle empty nextUri parameter (loader line 45)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -282,7 +264,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should handle redirect when catches array is not an array (loader line 86)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedNoCatches,
       };
@@ -293,7 +274,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should handle redirect when catches array is empty (loader line 86)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedNoCatches,
       };
@@ -305,7 +285,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should return catches array in loader response (loader line 97)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -316,7 +295,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should handle catches with empty array fallback (loader line 97)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -330,7 +308,6 @@ describe("SD: you-have-added-product page", () => {
   // FI0-6512: Back link navigation tests
   describe("Back link navigation to last added/edited product", () => {
     it("Scenario 1: should navigate back to the product that was just added when productIndex is in URL", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -348,7 +325,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("Scenario 1: should navigate back to first product when productIndex=0", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -365,7 +341,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("Scenario 2: should maintain productIndex when navigating with nextUri parameter", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -385,7 +360,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("Scenario 3: should default to last product when navigating directly without productIndex", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -403,7 +377,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("Scenario 4: should default to last product for cloned documents without productIndex", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -423,7 +396,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should navigate to correct product when clicking back link with productIndex", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -441,7 +413,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("Scenario 2: should navigate to previous product when back link is selected twice", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -462,7 +433,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should handle single product scenario correctly", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedValid,
       };
@@ -482,7 +452,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should handle edge case when productIndex is greater than available products", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -502,7 +471,6 @@ describe("SD: you-have-added-product page", () => {
 
     // Coverage tests for lines 147-149
     it("should NOT include backThroughProducts query when productIndex is 0 with multiple products (line 147-148 coverage)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -524,7 +492,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should NOT include backThroughProducts query with single product even if productIndex > 0 (line 147 first condition coverage)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedValid, // Single product scenario
       };
@@ -549,7 +516,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should use productIndex when defined in backUrl (line 149 first branch coverage)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -568,7 +534,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should build correct backUrl format when backThroughProductsQuery is empty (line 149 concatenation coverage)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedValid, // Single product
       };
@@ -596,7 +561,6 @@ describe("SD: you-have-added-product page", () => {
   // Additional coverage tests for complete code coverage
   describe("Additional coverage for uncovered code paths", () => {
     it("should properly handle nextUri parameter in loader and pass it through to form (loader line 45, component line 230)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -608,7 +572,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should NOT render Remove button when only one product exists (component line 209)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedValid, // Single product
       };
@@ -623,7 +586,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render Remove button for each product when multiple products exist (component line 209-221)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct, // Multiple products
       };
@@ -635,7 +597,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should not have 'No' radio button defaultChecked (component line 250)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -657,7 +618,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should not have 'No' radio button defaultChecked (component line 250) in welsh translation", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -682,7 +642,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render all table cells with product and certificate data (component lines 176-177)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -702,7 +661,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render Edit button with correct hidden inputs and backThroughProductsQuery (component lines 178-195)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -721,7 +679,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render Remove button with correct action value (component lines 210-220)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -733,7 +690,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render Details component with guidance content (component lines 258-262)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -753,7 +709,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render ButtonGroup component (component line 265)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -765,7 +720,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render correct title for single product scenario (component line 159)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedValid,
       };
@@ -776,7 +730,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render correct title for multiple products scenario (component line 155)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -787,7 +740,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render table with role='table' attribute (component line 161)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -798,7 +750,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render each table row with role='row' attribute (component line 175)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -811,7 +762,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render visually hidden text for Edit button (component lines 200-203)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -822,7 +772,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render visually hidden text for Remove button (component lines 217-220)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -833,7 +782,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should use unique key for each table row based on catch _id (component line 175)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -844,7 +792,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render SecureForm with csrf token (component lines 177, 228)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -856,7 +803,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render inline forms for Edit and Remove actions (component line 177)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -867,7 +813,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should have correct button classes and attributes (component lines 193-198, 210-215)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -891,7 +836,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should use count variable for title interpolation (component line 122)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -902,7 +846,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render Main component with backUrl prop (component line 151)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -914,7 +857,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render grid structure (component lines 152-154)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -926,7 +868,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render all three table headers using TableHeader component (component lines 162-167)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -939,7 +880,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should have correct button IDs with index (component lines 192, 210)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -953,7 +893,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render productId hidden input for each product (component line 179)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -964,7 +903,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render radio button inputs with correct type and attributes (component lines 239-243, 247-251)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -977,7 +915,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render radio labels with correct text (component lines 244, 252)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -989,7 +926,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render br elements for spacing (component lines 224, 237, 256)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -1000,7 +936,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should destructure all necessary values from useLoaderData (component line 119)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -1024,7 +959,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should use isEmpty from lodash for groupedErrors check (component lines 125, 131)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -1035,7 +969,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should map over catches array to render table rows (component line 172)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -1046,7 +979,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should use translation hook for common namespace (component line 122)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -1059,7 +991,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should have correct form method='post' (component lines 177, 228)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -1070,7 +1001,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should render url hidden input with backThroughProductsQuery (component line 178)", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
@@ -1082,7 +1012,6 @@ describe("SD: you-have-added-product page", () => {
     });
 
     it("should conditionally render title based on catches.length (component lines 155-159)", () => {
-      cy.wrap(true).should("be.true");
       // Test with 1 product
       let testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedValid,

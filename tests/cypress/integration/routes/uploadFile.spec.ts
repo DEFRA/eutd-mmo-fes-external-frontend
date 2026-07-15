@@ -5,7 +5,6 @@ const uploadFileUrl = `${certificateUrl}/upload-file`;
 
 describe("Upload File Page", () => {
   it("should render upload file page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsEmptyRows,
     };
@@ -29,7 +28,6 @@ describe("Upload File Page", () => {
 
 describe("Upload File Page Upload", () => {
   it("should not display a notification when rows are empty", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsEmptyRows,
     };
@@ -42,7 +40,6 @@ describe("Upload File Page Upload", () => {
   });
 
   it("should not display a notification when response is undefined", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsUndefined,
     };
@@ -55,7 +52,6 @@ describe("Upload File Page Upload", () => {
   });
 
   it("should display a error summary for an upload file error", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsFileError,
     };
@@ -70,7 +66,6 @@ describe("Upload File Page Upload", () => {
   });
 
   it("should attempt to upload a .csv file", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsSuccess,
     };
@@ -84,7 +79,6 @@ describe("Upload File Page Upload", () => {
   });
 
   it("should render summary information for valid uploaded landings", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsSuccess,
     };
@@ -165,7 +159,6 @@ describe("Upload File Page Upload", () => {
   });
 
   it("should attempt to upload a .csv file but fail to upload any rows", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsError,
     };
@@ -179,7 +172,6 @@ describe("Upload File Page Upload", () => {
   });
 
   it("should attempt to upload a .csv file but fail because of a fobidden response", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsForbidden,
     };
@@ -192,7 +184,6 @@ describe("Upload File Page Upload", () => {
   });
 
   it("should not allow access to this page for a landing entry type of direct landing", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsDirectLanding,
     };
@@ -204,7 +195,6 @@ describe("Upload File Page Upload", () => {
   });
 
   it("should not allow access to this page for a landing entry type of unauthorised", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsDirectLanding,
     };
@@ -218,7 +208,6 @@ describe("Upload File Page Upload", () => {
 
 describe("Upload File Page Upload - date errors", () => {
   it("should display an error for a upload with a missing date landed", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadMissingDateLanded,
     };
@@ -235,7 +224,6 @@ describe("Upload File Page Upload - date errors", () => {
 
 describe("Upload File Page Upload - future date landed errors", () => {
   it("should display the correct error message for a date landed in the future", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadFutureDateLanded,
     };
@@ -251,7 +239,6 @@ describe("Upload File Page Upload - future date landed errors", () => {
 
 describe("Upload File Page Upload - export weight errors", () => {
   it("should display an error for a upload with a missing export weight", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadMissingExportWeight,
     };
@@ -270,7 +257,6 @@ describe("Upload File Page Upload - export weight errors", () => {
 
 describe("Upload File Page Upload - High Seas Area errors", () => {
   it("should display an error for a upload with a invalid high seas area", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadInvalidHighSeasArea,
     };
@@ -285,7 +271,6 @@ describe("Upload File Page Upload - High Seas Area errors", () => {
 
 describe("Upload File Page Upload - EEZ errors", () => {
   it("should display an error for a upload with a unknown EEZ", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadUnknownEEZ,
     };
@@ -297,7 +282,6 @@ describe("Upload File Page Upload - EEZ errors", () => {
     cy.get("body").should("exist");
   });
   it("should display an error for a upload with a invalid EEZ", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadInvalidEEZ,
     };
@@ -312,7 +296,6 @@ describe("Upload File Page Upload - EEZ errors", () => {
 
 describe("Upload File Page Upload - RFMO errors", () => {
   it("should display an error for a upload with a unknown rfmo", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadUnknownRFMO,
     };
@@ -327,7 +310,6 @@ describe("Upload File Page Upload - RFMO errors", () => {
 
 describe("Upload File Page Upload - vesselPLN errors", () => {
   it("should display an error for a upload with a missing vessel pln", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadMissingVesselPln,
     };
@@ -340,7 +322,6 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
   });
 
   it("should display an error for a upload with an unknown vessel pln", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadMissingVesselPln,
     };
@@ -353,7 +334,6 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
   });
 
   it("should display an error for a upload with an invalid vessel pln", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadInvalidVesselPln,
     };
@@ -367,7 +347,6 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
 
   describe("Welsh translations", () => {
     it("should display an error for a upload with a missing vessel pln", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCUploadMissingVesselPln,
         lng: "cy",
@@ -381,7 +360,6 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
     });
 
     it("should display an error for a upload with an unknown vessel pln", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCUploadMissingVesselPln,
         lng: "cy",
@@ -395,7 +373,6 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
     });
 
     it("should display an error for a upload with an unlicensed vessel pln", () => {
-      cy.wrap(true).should("be.true");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCUploadInvalidVesselPln,
         lng: "cy",
@@ -414,7 +391,6 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
 
 describe("Upload File Page Upload - product errors", () => {
   it("should display product errors for an upload with product errors", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadProductErrors,
     };
@@ -436,7 +412,6 @@ describe("Upload File Page Upload - product errors", () => {
 
 describe("Upload File Page Upload - gearCode errors", () => {
   it("should display the same error for invalid / missing gear codes", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadGearCodeErrors,
     };
@@ -450,7 +425,6 @@ describe("Upload File Page Upload - gearCode errors", () => {
   });
 
   it("should display the same error for invalid / missing gear codes in Welsh", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadGearCodeErrors,
       lng: "cy",
@@ -467,7 +441,6 @@ describe("Upload File Page Upload - gearCode errors", () => {
 
 describe("Upload File Page Upload - AV scan failure error", () => {
   it("should display an error for a upload that has failed AV scan", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadAvScanErrors,
     };
@@ -486,7 +459,6 @@ describe("Upload File Page Upload - AV scan failure error", () => {
 
 describe("Upload File Page Upload - invalid, inaccessible, corrupt error", () => {
   it("should display an error for a upload that contains corrupted data", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadCorruptFileErrors,
     };
@@ -505,7 +477,6 @@ describe("Upload File Page Upload - invalid, inaccessible, corrupt error", () =>
 
 describe("Upload File Page - clear", () => {
   it("should render with not uploaded rows", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCSaveUploadLandingsClear,
     };
@@ -519,7 +490,6 @@ describe("Upload File Page - clear", () => {
   });
 
   it("should render the forbidden page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCSaveUploadLandingsClearForbidden,
     };
@@ -534,7 +504,6 @@ describe("Upload File Page - clear", () => {
 
 describe("Upload File Page - cancel", () => {
   it("should render the exporter details page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCSaveUploadLandingsClear,
     };
@@ -547,7 +516,6 @@ describe("Upload File Page - cancel", () => {
   });
 
   it("should render the forbidden page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCSaveUploadLandingsClearForbidden,
     };
@@ -562,7 +530,6 @@ describe("Upload File Page - cancel", () => {
 
 describe("Upload File Page - save and continue with errors", () => {
   it("should render an error island and file error", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCSaveUploadLandingsError,
     };
@@ -580,7 +547,6 @@ describe("Upload File Page - save and continue with errors", () => {
 
 describe("Upload File Page - max row error", () => {
   it("should render an error island and file error ", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsMaxRowsError,
     };
@@ -598,7 +564,6 @@ describe("Upload File Page - max row error", () => {
 
 describe("Upload File Page - file too large", () => {
   it("should render an error island and file error ", () => {
-    cy.wrap(true).should("be.true");
     const fileContent = `PRD765,10/10/2020,FAO18,PH1100,100
     PRD765,10/10/2020,FAO18,PH1100,100
     PRD769,10/10/2020,FAO18,PH1100,100
@@ -933,7 +898,6 @@ describe("Upload File Page - file too large", () => {
 
 describe("Upload File Page - save and continue success", () => {
   it("should render the what are you exporting page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCSaveUploadLandingsSuccess,
     };
@@ -949,7 +913,6 @@ describe("Upload File Page - save and continue success", () => {
 
 describe("Upload File Page - save and continue forbidden", () => {
   it("should render the forbidden page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCSaveUploadLandingsForbidden,
     };
@@ -965,7 +928,6 @@ describe("Upload File Page - save and continue forbidden", () => {
 
 describe("Upload File Page -form onChange handler ", () => {
   it("should submit when the onChange handler is called", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsSuccess,
     };
@@ -979,7 +941,6 @@ describe("Upload File Page -form onChange handler ", () => {
   });
 
   it("should trigger handleChange when file input changes and click upload", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadFileChangeHandler,
     };
@@ -998,7 +959,6 @@ describe("Upload File Page -form onChange handler ", () => {
 
 describe("Upload File Page - clear button functionality", () => {
   it("should clear the file input when clear button is clicked", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadFileClearButton,
     };
@@ -1026,7 +986,6 @@ describe("Upload File Page - clear button functionality", () => {
 
 describe("Upload File Page Upload - EEZ max length string error", () => {
   it("should display EEZ max length error when error is a string", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadEEZMaxErrorString,
     };
@@ -1039,7 +998,6 @@ describe("Upload File Page Upload - EEZ max length string error", () => {
   });
 
   it("should display EEZ max length error when error is a string", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadEEZMaxErrorObject,
     };
@@ -1054,7 +1012,6 @@ describe("Upload File Page Upload - EEZ max length string error", () => {
 
 describe("Upload File Page Upload - total combined export weight exceeded", () => {
   it("should display a total combined weight error on every row when total exceeds 9,999,999.99", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsTotalWeightExceeded,
     };
@@ -1074,7 +1031,6 @@ describe("Upload File Page Upload - total combined export weight exceeded", () =
   });
 
   it("should display 0 rows uploaded successfully when total weight is exceeded", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsTotalWeightExceeded,
     };
@@ -1086,7 +1042,6 @@ describe("Upload File Page Upload - total combined export weight exceeded", () =
   });
 
   it("should display the total weight error in Welsh when language is set to Welsh", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadLandingsTotalWeightExceeded,
       lng: "cy",

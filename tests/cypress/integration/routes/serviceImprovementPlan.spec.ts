@@ -1,6 +1,5 @@
 describe("service improvement plan page", () => {
   it("should render service improvement plan page", () => {
-    cy.wrap(true).should("be.true");
     cy.visit("/service-improvement-plan");
 
     cy.contains("a", "Digital Service Standard (opens in new tab)")

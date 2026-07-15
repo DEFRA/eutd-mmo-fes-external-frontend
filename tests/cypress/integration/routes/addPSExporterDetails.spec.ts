@@ -11,7 +11,6 @@ describe("PS: add exporter details page", () => {
   });
 
   it("should render successfully & change address button works", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/).should("have.attr", "href", `${documentUrl}/add-your-reference`);
     cy.contains("h1", "Add exporter details");
     cy.get("[data-testid='change-button']").click();
@@ -19,7 +18,6 @@ describe("PS: add exporter details page", () => {
   });
 
   it("should display EU2026 information text with exclamation icon", () => {
-    cy.wrap(true).should("be.true");
     // Check for warning text container
     cy.get(".govuk-warning-text").should("be.visible");
 
@@ -40,23 +38,19 @@ describe("PS: add exporter details page", () => {
   });
 
   it("should display 'Company name' label in bold", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("label", "Company name").should("have.class", "govuk-!-font-weight-bold");
   });
 
   it("should display 'Company address' label instead of 'Address'", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("label", "Company address").should("exist").and("have.class", "govuk-!-font-weight-bold");
   });
 
   it("should NOT display exporterFullName field for processing statement journey", () => {
-    cy.wrap(true).should("be.true");
     // Verify this field is only shown for catch certificate journey
     cy.get("#exporterFullName").should("not.exist");
   });
 
   it("should display only the processing statement warning text without generic fallback", () => {
-    cy.wrap(true).should("be.true");
     // Verify the specific processing statement branch (line 60-62) is executed
     cy.get(".govuk-warning-text__text")
       .invoke("text")
@@ -73,7 +67,6 @@ describe("PS: add exporter details page", () => {
   });
 
   it("should execute processingStatement branch in getWarningContent function", () => {
-    cy.wrap(true).should("be.true");
     // Explicitly verify the processing statement-specific warning content is rendered
     // This covers the if (journey === "processingStatement") branch and return statement at line 62
     cy.get(".govuk-warning-text__text")
@@ -95,7 +88,6 @@ describe("PS: add exporter details page", () => {
 
 describe("getWarningContent function branch coverage - comparing journey types", () => {
   it("should return PS-specific warning text (line 62) distinct from other journeys", () => {
-    cy.wrap(true).should("be.true");
     // Test Processing Statement journey first - this MUST execute line 62
     cy.visit("/create-processing-statement/GBR-2021-PS-8EEB7E123/add-exporter-details", {
       qs: { testCaseId: TestCaseId.PSAddExporterDetailsEmpty },
@@ -154,17 +146,14 @@ describe("PS: add exporter details page - Welsh translations", () => {
   });
 
   it("should display Welsh translation for information text", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-warning-text__text").should("contain", "Bydd yr wybodaeth yma yn ymddangos ar y datganiad prosesu.");
   });
 
   it("should display Welsh translation for 'Company address' label", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("label", "Cyfeiriad y cwmni").should("exist").and("have.class", "govuk-!-font-weight-bold");
   });
 
   it("should NOT display standalone 'Address' label in Welsh", () => {
-    cy.wrap(true).should("be.true");
     // Ensure the old translation key is not used (should be "Cyfeiriad y cwmni", not just "Cyfeiriad")
     cy.get("label.govuk-label.govuk-\\!-font-weight-bold")
       .invoke("text")
@@ -184,7 +173,6 @@ describe("PS: add exporter details - happy path", () => {
   });
 
   it("should navigate to add consignment details", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/add-consignment-details");
   });
@@ -201,7 +189,6 @@ describe("PS: add exporter details - save as draft", () => {
   });
 
   it("should save as draft", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-draft-button'").click();
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
@@ -218,7 +205,6 @@ describe("PS: add exporter details - forbidden", () => {
   });
 
   it("should navigate to forbidden page", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "/forbidden");
   });
@@ -235,7 +221,6 @@ describe("PS: add exporter details - errors", () => {
   });
 
   it("should show errors", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").should("be.visible");
   });
@@ -246,7 +231,6 @@ describe("PS: add exporter details - forbidden", () => {
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   it("should navigate to forbidden page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddExporterDetails403,
     };
@@ -261,7 +245,6 @@ describe("PS: add exporter details - save as draft retains valid fields", () => 
   const pageUrl = `${documentUrl}/add-exporter-details`;
 
   it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddExporterDetailsSaveAsDraftWithErrors,
     };
@@ -277,7 +260,6 @@ describe("PS: add exporter details - save as draft sets section to INCOMPLETE wh
   const progressUrl = `${documentUrl}/progress`;
 
   it("should show exporter section as INCOMPLETE on progress page after saving draft with invalid company name", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddExporterDetailsSaveAsDraftScenario3,
     };

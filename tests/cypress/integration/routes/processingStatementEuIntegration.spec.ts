@@ -11,7 +11,6 @@ describe("EU CATCH Integration - Processing Statement Completed Documents Table"
   });
 
   it("should render EU CATCH integration column header", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='processingStatement-completed-table']")
       .find("thead th")
       .contains("EU CATCH integration")
@@ -19,7 +18,6 @@ describe("EU CATCH Integration - Processing Statement Completed Documents Table"
   });
 
   it("should render EU CATCH integration column in correct position (after Date Created, before Action)", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='processingStatement-completed-table'] thead tr th").then(($headers) => {
       const headerTexts = $headers.toArray().map((el) => el.textContent?.trim());
       const dateCreatedIndex = headerTexts.map((text) => text?.includes("Date Created")).indexOf(true);
@@ -33,14 +31,12 @@ describe("EU CATCH Integration - Processing Statement Completed Documents Table"
   });
 
   it("should render 'Check status' link for each completed document", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="processingStatement-check-eu-catch-status"]').each(($link) => {
       cy.wrap($link).should("contain.text", "Check status");
     });
   });
 
   it("should render 'Check status' link with correct href attribute", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="processingStatement-check-eu-catch-status"]')
       .first()
       .should("have.attr", "href")
@@ -48,7 +44,6 @@ describe("EU CATCH Integration - Processing Statement Completed Documents Table"
   });
 
   it("should have accessible hidden text for screen readers on check status link", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="processingStatement-check-eu-catch-status"]')
       .first()
       .find(".govuk-visually-hidden")
@@ -57,7 +52,6 @@ describe("EU CATCH Integration - Processing Statement Completed Documents Table"
   });
 
   it("should render guidance text below completed documents table", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-inset-text")
       .should("be.visible")
       .find("p.govuk-body")
@@ -68,7 +62,6 @@ describe("EU CATCH Integration - Processing Statement Completed Documents Table"
   });
 
   it("should work without JavaScript (standard anchor tags)", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="processingStatement-check-eu-catch-status"]')
       .first()
       .should("have.prop", "tagName", "A")
@@ -85,7 +78,6 @@ describe("EU CATCH Integration - Processing Statement Welsh Translation", () => 
   });
 
   it("should render Welsh translation for EU CATCH integration header", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='processingStatement-completed-table']")
       .find("thead th")
       .contains("Integreiddio â system CATCH yr UE")
@@ -93,12 +85,10 @@ describe("EU CATCH Integration - Processing Statement Welsh Translation", () => 
   });
 
   it("should render Welsh translation for Check status link", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="processingStatement-check-eu-catch-status"]').first().should("contain.text", "Gwirio statws");
   });
 
   it("should render Welsh translation for guidance text", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".govuk-inset-text")
       .should("be.visible")
       .find("p.govuk-body")
@@ -111,7 +101,6 @@ describe("EU CATCH Integration - Processing Statement Welsh Translation", () => 
 
 describe("EU CATCH Integration - Processing Statement Status Pages", () => {
   it("should navigate to successful status page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSDashboardWithSuccessEUStatus,
     };
@@ -123,7 +112,6 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
   });
 
   it("should navigate to pending status page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSDashboardWithPendingEUStatus,
     };
@@ -135,7 +123,6 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
   });
 
   it("should navigate to failed status page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSDashboardWithFailedEUStatus,
     };
@@ -147,7 +134,6 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
   });
 
   it("should have back link on successful status page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSDashboardWithSuccessEUStatus,
     };
@@ -159,7 +145,6 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
   });
 
   it("should have back link on pending status page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSDashboardWithPendingEUStatus,
     };
@@ -171,7 +156,6 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
   });
 
   it("should have back link on failed status page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSDashboardWithFailedEUStatus,
     };
@@ -183,7 +167,6 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
   });
 
   it("should display pending page content correctly", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSDashboardWithPendingEUStatus,
     };
@@ -197,7 +180,6 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
   });
 
   it("should display failed page content correctly", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSDashboardWithFailedEUStatus,
     };
@@ -211,7 +193,6 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
 
 describe("EU CATCH Integration - Processing Statement Welsh Translation for Status Pages", () => {
   it("should render Welsh translation on pending status page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSDashboardWithPendingEUStatus,
     };
@@ -223,7 +204,6 @@ describe("EU CATCH Integration - Processing Statement Welsh Translation for Stat
   });
 
   it("should render Welsh translation on failed status page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSDashboardWithFailedEUStatus,
     };
@@ -242,14 +222,12 @@ describe("EU CATCH Integration - Processing Statement Accessibility", () => {
   });
 
   it("should have proper table structure with scope attributes", () => {
-    cy.wrap(true).should("be.true");
     cy.get("table[data-testid='processingStatement-completed-table'] thead th").each(($th) => {
       cy.wrap($th).should("have.attr", "scope", "col");
     });
   });
 
   it("should have proper link structure with visible text and hidden context", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="processingStatement-check-eu-catch-status"]')
       .first()
       .within(() => {

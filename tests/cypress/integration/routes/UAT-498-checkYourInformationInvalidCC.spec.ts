@@ -13,14 +13,12 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
     });
 
     it("should display the page correctly before submission", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("h1", /^Check your answers before you create the processing statement$/).should("be.visible");
       cy.contains("dt", "Catch certificate").should("be.visible");
       cy.contains("button", /^Accept and create processing statement$/).should("be.visible");
     });
 
     it("should show error in error summary at the top when invalid CC is submitted", () => {
-      cy.wrap(true).should("be.true");
       cy.get("[data-testid=create-ps-button]").click();
 
       // Error summary should be visible
@@ -31,7 +29,6 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
     });
 
     it("should display inline error message next to the catch certificate field", () => {
-      cy.wrap(true).should("be.true");
       cy.get("[data-testid=create-ps-button]").click();
 
       // Check for inline error message next to the catch certificate field
@@ -41,7 +38,6 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
     });
 
     it("should apply error styling to the catch certificate field", () => {
-      cy.wrap(true).should("be.true");
       cy.get("[data-testid=create-ps-button]").click();
 
       // The field should have error class
@@ -61,7 +57,6 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
     });
 
     it("should display both catch certificate and species errors", () => {
-      cy.wrap(true).should("be.true");
       cy.get("[data-testid=create-ps-button]").click();
 
       // Error summary should contain both errors
@@ -82,7 +77,6 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
     });
 
     it("should display format error next to the catch certificate field", () => {
-      cy.wrap(true).should("be.true");
       cy.get("[data-testid=create-ps-button]").click();
 
       cy.contains("h2", /^There is a problem$/).should("be.visible");
