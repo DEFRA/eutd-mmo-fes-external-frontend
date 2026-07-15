@@ -5,7 +5,6 @@ const trainPageUrl = `create-catch-certificate/${documentNumber}/add-additional-
 
 describe("Add Transportation Documents Train", () => {
   it("should render train transport details page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportDocuments,
     };
@@ -38,7 +37,6 @@ describe("Add Transportation Documents Train", () => {
   });
 
   it("should redirect user to CC dashboard page when user clicks on Save as Draft button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportDocuments,
     };
@@ -50,7 +48,6 @@ describe("Add Transportation Documents Train", () => {
   });
 
   it("should display errors", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportDocumentsErrors,
     };
@@ -60,7 +57,6 @@ describe("Add Transportation Documents Train", () => {
   });
 
   it("should display error for (optional) fields", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportDocumentsOptionalError,
     };
@@ -70,7 +66,6 @@ describe("Add Transportation Documents Train", () => {
   });
 
   it("should display error for adding an additional document for empty form", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportDocumentsOptionalError,
     };
@@ -81,7 +76,6 @@ describe("Add Transportation Documents Train", () => {
   });
 
   it("should display previously entered name and reference", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportDocumentsAddAnotherDocument,
     };
@@ -100,7 +94,6 @@ describe("Add Transportation Documents Train", () => {
   });
 
   it("should redirect user to forbidden page when saveTransportDocuments fails with a 403 error", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportDocumentsFailsWith403,
     };
@@ -111,7 +104,6 @@ describe("Add Transportation Documents Train", () => {
   });
 
   it("should navigate to cc dashboard page on click of save as draft button", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportDocumentsSave,
     };
@@ -123,7 +115,6 @@ describe("Add Transportation Documents Train", () => {
   });
 
   it("should display errors when click without adding document name and reference", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportDocumentsErrors,
     };
@@ -134,7 +125,6 @@ describe("Add Transportation Documents Train", () => {
   });
 
   it("should not display errors when click adding document name and reference", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportDocuments,
     };
@@ -170,7 +160,6 @@ describe("Add Transportation Documents Train", () => {
   });
 
   it("should not display the Add another document button when 5 transport documents have been added", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportDocumentsRestrictAddAnotherDocument,
     };

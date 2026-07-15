@@ -106,7 +106,6 @@ describe("Storage document departure summary: rendering", () => {
   });
 
   it("should render a back link", () => {
-    cy.wrap(true).should("be.true");
     cy.findByRole("link", { name: "Back" }).click();
     cy.url().should(
       "eq",
@@ -115,7 +114,6 @@ describe("Storage document departure summary: rendering", () => {
   });
 
   it("should render the correct page title", () => {
-    cy.wrap(true).should("be.true");
     cy.title().should(
       "eq",
       "Check and confirm your consignment weight - Create a UK non-manipulation document - GOV.UK"
@@ -123,13 +121,11 @@ describe("Storage document departure summary: rendering", () => {
   });
 
   it("should render the correct content", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
     assertGuidanceMessage();
   });
 
   it("should check the tabs", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#productTabs")
       .find("li")
       .should("have.length", 2)
@@ -140,7 +136,6 @@ describe("Storage document departure summary: rendering", () => {
   });
 
   it("should toggle the tabs and find text", () => {
-    cy.wrap(true).should("be.true");
     openArrivalTab();
     cy.get(".govuk-tabs__tab").contains("Storage arrival").should("be.visible");
     openDepartureTab();
@@ -150,7 +145,6 @@ describe("Storage document departure summary: rendering", () => {
 
 describe("Storage document departure summary: pageguard", () => {
   it("should redirect to the departure transport page", () => {
-    cy.wrap(true).should("be.true");
     visitDepartureSummary(TestCaseId.SDDepartureSummaryNoTransport, { failOnStatusCode: false });
     cy.url().should(
       "include",
@@ -159,19 +153,16 @@ describe("Storage document departure summary: pageguard", () => {
   });
 
   it("should redirect to the forbidden page", () => {
-    cy.wrap(true).should("be.true");
     visitDepartureSummary(TestCaseId.SDDepartureSummaryForbidden, { failOnStatusCode: false });
     cy.url().should("include", "/forbidden");
   });
 
   it("should redirect to the add product to this consignment page", () => {
-    cy.wrap(true).should("be.true");
     visitDepartureSummary(TestCaseId.SDDepartureSummaryNoCatches, { failOnStatusCode: false });
     cy.url().should("include", "/add-product-to-this-consignment");
   });
 
   it("should redirect to the add product to this consignment page with an empty catch", () => {
-    cy.wrap(true).should("be.true");
     visitDepartureSummary(TestCaseId.SDDepartureSummaryEmptyCatches, { failOnStatusCode: false });
     cy.url().should("include", "/add-product-to-this-consignment");
   });
@@ -183,7 +174,6 @@ describe("Storage document departure summary: arrival tab", () => {
   });
 
   it("loads the page with catches", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
     assertGuidanceMessage();
 
@@ -231,7 +221,6 @@ describe("Storage document departure summary: arrival tab", () => {
   });
 
   it("loads the edit page with catches", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
     assertGuidanceMessage();
 
@@ -256,7 +245,6 @@ describe("Storage document departure summary: arrival tab", () => {
   });
 
   it("should remove catch", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
     assertGuidanceMessage();
 
@@ -287,7 +275,6 @@ describe("Storage document departure summary: arrival tab with one catch", () =>
   });
 
   it("should not have remove button in arrival tab with one product", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
     openArrivalTab();
 
@@ -314,7 +301,6 @@ describe("Storage document departure summary: departure tab", () => {
   });
 
   it("loads the page with catches", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
     assertGuidanceMessage();
 
@@ -352,7 +338,6 @@ describe("Storage document departure summary: departure tab", () => {
   });
 
   it("loads the page with catches and save weight", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
 
     cy.get("#storage-departure-tab").within(() => {
@@ -377,7 +362,6 @@ describe("Storage document departure summary: departure tab", () => {
   });
 
   it("loads the page with catches and save wrong weight", () => {
-    cy.wrap(true).should("be.true");
     visitDepartureSummary(TestCaseId.SDDepartureSummaryCatchesInvalidWeightSave);
     assertEnglishHeading();
 
@@ -398,7 +382,6 @@ describe("Storage document departure summary: departure tab", () => {
   });
 
   it("should render the save as draft button", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
     cy.findByRole("button", { name: "Save as draft" });
     cy.get("#saveAsDraft").click();
@@ -406,7 +389,6 @@ describe("Storage document departure summary: departure tab", () => {
   });
 
   it("should navigate to progress when back to progress is clicked", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
     cy.get("#backToProgress").click();
     cy.url().should("include", "/progress");
@@ -419,7 +401,6 @@ describe("Storage document departure summary: tab with empty departure and load 
   });
 
   it("loads the page with catches", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
     assertGuidanceMessage();
 
@@ -457,7 +438,6 @@ describe("Storage document departure summary: tab with empty departure and load 
   });
 
   it("loads the page with catches and save weight", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
 
     cy.get("#storage-departure-tab").within(() => {
@@ -478,7 +458,6 @@ describe("Storage document departure summary: tab with empty departure and load 
   });
 
   it("loads the page with catches and save wrong weight", () => {
-    cy.wrap(true).should("be.true");
     visitDepartureSummary(TestCaseId.SDDepartureSummaryCatchesInvalidWeightSave);
     assertEnglishHeading();
 
@@ -499,7 +478,6 @@ describe("Storage document departure summary: tab with empty departure and load 
   });
 
   it("should render the save as draft button", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
     cy.findByRole("button", { name: "Save as draft" });
     cy.get("#saveAsDraft").click();
@@ -507,7 +485,6 @@ describe("Storage document departure summary: tab with empty departure and load 
   });
 
   it("should navigate to progress when back to progress is clicked", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
     cy.get("#backToProgress").click();
     cy.url().should("include", "/progress");
@@ -516,7 +493,6 @@ describe("Storage document departure summary: tab with empty departure and load 
 
 describe("Storage document departure summary: save as draft with validation errors (FI0-10577)", () => {
   it("should redirect to the NMD dashboard when Save as Draft is clicked with validation errors", () => {
-    cy.wrap(true).should("be.true");
     visitDepartureSummary(TestCaseId.SDDepartureSummarySaveAsDraftWithErrors);
     assertEnglishHeading();
     cy.get("#saveAsDraft").click();
@@ -526,7 +502,6 @@ describe("Storage document departure summary: save as draft with validation erro
 
 describe("Storage document departure summary: departure weight exceeds arrival weight (FI0-10945)", () => {
   it("should display EN and CY error when the departure weight exceeds the arrival weight", () => {
-    cy.wrap(true).should("be.true");
     visitDepartureSummary(TestCaseId.SDDepartureSummaryProductWeightExceedsArrival);
     assertEnglishHeading();
     submitDepartureSummary("savePostEn");
@@ -541,7 +516,6 @@ describe("Storage document departure summary: departure weight exceeds arrival w
 
 describe("Storage document departure summary: fishery product weight exceeds product weight (FI0-10945)", () => {
   it("should display EN and CY error when the fishery product weight exceeds the product departure weight", () => {
-    cy.wrap(true).should("be.true");
     visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsProduct);
     assertEnglishHeading();
     submitDepartureSummary("savePostEn");
@@ -558,7 +532,6 @@ describe("Storage document departure summary: fishery product weight exceeds pro
 
 describe("Storage document departure summary: fishery departure weight exceeds fishery arrival weight (FI0-11277)", () => {
   it("should display EN and CY error when the fishery departure weight exceeds the fishery arrival weight", () => {
-    cy.wrap(true).should("be.true");
     visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival);
     assertEnglishHeading();
     submitDepartureSummary("savePostEn");
@@ -581,7 +554,6 @@ describe("Storage document departure summary: departure weights reflect updated 
   });
 
   it("loads the departure tab with updated arrival weights when departure weights have been cleared after editing a copied document", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
 
     openDepartureTab();
@@ -618,7 +590,6 @@ describe("Storage document departure summary: departure weights reflect updated 
   });
 
   it("loads the arrival tab with the updated arrival weights", () => {
-    cy.wrap(true).should("be.true");
     assertEnglishHeading();
 
     openArrivalTab();

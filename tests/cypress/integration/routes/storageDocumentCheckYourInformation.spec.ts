@@ -12,7 +12,6 @@ describe("SD: check-your-information page", () => {
   });
 
   it("should render the correct back link", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href")
@@ -21,27 +20,22 @@ describe("SD: check-your-information page", () => {
   });
 
   it("should display the correct page heading", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h1", "Check your information before you create the non-manipulation document").should("be.visible");
   });
 
   it("should display the document creation header", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("h2", "Now create your non-manipulation document").should("be.visible");
   });
 
   it("should display the document submission confirmation text", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("By submitting this non-manipulation document, you confirm that:").should("be.visible");
   });
 
   it("should display the accept and create button with correct text", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("button", "Accept and create non-manipulation document").should("be.visible");
   });
 
   it("should contain the required heading", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Company name").should("be.visible");
     cy.contains("dt", "Company address").should("be.visible");
     cy.contains("dt", "Your reference").should("be.visible");
@@ -62,12 +56,10 @@ describe("SD: check-your-information page", () => {
   });
 
   it("should display user reference value", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Your reference").next("dd").should("contain", "MY-REF-12345");
   });
 
   it("should have a change link for user reference with correct href", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#yourReferenceChangeLink")
       .should("exist")
       .should("have.attr", "href")
@@ -77,7 +69,6 @@ describe("SD: check-your-information page", () => {
   });
 
   it("should have visually-hidden text for accessibility on reference change link", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#yourReferenceChangeLink")
       .find(".govuk-visually-hidden")
       .should("exist")
@@ -85,7 +76,6 @@ describe("SD: check-your-information page", () => {
   });
 
   it("should display 'Your reference' field underneath 'Document number' in the same section", () => {
-    cy.wrap(true).should("be.true");
     // Verify both Document number and Your reference are in the same dl element (document details section)
     cy.contains("h2", "Document details")
       .next("dl")
@@ -106,7 +96,6 @@ describe("SD: check-your-information page", () => {
   });
 
   it("should display change link for 'Your reference' when value is provided", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Your reference")
       .parent()
       .within(() => {
@@ -116,7 +105,6 @@ describe("SD: check-your-information page", () => {
   });
 
   it("should contain the required data", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dd", "GBR-2023-SD-A46E23603").should("be.visible");
     cy.contains("dd", "tesrt").should("be.visible");
     cy.contains("dd", "MO, LANCASTER HOUSE, HAMPSHIRE COURT").should("be.visible");
@@ -129,7 +117,6 @@ describe("SD: check-your-information page", () => {
   });
 
   it("should contain change links with href", () => {
-    cy.wrap(true).should("be.true");
     cy.get("a")
       .contains("Change")
       .each(($el) => {
@@ -138,7 +125,6 @@ describe("SD: check-your-information page", () => {
   });
 
   it("should have a change link for each summary row", () => {
-    cy.wrap(true).should("be.true");
     cy.get("a")
       .contains("Change")
       .then(($links) => {
@@ -156,7 +142,6 @@ describe("SD: check-your-information page mandetory", () => {
   });
 
   it("should contain the required heading", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Company name").should("be.visible");
     cy.contains("dt", "Company address").should("be.visible");
     cy.contains("dt", "Your reference").should("be.visible");
@@ -177,12 +162,10 @@ describe("SD: check-your-information page mandetory", () => {
   });
 
   it("should display user reference value for mandatory fields test", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Your reference").next("dd").should("contain", "TEST-REF-456");
   });
 
   it("should contain the required data", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dd", "GBR-2023-SD-A46E23603").should("be.visible");
     cy.contains("dd", "tesrt").should("be.visible");
     cy.contains("dd", "MO, LANCASTER HOUSE, HAMPSHIRE COURT").should("be.visible");
@@ -198,7 +181,6 @@ describe("SD: check-your-information page mandetory", () => {
 
 describe("SD: check-your-information page transport", () => {
   it("should render the page with train", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDCheckYourInformationTrain,
     };
@@ -208,7 +190,6 @@ describe("SD: check-your-information page transport", () => {
   });
 
   it("should render the page with plain", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDCheckYourInformationPlane,
     };
@@ -217,7 +198,6 @@ describe("SD: check-your-information page transport", () => {
     cy.get("h1").should("be.visible");
   });
   it("should render the page with Truck", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDCheckYourInformationTruckCmr,
     };
@@ -236,12 +216,10 @@ describe("SD: check-your-information page with user reference not provided", () 
   });
 
   it("should display 'Not provided' when user reference is empty", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Your reference").next("dd").should("contain", "Not provided");
   });
 
   it("should still have change link for user reference when not provided", () => {
-    cy.wrap(true).should("be.true");
     cy.get("#yourReferenceChangeLink")
       .should("exist")
       .should("have.attr", "href")
@@ -249,7 +227,6 @@ describe("SD: check-your-information page with user reference not provided", () 
   });
 
   it("should display 'Your reference' in document details section when not provided", () => {
-    cy.wrap(true).should("be.true");
     // Verify Your reference is in the document details section (same dl as Document number)
     cy.contains("h2", "Document details")
       .next("dl")
@@ -269,7 +246,6 @@ describe("SD: check-your-information page with user reference not provided", () 
 
 describe("Check Your Information (Summary) page: document submission", () => {
   it("should redirect user to storage document created page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDCheckYourInformationValidationSuccess,
     };
@@ -283,7 +259,6 @@ describe("Check Your Information (Summary) page: document submission", () => {
 
 describe("Check Your Information (Summary) page: document submission validation error", () => {
   it("should redirect user to storage document created page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDCheckYourInformationValidationFailure,
     };
@@ -317,7 +292,6 @@ describe("Check Your Information (Summary) page: pre-submit completeness check (
 
 describe("Check Your Information (Summary) page: pre-submit weight relationship check (FI0-10945)", () => {
   it("should block submit for original NMD when departure weights exceed arrival weights", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDCheckYourInformationSubmitInvalidWeightsOriginal,
     };
@@ -331,7 +305,6 @@ describe("Check Your Information (Summary) page: pre-submit weight relationship 
   });
 
   it("should block submit for copied NMD when edited arrival weights make departure weights invalid", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDCheckYourInformationSubmitInvalidWeightsCopied,
     };
@@ -347,7 +320,6 @@ describe("Check Your Information (Summary) page: pre-submit weight relationship 
 
 describe("Check Your Information (Summary) page: guard", () => {
   it("should redirect user to the forbidden page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDCheckYourInformationValidationGuard,
     };
@@ -357,7 +329,6 @@ describe("Check Your Information (Summary) page: guard", () => {
   });
 
   it("should redirect user to the progress page for an incomplete storage document", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDCheckYourInformationValidationProgress,
     };
@@ -367,7 +338,6 @@ describe("Check Your Information (Summary) page: guard", () => {
   });
 
   it("should redirect user to dashboard when storage document is already complete", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDCheckYourInformationValidationComplete,
     };
@@ -386,7 +356,6 @@ describe("SD: check-your-information page with issuing country", () => {
   });
 
   it("should display issuing country for non-UK certificates", () => {
-    cy.wrap(true).should("be.true");
     // Check that the issuing country field is displayed
     cy.contains("dt", "Issuing country").should("be.visible");
 
@@ -395,13 +364,11 @@ describe("SD: check-your-information page with issuing country", () => {
   });
 
   it("should not display issuing country for UK certificates", () => {
-    cy.wrap(true).should("be.true");
     // The second catch is UK-issued, so there should be only one issuing country field
     cy.get("dt").contains("Issuing country").should("have.length", 1);
   });
 
   it("should have change link for issuing country", () => {
-    cy.wrap(true).should("be.true");
     // Check that the change link exists for issuing country
     cy.contains("dt", "Issuing country")
       .nextAll()
@@ -422,17 +389,14 @@ describe("SD: check-your-information page - container numbers for truck departur
   });
 
   it("should display container identification numbers label", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Shipping container identification number").should("be.visible");
   });
 
   it("should display container numbers values", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dd", "CONT123, CONT456, CONT789").should("be.visible");
   });
 
   it("should have change link for container numbers", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Shipping container identification number")
       .parent()
       .find("a")
@@ -442,7 +406,6 @@ describe("SD: check-your-information page - container numbers for truck departur
   });
 
   it("should have correct anchor in change link URL", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Shipping container identification number")
       .parent()
       .find("a")
@@ -460,17 +423,14 @@ describe("SD: check-your-information page - container numbers for train departur
   });
 
   it("should display container identification numbers label", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Shipping container identification number").should("be.visible");
   });
 
   it("should display container numbers values", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dd", "TRAIN001, TRAIN002").should("be.visible");
   });
 
   it("should have change link for container numbers", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Shipping container identification number")
       .parent()
       .find("a")
@@ -480,7 +440,6 @@ describe("SD: check-your-information page - container numbers for train departur
   });
 
   it("should have correct anchor in change link URL", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Shipping container identification number")
       .parent()
       .find("a")
@@ -498,17 +457,14 @@ describe("SD: check-your-information page - Point of destination display", () =>
   });
 
   it("should display Point of destination label", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Point of destination").should("be.visible");
   });
 
   it("should display Point of destination value", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dd", "Calais port").should("be.visible");
   });
 
   it("should have change link for Point of destination", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Point of destination")
       .parent()
       .find("a")
@@ -519,7 +475,6 @@ describe("SD: check-your-information page - Point of destination display", () =>
   });
 
   it("should have correct anchor in change link URL for Point of destination", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("dt", "Point of destination")
       .parent()
       .find("a")
@@ -539,7 +494,6 @@ describe("SD: Point of destination - Edit from check-your-information", () => {
     });
 
     it("should navigate to truck transport page when clicking point of destination change link", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.url().should("include", "/add-transportation-details-truck");
@@ -547,7 +501,6 @@ describe("SD: Point of destination - Edit from check-your-information", () => {
     });
 
     it("should pre-populate point of destination field with existing value", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.get("#pointOfDestination").should("have.value", "Brussels Central Station");
@@ -563,7 +516,6 @@ describe("SD: Point of destination - Edit from check-your-information", () => {
     });
 
     it("should navigate to plane transport page when clicking point of destination change link", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.url().should("include", "/add-transportation-details-plane");
@@ -571,7 +523,6 @@ describe("SD: Point of destination - Edit from check-your-information", () => {
     });
 
     it("should pre-populate point of destination field with existing value", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.get("#pointOfDestination").should("have.value", "Amsterdam Schiphol Airport");
@@ -587,7 +538,6 @@ describe("SD: Point of destination - Edit from check-your-information", () => {
     });
 
     it("should navigate to train transport page when clicking point of destination change link", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.url().should("include", "/add-transportation-details-train");
@@ -595,7 +545,6 @@ describe("SD: Point of destination - Edit from check-your-information", () => {
     });
 
     it("should pre-populate point of destination field with existing value", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.get("#pointOfDestination").should("have.value", "Paris Gare du Nord");
@@ -611,7 +560,6 @@ describe("SD: Point of destination - Edit from check-your-information", () => {
     });
 
     it("should navigate to container vessel transport page when clicking point of destination change link", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.url().should("include", "/add-transportation-details-container-vessel");
@@ -619,7 +567,6 @@ describe("SD: Point of destination - Edit from check-your-information", () => {
     });
 
     it("should pre-populate point of destination field with existing value", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("dt", "Point of destination").parent().find("a").contains("Change").click();
 
       cy.get("#pointOfDestination").should("have.value", "Rotterdam Port");
@@ -631,7 +578,6 @@ describe("SD: Point of destination - Field visibility on all transport types", (
   const documentNumber = "GBR-2022-SD-F71D98A30";
 
   it("should display Point of destination field on truck transport page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TruckTransportAllowed,
     };
@@ -648,7 +594,6 @@ describe("SD: Point of destination - Field visibility on all transport types", (
   });
 
   it("should display Point of destination field on plane transport page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportAllowed,
     };
@@ -661,7 +606,6 @@ describe("SD: Point of destination - Field visibility on all transport types", (
   });
 
   it("should display Point of destination field on train transport page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TrainTransportAllowed,
     };
@@ -674,7 +618,6 @@ describe("SD: Point of destination - Field visibility on all transport types", (
   });
 
   it("should display Point of destination field on container vessel transport page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.ContainerVesselTransportAllowed,
     };
@@ -689,7 +632,6 @@ describe("SD: Point of destination - Field visibility on all transport types", (
 
 describe("SD: check-your-information page - Not Provided fallback", () => {
   it("should display 'Not provided' for airwayBillNumber, freightBillNumber, supportingDocuments and facilityApprovalNumber", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDCheckYourInformationAllFieldsNotProvided,
     };

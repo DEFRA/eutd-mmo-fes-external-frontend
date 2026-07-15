@@ -5,7 +5,6 @@ const progressUrl = `${certificateUrl}/progress`;
 
 describe("ProgressPage - Cache-Control header", () => {
   it("should return Cache-Control: no-store to prevent stale progress state on back navigation (FI0-11073)", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSIncompleteProgress,
     };
@@ -25,14 +24,12 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should display a processing statement header", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Create a UK processing statement$/)
       .should("be.visible")
       .should("have.attr", "href", "/create-processing-statement/processing-statements");
   });
 
   it("should display back button and back button should have correct href pointing to processing statement dashboard", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", "/create-processing-statement/processing-statements");
@@ -53,7 +50,6 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should display the correct headings", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='ps-progress-titling']", "Your Progress");
     cy.contains("[data-testid='ps-progress-heading']", "Processing Statement application: GBR-2021-PS-8EEB7E123");
 
@@ -61,27 +57,23 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should display Application incomplete when NOT all required sections have been completed", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='Progress-completed-heading']", "Application incomplete");
 
     cy.get("body").should("exist");
   });
 
   it("should display number of completed required sections", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='completedSections']", "You have completed 0 of 6 required sections.");
 
     cy.get("body").should("exist");
   });
 
   it("should display the correct tags", () => {
-    cy.wrap(true).should("be.true");
     cy.get("li strong:contains('OPTIONAL')").should("have.length", 1);
     cy.get("li strong:contains('INCOMPLETE')").should("have.length", 6);
   });
 
   it("should not render duplicate id attributes in the progress list", () => {
-    cy.wrap(true).should("be.true");
     cy.get(".app-task-list [id]").then(($elements) => {
       const ids = [...$elements].map((element) => element.id).filter(Boolean);
       const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
@@ -91,13 +83,11 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should redirect to the exporter processing statement dashboard", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=return-to-dashboard-button]").click();
     cy.url().should("include", "/processing-statements");
   });
 
   it("should display errors", () => {
-    cy.wrap(true).should("be.true");
     cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/progress");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
@@ -132,26 +122,22 @@ describe("ProgressPage - Completed Application", () => {
   });
 
   it("should display Application completed when all required sections have been completed", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
 
     cy.get("body").should("exist");
   });
 
   it("should display number of completed required sections", () => {
-    cy.wrap(true).should("be.true");
     cy.contains("[data-testid='completedSections']", "You have completed 6 of 6 required sections.");
 
     cy.get("body").should("exist");
   });
 
   it("should display the correct tags", () => {
-    cy.wrap(true).should("be.true");
     cy.get("li strong:contains('COMPLETE')").should("have.length", 6);
   });
 
   it("should redirect to check-your-information page when click on Check your answers button", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="continue-button"]').click();
 
     cy.get("body").should("exist");
@@ -168,7 +154,6 @@ describe("ProgressPage - Completed Application Unauthorised", () => {
   });
 
   it("should redirect to forbidden page when click on Check your answers button", () => {
-    cy.wrap(true).should("be.true");
     cy.get('[data-testid="continue-button"]').click();
     cy.url().should("contain", "/forbidden");
   });
@@ -176,7 +161,6 @@ describe("ProgressPage - Completed Application Unauthorised", () => {
 
 describe("should display the notificationBanner", () => {
   it("first visit copy page then click on green button to navigate progress page", () => {
-    cy.wrap(true).should("be.true");
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSSDCopyAllData,
       disableScripts: true,
@@ -241,12 +225,10 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should display application completed status", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("[data-testid='Progress-completed-heading']", "Application completed").should("be.visible");
     });
 
     it("should display error when attempting to continue with description-only products", () => {
-      cy.wrap(true).should("be.true");
       cy.get('[data-testid="continue-button"]').click();
       cy.url().should("include", "/progress");
 
@@ -266,7 +248,6 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should remain on progress page after validation error", () => {
-      cy.wrap(true).should("be.true");
       cy.get('[data-testid="continue-button"]').click();
       cy.url().should("include", "/progress");
       cy.url().should("not.include", "/check-your-information");
@@ -282,12 +263,10 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should display application completed status", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("[data-testid='Progress-completed-heading']", "Application completed").should("be.visible");
     });
 
     it("should display error when attempting to continue with mixed products", () => {
-      cy.wrap(true).should("be.true");
       cy.get('[data-testid="continue-button"]').click();
       cy.url().should("include", "/progress");
 
@@ -307,7 +286,6 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should remain on progress page after validation error", () => {
-      cy.wrap(true).should("be.true");
       cy.get('[data-testid="continue-button"]').click();
       cy.url().should("include", "/progress");
       cy.url().should("not.include", "/check-your-information");
@@ -323,19 +301,16 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should display application completed status", () => {
-      cy.wrap(true).should("be.true");
       cy.contains("[data-testid='Progress-completed-heading']", "Application completed").should("be.visible");
     });
 
     it("should allow progression to check-your-information when all products have catches", () => {
-      cy.wrap(true).should("be.true");
       cy.get('[data-testid="continue-button"]').click();
       // Should redirect successfully (no error)
       cy.url().should("not.include", "/progress");
     });
 
     it("should not display validation errors", () => {
-      cy.wrap(true).should("be.true");
       cy.get('[data-testid="continue-button"]').click();
       cy.contains("h2", /^There is a problem$/).should("not.exist");
     });
@@ -350,7 +325,6 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should display multiple inline errors for incomplete sections", () => {
-      cy.wrap(true).should("be.true");
       cy.get('[data-testid="continue-button"]').click();
       cy.url().should("include", "/progress");
 
@@ -374,7 +348,6 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
     });
 
     it("should ensure all errors are accessible and visible", () => {
-      cy.wrap(true).should("be.true");
       cy.get('[data-testid="continue-button"]').click();
 
       // Verify error summary links are functional
