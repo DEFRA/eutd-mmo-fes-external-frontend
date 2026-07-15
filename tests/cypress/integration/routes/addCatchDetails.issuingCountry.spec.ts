@@ -85,8 +85,15 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
       else cy.wrap($el).clear().type("Spain");
     });
 
-    // Now clear the issuing country field by clicking the field and clearing it
-    cy.get("#catches-0-issuingCountry").clear();
+    // Clear the field using keyboard input so the autocomplete updates its local state.
+    cy.get("#catches-0-issuingCountry").then(($field) => {
+      if ($field.is("select")) {
+        cy.wrap($field).select("");
+      } else {
+        cy.wrap($field).focus().type("{selectall}{backspace}", { force: true });
+      }
+    });
+    cy.get("#catches-0-issuingCountry").should("have.value", "");
 
     // Click Add button without required certificate number
     cy.get('[data-testid="add-product-details"]').click();
