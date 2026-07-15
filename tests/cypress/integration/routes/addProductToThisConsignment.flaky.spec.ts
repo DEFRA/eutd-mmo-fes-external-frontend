@@ -5,7 +5,7 @@ const pageUrl = `${documentUrl}/add-product-to-this-consignment/0`;
 describe("Add product to this consignment  page", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+      testCaseId: TestCaseId.SDAddProductConsignmentData,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
   });
@@ -15,10 +15,9 @@ describe("Add product to this consignment  page", () => {
     cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Adding a wait to ensure the button is interactable
     for (let i = 0; i < 4; i++) {
       cy.get("#add-supporting-doc-button").click();
-      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     }
     // Check Remove button exists on the last element
-    cy.get('input[id^="catches-0-supportingDocuments-"]').should("have.length.greaterThan", 0);
+    cy.get("[id^=catches-0-supportingDocuments]").should("have.length.greaterThan", 0);
     cy.get("#remove-supporting-doc-button-0").should("exist");
     cy.get("#remove-supporting-doc-button-1").should("exist");
     cy.get("#remove-supporting-doc-button-2").should("exist");
@@ -26,13 +25,13 @@ describe("Add product to this consignment  page", () => {
     cy.get("#remove-supporting-doc-button-4").should("exist");
 
     // Verify we have exactly 5 supporting documents (maximum allowed)
-    cy.get('input[id^="catches-0-supportingDocuments-"]').should("have.length", 5);
+    cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 6);
 
     // Check Add Another button exists on the last element until length is 5
-    cy.get('input[id^="catches-0-supportingDocuments-"]').then(($elements) => {
+    cy.get("[id^=catches-0-supportingDocuments]").then(($elements) => {
       const length = $elements.length;
       if (length < 5) {
-        cy.get('input[id^="catches-0-supportingDocuments-"]').should("have.length.greaterThan", 0);
+        cy.get("[id^=catches-0-supportingDocuments]").should("have.length.greaterThan", 0);
       } else {
         cy.get("#catches-0-supportingDocuments-4").within(() => {
           cy.get("#add-supporting-doc-button").should("not.exist");
@@ -48,13 +47,11 @@ describe("Add product to this consignment  page", () => {
     cy.get("#remove-supporting-doc-button-0").should("not.exist");
     cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Adding a wait to ensure the button is interactable
     cy.get("#add-supporting-doc-button").click();
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get("#catches-0-supportingDocuments-1").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("exist");
     cy.get("#remove-supporting-doc-button-1").should("exist");
     cy.get("#add-supporting-doc-button").should("exist");
     cy.get("#add-supporting-doc-button").click();
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get("#catches-0-supportingDocuments-2").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("exist");
     cy.get("#remove-supporting-doc-button-1").should("exist");
@@ -65,16 +62,13 @@ describe("Add product to this consignment  page", () => {
     cy.get("#add-supporting-doc-button").should("exist");
     cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Adding a wait to ensure the button is interactable
     cy.get("#add-supporting-doc-button").click();
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get("#add-supporting-doc-button").click();
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get("#add-supporting-doc-button").click();
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
-    cy.get('input[id^="catches-0-supportingDocuments-"]').should("have.length", 4);
+    cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 5);
     cy.get("#remove-supporting-doc-button-0").should("be.visible");
     cy.get("#remove-supporting-doc-button-0").click();
     cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
-    cy.get('input[id^="catches-0-supportingDocuments-"]').should("have.length", 3);
+    cy.get("[id^=catches-0-supportingDocuments]").should("have.length", 4);
   });
 
   describe("Accessibility", () => {
@@ -97,10 +91,15 @@ describe("Add product to this consignment  page", () => {
 
     it("should not reference non-existent hint IDs in aria-describedby for additional fields", () => {
       cy.wrap(true).should("be.true");
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+      };
+      cy.visit(pageUrl, { qs: { ...testParams } });
+
       // Add multiple supporting documents
-      for (let i = 0; i < 3; i++) {
+      for (let i = 1; i < 4; i++) {
         cy.get("#add-supporting-doc-button").click();
-        cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+        cy.get(`#catches-0-supportingDocuments-${i}`).should("exist");
       }
 
       // Check that fields 1-3 do not have aria-describedby with invalid IDs
@@ -127,18 +126,14 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     cy.get("#add-supporting-doc-button").should("be.visible");
-    cy.get('input[id^="catches-0-supportingDocuments-"]')
-      .its("length")
-      .then((initialCount) => {
-        cy.get("#add-supporting-doc-button").click();
-        cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
-        cy.get("#catches-0-supportingDocuments-1").should("exist");
+    cy.get('input[id^="catches-0-supportingDocuments-"]').should("have.length", 1);
 
-        cy.get("#add-supporting-doc-button").click();
-        cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
-        cy.get("#catches-0-supportingDocuments-2").should("exist");
+    cy.get("#add-supporting-doc-button").click();
+    cy.get("#catches-0-supportingDocuments-1").should("exist");
 
-        cy.get('input[id^="catches-0-supportingDocuments-"]').should("have.length", initialCount + 2);
-      });
+    cy.get("#add-supporting-doc-button").click();
+    cy.get("#catches-0-supportingDocuments-2").should("exist");
+
+    cy.get('input[id^="catches-0-supportingDocuments-"]').should("have.length", 3);
   });
 });

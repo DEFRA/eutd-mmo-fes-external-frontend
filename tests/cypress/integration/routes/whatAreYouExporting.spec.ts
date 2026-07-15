@@ -1325,28 +1325,17 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
       cy.get("[data-testid*='edit-button']").first().click();
       cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
-      cy.get("#species").invoke("val");
-
-      // Clear and type new species - break the chain to avoid detached DOM errors
-      cy.get("#species").clear();
-      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
-      cy.get("#species").type("Atlantic cod");
+      // Drive the input directly so the state lookup refreshes without depending on a dropdown option
+      cy.get("#species").invoke("val", "Albacore").trigger("input").trigger("change");
       cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
-      // Select from autocomplete if available
-      cy.get("body").then(($body) => {
-        if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click();
-          cy.document({ timeout: 2000 }).its("readyState").should("eq", "complete");
+      cy.get("#species").should("contain.value", "Albacore");
 
-          // Verify species code changed
-          cy.get("input[name='speciesCode']")
-            .invoke("val")
-            .then((val) => {
-              cy.wrap(val).should("not.equal", "AES");
-            });
-        }
+      cy.get("input[name='speciesCode']").should(($input) => {
+        expect($input.val()).to.not.equal("AES");
       });
+      cy.get("#state option", { timeout: 10000 }).should("have.length.greaterThan", 1);
+      cy.get("#state").should("have.value", "");
     });
   });
 
@@ -1606,23 +1595,18 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
       cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       // Clear species field (simulates selecting empty value)
-      cy.get("#species").clear();
-      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+      cy.get("#species").select(0);
+      cy.get("#species").should("have.value", "");
 
       // Type and select again
       cy.get("#species").type("Whiting");
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
-      cy.get("body").then(($body) => {
-        if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click();
-          cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+      cy.get(".autocomplete__option", { timeout: 10000 }).should("have.length.greaterThan", 0);
+      cy.get(".autocomplete__option").first().click();
 
-          // handleSpeciesSelection should set all fields correctly
-          cy.get("#species").invoke("val").should("not.be.empty");
-          cy.get("#state").should("have.value", "");
-        }
-      });
+      // handleSpeciesSelection should set all fields correctly
+      cy.get("#species").invoke("val").should("not.be.empty");
+      cy.get("#state").should("have.value", "");
     });
   });
 

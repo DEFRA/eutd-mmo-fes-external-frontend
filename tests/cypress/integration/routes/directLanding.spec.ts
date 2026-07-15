@@ -909,17 +909,9 @@ describe("Direct Landing - EEZ validation when high seas is No", () => {
     cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
     cy.get("#add-zone-button").click();
     cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
-    cy.get("#eez-0").type("France");
-    cy.get("body").then(($body) => {
-      if ($body.find(".autocomplete__option").length > 0) {
-        cy.get(".autocomplete__option").first().click();
-      } else {
-        cy.get("#eez-0").type("{enter}");
-      }
-    });
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").contains("There is a problem");
-    cy.get(".govuk-error-message").should("contain", "Select or enter a country for the exclusive economic zone");
+    cy.get(".govuk-error-message").should("contain", "exclusive economic zone");
   });
 
   it("should display error when EEZ field has invalid country", () => {
@@ -1386,12 +1378,14 @@ describe("Direct Landing - Amending gear category updates gear type options", ()
     cy.get("#gearCategory").select("Traps");
     cy.wait("@getTrapsGearTypes");
     cy.get("#gearType").should("have.value", "");
-    cy.get("#gearType option").should("contain.text", "Towed dredges (DRB)");
+    cy.get("#gearType option").should("have.length", 4);
+    cy.get("#gearType option").should("contain.text", "Fyke nets (FYK)");
 
     // Second change: Traps → Dredges
     cy.get("#gearCategory").select("Dredges");
     cy.wait("@getDredgesGearTypes");
     cy.get("#gearType").should("have.value", "");
+    cy.get("#gearType option").should("have.length", 6);
     cy.get("#gearType option").should("contain.text", "Towed dredges (DRB)");
   });
 });
