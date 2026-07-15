@@ -88,7 +88,7 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
       if ($field.is("select")) {
         cy.wrap($field).select("");
       } else {
-        cy.wrap($field).focus().type("{selectall}{backspace}", { force: true });
+        cy.wrap($field).should("be.enabled").focus().type("{selectall}{backspace}");
       }
     });
     cy.get("#catches-0-issuingCountry").should("have.value", "");
