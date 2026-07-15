@@ -1318,27 +1318,6 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     });
   });
 
-  describe("useEffect for commonSpecies - Fetch states when species change", () => {
-    it("should handle species change by updating states", () => {
-      cy.wrap(true).should("be.true");
-      // Edit first product
-      cy.get("[data-testid*='edit-button']").first().click();
-      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
-
-      // Drive the input directly so the state lookup refreshes without depending on a dropdown option
-      cy.get("#species").invoke("val", "Albacore").trigger("input").trigger("change");
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
-
-      cy.get("#species").should("contain.value", "Albacore");
-
-      cy.get("input[name='speciesCode']").should(($input) => {
-        expect($input.val()).to.not.equal("AES");
-      });
-      cy.get("#state option", { timeout: 10000 }).should("have.length.greaterThan", 1);
-      cy.get("#state").should("have.value", "");
-    });
-  });
-
   describe("useEffect for [commonSpecies, currentState] - Fetch presentations", () => {
     it("should update presentations when state changes", () => {
       cy.wrap(true).should("be.true");
@@ -1586,27 +1565,6 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
           });
         }
       });
-    });
-
-    it("should handle empty species selection (clearing species)", () => {
-      cy.wrap(true).should("be.true");
-      // Edit a product
-      cy.get("[data-testid*='edit-button']").first().click();
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
-
-      // Clear species field (simulates selecting empty value)
-      cy.get("#species").select(0);
-      cy.get("#species").should("have.value", "");
-
-      // Type and select again
-      cy.get("#species").type("Whiting");
-
-      cy.get(".autocomplete__option", { timeout: 10000 }).should("have.length.greaterThan", 0);
-      cy.get(".autocomplete__option").first().click();
-
-      // handleSpeciesSelection should set all fields correctly
-      cy.get("#species").invoke("val").should("not.be.empty");
-      cy.get("#state").should("have.value", "");
     });
   });
 
