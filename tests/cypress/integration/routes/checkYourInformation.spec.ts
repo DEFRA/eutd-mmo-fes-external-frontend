@@ -112,7 +112,7 @@ describe("Check Your Information (Summary) page: UI", () => {
     cy.findByRole("heading", {
       name: "Check your information before you create the catch certificate",
       level: 1,
-    });
+    }).should("be.visible");
   });
 
   it("should render document number in exporter details section", () => {
