@@ -19,8 +19,8 @@ describe("Check Your Information: Back link navigation", () => {
     });
   });
 
-  describe("Back link for non-manual entry (upload/direct landing) without copy context", () => {
-    it("should navigate back to progress page with backUri to what-export-journey for upload entry", () => {
+  describe("Back link for upload/direct landing without copy context", () => {
+    it("should navigate back to progress page with backUri to do-you-have-additional-transport-types for upload entry", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCCheckYourInformation,
       };
@@ -30,7 +30,7 @@ describe("Check Your Information: Back link navigation", () => {
         .should("be.visible")
         .should("have.attr", "href")
         .and("include", `${documentUrl}/progress?backUri=`)
-        .and("include", "what-export-journey");
+        .and("include", "do-you-have-additional-transport-types");
     });
 
     it("should navigate back to progress page with backUri to what-export-journey for direct landing", () => {
