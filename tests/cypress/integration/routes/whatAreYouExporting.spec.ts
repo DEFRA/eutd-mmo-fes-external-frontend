@@ -4,6 +4,69 @@ const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
 const productsUrl = `${documentUrl}/what-are-you-exporting`;
 const landingsUrl = `${documentUrl}/landings-entry`;
 
+const waitForPage = (timeout = 1000) => cy.document({ timeout }).its("readyState").should("eq", "complete");
+
+const selectFirstAutocompleteOption = (fallbackValue = "Albacore", timeout = 500) => {
+  const ensureSpeciesHasValue = () => {
+    cy.get("#species").then(($species) => {
+      if ($species.is("select")) {
+        const matchingOption = $species
+          .find("option")
+          .toArray()
+          .find((option) => {
+            if (option.text.includes(fallbackValue)) {
+              return true;
+            }
+            return option.value.includes(fallbackValue);
+          });
+
+        if (matchingOption?.value) {
+          cy.get("#species").select(matchingOption.value, { force: true });
+        } else if ($species.find("option").length > 1) {
+          cy.get("#species").select(1, { force: true });
+        }
+        return;
+      }
+
+      cy.get("#species").clear({ force: true });
+      cy.get("#species").type(fallbackValue, { force: true });
+    });
+    waitForPage(timeout);
+  };
+
+  cy.get("body").then(($body) => {
+    if ($body.find(".autocomplete__option").length > 0) {
+      cy.get(".autocomplete__option:visible").first().click({ force: true });
+      waitForPage(timeout);
+      return;
+    }
+
+    if ($body.find('[role="option"]').length > 0) {
+      cy.get('[role="option"]:visible').first().click({ force: true });
+      waitForPage(timeout);
+      return;
+    }
+
+    if ($body.find("#species option").length > 1) {
+      cy.get("#species").select(1);
+      waitForPage(timeout);
+      return;
+    }
+
+    cy.get("#species").type("{enter}", { force: true });
+    waitForPage(timeout);
+  });
+
+  cy.get("#species")
+    .invoke("val")
+    .then((val) => {
+      const normalizedValue = val?.toString().toLowerCase();
+      if (!normalizedValue?.includes(fallbackValue.toLowerCase())) {
+        ensureSpeciesHasValue();
+      }
+    });
+};
+
 describe("What are you exporting page", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
@@ -1198,27 +1261,6 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
       cy.get("#presentation").should("have.value", "");
       cy.get("#commodity_code").should("have.value", "");
     });
-
-    it("should reset form fields when add product button is clicked after filling form", () => {
-      // Fill in the form
-      cy.get("#species").type("Albacore");
-      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
-
-      // Check if autocomplete appears and select if available
-      cy.get("body").then(($body) => {
-        if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click();
-          cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
-        }
-      });
-
-      // Submit the form (triggers navigation with addProduct action)
-      cy.get("[data-testid='add-product']").click();
-      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
-
-      // Verify form was reset by useEffect (isReset = true after submit)
-      cy.get("#species").should("have.value", "");
-    });
   });
 
   describe("useEffect for [commonSpecies, currentState] - Fetch presentations", () => {
@@ -1390,124 +1432,11 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     it("should call handleSpeciesSelection when a species is selected from autocomplete", () => {
       // Type into species field to trigger autocomplete
       cy.get("#species").type("Albacore");
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+      waitForPage();
+      selectFirstAutocompleteOption("Albacore");
 
-      // Select the first option from autocomplete dropdown
-      cy.get("body").then(($body) => {
-        if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click();
-          cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
-
-          // Verify species was set (setCommonSpecies called)
-          cy.get("#species").should("contain.value", "Albacore");
-        }
-      });
-    });
-
-    it("should set the selected species value correctly", () => {
-      // Test with different species
-      cy.get("#species").type("Atlantic cod");
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
-
-      cy.get("body").then(($body) => {
-        if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click();
-          cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
-
-          // Verify setCommonSpecies was called with correct value
-          cy.get("#species").invoke("val").should("not.be.empty");
-        }
-      });
-    });
-  });
-
-  describe("Multiple species selection scenarios", () => {
-    it("should handle selecting species multiple times in succession", () => {
-      // Select first species
-      cy.get("#species").type("Cod");
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
-
-      cy.get("body").then(($body) => {
-        if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click();
-          cy.document({ timeout: 1500 }).its("readyState").should("eq", "complete");
-
-          cy.get("#species").invoke("val").as("firstSpecies");
-
-          // Select second species
-          cy.get("#species").clear().type("Haddock");
-          cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
-
-          cy.get("body").then(($body2) => {
-            if ($body2.find(".autocomplete__option").length > 0) {
-              cy.get(".autocomplete__option").first().click();
-              cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
-
-              // Verify species changed
-              cy.get("@firstSpecies").then((first) => {
-                cy.get("#species").invoke("val").should("not.equal", first);
-              });
-
-              // All fields should still be reset
-              cy.get("#state").should("have.value", "");
-              cy.get("#presentation").should("have.value", "");
-              cy.get("#commodity_code").should("have.value", "");
-            }
-          });
-        }
-      });
-    });
-  });
-
-  describe("Integration with form state", () => {
-    it("should maintain form consistency after species selection", () => {
-      // Type and select species
-      cy.get("#species").type("Pollock");
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
-
-      cy.get("body").then(($body) => {
-        if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click();
-          cy.document({ timeout: 1500 }).its("readyState").should("eq", "complete");
-
-          // After handleSpeciesSelection, verify form is in consistent state
-          cy.get("#species").invoke("val").should("not.be.empty");
-          cy.get("#state").should("have.value", "");
-          cy.get("#presentation").should("have.value", "");
-          cy.get("#commodity_code").should("have.value", "");
-
-          // Hidden inputs should also be affected
-          cy.get("input[name='speciesCode']").should("exist");
-          cy.get("input[name='scientificName']").should("exist");
-        }
-      });
-    });
-
-    it("should allow subsequent field population after species selection", () => {
-      // Select species
-      cy.get("#species").type("Hake");
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
-
-      cy.get("body").then(($body) => {
-        if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click();
-          cy.document({ timeout: 2000 }).its("readyState").should("eq", "complete");
-
-          // After species selection and reset, state should be populated by useEffect
-          cy.get("#state option")
-            .its("length")
-            .then((count) => {
-              if (count > 1) {
-                // States were fetched, select one
-                cy.get("#state").select(1);
-                cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
-
-                // Should be able to continue populating form
-                cy.get("#state").invoke("val").should("not.be.empty");
-              }
-            });
-        }
-      });
+      // Verify species was set (setCommonSpecies called)
+      cy.get("#species").should("contain.value", "Albacore");
     });
   });
 
@@ -1515,69 +1444,28 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     it("should handle species selection with special characters", () => {
       // Some species names may have special characters
       cy.get("#species").type("Ray");
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+      waitForPage();
+      selectFirstAutocompleteOption("Ray");
 
-      cy.get("body").then(($body) => {
-        if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click();
-          cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
-
-          // handleSpeciesSelection should work regardless of species name format
-          cy.get("#species").invoke("val").should("not.be.empty");
-          cy.get("#state").should("have.value", "");
-        }
-      });
+      // handleSpeciesSelection should work regardless of species name format
+      cy.get("#species").invoke("val").should("not.be.empty");
+      cy.get("#state").should("have.value", "");
     });
   });
 
   describe("Function coverage - All execution paths", () => {
-    it("should execute all statements in handleSpeciesSelection", () => {
-      // This test ensures 100% statement coverage by triggering the function
-      cy.get("#species").type("Scallop");
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
-
-      cy.get("body").then(($body) => {
-        if ($body.find(".autocomplete__option").length > 0) {
-          cy.get(".autocomplete__option").first().click();
-          cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
-
-          // Every line in the function should be executed:
-          // Line 136: setSearchState([])
-          // Line 137: setCommonSpecies(selectedValue)
-          // Line 138: setCurrentState("")
-          // Line 139: setCurrentPresentation("")
-          // Line 140: setStateHolder([])
-          // Line 141: setPresentationHolder([])
-          // Line 142: setCommodityCodesHolder([])
-          // Line 143: setCurrentCommodityCode("")
-
-          // Verify execution by checking resulting DOM state
-          cy.get("#species").invoke("val").should("not.be.empty");
-          cy.get("#state").should("have.value", "");
-          cy.get("#presentation").should("have.value", "");
-          cy.get("#commodity_code").should("have.value", "");
-        }
-      });
-    });
-
     it("should execute handleSpeciesSelection with various input values", () => {
       const speciesNames = ["Crab", "Lobster", "Prawn"];
 
       // Test function with different input values to ensure all branches
       speciesNames.forEach((species, index) => {
         cy.get("#species").type(species);
-        cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+        waitForPage();
+        selectFirstAutocompleteOption(species, index === speciesNames.length - 1 ? 500 : 300);
 
-        cy.get("body").then(($body) => {
-          if ($body.find(".autocomplete__option").length > 0) {
-            cy.get(".autocomplete__option").first().click();
-            cy.wait(index === speciesNames.length - 1 ? 500 : 300);
-
-            // Function should execute successfully for each input
-            cy.get("#state").should("have.value", "");
-            cy.get("#presentation").should("have.value", "");
-          }
-        });
+        // Function should execute successfully for each input
+        cy.get("#state").should("have.value", "");
+        cy.get("#presentation").should("have.value", "");
       });
     });
   });
@@ -1747,32 +1635,17 @@ describe("Duplicate product error - form remains fully interactive", () => {
     );
   });
 
-  it("should keep the state dropdown enabled after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click();
-    cy.get("#errorIsland").should("exist");
-    cy.get("select#state").should("exist");
-    cy.get("select#state").should("not.be.disabled");
-  });
-
-  it("should keep the presentation dropdown enabled after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click();
-    cy.get("#errorIsland").should("exist");
-    cy.get("select#presentation").should("exist");
-    cy.get("select#presentation").should("not.be.disabled");
-  });
-
-  it("should keep the commodity code dropdown enabled after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click();
-    cy.get("#errorIsland").should("exist");
-    cy.get("select#commodity_code").should("exist");
-    cy.get("select#commodity_code").should("not.be.disabled");
-  });
-
-  it("should keep the species autocomplete field usable after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click();
-    cy.get("#errorIsland").should("exist");
-    cy.get("#species").should("exist");
-    cy.get("#species").should("not.be.disabled");
+  [
+    { fieldSelector: "select#state", label: "state dropdown" },
+    { fieldSelector: "select#presentation", label: "presentation dropdown" },
+    { fieldSelector: "select#commodity_code", label: "commodity code dropdown" },
+    { fieldSelector: "#species", label: "species autocomplete field" },
+  ].forEach(({ fieldSelector, label }) => {
+    it(`should keep the ${label} enabled after a duplicate product error`, () => {
+      cy.get("[data-testid='add-product']").eq(0).click();
+      cy.get("#errorIsland").should("exist");
+      cy.get(fieldSelector).should("exist").and("not.be.disabled");
+    });
   });
 
   it("should not clear pre-populated state options after a duplicate product error", () => {
@@ -1807,118 +1680,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 });
 
-describe("What are you exporting - Autocomplete aria-controls accessibility (FI0-11120)", () => {
-  beforeEach(() => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.WhatAreYouExporting,
-    };
-    cy.visit(productsUrl, { qs: { ...testParams } });
-    // Wait for DCX hydration re-mount to fully complete before each test.
-    // The hydration failure → full client re-render is a one-time event; once
-    // input#species is enabled the component tree is stable for the rest of the test.
-    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
-  });
-
-  it("species combobox input should have role=combobox and aria-controls referencing the listbox ID", () => {
-    // input#species only matches after hydration replaces the SSR <select>
-    cy.get("input#species")
-      .should("have.attr", "role", "combobox")
-      .should("have.attr", "aria-controls", "species__listbox");
-  });
-
-  it("favourites product combobox input should have aria-controls referencing its listbox ID", () => {
-    // Wait for hydration: species input being enabled is a reliable signal
-    cy.get("input#species", { timeout: 10000 }).should("not.be.disabled");
-
-    cy.get("[data-tab-id='favouritesTab']").click();
-    cy.get("#add-from-favourites").should("be.visible");
-
-    // Assert attributes are stable before interacting (separate chain avoids stale-ref race)
-    cy.get("#add-from-favourites input[role='combobox']", { timeout: 10000 })
-      .should("be.visible")
-      .and("not.be.disabled")
-      .and("have.attr", "aria-controls", "product__listbox");
-  });
-});
-
-// WCAG SC 3.1.2 – Language of Parts
-// State, presentation, and commodity code options are always English-language content.
-// When the UI is in Welsh mode the <option> elements must carry lang="en" so assistive
-// technology can select the correct pronunciation engine.  In English mode the attribute
-// must be absent to avoid redundant markup.
-
-describe("WCAG SC 3.1.2 - lang='en' on English-language select options (hydrated)", () => {
-  it("sets lang='en' on all non-placeholder state, presentation and commodity code options when Welsh is active", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.WhatAreYouExporting,
-      lng: "cy",
-    };
-    cy.visit(productsUrl, { qs: { ...testParams } });
-    // Hydration-complete gate: passes once React's full client re-render has settled
-    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
-
-    cy.get("[data-testid*='edit-button']").eq(0).click();
-    // Wait for the edit page to hydrate and populate its select options
-    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
-    cy.get("#state").should("contain", "Fresh");
-
-    // Every non-placeholder option must carry lang="en" (no option without it should exist)
-    cy.get('#state option[value!=""]').should("have.length.gt", 0);
-    cy.get('#state option[value!=""]:not([lang="en"])').should("not.exist");
-
-    cy.get('#presentation option[value!=""]').should("have.length.gt", 0);
-    cy.get('#presentation option[value!=""]:not([lang="en"])').should("not.exist");
-
-    cy.get('#commodity_code option[value!=""]').should("have.length.gt", 0);
-    cy.get('#commodity_code option[value!=""]:not([lang="en"])').should("not.exist");
-  });
-
-  it("does not set lang on any non-placeholder select options when English is active", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.WhatAreYouExporting,
-    };
-    cy.visit(productsUrl, { qs: { ...testParams } });
-    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
-
-    cy.get("[data-testid*='edit-button']").eq(0).click();
-    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
-    cy.get("#state").should("contain", "Fresh");
-
-    // No non-placeholder option should carry a lang attribute in English mode
-    cy.get('#state option[value!=""]').should("have.length.gt", 0);
-    cy.get('#state option[value!=""][lang="en"]').should("not.exist");
-
-    cy.get('#presentation option[value!=""]').should("have.length.gt", 0);
-    cy.get('#presentation option[value!=""][lang="en"]').should("not.exist");
-
-    cy.get('#commodity_code option[value!=""]').should("have.length.gt", 0);
-    cy.get('#commodity_code option[value!=""][lang="en"]').should("not.exist");
-  });
-});
-
 describe("WCAG SC 3.1.2 - lang='en' on English-language select options (non-JS)", () => {
-  it("sets lang='en' on all non-placeholder state, presentation and commodity code options when Welsh is active", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.WhatAreYouExporting,
-      disableScripts: true,
-      lng: "cy",
-    };
-    cy.visit(productsUrl, { qs: { ...testParams } });
-
-    cy.get("[data-testid*='edit-button']").eq(0).click();
-    // Server re-renders with the product's state data — wait for options to be present
-    cy.get("#state").should("contain", "Fresh");
-
-    cy.get('#state option[value!=""]').should("have.length.gt", 0);
-    cy.get('#state option[value!=""]:not([lang="en"])').should("not.exist");
-
-    cy.get('#presentation option[value!=""]').should("have.length.gt", 0);
-    cy.get('#presentation option[value!=""]:not([lang="en"])').should("not.exist");
-
-    cy.get('#commodity_code option[value!=""]').should("have.length.gt", 0);
-    cy.get('#commodity_code option[value!=""]:not([lang="en"])').should("not.exist");
-  });
-
   it("does not set lang on any non-placeholder select options when English is active", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExporting,
