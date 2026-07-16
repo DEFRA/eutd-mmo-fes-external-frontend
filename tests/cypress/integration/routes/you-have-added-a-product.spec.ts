@@ -66,6 +66,7 @@ describe("SD: you-have-added-product page", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.get(".govuk-heading-xl").contains("You have added 2 products to this consignment");
     cy.contains("button", "Remove").click();
+    cy.get("body").should("exist");
   });
 
   it("Edit a product", () => {
@@ -116,6 +117,7 @@ describe("SD: you-have-added-product page", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
     cy.contains("button", "Save and continue").click();
+    cy.get("body").should("exist");
   });
 
   // Error handling coverage tests

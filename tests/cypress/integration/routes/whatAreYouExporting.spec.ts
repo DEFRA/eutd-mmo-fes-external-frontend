@@ -21,28 +21,28 @@ const selectFirstAutocompleteOption = (fallbackValue = "Albacore", timeout = 500
           });
 
         if (matchingOption?.value) {
-          cy.get("#species").select(matchingOption.value, { force: true });
+          cy.get("#species").should("be.enabled").select(matchingOption.value);
         } else if ($species.find("option").length > 1) {
-          cy.get("#species").select(1, { force: true });
+          cy.get("#species").should("be.enabled").select(1);
         }
         return;
       }
 
-      cy.get("#species").clear({ force: true });
-      cy.get("#species").type(fallbackValue, { force: true });
+      cy.get("#species").should("be.visible").and("not.be.disabled").clear();
+      cy.get("#species").should("be.visible").and("not.be.disabled").type(fallbackValue);
     });
     waitForPage(timeout);
   };
 
   cy.get("body").then(($body) => {
     if ($body.find(".autocomplete__option").length > 0) {
-      cy.get(".autocomplete__option:visible").first().click({ force: true });
+      cy.get(".autocomplete__option:visible").first().should("be.visible").click();
       waitForPage(timeout);
       return;
     }
 
     if ($body.find('[role="option"]').length > 0) {
-      cy.get('[role="option"]:visible').first().click({ force: true });
+      cy.get('[role="option"]:visible').first().should("be.visible").click();
       waitForPage(timeout);
       return;
     }
@@ -53,7 +53,7 @@ const selectFirstAutocompleteOption = (fallbackValue = "Albacore", timeout = 500
       return;
     }
 
-    cy.get("#species").type("{enter}", { force: true });
+    cy.get("#species").should("be.visible").and("not.be.disabled").type("{enter}");
     waitForPage(timeout);
   });
 
