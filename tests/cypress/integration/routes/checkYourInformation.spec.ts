@@ -2215,7 +2215,7 @@ describe("Check Your Information: Back link navigation with landing entry option
       .should("be.visible")
       .should("have.attr", "href")
       .and("include", `${documentUrl}/progress?backUri=`)
-      .and("include", "what-export-journey");
+      .and("include", "do-you-have-additional-transport-types");
   });
 
   it("should have back link to progress with backUri to what-export-journey for direct landing", () => {
