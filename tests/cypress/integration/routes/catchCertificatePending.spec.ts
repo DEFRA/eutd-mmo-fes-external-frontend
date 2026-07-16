@@ -16,7 +16,6 @@ describe("catch certificate pending page rendering", () => {
 
   it("should render document number", () => {
     cy.get(".govuk-panel__body > strong").contains(documentNumber);
-
     cy.get("body").should("exist");
   });
 
