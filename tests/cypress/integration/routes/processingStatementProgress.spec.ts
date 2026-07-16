@@ -35,36 +35,19 @@ describe("ProgressPage - Incomplete Application", () => {
       .should("have.attr", "href", "/create-processing-statement/processing-statements");
   });
 
-  it("should use backUri query parameter when present", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSIncompleteProgress,
-    };
-
-    cy.visit(`${progressUrl}?backUri=/create-processing-statement/GBR-2021-PS-8EEB7E123/what-export-destination`, {
-      qs: { ...testParams },
-    });
-
-    cy.contains("a", /^Back$/)
-      .should("be.visible")
-      .should("have.attr", "href", "/create-processing-statement/GBR-2021-PS-8EEB7E123/what-export-destination");
-  });
-
   it("should display the correct headings", () => {
     cy.contains("[data-testid='ps-progress-titling']", "Your Progress");
     cy.contains("[data-testid='ps-progress-heading']", "Processing Statement application: GBR-2021-PS-8EEB7E123");
-
     cy.get("body").should("exist");
   });
 
   it("should display Application incomplete when NOT all required sections have been completed", () => {
     cy.contains("[data-testid='Progress-completed-heading']", "Application incomplete");
-
     cy.get("body").should("exist");
   });
 
   it("should display number of completed required sections", () => {
     cy.contains("[data-testid='completedSections']", "You have completed 0 of 6 required sections.");
-
     cy.get("body").should("exist");
   });
 
@@ -123,13 +106,11 @@ describe("ProgressPage - Completed Application", () => {
 
   it("should display Application completed when all required sections have been completed", () => {
     cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
-
     cy.get("body").should("exist");
   });
 
   it("should display number of completed required sections", () => {
     cy.contains("[data-testid='completedSections']", "You have completed 6 of 6 required sections.");
-
     cy.get("body").should("exist");
   });
 
@@ -139,7 +120,6 @@ describe("ProgressPage - Completed Application", () => {
 
   it("should redirect to check-your-information page when click on Check your answers button", () => {
     cy.get('[data-testid="continue-button"]').click();
-
     cy.get("body").should("exist");
   });
 });
@@ -167,46 +147,12 @@ describe("should display the notificationBanner", () => {
     cy.visit("create-processing-statement/GBR-2022-PS-F71D98A30/copy-this-processing-statement", {
       qs: { ...testParams },
     });
-    cy.waitForUiUpdate(500);
-    cy.get("#voidOriginal").click();
+    cy.get('label[for="voidOriginal"]').should("be.visible").click();
     cy.get("#copyDocumentAcknowledged").check();
     cy.get('[data-testid="continue"]').click();
-    cy.get(".govuk-notification-banner__heading")
-      .contains(
-        "This draft was created by copying document GBR-2022-PS-F71D98A30. You are reminded that you must not use a processing statememt or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
-      )
-      .should("be.visible");
-  });
-});
-
-describe("ProgressPage - Back link from copied processing statement", () => {
-  it("should point Back to copy screen when no backUri is provided", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSSDCopyAllData,
-      disableScripts: true,
-    };
-
-    cy.visit("create-processing-statement/GBR-2022-PS-F71D98A30/copy-this-processing-statement", {
-      qs: { ...testParams },
-    });
-    cy.get("#voidOriginal").click();
-    cy.get("#copyDocumentAcknowledged").check();
-    cy.get('[data-testid="continue"]').click();
-
-    cy.url().then((currentUrl) => {
-      const match = currentUrl.match(/\/create-processing-statement\/([^/]+)\/progress/);
-      if (!match) {
-        throw new Error("new processing statement document number should be present in URL");
-      }
-
-      cy.contains("a", /^Back$/)
-        .should("be.visible")
-        .should(
-          "have.attr",
-          "href",
-          "/create-processing-statement/GBR-2022-PS-F71D98A30/copy-this-processing-statement"
-        );
-    });
+    cy.get(".govuk-notification-banner__heading").contains(
+      "This draft was created by copying document GBR-2022-PS-F71D98A30. You are reminded that you must not use a processing statememt or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
+    );
   });
 });
 

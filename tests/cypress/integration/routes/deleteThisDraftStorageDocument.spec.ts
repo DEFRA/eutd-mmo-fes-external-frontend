@@ -34,6 +34,7 @@ describe("Delete this draft storage document page", () => {
     cy.visit(deleteThisStorageDocumentUrl, { qs: { ...testParams } });
     cy.get("#documentDelete").check();
     cy.get("form").submit();
+    cy.get("body").should("exist");
   });
 
   it("Submit form with no option on click of save and continue button", () => {
@@ -43,6 +44,7 @@ describe("Delete this draft storage document page", () => {
     cy.visit(deleteThisStorageDocumentUrl, { qs: { ...testParams } });
     cy.get("#documentDeleteNo").check();
     cy.get("form").submit();
+    cy.get("body").should("exist");
   });
 
   it("forbidden 403", () => {

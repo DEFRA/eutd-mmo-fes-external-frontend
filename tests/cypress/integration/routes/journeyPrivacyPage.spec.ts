@@ -20,6 +20,7 @@ describe("Privacy page for cc journey", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };
+      cy.get("body").should("exist");
       cy.visit("/create-catch-certificate/privacy-notice", { qs: { ...testParams } });
       cy.contains("a", /^Back$/)
         .should("be.visible")

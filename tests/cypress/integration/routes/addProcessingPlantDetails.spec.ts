@@ -70,7 +70,6 @@ describe("Add Processing Plant Details return error response if the back end ret
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
 
     cy.get("[data-testid=save-and-continue").click();
-
     cy.get("body").should("exist");
   });
 

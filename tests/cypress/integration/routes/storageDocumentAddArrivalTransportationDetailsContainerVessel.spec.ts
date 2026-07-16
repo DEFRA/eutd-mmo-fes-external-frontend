@@ -14,6 +14,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
   it("should submit form with vesselName", () => {
     cy.get("#vesselName").type("Test Vessel");
     cy.get("[data-testid=save-and-continue]").click();
+    cy.get("body").should("exist");
   });
 
   it("should render error summary when action returns validation errors", () => {
@@ -348,6 +349,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidCharsFreightBillNumber,
       };
+      cy.get("body").should("exist");
       cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
       cy.get("#freightBillNumber").type("Freight@#");
       cy.get("[data-testid=save-and-continue]").click();

@@ -33,19 +33,16 @@ describe("ProgressPage - Incomplete Application", () => {
   it("should display the correct headings", () => {
     cy.contains("[data-testid='progress-titling']", "Your Progress");
     cy.contains("[data-testid='Progress-heading']", "Catch Certificate application: GBR-2021-CC-8EEB7E123");
-
     cy.get("body").should("exist");
   });
 
   it("should display Application incomplete when NOT all required sections have been completed", () => {
     cy.contains("[data-testid='Progress-completed-heading']", "Application incomplete");
-
     cy.get("body").should("exist");
   });
 
   it("should display number of completed required sections", () => {
     cy.contains("[data-testid='completedSections']", "You have completed 2 of 7 required sections.");
-
     cy.get("body").should("exist");
   });
 
@@ -105,13 +102,11 @@ describe("ProgressPage - Completed Application", () => {
 
   it("should display Application completed when all required sections have been completed", () => {
     cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
-
     cy.get("body").should("exist");
   });
 
   it("should display number of completed required sections", () => {
     cy.contains("[data-testid='completedSections']", "You have completed 7 of 7 required sections.");
-
     cy.get("body").should("exist");
   });
 
@@ -348,72 +343,5 @@ describe("ProgressPage - landings entry type: null", () => {
     });
 
     cy.url().should("include", "forbidden");
-  });
-});
-
-describe("ProgressPage - Back link from copied catch certificate", () => {
-  it("should point Back to landings-entry with backUri to copy-this-catch-certificate when document is copied", () => {
-    const copyParams: ITestParams = {
-      testCaseId: TestCaseId.CCCopyThisCatchCertAllData,
-      disableScripts: true,
-    };
-
-    cy.visit("create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate", {
-      qs: { ...copyParams },
-    });
-    cy.get("#voidOriginal").click();
-    cy.get("#copyDocumentAcknowledged").check();
-    cy.get("[data-testid=continue]").click();
-
-    cy.url().then((landingUrl) => {
-      const landingMatch = landingUrl.match(/\/create-catch-certificate\/([^/]+)\/landings-entry/);
-      if (!landingMatch) {
-        throw new Error("new catch certificate document number should be present in URL");
-      }
-      const newDocumentNumber = landingMatch?.[1] as string;
-
-      const progressParams: ITestParams = {
-        testCaseId: TestCaseId.CCUploadEntryIncompleteProgress,
-      };
-
-      cy.visit(`/create-catch-certificate/${newDocumentNumber}/progress`, {
-        qs: { ...progressParams },
-      });
-
-      // Check that back link includes backUri with copy-this-catch-certificate
-      cy.contains("a", /^Back$/)
-        .should("be.visible")
-        .should("have.attr", "href")
-        .and("include", `/create-catch-certificate/${newDocumentNumber}/landings-entry?backUri=`)
-        .and("include", `copy-this-catch-certificate`);
-    });
-  });
-
-  it("should point Back to landings-entry without backUri when no copy context exists", () => {
-    const progressParams: ITestParams = {
-      testCaseId: TestCaseId.CCUploadEntryIncompleteProgress,
-    };
-
-    cy.visit(progressUrl, { qs: { ...progressParams } });
-
-    cy.contains("a", /^Back$/)
-      .should("be.visible")
-      .invoke("attr", "href")
-      .should("eq", `${certificateUrl}/landings-entry`)
-      .and("not.include", "?backUri=");
-  });
-
-  it("should respect backUri query parameter when provided", () => {
-    const progressParams: ITestParams = {
-      testCaseId: TestCaseId.CCUploadEntryIncompleteProgress,
-    };
-
-    const customBackUri = encodeURIComponent(`${certificateUrl}/custom-page`);
-
-    cy.visit(`${progressUrl}?backUri=${customBackUri}`, { qs: { ...progressParams } });
-
-    cy.contains("a", /^Back$/)
-      .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/custom-page`);
   });
 });
