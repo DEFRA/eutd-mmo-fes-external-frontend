@@ -40,6 +40,8 @@ describe("Check Your Information (Summary) page: UI", () => {
     cy.contains("dt", "Address");
     cy.contains("dt", "Destination country");
     cy.contains("dt", "Point of destination");
+
+    cy.get("body").should("exist");
   });
 
   it("should contain the required data", () => {
@@ -59,6 +61,8 @@ describe("Check Your Information (Summary) page: UI", () => {
     cy.contains("dd", "Test data");
     cy.contains("dd", "30/06/2022");
     cy.contains("dd", "20/2/123456");
+
+    cy.get("body").should("exist");
   });
 
   it("should contain all the required change tags and urls", () => {
@@ -117,6 +121,8 @@ describe("Check Your Information page: updated exporter", () => {
       testCaseId: TestCaseId.PSCheckYourInformationUpdatedExporter,
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+
+    cy.get("body").should("exist");
   });
 });
 
@@ -203,6 +209,8 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
     cy.contains("dt", "Processing plant name");
     cy.contains("dt", "Address");
     cy.contains("dt", "Destination country");
+
+    cy.get("body").should("exist");
   });
 
   it("should contain the required data", () => {
@@ -222,6 +230,8 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
     cy.contains("dd", "Test data");
     cy.contains("dd", "30/06/2022");
     cy.contains("dd", "20/2/123456");
+
+    cy.get("body").should("exist");
   });
 });
 

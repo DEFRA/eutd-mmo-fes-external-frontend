@@ -20,6 +20,8 @@ describe("Add exporter details page", () => {
 
   it("should display correct headings", () => {
     cy.contains("h1", "Add exporter details");
+
+    cy.get("body").should("exist");
   });
 
   it("should display non-manipulation document warning message", () => {

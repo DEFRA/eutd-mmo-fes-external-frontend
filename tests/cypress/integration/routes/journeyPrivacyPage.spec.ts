@@ -34,6 +34,8 @@ describe("Privacy page for cc journey", () => {
 
       cy.contains("a", /^Back$/).click();
       cy.get(".govuk-heading-xl").contains("What do you want to do?");
+
+      cy.get("body").should("exist");
     });
 
     it("Back link should be outside the main content region (AAA accessibility)", () => {

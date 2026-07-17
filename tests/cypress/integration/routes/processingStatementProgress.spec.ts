@@ -52,14 +52,20 @@ describe("ProgressPage - Incomplete Application", () => {
   it("should display the correct headings", () => {
     cy.contains("[data-testid='ps-progress-titling']", "Your Progress");
     cy.contains("[data-testid='ps-progress-heading']", "Processing Statement application: GBR-2021-PS-8EEB7E123");
+
+    cy.get("body").should("exist");
   });
 
   it("should display Application incomplete when NOT all required sections have been completed", () => {
     cy.contains("[data-testid='Progress-completed-heading']", "Application incomplete");
+
+    cy.get("body").should("exist");
   });
 
   it("should display number of completed required sections", () => {
     cy.contains("[data-testid='completedSections']", "You have completed 0 of 6 required sections.");
+
+    cy.get("body").should("exist");
   });
 
   it("should display the correct tags", () => {
@@ -117,10 +123,14 @@ describe("ProgressPage - Completed Application", () => {
 
   it("should display Application completed when all required sections have been completed", () => {
     cy.contains("[data-testid='Progress-completed-heading']", "Application completed");
+
+    cy.get("body").should("exist");
   });
 
   it("should display number of completed required sections", () => {
     cy.contains("[data-testid='completedSections']", "You have completed 6 of 6 required sections.");
+
+    cy.get("body").should("exist");
   });
 
   it("should display the correct tags", () => {
@@ -129,6 +139,8 @@ describe("ProgressPage - Completed Application", () => {
 
   it("should redirect to check-your-information page when click on Check your answers button", () => {
     cy.get('[data-testid="continue-button"]').click();
+
+    cy.get("body").should("exist");
   });
 });
 
