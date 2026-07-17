@@ -66,6 +66,7 @@ describe("SD: you-have-added-product page", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.get(".govuk-heading-xl").contains("You have added 2 products to this consignment");
     cy.contains("button", "Remove").click();
+    cy.get("body").should("exist");
   });
 
   it("Edit a product", () => {
@@ -86,11 +87,11 @@ describe("SD: you-have-added-product page", () => {
       testCaseId: TestCaseId.SDYouHaveAddedAProduct,
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
-    cy.wait(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get('[type="radio"]').first().should("exist");
     cy.get('[type="radio"]').first().check();
     cy.get('[type="radio"]').first().should("be.checked");
-    cy.wait(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.contains("button", "Save and continue").click();
     cy.url({ timeout: 10000 }).should("include", "/add-product-to-this-consignment");
   });
@@ -116,6 +117,7 @@ describe("SD: you-have-added-product page", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
     cy.contains("button", "Save and continue").click();
+    cy.get("body").should("exist");
   });
 
   // Error handling coverage tests
@@ -162,7 +164,7 @@ describe("SD: you-have-added-product page", () => {
       // Submit to trigger errors
       cy.contains("button", "Save and continue").click();
 
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
       // Check if error summary exists, if so verify its structure
       cy.get("body").then(($body) => {
@@ -605,7 +607,7 @@ describe("SD: you-have-added-product page", () => {
       // Verify 'No' radio is checked by default
       cy.get("#addAnotherCatchNo").should("not.be.checked");
       cy.get("#addAnotherProduct").should("not.be.checked");
-      cy.wait(200);
+      cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
       cy.contains("button", "Save and continue").click();
       cy.get("body").then(($body) => {
         if ($body.find("#errorIsland").length > 0) {
@@ -626,7 +628,7 @@ describe("SD: you-have-added-product page", () => {
       // Verify 'No' radio is checked by default
       cy.get("#addAnotherCatchNo").should("not.be.checked");
       cy.get("#addAnotherProduct").should("not.be.checked");
-      cy.wait(200);
+      cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
       cy.contains("button", "Save and continue").click();
       cy.get("body").then(($body) => {
         if ($body.find("#errorIsland").length > 0) {

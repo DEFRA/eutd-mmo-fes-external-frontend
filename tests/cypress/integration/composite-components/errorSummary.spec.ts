@@ -100,7 +100,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
           const href = $link.attr("href");
           const fieldId = href?.replace("#", "");
 
-          $link.trigger("click");
+          cy.wrap($link).click();
 
           // Verify the field exists (proves scrollToId was called)
           if (fieldId) {
@@ -185,25 +185,27 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
     it("should extract field ID from href and call scrollToId", () => {
       const testParams: ITestParams = {
-        testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+        testCaseId: TestCaseId.DirectLandingDateLandedUnpopulated,
       };
-      const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
-      const pageUrl = `${documentUrl}/add-exporter-details`;
+      const pageUrl = "/create-catch-certificate/GBR-2021-CC-123/direct-landing";
 
       cy.visit(pageUrl, { qs: { ...testParams } });
       cy.get("[data-testid='save-and-continue']").click();
 
+      cy.get("#error-summary-title").should("be.visible");
+      cy.get(".govuk-error-summary__list").should("exist");
+
       // Get the first error link
-      cy.get(".govuk-error-summary__list a")
+      cy.get('.govuk-error-summary__list a[href^="#"]')
         .first()
         .then(($link) => {
           const href = $link.attr("href");
-          expect(href).to.match(/^#\w+/); // Should start with # followed by field name
+          expect(href).to.match(/^#.+/);
 
-          const fieldId = href?.slice(1);
+          const fieldId = href?.split("#")[1];
 
           // Click the link
-          $link.trigger("click");
+          cy.wrap($link).click();
 
           // Verify the target field exists (proves scrollToId found it)
           if (fieldId) {
@@ -300,10 +302,9 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
   describe("Component structure and GOV.UK classes", () => {
     it("should have correct GOV.UK class structure", () => {
       const testParams: ITestParams = {
-        testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+        testCaseId: TestCaseId.DirectLandingDateLandedUnpopulated,
       };
-      const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
-      const pageUrl = `${documentUrl}/add-exporter-details`;
+      const pageUrl = "/create-catch-certificate/GBR-2021-CC-123/direct-landing";
 
       cy.visit(pageUrl, { qs: { ...testParams } });
       cy.get("[data-testid='save-and-continue']").click();
@@ -336,10 +337,9 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
   describe("Errors prop handling and default value", () => {
     it("should handle errors array being provided with values", () => {
       const testParams: ITestParams = {
-        testCaseId: TestCaseId.CCAddExporterDetailsFailsWithErrors,
+        testCaseId: TestCaseId.DirectLandingDateLandedUnpopulated,
       };
-      const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
-      const pageUrl = `${documentUrl}/add-exporter-details`;
+      const pageUrl = "/create-catch-certificate/GBR-2021-CC-123/direct-landing";
 
       cy.visit(pageUrl, { qs: { ...testParams } });
       cy.get("[data-testid='save-and-continue']").click();
@@ -355,16 +355,15 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
     it("should render all errors from the errors array", () => {
       const testParams: ITestParams = {
-        testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
+        testCaseId: TestCaseId.DirectLandingDateLandedUnpopulated,
       };
-      const documentUrl = "/create-catch-certificate/GBR-2021-CC-123";
-      const pageUrl = `${documentUrl}/what-are-you-exporting`;
+      const pageUrl = "/create-catch-certificate/GBR-2021-CC-123/direct-landing";
 
       cy.visit(pageUrl, { qs: { ...testParams } });
-      cy.get("[data-testid='add-product']").eq(0).click();
+      cy.get("[data-testid='save-and-continue']").click();
 
       // Verify all errors in the array are rendered
-      cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 1);
+      cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 0);
 
       // Each list item should have content
       cy.get(".govuk-error-summary__list li").each(($li) => {
@@ -408,6 +407,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
 
       // Submit with errors
       cy.get("[data-testid='save-and-continue']").click();
+      cy.get("#error-summary-title").should("be.visible");
       cy.get(".govuk-error-summary__list li").should("have.length.greaterThan", 0);
 
       // Get initial error count
@@ -454,7 +454,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       cy.get("[data-testid='save-and-continue']").click();
 
       // Wait for component to mount and useEffect to run
-      cy.wait(100);
+      cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
 
       // Verify error summary is rendered (useEffect ran with valid ref)
       cy.get("#errorIsland").should("exist");

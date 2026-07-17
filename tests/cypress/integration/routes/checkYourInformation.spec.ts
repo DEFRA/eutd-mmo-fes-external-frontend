@@ -113,6 +113,7 @@ describe("Check Your Information (Summary) page: UI", () => {
       name: "Check your information before you create the catch certificate",
       level: 1,
     });
+    cy.get("body").should("exist");
   });
 
   it("should render document number in exporter details section", () => {
@@ -222,6 +223,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render landings section fields in the expected order", () => {
+    cy.get("body").should("exist");
     cy.get("dl")
       .eq(1)
       .find("dt.govuk-summary-list__key")

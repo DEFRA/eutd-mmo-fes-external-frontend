@@ -70,11 +70,11 @@ describe("DoYouHaveARoadTransportDocument", () => {
     };
 
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
-    cy.wait(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get("#cmr").should("exist");
     cy.get("#cmr").check();
     cy.get("#cmr").should("be.checked");
-    cy.wait(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.get("[data-testid=save-and-continue").click();
 
     cy.url({ timeout: 10000 }).should("include", "/departure-product-summary");
@@ -86,11 +86,11 @@ describe("DoYouHaveARoadTransportDocument", () => {
     };
 
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
-    cy.wait(500); // Wait for hydration
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for hydration
     cy.get("#separateCmrFalse").should("exist");
     cy.get("#separateCmrFalse").check();
     cy.get("#separateCmrFalse").should("be.checked");
-    cy.wait(200); // Allow React to process state change
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete"); // Allow React to process state change
     cy.get("[data-testid=save-and-continue").click();
 
     cy.url({ timeout: 10000 }).should("include", "/add-transportation-details-truck");
@@ -102,11 +102,11 @@ describe("DoYouHaveARoadTransportDocument", () => {
     };
 
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
-    cy.wait(500); // Wait for hydration
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for hydration
     cy.get("#cmr").should("exist");
     cy.get("#cmr").check();
     cy.get("#cmr").should("be.checked");
-    cy.wait(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.get("[data-testid=save-and-continue").click();
 
     cy.url({ timeout: 10000 }).should("include", "/forbidden");

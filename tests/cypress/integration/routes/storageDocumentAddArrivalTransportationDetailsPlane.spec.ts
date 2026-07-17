@@ -211,9 +211,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
       testCaseId: TestCaseId.PlaneTransportSaveMaxCharsAirwayBillNumber,
     };
     cy.visit(planePageUrl, { qs: { ...testParams } });
-    cy.get("#airwayBillNumber").type(
-      "This air waybill number is way too long and exceeds the maximum character limit"
-    );
+    cy.get("#airwayBillNumber").type("This air waybill number is way too long and exceeds the maximum character limit");
     cy.get("#flightNumber").type("AF296Q");
     cy.get("#freightBillNumber").type("Freight bill number");
     cy.get("#departureCountry").invoke("val", "France");
@@ -341,7 +339,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     );
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.wait(250);
+    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Place of unloading must not exceed 50 characters$/).should("be.visible");
   });
@@ -425,7 +423,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
         testCaseId: TestCaseId.PlaneTransportAllowed,
       };
       cy.visit(planePageUrl, { qs: { ...testParams } });
-      cy.wait(500);
+      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
       cy.get('input[name="containerNumbers.0"]').should("be.visible");
       cy.get("#add-container-button").should("be.visible");

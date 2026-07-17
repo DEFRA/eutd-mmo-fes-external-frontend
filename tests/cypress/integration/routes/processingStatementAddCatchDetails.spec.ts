@@ -1487,10 +1487,9 @@ describe("PS: Add catch details - Session Data Integrity", () => {
     cy.get("h2")
       .invoke("text")
       .then((headerText) => {
-        const speciesMatch = headerText.match(/(\d+)\s+species/);
-        const documentsMatch = headerText.match(/(\d+)\s+documents/);
-        const speciesCount = speciesMatch ? parseInt(speciesMatch[1]) : 0;
-        const documentCount = documentsMatch ? parseInt(documentsMatch[1]) : 0;
+        const counts = headerText.match(/\d+/g) ?? [];
+        const speciesCount = counts[0] ? parseInt(counts[0]) : 0;
+        const documentCount = counts[1] ? parseInt(counts[1]) : 0;
         cy.log(`Initial counts - Species: ${speciesCount}, Documents: ${documentCount}`);
         cy.get("[data-testid=edit-button-0]").eq(0).click();
         cy.url().should("include", "add-catch-details");
@@ -1498,10 +1497,9 @@ describe("PS: Add catch details - Session Data Integrity", () => {
         cy.get("h2")
           .invoke("text")
           .then((newHeaderText) => {
-            const newSpeciesMatch = newHeaderText.match(/(\d+)\s+species/);
-            const newDocumentsMatch = newHeaderText.match(/(\d+)\s+documents/);
-            const newSpeciesCount = newSpeciesMatch ? parseInt(newSpeciesMatch[1]) : 0;
-            const newDocumentCount = newDocumentsMatch ? parseInt(newDocumentsMatch[1]) : 0;
+            const newCounts = newHeaderText.match(/\d+/g) ?? [];
+            const newSpeciesCount = newCounts[0] ? parseInt(newCounts[0]) : 0;
+            const newDocumentCount = newCounts[1] ? parseInt(newCounts[1]) : 0;
             expect(newSpeciesCount).to.equal(speciesCount);
             expect(newDocumentCount).to.equal(documentCount);
             cy.log(
@@ -1634,7 +1632,7 @@ describe("PS: Add catch details - Species State Management", () => {
     cy.get("#catches-0-species").should("not.have.value", "");
   });
 
-  it("should maintain species code state during species changes", () => {
+  it("should maintain species code state during species changes after reset", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -1649,7 +1647,7 @@ describe("PS: Add catch details - Species State Management", () => {
     cy.get('input[name="speciesCode"]').should("exist");
   });
 
-  it("should handle species state during form reset", () => {
+  it("should handle species state during form reset after species update", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
