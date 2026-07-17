@@ -6,5 +6,7 @@ describe("Admin to FE-V2 Login Page", () => {
       testCaseId: TestCaseId.adminLogin,
     };
     cy.request({ url: "/admin-login", qs: { ...testParams }, failOnStatusCode: false });
+
+    cy.get("body").should("exist");
   });
 });

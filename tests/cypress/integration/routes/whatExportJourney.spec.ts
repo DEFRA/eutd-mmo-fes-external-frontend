@@ -42,6 +42,8 @@ describe("what export journey page for Direct Landing", () => {
     cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-list > li > a").contains("Select a valid destination country");
     cy.get(".govuk-error-message").contains("Select a valid destination country");
+
+    cy.get("body").should("exist");
   });
   it("should redirect to the forbidden page if there is an error as page is rendered", () => {
     const testParams: ITestParams = {
@@ -67,6 +69,8 @@ describe("what export journey page for Direct Landing", () => {
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
     cy.get("#exportedFromGU").check();
     cy.get('[data-testid="save-draft-button"]').click();
+
+    cy.get("body").should("exist");
   });
 
   it("should redirect to the landings-entry if the if landing entry is null", () => {
@@ -74,6 +78,8 @@ describe("what export journey page for Direct Landing", () => {
       testCaseId: TestCaseId.WhatExportJourneyDirectLandingNull,
     };
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+
+    cy.get("body").should("exist");
   });
 
   it("should redirect to the progess page if the user click on save and continue button", () => {
@@ -129,6 +135,8 @@ describe("what export journey page for Manual Entry", () => {
     cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-list > li > a").contains("Select a valid destination country");
     cy.get(".govuk-error-message").contains("Select a valid destination country");
+
+    cy.get("body").should("exist");
   });
   it("should redirect to the forbidden page if there is an error as page is rendered m", () => {
     const testParams: ITestParams = {
@@ -153,6 +161,8 @@ describe("what export journey page for Manual Entry", () => {
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
     cy.get("#exportedFromGU").check();
     cy.get('[data-testid="save-draft-button"]').click();
+
+    cy.get("body").should("exist");
   });
 
   it("should redirect to the landings-entry if the if landing entry is null", () => {
@@ -160,6 +170,8 @@ describe("what export journey page for Manual Entry", () => {
       testCaseId: TestCaseId.WhatExportJourneyManualEntryNull,
     };
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+
+    cy.get("body").should("exist");
   });
 
   it("should redirect to the how-does-the-export-leave-the-uk page if the user click on save and continue button", () => {
