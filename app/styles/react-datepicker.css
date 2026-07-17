@@ -305,7 +305,7 @@
 }
 .react-datepicker__week-number--selected {
   border-radius: 0.3rem;
-  background-color: #216ba5;
+  background-color: #1D5C8C;
   color: #fff;
 }
 .react-datepicker__week-number--selected:hover {
@@ -364,7 +364,7 @@
 .react-datepicker__quarter-text--highlighted,
 .react-datepicker__year-text--highlighted {
   border-radius: 0.3rem;
-  background-color: #3dcc4a;
+  background-color: #1B6521;
   color: #fff;
 }
 .react-datepicker__day--highlighted:hover,
@@ -391,7 +391,7 @@
 .react-datepicker__year-text--holidays {
   position: relative;
   border-radius: 0.3rem;
-  background-color: #ff6803;
+  background-color: #943B00;
   color: #fff;
 }
 .react-datepicker__day--holidays .overlay,
