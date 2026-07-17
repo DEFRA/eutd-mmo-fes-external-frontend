@@ -14,6 +14,8 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
   it("should submit form with vesselName", () => {
     cy.get("#vesselName").type("Test Vessel");
     cy.get("[data-testid=save-and-continue]").click();
+
+    cy.get("body").should("exist");
   });
 
   it("should render error summary when action returns validation errors", () => {
@@ -365,6 +367,8 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("#departureCountry").type("!InvalidCountry123");
       cy.get("[data-testid=save-and-continue]").click();
       cy.get("#error-summary-title").contains("There is a problem");
+
+      cy.get("body").should("exist");
     });
 
     it("should display error when consignment departs from (departure port) exceeds 50 characters", () => {

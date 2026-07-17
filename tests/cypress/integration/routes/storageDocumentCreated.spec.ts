@@ -72,6 +72,8 @@ describe("Storage document created page: rendering", () => {
 
   it("should render survey component", () => {
     cy.get('[data-testid="surveylink-feedback"]').contains("Take a 2 minute survey");
+
+    cy.get("body").should("exist");
   });
 
   it("should render PDF download link with correct href", () => {

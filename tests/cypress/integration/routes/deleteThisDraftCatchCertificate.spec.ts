@@ -23,6 +23,8 @@ describe("Delete this draft catch certificate page", () => {
     cy.visit(deleteThisDraftDocumentUrl, { qs: { ...testParams } });
     cy.get("#documentDelete").check();
     cy.get("form").submit();
+
+    cy.get("body").should("exist");
   });
   it("Submit form with no option on click of save and continue button", () => {
     const testParams: ITestParams = {
@@ -31,6 +33,8 @@ describe("Delete this draft catch certificate page", () => {
     cy.visit(deleteThisDraftDocumentUrl, { qs: { ...testParams } });
     cy.get("#documentDeleteNo").check();
     cy.get("form").submit();
+
+    cy.get("body").should("exist");
   });
   it("forbidden 403", () => {
     const testParams: ITestParams = {
