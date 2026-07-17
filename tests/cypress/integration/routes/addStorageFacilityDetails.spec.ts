@@ -160,6 +160,8 @@ describe("Add Storage Facility page when javascript is disabled", () => {
 
   it("should render add date button in add storage facility  when JavaScript is disabled", () => {
     cy.contains("[data-testid='add-storageFacilities-facilityArrivalDate']", "Add Date");
+
+    cy.get("body").should("exist");
   });
 
   it("should redirect to #facilityArrivalDate on valid date input", () => {

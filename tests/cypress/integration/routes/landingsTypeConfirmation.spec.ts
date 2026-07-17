@@ -27,6 +27,8 @@ describe("Landings confirmation page: user Interface", () => {
 
   it("should render the correct headings", () => {
     cy.contains("h1", "Are you sure you want to change your landings type?");
+
+    cy.get("body").should("exist");
   });
 
   it("should render the correct warning text", () => {
@@ -34,6 +36,8 @@ describe("Landings confirmation page: user Interface", () => {
       "div > strong",
       "Switching between direct and non-direct landings types will require the re-entry of landings data."
     );
+
+    cy.get("body").should("exist");
   });
 
   it("should render the two landings entry confirmation options and labels ", () => {
