@@ -360,6 +360,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
     });
 
     it("should display an error for a upload with an unlicensed vessel pln", () => {
+      cy.get("body").should("exist");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCUploadInvalidVesselPln,
         lng: "cy",
