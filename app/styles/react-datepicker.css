@@ -313,7 +313,7 @@
 }
 .react-datepicker__week-number--keyboard-selected {
   border-radius: 0.3rem;
-  background-color: #267ABA;
+  background-color: #1D5C8C;
   color: #fff;
 }
 .react-datepicker__week-number--keyboard-selected:hover {
