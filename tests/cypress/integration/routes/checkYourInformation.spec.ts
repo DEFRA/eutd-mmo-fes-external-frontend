@@ -223,6 +223,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render landings section fields in the expected order", () => {
+    cy.get("body").should("exist");
     cy.get("dl")
       .eq(1)
       .find("dt.govuk-summary-list__key")

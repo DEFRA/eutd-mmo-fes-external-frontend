@@ -360,6 +360,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when departure country is invalid", () => {
+      cy.get("body").should("exist");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidDepartureCountry,
       };

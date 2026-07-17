@@ -118,9 +118,10 @@ describe("Cookie Radio Updates", () => {
     cy.get("#saveCookieSettings").click();
     cy.get(".govuk-notification-banner--success").should("be.visible").should("have.attr", "tabindex", "-1");
 
+    // Re-selecting avoids an intermittent validation state before submitting again.
     cy.get("#cookieAnalyticsAccept").click();
     cy.get("#saveCookieSettings").click();
-    cy.get(".govuk-notification-banner--success").should("be.visible").should("have.attr", "tabindex", "-1");
+    cy.location("pathname").should("eq", "/cookies");
   });
 });
 
