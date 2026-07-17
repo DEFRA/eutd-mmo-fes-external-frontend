@@ -45,6 +45,8 @@ type loaderProps = {
   storageDocument: StorageDocument;
   exporter: IExporter;
   csrf: string;
+  copyDocumentAcknowledged: boolean;
+  copyDocumentNumber: string;
 };
 
 export const headers = () => ({
@@ -61,6 +63,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const session = await getSessionFromRequest(request);
   const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
+  const copyDocumentAcknowledged = session.get(`copyDocumentAcknowledged-${documentNumber}`) === "Y";
+  const copyDocumentNumber = session.get(`documentNumber-${documentNumber}`);
   const completedDocument = await getCompletedDocument(bearerToken, documentNumber);
   if (completedDocument?.documentStatus === "COMPLETE") {
     return redirect(`/create-non-manipulation-document/non-manipulation-documents`);
@@ -83,6 +87,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       storageDocument,
       exporter,
       csrf,
+      copyDocumentAcknowledged,
+      copyDocumentNumber,
     }),
     {
       headers: {
@@ -99,7 +105,21 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
 const CheckYourInformation = () => {
   const { t } = useTranslation(["common", "sdCheckYourInformation", "transportation", "progress"]);
-  const { documentNumber, storageDocument, exporter, csrf } = useLoaderData<loaderProps>();
+  const { documentNumber, storageDocument, exporter, csrf, copyDocumentAcknowledged, copyDocumentNumber } =
+    useLoaderData<loaderProps>();
+
+  const copiedFromDocumentNumber = copyDocumentNumber || documentNumber;
+  const hasCopiedDraftContext = copyDocumentAcknowledged || Boolean(copyDocumentNumber);
+  const backRoute = hasCopiedDraftContext
+    ? route("/create-non-manipulation-document/:documentNumber/copy-this-non-manipulation-document", {
+        documentNumber: copiedFromDocumentNumber,
+      })
+    : route("/create-non-manipulation-document/:documentNumber/departure-product-summary", {
+        documentNumber,
+      });
+  const backUrl = route("/create-non-manipulation-document/:documentNumber/progress?backUri=" + backRoute, {
+    documentNumber,
+  });
   const errors: IValidationError[] = useActionData<IValidationError[]>() ?? [];
   const hasErrors: boolean = Array.isArray(errors) && errors?.length > 0;
   const notificationMessages: string[] = [];
@@ -139,10 +159,7 @@ const CheckYourInformation = () => {
       notificationMessages={notificationMessages}
       hasErrors={hasErrors}
       errors={errors}
-      backUrl={`/create-non-manipulation-document/:documentNumber/progress?backUri=${route(
-        "/create-non-manipulation-document/:documentNumber/departure-product-summary",
-        { documentNumber }
-      )}`}
+      backUrl={backUrl}
       summaryHeading="sdSummaryPageHeading"
       headingTranslation="sdCheckYourInformation"
       checkInformationHeader="sdSummaryPageDocumentDetailsHeader"
