@@ -51,9 +51,11 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
   const bearerToken = await getBearerTokenForRequest(request);
   const csrf = await createCSRFToken(request);
   const session = await getSessionFromRequest(request);
+  const { documentNumber } = params;
   session.set("csrf", csrf);
 
-  const { documentNumber } = params;
+  const copyDocumentAcknowledged = session.get(`copyDocumentAcknowledged-${documentNumber}`) === "Y";
+  const copyDocumentNumber = session.get(`documentNumber-${documentNumber}`);
   const preSubmitBundle = await getCatchCertificatePreSubmitBundle(bearerToken, documentNumber);
   const {
     status,
@@ -126,6 +128,8 @@ export const CheckYourInformationLoader = async (request: Request, params: Param
       validationErrors: filterValidationErrors.length > 0 ? transformError(filterValidationErrors) : undefined,
       csrf,
       userReference,
+      copyDocumentAcknowledged,
+      copyDocumentNumber,
     }),
     {
       status: 200,
