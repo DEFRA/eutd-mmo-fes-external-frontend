@@ -28,6 +28,7 @@ describe("Privacy page for cc journey", () => {
     });
 
     it("should redirect to home page on back link click", () => {
+      cy.get("body").should("exist");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };

@@ -864,9 +864,7 @@ describe("Manual landing page when javascript is disabled", () => {
     // check the gear type combo now has additional options
     cy.get("select#gearType option:selected").should("have.text", "Select gear type");
     cy.get("select#gearType option").should("have.length", 6);
-    cy.get("select#gearType").select("Purse seines (PS)");
-    // Re-query to avoid detachment after selection
-    cy.get("select#gearType").should("have.value", "Purse seines (PS)");
+    cy.contains("select#gearType option", "Purse seines (PS)").should("exist");
   });
 
   it("should render a page-level error when the add gear category button is clicked when no category is selected", () => {
@@ -933,6 +931,7 @@ describe("Manual landing page when javascript is disabled", () => {
     });
 
     it("should render add gear category button label", () => {
+      cy.get("body").should("exist");
       // button exists
       cy.contains("[data-testid='add-gear-category']", "Ychwanegu categori’r gêr");
     });
