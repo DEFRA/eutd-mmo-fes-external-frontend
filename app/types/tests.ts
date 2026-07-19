@@ -435,6 +435,7 @@ export enum TestCaseId {
   ContainerVesselTransportContainerValidationErrors = "ContainerVesselTransportContainerValidationErrors",
   PlaneTransportSaveAndContinue = "PlaneTransportSaveAndContinue",
   PlaneTransportSaveAsDraft = "PlaneTransportSaveAsDraft",
+  PlaneTransportSaveAsDraftWithErrors = "PlaneTransportSaveAsDraftWithErrors",
   PlaneTransportSaveAsDraftRetainAllValuesCheck = "PlaneTransportSaveAsDraftRetainAllValuesCheck",
   PlaneTransportSaveAsDraftRetainDateCheck = "PlaneTransportSaveAsDraftRetainDateCheck",
   PlaneTransportErrors = "PlaneTransportErrors",
