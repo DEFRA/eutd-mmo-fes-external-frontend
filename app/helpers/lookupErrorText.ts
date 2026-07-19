@@ -345,6 +345,7 @@ export const getErrorMessage = (key: string): string => {
     "error.vesselPln.any.exists": "ccUploadFilePageTableVesselNotFound",
     "error.vesselPln.any.missing": "ccUploadFilePageTableVesselMissingError",
     "error.vesselPln.any.invalid": "ccUploadFilePageTableVesselInvalidLicenseError",
+    "error.startDate.vesselPln.any.invalid": "ccAddLandingStartDateInvalidFormat",
     "validation.gearCode.string.invalid": "ccUploadFilePageTableGearCodeNotFoundError",
     "validation.gearCode.string.unknown": "ccUploadFilePageTableGearCodeNotFoundError",
     "error.vessel.vesselName.any.required": "ccAddLandingVesselNameUnpopulatedError",
