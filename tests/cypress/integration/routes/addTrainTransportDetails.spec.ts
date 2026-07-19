@@ -354,6 +354,9 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     cy.get("[data-testid=save-and-continue]").click();
 
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Container identification number must only contain letters and numbers$/).should("be.visible");
+    cy.contains(
+      "a",
+      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+    ).should("be.visible");
   });
 });
