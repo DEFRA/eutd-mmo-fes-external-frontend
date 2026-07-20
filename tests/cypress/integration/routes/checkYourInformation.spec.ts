@@ -394,10 +394,10 @@ describe("Check Your Information (Summary) page: DirectLanding CC", () => {
   });
 
   it("should render the correct back link", () => {
-    cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", `${documentUrl}/progress`);
+      .should("have.attr", "href")
+      .and("include", `${documentUrl}/progress`);
   });
 
   it("should render a single transportation", () => {
@@ -455,9 +455,9 @@ describe("Check Your Information (Summary) page: ManualLanding CC", () => {
   it("should redirect to add-landings page when change vessel name or pln link is clicked", () => {
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", `${documentUrl}/progress`);
-    cy.get("[data-testid='change-0-vessel-label']").should("be.visible");
-    cy.get("[data-testid='change-0-vessel-label']").click();
+      .should("have.attr", "href")
+      .and("include", `${documentUrl}/progress`);
+    cy.get("[data-testid='change-0-vessel-label']").should("be.visible").click();
     cy.url().should("include", "/add-landings");
   });
 
