@@ -167,6 +167,7 @@ export enum TestCaseId {
   WhoseWatersTypePageGuard = "whoseWatersTypePageGuard",
 
   HowDoesTheExportLeaveNoTransportDetails = "howDoesTheExportLeaveNoTransportDetails",
+  HowDoesTheExportLeaveSaveAsDraftNoVehicle = "howDoesTheExportLeaveSaveAsDraftNoVehicle",
   HowDoesTheExportLeaveTruck = "howDoesTheExportLeaveTruck",
   HowDoesTheExportLeavePlane = "howDoesTheExportLeavePlane",
   HowDoesTheExportLeaveTrain = "howDoesTheExportLeaveTrain",
