@@ -61,7 +61,7 @@ describe("Remove Product Page - FI0-10296", () => {
         testCaseId: TestCaseId.RemoveProductYesSaveAndContinueWithProducts,
       };
       cy.visit(removeProductUrl, { qs: { ...testParams } });
-      cy.waitForUiUpdate(50); // Wait for MSW to set up
+      cy.document({ timeout: 50 }).its("readyState").should("eq", "complete"); // Wait for MSW to set up
 
       cy.get("#removeProductYes").check();
       cy.get("form").submit();
@@ -76,7 +76,7 @@ describe("Remove Product Page - FI0-10296", () => {
         testCaseId: TestCaseId.RemoveProductYesSaveAndContinueNoProducts,
       };
       cy.visit(removeProductUrl, { qs: { ...testParams } });
-      cy.waitForUiUpdate(50); // Wait for MSW to set up
+      cy.document({ timeout: 50 }).its("readyState").should("eq", "complete"); // Wait for MSW to set up
 
       cy.get("#removeProductYes").check();
       cy.get("form").submit();
@@ -91,7 +91,7 @@ describe("Remove Product Page - FI0-10296", () => {
         testCaseId: TestCaseId.RemoveProductYesSaveAsDraft,
       };
       cy.visit(removeProductUrl, { qs: { ...testParams } });
-      cy.waitForUiUpdate(50); // Wait for MSW to set up
+      cy.document({ timeout: 50 }).its("readyState").should("eq", "complete"); // Wait for MSW to set up
 
       cy.get("#removeProductYes").check();
       cy.get('[data-testid="save-draft-button"]').click();
@@ -106,7 +106,7 @@ describe("Remove Product Page - FI0-10296", () => {
         testCaseId: TestCaseId.RemoveProductNoSaveAndContinue,
       };
       cy.visit(removeProductUrl, { qs: { ...testParams } });
-      cy.waitForUiUpdate(50); // Wait for MSW to set up
+      cy.document({ timeout: 50 }).its("readyState").should("eq", "complete"); // Wait for MSW to set up
 
       cy.get("#removeProductNo").check();
       cy.get("form").submit();
@@ -121,7 +121,7 @@ describe("Remove Product Page - FI0-10296", () => {
         testCaseId: TestCaseId.RemoveProductNoSaveAsDraft,
       };
       cy.visit(removeProductUrl, { qs: { ...testParams } });
-      cy.waitForUiUpdate(50); // Wait for MSW to set up
+      cy.document({ timeout: 50 }).its("readyState").should("eq", "complete"); // Wait for MSW to set up
 
       cy.get("#removeProductNo").check();
       cy.get('[data-testid="save-draft-button"]').click();

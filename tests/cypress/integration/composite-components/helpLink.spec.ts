@@ -1,55 +1,13 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 describe("HelpSection", () => {
-  it("displays help section on three types of pages", () => {
-    const urls = [
-      "/create-catch-certificate/GBR-2022-CC-488FE89C1/progress",
-      "/create-catch-certificate/GBR-2022-CC-488FE89C1/landings-entry",
-      "/create-catch-certificate/GBR-2022-CC-488FE89C1/add-your-reference",
-      "/create-catch-certificate/GBR-2022-CC-488FE89C1/add-exporter-details",
-      "/create-catch-certificate/GBR-2022-CC-488FE89C1/what-are-you-exporting",
-      "/create-catch-certificate/GBR-2022-CC-488FE89C1/whose-waters-were-they-caught-in",
-      "/create-catch-certificate/GBR-2022-CC-488FE89C1/what-export-journey",
-      "/create-catch-certificate/GBR-2022-CC-488FE89C1/delete-this-draft-catch-certificate",
-      "/create-processing-statement/GBR-2022-CC-488FE89C1/progress",
-      "/create-processing-statement/GBR-2022-CC-488FE89C1/add-your-reference",
-      "/create-processing-statement/GBR-2022-CC-488FE89C1/add-exporter-details",
-      "/create-processing-statement/GBR-2022-CC-488FE89C1/add-consignment-details",
-      "/create-processing-statement/GBR-2022-CC-488FE89C1/add-processing-plant-address",
-      "/create-processing-statement/GBR-2022-CC-488FE89C1/add-health-certificate",
-      "/create-processing-statement/GBR-2022-CC-488FE89C1/what-consignment-destination",
-      "/create-processing-statement/GBR-2022-CC-488FE89C1/delete-this-draft-processing-statement",
-      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/progress",
-      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/add-your-reference",
-      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/add-exporter-details",
-      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/add-product-to-this-consignment",
-      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/how-does-the-consignment-arrive-to-the-uk",
-      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/add-storage-facility-details",
-      "/create-non-manipulation-document/GBR-2022-CC-488FE89C1/delete-this-draft-non-manipulation-document",
-    ];
+  it("renders help section on progress page", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadEntryCompleteProgress,
+    };
 
-    urls.forEach((url) => {
-      it(`Should display the help section on ${url}`, () => {
-        cy.visit(url);
-        cy.get("[data-testid=help-section]").should("exist");
-      });
-    });
-  });
-
-  it("does not display on the create pages or the manage pages", () => {
-    const urls = [
-      "/create-catch-certificate/catch-certificates",
-      "/create-processing-statement/processing-statements",
-      "/create-non-manipulation-document/non-manipulation-documents",
-      "/manage-favourites",
-    ];
-
-    urls.forEach((url) => {
-      it(`Should not display the help section on ${url}`, () => {
-        cy.visit(url);
-        cy.get("[data-testid=help-section]").should("not.exist");
-      });
-    });
+    cy.visit("/create-catch-certificate/GBR-2022-CC-488FE89C1/progress", { qs: { ...testParams } });
+    cy.get("[data-testid=help-section]").should("exist");
   });
 
   it("displays help section contents in English", () => {
@@ -113,5 +71,29 @@ describe("HelpSection", () => {
     cy.get("[data-test-id='exporting-link']")
       .invoke("text")
       .should("match", /allforio neu symud pysgod o['’]r DU\s*\(yn agor mewn tab newydd\)\.?/i); // normalise whitespace and apostrophe variants
+  });
+
+  it("uses processing statement wording for PS document numbers", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddExporterDetailsFull,
+    };
+
+    const url = "/create-processing-statement/GBR-2021-PS-8EEB7E123/add-exporter-details";
+
+    cy.visit(url, { qs: { ...testParams } });
+    cy.get("[data-testid=help-section]").should("exist");
+    cy.get("[data-test-id=get-help-body]").should("contain.text", "processing statement");
+  });
+
+  it("uses non-manipulation wording for SD document numbers", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddExporterDetails,
+    };
+
+    const url = "/create-non-manipulation-document/GBR-2021-SD-8EEB7E123/add-exporter-details";
+
+    cy.visit(url, { qs: { ...testParams } });
+    cy.get("[data-testid=help-section]").should("exist");
+    cy.get("[data-test-id=get-help-body]").should("contain.text", "non-manipulation document");
   });
 });

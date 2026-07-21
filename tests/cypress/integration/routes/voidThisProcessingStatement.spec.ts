@@ -35,7 +35,6 @@ describe("void this draft processing statement page", () => {
     cy.visit(voidThisProcessingStatementUrl, { qs: { ...testParams } });
     cy.get("#documentVoid").check();
     cy.get('[data-testid="continue"]').click();
-
     cy.get("body").should("exist");
   });
 
@@ -46,7 +45,6 @@ describe("void this draft processing statement page", () => {
     cy.visit(voidThisProcessingStatementUrl, { qs: { ...testParams } });
     cy.get("#documentVoidNo").check();
     cy.get('[data-testid="continue"]').click();
-
     cy.get("body").should("exist");
   });
 

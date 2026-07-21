@@ -3,6 +3,35 @@ const pageUrl = `${documentUrl}/add-catch-details/0`;
 
 import { type ITestParams, TestCaseId } from "~/types";
 
+const waitForPage = () => cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+
+const setSpecies = (value: string) => {
+  cy.get("#catches-0-species", { timeout: 8000 }).then(($el) => {
+    if ($el.is("select")) {
+      cy.wrap($el).should("be.enabled").select(value);
+      return;
+    }
+
+    cy.wrap($el).clear().type(value);
+  });
+};
+
+const enableIssuingCountry = () => {
+  cy.get('label[for="catchCertificateType-non_uk"]', { timeout: 8000 }).should("be.visible").click();
+  waitForPage();
+};
+
+const setIssuingCountry = (value: string) => {
+  cy.get("#catches-0-issuingCountry", { timeout: 8000 }).then(($el) => {
+    if ($el.is("select")) {
+      cy.wrap($el).should("be.enabled").select(value);
+      return;
+    }
+
+    cy.wrap($el).clear().type(value);
+  });
+};
+
 describe("PS: Add Catch Details - Issuing Country behavior", () => {
   it("should clear issuing country after adding a catch", () => {
     const testParams: ITestParams = {
@@ -10,38 +39,24 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.waitForUiUpdate(1000); // Wait for page to fully load
+    waitForPage();
 
-    // Fill species field
-    cy.get("#catches-0-species", { timeout: 8000 }).then(($el) => {
-      if ($el.is("select")) cy.wrap($el).should("be.enabled").select("Bigeye tuna (BET)");
-      else cy.wrap($el).clear().type("Bigeye tuna");
-    });
-    cy.waitForUiUpdate(300);
+    setSpecies("Bigeye tuna (BET)");
+    waitForPage();
 
-    // Click the label to check the non_uk radio button (the input itself is hidden with opacity: 0)
-    cy.get('label[for="catchCertificateType-non_uk"]', { timeout: 8000 }).should("be.visible").click();
-    cy.waitForUiUpdate(500); // Wait for conditional rendering of issuing country field
+    enableIssuingCountry();
 
-    // Fill issuing country field
-    cy.get("#catches-0-issuingCountry", { timeout: 8000 }).then(($el) => {
-      if ($el.is("select")) cy.wrap($el).should("be.enabled").select("Spain");
-      else cy.wrap($el).clear().type("Spain");
-    });
+    setIssuingCountry("Spain");
 
-    // Fill remaining fields
     cy.get('input[name="catchCertificateNumber"]').type("CERT12345");
     cy.get('input[name="totalWeightLanded"]').type("10");
     cy.get('input[name="exportWeightBeforeProcessing"]').type("5");
     cy.get('input[name="exportWeightAfterProcessing"]').type("4");
 
-    // Click Add button
     cy.get('[data-testid="add-product-details"]').click();
-    cy.waitForUiUpdate(1000); // Wait for form to process
+    waitForPage();
 
-    // Verify fields are cleared after successful add
     cy.get('input[name="catchCertificateNumber"]', { timeout: 10000 }).should("have.value", "");
-    // After form reset, issuing country field will not be visible since radio is reset to uk
     cy.get("#catches-0-issuingCountry", { timeout: 2000 }).should("not.exist");
     cy.get('input[name="totalWeightLanded"]', { timeout: 10000 }).should("have.value", "");
     cy.get('input[name="exportWeightBeforeProcessing"]', { timeout: 10000 }).should("have.value", "");
@@ -54,48 +69,30 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.waitForUiUpdate(1000); // Wait for page to fully load
+    waitForPage();
 
-    // Select species from the dropdown or type into autocomplete
-    cy.get("#catches-0-species").then(($el) => {
-      if ($el.is("select")) {
-        cy.wrap($el).should("be.enabled").select("Bigeye tuna (BET)");
-      } else if ($el.is("input")) {
-        cy.wrap($el).should("be.enabled").clear().type("Bigeye tuna");
-        // if suggestions appear, pick the first one
-        cy.get("#catches-0-species__listbox", { timeout: 2000 }).then(($list) => {
-          if ($list.length > 0) cy.get("#catches-0-species__listbox li").first().click();
-        });
-      }
-    });
-    cy.waitForUiUpdate(500); // Wait for value to be set
+    setSpecies("Bigeye tuna (BET)");
+    waitForPage();
 
-    // Click the label to check the non_uk radio button
-    cy.get('label[for="catchCertificateType-non_uk"]', { timeout: 8000 }).should("be.visible").click();
-    cy.waitForUiUpdate(300); // Wait for issuing country field to render
+    enableIssuingCountry();
 
-    // Verify issuing country field is now visible (since non_uk is selected)
     cy.get("#catches-0-issuingCountry", { timeout: 5000 }).should("exist");
 
-    // Fill issuing country field with a value
-    cy.get("#catches-0-issuingCountry").then(($el) => {
-      if ($el.is("select")) cy.wrap($el).should("be.enabled").select("Spain");
-      else cy.wrap($el).clear().type("Spain");
+    setIssuingCountry("Spain");
+
+    cy.get("#catches-0-issuingCountry").then(($field) => {
+      if ($field.is("select")) {
+        cy.wrap($field).select("");
+      } else {
+        cy.wrap($field).should("be.enabled").focus().type("{selectall}{backspace}");
+      }
     });
+    cy.get("#catches-0-issuingCountry").should("have.value", "");
 
-    // Now clear the issuing country field by clicking the field and clearing it
-    cy.get("#catches-0-issuingCountry").clear();
-
-    // Click Add button without required certificate number
     cy.get('[data-testid="add-product-details"]').click();
-    cy.waitForUiUpdate(1000); // Wait for form to process
+    waitForPage();
 
-    // The form should show validation errors or prevent submission
-    // Either errorIsland appears or fields are cleared (depending on backend response)
-    // For this test, we just verify that issuing country field state is managed properly
-    // If the radio gets reset, the field should not exist; if not, it should be cleared
     cy.get("#catches-0-issuingCountry", { timeout: 2000 }).then(($field) => {
-      // Field either doesn't exist (radio reset) or is empty
       if ($field.length > 0) {
         cy.wrap($field).should("have.value", "");
       }
