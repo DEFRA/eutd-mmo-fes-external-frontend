@@ -653,6 +653,7 @@ export enum TestCaseId {
   PSSDCopyDisallowed = "pssdCopyDisallowed",
   PSSDCopySave = "pssdCopyThisCatchCertificateSave",
   PSSDCopyAllData = "pssdCopyThisCatchCertAllData",
+  PSSDCopyVoidWithProgress = "pssdCopyVoidWithProgress",
 
   SDLoadDasboardWithCompletedAndInProgress = "sdLoadDasboardWithCompletedAndInProgress",
   SDLoadDasboardWithInProgressAndEmptyCompleted = "sdLoadDasboardWithInProgressAndEmptyCompleted",

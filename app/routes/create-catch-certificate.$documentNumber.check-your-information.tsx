@@ -589,13 +589,13 @@ const CheckYourInformation = () => {
     } else {
       const hasCopiedDraftContext = copyDocumentAcknowledged ?? Boolean(copyDocumentNumber);
       const backRoute = hasCopiedDraftContext
-        ? "/create-catch-certificate/:documentNumber/copy-this-catch-certificate"
+        ? "/create-catch-certificate/:documentNumber/landings-entry"
         : shouldBackToAdditionalTransportTypes
           ? "/create-catch-certificate/:documentNumber/do-you-have-additional-transport-types"
           : "/create-catch-certificate/:documentNumber/what-export-journey";
       return route(
         "/create-catch-certificate/:documentNumber/progress?backUri=" +
-          route(backRoute, { documentNumber: copyDocumentNumber ?? documentNumber }),
+          route(backRoute, { documentNumber: documentNumber }),
         { documentNumber }
       );
     }

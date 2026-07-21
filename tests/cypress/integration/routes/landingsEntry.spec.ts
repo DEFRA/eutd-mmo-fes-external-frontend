@@ -208,6 +208,29 @@ describe("Landings entry page: notification messages", () => {
     cy.url().should("not.include", "/forbidden");
   });
 
+  it("should point Back to catch-certificates dashboard when void-original option was confirmed", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCopyAllowed,
+      disableScripts: true,
+    };
+
+    cy.visit("create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate", {
+      qs: { ...testParams },
+    });
+    cy.get("#voidDocumentConfirm").invoke("prop", "checked", true).trigger("change");
+    cy.get("#copyDocumentAcknowledged").check();
+    cy.get("[data-testid=continue]").click();
+
+    cy.url().should("include", "/copy-void-confirmation");
+    cy.get("#voidOriginal").click();
+    cy.get("[data-testid=continue]").click();
+
+    cy.url().should("include", "/landings-entry");
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href", "/create-catch-certificate/catch-certificates");
+  });
+
   it("should still allow Back to copy screen after progress round trip", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCopyThisCatchCertAllData,
