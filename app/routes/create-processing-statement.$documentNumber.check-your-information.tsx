@@ -37,6 +37,7 @@ type loaderDataProps = {
   csrf: string;
   copyDocumentAcknowledged: boolean;
   copyDocumentNumber: string;
+  voidDocumentConfirm: boolean;
 };
 
 export const headers = () => ({
@@ -55,6 +56,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   session.set("csrf", csrf);
   const copyDocumentAcknowledged = session.get(`copyDocumentAcknowledged-${documentNumber}`) === "Y";
   const copyDocumentNumber = session.get(`documentNumber-${documentNumber}`);
+  const voidOriginalVal = session.get(`voidOriginal-${documentNumber}`);
+  const voidDocumentConfirm = voidOriginalVal ? voidOriginalVal === true : false;
   const completedDocument = await getCompletedDocument(bearerToken, documentNumber);
   if (completedDocument?.documentStatus === "COMPLETE") {
     return redirect(`/create-processing-statement/processing-statements`);
@@ -82,6 +85,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       csrf,
       copyDocumentAcknowledged,
       copyDocumentNumber,
+      voidDocumentConfirm,
     }),
     {
       headers: {
@@ -134,19 +138,29 @@ const getCatchErrors = (errors: IError[], catchIndex: number) => {
 
 const CheckYourInformation = () => {
   const { t } = useTranslation(["common", "psCheckYourInformation", "progress"]);
-  const { documentNumber, processingStatement, exporter, csrf, copyDocumentAcknowledged, copyDocumentNumber } =
-    useLoaderData<loaderDataProps>();
+  const {
+    documentNumber,
+    processingStatement,
+    exporter,
+    csrf,
+    copyDocumentAcknowledged,
+    copyDocumentNumber,
+    voidDocumentConfirm,
+  } = useLoaderData<loaderDataProps>();
 
   const copiedFromDocumentNumber = copyDocumentNumber || documentNumber;
   const hasCopiedDraftContext = copyDocumentAcknowledged || Boolean(copyDocumentNumber);
-  const backRoute = hasCopiedDraftContext
-    ? route("/create-processing-statement/:documentNumber/copy-this-processing-statement", {
-        documentNumber: copiedFromDocumentNumber,
-      })
-    : route("/create-processing-statement/:documentNumber/what-export-destination", { documentNumber });
-  const backUrl = route("/create-processing-statement/:documentNumber/progress?backUri=" + backRoute, {
-    documentNumber,
-  });
+  const backUrl = voidDocumentConfirm
+    ? route("/create-processing-statement/:documentNumber/progress", { documentNumber })
+    : route(
+        "/create-processing-statement/:documentNumber/progress?backUri=" +
+          (hasCopiedDraftContext
+            ? route("/create-processing-statement/:documentNumber/copy-this-processing-statement", {
+                documentNumber: copiedFromDocumentNumber,
+              })
+            : route("/create-processing-statement/:documentNumber/what-export-destination", { documentNumber })),
+        { documentNumber }
+      );
 
   const processedProducts = getProcessedProducts(processingStatement);
   const errors: IError[] = useActionData<IError[]>() ?? [];
