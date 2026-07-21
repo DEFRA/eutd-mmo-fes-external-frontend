@@ -183,6 +183,157 @@ describe("Landings entry page: notification messages", () => {
 
     cy.contains("div", notifMsg).should("be.visible");
   });
+
+  it("should point Back to copy screen when opened from copied catch certificate flow", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCopyThisCatchCertAllData,
+      disableScripts: true,
+    };
+
+    cy.visit("create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate", {
+      qs: { ...testParams },
+    });
+    cy.get("#voidOriginal").click();
+    cy.get("#copyDocumentAcknowledged").check();
+    cy.get("[data-testid=continue]").click();
+
+    cy.url().should("include", "/landings-entry");
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href", "/create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate");
+
+    cy.findByRole("link", { name: "Back" }).click();
+    cy.url().should("include", "/copy-this-catch-certificate");
+    cy.url().should("not.include", "/forbidden");
+  });
+
+  it("should point Back to catch-certificates dashboard when void-original option was confirmed", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCopyAllowed,
+      disableScripts: true,
+    };
+
+    cy.visit("create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate", {
+      qs: { ...testParams },
+    });
+    cy.get("#voidDocumentConfirm").invoke("prop", "checked", true).trigger("change");
+    cy.get("#copyDocumentAcknowledged").check();
+    cy.get("[data-testid=continue]").click();
+
+    cy.url().should("include", "/copy-void-confirmation");
+    cy.get("#voidOriginal").click();
+    cy.get("[data-testid=continue]").click();
+
+    cy.url().should("include", "/landings-entry");
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href", "/create-catch-certificate/catch-certificates");
+  });
+
+  it("should still allow Back to copy screen after progress round trip", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCCopyThisCatchCertAllData,
+      disableScripts: true,
+    };
+
+    cy.visit("create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate", {
+      qs: { ...testParams },
+    });
+    cy.get("#voidOriginal").click();
+    cy.get("#copyDocumentAcknowledged").check();
+    cy.get("[data-testid=continue]").click();
+
+    cy.url().then((landingUrl) => {
+      const landingMatch = landingUrl.match(/\/create-catch-certificate\/([^/]+)\/landings-entry/);
+      if (!landingMatch) {
+        throw new Error("new catch certificate document number should be present in URL");
+      }
+      const newDocumentNumber = landingMatch[1];
+
+      const progressParams: ITestParams = {
+        testCaseId: TestCaseId.CCUploadEntryIncompleteProgress,
+      };
+
+      cy.visit(`/create-catch-certificate/${newDocumentNumber}/progress`, {
+        qs: { ...progressParams },
+      });
+
+      cy.contains("a", /^Back$/).click();
+      cy.url().should("include", "/landings-entry");
+
+      cy.findByRole("link", { name: "Back" }).click();
+      cy.url().should("include", "/copy-this-catch-certificate");
+      cy.url().should("not.include", "/forbidden");
+    });
+  });
+
+  it("should clear copied-draft context after successful submit", () => {
+    const sourceDocumentNumber = "GBR-2022-CC-F71D98A30";
+    const copyParams: ITestParams = {
+      testCaseId: TestCaseId.CCCopyThisCatchCertAllData,
+      disableScripts: true,
+    };
+
+    cy.visit(`create-catch-certificate/${sourceDocumentNumber}/copy-this-catch-certificate`, {
+      qs: { ...copyParams },
+    });
+    cy.get("#voidOriginal").click();
+    cy.get("#copyDocumentAcknowledged").check();
+    cy.get("[data-testid=continue]").click();
+
+    cy.url().then((landingUrl) => {
+      const landingMatch = landingUrl.match(/\/create-catch-certificate\/([^/]+)\/landings-entry/);
+      if (!landingMatch) {
+        throw new Error("new catch certificate document number should be present in URL");
+      }
+      const newDocumentNumber = landingMatch[1];
+
+      const checkYourInfoParams: ITestParams = {
+        testCaseId: TestCaseId.CCCheckYourInformationValidationSuccess,
+      };
+
+      cy.visit(`/create-catch-certificate/${newDocumentNumber}/check-your-information`, {
+        qs: { ...checkYourInfoParams },
+      });
+      cy.get("[data-testid=create-cc-button]").click();
+      cy.url().should("include", "/catch-certificate-created");
+
+      const disallowedCopyParams: ITestParams = {
+        testCaseId: TestCaseId.CCCopyDisallowed,
+      };
+
+      cy.visit(`create-catch-certificate/${sourceDocumentNumber}/copy-this-catch-certificate`, {
+        qs: { ...disallowedCopyParams },
+      });
+      cy.url().should("include", "/forbidden");
+    });
+  });
+
+  it("should respect backUri query parameter when provided", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.LandingsTypeNull,
+    };
+
+    const customBackUri = encodeURIComponent(`${documentUrl}/custom-page`);
+
+    cy.visit(`${landingsUrl}?backUri=${customBackUri}`, { qs: { ...testParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href", `${documentUrl}/custom-page`);
+  });
+
+  it("should point Back to catch-certificates dashboard when no copy context or backUri", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.LandingsTypeNull,
+    };
+
+    cy.visit(landingsUrl, { qs: { ...testParams } });
+
+    cy.contains("a", /^Back$/)
+      .should("be.visible")
+      .should("have.attr", "href", "/create-catch-certificate/catch-certificates");
+  });
 });
 
 describe("Landings entry page: form submission and errors", () => {
