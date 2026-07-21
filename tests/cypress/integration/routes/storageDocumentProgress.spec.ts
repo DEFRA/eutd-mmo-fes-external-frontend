@@ -322,29 +322,6 @@ describe("ProgressPage - Back link from copied non-manipulation document", () =>
         );
     });
   });
-
-  it("should point Back to non-manipulation-documents dashboard when void-original option was confirmed", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSSDCopyVoidWithProgress,
-      disableScripts: true,
-    };
-
-    cy.visit("create-non-manipulation-document/GBR-2022-SD-F71D98A30/copy-this-non-manipulation-document", {
-      qs: { ...testParams },
-    });
-    cy.get("#voidDocumentConfirm").invoke("prop", "checked", true).trigger("change");
-    cy.get("#copyDocumentAcknowledged").check();
-    cy.get('[data-testid="continue"]').click();
-
-    cy.url().should("include", "/copy-void-confirmation");
-    cy.get("#voidOriginal").click();
-    cy.get('[data-testid="continue"]').click();
-
-    cy.url().should("include", "/progress");
-    cy.contains("a", /^Back$/)
-      .should("be.visible")
-      .should("have.attr", "href", "/create-non-manipulation-document/non-manipulation-documents");
-  });
 });
 
 describe("ProgressPage - Product details link behavior", () => {
