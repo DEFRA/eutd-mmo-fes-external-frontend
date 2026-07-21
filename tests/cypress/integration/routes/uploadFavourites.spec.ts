@@ -22,7 +22,6 @@ describe("Upload favourites page", () => {
 
   it("should render the correct page title", () => {
     cy.findByRole("heading", { name: "Product Favourites", level: 1 });
-
     cy.get("body").should("exist");
   });
 
@@ -35,26 +34,22 @@ describe("Upload favourites page", () => {
     cy.contains("label", "State");
     cy.contains("label", "Presentation");
     cy.contains("label", "Commodity Code");
-
     cy.get("body").should("exist");
   });
 
   it("should render the input label and hint text", () => {
     cy.get("div .govuk-hint").contains("For example, Lobster or LBE.");
-
     cy.get("body").should("exist");
   });
 
   it("should render form button", () => {
     cy.contains("[data-testid='add-product']", "Add product favourite");
     cy.contains("[data-testid='cancel']", "Cancel");
-
     cy.get("body").should("exist");
   });
 
   it("should show errors click of add product button", () => {
     cy.get("[data-testid='add-product']").click();
-
     cy.get("body").should("exist");
   });
 
@@ -67,7 +62,6 @@ describe("Upload favourites page", () => {
 
   it("should render the  Edit and remove buttons", () => {
     cy.contains("[data-testid='remove-button-PRD465']", "Remove");
-
     cy.get("body").should("exist");
   });
 });
@@ -86,7 +80,6 @@ describe("Upload favourites page: when JavaScript is disabled", () => {
     cy.contains("[data-testid='add-species']", "Add species");
     cy.contains("[data-testid='add-state']", "Add state");
     cy.contains("[data-testid='add-presentation']", "Add presentation");
-
     cy.get("body").should("exist");
   });
 

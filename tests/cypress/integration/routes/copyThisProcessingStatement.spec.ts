@@ -21,7 +21,6 @@ describe("Copy this processing statement address page: Allowed", () => {
 
   it("should render Acknowledgement text", () => {
     cy.contains("[data-testid='ackid']", "Acknowledgement");
-
     cy.get("body").should("exist");
   });
 
@@ -30,7 +29,6 @@ describe("Copy this processing statement address page: Allowed", () => {
       "div > strong",
       "You must not use a processing statement or data for catches that have already been exported. Knowingly reusing processing statements or using data that relate to a previous export is a serious offence and may result in enforcement action being taken."
     );
-
     cy.get("body").should("exist");
   });
 

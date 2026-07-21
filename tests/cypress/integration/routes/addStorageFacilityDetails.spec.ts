@@ -160,7 +160,6 @@ describe("Add Storage Facility page when javascript is disabled", () => {
 
   it("should render add date button in add storage facility  when JavaScript is disabled", () => {
     cy.contains("[data-testid='add-storageFacilities-facilityArrivalDate']", "Add Date");
-
     cy.get("body").should("exist");
   });
 
@@ -214,7 +213,7 @@ describe("Add Storage Facility page when javascript is disabled", () => {
     });
 
     it("should not show validation errors when clicking on draft", () => {
-      cy.waitForUiUpdate(5000);
+      cy.document({ timeout: 5000 }).its("readyState").should("eq", "complete");
       cy.get("[data-testid=save-draft-button]").click();
       cy.url().should("include", "create-non-manipulation-document/non-manipulation-documents");
     });
@@ -231,11 +230,11 @@ describe("Add Storage Facility Address - Error Both Name and Date", () => {
 
   it("shows both facility name and date errors", () => {
     cy.get('input[name="facilityArrivalDateDay"]').clear();
-    cy.waitForUiUpdate(100);
+    cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
     cy.get('input[name="facilityArrivalDateMonth"]').clear();
-    cy.waitForUiUpdate(100);
+    cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
     cy.get('input[name="facilityArrivalDateYear"]').clear();
-    cy.waitForUiUpdate(100);
+    cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
     cy.get('input[name="facilityName"]').clear();
     cy.get("[data-testid=goToAddAddress-button]").click();
 

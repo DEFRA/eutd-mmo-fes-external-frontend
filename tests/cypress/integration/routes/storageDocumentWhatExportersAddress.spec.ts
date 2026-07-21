@@ -12,7 +12,6 @@ describe("SD: Exporter address page", () => {
 
   it("should render the expected header", () => {
     cy.get(".govuk-heading-xl").contains("What is the exporter’s address");
-
     cy.get("body").should("exist");
   });
 
@@ -25,7 +24,6 @@ describe("SD: Exporter address page", () => {
     cy.get("div .govuk-hint").contains(
       "If you cannot find the address or you need to add a non-UK address, click the link 'Enter the address manually'"
     );
-
     cy.get("body").should("exist");
   });
 });
@@ -41,7 +39,6 @@ describe("SD: Entering the address manually", () => {
 
   it("should render header", () => {
     cy.get(".govuk-heading-xl").contains("What is the exporter’s address");
-
     cy.get("body").should("exist");
   });
 
@@ -54,14 +51,12 @@ describe("SD: Entering the address manually", () => {
     cy.contains("label", "County/state/province (optional)");
     cy.contains("label", "Postcode");
     cy.contains("label", "Country");
-
     cy.get("body").should("exist");
   });
 
   it("should render form button", () => {
     cy.contains("[data-testid='continue']", "Continue");
     cy.contains("[data-testid='cancel']", "Cancel");
-
     cy.get("body").should("exist");
   });
 });
@@ -197,7 +192,6 @@ describe("SD: On Selected Address", () => {
     cy.get("#getaddress").click();
 
     cy.contains("span", "Select an address to continue");
-
     cy.get("body").should("exist");
   });
 
@@ -228,7 +222,6 @@ describe("SD: On Selected Address", () => {
     cy.get("#findaddress").click();
 
     cy.findByRole("link", { name: "Enter a postcode" });
-
     cy.get("body").should("exist");
   });
 
@@ -244,7 +237,6 @@ describe("SD: On Selected Address", () => {
     cy.findByRole("link", {
       name: "Postcode must be between 5 and 8 characters, and contain only letters, numbers, spaces, hyphens and commas",
     });
-
     cy.get("body").should("exist");
   });
 

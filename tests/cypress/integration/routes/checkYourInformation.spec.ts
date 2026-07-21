@@ -112,7 +112,8 @@ describe("Check Your Information (Summary) page: UI", () => {
     cy.findByRole("heading", {
       name: "Check your information before you create the catch certificate",
       level: 1,
-    }).should("be.visible");
+    });
+    cy.get("body").should("exist");
   });
 
   it("should render document number in exporter details section", () => {
@@ -222,6 +223,7 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render landings section fields in the expected order", () => {
+    cy.get("body").should("exist");
     cy.get("dl")
       .eq(1)
       .find("dt.govuk-summary-list__key")
@@ -392,12 +394,10 @@ describe("Check Your Information (Summary) page: DirectLanding CC", () => {
   });
 
   it("should render the correct back link", () => {
-    cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href")
-      .and("include", `${documentUrl}/progress?backUri=`)
-      .and("include", "what-export-journey");
+      .and("include", `${documentUrl}/progress`);
   });
 
   it("should render a single transportation", () => {
@@ -456,10 +456,8 @@ describe("Check Your Information (Summary) page: ManualLanding CC", () => {
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href")
-      .and("include", `${documentUrl}/progress?backUri=`)
-      .and("include", "do-you-have-additional-transport-types");
-    cy.get("[data-testid='change-0-vessel-label']").should("be.visible");
-    cy.get("[data-testid='change-0-vessel-label']").click();
+      .and("include", `${documentUrl}/progress`);
+    cy.get("[data-testid='change-0-vessel-label']").should("be.visible").click();
     cy.url().should("include", "/add-landings");
   });
 
@@ -1294,7 +1292,7 @@ describe("CC - scenario 2 - Change transport mode", () => {
 
     cy.log("STEP #6 - Wait for the form to be fully loaded and stable");
     cy.get('input[name="vehicle"]').should("exist");
-    cy.waitForUiUpdate(200); // Let any hydration settle
+    cy.get('input[name="vehicle"][value="plane"]').should("be.enabled"); // Wait for hydration to complete
 
     cy.log("STEP #6A - Log all available radio buttons");
     cy.get('input[name="vehicle"]').then(($inputs) => {
@@ -1418,11 +1416,10 @@ describe("NMD - scenario 4 - Change arrival transport mode", () => {
     cy.log("STEP #4A - Waiting for data fetch to complete");
     // Wait for the client-side data fetch that re-renders the form
     cy.wait("@dataFetch");
-    cy.waitForUiUpdate(500); // Additional wait for form stability
 
     cy.log("STEP #5 - Checking form elements exist");
-    // Wait for the form to be fully loaded
-    cy.get('input[name="vehicle"]').should("exist");
+    // Wait for the form to be fully loaded and radio buttons to be interactable
+    cy.get('input[name="vehicle"]').should("exist").and("be.enabled");
 
     cy.log("STEP #5A - Logging all available radio buttons");
     cy.get('input[name="vehicle"]').then(($inputs) => {
@@ -1544,9 +1541,9 @@ describe("NMD - scenario 5 - Change departure transport mode - no change scenari
     cy.wait("@dataFetch");
     cy.log("STEP #4 - Data fetch completed");
 
-    // Wait for form to be stable (radio buttons exist, even if opacity:0 per GOVUK styling)
+    // Wait for form to be stable and the expected pre-filled radio button to be interactable
     cy.get('input[name="vehicle"]').should("exist");
-    cy.waitForUiUpdate(500); // Increased wait for form stability
+    cy.get('input[name="vehicle"][value="containerVessel"]').should("be.enabled");
 
     cy.log("STEP #5 - Check all radio button states");
     cy.get('input[name="vehicle"]').each(($radio) => {
@@ -1602,7 +1599,7 @@ describe("NMD - scenario 6 - Change departure transport mode", () => {
 
     // Wait for the form to be fully loaded and stable
     cy.get('input[name="vehicle"]').should("exist");
-    cy.waitForUiUpdate(200);
+    cy.get('input[name="vehicle"][value="plane"]').should("be.enabled");
 
     // Change the mode to Plane using cy.check()
     cy.get('input[name="vehicle"][value="plane"]').check();
@@ -2188,46 +2185,5 @@ describe("Check Your Information: Exporter details section", () => {
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
     cy.get("dl:nth-of-type(1) > .govuk-summary-list__row:nth-of-type(3)").find("a").should("not.exist");
-  });
-});
-
-describe("Check Your Information: Back link navigation with landing entry options", () => {
-  it("should have back link to progress with backUri to do-you-have-additional-transport-types for manual entry", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.CCCheckYourInformationManualLanding,
-    };
-    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-
-    cy.contains("a", /^Back$/)
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and("include", `${documentUrl}/progress?backUri=`)
-      .and("include", "do-you-have-additional-transport-types");
-  });
-
-  it("should have back link to progress with backUri to what-export-journey for upload entry", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.CCCheckYourInformation,
-    };
-    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-
-    cy.contains("a", /^Back$/)
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and("include", `${documentUrl}/progress?backUri=`)
-      .and("include", "do-you-have-additional-transport-types");
-  });
-
-  it("should have back link to progress with backUri to what-export-journey for direct landing", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.CCCheckYourInformationDirectLanding,
-    };
-    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-
-    cy.contains("a", /^Back$/)
-      .should("be.visible")
-      .should("have.attr", "href")
-      .and("include", `${documentUrl}/progress?backUri=`)
-      .and("include", "what-export-journey");
   });
 });

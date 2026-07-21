@@ -52,7 +52,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     // need to wait for UI hydration otherwise test can fail intermittently
     // .should("be.visible") does not seem to do the job
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
     cy.get('input[type="radio"][value="true"]').check();
     cy.get("[data-testid=save-and-continue").click();
@@ -68,7 +68,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     // need to wait for UI hydration otherwise test can fail intermittently
     // .should("be.visible") does not seem to do the job
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
     cy.get('input[type="radio"][value="false"]').check();
     cy.get("[data-testid=save-and-continue").click();
@@ -84,7 +84,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     // need to wait for UI hydration otherwise test can fail intermittently
     // .should("be.visible") does not seem to do the job
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
     cy.get("form input[type=hidden][name=csrf]").should("exist").invoke("val", "abc123");
     cy.get('input[type="radio"][value="false"]').check();
@@ -99,7 +99,7 @@ describe("DoYouHaveARoadTransportDocument", () => {
     cy.visit(doYouHaveARoadTransportDocumentUrl, { qs: { ...testParams } });
     // need to wait for UI hydration otherwise test can fail intermittently
     // .should("be.visible") does not seem to do the job
-    cy.waitForUiUpdate(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
     cy.get("[data-testid=save-draft-button").click();
 

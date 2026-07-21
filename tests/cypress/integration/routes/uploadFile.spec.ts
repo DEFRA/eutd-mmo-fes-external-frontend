@@ -74,7 +74,6 @@ describe("Upload File Page Upload", () => {
 
     cy.get("form").submit();
     cy.get(".govuk-notification-banner__heading").contains("3 out of 3 rows uploaded successfully");
-
     cy.get("body").should("exist");
   });
 
@@ -167,7 +166,6 @@ describe("Upload File Page Upload", () => {
 
     cy.get("form").submit();
     cy.get(".govuk-notification-banner__heading").contains("0 out of 2 rows uploaded successfully");
-
     cy.get("body").should("exist");
   });
 
@@ -217,7 +215,6 @@ describe("Upload File Page Upload - date errors", () => {
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Date landed is missing");
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Date landed must be a real date");
     cy.get("#row-1-PRD765-2-upload-file-error").contains("Enter a valid date landed");
-
     cy.get("body").should("exist");
   });
 });
@@ -250,7 +247,6 @@ describe("Upload File Page Upload - export weight errors", () => {
       "Enter the export weight as a number with a maximum of 2 decimal places"
     );
     cy.get("#row-1-PRD765-2-upload-file-error").contains("Enter the export weight as a number greater than 0");
-
     cy.get("body").should("exist");
   });
 });
@@ -264,7 +260,6 @@ describe("Upload File Page Upload - High Seas Area errors", () => {
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("FAO High seas area invalid");
-
     cy.get("body").should("exist");
   });
 });
@@ -278,7 +273,6 @@ describe("Upload File Page Upload - EEZ errors", () => {
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("EEZ does not exist");
-
     cy.get("body").should("exist");
   });
   it("should display an error for a upload with a invalid EEZ", () => {
@@ -289,7 +283,6 @@ describe("Upload File Page Upload - EEZ errors", () => {
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("EEZ does not exist");
-
     cy.get("body").should("exist");
   });
 });
@@ -303,7 +296,6 @@ describe("Upload File Page Upload - RFMO errors", () => {
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("RFMO does not exist");
-
     cy.get("body").should("exist");
   });
 });
@@ -317,7 +309,6 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Vessel PLN is missing");
-
     cy.get("body").should("exist");
   });
 
@@ -329,7 +320,6 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Vessel PLN does not exist");
-
     cy.get("body").should("exist");
   });
 
@@ -338,11 +328,10 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
       testCaseId: TestCaseId.CCUploadInvalidVesselPln,
     };
 
+    cy.get("body").should("exist");
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Date landed must correspond to when the vessel was licensed");
-
-    cy.get("body").should("exist");
   });
 
   describe("Welsh translations", () => {
@@ -352,11 +341,10 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
         lng: "cy",
       };
 
+      cy.get("body").should("exist");
       cy.visit(uploadFileUrl, { qs: { ...testParams } });
       cy.get("[data-testid=upload").click();
       cy.get("#row-1-PRD765-0-upload-file-error").contains("Mae PLN y cwch ar goll");
-
-      cy.get("body").should("exist");
     });
 
     it("should display an error for a upload with an unknown vessel pln", () => {
@@ -365,14 +353,14 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
         lng: "cy",
       };
 
+      cy.get("body").should("exist");
       cy.visit(uploadFileUrl, { qs: { ...testParams } });
       cy.get("[data-testid=upload").click();
       cy.get("#row-1-PRD765-1-upload-file-error").contains("Nid yw PLN y llong neu’r cwch yn bodoli");
-
-      cy.get("body").should("exist");
     });
 
     it("should display an error for a upload with an unlicensed vessel pln", () => {
+      cy.get("body").should("exist");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCUploadInvalidVesselPln,
         lng: "cy",
@@ -383,8 +371,6 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
       cy.get("#row-1-PRD765-0-upload-file-error").contains(
         "Rhaid i’r dyddiad glanio gyfateb i’r adeg y cafodd y cwch ei drwyddedu"
       );
-
-      cy.get("body").should("exist");
     });
   });
 });
@@ -405,7 +391,6 @@ describe("Upload File Page Upload - product errors", () => {
     cy.get("#row-1-PRD-UNKNOWN-3-upload-file-error").contains(
       "Atlantic cod (COD) was subject to fishing restrictions on your specified Landing date. Please refer to GOV.UK for further guidance."
     );
-
     cy.get("body").should("exist");
   });
 });
@@ -420,7 +405,6 @@ describe("Upload File Page Upload - gearCode errors", () => {
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Gear type does not exist");
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Gear type does not exist");
-
     cy.get("body").should("exist");
   });
 
@@ -434,7 +418,6 @@ describe("Upload File Page Upload - gearCode errors", () => {
     cy.get("form").submit();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Nid yw'r Math o gêr yn bodoli");
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Nid yw'r Math o gêr yn bodoli");
-
     cy.get("body").should("exist");
   });
 });
