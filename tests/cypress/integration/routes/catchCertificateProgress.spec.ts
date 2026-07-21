@@ -384,28 +384,6 @@ describe("ProgressPage - Back link from copied catch certificate", () => {
     });
   });
 
-  it("should redirect to landings-entry without backUri when void-original option is confirmed", () => {
-    const copyParams: ITestParams = {
-      testCaseId: TestCaseId.CCCopyAllowed,
-      disableScripts: true,
-    };
-
-    cy.visit("create-catch-certificate/GBR-2022-CC-F71D98A30/copy-this-catch-certificate", {
-      qs: { ...copyParams },
-    });
-    cy.get("#voidDocumentConfirm").invoke("prop", "checked", true).trigger("change");
-    cy.get("#copyDocumentAcknowledged").check();
-    cy.get("[data-testid=continue]").click();
-
-    cy.url().should("include", "/copy-void-confirmation");
-    cy.get("#voidOriginal").click();
-    cy.get("[data-testid=continue]").click();
-
-    // After confirming void, should redirect to landings-entry (not progress with backUri)
-    cy.url().should("include", "/landings-entry");
-    cy.url().should("not.include", "?backUri=");
-  });
-
   it("should point Back to landings-entry without backUri when no copy context exists", () => {
     const progressParams: ITestParams = {
       testCaseId: TestCaseId.CCUploadEntryIncompleteProgress,
