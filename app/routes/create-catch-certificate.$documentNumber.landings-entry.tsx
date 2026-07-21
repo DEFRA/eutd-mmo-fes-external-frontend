@@ -61,7 +61,7 @@ const LandingsEntry = () => {
       backUrl={
         url.get("backUri")
           ? url.get("backUri")!
-          : hasCopiedDraftContext
+          : hasCopiedDraftContext && !voidDocumentConfirm
             ? route("/create-catch-certificate/:documentNumber/copy-this-catch-certificate", { documentNumber })
             : route("/create-catch-certificate/catch-certificates")
       }
