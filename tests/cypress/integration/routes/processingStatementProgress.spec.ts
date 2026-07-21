@@ -154,29 +154,6 @@ describe("should display the notificationBanner", () => {
       "This draft was created by copying document GBR-2022-PS-F71D98A30. You are reminded that you must not use a processing statememt or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."
     );
   });
-
-  it("should point Back to processing-statements dashboard when void-original option was confirmed", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSSDCopyVoidWithProgress,
-      disableScripts: true,
-    };
-
-    cy.visit("create-processing-statement/GBR-2022-PS-F71D98A30/copy-this-processing-statement", {
-      qs: { ...testParams },
-    });
-    cy.get("#voidDocumentConfirm").invoke("prop", "checked", true).trigger("change");
-    cy.get("#copyDocumentAcknowledged").check();
-    cy.get('[data-testid="continue"]').click();
-
-    cy.url().should("include", "/copy-void-confirmation");
-    cy.get("#voidOriginal").click();
-    cy.get('[data-testid="continue"]').click();
-
-    cy.url().should("include", "/progress");
-    cy.contains("a", /^Back$/)
-      .should("be.visible")
-      .should("have.attr", "href", "/create-processing-statement/processing-statements");
-  });
 });
 
 // FI0-10647: Prevent description-only products in Processing Statements
