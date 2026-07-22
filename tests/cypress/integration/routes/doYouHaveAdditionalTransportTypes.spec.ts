@@ -49,6 +49,12 @@ describe("Transport Details Table", () => {
         cy.contains("th", header).should("exist");
       }
     });
+
+    // The fourth header is intentionally empty and rendered as a <td>.
+    cy.get("thead tr").within(() => {
+      cy.get("th").contains("Transport type").should("exist");
+      cy.get("td.govuk-table__header").should("have.length.at.least", 1);
+    });
   });
 
   it("renders all transport rows with correct data", () => {

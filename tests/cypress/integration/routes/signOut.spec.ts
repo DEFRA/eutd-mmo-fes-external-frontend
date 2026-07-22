@@ -17,4 +17,11 @@ describe("Sign Out Page", () => {
     // allow extra time for the client-side redirect to happen
     cy.url({ timeout: 10000 }).should("include", "/server-logout");
   });
+
+  it("should update the countdown text while waiting", () => {
+    cy.visit("/sign-out");
+
+    cy.contains("p", "5 seconds").should("be.visible");
+    cy.contains("p", "4 seconds", { timeout: 2500 }).should("be.visible");
+  });
 });
