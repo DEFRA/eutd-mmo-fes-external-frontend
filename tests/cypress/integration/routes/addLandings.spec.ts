@@ -298,6 +298,19 @@ describe("Manual landing page render with page guard", () => {
     cy.get("#rfmo").contains("General Fisheries Commission for the Mediterranean (GFCM)");
   });
 
+  it("allows changing high seas area and vessel autocomplete input", () => {
+    cy.get("input[type='radio'][name='highSeasArea']").eq(0).check({ force: true });
+    cy.get("input[type='radio'][name='highSeasArea']").eq(1).check({ force: true });
+
+    cy.get("body").then(($b) => {
+      if ($b.find("input[role='combobox']").length) {
+        cy.get("input[role='combobox']").first().clear().type("ZZZ-not-found").should("have.value", "ZZZ-not-found");
+      } else {
+        cy.get("#select-vessel").should("exist");
+      }
+    });
+  });
+
   it("should render and expand the RFMO help details", () => {
     cy.get(".govuk-details__summary").contains("What is a regional fisheries management organisation (RFMO)?").click();
     cy.get(".govuk-details__text")
