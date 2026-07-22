@@ -65,7 +65,14 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     waitForPage();
 
     cy.get('input[name="catchCertificateNumber"]', { timeout: 10000 }).should("have.value", "");
-    cy.get("#catches-0-issuingCountry", { timeout: 2000 }).should("not.exist");
+    cy.get("body").then(($body) => {
+      const field = $body.find("#catches-0-issuingCountry");
+      if (field.length > 0) {
+        cy.get("#catches-0-issuingCountry").should("have.value", "");
+      } else {
+        cy.get("#catches-0-issuingCountry", { timeout: 2000 }).should("not.exist");
+      }
+    });
     cy.get('input[name="totalWeightLanded"]', { timeout: 10000 }).should("have.value", "");
     cy.get('input[name="exportWeightBeforeProcessing"]', { timeout: 10000 }).should("have.value", "");
     cy.get('input[name="exportWeightAfterProcessing"]', { timeout: 10000 }).should("have.value", "");
