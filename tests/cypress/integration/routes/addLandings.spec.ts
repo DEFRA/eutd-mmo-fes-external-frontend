@@ -299,8 +299,8 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("allows changing high seas area and vessel autocomplete input", () => {
-    cy.get("input[type='radio'][name='highSeasArea']").eq(0).check({ force: true });
-    cy.get("input[type='radio'][name='highSeasArea']").eq(1).check({ force: true });
+    cy.get("input[type='radio'][name='highSeasArea']").eq(0).scrollIntoView().should("be.enabled").check();
+    cy.get("input[type='radio'][name='highSeasArea']").eq(1).scrollIntoView().should("be.enabled").check();
 
     cy.get("body").then(($b) => {
       if ($b.find("input[role='combobox']").length) {
