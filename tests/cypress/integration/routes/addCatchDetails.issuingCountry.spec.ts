@@ -24,7 +24,15 @@ const enableIssuingCountry = () => {
 const setIssuingCountry = (value: string) => {
   cy.get("#catches-0-issuingCountry", { timeout: 8000 }).then(($el) => {
     if ($el.is("select")) {
-      cy.wrap($el).should("be.enabled").select(value);
+      cy.get("#catches-0-issuingCountry option", { timeout: 8000 }).then(($options) => {
+        const matched = [...$options].find((option) => {
+          const opt = option as HTMLOptionElement;
+          return opt.value === value || opt.text.trim() === value;
+        }) as HTMLOptionElement | undefined;
+
+        expect(!!matched, `issuing country option ${value} exists`).to.equal(true);
+        cy.get("#catches-0-issuingCountry").should("be.enabled").invoke("val", matched!.value).trigger("change");
+      });
       return;
     }
 
@@ -82,7 +90,7 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
 
     cy.get("#catches-0-issuingCountry").then(($field) => {
       if ($field.is("select")) {
-        cy.wrap($field).select("");
+        cy.get("#catches-0-issuingCountry").should("be.enabled").invoke("val", "").trigger("change");
       } else {
         cy.wrap($field).should("be.enabled").focus().type("{selectall}{backspace}");
       }
