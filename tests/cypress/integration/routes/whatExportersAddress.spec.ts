@@ -288,7 +288,7 @@ describe("CC: Entering the address manually with errors", () => {
     cy.get(".govuk-error-summary").should("contain.text", "Select a country from the list");
     cy.get(".govuk-error-summary").should(
       "contain.text",
-      "Enter a sub-building name, building number, a building name or street name"
+      "Enter building number, a building name, a sub-building name, or street name"
     );
 
     // Required fields should have error styling and inline error messages
