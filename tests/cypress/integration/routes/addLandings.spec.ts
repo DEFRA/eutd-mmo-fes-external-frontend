@@ -1166,6 +1166,36 @@ describe("Manual page errors when javascript is disabled", () => {
   });
 });
 
+describe("Manual page vessel licence error on save and continue", () => {
+  it("should present the vessel licence error in the summary and against the vessel field", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.AddLandingPageFailsWithVesselLicenceOnSaveAndContinue,
+    };
+    cy.visit(manualLandingUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid='save-and-continue']").click();
+
+    cy.url().should("include", "add-landing");
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.get(".govuk-error-summary__list > li").should("contain", "Please contact support");
+    cy.get(".govuk-error-message").should("contain", "Please contact support");
+  });
+
+  it("should present the vessel licence error when javascript is disabled", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.AddLandingPageFailsWithVesselLicenceOnSaveAndContinue,
+      disableScripts: true,
+    };
+    cy.visit(manualLandingUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid='save-and-continue']").click();
+
+    cy.url().should("include", "add-landing");
+    cy.get(".govuk-error-summary__list > li").should("contain", "Please contact support");
+    cy.get(".govuk-error-message").should("contain", "Please contact support");
+  });
+});
+
 describe("Manual page forbidden when javascript is disabled", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
