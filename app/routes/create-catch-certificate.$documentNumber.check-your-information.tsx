@@ -539,6 +539,8 @@ const CheckYourInformation = () => {
     validationErrors,
     csrf,
     userReference,
+    copyDocumentAcknowledged,
+    copyDocumentNumber,
   } = useLoaderData();
   const exporterDetails: Exporter = exporter.model;
 
@@ -549,6 +551,8 @@ const CheckYourInformation = () => {
 
   const isLocked = status === "LOCKED";
   const isDirectLanding = landingsEntryOption === "directLanding";
+  const shouldBackToAdditionalTransportTypes =
+    landingsEntryOption === "manualEntry" || landingsEntryOption === "uploadEntry";
 
   const isVesselOverriddenByAdmin = (landing: LandingStatus) => landing?.model?.vessel?.vesselOverriddenByAdmin;
   const isAnyVesselOverriddenByAdmin = (landings: LandingStatus[]) =>
@@ -583,7 +587,17 @@ const CheckYourInformation = () => {
     if (isLocked) {
       return route("/create-catch-certificate/catch-certificates");
     } else {
-      return route("/create-catch-certificate/:documentNumber/progress", { documentNumber });
+      const hasCopiedDraftContext = copyDocumentAcknowledged ?? Boolean(copyDocumentNumber);
+      const backRoute = hasCopiedDraftContext
+        ? "/create-catch-certificate/:documentNumber/landings-entry"
+        : shouldBackToAdditionalTransportTypes
+          ? "/create-catch-certificate/:documentNumber/do-you-have-additional-transport-types"
+          : "/create-catch-certificate/:documentNumber/what-export-journey";
+      return route(
+        "/create-catch-certificate/:documentNumber/progress?backUri=" +
+          route(backRoute, { documentNumber: documentNumber }),
+        { documentNumber }
+      );
     }
   };
 

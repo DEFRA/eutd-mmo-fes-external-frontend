@@ -1,3 +1,13 @@
+import { type ITestParams, TestCaseId } from "~/types";
+
+const visitCookiesPage = (search = "") => {
+  const testParams: ITestParams = {
+    testCaseId: TestCaseId.UserAttributes,
+  };
+
+  cy.visit(`/cookies${search}`, { qs: { ...testParams } });
+};
+
 describe("Cookie Banner", () => {
   beforeEach(() => {
     // Clear cookies before each test
@@ -166,7 +176,7 @@ describe("Cookie Banner", () => {
       cy.contains("button", "Accept analytics cookies").click();
 
       // Wait a moment
-      cy.wait(500);
+      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
       // Check that marker still exists (page didn't reload)
       cy.window().its("testMarker").should("equal", "page-loaded");
@@ -187,7 +197,7 @@ describe("Cookie Banner", () => {
       cy.contains("button", "Reject analytics cookies").click();
 
       // Wait a moment
-      cy.wait(500);
+      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
 
       // Check that marker still exists (page didn't reload)
       cy.window().its("testMarker").should("equal", "page-loaded");
@@ -368,7 +378,7 @@ describe("Cookie Banner", () => {
       cy.contains("button", "Hide cookie message").click();
 
       // Navigate to cookies page with loggedIn parameter
-      cy.visit("/cookies?loggedIn=yes");
+      visitCookiesPage("?loggedIn=yes");
 
       // Banner should appear again with loggedIn=yes
       cy.get(".govuk-cookie-banner").should("be.visible");
@@ -387,14 +397,14 @@ describe("Cookie Banner", () => {
       cy.contains("button", "Hide cookie message").click();
 
       // Navigate to cookies page with loggedIn parameter
-      cy.visit("/cookies?loggedIn=yes");
+      visitCookiesPage("?loggedIn=yes");
 
       // Banner should appear again with loggedIn=yes
       cy.get(".govuk-cookie-banner").should("be.visible");
     });
 
     it("should not show banner without loggedIn parameter even if no cookie is set", () => {
-      cy.visit("/cookies");
+      visitCookiesPage();
 
       // Banner should not appear without the parameter
       cy.get(".govuk-cookie-banner").should("not.exist");
@@ -471,7 +481,7 @@ describe("Cookie Banner", () => {
 
     it("should handle page navigation with loggedIn parameter in different positions", () => {
       // Test with parameter at the end
-      cy.visit("/cookies?someParam=value&loggedIn=yes");
+      visitCookiesPage("?someParam=value&loggedIn=yes");
 
       // If no cookie is set, banner should not show on cookies page
       cy.get(".govuk-cookie-banner").should("not.exist");

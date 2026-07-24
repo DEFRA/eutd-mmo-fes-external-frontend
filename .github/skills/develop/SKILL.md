@@ -1,6 +1,10 @@
 ---
 name: develop
 description: 'Expert Remix/React/TypeScript SSR developer for MMO FES External Frontend. Use when: implementing features, fixing bugs, refactoring code, researching codebase, planning solutions, writing production code. Covers Remix patterns, GOV.UK components, i18next, CSRF, progressive enhancement.'
+license: OGL-UK-3.0
+metadata:
+  author: mmo-fes
+  version: "1.0"
 ---
 
 # External Frontend — Developer Skill

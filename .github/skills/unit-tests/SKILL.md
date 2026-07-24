@@ -1,6 +1,10 @@
 ---
 name: unit-tests
 description: 'Expert test engineer for MMO FES External Frontend. Use when: writing Cypress E2E tests, creating MSW handlers, setting up test fixtures, improving code coverage, fixing SonarQube issues.'
+license: OGL-UK-3.0
+metadata:
+  author: mmo-fes
+  version: "1.0"
 ---
 
 # External Frontend — Unit Tests Skill

@@ -35,6 +35,9 @@ type loaderDataProps = {
   processingStatement: ProcessingStatement;
   exporter: IExporter;
   csrf: string;
+  copyDocumentAcknowledged: boolean;
+  copyDocumentNumber: string;
+  voidDocumentConfirm: boolean;
 };
 
 export const headers = () => ({
@@ -51,6 +54,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const session = await getSessionFromRequest(request);
   const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
+  const copyDocumentAcknowledged = session.get(`copyDocumentAcknowledged-${documentNumber}`) === "Y";
+  const copyDocumentNumber = session.get(`documentNumber-${documentNumber}`);
+  const voidOriginalVal = session.get(`voidOriginal-${documentNumber}`);
+  const voidDocumentConfirm = voidOriginalVal ? voidOriginalVal === true : false;
   const completedDocument = await getCompletedDocument(bearerToken, documentNumber);
   if (completedDocument?.documentStatus === "COMPLETE") {
     return redirect(`/create-processing-statement/processing-statements`);
@@ -76,6 +83,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       processingStatement,
       exporter,
       csrf,
+      copyDocumentAcknowledged,
+      copyDocumentNumber,
+      voidDocumentConfirm,
     }),
     {
       headers: {
@@ -128,7 +138,29 @@ const getCatchErrors = (errors: IError[], catchIndex: number) => {
 
 const CheckYourInformation = () => {
   const { t } = useTranslation(["common", "psCheckYourInformation", "progress"]);
-  const { documentNumber, processingStatement, exporter, csrf } = useLoaderData<loaderDataProps>();
+  const {
+    documentNumber,
+    processingStatement,
+    exporter,
+    csrf,
+    copyDocumentAcknowledged,
+    copyDocumentNumber,
+    voidDocumentConfirm,
+  } = useLoaderData<loaderDataProps>();
+
+  const copiedFromDocumentNumber = copyDocumentNumber || documentNumber;
+  const hasCopiedDraftContext = copyDocumentAcknowledged || Boolean(copyDocumentNumber);
+  const backUrl = voidDocumentConfirm
+    ? route("/create-processing-statement/:documentNumber/progress", { documentNumber })
+    : route(
+        "/create-processing-statement/:documentNumber/progress?backUri=" +
+          (hasCopiedDraftContext
+            ? route("/create-processing-statement/:documentNumber/copy-this-processing-statement", {
+                documentNumber: copiedFromDocumentNumber,
+              })
+            : route("/create-processing-statement/:documentNumber/what-export-destination", { documentNumber })),
+        { documentNumber }
+      );
 
   const processedProducts = getProcessedProducts(processingStatement);
   const errors: IError[] = useActionData<IError[]>() ?? [];
@@ -157,7 +189,7 @@ const CheckYourInformation = () => {
       notificationMessages={notificationMessages}
       hasErrors={hasErrors}
       errors={errors}
-      backUrl={"/create-processing-statement/:documentNumber/progress"}
+      backUrl={backUrl}
       summaryHeading="psSummaryPageHeading"
       headingTranslation="psCheckYourInformation"
       checkInformationHeader="psSummaryPageDocumentDetailsHeader"

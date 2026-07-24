@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
+import { useActionData, useLoaderData, type LoaderFunction, type ActionFunction, useLocation } from "react-router";
 
 import type { ILandingsEntryOptionGet, LandingsEntryOptionType } from "~/types";
 import { displayErrorMessages, landingsEntryOptions } from "~/helpers";
@@ -52,10 +52,20 @@ const LandingsEntry = () => {
 
     return notificationMsgs.length ? notificationMsgs : [];
   };
-  const showNotificationBanner = copyDocumentAcknowledged || generatedByContent;
-
+  const hasCopiedDraftContext = copyDocumentAcknowledged || Boolean(documentNumber);
+  const location = useLocation();
+  const url = new URLSearchParams(location.search);
+  const showNotificationBanner = copyDocumentAcknowledged || generatedByContent || documentNumber;
   return (
-    <Main backUrl={route("/create-catch-certificate/catch-certificates")}>
+    <Main
+      backUrl={
+        url.get("backUri")
+          ? url.get("backUri")!
+          : hasCopiedDraftContext && !voidDocumentConfirm
+            ? route("/create-catch-certificate/:documentNumber/copy-this-catch-certificate", { documentNumber })
+            : route("/create-catch-certificate/catch-certificates")
+      }
+    >
       {showNotificationBanner && (
         <NotificationBanner
           header={t("commonImportant", { ns: "common" })}

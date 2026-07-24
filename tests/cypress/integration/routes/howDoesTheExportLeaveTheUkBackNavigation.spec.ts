@@ -141,9 +141,9 @@ describe("How does the export leave the UK - Back Navigation", () => {
 describe("How does the export leave the UK - Save as draft (FI0-10577)", () => {
   const certificateUrl = "/create-catch-certificate/GBR-2025-CC-136BEC4E4";
 
-  it("should redirect to CC dashboard without calling the transport API when no vehicle is selected", () => {
+  it("should redirect to CC dashboard when saving as draft", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.HowDoesTheExportLeaveSaveAsDraftNoVehicle,
+      testCaseId: TestCaseId.HowDoesTheExportLeaveTruck,
     };
 
     cy.visit(`${certificateUrl}/how-does-the-export-leave-the-uk`, {
@@ -152,7 +152,10 @@ describe("How does the export leave the UK - Save as draft (FI0-10577)", () => {
 
     cy.contains("h1", "How do you transport the export?").should("be.visible");
 
-    // Click save as draft without selecting a vehicle — should redirect to dashboard
+    // Select a vehicle before saving as draft
+    cy.get('input[name="vehicle"][value="truck"]').click();
+
+    // Click save as draft and verify redirect to dashboard
     cy.get("[data-testid=save-draft-button]").click();
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });

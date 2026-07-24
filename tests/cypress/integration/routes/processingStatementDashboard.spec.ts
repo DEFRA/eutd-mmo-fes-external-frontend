@@ -133,6 +133,16 @@ describe("PS dashboard with query parameters", () => {
       "/create-processing-statement/processing-statements?month=10&year=2020&position=0"
     );
   });
+
+  it("should render previous and next pagination controls", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSLoadDasboardWithCompletedAndInProgress,
+    };
+
+    cy.visit(processingStatementLandingUrl, { qs: { ...testParams, month: 10, year: 2020, position: 0 } });
+    cy.get(".govuk-pagination").should("exist");
+    cy.get(".govuk-pagination__next, .govuk-pagination__prev").should("exist");
+  });
 });
 
 describe("PS dashboard with user details", () => {

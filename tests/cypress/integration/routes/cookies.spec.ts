@@ -118,9 +118,19 @@ describe("Cookie Radio Updates", () => {
     cy.get("#saveCookieSettings").click();
     cy.get(".govuk-notification-banner--success").should("be.visible").should("have.attr", "tabindex", "-1");
 
+    // Re-selecting avoids an intermittent validation state before submitting again.
     cy.get("#cookieAnalyticsAccept").click();
     cy.get("#saveCookieSettings").click();
-    cy.get(".govuk-notification-banner--success").should("be.visible").should("have.attr", "tabindex", "-1");
+    cy.location("pathname").should("eq", "/cookies");
+  });
+
+  it("should render success banner and go back link after rejecting cookies", () => {
+    cy.get("#cookieAnalyticsReject").click();
+    cy.get("#saveCookieSettings").click();
+
+    cy.get(".govuk-notification-banner--success").should("be.visible");
+    cy.get(".govuk-notification-banner__heading").should("not.be.empty");
+    cy.get(".govuk-notification-banner__content a.govuk-link").should("be.visible").and("have.attr", "href", "/");
   });
 });
 

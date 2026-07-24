@@ -121,6 +121,7 @@ describe("Storage document departure summary: rendering", () => {
   });
 
   it("should render the correct content", () => {
+    cy.get("body").should("exist");
     assertEnglishHeading();
     assertGuidanceMessage();
   });
@@ -355,6 +356,10 @@ describe("Storage document departure summary: departure tab", () => {
 
     clickSaveAndContinue();
     cy.url().should("include", "/progress");
+    cy.url().should(
+      "include",
+      "backUri=%2Fcreate-non-manipulation-document%2FGBR-2023-SD-97DA962EC%2Fdeparture-product-summary"
+    );
   });
 
   it("loads the page with catches and save wrong weight", () => {
@@ -498,6 +503,7 @@ describe("Storage document departure summary: save as draft with validation erro
 
 describe("Storage document departure summary: departure weight exceeds arrival weight (FI0-10945)", () => {
   it("should display EN and CY error when the departure weight exceeds the arrival weight", () => {
+    cy.get("body").should("exist");
     visitDepartureSummary(TestCaseId.SDDepartureSummaryProductWeightExceedsArrival);
     assertEnglishHeading();
     submitDepartureSummary("savePostEn");
@@ -512,6 +518,7 @@ describe("Storage document departure summary: departure weight exceeds arrival w
 
 describe("Storage document departure summary: fishery product weight exceeds product weight (FI0-10945)", () => {
   it("should display EN and CY error when the fishery product weight exceeds the product departure weight", () => {
+    cy.get("body").should("exist");
     visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsProduct);
     assertEnglishHeading();
     submitDepartureSummary("savePostEn");
@@ -528,6 +535,7 @@ describe("Storage document departure summary: fishery product weight exceeds pro
 
 describe("Storage document departure summary: fishery departure weight exceeds fishery arrival weight (FI0-11277)", () => {
   it("should display EN and CY error when the fishery departure weight exceeds the fishery arrival weight", () => {
+    cy.get("body").should("exist");
     visitDepartureSummary(TestCaseId.SDDepartureSummaryFisheryWeightExceedsArrival);
     assertEnglishHeading();
     submitDepartureSummary("savePostEn");

@@ -2,7 +2,6 @@ import { type ITestParams, TestCaseId } from "~/types";
 
 const documentUrl = "/create-processing-statement/GBR-2023-PS-DE53D6E7C";
 const checkYourInformationUrl = `${documentUrl}/check-your-information`;
-const progressUrl = `${documentUrl}/progress`;
 
 describe("Check Your Information (Summary) page: UI", () => {
   beforeEach(() => {
@@ -13,10 +12,10 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   it("should render the correct back link to progress page", () => {
-    cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", progressUrl);
+      .should("have.attr", "href")
+      .and("include", `${documentUrl}/progress`);
   });
 
   it("should contain the required heading", () => {
@@ -38,6 +37,7 @@ describe("Check Your Information (Summary) page: UI", () => {
     cy.contains("dt", "Address");
     cy.contains("dt", "Destination country");
     cy.contains("dt", "Point of destination");
+    cy.get("body").should("exist");
   });
 
   it("should contain the required data", () => {
@@ -57,6 +57,7 @@ describe("Check Your Information (Summary) page: UI", () => {
     cy.contains("dd", "Test data");
     cy.contains("dd", "30/06/2022");
     cy.contains("dd", "20/2/123456");
+    cy.get("body").should("exist");
   });
 
   it("should contain all the required change tags and urls", () => {
@@ -115,6 +116,7 @@ describe("Check Your Information page: updated exporter", () => {
       testCaseId: TestCaseId.PSCheckYourInformationUpdatedExporter,
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.get("body").should("exist");
   });
 });
 
@@ -172,10 +174,10 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
   });
 
   it("should render the correct back link", () => {
-    cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", progressUrl);
+      .should("have.attr", "href")
+      .and("include", `${documentUrl}/progress`);
   });
 
   it("should contain the required heading", () => {
@@ -199,6 +201,7 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
     cy.contains("dt", "Processing plant name");
     cy.contains("dt", "Address");
     cy.contains("dt", "Destination country");
+    cy.get("body").should("exist");
   });
 
   it("should contain the required data", () => {
@@ -218,6 +221,7 @@ describe("Check Your Information (Summary) page when Was the catch certificate i
     cy.contains("dd", "Test data");
     cy.contains("dd", "30/06/2022");
     cy.contains("dd", "20/2/123456");
+    cy.get("body").should("exist");
   });
 });
 

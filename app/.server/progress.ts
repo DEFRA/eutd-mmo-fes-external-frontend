@@ -167,11 +167,6 @@ export const progressPageLoader = async (request: Request, params: Params, journ
     session.unset("exporterCompanyName");
   }
 
-  session.unset(`copyDocumentAcknowledged-${documentNumber}`);
-  session.unset(`copyDocument-${documentNumber}`);
-  session.unset(`documentNumber-${documentNumber}`);
-  session.unset(`voidOriginal-${documentNumber}`);
-  session.unset(`copyVoidDocument-${documentNumber}`);
   let objectToReturn: any = {
     documentNumber,
     progress,

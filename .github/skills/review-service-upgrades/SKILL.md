@@ -1,6 +1,10 @@
 ---
 name: review-service-upgrades
 description: "Expert dependency upgrade reviewer for MMO FES services. Use when: reviewing npm dependencies for vulnerabilities, upgrading packages safely, running npm audits, producing upgrade PRs with before/after evidence."
+license: OGL-UK-3.0
+metadata:
+  author: mmo-fes
+  version: "1.0"
 ---
 
 # Service Dependency Upgrade Review Skill

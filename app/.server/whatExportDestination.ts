@@ -132,16 +132,21 @@ export const WhatExportDestinationAction = async (request: Request, params: Para
     return apiCallFailed(errors, values);
   }
 
+  const backUri = route("/create-processing-statement/:documentNumber/what-export-destination", {
+    documentNumber,
+  });
+
+  const progressUrl = `${route("/create-processing-statement/:documentNumber/progress", {
+    documentNumber,
+  })}?backUri=${encodeURIComponent(backUri)}`;
+
   return redirect(
     isEmpty(nextUri)
-      ? route(
-          journey === "processingStatement"
-            ? "/create-processing-statement/:documentNumber/progress"
-            : "/create-non-manipulation-document/:documentNumber/how-does-the-consignment-leave-the-uk",
-          {
-            documentNumber: documentNumber,
-          }
-        )
+      ? journey === "processingStatement"
+        ? progressUrl
+        : route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-leave-the-uk", {
+            documentNumber,
+          })
       : nextUri
   );
 };

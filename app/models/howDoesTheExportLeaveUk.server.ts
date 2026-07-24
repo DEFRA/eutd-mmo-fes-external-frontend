@@ -89,22 +89,6 @@ export const HowDoesTheExportLeaveUkLoader = async (request: Request, params: Pa
   );
 };
 
-// Only persist the vehicle selection when one has actually been chosen.
-// Skipping the API call when vehicle is absent prevents saving null/invalid
-// transport data to the document.
-const saveTransportIfSelected = async (
-  bearerToken: string,
-  documentNumber: string | undefined,
-  transportId: string | undefined,
-  vehicle: Vehicle,
-  payload: ITransport
-): Promise<void> => {
-  if (!vehicle) return;
-  await (isEmpty(transportId)
-    ? addTransport(bearerToken, documentNumber, payload)
-    : updateTransport(bearerToken, documentNumber, transportId, payload));
-};
-
 export const HowDoesTheExportLeaveUkAction = async (
   request: Request,
   params: Params
@@ -144,15 +128,13 @@ export const HowDoesTheExportLeaveUkAction = async (
 
   const buttonClicked = form.get("_action") as string;
   const isSavedAsDraft: boolean = buttonClicked === "saveAsDraft";
-
-  if (isSavedAsDraft) {
-    await saveTransportIfSelected(bearerToken, documentNumber, transportId, vehicle, payload);
-    return redirect(route("/create-catch-certificate/catch-certificates"));
-  }
-
   const response: ITransport = isEmpty(transportId)
     ? await addTransport(bearerToken, documentNumber, payload)
     : await updateTransport(bearerToken, documentNumber, transportId, payload);
+
+  if (isSavedAsDraft) {
+    return redirect(route("/create-catch-certificate/catch-certificates"));
+  }
 
   const errors: IError[] | IErrorsTransformed = (response.errors as IError[]) || [];
   const isUnauthorised = response.unauthorised as boolean;

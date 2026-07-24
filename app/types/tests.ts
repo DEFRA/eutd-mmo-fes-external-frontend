@@ -165,7 +165,6 @@ export enum TestCaseId {
   PostWhoseWatersFailsWith403 = "postWhoseWatersFailsWith403",
   GetWhoseWatersFailsWith403 = "getWhoseWatersFailsWith403",
   WhoseWatersTypePageGuard = "whoseWatersTypePageGuard",
-  WhoseWatersSaveAsDraftWithInvalidOtherWaters = "whoseWatersSaveAsDraftWithInvalidOtherWaters",
 
   HowDoesTheExportLeaveNoTransportDetails = "howDoesTheExportLeaveNoTransportDetails",
   HowDoesTheExportLeaveSaveAsDraftNoVehicle = "howDoesTheExportLeaveSaveAsDraftNoVehicle",
@@ -655,6 +654,7 @@ export enum TestCaseId {
   PSSDCopyDisallowed = "pssdCopyDisallowed",
   PSSDCopySave = "pssdCopyThisCatchCertificateSave",
   PSSDCopyAllData = "pssdCopyThisCatchCertAllData",
+  PSSDCopyVoidWithProgress = "pssdCopyVoidWithProgress",
 
   SDLoadDasboardWithCompletedAndInProgress = "sdLoadDasboardWithCompletedAndInProgress",
   SDLoadDasboardWithInProgressAndEmptyCompleted = "sdLoadDasboardWithInProgressAndEmptyCompleted",
