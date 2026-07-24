@@ -24,4 +24,23 @@ describe("Sign Out Page", () => {
     cy.contains("p", "5 seconds").should("be.visible");
     cy.contains("p", "4 seconds", { timeout: 2500 }).should("be.visible");
   });
+
+  it("should submit continue action and redirect", () => {
+    cy.visit("/sign-out");
+
+    cy.request({
+      method: "POST",
+      url: "/sign-out",
+      form: true,
+      body: {
+        csrf: "invalid-token",
+        _action: "continue",
+      },
+      failOnStatusCode: false,
+      followRedirect: false,
+    }).then((response) => {
+      expect(response.status).to.equal(302);
+      expect(response.redirectedToUrl).to.equal("http://localhost:3000/");
+    });
+  });
 });
