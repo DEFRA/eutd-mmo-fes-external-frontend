@@ -3,10 +3,8 @@ import type { Dispatch, SetStateAction } from "react";
 
 // Safe HTML tag stripper with input validation
 const stripHtmlTags = (input: string): string => {
-  if (!input || typeof input !== "string") return "";
-  // Limit input length to prevent potential DoS
-  const maxLength = 10000;
-  const safeInput = input.length > maxLength ? input.substring(0, maxLength) : input;
+  // Limit input length to prevent potential DoS.
+  const safeInput = `${input}`.substring(0, 10000);
 
   // Use a character-by-character approach to avoid regex backtracking
   let result = "";
