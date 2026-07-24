@@ -242,6 +242,7 @@ export enum TestCaseId {
   AddLandingPageFailsWithMaxLandingExceededError = "addLandingPageFailsWithMaxLandingExceededError",
   AddLandingPageFailsWithTotalWeightExceeded = "addLandingPageFailsWithTotalWeightExceeded",
   AddLandingPageFailsWithErrorsOnSaveAndContinue = "AddLandingPageFailsWithErrorsOnSaveAndContinue",
+  AddLandingPageFailsWithVesselLicenceOnSaveAndContinue = "AddLandingPageFailsWithVesselLicenceOnSaveAndContinue",
   AddLandingPageFailsWhenGearTypeEmpty = "AddLandingPageFailsWhenGearTypeEmpty",
   AddLandingPageFailsWithForbiddenOnSaveAndContinue = "AddLandingPageFailsWithForbiddenOnSaveAndContinue",
   AddLandingGearTypesAPIError = "AddLandingGearTypesAPIError",
