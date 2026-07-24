@@ -57,4 +57,17 @@ describe("void this draft processing statement page", () => {
     cy.get("form").submit();
     cy.url().should("include", "/forbidden");
   });
+
+  it("redirects to forbidden after reopening void page once document is voided", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VoidThisDocumentOptionYes,
+    };
+
+    cy.visit(voidThisProcessingStatementUrl, { qs: { ...testParams } });
+    cy.get("#documentVoid").check();
+    cy.get('[data-testid="continue"]').click();
+    cy.url().should("include", "/create-processing-statement/processing-statements");
+    cy.visit(voidThisProcessingStatementUrl, { qs: { ...testParams }, failOnStatusCode: false });
+    cy.url().should("include", "/forbidden");
+  });
 });
