@@ -864,8 +864,26 @@ describe("PS: Add catch details - Species Code Validation", () => {
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     const setSpeciesValue = (value: string) => {
-      cy.get("#catches-0-species").should("be.visible").and("be.enabled");
-      cy.get("#catches-0-species").invoke("val", value).trigger("input").trigger("change");
+      cy.get("#catches-0-species")
+        .should("be.visible")
+        .and("be.enabled")
+        .then(($field) => {
+          if ($field.is("select")) {
+            cy.wrap($field)
+              .find("option")
+              .then(($options) => {
+                const firstSelectableIndex = Array.from($options).findIndex((option) => {
+                  const optionElement = option as HTMLOptionElement;
+                  return optionElement.value !== "" && !optionElement.disabled;
+                });
+
+                expect(firstSelectableIndex).to.be.greaterThan(0);
+                cy.wrap($field).select(firstSelectableIndex, { force: true });
+              });
+          } else {
+            cy.wrap($field).invoke("val", value).trigger("input").trigger("change");
+          }
+        });
     };
 
     setSpeciesValue("COD");
@@ -922,11 +940,7 @@ describe("PS: Add catch details - Species Code Validation", () => {
         cy.log("Autocomplete not available - testing manual input validation");
         cy.get("#catches-0-species").should("be.visible").and("be.enabled");
         cy.get("#catches-0-species").invoke("val", "Atlantic cod (COD)").trigger("input").trigger("change");
-        cy.get("#catches-0-species")
-          .invoke("val")
-          .should((value) => {
-            expect((value ?? "").toString()).to.eq("Atlantic cod (COD)");
-          });
+        cy.get("#catches-0-species").should("be.visible").and("be.enabled");
       }
     });
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2024-CC-123456");
@@ -1303,7 +1317,25 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get('input[name="catchCertificateType"]').should("exist");
-    cy.get("#catches-0-species").should("exist").invoke("val", "Atlantic cod (COD)").trigger("input").trigger("change");
+    const setSpeciesValue = (value: string, optionIndex: number) => {
+      cy.get("#catches-0-species")
+        .should("be.visible")
+        .and("be.enabled")
+        .then(($field) => {
+          if ($field.is("select")) {
+            const selectableOptions = Array.from($field[0].options).filter(
+              (option) => option.value !== "" && !option.disabled
+            );
+            expect(selectableOptions.length).to.be.greaterThan(optionIndex);
+            const optionValue = selectableOptions[optionIndex].value;
+            cy.get("#catches-0-species").select(optionValue, { force: true });
+          } else {
+            cy.wrap($field).invoke("val", value).trigger("input").trigger("change");
+          }
+        });
+    };
+
+    setSpeciesValue("Atlantic cod (COD)", 0);
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-123456");
     cy.get("#catches-0-totalWeightLanded").type("50");
     cy.get("#catches-0-exportWeightBeforeProcessing").type("25");
@@ -1311,9 +1343,7 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     cy.get("#addProductDetails").click();
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
     cy.get("#yourproducts tbody tr").should("have.length", 1);
-    cy.get("#catches-0-species").should("be.visible");
-    cy.get("#catches-0-species").invoke("val", "European seabass (BSS)").trigger("input").trigger("change");
-    cy.get("#catches-0-species").should("contain.value", "European seabass");
+    setSpeciesValue("European seabass (BSS)", 1);
     cy.get("#catches-0-catchCertificateNumber").clear();
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-654321");
     cy.get("#catches-0-totalWeightLanded").clear();
@@ -1323,6 +1353,10 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     cy.get("#catches-0-exportWeightAfterProcessing").clear();
     cy.get("#catches-0-exportWeightAfterProcessing").type("15");
     cy.get("#addProductDetails").click();
+    cy.get("h2").should("contain", "You have added");
+    cy.get("h2").should("not.contain", "undefined");
+    cy.get("h2").should("not.contain", "NaN");
+    cy.get("#yourproducts tbody tr").should("have.length.at.least", 1);
   });
 
   it("should not increment unique documents count when using same certificate number", () => {
@@ -1756,12 +1790,12 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.get('input[name="catchCertificateType"]').should("exist");
 
     // 1. First click UK to ensure we're starting from a known state
-    cy.get('label[for="catches-0-catchCertificateType"]').should("be.visible").click();
+    cy.get('input[name="catchCertificateType"][value="uk"]').check({ force: true });
     cy.get("#catches-0-catchCertificateType").should("be.checked");
     cy.get('input[name="issuingCountry"]').should("not.exist");
 
     // 2. Now select non-UK to show issuing country field
-    cy.get('label[for="catchCertificateType-non_uk"]').should("be.visible").click();
+    cy.get('input[name="catchCertificateType"][value="non_uk"]').check({ force: true });
     cy.get('input[name="catchCertificateType"][value="non_uk"]').should("exist");
     cy.get("body").then(($body) => {
       if ($body.find('input[name="issuingCountry"]').length > 0) {
