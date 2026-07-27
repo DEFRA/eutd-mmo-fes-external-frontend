@@ -37,11 +37,11 @@ export const FilterSearch = ({
         {label}
       </label>
 
-      {hint ? (
+      {hint && (
         <div id={hintId} className="govuk-hint">
           {hint}
         </div>
-      ) : null}
+      )}
 
       <div className="govuk-grid-row filter-search-row">
         <div className="govuk-grid-column-one-half">

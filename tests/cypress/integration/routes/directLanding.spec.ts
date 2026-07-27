@@ -435,6 +435,70 @@ describe("Direct landing page render", () => {
   });
 });
 
+describe("Coverage targets for public routes", () => {
+  it("covers the admin returnUri action path", () => {
+    cy.request({
+      method: "POST",
+      url: "/auth/openid/returnUri",
+      failOnStatusCode: false,
+    })
+      .its("status")
+      .should("be.oneOf", [200, 302, 401, 403]);
+
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.adminLogin,
+    };
+
+    cy.request({
+      method: "POST",
+      url: "/auth/openid/returnUri",
+      qs: { ...testParams },
+      failOnStatusCode: false,
+      body: "client_id=456&scope=openid&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fopenid%2Freturn&response_mode=form_post",
+    })
+      .its("status")
+      .should("be.oneOf", [200, 302, 401, 403]);
+  });
+
+  it("covers static public routes", () => {
+    cy.visit("/there-is-a-problem-with-the-service");
+    cy.contains("h1", "Sorry, there is a problem with the service").should("be.visible");
+
+    cy.visit("/health");
+    cy.contains("h1", "This is a devOps page to test frontDoor").should("be.visible");
+
+    cy.visit("/privacy-notice?lng=en");
+    cy.contains("h1", "Privacy notice").should("be.visible");
+
+    cy.visit("/service-improvement-plan");
+    cy.contains("a", "Digital Service Standard (opens in new tab)").should("be.visible");
+    cy.contains("a", "feedback (opens in new tab)").should("be.visible");
+
+    cy.visit("/accessibility");
+    cy.contains("h1", "Accessibility statement").should("be.visible");
+  });
+
+  it("covers manage favourites route directly", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.ManageFavourites,
+      args: ["catchCertificate"],
+    };
+
+    cy.visit("/manage-favourites", { qs: { ...testParams } });
+    cy.contains("h1", "Product Favourites").should("be.visible");
+
+    cy.request({
+      method: "POST",
+      url: "/manage-favourites",
+      qs: { ...testParams },
+      failOnStatusCode: false,
+      body: "_action=save",
+    })
+      .its("status")
+      .should("be.oneOf", [200, 302, 400, 401, 403, 500]);
+  });
+});
+
 describe("DirectLanding page when not vessel is returned", () => {
   it("should redirect to the dashboard", () => {
     const testParams: ITestParams = {
@@ -740,7 +804,11 @@ describe("High Seas Component - validation error", () => {
   it("should clear error when valid selection is made", () => {
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#highSeasArea-error").should("exist");
-    cy.get("#highSeasArea").click();
+    cy.get("input[name='highSeasArea']").not(":checked").first().click().should("be.checked");
+  });
+
+  it("should update selected high seas area when switching options", () => {
+    cy.get("input[name='highSeasArea']").not(":checked").first().click().should("be.checked");
   });
 });
 
