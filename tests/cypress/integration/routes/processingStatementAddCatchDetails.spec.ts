@@ -878,7 +878,7 @@ describe("PS: Add catch details - Species Code Validation", () => {
                 });
 
                 expect(firstSelectableIndex).to.be.greaterThan(0);
-                cy.wrap($field).select(firstSelectableIndex, { force: true });
+                cy.wrap($field).should("be.visible").and("not.be.disabled").select(firstSelectableIndex);
               });
           } else {
             cy.wrap($field).invoke("val", value).trigger("input").trigger("change");
@@ -1328,7 +1328,7 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
             );
             expect(selectableOptions.length).to.be.greaterThan(optionIndex);
             const optionValue = selectableOptions[optionIndex].value;
-            cy.get("#catches-0-species").select(optionValue, { force: true });
+            cy.get("#catches-0-species").should("be.visible").and("not.be.disabled").select(optionValue);
           } else {
             cy.wrap($field).invoke("val", value).trigger("input").trigger("change");
           }
@@ -1790,12 +1790,12 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     cy.get('input[name="catchCertificateType"]').should("exist");
 
     // 1. First click UK to ensure we're starting from a known state
-    cy.get('input[name="catchCertificateType"][value="uk"]').check({ force: true });
+    cy.get('label[for="catches-0-catchCertificateType"]').should("be.visible").click();
     cy.get("#catches-0-catchCertificateType").should("be.checked");
     cy.get('input[name="issuingCountry"]').should("not.exist");
 
     // 2. Now select non-UK to show issuing country field
-    cy.get('input[name="catchCertificateType"][value="non_uk"]').check({ force: true });
+    cy.get('label[for="catchCertificateType-non_uk"]').should("be.visible").click();
     cy.get('input[name="catchCertificateType"][value="non_uk"]').should("exist");
     cy.get("body").then(($body) => {
       if ($body.find('input[name="issuingCountry"]').length > 0) {
