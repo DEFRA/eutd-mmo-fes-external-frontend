@@ -618,6 +618,7 @@ const CatchAdded = () => {
               !
             </span>
             <strong className="govuk-warning-text__text">
+              <span className="govuk-visually-hidden">Warning</span>
               {t("editProductInformationMessage", { ns: "catchAdded" })}
             </strong>
           </div>
