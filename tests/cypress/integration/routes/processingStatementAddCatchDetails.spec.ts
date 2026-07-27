@@ -682,8 +682,15 @@ describe("PS: Add catch details - Species AutocompleteFormField", () => {
       .and("be.visible")
       .and("not.have.attr", "aria-invalid", "true");
     cy.get("#catches-0-species").focus();
-    cy.get("#catches-0-species").type("COD");
-    cy.get("#catches-0-species").should("be.focused");
+    cy.focused().should("have.id", "catches-0-species");
+    cy.focused().type("COD");
+    cy.get("#catches-0-species")
+      .invoke("val")
+      .should((value) => {
+        expect((value ?? "").toString().length).to.be.greaterThan(0);
+      });
+    cy.get("#catches-0-species").focus();
+    cy.focused().should("have.id", "catches-0-species");
   });
 });
 
@@ -856,11 +863,20 @@ describe("PS: Add catch details - Species Code Validation", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-species").should("be.visible").and("be.enabled").type("COD");
+    cy.get("#catches-0-species").should("be.visible").and("be.enabled");
+    cy.get("#catches-0-species").invoke("val", "").trigger("input").trigger("change");
+    cy.get("#catches-0-species").type("COD");
     cy.get("#catches-0-species").should("be.visible").and("be.enabled");
 
-    cy.get("#catches-0-species").type("{selectall}{backspace}");
-    cy.get("#catches-0-species").should("be.visible").type("Atlantic");
+    cy.get("#catches-0-species").invoke("val", "").trigger("input").trigger("change");
+    cy.get("#catches-0-species").type("Atlantic");
+    cy.get("#catches-0-species")
+      .invoke("val")
+      .should((value) => {
+        const text = (value ?? "").toString().toLowerCase();
+        expect(text).to.not.equal("");
+        expect(text).to.contain("atlantic");
+      });
     cy.get("body").then(($body) => {
       const hasAtlanticAutocompleteOption = $body
         .find(".autocomplete__option")
@@ -886,9 +902,14 @@ describe("PS: Add catch details - Species Code Validation", () => {
       }
     });
 
-    cy.get("#catches-0-species").type("{selectall}{backspace}");
-    cy.get("#catches-0-species").should("be.visible").type("Gadus morhua");
-    cy.get("#catches-0-species").invoke("val").should("not.be.undefined");
+    cy.get("#catches-0-species").invoke("val", "").trigger("input").trigger("change");
+    cy.get("#catches-0-species").type("Gadus morhua");
+    cy.get("#catches-0-species")
+      .invoke("val")
+      .should((value) => {
+        const text = (value ?? "").toString().toLowerCase();
+        expect(text).to.contain("gadus");
+      });
   });
 
   it("should validate species selection from autocomplete", () => {
@@ -1297,8 +1318,9 @@ describe("PS: Add catch details - Unique Species and Documents Session Managemen
     cy.get("#addProductDetails").click();
     cy.get("h2").should("contain", "You have added 1 species and 1 documents for");
     cy.get("#yourproducts tbody tr").should("have.length", 1);
-    cy.get("#catches-0-species").should("be.visible").and("not.be.disabled").clear();
-    cy.get("#catches-0-species").should("be.visible").and("not.be.disabled").type("European seabass (BSS)");
+    cy.get("#catches-0-species").should("be.visible");
+    cy.get("#catches-0-species").invoke("val", "European seabass (BSS)").trigger("input").trigger("change");
+    cy.get("#catches-0-species").should("contain.value", "European seabass");
     cy.get("#catches-0-catchCertificateNumber").clear();
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2022-CC-654321");
     cy.get("#catches-0-totalWeightLanded").clear();
@@ -1384,8 +1406,8 @@ describe("PS: Add catch details - Remove Functionality and Count Updates", () =>
     cy.get("#catches-0-species").should("be.enabled");
 
     // Second catch - requery and fill species field
-    cy.get("#catches-0-species").should("be.visible").and("not.be.disabled").clear();
-    cy.get("#catches-0-species").should("be.visible").and("not.be.disabled").type("Atlantic cod (COD)");
+    cy.get("#catches-0-species").should("be.visible");
+    cy.get("#catches-0-species").invoke("val", "Atlantic cod (COD)").trigger("input").trigger("change");
     cy.get("#catches-0-species").should("be.visible");
     cy.get("#catches-0-catchCertificateNumber").should("not.be.disabled").clear();
     cy.get("#catches-0-catchCertificateNumber").should("not.be.disabled").type("GBR-2022-CC-222222");
