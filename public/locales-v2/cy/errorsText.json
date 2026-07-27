@@ -42,7 +42,7 @@
   "commonWhatExportersAddressErrorSubBuildingValidation": "Rhaid i enw’r is-adeilad gynnwys llythrennau, rhifau, collnodau, cysylltnodau, atalnodau llawn, atalnodau, bylchau, ampersands, ebychnodau a blaenslaesau yn unig",
   "commonWhatExportersAddressErrorBuildingNumberValidation": "Rhaid i rif yr adeilad gynnwys llythrennau, rhifau, bylchau, cysylltnodau ac atalnodau yn unig",
   "commonWhatExportersAddressErrorBuildingNameValidation": "Rhaid i enw’r adeilad gynnwys llythrennau, rhifau, collnodau, cysylltnodau, atalnodau llawn, atalnodau, bylchau, ampersands, ebychnodau a blaenslaesau yn unig",
-  "commonWhatExportersAddressErrorAddressFirstPart": "Rhowch enw isadeilad, rhif adeilad, enw adeilad neu enw stryd",
+  "commonWhatExportersAddressErrorAddressFirstPart": "Rhowch rif adeilad, enw adeilad, enw isadeilad neu enw stryd",
   "commonProductDestinationErrorInvalidCountry": "Dewiswch wlad gyrchfan ddilys",
   "ccWhatExportJourneyErrorPointOfDestinationRequired": "Rhowch y gyrchfan",
   "ccWhatExportJourneyErrorPointOfDestinationMaxLength": "Rhaid i'r gyrchfan fod yn llai na 100 o nodau",

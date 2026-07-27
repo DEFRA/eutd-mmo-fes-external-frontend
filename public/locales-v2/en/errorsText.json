@@ -42,7 +42,7 @@
   "commonWhatExportersAddressErrorSubBuildingValidation": "SubBuilding name must only contain letters, numbers, apostrophes, hyphens, periods, commas, spaces, ampersands, exclamation marks and forward slashes",
   "commonWhatExportersAddressErrorBuildingNumberValidation": "Building number must contain only letters, numbers, spaces, hyphens and commas",
   "commonWhatExportersAddressErrorBuildingNameValidation": "Building name must only contain letters, numbers, apostrophes, hyphens, periods, commas, spaces, ampersands, exclamation marks and forward slashes",
-  "commonWhatExportersAddressErrorAddressFirstPart": "Enter a sub-building name, building number, a building name or street name",
+  "commonWhatExportersAddressErrorAddressFirstPart": "Enter building number, a building name, a sub-building name, or street name",
   "commonProductDestinationErrorInvalidCountry": "Select a valid destination country",
   "ccWhatExportJourneyErrorPointOfDestinationRequired": "Enter the point of destination",
   "ccWhatExportJourneyErrorPointOfDestinationMaxLength": "Point of destination must not exceed 100 characters",
