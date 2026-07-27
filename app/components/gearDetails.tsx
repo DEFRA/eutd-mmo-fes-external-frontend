@@ -48,7 +48,7 @@ export const GearDetails = ({
   gearTypeMessage,
   values,
 }: gearDetailsProps) => {
-  const gearCategoryErrorId = errors.gearCategory.fieldId ?? "gearCategory-error";
+  const gearCategoryErrorId = errors.gearCategory?.fieldId ?? "gearCategory-error";
   const defaultGearCategory = values?.gearCategory ?? selectedGearCategory;
   const selectedGearTypeValue = selectedGearType ?? "";
 
@@ -92,7 +92,7 @@ export const GearDetails = ({
             defaultValue={defaultGearCategory}
             onChange={(e) => setSelectedGearCategory(e.target.value)}
           >
-            <option value="" selected aria-label={addLandingGearCategoryNullOption}>
+            <option value="" aria-label={addLandingGearCategoryNullOption}>
               {addLandingGearCategoryNullOption}
             </option>
             {Array.isArray(gearCategories) &&

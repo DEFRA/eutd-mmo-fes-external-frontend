@@ -62,11 +62,11 @@ export const RfmoSelector = ({
           defaultValue={selectedRfmo}
           onChange={(e) => setRfmo(e.target.value)}
         >
-          <option value="" selected aria-label={ccRfmoNullOptionAriaLabel}>
+          <option value="" aria-label={ccRfmoNullOptionAriaLabel}>
             {rfmoNullOption}
           </option>
           {rfmos.map((rfmo) => (
-            <option key={rfmo} value={rfmo} selected={rfmo === selectedRfmo}>
+            <option key={rfmo} value={rfmo}>
               {rfmo}
             </option>
           ))}
