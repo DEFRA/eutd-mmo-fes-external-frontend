@@ -171,6 +171,34 @@ const addLandingsHandler: ITestHandler = {
     rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
     rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
   ],
+  [TestCaseId.AddLandingPageFailsWithVesselLicenceOnSaveAndContinue]: () => [
+    rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json(addLandings))),
+    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(mannualLandingType))),
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(mockSearchVesselName, (req, res, ctx) => res(ctx.json(getVessels))),
+    rest.post(SAVE_AND_VALIDATE_EXPORT_URL, (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          items: [
+            {
+              product: {
+                id: "GBR-2023-CC-2323EC498-81368201-50c5-4347-bf1f-5802be97b58b",
+                species: { code: "COD", label: "Atlantic cod (COD)" },
+              },
+              landings: [],
+            },
+          ],
+          errors: {
+            vessel_license: "Please contact support.",
+          },
+        })
+      )
+    ),
+    rest.get(GET_GEAR_CATEGORIES_URL, (req, res, ctx) => res(ctx.json(getGearCategories))),
+    rest.get(mockGetGearTypesByCategoriesUrl, (req, res, ctx) => res(ctx.json(getGearTypesByCategory))),
+    rest.get(GET_RFMO_AREAS_URL, (req, res, ctx) => res(ctx.json(getRfmos))),
+  ],
   [TestCaseId.AddLandingPageFailsWithForbiddenOnSaveAndContinue]: () => [
     rest.get(EXPORT_PAYLOAD_URL, (req, res, ctx) => res(ctx.json(addLandings))),
     rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(mannualLandingType))),
