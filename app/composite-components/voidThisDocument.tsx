@@ -5,8 +5,7 @@ import isEmpty from "lodash/isEmpty";
 import { Main, ErrorSummary, SecureForm } from "~/components";
 import { VoidCertificateConfirm } from "./voidCertificateConfirm";
 import { displayErrorMessages } from "~/helpers";
-import { useLoaderData, useRevalidator } from "react-router";
-import { useEffect } from "react";
+import { useLoaderData } from "react-router";
 
 type VoidThisDocumentProps = {
   actionData: any;
@@ -17,27 +16,7 @@ type VoidThisDocumentProps = {
 export const VoidthisDocumentComponent = ({ journey, actionData, backUrl }: VoidThisDocumentProps) => {
   const { t } = useTranslation(["common"]);
   const { csrf } = useLoaderData();
-  const { revalidate } = useRevalidator();
   const { errors = {}, confirmDocumentVoid } = actionData;
-
-  useEffect(() => {
-    const isBackForwardNavigation = () => {
-      const navigationEntry = window.performance?.getEntriesByType("navigation")?.[0] as
-        | PerformanceNavigationTiming
-        | undefined;
-      return navigationEntry?.type === "back_forward";
-    };
-
-    const handlePageShow = (event: PageTransitionEvent) => {
-      if (event.persisted || isBackForwardNavigation()) {
-        revalidate();
-      }
-    };
-
-    window.addEventListener("pageshow", handlePageShow);
-
-    return () => window.removeEventListener("pageshow", handlePageShow);
-  }, [revalidate]);
 
   return (
     <Main backUrl={backUrl}>
