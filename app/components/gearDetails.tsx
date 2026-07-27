@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import { ErrorMessage } from "./errorMessage";
+import { ErrorMessage } from "~/components/errorMessage";
 import type { IErrorsTransformed, IGearType } from "~/types";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 
@@ -47,105 +47,110 @@ export const GearDetails = ({
   gearCategoryMessage,
   gearTypeMessage,
   values,
-}: gearDetailsProps) => (
-  <div
-    className={classNames("govuk-form-group", {
-      "govuk-form-group--error": groupedErrorIds["gearDetails"]?.length > 0,
-    })}
-  >
-    <fieldset
-      className="govuk-fieldset"
-      role="group"
-      aria-describedby={`gearDetails-hint ${groupedErrorIds["gearDetails"]?.join(" ") ?? ""}`}
+}: gearDetailsProps) => {
+  const gearCategoryErrorId = errors.gearCategory.fieldId ?? "gearCategory-error";
+  const defaultGearCategory = values?.gearCategory ?? selectedGearCategory;
+  const selectedGearTypeValue = selectedGearType ?? "";
+
+  return (
+    <div
+      className={classNames("govuk-form-group", {
+        "govuk-form-group--error": groupedErrorIds["gearDetails"]?.length > 0,
+      })}
     >
-      <legend className="govuk-fieldset__legend">
-        <b>{legendTitle}</b>
-      </legend>
-      <div id="gearDetails-hint" className="govuk-hint">
-        {gearDetailsHint}
-      </div>
-      <div
-        className={classNames("govuk-form-group govuk-!-margin-bottom-3", {
-          "govuk-form-group--error": errors.gearCategory?.message,
-        })}
+      <fieldset
+        className="govuk-fieldset"
+        role="group"
+        aria-describedby={`gearDetails-hint ${groupedErrorIds["gearDetails"]?.join(" ") ?? ""}`}
       >
-        <label htmlFor="gearCategory" className="govuk-label">
-          {landingGearCategoryLabel}
-        </label>
-        {gearCategoryMessage && (
-          <ErrorMessage
-            id={errors.gearCategory.fieldId ?? "gearCategory-error"}
-            text={gearCategoryMessage}
-            visuallyHiddenText={visuallyHiddenText}
-          />
-        )}
-        <select
-          name="gearCategory"
-          id="gearCategory"
-          className={classNames("govuk-select govuk-!-width-one-half govuk-!-margin-bottom-3 govuk-!-margin-right-4", {
-            " govuk-select--error": errors?.gearCategory?.message,
+        <legend className="govuk-fieldset__legend">
+          <b>{legendTitle}</b>
+        </legend>
+        <div id="gearDetails-hint" className="govuk-hint">
+          {gearDetailsHint}
+        </div>
+        <div
+          className={classNames("govuk-form-group govuk-!-margin-bottom-3", {
+            "govuk-form-group--error": errors.gearCategory?.message,
           })}
-          defaultValue={values?.gearCategory ?? selectedGearCategory}
-          onChange={(e) => setSelectedGearCategory(e.target.value)}
         >
-          <option value="" selected aria-label={addLandingGearCategoryNullOption}>
-            {addLandingGearCategoryNullOption}
-          </option>
-          {Array.isArray(gearCategories) &&
-            gearCategories.map((value) => (
-              <option key={value} value={value}>
-                {value}
+          <label htmlFor="gearCategory" className="govuk-label">
+            {landingGearCategoryLabel}
+          </label>
+          {gearCategoryMessage && (
+            <ErrorMessage id={gearCategoryErrorId} text={gearCategoryMessage} visuallyHiddenText={visuallyHiddenText} />
+          )}
+          <select
+            name="gearCategory"
+            id="gearCategory"
+            className={classNames(
+              "govuk-select govuk-!-width-one-half govuk-!-margin-bottom-3 govuk-!-margin-right-4",
+              {
+                " govuk-select--error": errors?.gearCategory?.message,
+              }
+            )}
+            defaultValue={defaultGearCategory}
+            onChange={(e) => setSelectedGearCategory(e.target.value)}
+          >
+            <option value="" selected aria-label={addLandingGearCategoryNullOption}>
+              {addLandingGearCategoryNullOption}
+            </option>
+            {Array.isArray(gearCategories) &&
+              gearCategories.map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+          </select>
+          {!isHydrated && (
+            <Button
+              id="add-gear-category"
+              label={addLandingGearCategoryButton}
+              type={BUTTON_TYPE.SUBMIT}
+              className="govuk-button govuk-button--primary govuk-!-margin-bottom-0"
+              data-module="govuk-button"
+              name="_action"
+              // @ts-ignore
+              value="addGearCategory"
+              data-testid="add-gear-category"
+            />
+          )}
+        </div>
+        <div
+          className={classNames("govuk-form-group", {
+            "govuk-form-group--error": errors.gearType?.message,
+          })}
+        >
+          <label htmlFor="gearType" className="govuk-label">
+            {addLandingGearTypeLabel}
+          </label>
+          {gearTypeMessage && (
+            <ErrorMessage
+              id={errors.gearType.fieldId ?? "gearType-error"}
+              text={gearTypeMessage}
+              visuallyHiddenText={visuallyHiddenText}
+            />
+          )}
+          <select
+            name="gearType"
+            id="gearType"
+            className={classNames("govuk-select govuk-!-width-one-half", {
+              " govuk-select--error": errors?.gearType?.message,
+            })}
+            value={selectedGearTypeValue}
+            onChange={(e) => setSelectedGearType(e.target.value)}
+          >
+            <option value="" aria-label={addLandingGearTypeNullOption}>
+              {addLandingGearTypeNullOption}
+            </option>
+            {gearTypes.map(({ gearName, gearCode }) => (
+              <option key={gearCode} value={`${gearName} (${gearCode})`}>
+                {`${gearName} (${gearCode})`}
               </option>
             ))}
-        </select>
-        {!isHydrated && (
-          <Button
-            id="add-gear-category"
-            label={addLandingGearCategoryButton}
-            type={BUTTON_TYPE.SUBMIT}
-            className="govuk-button govuk-button--primary govuk-!-margin-bottom-0"
-            data-module="govuk-button"
-            name="_action"
-            // @ts-ignore
-            value="addGearCategory"
-            data-testid="add-gear-category"
-          />
-        )}
-      </div>
-      <div
-        className={classNames("govuk-form-group", {
-          "govuk-form-group--error": errors.gearType?.message,
-        })}
-      >
-        <label htmlFor="gearType" className="govuk-label">
-          {addLandingGearTypeLabel}
-        </label>
-        {gearTypeMessage && (
-          <ErrorMessage
-            id={errors.gearType.fieldId ?? "gearType-error"}
-            text={gearTypeMessage}
-            visuallyHiddenText={visuallyHiddenText}
-          />
-        )}
-        <select
-          name="gearType"
-          id="gearType"
-          className={classNames("govuk-select govuk-!-width-one-half", {
-            " govuk-select--error": errors?.gearType?.message,
-          })}
-          value={selectedGearType ?? ""}
-          onChange={(e) => setSelectedGearType(e.target.value)}
-        >
-          <option value="" aria-label={addLandingGearTypeNullOption}>
-            {addLandingGearTypeNullOption}
-          </option>
-          {gearTypes.map(({ gearName, gearCode }) => (
-            <option key={gearCode} value={`${gearName} (${gearCode})`}>
-              {`${gearName} (${gearCode})`}
-            </option>
-          ))}
-        </select>
-      </div>
-    </fieldset>
-  </div>
-);
+          </select>
+        </div>
+      </fieldset>
+    </div>
+  );
+};
