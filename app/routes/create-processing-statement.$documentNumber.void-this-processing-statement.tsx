@@ -8,6 +8,10 @@ import { voidThisDocumentAction, voidThisDocumentLoader } from "~/.server";
 
 export const loader: LoaderFunction = async ({ request, params }) => voidThisDocumentLoader(request, params);
 
+export const headers = () => ({
+  "Cache-Control": "no-store",
+});
+
 export const action: ActionFunction = async ({ request, params }): Promise<Response | ErrorResponse> => {
   const nextUri = route("/create-processing-statement/processing-statements");
   return await voidThisDocumentAction(request, params, nextUri);

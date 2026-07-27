@@ -8,6 +8,10 @@ import { voidThisDocumentLoader, voidThisDocumentAction } from "~/.server";
 
 export const loader: LoaderFunction = async ({ request, params }) => voidThisDocumentLoader(request, params);
 
+export const headers = () => ({
+  "Cache-Control": "no-store",
+});
+
 export const action: ActionFunction = async ({ request, params }): Promise<Response | ErrorResponse> => {
   const nextUri = route("/create-non-manipulation-document/non-manipulation-documents");
   return await voidThisDocumentAction(request, params, nextUri);
