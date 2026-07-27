@@ -11,9 +11,9 @@ const CoverageFixtures = () => {
   const [selectedGearCategory, setSelectedGearCategory] = React.useState("");
   const [selectedGearType, setSelectedGearType] = React.useState("");
   const [selectedRfmo, setSelectedRfmo] = React.useState("IOTC");
-  const [showClientFilterSearch, setShowClientFilterSearch] = React.useState(false);
-  const [showClientRfmoSelector, setShowClientRfmoSelector] = React.useState(false);
-  const [showClientErrorSummary, setShowClientErrorSummary] = React.useState(false);
+  const [showClientFilterSearch, setShowClientFilterSearch] = React.useState(true);
+  const [showClientRfmoSelector, setShowClientRfmoSelector] = React.useState(true);
+  const [showClientErrorSummary, setShowClientErrorSummary] = React.useState(true);
 
   return (
     <div data-testid="coverage-fixtures">
