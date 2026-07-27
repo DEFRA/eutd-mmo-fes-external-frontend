@@ -24,6 +24,16 @@ describe("Upload File Page", () => {
       .should("be.visible")
       .should("have.attr", "href", "/create-catch-certificate/GBR-2021-CC-8EEB7E123/product-favourites");
   });
+
+  it("should have visually hidden assistive text for screen readers in the warning message (WCAG 1.3.1)", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadLandingsEmptyRows,
+    };
+
+    cy.visit(uploadFileUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid='warning-message']").find(".govuk-visually-hidden").should("contain", "Warning");
+  });
 });
 
 describe("Upload File Page Upload", () => {

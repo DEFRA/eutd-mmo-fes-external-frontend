@@ -95,9 +95,9 @@ describe("PS: Catch added", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for hydration
-    cy.get('[type="radio"]').first().should("exist");
-    cy.get('[type="radio"]').first().check();
-    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete"); // Allow React to process the state change
+    cy.get('[name="addAnotherCatch"][value="Yes"]').should("exist");
+    cy.get('label[for="addAnotherCatch"]').click();
+    cy.get('[name="addAnotherCatch"][value="Yes"]').should("be.checked");
     cy.contains("button", "Save and continue").click();
     cy.url({ timeout: 10000 }).should("include", "/add-consignment-details");
   });
@@ -562,6 +562,7 @@ describe("PS: Catch added", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid='warning-message']").should("exist");
     cy.get("[data-testid='warning-message']").should("contain", "To edit product information, press change.");
+    cy.get("[data-testid='warning-message']").find(".govuk-visually-hidden").should("contain", "Warning");
   });
 
   it("should have correct table structure with 7 columns", () => {
