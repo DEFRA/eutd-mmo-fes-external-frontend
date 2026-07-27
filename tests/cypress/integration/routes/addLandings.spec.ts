@@ -270,6 +270,7 @@ describe("Manual landing page render with page guard", () => {
 
   it("renders high seas area details and allows selection", () => {
     cy.get("input[type='radio'][name='highSeasArea']").first().check();
+    cy.get("input[type='radio'][name='highSeasArea']").first().should("be.checked");
   });
 
   it("should render the RFMO label and hint", () => {
@@ -458,7 +459,7 @@ describe("Manual landing page render with page guard", () => {
   });
 
   it("should render the add Product button", () => {
-    cy.get("#submit").contains("Add Landing");
+    cy.get("#submit").contains("Add Landing").should("be.visible");
   });
   // (moved to flaky spec)
   it("moved to flaky spec: add product flow", () => {
@@ -846,7 +847,7 @@ describe("Manual landing page when javascript is disabled", () => {
 
   it("should render add gear category button", () => {
     // button exists
-    cy.contains("[data-testid='add-gear-category']", "Add gear category");
+    cy.contains("[data-testid='add-gear-category']", "Add gear category").should("be.visible");
   });
 
   it("should populate the gear types combo box with valid options for that particular gear category", () => {
@@ -930,7 +931,7 @@ describe("Manual landing page when javascript is disabled", () => {
 
     it("should render add gear category button label", () => {
       // button exists
-      cy.contains("[data-testid='add-gear-category']", "Ychwanegu categori’r gêr");
+      cy.contains("[data-testid='add-gear-category']", "Ychwanegu categori’r gêr").should("be.visible");
     });
 
     it("should not translate gear category / type options", () => {
@@ -985,6 +986,7 @@ describe("Manual Landing page errors when javascript is disabled", () => {
     cy.get("#select-vessel").as("selectVesselAuto");
     cy.get("@selectVesselAuto").invoke("val", "abc");
     cy.get("@selectVesselAuto").trigger("change");
+    cy.get("@selectVesselAuto").should("have.value", "abc");
   });
 
   it("should click on save and continue", () => {
@@ -1002,6 +1004,8 @@ describe("Manual Landing page errors when javascript is disabled", () => {
     cy.get("#gearCategory").contains("Select gear category");
     cy.get("#gearType").contains("Select gear type");
     cy.get("#rfmo").contains("Select RFMO");
+    // Verify form is in reset state
+    cy.get("@selectVesselReset").should("have.value", "");
   });
 });
 
@@ -1016,6 +1020,7 @@ describe("Manual Landing page onclick of edit", () => {
     cy.get("#select-faoArea").contains("FAO27");
     cy.get("#select-vessel").contains("BANANA SPLIT (J357)");
     cy.get("#exportWeight").invoke("val", "123");
+    cy.get("#exportWeight").should("have.value", "123");
     cy.get("#submit").contains("Update landing");
   });
 
@@ -1150,6 +1155,9 @@ describe("Manual page errors when javascript is disabled", () => {
     cy.get("#startDate-month").invoke("val", "10");
     cy.get("#startDate-year").invoke("val", "20");
     cy.get("[data-testid='add-dateLanded']").click();
+    // Verify date values are set
+    cy.get("#dateLanded-year").should("have.value", "20");
+    cy.get("#startDate-year").should("have.value", "20");
   });
 
   it("should click on save and continue", () => {
