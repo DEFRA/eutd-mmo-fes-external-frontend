@@ -23,7 +23,7 @@ const selectFirstGearTypeOption = () => {
       cy.get("[data-testid='add-gear-category']").first().click();
     }
   });
-  cy.wait(300);
+  // Wait for gear type options to populate (assertion automatically retries)
   cy.get("#gearType option").should("have.length.greaterThan", 1);
   selectFirstNonEmptyOption("#gearType");
 };
@@ -66,9 +66,9 @@ const verifyLandingFormIsReset = (isProductEmpty: boolean) => {
 };
 
 const populateLandingForm = () => {
-  // Wait for hydration
-  cy.get("#startDate").should("be.visible");
-  cy.wait(300); // Allow hydration to complete
+  // Wait for hydration - check element is visible and not disabled
+  cy.get("#startDate").should("be.visible").and("not.be.disabled");
+  cy.get("select#product").should("be.visible").and("not.be.disabled");
 
   // product
   cy.get("select#product").select(1).invoke("val").should("not.eq", "");
@@ -857,14 +857,15 @@ describe("Manual landing page when javascript is disabled", () => {
     // select a gear category
     cy.get("select#gearCategory").select("Surrounding nets");
     cy.get("[data-testid='add-gear-category']").click();
-    // Wait for the server-side action to complete and page to reload
-    cy.wait(500);
-    // check the gear type combo now has additional options
-    cy.get("select#gearType option:selected").should("have.text", "Select gear type");
+    // Wait for server-side form action to complete - button becomes interactive again
+    cy.get("[data-testid='add-gear-category']").should("be.visible").and("not.be.disabled");
+    // Verify select is populated and ready
     cy.get("select#gearType option").should("have.length", 6);
+    cy.get("select#gearType option:selected").should("have.text", "Select gear type");
+    cy.get("select#gearType").should("be.visible").and("not.be.disabled");
+    // Perform selection and verify
     cy.get("select#gearType").select("Purse seines (PS)");
-    // Re-query to avoid detachment after selection
-    cy.get("select#gearType").should("have.value", "Purse seines (PS)");
+    cy.get("select#gearType option:selected").should("have.text", "Purse seines (PS)");
   });
 
   it("should render a page-level error when the add gear category button is clicked when no category is selected", () => {
@@ -941,13 +942,15 @@ describe("Manual landing page when javascript is disabled", () => {
       // select a gear category
       cy.get("select#gearCategory").select("Surrounding nets");
       cy.get("[data-testid='add-gear-category']").click();
-      // workaround for Remix hydration issues, if we don't wait the UI simply isn't ready
-      cy.wait(250);
-      // check the gear type combo now has additional options
-      cy.get("select#gearType option:selected").should("have.text", "Dewiswch y math o gêr");
+      // Wait for server-side form action to complete - button becomes interactive again
+      cy.get("[data-testid='add-gear-category']").should("be.visible").and("not.be.disabled");
+      // Verify select is populated and ready
       cy.get("select#gearType option").should("have.length", 6);
+      cy.get("select#gearType option:selected").should("have.text", "Dewiswch y math o gêr");
+      cy.get("select#gearType").should("be.visible").and("not.be.disabled");
+      // Perform selection and verify
       cy.get("select#gearType").select("Purse seines (PS)");
-      cy.get("select#gearType").should("have.value", "Purse seines (PS)");
+      cy.get("select#gearType option:selected").should("have.text", "Purse seines (PS)");
     });
 
     it("should render an error prompt if the add gear category button is clicked when no category is selected", () => {
@@ -1495,9 +1498,8 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should apply correct CSS classes to EEZ fields based on error state", () => {
-    // Wait for form to hydrate
-    cy.get("input#startDate").should("be.visible");
-    cy.wait(200);
+    // Wait for form to hydrate - ensure element is ready for interaction
+    cy.get("input#startDate").should("be.visible").and("not.be.disabled");
 
     cy.get("input#startDate").clear();
     cy.get("input#startDate").type("01");
