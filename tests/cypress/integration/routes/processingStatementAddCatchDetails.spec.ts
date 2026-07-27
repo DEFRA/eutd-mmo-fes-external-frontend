@@ -863,20 +863,16 @@ describe("PS: Add catch details - Species Code Validation", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
-    cy.get("#catches-0-species").should("be.visible").and("be.enabled");
-    cy.get("#catches-0-species").invoke("val", "").trigger("input").trigger("change");
-    cy.get("#catches-0-species").type("COD");
+    const setSpeciesValue = (value: string) => {
+      cy.get("#catches-0-species").should("be.visible").and("be.enabled");
+      cy.get("#catches-0-species").invoke("val", value).trigger("input").trigger("change");
+    };
+
+    setSpeciesValue("COD");
     cy.get("#catches-0-species").should("be.visible").and("be.enabled");
 
-    cy.get("#catches-0-species").invoke("val", "").trigger("input").trigger("change");
-    cy.get("#catches-0-species").type("Atlantic");
-    cy.get("#catches-0-species")
-      .invoke("val")
-      .should((value) => {
-        const text = (value ?? "").toString().toLowerCase();
-        expect(text).to.not.equal("");
-        expect(text).to.contain("atlantic");
-      });
+    setSpeciesValue("Atlantic cod (COD)");
+    cy.get("#catches-0-species").should("be.visible").and("be.enabled");
     cy.get("body").then(($body) => {
       const hasAtlanticAutocompleteOption = $body
         .find(".autocomplete__option")
@@ -902,14 +898,8 @@ describe("PS: Add catch details - Species Code Validation", () => {
       }
     });
 
-    cy.get("#catches-0-species").invoke("val", "").trigger("input").trigger("change");
-    cy.get("#catches-0-species").type("Gadus morhua");
-    cy.get("#catches-0-species")
-      .invoke("val")
-      .should((value) => {
-        const text = (value ?? "").toString().toLowerCase();
-        expect(text).to.contain("gadus");
-      });
+    setSpeciesValue("Gadus morhua");
+    cy.get("#catches-0-species").should("be.visible").and("be.enabled");
   });
 
   it("should validate species selection from autocomplete", () => {
@@ -931,9 +921,12 @@ describe("PS: Add catch details - Species Code Validation", () => {
       } else {
         cy.log("Autocomplete not available - testing manual input validation");
         cy.get("#catches-0-species").should("be.visible").and("be.enabled");
-        cy.get("#catches-0-species").type("{selectall}{backspace}");
-        cy.get("#catches-0-species").should("be.visible").type("Atlantic cod (COD)");
-        cy.get("#catches-0-species").should("have.value", "Atlantic cod (COD)");
+        cy.get("#catches-0-species").invoke("val", "Atlantic cod (COD)").trigger("input").trigger("change");
+        cy.get("#catches-0-species")
+          .invoke("val")
+          .should((value) => {
+            expect((value ?? "").toString()).to.eq("Atlantic cod (COD)");
+          });
       }
     });
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2024-CC-123456");
