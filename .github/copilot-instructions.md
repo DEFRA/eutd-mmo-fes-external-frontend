@@ -259,6 +259,52 @@ npm run debug              # Start with Node inspector
 - `tests/msw/handlers/index.ts`: Central MSW handler registry
 - `vite.config.mts`: Vite/Remix configuration (code instrumentation for tests)
 
+## Standards precedence (highest wins)
+
+When guidance conflicts, follow this order:
+
+1. **DEFRA Software Development Standards** (mandatory) — https://defra.github.io/software-development-standards/
+2. **DEFRA Digital Service Manual** — https://digital.defra.gov.uk/service-manual
+3. **GOV.UK Service Standard & Service Manual (GDS)** — https://www.gov.uk/service-manual (this is where the **GOV.UK Design System** and the **WCAG 2.2 AA accessibility** requirements for this public-facing service live)
+4. **Community best practice** — [OWASP Secure Coding Practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/), [12-factor](https://12factor.net/), widely-adopted Remix/React/TypeScript patterns
+
+> **DEFRA takes precedence over GDS. GDS takes precedence over community guidance.** Any deviation from a DEFRA standard MUST be raised as a formal exception through DEFRA's architectural governance (Delivery Architecture team: `delivery.architecture@defra.gov.uk`).
+
+## The working framework (Triage → Read → Research → Plan Handoff → Plan Validation Research → Approval → Implement → Test → Iterate → Summarise)
+
+This section is the **single source of truth** for the working loop. The custom agents ([Orchestrator](.github/agents/external-fe-orchestrator.agent.md), [Planner](.github/agents/external-fe-planner.agent.md), [Developer](.github/agents/external-fe-developer.agent.md) and [Reviewer](.github/agents/external-fe-reviewer.agent.md)) reference it and **must not restate or fork it**.
+
+**Triage first — pick the right path by size and risk:**
+
+- **Trivial / low-risk** (typo, comment/doc tweak, a small localised change with no impact on architecture, user-facing UI or accessibility, bilingual (Welsh) content, CSRF/`<SecureForm>` handling, authentication or session/cookie handling, loaders/actions, server-only `.server.ts` isolation, external integrations, security or data correctness): skip the planner and heavy research. Do a light **Read → Implement → Test → Summarise**, and research only the specific point that is genuinely uncertain.
+- **Non-trivial** (new feature; any user-facing/UI or **accessibility** (WCAG 2.2 AA / GOV.UK Design System) change; any **bilingual (English + Welsh, i18next)** content change; any change to loaders/actions, CSRF (`<SecureForm>` + `validateCSRFToken`), authentication or session/cookie handling, or server-only `.server.ts` code; external integrations (Orchestration/Reference services, Dynamics/IDM, Application Insights, Azure Blob/Event Hubs); security; or anything affecting request/data correctness or risky): run the full loop below.
+
+Non-trivial loop:
+
+1. **Read** — Read the relevant files/config in the repo for context before acting. Never assume; verify.
+2. **Research** — Do thorough, risk-scoped research in the open and validate findings against DEFRA/GDS and framework/library guidance so advice reflects current APIs and policy. Cite sources.
+3. **Clarify** — Ask the user targeted questions whenever requirements are ambiguous or missing. Surface requirement gaps explicitly with suggested fixes. Do not guess at intent.
+4. **Plan handoff** — Delegate planning to the [Planner - External Frontend](.github/agents/external-fe-planner.agent.md) agent when one exists. The planning agent returns the complete implementation plan.
+5. **Plan validation research** — Perform thorough research in the open to validate the plan against DEFRA/GDS and framework guidance, **focusing on the steps the planner flagged as risky or version-sensitive** (unfamiliar APIs, accessibility, bilingual coverage, CSRF, auth/session, security, policy). Send targeted revisions back to the planner.
+6. **Approval** — Present the complete validated plan to the user and obtain explicit approval before implementation. If changes are requested, update the plan, re-validate, and re-approve. **Cap the plan → validate → approve → implement replanning cycle at 3 iterations**; if it is still unresolved, stop and surface the blocker to the user.
+7. **Implement** — Deliver one task at a time (or parallel independent tasks) from the approved plan. Stay focused on the requested outcome; do not scope-creep or refactor unrelated code. When a change introduces or alters architecture, capture the decision as an ADR and update the relevant docs and ADRs **where the repo already keeps them** (e.g. `docs/`).
+8. **Test / Validate** — Lint (`npm run lint`), run the instrumented Cypress + MSW flow (`npm run pre:test:start` → `npm run :test:start` → `npm run :test:all`, coverage via Istanbul), build (`npm run build`), check errors, and confirm each task works before moving on. For UI changes, confirm accessibility (WCAG 2.2 AA / GOV.UK Design System) and full bilingual (English + Welsh) coverage.
+9. **Iterate** — Refine until the user is satisfied with each task.
+10. **Summarise** — End with a detailed **executive summary** of what changed, why, how it was validated, and any follow-ups or risks.
+
+## Workflow agents
+
+Non-trivial work is coordinated through four custom agents that all run the framework above:
+
+| Agent | Role |
+|-------|------|
+| [Orchestrator - External Frontend](.github/agents/external-fe-orchestrator.agent.md) | Plans, delegates, verifies and reports; owns the Yes/No user-approval gate. Does **not** implement. |
+| [Planner - External Frontend](.github/agents/external-fe-planner.agent.md) | Internal planning subagent; produces the approval-ready plan and the research behind it. |
+| [Developer - External Frontend](.github/agents/external-fe-developer.agent.md) | Implements an already-approved plan end-to-end with tests. |
+| [Reviewer - External Frontend](.github/agents/external-fe-reviewer.agent.md) | Read-only review against DEFRA standards; reports findings by severity. |
+
+Research (§4.2) and plan-validation research (§4.5) use the [deep-research-defra-alignment](.github/skills/deep-research-defra-alignment/SKILL.md) skill. For user-facing accessibility and testing work the team also draws on the existing [Accessibility Advisor](.github/agents/accessibility-advisor.agent.md) and [Cypress Efficiency Tester](.github/agents/cypress-efficiency-tester.agent.md) agents and the [govuk-accessibility](.github/skills/govuk-accessibility/SKILL.md) skill.
+
 ## Skills
 
 Use `/develop` for implementation, coding, and research tasks. Use `/unit-tests` for writing Cypress tests, MSW handlers, and coverage.
