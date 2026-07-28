@@ -7,6 +7,10 @@ import { deleteDraftFormAction, deleteDraftFormLoader } from "~/.server";
 
 export const loader: LoaderFunction = async ({ request, params }) => await deleteDraftFormLoader({ request, params });
 
+export const headers = () => ({
+  "Cache-Control": "no-store",
+});
+
 export const action: ActionFunction = async ({
   request,
   params,
