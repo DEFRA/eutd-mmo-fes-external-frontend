@@ -137,6 +137,8 @@ const onGetCreatedCertificate = async (response: Response): Promise<CompletedDoc
     }
     case 403:
       return null;
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -183,6 +185,8 @@ const onSubmitExportCertificateResponse = async (response: Response): Promise<IS
       return {
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       const responseText = await response.text();
       serverLogger.error(`Unexpected error from PDF service: ${response.status} - ${responseText}`);
@@ -225,6 +229,8 @@ const onGetVesselsResponse = async (response: Response): Promise<IVessel[]> => {
       return [];
     case 400:
       return [];
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     case 500:
       throw new Error(`Internal server error: ${response.status}`);
     default:

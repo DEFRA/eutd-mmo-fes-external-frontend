@@ -108,6 +108,8 @@ const onNotificationResponse = async (response: Response): Promise<INotification
       return await response.json();
     case 204:
       return null;
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -146,6 +148,8 @@ const onCreateDocumentResponse = async (response: Response): Promise<CreateDocum
       return {
         documentNumber: undefined,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }

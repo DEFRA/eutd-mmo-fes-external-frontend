@@ -66,6 +66,8 @@ const onAddLandingsEntryOptionResponse = async (
         errors: [],
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -77,13 +79,13 @@ const onGetLandingsEntryOptionResponse = async (response: Response): Promise<ILa
     case 204:
       const landingsEntryOption: ILandingsEntryOptionGet = await response.json();
       return landingsEntryOption;
-    case 404:
     case 403:
       return {
         unauthorised: true,
         generatedByContent: false,
       };
-
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }

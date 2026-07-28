@@ -61,6 +61,8 @@ const onUploadLandings = async (response: Response): Promise<IUploadedLanding[] 
       return {
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -116,6 +118,8 @@ const onSaveLandings = async (response: Response): Promise<IBase & { rows?: IUpl
       return {
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }

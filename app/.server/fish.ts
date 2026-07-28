@@ -99,6 +99,8 @@ const onAddFishResponse = async (response: Response): Promise<Product> => {
         errors,
         user_id: "",
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -110,6 +112,8 @@ const onDeleteFishResponse = async (response: Response): Promise<{ cancel: strin
     case 204:
       const removeFishResponse: any = await response.json();
       return removeFishResponse;
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }

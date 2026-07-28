@@ -28,6 +28,8 @@ const onGetExportPayloadResponse = async (response: Response): Promise<ProductsL
       return {
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -79,6 +81,8 @@ const saveAddLandingsDetailsResponse = async (response: Response): Promise<Produ
         ...(await response.json()),
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -122,6 +126,8 @@ const onDeleteProductLandings = async (response: Response): Promise<{ cancel: st
     case 204:
       const removeFishResponse: any = await response.json();
       return removeFishResponse;
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }

@@ -196,6 +196,8 @@ const onSubmitExportCertificateResponse = async (response: Response): Promise<IC
       return {
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     case 500:
       let validationErrors = await response.json();
       if (Array.isArray(validationErrors) && validationErrors[0]?.error === "SYSTEM_ERROR") {

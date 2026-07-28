@@ -26,11 +26,15 @@ export const getTransportations = async (bearerToken: string, documentNumber?: s
 };
 
 const onGetTransportations = async (response: Response): Promise<ITransport[]> => {
-  if (response.status === 200) {
-    const transportations: ITransport[] = await response.json();
-    return transportations;
+  switch (response.status) {
+    case 200:
+      const transportations: ITransport[] = await response.json();
+      return transportations;
+    case 404:
+      throw new Response("Not Found", { status: 404 });
+    default:
+      throw new Error(`Unexpected error: ${response.status}`);
   }
-  throw new Error(`Unexpected error: ${response.status}`);
 };
 
 export const getTransportDetails = async (
@@ -76,9 +80,7 @@ const onGetTransport = async (response: Response): Promise<ITransport> => {
         unauthorised: true,
       };
     case 404:
-      return {
-        vehicle: "undefined",
-      };
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -127,6 +129,8 @@ const onAddTransportDetails = async (response: Response): Promise<ITransport> =>
         errors: [],
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -217,6 +221,8 @@ const onUpdateTransport = async (response: Response, vehicle: string): Promise<I
         errors: [],
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -261,6 +267,9 @@ const onDeleteTransport = async (response: Response): Promise<{ success: boolean
         errors: [],
         unauthorised: true,
       };
+
+    case 404:
+      throw new Response("Not Found", { status: 404 });
 
     default:
       throw new Error(`Unexpected error: ${response.status}`);
@@ -325,6 +334,8 @@ const onUpdateTransportDocuments = async (response: Response): Promise<ITranspor
         errors: [],
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -422,6 +433,8 @@ const onSaveTransportDetails = async (response: Response, payload?: ITransport):
         errors: [],
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -468,6 +481,8 @@ const onSaveTruckCMR = async (response: Response): Promise<IBase> => {
         errors: [],
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -529,6 +544,8 @@ const onAddAdditionalTransportTypes = async (response: Response): Promise<IAddTr
         errors: [],
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }

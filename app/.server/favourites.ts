@@ -157,6 +157,8 @@ const onAddFavouriteResponse = async (response: Response): Promise<Product> => {
         id: "",
         errors,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -174,6 +176,8 @@ const onDeleteProductFavourites = async (response: Response): Promise<{ cancel: 
     case 204:
       const removeFishResponse: any = await response.json();
       return removeFishResponse;
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }

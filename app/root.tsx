@@ -261,7 +261,7 @@ const Template = ({
 export function ErrorBoundary() {
   const [rootData] = useMatches() || [];
   const error = useRouteError();
-  const { t } = useTranslation(["common", "forbidden"]);
+  const { t } = useTranslation(["common", "forbidden", "pageNotFound"]);
   useChangeLanguage(rootData?.data?.locale ?? "en");
   const templateProps = (rootData?.data as IMainAppProps) || {};
 
@@ -269,6 +269,23 @@ export function ErrorBoundary() {
   if (isRouteErrorResponse(error)) {
     const substring = "The request is blocked.";
     const isWAFError = typeof error?.data === "string" && error.data.includes(substring);
+
+    // Handle 404 Not Found errors - show forbidden page
+    if (error.status === 404) {
+      return (
+        <Template {...templateProps} disableScripts>
+          <Main showHelpLink={false}>
+            <div className="govuk-grid-row">
+              <div className="govuk-grid-column-two-thirds">
+                <Title title={t("forbiddenH1Text", { ns: "forbidden" })} />
+                <p data-testid="no-permission">{t("forbiddenPageP1Text", { ns: "forbidden" })}</p>
+                <p data-testid="navigate-back">{t("forbiddenPageP2Text", { ns: "forbidden" })}</p>
+              </div>
+            </div>
+          </Main>
+        </Template>
+      );
+    }
 
     return isWAFError ? (
       <Template {...templateProps} disableScripts>

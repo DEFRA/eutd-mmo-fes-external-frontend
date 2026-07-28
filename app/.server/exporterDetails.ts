@@ -171,6 +171,8 @@ const onGetExporterDetailsResponse = async (response: Response): Promise<IExport
         errors: [],
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -477,6 +479,8 @@ const onAddExporterDetailsResponse = async (response: Response): Promise<IExport
         ...(await response.json()),
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }

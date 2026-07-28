@@ -24,6 +24,8 @@ const onPostCodeResponse = async (response: Response): Promise<ILookUpAddress> =
           },
         ],
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }

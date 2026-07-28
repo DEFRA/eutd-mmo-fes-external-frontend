@@ -90,6 +90,8 @@ export const postAddedSpeciesPerUser = async (
         errors: [],
         unauthorised: true,
       };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
@@ -105,17 +107,24 @@ export const getAddedSpeciesPerUser = async (
 
   const response: Response = await get(bearerToken, ADDED_SPECIES_URL, { documentNumber });
 
-  const addedSpeciesPerUser: { species: Product[] } = (await response.json()) ?? { species: [] };
-
-  return !isEmpty(addedSpeciesPerUser.species)
-    ? {
-        products: addedSpeciesPerUser.species,
-        documentNumber,
-      }
-    : {
-        products: [],
-        documentNumber,
-      };
+  switch (response.status) {
+    case 200:
+    case 204:
+      const addedSpeciesPerUser: { species: Product[] } = (await response.json()) ?? { species: [] };
+      return !isEmpty(addedSpeciesPerUser.species)
+        ? {
+            products: addedSpeciesPerUser.species,
+            documentNumber,
+          }
+        : {
+            products: [],
+            documentNumber,
+          };
+    case 404:
+      throw new Response("Not Found", { status: 404 });
+    default:
+      throw new Error(`Unexpected error: ${response.status}`);
+  }
 };
 
 export const getAllSpecies = async (ukOnly: boolean = false): Promise<Species[]> => {

@@ -52,6 +52,8 @@ const onGetCountriesResponse = async (response: Response): Promise<ICountry[]> =
     case 400:
     case 500:
       return [];
+    case 404:
+      throw new Response("Not Found", { status: 404 });
     default:
       throw new Error(`Unexpected error: ${response.status}`);
   }
