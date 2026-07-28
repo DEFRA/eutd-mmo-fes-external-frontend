@@ -889,17 +889,36 @@ describe("PS: Add catch details - Species Code Validation", () => {
     setSpeciesValue("COD");
     cy.get("#catches-0-species").should("be.visible").and("be.enabled");
 
-    setSpeciesValue("Atlantic cod (COD)");
-    cy.get("#catches-0-species").should("be.visible").and("be.enabled");
-
+    cy.get("#catches-0-species").type("{selectall}{backspace}");
+    cy.get("#catches-0-species").should("be.visible").type("Atlantic");
     cy.get("body").then(($body) => {
-      if ($body.find(".autocomplete__menu").length > 0 || $body.find('[role="listbox"]').length > 0) {
-        cy.log("Autocomplete suggestions found");
+      const hasAtlanticAutocompleteOption = $body
+        .find(".autocomplete__option")
+        .toArray()
+        .some((option) => (option.textContent ?? "").toLowerCase().includes("atlantic"));
+
+      const hasAtlanticRoleOption = $body
+        .find('[role="option"]')
+        .toArray()
+        .some((option) => (option.textContent ?? "").toLowerCase().includes("atlantic"));
+
+      if (hasAtlanticAutocompleteOption) {
+        cy.contains(".autocomplete__option", "Atlantic", { matchCase: false }).first().click();
+        cy.get("#catches-0-species").should("contain.value", "Atlantic");
+      } else if (hasAtlanticRoleOption) {
+        cy.contains('[role="option"]', "Atlantic", { matchCase: false }).first().click();
+        cy.get("#catches-0-species").should("contain.value", "Atlantic");
+      } else {
+        // When autocomplete options are not rendered, assert with a full valid species label.
+        cy.get("#catches-0-species").type("{selectall}{backspace}");
+        cy.get("#catches-0-species").type("Atlantic cod (COD)");
+        cy.get("#catches-0-species").should("have.value", "Atlantic cod (COD)");
       }
     });
 
-    setSpeciesValue("Gadus morhua");
-    cy.get("#catches-0-species").should("be.visible").and("be.enabled");
+    cy.get("#catches-0-species").type("{selectall}{backspace}");
+    cy.get("#catches-0-species").should("be.visible").type("Gadus morhua");
+    cy.get("#catches-0-species").invoke("val").should("not.be.undefined");
   });
 
   it("should validate species selection from autocomplete", () => {
