@@ -133,7 +133,10 @@ const AddProcessingPlantDetails = () => {
                 <span className="govuk-warning-text__icon" aria-hidden="true">
                   !
                 </span>
-                <strong className="govuk-warning-text__text">{t("psAddProcessingPDAlertText")} </strong>
+                <strong className="govuk-warning-text__text">
+                  <span className="govuk-visually-hidden">Warning</span>
+                  {t("psAddProcessingPDAlertText")}
+                </strong>
               </div>
               <div
                 className={isEmpty(errors?.plantName) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"}
