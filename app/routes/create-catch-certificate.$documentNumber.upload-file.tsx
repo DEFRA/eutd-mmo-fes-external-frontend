@@ -111,6 +111,7 @@ const UploadFile = () => {
               !
             </span>
             <strong className="govuk-warning-text__text">
+              <span className="govuk-visually-hidden">Warning</span>
               {t("ccUploadFilePageGuidanceMessage")}{" "}
               <Link
                 className="govuk-link"

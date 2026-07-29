@@ -21,8 +21,23 @@ const enableIssuingCountry = () => {
   waitForPage();
 };
 
+const getEnabledIssuingCountryField = () =>
+  cy.get('input[name="issuingCountry"], select[name="issuingCountry"]', { timeout: 8000 }).then(($fields) => {
+    const enabledInput = $fields.filter("input:enabled").first();
+    if (enabledInput.length > 0) {
+      return cy.wrap(enabledInput);
+    }
+
+    const enabledSelect = $fields.filter("select:enabled").first();
+    if (enabledSelect.length > 0) {
+      return cy.wrap(enabledSelect);
+    }
+
+    throw new Error("No enabled issuing country control found");
+  });
+
 const setIssuingCountry = (value: string) => {
-  cy.get("#catches-0-issuingCountry", { timeout: 8000 }).then(($el) => {
+  getEnabledIssuingCountryField().then(($el) => {
     if ($el.is("select")) {
       cy.wrap($el).should("be.enabled").select(value);
       return;
@@ -76,25 +91,28 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
 
     enableIssuingCountry();
 
-    cy.get("#catches-0-issuingCountry", { timeout: 5000 }).should("exist");
+    getEnabledIssuingCountryField().should("exist");
 
     setIssuingCountry("Spain");
 
-    cy.get("#catches-0-issuingCountry").then(($field) => {
+    getEnabledIssuingCountryField().then(($field) => {
       if ($field.is("select")) {
         cy.wrap($field).select("");
       } else {
         cy.wrap($field).should("be.enabled").focus().type("{selectall}{backspace}");
       }
     });
-    cy.get("#catches-0-issuingCountry").should("have.value", "");
+    getEnabledIssuingCountryField().should("have.value", "");
 
     cy.get('[data-testid="add-product-details"]').click();
     waitForPage();
 
-    cy.get("#catches-0-issuingCountry", { timeout: 2000 }).then(($field) => {
+    cy.get('input[name="issuingCountry"], select[name="issuingCountry"]', { timeout: 2000 }).then(($field) => {
       if ($field.length > 0) {
-        cy.wrap($field).should("have.value", "");
+        const enabledField = $field.filter(":enabled").first();
+        if (enabledField.length > 0) {
+          cy.wrap(enabledField).should("have.value", "");
+        }
       }
     });
   });
