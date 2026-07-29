@@ -30,6 +30,7 @@ trigger:
       - "hotfix/*"
       - "feature/*"
       - "epic/*"
+      - "gh-readonly-queue/*"
   paths:
     exclude:
       - ".github/**"
