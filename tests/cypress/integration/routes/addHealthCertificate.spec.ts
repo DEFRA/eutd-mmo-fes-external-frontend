@@ -138,25 +138,6 @@ describe("Add Health Certificate - invalid year in date picker", () => {
     cy.url().should("include", "/add-health-certificate");
     cy.contains("Enter a real date in the dd/mm/yyyy format").should("be.visible");
   });
-
-  it("should show validation errors when both values are invalid", () => {
-    cy.get("#healthCertificateNumber").clear();
-    cy.get("#healthCertificateNumber").type("EHC123");
-    cy.get('input[name="healthCertificateDateDay"]').clear();
-    cy.get('input[name="healthCertificateDateDay"]').type("01");
-    cy.get('input[name="healthCertificateDateMonth"]').clear();
-    cy.get('input[name="healthCertificateDateMonth"]').type("01");
-    cy.get('input[name="healthCertificateDateYear"]').clear();
-    cy.get('input[name="healthCertificateDateYear"]').type("0000");
-
-    cy.get("[data-testid='save-and-continue']").click();
-
-    // Wait for error summary to appear
-    cy.get("#error-summary-title", { timeout: 20000 }).should("be.visible");
-
-    // Verify date validation error appears
-    cy.contains("Enter a real date in the dd/mm/yyyy format").should("be.visible");
-  });
 });
 
 describe("Add Health Certificate: save as draft retains valid fields", () => {

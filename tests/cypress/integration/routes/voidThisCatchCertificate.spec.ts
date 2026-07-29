@@ -34,7 +34,6 @@ describe("void this draft catch certificate page", () => {
     cy.visit(voidThisCatchCertificateUrl, { qs: { ...testParams } });
     cy.get("#documentVoid").check();
     cy.get('[data-testid="continue"]').click();
-
     cy.get("body").should("exist");
   });
 
@@ -45,7 +44,6 @@ describe("void this draft catch certificate page", () => {
     cy.visit(voidThisCatchCertificateUrl, { qs: { ...testParams } });
     cy.get("#documentVoidNo").check();
     cy.get('[data-testid="continue"]').click();
-
     cy.get("body").should("exist");
   });
 
@@ -56,6 +54,19 @@ describe("void this draft catch certificate page", () => {
     cy.visit(voidThisCatchCertificateUrl, { qs: { ...testParams } });
     cy.get("#documentVoid").check();
     cy.get("form").submit();
+    cy.url().should("include", "/forbidden");
+  });
+
+  it("redirects to forbidden after reopening void page once document is voided", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.VoidThisDocumentOptionYes,
+    };
+
+    cy.visit(voidThisCatchCertificateUrl, { qs: { ...testParams } });
+    cy.get("#documentVoid").check();
+    cy.get('[data-testid="continue"]').click();
+    cy.url().should("include", "/create-catch-certificate/catch-certificates");
+    cy.visit(voidThisCatchCertificateUrl, { qs: { ...testParams }, failOnStatusCode: false });
     cy.url().should("include", "/forbidden");
   });
 });

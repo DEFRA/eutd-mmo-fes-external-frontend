@@ -32,7 +32,6 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
     cy.get("[data-tab-id='favouritesTab']").click();
     cy.get('select[name="favourite"]').select("Aesop shrimp (AES) Fresh,Whole, 03063590");
     cy.get("[data-testid='add-product']").eq(1).click();
-
     cy.get("body").should("exist");
   });
 
@@ -40,7 +39,6 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
     cy.contains("[data-testid='add-species']", "Add species");
     cy.contains("[data-testid='add-state']", "Add state");
     cy.contains("[data-testid='add-presentation']", "Add presentation");
-
     cy.get("body").should("exist");
   });
 
@@ -59,7 +57,6 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("03024400");
     cy.get("[data-testid='add-product']").contains("Update product");
-
     cy.get("body").should("exist");
   });
 

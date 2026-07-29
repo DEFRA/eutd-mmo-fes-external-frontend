@@ -18,7 +18,6 @@ describe("Add Transportation Details: Container Vessel", () => {
 
   it("should render the expected header", () => {
     cy.get(".govuk-heading-xl").contains("Add transportation details: container vessel");
-
     cy.get("body").should("exist");
   });
 
@@ -44,7 +43,6 @@ describe("Add Transportation Details: Container Vessel", () => {
     cy.get("div .govuk-hint").contains(
       "Enter the identification number shown on the shipping container. For example, ABCJ0123456"
     );
-
     cy.get("body").should("exist");
   });
 });

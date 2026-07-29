@@ -33,7 +33,6 @@ describe("Delete this draft processing statement page", () => {
     cy.visit(deleteThisProcessingStatementUrl, { qs: { ...testParams } });
     cy.get("#documentDelete").check();
     cy.get("form").submit();
-
     cy.get("body").should("exist");
   });
 
@@ -44,7 +43,6 @@ describe("Delete this draft processing statement page", () => {
     cy.visit(deleteThisProcessingStatementUrl, { qs: { ...testParams } });
     cy.get("#documentDeleteNo").check();
     cy.get("form").submit();
-
     cy.get("body").should("exist");
   });
 

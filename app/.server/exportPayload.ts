@@ -50,12 +50,12 @@ const saveAddLandingsDetailsResponse = async (response: Response): Promise<Produ
     case 200:
     case 204:
       return await response.json();
-    case 400:
+    case 400: {
       const data = await response.json();
       const errors: IError[] = Object.keys(data.errors).map((key: string) =>
         key === "vessel_license"
           ? {
-              key: "vessel_license",
+              key: "vessel-vesselName",
               message: "ccContactSupport",
             }
           : {
@@ -73,6 +73,7 @@ const saveAddLandingsDetailsResponse = async (response: Response): Promise<Produ
         ...data,
         errors,
       };
+    }
     case 403:
       return {
         ...(await response.json()),

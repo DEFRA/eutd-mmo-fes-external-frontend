@@ -20,6 +20,7 @@ describe("Privacy page for cc journey", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };
+      cy.get("body").should("exist");
       cy.visit("/create-catch-certificate/privacy-notice", { qs: { ...testParams } });
       cy.contains("a", /^Back$/)
         .should("be.visible")
@@ -27,6 +28,7 @@ describe("Privacy page for cc journey", () => {
     });
 
     it("should redirect to home page on back link click", () => {
+      cy.get("body").should("exist");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };

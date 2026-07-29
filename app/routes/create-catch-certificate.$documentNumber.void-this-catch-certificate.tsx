@@ -9,6 +9,10 @@ import { useScrollOnPageLoad } from "~/hooks";
 
 export const loader: LoaderFunction = async ({ request, params }) => voidThisDocumentLoader(request, params);
 
+export const headers = () => ({
+  "Cache-Control": "no-store",
+});
+
 export const action: ActionFunction = async ({ request, params }): Promise<Response | ErrorResponse> => {
   const nextUri = route("/create-catch-certificate/catch-certificates");
   return await voidThisDocumentAction(request, params, nextUri);

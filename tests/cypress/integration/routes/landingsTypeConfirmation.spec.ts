@@ -11,12 +11,12 @@ describe("Landings confirmation page: user Interface", () => {
       testCaseId: TestCaseId.LandingsTypeConfirmationCaseTwo,
     };
     cy.visit(landingsUrl, { qs: { ...testParams } });
-    cy.waitForUiUpdate(500); // Wait for hydration
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for hydration
     // GOV.UK radios have opacity:0, use check() and verify
     cy.get("#manualOptionEntry").should("exist");
     cy.get("#manualOptionEntry").check();
     cy.get("#manualOptionEntry").should("be.checked");
-    cy.waitForUiUpdate(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.get("form").submit();
     cy.url({ timeout: 10000 }).should("include", landingsTypeConfirmationUrl);
   });
@@ -27,7 +27,6 @@ describe("Landings confirmation page: user Interface", () => {
 
   it("should render the correct headings", () => {
     cy.contains("h1", "Are you sure you want to change your landings type?");
-
     cy.get("body").should("exist");
   });
 
@@ -36,7 +35,6 @@ describe("Landings confirmation page: user Interface", () => {
       "div > strong",
       "Switching between direct and non-direct landings types will require the re-entry of landings data."
     );
-
     cy.get("body").should("exist");
   });
 
@@ -73,12 +71,12 @@ describe("Landings confirmation page: Error summary", () => {
       testCaseId: TestCaseId.LandingsTypeConfirmationCaseTwo,
     };
     cy.visit(landingsUrl, { qs: { ...testParams } });
-    cy.waitForUiUpdate(500); // Wait for hydration
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for hydration
     // GOV.UK radios have opacity:0, use check() and verify
     cy.get("#manualOptionEntry").should("exist");
     cy.get("#manualOptionEntry").check();
     cy.get("#manualOptionEntry").should("be.checked");
-    cy.waitForUiUpdate(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.get("form").submit();
     cy.url({ timeout: 10000 }).should("include", landingsTypeConfirmationUrl);
   });
@@ -98,18 +96,18 @@ describe("Landings confirmation page: buttons functionality", () => {
       testCaseId: TestCaseId.LandingsTypeConfirmation,
     };
     cy.visit(landingsUrl, { qs: { ...testParams } });
-    cy.waitForUiUpdate(500); // Wait for hydration
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for hydration
     // GOV.UK radios have opacity:0, use check() and verify
     cy.get("#manualOptionEntry").should("exist");
     cy.get("#manualOptionEntry").check();
     cy.get("#manualOptionEntry").should("be.checked");
-    cy.waitForUiUpdate(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.get("form").submit();
     cy.url({ timeout: 10000 }).should("include", landingsTypeConfirmationUrl);
   });
 
   it("should be able to navigate to the progress page when the user selects Yes and clicks continue button", () => {
-    cy.waitForUiUpdate(200); // Allow any client-side state updates
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete"); // Allow any client-side state updates
     cy.get("#confirmLandingsTypes").should("exist");
     cy.get("#confirmLandingsTypes").check();
     cy.get("#confirmLandingsTypes").should("be.checked");
@@ -118,7 +116,7 @@ describe("Landings confirmation page: buttons functionality", () => {
   });
 
   it("should be able to navigate to landings entry page when the user selects No and clicks continue button", () => {
-    cy.waitForUiUpdate(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.get("#landingsTypeNo").check();
     cy.get("#landingsTypeNo").should("be.checked");
     cy.get("[data-testid=continue]").click();
@@ -126,7 +124,7 @@ describe("Landings confirmation page: buttons functionality", () => {
   });
 
   it("should be able to navigate to landings entry page when the user clicks cancel button", () => {
-    cy.waitForUiUpdate(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.get("#landingsTypeNo").should("exist");
     cy.get("#landingsTypeNo").check();
     cy.get("#landingsTypeNo").should("be.checked");
@@ -154,11 +152,11 @@ describe("Landings confirmation page: redirect to forbidden page", () => {
       testCaseId: TestCaseId.LandingsTypeConfirmationCaseOne,
     };
     cy.visit(landingsUrl, { qs: { ...testParams } });
-    cy.waitForUiUpdate(500); // Wait for hydration
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for hydration
     cy.get("#manualOptionEntry").should("exist");
     cy.get("#manualOptionEntry").check();
     cy.get("#manualOptionEntry").should("be.checked");
-    cy.waitForUiUpdate(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.get("form").submit();
     cy.url({ timeout: 10000 }).should("include", landingsTypeConfirmationUrl);
   });

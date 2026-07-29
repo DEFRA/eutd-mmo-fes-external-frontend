@@ -167,6 +167,7 @@ export enum TestCaseId {
   WhoseWatersTypePageGuard = "whoseWatersTypePageGuard",
 
   HowDoesTheExportLeaveNoTransportDetails = "howDoesTheExportLeaveNoTransportDetails",
+  HowDoesTheExportLeaveSaveAsDraftNoVehicle = "howDoesTheExportLeaveSaveAsDraftNoVehicle",
   HowDoesTheExportLeaveTruck = "howDoesTheExportLeaveTruck",
   HowDoesTheExportLeavePlane = "howDoesTheExportLeavePlane",
   HowDoesTheExportLeaveTrain = "howDoesTheExportLeaveTrain",
@@ -240,6 +241,7 @@ export enum TestCaseId {
   AddLandingPageFailsWithMaxLandingExceededError = "addLandingPageFailsWithMaxLandingExceededError",
   AddLandingPageFailsWithTotalWeightExceeded = "addLandingPageFailsWithTotalWeightExceeded",
   AddLandingPageFailsWithErrorsOnSaveAndContinue = "AddLandingPageFailsWithErrorsOnSaveAndContinue",
+  AddLandingPageFailsWithVesselLicenceOnSaveAndContinue = "AddLandingPageFailsWithVesselLicenceOnSaveAndContinue",
   AddLandingPageFailsWhenGearTypeEmpty = "AddLandingPageFailsWhenGearTypeEmpty",
   AddLandingPageFailsWithForbiddenOnSaveAndContinue = "AddLandingPageFailsWithForbiddenOnSaveAndContinue",
   AddLandingGearTypesAPIError = "AddLandingGearTypesAPIError",
@@ -653,6 +655,7 @@ export enum TestCaseId {
   PSSDCopyDisallowed = "pssdCopyDisallowed",
   PSSDCopySave = "pssdCopyThisCatchCertificateSave",
   PSSDCopyAllData = "pssdCopyThisCatchCertAllData",
+  PSSDCopyVoidWithProgress = "pssdCopyVoidWithProgress",
 
   SDLoadDasboardWithCompletedAndInProgress = "sdLoadDasboardWithCompletedAndInProgress",
   SDLoadDasboardWithInProgressAndEmptyCompleted = "sdLoadDasboardWithInProgressAndEmptyCompleted",

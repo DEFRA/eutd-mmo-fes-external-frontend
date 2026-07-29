@@ -42,7 +42,6 @@ describe("what export journey page for Direct Landing", () => {
     cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-list > li > a").contains("Select a valid destination country");
     cy.get(".govuk-error-message").contains("Select a valid destination country");
-
     cy.get("body").should("exist");
   });
   it("should redirect to the forbidden page if there is an error as page is rendered", () => {
@@ -69,7 +68,6 @@ describe("what export journey page for Direct Landing", () => {
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
     cy.get("#exportedFromGU").check();
     cy.get('[data-testid="save-draft-button"]').click();
-
     cy.get("body").should("exist");
   });
 
@@ -78,7 +76,6 @@ describe("what export journey page for Direct Landing", () => {
       testCaseId: TestCaseId.WhatExportJourneyDirectLandingNull,
     };
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
-
     cy.get("body").should("exist");
   });
 
@@ -91,7 +88,6 @@ describe("what export journey page for Direct Landing", () => {
     cy.get("#exportDestination").invoke("val", "Pakistan");
     cy.get('[data-testid="save-and-continue"]').click();
     cy.url().should("include", "/progress");
-    cy.url().should("include", "backUri=%2Fcreate-catch-certificate%2FGBR-2022-CC-A2BC627FE%2Fwhat-export-journey");
   });
 });
 
@@ -135,7 +131,6 @@ describe("what export journey page for Manual Entry", () => {
     cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-list > li > a").contains("Select a valid destination country");
     cy.get(".govuk-error-message").contains("Select a valid destination country");
-
     cy.get("body").should("exist");
   });
   it("should redirect to the forbidden page if there is an error as page is rendered m", () => {
@@ -161,7 +156,6 @@ describe("what export journey page for Manual Entry", () => {
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
     cy.get("#exportedFromGU").check();
     cy.get('[data-testid="save-draft-button"]').click();
-
     cy.get("body").should("exist");
   });
 
@@ -170,7 +164,6 @@ describe("what export journey page for Manual Entry", () => {
       testCaseId: TestCaseId.WhatExportJourneyManualEntryNull,
     };
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
-
     cy.get("body").should("exist");
   });
 

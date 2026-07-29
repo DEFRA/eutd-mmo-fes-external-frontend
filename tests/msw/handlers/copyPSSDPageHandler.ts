@@ -52,6 +52,15 @@ const copyPSSDPageHandler: ITestHandler = {
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(truckTransportDetails))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
+  [TestCaseId.PSSDCopyVoidWithProgress]: () => [
+    rest.get(CHECK_COPY_URL, (req, res, ctx) => res(ctx.json(copyAllowed))),
+    rest.post(CONFIRM_COPY_URL, (req, res, ctx) => res(ctx.json(psCatchVoid))),
+    rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgressIncomplete))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
+    rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressIncomplete))),
+    rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(truckTransportDetails))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
+  ],
 };
 
 export default copyPSSDPageHandler;

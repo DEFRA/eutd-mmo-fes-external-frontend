@@ -69,7 +69,7 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
     case "catchCertificate":
       backUrl =
         backUriFromQuery ??
-        (hasCopiedDraftContext
+        (hasCopiedDraftContext && !voidDocumentConfirm
           ? route(
               "/create-catch-certificate/:documentNumber/landings-entry?backUri=" +
                 route("/create-catch-certificate/:documentNumber/copy-this-catch-certificate", {
@@ -84,7 +84,7 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
     case "processingStatement":
       backUrl =
         backUriFromQuery ??
-        (hasCopiedDraftContext
+        (hasCopiedDraftContext && !voidDocumentConfirm
           ? route("/create-processing-statement/:documentNumber/copy-this-processing-statement", {
               documentNumber: copiedFromDocumentNumber,
             })
@@ -96,7 +96,7 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
     case "storageNotes":
       backUrl =
         backUriFromQuery ??
-        (hasCopiedDraftContext
+        (hasCopiedDraftContext && !voidDocumentConfirm
           ? route("/create-non-manipulation-document/:documentNumber/copy-this-non-manipulation-document", {
               documentNumber: copiedFromDocumentNumber,
             })

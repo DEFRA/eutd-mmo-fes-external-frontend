@@ -267,6 +267,7 @@ const IssuingCountryField: React.FC<{
       defaultValue={defaultValue}
       options={countryOptions}
       onSelected={(country) => setSelectedIssuingCountry(country)}
+      onChange={(value) => setSelectedIssuingCountry(value)}
       optionsId="issuing-country-option"
       containerClassName={classNames("govuk-form-group", {
         "govuk-form-group--error": hasError(errors, fieldKey),
