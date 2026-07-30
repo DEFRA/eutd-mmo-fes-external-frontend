@@ -17,7 +17,6 @@ import type {
   StorageDocumentCatch,
   CatchIndex,
   ActionDataWithErrors,
-  LinkData,
   CatchesLoaderData,
 } from "~/types";
 import { getSessionFromRequest, commitSession } from "~/sessions.server";
@@ -135,20 +134,6 @@ const YouHaveAddedAProduct = () => {
     }
   }, [groupedErrors]);
 
-  const renderErrorSummary = (index: number) => {
-    if (!isEmpty(groupedErrors) && !isEmpty(groupedErrors[index])) {
-      const linkData: LinkData[] = groupedErrors[index].map(() => ({
-        href: `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${index}`,
-      }));
-
-      return (
-        <ErrorSummary errors={groupedErrors[index]} linkData={linkData} containerClassName="govuk-!-margin-top-4 " />
-      );
-    }
-
-    return null;
-  };
-
   // For multiple products, include a query parameter so subsequent back clicks can navigate
   // backwards through products in reverse add order.
   const shouldNavigateBackThroughProducts = catches.length > 1 && productIndex > 0;
@@ -180,7 +165,6 @@ const YouHaveAddedAProduct = () => {
                 const validCatchIndex = item.catchIndex ?? index;
                 return (
                   <tr className="govuk-table__row" key={item._id} role="row">
-                    {renderErrorSummary(validCatchIndex)}
                     <td className="govuk-table__cell">{item.product}</td>
                     <td className="govuk-table__cell">{item.certificateNumber}</td>
                     <td className="govuk-table__cell">
