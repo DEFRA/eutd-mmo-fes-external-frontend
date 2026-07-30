@@ -1,6 +1,22 @@
 import { type ITestParams, TestCaseId } from "~/types";
 const documentUrl = "/create-catch-certificate/GBR-2022-CC-A2BC627FE";
 const whatExportJourneyUrl = `${documentUrl}/what-export-journey`;
+
+const selectDestinationCountry = (country: string) => {
+  cy.get("#exportDestination").then(($el) => {
+    if ($el.is("select")) {
+      // Set and trigger change to avoid actionability retries on rerendering select controls.
+      cy.get("#exportDestination").invoke("val", country).trigger("change");
+      return;
+    }
+
+    cy.get("#exportDestination").should("be.visible").clear().type(country);
+    cy.get(".autocomplete__option")
+      .contains(new RegExp(`^${country}$`))
+      .click();
+  });
+};
+
 describe("what export journey page for Direct Landing", () => {
   it("it shoud render the page", () => {
     const testParams: ITestParams = {
@@ -241,13 +257,7 @@ describe("Destination country field validation", () => {
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
 
     cy.get("#exportedFromUK").check();
-    cy.get("#exportDestination").then(($el) => {
-      if ($el.is("select")) {
-        cy.wrap($el).select("France");
-      } else {
-        cy.wrap($el).invoke("val", "France");
-      }
-    });
+    selectDestinationCountry("France");
     cy.get("#pointOfDestination").type("Calais Port");
     cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-error-summary").should("not.exist");
@@ -295,13 +305,7 @@ describe("Point of destination field", () => {
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
 
     cy.get("#exportedFromUK").check();
-    cy.get("#exportDestination").then(($el) => {
-      if ($el.is("select")) {
-        cy.wrap($el).select("France");
-      } else {
-        cy.wrap($el).invoke("val", "France");
-      }
-    });
+    selectDestinationCountry("France");
     cy.get('[data-testid="save-and-continue"]').click();
 
     // Check error summary
