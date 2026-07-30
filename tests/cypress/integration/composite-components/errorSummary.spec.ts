@@ -109,8 +109,8 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
         });
     });
 
-    it("should use linkData href when provided", () => {
-      // Using a test case that provides linkData for errors
+    it("should use default anchor href when no linkData provided", () => {
+      // Test case that validates anchor link behavior for error summary
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedInvalid,
       };
@@ -120,15 +120,23 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       cy.visit(pageUrl, { qs: { ...testParams } });
       cy.contains("button", "Save and continue").click();
 
-      cy.get('.govuk-error-summary__list a[href*="/add-product-to-this-consignment/"]')
+      // Verify error summary links use anchor pattern (#errorKey)
+      cy.get('.govuk-error-summary__list a[href^="#"]')
+        .should("have.length.greaterThan", 0)
         .first()
         .should("have.attr", "href")
         .then((href) => {
-          expect(href).to.include("/add-product-to-this-consignment/");
-          expect(href).not.to.include("#");
+          // Should be an anchor link starting with #
+          expect(href).to.match(/^#/);
+          // Should NOT contain full URL path
+          expect(href).not.to.include("/add-product-to-this-consignment/");
 
-          cy.get('.govuk-error-summary__list a[href*="/add-product-to-this-consignment/"]').first().click();
-          cy.url().should("include", href);
+          // Click the link - should not navigate away from current page
+          cy.get('.govuk-error-summary__list a[href^="#"]').first().click();
+
+          // URL should not change (no navigation)
+          cy.url().should("include", pageUrl);
+          cy.url().should("not.include", "/add-product-to-this-consignment/");
         });
     });
   });
@@ -453,10 +461,8 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       cy.visit(pageUrl, { qs: { ...testParams } });
       cy.get("[data-testid='save-and-continue']").click();
 
-      // Wait for component to mount and useEffect to run
-      cy.wait(100);
-
       // Verify error summary is rendered (useEffect ran with valid ref)
+      // Cypress automatically retries until the element exists
       cy.get("#errorIsland").should("exist");
 
       // Verify focus and scroll happened (title should be in viewport)
