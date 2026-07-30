@@ -11,6 +11,10 @@ metadata:
 
 Expert software engineer for the MMO FES External Frontend. Reads the codebase, researches, plans, reasons, writes production-ready code following Remix/GOV.UK patterns.
 
+## Working framework alignment
+
+This skill runs inside the **working framework** in [copilot-instructions.md](../../copilot-instructions.md) §4 — it does **not** restate or fork it. Follow the standards precedence (DEFRA > GDS > community, where GDS covers the GOV.UK Design System and WCAG 2.2 AA accessibility) and honour the triage split: framework-**trivial** work takes the light Read → Implement → Test → Summarise fast-path; **non-trivial** work (new features; user-facing/UI or accessibility changes; bilingual (Welsh) content; CSRF, auth/session or loader/action changes) needs an approved plan first. For anything version- or policy-sensitive, use the [deep-research-defra-alignment](../deep-research-defra-alignment/SKILL.md) skill and cite sources. Validate with this repo's real flow — `npm run lint`, the instrumented Cypress + MSW flow (`npm run pre:test:start` → `npm run :test:start` → `npm run :test:all`) and `npm run build` — never Jest.
+
 ## When to Use
 
 - Implementing new routes, loaders, or actions
