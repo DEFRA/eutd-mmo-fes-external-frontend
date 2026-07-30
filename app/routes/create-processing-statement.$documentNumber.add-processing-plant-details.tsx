@@ -129,12 +129,14 @@ const AddProcessingPlantDetails = () => {
               <legend className="govuk-fieldset__legend govuk-fieldset__legend">
                 <Title title={`${t("psAddProcessingPDAddProcessingPlantDetails")}`} />
               </legend>
-              <div className="govuk-warning-text" data-testid="warning-message">
+              <div className="govuk-warning-text" data-testid="warning-message" role="note">
                 <span className="govuk-warning-text__icon" aria-hidden="true">
                   !
                 </span>
                 <strong className="govuk-warning-text__text">
-                  <span className="govuk-visually-hidden">Warning</span>
+                  <span className="govuk-warning-text__assistive govuk-visually-hidden">
+                    {t("commonWarning", { ns: "common" })}
+                  </span>
                   {t("psAddProcessingPDAlertText")}
                 </strong>
               </div>

@@ -561,6 +561,7 @@ describe("PS: Catch added", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid='warning-message']").should("exist");
+    cy.get("[data-testid='warning-message']").should("have.attr", "role", "note");
     cy.get("[data-testid='warning-message']").should("contain", "To edit product information, press change.");
     cy.get("[data-testid='warning-message']").find(".govuk-visually-hidden").should("contain", "Warning");
   });
@@ -1779,6 +1780,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
     it("should display warning message about editing product information", () => {
       cy.get('[data-testid="warning-message"]').should("be.visible");
+      cy.get('[data-testid="warning-message"]').should("have.attr", "role", "note");
       cy.get('[data-testid="warning-message"]').should("contain.text", "To edit product information, press change");
     });
 

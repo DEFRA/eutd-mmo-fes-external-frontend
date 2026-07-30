@@ -189,6 +189,7 @@ describe("Add consignment details: edit mode scenarios", () => {
 
     cy.get('[data-testid="warning-message"]')
       .should("be.visible")
+      .should("have.attr", "role", "note")
       .should("contain.text", "To edit or remove species from this product, press save and continue.");
   });
 
@@ -201,6 +202,7 @@ describe("Add consignment details: edit mode scenarios", () => {
 
     cy.get('[data-testid="warning-message"]')
       .should("be.visible")
+      .should("have.attr", "role", "note")
       .should("contain.text", "You must add one processed product at a time.")
       .should("not.contain.text", "To edit or remove species");
   });
@@ -248,6 +250,7 @@ describe("Add consignment details: edit mode scenarios", () => {
 
     cy.get('[data-testid="warning-message"]')
       .should("be.visible")
+      .should("have.attr", "role", "note")
       .should("contain.text", "I olygu neu dynnu rhywogaethau o'r cynnyrch hwn, pwyswch cadw a pharhau.");
 
     cy.get('[data-testid="remove-product-button"]').should("be.visible").should("contain.text", "Tynnwch y cynnyrch");
@@ -263,6 +266,7 @@ describe("Add consignment details: edit mode scenarios", () => {
 
     cy.get('[data-testid="warning-message"]')
       .should("be.visible")
+      .should("have.attr", "role", "note")
       .should("contain.text", "To edit or remove species from this product");
 
     cy.get('[data-testid="remove-product-button"]').should("be.visible").should("have.attr", "type", "submit");

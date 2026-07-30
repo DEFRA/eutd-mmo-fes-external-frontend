@@ -26,6 +26,7 @@ describe("Add Consignment Details: page render", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=warning-message]").should("be.visible");
+    cy.get("[data-testid=warning-message]").should("have.attr", "role", "note");
   });
 
   it("should redirect to forbidden when document access is unauthorised", () => {

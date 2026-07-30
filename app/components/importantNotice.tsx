@@ -9,7 +9,7 @@ export const ImportantNotice = ({ messageKey }: ImportantNoticeProps) => {
   const { t } = useTranslation("common");
 
   return (
-    <div className="govuk-warning-text">
+    <div className="govuk-warning-text" role="note">
       <span className="govuk-warning-text__icon" aria-hidden="true">
         !
       </span>
