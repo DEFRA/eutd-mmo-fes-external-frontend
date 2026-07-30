@@ -330,14 +330,16 @@ const AddConsignmentDetailsIndex = () => {
       <div id="consignmentDescriptionEmpty" className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <Title title={t("addConsignmentDetailsConsignmentPageHeader")} />
-          <div className="govuk-warning-text" data-testid="warning-message">
+          <div className="govuk-warning-text" data-testid="warning-message" role="note">
             {" "}
             <span className="govuk-warning-text__icon" aria-hidden="true">
               {" "}
               !{" "}
             </span>{" "}
             <strong className="govuk-warning-text__text">
-              <span className="govuk-visually-hidden">Warning</span>
+              <span className="govuk-warning-text__assistive govuk-visually-hidden">
+                {t("commonWarning", { ns: "common" })}
+              </span>
               {t(`${isEditing ? "addConsignmentDetailsEditInfo" : "addConsignmentDetailsWarningLabel"}`)}
             </strong>
           </div>
