@@ -29,6 +29,7 @@ describe("Add Processing Plant Details", () => {
   it("will have an alert text at the top of the page", () => {
     cy.get("[data-testid=warning-message]")
       .should("be.visible")
+      .should("have.attr", "role", "note")
       .contains("An address must be added for this processing plant.");
   });
 
