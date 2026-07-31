@@ -123,6 +123,15 @@ describe("Cookie Radio Updates", () => {
     cy.get("#saveCookieSettings").click();
     cy.location("pathname").should("eq", "/cookies");
   });
+
+  it("should render success banner and go back link after rejecting cookies", () => {
+    cy.get("#cookieAnalyticsReject").click();
+    cy.get("#saveCookieSettings").click();
+
+    cy.get(".govuk-notification-banner--success").should("be.visible");
+    cy.get(".govuk-notification-banner__heading").should("not.be.empty");
+    cy.get(".govuk-notification-banner__content a.govuk-link").should("be.visible").and("have.attr", "href", "/");
+  });
 });
 
 describe("Journey dashboards should redirect to cookie page when user has not accepted cookie statement", () => {

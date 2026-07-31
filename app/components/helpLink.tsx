@@ -1,21 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { useLoaderData } from "react-router";
 
-const inferredDocumentName = (documentNumber: string | undefined) => {
-  if (documentNumber && documentNumber.length > 11) {
-    switch (documentNumber.substring(9, 11)) {
-      case "CC":
-        return "catchCertificatehelpLink";
-      case "PS":
-        return "processingStatementhelpLink";
-      case "SD":
-        return "storageNoteshelpLink";
-      default:
-        return "";
-    }
-  }
-  return "";
+const documentNameByType: Record<string, string> = {
+  CC: "catchCertificatehelpLink",
+  PS: "processingStatementhelpLink",
+  SD: "storageNoteshelpLink",
 };
+
+const inferredDocumentName = (documentNumber: string | undefined) =>
+  documentNameByType[(documentNumber ?? "").substring(9, 11)] ?? "";
 
 export const HelpLink = () => {
   const { t } = useTranslation();

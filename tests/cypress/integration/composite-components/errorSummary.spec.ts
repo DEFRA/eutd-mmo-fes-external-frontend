@@ -131,6 +131,23 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
           cy.url().should("include", href);
         });
     });
+
+    it("should render mixed link targets when only some errors include linkData href", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.SDProductAddedInvalid,
+      };
+      const documentUrl = "/create-non-manipulation-document/GBR-2021-SD-123";
+      const pageUrl = `${documentUrl}/you-have-added-a-product`;
+
+      cy.visit(pageUrl, { qs: { ...testParams } });
+      cy.contains("button", "Save and continue").click();
+
+      cy.get(".govuk-error-summary__list a").then(($links) => {
+        const hrefs = [...$links].map((link) => (link as HTMLAnchorElement).getAttribute("href") ?? "");
+        expect(hrefs.some((href) => href.includes("/add-product-to-this-consignment/"))).to.equal(true);
+        expect(hrefs.some((href) => href.startsWith("#"))).to.equal(true);
+      });
+    });
   });
 
   describe("useEffect focus and scroll behavior", () => {

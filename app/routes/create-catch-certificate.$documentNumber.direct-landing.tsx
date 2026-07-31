@@ -141,7 +141,7 @@ const DirectLanding = () => {
   const [gearType, setGearType] = useState<string>(selectedGearType ?? "");
   const [gearTypes, setGearTypes] = useState<IGearType[]>(fallbackGearTypes ?? []);
   const isFirstGearCategoryRender = useRef(true);
-  const [highSeasArea, setHighSeasArea] = useState<HighSeasAreaType>(selectedHighSeasArea);
+  const [highSeasArea] = useState<HighSeasAreaType>(selectedHighSeasArea);
   const [rfmo, setRfmo] = useState<string>(selectedRfmo ?? "");
 
   let selctedEEZCountries: string[] = [];
@@ -388,7 +388,6 @@ const DirectLanding = () => {
               />
               <HighSeasAreasDetails
                 highSeasArea={highSeasArea}
-                setHighSeasArea={setHighSeasArea}
                 getHSAOptionLabel={(option: HSAOptionType) => t(option.label, { ns: "common" })}
                 HSALabel={t("ccAddLandingHSALabel", { ns: "directLandings" })}
                 HSAHint={t("ccAddLandingHSAHint", { ns: "directLandings" })}

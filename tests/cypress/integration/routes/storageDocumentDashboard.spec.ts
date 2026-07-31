@@ -127,6 +127,16 @@ describe("Storage Document Dashboard page for in progress table: rendering", () 
   it("should display horizontal separator line after guidance", () => {
     cy.get(".govuk-section-break").should("exist");
   });
+
+  it("should render pagination controls when query params are present", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDLoadDasboardWithCompletedAndInProgress,
+    };
+
+    cy.visit(storageDocumentDashboardUrl, { qs: { ...testParams, month: 10, year: 2020, position: 0 } });
+    cy.get(".govuk-pagination").should("exist");
+    cy.get(".govuk-pagination__next, .govuk-pagination__prev").should("exist");
+  });
 });
 
 describe("Storage Document Dashboard page for completed table: rendering", () => {
