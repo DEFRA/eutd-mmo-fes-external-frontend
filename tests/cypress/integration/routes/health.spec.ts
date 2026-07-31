@@ -22,6 +22,11 @@ describe("Health Page", () => {
     cy.get("[data-testid='coverage-notification']").should("contain.text", "A sample notification message");
     cy.get(".client-mounted-error-summary").should("be.visible");
 
+    cy.get("#hsa-option-yes").should("have.length", 1);
+    cy.get("#hsa-option-no").should("have.length", 1);
+    cy.get("#hsa-option-error-yes").should("have.length", 1);
+    cy.get("#hsa-option-error-no").should("have.length", 1);
+
     cy.contains("summary", "RFMO help").click();
     cy.contains("details.govuk-details", "RFMO help").within(() => {
       cy.get("a.govuk-link").should("have.attr", "href").and("include", "fishing-area#rfmo");

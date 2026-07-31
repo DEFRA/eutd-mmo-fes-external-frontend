@@ -15,6 +15,31 @@ import { NotificationBanner } from "~/components/notficationBanner";
 import { HighSeasAreasDetails } from "~/components/highSeasAreasDetails";
 import { GearDetails } from "~/components/gearDetails";
 
+type HighSeasAreaFixtureProps = {
+  idPrefix: string;
+  hint: string;
+  highSeasAreaValue: "yes" | "no";
+  showError?: boolean;
+};
+
+const HighSeasAreaFixture = ({ idPrefix, hint, highSeasAreaValue, showError = false }: HighSeasAreaFixtureProps) => {
+  const options = [
+    { id: `${idPrefix}-yes`, value: "yes" },
+    { id: `${idPrefix}-no`, value: "no" },
+  ] as any;
+
+  return (
+    <HighSeasAreasDetails
+      HSALabel="High seas area"
+      HSAHint={hint}
+      confirmHSATypeOptions={options}
+      highSeasArea={highSeasAreaValue as any}
+      getHSAOptionLabel={(option: any) => String(option.value)}
+      errors={showError ? ({ message: "commonErrorText", value: {} } as any) : undefined}
+    />
+  );
+};
+
 export const LegacyCoverageFixtures = () => {
   const [selectedGearCategory, setSelectedGearCategory] = React.useState("");
   const [selectedGearType, setSelectedGearType] = React.useState("");
@@ -25,32 +50,9 @@ export const LegacyCoverageFixtures = () => {
 
       <NotificationBanner header="Header" messages={["Message"]} dataTestId="coverage-notification" />
 
-      <HighSeasAreasDetails
-        HSALabel="High seas area"
-        HSAHint="Hint"
-        confirmHSATypeOptions={
-          [
-            { id: "highSeasArea-yes", value: "yes" },
-            { id: "highSeasArea-no", value: "no" },
-          ] as any
-        }
-        highSeasArea={"yes" as any}
-        getHSAOptionLabel={(option: any) => String(option.value)}
-      />
+      <HighSeasAreaFixture idPrefix="highSeasArea" hint="Hint" highSeasAreaValue="yes" />
 
-      <HighSeasAreasDetails
-        HSALabel="High seas area"
-        HSAHint="Hint"
-        confirmHSATypeOptions={
-          [
-            { id: "highSeasArea-error-yes", value: "yes" },
-            { id: "highSeasArea-error-no", value: "no" },
-          ] as any
-        }
-        highSeasArea={"yes" as any}
-        getHSAOptionLabel={(option: any) => String(option.value)}
-        errors={{ message: "commonErrorText", value: {} } as any}
-      />
+      <HighSeasAreaFixture idPrefix="highSeasArea-error" hint="Hint" highSeasAreaValue="yes" showError />
 
       <GearDetails
         isHydrated={false}
