@@ -914,7 +914,10 @@ const AddProductIndex = () => {
                   })}
                   inputProps={{
                     defaultValue: getFormValue("species", catchDetails?.product ?? ""),
-                    id: Object.keys(allErrors)[0],
+                    id: productKey,
+                    className: classNames("govuk-input", {
+                      "govuk-input--error": errors?.[productKey]?.message,
+                    }),
                   }}
                   hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                   hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
@@ -967,6 +970,9 @@ const AddProductIndex = () => {
                 id: productDescriptionKey,
                 defaultValue: getFormValue("productDescription", catchDetails?.productDescription),
                 "aria-describedby": `${productDescriptionKey}-hint`,
+                className: classNames("govuk-input", {
+                  "govuk-input--error": errors?.[productDescriptionKey]?.message,
+                }),
               }}
               data-testid="productDescription"
               errorProps={getErrorProps(errors, productDescriptionKey)}
