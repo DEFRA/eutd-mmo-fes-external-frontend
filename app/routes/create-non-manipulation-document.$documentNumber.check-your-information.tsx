@@ -3,7 +3,14 @@ import { useTranslation } from "react-i18next";
 import { useScrollOnPageLoad } from "~/hooks";
 import isEmpty from "lodash/isEmpty";
 import { useEffect } from "react";
-import { redirect, useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
+import {
+  redirect,
+  useActionData,
+  useLoaderData,
+  useLocation,
+  type LoaderFunction,
+  type ActionFunction,
+} from "react-router";
 
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";
@@ -121,6 +128,10 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   CheckYourInformationPSSDAction(request, params, "storageNotes");
 
 const CheckYourInformation = () => {
+  const location = useLocation();
+  const url = new URLSearchParams(location.search);
+  const backUriFromQuery = url.get("backUri");
+
   const { t } = useTranslation(["common", "sdCheckYourInformation", "transportation", "progress"]);
   const {
     documentNumber,
@@ -134,19 +145,24 @@ const CheckYourInformation = () => {
 
   const copiedFromDocumentNumber = copyDocumentNumber || documentNumber;
   const hasCopiedDraftContext = copyDocumentAcknowledged || Boolean(copyDocumentNumber);
-  const backUrl = voidDocumentConfirm
-    ? route("/create-non-manipulation-document/:documentNumber/progress", { documentNumber })
-    : route(
-        "/create-non-manipulation-document/:documentNumber/progress?backUri=" +
-          (hasCopiedDraftContext
-            ? route("/create-non-manipulation-document/:documentNumber/copy-this-non-manipulation-document", {
-                documentNumber: copiedFromDocumentNumber,
-              })
-            : route("/create-non-manipulation-document/:documentNumber/departure-product-summary", {
-                documentNumber,
-              })),
+  const backUrl = backUriFromQuery
+    ? route(
+        "/create-non-manipulation-document/:documentNumber/progress?backUri=" + encodeURIComponent(backUriFromQuery),
         { documentNumber }
-      );
+      )
+    : voidDocumentConfirm
+      ? route("/create-non-manipulation-document/:documentNumber/progress", { documentNumber })
+      : route(
+          "/create-non-manipulation-document/:documentNumber/progress?backUri=" +
+            (hasCopiedDraftContext
+              ? route("/create-non-manipulation-document/:documentNumber/copy-this-non-manipulation-document", {
+                  documentNumber: copiedFromDocumentNumber,
+                })
+              : route("/create-non-manipulation-document/:documentNumber/departure-product-summary", {
+                  documentNumber,
+                })),
+          { documentNumber }
+        );
   const errors: IValidationError[] = useActionData<IValidationError[]>() ?? [];
   const hasErrors: boolean = Array.isArray(errors) && errors?.length > 0;
   const notificationMessages: string[] = [];

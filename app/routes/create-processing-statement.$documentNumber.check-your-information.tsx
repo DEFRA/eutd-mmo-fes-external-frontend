@@ -1,5 +1,13 @@
 import * as React from "react";
-import { redirect, useActionData, useLoaderData, type LoaderFunction, type ActionFunction, Link } from "react-router";
+import {
+  redirect,
+  useActionData,
+  useLoaderData,
+  useLocation,
+  type LoaderFunction,
+  type ActionFunction,
+  Link,
+} from "react-router";
 
 import { route } from "routes-gen";
 import { useEffect } from "react";
@@ -137,6 +145,10 @@ const getCatchErrors = (errors: IError[], catchIndex: number) => {
 };
 
 const CheckYourInformation = () => {
+  const location = useLocation();
+  const url = new URLSearchParams(location.search);
+  const backUriFromQuery = url.get("backUri");
+
   const { t } = useTranslation(["common", "psCheckYourInformation", "progress"]);
   const {
     documentNumber,
@@ -150,17 +162,21 @@ const CheckYourInformation = () => {
 
   const copiedFromDocumentNumber = copyDocumentNumber || documentNumber;
   const hasCopiedDraftContext = copyDocumentAcknowledged || Boolean(copyDocumentNumber);
-  const backUrl = voidDocumentConfirm
-    ? route("/create-processing-statement/:documentNumber/progress", { documentNumber })
-    : route(
-        "/create-processing-statement/:documentNumber/progress?backUri=" +
-          (hasCopiedDraftContext
-            ? route("/create-processing-statement/:documentNumber/copy-this-processing-statement", {
-                documentNumber: copiedFromDocumentNumber,
-              })
-            : route("/create-processing-statement/:documentNumber/what-export-destination", { documentNumber })),
-        { documentNumber }
-      );
+  const backUrl = backUriFromQuery
+    ? route("/create-processing-statement/:documentNumber/progress?backUri=" + encodeURIComponent(backUriFromQuery), {
+        documentNumber,
+      })
+    : voidDocumentConfirm
+      ? route("/create-processing-statement/:documentNumber/progress", { documentNumber })
+      : route(
+          "/create-processing-statement/:documentNumber/progress?backUri=" +
+            (hasCopiedDraftContext
+              ? route("/create-processing-statement/:documentNumber/copy-this-processing-statement", {
+                  documentNumber: copiedFromDocumentNumber,
+                })
+              : route("/create-processing-statement/:documentNumber/what-export-destination", { documentNumber })),
+          { documentNumber }
+        );
 
   const processedProducts = getProcessedProducts(processingStatement);
   const errors: IError[] = useActionData<IError[]>() ?? [];
