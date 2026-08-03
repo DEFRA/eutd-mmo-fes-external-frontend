@@ -239,6 +239,8 @@ export const progressAction = async (
   journey: Journey
 ): Promise<Response | ErrorResponse> => {
   const { documentNumber } = params;
+  const requestUrl = new URL(request.url);
+  const backUri = requestUrl.searchParams.get("backUri");
   const bearerToken = await getBearerTokenForRequest(request);
   const form = await request.formData();
   const isValid = await validateCSRFToken(request, form);
@@ -272,6 +274,10 @@ export const progressAction = async (
         documentNumber,
       });
       break;
+  }
+
+  if (backUri) {
+    checkInfoRoute = `${checkInfoRoute}?backUri=${encodeURIComponent(backUri)}`;
   }
 
   if (form.get("_action") === "returnToDashboard") return redirect(returnToDashboardRoute, headers);
