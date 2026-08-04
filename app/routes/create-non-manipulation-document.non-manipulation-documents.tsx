@@ -30,8 +30,9 @@ const StorageDocuments = () => {
     csrf,
   } = useLoaderData<IDashboardData>();
   const { t } = useTranslation(["common"]);
+  const nmdDashboardBackUri = encodeURIComponent("/create-non-manipulation-document/non-manipulation-documents");
   const linksToPopulate = {
-    continueLink: "/create-non-manipulation-document/:documentNumber/progress",
+    continueLink: `/create-non-manipulation-document/:documentNumber/progress?backUri=${nmdDashboardBackUri}`,
     deleteLink: "/create-non-manipulation-document/:documentNumber/delete-this-non-manipulation-document",
     voidLink: "/create-non-manipulation-document/:documentNumber/void-this-non-manipulation-document",
     copyLink: "/create-non-manipulation-document/:documentNumber/copy-this-non-manipulation-document",

@@ -30,8 +30,9 @@ const ProcessingStatements = () => {
     csrf,
   } = useLoaderData<IDashboardData>();
   const { t } = useTranslation(["common"]);
+  const psDashboardBackUri = encodeURIComponent("/create-processing-statement/processing-statements");
   const linksToPopulate = {
-    continueLink: "/create-processing-statement/:documentNumber/progress",
+    continueLink: `/create-processing-statement/:documentNumber/progress?backUri=${psDashboardBackUri}`,
     deleteLink: "/create-processing-statement/:documentNumber/delete-this-draft-processing-statement",
     voidLink: "/create-processing-statement/:documentNumber/void-this-processing-statement",
     copyLink: "/create-processing-statement/:documentNumber/copy-this-processing-statement",
