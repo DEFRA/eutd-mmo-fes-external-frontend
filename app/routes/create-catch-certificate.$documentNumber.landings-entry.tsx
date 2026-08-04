@@ -55,7 +55,8 @@ const LandingsEntry = () => {
   const hasCopiedDraftContext = copyDocumentAcknowledged || Boolean(documentNumber);
   const location = useLocation();
   const url = new URLSearchParams(location.search);
-  const showNotificationBanner = copyDocumentAcknowledged || generatedByContent || documentNumber;
+  const notificationMessages = getNotificationMsg(generatedByContent);
+  const showNotificationBanner = notificationMessages.length > 0;
   return (
     <Main
       backUrl={
@@ -69,7 +70,7 @@ const LandingsEntry = () => {
       {showNotificationBanner && (
         <NotificationBanner
           header={t("commonImportant", { ns: "common" })}
-          messages={getNotificationMsg(generatedByContent)}
+          messages={notificationMessages}
           dataTestId={voidDocumentConfirm ? "catchCertificate-CopyVoid" : ""}
         />
       )}

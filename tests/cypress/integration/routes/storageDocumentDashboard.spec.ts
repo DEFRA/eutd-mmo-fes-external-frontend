@@ -258,9 +258,12 @@ describe("Storage Document Dashboard page: continue a document", () => {
     };
     cy.visit(storageDocumentDashboardUrl, { qs: { ...testParams } });
 
-    cy.get(
-      "a#continue-GBR-2022-SD-F0285BD8A[href='/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/progress']"
-    ).click();
+    cy.get("a#continue-GBR-2022-SD-F0285BD8A")
+      .should("have.attr", "href")
+      .and("include", "/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/progress")
+      .and("include", "backUri=");
+
+    cy.get("a#continue-GBR-2022-SD-F0285BD8A").click();
     cy.url().should("include", "/create-non-manipulation-document/GBR-2022-SD-F0285BD8A/progress");
   });
 });
