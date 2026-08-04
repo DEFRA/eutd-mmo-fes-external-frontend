@@ -161,6 +161,16 @@ export const progressPageLoader = async (request: Request, params: Params, journ
   const voidDocumentConfirm = session.get(`voidOriginal-${documentNumber}`)
     ? session.get(`voidOriginal-${documentNumber}`) === true
     : session.get(`copyVoidDocument-${documentNumber}`) === "voidDocumentConfirm";
+
+  // Consume copy acknowledgement after first progress render for journeys
+  // that can revisit progress via in-journey section navigation.
+  if (
+    (journey === "catchCertificate" || journey === "storageNotes" || journey === "processingStatement") &&
+    copyDocumentAcknowledged
+  ) {
+    session.unset(`copyDocumentAcknowledged-${documentNumber}`);
+  }
+
   session.unset("exporterCompanyName");
   if (journey === "catchCertificate") {
     session.unset("exporterFullName");
