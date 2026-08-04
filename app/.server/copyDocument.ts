@@ -152,16 +152,9 @@ export const copyDocumentLoader = async (request: Request, params: Params) => {
       return false;
     }
 
-    const newDocumentNumber = key.replace("documentNumber-", "");
     const copiedFromDocumentNumber = session.get(key);
-    const copyAcknowledgedValue = session.get(`copyDocumentAcknowledged-${newDocumentNumber}`);
-    const copyAcknowledged =
-      copyAcknowledgedValue === "Y" ||
-      copyAcknowledgedValue === "on" ||
-      copyAcknowledgedValue === true ||
-      copyAcknowledgedValue === "true";
 
-    return copiedFromDocumentNumber === documentNumber && copyAcknowledged;
+    return copiedFromDocumentNumber === documentNumber;
   });
 
   if (!canCopy && !hasCopiedDraftContext) {
