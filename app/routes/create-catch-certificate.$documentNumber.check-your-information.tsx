@@ -597,7 +597,7 @@ const CheckYourInformation = () => {
         );
       }
 
-      const hasCopiedDraftContext = copyDocumentAcknowledged ?? Boolean(copyDocumentNumber);
+      const hasCopiedDraftContext = copyDocumentAcknowledged ? true : Boolean(copyDocumentNumber);
       const backRoute = hasCopiedDraftContext
         ? "/create-catch-certificate/:documentNumber/landings-entry"
         : shouldBackToAdditionalTransportTypes
