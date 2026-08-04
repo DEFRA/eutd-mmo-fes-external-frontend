@@ -57,6 +57,19 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
     clearSession(session);
   }
 
+  // Reset copy-session context when loading a dashboard.
+  for (const key of Object.keys(session.data)) {
+    if (
+      key.startsWith("copyDocumentAcknowledged-") ||
+      key.startsWith("copyDocument-") ||
+      key.startsWith("documentNumber-") ||
+      key.startsWith("voidOriginal-") ||
+      key.startsWith("copyVoidDocument-")
+    ) {
+      session.unset(key);
+    }
+  }
+
   let name: string = "";
   if (accountDetails.model?.exporterCompanyName) {
     name = accountDetails.model?.exporterCompanyName;
