@@ -167,7 +167,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       documentNumber,
       productId: currentProductDescription?.id,
       commodityCode: currentProductDescription?.commodityCode,
-      description: currentProductDescription?.description.replaceAll(/\s+/g, " ").trim(),
+      description: (currentProductDescription?.description ?? "").replaceAll(/\s+/g, " ").trim(),
       products: processingStatement?.products ?? [],
       nextUri,
       lang,
@@ -347,7 +347,7 @@ const AddConsignmentDetailsIndex = () => {
             method="post"
             action={
               productId === undefined || productId === null
-                ? `/create-processing-statement/${documentNumber}/add-consignment-details`
+                ? `/create-processing-statement/${documentNumber}/add-consignment-details?index`
                 : `/create-processing-statement/${documentNumber}/add-consignment-details/${productId}`
             }
             csrf={csrf}
