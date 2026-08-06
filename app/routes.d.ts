@@ -80,9 +80,6 @@ declare module "routes-gen" {
     "/create-non-manipulation-document/:documentNumber/delete-this-non-manipulation-document": {
       documentNumber: string;
     };
-    "/create-non-manipulation-document/:documentNumber/do-you-have-a-road-transport-document": {
-      documentNumber: string;
-    };
     "/create-non-manipulation-document/:documentNumber/how-does-the-consignment-leave-the-uk": {
       documentNumber: string;
     };

@@ -70,12 +70,6 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
     rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
   ],
-  [TestCaseId.SDCheckYourInformationTruckCmr]: () => [
-    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumenOneFacility))),
-    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
-    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
-  ],
   [TestCaseId.SDCheckYourInformationTruckWithContainers]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumenOneFacility))),

@@ -197,14 +197,6 @@ describe("SD: check-your-information page transport", () => {
     cy.url().should("include", "/check-your-information");
     cy.get("h1").should("be.visible");
   });
-  it("should render the page with Truck", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDCheckYourInformationTruckCmr,
-    };
-    cy.visit(sdPageUrl, { qs: { ...testParams } });
-    cy.url().should("include", "/check-your-information");
-    cy.contains("dd", "Dakota Hill").should("be.visible");
-  });
 });
 
 describe("SD: check-your-information page with user reference not provided", () => {
