@@ -1,4 +1,4 @@
-import type { ConfirmCmrOptionsType, IError, IErrorsTransformed, TransportOptionType } from "~/types";
+import type { IError, IErrorsTransformed, TransportOptionType } from "~/types";
 import { isValidDate } from "./utilities";
 import isEmpty from "lodash/isEmpty";
 export const getExportDate = (exportDateFromAction?: string, exportDate?: string | null) =>
@@ -88,19 +88,6 @@ export const transportOptions: TransportOptionType[] = [
     label: "containerVessel",
     value: "containerVessel",
     id: "containerVessel",
-  },
-];
-
-export const confirmCmrOptions: ConfirmCmrOptionsType[] = [
-  {
-    label: "commonThereIs",
-    value: "true",
-    id: "cmr",
-  },
-  {
-    label: "commonThereIsNot",
-    value: "false",
-    id: "separateCmrFalse",
   },
 ];
 

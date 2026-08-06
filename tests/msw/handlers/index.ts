@@ -18,7 +18,6 @@ import checkYourInformationCCHandler from "./checkYourInformationCCHandler";
 import whatAreYouExportingHandler from "./whatAreYouExportingHandler";
 import transportDetailsHandler from "./transportDetailsHandler";
 import addTransportationDetailsContainerVesselHandler from "./addTransportationDetailsContainerVesselHandler";
-import doYouHaveARoadTransportDocumentHandler from "./doYouHaveARoadTransportDocumentHandler";
 import addTransportationDetailsPlaneHandler from "./addTransportationDetailsPlaneHandler";
 import addTransportationAdditionalTypesCheckHandler from "./addTransportationAdditionalTypesCheckHandler";
 import deleteThisDocumentHandler from "./deleteThisDraftDocumentHandler";
@@ -79,7 +78,6 @@ const rootTestHandler: ITestHandler = {
   ...whatAreYouExportingHandler,
   ...transportDetailsHandler,
   ...addTransportationDetailsContainerVesselHandler,
-  ...doYouHaveARoadTransportDocumentHandler,
   ...deleteThisDocumentHandler,
   ...addTransportationDetailsPlaneHandler,
   ...addTransportationAdditionalTypesCheckHandler,

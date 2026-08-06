@@ -79,8 +79,6 @@ export const getErrorMessage = (key: string): string => {
     "error.copyDocumentAcknowledged.any.required": "commonCopyAcknowledgementError",
     "error.documentVoid.any.required": "commonConfirmDocumentVoidPageError",
     "error.documentVoid.string.base": "commonConfirmDocumentVoidPageError",
-    "error.cmr.string.base": "commonRoadTransportDocumentError",
-    "error.cmr.any.required": "commonRoadTransportDocumentError",
     "error.flightNumber.any.required": "commonAddTransportationDetailsPlaneFlightNumberLabelError",
     "error.flightNumber.any.empty": "commonAddTransportationDetailsPlaneFlightNumberLabelError",
     "error.flightNumber.string.empty": "commonAddTransportationDetailsPlaneFlightNumberLabelError",

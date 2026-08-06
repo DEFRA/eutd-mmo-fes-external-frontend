@@ -416,7 +416,7 @@ export const StorageDocumentTransportDisplay = ({
                       lowerCase(itemData.label)
                     }
                     className="govuk-link"
-                    href={`/create-non-manipulation-document/${documentNumber}/${changeLinkUri(transportType, transport)}?nextUri=${route(
+                    href={`/create-non-manipulation-document/${documentNumber}/${changeLinkUri(transportType)}?nextUri=${route(
                       "/create-non-manipulation-document/:documentNumber/check-your-information",
                       {
                         documentNumber,

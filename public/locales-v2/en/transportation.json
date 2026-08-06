@@ -54,8 +54,7 @@
   "transportSelectionExpandableTitle": "Why can I add more than one mode of transport?",
   "transportSelectionExpandableContent": "New EU regulations allow you to include more than one mode of transport in your catch certificate. This helps improve traceability when your catch is moved using different types of transport, such as by sea, road, or air.",
   "transportSelectionSelectTypeTransportLabelOptional": "Select a type of transport (optional)",
-  "doYouHaveaRoadTransportDocumentHeader": "Do you have a road transport document to go with this export?",
-  "doYouHaveaRoadTransportDocumentHint": "This document is sometimes called a CMR note. It’s a contract between you and the haulier, and includes details about your export.",
+
   "addTransportationDetailsTransportDetailsTitle": "Add transportation details:",
   "addTruckTransportationDetailsTransportDetailsTitle": "Truck departing the UK",
   "addTrainTransportationDetailsTransportDetailsTitle": "Train departing the UK",

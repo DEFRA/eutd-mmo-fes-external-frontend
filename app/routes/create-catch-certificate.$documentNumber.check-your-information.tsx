@@ -94,94 +94,73 @@ const getTransportationDetailsSummary = (documentNumber: string, isLocked: boole
       />
       {transport.vehicle === "truck" && (
         <>
-          {transport.cmr && transport.cmr === "true" ? (
+          <SummaryListRow
+            keyText={t("addTransportationDetailsTruckNationality", { ns: "transportation" })}
+            value={transport.nationalityOfVehicle}
+            actions={generateActions(
+              isLocked,
+              `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${transport.id}?nextUri=${route(
+                "/create-catch-certificate/:documentNumber/check-your-information",
+                {
+                  documentNumber,
+                }
+              )}#nationalityOfVehicle`,
+              "ccSummaryPageTransportationDetails",
+              "checkYourInformation",
+              t
+            )}
+          />
+          <SummaryListRow
+            keyText={t("addTransportationDetailsRegistrationNumber", { ns: "transportation" })}
+            value={transport.registrationNumber}
+            actions={generateActions(
+              isLocked,
+              `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${transport.id}?nextUri=${route(
+                "/create-catch-certificate/:documentNumber/check-your-information",
+                {
+                  documentNumber,
+                }
+              )}#registrationNumber`,
+              "ccSummaryPageTransportationDetails",
+              "checkYourInformation",
+              t
+            )}
+          />
+          {transport.containerIdentificationNumber && (
             <SummaryListRow
-              keyText={t("doYouHaveaRoadTransportDocumentHeader", { ns: "transportation" })}
-              value={t("commonYesLabel", { ns: "common" })}
+              keyText={t("addTransportationDetailsContainerIdentificationNumberTruck", { ns: "transportation" })}
+              value={transport.containerIdentificationNumber}
               actions={generateActions(
                 isLocked,
-                `/create-catch-certificate/${documentNumber}/do-you-have-a-road-transport-document/${transport.id}?nextUri=${route(
+                `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${transport.id}?nextUri=${route(
                   "/create-catch-certificate/:documentNumber/check-your-information",
                   {
                     documentNumber,
                   }
-                )}#cmr`,
-                "ccSummaryPageTransportationDetails",
-                "checkYourInformation",
-                t
+                )}#containerIdentificationNumber`,
+                "addTransportationDetailsContainerIdentificationNumberTruck",
+                "transportation",
+                t,
+                "change-container-truck"
               )}
             />
-          ) : (
-            <>
-              <SummaryListRow
-                keyText={t("addTransportationDetailsTruckNationality", { ns: "transportation" })}
-                value={transport.nationalityOfVehicle}
-                actions={generateActions(
-                  isLocked,
-                  `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${transport.id}?nextUri=${route(
-                    "/create-catch-certificate/:documentNumber/check-your-information",
-                    {
-                      documentNumber,
-                    }
-                  )}#nationalityOfVehicle`,
-                  "ccSummaryPageTransportationDetails",
-                  "checkYourInformation",
-                  t
-                )}
-              />
-              <SummaryListRow
-                keyText={t("addTransportationDetailsRegistrationNumber", { ns: "transportation" })}
-                value={transport.registrationNumber}
-                actions={generateActions(
-                  isLocked,
-                  `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${transport.id}?nextUri=${route(
-                    "/create-catch-certificate/:documentNumber/check-your-information",
-                    {
-                      documentNumber,
-                    }
-                  )}#registrationNumber`,
-                  "ccSummaryPageTransportationDetails",
-                  "checkYourInformation",
-                  t
-                )}
-              />
-              {transport.containerIdentificationNumber && (
-                <SummaryListRow
-                  keyText={t("addTransportationDetailsContainerIdentificationNumberTruck", { ns: "transportation" })}
-                  value={transport.containerIdentificationNumber}
-                  actions={generateActions(
-                    isLocked,
-                    `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${transport.id}?nextUri=${route(
-                      "/create-catch-certificate/:documentNumber/check-your-information",
-                      {
-                        documentNumber,
-                      }
-                    )}#containerIdentificationNumber`,
-                    "addTransportationDetailsContainerIdentificationNumberTruck",
-                    "transportation",
-                    t,
-                    "change-container-truck"
-                  )}
-                />
-              )}
-              <SummaryListRow
-                keyText={t("addTransportationDetailsPlaceExportLeavesDepartureCountry", { ns: "transportation" })}
-                value={transport.departurePlace}
-                actions={generateActions(
-                  isLocked,
-                  `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${transport.id}?nextUri=${route(
-                    "/create-catch-certificate/:documentNumber/check-your-information",
-                    {
-                      documentNumber,
-                    }
-                  )}#departurePlace`,
-                  "ccSummaryPageTransportationDetails",
-                  "checkYourInformation",
-                  t
-                )}
-              />
-            </>
           )}
+          <SummaryListRow
+            keyText={t("addTransportationDetailsPlaceExportLeavesDepartureCountry", { ns: "transportation" })}
+            value={transport.departurePlace}
+            actions={generateActions(
+              isLocked,
+              `/create-catch-certificate/${documentNumber}/add-transportation-details-truck/${transport.id}?nextUri=${route(
+                "/create-catch-certificate/:documentNumber/check-your-information",
+                {
+                  documentNumber,
+                }
+              )}#departurePlace`,
+              "ccSummaryPageTransportationDetails",
+              "checkYourInformation",
+              t
+            )}
+          />
           <SummaryListRow
             keyText={t("addTransportationDetailsFreightBillNumber", { ns: "transportation" })}
             value={transport.freightBillNumber ?? t("commonNotProvided", { ns: "common" })}
