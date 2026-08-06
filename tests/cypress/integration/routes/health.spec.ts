@@ -13,14 +13,145 @@ describe("Health Page", () => {
     cy.get("[data-testid='client-filter-search-fixture']").should("be.visible");
     cy.get("#client-filter-search").should("have.value", "Cod");
 
-    cy.get("[data-testid='filter-search-reset']").first().trigger("click");
+    cy.get("[data-testid='filter-search-reset']")
+      .first()
+      .then(($button) => {
+        const button = $button[0] as HTMLButtonElement;
+        button.form?.requestSubmit(button);
+      });
     cy.get("input#q-filter").should("exist");
 
-    cy.get("[data-testid='client-filter-search-fixture'] [data-testid='filter-search-reset']").trigger("click");
+    cy.get("[data-testid='client-filter-search-fixture'] [data-testid='filter-search-reset']").then(($button) => {
+      const button = $button[0] as HTMLButtonElement;
+      button.form?.requestSubmit(button);
+    });
     cy.get("#client-filter-search").should("exist");
 
     cy.get("[data-testid='coverage-notification']").should("contain.text", "A sample notification message");
+    cy.get("[data-testid='coverage-notification-multi']").should("have.length", 2);
     cy.get(".client-mounted-error-summary").should("be.visible");
+
+    cy.get("[data-testid='coverage-autocomplete-default-fixture'] #coverage-autocomplete")
+      .should("have.attr", "aria-controls", "coverage-autocomplete__listbox")
+      .clear()
+      .type("zz");
+    cy.get("[data-testid='coverage-autocomplete-default-fixture'] #coverage-autocomplete").should("have.value", "zz");
+
+    cy.get("[data-testid='coverage-autocomplete-default-fixture'] #coverage-autocomplete").clear().type("hak");
+    cy.get("[data-testid='coverage-autocomplete-default-fixture'] #coverage-autocomplete").should("have.value", "hak");
+
+    cy.get("[data-testid='coverage-autocomplete-default-fixture'] #coverage-autocomplete").clear().type("co");
+    cy.get("[data-testid='coverage-autocomplete-default-fixture'] #coverage-autocomplete").should("have.value", "co");
+    cy.get("[data-testid='coverage-autocomplete-change-value']").should("not.be.empty");
+
+    cy.get("[data-testid='coverage-autocomplete-custom-fixture'] .coverage-autocomplete-container").should("exist");
+    cy.get("[data-testid='coverage-autocomplete-custom-fixture'] .coverage-autocomplete-label").should("exist");
+    cy.get("[data-testid='coverage-autocomplete-custom-fixture'] .coverage-autocomplete-hint").should("exist");
+    cy.get("[data-testid='coverage-autocomplete-custom-fixture'] #coverage-autocomplete-custom")
+      .should("have.attr", "aria-controls", "coverage-autocomplete-custom__listbox")
+      .clear()
+      .type("zzz");
+
+    cy.get("[data-testid='coverage-autocomplete-value-fixture'] #coverage-autocomplete-value").should(
+      "have.value",
+      "Cod"
+    );
+    cy.get("[data-testid='coverage-autocomplete-status-none']").should("have.text", "No results found");
+    cy.get("[data-testid='coverage-autocomplete-status-one']").should("have.text", "single:1:fish:2");
+    cy.get("[data-testid='coverage-autocomplete-status-many']").should("have.text", "multiple:2:fish:3");
+    cy.get("[data-testid='coverage-autocomplete-status-negative']").should("have.text", "");
+    cy.get("[data-testid='coverage-autocomplete-resolved-defaults']")
+      .invoke("text")
+      .should("include", '"notFoundText":"No results found"')
+      .and("include", '"containerClassName":"govuk-form-group"')
+      .and("include", '"errorPosition":"after-hint"')
+      .and("include", '"resultUlClass":"autocomplete__menu"');
+    cy.get("[data-testid='coverage-autocomplete-resolved-customs']")
+      .invoke("text")
+      .should("include", '"notFoundText":"No fish found"')
+      .and("include", '"containerClassName":"custom-container"')
+      .and("include", '"errorPosition":"after-label"')
+      .and("include", '"resultUlClass":"custom-menu"')
+      .and("include", '"defaultValue":"Cod"');
+    cy.get("[data-testid='coverage-autocomplete-resolved-default-value']")
+      .invoke("text")
+      .should("include", '"defaultValue":"Haddock"');
+    cy.get("[data-testid='coverage-autocomplete-resolved-empty-fallback']")
+      .invoke("text")
+      .should("include", '"defaultValue":""');
+    cy.get("[data-testid='coverage-common-date-initial-valid']")
+      .invoke("text")
+      .should("match", /^2026-08-/);
+    cy.get("[data-testid='coverage-common-date-initial-invalid']").should("have.text", "true");
+    cy.get("[data-testid='coverage-common-date-parts-complete']").should(
+      "have.text",
+      '{"yearSelected":"2026","monthSelected":"8","daySelected":"20"}'
+    );
+    cy.get("[data-testid='coverage-common-date-parts-empty']").should(
+      "have.text",
+      '{"yearSelected":"","monthSelected":"","daySelected":""}'
+    );
+    cy.get("[data-testid='coverage-common-date-change-state-valid']")
+      .invoke("text")
+      .should("match", /^2026-08-/);
+    cy.get("[data-testid='coverage-common-date-change-state-null']").should("have.text", "Invalid date");
+    cy.get("[data-testid='coverage-common-date-sync-valid']")
+      .invoke("text")
+      .should("match", /^2026-08-/);
+    cy.get("[data-testid='coverage-common-date-sync-invalid']").should("have.text", "null");
+    cy.get("[data-testid='coverage-common-date-add-button-true']").should("have.text", "true");
+    cy.get("[data-testid='coverage-common-date-add-button-false']").should("have.text", "false");
+    cy.get("[data-testid='coverage-common-date-calendar-true']").should("have.text", "true");
+    cy.get("[data-testid='coverage-common-date-calendar-false']").should("have.text", "false");
+    cy.get("[data-testid='coverage-page-navigation-prev'] a")
+      .should("have.attr", "rel", "prev")
+      .and("have.attr", "href")
+      .and("include", "month=");
+    cy.get("[data-testid='coverage-page-navigation-next'] a")
+      .should("have.attr", "rel", "next")
+      .and("have.attr", "href")
+      .and("include", "year=");
+    cy.get("[data-testid='coverage-page-navigation-monthly'] li").should("have.length.at.least", 1);
+    cy.get("[data-testid='coverage-page-navigation-monthly'] .govuk-pagination__item--current").should("exist");
+    cy.get("[data-testid='coverage-page-navigation-prev'] .govuk-visually-hidden").should(
+      "contain.text",
+      "Catch certificates pages"
+    );
+    cy.get("[data-testid='coverage-page-navigation-next'] .govuk-visually-hidden").should(
+      "contain.text",
+      "Catch certificates pages"
+    );
+    cy.get("[data-testid='coverage-page-navigation-prev-no-hidden'] .govuk-visually-hidden").should("not.exist");
+    cy.get("[data-testid='coverage-page-navigation-next-no-hidden'] .govuk-visually-hidden").should("not.exist");
+
+    cy.get("#coverage-date-container .date-picker").should("exist");
+    cy.get("#coverage-date-year").clear();
+    cy.get("#coverage-date-year").type("2026");
+    cy.get("#coverage-date-month").clear();
+    cy.get("#coverage-date-month").type("8");
+    cy.get("#coverage-date").clear();
+    cy.get("#coverage-date").type("15");
+    cy.get("#coverage-date-container .date-picker")
+      .invoke("val")
+      .should("match", /^2026-08-/);
+    cy.get("#coverage-date-container .date-picker").first().click();
+    cy.get(".react-datepicker").should("be.visible");
+    cy.get(".react-datepicker__day--020:not(.react-datepicker__day--outside-month)").first().click();
+    cy.get("#coverage-date-container .date-picker")
+      .invoke("val")
+      .should("match", /^2026-08-/);
+    cy.get("button[data-testid='add-coverage-date']").should("not.exist");
+    cy.get("button[data-testid='add-coverage-date-add-button']").should("be.visible");
+    cy.get("#coverage-date-with-error").should("have.class", "govuk-input--error");
+
+    cy.get("[data-testid='coverage-table-header'] thead tr").within(() => {
+      cy.get("th").should("have.length", 2);
+      cy.get("td").should("have.length", 1);
+    });
+
+    cy.get("[data-testid='coverage-format-address']").should("contain.text", "Line 1");
+    cy.get("[data-testid='coverage-format-address']").should("contain.text", "Line 2");
+    cy.get("[data-testid='coverage-format-address']").should("contain.text", "Line 3");
 
     cy.get("#hsa-option-yes").should("have.length", 1);
     cy.get("#hsa-option-no").should("have.length", 1);

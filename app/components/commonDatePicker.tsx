@@ -4,11 +4,17 @@ import isEmpty from "lodash/isEmpty";
 import type { IError } from "~/types";
 import { CalendarDateButton, DateInputDay, DateInputMonth, DateInputYear, ErrorMessage } from "~/components";
 import { useState, useEffect } from "react";
-import { isValidDate } from "~/helpers/utilities";
-import moment from "moment";
 import DatePicker from "react-datepicker";
 import { useIsHydrated } from "~/hooks";
 import { errorMessageText } from "~/helpers/errorUtilities";
+import {
+  getDateParts,
+  getInitialSelectedDate,
+  getPickerChangeState,
+  getSynchronizedSelectedDate,
+  shouldRenderAddDateButton,
+  shouldRenderCalendarDatePicker,
+} from "~/components/commonDatePicker.helpers";
 
 type DatePickerProps = {
   id: string;
@@ -20,8 +26,18 @@ type DatePickerProps = {
   translationNs: string;
   dateSelected: string;
   hideAddDateButton?: boolean;
+  isHydratedOverride?: boolean;
   getDateSelected: (date: string) => void;
 };
+
+export {
+  getDateParts,
+  getInitialSelectedDate,
+  getPickerChangeState,
+  getSynchronizedSelectedDate,
+  shouldRenderAddDateButton,
+  shouldRenderCalendarDatePicker,
+} from "~/components/commonDatePicker.helpers";
 
 export const CommonDatePicker = ({
   id,
@@ -33,27 +49,27 @@ export const CommonDatePicker = ({
   translationNs,
   dateSelected,
   hideAddDateButton,
+  isHydratedOverride,
   getDateSelected,
 }: DatePickerProps) => {
   const { t } = useTranslation(["errorsText", "common"]);
   const dateFormat = "YYYY-MM-DD";
-  const isHydrated = useIsHydrated();
-  const [selectedDate, setSelectedDate] = useState<Date | null>(
-    isValidDate(dateSelected) ? new Date(dateSelected) : new Date()
-  );
+  const hydratedFromHook = useIsHydrated();
+  const isHydrated = isHydratedOverride ?? hydratedFromHook;
+  const [selectedDate, setSelectedDate] = useState<Date | null>(getInitialSelectedDate(dateSelected));
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
 
-  const [yearSelected = "", monthSelected = "", daySelected = ""] = dateSelected.split("-");
+  const { yearSelected, monthSelected, daySelected } = getDateParts(dateSelected);
 
   const handleOnChange = (date: Date | null) => {
-    const checkDate = moment(date);
-    setSelectedDate(date);
-    setDay(checkDate.format("DD"));
-    setMonth(checkDate.format("MM"));
-    setYear(checkDate.format("YYYY"));
-    getDateSelected(moment(date).format(dateFormat));
+    const nextState = getPickerChangeState(date, dateFormat);
+    setSelectedDate(nextState.selectedDate);
+    setDay(nextState.day);
+    setMonth(nextState.month);
+    setYear(nextState.year);
+    getDateSelected(nextState.formattedDate);
   };
 
   const handleDayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,9 +94,9 @@ export const CommonDatePicker = ({
   }, []);
 
   useEffect(() => {
-    const dateString = `${year}-${month}-${day}`;
-    if (isValidDate(dateString)) {
-      setSelectedDate(new Date(dateString));
+    const nextSelectedDate = getSynchronizedSelectedDate(year, month, day);
+    if (nextSelectedDate) {
+      setSelectedDate(nextSelectedDate);
     }
   }, [day, month, year]);
 
@@ -150,7 +166,7 @@ export const CommonDatePicker = ({
               label={t("commonDatePickerLabelYear", { ns: "common" })}
             />
           </div>
-          {!hideAddDateButton && !isHydrated ? (
+          {shouldRenderAddDateButton(hideAddDateButton, isHydrated) ? (
             <Button
               label={t("commonAddDateText", { ns: "common" })}
               type={BUTTON_TYPE.SUBMIT}
@@ -162,7 +178,7 @@ export const CommonDatePicker = ({
               data-testid={`add-${id}`}
             />
           ) : (
-            isHydrated && (
+            shouldRenderCalendarDatePicker(hideAddDateButton, isHydrated) && (
               <div className="govuk-date-input__item">
                 <div className="govuk-form-group">
                   <DatePicker

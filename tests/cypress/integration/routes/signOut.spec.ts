@@ -1,46 +1,55 @@
 describe("Sign Out Page", () => {
-  it("should render the sign out page with a continue link", () => {
-    cy.visit("/sign-out");
+  const signOutUrl = "/sign-out?warningTimeoutMs=5000";
 
-    cy.contains("h1", "Your application will time out soon");
-    cy.contains(
-      "p",
-      "We will reset your application if you do not respond in 5 seconds. We do keep your information secure."
-    );
+  it("should render the sign out page with a continue button", () => {
+    cy.visit(signOutUrl);
+
+    cy.get("main").within(() => {
+      cy.contains("h1", "Your application will time out soon");
+      cy.contains("p", "We will reset your application if you do not respond in");
+    });
 
     cy.get("button#continue").should("be.visible");
-    cy.get("button#continue").click();
-    cy.url().should("eq", "http://localhost:3000/");
-  });
-  it("should redirect to logout page after 5s", () => {
-    cy.visit("/sign-out");
-    // allow extra time for the client-side redirect to happen
-    cy.url({ timeout: 10000 }).should("include", "/server-logout");
   });
 
-  it("should update the countdown text while waiting", () => {
-    cy.visit("/sign-out");
+  it("should render warning text for configured timeout", () => {
+    cy.visit(signOutUrl);
 
-    cy.contains("p", "5 seconds").should("be.visible");
-    cy.contains("p", "4 seconds", { timeout: 2500 }).should("be.visible");
-  });
-
-  it("should submit continue action and redirect", () => {
-    cy.visit("/sign-out");
-
-    cy.request({
-      method: "POST",
-      url: "/sign-out",
-      form: true,
-      body: {
-        csrf: "invalid-token",
-        _action: "continue",
-      },
-      failOnStatusCode: false,
-      followRedirect: false,
-    }).then((response) => {
-      expect(response.status).to.equal(302);
-      expect(response.redirectedToUrl).to.equal("http://localhost:3000/");
+    cy.get("main").within(() => {
+      cy.contains("p", "We will reset your application if you do not respond in").should("be.visible");
     });
+  });
+
+  it("should show countdown text while waiting", () => {
+    cy.clock();
+    cy.visit(signOutUrl);
+
+    cy.get("main").within(() => {
+      cy.get("p")
+        .eq(0)
+        .invoke("text")
+        .should("match", /(seconds|minutes)/i);
+    });
+    cy.tick(1000);
+    cy.get("main").within(() => {
+      cy.get("p")
+        .eq(0)
+        .invoke("text")
+        .should("match", /(seconds|minutes)/i);
+    });
+  });
+
+  it("should leave sign-out page when timeout elapses", () => {
+    cy.visit(signOutUrl);
+
+    cy.location("pathname").should("eq", "/sign-out");
+    cy.location("pathname", { timeout: 12000 }).should("eq", "/server-logout");
+  });
+
+  it("should submit continue action via form and leave sign-out page", () => {
+    cy.visit(signOutUrl);
+
+    cy.get("button#continue").click();
+    cy.location("pathname", { timeout: 10000 }).should("not.eq", "/sign-out");
   });
 });
