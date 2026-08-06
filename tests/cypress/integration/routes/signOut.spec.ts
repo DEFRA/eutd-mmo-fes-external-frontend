@@ -1,5 +1,6 @@
 describe("Sign Out Page", () => {
   const signOutUrl = "/sign-out?warningTimeoutMs=5000";
+  const signOutMinuteUrl = "/sign-out?warningTimeoutMs=65000";
 
   it("should render the sign out page with a continue button", () => {
     cy.visit(signOutUrl);
@@ -37,6 +38,15 @@ describe("Sign Out Page", () => {
         .invoke("text")
         .should("match", /(seconds|minutes)/i);
     });
+  });
+
+  it("should display warning in minutes when timeout is greater than one minute", () => {
+    cy.visit(signOutMinuteUrl);
+
+    cy.get("main p")
+      .first()
+      .invoke("text")
+      .should("match", /minutes/i);
   });
 
   it("should leave sign-out page when timeout elapses", () => {

@@ -60,6 +60,15 @@ describe("Health Page", () => {
     cy.get("[data-testid='coverage-autocomplete-status-one']").should("have.text", "single:1:fish:2");
     cy.get("[data-testid='coverage-autocomplete-status-many']").should("have.text", "multiple:2:fish:3");
     cy.get("[data-testid='coverage-autocomplete-status-negative']").should("have.text", "");
+    cy.get("[data-testid='coverage-autocomplete-search-zz']").should("have.text", "[]");
+    cy.get("[data-testid='coverage-autocomplete-search-hak']").should("have.text", '["Hake"]');
+    cy.get("[data-testid='coverage-autocomplete-search-co']").should("have.text", '["Cod","Coley"]');
+    cy.get("[data-testid='coverage-autocomplete-search-filter']").should("contain.text", "Coley");
+    cy.get("[data-testid='coverage-autocomplete-translator-single']").should("have.text", "single:1:fish:2");
+    cy.get("[data-testid='coverage-autocomplete-translator-multiple']").should("have.text", "multiple:2:fish:3");
+    cy.get("[data-testid='coverage-autocomplete-translator-fallback']").should("have.text", "unknownKey");
+    cy.get("[data-testid='coverage-pagination-translator-fallback']").should("have.text", "unknownKey");
+    cy.get("[data-testid='coverage-autocomplete-noop-change-result']").should("have.text", "true");
     cy.get("[data-testid='coverage-autocomplete-resolved-defaults']")
       .invoke("text")
       .should("include", '"notFoundText":"No results found"')
@@ -95,9 +104,8 @@ describe("Health Page", () => {
       .invoke("text")
       .should("match", /^2026-08-/);
     cy.get("[data-testid='coverage-common-date-change-state-null']").should("have.text", "Invalid date");
-    cy.get("[data-testid='coverage-common-date-sync-valid']")
-      .invoke("text")
-      .should("match", /^2026-08-/);
+    cy.get("[data-testid='coverage-common-date-sync-valid']").should("contain.text", "2026-08-");
+    cy.get("[data-testid='coverage-common-date-sync-valid-fallback']").should("have.text", "null");
     cy.get("[data-testid='coverage-common-date-sync-invalid']").should("have.text", "null");
     cy.get("[data-testid='coverage-common-date-add-button-true']").should("have.text", "true");
     cy.get("[data-testid='coverage-common-date-add-button-false']").should("have.text", "false");

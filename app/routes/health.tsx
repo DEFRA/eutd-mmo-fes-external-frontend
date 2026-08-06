@@ -35,6 +35,7 @@ const CoverageFixtures = () => {
   const [showClientFilterSearch, setShowClientFilterSearch] = React.useState(true);
   const [showClientRfmoSelector, setShowClientRfmoSelector] = React.useState(true);
   const [showClientErrorSummary, setShowClientErrorSummary] = React.useState(true);
+  const noopAutocompleteChange = () => undefined;
   const autocompleteOptions = ["Cod", "Coley", "Hake"];
   const autocompleteSearch = (query: string, options: string[]) => {
     const normalizedQuery = query.toLowerCase();
@@ -151,7 +152,7 @@ const CoverageFixtures = () => {
           promptMessage="Prompt message"
           promptCondition={() => true}
           searchHandler={autocompleteSearch}
-          onChange={() => undefined}
+          onChange={noopAutocompleteChange}
           customNonJSComp={<div data-testid="coverage-autocomplete-non-js">Non JS</div>}
         />
       </div>
@@ -172,6 +173,27 @@ const CoverageFixtures = () => {
 
       <div data-testid="coverage-autocomplete-change-value">{autocompleteChangeValue}</div>
       <div data-testid="coverage-autocomplete-selected-value">{autocompleteSelectedValue}</div>
+      <div data-testid="coverage-autocomplete-search-zz">
+        {JSON.stringify(autocompleteSearch("zz", autocompleteOptions))}
+      </div>
+      <div data-testid="coverage-autocomplete-search-hak">
+        {JSON.stringify(autocompleteSearch("hak", autocompleteOptions))}
+      </div>
+      <div data-testid="coverage-autocomplete-search-co">
+        {JSON.stringify(autocompleteSearch("co", autocompleteOptions))}
+      </div>
+      <div data-testid="coverage-autocomplete-search-filter">
+        {JSON.stringify(autocompleteSearch("le", autocompleteOptions))}
+      </div>
+      <div data-testid="coverage-autocomplete-translator-single">
+        {autocompleteStatusTranslator("autocompleteSingleResult", { length: 1, property: "fish", position: 2 })}
+      </div>
+      <div data-testid="coverage-autocomplete-translator-multiple">
+        {autocompleteStatusTranslator("autocompleteMultipleResults", { length: 2, property: "fish", position: 3 })}
+      </div>
+      <div data-testid="coverage-autocomplete-translator-fallback">{autocompleteStatusTranslator("unknownKey")}</div>
+      <div data-testid="coverage-pagination-translator-fallback">{paginationTranslator("unknownKey")}</div>
+      <div data-testid="coverage-autocomplete-noop-change-result">{String(noopAutocompleteChange() === undefined)}</div>
       <div data-testid="coverage-autocomplete-status-none">
         {getAutocompleteStatusText({
           length: 0,
@@ -267,7 +289,10 @@ const CoverageFixtures = () => {
       </div>
       <div data-testid="coverage-common-date-change-state-null">{getPickerChangeState(null).formattedDate}</div>
       <div data-testid="coverage-common-date-sync-valid">
-        {getSynchronizedSelectedDate("2026", "8", "20")?.toISOString().slice(0, 10) ?? "null"}
+        {String(getSynchronizedSelectedDate("2026", "8", "20")?.toISOString().slice(0, 10))}
+      </div>
+      <div data-testid="coverage-common-date-sync-valid-fallback">
+        {getSynchronizedSelectedDate("2026", "99", "99")?.toISOString().slice(0, 10) ?? "null"}
       </div>
       <div data-testid="coverage-common-date-sync-invalid">
         {String(getSynchronizedSelectedDate("2026", "99", "99"))}

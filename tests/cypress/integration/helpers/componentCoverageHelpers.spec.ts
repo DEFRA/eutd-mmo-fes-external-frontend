@@ -7,6 +7,7 @@ import {
   shouldRenderAddDateButton,
   shouldRenderCalendarDatePicker,
 } from "~/components/commonDatePicker.helpers";
+import { decrementIdleTime, getWarningTimeToDisplay } from "~/routes/sign-out.helpers";
 
 describe("component coverage helpers", () => {
   const t = (key: string) => {
@@ -141,6 +142,25 @@ describe("component coverage helpers", () => {
       expect(shouldRenderAddDateButton(true, false)).to.equal(false);
       expect(shouldRenderCalendarDatePicker(true, true)).to.equal(true);
       expect(shouldRenderCalendarDatePicker(false, false)).to.equal(false);
+    });
+  });
+
+  describe("sign-out helpers", () => {
+    it("covers idle time decrement for positive and non-positive values", () => {
+      expect(decrementIdleTime(5000, 1000)).to.equal(4000);
+      expect(decrementIdleTime(0, 1000)).to.equal(0);
+      expect(decrementIdleTime(-1000, 1000)).to.equal(0);
+    });
+
+    it("covers warning time display in minutes and seconds", () => {
+      const tSignOut = (key: string) => {
+        if (key === "signOutMinutes") return "minutes";
+        if (key === "signOutSeconds") return "seconds";
+        return key;
+      };
+
+      expect(getWarningTimeToDisplay(65000, 60000, 1000, tSignOut)).to.equal("2 minutes");
+      expect(getWarningTimeToDisplay(5000, 60000, 1000, tSignOut)).to.equal("5 seconds");
     });
   });
 });

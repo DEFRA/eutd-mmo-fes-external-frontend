@@ -10,6 +10,7 @@ import { route } from "routes-gen";
 import { BUTTON_TYPE, Button } from "@capgeminiuk/dcx-react-library";
 import { createCSRFToken, validateCSRFToken } from "~/.server";
 import { getSessionFromRequest, commitSession } from "~/sessions.server";
+import { decrementIdleTime, getWarningTimeToDisplay } from "~/routes/sign-out.helpers";
 
 type signOutLoaderData = {
   warningTime: number;
@@ -71,7 +72,7 @@ const SignOut = () => {
 
   useEffect(() => {
     timer = setInterval(() => {
-      setIdleTime((previousIdleTime: number) => (previousIdleTime > 0 ? previousIdleTime - secondInMilliseconds : 0));
+      setIdleTime((previousIdleTime: number) => decrementIdleTime(previousIdleTime, secondInMilliseconds));
     }, secondInMilliseconds);
 
     return () => {
@@ -79,10 +80,9 @@ const SignOut = () => {
     };
   }, []);
 
-  const warningTimeToDisplay =
-    idleTime > minuteInMilliseconds
-      ? `${Math.ceil(idleTime / minuteInMilliseconds)} ${t("signOutMinutes")}`
-      : `${idleTime / secondInMilliseconds} ${t("signOutSeconds")}`;
+  const warningTimeToDisplay = getWarningTimeToDisplay(idleTime, minuteInMilliseconds, secondInMilliseconds, (key) =>
+    t(key)
+  );
 
   useEffect(() => {
     if (idleTime === 0) {
