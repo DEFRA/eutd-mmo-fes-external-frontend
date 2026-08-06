@@ -886,6 +886,7 @@ export enum TestCaseId {
   RemoveProductNonJS = "removeProductNonJS",
   RemoveProductAccessibility = "removeProductAccessibility",
   RemoveProductFromAdmin = "removeProductFromAdmin",
+  RemoveProductAlreadyDeleted = "removeProductAlreadyDeleted",
   SDAddStorageFacilityNameAddressError = "SDAddStorageFacilityNameAddressError",
 
   // FI0-10292: Point of destination for Processing Statement
