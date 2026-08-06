@@ -149,7 +149,10 @@
     {
       "id": "2",
       "vehicle": "truck",
-      "cmr": "true"
+      "nationalityOfVehicle": "United Kingdom",
+      "registrationNumber": "BD51SMR",
+      "departurePlace": "Dover",
+      "freightBillNumber": "FB0002"
     }
   ],
   "exportLocation": {
