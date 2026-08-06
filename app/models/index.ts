@@ -5,7 +5,6 @@ export * from "./privacyNotice.server";
 export * from "./cookie.server";
 export * from "./directLandings.server";
 export * from "./checkYourInformation.server";
-export * from "./doYouAHaveRoadTransportDocument.server";
 export * from "./doYouHaveAddtionalTransportTypes.server";
 export * from "./howDoesTheExportLeaveUk.server";
 export * from "./landingsEntry.server";
