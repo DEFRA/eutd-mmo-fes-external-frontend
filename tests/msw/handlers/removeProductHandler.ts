@@ -102,6 +102,12 @@ const removeProductHandler: ITestHandler = {
       res(ctx.json(multipleProducts.processingStatementWithMultipleProducts))
     ),
   ],
+
+  [TestCaseId.RemoveProductAlreadyDeleted]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) =>
+      res(ctx.json(multipleProducts.processingStatementAfterRemoval))
+    ),
+  ],
 };
 
 export default removeProductHandler;

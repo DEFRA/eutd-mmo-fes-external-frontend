@@ -191,6 +191,18 @@ describe("Remove Product Page - FI0-10296", () => {
     });
   });
 
+  describe("Scenario 11 - Already deleted product", () => {
+    it("should redirect to forbidden page when product has already been deleted", () => {
+      const testParams: ITestParams = {
+        testCaseId: TestCaseId.RemoveProductAlreadyDeleted,
+      };
+      cy.visit(removeProductUrl, { qs: { ...testParams } });
+
+      cy.url().should("include", "/forbidden");
+      cy.get('[data-testid="no-permission"]').should("be.visible");
+    });
+  });
+
   describe("Error Handling - No selection", () => {
     it("should display error when no radio button selected", () => {
       const testParams: ITestParams = {
