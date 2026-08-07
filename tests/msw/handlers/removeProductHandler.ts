@@ -11,28 +11,30 @@ const removeProductHandler: ITestHandler = {
   ],
 
   [TestCaseId.RemoveProductYesSaveAndContinueWithProducts]: () => [
+    // catch-added loader — lowest MSW priority (added first, prepended to back)
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) =>
-      res(ctx.json(multipleProducts.processingStatementWithMultipleProducts))
+      res(ctx.json(multipleProducts.processingStatementAfterRemoval))
     ),
     rest.post(mockGetAddProcessingStatementUrl, (req, res, ctx) =>
       res(ctx.json(multipleProducts.processingStatementAfterRemoval))
     ),
-    // Mock the catch-added page loader
+    // initial page load — highest MSW priority (added last, prepended to front), consumed once
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) =>
-      res(ctx.json(multipleProducts.processingStatementAfterRemoval))
+      res.once(ctx.json(multipleProducts.processingStatementWithMultipleProducts))
     ),
   ],
 
   [TestCaseId.RemoveProductYesSaveAndContinueNoProducts]: () => [
+    // add-consignment-details loader — lowest MSW priority
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) =>
-      res(ctx.json(multipleProducts.processingStatementSingleProduct))
+      res(ctx.json(multipleProducts.processingStatementNoProducts))
     ),
     rest.post(mockGetAddProcessingStatementUrl, (req, res, ctx) =>
       res(ctx.json(multipleProducts.processingStatementNoProducts))
     ),
-    // Mock the add-consignment-details page loader
+    // initial page load — highest MSW priority, consumed once
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) =>
-      res(ctx.json(multipleProducts.processingStatementNoProducts))
+      res.once(ctx.json(multipleProducts.processingStatementSingleProduct))
     ),
   ],
 
@@ -79,15 +81,16 @@ const removeProductHandler: ITestHandler = {
   ],
 
   [TestCaseId.RemoveProductNonJS]: () => [
+    // catch-added loader — lowest MSW priority
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) =>
-      res(ctx.json(multipleProducts.processingStatementWithMultipleProducts))
+      res(ctx.json(multipleProducts.processingStatementAfterRemoval))
     ),
     rest.post(mockGetAddProcessingStatementUrl, (req, res, ctx) =>
       res(ctx.json(multipleProducts.processingStatementAfterRemoval))
     ),
-    // Mock the catch-added page loader
+    // initial page load — highest MSW priority, consumed once
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) =>
-      res(ctx.json(multipleProducts.processingStatementAfterRemoval))
+      res.once(ctx.json(multipleProducts.processingStatementWithMultipleProducts))
     ),
   ],
 
