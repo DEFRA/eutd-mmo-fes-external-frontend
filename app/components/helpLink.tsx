@@ -1,19 +1,16 @@
 import { useTranslation } from "react-i18next";
 import { useLoaderData } from "react-router";
+import { inferredDocumentName } from "~/components/helpLink.helpers";
 
-const documentNameByType: Record<string, string> = {
-  CC: "catchCertificatehelpLink",
-  PS: "processingStatementhelpLink",
-  SD: "storageNoteshelpLink",
+type HelpLinkProps = {
+  documentNumberOverride?: string;
 };
 
-const inferredDocumentName = (documentNumber: string | undefined) =>
-  documentNameByType[(documentNumber ?? "").substring(9, 11)] ?? "";
-
-export const HelpLink = () => {
+export const HelpLink = ({ documentNumberOverride }: HelpLinkProps) => {
   const { t } = useTranslation();
 
-  const { documentNumber } = useLoaderData<string>();
+  const loaderData = useLoaderData() as { documentNumber?: string } | undefined;
+  const documentNumber = documentNumberOverride ?? loaderData?.documentNumber;
   const documentNameKey = inferredDocumentName(documentNumber);
   const documentName = t(documentNameKey);
 

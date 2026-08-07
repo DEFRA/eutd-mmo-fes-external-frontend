@@ -8,6 +8,7 @@ import {
   shouldRenderCalendarDatePicker,
 } from "~/components/commonDatePicker.helpers";
 import { decrementIdleTime, getWarningTimeToDisplay } from "~/routes/sign-out.helpers";
+import { inferredDocumentName } from "~/components/helpLink.helpers";
 
 describe("component coverage helpers", () => {
   const t = (key: string) => {
@@ -161,6 +162,16 @@ describe("component coverage helpers", () => {
 
       expect(getWarningTimeToDisplay(65000, 60000, 1000, tSignOut)).to.equal("2 minutes");
       expect(getWarningTimeToDisplay(5000, 60000, 1000, tSignOut)).to.equal("5 seconds");
+    });
+  });
+
+  describe("helpLink helpers", () => {
+    it("covers known and fallback document type inference", () => {
+      expect(inferredDocumentName("GBR-2022-CC-123456789")).to.equal("catchCertificatehelpLink");
+      expect(inferredDocumentName("GBR-2022-PS-123456789")).to.equal("processingStatementhelpLink");
+      expect(inferredDocumentName("GBR-2022-SD-123456789")).to.equal("storageNoteshelpLink");
+      expect(inferredDocumentName("GBR-2022-XX-123456789")).to.equal("");
+      expect(inferredDocumentName(undefined)).to.equal("");
     });
   });
 });

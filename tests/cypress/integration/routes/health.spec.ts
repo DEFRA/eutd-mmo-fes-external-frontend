@@ -6,9 +6,62 @@ describe("Health Page", () => {
   });
 
   it("should exercise coverage fixtures for legacy components", () => {
-    cy.visit("/health?showCoverageFixtures=1");
+    cy.intercept("POST", "/set-cookie-preference", {
+      statusCode: 200,
+      body: { success: true },
+    }).as("cookiePreferenceSave");
+
+    cy.visit("/health?showCoverageFixtures=1&loggedIn=yes");
+
+    cy.get(".govuk-cookie-banner").should("be.visible");
+    cy.contains("button", "Accept analytics cookies").then(($button) => {
+      ($button[0] as HTMLButtonElement).click();
+    });
+    cy.wait("@cookiePreferenceSave");
+    cy.get(".govuk-cookie-banner__content").should("contain.text", "You've accepted analytics cookies");
+    cy.contains("button", "Hide cookie message").then(($button) => {
+      ($button[0] as HTMLButtonElement).click();
+    });
+    cy.get(".govuk-cookie-banner").should("not.exist");
+
+    cy.intercept("POST", "/set-cookie-preference", {
+      forceNetworkError: true,
+    }).as("cookiePreferenceNetworkError");
+    cy.visit("/health?showCoverageFixtures=1&loggedIn=yes");
+    cy.contains("button", "Reject analytics cookies").then(($button) => {
+      ($button[0] as HTMLButtonElement).click();
+    });
+    cy.wait("@cookiePreferenceNetworkError");
+    cy.get(".govuk-cookie-banner__content").should("contain.text", "You've rejected analytics cookies");
+    cy.contains("button", "Hide cookie message").then(($button) => {
+      ($button[0] as HTMLButtonElement).click();
+    });
+    cy.get(".govuk-cookie-banner").should("not.exist");
 
     cy.get("[data-testid='coverage-fixtures']").should("be.visible");
+    cy.get("[data-testid='coverage-notification-component-fixture'] .notification-banner__heading").should(
+      "contain.text",
+      "Coverage Title"
+    );
+    cy.get("[data-testid='coverage-notification-component-fixture'] .notification-banner__message").should(
+      "contain.text",
+      "Coverage Message"
+    );
+
+    cy.get("[data-testid='coverage-help-link-cc'] [data-test-id='get-help-body']").should(
+      "contain.text",
+      "catch certificate"
+    );
+    cy.get("[data-testid='coverage-help-link-ps'] [data-test-id='get-help-body']").should(
+      "contain.text",
+      "processing statement"
+    );
+    cy.get("[data-testid='coverage-help-link-sd'] [data-test-id='get-help-body']").should(
+      "contain.text",
+      "non-manipulation document"
+    );
+    cy.get("[data-testid='coverage-help-link-unknown'] [data-test-id='get-help-body']").should("be.visible");
+    cy.get("[data-testid='coverage-help-link-loader-fallback'] [data-test-id='get-help-body']").should("be.visible");
 
     cy.get("[data-testid='client-filter-search-fixture']").should("be.visible");
     cy.get("#client-filter-search").should("have.value", "Cod");

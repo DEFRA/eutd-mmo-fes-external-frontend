@@ -2,6 +2,8 @@ import * as React from "react";
 import { Main, Title } from "~/components";
 import { FilterSearch } from "~/components/filterSearch";
 import { NotificationBanner } from "~/components/notficationBanner";
+import { Notification } from "~/components/notification";
+import { HelpLink } from "~/components/helpLink";
 import { GearDetails } from "~/components/gearDetails";
 import { RfmoSelector } from "~/components/rfmoSelector";
 import { ErrorSummaryView } from "~/components/errorSummaryView";
@@ -104,6 +106,26 @@ const CoverageFixtures = () => {
         messages={["First message", "Second message"]}
         dataTestId="coverage-notification-multi"
       />
+
+      <div data-testid="coverage-notification-component-fixture">
+        <Notification title="Coverage Title" message="Coverage Message" />
+      </div>
+
+      <div data-testid="coverage-help-link-cc">
+        <HelpLink documentNumberOverride="GBR-2022-CC-123456789" />
+      </div>
+      <div data-testid="coverage-help-link-ps">
+        <HelpLink documentNumberOverride="GBR-2022-PS-123456789" />
+      </div>
+      <div data-testid="coverage-help-link-sd">
+        <HelpLink documentNumberOverride="GBR-2022-SD-123456789" />
+      </div>
+      <div data-testid="coverage-help-link-unknown">
+        <HelpLink documentNumberOverride="GBR-2022-XX-123456789" />
+      </div>
+      <div data-testid="coverage-help-link-loader-fallback">
+        <HelpLink />
+      </div>
 
       <div data-testid="coverage-autocomplete-default-fixture">
         <AutocompleteFormField
