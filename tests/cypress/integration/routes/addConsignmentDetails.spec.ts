@@ -64,6 +64,15 @@ describe("Add consignment details page", () => {
     cy.get("a").contains("Select a commodity code");
     cy.get(".govuk-error-message").contains("Select a commodity code");
   });
+
+  it("should show a commodity code error when typed text includes a valid code with tampered label", () => {
+    cy.get("#commodityCode").type('03034512 - Frozen Atlantic bluefin tuna @@"Thunnus thynnus"');
+    cy.get("[data-testid*='save-and-continue'").eq(0).click();
+    cy.url().should("include", "/add-consignment-details");
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("a").contains("Select a commodity code");
+    cy.get(".govuk-error-message").contains("Select a commodity code");
+  });
 });
 
 describe("Add consignment details when updating product description", () => {
@@ -180,6 +189,22 @@ describe("Add consignment details: save consignment details", () => {
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get("a").contains("Enter at least one product");
     cy.get(".govuk-error-message").contains("Enter at least one product");
+  });
+
+  it("will stay on page and show commodity code error for tampered commodity label", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddConsignmentDetails,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("#consignmentDescription").type("{selectall}Frozen tuna portions");
+    cy.get("#commodityCode").type('{selectall}03034512 - Frozen Atlantic bluefin tuna @@"Thunnus thynnus"');
+    cy.get("[data-testid=save-and-continue]").click();
+
+    cy.url().should("include", "/add-consignment-details");
+    cy.url().should("not.include", "/add-catch-details");
+    cy.contains(".govuk-error-message", "Select a commodity code").should("be.visible");
   });
 });
 

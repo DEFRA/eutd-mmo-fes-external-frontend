@@ -50,6 +50,20 @@ type loaderConsignmentDetails = {
   csrf: string;
 };
 
+const normaliseWhitespace = (value: string): string => value.replaceAll(/\s+/g, " ").trim();
+
+const resolveCommodityCodeFromInput = (value: string, commodities: CodeAndDescription[]): string => {
+  const normalisedValue = normaliseWhitespace(value);
+  if (!normalisedValue) return "";
+
+  const selectedCommodity = commodities.find((commodity) => {
+    const optionLabel = `${commodity.code} - ${commodity.description}`;
+    return optionLabel === normalisedValue || commodity.code === normalisedValue;
+  });
+
+  return selectedCommodity?.code ?? "";
+};
+
 // Helper to build valid product data, clearing any fields that failed validation
 const getValidProductData = async (
   validationResponse: Response | ErrorResponse | undefined,
@@ -203,8 +217,8 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const productId = isEmpty(values["productId"])
     ? documentNumber + "-" + moment.utc().unix()
     : (values["productId"] as string);
-  const commodityDescription = (values["consignmentDescription"] as string).replaceAll(/\s+/g, " ").trim();
-  const commodityCode = (values["commodityCode"] as string).split(" - ")[0];
+  const commodityDescription = normaliseWhitespace((values["consignmentDescription"] as string) ?? "");
+  const commodityInput = normaliseWhitespace((values["commodityCode"] as string) ?? "");
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
@@ -212,6 +226,9 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (isRemove) {
     return redirect(`/create-processing-statement/${documentNumber}/remove-product/${productId}`);
   }
+
+  const commodities = await getCommodities();
+  const commodityCode = resolveCommodityCodeFromInput(commodityInput, commodities);
 
   // First validation pass – always validate without saving so we can inspect errors
   const validationResponse = await updateProcessingStatementProducts(
