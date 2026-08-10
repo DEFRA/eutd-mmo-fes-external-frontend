@@ -22,7 +22,8 @@ export const getRootData = async (request: Request): Promise<IMainAppProps> => {
   const gaId: string = ENV.GA_TRACKING_ID;
   const clarityProjectId: string = ENV.CLARITY_PROJECT_ID;
   const bearerToken = await getBearerTokenForRequest(request);
-  const { enrolmentCount }: any = jwt.decode(bearerToken);
+  const decodedToken = jwt.decode(bearerToken) as { enrolmentCount?: unknown } | null;
+  const enrolmentCount = typeof decodedToken?.enrolmentCount === "number" ? decodedToken.enrolmentCount : 0;
   const showChangeOrganisationLink = enrolmentCount > 1;
 
   let redirectTo = null;
