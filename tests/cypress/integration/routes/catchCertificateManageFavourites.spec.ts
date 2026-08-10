@@ -37,7 +37,7 @@ describe("Manage favourites page", () => {
   });
 
   it("should check for field labels", () => {
-    cy.contains("label", "Common name or FAO code");
+    cy.contains("label", "Common name or Food and Agriculture Organisation (FAO) code");
     cy.contains("label", "State");
     cy.contains("label", "Presentation");
     cy.contains("label", "Commodity Code");

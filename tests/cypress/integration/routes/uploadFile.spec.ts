@@ -991,7 +991,7 @@ describe("Upload File Page Upload - EEZ max length string error", () => {
     cy.get("[data-testid=upload]").click();
     cy.get("#row-1-PRD765-0-upload-file-error")
       .should("exist")
-      .and("contain.text", "You are only able to add maximum of 5 EEZ");
+      .and("contain.text", "You are only able to add maximum of 5 Exclusive Economic Zone (EEZ)");
   });
 
   it("should display EEZ max length error when error is a string", () => {
@@ -1003,7 +1003,7 @@ describe("Upload File Page Upload - EEZ max length string error", () => {
     cy.get("[data-testid=upload]").click();
     cy.get("#row-1-PRD765-0-upload-file-error")
       .should("exist")
-      .and("contain.text", "You are only able to add maximum of 5 EEZ");
+      .and("contain.text", "You are only able to add maximum of 5 Exclusive Economic Zone (EEZ)");
   });
 });
 
