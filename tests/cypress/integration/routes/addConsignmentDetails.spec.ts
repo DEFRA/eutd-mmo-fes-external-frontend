@@ -198,8 +198,8 @@ describe("Add consignment details: save consignment details", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get("#consignmentDescription").clear().type("Frozen tuna portions");
-    cy.get("#commodityCode").clear().type('03034512 - Frozen Atlantic bluefin tuna @@"Thunnus thynnus"');
+    cy.get("#consignmentDescription").type("{selectall}Frozen tuna portions");
+    cy.get("#commodityCode").type('{selectall}03034512 - Frozen Atlantic bluefin tuna @@"Thunnus thynnus"');
     cy.get("[data-testid=save-and-continue]").click();
 
     cy.url().should("include", "/add-consignment-details");
