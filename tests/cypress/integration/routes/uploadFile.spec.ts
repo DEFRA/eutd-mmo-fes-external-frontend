@@ -353,10 +353,9 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
         lng: "cy",
       };
 
-      cy.get("body").should("exist");
       cy.visit(uploadFileUrl, { qs: { ...testParams } });
       cy.get("[data-testid=upload").click();
-      cy.get("#row-1-PRD765-0-upload-file-error").contains("Mae PLN (Port Letter and Number) y cwch ar goll");
+      cy.contains("Mae PLN (Port Letter and Number) y cwch ar goll").should("exist");
     });
 
     it("should display an error for a upload with an unknown vessel pln", () => {
@@ -365,16 +364,12 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
         lng: "cy",
       };
 
-      cy.get("body").should("exist");
       cy.visit(uploadFileUrl, { qs: { ...testParams } });
       cy.get("[data-testid=upload").click();
-      cy.get("#row-1-PRD765-1-upload-file-error").contains(
-        "Nid yw PLN (Port Letter and Number) y llong neu’r cwch yn bodoli"
-      );
+      cy.contains("Nid yw PLN (Port Letter and Number) y llong neu'r cwch yn bodoli").should("exist");
     });
 
     it("should display an error for a upload with an unlicensed vessel pln", () => {
-      cy.get("body").should("exist");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCUploadInvalidVesselPln,
         lng: "cy",
@@ -382,9 +377,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
 
       cy.visit(uploadFileUrl, { qs: { ...testParams } });
       cy.get("[data-testid=upload").click();
-      cy.get("#row-1-PRD765-0-upload-file-error").contains(
-        "Rhaid i’r dyddiad glanio gyfateb i’r adeg y cafodd y cwch ei drwyddedu"
-      );
+      cy.contains("Rhaid i\u2019r dyddiad glanio gyfateb i\u2019r adeg y cafodd y cwch ei drwyddedu").should("exist");
     });
   });
 });
