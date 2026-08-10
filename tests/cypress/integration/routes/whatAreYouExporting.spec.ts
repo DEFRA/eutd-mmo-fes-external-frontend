@@ -133,7 +133,7 @@ describe("What are you exporting page", () => {
   });
 
   it("should check for field labels", () => {
-    cy.contains("label", "Common name or FAO code").should("be.visible");
+    cy.contains("label", "Common name or Food and Agriculture Organisation (FAO) code").should("be.visible");
     cy.contains("label", "State").should("be.visible");
     cy.contains("label", "Presentation").should("be.visible");
     cy.contains("label", "Commodity Code").should("be.visible");
