@@ -1,6 +1,7 @@
 describe("Sign Out Page", () => {
   const signOutUrl = "/sign-out?warningTimeoutMs=5000";
   const signOutMinuteUrl = "/sign-out?warningTimeoutMs=65000";
+  const signOutInvalidOverrideUrl = "/sign-out?warningTimeoutMs=invalid";
 
   it("should render the sign out page with a continue button", () => {
     cy.visit(signOutUrl);
@@ -19,6 +20,23 @@ describe("Sign Out Page", () => {
     cy.get("main").within(() => {
       cy.contains("p", "We will reset your application if you do not respond in").should("be.visible");
     });
+  });
+
+  it("should fall back to configured timeout when warningTimeoutMs is invalid", () => {
+    cy.clock();
+    cy.visit("/sign-out");
+    cy.get("main p")
+      .first()
+      .invoke("text")
+      .then((configuredWarningText) => {
+        cy.visit(signOutInvalidOverrideUrl);
+        cy.get("main p")
+          .first()
+          .invoke("text")
+          .then((invalidOverrideText) => {
+            expect(invalidOverrideText).to.equal(configuredWarningText);
+          });
+      });
   });
 
   it("should show countdown text while waiting", () => {
@@ -61,5 +79,14 @@ describe("Sign Out Page", () => {
 
     cy.get("button#continue").click();
     cy.location("pathname", { timeout: 10000 }).should("not.eq", "/sign-out");
+  });
+
+  it("should redirect to forbidden when csrf token is invalid", () => {
+    cy.visit(signOutUrl);
+
+    cy.get("form input[type=hidden][name=csrf]").should("exist").invoke("val", "invalid-csrf");
+    cy.get("button#continue").click();
+
+    cy.location("pathname", { timeout: 10000 }).should("eq", "/forbidden");
   });
 });

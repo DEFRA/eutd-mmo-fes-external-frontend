@@ -65,6 +65,9 @@ describe("Health Page", () => {
 
     cy.get("[data-testid='client-filter-search-fixture']").should("be.visible");
     cy.get("#client-filter-search").should("have.value", "Cod");
+    cy.get("#client-filter-search").clear().type("Hake").should("have.value", "Hake");
+    cy.get("[data-testid='client-filter-search-fixture'] [data-testid='filter-search-reset']").click();
+    cy.get("#client-filter-search").should("have.value", "");
 
     cy.get("[data-testid='filter-search-reset']")
       .first()
@@ -210,6 +213,9 @@ describe("Health Page", () => {
       cy.get("td").should("have.length", 1);
     });
 
+    cy.get("[data-testid='coverage-catch-details-table-header'] thead tr th").should("have.length", 3);
+    cy.get("[data-testid='coverage-fao-selector-fixture'] #select-faoArea").should("have.value", "27");
+
     cy.get("[data-testid='coverage-format-address']").should("contain.text", "Line 1");
     cy.get("[data-testid='coverage-format-address']").should("contain.text", "Line 2");
     cy.get("[data-testid='coverage-format-address']").should("contain.text", "Line 3");
@@ -236,6 +242,46 @@ describe("Health Page", () => {
     cy.get("[data-testid='mount-client-filter-search']").click();
     cy.get("[data-testid='mount-client-rfmo-selector']").click();
     cy.get("[data-testid='mount-client-error-summary']").click();
+
+    cy.get("[data-testid='coverage-main-default-fixture']").should("contain.text", "Default main content");
+    cy.get("[data-testid='coverage-main-back-and-feedback-fixture']").within(() => {
+      cy.get("a.govuk-back-link").should("have.attr", "href", "/health");
+      cy.get("[data-testid='surveylink-feedback']").should("have.attr", "href", "https://example.com/feedback");
+    });
+
+    cy.get("[data-testid='coverage-links-fixture']").within(() => {
+      cy.get("a.govuk-back-link").should("have.attr", "href", "/health");
+      cy.get("#backToProgress")
+        .should("have.attr", "href")
+        .and("include", "/create-catch-certificate/GBR-TEST/progress");
+      cy.get("[data-testid='surveylink-feedback']").should("have.attr", "href", "https://example.com/survey");
+      cy.get("a[href='/manage-favourites']").should("exist");
+      cy.get("a[href='/custom-favourites']").should("exist");
+    });
+
+    cy.get("[data-testid='coverage-important-notice-fixture'] .govuk-warning-text").should("be.visible");
+    cy.get("[data-testid='coverage-add-landings-help-default'] details").should("exist");
+    cy.get("[data-testid='coverage-add-landings-help-custom'] details").should("exist");
+
+    cy.get("[data-testid='coverage-sidebar-catch-fixture'] [data-testid='prior-notification-form']").should("exist");
+    cy.get("[data-testid='coverage-sidebar-processing-fixture'] [data-testid='create-uk-catch-certificate']").should(
+      "exist"
+    );
+    cy.get("[data-testid='coverage-sidebar-storage-fixture']").should("contain.text", "Need help");
+    cy.get("[data-testid='coverage-sidebar-other-fixture']").should("contain.text", "Need help");
+
+    cy.get("[data-testid='coverage-header-home-fixture']").within(() => {
+      cy.get(".govuk-service-navigation__service-name a").should("have.attr", "href", "/");
+      cy.get("[data-testid='navigation'] #signOutLink").should("have.attr", "href", "/logout");
+    });
+    cy.get("[data-testid='coverage-header-link-fixture']").within(() => {
+      cy.get(".govuk-service-navigation__service-name a").should("have.attr", "href", "/health");
+      cy.get("[data-testid='navigation'] a").should("have.length.at.least", 4);
+    });
+
+    cy.visit("/logout", { failOnStatusCode: false });
+    cy.location("pathname", { timeout: 10000 }).should("eq", "/server-logout");
+    cy.visit("/health?showCoverageFixtures=1&loggedIn=yes");
 
     cy.get("[data-testid='coverage-fixtures']").should("exist");
   });

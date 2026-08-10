@@ -4,6 +4,16 @@ import { FilterSearch } from "~/components/filterSearch";
 import { NotificationBanner } from "~/components/notficationBanner";
 import { Notification } from "~/components/notification";
 import { HelpLink } from "~/components/helpLink";
+import { BackButton } from "~/components/backButton";
+import { BackToProgressLink } from "~/components/backToProgressLink";
+import { SurveyLink } from "~/components/surveyLink";
+import { ImportantNotice } from "~/components/importantNotice";
+import { ManageYourProductFavouritesLink } from "~/components/manageYourProductFavouritesLink";
+import { AddLandingsVesselHelpContent } from "~/components/addLandingsVesselHelpContent";
+import { CatchDetailsTableHeader } from "~/components/catchDetailsTableHeader";
+import { FaoAreaSelector } from "~/components/faoAreaSelector";
+import { Sidebar } from "~/components/sidebar";
+import { Header } from "~/components/header";
 import { GearDetails } from "~/components/gearDetails";
 import { RfmoSelector } from "~/components/rfmoSelector";
 import { ErrorSummaryView } from "~/components/errorSummaryView";
@@ -106,6 +116,8 @@ const CoverageFixtures = () => {
         messages={["First message", "Second message"]}
         dataTestId="coverage-notification-multi"
       />
+
+      <NotificationBanner header="Default id" messages={["Default data test id branch"]} />
 
       <div data-testid="coverage-notification-component-fixture">
         <Notification title="Coverage Title" message="Coverage Message" />
@@ -376,6 +388,20 @@ const CoverageFixtures = () => {
         <TableHeader headersToRender={["Document number", "", "Action"]} />
       </table>
 
+      <table className="govuk-table" data-testid="coverage-catch-details-table-header">
+        <CatchDetailsTableHeader
+          headersToRender={[
+            { id: "documentNumber", text: "Document number" },
+            { id: "status", text: "Status" },
+            { id: "action", text: "Action" },
+          ]}
+        />
+      </table>
+
+      <div data-testid="coverage-fao-selector-fixture">
+        <FaoAreaSelector legendTitle="Choose FAO area" defaultValue="27" faoAreas={["27", "34"]} />
+      </div>
+
       <div data-testid="coverage-format-address">{formatAddress("Line 1", null, "Line 2", undefined, "Line 3")}</div>
 
       <HighSeasAreaFixture idPrefix="hsa-option" hint="Select one option" highSeasAreaValue="yes" />
@@ -571,6 +597,81 @@ const CoverageFixtures = () => {
           errors={[{ key: "field-3", message: "commonErrorText", value: { fieldName: "Field" } } as any]}
         />
       )}
+
+      <div data-testid="coverage-main-default-fixture">
+        <Main>
+          <p>Default main content</p>
+        </Main>
+      </div>
+
+      <div data-testid="coverage-main-back-and-feedback-fixture">
+        <Main backUrl="/health" showHelpLink={false} feedbackLink="https://example.com/feedback">
+          <p>Main with back link and feedback link</p>
+        </Main>
+      </div>
+
+      <div data-testid="coverage-links-fixture">
+        <BackButton to="/health" />
+        <BackToProgressLink
+          progressUri="/create-catch-certificate/:documentNumber/progress"
+          documentNumber="GBR-TEST"
+        />
+        <SurveyLink feedbackURL="https://example.com/survey" />
+        <ManageYourProductFavouritesLink />
+        <ManageYourProductFavouritesLink href="/custom-favourites" />
+      </div>
+
+      <div data-testid="coverage-important-notice-fixture">
+        <ImportantNotice messageKey="commonErrorText" />
+      </div>
+
+      <div data-testid="coverage-add-landings-help-default">
+        <AddLandingsVesselHelpContent />
+      </div>
+
+      <div data-testid="coverage-add-landings-help-custom">
+        <AddLandingsVesselHelpContent namespace="common" />
+      </div>
+
+      <div data-testid="coverage-sidebar-catch-fixture">
+        <Sidebar journey="catchCertificate" dashboardFeedbackURL="https://example.com/dashboard-feedback" />
+      </div>
+
+      <div data-testid="coverage-sidebar-processing-fixture">
+        <Sidebar journey="processingStatement" dashboardFeedbackURL="https://example.com/dashboard-feedback" />
+      </div>
+
+      <div data-testid="coverage-sidebar-storage-fixture">
+        <Sidebar journey="storageNotes" dashboardFeedbackURL="https://example.com/dashboard-feedback" />
+      </div>
+
+      <div data-testid="coverage-sidebar-other-fixture">
+        <Sidebar journey="unknownJourney" dashboardFeedbackURL="https://example.com/dashboard-feedback" />
+      </div>
+
+      <div data-testid="coverage-header-home-fixture">
+        <Header
+          title="title"
+          titleTo="/"
+          hideHomeLink={true}
+          hideFavouritesLink={true}
+          changeOrganisationUrl={null}
+          identityAppMgtURL="https://example.com/account"
+          identityAppLogoutURL="/logout"
+        />
+      </div>
+
+      <div data-testid="coverage-header-link-fixture">
+        <Header
+          title="title"
+          titleTo="/health"
+          hideHomeLink={false}
+          hideFavouritesLink={false}
+          changeOrganisationUrl="/redirectTo"
+          identityAppMgtURL="https://example.com/account"
+          identityAppLogoutURL="/logout"
+        />
+      </div>
     </div>
   );
 };
