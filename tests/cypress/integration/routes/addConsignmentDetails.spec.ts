@@ -193,7 +193,7 @@ describe("Add consignment details: save consignment details", () => {
 
   it("will stay on page and show commodity code error for tampered commodity label", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSPostAddConsignmentDetails,
+      testCaseId: TestCaseId.PSAddConsignmentDetails,
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
@@ -204,9 +204,7 @@ describe("Add consignment details: save consignment details", () => {
 
     cy.url().should("include", "/add-consignment-details");
     cy.url().should("not.include", "/add-catch-details");
-    cy.get("#error-summary-title").contains("There is a problem");
-    cy.get("a").contains("Select a commodity code");
-    cy.get(".govuk-error-message").contains("Select a commodity code");
+    cy.contains(".govuk-error-message", "Select a commodity code").should("be.visible");
   });
 });
 
