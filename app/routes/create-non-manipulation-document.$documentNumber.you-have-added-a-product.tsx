@@ -35,7 +35,7 @@ import setApiMock from "tests/msw/helpers/setApiMock";
 import { ButtonGroup } from "~/composite-components";
 import i18next from "~/i18next.server";
 
-export const meta: MetaFunction = (args) => getMeta(args);
+export const meta: MetaFunction<typeof loader> = (args) => getMeta(args);
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   /* istanbul ignore next */

@@ -483,7 +483,8 @@ export const executeAction = async (request: Request, params: Params): Promise<R
     const catchIdsToRemove: string[] = catchesToRemove?.split(",") ?? [];
 
     catchIdsToRemove.push(catchId);
-    session.set("catchesToRemove", [...new Set(catchIdsToRemove)].join(","));
+    const nextCatchesToRemove = [...new Set(catchIdsToRemove)].join(",");
+    session.set("catchesToRemove", nextCatchesToRemove);
 
     return redirect(
       route("/create-non-manipulation-document/:documentNumber/you-have-added-a-product", { documentNumber }),
