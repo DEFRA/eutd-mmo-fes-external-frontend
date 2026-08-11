@@ -57,9 +57,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   if (hasActionExecuted) {
     session.unset("actionExecuted");
-  } else {
-    // If the loader is NOT exeecuting straight after the action, clear the list of catch IDs to be removed
-    session.unset("catchesToRemove");
   }
 
   const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
@@ -70,8 +67,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const catchesToRemove = session.get("catchesToRemove");
 
-  // If the loader is exeecuting straight after the action, filter the catches array if needed
-  if (hasActionExecuted && catchesToRemove) {
+  // Keep pending removals applied across navigation until a successful save clears them.
+  if (catchesToRemove) {
     // Save the original catchIndex to allow Edit functionality for the correct catch entry even when one or more catches
     //   have been marked for removal causing the UI index of visible entries to be different from their original index
     sdData.catches = getVisibleProducts(sdData.catches, catchesToRemove);

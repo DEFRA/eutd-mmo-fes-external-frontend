@@ -434,6 +434,25 @@ export const executeAction = async (request: Request, params: Params): Promise<R
   const catchesToRemove = session.get("catchesToRemove") ?? "";
 
   if (addAnotherProduct) {
+    if (catchesToRemove) {
+      sdData.catches = getVisibleProducts(sdData.catches, catchesToRemove);
+
+      await updateStorageDocumentCatchDetails(
+        bearerToken,
+        documentNumber,
+        {
+          catches: [...(Array.isArray(sdData.catches) ? sdData.catches : [])],
+          addAnotherProduct: values.addAnotherProduct as string,
+        },
+        `/create-non-manipulation-document/${documentNumber}/you-have-added-a-product`,
+        undefined,
+        false,
+        true
+      );
+
+      session.unset("catchesToRemove");
+    }
+
     return redirect(
       `/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${sdData.catches.length}`,
       {

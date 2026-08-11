@@ -96,6 +96,28 @@ describe("SD: you-have-added-product page", () => {
     cy.url({ timeout: 10000 }).should("include", "/add-product-to-this-consignment");
   });
 
+  it("should keep removed products hidden in summary after selecting Yes to add another product", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+    };
+
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+    cy.get("tbody.govuk-table__body tr.govuk-table__row").should("have.length", 2);
+
+    cy.get('[data-testid="remove-button"]').first().click();
+    cy.get("tbody.govuk-table__body tr.govuk-table__row").should("have.length", 1);
+
+    cy.get("#addAnotherProduct").check();
+    cy.contains("button", "Save and continue").click();
+
+    cy.url().should("include", "/add-product-to-this-consignment/");
+
+    // Simulate returning to the summary page after adding another product.
+    cy.visit(`${sdPageUrl}?productIndex=2`, { qs: { ...testParams } });
+    cy.get("tbody.govuk-table__body tr.govuk-table__row").should("have.length", 1);
+    cy.contains("Amberjacks nei (AMX)").should("not.exist");
+  });
+
   it("should allow continuing if the catch is valid", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDProductAddedValid,
