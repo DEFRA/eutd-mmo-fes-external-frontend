@@ -491,7 +491,7 @@ export const pages: Pages = {
   },
   [Page.StorageDocumentStorageFacilityApproval]: {
     path: "/create-non-manipulation-document/:documentNumber/add-storage-facility-approval",
-    title: "sdAddStorageFacilityTitle",
+    title: "sdAddStorageFacilityApprovalTitle",
     homeLink: "non-manipulation-document",
     hideFavouritesLink: true,
   },
