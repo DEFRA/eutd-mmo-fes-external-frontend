@@ -723,6 +723,7 @@ describe("Manual landing page: submit unauthorised access", () => {
       cy.get("#gearCategory").select(4);
     });
     cy.get("#gearCategory").select(4);
+    cy.get("#gearType").should("exist");
     selectFirstGearTypeOption();
     cy.get("#rfmo").then(() => {
       cy.get("#rfmo").select(2);

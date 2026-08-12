@@ -341,7 +341,7 @@ describe("CC: Entering the address manually with errors", () => {
 
     // Country field should have inline error
     cy.get("#country")
-      .parents(".govuk-form-group")
+      .closest(".govuk-form-group")
       .should("have.class", "govuk-form-group--error")
       .find(".govuk-error-message")
       .should("be.visible")
