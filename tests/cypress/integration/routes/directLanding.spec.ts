@@ -6,8 +6,7 @@ const directLandingUrl = `${documentUrl}/${documentNumber}/direct-landing`;
 const invalidVesselValue = "Invalid123";
 
 const waitForDatePickerReady = () => {
-  // Wait for the date picker button to be interactive (more specific than generic hydration)
-  cy.get("button.date-picker").should("exist").and("be.visible");
+  cy.get("#dateLanded").should("be.visible");
 };
 
 describe("Direct landing page render", () => {

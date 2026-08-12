@@ -105,7 +105,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
       cy.wrap($species).should("be.visible").and("not.be.disabled").clear();
       cy.wrap($species).should("be.visible").and("not.be.disabled").type("Aesop");
     });
-    cy.waitForHydration();
+    cy.waitForHydration(2000);
     selectFirstAutocompleteOption("Aesop shrimp", 1500);
 
     cy.get("#species").invoke("val").should("not.be.empty");
