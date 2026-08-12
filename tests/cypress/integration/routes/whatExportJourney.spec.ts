@@ -1,6 +1,22 @@
 import { type ITestParams, TestCaseId } from "~/types";
 const documentUrl = "/create-catch-certificate/GBR-2022-CC-A2BC627FE";
 const whatExportJourneyUrl = `${documentUrl}/what-export-journey`;
+
+const selectDestinationCountry = (country: string) => {
+  cy.get("#exportDestination").then(($el) => {
+    if ($el.is("select")) {
+      // Set and trigger change to avoid actionability retries on rerendering select controls.
+      cy.get("#exportDestination").invoke("val", country).trigger("change");
+      return;
+    }
+
+    cy.get("#exportDestination").should("be.visible").clear().type(country);
+    cy.get(".autocomplete__option")
+      .contains(new RegExp(`^${country}$`))
+      .click();
+  });
+};
+
 describe("what export journey page for Direct Landing", () => {
   it("it shoud render the page", () => {
     const testParams: ITestParams = {
@@ -42,6 +58,7 @@ describe("what export journey page for Direct Landing", () => {
     cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-list > li > a").contains("Select a valid destination country");
     cy.get(".govuk-error-message").contains("Select a valid destination country");
+    cy.get("body").should("exist");
   });
   it("should redirect to the forbidden page if there is an error as page is rendered", () => {
     const testParams: ITestParams = {
@@ -67,6 +84,7 @@ describe("what export journey page for Direct Landing", () => {
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
     cy.get("#exportedFromGU").check();
     cy.get('[data-testid="save-draft-button"]').click();
+    cy.get("body").should("exist");
   });
 
   it("should redirect to the landings-entry if the if landing entry is null", () => {
@@ -74,6 +92,7 @@ describe("what export journey page for Direct Landing", () => {
       testCaseId: TestCaseId.WhatExportJourneyDirectLandingNull,
     };
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+    cy.get("body").should("exist");
   });
 
   it("should redirect to the progess page if the user click on save and continue button", () => {
@@ -128,6 +147,7 @@ describe("what export journey page for Manual Entry", () => {
     cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-list > li > a").contains("Select a valid destination country");
     cy.get(".govuk-error-message").contains("Select a valid destination country");
+    cy.get("body").should("exist");
   });
   it("should redirect to the forbidden page if there is an error as page is rendered m", () => {
     const testParams: ITestParams = {
@@ -152,6 +172,7 @@ describe("what export journey page for Manual Entry", () => {
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
     cy.get("#exportedFromGU").check();
     cy.get('[data-testid="save-draft-button"]').click();
+    cy.get("body").should("exist");
   });
 
   it("should redirect to the landings-entry if the if landing entry is null", () => {
@@ -159,6 +180,7 @@ describe("what export journey page for Manual Entry", () => {
       testCaseId: TestCaseId.WhatExportJourneyManualEntryNull,
     };
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
+    cy.get("body").should("exist");
   });
 
   it("should redirect to the how-does-the-export-leave-the-uk page if the user click on save and continue button", () => {
@@ -235,13 +257,7 @@ describe("Destination country field validation", () => {
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
 
     cy.get("#exportedFromUK").check();
-    cy.get("#exportDestination").then(($el) => {
-      if ($el.is("select")) {
-        cy.wrap($el).select("France");
-      } else {
-        cy.wrap($el).invoke("val", "France");
-      }
-    });
+    selectDestinationCountry("France");
     cy.get("#pointOfDestination").type("Calais Port");
     cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-error-summary").should("not.exist");
@@ -289,13 +305,7 @@ describe("Point of destination field", () => {
     cy.visit(whatExportJourneyUrl, { qs: { ...testParams } });
 
     cy.get("#exportedFromUK").check();
-    cy.get("#exportDestination").then(($el) => {
-      if ($el.is("select")) {
-        cy.wrap($el).select("France");
-      } else {
-        cy.wrap($el).invoke("val", "France");
-      }
-    });
+    selectDestinationCountry("France");
     cy.get('[data-testid="save-and-continue"]').click();
 
     // Check error summary

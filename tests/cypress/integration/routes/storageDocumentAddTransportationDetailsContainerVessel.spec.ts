@@ -209,10 +209,14 @@ describe("Container Vessel Save as Draft - Retain valid field values", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
 
     // Fill all valid fields
-    cy.get("#vesselName").clear().type("Atlantic Star");
-    cy.get("#flagState").clear().type("Greece");
-    cy.get("#departurePlace").clear().type("Felixstowe Port");
-    cy.get('input[name="containerNumbers.0"]').clear().type("ABCJ0123456");
+    cy.get("#vesselName").clear();
+    cy.get("#vesselName").type("Atlantic Star");
+    cy.get("#flagState").clear();
+    cy.get("#flagState").type("Greece");
+    cy.get("#departurePlace").clear();
+    cy.get("#departurePlace").type("Felixstowe Port");
+    cy.get('input[name="containerNumbers.0"]').clear();
+    cy.get('input[name="containerNumbers.0"]').type("ABCJ0123456");
 
     // Save as draft
     cy.get("[data-testid=save-draft-button]").click();

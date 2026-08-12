@@ -94,10 +94,10 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.wait(500); // Wait for hydration
-    cy.get('[type="radio"]').first().should("exist");
-    cy.get('[type="radio"]').first().check();
-    cy.wait(200); // Allow React to process the state change
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for hydration
+    cy.get('[name="addAnotherCatch"][value="Yes"]').should("exist");
+    cy.get('label[for="addAnotherCatch"]').click();
+    cy.get('[name="addAnotherCatch"][value="Yes"]').should("be.checked");
     cy.contains("button", "Save and continue").click();
     cy.url({ timeout: 10000 }).should("include", "/add-consignment-details");
   });
@@ -561,7 +561,9 @@ describe("PS: Catch added", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid='warning-message']").should("exist");
+    cy.get("[data-testid='warning-message']").should("have.attr", "role", "note");
     cy.get("[data-testid='warning-message']").should("contain", "To edit product information, press change.");
+    cy.get("[data-testid='warning-message']").find(".govuk-visually-hidden").should("contain", "Warning");
   });
 
   it("should have correct table structure with 7 columns", () => {
@@ -1260,7 +1262,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     cy.get('input[name="q"]').click();
     cy.get('input[name="q"]').clear();
     cy.get('input[name="q"]').type("Salmon");
-    cy.wait(500); // Wait for re-render if needed we should not have to do this but is the only way around flaky test right now
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for re-render if needed we should not have to do this but is the only way around flaky test right now
     cy.get('input[name="q"]').should("have.value", "Salmon");
     cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
     cy.get('button[name="actionType"][value="search"]').click();
@@ -1778,6 +1780,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
     it("should display warning message about editing product information", () => {
       cy.get('[data-testid="warning-message"]').should("be.visible");
+      cy.get('[data-testid="warning-message"]').should("have.attr", "role", "note");
       cy.get('[data-testid="warning-message"]').should("contain.text", "To edit product information, press change");
     });
 

@@ -24,6 +24,16 @@ describe("Upload File Page", () => {
       .should("be.visible")
       .should("have.attr", "href", "/create-catch-certificate/GBR-2021-CC-8EEB7E123/product-favourites");
   });
+
+  it("should have visually hidden assistive text for screen readers in the warning message (WCAG 1.3.1)", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCUploadLandingsEmptyRows,
+    };
+
+    cy.visit(uploadFileUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid='warning-message']").find(".govuk-visually-hidden").should("contain", "Warning");
+  });
 });
 
 describe("Upload File Page Upload", () => {
@@ -74,6 +84,7 @@ describe("Upload File Page Upload", () => {
 
     cy.get("form").submit();
     cy.get(".govuk-notification-banner__heading").contains("3 out of 3 rows uploaded successfully");
+    cy.get("body").should("exist");
   });
 
   it("should render summary information for valid uploaded landings", () => {
@@ -165,6 +176,7 @@ describe("Upload File Page Upload", () => {
 
     cy.get("form").submit();
     cy.get(".govuk-notification-banner__heading").contains("0 out of 2 rows uploaded successfully");
+    cy.get("body").should("exist");
   });
 
   it("should attempt to upload a .csv file but fail because of a fobidden response", () => {
@@ -213,6 +225,7 @@ describe("Upload File Page Upload - date errors", () => {
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Date landed is missing");
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Date landed must be a real date");
     cy.get("#row-1-PRD765-2-upload-file-error").contains("Enter a valid date landed");
+    cy.get("body").should("exist");
   });
 });
 
@@ -244,6 +257,7 @@ describe("Upload File Page Upload - export weight errors", () => {
       "Enter the export weight as a number with a maximum of 2 decimal places"
     );
     cy.get("#row-1-PRD765-2-upload-file-error").contains("Enter the export weight as a number greater than 0");
+    cy.get("body").should("exist");
   });
 });
 
@@ -256,6 +270,7 @@ describe("Upload File Page Upload - High Seas Area errors", () => {
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("FAO High seas area invalid");
+    cy.get("body").should("exist");
   });
 });
 
@@ -268,6 +283,7 @@ describe("Upload File Page Upload - EEZ errors", () => {
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("EEZ does not exist");
+    cy.get("body").should("exist");
   });
   it("should display an error for a upload with a invalid EEZ", () => {
     const testParams: ITestParams = {
@@ -277,6 +293,7 @@ describe("Upload File Page Upload - EEZ errors", () => {
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("EEZ does not exist");
+    cy.get("body").should("exist");
   });
 });
 
@@ -289,6 +306,7 @@ describe("Upload File Page Upload - RFMO errors", () => {
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("RFMO does not exist");
+    cy.get("body").should("exist");
   });
 });
 
@@ -301,6 +319,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Vessel PLN is missing");
+    cy.get("body").should("exist");
   });
 
   it("should display an error for a upload with an unknown vessel pln", () => {
@@ -311,6 +330,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Vessel PLN does not exist");
+    cy.get("body").should("exist");
   });
 
   it("should display an error for a upload with an invalid vessel pln", () => {
@@ -318,6 +338,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
       testCaseId: TestCaseId.CCUploadInvalidVesselPln,
     };
 
+    cy.get("body").should("exist");
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Date landed must correspond to when the vessel was licensed");
@@ -330,6 +351,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
         lng: "cy",
       };
 
+      cy.get("body").should("exist");
       cy.visit(uploadFileUrl, { qs: { ...testParams } });
       cy.get("[data-testid=upload").click();
       cy.get("#row-1-PRD765-0-upload-file-error").contains("Mae PLN y cwch ar goll");
@@ -341,12 +363,14 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
         lng: "cy",
       };
 
+      cy.get("body").should("exist");
       cy.visit(uploadFileUrl, { qs: { ...testParams } });
       cy.get("[data-testid=upload").click();
       cy.get("#row-1-PRD765-1-upload-file-error").contains("Nid yw PLN y llong neu’r cwch yn bodoli");
     });
 
     it("should display an error for a upload with an unlicensed vessel pln", () => {
+      cy.get("body").should("exist");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCUploadInvalidVesselPln,
         lng: "cy",
@@ -377,6 +401,7 @@ describe("Upload File Page Upload - product errors", () => {
     cy.get("#row-1-PRD-UNKNOWN-3-upload-file-error").contains(
       "Atlantic cod (COD) was subject to fishing restrictions on your specified Landing date. Please refer to GOV.UK for further guidance."
     );
+    cy.get("body").should("exist");
   });
 });
 
@@ -390,6 +415,7 @@ describe("Upload File Page Upload - gearCode errors", () => {
     cy.get("[data-testid=upload").click();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Gear type does not exist");
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Gear type does not exist");
+    cy.get("body").should("exist");
   });
 
   it("should display the same error for invalid / missing gear codes in Welsh", () => {
@@ -402,6 +428,7 @@ describe("Upload File Page Upload - gearCode errors", () => {
     cy.get("form").submit();
     cy.get("#row-1-PRD765-0-upload-file-error").contains("Nid yw'r Math o gêr yn bodoli");
     cy.get("#row-1-PRD765-1-upload-file-error").contains("Nid yw'r Math o gêr yn bodoli");
+    cy.get("body").should("exist");
   });
 });
 

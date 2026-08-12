@@ -57,6 +57,13 @@ export const getDashboardLoader = async (request: Request, journey: Journey, tit
     clearSession(session);
   }
 
+  // Reset copy-banner acknowledgement when loading a dashboard.
+  for (const key of Object.keys(session.data)) {
+    if (key.startsWith("copyDocumentAcknowledged-")) {
+      session.unset(key);
+    }
+  }
+
   let name: string = "";
   if (accountDetails.model?.exporterCompanyName) {
     name = accountDetails.model?.exporterCompanyName;

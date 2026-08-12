@@ -20,6 +20,7 @@ describe("Privacy page for cc journey", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };
+      cy.get("body").should("exist");
       cy.visit("/create-catch-certificate/privacy-notice", { qs: { ...testParams } });
       cy.contains("a", /^Back$/)
         .should("be.visible")
@@ -27,6 +28,7 @@ describe("Privacy page for cc journey", () => {
     });
 
     it("should redirect to home page on back link click", () => {
+      cy.get("body").should("exist");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.PrivacyEmpty,
       };
@@ -34,6 +36,8 @@ describe("Privacy page for cc journey", () => {
 
       cy.contains("a", /^Back$/).click();
       cy.get(".govuk-heading-xl").contains("What do you want to do?");
+
+      cy.get("body").should("exist");
     });
 
     it("Back link should be outside the main content region (AAA accessibility)", () => {

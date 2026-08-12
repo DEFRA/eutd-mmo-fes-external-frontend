@@ -56,6 +56,10 @@ export const loader: LoaderFunction = async ({ request, params }): Promise<Typed
   // Get product description for the specific product
   const { currentProductDescription } = getProductDescription(psData.products, productId);
 
+  if (!currentProductDescription) {
+    return redirect("/forbidden");
+  }
+
   // Create CSRF token
   const csrf = await createCSRFToken(request);
   const session = await getSessionFromRequest(request);
@@ -66,7 +70,7 @@ export const loader: LoaderFunction = async ({ request, params }): Promise<Typed
       csrf,
       documentNumber,
       productId,
-      productDescription: currentProductDescription?.description ?? "",
+      productDescription: currentProductDescription.description,
     },
     session
   );

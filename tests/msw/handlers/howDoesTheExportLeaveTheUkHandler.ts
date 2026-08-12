@@ -134,7 +134,7 @@ const howDoesTheExportLeaveTheUkHandler: ITestHandler = {
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(empty))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(ccDrafts))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
-    // No POST mock needed — the action skips the transport API call when no vehicle is selected
+    rest.post(ADD_TRANSPORT_DETAILS_URL, (req, res, ctx) => res(ctx.json(catchCertificateTrain))),
   ],
   // FI0-10616: Back navigation scenarios
   [TestCaseId.HowDoesTheExportLeaveTheUkBackFromAdditionalTransport]: () => [

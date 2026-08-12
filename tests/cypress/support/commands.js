@@ -27,3 +27,9 @@ Cypress.Commands.add("findGovUkLabel", (textToFind) => {
 Cypress.Commands.add("findGovUkHint", (textToFind) => {
   cy.get(".govuk-hint").contains(textToFind);
 });
+
+Cypress.Commands.add("waitForUiUpdate", (timeout = 0) => {
+  if (timeout > 0) {
+    cy.wrap(null, { log: false }).then(() => new Cypress.Promise((resolve) => setTimeout(resolve, timeout)));
+  }
+});

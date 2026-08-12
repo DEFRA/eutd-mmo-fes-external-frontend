@@ -10,6 +10,7 @@ import { route } from "routes-gen";
 import { BUTTON_TYPE, Button } from "@capgeminiuk/dcx-react-library";
 import { createCSRFToken, validateCSRFToken } from "~/.server";
 import { getSessionFromRequest, commitSession } from "~/sessions.server";
+import { decrementIdleTime, getWarningTimeToDisplay } from "~/routes/sign-out.helpers";
 
 type signOutLoaderData = {
   warningTime: number;
@@ -23,7 +24,14 @@ export const loader: LoaderFunction = async ({ request }) => {
   setApiMock(request.url);
   const ENV = getEnv();
 
-  const warningTime: number = Number.parseInt(ENV.WARNING_T0_TIME_OUT_IN_MILLISECONDS, 10);
+  const configuredWarningTime = Number.parseInt(ENV.WARNING_T0_TIME_OUT_IN_MILLISECONDS, 10);
+  const url = new URL(request.url);
+  const warningTimeoutOverride = Number.parseInt(url.searchParams.get("warningTimeoutMs") ?? "", 10);
+  // Keep production behavior unchanged and allow deterministic timeout in non-production tests.
+  const warningTime: number =
+    process.env.NODE_ENV !== "production" && Number.isFinite(warningTimeoutOverride) && warningTimeoutOverride > 0
+      ? warningTimeoutOverride
+      : configuredWarningTime;
   const minuteInMilliseconds = 60000;
   const secondInMilliseconds = 1000;
   const csrf = await createCSRFToken(request);
@@ -64,7 +72,7 @@ const SignOut = () => {
 
   useEffect(() => {
     timer = setInterval(() => {
-      setIdleTime((previousIdleTime: number) => (previousIdleTime > 0 ? previousIdleTime - secondInMilliseconds : 0));
+      setIdleTime((previousIdleTime: number) => decrementIdleTime(previousIdleTime, secondInMilliseconds));
     }, secondInMilliseconds);
 
     return () => {
@@ -72,10 +80,9 @@ const SignOut = () => {
     };
   }, []);
 
-  const warningTimeToDisplay =
-    idleTime > minuteInMilliseconds
-      ? `${Math.ceil(idleTime / minuteInMilliseconds)} ${t("signOutMinutes")}`
-      : `${idleTime / secondInMilliseconds} ${t("signOutSeconds")}`;
+  const warningTimeToDisplay = getWarningTimeToDisplay(idleTime, minuteInMilliseconds, secondInMilliseconds, (key) =>
+    t(key)
+  );
 
   useEffect(() => {
     if (idleTime === 0) {

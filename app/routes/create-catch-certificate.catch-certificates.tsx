@@ -93,6 +93,11 @@ const populateRecordLinks = (documents: IGetAllDocumentsData, t: TFunction<"comm
     ? documents.inProgress.map((document) => {
         const userRef = getDashboardUserReference(document);
         const journeyRef = `${t(journey)} ${document.documentNumber} ${userRef}`;
+        const backUri = route("/create-catch-certificate/catch-certificates");
+
+        const progressUrl = `${route("/create-catch-certificate/:documentNumber/progress", {
+          documentNumber: document.documentNumber,
+        })}?backUri=${encodeURIComponent(backUri)}`;
 
         document.links = {
           continueLink: () => (
@@ -103,9 +108,7 @@ const populateRecordLinks = (documents: IGetAllDocumentsData, t: TFunction<"comm
                   ? route("/create-catch-certificate/:documentNumber/check-your-information", {
                       documentNumber: document.documentNumber,
                     })
-                  : route("/create-catch-certificate/:documentNumber/progress", {
-                      documentNumber: document.documentNumber,
-                    })
+                  : progressUrl
               }
               className="govuk-link"
               reloadDocument

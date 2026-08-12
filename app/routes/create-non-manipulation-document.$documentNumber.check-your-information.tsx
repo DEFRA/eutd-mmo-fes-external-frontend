@@ -3,7 +3,14 @@ import { useTranslation } from "react-i18next";
 import { useScrollOnPageLoad } from "~/hooks";
 import isEmpty from "lodash/isEmpty";
 import { useEffect } from "react";
-import { redirect, useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
+import {
+  redirect,
+  useActionData,
+  useLoaderData,
+  useLocation,
+  type LoaderFunction,
+  type ActionFunction,
+} from "react-router";
 
 import { route } from "routes-gen";
 import setApiMock from "tests/msw/helpers/setApiMock";
@@ -45,6 +52,9 @@ type loaderProps = {
   storageDocument: StorageDocument;
   exporter: IExporter;
   csrf: string;
+  copyDocumentAcknowledged: boolean;
+  copyDocumentNumber: string;
+  voidDocumentConfirm: boolean;
 };
 
 export const headers = () => ({
@@ -61,6 +71,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const session = await getSessionFromRequest(request);
   const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
+  const copyDocumentAcknowledged = session.get(`copyDocumentAcknowledged-${documentNumber}`) === "Y";
+  const copyDocumentNumber = session.get(`documentNumber-${documentNumber}`);
+  const voidOriginalVal = session.get(`voidOriginal-${documentNumber}`);
+  const voidDocumentConfirm = voidOriginalVal ? voidOriginalVal === true : false;
   const completedDocument = await getCompletedDocument(bearerToken, documentNumber);
   if (completedDocument?.documentStatus === "COMPLETE") {
     return redirect(`/create-non-manipulation-document/non-manipulation-documents`);
@@ -83,6 +97,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       storageDocument,
       exporter,
       csrf,
+      copyDocumentAcknowledged,
+      copyDocumentNumber,
+      voidDocumentConfirm,
     }),
     {
       headers: {
@@ -98,8 +115,41 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   CheckYourInformationPSSDAction(request, params, "storageNotes");
 
 const CheckYourInformation = () => {
+  const location = useLocation();
+  const url = new URLSearchParams(location.search);
+  const backUriFromQuery = url.get("backUri");
+
   const { t } = useTranslation(["common", "sdCheckYourInformation", "transportation", "progress"]);
-  const { documentNumber, storageDocument, exporter, csrf } = useLoaderData<loaderProps>();
+  const {
+    documentNumber,
+    storageDocument,
+    exporter,
+    csrf,
+    copyDocumentAcknowledged,
+    copyDocumentNumber,
+    voidDocumentConfirm,
+  } = useLoaderData<loaderProps>();
+
+  const copiedFromDocumentNumber = copyDocumentNumber || documentNumber;
+  const hasCopiedDraftContext = copyDocumentAcknowledged || Boolean(copyDocumentNumber);
+  const backUrl = backUriFromQuery
+    ? route(
+        "/create-non-manipulation-document/:documentNumber/progress?backUri=" + encodeURIComponent(backUriFromQuery),
+        { documentNumber }
+      )
+    : voidDocumentConfirm
+      ? route("/create-non-manipulation-document/:documentNumber/progress", { documentNumber })
+      : route(
+          "/create-non-manipulation-document/:documentNumber/progress?backUri=" +
+            (hasCopiedDraftContext
+              ? route("/create-non-manipulation-document/:documentNumber/copy-this-non-manipulation-document", {
+                  documentNumber: copiedFromDocumentNumber,
+                })
+              : route("/create-non-manipulation-document/:documentNumber/departure-product-summary", {
+                  documentNumber,
+                })),
+          { documentNumber }
+        );
   const errors: IValidationError[] = useActionData<IValidationError[]>() ?? [];
   const hasErrors: boolean = Array.isArray(errors) && errors?.length > 0;
   const notificationMessages: string[] = [];
@@ -139,7 +189,7 @@ const CheckYourInformation = () => {
       notificationMessages={notificationMessages}
       hasErrors={hasErrors}
       errors={errors}
-      backUrl={`/create-non-manipulation-document/:documentNumber/progress`}
+      backUrl={backUrl}
       summaryHeading="sdSummaryPageHeading"
       headingTranslation="sdCheckYourInformation"
       checkInformationHeader="sdSummaryPageDocumentDetailsHeader"

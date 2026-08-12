@@ -613,11 +613,14 @@ const CatchAdded = () => {
               })} ${productDescription}`}
             </h2>
           )}
-          <div className="govuk-warning-text govuk-!-margin-bottom-4" data-testid="warning-message">
+          <div className="govuk-warning-text govuk-!-margin-bottom-4" data-testid="warning-message" role="note">
             <span className="govuk-warning-text__icon" aria-hidden="true">
               !
             </span>
             <strong className="govuk-warning-text__text">
+              <span className="govuk-warning-text__assistive govuk-visually-hidden">
+                {t("commonWarning", { ns: "common" })}
+              </span>
               {t("editProductInformationMessage", { ns: "catchAdded" })}
             </strong>
           </div>

@@ -266,6 +266,7 @@ const IssuingCountryField: React.FC<{
       errorMessageText={errorMessage}
       defaultValue={defaultValue}
       options={countryOptions}
+      searchHandler={(query, opts) => (opts as string[]).filter((o) => o.toLowerCase().includes(query.toLowerCase()))}
       onSelected={(country) => setSelectedIssuingCountry(country)}
       optionsId="issuing-country-option"
       containerClassName={classNames("govuk-form-group", {

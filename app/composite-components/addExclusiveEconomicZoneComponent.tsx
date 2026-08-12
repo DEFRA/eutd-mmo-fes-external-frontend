@@ -1,6 +1,6 @@
 import { Button, BUTTON_TYPE, Details } from "@capgeminiuk/dcx-react-library";
 import type { ICountry, IError, IErrorsTransformed } from "~/types";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { AutocompleteFormField } from "~/components";
 import classNames from "classnames";
 import isEmpty from "lodash/isEmpty";
@@ -148,7 +148,7 @@ export const AddExclusiveEconomicZoneComponent = ({
       {exclusiveEconomicZones.map((zone: string, index: number) => {
         const errorForIndex = getErrorForIndex(index);
         return (
-          <>
+          <Fragment key={zone}>
             <div
               className={`${isEmpty(errorForIndex) ? "govuk-button-group" : "govuk-button-group govuk-form-group--error"} supporting-document-row`}
             >
@@ -189,7 +189,7 @@ export const AddExclusiveEconomicZoneComponent = ({
               {showRemoveZoneButton(exclusiveEconomicZones, index)}
             </div>
             {showAddZoneButton(exclusiveEconomicZones, index)}
-          </>
+          </Fragment>
         );
       })}
       <Details

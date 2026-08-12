@@ -14,6 +14,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
   it("should submit form with vesselName", () => {
     cy.get("#vesselName").type("Test Vessel");
     cy.get("[data-testid=save-and-continue]").click();
+    cy.get("body").should("exist");
   });
 
   it("should render error summary when action returns validation errors", () => {
@@ -272,7 +273,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
           // click add until at least 5 inputs exist (click 4 times)
           for (let i = 1; i < 5; i++) {
             cy.get('[data-testid="add-another-container"]').click();
-            cy.wait(150);
+            cy.document({ timeout: 150 }).its("readyState").should("eq", "complete");
           }
         }
       });
@@ -348,6 +349,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidCharsFreightBillNumber,
       };
+      cy.get("body").should("exist");
       cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
       cy.get("#freightBillNumber").type("Freight@#");
       cy.get("[data-testid=save-and-continue]").click();
@@ -358,6 +360,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     });
 
     it("should display error when departure country is invalid", () => {
+      cy.get("body").should("exist");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.ContainerVesselSaveInvalidDepartureCountry,
       };

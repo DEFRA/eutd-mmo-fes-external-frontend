@@ -381,21 +381,14 @@ const getErrorMessage = (errors: any, fieldKey: string, t: any) =>
 const getErrorClassName = (errors: any, fieldKey: string) =>
   hasError(errors, fieldKey) ? "govuk-form-group--error" : "";
 
-const hasSpeciesError = (errors: any, speciesKey: string): boolean =>
-  Object.keys(errors).some((key) => key.startsWith(speciesKey));
+const hasProductError = (errors: any, productKey: string): boolean => Object.keys(errors).includes(productKey);
 
-const getSpeciesErrorMessage = (
-  errors: any,
-  productKey: string,
-  speciesKey: string,
-  isHydrated: boolean,
-  t: any
-): string => {
-  if (isHydrated || (!isHydrated && errors?.[productKey]?.message)) {
+const getSpeciesErrorMessage = (errors: any, productKey: string, isHydrated: boolean, t: any): string => {
+  if (isHydrated) {
     return t(errors?.[productKey]?.message, { ns: "errorsText" });
   }
   const allErrors = transformedErrors(errors);
-  const keysAndValues = getKeysAndValues(allErrors, speciesKey);
+  const keysAndValues = getKeysAndValues(allErrors, productKey);
   return t(keysAndValues?.key, { dynamicValue: keysAndValues?.value, ns: "errorsText" });
 };
 
@@ -477,7 +470,6 @@ const AddProductIndex = () => {
 
   const commodityCodeKey = `catches-${productIndex}-commodityCode`;
   const productKey = `catches-${productIndex}-product`;
-  const speciesKey = "catches-species";
   const weightKey = `catches-${productIndex}-weightOnCC`;
   const certificateTypeKey = `catches-${productIndex}-certificateType`;
   const issuingCountryKey = `catches-${productIndex}-issuingCountry`;
@@ -500,8 +492,8 @@ const AddProductIndex = () => {
   }, [isHydrated]);
 
   const allErrors = transformedErrors(errors);
-  const hasCatchesSpeciesError = hasSpeciesError(errors, speciesKey);
-  const getErrorMessageForSpecies = () => getSpeciesErrorMessage(errors, productKey, speciesKey, isHydrated, t);
+  const hasCatchesSpeciesError = hasProductError(errors, productKey);
+  const getErrorMessageForSpecies = () => getSpeciesErrorMessage(errors, productKey, isHydrated, t);
 
   const initialSupportingDocs =
     !isEmpty(errors) && submittedFormData.supportingDocuments !== undefined
@@ -914,7 +906,10 @@ const AddProductIndex = () => {
                   })}
                   inputProps={{
                     defaultValue: getFormValue("species", catchDetails?.product ?? ""),
-                    id: Object.keys(allErrors)[0],
+                    id: productKey,
+                    className: classNames("govuk-input", {
+                      "govuk-input--error": errors?.[productKey]?.message,
+                    }),
                   }}
                   hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
                   hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
@@ -967,6 +962,9 @@ const AddProductIndex = () => {
                 id: productDescriptionKey,
                 defaultValue: getFormValue("productDescription", catchDetails?.productDescription),
                 "aria-describedby": `${productDescriptionKey}-hint`,
+                className: classNames("govuk-input", {
+                  "govuk-input--error": errors?.[productDescriptionKey]?.message,
+                }),
               }}
               data-testid="productDescription"
               errorProps={getErrorProps(errors, productDescriptionKey)}

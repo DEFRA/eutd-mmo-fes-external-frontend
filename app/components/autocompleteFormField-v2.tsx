@@ -1,7 +1,8 @@
-import { Autocomplete, AutoCompleteErrorPosition } from "@capgeminiuk/dcx-react-library";
+import { Autocomplete, type AutoCompleteErrorPosition } from "@capgeminiuk/dcx-react-library";
 import { useTranslation } from "react-i18next";
 import type { Species } from "~/types";
 import React, { type ReactElement } from "react";
+import { getAutocompleteStatusText, getResolvedAutocompleteProps } from "~/components/autocompleteFormField-v2.helpers";
 
 type AutocompleteFormFieldProps = {
   id: string;
@@ -38,6 +39,8 @@ type AutocompleteFormFieldProps = {
   customNonJSComp?: ReactElement;
 };
 
+export { getAutocompleteStatusText, getResolvedAutocompleteProps } from "~/components/autocompleteFormField-v2.helpers";
+
 export const AutocompleteFormField = ({
   id,
   name,
@@ -71,17 +74,23 @@ export const AutocompleteFormField = ({
 }: AutocompleteFormFieldProps) => {
   const { t } = useTranslation("common");
   const [status, setStatus] = React.useState("");
-  const listboxId = `${id}__listbox`;
+  const resolvedProps = getResolvedAutocompleteProps({
+    id,
+    notFoundText,
+    containerClassName,
+    errorPosition,
+    errorMessageClassName,
+    labelClassName,
+    hintClass,
+    inputProps,
+    defaultValue,
+    resultUlClass,
+    resultlLiClass,
+    resultNoOptionClass,
+    t,
+  });
   const change = (length: number, property: string, position: number) => {
-    let newText = "";
-    if (length === 0) {
-      newText = notFoundText ?? t("commonNoResultsFound");
-    } else if (length === 1) {
-      newText = t("autocompleteSingleResult", { length, property, position, ns: "accessibility" });
-    } else if (length > 0) {
-      newText = t("autocompleteMultipleResults", { length, property, position, ns: "accessibility" });
-    }
-    setStatus(newText);
+    setStatus(getAutocompleteStatusText({ length, property, position, notFoundText, t }));
   };
 
   return (
@@ -92,30 +101,25 @@ export const AutocompleteFormField = ({
       id={id}
       name={name}
       options={options}
-      notFoundText={notFoundText ?? t("commonNoResultsFound")}
-      containerClassName={containerClassName ?? "govuk-form-group"}
+      notFoundText={resolvedProps.notFoundText}
+      containerClassName={resolvedProps.containerClassName}
       errorId={errorId}
-      errorPosition={errorPosition ?? AutoCompleteErrorPosition.AFTER_HINT}
+      errorPosition={resolvedProps.errorPosition}
       errorMessageText={errorMessageText}
-      errorMessageClassName={errorMessageClassName ?? "govuk-error-message"}
+      errorMessageClassName={resolvedProps.errorMessageClassName}
       defaultValue={defaultValue}
       labelText={labelText}
-      labelClassName={labelClassName ?? "govuk-label"}
+      labelClassName={resolvedProps.labelClassName}
       labelProps={{ id: `${id}-label` }}
       hintText={hintText}
-      hintClass={hintClass ?? "govuk-hint"}
+      hintClass={resolvedProps.hintClass}
       hintId={`${id}-hint`}
       selectProps={selectProps}
-      resultId={listboxId}
-      inputProps={{
-        // Ensure tests and controlled inputs always have a defined value/defaultValue
-        defaultValue: inputProps?.defaultValue ?? inputProps?.value ?? defaultValue ?? "",
-        ...inputProps,
-        "aria-controls": listboxId,
-      }}
-      resultUlClass={resultUlClass ?? "autocomplete__menu"}
-      resultlLiClass={resultlLiClass ?? "autocomplete__option"}
-      resultNoOptionClass={resultNoOptionClass ?? "autocomplete__option--no-results"}
+      resultId={resolvedProps.listboxId}
+      inputProps={resolvedProps.inputProps}
+      resultUlClass={resolvedProps.resultUlClass}
+      resultlLiClass={resolvedProps.resultlLiClass}
+      resultNoOptionClass={resolvedProps.resultNoOptionClass}
       onSelected={onSelected}
       promptId={promptId}
       promptMessage={promptMessage}

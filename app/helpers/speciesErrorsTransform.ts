@@ -34,9 +34,9 @@ export const getKeysAndValues = (obj: any, prefix: string) => {
     value: "",
   };
   Object.keys(obj).forEach((key) => {
-    if (key.startsWith(prefix)) {
+    if (key === prefix) {
       result["key"] = obj[key].message;
-      result["value"] = obj[key].value ? obj[key].value.dynamicValue.split(",").join(", ") : null;
+      result["value"] = obj[key].value ? obj[key].value.dynamicValue.replaceAll(",", ", ") : null;
     }
   });
   return result;

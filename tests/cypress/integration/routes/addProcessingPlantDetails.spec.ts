@@ -29,7 +29,12 @@ describe("Add Processing Plant Details", () => {
   it("will have an alert text at the top of the page", () => {
     cy.get("[data-testid=warning-message]")
       .should("be.visible")
+      .should("have.attr", "role", "note")
       .contains("An address must be added for this processing plant.");
+  });
+
+  it("will have visually hidden assistive text for screen readers in the warning message (WCAG 1.3.1)", () => {
+    cy.get("[data-testid=warning-message]").find(".govuk-visually-hidden").should("contain", "Warning");
   });
 
   it("will display label names for all inputs", () => {
@@ -70,6 +75,7 @@ describe("Add Processing Plant Details return error response if the back end ret
     cy.visit(psDetailsUrl, { qs: { ...testParams } });
 
     cy.get("[data-testid=save-and-continue").click();
+    cy.get("body").should("exist");
   });
 
   it("should not render duplicate id attributes when validation errors are shown", () => {

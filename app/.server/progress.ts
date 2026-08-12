@@ -161,17 +161,22 @@ export const progressPageLoader = async (request: Request, params: Params, journ
   const voidDocumentConfirm = session.get(`voidOriginal-${documentNumber}`)
     ? session.get(`voidOriginal-${documentNumber}`) === true
     : session.get(`copyVoidDocument-${documentNumber}`) === "voidDocumentConfirm";
+
+  // Consume copy acknowledgement after first progress render for journeys
+  // that can revisit progress via in-journey section navigation.
+  if (
+    (journey === "catchCertificate" || journey === "storageNotes" || journey === "processingStatement") &&
+    copyDocumentAcknowledged
+  ) {
+    session.unset(`copyDocumentAcknowledged-${documentNumber}`);
+  }
+
   session.unset("exporterCompanyName");
   if (journey === "catchCertificate") {
     session.unset("exporterFullName");
     session.unset("exporterCompanyName");
   }
 
-  session.unset(`copyDocumentAcknowledged-${documentNumber}`);
-  session.unset(`copyDocument-${documentNumber}`);
-  session.unset(`documentNumber-${documentNumber}`);
-  session.unset(`voidOriginal-${documentNumber}`);
-  session.unset(`copyVoidDocument-${documentNumber}`);
   let objectToReturn: any = {
     documentNumber,
     progress,
@@ -244,6 +249,8 @@ export const progressAction = async (
   journey: Journey
 ): Promise<Response | ErrorResponse> => {
   const { documentNumber } = params;
+  const requestUrl = new URL(request.url);
+  const backUri = requestUrl.searchParams.get("backUri");
   const bearerToken = await getBearerTokenForRequest(request);
   const form = await request.formData();
   const isValid = await validateCSRFToken(request, form);
@@ -277,6 +284,10 @@ export const progressAction = async (
         documentNumber,
       });
       break;
+  }
+
+  if (backUri) {
+    checkInfoRoute = `${checkInfoRoute}?backUri=${encodeURIComponent(backUri)}`;
   }
 
   if (form.get("_action") === "returnToDashboard") return redirect(returnToDashboardRoute, headers);

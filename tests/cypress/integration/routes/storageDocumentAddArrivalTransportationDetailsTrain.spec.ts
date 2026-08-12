@@ -15,7 +15,7 @@ describe("Add Transportation Details Train: Allowed", () => {
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-arrive-to-the-uk`);
     cy.get(".govuk-heading-xl").contains("Train arriving in the UK");
-    cy.wait(250);
+    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.get("form").should(($form) => {
       expect($form.find("input[type='text']")).to.have.lengthOf(6);
 
@@ -145,7 +145,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     );
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.wait(250);
+    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Place of unloading must not exceed 50 characters$/).should("be.visible");
   });

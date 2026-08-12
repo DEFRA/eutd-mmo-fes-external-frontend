@@ -130,7 +130,14 @@ export const WhatExportJourneyAction = async (request: Request, params: Params):
 
   // For direct landing journey, redirect to progress page
   if (landingsEntryOption === "directLanding" || !isEmpty(body.get("nextUri"))) {
-    return redirect(route("/create-catch-certificate/:documentNumber/progress", { documentNumber }));
+    const backUri = route("/create-catch-certificate/:documentNumber/what-export-journey", {
+      documentNumber,
+    });
+    return redirect(
+      `${route("/create-catch-certificate/:documentNumber/progress", {
+        documentNumber,
+      })}?backUri=${encodeURIComponent(backUri)}`
+    );
   }
 
   // For manual entry, redirect to how-does-the-export-leave-the-uk

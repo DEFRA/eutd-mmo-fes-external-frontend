@@ -1,6 +1,10 @@
 ---
 name: unit-tests
 description: 'Expert test engineer for MMO FES External Frontend. Use when: writing Cypress E2E tests, creating MSW handlers, setting up test fixtures, improving code coverage, fixing SonarQube issues.'
+license: OGL-UK-3.0
+metadata:
+  author: mmo-fes
+  version: "1.0"
 ---
 
 # External Frontend — Unit Tests Skill
@@ -17,7 +21,7 @@ Expert in Cypress E2E + MSW API mocking + Istanbul code coverage for the Remix S
 
 ## Coverage Requirements
 
-- **Overall target**: >90% coverage
+- **Tiered targets**: ≥90% global (Statements/Branches/Functions/Lines), ≥95% core business logic, 100% error-handling and security-critical paths — never drop below the project or SonarCloud baseline
 - Instrumented build required before testing: `npm run pre:test:start`
 - Start test server: `npm run :test:start`
 - Run all tests: `npm run :test:all`

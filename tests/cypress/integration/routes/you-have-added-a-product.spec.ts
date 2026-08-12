@@ -66,6 +66,7 @@ describe("SD: you-have-added-product page", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.get(".govuk-heading-xl").contains("You have added 2 products to this consignment");
     cy.contains("button", "Remove").click();
+    cy.get("body").should("exist");
   });
 
   it("Edit a product", () => {
@@ -86,13 +87,31 @@ describe("SD: you-have-added-product page", () => {
       testCaseId: TestCaseId.SDYouHaveAddedAProduct,
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
-    cy.wait(500);
+    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get('[type="radio"]').first().should("exist");
     cy.get('[type="radio"]').first().check();
     cy.get('[type="radio"]').first().should("be.checked");
-    cy.wait(200);
+    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
     cy.contains("button", "Save and continue").click();
     cy.url({ timeout: 10000 }).should("include", "/add-product-to-this-consignment");
+  });
+
+  it("should keep the remove and add-another flow stable after removing a product", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDYouHaveAddedAProduct,
+    };
+
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+    cy.get("tbody.govuk-table__body tr.govuk-table__row").should("have.length", 2);
+
+    cy.get('[data-testid="remove-button"]').first().click();
+    cy.get("tbody.govuk-table__body tr.govuk-table__row").should("have.length", 1);
+
+    cy.get("#addAnotherProduct").check();
+    cy.contains("button", "Save and continue").click();
+
+    cy.url().should("include", "/add-product-to-this-consignment/");
+    cy.contains("a", /^Back$/).should("exist");
   });
 
   it("should allow continuing if the catch is valid", () => {
@@ -116,6 +135,7 @@ describe("SD: you-have-added-product page", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
     cy.contains("button", "Save and continue").click();
+    cy.get("body").should("exist");
   });
 
   // Error handling coverage tests
@@ -153,7 +173,7 @@ describe("SD: you-have-added-product page", () => {
       });
     });
 
-    it("should create error summary with linkData navigation for product errors (component lines 132-136)", () => {
+    it("should render error summary with anchor links for product errors (component lines 132-136)", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDProductAddedInvalid,
       };
@@ -162,32 +182,25 @@ describe("SD: you-have-added-product page", () => {
       // Submit to trigger errors
       cy.contains("button", "Save and continue").click();
 
-      cy.wait(1000);
+      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
 
-      // Check if error summary exists, if so verify its structure
-      cy.get("body").then(($body) => {
-        if ($body.find("#errorIsland").length > 0) {
-          // Verify error summary is rendered
-          cy.get("#errorIsland").should("exist");
-          cy.get(".govuk-error-summary").should("be.visible");
+      // Error summary should render for the invalid product
+      cy.get("#errorIsland").should("exist");
+      cy.get(".govuk-error-summary").should("be.visible");
 
-          cy.get('.govuk-error-summary__list a[href*="/add-product-to-this-consignment/"]')
-            .first()
-            .should("have.attr", "href")
-            .then((href) => {
-              expect(href).to.include("/add-product-to-this-consignment/");
-              expect(href).not.to.include("#");
+      // The page does not pass linkData, so every error link is a #errorKey anchor
+      cy.get(".govuk-error-summary__list a")
+        .first()
+        .should("have.attr", "href")
+        .then((href) => {
+          expect(href).to.match(/^#/);
+          expect(href).not.to.include("/add-product-to-this-consignment/");
+        });
 
-              cy.get('.govuk-error-summary__list a[href*="/add-product-to-this-consignment/"]').first().click();
-              cy.url().should("include", href);
-            });
-        } else {
-          // If no error summary, verify the page hasn't navigated (which would indicate validation passed)
-          cy.url().should("include", "/you-have-added-a-product");
-          // This tests the renderErrorSummary function's conditional logic that returns null when no errors
-          cy.log("No error summary rendered - renderErrorSummary returned null as expected when no errors for index");
-        }
-      });
+      // Clicking an anchor link must not navigate away from the page
+      cy.get('.govuk-error-summary__list a[href^="#"]').first().click();
+      cy.url().should("include", "/you-have-added-a-product");
+      cy.url().should("not.include", "/add-product-to-this-consignment/");
     });
   });
 
@@ -605,7 +618,7 @@ describe("SD: you-have-added-product page", () => {
       // Verify 'No' radio is checked by default
       cy.get("#addAnotherCatchNo").should("not.be.checked");
       cy.get("#addAnotherProduct").should("not.be.checked");
-      cy.wait(200);
+      cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
       cy.contains("button", "Save and continue").click();
       cy.get("body").then(($body) => {
         if ($body.find("#errorIsland").length > 0) {
@@ -626,7 +639,7 @@ describe("SD: you-have-added-product page", () => {
       // Verify 'No' radio is checked by default
       cy.get("#addAnotherCatchNo").should("not.be.checked");
       cy.get("#addAnotherProduct").should("not.be.checked");
-      cy.wait(200);
+      cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
       cy.contains("button", "Save and continue").click();
       cy.get("body").then(($body) => {
         if ($body.find("#errorIsland").length > 0) {

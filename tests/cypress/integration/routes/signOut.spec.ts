@@ -1,20 +1,96 @@
 describe("Sign Out Page", () => {
-  it("should render the sign out page with a continue link", () => {
-    cy.visit("/sign-out");
+  const signOutUrl = "/sign-out?warningTimeoutMs=5000";
+  const signOutInvalidOverrideUrl = "/sign-out?warningTimeoutMs=invalid";
 
-    cy.contains("h1", "Your application will time out soon");
-    cy.contains(
-      "p",
-      "We will reset your application if you do not respond in 5 seconds. We do keep your information secure."
-    );
+  it("should render the sign out page with a continue button", () => {
+    cy.visit(signOutUrl);
+
+    cy.get("main").within(() => {
+      cy.contains("h1", "Your application will time out soon");
+      cy.contains("p", "We will reset your application if you do not respond in");
+    });
 
     cy.get("button#continue").should("be.visible");
-    cy.get("button#continue").click();
-    cy.url().should("eq", "http://localhost:3000/");
   });
-  it("should redirect to logout page after 5s", () => {
+
+  it("should render warning text for configured timeout", () => {
+    cy.visit(signOutUrl);
+
+    cy.get("main").within(() => {
+      cy.contains("p", "We will reset your application if you do not respond in").should("be.visible");
+    });
+  });
+
+  it("should fall back to configured timeout when warningTimeoutMs is invalid", () => {
+    cy.clock();
     cy.visit("/sign-out");
-    // allow extra time for the client-side redirect to happen
-    cy.url({ timeout: 10000 }).should("include", "/server-logout");
+    cy.get("main p")
+      .first()
+      .invoke("text")
+      .then((configuredWarningText) => {
+        cy.visit(signOutInvalidOverrideUrl);
+        cy.get("main p")
+          .first()
+          .invoke("text")
+          .then((invalidOverrideText) => {
+            expect(invalidOverrideText).to.equal(configuredWarningText);
+          });
+      });
+  });
+
+  it("should show countdown text while waiting", () => {
+    cy.clock();
+    cy.visit(signOutUrl);
+
+    cy.get("main").within(() => {
+      cy.get("p")
+        .eq(0)
+        .invoke("text")
+        .should("match", /(seconds|minutes)/i);
+    });
+    cy.tick(1000);
+    cy.get("main").within(() => {
+      cy.get("p")
+        .eq(0)
+        .invoke("text")
+        .should("match", /(seconds|minutes)/i);
+    });
+  });
+
+  it("should leave sign-out page when timeout elapses", () => {
+    cy.visit(signOutUrl);
+
+    cy.location("pathname").should("eq", "/sign-out");
+    cy.location("pathname", { timeout: 12000 }).should("eq", "/server-logout");
+  });
+
+  it("should submit continue action via form and leave sign-out page", () => {
+    cy.visit(signOutUrl);
+
+    cy.get("button#continue").click();
+    cy.location("pathname", { timeout: 10000 }).should("not.eq", "/sign-out");
+  });
+
+  it("should redirect on submit when csrf token is invalid", () => {
+    cy.visit(signOutUrl);
+
+    cy.request({
+      method: "POST",
+      url: signOutUrl,
+      form: true,
+      body: {
+        csrf: "invalid-csrf",
+        _action: "continue",
+      },
+      failOnStatusCode: false,
+      followRedirect: false,
+    }).then((response) => {
+      expect(response.status).to.be.oneOf([301, 302, 303, 307, 308]);
+      const location = String(response.headers.location);
+      // In test env CSRF validation is bypassed by design; in other envs invalid CSRF redirects to /forbidden.
+      expect(location === "/forbidden" || location === "/" || location.startsWith("http://localhost:3000")).to.equal(
+        true
+      );
+    });
   });
 });

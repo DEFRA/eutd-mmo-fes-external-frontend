@@ -55,6 +55,24 @@ describe("Add consignment details page", () => {
     cy.get("a").contains("Enter a description of the product");
     cy.get(".govuk-error-message").contains("Enter a description of the product");
   });
+
+  it("should show a commodity code error when special characters are entered", () => {
+    cy.get("#commodityCode").type("!@#$%^&*()");
+    cy.get("[data-testid*='save-and-continue'").eq(0).click();
+    cy.url().should("include", "/add-consignment-details");
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("a").contains("Select a commodity code");
+    cy.get(".govuk-error-message").contains("Select a commodity code");
+  });
+
+  it("should show a commodity code error when typed text includes a valid code with tampered label", () => {
+    cy.get("#commodityCode").type('03034512 - Frozen Atlantic bluefin tuna @@"Thunnus thynnus"');
+    cy.get("[data-testid*='save-and-continue'").eq(0).click();
+    cy.url().should("include", "/add-consignment-details");
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("a").contains("Select a commodity code");
+    cy.get(".govuk-error-message").contains("Select a commodity code");
+  });
 });
 
 describe("Add consignment details when updating product description", () => {
@@ -172,6 +190,22 @@ describe("Add consignment details: save consignment details", () => {
     cy.get("a").contains("Enter at least one product");
     cy.get(".govuk-error-message").contains("Enter at least one product");
   });
+
+  it("will stay on page and show commodity code error for tampered commodity label", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddConsignmentDetails,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get("#consignmentDescription").type("{selectall}Frozen tuna portions");
+    cy.get("#commodityCode").type('{selectall}03034512 - Frozen Atlantic bluefin tuna @@"Thunnus thynnus"');
+    cy.get("[data-testid=save-and-continue]").click();
+
+    cy.url().should("include", "/add-consignment-details");
+    cy.url().should("not.include", "/add-catch-details");
+    cy.contains(".govuk-error-message", "Select a commodity code").should("be.visible");
+  });
 });
 
 describe("Add consignment details: edit mode scenarios", () => {
@@ -189,6 +223,7 @@ describe("Add consignment details: edit mode scenarios", () => {
 
     cy.get('[data-testid="warning-message"]')
       .should("be.visible")
+      .should("have.attr", "role", "note")
       .should("contain.text", "To edit or remove species from this product, press save and continue.");
   });
 
@@ -201,6 +236,7 @@ describe("Add consignment details: edit mode scenarios", () => {
 
     cy.get('[data-testid="warning-message"]')
       .should("be.visible")
+      .should("have.attr", "role", "note")
       .should("contain.text", "You must add one processed product at a time.")
       .should("not.contain.text", "To edit or remove species");
   });
@@ -248,6 +284,7 @@ describe("Add consignment details: edit mode scenarios", () => {
 
     cy.get('[data-testid="warning-message"]')
       .should("be.visible")
+      .should("have.attr", "role", "note")
       .should("contain.text", "I olygu neu dynnu rhywogaethau o'r cynnyrch hwn, pwyswch cadw a pharhau.");
 
     cy.get('[data-testid="remove-product-button"]').should("be.visible").should("contain.text", "Tynnwch y cynnyrch");
@@ -263,6 +300,7 @@ describe("Add consignment details: edit mode scenarios", () => {
 
     cy.get('[data-testid="warning-message"]')
       .should("be.visible")
+      .should("have.attr", "role", "note")
       .should("contain.text", "To edit or remove species from this product");
 
     cy.get('[data-testid="remove-product-button"]').should("be.visible").should("have.attr", "type", "submit");
@@ -280,6 +318,37 @@ describe("Add consignment details: edit mode scenarios", () => {
 
     // Should redirect to remove product page
     cy.url().should("include", `/remove-product/${productId}`);
+  });
+
+  it("should show validation errors on the edit page when save and continue is clicked", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddConsignmentDetails,
+    };
+
+    cy.visit(editPageUrl, { qs: { ...testParams } });
+
+    cy.get("[data-testid=save-and-continue]").click();
+    cy.url().should("include", `/add-consignment-details/${productId}`);
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("a").contains("Select a commodity code");
+    cy.get(".govuk-error-message").contains("Select a commodity code");
+    cy.get("a").contains("Enter a description of the product");
+    cy.get(".govuk-error-message").contains("Enter a description of the product");
+  });
+
+  it("should show a commodity code error on the edit page when special characters are entered", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddConsignmentDetails,
+    };
+
+    cy.visit(editPageUrl, { qs: { ...testParams } });
+
+    cy.get("#commodityCode").type("{selectall}!@#$%^&*()");
+    cy.get("[data-testid=save-and-continue]").click();
+    cy.url().should("include", `/add-consignment-details/${productId}`);
+    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("a").contains("Select a commodity code");
+    cy.get(".govuk-error-message").contains("Select a commodity code");
   });
 });
 
