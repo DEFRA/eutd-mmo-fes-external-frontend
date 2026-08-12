@@ -265,7 +265,7 @@ describe("should display the notificationBanner", () => {
     cy.visit("create-non-manipulation-document/GBR-2022-SD-F71D98A30/copy-this-non-manipulation-document", {
       qs: { ...testParams },
     });
-    cy.waitForUiUpdate(250);
+    cy.get("#voidOriginal").should("be.visible");
     cy.get("#voidOriginal").click();
     cy.get("#copyDocumentAcknowledged").click();
     cy.get('[data-testid="continue"]').click();

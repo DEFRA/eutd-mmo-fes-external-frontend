@@ -22,6 +22,28 @@ declare global {
        * @example cy.waitForUiUpdate(500)
        */
       waitForUiUpdate(timeout?: number): Chainable<void>;
+
+      /**
+       * Waits for document.readyState to equal "complete" within the given timeout.
+       * Use after interactions that trigger navigation or DOM re-renders.
+       * @example cy.waitForPage()
+       * @example cy.waitForPage(2000)
+       */
+      waitForPage(timeout?: number): Chainable<void>;
+
+      /**
+       * Waits for full page hydration using semantic visibility assertions.
+       * Preferred over waitForPage for post-navigation or post-submit checks.
+       * @example cy.waitForHydration()
+       * @example cy.waitForHydration(3000)
+       */
+      waitForHydration(timeout?: number): Chainable<void>;
+
+      /**
+       * Selects the first option with a non-empty value from a <select> element.
+       * @example cy.selectFirstNonEmptyOption('#gearType')
+       */
+      selectFirstNonEmptyOption(selector: string): Chainable<void>;
     }
   }
 }

@@ -348,7 +348,7 @@ describe("CC: Entering the address manually with errors", () => {
       .and("contain.text", "Select a country from the list");
   });
 });
-//I skipped these tests as they are flaky in CI/CD
+// Address lookup is fully mocked via CCExporterSelectAddress handler
 describe("CC: On Selected Address", () => {
   it("should populate selected address into form", () => {
     const testParams: ITestParams = {

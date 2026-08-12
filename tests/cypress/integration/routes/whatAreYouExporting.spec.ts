@@ -4,8 +4,6 @@ const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
 const productsUrl = `${documentUrl}/what-are-you-exporting`;
 const landingsUrl = `${documentUrl}/landings-entry`;
 
-const waitForPage = (timeout = 1000) => cy.document({ timeout }).its("readyState").should("eq", "complete");
-
 const selectFirstAutocompleteOption = (fallbackValue = "Albacore", timeout = 500) => {
   const ensureSpeciesHasValue = () => {
     cy.get("#species").then(($species) => {
@@ -31,30 +29,30 @@ const selectFirstAutocompleteOption = (fallbackValue = "Albacore", timeout = 500
       cy.get("#species").should("be.visible").and("not.be.disabled").clear();
       cy.get("#species").should("be.visible").and("not.be.disabled").type(fallbackValue);
     });
-    waitForPage(timeout);
+    cy.waitForHydration(timeout);
   };
 
   cy.get("body").then(($body) => {
     if ($body.find(".autocomplete__option").length > 0) {
       cy.get(".autocomplete__option:visible").first().should("be.visible").click();
-      waitForPage(timeout);
+      cy.waitForHydration(timeout);
       return;
     }
 
     if ($body.find('[role="option"]').length > 0) {
       cy.get('[role="option"]:visible').first().should("be.visible").click();
-      waitForPage(timeout);
+      cy.waitForHydration(timeout);
       return;
     }
 
     if ($body.find("#species option").length > 1) {
       cy.get("#species").select(1);
-      waitForPage(timeout);
+      cy.waitForHydration(timeout);
       return;
     }
 
     cy.get("#species").should("be.visible").and("not.be.disabled").type("{enter}");
-    waitForPage(timeout);
+    cy.waitForHydration(timeout);
   });
 
   cy.get("#species")
@@ -660,7 +658,7 @@ describe("What are you exporting page: Tab interaction and handleTab function", 
     cy.get("[data-testid*='edit-button']").first().trigger("click");
 
     // Verify products tab is active and we scrolled to it
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(500);
     cy.get("#add-products").should("be.visible");
   });
 
@@ -678,7 +676,7 @@ describe("What are you exporting page: Tab interaction and handleTab function", 
     cy.get("[data-testid*='edit-button']").first().should("be.visible").trigger("click");
 
     // Should switch to products tab and scroll to #productsTab
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Allow for scroll animation
+    cy.waitForHydration(500); // Allow for scroll animation
     cy.get("#add-products").should("be.visible");
   });
 });
@@ -889,7 +887,7 @@ describe("What are you exporting page: TabRef and handleTab functionality", () =
     cy.get("[data-testid*='edit-button']").first().click();
 
     // Verify we're back on products tab
-    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(300);
     cy.get("#add-products").should("be.visible");
   });
 
@@ -1050,7 +1048,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
 
     // Select a species and state to populate presentations
     cy.get("#species").invoke("val", "Albacore (ALB)").trigger("change");
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(500);
 
     // Presentation field should exist
     cy.get("#presentation").should("exist");
@@ -1267,7 +1265,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should update presentations when state changes", () => {
       // Edit a product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(1000);
 
       // Get current presentation count
       cy.get("#presentation option")
@@ -1279,7 +1277,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
             .then((stateCount) => {
               if (stateCount > 2) {
                 cy.get("#state").select(1);
-                cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+                cy.waitForHydration(1000);
 
                 // Presentations should be updated by useEffect
                 cy.get("#presentation option").should("exist");
@@ -1293,7 +1291,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should populate commodity codes when presentation is selected", () => {
       // Edit a product with all fields
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(1000);
 
       // Verify commodity codes are populated by useEffect
       cy.get("#commodity_code option").should("have.length.greaterThan", 0);
@@ -1302,7 +1300,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should auto-select commodity code when only one is available", () => {
       // Edit a product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(1000);
 
       // Check if commodity code is auto-selected
       cy.get("#commodity_code option")
@@ -1318,7 +1316,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should update commodity codes when presentation changes", () => {
       // Edit a product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(1000);
 
       // Get current commodity code
       cy.get("#commodity_code").invoke("val");
@@ -1329,7 +1327,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
         .then((count) => {
           if (count > 2) {
             cy.get("#presentation").select(1);
-            cy.document({ timeout: 2000 }).its("readyState").should("eq", "complete");
+            cy.waitForHydration(2000);
 
             // Commodity codes should be updated by useEffect
             cy.get("#commodity_code option").should("exist");
@@ -1355,7 +1353,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should update commodityCodesHolder when commodityCodes prop changes", () => {
       // Edit a product (commodityCodes prop is passed)
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(1000);
 
       // useEffect should populate commodityCodesHolder from commodityCodes prop
       cy.get("#commodity_code option").should("have.length.greaterThan", 0);
@@ -1368,7 +1366,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
         .then(() => {
           // Edit product
           cy.get("[data-testid*='edit-button']").first().click();
-          cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+          cy.waitForHydration(1000);
 
           // useEffect should handle commodityCodes prop even if empty initially
           cy.get("#commodity_code").should("exist");
@@ -1380,11 +1378,11 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should cleanup on cancel action", () => {
       // Edit a product to trigger useEffect hooks
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(1000);
 
       // Cancel triggers navigation and cleanup
       cy.get("[data-testid='cancel']").click();
-      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(500);
 
       // Form should be clean
       cy.get("#species").should("have.value", "");
@@ -1396,7 +1394,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
     it("should maintain state consistency across useEffect executions", () => {
       // Edit product
       cy.get("[data-testid*='edit-button']").first().click();
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(1000);
 
       // Capture initial state
       cy.get("#species").invoke("val").as("originalSpecies");
@@ -1408,7 +1406,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
         .then((count) => {
           if (count > 2) {
             cy.get("#state").select(1);
-            cy.document({ timeout: 2000 }).its("readyState").should("eq", "complete");
+            cy.waitForHydration(2000);
 
             // Species should remain the same (useEffect for presentations shouldn't affect species)
             cy.get("@originalSpecies").then((original) => {
@@ -1432,7 +1430,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     it("should call handleSpeciesSelection when a species is selected from autocomplete", () => {
       // Type into species field to trigger autocomplete
       cy.get("#species").type("Albacore");
-      waitForPage();
+      cy.waitForHydration();
       selectFirstAutocompleteOption("Albacore");
 
       // Verify species was set (setCommonSpecies called)
@@ -1444,7 +1442,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
     it("should handle species selection with special characters", () => {
       // Some species names may have special characters
       cy.get("#species").type("Ray");
-      waitForPage();
+      cy.waitForHydration();
       selectFirstAutocompleteOption("Ray");
 
       // handleSpeciesSelection should work regardless of species name format
@@ -1460,7 +1458,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
       // Test function with different input values to ensure all branches
       speciesNames.forEach((species, index) => {
         cy.get("#species").type(species);
-        waitForPage();
+        cy.waitForHydration();
         selectFirstAutocompleteOption(species, index === speciesNames.length - 1 ? 500 : 300);
 
         // Function should execute successfully for each input

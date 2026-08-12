@@ -3,8 +3,6 @@ const pageUrl = `${documentUrl}/add-catch-details/0`;
 
 import { type ITestParams, TestCaseId } from "~/types";
 
-const waitForPage = () => cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
-
 const setSpecies = (value: string) => {
   cy.get("#catches-0-species", { timeout: 8000 }).then(($el) => {
     if ($el.is("select")) {
@@ -18,7 +16,7 @@ const setSpecies = (value: string) => {
 
 const enableIssuingCountry = () => {
   cy.get('label[for="catchCertificateType-non_uk"]', { timeout: 8000 }).should("be.visible").click();
-  waitForPage();
+  cy.waitForHydration();
 };
 
 const getEnabledIssuingCountryField = () =>
@@ -62,10 +60,10 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    waitForPage();
+    cy.waitForHydration();
 
     setSpecies("Bigeye tuna (BET)");
-    waitForPage();
+    cy.waitForHydration();
 
     enableIssuingCountry();
 
@@ -77,7 +75,7 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     cy.get('input[name="exportWeightAfterProcessing"]').type("4");
 
     cy.get('[data-testid="add-product-details"]').click();
-    waitForPage();
+    cy.waitForHydration();
 
     cy.get('input[name="catchCertificateNumber"]', { timeout: 10000 }).should("have.value", "");
     cy.get("body").then(($body) => {
@@ -99,10 +97,10 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    waitForPage();
+    cy.waitForHydration();
 
     setSpecies("Bigeye tuna (BET)");
-    waitForPage();
+    cy.waitForHydration();
 
     enableIssuingCountry();
 
@@ -120,7 +118,7 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     getEnabledIssuingCountryField().should("have.value", "");
 
     cy.get('[data-testid="add-product-details"]').click();
-    waitForPage();
+    cy.waitForHydration();
 
     cy.get('input[name="issuingCountry"], select[name="issuingCountry"]', { timeout: 2000 }).then(($field) => {
       if ($field.length > 0) {

@@ -1,32 +1,16 @@
 import { type ITestParams, TestCaseId } from "~/types";
+import {
+  PRODUCT_HEADER_FIELDS,
+  LANDING_FIELD_ORDER,
+  findFieldIndex,
+  splitIntoLandingGroups,
+  getProductSectionEndIndex,
+} from "../../../unit/testUtils";
 
 const documentUrl = "/create-catch-certificate/GBR-2022-CC-24F279E85";
 const landingsUrl = `${documentUrl}/landings-entry`;
 const checkYourInformationUrl = `${documentUrl}/check-your-information`;
 const progressUrl = `${documentUrl}/progress`;
-
-// Helper constants for landings field order validation
-const PRODUCT_HEADER_FIELDS = ["species", "state", "presentation", "commodity code"];
-const LANDING_FIELD_ORDER = [
-  "start date",
-  "date landed",
-  "catch area",
-  "high seas area",
-  "exclusive economic zone",
-  "rfmo",
-  "vessel name",
-  "gear category",
-  "gear type",
-  "export weight",
-];
-
-// Helper functions for landings field order validation
-function findFieldIndex(section: string[], field: string): number {
-  for (let i = 0; i < section.length; i++) {
-    if (section[i].includes(field)) return i;
-  }
-  return -1;
-}
 
 function validateHeaderOrder(section: string[]): void {
   let lastH = -1;
@@ -36,20 +20,6 @@ function validateHeaderOrder(section: string[]): void {
     expect(idx, `${h} should come after previous header`).to.be.greaterThan(lastH);
     lastH = idx;
   }
-}
-
-function splitIntoLandingGroups(landingRows: string[]): string[][] {
-  const groups: string[][] = [];
-  let currentGroup: string[] = [];
-  for (const label of landingRows) {
-    currentGroup.push(label);
-    if (label.includes("export weight")) {
-      groups.push(currentGroup);
-      currentGroup = [];
-    }
-  }
-  if (currentGroup.length > 0) groups.push(currentGroup);
-  return groups;
 }
 
 function validateLandingGroup(group: string[], prodIdx: number, lgIndex: number): void {
@@ -64,21 +34,6 @@ function validateLandingGroup(group: string[], prodIdx: number, lgIndex: number)
     expect(idx, `product ${prodIdx} landing ${lgIndex} ${f} should come after previous`).to.be.greaterThan(last);
     last = idx;
   }
-}
-
-function getProductSectionEndIndex(
-  speciesIndices: number[],
-  totalIndex: number,
-  textsLength: number,
-  prodIdx: number
-): number {
-  if (prodIdx + 1 < speciesIndices.length) {
-    return speciesIndices[prodIdx + 1];
-  }
-  if (totalIndex > -1) {
-    return totalIndex;
-  }
-  return textsLength;
 }
 
 function validateProductSection(texts: string[], speciesIndices: number[], totalIndex: number, prodIdx: number): void {

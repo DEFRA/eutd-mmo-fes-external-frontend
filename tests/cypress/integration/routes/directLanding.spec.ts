@@ -5,9 +5,9 @@ const documentNumber = "GBR-2022-CC-6BC952BA3";
 const directLandingUrl = `${documentUrl}/${documentNumber}/direct-landing`;
 const invalidVesselValue = "Invalid123";
 
-const waitForHydration = () => {
-  // if the date pickers are there then we can assume the UI is ready
-  cy.get("button.date-picker").should("be.visible");
+const waitForDatePickerReady = () => {
+  // Wait for the date picker button to be interactive (more specific than generic hydration)
+  cy.get("button.date-picker").should("exist").and("be.visible");
 };
 
 describe("Direct landing page render", () => {
@@ -154,7 +154,7 @@ describe("Direct landing page render", () => {
 
   it("should render the 'Add Another EEZ' button after the last select dropdown", () => {
     cy.get("#eez-0").should("be.visible").and("not.be.disabled");
-    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(250);
     for (let i = 0; i < 2; i++) {
       cy.get("#remove-zone-button").click();
     }
@@ -164,14 +164,14 @@ describe("Direct landing page render", () => {
 
   it("should display 'Remove' and 'Add Another' buttons appropriately depending on selection count", () => {
     cy.get("#eez-0").should("be.visible").and("not.be.disabled");
-    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(250);
     cy.get("#add-zone-button").should("exist");
     cy.get("#add-zone-button .govuk-visually-hidden").should("contain", "exclusive economic zone");
     for (let i = 0; i < 4; i++) {
       cy.get("body").then(($body) => {
         if ($body.find("#add-zone-button").length > 0) {
           cy.get("#add-zone-button").click();
-          cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+          cy.waitForHydration(250);
         }
       });
     }
@@ -188,9 +188,9 @@ describe("Direct landing page render", () => {
 
   it("should correctly display 'Remove' and 'Add Another' buttons based on EEZ selection state", () => {
     cy.get("#eez-0").should("be.visible").and("not.be.disabled");
-    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(300);
     cy.get("#add-zone-button").trigger("click");
-    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(300);
     cy.get("#eez-1").should("exist");
     cy.get("#remove-zone-button").should("exist");
     cy.get("#add-zone-button").should("exist");
@@ -200,9 +200,9 @@ describe("Direct landing page render", () => {
   });
 
   it("should render the add another zone button and click on it", () => {
-    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(300);
     cy.get("#add-zone-button").trigger("click");
-    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(300);
     cy.get("#eez-0").should("have.length", 1);
     cy.get("#eez-1").should("exist");
     cy.get("#remove-zone-button").should("exist");
@@ -212,7 +212,7 @@ describe("Direct landing page render", () => {
   });
 
   it("should correctly render and respond to click on the 'Add Another Zone' button", () => {
-    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(300);
     cy.get("#add-zone-button").should("exist");
     cy.get("#add-zone-button").last().click();
     cy.get("#remove-zone-button").last().should("be.visible");
@@ -220,8 +220,8 @@ describe("Direct landing page render", () => {
   });
 
   it("should remove the last EEZ select field when the 'Remove Zone' button is clicked", () => {
-    waitForHydration();
-    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
+    waitForDatePickerReady();
+    cy.waitForHydration(300);
 
     cy.get('[id^="eez-"]').then(($eez) => {
       const initialCount = $eez.length;
@@ -229,14 +229,14 @@ describe("Direct landing page render", () => {
       if (initialCount >= 3) {
         cy.get("#remove-zone-button").last().should("be.visible");
         cy.get("#remove-zone-button").last().click();
-        cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
+        cy.waitForHydration(200);
       }
 
       cy.get("#add-zone-button").should("be.visible");
       cy.get("#add-zone-button").click();
-      cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(200);
       cy.get("#add-zone-button").click();
-      cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(200);
 
       cy.get("#remove-zone-button").last().should("be.visible");
       cy.get("#remove-zone-button").last().click();
@@ -322,7 +322,7 @@ describe("Direct landing page render", () => {
   });
 
   it("should disable vessel input until date landed is populated", () => {
-    waitForHydration();
+    waitForDatePickerReady();
     cy.get(String.raw`#vessel-vesselName`).clear();
     cy.get(String.raw`#vessel-vesselName`)
       .invoke("val")
@@ -422,7 +422,7 @@ describe("Direct landing page render", () => {
   });
 
   it("should trigger vessel dropdown when user types", () => {
-    waitForHydration();
+    waitForDatePickerReady();
     cy.get(String.raw`#vessel-vesselName`)
       .invoke("val")
       .should("eq", "AARON (N370)");
@@ -594,7 +594,7 @@ describe("DirectLanding page errors when javascript is enabled", () => {
   });
 
   it("should calculate total weight when individual product weights are changed", () => {
-    waitForHydration();
+    waitForDatePickerReady();
 
     cy.contains(".govuk-table__cell", "Total export weight").should("be.visible");
     cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "5.00kg");
@@ -613,7 +613,7 @@ describe("DirectLanding page errors when javascript is enabled", () => {
   });
 
   it("should handle NaN values correctly and default to 0 using Number.isNaN()", () => {
-    waitForHydration();
+    waitForDatePickerReady();
 
     cy.contains(".govuk-table__cell", "Total export weight").should("be.visible");
 
@@ -630,7 +630,7 @@ describe("DirectLanding page errors when javascript is enabled", () => {
   });
 
   it("should correctly calculate total weight when some weights are empty or invalid", () => {
-    waitForHydration();
+    waitForDatePickerReady();
 
     cy.contains(".govuk-table__cell", "Total export weight").should("be.visible");
 
@@ -647,7 +647,7 @@ describe("DirectLanding page errors when javascript is enabled", () => {
   });
 
   it("should handle zero values correctly without treating them as NaN", () => {
-    waitForHydration();
+    waitForDatePickerReady();
 
     cy.contains(".govuk-table__cell", "Total export weight").should("be.visible");
 
@@ -664,7 +664,7 @@ describe("DirectLanding page errors when javascript is enabled", () => {
   });
 
   it("should handle decimal values correctly without NaN issues", () => {
-    waitForHydration();
+    waitForDatePickerReady();
 
     cy.contains(".govuk-table__cell", "Total export weight").should("be.visible");
 
@@ -838,16 +838,16 @@ describe("Direct Landing - EEZ validation when high seas is No", () => {
   });
 
   it("should display error when EEZ field is empty", () => {
-    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(300);
     cy.get("#add-zone-button").click();
-    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(300);
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get(".govuk-error-message").should("contain", "exclusive economic zone");
   });
 
   it("should display error when EEZ field has invalid country", () => {
-    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(300);
     cy.get("#eez-0").type("Invalid Country Name XYZ");
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").contains("There is a problem");
@@ -942,7 +942,7 @@ describe("Direct Landing Error Messages - English", () => {
     cy.get(String.raw`#vessel-vesselName`)
       .invoke("val", "")
       .type(invalidVesselValue);
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(500);
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").contains("There is a problem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Select a vessel from the list");
@@ -1099,7 +1099,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
     cy.get(String.raw`#vessel-vesselName`)
       .invoke("val", "")
       .type(invalidVesselValue);
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(500);
     cy.get("[data-testid='save-and-continue']").click();
     cy.get("#error-summary-title").contains("Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
@@ -1179,7 +1179,7 @@ describe("Direct Landing - Client-side fetch error resilience", () => {
       testCaseId: TestCaseId.DirectLanding,
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
-    waitForHydration();
+    waitForDatePickerReady();
   });
 
   it("should handle gear types fetch network errors gracefully and keep the gear type input rendered", () => {
@@ -1218,7 +1218,7 @@ describe("Direct Landing - Amending gear category updates gear type options", ()
       testCaseId: TestCaseId.DirectLanding,
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
-    waitForHydration();
+    waitForDatePickerReady();
   });
 
   it("should display the pre-saved gear category and gear type on page load", () => {

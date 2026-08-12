@@ -3,8 +3,6 @@ import { type ITestParams, TestCaseId } from "~/types";
 const documentUrl = "/create-catch-certificate/GBR-2021-CC-8EEB7E123";
 const productsUrl = `${documentUrl}/what-are-you-exporting`;
 
-const waitForPage = (timeout = 1000) => cy.document({ timeout }).its("readyState").should("eq", "complete");
-
 const selectFirstAutocompleteOption = (fallbackValue = "Albacore", timeout = 500) => {
   const ensureSpeciesHasValue = () => {
     cy.get("#species").then(($species) => {
@@ -30,30 +28,30 @@ const selectFirstAutocompleteOption = (fallbackValue = "Albacore", timeout = 500
       cy.get("#species").should("be.visible").and("not.be.disabled").clear();
       cy.get("#species").should("be.visible").and("not.be.disabled").type(fallbackValue);
     });
-    waitForPage(timeout);
+    cy.waitForHydration(timeout);
   };
 
   cy.get("body").then(($body) => {
     if ($body.find(".autocomplete__option").length > 0) {
       cy.get(".autocomplete__option:visible").first().should("be.visible").click();
-      waitForPage(timeout);
+      cy.waitForHydration(timeout);
       return;
     }
 
     if ($body.find('[role="option"]').length > 0) {
       cy.get('[role="option"]:visible').first().should("be.visible").click();
-      waitForPage(timeout);
+      cy.waitForHydration(timeout);
       return;
     }
 
     if ($body.find("#species option").length > 1) {
       cy.get("#species").select(1);
-      waitForPage(timeout);
+      cy.waitForHydration(timeout);
       return;
     }
 
     cy.get("#species").should("be.visible").and("not.be.disabled").type("{enter}");
-    waitForPage(timeout);
+    cy.waitForHydration(timeout);
   });
 
   cy.get("#species")
@@ -76,7 +74,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
   it("should set the selected species value correctly", () => {
     cy.get("#species").type("Albacore");
-    waitForPage();
+    cy.waitForHydration();
     selectFirstAutocompleteOption("Albacore");
 
     cy.get("#species")
@@ -90,7 +88,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
   it("should handle selecting species multiple times in succession", () => {
     cy.get("#species").type("Cod");
-    waitForPage();
+    cy.waitForHydration();
     selectFirstAutocompleteOption("Cod", 1500);
 
     cy.get("#species").then(($species) => {
@@ -107,7 +105,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
       cy.wrap($species).should("be.visible").and("not.be.disabled").clear();
       cy.wrap($species).should("be.visible").and("not.be.disabled").type("Aesop");
     });
-    waitForPage();
+    cy.waitForHydration();
     selectFirstAutocompleteOption("Aesop shrimp", 1500);
 
     cy.get("#species").invoke("val").should("not.be.empty");
@@ -119,7 +117,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
   it("should maintain form consistency after species selection", () => {
     cy.get("#species").type("Pollock");
-    waitForPage();
+    cy.waitForHydration();
     selectFirstAutocompleteOption("Pollock", 1500);
 
     cy.get("#species").should("exist");
@@ -133,7 +131,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
   it("should allow subsequent field population after species selection", () => {
     cy.get("#species").type("Hake");
-    waitForPage();
+    cy.waitForHydration();
     selectFirstAutocompleteOption("Hake", 2000);
 
     cy.get("#state option")
@@ -141,7 +139,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
       .then((count) => {
         if (count > 1) {
           cy.get("#state").select(1);
-          waitForPage();
+          cy.waitForHydration();
           cy.get("#state").invoke("val").should("not.be.empty");
         }
       });
@@ -149,7 +147,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
   it("should execute all statements in handleSpeciesSelection", () => {
     cy.get("#species").type("Scallop");
-    waitForPage();
+    cy.waitForHydration();
     selectFirstAutocompleteOption("Scallop");
 
     cy.get("#species").invoke("val").should("not.be.empty");
@@ -160,11 +158,11 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
 
   it("should reset form fields when add product button is clicked after filling form", () => {
     cy.get("[data-testid*='edit-button']").first().click();
-    waitForPage(1000);
+    cy.waitForHydration(1000);
     cy.get("#species").should("not.have.value", "");
 
     cy.get("[data-testid='add-product']").first().click();
-    waitForPage(1000);
+    cy.waitForHydration(1000);
 
     cy.get("#species").should("have.value", "");
   });
@@ -176,7 +174,7 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
-    waitForPage(15000);
+    cy.waitForHydration(15000);
   });
 
   it("species combobox input should have role=combobox and aria-controls referencing the listbox ID", () => {
@@ -200,10 +198,10 @@ describe("WCAG SC 3.1.2 - lang='en' on English-language select options (hydrated
       lng: "cy",
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
-    waitForPage(15000);
+    cy.waitForHydration(15000);
 
     cy.get("[data-testid*='edit-button']").eq(0).click();
-    waitForPage(15000);
+    cy.waitForHydration(15000);
     cy.get("#state").should("contain", "Fresh");
 
     cy.get('#state option[value!=""]').should("have.length.gt", 0);
