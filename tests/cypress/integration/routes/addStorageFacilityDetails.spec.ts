@@ -26,7 +26,7 @@ describe("Add Storage Facility Address", () => {
         "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-arrival-transportation-details-plane"
       );
 
-    cy.get(".govuk-heading-xl").contains("Add storage facility details");
+    cy.get(".govuk-heading-xl").contains("Add storage facility approval details");
 
     cy.contains("strong", "A storage facility address must be added here.");
 
@@ -325,7 +325,7 @@ describe("Add Storage Facility Address - Dynamic Back Link Based on Transport Mo
   });
 });
 
-describe("Add Storage Facility Details: save as draft retains valid fields", () => {
+describe("Add Storage Facility Approval Details: save as draft retains valid fields", () => {
   it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftWithErrors,

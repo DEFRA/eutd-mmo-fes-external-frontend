@@ -1,5 +1,5 @@
 {
-  "sdAddStorageDetailsHeader": "Add storage facility details",
+  "sdAddStorageDetailsHeader": "Add storage facility approval details",
   "sdFacilityName": "Storage facility name",
   "sdAddStorageFacilityDetailsAddressText": "An address must be provided for this storage facility.",
   "sdAddStorageFacilityDetailsAddAddressText": "Add the storage facility address",
