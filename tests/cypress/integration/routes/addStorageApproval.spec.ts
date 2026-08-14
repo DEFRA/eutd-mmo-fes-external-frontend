@@ -19,7 +19,7 @@ describe("Add Storage Facility Approval", () => {
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", addStorageFacilityUrl);
-    cy.get(".govuk-heading-xl").contains("Add storage facility details");
+    cy.get(".govuk-heading-xl").contains("Add storage facility approval details");
     cy.get(".govuk-label").contains("Approval number (if applicable)");
     cy.get(".govuk-hint").contains(
       "If the storage facility has an approval number enter it here. For example, UK/ABC/001, 1 UK 22028 or TSF001."
@@ -204,7 +204,7 @@ describe("Add Storage Facility Approval - Non JavaScript", () => {
     };
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
 
-    cy.get(".govuk-heading-xl").contains("Add storage facility details");
+    cy.get(".govuk-heading-xl").contains("Add storage facility approval details");
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001");
     cy.get("#storageFacilities-facilityStorage").check();
     cy.get("[data-testid=save-and-continue]").click();
