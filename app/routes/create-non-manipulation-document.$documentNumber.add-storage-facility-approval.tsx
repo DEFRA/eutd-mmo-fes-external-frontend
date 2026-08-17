@@ -173,7 +173,7 @@ const AddStorageFacilityApproval = () => {
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorTransformedMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
-          <Title title={t("sdAddStorageDetailsHeader")} />
+          <Title title={t("sdAddStorageApprovalDetailsHeader")} />
           <SecureForm
             method="post"
             action={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-approval`}
