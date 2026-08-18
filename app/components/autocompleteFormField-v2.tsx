@@ -71,6 +71,11 @@ export const AutocompleteFormField = ({
 }: AutocompleteFormFieldProps) => {
   const { t } = useTranslation("common");
   const [status, setStatus] = React.useState("");
+  // Guards against DCX Autocomplete calling Object.keys(null) when no options match
+  const safeDefaultSearch = (query: string, opts: any[]): string[] =>
+    (opts as string[]).filter(
+      (option) => typeof option === "string" && option.toLowerCase().includes(query.toLowerCase())
+    );
   const listboxId = `${id}__listbox`;
   const change = (length: number, property: string, position: number) => {
     let newText = "";
@@ -120,7 +125,7 @@ export const AutocompleteFormField = ({
       promptId={promptId}
       promptMessage={promptMessage}
       promptCondition={promptCondition}
-      search={searchHandler}
+      search={searchHandler ?? safeDefaultSearch}
       resultActiveClass="autocomplete__option--focused"
       onChange={onChange}
       statusUpdate={(length, property, position) => change(length, property, position)}
