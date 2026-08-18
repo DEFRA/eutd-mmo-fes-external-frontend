@@ -26,7 +26,7 @@ describe("Add Storage Facility Address", () => {
         "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-arrival-transportation-details-plane"
       );
 
-    cy.get(".govuk-heading-xl").contains("Add storage facility details");
+    cy.get(".govuk-heading-xl").contains("Add storage facility");
 
     cy.contains("strong", "A storage facility address must be added here.");
 
