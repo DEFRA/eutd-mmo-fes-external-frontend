@@ -93,12 +93,6 @@ export const AddProductsComponent = ({
             "govuk-form-group--error": errors?.species?.message,
           })}
         >
-          <label
-            className="govuk-label govuk-!-font-weight-bold"
-            htmlFor="species"
-            aria-label="Common name or Food and Agriculture Organisation FAO code"
-            dangerouslySetInnerHTML={{ __html: t("ccFavouritesPageFormCommonNameField") }}
-          />
           <AutocompleteFormField
             id="species"
             name="species"
@@ -106,7 +100,7 @@ export const AddProductsComponent = ({
             defaultValue={commonSpeciesNojs}
             options={isHydrated ? species : ["", ...species.map((s: Species) => `${s.faoName} (${s.faoCode})`)]}
             optionsId="species-option"
-            labelClassName="govuk-visually-hidden"
+            labelClassName="govuk-label govuk-!-font-weight-bold"
             labelText={t("ccFavouritesPageFormCommonNameField").replace(/<[^>]*>/g, "")}
             hintText={t("ccSpeciesBlockHintText")}
             containerClassName=""
