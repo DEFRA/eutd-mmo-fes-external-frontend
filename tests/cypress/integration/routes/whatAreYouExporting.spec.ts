@@ -1425,6 +1425,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
   });
 
   describe("Basic species selection functionality", () => {
