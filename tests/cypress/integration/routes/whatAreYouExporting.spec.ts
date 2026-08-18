@@ -199,6 +199,7 @@ describe("What are you exporting page", () => {
   });
 
   it("check input typing for finding the species", () => {
+    cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
     cy.get("[data-tab-id='productsTab']").click();
     cy.get("#add-products").should("be.visible");
     cy.get("[data-tab-id='favouritesTab']").click();
