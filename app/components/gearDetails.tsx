@@ -74,7 +74,7 @@ export const GearDetails = ({
         </label>
         {gearCategoryMessage && (
           <ErrorMessage
-            id={errors.gearCategory.fieldId ?? "gearCategory-error"}
+            id={errors.gearCategory.fieldId}
             text={gearCategoryMessage}
             visuallyHiddenText={visuallyHiddenText}
           />
