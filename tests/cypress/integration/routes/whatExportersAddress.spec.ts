@@ -316,6 +316,13 @@ describe("CC: Entering the address manually with errors", () => {
 
   // FI0-11275: Entering an invalid character in country field should show a country error
   it("should display country error when an invalid character is entered in the country field", () => {
+    // DCX Autocomplete calls Object.keys(null) when typed text matches no option — known third-party bug
+    cy.on("uncaught:exception", (err) => {
+      if (err.message.includes("Cannot convert undefined or null to object")) {
+        return false;
+      }
+    });
+
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressWithInvalidCountry,
     };
