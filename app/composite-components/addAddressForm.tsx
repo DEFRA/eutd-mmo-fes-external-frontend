@@ -238,6 +238,11 @@ export const AddAddressForm = ({
                 "govuk-input--error": errors?.country,
               }),
             }}
+            searchHandler={(query, opts) =>
+              (opts as string[]).filter(
+                (option) => typeof option === "string" && option.toLowerCase().includes(query.toLowerCase())
+              )
+            }
           />
         </div>
       </div>

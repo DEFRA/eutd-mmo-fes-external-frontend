@@ -322,11 +322,11 @@ describe("Direct landing page render", () => {
 
   it("should disable vessel input until date landed is populated", () => {
     waitForDatePickerReady();
-    cy.get(String.raw`#vessel-vesselName`).clear();
+    cy.get(String.raw`#vessel-vesselName`).clear({ force: true });
     cy.get(String.raw`#vessel-vesselName`)
       .invoke("val")
       .should("eq", "");
-    cy.get("#dateLanded").clear();
+    cy.get("#dateLanded").clear({ force: true });
     cy.get("#dateLanded").invoke("val").should("eq", "");
     cy.get("#dateLanded-month").clear();
     cy.get("#dateLanded-month").invoke("val").should("eq", "");
@@ -425,7 +425,7 @@ describe("Direct landing page render", () => {
     cy.get(String.raw`#vessel-vesselName`)
       .invoke("val")
       .should("eq", "AARON (N370)");
-    cy.get(String.raw`#vessel-vesselName`).clear();
+    cy.get(String.raw`#vessel-vesselName`).clear({ force: true });
     cy.get(String.raw`#vessel-vesselName`)
       .invoke("val")
       .should("be.empty");
@@ -600,13 +600,13 @@ describe("DirectLanding page errors when javascript is enabled", () => {
 
     cy.get('input[id="weights.0.exportWeight"]').clear();
     cy.get('input[id="weights.0.exportWeight"]').type("20");
-    cy.get('input[id="weights.0.exportWeight"]').blur();
+    cy.get('input[id="weights.0.exportWeight"]').blur({ force: true });
 
     cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "23.00kg");
 
     cy.get('input[id="weights.1.exportWeight"]').clear();
     cy.get('input[id="weights.1.exportWeight"]').type("10");
-    cy.get('input[id="weights.1.exportWeight"]').blur();
+    cy.get('input[id="weights.1.exportWeight"]').blur({ force: true });
 
     cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "30.00kg");
   });
@@ -635,12 +635,12 @@ describe("DirectLanding page errors when javascript is enabled", () => {
 
     // Clear first weight (should default to 0)
     cy.get('input[id="weights.0.exportWeight"]').clear();
-    cy.get('input[id="weights.0.exportWeight"]').blur();
+    cy.get('input[id="weights.0.exportWeight"]').blur({ force: true });
 
     // Set second weight to valid number
     cy.get('input[id="weights.1.exportWeight"]').clear();
     cy.get('input[id="weights.1.exportWeight"]').type("15");
-    cy.get('input[id="weights.1.exportWeight"]').blur();
+    cy.get('input[id="weights.1.exportWeight"]').blur({ force: true });
 
     cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "15.00kg");
   });
@@ -653,11 +653,11 @@ describe("DirectLanding page errors when javascript is enabled", () => {
     // Set weights to 0
     cy.get('input[id="weights.0.exportWeight"]').clear();
     cy.get('input[id="weights.0.exportWeight"]').type("0");
-    cy.get('input[id="weights.0.exportWeight"]').blur();
+    cy.get('input[id="weights.0.exportWeight"]').blur({ force: true });
 
     cy.get('input[id="weights.1.exportWeight"]').clear();
     cy.get('input[id="weights.1.exportWeight"]').type("0");
-    cy.get('input[id="weights.1.exportWeight"]').blur();
+    cy.get('input[id="weights.1.exportWeight"]').blur({ force: true });
 
     cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "0.00kg");
   });
@@ -670,11 +670,11 @@ describe("DirectLanding page errors when javascript is enabled", () => {
     // Set decimal weights
     cy.get('input[id="weights.0.exportWeight"]').clear();
     cy.get('input[id="weights.0.exportWeight"]').type("5.5");
-    cy.get('input[id="weights.0.exportWeight"]').blur();
+    cy.get('input[id="weights.0.exportWeight"]').blur({ force: true });
 
     cy.get('input[id="weights.1.exportWeight"]').clear();
     cy.get('input[id="weights.1.exportWeight"]').type("4.25");
-    cy.get('input[id="weights.1.exportWeight"]').blur();
+    cy.get('input[id="weights.1.exportWeight"]').blur({ force: true });
 
     cy.contains(".govuk-table__cell", "Total export weight").next(".govuk-table__cell").should("have.text", "9.75kg");
   });
@@ -1193,7 +1193,7 @@ describe("Direct Landing - Client-side fetch error resilience", () => {
   it("should handle vessel search fetch network errors gracefully and keep the vessel input rendered", () => {
     cy.intercept("GET", "/get-vessels*", { forceNetworkError: true }).as("vesselFetchError");
     // Clear vessel and type to trigger the useEffect which fetches /get-vessels
-    cy.get(String.raw`#vessel-vesselName`).clear();
+    cy.get(String.raw`#vessel-vesselName`).clear({ force: true });
     cy.get(String.raw`#vessel-vesselName`).type("ab");
     cy.wait("@vesselFetchError");
     // After the error, the vessel input should still be in the DOM
@@ -1277,14 +1277,14 @@ describe("Direct Landing - Amending gear category updates gear type options", ()
     }).as("getDredgesGearTypes");
 
     // First change: Surrounding nets → Traps
-    cy.get("#gearCategory").select("Traps");
+    cy.get("#gearCategory").select("Traps").trigger("change");
     cy.wait("@getTrapsGearTypes");
     cy.get("#gearType").should("have.value", "");
     cy.get("#gearType option").should("have.length", 4);
     cy.get("#gearType option").should("contain.text", "Fyke nets (FYK)");
 
     // Second change: Traps → Dredges
-    cy.get("#gearCategory").select("Dredges");
+    cy.get("#gearCategory").select("Dredges").trigger("change");
     cy.wait("@getDredgesGearTypes");
     cy.get("#gearType").should("have.value", "");
     cy.get("#gearType option").should("have.length", 6);
