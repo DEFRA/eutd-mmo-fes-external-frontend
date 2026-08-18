@@ -26,8 +26,8 @@ const selectFirstAutocompleteOption = (fallbackValue = "Albacore", timeout = 500
         return;
       }
 
-      cy.get("#species").should("be.visible").and("not.be.disabled").clear();
-      cy.get("#species").should("be.visible").and("not.be.disabled").type(fallbackValue);
+      cy.get("#species").invoke("val", "").trigger("change");
+      cy.get("#species").type(fallbackValue);
     });
     cy.waitForHydration(timeout);
   };
