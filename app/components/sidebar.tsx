@@ -21,21 +21,23 @@ export const Sidebar = ({ journey, dashboardFeedbackURL }: SidebarProps) => {
             className="govuk-link"
           >
             {t("commonDashboardPriorNotificationForm")}{" "}
+            <span className="govuk-visually-hidden">{t("commonPdfDocument")}</span>{" "}
             <span className="govuk-visually-hidden">{t("commonHelpLinkOpenInNewTab")}</span>
           </a>{" "}
-          (PDF)
+          <span aria-hidden="true">(PDF)</span>
           <br />
           <a
-            data-test-id="pre-landing-declaration"
+            data-testid="pre-landing-declaration"
             rel="noopener noreferrer"
             href="https://www.gov.uk/government/publications/make-a-pre-landing-declaration-to-land-fish-in-an-eu-port"
             target="_blank"
             className="govuk-link"
           >
             {t("commonDashboardPreLandingDeclaration")}{" "}
+            <span className="govuk-visually-hidden">{t("commonPdfDocument")}</span>{" "}
             <span className="govuk-visually-hidden">{t("commonHelpLinkOpenInNewTab")}</span>
           </a>{" "}
-          (PDF)
+          <span aria-hidden="true">(PDF)</span>
         </p>
         <hr className="sidebar-divider" />
       </>
