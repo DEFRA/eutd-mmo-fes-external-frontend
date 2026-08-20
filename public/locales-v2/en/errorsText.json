@@ -11,6 +11,7 @@
   "sdAddProductToConsignmentCertificateNumberErrorNull": "Enter the document number",
   "sdAddProductToConsignmentWeightOnCCErrorNull": "Enter the weight on the document in kg",
   "sdAddCatchDetailsErrorEnterIssuingCountry": "Enter the country that issued the entry document",
+  "sdAddCatchDetailsErrorSelectEntryDocumentType": "Select which entry document you used",
   "ccLandingTypeSelectOption": "Select an option to continue",
   "commonUserReferencePageErrorMaxChar": "Your reference must not exceed 50 characters",
   "commonUserReferenceEnterRefAsACombination": "Enter your reference as a combination of letters, numbers, hyphens, slashes and full stops",

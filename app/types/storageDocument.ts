@@ -1,4 +1,4 @@
-import type { CatchIndex, CertificateType, ICountry, ITransport, IValidationError } from "~/types";
+import type { CatchIndex, CertificateType, ICountry, ITransport, IValidationError, Journey } from "~/types";
 
 export interface StorageDocumentCatch {
   id: string;
@@ -10,6 +10,7 @@ export interface StorageDocumentCatch {
   transportUnloadedFrom: string;
   certificateNumber: string;
   certificateType?: CertificateType;
+  entryDocumentType?: Journey;
   issuingCountry?: ICountry;
   weightOnCC: string;
   scientificName?: string;
