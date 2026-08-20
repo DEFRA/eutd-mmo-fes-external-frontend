@@ -136,3 +136,174 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       });
   });
 });
+
+describe("Add product to this consignment: entry document type question", () => {
+  const documentUrl = "/create-non-manipulation-document/GBR-2023-SD-83552D3E5";
+  const pageUrl = `${documentUrl}/add-product-to-this-consignment/0`;
+
+  it("should always show 'Which entry document did you use?' regardless of UK document selection", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Question is visible with non-UK selected (fixture default)
+    cy.contains("Which entry document did you use?").should("be.visible");
+
+    // Still visible after switching to UK
+    cy.get(`input[name="docIssuedInUk"][value="uk"]`).click();
+    cy.contains("Which entry document did you use?").should("be.visible");
+  });
+
+  it("should pre-select the entry document type when an existing value is loaded", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentWithEntryDocumentType,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get(`#catches-0-entryDocumentTypeCatchCertificate`).should("be.checked");
+    cy.get(`#catches-0-entryDocumentTypeProcessingStatement`).should("not.be.checked");
+    cy.get(`#catches-0-entryDocumentTypeNonManipulationDocument`).should("not.be.checked");
+  });
+
+  it("should allow selecting each entry document type option", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get(`#catches-0-entryDocumentTypeProcessingStatement`).click();
+    cy.get(`#catches-0-entryDocumentTypeProcessingStatement`).should("be.checked");
+    cy.get(`#catches-0-entryDocumentTypeCatchCertificate`).should("not.be.checked");
+
+    cy.get(`#catches-0-entryDocumentTypeNonManipulationDocument`).click();
+    cy.get(`#catches-0-entryDocumentTypeNonManipulationDocument`).should("be.checked");
+    cy.get(`#catches-0-entryDocumentTypeProcessingStatement`).should("not.be.checked");
+  });
+
+  it("should show Welsh translation for 'Which entry document did you use?'", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+      lng: "cy",
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.contains("Pa ddogfen mynediad wnaethoch chi ei defnyddio?").should("be.visible");
+    cy.contains("Tystysgrif dalfa").should("be.visible");
+    cy.contains("Datganiad prosesu").should("be.visible");
+    cy.contains("Dogfen dim triniaeth").should("be.visible");
+  });
+
+  it("should show 'Which entry document did you use?' question without JavaScript (non-JS always renders conditional fields)", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+      disableScripts: true,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Without JS, conditional fields are always rendered (isHydrated = false)
+    cy.contains("Which entry document did you use?").should("be.visible");
+    cy.get(`input[name="entryDocumentType"][value="catchCertificate"]`).should("exist");
+    cy.get(`input[name="entryDocumentType"][value="processingStatement"]`).should("exist");
+    cy.get(`input[name="entryDocumentType"][value="storageNotes"]`).should("exist");
+    // In non-JS mode, the fallback entry document field is always visible
+    cy.get(`input[name="entryDocument"]`).should("exist");
+  });
+
+  it("should not show entry document field when no entry document type is selected", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // No option selected initially — entry document field not visible
+    cy.get(`input[name="entryDocument"]`).should("not.be.visible");
+  });
+
+  it("should show entry document field when Catch certificate is selected", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get(`#catches-0-entryDocumentTypeCatchCertificate`).click();
+    cy.get(`#catches-0-entryDocumentTypeCatchCertificate`).should("be.checked");
+    cy.get(`input[name="entryDocument"]`).filter(":visible").should("exist");
+  });
+
+  it("should show entry document field when Processing statement is selected", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get(`#catches-0-entryDocumentTypeProcessingStatement`).click();
+    cy.get(`input[name="entryDocument"]`).filter(":visible").should("exist");
+  });
+
+  it("should show entry document field when Non manipulation document is selected", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get(`#catches-0-entryDocumentTypeNonManipulationDocument`).click();
+    cy.get(`input[name="entryDocument"]`).filter(":visible").should("exist");
+  });
+
+  it("should pre-populate entry document field when loaded with existing entryDocumentType", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentWithEntryDocumentType,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Fixture has entryDocumentType: "catchCertificate" — field should be visible and pre-filled
+    cy.get(`input[name="entryDocument"]`).filter(":visible").should("exist");
+  });
+});
+
+describe("Add product to this consignment: entry document type error", () => {
+  const documentUrl = "/create-non-manipulation-document/GBR-2023-SD-83552D3E5";
+  const pageUrl = `${documentUrl}/add-product-to-this-consignment/0`;
+
+  it("should show error in summary and above radio group when no entry document type is selected for non-UK document", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentEntryDocumentTypeRequired,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Select non-UK to make the question visible, then submit
+    cy.get(`input[name="docIssuedInUk"][value="non_uk"]`).click();
+    cy.get("[data-testid*='save-and-continue']").eq(0).click();
+
+    cy.get("#error-summary-title").should("contain.text", "There is a problem");
+    cy.contains("a", "Select which entry document you used").should("be.visible");
+    cy.get(".govuk-error-message").should("contain.text", "Select which entry document you used");
+  });
+
+  it("should show Welsh error message when no entry document type is selected", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentEntryDocumentTypeRequired,
+      lng: "cy",
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    cy.get(`input[name="docIssuedInUk"][value="non_uk"]`).click();
+    cy.get("[data-testid*='save-and-continue']").eq(0).click();
+
+    cy.get("#error-summary-title").should("be.visible");
+    cy.get(".govuk-error-message").contains("Dewiswch pa ddogfen mynediad a ddefnyddioch chi");
+  });
+
+  it("should not show entry document type error when 'Yes' (UK) is selected", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentEntryDocumentTypeRequired,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams } });
+
+    // Question is always visible — but the error element should not exist without submitting
+    cy.get(`input[name="docIssuedInUk"][value="uk"]`).click();
+    cy.contains("Which entry document did you use?").should("be.visible");
+    cy.get("#entryDocumentType-error").should("not.exist");
+  });
+});

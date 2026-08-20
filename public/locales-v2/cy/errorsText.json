@@ -11,6 +11,7 @@
   "sdAddProductToConsignmentCertificateNumberErrorNull": "Rhowch rif y ddogfen",
   "sdAddProductToConsignmentWeightOnCCErrorNull": "Rhowch bwysau'r ddogfen mewn kg",
   "sdAddCatchDetailsErrorEnterIssuingCountry": "Rhowch y wlad a ddyroddodd y ddogfen mynediad",
+  "sdAddCatchDetailsErrorSelectEntryDocumentType": "Dewiswch pa ddogfen mynediad a ddefnyddioch chi",
   "ccLandingTypeSelectOption": "Dewiswch opsiwn i fwrw ymlaen",
   "commonUserReferencePageErrorMaxChar": "Ni chaiff eich cyfeirnod fod yn fwy na 50 o gymeriadau",
   "commonUserReferenceEnterRefAsACombination": "Rhowch eich cyfeirnod fel cyfuniad o lythrennau, rhifau, cysylltnodau, slaesiau ac atalnodau llawn",

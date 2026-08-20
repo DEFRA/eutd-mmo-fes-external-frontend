@@ -18,6 +18,7 @@ import {
   mockSaveAndValidateDocument,
 } from "~/urls.server";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
+import storageDocumentWithEntryDocumentTypeSummary from "@/fixtures/storageDocumentApi/storageDocumentWithEntryDocumentTypeSummary.json";
 import storageDocumentMandatory from "@/fixtures/storageDocumentApi/storageDocumentMandatoryFieldsOnly.json";
 import sdExporterDetails from "@/fixtures/addExporterDetails/sdExporterDetails.json";
 import storageDocumentNoCatches from "@/fixtures/storageDocumentApi/storageDocumentNoCatches.json";
@@ -358,6 +359,12 @@ const checkYourInformationSDHandler: ITestHandler = {
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransport))),
     // Save facility (POST)
     rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) => res(ctx.json(storageDocument))),
+  ],
+  [TestCaseId.SDCheckYourInformationWithEntryDocumentType]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...sdCreated, documentStatus: "DRAFT" }))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentWithEntryDocumentTypeSummary))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(sdExporterDetails))),
+    rest.get(checkProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.status(200))),
   ],
 };
 
