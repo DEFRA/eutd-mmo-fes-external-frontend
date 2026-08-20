@@ -656,7 +656,7 @@ describe("SD: check-your-information page with entry document type", () => {
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
-    cy.contains("dt", "Entry document type")
+    cy.contains("dt", "Entry document reference")
       .parent()
       .nextAll()
       .find("dt")
