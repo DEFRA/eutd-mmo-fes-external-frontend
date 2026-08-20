@@ -705,21 +705,23 @@ const AddProductIndex = () => {
                       visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                     />
                   )}
-                  <div className="govuk-radios" data-module="govuk-radios">
-                    {entryDocumentTypeOptions.map((option) => (
+                  <div className="govuk-radios">
+                    {entryDocumentTypeOptions.map((option, index) => (
                       <React.Fragment key={option.id}>
                         <div className="govuk-radios__item">
                           <input
-                            id={entryDocumentTypeKey}
+                            id={index === 0 ? entryDocumentTypeKey : `${entryDocumentTypeKey}${option.id}`}
                             type="radio"
                             name="entryDocumentType"
                             className="govuk-radios__input"
                             value={option.value}
                             checked={selectedEntryDocumentType === option.value}
                             onChange={(e) => setSelectedEntryDocumentType(e.target.value)}
-                            aria-controls={isHydrated ? `conditional-entryDocumentType-${option.id}` : undefined}
                           />
-                          <label htmlFor={entryDocumentTypeKey} className="govuk-label govuk-radios__label">
+                          <label
+                            htmlFor={index === 0 ? entryDocumentTypeKey : `${entryDocumentTypeKey}${option.id}`}
+                            className="govuk-label govuk-radios__label"
+                          >
                             {t(option.labelKey, { ns: "addProductToThisConsignment" })}
                           </label>
                         </div>
@@ -741,13 +743,13 @@ const AddProductIndex = () => {
                                   selectedEntryDocumentType === option.value && errors?.[certKey]?.message,
                               })}
                               inputProps={{
-                                id: `${certKey}-${option.id}`,
+                                id: `${selectedEntryDocumentType === option.value ? certKey : certKey + "-" + option.id}`,
                                 defaultValue: getFormValue("entryDocument", catchDetails?.certificateNumber),
                                 "aria-describedby": `${certKey}-${option.id}-hint`,
                                 disabled: selectedEntryDocumentType !== option.value,
                               }}
                               hint={{
-                                id: `${certKey}-${option.id}-hint`,
+                                id: `${selectedEntryDocumentType === option.value ? certKey + "-hint" : certKey + "-" + option.id + "-hint"}`,
                                 position: "above",
                                 text: `${t("entryDocumentHint", { ns: "addProductToThisConsignment" })}`,
                                 className: "govuk-hint",
