@@ -161,9 +161,9 @@ describe("Add product to this consignment: entry document type question", () => 
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get(`#catches-0-entryDocumentTypeCatchCertificate`).should("be.checked");
-    cy.get(`#catches-0-entryDocumentTypeProcessingStatement`).should("not.be.checked");
-    cy.get(`#catches-0-entryDocumentTypeNonManipulationDocument`).should("not.be.checked");
+    cy.get(`#catches-0-entryDocumentType`).should("be.checked");
+    cy.get(`input[name="entryDocumentType"][value="processingStatement"]`).should("not.be.checked");
+    cy.get(`input[name="entryDocumentType"][value="storageNotes"]`).should("not.be.checked");
   });
 
   it("should allow selecting each entry document type option", () => {
@@ -172,13 +172,13 @@ describe("Add product to this consignment: entry document type question", () => 
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get(`#catches-0-entryDocumentTypeProcessingStatement`).click();
-    cy.get(`#catches-0-entryDocumentTypeProcessingStatement`).should("be.checked");
-    cy.get(`#catches-0-entryDocumentTypeCatchCertificate`).should("not.be.checked");
+    cy.get(`input[name="entryDocumentType"][value="processingStatement"]`).click();
+    cy.get(`input[name="entryDocumentType"][value="processingStatement"]`).should("be.checked");
+    cy.get(`#catches-0-entryDocumentType`).should("not.be.checked");
 
-    cy.get(`#catches-0-entryDocumentTypeNonManipulationDocument`).click();
-    cy.get(`#catches-0-entryDocumentTypeNonManipulationDocument`).should("be.checked");
-    cy.get(`#catches-0-entryDocumentTypeProcessingStatement`).should("not.be.checked");
+    cy.get(`input[name="entryDocumentType"][value="storageNotes"]`).click();
+    cy.get(`input[name="entryDocumentType"][value="storageNotes"]`).should("be.checked");
+    cy.get(`input[name="entryDocumentType"][value="processingStatement"]`).should("not.be.checked");
   });
 
   it("should show Welsh translation for 'Which entry document did you use?'", () => {
@@ -226,8 +226,8 @@ describe("Add product to this consignment: entry document type question", () => 
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get(`#catches-0-entryDocumentTypeCatchCertificate`).click();
-    cy.get(`#catches-0-entryDocumentTypeCatchCertificate`).should("be.checked");
+    cy.get(`#catches-0-entryDocumentType`).click();
+    cy.get(`#catches-0-entryDocumentType`).should("be.checked");
     cy.get(`input[name="entryDocument"]`).filter(":visible").should("exist");
   });
 
@@ -237,7 +237,7 @@ describe("Add product to this consignment: entry document type question", () => 
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get(`#catches-0-entryDocumentTypeProcessingStatement`).click();
+    cy.get(`input[name="entryDocumentType"][value="processingStatement"]`).click();
     cy.get(`input[name="entryDocument"]`).filter(":visible").should("exist");
   });
 
@@ -247,7 +247,7 @@ describe("Add product to this consignment: entry document type question", () => 
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.get(`#catches-0-entryDocumentTypeNonManipulationDocument`).click();
+    cy.get(`input[name="entryDocumentType"][value="storageNotes"]`).click();
     cy.get(`input[name="entryDocument"]`).filter(":visible").should("exist");
   });
 
