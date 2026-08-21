@@ -2,6 +2,28 @@ import { type ITestParams, TestCaseId, type Journey } from "~/types";
 const catchCertificateUrl = "/create-catch-certificate/catch-certificates";
 const journey: Journey = "catchCertificate";
 
+const assertDirectLandingsPdfLinks = ({
+  priorNotificationFormText,
+  preLandingDeclarationText,
+  pdfDocumentText,
+  opensInNewTabText,
+}: {
+  priorNotificationFormText: string;
+  preLandingDeclarationText: string;
+  pdfDocumentText: string;
+  opensInNewTabText: string;
+}) => {
+  cy.get('[data-testid="prior-notification-form"]')
+    .should("contain.text", priorNotificationFormText)
+    .and("contain.text", pdfDocumentText)
+    .and("contain.text", opensInNewTabText);
+
+  cy.get('[data-testid="pre-landing-declaration"]')
+    .should("contain.text", preLandingDeclarationText)
+    .and("contain.text", pdfDocumentText)
+    .and("contain.text", opensInNewTabText);
+};
+
 describe("Catch certificate dashboard sidebar links", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
@@ -31,6 +53,29 @@ describe("Catch certificate dashboard sidebar links", () => {
     cy.contains("a", "EU 2026 Changes Guidance (gov.uk)")
       .should("be.visible")
       .should("have.attr", "href", "https://www.gov.uk/guidance/eu-iuu-regulation-2026-changes");
+  });
+
+  it("should include PDF document type in direct landings link accessible names", () => {
+    assertDirectLandingsPdfLinks({
+      priorNotificationFormText: "Prior notification form (gov.uk)",
+      preLandingDeclarationText: "Pre-landing declaration (gov.uk)",
+      pdfDocumentText: "(PDF document)",
+      opensInNewTabText: "(opens in new tab)",
+    });
+  });
+
+  it("should include Welsh PDF document type in direct landings link accessible names", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.CCDashboard,
+    };
+    cy.visit(catchCertificateUrl, { qs: { ...testParams, lng: "cy" } });
+
+    assertDirectLandingsPdfLinks({
+      priorNotificationFormText: "Ffurflen hysbysu ymlaen llaw (gov.uk)",
+      preLandingDeclarationText: "Datganiad cyn glanio (gov.uk)",
+      pdfDocumentText: "(dogfen PDF)",
+      opensInNewTabText: "(yn agor mewn tab newydd)",
+    });
   });
 
   it("should display feedback headings", () => {
