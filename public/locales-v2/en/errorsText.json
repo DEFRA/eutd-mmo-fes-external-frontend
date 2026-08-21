@@ -55,7 +55,7 @@
   "commonAddTransportationDetailsPlaneFlightNumberLabelError": "Enter the flight number",
   "commonAddTransportationDetailsPlaneFlightNumberMaxCharError": "Flight number must not exceed 15 characters",
   "commonAddTransportationDetailsPlaneFlightNumberOnlyNumbersError": "Flight number must only contain letters and numbers",
-  "ccProductFavouritesPageErrorSpeciesName": "Enter the common name or FAO code",
+  "ccProductFavouritesPageErrorSpeciesName": "Enter the common name or Food and Agriculture Organisation (FAO) code",
   "ccProductFavouritesPageErrorState": "Select the state",
   "ccProductFavouritesPageErrorPresentation": "Select the presentation",
   "commonTransportationDetailsTruckNationalityError": "Enter the nationality of vehicle",

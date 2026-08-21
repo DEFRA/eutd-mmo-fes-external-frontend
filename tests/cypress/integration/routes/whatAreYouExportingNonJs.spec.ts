@@ -71,7 +71,7 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   it("should display an error validation at the form input when add species is clicked without selecting a value", () => {
     cy.get("[data-testid='add-species']").click();
 
-    cy.contains("span", /^Enter the common name or FAO code$/).should("be.visible");
+    cy.contains("span", /^Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should("be.visible");
   });
 
   it("should set the form input when add species is clicked with selected value", () => {
@@ -82,7 +82,7 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
 
   it("should display an error validation at the form input when add state is clicked without selecting a value", () => {
     cy.get("[data-testid='add-state']").click();
-    cy.contains("span", /^Enter the common name or FAO code$/).should("be.visible");
+    cy.contains("span", /^Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should("be.visible");
     cy.get("#state-error-message").should("have.class", "govuk-error-message");
     cy.get("#state-error-message > span")
       .contains(/^Error:$/)
@@ -92,7 +92,7 @@ describe("What are you exporting page: when JavaScript is disabled", () => {
   it("should display an error validations at the form inputs when add presentation is clicked without selecting a value", () => {
     cy.get("[data-testid='add-presentation']").click();
 
-    cy.contains("span", /^Enter the common name or FAO code$/).should("be.visible");
+    cy.contains("span", /^Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should("be.visible");
     cy.get("#state-error-message > span")
       .contains(/^Error:$/)
       .should("be.visible");
