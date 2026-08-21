@@ -36,9 +36,9 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const railwayBillNumber = handleFormEmptyStringValue(form, "railwayBillNumber", saveAsDraft);
   const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
   const departureCountryForm = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
-  const departureCountry = countries.find(
-    (c: ICountry) => c.officialCountryName === departureCountryForm
-  )?.officialCountryName;
+  const departureCountry = countries
+    .filter((c: ICountry) => c.isoCodeAlpha2 !== "GB")
+    .find((c: ICountry) => c.officialCountryName === departureCountryForm)?.officialCountryName;
   const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
   const placeOfUnloading = handleFormEmptyStringValue(form, "placeOfUnloading", saveAsDraft);
 
