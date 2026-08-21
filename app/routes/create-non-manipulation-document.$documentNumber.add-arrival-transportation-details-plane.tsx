@@ -48,9 +48,9 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const airwayBillNumber = handleFormEmptyStringValue(form, "airwayBillNumber", saveAsDraft);
   const flightNumber = handleFormEmptyStringValue(form, "flightNumber", saveAsDraft);
   const departureCountryForm = handleFormEmptyStringValue(form, "departureCountry", saveAsDraft);
-  const departureCountry = countries.find(
-    (c: ICountry) => c.officialCountryName === departureCountryForm
-  )?.officialCountryName;
+  const departureCountry = countries
+    .filter((c: ICountry) => c.isoCodeAlpha2 !== "GB")
+    .find((c: ICountry) => c.officialCountryName === departureCountryForm)?.officialCountryName;
   const departureDate = calculateDepartureDate(form);
   const departurePort = handleFormEmptyStringValue(form, "departurePort", saveAsDraft);
   const freightBillNumber = handleFormEmptyStringValue(form, "freightBillNumber", saveAsDraft);
