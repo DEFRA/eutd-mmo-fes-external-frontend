@@ -56,7 +56,7 @@
   "commonAddTransportationDetailsPlaneFlightNumberLabelError": "Rhowch rif yr awyren",
   "commonAddTransportationDetailsPlaneFlightNumberMaxCharError": "Rhaid i rif yr hediad fod yn llai na 15 o nodau",
   "commonAddTransportationDetailsPlaneFlightNumberOnlyNumbersError": "Rhaid i rif yr hediad gynnwys llythrennau a rhifau yn unig",
-  "ccProductFavouritesPageErrorSpeciesName": "Rhowch yr enw cyffredin neu’r cod FAO",
+  "ccProductFavouritesPageErrorSpeciesName": "Rhowch yr enw cyffredin neu god y Sefydliad Bwyd ac Amaethyddiaeth (FAO)",
   "ccProductFavouritesPageErrorState": "Dewiswch y cyflwr",
   "ccProductFavouritesPageErrorPresentation": "Dewiswch y cyflwyniad",
   "commonTransportationDetailsTruckNationalityError": "Rhowch genedligrwydd y cerbyd",
