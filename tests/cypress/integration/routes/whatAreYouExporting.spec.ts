@@ -298,10 +298,26 @@ describe("Errors on click of add product button", () => {
   it("should show errors click of add product button", () => {
     cy.get("[data-testid='add-product']").eq(0).click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the common name or FAO code$/).should("be.visible");
+    cy.contains("a", /^Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should("be.visible");
     cy.contains("a", /^Select the state$/).should("be.visible");
     cy.contains("a", /^Select the presentation$/).should("be.visible");
     cy.contains("a", /^Select a commodity code$/).should("be.visible");
+  });
+});
+
+describe("Welsh errors on click of add product button", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
+    };
+    cy.visit(productsUrl, { qs: { ...testParams, lng: "cy" } });
+  });
+
+  it("should show the Welsh species error", () => {
+    cy.get("[data-testid='add-product']").eq(0).click();
+    cy.contains("a", /^Rhowch yr enw cyffredin neu god y Sefydliad Bwyd ac Amaethyddiaeth \(FAO\)$/).should(
+      "be.visible"
+    );
   });
 });
 
@@ -862,7 +878,7 @@ describe("What are you exporting page: Error object transformation", () => {
 
     // Verify all expected error links are present and properly transformed
     cy.get(".govuk-error-summary__list a")
-      .contains("Enter the common name or FAO code")
+      .contains("Enter the common name or Food and Agriculture Organisation (FAO) code")
       .should("have.attr", "href", "#species");
     cy.get(".govuk-error-summary__list a").contains("Select the state").should("have.attr", "href", "#state");
     cy.get(".govuk-error-summary__list a")

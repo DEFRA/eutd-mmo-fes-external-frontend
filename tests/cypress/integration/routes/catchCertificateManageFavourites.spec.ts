@@ -93,7 +93,7 @@ describe("Manage favourites page: when JavaScript is disabled", () => {
   it("should return an error when a species has not been selected", () => {
     cy.get("[data-testid='add-species']").click();
     cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the common name or FAO code$/).should("be.visible");
+    cy.contains("a", /^Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should("be.visible");
   });
 
   it("should return an error when a state has not been selected", () => {
