@@ -147,6 +147,7 @@ const transportDetailsHandler: ITestHandler = {
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
     rest.get(mockGetTransportByIdUrl, (req, res, ctx) => res(ctx.json(catchCertificateTruckTransportAllowedDetails))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(oneValidFacility))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
   ],
   [TestCaseId.TruckTransportAllowedNoFacilityArrivalDate]: () => [
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckTransportAllowedDetails))),
