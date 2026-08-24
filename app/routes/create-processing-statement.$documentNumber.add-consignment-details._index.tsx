@@ -52,13 +52,23 @@ type loaderConsignmentDetails = {
 
 const normaliseWhitespace = (value: string): string => value.replaceAll(/\s+/g, " ").trim();
 
+// AutocompleteFormField submits the raw label string (e.g. &gt;) but the API returns unencoded (>); decode before comparing.
+const decodeHtmlEntities = (value: string): string =>
+  value
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">")
+    .replaceAll("&quot;", '"')
+    .replaceAll("&apos;", "'")
+    .replaceAll("&#39;", "'")
+    .replaceAll("&amp;", "&");
+
 const resolveCommodityCodeFromInput = (value: string, commodities: CodeAndDescription[]): string => {
-  const normalisedValue = normaliseWhitespace(value);
-  if (!normalisedValue) return "";
+  const decodedValue = decodeHtmlEntities(normaliseWhitespace(value));
+  if (!decodedValue) return "";
 
   const selectedCommodity = commodities.find((commodity) => {
     const optionLabel = `${commodity.code} - ${commodity.description}`;
-    return optionLabel === normalisedValue || commodity.code === normalisedValue;
+    return optionLabel === decodedValue || commodity.code === decodedValue;
   });
 
   return selectedCommodity?.code ?? "";
