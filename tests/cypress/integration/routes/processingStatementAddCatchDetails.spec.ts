@@ -279,10 +279,9 @@ describe("PS: Add catch details", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams, lng: "cy" } });
 
     cy.get("#addProductDetails").click();
-    cy.contains(
-      "a",
-      /^Rhowch god y Sefydliad Bwyd ac Amaethyddiaeth \(FAO\) neu enw’r rhywogaeth$/
-    ).should("be.visible");
+    cy.get("label[for='catches-0-species']")
+      .contains("Cod y Sefydliad Bwyd ac Amaethyddiaeth (FAO) neu enw’r rhywogaeth")
+      .should("be.visible");
   });
 
   it("should display an error if the catch certificate number is in the is in the wrong format for a UK catch certificate", () => {
