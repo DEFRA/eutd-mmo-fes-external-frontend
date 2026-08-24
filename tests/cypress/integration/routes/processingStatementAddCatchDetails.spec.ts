@@ -271,6 +271,20 @@ describe("PS: Add catch details", () => {
       .should("be.visible");
   });
 
+  it("should display the Welsh species error when submitting blank fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsWithBlankInput,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams, lng: "cy" } });
+
+    cy.get("#addProductDetails").click();
+    cy.contains(
+      "a",
+      /^Rhowch god y Sefydliad Bwyd ac Amaethyddiaeth \(FAO\) neu enw’r rhywogaeth$/
+    ).should("be.visible");
+  });
+
   it("should display an error if the catch certificate number is in the is in the wrong format for a UK catch certificate", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsWithInvalidCCFormat,
@@ -951,7 +965,10 @@ describe("PS: Add catch details - Species Code Validation", () => {
 
     cy.get("body").then(($body) => {
       if ($body.find(".govuk-error-summary").length > 0) {
-        cy.get(".govuk-error-summary").should("not.contain", "Enter the FAO code or species name");
+        cy.get(".govuk-error-summary").should(
+          "not.contain",
+          "Enter the Food and Agriculture Organisation (FAO) code or species name"
+        );
         cy.get(".govuk-error-summary").should("not.contain", "Enter a valid FAO species code");
       } else {
         cy.get("#yourproducts tbody tr").should("have.length.greaterThan", 0);

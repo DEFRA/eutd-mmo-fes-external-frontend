@@ -61,7 +61,7 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
 
       // Error summary should contain both errors
       cy.contains("a", /^The catch certificate entered is no longer valid$/).should("be.visible");
-      cy.contains("a", /^Enter the FAO code or species name$/).should("be.visible");
+      cy.contains("a", /^Enter the Food and Agriculture Organisation \(FAO\) code or species name$/).should("be.visible");
 
       // Both inline error messages should be visible
       cy.get(".govuk-error-message").should("have.length", 2);
