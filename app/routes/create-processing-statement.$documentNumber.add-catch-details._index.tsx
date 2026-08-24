@@ -717,7 +717,6 @@ const AddCatchDetailsIndex = () => {
           errors={displayErrorMessagesInOrder(
             errors,
             [
-              `catches-${catchIndex}-species`,
               `catches-${catchIndex}-catchCertificateType`,
               `catches-${catchIndex}-issuingCountry`,
               `catches-${catchIndex}-catchCertificateNumber`,
