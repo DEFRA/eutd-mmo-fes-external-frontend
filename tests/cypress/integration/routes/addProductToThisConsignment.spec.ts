@@ -137,6 +137,19 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
   });
 });
 
+describe("Add product to this consignment page: Welsh validation", () => {
+  it("should display the Welsh species label", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddProductConsignmentDataSpeicesError,
+    };
+    cy.visit(pageUrl, { qs: { ...testParams, lng: "cy" } });
+
+    cy.get("label[for='catches-0-product']")
+      .contains("Cod neu enw rhywogaeth y Sefydliad Bwyd ac Amaethyddiaeth (FAO)")
+      .should("be.visible");
+  });
+});
+
 describe("Add product to this consignment: entry document type question", () => {
   const documentUrl = "/create-non-manipulation-document/GBR-2023-SD-83552D3E5";
   const pageUrl = `${documentUrl}/add-product-to-this-consignment/0`;
