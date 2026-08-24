@@ -812,6 +812,7 @@ export enum TestCaseId {
   SDCheckYourInformationPlaneEdit = "sdCheckYourInformationPlaneEdit",
   SDCheckYourInformationTrainEdit = "sdCheckYourInformationTrainEdit",
   SDCheckYourInformationContainerVesselEdit = "sdCheckYourInformationContainerVesselEdit",
+  SDCheckYourInformationWithEntryDocumentType = "sdCheckYourInformationWithEntryDocumentType",
 
   SDFacilityWithNoFacilities = "sdFacilityWithNoFacilities",
   SDFacilityWithNoResponse = "sdFacilityWithNoResponse",
@@ -836,6 +837,8 @@ export enum TestCaseId {
   SDAddProductConsignmentSaveAsDraftNoErrors = "sdAddProductConsignmentSaveAsDraftNoErrors",
   SDAddProductConsignmentNonJsAddSupportingDoc = "sdAddProductConsignmentNonJsAddSupportingDoc",
   SDAddProductConsignmentNonJsRemoveSupportingDoc = "sdAddProductConsignmentNonJsRemoveSupportingDoc",
+  SDAddProductConsignmentEntryDocumentTypeRequired = "sdAddProductConsignmentEntryDocumentTypeRequired",
+  SDAddProductConsignmentWithEntryDocumentType = "sdAddProductConsignmentWithEntryDocumentType",
   SDFacilityTwoFacilities = "sdFacilityTwoFacilities",
   SDFacilityTwoFacilitiesDetails = "sdFacilityTwoFacilitiesDetails",
   SDAddUKEntryDocumentNoCatches = "sdAddUKEntryDocumentNoCatches",

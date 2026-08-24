@@ -39,6 +39,7 @@ import type {
   Species,
   LabelAndValue,
   CodeAndDescription,
+  Journey,
   StorageDocument,
   StorageDocumentCatch,
   DocIssuedInUkRadioSelectOptionType,
@@ -175,6 +176,7 @@ const getUpdateStorageDocumentData = (
     weightOnCC: values.weight as string,
     certificateType: values.docIssuedInUk as DocIssuedInUkRadioSelectType,
     issuingCountry,
+    entryDocumentType: values.entryDocumentType ? (values.entryDocumentType as Journey) : undefined,
     supportingDocuments: supportingDocumentsFromForm.length > 0 ? supportingDocumentsFromForm : undefined,
     productDescription: isEmpty(values.productDescription) ? undefined : (values.productDescription as string),
     netWeightProductArrival:
@@ -263,6 +265,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       species: values["species"],
       docIssuedInUk: values["docIssuedInUk"],
       issuingCountry: values["issuingCountry"],
+      entryDocumentType: values["entryDocumentType"],
       entryDocument: values["entryDocument"],
       weight: values["weight"],
       commodityCode: values["commodityCode"],
@@ -432,6 +435,12 @@ const functionToGetInitialState = (
   return new Array(maximumEntryDocsAllowed).fill("");
 };
 
+const entryDocumentTypeOptions = [
+  { id: "CatchCertificate", value: "catchCertificate", labelKey: "entryDocumentTypeCatchCertificate" },
+  { id: "ProcessingStatement", value: "processingStatement", labelKey: "entryDocumentTypeProcessingStatement" },
+  { id: "NonManipulationDocument", value: "storageNotes", labelKey: "entryDocumentTypeNonManipulationDocument" },
+] as const;
+
 const AddProductIndex = () => {
   const {
     documentNumber,
@@ -467,12 +476,16 @@ const AddProductIndex = () => {
   const [selectedCertificateType, setSelectedCertificateType] = useState<string>(
     getFormValue("docIssuedInUk", catchDetails?.certificateType ?? "")
   );
+  const [selectedEntryDocumentType, setSelectedEntryDocumentType] = useState<string>(
+    getFormValue("entryDocumentType", catchDetails?.entryDocumentType ?? "")
+  );
 
   const commodityCodeKey = `catches-${productIndex}-commodityCode`;
   const productKey = `catches-${productIndex}-product`;
   const weightKey = `catches-${productIndex}-weightOnCC`;
   const certificateTypeKey = `catches-${productIndex}-certificateType`;
   const issuingCountryKey = `catches-${productIndex}-issuingCountry`;
+  const entryDocumentTypeKey = `catches-${productIndex}-entryDocumentType`;
   const certKey = `catches-${productIndex}-certificateNumber`;
   const supportingDocumentsKey = `catches-${productIndex}-supportingDocuments`;
   const productDescriptionKey = `catches-${productIndex}-productDescription`;
@@ -570,6 +583,7 @@ const AddProductIndex = () => {
 
   const allErrorKeysInOrder = [
     certificateTypeKey,
+    entryDocumentTypeKey,
     issuingCountryKey,
     certKey,
     weightKey,
@@ -669,6 +683,127 @@ const AddProductIndex = () => {
                   </div>
                 </fieldset>
               </div>
+              <div
+                id={`${documentNumber}-${entryDocumentTypeKey}`}
+                className={
+                  isEmpty(errors?.[entryDocumentTypeKey])
+                    ? "govuk-form-group"
+                    : "govuk-form-group govuk-form-group--error"
+                }
+              >
+                <fieldset
+                  className="govuk-fieldset"
+                  aria-describedby={!isEmpty(errors?.[entryDocumentTypeKey]) ? "entryDocumentType-error" : undefined}
+                >
+                  <legend className="govuk-fieldset__legend govuk-!-font-weight-bold">
+                    {t("entryDocumentType", { ns: "addProductToThisConsignment" })}
+                  </legend>
+                  {!isEmpty(errors?.[entryDocumentTypeKey]) && (
+                    <ErrorMessage
+                      id="entryDocumentType-error"
+                      text={t(errors?.[entryDocumentTypeKey]?.message, { ns: "errorsText" })}
+                      visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                    />
+                  )}
+                  <div className="govuk-radios">
+                    {entryDocumentTypeOptions.map((option, index) => (
+                      <React.Fragment key={option.id}>
+                        <div className="govuk-radios__item">
+                          <input
+                            id={index === 0 ? entryDocumentTypeKey : `${entryDocumentTypeKey}${option.id}`}
+                            type="radio"
+                            name="entryDocumentType"
+                            className="govuk-radios__input"
+                            value={option.value}
+                            checked={selectedEntryDocumentType === option.value}
+                            onChange={(e) => setSelectedEntryDocumentType(e.target.value)}
+                          />
+                          <label
+                            htmlFor={index === 0 ? entryDocumentTypeKey : `${entryDocumentTypeKey}${option.id}`}
+                            className="govuk-label govuk-radios__label"
+                          >
+                            {t(option.labelKey, { ns: "addProductToThisConsignment" })}
+                          </label>
+                        </div>
+                        {isHydrated && (
+                          <div
+                            className={classNames("govuk-radios__conditional", {
+                              "govuk-radios__conditional--hidden": selectedEntryDocumentType !== option.value,
+                            })}
+                            id={`conditional-entryDocumentType-${option.id}`}
+                          >
+                            <FormInput
+                              containerClassName="govuk-form-group"
+                              label={t("entryDocument", { ns: "addProductToThisConsignment" })}
+                              labelClassName="govuk-label govuk-!-font-weight-bold"
+                              name="entryDocument"
+                              type="text"
+                              inputClassName={classNames("govuk-input govuk-!-width-one-half", {
+                                "govuk-input--error":
+                                  selectedEntryDocumentType === option.value && errors?.[certKey]?.message,
+                              })}
+                              inputProps={{
+                                id: `${selectedEntryDocumentType === option.value ? certKey : certKey + "-" + option.id}`,
+                                defaultValue: getFormValue("entryDocument", catchDetails?.certificateNumber),
+                                "aria-describedby": `${certKey}-${option.id}-hint`,
+                                disabled: selectedEntryDocumentType !== option.value,
+                              }}
+                              hint={{
+                                id: `${selectedEntryDocumentType === option.value ? certKey + "-hint" : certKey + "-" + option.id + "-hint"}`,
+                                position: "above",
+                                text: `${t("entryDocumentHint", { ns: "addProductToThisConsignment" })}`,
+                                className: "govuk-hint",
+                              }}
+                              errorPosition={ErrorPosition.AFTER_LABEL}
+                              errorProps={
+                                selectedEntryDocumentType === option.value ? getErrorProps(errors, certKey) : {}
+                              }
+                              staticErrorMessage={
+                                selectedEntryDocumentType === option.value ? getErrorMessage(errors, certKey, t) : ""
+                              }
+                              containerClassNameError={
+                                selectedEntryDocumentType === option.value ? getErrorClassName(errors, certKey) : ""
+                              }
+                              hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+                              hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+                            />
+                          </div>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </fieldset>
+              </div>
+              {!isHydrated && (
+                <FormInput
+                  containerClassName="govuk-form-group govuk-!-margin-top-4"
+                  label={t("entryDocument", { ns: "addProductToThisConsignment" })}
+                  labelClassName="govuk-label govuk-!-font-weight-bold"
+                  name="entryDocument"
+                  type="text"
+                  inputClassName={classNames("govuk-input govuk-!-width-one-half", {
+                    "govuk-input--error": errors?.[certKey]?.message,
+                  })}
+                  inputProps={{
+                    id: certKey,
+                    defaultValue: getFormValue("entryDocument", catchDetails?.certificateNumber),
+                    "aria-describedby": `${certKey}-hint`,
+                  }}
+                  hint={{
+                    id: `${certKey}-hint`,
+                    position: "above",
+                    text: `${t("entryDocumentHint", { ns: "addProductToThisConsignment" })}`,
+                    className: "govuk-hint",
+                  }}
+                  errorPosition={ErrorPosition.AFTER_LABEL}
+                  errorProps={getErrorProps(errors, certKey)}
+                  staticErrorMessage={getErrorMessage(errors, certKey, t)}
+                  containerClassNameError={getErrorClassName(errors, certKey)}
+                  hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+                  hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+                />
+              )}
+              <EntryDocumentGuidanceText />
               {(!isHydrated || isNonUkCertificate) && (
                 <AutocompleteFormField
                   id={issuingCountryKey}
@@ -700,34 +835,7 @@ const AddProductIndex = () => {
                   }}
                 />
               )}
-              <FormInput
-                containerClassName="govuk-form-group"
-                label={t("entryDocument", { ns: "addProductToThisConsignment" })}
-                labelClassName="govuk-label govuk-!-font-weight-bold"
-                name="entryDocument"
-                type="text"
-                inputClassName={classNames("govuk-input govuk-!-width-one-half", {
-                  "govuk-input--error": errors?.[certKey]?.message,
-                })}
-                inputProps={{
-                  id: certKey,
-                  defaultValue: getFormValue("entryDocument", catchDetails?.certificateNumber),
-                  "aria-describedby": `${certKey}-hint`,
-                }}
-                hint={{
-                  id: `${certKey}-hint`,
-                  position: "above",
-                  text: `${t("entryDocumentHint", { ns: "addProductToThisConsignment" })}`,
-                  className: "govuk-hint",
-                }}
-                errorPosition={ErrorPosition.AFTER_LABEL}
-                errorProps={getErrorProps(errors, certKey)}
-                staticErrorMessage={getErrorMessage(errors, certKey, t)}
-                containerClassNameError={getErrorClassName(errors, certKey)}
-                hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-                hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-              />
-              <EntryDocumentGuidanceText />
+
               <FormInput
                 containerClassName="govuk-form-group"
                 label={t("weightOnDocumentLabel", { ns: "addProductToThisConsignment" })}

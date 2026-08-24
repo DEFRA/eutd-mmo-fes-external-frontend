@@ -65,6 +65,7 @@ export const AddTransportationArrivalDetailsComponent = ({
     departureDate,
     departurePort,
     countries,
+    allCountries,
     nextUri,
     csrf,
     displayOptionalSuffix,
@@ -73,6 +74,7 @@ export const AddTransportationArrivalDetailsComponent = ({
     ITransport & {
       documentNumber: string;
       countries: ICountry[];
+      allCountries: ICountry[];
       nextUri: string;
       csrf: string;
       displayOptionalSuffix: boolean;
@@ -83,6 +85,7 @@ export const AddTransportationArrivalDetailsComponent = ({
     legendTitle?: string;
     infoText?: string;
     countries: ICountry[];
+    allCountries?: ICountry[];
     errors: IErrorsTransformed;
     displayOptionalSuffix: boolean;
   } = {
@@ -97,6 +100,7 @@ export const AddTransportationArrivalDetailsComponent = ({
     containerNumbers: getContainerNumbers(errors, actionData, containerNumbers),
     placeOfUnloading: getPlaceOfUnloading(errors, actionData, placeOfUnloading ?? undefined),
     countries: countries,
+    allCountries: allCountries,
     errors: errors,
     displayOptionalSuffix,
   };
