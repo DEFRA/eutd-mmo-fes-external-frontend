@@ -127,7 +127,7 @@ export const getAllProductFavourites = async (
 };
 
 export const addProductFavourites = async (bearerToken: string, fishObj: Species): Promise<Product> => {
-  const response: Response = await post(bearerToken, `${FAVOURITES_URL}`, {}, { ...fishObj });
+  const response: Response = await post(bearerToken, FAVOURITES_URL, {}, { ...fishObj });
 
   return onAddFavouriteResponse(response);
 };
