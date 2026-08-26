@@ -5,7 +5,7 @@
   "documentIssuedInTheUKHint": "Dyma'r ddogfen olaf a ddefnyddiwyd i ddod â'r cynnyrch i'r DU.",
   "issuingCountry": "Gwlad dyroddi",
   "issuingCountryHint": "Rhowch y wlad a ddyroddodd y ddogfen mynediad",
-  "entryDocumentType": "Pa ddogfen mynediad wnaethoch chi ei defnyddio?",
+  "entryDocumentType": "Pa ddogfen mynediad ddefnyddioch chi?",
   "entryDocumentTypeCatchCertificate": "Tystysgrif dalfa",
   "entryDocumentTypeProcessingStatement": "Datganiad prosesu",
   "entryDocumentTypeNonManipulationDocument": "Dogfen dim triniaeth",
