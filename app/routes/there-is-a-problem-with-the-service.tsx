@@ -2,7 +2,7 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { Main, Title } from "~/components";
 
-const ProblemWithService = () => {
+const ErrorPage = () => {
   const { t } = useTranslation();
 
   return (
@@ -18,4 +18,4 @@ const ProblemWithService = () => {
   );
 };
 
-export default ProblemWithService;
+export default ErrorPage;

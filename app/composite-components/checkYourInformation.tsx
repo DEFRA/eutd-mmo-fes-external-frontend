@@ -416,7 +416,7 @@ export const StorageDocumentTransportDisplay = ({
                       lowerCase(itemData.label)
                     }
                     className="govuk-link"
-                    href={`/create-non-manipulation-document/${documentNumber}/${changeLinkUri(transportType, transport)}?nextUri=${route(
+                    href={`/create-non-manipulation-document/${documentNumber}/${changeLinkUri(transportType)}?nextUri=${route(
                       "/create-non-manipulation-document/:documentNumber/check-your-information",
                       {
                         documentNumber,
@@ -547,6 +547,12 @@ export const CheckYourInformationRow = ({
   </div>
 );
 
+const entryDocumentTypeKeyMap: Record<string, string> = {
+  catchCertificate: "sdEntryDocumentTypeCatchCertificate",
+  processingStatement: "sdEntryDocumentTypeProcessingStatement",
+  storageNotes: "sdEntryDocumentTypeNonManipulationDocument",
+};
+
 export const CheckYourInformationProductLayout = ({
   catchItem: ctch,
   index,
@@ -591,12 +597,12 @@ export const CheckYourInformationProductLayout = ({
           )}`}
           t={t}
         />
-        {ctch.certificateType === "non_uk" && ctch.issuingCountry && (
+        {ctch.certificateType === "non_uk" && ctch.entryDocumentType && (
           <CheckYourInformationRow
-            label={t("sdCheckYourInformationIssuingCountry", { ns: "sdCheckYourInformation" })}
-            value={ctch.issuingCountry.officialCountryName}
+            label={t("sdCheckYourInformationEntryDocumentType", { ns: "sdCheckYourInformation" })}
+            value={t(entryDocumentTypeKeyMap[ctch.entryDocumentType] ?? "", { ns: "sdCheckYourInformation" })}
             isActionEnabled={true}
-            actionURL={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${index}#catches-${index}-issuingCountry?nextUri=${route(
+            actionURL={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${index}#${documentNumber}-catches-${index}-entryDocumentType?nextUri=${route(
               "/create-non-manipulation-document/:documentNumber/check-your-information",
               { documentNumber }
             )}`}
@@ -613,6 +619,18 @@ export const CheckYourInformationProductLayout = ({
           )}`}
           t={t}
         />
+        {ctch.certificateType === "non_uk" && ctch.issuingCountry && (
+          <CheckYourInformationRow
+            label={t("sdCheckYourInformationIssuingCountry", { ns: "sdCheckYourInformation" })}
+            value={ctch.issuingCountry.officialCountryName}
+            isActionEnabled={true}
+            actionURL={`/create-non-manipulation-document/${documentNumber}/add-product-to-this-consignment/${index}#catches-${index}-issuingCountry?nextUri=${route(
+              "/create-non-manipulation-document/:documentNumber/check-your-information",
+              { documentNumber }
+            )}`}
+            t={t}
+          />
+        )}
       </dl>
       <InsetText>
         {t("sdConsignmentItemlabel", { ns: "sdCheckYourInformation" }).replace(

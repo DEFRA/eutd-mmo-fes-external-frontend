@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 
 type FilterSearchProps = {
   label: string;
-  hint?: string;
+  hint: string;
   name?: string;
   id?: string;
   placeholder?: string;
@@ -36,13 +36,9 @@ export const FilterSearch = ({
       <label className="govuk-label govuk-!-font-weight-bold" htmlFor={inputId}>
         {label}
       </label>
-
-      {hint && (
-        <div id={hintId} className="govuk-hint">
-          {hint}
-        </div>
-      )}
-
+      <div id={hintId} className="govuk-hint">
+        {hint}
+      </div>
       <div className="govuk-grid-row filter-search-row">
         <div className="govuk-grid-column-one-half">
           <input
@@ -52,7 +48,7 @@ export const FilterSearch = ({
             name={name}
             defaultValue={defaultValue}
             placeholder={placeholder}
-            aria-describedby={hint ? hintId : undefined}
+            aria-describedby={hintId}
             type="search"
           />
         </div>

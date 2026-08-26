@@ -5,40 +5,6 @@ describe("Privacy Page", () => {
     cy.visit(`${privacyNoticeUrl}?lng=en`);
     cy.contains("h1", /^Privacy notice$/).should("be.visible");
   });
-
-  it("should exercise legacy coverage fixtures", () => {
-    cy.visit(`${privacyNoticeUrl}?lng=en&showCoverageFixtures=1`);
-
-    cy.get("[data-testid='coverage-fixtures']").should("exist").invoke("css", "display", "block");
-    cy.get("#q-filter").should("exist");
-    cy.get("[data-testid='filter-search-reset']")
-      .first()
-      .then(($el) => {
-        ($el[0] as HTMLButtonElement).click();
-      });
-    cy.get("[data-testid='coverage-notification']").should("contain.text", "Message");
-    cy.get("#highSeasArea-yes")
-      .first()
-      .then(($el) => {
-        const input = $el[0] as HTMLInputElement;
-        input.checked = true;
-        input.dispatchEvent(new Event("change", { bubbles: true }));
-      });
-    cy.get("#gearCategory")
-      .first()
-      .then(($el) => {
-        const select = $el[0] as HTMLSelectElement;
-        select.value = "Trawl";
-        select.dispatchEvent(new Event("change", { bubbles: true }));
-      });
-    cy.get("#gearType")
-      .first()
-      .then(($el) => {
-        const select = $el[0] as HTMLSelectElement;
-        select.value = "Drift nets (GN)";
-        select.dispatchEvent(new Event("change", { bubbles: true }));
-      });
-  });
   it("should render Privacy Page content in Welsh", () => {
     cy.visit(`${privacyNoticeUrl}?lng=cy`);
     cy.contains("h1", /^Hysbysiad preifatrwydd$/).should("be.visible");

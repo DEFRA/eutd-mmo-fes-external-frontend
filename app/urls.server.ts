@@ -19,7 +19,6 @@ export const EXPORT_LOCATION_DRAFT_URL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v
 export const GET_TRANSPORTATIONS_URL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/catch-certificate/transportations`;
 export const SAVE_TRANSPORT_DETAILS_URL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/transport/add`;
 export const ADD_TRANSPORT_DETAILS_URL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/catch-certificate/transport/add`;
-export const SAVE_TRUCK_CMR_URL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/transport/truck/cmr`;
 export const CHECK_ADDITIONAL_TYPES_URL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/catch-certificate/transport/check`;
 export const CONFIRM_COPY_URL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/confirm-copy-certificate`;
 export const CHECK_COPY_URL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/check-copy-certificate`;

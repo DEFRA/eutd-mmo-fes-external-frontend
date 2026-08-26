@@ -188,18 +188,6 @@ const progressPageHandler: ITestHandler = {
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(truckTransportDetails))),
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
   ],
-  [TestCaseId.SDCompleteTruckCMRProgress]: () => [
-    rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
-    rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) =>
-      res(
-        ctx.json({
-          cmr: "true",
-          vehicle: "truck",
-        })
-      )
-    ),
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
-  ],
   [TestCaseId.SDCompleteTrainProgress]: () => [
     rest.get(getProgressUrl("storageNotes"), (req, res, ctx) => res(ctx.json(sdProgressComplete))),
     rest.get(getTransportDetailsUrl("storageNotes"), (req, res, ctx) => res(ctx.json(trainTransportDetails))),
