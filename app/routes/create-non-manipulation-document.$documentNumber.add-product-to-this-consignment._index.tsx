@@ -479,6 +479,9 @@ const AddProductIndex = () => {
   const [selectedEntryDocumentType, setSelectedEntryDocumentType] = useState<string>(
     getFormValue("entryDocumentType", catchDetails?.entryDocumentType ?? "")
   );
+  const [entryDocument, setEntryDocument] = useState<string>(
+    getFormValue("entryDocument", catchDetails?.certificateNumber ?? "")
+  );
 
   const commodityCodeKey = `catches-${productIndex}-commodityCode`;
   const productKey = `catches-${productIndex}-product`;
@@ -670,7 +673,10 @@ const AddProductIndex = () => {
                           value={option.value}
                           checked={selectedCertificateType === option.value}
                           aria-describedby={`${certificateTypeKey}-hint`}
-                          onChange={(e) => setSelectedCertificateType(e.target.value)}
+                          onChange={(e) => {
+                            setSelectedCertificateType(e.target.value);
+                            setEntryDocument("");
+                          }}
                         />
                         <label
                           htmlFor={`${certificateTypeKey}${option.id}`}
@@ -716,7 +722,10 @@ const AddProductIndex = () => {
                             className="govuk-radios__input"
                             value={option.value}
                             checked={selectedEntryDocumentType === option.value}
-                            onChange={(e) => setSelectedEntryDocumentType(e.target.value)}
+                            onChange={(e) => {
+                              setSelectedEntryDocumentType(e.target.value);
+                              setEntryDocument("");
+                            }}
                           />
                           <label
                             htmlFor={index === 0 ? entryDocumentTypeKey : `${entryDocumentTypeKey}${option.id}`}
@@ -744,7 +753,8 @@ const AddProductIndex = () => {
                               })}
                               inputProps={{
                                 id: `${selectedEntryDocumentType === option.value ? certKey : certKey + "-" + option.id}`,
-                                defaultValue: getFormValue("entryDocument", catchDetails?.certificateNumber),
+                                value: entryDocument,
+                                onChange: (e: React.ChangeEvent<HTMLInputElement>) => setEntryDocument(e.target.value),
                                 "aria-describedby": `${certKey}-${option.id}-hint`,
                                 disabled: selectedEntryDocumentType !== option.value,
                               }}
