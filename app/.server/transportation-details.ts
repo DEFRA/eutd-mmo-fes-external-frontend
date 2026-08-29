@@ -88,7 +88,6 @@ const handleTransportResponse = (
   const isUnauthorised = postTransport.unauthorised as boolean;
 
   if (isUnauthorised) return redirect("/forbidden");
-  if (saveDraft) return redirect(route("/create-catch-certificate/catch-certificates"));
   if (errors.length > 0) {
     // Map backend error messages through getErrorMessage to get proper translation keys
     const mappedErrors = errors.map((error: IError) => ({
@@ -98,6 +97,7 @@ const handleTransportResponse = (
     const values = Object.fromEntries(form);
     return apiCallFailed(mappedErrors, values);
   }
+  if (saveDraft) return redirect(route("/create-catch-certificate/catch-certificates"));
 
   // Use the transport ID from the response
   const transportId = postTransport.id;

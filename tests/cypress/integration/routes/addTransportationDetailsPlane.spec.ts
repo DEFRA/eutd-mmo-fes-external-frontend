@@ -116,6 +116,18 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.url().should("include", "/create-catch-certificate/catch-certificates");
   });
 
+  it("should show validation errors and stay on page when save as draft is clicked with invalid data", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportSaveAsDraftWithErrors,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-draft-button]").click({ force: true });
+    cy.url().should("include", "/add-transportation-details-plane");
+    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("a", /^Enter the flight number$/).should("be.visible");
+    cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
+  });
+
   it("should navigate to progress page on click of save and continue button", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSave,
