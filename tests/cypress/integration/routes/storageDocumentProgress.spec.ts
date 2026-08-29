@@ -265,10 +265,11 @@ describe("should display the notificationBanner", () => {
     cy.visit("create-non-manipulation-document/GBR-2022-SD-F71D98A30/copy-this-non-manipulation-document", {
       qs: { ...testParams },
     });
-    cy.waitForUiUpdate(250);
+    cy.get("#voidOriginal").should("exist");
     cy.get("#voidOriginal").click();
     cy.get("#copyDocumentAcknowledged").click();
     cy.get('[data-testid="continue"]').click();
+    cy.waitForHydration(2000);
     cy.get(".govuk-notification-banner__heading")
       .contains(
         "This draft was created by copying document GBR-2022-SD-F71D98A30. You are reminded that you must not use a non-manipulation document or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken."

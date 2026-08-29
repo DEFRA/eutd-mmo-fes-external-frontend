@@ -1,21 +1,9 @@
 import { type ITestParams, TestCaseId } from "~/types";
+import { pad2 } from "../../../unit/testUtils";
 
 const documentUrl = "/create-catch-certificate";
 const documentNumber = "GBR-2023-CC-2323EC498";
 const manualLandingUrl = `${documentUrl}/${documentNumber}/add-landings`;
-
-// Helper function for padding date values
-const pad2 = (n: number | string) => (n.toString().length === 1 ? "0" + n : n.toString());
-
-const selectFirstNonEmptyOption = (selector: string) => {
-  cy.get(`${selector} option`).then(($options) => {
-    const firstNonEmpty = [...$options].find((opt) => (opt as HTMLOptionElement).value);
-    if (!firstNonEmpty) {
-      throw new Error(`non-empty option exists for ${selector}`);
-    }
-    cy.get(selector).select((firstNonEmpty as HTMLOptionElement).value);
-  });
-};
 
 const selectFirstGearTypeOption = () => {
   cy.get("body").then(($body) => {
@@ -23,9 +11,8 @@ const selectFirstGearTypeOption = () => {
       cy.get("[data-testid='add-gear-category']").first().click();
     }
   });
-  cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
   cy.get("#gearType option").should("have.length.greaterThan", 1);
-  selectFirstNonEmptyOption("#gearType");
+  cy.selectFirstNonEmptyOption("#gearType");
 };
 
 const verifyLandingFormIsReset = (isProductEmpty: boolean) => {
@@ -66,9 +53,7 @@ const verifyLandingFormIsReset = (isProductEmpty: boolean) => {
 };
 
 const populateLandingForm = () => {
-  // Wait for hydration
-  cy.get("#startDate").should("be.visible");
-  cy.document({ timeout: 300 }).its("readyState").should("eq", "complete"); // Allow hydration to complete
+  cy.get("#startDate").should("be.visible").and("not.be.disabled");
 
   // product
   cy.get("select#product").select(1).invoke("val").should("not.eq", "");
@@ -265,8 +250,6 @@ describe("Manual landing page render with page guard", () => {
     cy.get("#product").as("selectProduct").select("Select a product");
     cy.get("@selectProduct").should("have.value", "");
   });
-
-  // (moved to flaky spec)
 
   it("renders high seas area details and allows selection", () => {
     cy.get("input[type='radio'][name='highSeasArea']").first().check();
@@ -475,8 +458,7 @@ describe("Manual landing page render with page guard", () => {
     cy.get("#submit").contains("Add Landing");
     cy.get("body").should("exist");
   });
-  // (moved to flaky spec)
-  it("moved to flaky spec: add product flow", () => {
+  it("should complete the full add-product landing form flow", () => {
     // Product
     cy.get("#product").contains("Select a product");
     cy.get("#product").then(() => {
@@ -587,8 +569,6 @@ describe("Manual landing page: post-action behaviour", () => {
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
   });
 
-  // (moved to flaky spec)
-
   it("should clear the form when landing is updated", () => {
     // click edit existing landing
     cy.get('[data-testid="edit_GBR-2023-CC-B2DFABFDE-1321338481"]').click();
@@ -607,8 +587,6 @@ describe("Manual landing page: post-action behaviour", () => {
     // comfirm form is now empty
     verifyLandingFormIsReset(false);
   });
-
-  // (moved to flaky spec)
 
   it("should clear the form when edit landing from redirect", () => {
     const testParams: any = {
@@ -693,7 +671,6 @@ describe("Manual landing page: post-action behaviour", () => {
 });
 
 describe("Manual landing page: submit unauthorised access", () => {
-  // (moved to flaky spec)
   it("should redirect to forbidden for unauthorised submit", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.AddLandingSubmitUnauthorised,
@@ -746,6 +723,7 @@ describe("Manual landing page: submit unauthorised access", () => {
       cy.get("#gearCategory").select(4);
     });
     cy.get("#gearCategory").select(4);
+    cy.get("#gearType").should("exist");
     selectFirstGearTypeOption();
     cy.get("#rfmo").then(() => {
       cy.get("#rfmo").select(2);
@@ -755,7 +733,6 @@ describe("Manual landing page: submit unauthorised access", () => {
     cy.url().should("include", "/forbidden");
   });
 
-  // (moved to flaky spec)
   it("should redirect to forbidden with support id when unauthorised submit", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.AddLandingSubmitUnauthorisedAndSupportId,
@@ -872,8 +849,7 @@ describe("Manual landing page when javascript is disabled", () => {
     // select a gear category
     cy.get("select#gearCategory").select("Surrounding nets");
     cy.get("[data-testid='add-gear-category']").click();
-    // Wait for the server-side action to complete and page to reload
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+    cy.get("#gearType").should("be.visible");
     // check the gear type combo now has additional options
     cy.get("select#gearType option:selected").should("have.text", "Select gear type");
     cy.get("select#gearType option").should("have.length", 6);
@@ -956,8 +932,7 @@ describe("Manual landing page when javascript is disabled", () => {
       // select a gear category
       cy.get("select#gearCategory").select("Surrounding nets");
       cy.get("[data-testid='add-gear-category']").click();
-      // workaround for Remix hydration issues, if we don't wait the UI simply isn't ready
-      cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+      cy.get("#gearType option").should("have.length.greaterThan", 1);
       // check the gear type combo now has additional options
       cy.get("select#gearType option:selected").should("have.text", "Dewiswch y math o gêr");
       cy.get("select#gearType option").should("have.length", 6);
@@ -1333,10 +1308,6 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
     cy.contains("a", /^Enter the date landed$/).should("be.visible");
   });
 
-  // (moved to flaky spec)
-
-  // (moved to flaky spec)
-
   it("should not show vessel error if vessel is entered and date is valid", () => {
     const today = new Date();
     cy.get("#dateLanded").type(pad2(today.getDate()));
@@ -1507,9 +1478,7 @@ describe("Mandatory field validation tests", () => {
   });
 
   it("should apply correct CSS classes to EEZ fields based on error state", () => {
-    // Wait for form to hydrate
     cy.get("input#startDate").should("be.visible");
-    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
 
     cy.get("input#startDate").clear();
     cy.get("input#startDate").type("01");

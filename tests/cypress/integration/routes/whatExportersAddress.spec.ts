@@ -316,6 +316,13 @@ describe("CC: Entering the address manually with errors", () => {
 
   // FI0-11275: Entering an invalid character in country field should show a country error
   it("should display country error when an invalid character is entered in the country field", () => {
+    // DCX Autocomplete calls Object.keys(null) when typed text matches no option — known third-party bug
+    cy.on("uncaught:exception", (err) => {
+      if (err.message.includes("Cannot convert undefined or null to object")) {
+        return false;
+      }
+    });
+
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCExporterManualAddressWithInvalidCountry,
     };
@@ -341,14 +348,14 @@ describe("CC: Entering the address manually with errors", () => {
 
     // Country field should have inline error
     cy.get("#country")
-      .parents(".govuk-form-group")
+      .closest(".govuk-form-group")
       .should("have.class", "govuk-form-group--error")
       .find(".govuk-error-message")
       .should("be.visible")
       .and("contain.text", "Select a country from the list");
   });
 });
-//I skipped these tests as they are flaky in CI/CD
+// Address lookup is fully mocked via CCExporterSelectAddress handler
 describe("CC: On Selected Address", () => {
   it("should populate selected address into form", () => {
     const testParams: ITestParams = {

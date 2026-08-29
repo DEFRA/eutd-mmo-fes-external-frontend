@@ -15,7 +15,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
       .should("be.visible")
       .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-arrive-to-the-uk`);
     cy.get(".govuk-heading-xl").contains("Truck arriving in the UK");
-    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(250);
     cy.get("form").should(($form) => {
       expect($form.find("input[type='text']")).to.have.lengthOf(7);
 
@@ -158,7 +158,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#placeOfUnloading").type("Place of unloading");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the registration number$/).should("be.visible");
   });
@@ -176,7 +176,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#placeOfUnloading").should("have.value", "");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the place where the consignment was unloaded$/).should("be.visible");
   });
@@ -196,7 +196,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     );
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Place of unloading must not exceed 50 characters$/).should("be.visible");
   });
@@ -250,7 +250,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#placeOfUnloading").type("Place of unloading");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Select a truck nationality from the list$/).should("be.visible");
   });
@@ -267,7 +267,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#placeOfUnloading").type("Place of unloading");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the country of departure$/).should("be.visible");
   });
@@ -284,7 +284,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#placeOfUnloading").type("Place of unloading");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter where the consignment departs from$/).should("be.visible");
   });
@@ -301,7 +301,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#placeOfUnloading").type("Place of unloading");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the departure date$/).should("be.visible");
   });
@@ -503,7 +503,7 @@ describe("Add Transportation Details Truck: Invalid year in departure date", () 
     cy.get("#departureDate-month").clear().type("01");
     cy.get("#departureDate-year").clear().type("0000");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Departure date must be a real date$/).should("be.visible");
   });

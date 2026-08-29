@@ -213,7 +213,7 @@ describe("Add Storage Facility page when javascript is disabled", () => {
     });
 
     it("should not show validation errors when clicking on draft", () => {
-      cy.document({ timeout: 5000 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(5000);
       cy.get("[data-testid=save-draft-button]").click();
       cy.url().should("include", "create-non-manipulation-document/non-manipulation-documents");
     });
@@ -230,11 +230,11 @@ describe("Add Storage Facility Address - Error Both Name and Date", () => {
 
   it("shows both facility name and date errors", () => {
     cy.get('input[name="facilityArrivalDateDay"]').clear();
-    cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(100);
     cy.get('input[name="facilityArrivalDateMonth"]').clear();
-    cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(100);
     cy.get('input[name="facilityArrivalDateYear"]').clear();
-    cy.document({ timeout: 100 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(100);
     cy.get('input[name="facilityName"]').clear();
     cy.get("[data-testid=goToAddAddress-button]").click();
 

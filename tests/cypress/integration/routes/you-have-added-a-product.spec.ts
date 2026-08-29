@@ -87,11 +87,11 @@ describe("SD: you-have-added-product page", () => {
       testCaseId: TestCaseId.SDYouHaveAddedAProduct,
     };
     cy.visit(sdPageUrl, { qs: { ...testParams } });
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(500);
     cy.get('[type="radio"]').first().should("exist");
     cy.get('[type="radio"]').first().check();
     cy.get('[type="radio"]').first().should("be.checked");
-    cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(200);
     cy.contains("button", "Save and continue").click();
     cy.url({ timeout: 10000 }).should("include", "/add-product-to-this-consignment");
   });
@@ -182,7 +182,7 @@ describe("SD: you-have-added-product page", () => {
       // Submit to trigger errors
       cy.contains("button", "Save and continue").click();
 
-      cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(1000);
 
       // Error summary should render for the invalid product
       cy.get("#errorIsland").should("exist");
@@ -618,7 +618,7 @@ describe("SD: you-have-added-product page", () => {
       // Verify 'No' radio is checked by default
       cy.get("#addAnotherCatchNo").should("not.be.checked");
       cy.get("#addAnotherProduct").should("not.be.checked");
-      cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(200);
       cy.contains("button", "Save and continue").click();
       cy.get("body").then(($body) => {
         if ($body.find("#errorIsland").length > 0) {
@@ -639,7 +639,7 @@ describe("SD: you-have-added-product page", () => {
       // Verify 'No' radio is checked by default
       cy.get("#addAnotherCatchNo").should("not.be.checked");
       cy.get("#addAnotherProduct").should("not.be.checked");
-      cy.document({ timeout: 200 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(200);
       cy.contains("button", "Save and continue").click();
       cy.get("body").then(($body) => {
         if ($body.find("#errorIsland").length > 0) {

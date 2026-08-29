@@ -11,10 +11,10 @@ describe("Add product to this consignment  page", () => {
   });
 
   it("should show Remove and Add Another buttons correctly based on selection length", () => {
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Adding a wait to ensure the button is interactable
+    cy.waitForHydration(500); // Adding a wait to ensure the button is interactable
     for (let i = 0; i < 4; i++) {
       cy.get("#add-supporting-doc-button").click();
-      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(500);
     }
     // Check Remove button exists on the last element
     cy.get('input[id^="catches-0-supportingDocuments-"]').should("have.length.greaterThan", 0);
@@ -44,15 +44,15 @@ describe("Add product to this consignment  page", () => {
     cy.get("#catches-0-supportingDocuments-0").should("be.visible").and("not.be.disabled");
     cy.get("#add-supporting-doc-button").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("not.exist");
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Adding a wait to ensure the button is interactable
+    cy.waitForHydration(500); // Adding a wait to ensure the button is interactable
     cy.get("#add-supporting-doc-button").click();
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(500);
     cy.get("#catches-0-supportingDocuments-1").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("exist");
     cy.get("#remove-supporting-doc-button-1").should("exist");
     cy.get("#add-supporting-doc-button").should("exist");
     cy.get("#add-supporting-doc-button").click();
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(500);
     cy.get("#catches-0-supportingDocuments-2").should("exist");
     cy.get("#remove-supporting-doc-button-0").should("exist");
     cy.get("#remove-supporting-doc-button-1").should("exist");
@@ -60,17 +60,17 @@ describe("Add product to this consignment  page", () => {
   });
   it("should remove the last doc and update selectedSupportingDocuments", () => {
     cy.get("#add-supporting-doc-button").should("exist");
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Adding a wait to ensure the button is interactable
+    cy.waitForHydration(500); // Adding a wait to ensure the button is interactable
     cy.get("#add-supporting-doc-button").click();
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(500);
     cy.get("#add-supporting-doc-button").click();
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(500);
     cy.get("#add-supporting-doc-button").click();
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(500);
     cy.get('input[id^="catches-0-supportingDocuments-"]').should("have.length", 4);
     cy.get("#remove-supporting-doc-button-0").should("be.visible");
     cy.get("#remove-supporting-doc-button-0").click();
-    cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(300);
     cy.get('input[id^="catches-0-supportingDocuments-"]').should("have.length", 3);
   });
 
@@ -78,7 +78,7 @@ describe("Add product to this consignment  page", () => {
     it("should have proper accessibility attributes for additional supporting document fields", () => {
       // Add second supporting document
       cy.get("#add-supporting-doc-button").click();
-      cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(300);
 
       // Second field should have aria-label but no aria-describedby
       cy.get("#catches-0-supportingDocuments-1").should("have.attr", "aria-label", "catches-0-supportingDocuments-1");
@@ -86,7 +86,7 @@ describe("Add product to this consignment  page", () => {
 
       // Third field should also have aria-label
       cy.get("#add-supporting-doc-button").click();
-      cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(300);
       cy.get("#catches-0-supportingDocuments-2").should("have.attr", "aria-label", "catches-0-supportingDocuments-2");
       cy.get("#catches-0-supportingDocuments-2").should("not.have.attr", "aria-describedby");
     });
@@ -95,7 +95,7 @@ describe("Add product to this consignment  page", () => {
       // Add multiple supporting documents
       for (let i = 0; i < 3; i++) {
         cy.get("#add-supporting-doc-button").click();
-        cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+        cy.waitForHydration(500);
       }
 
       // Check that fields 1-3 do not have aria-describedby with invalid IDs
@@ -125,11 +125,11 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       .its("length")
       .then((initialCount) => {
         cy.get("#add-supporting-doc-button").click();
-        cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+        cy.waitForHydration(500);
         cy.get("#catches-0-supportingDocuments-1").should("exist");
 
         cy.get("#add-supporting-doc-button").click();
-        cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+        cy.waitForHydration(500);
         cy.get("#catches-0-supportingDocuments-2").should("exist");
 
         cy.get('input[id^="catches-0-supportingDocuments-"]').should("have.length", initialCount + 2);

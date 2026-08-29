@@ -28,6 +28,7 @@ export default defineConfig({
   video: false,
   screenshotOnRunFailure: false,
   numTestsKeptInMemory: 0, // Disable test snapshotting to reduce memory usage
+  experimentalMemoryManagement: true,
   reporter: "cypress-multi-reporters",
   reporterOptions: {
     configFile: "cypress-reporter-config.json",

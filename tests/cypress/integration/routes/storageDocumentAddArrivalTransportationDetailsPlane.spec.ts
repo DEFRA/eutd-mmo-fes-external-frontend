@@ -351,7 +351,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     );
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
+    cy.waitForHydration(250);
     cy.contains("h2", /^There is a problem$/).should("be.visible");
     cy.contains("a", /^Place of unloading must not exceed 50 characters$/).should("be.visible");
   });
@@ -435,7 +435,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
         testCaseId: TestCaseId.PlaneTransportAllowed,
       };
       cy.visit(planePageUrl, { qs: { ...testParams } });
-      cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
+      cy.waitForHydration(500);
 
       cy.get('input[name="containerNumbers.0"]').should("be.visible");
       cy.get("#add-container-button").should("be.visible");

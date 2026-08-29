@@ -280,7 +280,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
           // click add until at least 5 inputs exist (click 4 times)
           for (let i = 1; i < 5; i++) {
             cy.get('[data-testid="add-another-container"]').click();
-            cy.document({ timeout: 150 }).its("readyState").should("eq", "complete");
+            cy.waitForHydration(150);
           }
         }
       });

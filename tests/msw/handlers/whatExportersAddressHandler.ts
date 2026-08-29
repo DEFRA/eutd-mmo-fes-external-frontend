@@ -71,7 +71,7 @@ const whatExportersAddressHandler: ITestHandler = {
   [TestCaseId.CCExporterManualAddressWithInvalidCountry]: () => [
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) =>
-      res(ctx.status(400), ctx.json(["error.country.string.pattern.base"]))
+      res(ctx.status(400), ctx.json({ country: "error.country.string.pattern.base" }))
     ),
   ],
   [TestCaseId.CCExporterManualAddressWithAddressFirstPartError]: () => [

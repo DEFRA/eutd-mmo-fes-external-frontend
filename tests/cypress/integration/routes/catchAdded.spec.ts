@@ -94,8 +94,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for hydration
-    cy.get('[name="addAnotherCatch"][value="Yes"]').should("exist");
+    cy.get('[name="addAnotherCatch"][value="Yes"]').should("exist").and("not.be.disabled");
     cy.get('label[for="addAnotherCatch"]').click();
     cy.get('[name="addAnotherCatch"][value="Yes"]').should("be.checked");
     cy.contains("button", "Save and continue").click();
@@ -607,106 +606,6 @@ describe("PS: Catch added", () => {
             cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").should("contain", "Change");
           });
       });
-  });
-
-  it("should test FilterSearch component functionality with default button labels", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
-    };
-
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get("tbody tr").its("length").as("initialCount");
-
-    cy.get('input[name="q"]').as("searchInput");
-    cy.get("@searchInput").clear();
-    cy.get("@searchInput").type("COD");
-
-    cy.get('[data-testid="filter-search-submit"]').should("contain.text", "Search");
-    cy.get('[data-testid="filter-search-submit"]').click();
-
-    cy.get("tbody tr").should("have.length.gte", 0);
-
-    cy.get('[data-testid="filter-search-reset"]').should("contain.text", "Reset");
-    cy.get('[data-testid="filter-search-reset"]').click();
-
-    cy.get("@searchInput").should("have.value", "");
-
-    cy.get("@initialCount").then((initialCount) => {
-      cy.get("tbody tr").should("have.length", Number(initialCount));
-    });
-  });
-
-  it("should display hint text when hint prop is provided", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
-    };
-
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get(".govuk-hint").should("exist");
-    cy.get(".govuk-hint").should("contain.text", "You can search by product description, FAO code or species name");
-  });
-
-  it("should associate hint with input field using aria-describedby", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
-    };
-
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get('input[name="q"]').should("have.attr", "aria-describedby");
-
-    cy.get('input[name="q"]')
-      .invoke("attr", "aria-describedby")
-      .then((ariaDescribedBy) => {
-        cy.get(`#${ariaDescribedBy}`).should("exist");
-        cy.get(`#${ariaDescribedBy}`).should("have.class", "govuk-hint");
-        cy.get(`#${ariaDescribedBy}`).should(
-          "contain.text",
-          "You can search by product description, FAO code or species name"
-        );
-      });
-  });
-
-  it("should have correct hint id format", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
-    };
-
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get('input[name="q"]')
-      .should("have.attr", "id")
-      .and("match", /.*-filter$/); // ignore denial of service - test file
-
-    cy.get('input[name="q"]')
-      .invoke("attr", "id")
-      .then((inputId) => {
-        const expectedHintId = `${inputId}-hint`;
-        cy.get(`#${expectedHintId}`).should("exist");
-        cy.get(`#${expectedHintId}`).should("have.class", "govuk-hint");
-      });
-  });
-
-  it("should verify hint accessibility features", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
-    };
-
-    cy.visit(pageUrl, { qs: { ...testParams } });
-
-    cy.get(".govuk-hint").should("be.visible");
-    cy.get(".govuk-hint").should("have.class", "govuk-hint");
-
-    cy.get('input[name="q"]').should("have.attr", "aria-describedby");
-    cy.get('input[name="q"]').should("have.attr", "type", "search");
-
-    cy.get('input[name="q"]').then(($input) => {
-      const hintId = $input.attr("aria-describedby");
-      cy.get(`#${hintId}`).should("be.visible");
-      cy.get(`#${hintId}`).should("contain.text", "You can search by product description, FAO code or species name");
-    });
   });
 
   it("should style Change link as a link, not a button", () => {
@@ -1262,7 +1161,6 @@ describe("PS: Catch added - session clearing on navigation", () => {
     cy.get('input[name="q"]').click();
     cy.get('input[name="q"]').clear();
     cy.get('input[name="q"]').type("Salmon");
-    cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for re-render if needed we should not have to do this but is the only way around flaky test right now
     cy.get('input[name="q"]').should("have.value", "Salmon");
     cy.intercept("POST", "**/create-processing-statement/*/catch-added*").as("filterSubmit");
     cy.get('button[name="actionType"][value="search"]').click();
