@@ -32,6 +32,10 @@ export const ExportDestinationField = ({
       options={["", ...countries.map((c: ICountry) => c.officialCountryName)]}
       optionsId="country-option"
       errorMessageText={t(errors?.exportDestination?.message, { ns: "errorsText" })}
+      errorVisuallyHiddenText={{
+        text: t("commonErrorText", { ns: "errorsText" }),
+        className: "govuk-visually-hidden",
+      }}
       id="exportDestination"
       name="exportedTo"
       defaultValue={formData.exportedTo === "" ? "" : exportLocation?.exportedTo?.officialCountryName ?? ""}
