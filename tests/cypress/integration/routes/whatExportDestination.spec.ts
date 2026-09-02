@@ -42,6 +42,7 @@ describe("what export destination page", () => {
     cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-list > li > a").contains("Select a valid destination country");
     cy.get(".govuk-error-message").contains("Select a valid destination country");
+    cy.get(".govuk-error-message .govuk-visually-hidden").should("contain.text", "Error:");
     cy.get("body").should("exist");
   });
   it("should redirect to the forbidden page if there is an error as page is rendered", () => {
