@@ -227,7 +227,7 @@ describe("Add product to this consignment: entry document type question", () => 
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
 
-    cy.contains("Pa ddogfen mynediad ddefnyddioch chi?").should("be.visible");
+    cy.contains("Pa ddogfen mynediad wnaethoch chi ei defnyddio?").should("be.visible");
     cy.contains("Tystysgrif dalfa").should("be.visible");
     cy.contains("Datganiad prosesu").should("be.visible");
     cy.contains("Dogfen dim triniaeth").should("be.visible");
