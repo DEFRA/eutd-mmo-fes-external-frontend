@@ -15,6 +15,7 @@ type AutocompleteFormFieldProps = {
   errorPosition?: AutoCompleteErrorPosition;
   errorMessageText: string;
   errorMessageClassName?: string;
+  errorVisuallyHiddenText?: { text: string; className?: string };
   defaultValue: string;
   labelText?: string;
   labelClassName?: string;
@@ -52,6 +53,7 @@ export const AutocompleteFormField = ({
   errorPosition,
   errorMessageText,
   errorMessageClassName,
+  errorVisuallyHiddenText,
   defaultValue,
   labelText,
   labelClassName,
@@ -107,6 +109,12 @@ export const AutocompleteFormField = ({
       errorPosition={resolvedProps.errorPosition}
       errorMessageText={errorMessageText}
       errorMessageClassName={resolvedProps.errorMessageClassName}
+      errorVisuallyHiddenText={
+        errorVisuallyHiddenText ?? {
+          text: t("commonErrorText", { ns: "errorsText" }),
+          className: "govuk-visually-hidden",
+        }
+      }
       defaultValue={defaultValue}
       labelText={labelText}
       labelClassName={resolvedProps.labelClassName}

@@ -222,6 +222,10 @@ const WhatAreYouExporting = () => {
                       id="product"
                       name="favourite"
                       errorMessageText={t(errors?.product?.message, { ns: "errorsText" })}
+                      errorVisuallyHiddenText={{
+                        text: t("commonErrorText", { ns: "errorsText" }),
+                        className: "govuk-visually-hidden",
+                      }}
                       defaultValue=""
                       key={key}
                       options={[
