@@ -163,7 +163,7 @@ describe("PS: On Selected Address", () => {
 
     cy.contains("h2", "Postcode").should("be.visible");
     cy.get("body").then(($body) => {
-      expect($body.find("h4:contains('Postcode')").length).to.eq(0);
+      expect($body.find("h4:contains('Postcode')")).to.have.lengthOf(0);
     });
   });
 
