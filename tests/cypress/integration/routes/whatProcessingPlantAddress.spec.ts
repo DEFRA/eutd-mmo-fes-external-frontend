@@ -151,6 +151,22 @@ describe("PS: Entering the address manually with errors", () => {
 });
 
 describe("PS: On Selected Address", () => {
+  it("should show a valid heading level for the selected postcode", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSExporterSelectAddress,
+    };
+
+    cy.visit(psPageUrl, { qs: { ...testParams } });
+
+    cy.get("input[name=postcode]").type("12345");
+    cy.get("#findaddress").click();
+
+    cy.contains("h2", "Postcode").should("be.visible");
+    cy.get("body").then(($body) => {
+      expect($body.find("h4:contains('Postcode')").length).to.eq(0);
+    });
+  });
+
   it("should populate selected address into form", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSExporterSelectAddress,
