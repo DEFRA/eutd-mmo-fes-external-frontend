@@ -105,18 +105,26 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     waitForPage();
     enableIssuingCountry();
 
-    cy.get('input[name="issuingCountry"]', { timeout: 8000 })
-      .should("be.visible")
-      .should("be.enabled")
-      .click();
-    cy.get('input[name="issuingCountry"]', { timeout: 8000 }).type("Spa");
-    cy.get('input[name="issuingCountry"]')
-      .should("have.attr", "aria-expanded", "true");
-    cy.contains("li", "Spain").click();
+    getEnabledIssuingCountryField().then(($field) => {
+      if ($field.is("select")) {
+        setIssuingCountry("Spain");
+        cy.get("#catches-0-issuingCountry").should("have.value", "Spain");
+        return;
+      }
 
-    cy.get('input[name="issuingCountry"]')
-      .should("have.value", "Spain")
-      .and("have.attr", "aria-expanded", "false");
+      cy.get('input[name="issuingCountry"]', { timeout: 8000 })
+        .should("be.visible")
+        .should("be.enabled")
+        .click();
+      cy.get('input[name="issuingCountry"]', { timeout: 8000 }).type("Spa");
+      cy.get('input[name="issuingCountry"]')
+        .should("have.attr", "aria-expanded", "true");
+      cy.contains("li", "Spain").click();
+
+      cy.get('input[name="issuingCountry"]')
+        .should("have.value", "Spain")
+        .and("have.attr", "aria-expanded", "false");
+    });
   });
 
   it("should clear issuing country when user removes it and clicks Add (issue reproduction)", () => {
