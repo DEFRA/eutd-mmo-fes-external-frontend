@@ -106,7 +106,11 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     enableIssuingCountry();
 
     cy.get('input[name="issuingCountry"]', { timeout: 8000 })
-      .type("Spa")
+      .should("be.visible")
+      .should("be.enabled")
+      .click();
+    cy.get('input[name="issuingCountry"]', { timeout: 8000 }).type("Spa");
+    cy.get('input[name="issuingCountry"]')
       .should("have.attr", "aria-expanded", "true");
     cy.contains("li", "Spain").click();
 
