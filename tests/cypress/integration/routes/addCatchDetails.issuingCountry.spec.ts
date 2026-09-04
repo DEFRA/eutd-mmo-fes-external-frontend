@@ -93,6 +93,40 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     cy.get('input[name="exportWeightAfterProcessing"]', { timeout: 10000 }).should("have.value", "");
   });
 
+  it("should collapse the issuing country dropdown after selecting a country", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedBlankOneCatch,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    waitForPage();
+
+    setSpecies("Bigeye tuna (BET)");
+    waitForPage();
+    enableIssuingCountry();
+
+    getEnabledIssuingCountryField().then(($field) => {
+      if ($field.is("select")) {
+        setIssuingCountry("Spain");
+        cy.get("#catches-0-issuingCountry").should("have.value", "Spain");
+        return;
+      }
+
+      cy.get('input[name="issuingCountry"]', { timeout: 8000 })
+        .should("be.visible")
+        .should("be.enabled")
+        .click();
+      cy.get('input[name="issuingCountry"]', { timeout: 8000 }).type("Spa");
+      cy.get('input[name="issuingCountry"]')
+        .should("have.attr", "aria-expanded", "true");
+      cy.contains("li", "Spain").click();
+
+      cy.get('input[name="issuingCountry"]')
+        .should("have.value", "Spain")
+        .and("have.attr", "aria-expanded", "false");
+    });
+  });
+
   it("should clear issuing country when user removes it and clicks Add (issue reproduction)", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsContinueCatchError,
