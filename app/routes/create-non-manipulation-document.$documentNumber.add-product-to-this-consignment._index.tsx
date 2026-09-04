@@ -479,6 +479,18 @@ const AddProductIndex = () => {
   const [selectedEntryDocumentType, setSelectedEntryDocumentType] = useState<string>(
     getFormValue("entryDocumentType", catchDetails?.entryDocumentType ?? "")
   );
+  // Keep a separate entry document value per journey type so switching radios
+  // never clears or overwrites another type's value; only the enabled input
+  // for the selected type is submitted to the action (disabled inputs aren't
+  // included in form submission).
+  const [entryDocumentByType, setEntryDocumentByType] = useState<Record<string, string>>(() => ({
+    ...Object.fromEntries(entryDocumentTypeOptions.map((option) => [option.value, ""])),
+    [selectedEntryDocumentType]: getFormValue("entryDocument", catchDetails?.certificateNumber ?? ""),
+  }));
+
+  const handleEntryDocumentChange = (type: string, value: string) => {
+    setEntryDocumentByType((prev) => ({ ...prev, [type]: value }));
+  };
 
   const commodityCodeKey = `catches-${productIndex}-commodityCode`;
   const productKey = `catches-${productIndex}-product`;
@@ -670,7 +682,9 @@ const AddProductIndex = () => {
                           value={option.value}
                           checked={selectedCertificateType === option.value}
                           aria-describedby={`${certificateTypeKey}-hint`}
-                          onChange={(e) => setSelectedCertificateType(e.target.value)}
+                          onChange={(e) => {
+                            setSelectedCertificateType(e.target.value);
+                          }}
                         />
                         <label
                           htmlFor={`${certificateTypeKey}${option.id}`}
@@ -716,7 +730,9 @@ const AddProductIndex = () => {
                             className="govuk-radios__input"
                             value={option.value}
                             checked={selectedEntryDocumentType === option.value}
-                            onChange={(e) => setSelectedEntryDocumentType(e.target.value)}
+                            onChange={(e) => {
+                              setSelectedEntryDocumentType(e.target.value);
+                            }}
                           />
                           <label
                             htmlFor={index === 0 ? entryDocumentTypeKey : `${entryDocumentTypeKey}${option.id}`}
@@ -744,7 +760,9 @@ const AddProductIndex = () => {
                               })}
                               inputProps={{
                                 id: `${selectedEntryDocumentType === option.value ? certKey : certKey + "-" + option.id}`,
-                                defaultValue: getFormValue("entryDocument", catchDetails?.certificateNumber),
+                                value: entryDocumentByType[option.value] ?? "",
+                                onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                                  handleEntryDocumentChange(option.value, e.target.value),
                                 "aria-describedby": `${certKey}-${option.id}-hint`,
                                 disabled: selectedEntryDocumentType !== option.value,
                               }}
