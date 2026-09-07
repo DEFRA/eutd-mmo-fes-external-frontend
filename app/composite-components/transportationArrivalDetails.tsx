@@ -23,12 +23,14 @@ export const ArrivalTransportationModeDetails = ({
   registrationNumber,
   errors,
   countries,
+  allCountries,
   displayOptionalSuffix,
   onErrorsChange,
 }: ITransport & {
   legendTitle?: string;
   errors: IErrorsTransformed;
   countries: ICountry[];
+  allCountries?: ICountry[];
   displayOptionalSuffix: boolean;
   onErrorsChange?: (updatedErrors: IErrorsTransformed) => void;
 }) => {
@@ -42,34 +44,32 @@ export const ArrivalTransportationModeDetails = ({
         </legend>
       )}
       {vehicle === "train" && (
-        <>
-          <FormInput
-            containerClassName="govuk-form-group govuk-!-width-one-half"
-            labelClassName="govuk-label govuk-!-font-weight-bold"
-            label={t("addTransportationArrivalDetailsRailwayBillNumber")}
-            name="railwayBillNumber"
-            type="text"
-            inputClassName={classNames("govuk-input", {
-              "govuk-input--error": errors?.railwayBillNumber,
-            })}
-            inputProps={{
-              defaultValue: railwayBillNumber,
-              id: "railwayBillNumber",
-            }}
-            hint={{
-              id: "hint-railwayBillNumber",
-              position: "above",
-              text: t("addTransportationArrivalDetailsRailwayBillNumberHint"),
-              className: "govuk-hint govuk-!-margin-bottom-0",
-            }}
-            errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.railwayBillNumber)) }}
-            staticErrorMessage={t(errors?.railwayBillNumber?.message, { ns: "errorsText" })}
-            errorPosition={ErrorPosition.AFTER_LABEL}
-            containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.railwayBillNumber))}
-            hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-          />
-        </>
+        <FormInput
+          containerClassName="govuk-form-group govuk-!-width-one-half"
+          labelClassName="govuk-label govuk-!-font-weight-bold"
+          label={t("addTransportationArrivalDetailsRailwayBillNumber")}
+          name="railwayBillNumber"
+          type="text"
+          inputClassName={classNames("govuk-input", {
+            "govuk-input--error": errors?.railwayBillNumber,
+          })}
+          inputProps={{
+            defaultValue: railwayBillNumber,
+            id: "railwayBillNumber",
+          }}
+          hint={{
+            id: "hint-railwayBillNumber",
+            position: "above",
+            text: t("addTransportationArrivalDetailsRailwayBillNumberHint"),
+            className: "govuk-hint govuk-!-margin-bottom-0",
+          }}
+          errorProps={{ className: getErrorMessageClassName(!isEmpty(errors?.railwayBillNumber)) }}
+          staticErrorMessage={t(errors?.railwayBillNumber?.message, { ns: "errorsText" })}
+          errorPosition={ErrorPosition.AFTER_LABEL}
+          containerClassNameError={getContainerErrorClassName(!isEmpty(errors?.railwayBillNumber))}
+          hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+          hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+        />
       )}
       {vehicle === "containerVessel" && (
         <>
@@ -134,7 +134,7 @@ export const ArrivalTransportationModeDetails = ({
           <TruckNationalityField
             nationalityOfVehicle={nationalityOfVehicle}
             errors={errors}
-            countries={countries}
+            countries={allCountries ?? countries}
             t={t}
             labelKey="addTransportationArrivalDetailsTruckNationality"
             hintKey="addTransportationArrivalDetailsTruckNationalityHint"
@@ -263,6 +263,7 @@ export const TransportationArrivalDetails = ({
   legendTitle,
   freightBillNumber,
   countries,
+  allCountries,
   displayOptionalSuffix,
   placeOfUnloading,
   useBoldLabels = false,
@@ -271,6 +272,7 @@ export const TransportationArrivalDetails = ({
   legendTitle?: string;
   errors: IErrorsTransformed;
   countries: ICountry[];
+  allCountries?: ICountry[];
   displayOptionalSuffix: boolean;
   useBoldLabels?: boolean;
   onErrorsChange?: (updatedErrors: IErrorsTransformed) => void;
@@ -293,6 +295,7 @@ export const TransportationArrivalDetails = ({
         departurePort={departurePort}
         errors={errors}
         countries={countries}
+        allCountries={allCountries}
         displayOptionalSuffix={displayOptionalSuffix}
         onErrorsChange={onErrorsChange}
       />

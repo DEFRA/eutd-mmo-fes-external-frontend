@@ -88,6 +88,28 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departureDate-year").should("exist");
   });
 
+  it("should exclude United Kingdom from the country of departure dropdown", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportAllowed,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get("select[name='departureCountry']").should(
+      "not.contain",
+      "United Kingdom of Great Britain and Northern Ireland"
+    );
+  });
+
+  it("should include United Kingdom in the truck nationality dropdown", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TruckTransportAllowed,
+    };
+    cy.visit(truckPageUrl, { qs: { ...testParams } });
+    cy.get("select[name='nationalityOfVehicle']").should(
+      "contain",
+      "United Kingdom of Great Britain and Northern Ireland"
+    );
+  });
+
   it("should display error when registration number length exceeds 50 characters", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsTruckRegNumber,

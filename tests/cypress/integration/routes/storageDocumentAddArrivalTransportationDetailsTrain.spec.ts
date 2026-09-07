@@ -85,6 +85,17 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#departureDate-year").should("exist");
   });
 
+  it("should exclude United Kingdom from the country of departure dropdown", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.TrainTransportAllowed,
+    };
+    cy.visit(trainPageUrl, { qs: { ...testParams } });
+    cy.get("select[name='departureCountry']").should(
+      "not.contain",
+      "United Kingdom of Great Britain and Northern Ireland"
+    );
+  });
+
   it("should display error when rail bill number has more than 15 chars", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.TransportSaveMaxCharsRailwayBillNumber,

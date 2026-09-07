@@ -109,6 +109,13 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("#departureDate-month").should("exist");
       cy.get("#departureDate-year").should("exist");
     });
+
+    it("should exclude United Kingdom from the country of departure dropdown", () => {
+      cy.get("select[name='departureCountry']").should(
+        "not.contain",
+        "United Kingdom of Great Britain and Northern Ireland"
+      );
+    });
   });
 
   describe("ContainerVesselSaveInvalidCharsVesselName scenarios", () => {
