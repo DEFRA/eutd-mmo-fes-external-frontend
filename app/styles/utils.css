@@ -11,3 +11,35 @@ body {
   overflow-x: hidden;
   max-width: 100vw;
 }
+
+/* WCAG 2.2 AAA (SC 1.4.6): ensure GOV.UK links meet 7:1 on white backgrounds. */
+.govuk-link:link {
+  color: #003078;
+}
+
+.govuk-link:visited {
+  color: #4c2c92;
+}
+
+.govuk-link:hover {
+  color: #00224f;
+}
+
+.govuk-link:active,
+.govuk-link:focus {
+  color: #0b0c0c;
+}
+
+.govuk-link--no-visited-state:link,
+.govuk-link--no-visited-state:visited {
+  color: #003078;
+}
+
+.govuk-link--no-visited-state:hover {
+  color: #00224f;
+}
+
+.govuk-link--no-visited-state:active,
+.govuk-link--no-visited-state:focus {
+  color: #0b0c0c;
+}

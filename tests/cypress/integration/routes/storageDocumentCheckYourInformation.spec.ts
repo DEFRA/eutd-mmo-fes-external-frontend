@@ -197,14 +197,6 @@ describe("SD: check-your-information page transport", () => {
     cy.url().should("include", "/check-your-information");
     cy.get("h1").should("be.visible");
   });
-  it("should render the page with Truck", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDCheckYourInformationTruckCmr,
-    };
-    cy.visit(sdPageUrl, { qs: { ...testParams } });
-    cy.url().should("include", "/check-your-information");
-    cy.contains("dd", "Dakota Hill").should("be.visible");
-  });
 });
 
 describe("SD: check-your-information page with user reference not provided", () => {
@@ -627,5 +619,68 @@ describe("SD: check-your-information page - Not Provided fallback", () => {
     cy.contains("dt.govuk-summary-list__key", "Freight bill number").next("dd").should("have.text", "Not provided");
     cy.contains("dt.govuk-summary-list__key", "Air waybill number").next("dd").should("have.text", "Not provided");
     cy.contains("dt.govuk-summary-list__key", "Approval number").next("dd").should("have.text", "Not provided");
+  });
+});
+
+describe("SD: check-your-information page with entry document type", () => {
+  it("should display entry document type row for non-UK certificates that have an entry document type", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationWithEntryDocumentType,
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    cy.contains("dt", "Entry document type").should("be.visible");
+    cy.contains("dt", "Entry document type").next("dd").should("contain.text", "Catch certificate");
+  });
+
+  it("should display the entry document type row above the issuing country row", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationWithEntryDocumentType,
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    cy.contains("dt", "Entry document reference")
+      .parent()
+      .nextAll()
+      .find("dt")
+      .first()
+      .should("contain.text", "Issuing country");
+  });
+
+  it("should have a change link for entry document type with correct href", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationWithEntryDocumentType,
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    cy.contains("dt", "Entry document type")
+      .parent()
+      .find("a")
+      .contains("Change")
+      .should("be.visible")
+      .should("have.attr", "href")
+      .and("include", "/add-product-to-this-consignment/0")
+      .and("include", "catches-0-entryDocumentType")
+      .and("include", "check-your-information");
+  });
+
+  it("should not display entry document type row when entryDocumentType is not set", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformation,
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    cy.contains("dt", "Entry document type").should("not.exist");
+  });
+
+  it("should display Welsh translation for entry document type label and value", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDCheckYourInformationWithEntryDocumentType,
+      lng: "cy",
+    };
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+
+    cy.contains("dt", "Math y ddogfen mynediad").should("be.visible");
+    cy.contains("dt", "Math y ddogfen mynediad").next("dd").should("contain.text", "Tystysgrif dalfa");
   });
 });

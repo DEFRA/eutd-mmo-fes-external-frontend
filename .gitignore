@@ -28,3 +28,4 @@ __azurite_db_blob_extent__.json
 /.react-router
 /runner-results
 /multi-reporter-config.json
+/.vscode/launch.json

@@ -244,11 +244,9 @@ describe("Upload Guidance Page", () => {
 
     it("should render a EEZ requirement row", () => {
       cy.get("tr.govuk-table__row th.govuk-table__header").contains("Exclusive economic zone").should("exist");
+      cy.get("tr.govuk-table__row td.govuk-table__cell ol li").contains("Exclusive Economic Zone").should("exist");
       cy.get("tr.govuk-table__row td.govuk-table__cell ol li")
-        .contains("EEZ must be entered as a 2 or 3 character country ISO codes.")
-        .should("exist");
-      cy.get("tr.govuk-table__row td.govuk-table__cell ol li")
-        .contains("If providing multiple EEZ, these must be separated by a semi-colon.")
+        .contains("If providing multiple Exclusive Economic Zone")
         .should("exist");
     });
 
@@ -256,19 +254,25 @@ describe("Upload Guidance Page", () => {
       cy.get("tr.govuk-table__row th.govuk-table__header")
         .contains("Regional fisheries management organisation")
         .should("exist");
-      cy.get("tr.govuk-table__row td.govuk-table__cell ol li").contains("RFMO acronym to be entered.").should("exist");
+      cy.get("tr.govuk-table__row td.govuk-table__cell ol li")
+        .contains("Regional Fisheries Management Organisation")
+        .should("exist");
     });
 
     it("should render a Vessel PLN requirement row", () => {
-      cy.get("tr.govuk-table__row th.govuk-table__header").contains("Vessel PLN").should("exist");
+      cy.get("tr.govuk-table__row th.govuk-table__header")
+        .contains("Vessel Port Letter and Number (PLN)")
+        .should("exist");
       cy.get("tr.govuk-table__row td.govuk-table__cell ol li")
-        .contains("The PLN must be a valid Vessel PLN.")
+        .contains("The Port Letter and Number (PLN) must be a valid Vessel PLN.")
         .should("exist");
       cy.get("tr.govuk-table__row td.govuk-table__cell ol li")
         .contains("Vessels must be licensed on the date the catch was landed.")
         .should("exist");
       cy.get("tr.govuk-table__row td.govuk-table__cell ol li")
-        .contains("Vessel PLNs are available from: fishhub.cefas.co.uk/vessel-register/ (opens in new tab)")
+        .contains(
+          "Vessel Port Letter and Number (PLN)s are available from: fishhub.cefas.co.uk/vessel-register/ (opens in new tab)"
+        )
         .should("exist");
     });
 

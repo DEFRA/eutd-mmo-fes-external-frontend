@@ -66,7 +66,7 @@ const hasTransportDetails = (transport: ITransport): boolean => {
   switch (transport.vehicle) {
     case "truck":
       hasRequiredTransportDetails = ["nationalityOfVehicle", "registrationNumber", "departurePlace"].every(
-        (prop) => transport.cmr === "true" || !isEmpty(transport[prop as keyof ITransport])
+        (prop) => !isEmpty(transport[prop as keyof ITransport])
       );
       break;
     case "plane":

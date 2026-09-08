@@ -5,7 +5,6 @@ import {
   ADD_TRANSPORT_DETAILS_URL,
   addTransportationDetailsUrl,
   updateTransportDetailsByIdUrl,
-  SAVE_TRUCK_CMR_URL,
   CHECK_ADDITIONAL_TYPES_URL,
   SAVE_TRANSPORT_DETAILS_URL,
   GET_TRANSPORTATIONS_URL,
@@ -410,52 +409,6 @@ const onSaveTransportDetails = async (response: Response, payload?: ITransport):
         }
       });
 
-      return {
-        errors: Object.keys(errorsResponse).map((error) => ({
-          key: error,
-          message: getErrorMessage(errorsResponse[error]),
-        })),
-      };
-    }
-    case 403:
-      return {
-        errors: [],
-        unauthorised: true,
-      };
-    default:
-      throw new Error(`Unexpected error: ${response.status}`);
-  }
-};
-
-export const saveTruckCMR = async (
-  bearerToken: string,
-  currentUri: string,
-  journey: Journey,
-  transport: any,
-  isTruckCMRSavedAsDraft: boolean,
-  documentNumber: string | undefined
-): Promise<IBase> => {
-  if (!documentNumber) throw new Error("Document number is required");
-
-  const response: Response = await post(
-    bearerToken,
-    SAVE_TRUCK_CMR_URL,
-    { documentNumber: documentNumber },
-    { ...transport, currentUri, journey, isTruckCMRSavedAsDraft }
-  );
-
-  return onSaveTruckCMR(response);
-};
-
-const onSaveTruckCMR = async (response: Response): Promise<IBase> => {
-  switch (response.status) {
-    case 200:
-    case 204:
-      return {
-        errors: [],
-      };
-    case 400: {
-      const errorsResponse = await response.json();
       return {
         errors: Object.keys(errorsResponse).map((error) => ({
           key: error,

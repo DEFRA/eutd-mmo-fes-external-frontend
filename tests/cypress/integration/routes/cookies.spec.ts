@@ -46,7 +46,7 @@ describe("Cookie Policy page", () => {
       ".govuk-body",
       "The data is anonymised and we do not allow these analytics providers to share it with others. You can opt out of Clarity telemetry by selecting Microsoft on the "
     );
-    cy.contains("a", /^DAA WebChoices service.$/)
+    cy.contains("a", /Digital Advertising Alliance/)
       .should("be.visible")
       .should("have.attr", "href", `https://optout.aboutads.info/`)
       .click();

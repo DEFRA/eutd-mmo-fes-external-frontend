@@ -4,13 +4,11 @@ import { type ICountry } from "./common";
 import { type Journey } from "./main";
 
 export type Vehicle = "truck" | "plane" | "train" | "containerVessel" | "directLanding" | "undefined";
-export type Cmr = "true" | "false";
 export type addTransportation = "yes" | "no";
 
 export interface ITransport extends IBase {
   id?: string;
   vehicle: Vehicle;
-  cmr?: Cmr;
   nationalityOfVehicle?: string;
   registrationNumber?: string;
   departurePlace?: string | null;
@@ -41,12 +39,6 @@ export interface ITransport extends IBase {
 }
 
 export type TransportOptionType = {
-  label: string;
-  value: string;
-  id: string;
-};
-
-export type ConfirmCmrOptionsType = {
   label: string;
   value: string;
   id: string;

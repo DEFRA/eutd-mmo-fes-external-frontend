@@ -7,7 +7,6 @@ import type { IMainAppProps } from "~/types";
 const AccessibilityView = () => {
   const { t } = useTranslation("accessibility");
   const rootData = useRouteLoaderData<IMainAppProps>("root");
-  /* istanbul ignore next */
   const contactNumber = rootData?.supportContactNumber ?? "0330 159 1989";
 
   return (
@@ -117,7 +116,11 @@ const AccessibilityView = () => {
           <h3 className="govuk-heading-m">{t("complianceStatusHeading")}</h3>
           <p>
             {t("complianceStatusParagraphText_1")}{" "}
-            <a className="govuk-link" href="https://www.w3.org/TR/WCAG21/">
+            <a
+              className="govuk-link"
+              href="https://www.w3.org/TR/WCAG21/"
+              aria-label="Opens link to Web Content Accessibility Guidelines"
+            >
               {t("complianceStatusLink")}
             </a>
           </p>

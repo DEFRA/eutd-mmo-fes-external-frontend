@@ -25,7 +25,7 @@ import {
   instanceOfUnauthorised,
 } from "~/.server";
 import { Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
-import { backUri, scrollToId, hasExporterAddressBeenUpdated } from "~/helpers";
+import { scrollToId, hasExporterAddressBeenUpdated } from "~/helpers";
 import type {
   Exporter,
   IExporter,
@@ -433,36 +433,7 @@ const CheckYourInformation = () => {
               documentNumber={documentNumber}
             />
           )}
-          {storageDocument.transport?.vehicle === "truck" && transport.cmr === "true" && (
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key govuk-!-width-one-half">
-                {t("doYouHaveaRoadTransportDocumentHeader", { ns: "transportation" })}
-              </dt>
-              <dd className="govuk-summary-list__value">{t("commonYesLabel", { ns: "common" })}</dd>
-              <dd className="govuk-summary-list__actions">
-                <a
-                  aria-label={
-                    t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" }) +
-                    " " +
-                    t("doYouHaveaRoadTransportDocumentHeader", { ns: "transportation" })
-                  }
-                  className="govuk-link"
-                  href={`/create-non-manipulation-document/${documentNumber}/${backUri(
-                    transport,
-                    "storageNotes"
-                  )}?nextUri=${route("/create-non-manipulation-document/:documentNumber/check-your-information", {
-                    documentNumber,
-                  })}`}
-                >
-                  {t("sdSummaryPageChangeLinkText", { ns: "sdCheckYourInformation" })}
-                  <span className="govuk-visually-hidden">
-                    {" " + lowerCase(t("doYouHaveaRoadTransportDocumentHeader", { ns: "transportation" }))}
-                  </span>
-                </a>
-              </dd>
-            </div>
-          )}
-          {storageDocument.transport?.vehicle === "truck" && transport.cmr !== "true" && (
+          {storageDocument.transport?.vehicle === "truck" && (
             <StorageDocumentTransportDisplay
               transportType="truck"
               transport={transport}

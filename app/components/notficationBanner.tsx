@@ -4,7 +4,7 @@ import classNames from "classnames/bind";
 export const NotificationBanner = ({
   header,
   messages,
-  className,
+  className = "",
   dataTestId = "",
   role = "region",
 }: INotificationBanner) => (

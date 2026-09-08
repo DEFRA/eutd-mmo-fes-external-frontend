@@ -86,6 +86,18 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departureDate-month").should("exist");
     cy.get("#departureDate-year").should("exist");
   });
+
+  it("should exclude United Kingdom from the country of departure dropdown", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PlaneTransportAllowed,
+    };
+    cy.visit(planePageUrl, { qs: { ...testParams } });
+    cy.get("select[name='departureCountry']").should(
+      "not.contain",
+      "United Kingdom of Great Britain and Northern Ireland"
+    );
+  });
+
   it("should navigate to sd dashboard page on click of save as draft button", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PlaneTransportSaveAsDraft,

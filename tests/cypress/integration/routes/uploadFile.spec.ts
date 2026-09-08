@@ -282,7 +282,7 @@ describe("Upload File Page Upload - EEZ errors", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
-    cy.get("#row-1-PRD765-0-upload-file-error").contains("EEZ does not exist");
+    cy.get("#row-1-PRD765-0-upload-file-error").contains("Exclusive Economic Zone (EEZ) does not exist");
     cy.get("body").should("exist");
   });
   it("should display an error for a upload with a invalid EEZ", () => {
@@ -292,7 +292,7 @@ describe("Upload File Page Upload - EEZ errors", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
-    cy.get("#row-1-PRD765-0-upload-file-error").contains("EEZ does not exist");
+    cy.get("#row-1-PRD765-0-upload-file-error").contains("Exclusive Economic Zone (EEZ) does not exist");
     cy.get("body").should("exist");
   });
 });
@@ -305,7 +305,9 @@ describe("Upload File Page Upload - RFMO errors", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
-    cy.get("#row-1-PRD765-0-upload-file-error").contains("RFMO does not exist");
+    cy.get("#row-1-PRD765-0-upload-file-error").contains(
+      "Regional Fisheries Management Organisation (RFMO) does not exist"
+    );
     cy.get("body").should("exist");
   });
 });
@@ -318,7 +320,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
-    cy.get("#row-1-PRD765-0-upload-file-error").contains("Vessel PLN is missing");
+    cy.get("#row-1-PRD765-0-upload-file-error").contains("Vessel Port Letter and Number (PLN) is missing");
     cy.get("body").should("exist");
   });
 
@@ -329,7 +331,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
 
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("[data-testid=upload").click();
-    cy.get("#row-1-PRD765-1-upload-file-error").contains("Vessel PLN does not exist");
+    cy.get("#row-1-PRD765-1-upload-file-error").contains("Vessel Port Letter and Number (PLN) does not exist");
     cy.get("body").should("exist");
   });
 
@@ -351,10 +353,9 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
         lng: "cy",
       };
 
-      cy.get("body").should("exist");
       cy.visit(uploadFileUrl, { qs: { ...testParams } });
       cy.get("[data-testid=upload").click();
-      cy.get("#row-1-PRD765-0-upload-file-error").contains("Mae PLN y cwch ar goll");
+      cy.contains("Mae PLN (Port Letter and Number) y cwch ar goll").should("exist");
     });
 
     it("should display an error for a upload with an unknown vessel pln", () => {
@@ -363,14 +364,12 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
         lng: "cy",
       };
 
-      cy.get("body").should("exist");
       cy.visit(uploadFileUrl, { qs: { ...testParams } });
       cy.get("[data-testid=upload").click();
-      cy.get("#row-1-PRD765-1-upload-file-error").contains("Nid yw PLN y llong neu’r cwch yn bodoli");
+      cy.contains("Nid yw PLN (Port Letter and Number) y llong neu'r cwch yn bodoli").should("exist");
     });
 
     it("should display an error for a upload with an unlicensed vessel pln", () => {
-      cy.get("body").should("exist");
       const testParams: ITestParams = {
         testCaseId: TestCaseId.CCUploadInvalidVesselPln,
         lng: "cy",
@@ -378,9 +377,7 @@ describe("Upload File Page Upload - vesselPLN errors", () => {
 
       cy.visit(uploadFileUrl, { qs: { ...testParams } });
       cy.get("[data-testid=upload").click();
-      cy.get("#row-1-PRD765-0-upload-file-error").contains(
-        "Rhaid i’r dyddiad glanio gyfateb i’r adeg y cafodd y cwch ei drwyddedu"
-      );
+      cy.contains("Rhaid i\u2019r dyddiad glanio gyfateb i\u2019r adeg y cafodd y cwch ei drwyddedu").should("exist");
     });
   });
 });
@@ -987,7 +984,7 @@ describe("Upload File Page Upload - EEZ max length string error", () => {
     cy.get("[data-testid=upload]").click();
     cy.get("#row-1-PRD765-0-upload-file-error")
       .should("exist")
-      .and("contain.text", "You are only able to add maximum of 5 EEZ");
+      .and("contain.text", "You are only able to add maximum of 5 Exclusive Economic Zone (EEZ)");
   });
 
   it("should display EEZ max length error when error is a string", () => {
@@ -999,7 +996,7 @@ describe("Upload File Page Upload - EEZ max length string error", () => {
     cy.get("[data-testid=upload]").click();
     cy.get("#row-1-PRD765-0-upload-file-error")
       .should("exist")
-      .and("contain.text", "You are only able to add maximum of 5 EEZ");
+      .and("contain.text", "You are only able to add maximum of 5 Exclusive Economic Zone (EEZ)");
   });
 });
 

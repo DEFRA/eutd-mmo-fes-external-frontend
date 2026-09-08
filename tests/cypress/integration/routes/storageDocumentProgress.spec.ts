@@ -224,22 +224,6 @@ describe("ProgressPage - Links with transport selected - truck", () => {
   });
 });
 
-describe("ProgressPage - Links with transport selected - truck - No CMR", () => {
-  beforeEach(() => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDCompleteTruckCMRProgress,
-    };
-
-    cy.visit(progressUrl, { qs: { ...testParams } });
-  });
-
-  it("should display correct links", () => {
-    cy.contains("a", "UK departure transport details")
-      .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/how-does-the-consignment-leave-the-uk`);
-  });
-});
-
 describe("ProgressPage - Links with transport selected - train", () => {
   beforeEach(() => {
     const testParams: ITestParams = {

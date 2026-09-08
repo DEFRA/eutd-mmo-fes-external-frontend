@@ -122,12 +122,6 @@ describe("Check Your Information (Summary) page: UI", () => {
       .should("have.text", "GBR-2022-CC-24F279E85");
   });
 
-  it("should render CMR field when set for transport", () => {
-    cy.contains("dt.govuk-summary-list__key", "Do you have a road transport document to go with this export?")
-      .next("dd")
-      .should("have.text", "Yes");
-  });
-
   it("should render high seas area field when set for landing", () => {
     cy.get(".govuk-summary-list__key")
       .filter(':contains("High seas area")')
@@ -275,13 +269,6 @@ describe("Check Your Information (Summary) page: UI", () => {
   });
 
   describe("Welsh translations", () => {
-    it("should render translated CMR field when set for transport", () => {
-      cy.get('a[hreflang="cy"][lang="cy"]').click();
-      cy.contains("dt.govuk-summary-list__key", "Oes gennych chi ddogfen trafnidiaeth ffordd i fynd gyda’r allforion?")
-        .next("dd")
-        .should("have.text", "Ydw");
-    });
-
     it("should render translated high seas field when set for landing", () => {
       cy.get('a[hreflang="cy"][lang="cy"]').click();
       cy.get(".govuk-summary-list__key")
@@ -1905,33 +1892,10 @@ describe("Check Your Information: Transportation details for multiple transports
   });
 });
 
-describe("Check Your Information: Truck transport with CMR true", () => {
+describe("Check Your Information: Truck transport details", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.CCCheckYourInformation,
-    };
-    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
-  });
-
-  it("should render CMR question when truck has CMR true", () => {
-    cy.contains("dt", "Do you have a road transport document to go with this export?").should("be.visible");
-  });
-
-  it("should display Yes for CMR when value is true", () => {
-    cy.contains("dt", "Do you have a road transport document to go with this export?")
-      .next("dd")
-      .should("have.text", "Yes");
-  });
-
-  it("should have change link for CMR that includes anchor", () => {
-    cy.get('[href*="do-you-have-a-road-transport-document"]').should("have.attr", "href").and("include", "#cmr");
-  });
-});
-
-describe("Check Your Information: Truck transport without CMR (false)", () => {
-  beforeEach(() => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.CCCheckYourInformationTruckNoCMR,
     };
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
   });

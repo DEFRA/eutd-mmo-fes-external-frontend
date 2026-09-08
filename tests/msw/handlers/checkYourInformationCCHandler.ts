@@ -459,25 +459,6 @@ const checkYourInformationCCHandler: ITestHandler = {
     rest.get(COUNTRIES_URL, (req, res, ctx) => res(ctx.json(countries))),
     rest.get(GET_TRANSPORTATIONS_URL, (req, res, ctx) => res(ctx.json([truckTransportDetails, planeTransportDetails]))),
   ],
-  [TestCaseId.CCCheckYourInformationTruckNoCMR]: () => [
-    preSubmitBundle(
-      {
-        ...ccTruck,
-        transportations: [{ ...ccTruck.transportations[0], cmr: "false" }],
-      },
-      progressComplete
-    ),
-    rest.get(getProgressUrl("catchCertificate"), (req, res, ctx) => res(ctx.json(progressComplete))),
-    rest.get(GET_CERTIFICATE_SUMMARY, (req, res, ctx) =>
-      res(
-        ctx.json({
-          ...ccTruck,
-          transportations: [{ ...ccTruck.transportations[0], cmr: "false" }],
-        })
-      )
-    ),
-    rest.get(LANDINGS_TYPE_URL, (req, res, ctx) => res(ctx.json(uploadEntryLandingsType))),
-  ],
   [TestCaseId.CCCheckYourInformationTrain]: () => [
     preSubmitBundle(
       {

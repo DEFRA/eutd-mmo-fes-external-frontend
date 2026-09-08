@@ -54,13 +54,9 @@ export const backUri = (transport: ITransport, journey: Journey) => {
   switch (transport.vehicle) {
     case "truck": {
       if (journey === "catchCertificate") {
-        backUri =
-          transport.cmr === "true"
-            ? "do-you-have-a-road-transport-document"
-            : "add-additional-transport-documents-truck";
+        backUri = "add-additional-transport-documents-truck";
       } else {
-        backUri =
-          transport.cmr === "true" ? "do-you-have-a-road-transport-document" : "add-transportation-details-truck";
+        backUri = "add-transportation-details-truck";
       }
       break;
     }
@@ -90,13 +86,12 @@ export const backUri = (transport: ITransport, journey: Journey) => {
   return backUri;
 };
 
-export const changeLinkUri = (transportType: string, transport: ITransport) => {
+export const changeLinkUri = (transportType: string) => {
   let changeLinkUri = "";
 
   switch (transportType) {
     case "truck": {
-      changeLinkUri =
-        transport.cmr === "true" ? "do-you-have-a-road-transport-document" : "add-transportation-details-truck";
+      changeLinkUri = "add-transportation-details-truck";
       break;
     }
     case "plane":

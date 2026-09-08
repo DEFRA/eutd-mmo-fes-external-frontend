@@ -62,7 +62,6 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   const payload: ITransport = {
     vehicle: transport.vehicle,
-    cmr: transport.cmr,
     exportedTo,
     pointOfDestination,
     nationalityOfVehicle: countries.find((c: ICountry) => c.officialCountryName === nationalityOfVehicle)

@@ -47,5 +47,5 @@
   "sdProgressDepartureFromStorageFaciltyDetails": "Manylion cludiant ymadael y DU",
   "sdProgressStoragefacilities": "Manylion y cyfleuster storio",
   "sdProgressNotificationMsgIsNotVoided": "Crëwyd y drafft hwn drwy gopïo dogfen {{c}}. Fe'ch atgoffir na chewch chi ddefnyddio dogfen dim triniaeth neu ddata ar gyfer dalfeydd sydd eisoes wedi'u hallforio gan fod hyn yn drosedd ddifrifol ac y gall arwain at gymryd camau gorfodi.",
-  "sdProgressNotificationMsgIsVoided": "Cafodd y drafft hwn ei greu drwy gopïo dogfen sydd bellach wedi cael ei dirymu. Fe’ch atgoffir na ddylech ddefnyddio dogfen storio na data ar gyfer dalfeydd sydd eisoes wedi’u hallforio gan fod hyn yn drosedd ddifrifol a gall arwain at gymryd camau gorfodi."
+  "sdProgressNotificationMsgIsVoided": "Cafodd y drafft hwn ei greu drwy gopïo dogfen sydd bellach wedi cael ei dirymu. Fe’ch atgoffir na ddylech ddefnyddio dogfen dim triniaeth na data ar gyfer dalfeydd sydd eisoes wedi’u hallforio gan fod hyn yn drosedd ddifrifol a gall arwain at gymryd camau gorfodi."
 }

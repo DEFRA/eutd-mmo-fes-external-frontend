@@ -24,6 +24,8 @@ import storageDocumentSpeciesError from "@/fixtures/storageDocumentApi/storageDo
 import storageDocumentSupportingDocumentsError from "@/fixtures/storageDocumentApi/storageDocumentSupportingDocumentsError.json";
 import storageDocumentSpeciesSuggestError from "@/fixtures/storageDocumentApi/storageDocumentSpeciesSuggestError.json";
 import sdAddProductConsignmentIssuingCountryRequired from "@/fixtures/saveAndValidateApi/sdAddProductConsignmentIssuingCountryRequired.json";
+import sdAddProductConsignmentEntryDocumentTypeRequired from "@/fixtures/saveAndValidateApi/sdAddProductConsignmentEntryDocumentTypeRequired.json";
+import storageDocumentWithEntryDocumentType from "@/fixtures/storageDocumentApi/storageDocumentWithEntryDocumentType.json";
 import sdAddProductConsignmentProductDescriptionRequired from "@/fixtures/saveAndValidateApi/sdAddProductConsignmentProductDescriptionRequired.json";
 import sdAddProductConsignmentFisheryWeightExceedsProductWeight from "@/fixtures/saveAndValidateApi/sdAddProductConsignmentFisheryWeightExceedsProductWeight.json";
 
@@ -185,6 +187,26 @@ const addProductConsignementHandler: ITestHandler = {
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
     rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+  ],
+  [TestCaseId.SDAddProductConsignmentEntryDocumentTypeRequired]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(sdAddProductConsignmentEntryDocumentTypeRequired))
+    ),
+  ],
+  [TestCaseId.SDAddProductConsignmentWithEntryDocumentType]: () => [
+    rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentWithEntryDocumentType))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(sdDrafts))),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+    rest.get(mockCountriesUrl, (req, res, ctx) => res(ctx.json(countries))),
+    rest.post(mockGetAddStoargaDocumentUrl, (req, res, ctx) => res(ctx.json(storageDocumentWithEntryDocumentType))),
   ],
 };
 

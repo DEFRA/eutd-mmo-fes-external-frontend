@@ -284,7 +284,8 @@ export const TransportationDetailsLoaderFunction = async (
 
   if (transport.vehicle !== transportType) return redirect("/forbidden");
 
-  const countries: ICountry[] = await getCountries();
+  const allCountries: ICountry[] = await getCountries();
+  const countries = arrival ? allCountries.filter((c) => c.isoCodeAlpha2 !== "GB") : allCountries;
   const displayOptionalSuffix = getEnv().EU_CATCH_FIELDS_OPTIONAL === "true";
 
   // Handle containers data when JS is disabled
@@ -308,6 +309,7 @@ export const TransportationDetailsLoaderFunction = async (
       nextUri,
       csrf,
       countries,
+      allCountries,
       displayOptionalSuffix,
       containerNumbers,
     }),
