@@ -14,6 +14,40 @@ describe("ProgressPage - Cache-Control header", () => {
   });
 });
 
+describe("ProgressPage - Processing plant rows by JS mode", () => {
+  it("points the processing plant address row at the plant details page for the JS journey", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSProgressJsPlantRows,
+    };
+
+    cy.visit(progressUrl, { qs: { ...testParams } });
+    cy.get('[data-testid="progress-processingPlant-wrapper"]').should("exist");
+    cy.get('[data-testid="progress-processingPlantAddress-wrapper"]').should("exist");
+    cy.get('[data-testid="progress-processingPlantAddress-title"]').should(
+      "have.attr",
+      "href",
+      `${certificateUrl}/add-processing-plant-details`
+    );
+    cy.get("li strong:contains('COMPLETE')").should("have.length", 6);
+  });
+
+  it("points the processing plant address row at the plant address page for the non-JS journey", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSProgressNonJsPlantRows,
+    };
+
+    cy.visit(progressUrl, { qs: { ...testParams } });
+    cy.get('[data-testid="progress-processingPlant-wrapper"]').should("exist");
+    cy.get('[data-testid="progress-processingPlantAddress-wrapper"]').should("exist");
+    cy.get('[data-testid="progress-processingPlantAddress-title"]').should(
+      "have.attr",
+      "href",
+      `${certificateUrl}/add-processing-plant-address`
+    );
+    cy.get("li strong:contains('COMPLETE')").should("have.length", 6);
+  });
+});
+
 describe("ProgressPage - Incomplete Application", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
@@ -62,6 +96,17 @@ describe("ProgressPage - Incomplete Application", () => {
       const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
 
       cy.wrap(duplicateIds, { log: false }).should("deep.equal", []);
+    });
+  });
+
+  // Guards against an error summary entry pointing at a row that is not rendered.
+  it("should link every error summary entry to an element that exists on the page", () => {
+    cy.get("[data-testid=continue-button]").click();
+    cy.get(".govuk-error-summary__list a").should("have.length.greaterThan", 0);
+    cy.get(".govuk-error-summary__list a").each(($link) => {
+      const href = $link.attr("href") ?? "";
+      expect(href, "error summary href").to.match(/^#.+/);
+      cy.get(href).should("exist");
     });
   });
 

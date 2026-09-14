@@ -6,6 +6,11 @@
   background-color: rgba(245, 245, 245, 0.747);
 }
 
+/* Hidden only when JS is available to toggle it; without JS the content stays usable. */
+[data-js="enabled"] .app-hide-when-js {
+  display: none;
+}
+
 html,
 body {
   overflow-x: hidden;
