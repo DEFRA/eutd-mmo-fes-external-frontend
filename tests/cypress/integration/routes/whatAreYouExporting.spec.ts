@@ -269,7 +269,7 @@ describe("What are you exporting page when js is enabled", () => {
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("16051000");
     cy.get("[data-testid='add-product']").eq(0).click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
   });
 });
 
@@ -297,7 +297,7 @@ describe("Errors on click of add product button", () => {
 
   it("should show errors click of add product button", () => {
     cy.get("[data-testid='add-product']").eq(0).click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should("be.visible");
     cy.contains("a", /^Select the state$/).should("be.visible");
     cy.contains("a", /^Select the presentation$/).should("be.visible");
@@ -331,7 +331,7 @@ describe("Errors on click of add product button from favourites", () => {
     cy.get("#add-from-favourites").should("be.visible");
     cy.get("#add-from-favourites [data-testid='add-product']").click();
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Select a product favourite from the list$/).should("be.visible");
 
     // After errors are shown, verify that the AutocompleteFormField has error styling
@@ -351,7 +351,7 @@ describe("Errors on click of add product button from favourites", () => {
 
     // Error summary should be visible (triggers useEffect scrollToId on line 110)
     cy.get("#errorIsland").should("exist");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
   });
 });
 
@@ -363,7 +363,7 @@ describe("Save and continue what are you exporting page", () => {
     cy.visit(productsUrl, { qs: { ...testParams } });
 
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter at least one product$/).should("be.visible");
   });
 });
@@ -957,7 +957,7 @@ describe("What are you exporting page: useEffect error scrolling", () => {
 
     // useEffect should scroll to errorIsland
     cy.get("#errorIsland").should("be.visible");
-    cy.contains("h2", "There is a problem").should("be.visible");
+    cy.contains("h2", "Error:There is a problem").should("be.visible");
   });
 
   it("should not scroll when errors remain empty", () => {
@@ -1637,7 +1637,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
 
   it("should display the duplicate product error message in the error summary", () => {
     cy.get("[data-testid='add-product']").eq(0).click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /The combination of species, state, presentation and commodity code must be unique/).should(
       "be.visible"
     );

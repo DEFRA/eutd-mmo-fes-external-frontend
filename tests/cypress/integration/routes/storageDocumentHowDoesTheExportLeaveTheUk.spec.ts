@@ -124,7 +124,7 @@ describe("HowDoesTheExportLeaveTheUk", () => {
     cy.get("#errorIsland").should("be.visible");
     cy.get(".govuk-form-group--error").should("be.visible");
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Select how the export leaves the UK$/).should("be.visible");
     cy.get("#vehicle-error").should("be.visible");
     cy.contains("span.govuk-visually-hidden", /^Error:$/).should("be.visible");

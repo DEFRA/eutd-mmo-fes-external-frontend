@@ -73,7 +73,7 @@ describe("ProgressPage - Incomplete Application", () => {
   it("should display errors", () => {
     cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/progress");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^You must complete the exporter details section before being able to continue$/).should(
       "be.visible"
     );
@@ -178,7 +178,7 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
       cy.url().should("include", "/progress");
 
       // Check for error summary at the top
-      cy.contains("h2", /^There is a problem$/).should("be.visible");
+      cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
 
       // Check for specific product validation error in error summary
       cy.contains("a", /product details section/).should("be.visible");
@@ -216,7 +216,7 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
       cy.url().should("include", "/progress");
 
       // Check for error summary at the top
-      cy.contains("h2", /^There is a problem$/).should("be.visible");
+      cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
 
       // Check for specific product validation error in error summary
       cy.contains("a", /product details section/).should("be.visible");
@@ -257,7 +257,7 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
 
     it("should not display validation errors", () => {
       cy.get('[data-testid="continue-button"]').click();
-      cy.contains("h2", /^There is a problem$/).should("not.exist");
+      cy.contains("h2", /^Error:There is a problem$/).should("not.exist");
     });
   });
 
@@ -274,7 +274,7 @@ describe("ProgressPage - FI0-10647 - Description-only Products Validation", () =
       cy.url().should("include", "/progress");
 
       // Check for error summary at the top
-      cy.contains("h2", /^There is a problem$/).should("be.visible");
+      cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
 
       // Check for exporter error - both in summary and inline
       cy.contains("a", /exporter details section/).should("be.visible");

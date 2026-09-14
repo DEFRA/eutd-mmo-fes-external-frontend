@@ -84,7 +84,7 @@ describe("Landings confirmation page: Error summary", () => {
   it("should display an error  summary and error validation at the form input when there is a bad request", () => {
     cy.get("[data-testid=continue]").click();
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Select an option to continue$/).should("be.visible");
     cy.contains("p.govuk-error-message > span", /^Error:$/).should("be.visible");
   });

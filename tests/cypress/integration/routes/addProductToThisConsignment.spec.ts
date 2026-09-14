@@ -289,7 +289,7 @@ describe("Add product to this consignment: entry document type error", () => {
     cy.get(`input[name="docIssuedInUk"][value="non_uk"]`).click();
     cy.get("[data-testid*='save-and-continue']").eq(0).click();
 
-    cy.get("#error-summary-title").should("contain.text", "There is a problem");
+    cy.get("#error-summary-title").should("contain.text", "Error:There is a problem");
     cy.contains("a", "Select which entry document you used").should("be.visible");
     cy.get(".govuk-error-message").should("contain.text", "Select which entry document you used");
   });

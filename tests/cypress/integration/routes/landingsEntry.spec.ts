@@ -106,7 +106,7 @@ describe("Landings entry page: choosing an option", () => {
     cy.visit(landingsUrl, { qs: { ...testParams } });
     cy.get("form").submit();
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a[href='#landingsEntryOption']", /^Select an option to continue$/).should("be.visible");
   });
 
@@ -194,7 +194,7 @@ describe("Landings entry page: form submission and errors", () => {
     cy.visit(landingsUrl, { qs: { ...testParams } });
     cy.get("form").submit();
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a[href='#landingsEntryOption']", /^Select an option to continue$/).should("be.visible");
   });
 

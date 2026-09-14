@@ -48,7 +48,7 @@ describe("Add consignment details page", () => {
   it("should show validation errors once adding commodity code and product description with no values", () => {
     cy.get("[data-testid*='save-and-continue'").eq(0).click();
     cy.url().should("include", "/add-consignment-details");
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
 
     cy.get("a").contains("Select a commodity code");
     cy.get(".govuk-error-message").contains("Select a commodity code");
@@ -60,7 +60,7 @@ describe("Add consignment details page", () => {
     cy.get("#commodityCode").type("!@#$%^&*()");
     cy.get("[data-testid*='save-and-continue'").eq(0).click();
     cy.url().should("include", "/add-consignment-details");
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get("a").contains("Select a commodity code");
     cy.get(".govuk-error-message").contains("Select a commodity code");
   });
@@ -69,7 +69,7 @@ describe("Add consignment details page", () => {
     cy.get("#commodityCode").type('03034512 - Frozen Atlantic bluefin tuna @@"Thunnus thynnus"');
     cy.get("[data-testid*='save-and-continue'").eq(0).click();
     cy.url().should("include", "/add-consignment-details");
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get("a").contains("Select a commodity code");
     cy.get(".govuk-error-message").contains("Select a commodity code");
   });
@@ -186,7 +186,7 @@ describe("Add consignment details: save consignment details", () => {
 
     cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", "/add-consignment-details");
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get("a").contains("Enter at least one product");
     cy.get(".govuk-error-message").contains("Enter at least one product");
   });
@@ -329,7 +329,7 @@ describe("Add consignment details: edit mode scenarios", () => {
 
     cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", `/add-consignment-details/${productId}`);
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get("a").contains("Select a commodity code");
     cy.get(".govuk-error-message").contains("Select a commodity code");
     cy.get("a").contains("Enter a description of the product");
@@ -346,7 +346,7 @@ describe("Add consignment details: edit mode scenarios", () => {
     cy.get("#commodityCode").type("{selectall}!@#$%^&*()");
     cy.get("[data-testid=save-and-continue]").click();
     cy.url().should("include", `/add-consignment-details/${productId}`);
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get("a").contains("Select a commodity code");
     cy.get(".govuk-error-message").contains("Select a commodity code");
   });

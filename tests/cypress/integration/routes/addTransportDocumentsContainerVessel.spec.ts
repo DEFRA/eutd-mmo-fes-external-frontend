@@ -56,7 +56,7 @@ describe("Add Transportation Documents Container Vessel", () => {
     };
     cy.visit(containerVesselPageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
   });
 
   it("should display error for (optional) fields", () => {
@@ -74,7 +74,7 @@ describe("Add Transportation Documents Container Vessel", () => {
     };
     cy.visit(containerVesselPageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=add-another-document-button]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter at least one additional transport document$/).should("be.visible");
   });
 
@@ -129,8 +129,8 @@ describe("Add Transportation Documents Container Vessel", () => {
     };
     cy.visit(containerVesselPageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=add-another-document-button]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("h2", /^There is a problem$/).click();
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).click();
   });
 
   it("should not display errors when click adding document name and reference", () => {

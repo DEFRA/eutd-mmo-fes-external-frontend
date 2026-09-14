@@ -362,7 +362,7 @@ describe("PS: Add catch details", () => {
     cy.visit(validEditCatchDetailsUrlForUK, { qs: { ...testParams } });
     cy.get("#addProductDetails").should("have.text", "Update");
     cy.get("#addProductDetails").click();
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get(".govuk-error-message").contains("Enter the catch certificate number");
   });
 
@@ -431,7 +431,7 @@ describe("PS: Add catch details", () => {
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("[data-testid=add-product-details").click();
-    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.get("#error-summary-title").contains("Error:There is a problem").should("be.visible");
     cy.get(".govuk-error-message").contains("Add at least one species to your processed product").should("be.visible");
   });
 
@@ -443,7 +443,7 @@ describe("PS: Add catch details", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get('[data-testid="save-and-continue"]').click();
 
-    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.get("#error-summary-title").contains("Error:There is a problem").should("be.visible");
     cy.get(".govuk-error-message").contains("Add at least one species to your processed product").should("be.visible");
     cy.focused().should("have.id", "errorIsland");
   });
@@ -468,7 +468,7 @@ describe("PS: Add catch details", () => {
 
     cy.get('[data-testid="save-and-continue"]').click();
 
-    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.get("#error-summary-title").contains("Error:There is a problem").should("be.visible");
     cy.focused().should("have.id", "errorIsland");
   });
 
@@ -787,7 +787,7 @@ describe("PS: Add catch details - Weight Input Validation", () => {
     cy.get("#catches-0-exportWeightBeforeProcessing").type("60");
     cy.get("#catches-0-exportWeightAfterProcessing").type("30");
     cy.get("#addProductDetails").click();
-    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.get("#error-summary-title").contains("Error:There is a problem").should("be.visible");
     cy.get(".govuk-error-message").should("exist");
   });
 
@@ -1117,7 +1117,7 @@ describe("PS: Add catch details - Error Handling", () => {
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
     cy.get("#addProductDetails").click();
     cy.get(".govuk-error-summary").should("be.visible");
-    cy.get("#error-summary-title").should("contain", "There is a problem");
+    cy.get("#error-summary-title").should("contain", "Error:There is a problem");
     cy.get(".govuk-error-message").should("have.length", 4);
   });
 
@@ -1963,7 +1963,7 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
     cy.get("#addProductDetails").click();
 
     cy.get(".govuk-error-summary").should("be.visible");
-    cy.get("#error-summary-title").should("contain.text", "There is a problem");
+    cy.get("#error-summary-title").should("contain.text", "Error:There is a problem");
     cy.get(".govuk-error-summary").should("contain.text", "Enter the commodity code");
     cy.get("#catches-0-speciesCommodityCode-error").should("contain.text", "Enter the commodity code");
   });
