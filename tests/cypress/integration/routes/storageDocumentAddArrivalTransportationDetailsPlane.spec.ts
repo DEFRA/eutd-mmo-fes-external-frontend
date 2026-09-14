@@ -230,7 +230,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departurePort").type("Charles de Gaulle airport");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Air waybill number must not exceed 50 characters$/).should("be.visible");
   });
 
@@ -246,7 +246,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departurePort").type("Charles de Gaulle airport");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the flight number$/).should("be.visible");
   });
 
@@ -262,7 +262,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departurePort").type("Charles de Gaulle airport");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Flight number must not exceed 15 characters$/).should("be.visible");
   });
 
@@ -278,7 +278,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departurePort").type("Charles de Gaulle airport");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Flight number must only contain letters and numbers$/).should("be.visible");
   });
 
@@ -296,7 +296,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departurePort").type("Charles de Gaulle airport");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Freight bill number must not exceed 60 characters$/).should("be.visible");
   });
 
@@ -312,7 +312,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#departurePort").type("Charles de Gaulle airport");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
       /^Freight bill number must only contain letters, numbers, hyphens, full stops and forward slashes$/
@@ -332,7 +332,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#placeOfUnloading").should("have.value", "");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the place where the consignment was unloaded$/).should("be.visible");
   });
 
@@ -352,7 +352,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Place of unloading must not exceed 50 characters$/).should("be.visible");
   });
 
@@ -370,7 +370,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#placeOfUnloading").type("Heathrow");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the shipping container identification number$/).should("be.visible");
   });
 
@@ -388,7 +388,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#placeOfUnloading").type("Heathrow");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the country of departure$/).should("be.visible");
   });
 
@@ -406,7 +406,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#placeOfUnloading").type("Heathrow");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter where the consignment departs from$/).should("be.visible");
   });
 
@@ -425,7 +425,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#placeOfUnloading").type("Heathrow");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the departure date$/).should("be.visible");
   });
 

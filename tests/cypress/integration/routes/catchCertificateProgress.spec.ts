@@ -74,7 +74,7 @@ describe("ProgressPage - Incomplete Application", () => {
   it("should display errors", () => {
     cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/progress");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^You must complete the product details section before being able to continue$/).should(
       "be.visible"
     );

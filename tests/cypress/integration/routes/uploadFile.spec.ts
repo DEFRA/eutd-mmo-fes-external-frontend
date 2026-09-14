@@ -70,7 +70,7 @@ describe("Upload File Page Upload", () => {
 
     cy.get("form").submit();
     cy.url().should("include", "/upload-file");
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get("a").contains("The selected file is empty");
     cy.get(".govuk-error-message").contains("The selected file is empty");
   });
@@ -437,12 +437,12 @@ describe("Upload File Page Upload - AV scan failure error", () => {
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("form").submit();
     cy.url().should("include", "/upload-file");
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get("a").contains(
-      "There is a problem with the file upload service. Please try again later or enter your products and landings manually."
+      "Error:There is a problem with the file upload service. Please try again later or enter your products and landings manually."
     );
     cy.get(".govuk-error-message").contains(
-      "There is a problem with the file upload service. Please try again later or enter your products and landings manually."
+      "Error:There is a problem with the file upload service. Please try again later or enter your products and landings manually."
     );
   });
 });
@@ -455,7 +455,7 @@ describe("Upload File Page Upload - invalid, inaccessible, corrupt error", () =>
     cy.visit(uploadFileUrl, { qs: { ...testParams } });
     cy.get("form").submit();
     cy.url().should("include", "/upload-file");
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get("a").contains(
       "The selected file is invalid. For example, the data could be inaccessible, corrupt, or in the wrong structure."
     );
@@ -529,7 +529,7 @@ describe("Upload File Page - save and continue with errors", () => {
     cy.get("[data-testid=continue").click();
 
     cy.url().should("include", "/upload-file");
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get("a").contains("The selected file is empty");
     cy.get("#file-error-message").contains("The selected file is empty");
   });
@@ -546,7 +546,7 @@ describe("Upload File Page - max row error", () => {
     cy.get("form").submit();
 
     cy.url().should("include", "/upload-file");
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get("a").contains("The selected file should contain a maximum of 100 rows");
     cy.get("#file-error-message").contains("The selected file should contain a maximum of 100 rows");
   });
@@ -880,7 +880,7 @@ describe("Upload File Page - file too large", () => {
     cy.get("form").submit();
 
     cy.url().should("include", "/upload-file");
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get("a").contains("The selected file must be smaller than 10KB");
     cy.get("#file-error-message").contains("The selected file must be smaller than 10KB");
   });

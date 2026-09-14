@@ -85,19 +85,19 @@ describe("Upload favourites page: when JavaScript is disabled", () => {
 
   it("should return an error when a species has not been selected", () => {
     cy.get("[data-testid='add-species']").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should("be.visible");
   });
 
   it("should return an error when a state has not been selected", () => {
     cy.get("[data-testid='add-state']").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Select the state$/).should("be.visible");
   });
 
   it("should return an error when a presentation has not been selected", () => {
     cy.get("[data-testid='add-presentation']").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Select the presentation$/).should("be.visible");
   });
 
@@ -129,7 +129,7 @@ describe("Upload favourites page with errors", () => {
 
   it("should show errors click of add product button", () => {
     cy.get("[data-testid='add-product']").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.url().should("include", "/upload-favourites");
   });
 });
@@ -156,7 +156,7 @@ describe("Upload favourites page: validating inputs", () => {
     cy.visit(uploadFavouritesUrl, { qs: { ...testParams } });
 
     cy.get("[data-testid='add-species']").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should("be.visible");
   });
 });

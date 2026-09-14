@@ -1059,7 +1059,7 @@ describe("Manual landings page: Error summary on click of add Product", () => {
     };
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid=submit]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Select a product from the list$/).should("be.visible");
     cy.contains("a", /^Select or enter a vessel name or port letter and number$/).should("be.visible");
     cy.contains("a", /^Enter the date landed$/).should("be.visible");
@@ -1078,7 +1078,7 @@ describe("Manual landings page: Error summary on click of add Product", () => {
     });
     cy.get("#gearCategory").contains("Dredges");
     cy.get("[data-testid=submit]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.get("#gearCategory option:selected")
       .invoke("text")
       .then((text) => {
@@ -1119,7 +1119,7 @@ describe("Manual landings page: Error with Max landings exceeded", () => {
     };
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
       /^The maximum landings limit has been reached. To progress, you will need to remove the products without landings.$/
@@ -1137,7 +1137,7 @@ describe("Manual landings page: Error with total combined export weight exceeded
     // Trigger form submit which will hit the VALIDATE_LANDINGS_URL MSW endpoint and return 400
     cy.get("[data-testid='submit']").click();
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^The total combined weight for all products must be less than 10,000,000$/).should("be.visible");
   });
 });
@@ -1193,7 +1193,7 @@ describe("Manual page vessel licence error on save and continue", () => {
     cy.get("[data-testid='save-and-continue']").click();
 
     cy.url().should("include", "add-landing");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.get(".govuk-error-summary__list > li").should("contain", "Please contact support");
     cy.get(".govuk-error-message").should("contain", "Please contact support");
   });
@@ -1381,7 +1381,7 @@ describe("Mandatory field validation tests", () => {
 
     cy.get(".govuk-error-summary", { timeout: 10000 }).should("be.visible");
 
-    cy.get(".govuk-error-summary").contains("h2", "There is a problem").should("be.visible");
+    cy.get(".govuk-error-summary").contains("h2", "Error:There is a problem").should("be.visible");
 
     cy.get(".govuk-error-summary").contains("a", "Enter the start date of the fishing trip").should("be.visible");
   });
@@ -1396,7 +1396,7 @@ describe("Mandatory field validation tests", () => {
 
     cy.get("[data-testid=submit]").click();
 
-    cy.contains("h2", "There is a problem").should("be.visible");
+    cy.contains("h2", "Error:There is a problem").should("be.visible");
 
     cy.get(".govuk-error-summary")
       .contains("a", "Select whether the product was caught in a high seas area")
@@ -1415,7 +1415,7 @@ describe("Mandatory field validation tests", () => {
 
     cy.get("[data-testid=submit]").click();
 
-    cy.contains("h2", "There is a problem").should("be.visible");
+    cy.contains("h2", "Error:There is a problem").should("be.visible");
 
     cy.get(".govuk-error-summary")
       .contains("a", "Select or enter a country for the exclusive economic zone")
@@ -1440,7 +1440,7 @@ describe("Mandatory field validation tests", () => {
 
     cy.get("[data-testid=submit]").click();
 
-    cy.contains("h2", "There is a problem").should("be.visible");
+    cy.contains("h2", "Error:There is a problem").should("be.visible");
 
     cy.get(".govuk-error-summary").contains("a", "Select a gear category").should("be.visible");
 
@@ -1461,7 +1461,7 @@ describe("Mandatory field validation tests", () => {
 
     cy.get("[data-testid=submit]").click();
 
-    cy.contains("h2", "There is a problem").should("be.visible");
+    cy.contains("h2", "Error:There is a problem").should("be.visible");
     cy.get("#gearCategory option:selected")
       .invoke("text")
       .then((text) => {
@@ -1482,7 +1482,7 @@ describe("Mandatory field validation tests", () => {
   it("should display multiple validation errors when multiple mandatory fields are empty", () => {
     cy.get("[data-testid=submit]").click();
 
-    cy.contains("h2", "There is a problem").should("be.visible");
+    cy.contains("h2", "Error:There is a problem").should("be.visible");
 
     cy.get(".govuk-error-summary").contains("a", "Enter the start date of the fishing trip").should("be.visible");
     cy.get(".govuk-error-summary")
@@ -1503,7 +1503,7 @@ describe("Mandatory field validation tests", () => {
 
     cy.get("[data-testid=submit]").click();
 
-    cy.contains("h2", "There is a problem").should("be.visible");
+    cy.contains("h2", "Error:There is a problem").should("be.visible");
 
     cy.get(".govuk-error-summary")
       .contains("a", "Select or enter a country for the exclusive economic zone")

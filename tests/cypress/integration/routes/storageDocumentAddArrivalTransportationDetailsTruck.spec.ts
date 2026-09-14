@@ -123,7 +123,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departurePort").type("Where the consignment departs from");
     cy.get("#placeOfUnloading").type("Place of unloading");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Registration number must not exceed 50 characters$/).should("be.visible");
   });
 
@@ -139,7 +139,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departurePort").type("Where the consignment departs from");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Registration number must only contain letters, numbers, hyphens, and spaces$/).should(
       "be.visible"
     );
@@ -159,7 +159,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the registration number$/).should("be.visible");
   });
 
@@ -177,7 +177,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the place where the consignment was unloaded$/).should("be.visible");
   });
 
@@ -197,7 +197,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Place of unloading must not exceed 50 characters$/).should("be.visible");
   });
 
@@ -215,7 +215,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departurePort").type("Where the consignment departs from");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Freight bill number must not exceed 60 characters$/).should("be.visible");
   });
 
@@ -231,7 +231,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#departurePort").type("Where the consignment departs from");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
       /^Freight bill number must only contain letters, numbers, hyphens, full stops and forward slashes$/
@@ -251,7 +251,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Select a truck nationality from the list$/).should("be.visible");
   });
 
@@ -268,7 +268,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the country of departure$/).should("be.visible");
   });
 
@@ -285,7 +285,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter where the consignment departs from$/).should("be.visible");
   });
 
@@ -302,7 +302,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the departure date$/).should("be.visible");
   });
 
@@ -504,7 +504,7 @@ describe("Add Transportation Details Truck: Invalid year in departure date", () 
     cy.get("#departureDate-year").clear().type("0000");
     cy.get("[data-testid=save-and-continue]").click();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Departure date must be a real date$/).should("be.visible");
   });
 });

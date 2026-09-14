@@ -92,7 +92,7 @@ describe("Add storage facility details: validation errors", () => {
 
     cy.visit(pagePath, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
   });
 
   it("should display validation errors when facility name is missing on go to add address", () => {
@@ -102,7 +102,7 @@ describe("Add storage facility details: validation errors", () => {
 
     cy.visit(pagePath, { qs: { ...testParams } });
     cy.get("[data-testid=goToAddAddress-button]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
   });
 });
 

@@ -107,7 +107,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#departurePort").type("Where the consignment departs from");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Railway bill number must not exceed 15 characters$/).should("be.visible");
   });
 
@@ -122,7 +122,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#departurePort").type("Where the consignment departs from");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the railway bill number$/).should("be.visible");
   });
 
@@ -138,7 +138,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#placeOfUnloading").should("have.value", "");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the place where the consignment was unloaded$/).should("be.visible");
   });
 
@@ -157,7 +157,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Place of unloading must not exceed 50 characters$/).should("be.visible");
   });
 
@@ -172,7 +172,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#departurePort").type("Where the consignment departs from");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Railway bill number must only contain letters and numbers$/).should("be.visible");
   });
 
@@ -183,7 +183,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
     cy.contains("a", /^Enter the railway bill number$/).should("be.visible");
   });
@@ -276,7 +276,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error is displayed
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the country of departure$/).should("be.visible");
   });
 
@@ -298,7 +298,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error is displayed
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter where the consignment departs from$/).should("be.visible");
   });
 
@@ -318,7 +318,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error is displayed
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the departure date$/).should("be.visible");
   });
 
