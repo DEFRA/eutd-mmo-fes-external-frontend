@@ -418,7 +418,7 @@ describe("Add Transportation Details Truck: Welsh translations for departure por
     const longString = new Array(52).join("a");
     cy.get("#departurePlace").type(longString);
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
+    cy.contains("h2", /^Gwall:Mae yna broblem$/).should("be.visible");
     cy.contains("a", /^Rhaid i O ble mae'r lori’n ymadael fod yn llai na 50 o nodau$/).should("be.visible");
     cy.get(".govuk-error-message").should(
       "contain.text",
@@ -433,7 +433,7 @@ describe("Add Transportation Details Truck: Welsh translations for departure por
     cy.visit(truckPageUrl, { qs: { ...testParams, lng: "cy" } });
     cy.get("#departurePlace").type("Invalid@#$%");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
+    cy.contains("h2", /^Gwall:Mae yna broblem$/).should("be.visible");
     cy.contains(
       "a",
       /^Rhaid i O ble mae'r lori’n ymadael gynnwys llythrennau, rhifau, collnodau, cysylltnodau a bylchau yn unig$/
