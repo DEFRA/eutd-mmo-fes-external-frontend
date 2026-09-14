@@ -36,6 +36,7 @@ export const ErrorSummaryView = ({
       data-module="govuk-error-summary"
     >
       <h2 className="govuk-error-summary__title" id="error-summary-title">
+        <span className="govuk-visually-hidden">{t("commonErrorText", { ns: "errorsText" })}</span>
         {t("commonErrorHeading", { ns: "common" })}
       </h2>
       <div className="govuk-error-summary__body">
