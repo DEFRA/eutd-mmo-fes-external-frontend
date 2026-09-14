@@ -82,4 +82,5 @@ export interface ProgressLoaderProps {
   transportSummary?: string | null;
   products?: ProcessingStatementProduct[];
   catches?: StorageDocumentCatch[];
+  isNonJs?: boolean;
 }

@@ -32,6 +32,7 @@ import type { IMainAppProps } from "./types";
 import clientLogger from "./logger";
 import { allNamespaces, supportedLanguages } from "./i18n";
 import { useNonce } from "./nonce";
+import { useIsHydrated } from "./hooks";
 
 declare global {
   // Injected by Vite define config for cache-busting
@@ -107,6 +108,7 @@ const Template = ({
   const { pathname } = useLocation();
   const { i18n } = useTranslation();
   const nonce = useNonce();
+  const isHydrated = useIsHydrated();
 
   useChangeLanguage(locale);
 
@@ -218,12 +220,29 @@ const Template = ({
   const location = useLocation();
 
   return (
-    <html className="govuk-template govuk-template--rebranded" lang={locale} dir={i18n.dir()}>
+    // The pre-paint script below sets data-js before hydration; React then owns it so later
+    // re-renders of <html> cannot strip it. suppressHydrationWarning covers the handover.
+    <html
+      className="govuk-template govuk-template--rebranded"
+      lang={locale}
+      dir={i18n.dir()}
+      data-js={isHydrated ? "enabled" : undefined}
+      suppressHydrationWarning
+    >
       <head>
         <Meta />
         <Links />
       </head>
       <body className="govuk-template__body govuk-body">
+        {/* Runs before first paint so JS-only styling applies without a visible no-JS-to-JS flip. */}
+        {!disableScripts && (
+          <script
+            nonce={nonce}
+            dangerouslySetInnerHTML={{
+              __html: `document.documentElement.setAttribute('data-js','enabled')`,
+            }}
+          />
+        )}
         {shouldRenderGA(analyticsCookieAccepted) && (
           <noscript
             dangerouslySetInnerHTML={{

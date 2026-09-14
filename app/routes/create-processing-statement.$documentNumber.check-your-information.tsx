@@ -421,23 +421,25 @@ const CheckYourInformation = () => {
                 processingStatement?.plantPostcode
               )}
             </dd>
-            <dd className="govuk-summary-list__actions">
-              <Link
-                className="govuk-link"
-                to={
-                  "/create-processing-statement/" +
-                  documentNumber +
-                  "/add-processing-plant-address?nextUri=" +
-                  encodeURIComponent("/create-processing-statement/" + documentNumber + "/check-your-information")
-                }
-              >
-                {t("commonChangeLink", { ns: "common" })}
-                <span className="govuk-visually-hidden">
-                  {" "}
-                  {lowerCase(t("psSummaryPagePlantAddress", { ns: "psCheckYourInformation" }))}
-                </span>
-              </Link>
-            </dd>
+            {processingStatement.isNonJs && (
+              <dd className="govuk-summary-list__actions">
+                <Link
+                  className="govuk-link"
+                  to={
+                    "/create-processing-statement/" +
+                    documentNumber +
+                    "/add-processing-plant-address?nextUri=" +
+                    encodeURIComponent("/create-processing-statement/" + documentNumber + "/check-your-information")
+                  }
+                >
+                  {t("commonChangeLink", { ns: "common" })}
+                  <span className="govuk-visually-hidden">
+                    {" "}
+                    {lowerCase(t("psSummaryPagePlantAddress", { ns: "psCheckYourInformation" }))}
+                  </span>
+                </Link>
+              </dd>
+            )}
           </div>
         </dl>
         <h2 className="govuk-heading-l">{t("psSummaryPageTransportDetails", { ns: "psCheckYourInformation" })}</h2>

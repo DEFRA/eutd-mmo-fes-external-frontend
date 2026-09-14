@@ -456,7 +456,7 @@ describe("PS: Add catch details", () => {
     cy.visit(validAddCatchDetailsUrlForUK, { qs: { ...testParams } });
     cy.get("#catches-0-catchCertificateType").check();
     cy.get("#catches-0-catchCertificateType").should("be.checked");
-    cy.get('[data-testid="issuing-country-0"]').should("not.exist");
+    cy.get('[data-testid="issuing-country-0"]').should("not.be.visible");
     cy.get("#catches-0-catchCertificateNumber").clear();
     cy.get("#catches-0-catchCertificateNumber").type("GBR-2023-CC-7E720BE");
     cy.get("#catches-0-totalWeightLanded").clear();
@@ -1808,7 +1808,7 @@ describe("PS: Add catch details - Issuing Country Functionality", () => {
     // 1. First click UK to ensure we're starting from a known state
     cy.get('label[for="catches-0-catchCertificateType"]').should("be.visible").click();
     cy.get("#catches-0-catchCertificateType").should("be.checked");
-    cy.get('input[name="issuingCountry"]').should("not.exist");
+    cy.get('input[name="issuingCountry"]').should("not.be.visible");
 
     // 2. Now select non-UK to show issuing country field
     cy.get('label[for="catchCertificateType-non_uk"]').should("be.visible").click();
@@ -2115,5 +2115,60 @@ describe("PS: Add catch details - Catch Certificate Commodity Code FormInput", (
     cy.visit(validEditCatchDetailsUrl, { qs: { ...testParams } });
 
     cy.get("#catches-0-speciesCommodityCode").should("not.have.value", "").and("be.visible");
+  });
+});
+
+// FIO-11516: the page used to flip from the no-JS view to the JS view on every load.
+describe("PS: Add catch details - no-JS to JS transition", () => {
+  it("should mark the document as JS-enabled before hydration", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+
+    cy.get("html").should("have.attr", "data-js", "enabled");
+  });
+
+  it("should keep the issuing country field hidden until a non-UK certificate is chosen", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+
+    cy.get('[data-testid="issuing-country-wrapper"]').should("have.class", "app-hide-when-js");
+    cy.get("#catches-0-issuingCountry").should("not.be.visible");
+
+    cy.get('label[for="catches-0-catchCertificateType"]').click();
+    cy.get('[data-testid="issuing-country-wrapper"]').should("have.class", "app-hide-when-js");
+    cy.get("#catches-0-issuingCountry").should("not.be.visible");
+
+    cy.get('label[for="catchCertificateType-non_uk"]').click();
+    cy.get('[data-testid="issuing-country-wrapper"]').should("not.have.class", "app-hide-when-js");
+    cy.get("#catches-0-issuingCountry").should("be.visible");
+  });
+
+  it("should render the species fallback select without a dropdown arrow when JS is enabled", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+
+    cy.get(".app-autocomplete").should("have.length.at.least", 2);
+  });
+
+  it("should keep both autocomplete fields usable as native selects without JavaScript", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
+      disableScripts: true,
+    };
+
+    cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+
+    cy.get("html").should("not.have.attr", "data-js");
+    cy.get("select#catches-0-species").should("be.visible");
+    cy.get("select#catches-0-issuingCountry").should("be.visible");
   });
 });

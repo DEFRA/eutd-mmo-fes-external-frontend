@@ -3,7 +3,6 @@ import { type ITestHandler, TestCaseId } from "~/types";
 import processingStatement from "@/fixtures/processingStatementApi/processingStatement.json";
 import prcessingStatementAddPlantAddress from "@/fixtures/processingStatementApi/processingStatementNoAddress.json";
 import processingStatementAddPlantNameError from "@/fixtures/processingStatementApi/processingStatementAddPlantNameError.json";
-import processingStatementAddPlantAddressError from "@/fixtures/processingStatementApi/processingStatementAddPlantAddressError.json";
 import processingStatementInvalidPlantNameError from "@/fixtures/processingStatementApi/processingStatementPlantNameIncorrectError.json";
 import processingStatementComplete from "@/fixtures/processingStatementApi/processingStatementComplete.json";
 import psProgressIncomplete from "@/fixtures/progressApi/psIncomplete.json";
@@ -61,12 +60,6 @@ const addProcessingPlantAddressHandler: ITestHandler = {
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(prcessingStatementAddPlantAddress))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(prcessingStatementAddPlantAddress))),
     rest.get(mockFindExporterAddressUrl, (req, res, ctx) => res(ctx.status(400), ctx.json(postcodeEmptyError))),
-  ],
-  [TestCaseId.PSAddProcessingPlantDetailsError]: () => [
-    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
-    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
-      res(ctx.json(processingStatementAddPlantAddressError))
-    ),
   ],
   [TestCaseId.PSAddProcessingPlantAddressInvalidPlantNameError]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
