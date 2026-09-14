@@ -546,7 +546,7 @@ describe("DirectLanding page errors when javascript is disabled", () => {
 
   it("should render a page-level error when vessel name is missing", () => {
     cy.get("[data-testid='save-and-continue']").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Select or enter a vessel name or port letter and number$/).should("be.visible");
   });
 
@@ -561,7 +561,7 @@ describe("DirectLanding page errors when javascript is disabled", () => {
   it("should render a page-level error when the add gear category button is clicked when no category is selected", () => {
     cy.get("select#gearCategory").select("Select gear category");
     cy.get("[data-testid='add-gear-category']").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^You must select a gear category option to add gear category$/).should("be.visible");
   });
 
@@ -691,13 +691,13 @@ describe("Direct Landing mandatory fields unpopulated errors", () => {
 
   it("should display an error when start date is unpopulated", () => {
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.get("#error-summary-title").contains("Error:There is a problem").should("be.visible");
     cy.get(".govuk-error-message").contains("Enter the start date of the fishing trip").should("be.visible");
   });
 
   it("should display an error when high seas is unpopulated", () => {
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.get("#error-summary-title").contains("Error:There is a problem").should("be.visible");
     cy.contains(".govuk-error-message", "Select whether the product was caught in a high seas area").should(
       "be.visible"
     );
@@ -705,7 +705,7 @@ describe("Direct Landing mandatory fields unpopulated errors", () => {
 
   it("should display an error when gear category is unpopulated", () => {
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.get("#error-summary-title").contains("Error:There is a problem").should("be.visible");
     cy.contains(".govuk-error-message", "Select a gear category").should("be.visible");
   });
 });
@@ -777,7 +777,7 @@ describe("Direct Landing page when gear types api is failing", () => {
     cy.visit(directLandingUrl, { qs: { ...testParams } });
 
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem").should("be.visible");
+    cy.get("#error-summary-title").contains("Error:There is a problem").should("be.visible");
     cy.get(".govuk-error-message")
       .contains("You must select a gear type when you have selected a gear category")
       .should("be.visible");
@@ -842,7 +842,7 @@ describe("Direct Landing - EEZ validation when high seas is No", () => {
     cy.get("#add-zone-button").click();
     cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get(".govuk-error-message").should("contain", "exclusive economic zone");
   });
 
@@ -850,7 +850,7 @@ describe("Direct Landing - EEZ validation when high seas is No", () => {
     cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");
     cy.get("#eez-0").type("Invalid Country Name XYZ");
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get(".govuk-error-message").should("contain", "Select a country for the exclusive economic zone from the list");
   });
 });
@@ -871,7 +871,7 @@ describe("Direct Landing - Invalid date validation without vessel name error (FI
   it("should display date errors but not a vessel error when invalid dates are submitted (FIO-10474)", () => {
     cy.get("[data-testid='save-and-continue']").click();
     cy.url().should("include", "direct-landing");
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get(".govuk-error-summary__list").should("contain.text", "Enter a valid");
     cy.get(".govuk-error-summary__list").should("not.contain.text", "Select a vessel from the list");
   });
@@ -883,7 +883,7 @@ describe("Direct Landing Error Messages - English", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem"); // Passes in dev localhost:3000
+    cy.get("#error-summary-title").contains("Error:There is a problem"); // Passes in dev localhost:3000
     cy.get(".govuk-error-summary__list a").should("contain.text", "Enter the date landed"); // Passes in dev localhost:3000
     cy.get(".govuk-error-summary__list a").should(
       "contain.text",
@@ -908,7 +908,7 @@ describe("Direct Landing Error Messages - English", () => {
     cy.get("#dateLanded-year").clear();
     cy.get("#dateLanded-year").type("2026");
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Enter a valid date landed");
     cy.get(".govuk-error-message").should("contain.text", "Enter a valid date landed");
   });
@@ -926,7 +926,7 @@ describe("Direct Landing Error Messages - English", () => {
     cy.get("#dateLanded-year").clear();
     cy.get("#dateLanded-year").type("2029");
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get(".govuk-error-summary__list a").should(
       "contain.text",
       "Date landed must be today or within the next 7 days"
@@ -944,7 +944,7 @@ describe("Direct Landing Error Messages - English", () => {
       .type(invalidVesselValue);
     cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Select a vessel from the list");
     cy.get(".govuk-error-message").should("contain.text", "Select a vessel from the list");
   });
@@ -955,7 +955,7 @@ describe("Direct Landing Error Messages - English", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Select a vessel from the list");
     cy.get(".govuk-error-message").should("contain.text", "Select a vessel from the list");
     cy.get(String.raw`#vessel-vesselName`)
@@ -969,7 +969,7 @@ describe("Direct Landing Error Messages - English", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Enter the export weight in kilograms");
     cy.get(".govuk-error-message").should("contain.text", "Enter the export weight in kilograms");
   });
@@ -980,7 +980,7 @@ describe("Direct Landing Error Messages - English", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get(".govuk-error-summary__list a")
       .should("contain.text", "The total combined weight of all products must be less than 100,000,000,000")
       .and("have.attr", "href", "#weights");
@@ -997,7 +997,7 @@ describe("Direct Landing Error Messages - English", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get(".govuk-error-summary__list a")
       .should("contain.text", "The total combined weight of all products must be less than 100,000,000,000")
       .and("have.attr", "href", "#weights");
@@ -1015,7 +1015,7 @@ describe("Direct Landing Error Messages - English", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     // The error message should appear exactly once in the summary list
     cy.get(".govuk-error-summary__list a")
       .filter(':contains("The total combined weight of all products must be less than 100,000,000,000")')

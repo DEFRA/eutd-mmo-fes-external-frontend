@@ -282,7 +282,7 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
       cy.get("[data-testid='save-and-continue']").click();
 
       // Verify common namespace translation (commonErrorHeading)
-      cy.get("#error-summary-title").should("exist").and("have.text", "There is a problem");
+      cy.get("#error-summary-title").should("exist").and("have.text", "Error:There is a problem");
 
       // Verify error messages are translated (from errorsText namespace)
       cy.get(".govuk-error-summary__list a").should("have.length.greaterThan", 0);

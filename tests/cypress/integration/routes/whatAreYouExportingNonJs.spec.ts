@@ -14,7 +14,7 @@ describe("Errors on click of add product button from empty favourites", () => {
     cy.get("[data-tab-id='favouritesTab']").click();
     cy.get('select[name="favourite"]').select("Aesop shrimp (AES) Fresh,Whole, 03063590");
     cy.get("[data-testid='add-product']").eq(1).click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Select a product favourite from the list$/).should("be.visible");
   });
 });

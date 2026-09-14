@@ -194,7 +194,7 @@ describe("Add Processing Plant Address", () => {
 
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("#findaddress").click();
-    cy.contains("h2", "There is a problem").should("be.visible");
+    cy.contains("h2", "Error:There is a problem").should("be.visible");
     cy.get(".govuk-error-summary").should("be.visible");
     cy.get(".govuk-error-summary").contains("a", "Enter a postcode").should("be.visible");
     cy.url().should("include", psAddressUrl);
@@ -327,7 +327,7 @@ describe("Add Processing Plant Address", () => {
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("input[name=postcode]").type("?@444");
     cy.get("#findaddress").click();
-    cy.contains("h2", "There is a problem").should("be.visible");
+    cy.contains("h2", "Error:There is a problem").should("be.visible");
   });
 
   it("should handle changelink action correctly", () => {

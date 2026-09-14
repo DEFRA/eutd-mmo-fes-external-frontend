@@ -22,7 +22,7 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
       cy.get("[data-testid=create-ps-button]").click();
 
       // Error summary should be visible
-      cy.contains("h2", /^There is a problem$/).should("be.visible");
+      cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
 
       // Error link should be present in the error summary
       cy.contains("a", /^The catch certificate entered is no longer valid$/).should("be.visible");
@@ -61,7 +61,9 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
 
       // Error summary should contain both errors
       cy.contains("a", /^The catch certificate entered is no longer valid$/).should("be.visible");
-      cy.contains("a", /^Enter the Food and Agriculture Organisation \(FAO\) code or species name$/).should("be.visible");
+      cy.contains("a", /^Enter the Food and Agriculture Organisation \(FAO\) code or species name$/).should(
+        "be.visible"
+      );
 
       // Both inline error messages should be visible
       cy.get(".govuk-error-message").should("have.length", 2);
@@ -79,7 +81,7 @@ describe("UAT-498: Check Your Information page - Invalid Catch Certificate Error
     it("should display format error next to the catch certificate field", () => {
       cy.get("[data-testid=create-ps-button]").click();
 
-      cy.contains("h2", /^There is a problem$/).should("be.visible");
+      cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
       cy.contains("a", /^Catch certificate number must only contain letters, numbers/).should("be.visible");
 
       // Inline error should be visible

@@ -34,7 +34,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
     cy.get("form").submit();
 
     // The page should show the error summary rendered by the component
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
   });
 
   describe("AddArrivalContainerVesselTransportAllowed scenarios", () => {
@@ -136,7 +136,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("#departurePort").type("Port of Calais");
       cy.get("[data-testid=save-and-continue]").click();
       cy.get("form").submit();
-      cy.contains("h2", /^There is a problem$/).should("be.visible");
+      cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
       cy.contains("a", /^Enter the vessel name$/).should("be.visible");
     });
 
@@ -149,7 +149,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("#departurePort").type("Port of Calais");
       cy.get("[data-testid=save-and-continue]").click();
       cy.get("form").submit();
-      cy.contains("h2", /^There is a problem$/).should("be.visible");
+      cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
       cy.contains("a", /^Vessel name must only contain letters, numbers, apostrophes, hyphens, and brackets$/).should(
         "be.visible"
       );
@@ -251,7 +251,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
       cy.get('[name="containerNumbers.0"]').should("be.visible").type("INVALID@#");
       cy.get("[data-testid=save-and-continue]").click();
-      cy.contains("h2", "There is a problem").should("be.visible");
+      cy.contains("h2", "Error:There is a problem").should("be.visible");
     });
 
     it("should show format error when a container identification number has invalid format regardless of length", () => {
@@ -263,7 +263,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
         .should("be.visible")
         .type("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
       cy.get("[data-testid=save-and-continue]").click();
-      cy.contains("h2", "There is a problem").should("be.visible");
+      cy.contains("h2", "Error:There is a problem").should("be.visible");
     });
 
     it("should add 5 container numbers with correct format", () => {
@@ -374,7 +374,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
       cy.get("#departureCountry").type("!InvalidCountry123");
       cy.get("[data-testid=save-and-continue]").click();
-      cy.get("#error-summary-title").contains("There is a problem");
+      cy.get("#error-summary-title").contains("Error:There is a problem");
     });
 
     it("should display error when consignment departs from (departure port) exceeds 50 characters", () => {
@@ -409,7 +409,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("#departureDate-month").type("13");
       cy.get("#departureDate-year").type("2025");
       cy.get("[data-testid=save-and-continue]").click();
-      cy.contains("h2", /^There is a problem$/).should("be.visible");
+      cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
       cy.contains("a", "Departure date must be a real date").should("be.visible");
     });
   });
@@ -429,7 +429,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureDate-month").type("07");
     cy.get("#departureDate-year").type("2025");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the flag state$/).should("be.visible");
   });
 
@@ -445,7 +445,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureDate-month").type("07");
     cy.get("#departureDate-year").type("2025");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the shipping container identification number$/).should("be.visible");
   });
 
@@ -461,7 +461,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureDate-month").type("07");
     cy.get("#departureDate-year").type("2025");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the country of departure$/).should("be.visible");
   });
 
@@ -477,7 +477,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureDate-month").type("07");
     cy.get("#departureDate-year").type("2025");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter where the consignment departs from$/).should("be.visible");
   });
 
@@ -490,7 +490,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departurePort").type("Port of Calais");
     cy.get("#placeOfUnloading").type("Dover");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the departure date$/).should("be.visible");
   });
 });

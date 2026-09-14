@@ -129,8 +129,11 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
     cy.visit(processingStatementUrl, { qs: { ...testParams } });
     cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-check-status");
     cy.url().should("include", "/eu-data-integration-check-status");
-    cy.contains("h1", "There is a problem with EU data integration").should("be.visible");
-    cy.title().should("eq", "There is a problem with EU data integration - Create a UK processing statement - GOV.UK");
+    cy.contains("h1", "Error:There is a problem with EU data integration").should("be.visible");
+    cy.title().should(
+      "eq",
+      "Error:There is a problem with EU data integration - Create a UK processing statement - GOV.UK"
+    );
   });
 
   it("should have back link on successful status page", () => {
@@ -185,7 +188,7 @@ describe("EU CATCH Integration - Processing Statement Status Pages", () => {
     };
     cy.visit(processingStatementUrl, { qs: { ...testParams } });
     cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-check-status");
-    cy.contains("h1", "There is a problem with EU data integration").should("be.visible");
+    cy.contains("h1", "Error:There is a problem with EU data integration").should("be.visible");
     cy.contains("h2", "What this means").should("be.visible");
     cy.contains("h2", "If you need to speak to someone").should("be.visible");
   });
