@@ -92,7 +92,12 @@ export const validateResponseData = (
     return;
   }
 
-  const errors: IError[] | IErrorsTransformed = (responseData.errors as IError[]) || [];
+  const rawErrors = responseData.errors;
+  const errors: IError[] = Array.isArray(rawErrors)
+    ? (rawErrors as IError[])
+    : rawErrors && typeof rawErrors === "object"
+      ? Object.entries(rawErrors as Record<string, string>).map(([key, message]) => ({ key, message }))
+      : [];
   const unauthorised = responseData.unauthorised as boolean;
 
   if (unauthorised) {

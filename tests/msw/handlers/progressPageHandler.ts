@@ -78,6 +78,20 @@ const progressPageHandler: ITestHandler = {
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
   ],
+  [TestCaseId.PSProgressJsPlantRows]: () => [
+    rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgressComplete))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocument))),
+    rest.get(mockCheckProgressUrl, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json({ ...processingStatement, isNonJs: false }))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+  ],
+  [TestCaseId.PSProgressNonJsPlantRows]: () => [
+    rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgressComplete))),
+    rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocument))),
+    rest.get(mockCheckProgressUrl, (req, res, ctx) => res(ctx.json({}))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json({ ...processingStatement, isNonJs: true }))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+  ],
   [TestCaseId.PSCompleteProgressUnauthorised]: () => [
     rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgressComplete))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocument))),
