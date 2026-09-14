@@ -52,3 +52,4 @@ export * from "./eu-data-integration";
 export * from "./transportation-documents";
 export * from "./deleteDraftForm";
 export * from "./howDoesTheConsignmentArriveToTheUk";
+export * from "./processingPlants";

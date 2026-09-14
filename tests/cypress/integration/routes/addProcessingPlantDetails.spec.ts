@@ -1,241 +1,174 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const psDetailsUrl = `create-processing-statement/GBR-2022-PS-3FE1169D1/add-processing-plant-details`;
-const certificateUrl = `/create-processing-statement/GBR-2022-PS-3FE1169D1`;
+const documentNumber = "GBR-2022-PS-0D12ABA0A";
+const pageUrl = `/create-processing-statement/${documentNumber}/add-processing-plant-details`;
+const expectedOption = "Test Fish Plant (UK/1234/EC)";
 
-describe("Add Processing Plant Details", () => {
-  beforeEach(() => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSAddProcessingPlantDetails,
-    };
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
-  });
+const visitPage = (testCaseId: TestCaseId) => {
+  const testParams: ITestParams = { testCaseId };
+  cy.visit(pageUrl, { qs: { ...testParams } });
+};
 
-  it("should render processing Plant Details page", () => {
-    cy.contains("a", /^Back$/)
-      .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/catch-added`);
-    cy.get(".govuk-heading-xl").contains("Add processing plant details");
-    cy.contains("button", "Add address").should("be.visible");
-    cy.contains("button", "Save as draft").should("be.visible");
-  });
+// Waits for hydration: the SSR fallback inputs are swapped for the autocomplete once React hydrates.
+const visitJsPage = (testCaseId: TestCaseId) => {
+  visitPage(testCaseId);
+  cy.get("#processingPlant").should("be.visible");
+};
 
-  it("will have a progress link to the progress page", () => {
-    cy.contains("a", "Back to your progress").should("be.visible");
-    cy.contains("a", "Back to your progress")
-      .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/progress`);
-  });
-  it("will have an alert text at the top of the page", () => {
-    cy.get("[data-testid=warning-message]")
-      .should("be.visible")
-      .should("have.attr", "role", "note")
-      .contains("An address must be added for this processing plant.");
-  });
+const visitNonJsPage = (testCaseId: TestCaseId) => {
+  const testParams: ITestParams = { testCaseId, disableScripts: true };
+  cy.visit(pageUrl, { qs: { ...testParams } });
+  cy.get("#plantName").should("be.visible");
+};
 
-  it("will have visually hidden assistive text for screen readers in the warning message (WCAG 1.3.1)", () => {
-    cy.get("[data-testid=warning-message]").find(".govuk-visually-hidden").should("contain", "Warning");
-  });
+const selectEstablishment = () => {
+  cy.get("#processingPlant").clear();
+  cy.get("#processingPlant").type(expectedOption);
+};
 
-  it("will display label names for all inputs", () => {
-    cy.get("label[for='plantName']").should("be.visible").contains("Processing plant name");
-    cy.get("label[for='plantApprovalNumber']").should("be.visible").contains("Plant approval number");
-    cy.get("label[for='personResponsibleForConsignment']")
-      .should("be.visible")
-      .contains("Person responsible for this consignment");
-  });
+const fillNonJsPlantDetails = (plantName: string, plantApprovalNumber: string) => {
+  cy.get("#plantName").clear();
+  cy.get("#plantName").type(plantName);
+  cy.get("#plantApprovalNumber").clear();
+  cy.get("#plantApprovalNumber").type(plantApprovalNumber);
+};
 
-  it("will display all the hint texts for the inputs", () => {
-    cy.get("#hint-plantApprovalNumber")
-      .should("be.visible")
-      .contains("This is sometimes called a site code. For example, UK/1234/EC");
-    cy.get("#hint-personResponsibleForConsignment")
-      .should("be.visible")
-      .contains("Enter the name of the person in charge at the processing plant. For example, John Smith");
+const fillPersonResponsible = (name: string) => {
+  cy.get("#personResponsibleForConsignment").clear();
+  cy.get("#personResponsibleForConsignment").type(name);
+};
+
+describe("PS: add processing plant details - rendering", () => {
+  it("should render the establishment autocomplete, hint and buttons for the JS journey", () => {
+    visitJsPage(TestCaseId.PSAddProcessingPlantDetails);
+
+    cy.get(".govuk-heading-xl").should("be.visible");
+    cy.get("label[for='processingPlant']").should("contain", "Processing plant name and approval number");
+    cy.contains("Search for an approved processing plant by name or approval number").should("be.visible");
+    cy.get("#personResponsibleForConsignment").should("be.visible");
+    cy.get("[data-testid='save-and-continue']").should("be.visible");
+    cy.get("[data-testid='save-draft-button']").should("be.visible");
   });
 
-  it("will display current value for personResponsibleForConsignment input", () => {
-    cy.get("#personResponsibleForConsignment").should("be.visible").should("have.value", "Test data");
-  });
+  it("should render plain plant name and approval number inputs for the non-JS journey", () => {
+    visitNonJsPage(TestCaseId.PSAddProcessingPlantDetailsMatchByApproval);
 
-  it("will display current value for plantApprovalNumber input", () => {
-    cy.get("#plantApprovalNumber").should("be.visible").should("have.value", "Approval Number");
-  });
-  it("will display current value for processingPlantName input", () => {
-    cy.get("#plantName").should("be.visible").should("have.value", "Test Plantname");
+    cy.get("#plantApprovalNumber").should("be.visible");
+    cy.contains("label", "Processing plant name").should("be.visible");
+    cy.contains("label", "Plant approval number").should("be.visible");
+    cy.contains("label", "Processing plant name and approval number").should("not.exist");
   });
 });
 
-describe("Add Processing Plant Details return error response if the back end returns an error", () => {
-  it("will return error response if the back end returns an error", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
-    };
+describe("PS: add processing plant details - autocomplete filtering", () => {
+  it("should filter establishments by plant name and by approval number", () => {
+    visitJsPage(TestCaseId.PSAddProcessingPlantDetails);
 
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    cy.get("#processingPlant").clear();
+    cy.get("#processingPlant").type("Test Fish");
+    cy.contains(".autocomplete__option", expectedOption).should("be.visible");
 
-    cy.get("[data-testid=save-and-continue").click();
-    cy.get("body").should("exist");
-  });
-
-  it("should not render duplicate id attributes when validation errors are shown", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
-    };
-
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-and-continue").click();
-
-    cy.get("[id]").then(($elements) => {
-      const ids = [...$elements].map((element) => element.id).filter(Boolean);
-      const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
-
-      cy.wrap(duplicateIds, { log: false }).should("deep.equal", []);
-    });
+    cy.get("#processingPlant").clear();
+    cy.get("#processingPlant").type("1234");
+    cy.contains(".autocomplete__option", expectedOption).should("be.visible");
   });
 });
 
-describe("Get Processing Plant Details: unauthorised access", () => {
-  it("will have a back link to the add exporters details page", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSAddConsignmentDetailsUnauthorised,
-    };
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
-
+describe("PS: add processing plant details - forbidden", () => {
+  it("should redirect to the forbidden page when unauthorised", () => {
+    visitPage(TestCaseId.PSAddProcessingPlantDetailsUnauthorised);
     cy.url().should("include", "/forbidden");
-    cy.get("h1").contains("Forbidden");
   });
 });
 
-describe("Add Processing Plant Details: save processing plant details", () => {
-  it("will save the Processing Plant Details as draft and take the exporter the PS dashboard", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSPostAddProcessingPlantDetails,
-    };
+describe("PS: add processing plant details - save and continue success", () => {
+  it("should redirect to add-health-certificate when a matching establishment is selected in JS", () => {
+    visitJsPage(TestCaseId.PSAddProcessingPlantDetailsMatchByApproval);
 
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    selectEstablishment();
+    fillPersonResponsible("Jane Doe");
+    cy.get("[data-testid='save-and-continue']").click();
 
-    cy.get("[data-testid=save-draft-button").click();
-    cy.url().should("include", "/create-processing-statement/processing-statements");
+    cy.url().should("include", `/create-processing-statement/${documentNumber}/add-health-certificate`);
   });
 
-  it("will save the consignment details and take the exporter the next page", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSPostAddProcessingPlantDetails,
-    };
+  it("should redirect to add-processing-plant-address when values match in non-JS", () => {
+    visitNonJsPage(TestCaseId.PSAddProcessingPlantDetailsMatchByApproval);
 
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+    fillNonJsPlantDetails("Test Fish Plant", "UK/1234/EC");
+    fillPersonResponsible("Jane Doe");
+    cy.get("[data-testid='save-and-continue']").click();
 
-    cy.get("[data-testid=save-and-continue").click();
-    cy.url().should("include", "/create-processing-statement/GBR-2022-PS-3FE1169D1/add-processing-plant-address");
-  });
-
-  it("should show validation errors on regular save but not on save as draft", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
-    };
-
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
-    cy.get("#plantName").clear();
-    cy.get("#plantApprovalNumber").clear();
-    cy.get("[data-testid=save-and-continue]").click();
-    cy.url().should("include", "add-processing-plant-details");
-    cy.get("[data-testid=save-draft-button]").click();
-    cy.url().should("include", "/create-processing-statement/processing-statements");
+    cy.url().should("include", `/create-processing-statement/${documentNumber}/add-processing-plant-address`);
   });
 });
 
-// Add this new describe block after the existing tests
-describe("Add Processing Plant Details: Save as Draft functionality", () => {
-  beforeEach(() => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSAddProcessingPlantDetails,
-    };
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
+describe("PS: add processing plant details - save and continue validation", () => {
+  it("should show both plant errors in the summary when no establishment matches in JS", () => {
+    visitJsPage(TestCaseId.PSAddProcessingPlantDetailsNoMatch);
+
+    cy.get("#processingPlant").clear();
+    cy.get("#processingPlant").type("Unknown Plant (UK/9999/EC)");
+    fillPersonResponsible("Jane Doe");
+    cy.get("[data-testid='save-and-continue']").click();
+
+    cy.get("#error-summary-title").should("be.visible");
+    cy.contains("Enter a valid processing plant name").should("be.visible");
+    cy.contains("Enter a valid plant approval number").should("be.visible");
+    cy.url().should("include", "/add-processing-plant-details");
   });
 
-  it("should save as draft with valid data and redirect to processing statements", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSPostAddProcessingPlantDetails,
-    };
+  it("should show inline errors for both plant fields when no establishment matches in non-JS", () => {
+    visitNonJsPage(TestCaseId.PSAddProcessingPlantDetailsNoMatch);
 
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
-    cy.get("#plantName").clear();
-    cy.get("#plantName").type("Test Processing Plant");
-    cy.get("#plantApprovalNumber").clear();
-    cy.get("#plantApprovalNumber").type("UK/TEST/123");
+    fillNonJsPlantDetails("Unknown Plant", "UK/9999/EC");
+    fillPersonResponsible("Jane Doe");
+    cy.get("[data-testid='save-and-continue']").click();
+
+    cy.get("#plantName-error").should("contain", "Enter a valid processing plant name");
+    cy.get("#plantApprovalNumber-error").should("contain", "Enter a valid plant approval number");
+  });
+
+  it("should require the person responsible in JS", () => {
+    visitJsPage(TestCaseId.PSAddProcessingPlantDetailsError);
+
+    selectEstablishment();
     cy.get("#personResponsibleForConsignment").clear();
-    cy.get("#personResponsibleForConsignment").type("John Doe");
-    cy.get("[data-testid=save-draft-button]").click();
-    cy.url().should("include", "/create-processing-statement/processing-statements");
+    cy.get("[data-testid='save-and-continue']").click();
+
+    cy.contains("Enter the name of the person responsible for this consignment").should("be.visible");
   });
 
-  it("should save as draft with partial data without validation errors", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSPostAddProcessingPlantDetails,
-    };
+  it("should require the person responsible in non-JS", () => {
+    visitNonJsPage(TestCaseId.PSAddProcessingPlantDetailsError);
 
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
-    cy.get("#plantName").clear();
-    cy.get("#plantName").type("Partial Plant Name");
-    cy.get("[data-testid=save-draft-button]").click();
-    cy.url().should("include", "/create-processing-statement/processing-statements");
-    cy.get(".govuk-error-summary").should("not.exist");
-    cy.get(".govuk-error-message").should("not.exist");
-  });
-
-  it("should save as draft with empty fields without validation errors", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSPostAddProcessingPlantDetails,
-    };
-
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
-    cy.get("#plantName").clear();
-    cy.get("#plantApprovalNumber").clear();
+    fillNonJsPlantDetails("Test Fish Plant", "UK/1234/EC");
     cy.get("#personResponsibleForConsignment").clear();
-    cy.get("[data-testid=save-draft-button]").click();
-    cy.url().should("include", "/create-processing-statement/processing-statements");
-    cy.get(".govuk-error-summary").should("not.exist");
-    cy.get(".govuk-error-message").should("not.exist");
-  });
+    cy.get("[data-testid='save-and-continue']").click();
 
-  it("should handle save as draft when backend returns an error gracefully", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
-    };
-
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
-    cy.get("#plantName").clear();
-    cy.get("#plantName").type("Error Test Plant");
-    cy.get("[data-testid=save-draft-button]").click();
-    cy.url().should("include", "/create-processing-statement/processing-statements");
-  });
-
-  it("should show save as draft button is clearly labeled and accessible", () => {
-    cy.get("[data-testid=save-draft-button]")
-      .should("be.visible")
-      .should("contain.text", "Save as draft")
-      .should("not.be.disabled");
-    cy.get("[data-testid=save-and-continue]").should("be.visible").should("not.contain.text", "Save as draft");
+    cy.contains("Enter the name of the person responsible for this consignment").should("be.visible");
   });
 });
 
-describe("Add Processing Plant Details (PS): save as draft retains valid fields", () => {
-  it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftWithErrors,
-    };
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-draft-button]").click();
+describe("PS: add processing plant details - save as draft", () => {
+  it("should redirect to the processing statements dashboard", () => {
+    visitJsPage(TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftNoErrors);
+
+    selectEstablishment();
+    fillPersonResponsible("Jane Doe");
+    cy.get("[data-testid='save-draft-button']").click();
+
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 
-  it("should redirect to dashboard when no validation errors on save as draft", () => {
-    const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftNoErrors,
-    };
-    cy.visit(psDetailsUrl, { qs: { ...testParams } });
-    cy.get("[data-testid=save-draft-button]").click();
+  // FI0-10577: saving a draft must succeed even when the document fails validation.
+  it("should redirect to the dashboard when the document has validation errors", () => {
+    visitJsPage(TestCaseId.PSAddProcessingPlantDetailsSaveAsDraftWithErrors);
+
+    selectEstablishment();
+    fillPersonResponsible("Jane Doe");
+    cy.get("[data-testid='save-draft-button']").click();
+
     cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });

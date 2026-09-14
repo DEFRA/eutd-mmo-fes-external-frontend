@@ -120,6 +120,35 @@ describe("Check Your Information page: updated exporter", () => {
   });
 });
 
+describe("Check Your Information (Summary) page: plant address change-link visibility", () => {
+  it("hides plant address Change link for JS journey", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformationJsPlantAddressNoChange,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.contains("dt", "Address")
+      .parent()
+      .within(() => {
+        cy.contains("a", "Change").should("not.exist");
+      });
+  });
+
+  it("shows plant address Change link for non-JS journey", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCheckYourInformationNonJsPlantAddressHasChange,
+    };
+    cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
+    cy.contains("dt", "Address")
+      .parent()
+      .within(() => {
+        cy.contains("a", "Change")
+          .should("be.visible")
+          .should("have.attr", "href")
+          .and("include", "/add-processing-plant-address");
+      });
+  });
+});
+
 describe("Check Your Information (Summary) page: Validation", () => {
   it("should error and show a validation error", () => {
     const testParams: ITestParams = {

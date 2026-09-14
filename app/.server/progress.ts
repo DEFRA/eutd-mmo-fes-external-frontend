@@ -214,9 +214,11 @@ export const progressPageLoader = async (request: Request, params: Params, journ
       documentNumber
     );
     const products = (processingStatementData as ProcessingStatement).products ?? [];
+    const isNonJs = (processingStatementData as ProcessingStatement).isNonJs ?? false;
     objectToReturn = {
       ...objectToReturn,
       products,
+      isNonJs,
     };
   }
 
