@@ -514,7 +514,10 @@ const DirectLanding = () => {
               })}
             >
               {!isEmpty(errors?.["weights"]) && (
-                <ErrorMessage text={t(errors["weights"].message, { ns: "errorsText" })} />
+                <ErrorMessage
+                  text={t(errors["weights"].message, { ns: "errorsText" })}
+                  visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                />
               )}
               <table className="govuk-table" id="yourproducts">
                 <thead className="govuk-table__head">

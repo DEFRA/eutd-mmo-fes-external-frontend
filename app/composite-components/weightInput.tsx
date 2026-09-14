@@ -71,7 +71,10 @@ export const WeightInput = ({
           <label className="govuk-label govuk-!-font-weight-bold" htmlFor={inputId}>
             {label}
           </label>
-          <ErrorMessage text={t(errors[inputId]?.message, { ns: "errorsText" })} />
+          <ErrorMessage
+            text={t(errors[inputId]?.message, { ns: "errorsText" })}
+            visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+          />
           <div id={hintId} className="govuk-hint govuk-!-margin-bottom-2">
             {hint}
           </div>
@@ -79,7 +82,10 @@ export const WeightInput = ({
       )}
       <div className="govuk-input__wrapper">
         {!errorID && errors && !isEmpty(errors[inputId]) && (
-          <ErrorMessage text={t(errors[inputId]?.message, { ns: "errorsText" })} />
+          <ErrorMessage
+            text={t(errors[inputId]?.message, { ns: "errorsText" })}
+            visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+          />
         )}
         <input
           className={

@@ -52,6 +52,10 @@ export const SelectAddress = ({ postcode, postcodeaddresses, errors, actionUri, 
                   error={{
                     text: t(errors?.addressError?.message, { ns: "errorsText" }) || "",
                     className: "govuk-error-message",
+                    visuallyHiddenText: {
+                      text: t("commonErrorText", { ns: "errorsText" }),
+                      className: "govuk-visually-hidden",
+                    },
                   }}
                   containerClassName={!isEmpty(errors) ? "govuk-form-group govuk-form-group--error" : ""}
                 />
