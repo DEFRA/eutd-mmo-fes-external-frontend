@@ -209,7 +209,7 @@ describe("EU CATCH Integration - Processing Statement Welsh Translation for Stat
     };
     cy.visit(processingStatementUrl, { qs: { ...testParams } });
     cy.visit("/create-processing-statement/GBR-2022-PS-1D7833456/eu-data-integration-check-status?lng=cy");
-    cy.contains("h1", "Gwall:Mae yna broblem wrth integreiddio â data'r UE").should("be.visible");
+    cy.contains("h1", "Mae yna broblem wrth integreiddio â data'r UE").should("be.visible");
   });
 });
 

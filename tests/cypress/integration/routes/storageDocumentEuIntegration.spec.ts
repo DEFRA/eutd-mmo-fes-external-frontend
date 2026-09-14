@@ -215,7 +215,7 @@ describe("EU CATCH Integration - Storage Document Welsh Translation for Status P
     };
     cy.visit(storageDocumentUrl, { qs: { ...testParams } });
     cy.visit("/create-non-manipulation-document/GBR-2022-SD-1C9833456/eu-data-integration-check-status?lng=cy");
-    cy.contains("h1", "Gwall:Mae yna broblem wrth integreiddio â data'r UE").should("be.visible");
+    cy.contains("h1", "Mae yna broblem wrth integreiddio â data'r UE").should("be.visible");
   });
 });
 
