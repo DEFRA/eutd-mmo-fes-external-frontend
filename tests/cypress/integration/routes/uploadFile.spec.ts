@@ -439,10 +439,10 @@ describe("Upload File Page Upload - AV scan failure error", () => {
     cy.url().should("include", "/upload-file");
     cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get("a").contains(
-      "Error:There is a problem with the file upload service. Please try again later or enter your products and landings manually."
+      "There is a problem with the file upload service. Please try again later or enter your products and landings manually."
     );
     cy.get(".govuk-error-message").contains(
-      "Error:There is a problem with the file upload service. Please try again later or enter your products and landings manually."
+      "There is a problem with the file upload service. Please try again later or enter your products and landings manually."
     );
   });
 });
