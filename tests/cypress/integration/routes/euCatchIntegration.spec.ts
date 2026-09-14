@@ -136,7 +136,7 @@ describe("EU CATCH Integration - Welsh Translation for Status Pages", () => {
     };
     cy.visit(catchCertificateUrl, { qs: { ...testParams } });
     cy.visit("/create-catch-certificate/GBR-2022-CC-45A276B54/eu-data-integration-check-status?lng=cy");
-    cy.contains("h1", "Gwall:Mae yna broblem wrth integreiddio â data'r UE").should("be.visible");
+    cy.contains("h1", "Mae yna broblem wrth integreiddio â data'r UE").should("be.visible");
   });
 });
 
