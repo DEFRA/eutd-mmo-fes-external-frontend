@@ -380,7 +380,7 @@ describe("Add Transportation Details Train: Welsh Translations", () => {
     cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error summary header in Welsh
-    cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
+    cy.contains("h2", /^Gwall:Mae yna broblem$/).should("be.visible");
 
     // Verify Welsh error messages as per acceptance criteria
     // "Enter the country of departure" -> "Rhowch y wlad ymadael"
