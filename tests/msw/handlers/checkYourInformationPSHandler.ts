@@ -37,6 +37,16 @@ const checkYourInformationPSHandler: ITestHandler = {
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
   ],
+  [TestCaseId.PSCheckYourInformationJsPlantAddressNoChange]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json({ ...processingStatement, isNonJs: false }))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+  ],
+  [TestCaseId.PSCheckYourInformationNonJsPlantAddressHasChange]: () => [
+    rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json({ ...processingStatement, isNonJs: true }))),
+    rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
+  ],
   [TestCaseId.PSCheckYourInformationUpdatedExporter]: () => [
     rest.get(mockDocumentUrl, (req, res, ctx) => res(ctx.json({ ...psCreated, documentStatus: "DRAFT" }))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),

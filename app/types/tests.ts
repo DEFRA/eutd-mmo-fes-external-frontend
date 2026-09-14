@@ -135,6 +135,13 @@ export enum TestCaseId {
   PSAddProcessingPlantDetailsUnauthorised = "psAddProcessingPlantDetailsUnauthorised",
   PSAddProcessingPlantDetailsSaveAsDraftWithErrors = "psAddProcessingPlantDetailsSaveAsDraftWithErrors",
   PSAddProcessingPlantDetailsSaveAsDraftNoErrors = "psAddProcessingPlantDetailsSaveAsDraftNoErrors",
+  PSAddProcessingPlantDetailsMatchByApproval = "psAddProcessingPlantDetailsMatchByApproval",
+  PSAddProcessingPlantDetailsMatchByName = "psAddProcessingPlantDetailsMatchByName",
+  PSAddProcessingPlantDetailsNoMatch = "psAddProcessingPlantDetailsNoMatch",
+  PSProgressNonJsPlantRows = "psProgressNonJsPlantRows",
+  PSProgressJsPlantRows = "psProgressJsPlantRows",
+  PSCheckYourInformationJsPlantAddressNoChange = "psCheckYourInformationJsPlantAddressNoChange",
+  PSCheckYourInformationNonJsPlantAddressHasChange = "psCheckYourInformationNonJsPlantAddressHasChange",
 
   PSAddHealthCertificate = "psAddHealthCertificate",
   PSAddHealthCertificateError = "psAddHealthCertificateError",
