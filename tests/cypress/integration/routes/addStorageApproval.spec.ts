@@ -171,7 +171,7 @@ describe("Add Storage Facility Approval - Welsh Translations", () => {
     cy.get(".govuk-label").contains("Rhif cymeradwyo");
 
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", "Mae yna broblem");
+    cy.contains("h2", "Gwall:Mae yna broblem");
     cy.contains("a", /Ni chaiff rhif y gymeradwyaeth fod yn fwy na 50 o gymeriadau$/)
       .should("be.visible")
       .should("have.attr", "href", "#storageFacilities-facilityApproval");
@@ -186,7 +186,7 @@ describe("Add Storage Facility Approval - Welsh Translations", () => {
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001@#$");
     cy.get("#storageFacilities-facilityStorage").check();
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", "Mae yna broblem");
+    cy.contains("h2", "Gwall:Mae yna broblem");
     cy.contains(
       "a",
       /Rhaid i rif y gymeradwyaeth gynnwys llythrennau, rhifau, cysylltnodau, atalnodau llawn, blaenslaesau a bylchau yn unig$/

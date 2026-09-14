@@ -1037,7 +1037,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get("#error-summary-title").contains("Gwall:Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Rhowch y dyddiad glanio");
     cy.get(".govuk-error-message").should("contain.text", "Rhowch y dyddiad glanio");
   });
@@ -1049,7 +1049,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get("#error-summary-title").contains("Gwall:Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Rhowch ddyddiad glanio dilys");
     cy.get(".govuk-error-message").should("contain.text", "Rhowch ddyddiad glanio dilys");
   });
@@ -1061,7 +1061,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get("#error-summary-title").contains("Gwall:Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should(
       "contain.text",
       "Rhaid i'r dyddiad glanio fod heddiw neu o fewn y 7 diwrnod nesaf"
@@ -1079,7 +1079,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get("#error-summary-title").contains("Gwall:Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should(
       "contain.text",
       "Dewiswch neu rhowch enw llong neu lythyren a rhif porthladd"
@@ -1101,7 +1101,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
       .type(invalidVesselValue);
     cy.document({ timeout: 500 }).its("readyState").should("eq", "complete");
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get("#error-summary-title").contains("Gwall:Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
     cy.get(".govuk-error-message").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
   });
@@ -1113,7 +1113,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get("#error-summary-title").contains("Gwall:Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
     cy.get(".govuk-error-message").should("contain.text", "Dewiswch gwch neu long o'r rhestr");
     cy.get(String.raw`#vessel-vesselName`)
@@ -1128,7 +1128,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get("#error-summary-title").contains("Gwall:Mae yna broblem");
     cy.get(".govuk-error-summary__list a").should("contain.text", "Rhowch y pwysau allforio mewn cilogramau");
     cy.get(".govuk-error-message").should("contain.text", "Rhowch y pwysau allforio mewn cilogramau");
   });
@@ -1140,7 +1140,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get("#error-summary-title").contains("Gwall:Mae yna broblem");
     cy.get(".govuk-error-summary__list a")
       .should("contain.text", "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000")
       .and("have.attr", "href", "#weights");
@@ -1158,7 +1158,7 @@ describe("Direct Landing Error Messages - Welsh", () => {
     };
     cy.visit(directLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid='save-and-continue']").click();
-    cy.get("#error-summary-title").contains("Mae yna broblem");
+    cy.get("#error-summary-title").contains("Gwall:Mae yna broblem");
     cy.get(".govuk-error-summary__list a")
       .should("contain.text", "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000")
       .and("have.attr", "href", "#weights");

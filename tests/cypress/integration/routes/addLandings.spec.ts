@@ -982,7 +982,7 @@ describe("Manual landing page when javascript is disabled", () => {
       });
       cy.get("#gearCategory").contains("Dredges");
       cy.get("[data-testid=submit]").click();
-      cy.contains("h2", /^Mae yna broblem$/).should("be.visible");
+      cy.contains("h2", /^Gwall:Mae yna broblem$/).should("be.visible");
       cy.contains("a", /^Rhaid ichi ddewis y math o gêr ar ôl ichi ddewis categori gêr$/).should("be.visible");
     });
   });
