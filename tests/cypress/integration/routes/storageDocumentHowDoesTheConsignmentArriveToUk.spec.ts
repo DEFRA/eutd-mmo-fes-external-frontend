@@ -124,7 +124,7 @@ describe("HowDoesTheConsignmentArriveToUk", () => {
     cy.visit(howDoesTheConsignmentArriveToUkUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue").click();
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Select how the consignment arrives to the UK$/).should("be.visible");
     cy.get("#vehicle-error").should("be.visible");
     cy.get("#vehicle-error").should("contain", "Select how the consignment arrives to the UK");

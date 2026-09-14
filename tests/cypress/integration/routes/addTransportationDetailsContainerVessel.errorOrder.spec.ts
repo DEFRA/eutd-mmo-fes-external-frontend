@@ -26,7 +26,7 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
     cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error summary appears
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
 
     // Verify all 4 errors appear in correct order
     cy.get(".govuk-error-summary__list li").should("have.length", 4);
@@ -56,7 +56,7 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
     cy.get("[data-testid=save-and-continue]").click();
 
     // Verify error summary appears
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
 
     // Verify all 4 errors appear in correct order
     cy.get(".govuk-error-summary__list li").should("have.length", 4);
@@ -87,7 +87,7 @@ describe("Container Vessel: Error Order Validation - UAT-499", () => {
 
     cy.get("[data-testid=save-and-continue]").click();
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.get(".govuk-error-summary__list li")
       .eq(0)
       .should("contain", "Enter a shipping container number in the correct format");

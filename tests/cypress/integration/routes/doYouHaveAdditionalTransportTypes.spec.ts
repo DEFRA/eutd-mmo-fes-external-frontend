@@ -182,7 +182,7 @@ describe("DoYouHaveAdditionalTransportTypes", () => {
     cy.visit(doYouHaveAdditionalTransportTypesUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue").click();
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
   });
 
   it("should display forbidden page", () => {

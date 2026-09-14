@@ -128,7 +128,7 @@ describe("Check Your Information (Summary) page: Validation", () => {
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
 
     cy.get("[data-testid=create-ps-button]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
       /^The catch certificate entered does not exist, ensure you have entered a valid catch certificate number$/
@@ -142,7 +142,7 @@ describe("Check Your Information (Summary) page: Validation", () => {
     cy.visit(checkYourInformationUrl, { qs: { ...testParams } });
 
     cy.get("[data-testid=create-ps-button]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^The health certificate date must be today or in the past.$/).should("be.visible");
   });
 

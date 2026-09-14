@@ -25,7 +25,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#freightBillNumber").type("AA1234567");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Railway bill number must not exceed 15 characters$/).should("be.visible");
   });
 
@@ -39,7 +39,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#freightBillNumber").type("Very Very Very Very Very Very Very Lengthy Freight Bill Number");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Freight bill number must not exceed 60 characters$/).should("be.visible");
   });
 
@@ -53,7 +53,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("#freightBillNumber").type("AA1234567");
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Railway bill number must only contain letters and numbers$/).should("be.visible");
   });
 
@@ -64,7 +64,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
     cy.contains("a", /^Enter the railway bill number$/).should("be.visible");
   });
@@ -184,7 +184,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
     cy.get("#departurePlace").type("Dover");
     cy.get('input[name="containerNumbers.0"]').type("A".repeat(51));
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
       /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
@@ -200,7 +200,7 @@ describe("Add Transportation Details Train: Container Identification Number Vali
     cy.get("#departurePlace").type("Dover");
     cy.get('input[name="containerNumbers.0"]').type("ABC123!@#");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
       /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
@@ -305,7 +305,7 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     cy.get("[data-testid=save-and-continue]").click();
 
     // Check error is displayed
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
 
     // Verify container values are still present
     cy.get('input[name="containerNumbers.0"]').should("have.value", "ABCU1234567");
@@ -337,7 +337,7 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
     cy.get("[data-testid=save-and-continue]").click();
 
     // Check error is displayed
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Container identification number must only contain letters and numbers$/).should("be.visible");
   });
 
@@ -353,7 +353,7 @@ describe("Add Transportation Details Train: Multiple Container Numbers", () => {
 
     cy.get("[data-testid=save-and-continue]").click();
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Container identification number must only contain letters and numbers$/).should("be.visible");
   });
 });

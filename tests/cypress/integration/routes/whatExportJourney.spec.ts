@@ -226,7 +226,7 @@ describe("Destination country field validation", () => {
     cy.get("#pointOfDestination").type("Calais Port");
     cy.get('[data-testid="save-and-continue"]').click();
     cy.get(".govuk-error-summary").should("be.visible");
-    cy.get(".govuk-error-summary__title").should("contain", "There is a problem");
+    cy.get(".govuk-error-summary__title").should("contain", "Error:There is a problem");
     cy.get(".govuk-list > li > a").should("contain", "Select a valid destination country");
     cy.get(".govuk-error-message").should("contain", "Select a valid destination country");
     cy.get("#exportDestination").should(($el) => {

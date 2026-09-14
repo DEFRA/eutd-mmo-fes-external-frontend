@@ -52,7 +52,7 @@ describe("Copy void confirmation page", () => {
     copyvoidpage(testParams);
     cy.contains("h1", "Are you sure you want to void the original non-manipulation document?");
     cy.get("[data-testid=continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Select an option to continue$/).should("be.visible");
   });
 
