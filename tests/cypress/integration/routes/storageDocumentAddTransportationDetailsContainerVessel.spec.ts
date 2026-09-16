@@ -87,9 +87,9 @@ describe("Save and Continue button - UnHappy path", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get(".govuk-error-summary__list").contains("Enter the vessel name");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
-    cy.contains("a", /^Enter the flag state$/).should("be.visible");
-    cy.contains("a", /^Enter the vessel name$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place the export leaves the UK$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the flag state$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the vessel name$/).should("be.visible");
   });
 });
 
@@ -145,7 +145,7 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the point of destination$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the point of destination$/).should("be.visible");
   });
 
   it("should display error when point of destination exceeds 100 characters", () => {

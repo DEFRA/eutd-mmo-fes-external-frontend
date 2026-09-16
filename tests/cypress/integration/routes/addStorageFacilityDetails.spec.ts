@@ -112,7 +112,7 @@ describe("Add Storage Facility Address - Error", () => {
   it("should show facility name validation error", () => {
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "Error:There is a problem");
-    cy.contains("a", /^Enter the facility name$/)
+    cy.contains("a", /^Error:Enter the facility name$/)
       .should("be.visible")
       .should("have.attr", "href", "#storageFacilities-facilityName");
     cy.get(".govuk-error-summary").should("be.visible");
@@ -121,7 +121,7 @@ describe("Add Storage Facility Address - Error", () => {
   it("should show address validation error", () => {
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", "Error:There is a problem");
-    cy.contains("a", /^Enter the address$/)
+    cy.contains("a", /^Error:Enter the address$/)
       .should("be.visible")
       .should("have.attr", "href", "#storageFacilities-facilityAddressOne");
   });

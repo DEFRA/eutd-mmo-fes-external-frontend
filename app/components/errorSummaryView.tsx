@@ -52,6 +52,7 @@ export const ErrorSummaryView = ({
                   href={hasLinkData ? linkData[index].href : `#${errorKey}`}
                   {...(!hasLinkData && { onClick: onErrorSummaryLinkClick })}
                 >
+                  <span className="govuk-visually-hidden">{t("commonErrorText", { ns: "errorsText" })}</span>
                   {errorHasValue
                     ? t(error.message, { ...error.value, interpolation: { escapeValue: false } })
                     : t(error.message)}

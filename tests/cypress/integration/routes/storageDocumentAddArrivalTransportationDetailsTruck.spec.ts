@@ -124,7 +124,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#placeOfUnloading").type("Place of unloading");
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Registration number must not exceed 50 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Registration number must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should display error when registration number has alphanumeric text", () => {
@@ -140,7 +140,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Registration number must only contain letters, numbers, hyphens, and spaces$/).should(
+    cy.contains("a", /^Error:Registration number must only contain letters, numbers, hyphens, and spaces$/).should(
       "be.visible"
     );
   });
@@ -160,7 +160,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the registration number$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the registration number$/).should("be.visible");
   });
 
   it("should display error when place of unloading is empty", () => {
@@ -178,7 +178,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the place where the consignment was unloaded$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place where the consignment was unloaded$/).should("be.visible");
   });
 
   it("should display error when place of unloading is empty", () => {
@@ -252,7 +252,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select a truck nationality from the list$/).should("be.visible");
+    cy.contains("a", /^Error:Select a truck nationality from the list$/).should("be.visible");
   });
 
   it("should display error when country of departure is empty", () => {
@@ -269,7 +269,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the country of departure$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the country of departure$/).should("be.visible");
   });
 
   it("should display error when consignment origin is empty", () => {
@@ -286,7 +286,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter where the consignment departs from$/).should("be.visible");
+    cy.contains("a", /^Error:Enter where the consignment departs from$/).should("be.visible");
   });
 
   it("should display error when departure date is empty", () => {
@@ -303,7 +303,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the departure date$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the departure date$/).should("be.visible");
   });
 
   it("should navigate to sd dashboard page on click of save as draft button", () => {
