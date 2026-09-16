@@ -279,7 +279,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Flight number must only contain letters and numbers$/).should("be.visible");
+    cy.contains("a", /^Error:Flight number must only contain letters and numbers$/).should("be.visible");
   });
 
   it("should display error when freight bill number exceeds 60 chars", () => {
@@ -297,7 +297,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Freight bill number must not exceed 60 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Freight bill number must not exceed 60 characters$/).should("be.visible");
   });
 
   it("should display error when freight bill number has alphanumeric text", () => {
@@ -353,7 +353,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Place of unloading must not exceed 50 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Place of unloading must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should display error when container identification number is not populated", () => {

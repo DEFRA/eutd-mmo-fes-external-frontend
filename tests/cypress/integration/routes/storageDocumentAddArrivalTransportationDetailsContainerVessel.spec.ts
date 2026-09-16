@@ -349,7 +349,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
       cy.get("#freightBillNumber").type("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
       cy.get("[data-testid=save-and-continue]").click();
-      cy.contains("a", "Freight bill number must not exceed 60 characters").should("be.visible");
+      cy.contains("a", "Error:Freight bill number must not exceed 60 characters").should("be.visible");
     });
 
     it("should display error when freight bill number has invalid characters", () => {

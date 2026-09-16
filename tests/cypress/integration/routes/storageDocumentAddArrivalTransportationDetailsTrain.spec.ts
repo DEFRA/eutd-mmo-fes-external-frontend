@@ -158,7 +158,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Place of unloading must not exceed 50 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Place of unloading must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should display error when railway bill has alphanumeric text", () => {

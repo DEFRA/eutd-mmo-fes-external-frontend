@@ -317,7 +317,7 @@ describe("Welsh errors on click of add product button", () => {
 
   it("should show the Welsh species error", () => {
     cy.get("[data-testid='add-product']").eq(0).click();
-    cy.contains("a", /^Rhowch yr enw cyffredin neu god y Sefydliad Bwyd ac Amaethyddiaeth \(FAO\)$/).should(
+    cy.contains("a", /^Gwall:Rhowch yr enw cyffredin neu god y Sefydliad Bwyd ac Amaethyddiaeth \(FAO\)$/).should(
       "be.visible"
     );
   });
