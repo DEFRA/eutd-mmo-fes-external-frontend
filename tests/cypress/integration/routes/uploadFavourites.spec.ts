@@ -86,19 +86,21 @@ describe("Upload favourites page: when JavaScript is disabled", () => {
   it("should return an error when a species has not been selected", () => {
     cy.get("[data-testid='add-species']").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should(
+      "be.visible"
+    );
   });
 
   it("should return an error when a state has not been selected", () => {
     cy.get("[data-testid='add-state']").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select the state$/).should("be.visible");
+    cy.contains("a", /^Error:Select the state$/).should("be.visible");
   });
 
   it("should return an error when a presentation has not been selected", () => {
     cy.get("[data-testid='add-presentation']").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select the presentation$/).should("be.visible");
+    cy.contains("a", /^Error:Select the presentation$/).should("be.visible");
   });
 
   it("should return to current page when clicking cancel", () => {
@@ -157,7 +159,9 @@ describe("Upload favourites page: validating inputs", () => {
 
     cy.get("[data-testid='add-species']").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should(
+      "be.visible"
+    );
   });
 });
 

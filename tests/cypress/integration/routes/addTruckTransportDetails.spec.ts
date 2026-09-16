@@ -154,7 +154,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Registration number must not exceed 50 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Registration number must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should display error when registration number alphanumeric text", () => {
@@ -166,7 +166,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Registration number must only contain letters, numbers, hyphens, and spaces$/).should(
+    cy.contains("a", /^Error:Registration number must only contain letters, numbers, hyphens, and spaces$/).should(
       "be.visible"
     );
   });
@@ -179,9 +179,9 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the nationality of vehicle$/).should("be.visible");
-    cy.contains("a", /^Enter the registration number$/).should("be.visible");
-    cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the nationality of vehicle$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the registration number$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place the export leaves the UK$/).should("be.visible");
   });
 
   it("should navigate to cc dashboard page on click of save as draft button", () => {
@@ -242,7 +242,7 @@ describe("Add Transportation Details Truck: Nationality Field Error State", () =
 
     cy.get("#nationalityOfVehicle").parents(".govuk-form-group").should("have.class", "govuk-form-group--error");
     cy.get("#nationalityOfVehicle").should("have.class", "govuk-input--error");
-    cy.contains("a", /^Enter the nationality of vehicle$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the nationality of vehicle$/).should("be.visible");
   });
 
   it("should maintain autocomplete functionality with error state", () => {
@@ -282,7 +282,7 @@ describe("Add Transportation Details Truck: Invalid Nationality Validation", () 
 
     // Backend validation should return error
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select a truck nationality from the list$/).should("be.visible");
+    cy.contains("a", /^Error:Select a truck nationality from the list$/).should("be.visible");
 
     cy.get("#nationalityOfVehicle").parents(".govuk-form-group").should("have.class", "govuk-form-group--error");
     cy.get("#nationalityOfVehicle").should("have.class", "govuk-input--error");

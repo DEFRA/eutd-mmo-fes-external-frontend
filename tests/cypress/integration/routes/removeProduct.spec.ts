@@ -214,7 +214,7 @@ describe("Remove Product Page - FI0-10296", () => {
       cy.get("#removeProduct-error").should("be.visible");
       cy.get("#removeProduct-error").should("contain", "Select yes if you want to remove this product");
       cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-      cy.contains("a", /^Select yes if you want to remove this product and all its associated species$/).should(
+      cy.contains("a", /^Error:Select yes if you want to remove this product and all its associated species$/).should(
         "be.visible"
       );
 

@@ -231,7 +231,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Air waybill number must not exceed 50 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Air waybill number must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should display error when flight number is empty", () => {
@@ -247,7 +247,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the flight number$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the flight number$/).should("be.visible");
   });
 
   it("should display error when flight number exceeds 15 chars", () => {
@@ -263,7 +263,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Flight number must not exceed 15 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Flight number must not exceed 15 characters$/).should("be.visible");
   });
 
   it("should display error when flight number has invalid characters", () => {
@@ -333,7 +333,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the place where the consignment was unloaded$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place where the consignment was unloaded$/).should("be.visible");
   });
 
   it("should display error when place of unloading is empty", () => {
@@ -371,7 +371,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the shipping container identification number$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the shipping container identification number$/).should("be.visible");
   });
 
   it("should display error when country of departure is not populated", () => {
@@ -389,7 +389,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the country of departure$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the country of departure$/).should("be.visible");
   });
 
   it("should display error when where the consignment departs from is not populated", () => {
@@ -407,7 +407,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter where the consignment departs from$/).should("be.visible");
+    cy.contains("a", /^Error:Enter where the consignment departs from$/).should("be.visible");
   });
 
   it("should display error when departure date is not populated", () => {
@@ -426,7 +426,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the departure date$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the departure date$/).should("be.visible");
   });
 
   describe("Multiple Containers", () => {

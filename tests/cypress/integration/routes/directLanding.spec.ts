@@ -547,7 +547,7 @@ describe("DirectLanding page errors when javascript is disabled", () => {
   it("should render a page-level error when vessel name is missing", () => {
     cy.get("[data-testid='save-and-continue']").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select or enter a vessel name or port letter and number$/).should("be.visible");
+    cy.contains("a", /^Error:Select or enter a vessel name or port letter and number$/).should("be.visible");
   });
 
   it("should render a field-level error when vessel is missing", () => {
@@ -562,7 +562,7 @@ describe("DirectLanding page errors when javascript is disabled", () => {
     cy.get("select#gearCategory").select("Select gear category");
     cy.get("[data-testid='add-gear-category']").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^You must select a gear category option to add gear category$/).should("be.visible");
+    cy.contains("a", /^Error:You must select a gear category option to add gear category$/).should("be.visible");
   });
 
   it("should render a field-level error when the add gear category button is clicked when no category is selected", () => {

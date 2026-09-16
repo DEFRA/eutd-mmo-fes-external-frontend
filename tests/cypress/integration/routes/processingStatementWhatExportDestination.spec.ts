@@ -20,7 +20,7 @@ describe("What Export Destination page: UI", () => {
   });
 
   it("should contain the page title", () => {
-    cy.contains("h1", /^Enter the destination for the consignment$/).should("be.visible");
+    cy.contains("h1", /^Error:Enter the destination for the consignment$/).should("be.visible");
   });
 
   it("should contain destination country field", () => {
