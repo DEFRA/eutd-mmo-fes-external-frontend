@@ -355,7 +355,7 @@ describe("Truck Point of Destination - Validation Scenarios", () => {
     cy.get("#pointOfDestination").type(longString);
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Point of destination must not exceed 100 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Point of destination must not exceed 100 characters$/).should("be.visible");
   });
 
   it("should display error when point of destination contains invalid characters", () => {
@@ -368,7 +368,7 @@ describe("Truck Point of Destination - Validation Scenarios", () => {
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
+      /^Error:Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
     ).should("be.visible");
   });
 });
