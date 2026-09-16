@@ -315,7 +315,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Freight bill number must only contain letters, numbers, hyphens, full stops and forward slashes$/
+      /^Error:Freight bill number must only contain letters, numbers, hyphens, full stops and forward slashes$/
     ).should("be.visible");
   });
 
