@@ -298,10 +298,12 @@ describe("Errors on click of add product button", () => {
   it("should show errors click of add product button", () => {
     cy.get("[data-testid='add-product']").eq(0).click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should("be.visible");
-    cy.contains("a", /^Select the state$/).should("be.visible");
-    cy.contains("a", /^Select the presentation$/).should("be.visible");
-    cy.contains("a", /^Select a commodity code$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the common name or Food and Agriculture Organisation \(FAO\) code$/).should(
+      "be.visible"
+    );
+    cy.contains("a", /^Error:Select the state$/).should("be.visible");
+    cy.contains("a", /^Error:Select the presentation$/).should("be.visible");
+    cy.contains("a", /^Error:Select a commodity code$/).should("be.visible");
   });
 });
 
@@ -332,7 +334,7 @@ describe("Errors on click of add product button from favourites", () => {
     cy.get("#add-from-favourites [data-testid='add-product']").click();
 
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select a product favourite from the list$/).should("be.visible");
+    cy.contains("a", /^Error:Select a product favourite from the list$/).should("be.visible");
 
     // After errors are shown, verify that the AutocompleteFormField has error styling
     // This tests lines 233, 239, 242 which apply error classes when errors?.product exists
@@ -364,7 +366,7 @@ describe("Save and continue what are you exporting page", () => {
 
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter at least one product$/).should("be.visible");
+    cy.contains("a", /^Error:Enter at least one product$/).should("be.visible");
   });
 });
 

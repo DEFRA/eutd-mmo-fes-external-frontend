@@ -983,7 +983,7 @@ describe("Manual landing page when javascript is disabled", () => {
       cy.get("#gearCategory").contains("Dredges");
       cy.get("[data-testid=submit]").click();
       cy.contains("h2", /^Gwall:Mae yna broblem$/).should("be.visible");
-      cy.contains("a", /^Rhaid ichi ddewis y math o gêr ar ôl ichi ddewis categori gêr$/).should("be.visible");
+      cy.contains("a", /^Gwall:Rhaid ichi ddewis y math o gêr ar ôl ichi ddewis categori gêr$/).should("be.visible");
     });
   });
 });
@@ -1056,12 +1056,12 @@ describe("Manual landings page: Error summary on click of add Product", () => {
     cy.visit(manualLandingUrl, { qs: { ...testParams } });
     cy.get("[data-testid=submit]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select a product from the list$/).should("be.visible");
-    cy.contains("a", /^Select or enter a vessel name or port letter and number$/).should("be.visible");
-    cy.contains("a", /^Enter the date landed$/).should("be.visible");
-    cy.contains("a", /^Enter the export weight in kilograms$/).should("be.visible");
-    cy.contains("a", /^Select a gear category$/).should("be.visible");
-    cy.contains("a", /^Select a gear type$/).should("be.visible");
+    cy.contains("a", /^Error:Select a product from the list$/).should("be.visible");
+    cy.contains("a", /^Error:Select or enter a vessel name or port letter and number$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the date landed$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the export weight in kilograms$/).should("be.visible");
+    cy.contains("a", /^Error:Select a gear category$/).should("be.visible");
+    cy.contains("a", /^Error:Select a gear type$/).should("be.visible");
   });
   it("should display an error when gear category is selected but gear type is not", () => {
     const testParams: ITestParams = {
@@ -1081,9 +1081,11 @@ describe("Manual landings page: Error summary on click of add Product", () => {
         const placeholderPatterns = [/Select gear category/, /Dewiswch categori/, /Dewiswch gategori/];
         const isPlaceholder = placeholderPatterns.some((p) => p.test(text));
         if (isPlaceholder) {
-          cy.contains("a", /^Select a gear type$/).should("be.visible");
+          cy.contains("a", /^Error:Select a gear type$/).should("be.visible");
         } else {
-          cy.contains("a", /^You must select a gear type when you have selected a gear category$/).should("be.visible");
+          cy.contains("a", /^Error:You must select a gear type when you have selected a gear category$/).should(
+            "be.visible"
+          );
         }
       });
   });
@@ -1095,7 +1097,7 @@ describe("Manual landings page: Error summary on click of add Product", () => {
     cy.get("#gearCategory").contains("Select gear category");
     cy.get("#gearType").contains("Select gear type");
     cy.get("[data-testid=submit]").click();
-    cy.contains("a", /^Select a gear type$/).should("be.visible");
+    cy.contains("a", /^Error:Select a gear type$/).should("be.visible");
   });
 
   it("shows error messages when required fields are empty and form is submitted", () => {
@@ -1118,7 +1120,7 @@ describe("Manual landings page: Error with Max landings exceeded", () => {
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^The maximum landings limit has been reached. To progress, you will need to remove the products without landings.$/
+      /^Error:The maximum landings limit has been reached. To progress, you will need to remove the products without landings.$/
     ).should("be.visible");
   });
 });
@@ -1134,7 +1136,9 @@ describe("Manual landings page: Error with total combined export weight exceeded
     cy.get("[data-testid='submit']").click();
 
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^The total combined weight for all products must be less than 10,000,000$/).should("be.visible");
+    cy.contains("a", /^Error:The total combined weight for all products must be less than 10,000,000$/).should(
+      "be.visible"
+    );
   });
 });
 
@@ -1318,7 +1322,7 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
     cy.get("#dateLanded-month").type("05");
     cy.get("#dateLanded-year").clear();
     cy.get("[data-testid=submit]").click();
-    cy.contains(/^Enter the date landed$/).should("be.visible");
+    cy.contains(/^Error:Enter the date landed$/).should("be.visible");
   });
 
   it("should show an error if Date Landed is in an invalid format", () => {
@@ -1330,7 +1334,7 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
     cy.get("#dateLanded-month").type("99");
     cy.get("#dateLanded-year").type("2020");
     cy.get("[data-testid=submit]").click();
-    cy.contains("a", /^Enter the date landed$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the date landed$/).should("be.visible");
   });
 
   // (moved to flaky spec)
@@ -1355,7 +1359,7 @@ describe("Manual landing page: Date Landed and Vessel validation", () => {
     });
     cy.get("#exportWeight").invoke("val", "25");
     cy.get("[data-testid=submit]").click();
-    cy.contains("a", /^Select a vessel from the list$/).should("not.exist");
+    cy.contains("a", /^Error:Select a vessel from the list$/).should("not.exist");
   });
 });
 

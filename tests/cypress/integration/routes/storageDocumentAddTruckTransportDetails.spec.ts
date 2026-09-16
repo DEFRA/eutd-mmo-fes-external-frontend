@@ -119,7 +119,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Registration number must not exceed 50 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Registration number must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should display error when registration number alphanumeric text", () => {
@@ -131,7 +131,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Registration number must only contain letters, numbers, hyphens, and spaces$/).should(
+    cy.contains("a", /^Error:Registration number must only contain letters, numbers, hyphens, and spaces$/).should(
       "be.visible"
     );
   });
@@ -143,9 +143,9 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select a truck nationality from the list$/).should("be.visible");
-    cy.contains("a", /^Enter the registration number$/).should("be.visible");
-    cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
+    cy.contains("a", /^Error:Select a truck nationality from the list$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the registration number$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place the export leaves the UK$/).should("be.visible");
   });
 
   it("should navigate to SD dashboard page on click of save as draft button", () => {
@@ -343,7 +343,7 @@ describe("Truck Point of Destination - Validation Scenarios", () => {
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the point of destination$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the point of destination$/).should("be.visible");
   });
 
   it("should display error when point of destination exceeds 100 characters", () => {

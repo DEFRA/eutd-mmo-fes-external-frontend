@@ -67,9 +67,9 @@ describe("Save and Continue button - UnHappy path", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get(".govuk-error-summary__list").contains("Enter the vessel name");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
-    cy.contains("a", /^Enter the flag state$/).should("be.visible");
-    cy.contains("a", /^Enter the vessel name$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place the export leaves the UK$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the flag state$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the vessel name$/).should("be.visible");
   });
 });
 
@@ -139,7 +139,7 @@ describe("Add Transportation Details Container Vessel: Container Identification 
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+      /^Error:Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
     ).should("be.visible");
   });
 
@@ -156,7 +156,7 @@ describe("Add Transportation Details Container Vessel: Container Identification 
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+      /^Error:Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
     ).should("be.visible");
   });
 
@@ -287,7 +287,7 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+      /^Error:Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
     ).should("be.visible");
   });
 

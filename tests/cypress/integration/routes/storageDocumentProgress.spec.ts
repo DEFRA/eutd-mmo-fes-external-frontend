@@ -98,16 +98,16 @@ describe("ProgressPage - Incomplete Application", () => {
     cy.get("[data-testid=continue-button]").click();
     cy.url().should("include", "/progress");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^You must complete the exporter details section before being able to continue$/).should(
+    cy.contains("a", /^Error:You must complete the exporter details section before being able to continue$/).should(
       "be.visible"
     );
-    cy.contains("a", /^You must complete the product details section before being able to continue$/).should(
+    cy.contains("a", /^Error:You must complete the product details section before being able to continue$/).should(
       "be.visible"
     );
-    cy.contains("a", /^You must complete the storage facilities section before being able to continue$/).should(
+    cy.contains("a", /^Error:You must complete the storage facilities section before being able to continue$/).should(
       "be.visible"
     );
-    cy.contains("a", /^You must complete the transport details section before being able to continue$/).should(
+    cy.contains("a", /^Error:You must complete the transport details section before being able to continue$/).should(
       "be.visible"
     );
   });

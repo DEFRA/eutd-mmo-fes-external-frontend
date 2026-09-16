@@ -123,7 +123,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Flight number must not exceed 15 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Flight number must not exceed 15 characters$/).should("be.visible");
   });
 
   it("should display error when flight number alphanumeric text", () => {
@@ -135,7 +135,7 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Flight number must only contain letters and numbers$/).should("be.visible");
+    cy.contains("a", /^Error:Flight number must only contain letters and numbers$/).should("be.visible");
   });
 
   it("should display errors", () => {
@@ -146,9 +146,9 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the flight number$/).should("be.visible");
-    // cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
-    cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the flight number$/).should("be.visible");
+    // cy.contains("a", /^Error:Enter the container identification number or numbers$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place the export leaves the UK$/).should("be.visible");
   });
 
   it("should display error messages in the same order as the fields on the page", () => {
@@ -291,7 +291,7 @@ describe("Plane Point of Destination - Validation Scenarios", () => {
     cy.visit(planePageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the point of destination$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the point of destination$/).should("be.visible");
   });
 
   it("should display error when point of destination exceeds 100 characters", () => {
