@@ -74,8 +74,8 @@ describe("Error summary", () => {
     cy.get("[data-testid=continue]").click();
 
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select an option to continue$/).should("be.visible");
-    cy.contains("a", /^Check the acknowledgement to continue$/).should("be.visible");
+    cy.contains("a", /^Error:Select an option to continue$/).should("be.visible");
+    cy.contains("a", /^Error:Check the acknowledgement to continue$/).should("be.visible");
   });
 });
 

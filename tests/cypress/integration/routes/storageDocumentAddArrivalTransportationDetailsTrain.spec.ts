@@ -123,7 +123,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the railway bill number$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the railway bill number$/).should("be.visible");
   });
 
   it("should display error when place of unloading is empty", () => {
@@ -139,7 +139,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the place where the consignment was unloaded$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place where the consignment was unloaded$/).should("be.visible");
   });
 
   it("should display error when place of unloading is empty", () => {
@@ -184,8 +184,8 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
-    cy.contains("a", /^Enter the railway bill number$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place the export leaves the UK$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the railway bill number$/).should("be.visible");
   });
 
   it("should navigate to sd dashboard page on click of save as draft button", () => {
@@ -277,7 +277,7 @@ describe("Add Transportation Details Train: Allowed", () => {
 
     // Verify error is displayed
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the country of departure$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the country of departure$/).should("be.visible");
   });
 
   // FI0-10289: Scenario 3 - Error when Where the consignment departs from not populated
@@ -299,7 +299,7 @@ describe("Add Transportation Details Train: Allowed", () => {
 
     // Verify error is displayed
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter where the consignment departs from$/).should("be.visible");
+    cy.contains("a", /^Error:Enter where the consignment departs from$/).should("be.visible");
   });
 
   // FI0-10289: Scenario 4 - Error when Departure date not populated
@@ -319,7 +319,7 @@ describe("Add Transportation Details Train: Allowed", () => {
 
     // Verify error is displayed
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the departure date$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the departure date$/).should("be.visible");
   });
 
   // FI0-10289: Scenario 5 - All mandatory fields populated

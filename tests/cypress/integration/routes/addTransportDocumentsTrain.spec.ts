@@ -72,7 +72,7 @@ describe("Add Transportation Documents Train", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=add-another-document-button]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter at least one additional transport document$/).should("be.visible");
+    cy.contains("a", /^Error:Enter at least one additional transport document$/).should("be.visible");
   });
 
   it("should display previously entered name and reference", () => {

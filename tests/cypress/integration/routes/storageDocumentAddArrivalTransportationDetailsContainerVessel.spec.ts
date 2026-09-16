@@ -137,7 +137,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("[data-testid=save-and-continue]").click();
       cy.get("form").submit();
       cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-      cy.contains("a", /^Enter the vessel name$/).should("be.visible");
+      cy.contains("a", /^Error:Enter the vessel name$/).should("be.visible");
     });
 
     it("should display error when vessel name contains invalid characters", () => {
@@ -430,7 +430,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureDate-year").type("2025");
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the flag state$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the flag state$/).should("be.visible");
   });
 
   it("should display error when container identification number is empty", () => {
@@ -446,7 +446,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureDate-year").type("2025");
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the shipping container identification number$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the shipping container identification number$/).should("be.visible");
   });
 
   it("should display error when country of departure is empty", () => {
@@ -462,7 +462,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureDate-year").type("2025");
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the country of departure$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the country of departure$/).should("be.visible");
   });
 
   it("should display error when consignment departs from is empty", () => {
@@ -478,7 +478,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#departureDate-year").type("2025");
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter where the consignment departs from$/).should("be.visible");
+    cy.contains("a", /^Error:Enter where the consignment departs from$/).should("be.visible");
   });
 
   it("should display error when departure date is empty", () => {
@@ -491,7 +491,7 @@ describe("Container Vessel Arrival Required Fields Validation", () => {
     cy.get("#placeOfUnloading").type("Dover");
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the departure date$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the departure date$/).should("be.visible");
   });
 });
 

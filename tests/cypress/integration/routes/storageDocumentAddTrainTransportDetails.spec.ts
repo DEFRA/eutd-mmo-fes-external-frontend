@@ -114,7 +114,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Railway bill number must not exceed 15 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Railway bill number must not exceed 15 characters$/).should("be.visible");
   });
 
   it("should display error when railwat bill has alphanumeric text", () => {
@@ -127,7 +127,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Railway bill number must only contain letters and numbers$/).should("be.visible");
+    cy.contains("a", /^Error:Railway bill number must only contain letters and numbers$/).should("be.visible");
   });
 
   it("should display errors", () => {
@@ -138,8 +138,8 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
-    cy.contains("a", /^Enter the railway bill number$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place the export leaves the UK$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the railway bill number$/).should("be.visible");
   });
 
   it("should navigate to sd dashboard page on click of save as draft button", () => {
@@ -318,7 +318,7 @@ describe("Train Point of Destination - Validation Scenarios", () => {
     cy.visit(trainPageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the point of destination$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the point of destination$/).should("be.visible");
   });
 
   it("should display error when point of destination exceeds 100 characters", () => {
@@ -330,7 +330,7 @@ describe("Train Point of Destination - Validation Scenarios", () => {
     cy.get("#pointOfDestination").type(longString);
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Point of destination must not exceed 100 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Point of destination must not exceed 100 characters$/).should("be.visible");
   });
 
   it("should display error when point of destination contains invalid characters", () => {
@@ -343,7 +343,7 @@ describe("Train Point of Destination - Validation Scenarios", () => {
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
+      /^Error:Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
     ).should("be.visible");
   });
 });
