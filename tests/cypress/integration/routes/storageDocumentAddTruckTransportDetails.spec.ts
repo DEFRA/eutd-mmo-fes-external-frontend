@@ -419,7 +419,7 @@ describe("Add Transportation Details Truck: Welsh translations for departure por
     cy.get("#departurePlace").type(longString);
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Gwall:Mae yna broblem$/).should("be.visible");
-    cy.contains("a", /^Rhaid i O ble mae'r lori’n ymadael fod yn llai na 50 o nodau$/).should("be.visible");
+    cy.contains("a", /^Gwall:Rhaid i O ble mae'r lori’n ymadael fod yn llai na 50 o nodau$/).should("be.visible");
     cy.get(".govuk-error-message").should(
       "contain.text",
       "Rhaid i O ble mae'r lori’n ymadael fod yn llai na 50 o nodau"
@@ -436,7 +436,7 @@ describe("Add Transportation Details Truck: Welsh translations for departure por
     cy.contains("h2", /^Gwall:Mae yna broblem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Rhaid i O ble mae'r lori’n ymadael gynnwys llythrennau, rhifau, collnodau, cysylltnodau a bylchau yn unig$/
+      /^Gwall:Rhaid i O ble mae'r lori’n ymadael gynnwys llythrennau, rhifau, collnodau, cysylltnodau a bylchau yn unig$/
     ).should("be.visible");
     cy.get(".govuk-error-message").should(
       "contain.text",
@@ -460,6 +460,6 @@ describe("Add Transportation Details Truck: Invalid year in export date", () => 
     cy.get("[data-testid=save-and-continue]").click();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Export date must be a real date$/).should("be.visible");
+    cy.contains("a", /^Error:Export date must be a real date$/).should("be.visible");
   });
 });

@@ -362,7 +362,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("[data-testid=save-and-continue]").click();
       cy.contains(
         "a",
-        "Freight bill number must only contain letters, numbers, hyphens, full stops and forward slashes"
+        "Error:Freight bill number must only contain letters, numbers, hyphens, full stops and forward slashes"
       ).should("be.visible");
     });
 
