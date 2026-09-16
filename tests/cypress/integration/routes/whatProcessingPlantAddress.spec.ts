@@ -232,7 +232,7 @@ describe("PS: On Selected Address", () => {
 
     cy.get("#findaddress").click();
 
-    cy.findByRole("link", { name: "Enter a postcode" }).should("be.visible");
+    cy.findByRole("link", { name: "Error: Enter a postcode" }).should("be.visible");
   });
 
   it("should display error if the entered postcode is invalid", () => {
@@ -245,7 +245,7 @@ describe("PS: On Selected Address", () => {
     cy.get("#findaddress").click();
 
     cy.findByRole("link", {
-      name: "Postcode must be between 5 and 8 characters, and contain only letters, numbers, spaces, hyphens and commas",
+      name: "Error: Postcode must be between 5 and 8 characters, and contain only letters, numbers, spaces, hyphens and commas",
     }).should("be.visible");
   });
 
