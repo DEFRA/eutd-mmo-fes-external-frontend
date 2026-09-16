@@ -196,7 +196,7 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
+      /^Error:Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
     ).should("be.visible");
   });
 });
