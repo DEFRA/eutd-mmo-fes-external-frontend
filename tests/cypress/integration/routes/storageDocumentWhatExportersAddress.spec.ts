@@ -235,7 +235,7 @@ describe("SD: On Selected Address", () => {
     cy.get("#findaddress").click();
 
     cy.findByRole("link", {
-      name: "Error:Postcode must be between 5 and 8 characters, and contain only letters, numbers, spaces, hyphens and commas",
+      name: "Postcode must be between 5 and 8 characters, and contain only letters, numbers, spaces, hyphens and commas",
     });
     cy.get("body").should("exist");
   });
