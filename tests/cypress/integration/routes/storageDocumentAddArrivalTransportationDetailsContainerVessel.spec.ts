@@ -412,7 +412,7 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("#departureDate-year").type("2025");
       cy.get("[data-testid=save-and-continue]").click();
       cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-      cy.contains("a", "Departure date must be a real date").should("be.visible");
+      cy.contains("a", "Error:Departure date must be a real date").should("be.visible");
     });
   });
 });
