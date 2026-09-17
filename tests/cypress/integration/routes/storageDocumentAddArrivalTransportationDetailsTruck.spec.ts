@@ -505,6 +505,6 @@ describe("Add Transportation Details Truck: Invalid year in departure date", () 
     cy.get("[data-testid=save-and-continue]").click();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Departure date must be a real date$/).should("be.visible");
+    cy.contains("a", /^Error:Departure date must be a real date$/).should("be.visible");
   });
 });
