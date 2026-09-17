@@ -108,7 +108,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Railway bill number must not exceed 15 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Railway bill number must not exceed 15 characters$/).should("be.visible");
   });
 
   it("should display error when railway bill has alphanumeric text", () => {
@@ -173,7 +173,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Railway bill number must only contain letters and numbers$/).should("be.visible");
+    cy.contains("a", /^Error:Railway bill number must only contain letters and numbers$/).should("be.visible");
   });
 
   it("should display errors", () => {
@@ -384,13 +384,13 @@ describe("Add Transportation Details Train: Welsh Translations", () => {
 
     // Verify Welsh error messages as per acceptance criteria
     // "Enter the country of departure" -> "Rhowch y wlad ymadael"
-    cy.contains("a", /^Rhowch y wlad ymadael$/).should("be.visible");
+    cy.contains("a", /^Gwall:Rhowch y wlad ymadael$/).should("be.visible");
 
     // "Enter where the consignment departs from" -> "Rhowch o ble mae'r llwyth yn ymadael"
-    cy.contains("a", /^Rhowch o ble mae'r llwyth yn ymadael$/).should("be.visible");
+    cy.contains("a", /^Gwall:Rhowch o ble mae'r llwyth yn ymadael$/).should("be.visible");
 
     // "Enter the departure date" -> "Rhowch y dyddiad ymadael"
-    cy.contains("a", /^Rhowch y dyddiad ymadael$/).should("be.visible");
+    cy.contains("a", /^Gwall:Rhowch y dyddiad ymadael$/).should("be.visible");
   });
 
   it("should handle adding and removing containers", () => {
