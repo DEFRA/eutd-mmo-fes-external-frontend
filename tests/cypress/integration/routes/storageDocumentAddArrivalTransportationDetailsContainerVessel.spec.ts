@@ -150,9 +150,10 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.get("[data-testid=save-and-continue]").click();
       cy.get("form").submit();
       cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-      cy.contains("a", /^Vessel name must only contain letters, numbers, apostrophes, hyphens, and brackets$/).should(
-        "be.visible"
-      );
+      cy.contains(
+        "a",
+        /^Error:Vessel name must only contain letters, numbers, apostrophes, hyphens, and brackets$/
+      ).should("be.visible");
     });
 
     it("should scroll to errorIsland when there is a validation error in vessel name and we try to submit", () => {
@@ -217,9 +218,10 @@ describe("AddArrivalContainerVesselTransportSave scenarios", () => {
       cy.visit(addArrivalTransportationDetailsContainerVesselUrl, { qs: { ...testParams } });
       cy.get("#vesselName").type("Invalid@Name!");
       cy.get("[data-testid=save-and-continue]").click();
-      cy.contains("a", "Vessel name must only contain letters, numbers, apostrophes, hyphens, and brackets").should(
-        "be.visible"
-      );
+      cy.contains(
+        "a",
+        "Error:Vessel name must only contain letters, numbers, apostrophes, hyphens, and brackets"
+      ).should("be.visible");
     });
 
     it("should display error when flag state exceeds 50 characters", () => {
