@@ -245,6 +245,7 @@
   "commonErrorText": "Gwall:",
   "ccStartDateInvalidError": "Rhowch ddyddiad dechrau dilys ar gyfer y daith bysgota",
   "ccStartDateMaxError": "Ni chaiff y dyddiad dechrau fod ar ôl y dyddiad glanio",
+  "ccStartDateFutureError": "Ni chaiff y dyddiad dechrau fod yn y dyfodol",
   "ccAddLandingStartDateUnpopulated": "Rhowch ddyddiad dechrau'r daith bysgota",
   "ccAddLandingStartDateInvalidFormat": "Rhowch ddyddiad dechrau dilys ar gyfer y daith bysgota",
   "ccAddLandingHighSeasAreaError": "Dewiswch a gafodd y cynnyrch ei ddal mewn ardal gefnfor",
