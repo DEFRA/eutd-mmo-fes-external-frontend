@@ -56,6 +56,7 @@
   "ccCommonExportWeightGreaterError": "Enter the export weight as a number greater than 0",
   "ccStartDateInvalidError": "Start date must be a real date",
   "ccStartDateMaxError": "Start date must not be after the date landed",
+  "ccStartDateFutureError": "Start date must not be in the future",
   "ccCommonArrivalDateMissingError": "Arrival Date is missing",
   "ccArrivalDateValidationError": "Arrival date must be a real date",
   "ccUploadFilePageErrorInvalidFile": "The selected file is invalid. For example, the data could be inaccessible, corrupt, or in the wrong structure.",

@@ -391,6 +391,7 @@ export const getErrorMessage = (key: string): string => {
     "error.exportDate.date.max": "sdTransportCommonExportDateGreaterError",
     "error.startDate.date.base": "ccStartDateInvalidError",
     "error.startDate.date.max": "ccStartDateMaxError",
+    "error.startDate.date.future": "ccStartDateFutureError",
     "error.startDate.string.empty": "ccAddLandingStartDateUnpopulated",
     "error.startDate.date.format": "ccAddLandingStartDateInvalidFormat",
     "error.addTransportation.any.only": "ccAdditionalTransportType",
