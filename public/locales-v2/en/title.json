@@ -92,5 +92,6 @@
   "addArrivalTransportationDetailsPlane": "Plane arriving in the UK - Create a UK non-manipulation document - GOV.UK",
   "addArrivalTransportationDetailsTruck": "Truck arriving in the UK - Create a UK non-manipulation document - GOV.UK",
   "storageDocumentDepartureProductSummary": "Check and confirm your consignment weight - Create a UK non-manipulation document - GOV.UK",
-  "psRemoveProduct": "Remove a product - Create a UK processing statement - GOV.UK"
+  "psRemoveProduct": "Remove a product - Create a UK processing statement - GOV.UK",
+  "sdRemoveProduct": "Remove a product - Create a UK non-manipulation document - GOV.UK"
 }

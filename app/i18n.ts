@@ -66,5 +66,6 @@ export const allNamespaces = [
   "sdDepartureProductSummary",
   "catchDetailsTableHeader",
   "psRemoveProduct",
+  "sdRemoveProduct",
   "euDataIntegration",
 ];
