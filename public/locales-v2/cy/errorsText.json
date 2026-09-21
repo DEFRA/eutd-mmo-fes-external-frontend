@@ -309,6 +309,7 @@
   "ccCommonGearTypeUnpopulatedError": "Dewiswch fath o gêr",
   "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError": "Rhaid i rif y cynhwysydd gynnwys dim ond llythrennau a rhifau",
   "removeProductErrorNoSelection": "Dewiswch 'ydw' os hoffech chi dynnu'r cynnyrch hwn a'r holl rywogaethau cysylltiedig",
+  "sdRemoveProductErrorNoSelection": "Dewiswch 'ydw' os hoffech chi dynnu'r cynnyrch hwn o'r llwyth",
   "sdArrivalDatenotMorethanOneDay": "Ni chaiff y dyddiad cyrraedd fod fwy nag 1 diwrnod yn y dyfodol",
   "ccDirectLandingDateLandedRequiredError": "Rhowch y dyddiad glanio",
   "ccDirectLandingDateLandedInvalidError": "Rhowch ddyddiad glanio dilys",

@@ -88,6 +88,10 @@ declare module "routes-gen" {
     "/create-non-manipulation-document/:documentNumber/void-this-non-manipulation-document": { documentNumber: string };
     "/create-non-manipulation-document/:documentNumber/what-exporters-address": { documentNumber: string };
     "/create-non-manipulation-document/:documentNumber/you-have-added-a-product": { documentNumber: string };
+    "/create-non-manipulation-document/:documentNumber/remove-product/:productId": {
+      documentNumber: string;
+      productId: string;
+    };
     "/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk": {
       documentNumber: string;
     };
@@ -370,6 +374,10 @@ declare module "routes-gen" {
       | [
           "/create-non-manipulation-document/:documentNumber/you-have-added-a-product",
           RouteParams["/create-non-manipulation-document/:documentNumber/you-have-added-a-product"],
+        ]
+      | [
+          "/create-non-manipulation-document/:documentNumber/remove-product/:productId",
+          RouteParams["/create-non-manipulation-document/:documentNumber/remove-product/:productId"],
         ]
       | ["/create-non-manipulation-document/non-manipulation-documents"]
       | ["/dev/null"]
