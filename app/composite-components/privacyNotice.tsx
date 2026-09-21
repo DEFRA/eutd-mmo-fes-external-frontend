@@ -3,92 +3,302 @@ import { useTranslation } from "react-i18next";
 
 export const PrivacyNotice = () => {
   const { t } = useTranslation(["privacyNotice", "common"]);
+  const openInNewTabText = t("commonHelpLinkOpenInNewTab", { ns: "common" });
+  const bulletListClassName = "govuk-list govuk-list--bullet";
+
+  const renderExternalLink = (href: string, labelKey: string) => (
+    <a
+      className="govuk-link"
+      href={href}
+      target="_blank"
+      rel="noreferrer noopener"
+      aria-label={`${t(labelKey)} ${openInNewTabText}`}
+    >
+      {t(labelKey)}
+    </a>
+  );
+
+  const dataControllerKeys = [
+    "privacyPageDataControllersLi1",
+    "privacyPageDataControllersLi2",
+    "privacyPageDataControllersLi3",
+    "privacyPageDataControllersLi4",
+    "privacyPageDataControllersLi5",
+    "privacyPageDataControllersLi6",
+  ];
+  const vesselDetailKeys = [
+    "privacyPageWhatDataVesselLi1",
+    "privacyPageWhatDataVesselLi2",
+    "privacyPageWhatDataVesselLi3",
+    "privacyPageWhatDataVesselLi4",
+    "privacyPageWhatDataVesselLi5",
+    "privacyPageWhatDataVesselLi6",
+    "privacyPageWhatDataVesselLi7",
+  ];
+  const performanceStatsKeys = [
+    "privacyPagePerformanceStatsLi1",
+    "privacyPagePerformanceStatsLi2",
+    "privacyPagePerformanceStatsLi3",
+    "privacyPagePerformanceStatsLi4",
+    "privacyPagePerformanceStatsLi5",
+  ];
+  const performanceDocumentInsightKeys = [
+    "privacyPagePerformanceDocInsightsLi1",
+    "privacyPagePerformanceDocInsightsLi2",
+    "privacyPagePerformanceDocInsightsLi3",
+    "privacyPagePerformanceDocInsightsLi4",
+  ];
+  const performanceCompanyInsightKeys = [
+    "privacyPagePerformanceCompanyInsightsLi1",
+    "privacyPagePerformanceCompanyInsightsLi2",
+    "privacyPagePerformanceCompanyInsightsLi3",
+    "privacyPagePerformanceCompanyInsightsLi4",
+    "privacyPagePerformanceCompanyInsightsLi5",
+  ];
+  const obtainedFromKeys = ["privacyPageObtainedLi1", "privacyPageObtainedLi2", "privacyPageObtainedLi3"];
+  const sharingLegislationKeys = [
+    "privacyPageSharingLi1",
+    "privacyPageSharingLi2",
+    "privacyPageSharingLi3",
+    "privacyPageSharingLi4",
+    "privacyPageSharingLi5",
+    "privacyPageSharingLi6",
+  ];
+  const automatedDecisionKeys = ["privacyPageAutomatedLi1", "privacyPageAutomatedLi2"];
+  const publicTaskRightsKeys = [
+    "privacyPageRightsPublicTaskLi1",
+    "privacyPageRightsPublicTaskLi2",
+    "privacyPageRightsPublicTaskLi3",
+    "privacyPageRightsPublicTaskLi4",
+    "privacyPageRightsPublicTaskLi5",
+    "privacyPageRightsPublicTaskLi6",
+  ];
+  const legalObligationRightsKeys = [
+    "privacyPageRightsLegalObligationLi1",
+    "privacyPageRightsLegalObligationLi2",
+    "privacyPageRightsLegalObligationLi3",
+    "privacyPageRightsLegalObligationLi4",
+    "privacyPageRightsLegalObligationLi5",
+  ];
+
   return (
     <div className="govuk-grid-row">
       <div className="govuk-grid-column-full">
-        <Title className="govuk-!-margin-bottom-5" title={t("privacyPageTitleText")} />
-        <p>{t("privacyPageDescription1")}</p>
-        <p dangerouslySetInnerHTML={{ __html: t("privacyPageDescription2") }} />
-        <p>&nbsp;</p>
-        <h2 className="govuk-heading-l">{t("privacyPagePersonalInfoText")}</h2>
-        <p
-          className="govuk-!-margin-bottom-1"
-          dangerouslySetInnerHTML={{ __html: t("privacyPagePersonalInfoDescription") }}
-        />
-        <p>{t("privacyPagePersonalInfoUlText")}</p>
-        <ul className="govuk-list--bullet">
-          <li>{t("privacyPagePersonalInfoLiText1")}</li>
-          <li>{t("privacyPagePersonalInfoLiText2")}</li>
-          <li>{t("privacyPagePersonalInfoLiText3")}</li>
-          <li>{t("privacyPagePersonalInfoLiText4")}</li>
-
-          <li>
-            <div>{t("privacyPagePersonalInfoLiText5")}</div>
-            <ul>
-              <li>{t("privacyPagePersonalInfoLiText6")}</li>
-              <li>{t("privacyPagePersonalInfoLiText7")}</li>
-              <li>{t("privacyPagePersonalInfoLiText8")}</li>
-              <li>{t("privacyPagePersonalInfoLiText9")}</li>
-              <li>{t("privacyPagePersonalInfoLiText10")}</li>
-              <li>{t("privacyPagePersonalInfoLiText11")}</li>
-              <li>{t("privacyPagePersonalInfoLiText12")}</li>
-            </ul>
-          </li>
-          <li>{t("privacyPagePersonalInfoLiText13")}</li>
-          <li>{t("privacyPagePersonalInfoLiText14")}</li>
-        </ul>
-        <br />
-        <p className="govuk-!-margin-top-0">{t("privacyPagePersonalInfoDescription2")}</p>
-        <h3 className="govuk-heading-s">{t("privacyPagePerformanceStatus")}</h3>
-        <ul className="govuk-list--bullet">
-          <li>{t("privacyPagePerformanceStatusli1")}</li>
-          <li>{t("privacyPagePerformanceStatusli2")}</li>
-          <li>{t("privacyPagePerformanceStatusli3")}</li>
-          <li>{t("privacyPagePerformanceStatusli4")}</li>
-          <li>{t("privacyPagePerformanceStatusli5")}</li>
-        </ul>
-        <br />
-        <h3 className="govuk-heading-s">{t("personalInformationText")}</h3>
-        <ul className="govuk-list--bullet">
-          <li>
-            <div>{t("privacyPagePerformanceInformationUl1")}</div>
-            <ul>
-              <li>{t("privacyPagePerformanceInformationli1")}</li>
-              <li>{t("privacyPagePerformanceInformationli2")}</li>
-              <li>{t("privacyPagePerformanceInformationli3")} </li>
-              <li>{t("privacyPagePerformanceInformationli4")}</li>
-            </ul>
-          </li>
-          <li>
-            <h3 className="govuk-heading-s">{t("privacyPagePerformanceInformationUl2")}</h3>
-            <ul>
-              <li>{t("privacyPagePerformanceInformationUl21")}</li>
-              <li>{t("privacyPagePerformanceInformationUl22")}</li>
-              <li>{t("privacyPagePerformanceInformationUl23")}</li>
-              <li>{t("privacyPagePerformanceInformationUl24")}</li>
-              <li>{t("privacyPagePerformanceInformationUl25")}</li>
-            </ul>
-          </li>
-        </ul>
-        <br />
+        <Title className="govuk-!-margin-bottom-5" title={t("privacyPageOpeningHeading")} />
         <p>
-          {t("privacyPagePerformanceInformation1")}
-          <a
-            className="govuk-link"
-            href="https://privacy.microsoft.com/privacystatement"
-            target="_blank"
-            rel="noreferrer"
-            aria-label={t("privacyPagePerformanceInformation1AriaLabel")}
-          >
-            {t("privacyPagePerformanceInformation1AnchorText")}
+          <strong>{t("privacyPagePublishedDate")}</strong>
+        </p>
+        <p>
+          {t("privacyPageJointControllersPrefix")}
+          {renderExternalLink(
+            "https://www.gov.uk/government/organisations/marine-management-organisation/about/personal-information-charter",
+            "privacyPageOpeningCharterLinkText"
+          )}
+          {t("privacyPageJointControllersSuffix")}
+        </p>
+        <hr className="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+        <h2 className="govuk-heading-l">{t("privacyPageTitleText")}</h2>
+        <p>{t("privacyPageIntro1")}</p>
+        <p dangerouslySetInnerHTML={{ __html: t("privacyPageIntro2") }} />
+        <p>{t("privacyPageIntro3")}</p>
+        <p>{t("privacyPageDataControllersIntro")}</p>
+        <ul className={bulletListClassName}>
+          {dataControllerKeys.map((key) => (
+            <li key={key}>{t(key)}</li>
+          ))}
+        </ul>
+
+        <h2 className="govuk-heading-l">{t("privacyPagePurposeHeading")}</h2>
+        <p>{t("privacyPagePurposeDesc1")}</p>
+        <p>{t("privacyPagePurposeDesc2")}</p>
+        <p>{t("privacyPagePurposeDesc3")}</p>
+        <p>{t("privacyPagePurposeDesc4")}</p>
+        <p>{t("privacyPagePurposeDesc5")}</p>
+        <p>
+          {t("privacyPagePurposeDesc6Prefix")}
+          {renderExternalLink("https://privacy.microsoft.com/privacystatement", "privacyPageMicrosoftLinkText")}
+          {t("privacyPagePurposeDesc6Suffix")}
+        </p>
+        <p>{t("privacyPagePurposeDesc7")}</p>
+
+        <h2 className="govuk-heading-l">{t("privacyPageWhatDataHeading")}</h2>
+        <p>{t("privacyPageWhatDataDesc")}</p>
+        <ul className={bulletListClassName}>
+          <li>{t("privacyPageWhatDataLi1")}</li>
+          <li>{t("privacyPageWhatDataLi2")}</li>
+          <li>{t("privacyPageWhatDataLi3")}</li>
+          <li>{t("privacyPageWhatDataLi4")}</li>
+          <li>{t("privacyPageWhatDataLi5")}</li>
+          <li>
+            <div>{t("privacyPageWhatDataLi6")}</div>
+            <ul className={bulletListClassName}>
+              {vesselDetailKeys.map((key) => (
+                <li key={key}>{t(key)}</li>
+              ))}
+            </ul>
+          </li>
+          <li>{t("privacyPageWhatDataLi7")}</li>
+          <li>{t("privacyPageWhatDataLi8")}</li>
+        </ul>
+        <p>{t("privacyPagePerformanceDesc")}</p>
+        <h3 className="govuk-heading-m">{t("privacyPagePerformanceStatsHeading")}</h3>
+        <ul className={bulletListClassName}>
+          {performanceStatsKeys.map((key) => (
+            <li key={key}>{t(key)}</li>
+          ))}
+        </ul>
+        <h3 className="govuk-heading-m">{t("privacyPagePerformanceInfoHeading")}</h3>
+        <ul className={bulletListClassName}>
+          <li>
+            <h3 className="govuk-heading-m">{t("privacyPagePerformanceDocInsights")}</h3>
+            <ul className={bulletListClassName}>
+              {performanceDocumentInsightKeys.map((key) => (
+                <li key={key}>{t(key)}</li>
+              ))}
+            </ul>
+          </li>
+          <li>
+            <h3 className="govuk-heading-m">{t("privacyPagePerformanceCompanyInsights")}</h3>
+            <ul className={bulletListClassName}>
+              {performanceCompanyInsightKeys.map((key) => (
+                <li key={key}>{t(key)}</li>
+              ))}
+            </ul>
+          </li>
+        </ul>
+        <p>{t("privacyPagePerformanceClarityDesc")}</p>
+
+        <h2 className="govuk-heading-l">{t("privacyPageObtainedHeading")}</h2>
+        <p>{t("privacyPageObtainedDesc")}</p>
+        <ul className={bulletListClassName}>
+          {obtainedFromKeys.map((key) => (
+            <li key={key}>{t(key)}</li>
+          ))}
+        </ul>
+
+        <h2 className="govuk-heading-l">{t("privacyPageLawfulBasisHeading")}</h2>
+        <p>{t("privacyPageLawfulBasisDesc1")}</p>
+        <p>{t("privacyPageLawfulBasisDesc2")}</p>
+        <p>{t("privacyPageLawfulBasisDesc3")}</p>
+        <p>{t("privacyPageLawfulBasisDesc4")}</p>
+
+        <h2 className="govuk-heading-l">{t("privacyPageConsentHeading")}</h2>
+        <p>{t("privacyPageConsentDesc")}</p>
+
+        <h2 className="govuk-heading-l">{t("privacyPageSharingHeading")}</h2>
+        <p dangerouslySetInnerHTML={{ __html: t("privacyPageSharingDesc1") }} />
+        <p>{t("privacyPageSharingDesc2")}</p>
+        <p>{t("privacyPageSharingDesc3")}</p>
+        <p>{t("privacyPageSharingDesc4")}</p>
+        <p>{t("privacyPageSharingDesc5")}</p>
+        <ul className={bulletListClassName}>
+          {sharingLegislationKeys.map((key) => (
+            <li key={key}>{t(key)}</li>
+          ))}
+        </ul>
+        <p>{t("privacyPageSharingDesc6")}</p>
+
+        <h2 className="govuk-heading-l">{t("privacyPageRetentionHeading")}</h2>
+        <p>{t("privacyPageRetentionDesc1")}</p>
+        <p>{t("privacyPageRetentionDesc2")}</p>
+        <p>{t("privacyPageRetentionDesc3")}</p>
+        <p>
+          {t("privacyPageRetentionDesc4Prefix")}
+          {renderExternalLink(
+            "https://www.gov.uk/government/organisations/marine-management-organisation/about/personal-information-charter",
+            "privacyPagePersonalInformationCharterLinkText"
+          )}
+          {t("privacyPageRetentionDesc4Middle")}
+          {renderExternalLink(
+            "https://www.gov.uk/government/organisations/marine-management-organisation/about/personal-information-charter#how-long-we-will-keep-data",
+            "privacyPageHowLongWeKeepDataLinkText"
+          )}
+          {t("privacyPageRetentionDesc4Suffix")}
+        </p>
+
+        <h2 className="govuk-heading-l">{t("privacyPageAutomatedHeading")}</h2>
+        <p>{t("privacyPageAutomatedDesc")}</p>
+        <ul className={bulletListClassName}>
+          {automatedDecisionKeys.map((key) => (
+            <li key={key}>{t(key)}</li>
+          ))}
+        </ul>
+
+        <h2 className="govuk-heading-l">{t("privacyPageNoDataHeading")}</h2>
+        <p>{t("privacyPageNoDataDesc")}</p>
+
+        <h2 className="govuk-heading-l">{t("privacyPageTransferHeading")}</h2>
+        <p>{t("privacyPageTransferDesc1")}</p>
+        <p>
+          {renderExternalLink(
+            "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/international-transfers/adequacy-regulations/",
+            "privacyPageTransferAdequacyLinkText"
+          )}
+        </p>
+        <p>{t("privacyPageTransferDesc2")}</p>
+        <p>{t("privacyPageTransferDesc3")}</p>
+        <p>{t("privacyPageTransferDesc4")}</p>
+
+        <h2 className="govuk-heading-l">{t("privacyPageRightsHeading")}</h2>
+        <p>{t("privacyPageRightsDesc1")}</p>
+        <h3 className="govuk-heading-m">{t("privacyPageRightsPublicTaskHeading")}</h3>
+        <ul className={bulletListClassName}>
+          {publicTaskRightsKeys.map((key) => (
+            <li key={key}>{t(key)}</li>
+          ))}
+        </ul>
+        <h3 className="govuk-heading-m">{t("privacyPageRightsLegalObligationHeading")}</h3>
+        <ul className={bulletListClassName}>
+          {legalObligationRightsKeys.map((key) => (
+            <li key={key}>{t(key)}</li>
+          ))}
+        </ul>
+        <p>{t("privacyPageRightsDesc2")}</p>
+        <p>
+          {t("privacyPageRightsDesc3Prefix")}
+          {renderExternalLink(
+            "https://www.gov.uk/government/organisations/marine-management-organisation/about/personal-information-charter",
+            "privacyPagePersonalInformationCharterLinkText"
+          )}
+          {t("privacyPageRightsDesc3Suffix")}
+        </p>
+
+        <h2 className="govuk-heading-l">{t("privacyPageContactHeading")}</h2>
+        <p>
+          {t("privacyPageContactDesc1Prefix")}
+          {renderExternalLink(
+            "https://www.gov.uk/government/organisations/marine-management-organisation/about/personal-information-charter",
+            "privacyPagePersonalInformationCharterLinkText"
+          )}
+          {t("privacyPageContactDesc1Suffix")}
+        </p>
+        <p>{t("privacyPageContactDesc2")}</p>
+        <p>
+          Data Protection Team,
+          <br />
+          Marine Management Organisation,
+          <br />
+          Tyneside House
+          <br />
+          Skinnerburn Road
+          <br />
+          Newcastle upon Tyne
+          <br />
+          NE4 7AR
+        </p>
+        <p>
+          {t("email")}:{" "}
+          <a className="govuk-link" href="mailto:dataprotection@marinemanagement.org.uk">
+            dataprotection@marinemanagement.org.uk
           </a>
         </p>
-        <p>{t("privacyPagePerformanceInformation2")}</p>
-        <h2>{t("privacyPageHeading1")}</h2>
-        <p>{t("privacyPageHeading1Description")}</p>
-        <h3 className="govuk-heading-s">{t("privacyPageProtectionOfficerText")}</h3>
+        <p>{t("privacyPageContactDesc3")}</p>
+        <p>{t("privacyPageContactDesc4")}</p>
         <p>
-          Defra Group DPO Office, 4th Floor, <br />
+          DPO
+          <br />
+          Defra Group DPO Office, 4th Floor,
+          <br />
           Seacole, Marsham Street,
           <br />
           Westminster
@@ -96,26 +306,15 @@ export const PrivacyNotice = () => {
           London
           <br />
           SW1P 4DF
-          <br />
-          <a className="govuk-link" href="mailto:DefraGroupDataProtectionOfficer@defra.gov.uk">
-            Contact the Defra Data Protection Officer
-          </a>
         </p>
-        <p dangerouslySetInnerHTML={{ __html: t("privacyPageProtectionMarineFisheriesAuthorities") }} />
-        <p dangerouslySetInnerHTML={{ __html: t("privacyPageProtectionAddressDataProtectionTeam") }} />
         <p>
-          Tyneside House
-          <br />
-          Skinnerburn Rd
-          <br />
-          Newcastle upon Tyne
-          <br />
-          NE4 7AR
-          <br />
-          <a className="govuk-link" href="mailto:data.protection@marinemanagement.org.uk">
-            Contact the Marine Management Data Protection Officer
+          {t("email")}:{" "}
+          <a className="govuk-link" href="mailto:DefraGroupDataProtectionOfficer@defra.gov.uk">
+            DefraGroupDataProtectionOfficer@defra.gov.uk
           </a>
         </p>
+
+        <h3 className="govuk-heading-m">{t("privacyPageOtherControllersHeading")}</h3>
         <p>
           Department of Environment, Food and Agriculture
           <br />
@@ -128,13 +327,15 @@ export const PrivacyNotice = () => {
           Isle of Man
           <br />
           IM4 3AS
-          <br />
-          <a className="govuk-link" href="fisheries@gov.im">
-            Contact the Department of Environment, Food and Agriculture
+        </p>
+        <p>
+          {t("email")}:{" "}
+          <a className="govuk-link" href="mailto:fisheries@gov.im">
+            fisheries@gov.im
           </a>
         </p>
         <p>
-          Marine Scotland
+          Marine Directorate (Scotland)
           <br />
           Data Protection and Information Assets Team
           <br />
@@ -147,26 +348,30 @@ export const PrivacyNotice = () => {
           EDINBURGH
           <br />
           EH11 3XD
-          <br />
+        </p>
+        <p>
+          {t("email")}:{" "}
           <a className="govuk-link" href="mailto:dpa@gov.scot">
-            Contact the Data Protection and Information Assets Team
+            dpa@gov.scot
           </a>
         </p>
         <p>
-          {t("privacyPageWelshGovernment")}
+          Welsh Government
           <br />
-          {t("privacyPageDataProtectionOfficer")}
+          Data Protection Officer
           <br />
-          {t("privacyPageWelshGovernment")}
+          Welsh Government
           <br />
-          {t("Cathays Park")}
+          Cathays Park
           <br />
-          {t("privacyPageCardiff")}
+          Cardiff
           <br />
           CF10 3NQ
-          <br />
+        </p>
+        <p>
+          {t("email")}:{" "}
           <a className="govuk-link" href="mailto:Data.ProtectionOfficer@gov.wales">
-            Contact the Welsh Government
+            Data.ProtectionOfficer@gov.wales
           </a>
         </p>
         <p>
@@ -183,142 +388,41 @@ export const PrivacyNotice = () => {
           BT49 9HP
           <br />
           {t("telephone")}: 028 7744 2350
-          <br />
+        </p>
+        <p>
+          {t("email")}:{" "}
           <a className="govuk-link" href="mailto:dataprotectionofficer@daera-ni.gov.uk">
-            Contact the Department of Agriculture, Environment and Rural Affair
-          </a>
-        </p>
-        <p>&nbsp;</p>
-        <h2>{t("privacyPageHeading2")} </h2>
-        <p>{t("privacyPageHeading2Desc1")}</p>
-        <p>{t("privacyPageHeading2Desc2")}</p>
-        <p>
-          <a
-            className="govuk-link"
-            href="https://www.gov.uk/government/organisations/marine-management-organisation"
-            target="_blank"
-            rel="noreferrer noopener"
-            dangerouslySetInnerHTML={{
-              __html: t("privacyPageHeading2MMOLink") + " " + t("commonHelpLinkOpenInNewTab", { ns: "common" }),
-            }}
-          />
-        </p>
-        <p>{t("privacyPageHeading2Desc4")}</p>
-        <p dangerouslySetInnerHTML={{ __html: t("privacyPageHeading2Desc5") }} />
-        <p>{t("privacyPageHeading2Desc6")}</p>
-        <p>{t("privacyPageHeading2Desc7")}</p>
-        <p>{t("privacyPageHeading2Desc8")}</p>
-        <br />
-        <h2>{t("privacyPageHeading3")}</h2>
-        <p dangerouslySetInnerHTML={{ __html: t("privacyPageHeading3Desc1") }} />
-        <p>{t("privacyPageHeading3Desc2")}</p>
-        <p>{t("privacyPageHeading3Desc3")}</p>
-        <ul className="govuk-list--bullet">
-          <li>{t("privacyPageHeading3Li1")}</li>
-          <li>{t("privacyPageHeading3Li2")}</li>
-          <li>{t("privacyPageHeading3Li3")}</li>
-          <li>{t("privacyPageHeading3Li4")}</li>
-          <li>{t("privacyPageHeading3Li5")}</li>
-          <li>{t("privacyPageHeading3Li6")}</li>
-          <li>{t("privacyPageHeading3Li7")}</li>
-          <li>{t("privacyPageHeading3Li8")}</li>
-        </ul>
-        <br />
-        <h2>{t("privacyPageHeading4")}</h2>
-        <p>{t("privacyPageHeading4Desc")}</p>
-        <br />
-        <h2>{t("privacyPageHeading5")}</h2>
-        <p>{t("privacyPageHeading5Desc")}</p>
-        <br />
-        <h2>{t("privacyPageHeading6")}</h2>
-        <p>{t("privacyPageHeading6Desc")}</p>
-        <br />
-        <h2>{t("youRights")}</h2>
-        <p dangerouslySetInnerHTML={{ __html: t("youRightDescription1") }} />
-        <p>{t("youRightDescription2")}</p>
-        <p>{t("youRightDescription3")}</p>
-        <p>{t("youRightDescription4")}</p>
-        <p>
-          <a
-            className="govuk-link"
-            href="https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-general-data-protection-regulation-gdpr/individual-rights/"
-          >
-            {t("privacyPageInformationCommissionerOffice")}
-          </a>
-        </p>
-        <br />
-        <h2>{t("HowDoIContact")}</h2>
-        <p>{t("HowDoIContactDesc1")}</p>
-        <p dangerouslySetInnerHTML={{ __html: t("HowDoIContactDesc2") }} />
-        <p>
-          Tyneside House
-          <br />
-          Skinnerburn Rd
-          <br />
-          Newcastle upon Tyne
-          <br />
-          NE4 7AR
-        </p>
-        <p>
-          {t("email")}:{" "}
-          <a className="govuk-link" href="mailto:dataprotection@marinemanagement.org.uk">
-            Contact the Marine Management Data Protection Officer
-          </a>
-        </p>
-        <p>{t("HowDoIContactDesc3")}</p>
-        <p>{t("HowDoIContactDesc4")}</p>
-        <p>
-          DPO
-          <br />
-          Defra
-          <br />
-          Department for the Environment, Food and Rural Affairs
-          <br />
-          2 Marsham Street
-          <br />
-          London
-          <br />
-          SW1P 4DF
-        </p>
-        <p>
-          {t("email")}:{" "}
-          <a className="govuk-link" href="mailto:DefraGroupDataProtectionOfficer@defra.gov.uk">
-            Contact the Defra Data Protection Officer
-          </a>
-        </p>
-        <br />
-        <h2>{t("HowDoIComplain")}</h2>
-        <p>{t("HowDoIComplainDesc")}</p>
-        <p>
-          Information Commissioner's Office
-          <br />
-          Wycliffe House
-          <br />
-          Water Lane
-          <br />
-          Wilmslow
-          <br />
-          Cheshire
-          <br />
-          SK9 5AF
-        </p>
-        <p>{t("telephone")}:0303 123 1113</p>
-        <p>
-          {t("email")}:
-          <a className="govuk-link" href="mailto:casework@ico.org.uk">
-            Contact the Information Commissioner's Office
+            dataprotectionofficer@daera-ni.gov.uk
           </a>
         </p>
         <p>
-          <a
-            className="govuk-link"
-            href="https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-general-data-protection-regulation-gdpr/individual-rights/"
-          >
-            {t("privacyPageInformationCommissionerOffice")}
-          </a>
+          Jersey
+          <br />
+          Marine Resources, Marine Department of Environment,
+          <br />
+          Howard Davis Farm,
+          <br />
+          La Route de la Trinité,
+          <br />
+          Trinity, Jersey,
+          <br />
+          JE3 5JP
         </p>
-        <h2>{t("HowDoIContactChangesPrivacyNotice")}</h2>
-        <p>{t("HowDoIContactChangesPrivacyNoticeDesc")}</p>
+        <p>
+          Guernsey
+          <br />
+          PO Box 459,
+          <br />
+          Raymond Falla House,
+          <br />
+          Longue Rue,
+          <br />
+          St Martin,
+          <br />
+          Guernsey,
+          <br />
+          GY1 1AF
+        </p>
       </div>
     </div>
   );
