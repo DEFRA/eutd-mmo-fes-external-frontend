@@ -92,5 +92,6 @@
   "addArrivalTransportationDetailsPlane": "Awyren yn cyrraedd y DU - Creu dogfen storio’r DU - GOV.UK",
   "addArrivalTransportationDetailsTruck": "Lori yn cyrraedd y DU - Creu dogfen storio’r DU - GOV.UK",
   "storageDocumentDepartureProductSummary": "Gwirio a chadarnhau pwysau’ch llwyth - Creu dogfen storio’r DU - GOV.UK",
-  "psRemoveProduct": "Tynnwch gynnyrch - Creu datganiad prosesu yn y DU - GOV.UK"
+  "psRemoveProduct": "Tynnwch gynnyrch - Creu datganiad prosesu yn y DU - GOV.UK",
+  "sdRemoveProduct": "Tynnu cynnyrch - Creu dogfen dim triniaeth ar gyfer y DU - GOV.UK"
 }
