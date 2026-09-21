@@ -1,10 +1,8 @@
 import { useActionData, useLoaderData } from "react-router";
-import { Main, ErrorSummary } from "~/components";
-import { displayErrorMessages } from "~/helpers";
+import { useTranslation } from "react-i18next";
 import type { Journey } from "~/types";
-import isEmpty from "lodash/isEmpty";
-import { DeleteDraft } from "./deleteDraft";
 import { useScrollOnPageLoad } from "~/hooks";
+import { YesNoConfirmationPage } from "./yesNoConfirmationPage";
 
 type DeleteDraftFormProps = {
   backUrl: string;
@@ -14,17 +12,22 @@ type DeleteDraftFormProps = {
 export const DeleteDraftForm = ({ backUrl, journey }: DeleteDraftFormProps) => {
   const { csrf } = useLoaderData<{ csrf: string }>();
   const { errors = {} } = useActionData<{ errors: any }>() ?? {};
+  const { t } = useTranslation(["common"]);
 
   useScrollOnPageLoad();
 
   return (
-    <Main backUrl={backUrl}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
-      <div className="govuk-grid-row">
-        <div className="govuk-grid-column-three-quarters">
-          <DeleteDraft errors={errors} journey={journey} csrf={csrf} />
-        </div>
-      </div>
-    </Main>
+    <YesNoConfirmationPage
+      csrf={csrf}
+      backUrl={backUrl}
+      title={t(`${journey}DeleteConfirmation`, { ns: "common" })}
+      radioName="documentDelete"
+      yesLabel={t("commonYesLabel")}
+      noLabel={t("commonNoLabel")}
+      errors={errors}
+      gridColumnClassName="govuk-grid-column-three-quarters"
+    >
+      <input type="hidden" name="journey" value={journey} />
+    </YesNoConfirmationPage>
   );
 };

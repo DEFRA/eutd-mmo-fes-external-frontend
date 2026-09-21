@@ -311,6 +311,7 @@
   "ccCommonGearTypeUnpopulatedError": "Select a gear type",
   "ccAddTransportationDetailsContainerIdentificationNumberOnlyNumLettersWithoutSpacesError": "Container identification number must only contain letters and numbers",
   "removeProductErrorNoSelection": "Select yes if you want to remove this product and all its associated species",
+  "sdRemoveProductErrorNoSelection": "Select yes if you want to remove this product from the consignment",
   "sdArrivalDatenotMorethanOneDay": "Arrival date must not be more than 1 day in the future",
   "ccDirectLandingDateLandedRequiredError": "Enter the date landed",
   "ccDirectLandingDateLandedInvalidError": "Enter a valid date landed",

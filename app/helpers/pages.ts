@@ -112,6 +112,7 @@ export enum Page {
   StorageDocumentStorageFacilityApproval = "storageDocumentStorageFacilityApproval",
   HowDoesTheConsignmentArriveAToTheUk = "HowDoesTheConsignmentArriveAToTheUk",
   ProcessingStatementRemoveProduct = "ProcessingStatementRemoveProduct",
+  StorageDocumentRemoveProduct = "storageDocumentRemoveProduct",
 }
 
 export const pages: Pages = {
@@ -601,6 +602,12 @@ export const pages: Pages = {
     path: "/create-processing-statement/:documentNumber/remove-product/:productId",
     title: "psRemoveProduct",
     homeLink: "processing-statement",
+    hideFavouritesLink: true,
+  },
+  [Page.StorageDocumentRemoveProduct]: {
+    path: "/create-non-manipulation-document/:documentNumber/remove-product/:productId",
+    title: "sdRemoveProduct",
+    homeLink: "non-manipulation-document",
     hideFavouritesLink: true,
   },
 };

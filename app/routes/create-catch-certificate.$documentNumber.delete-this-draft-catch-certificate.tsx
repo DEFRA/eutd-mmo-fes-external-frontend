@@ -1,20 +1,9 @@
 import * as React from "react";
-import {
-  useActionData,
-  useLoaderData,
-  type ActionFunction,
-  type LoaderFunction,
-  type TypedResponse,
-} from "react-router";
+import { type ActionFunction, type LoaderFunction, type TypedResponse } from "react-router";
 import { route } from "routes-gen";
-import { Main, ErrorSummary } from "~/components";
-
-import { displayErrorMessages } from "~/helpers";
 import { deleteDraftFormAction, deleteDraftFormLoader } from "~/.server";
 import type { ErrorResponse } from "~/types";
-import isEmpty from "lodash/isEmpty";
-import { DeleteDraft } from "~/composite-components";
-import { useScrollOnPageLoad } from "~/hooks";
+import { DeleteDraftForm } from "~/composite-components";
 
 export const loader: LoaderFunction = async ({ request, params }) => await deleteDraftFormLoader({ request, params });
 
@@ -33,22 +22,8 @@ export const action: ActionFunction = async ({
     nextUri: route("/create-catch-certificate/catch-certificates"),
   });
 
-const DocumentConfirmDeleteDraftPage = () => {
-  const { csrf } = useLoaderData<{ csrf: string }>();
-  const { errors = {} } = useActionData<{ errors: any }>() ?? {};
-
-  useScrollOnPageLoad();
-
-  return (
-    <Main backUrl={route("/create-catch-certificate/catch-certificates")}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessages(errors)} />}
-      <div className="govuk-grid-row">
-        <div className="govuk-grid-column-three-quarters">
-          <DeleteDraft errors={errors} journey="catchCertificate" csrf={csrf} />
-        </div>
-      </div>
-    </Main>
-  );
-};
+const DocumentConfirmDeleteDraftPage = () => (
+  <DeleteDraftForm backUrl={route("/create-catch-certificate/catch-certificates")} journey="catchCertificate" />
+);
 
 export default DocumentConfirmDeleteDraftPage;
