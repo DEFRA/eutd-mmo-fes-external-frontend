@@ -4,7 +4,7 @@ describe("Privacy Page", () => {
   it("should render Privacy Page content in English", () => {
     cy.visit(`${privacyNoticeUrl}?lng=en`);
     cy.contains("h1", /^Privacy Notice$/).should("be.visible");
-    cy.contains("Date Published: [INSERT DATE]").should("be.visible");
+    cy.contains("Date Published: 29/10/2026").should("be.visible");
     cy.contains(
       "The Marine Management Organisation (MMO) and the other UK Fisheries Administrations are joint controllers"
     ).should("be.visible");
