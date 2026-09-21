@@ -108,7 +108,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Railway bill number must not exceed 15 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Railway bill number must not exceed 15 characters$/).should("be.visible");
   });
 
   it("should display error when railway bill has alphanumeric text", () => {
@@ -123,7 +123,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the railway bill number$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the railway bill number$/).should("be.visible");
   });
 
   it("should display error when place of unloading is empty", () => {
@@ -139,7 +139,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the place where the consignment was unloaded$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place where the consignment was unloaded$/).should("be.visible");
   });
 
   it("should display error when place of unloading is empty", () => {
@@ -158,7 +158,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("form").submit();
     cy.document({ timeout: 250 }).its("readyState").should("eq", "complete");
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Place of unloading must not exceed 50 characters$/).should("be.visible");
+    cy.contains("a", /^Error:Place of unloading must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should display error when railway bill has alphanumeric text", () => {
@@ -173,7 +173,7 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Railway bill number must only contain letters and numbers$/).should("be.visible");
+    cy.contains("a", /^Error:Railway bill number must only contain letters and numbers$/).should("be.visible");
   });
 
   it("should display errors", () => {
@@ -184,8 +184,8 @@ describe("Add Transportation Details Train: Allowed", () => {
     cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
-    cy.contains("a", /^Enter the railway bill number$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place the export leaves the UK$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the railway bill number$/).should("be.visible");
   });
 
   it("should navigate to sd dashboard page on click of save as draft button", () => {
@@ -277,7 +277,7 @@ describe("Add Transportation Details Train: Allowed", () => {
 
     // Verify error is displayed
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the country of departure$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the country of departure$/).should("be.visible");
   });
 
   // FI0-10289: Scenario 3 - Error when Where the consignment departs from not populated
@@ -299,7 +299,7 @@ describe("Add Transportation Details Train: Allowed", () => {
 
     // Verify error is displayed
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter where the consignment departs from$/).should("be.visible");
+    cy.contains("a", /^Error:Enter where the consignment departs from$/).should("be.visible");
   });
 
   // FI0-10289: Scenario 4 - Error when Departure date not populated
@@ -319,7 +319,7 @@ describe("Add Transportation Details Train: Allowed", () => {
 
     // Verify error is displayed
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the departure date$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the departure date$/).should("be.visible");
   });
 
   // FI0-10289: Scenario 5 - All mandatory fields populated
@@ -384,13 +384,13 @@ describe("Add Transportation Details Train: Welsh Translations", () => {
 
     // Verify Welsh error messages as per acceptance criteria
     // "Enter the country of departure" -> "Rhowch y wlad ymadael"
-    cy.contains("a", /^Rhowch y wlad ymadael$/).should("be.visible");
+    cy.contains("a", /^Gwall:Rhowch y wlad ymadael$/).should("be.visible");
 
     // "Enter where the consignment departs from" -> "Rhowch o ble mae'r llwyth yn ymadael"
-    cy.contains("a", /^Rhowch o ble mae'r llwyth yn ymadael$/).should("be.visible");
+    cy.contains("a", /^Gwall:Rhowch o ble mae'r llwyth yn ymadael$/).should("be.visible");
 
     // "Enter the departure date" -> "Rhowch y dyddiad ymadael"
-    cy.contains("a", /^Rhowch y dyddiad ymadael$/).should("be.visible");
+    cy.contains("a", /^Gwall:Rhowch y dyddiad ymadael$/).should("be.visible");
   });
 
   it("should handle adding and removing containers", () => {

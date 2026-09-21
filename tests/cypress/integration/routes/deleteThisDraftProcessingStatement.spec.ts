@@ -20,7 +20,7 @@ describe("Delete this draft processing statement page", () => {
     cy.get("form").submit();
 
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select yes if you want to delete the current document and start a new one$/).should(
+    cy.contains("a", /^Error:Select yes if you want to delete the current document and start a new one$/).should(
       "be.visible"
     );
     cy.contains("p > span", /^Error:$/).should("be.visible");

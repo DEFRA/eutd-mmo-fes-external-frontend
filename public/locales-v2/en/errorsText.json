@@ -246,6 +246,7 @@
   "commonErrorText": "Error:",
   "ccStartDateInvalidError": "Enter a valid start date of the fishing trip",
   "ccStartDateMaxError": "Start date must not be after the date landed",
+  "ccStartDateFutureError": "Start date must not be in the future",
   "ccAddLandingStartDateUnpopulated": "Enter the start date of the fishing trip",
   "ccAddLandingStartDateInvalidFormat": "Enter a valid start date of the fishing trip",
   "ccAddLandingHighSeasAreaError": "Select whether the product was caught in a high seas area",

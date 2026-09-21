@@ -105,8 +105,8 @@ describe("Whose waters page page: Error summary", () => {
     cy.get("[data-testid=save-and-continue]").click();
 
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
-    cy.contains("a", /^Select whose waters the fish or shellfish were caught in$/).should("be.visible");
-    cy.contains("a", /^Enter whose waters the fish or shellfish were caught in$/).should("be.visible");
+    cy.contains("a", /^Error:Select whose waters the fish or shellfish were caught in$/).should("be.visible");
+    cy.contains("a", /^Error:Enter whose waters the fish or shellfish were caught in$/).should("be.visible");
     cy.contains("div > fieldset > p.govuk-error-message > span", /^Error:/).should("be.visible");
   });
 });
