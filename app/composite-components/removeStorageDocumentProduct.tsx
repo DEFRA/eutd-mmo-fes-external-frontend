@@ -7,6 +7,7 @@ type RemoveStorageDocumentProductProps = {
   productId: string;
   backUrl: string;
   errors?: IErrorsTransformed;
+  returnUrl?: string;
 };
 
 export const RemoveStorageDocumentProduct = ({
@@ -14,6 +15,7 @@ export const RemoveStorageDocumentProduct = ({
   productId,
   backUrl,
   errors,
+  returnUrl,
 }: RemoveStorageDocumentProductProps) => {
   const { t } = useTranslation(["sdRemoveProduct", "common"]);
 
@@ -29,6 +31,7 @@ export const RemoveStorageDocumentProduct = ({
       errors={errors}
     >
       <input type="hidden" name="productId" value={productId} />
+      {returnUrl && <input type="hidden" name="returnUrl" value={returnUrl} />}
     </YesNoConfirmationPage>
   );
 };
