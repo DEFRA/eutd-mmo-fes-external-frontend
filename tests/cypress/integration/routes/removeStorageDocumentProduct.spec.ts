@@ -31,8 +31,8 @@ describe("SD: remove-product confirmation page", () => {
     };
     cy.visit(removeProductUrl, { qs: { ...testParams } });
 
-    cy.get("#removeProduct").parent().should("contain", "Yes");
-    cy.get("#removeProductNo").parent().should("contain", "No");
+    cy.get("#removeProduct").parent().should("contain", "Yes, remove this product");
+    cy.get("#removeProductNo").parent().should("contain", "No, keep this product");
     cy.get('[data-testid="continue"]').should("be.visible").should("contain", "Save and continue");
   });
 
@@ -45,8 +45,8 @@ describe("SD: remove-product confirmation page", () => {
 
     cy.contains("h1", "Ydych chi'n siŵr eich bod chi eisiau tynnu'r cynnyrch hwn o'r llwyth?").should("be.visible");
     cy.contains("Bydd y cynnyrch yma yn cael ei dynnu o'ch llwyth.").should("be.visible");
-    cy.get("#removeProduct").parent().should("contain", "Ydw");
-    cy.get("#removeProductNo").parent().should("contain", "Nac ydw");
+    cy.get("#removeProduct").parent().should("contain", "Ydw, tynnwch y cynnyrch yma");
+    cy.get("#removeProductNo").parent().should("contain", "Nac ydw, cadwch y cynnyrch yma");
   });
 
   it("should display an error when no option is selected", () => {

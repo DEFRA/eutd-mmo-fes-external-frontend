@@ -7,6 +7,7 @@ type RemoveStorageDocumentProductProps = {
   productId: string;
   backUrl: string;
   errors?: IErrorsTransformed;
+  returnUrl?: string;
 };
 
 export const RemoveStorageDocumentProduct = ({
@@ -14,8 +15,9 @@ export const RemoveStorageDocumentProduct = ({
   productId,
   backUrl,
   errors,
+  returnUrl,
 }: RemoveStorageDocumentProductProps) => {
-  const { t } = useTranslation(["sdRemoveProduct", "common"]);
+  const { t } = useTranslation(["sdRemoveProduct"]);
 
   return (
     <YesNoConfirmationPage
@@ -24,11 +26,12 @@ export const RemoveStorageDocumentProduct = ({
       title={t("sdRemoveProductTitle", { ns: "sdRemoveProduct" })}
       hint={t("sdRemoveProductHint", { ns: "sdRemoveProduct" })}
       radioName="removeProduct"
-      yesLabel={t("commonYesLabel", { ns: "common" })}
-      noLabel={t("commonNoLabel", { ns: "common" })}
+      yesLabel={t("sdRemoveProductConfirmButton", { ns: "sdRemoveProduct" })}
+      noLabel={t("sdRemoveProductCancelButton", { ns: "sdRemoveProduct" })}
       errors={errors}
     >
       <input type="hidden" name="productId" value={productId} />
+      {returnUrl && <input type="hidden" name="returnUrl" value={returnUrl} />}
     </YesNoConfirmationPage>
   );
 };
