@@ -1,6 +1,4 @@
 {
   "sdRemoveProductTitle": "Are you sure you want to remove this product from the consignment?",
-  "sdRemoveProductHint": "This product will be removed from your consignment.",
-  "sdRemoveProductConfirmButton": "Yes, remove this product",
-  "sdRemoveProductCancelButton": "No, keep this product"
+  "sdRemoveProductHint": "This product will be removed from your consignment."
 }
