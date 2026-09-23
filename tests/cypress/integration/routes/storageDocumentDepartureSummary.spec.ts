@@ -204,7 +204,7 @@ describe("Storage document departure summary: arrival tab", () => {
                 .should("have.value", "100.00")
                 .and("have.attr", "aria-label", "Fishery product weight (kilograms)");
               cy.get("td").eq(3).find("button").eq(0).contains("Edit");
-              cy.get("td").eq(3).find("button").eq(1).contains("Remove");
+              cy.get("td").eq(3).contains("Remove");
             });
 
           cy.get("tr")
@@ -214,7 +214,7 @@ describe("Storage document departure summary: arrival tab", () => {
               cy.get("td").eq(1).find("input").should("have.value", "50.00");
               cy.get("td").eq(2).find("input").should("have.value", "50.00");
               cy.get("td").eq(3).find("button").eq(0).contains("Edit");
-              cy.get("td").eq(3).find("button").eq(1).contains("Remove");
+              cy.get("td").eq(3).contains("Remove");
             });
         });
       });
@@ -260,11 +260,16 @@ describe("Storage document departure summary: arrival tab", () => {
           cy.get("tr")
             .eq(0)
             .within(() => {
-              cy.get("td").eq(3).find("button").eq(1).contains("Remove").click();
+              cy.get("td").eq(3).contains("Remove").click();
             });
         });
       });
     });
+
+    cy.url().should("include", "/remove-product/");
+
+    cy.get("#removeProduct").check();
+    cy.get('[data-testid="continue"]').click();
 
     cy.url().should("include", getStorageDocumentUrl());
   });
@@ -288,7 +293,7 @@ describe("Storage document departure summary: arrival tab with one catch", () =>
           cy.get("tr")
             .eq(0)
             .within(() => {
-              cy.get("td").eq(3).find("button").contains("Remove").should("not.exist");
+              cy.get("td").eq(3).contains("Remove").should("not.exist");
             });
         });
       });
