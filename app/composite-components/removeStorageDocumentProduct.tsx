@@ -17,7 +17,7 @@ export const RemoveStorageDocumentProduct = ({
   errors,
   returnUrl,
 }: RemoveStorageDocumentProductProps) => {
-  const { t } = useTranslation(["sdRemoveProduct"]);
+  const { t } = useTranslation(["sdRemoveProduct", "common"]);
 
   return (
     <YesNoConfirmationPage
@@ -26,8 +26,8 @@ export const RemoveStorageDocumentProduct = ({
       title={t("sdRemoveProductTitle", { ns: "sdRemoveProduct" })}
       hint={t("sdRemoveProductHint", { ns: "sdRemoveProduct" })}
       radioName="removeProduct"
-      yesLabel={t("sdRemoveProductConfirmButton", { ns: "sdRemoveProduct" })}
-      noLabel={t("sdRemoveProductCancelButton", { ns: "sdRemoveProduct" })}
+      yesLabel={t("commonYesLabel", { ns: "common" })}
+      noLabel={t("commonNoLabel", { ns: "common" })}
       errors={errors}
     >
       <input type="hidden" name="productId" value={productId} />
