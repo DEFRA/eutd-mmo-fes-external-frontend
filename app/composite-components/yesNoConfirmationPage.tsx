@@ -33,7 +33,7 @@ export const YesNoConfirmationPage = ({
   continueLabel,
   errors = {},
   children,
-  gridColumnClassName = "govuk-grid-column-two-thirds",
+  gridColumnClassName,
   titleTestId,
 }: YesNoConfirmationPageProps) => {
   const { t } = useTranslation(["common", "errorsText"]);
