@@ -42,20 +42,44 @@ export const getBearerTokenForRequest = async (request: Request): Promise<string
   const session = await getSessionFromRequest(request);
   const id_token = session.get("token_id");
 
-  if (id_token) {
+  if (!id_token) {
+    throw redirect(await buildLoginRedirectUrl());
+  }
+
+  if (!isTokenNearExpiry(id_token)) {
     return id_token;
   }
 
-  const cl = await getClient(ENV.IDM_CLIENTID, ENV.IDM_CLIENTSECRET);
-  const redirectTo = cl.authorizationUrl({
-    serviceId: ENV.IDENTITY_SERVICEID,
-    redirect_uri: REDIRECT_URL,
-    scope: "openid offline_access",
-    response_mode: "form_post",
-    response_type: "code",
-  });
+  const storedRefreshToken = session.get("refresh_token");
 
-  throw redirect(redirectTo);
+  if (!storedRefreshToken) {
+    throw redirect(await buildLoginRedirectUrl());
+  }
+
+  try {
+    const refreshedTokenSet = await exchangeRefreshTokenForTokenSet(storedRefreshToken);
+
+    if (!refreshedTokenSet.id_token || isTokenNearExpiry(refreshedTokenSet.id_token)) {
+      logger.error("[IDM-V2][TOKEN-REFRESH][ERROR][Refreshed token missing or still near expiry]");
+      throw redirect(await buildLoginRedirectUrl());
+    }
+
+    setTokenId(refreshedTokenSet.id_token, session);
+    setRefreshToken(refreshedTokenSet.refresh_token ?? storedRefreshToken, session);
+
+    throw redirect(request.url, {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  } catch (e) {
+    if (e instanceof Response) {
+      throw e;
+    }
+
+    logger.error(`[IDM-V2][TOKEN-REFRESH][ERROR][${e instanceof Error ? e.stack ?? e.message : e}]`);
+    throw redirect(await buildLoginRedirectUrl());
+  }
 };
 
 export const isAdminUser = (bearerToken: string): boolean => {
@@ -143,6 +167,47 @@ const setTokenId: (id: string, session: Session) => void = (id: string, session:
   session.set("token_id", id);
 };
 
+const setRefreshToken: (refreshToken: string | undefined, session: Session) => void = (
+  refreshToken: string | undefined,
+  session: Session
+) => {
+  session.unset("refresh_token");
+
+  if (refreshToken) {
+    session.set("refresh_token", refreshToken);
+  }
+};
+
+const TOKEN_REFRESH_BUFFER_SECONDS = 300;
+
+// True when the token has no readable exp claim, or expires within the refresh buffer
+const isTokenNearExpiry = (id_token: string): boolean => {
+  const decoded = jwt.decode(id_token);
+  const exp = decoded && typeof decoded !== "string" ? decoded.exp : undefined;
+
+  if (!exp) {
+    return true;
+  }
+
+  return exp - Math.floor(Date.now() / 1000) <= TOKEN_REFRESH_BUFFER_SECONDS;
+};
+
+const buildLoginRedirectUrl = async (): Promise<string> => {
+  const cl = await getClient(ENV.IDM_CLIENTID, ENV.IDM_CLIENTSECRET);
+  return cl.authorizationUrl({
+    serviceId: ENV.IDENTITY_SERVICEID,
+    redirect_uri: REDIRECT_URL,
+    scope: "openid offline_access",
+    response_mode: "form_post",
+    response_type: "code",
+  });
+};
+
+const exchangeRefreshTokenForTokenSet = async (storedRefreshToken: string): Promise<TokenSet> => {
+  const cl = await getClient(ENV.IDM_CLIENTID, ENV.IDM_CLIENTSECRET);
+  return await cl.refresh(storedRefreshToken);
+};
+
 const getDecodedPayload: (id_token: string) => jwt.JwtPayload = (id_token: string) => {
   const decoded: string | jwt.JwtPayload | null = jwt.decode(id_token);
 
@@ -161,7 +226,7 @@ const processTokenEnrolment = async (tokenSet: TokenSet, session: Session): Prom
   const { contactId, enrolmentRequestCount, enrolmentCount } = getDecodedPayload(tokenSet.id_token);
 
   if (enrolmentRequestCount > 0) {
-    const { id_token } = await autoEnrollUserForService(contactId, tokenSet);
+    const { id_token, refresh_token } = await autoEnrollUserForService(contactId, tokenSet);
 
     if (id_token) {
       const { enrolmentCount: newEnrolmentCount } = getDecodedPayload(id_token);
@@ -171,9 +236,11 @@ const processTokenEnrolment = async (tokenSet: TokenSet, session: Session): Prom
       }
 
       setTokenId(id_token, session);
+      setRefreshToken(refresh_token, session);
     }
   } else if (enrolmentCount > 0) {
     setTokenId(tokenSet.id_token, session);
+    setRefreshToken(tokenSet.refresh_token, session);
   } else {
     throw new Error("User has no enrolments");
   }
