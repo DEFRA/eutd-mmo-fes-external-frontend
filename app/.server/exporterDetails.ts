@@ -86,12 +86,22 @@ export const getUserDetails = async (bearerToken: string): Promise<IExporter> =>
   return onGetIDMUserDetailsResponse(response);
 };
 
-export const getAccountDetailsFromClaims = (claims: any) => {
-  const { currentRelationshipId, relationships } = claims;
+export const getAccountDetailsFromClaims = (
+  claims: any
+): { accountId: string | undefined; exporterCompanyName: string | undefined } => {
+  const { currentRelationshipId, relationships } = claims ?? {};
 
-  const relationshipWithId = relationships.find((str: string) => str.includes(currentRelationshipId));
+  const relationshipWithId: string | undefined = Array.isArray(relationships)
+    ? relationships.find((str: string) => str.includes(currentRelationshipId))
+    : undefined;
 
-  const relationshipIdTokens = relationshipWithId.split`:`;
+  if (!relationshipWithId) {
+    // B2C refresh-token grants can omit the relationships/currentRelationshipId claims, unlike a full sign-in
+    serverLogger.warn("[EXPORTER-DETAILS][GET-ACCOUNT-DETAILS-FROM-CLAIMS][NO-MATCHING-RELATIONSHIP]");
+    return { accountId: undefined, exporterCompanyName: undefined };
+  }
+
+  const relationshipIdTokens = relationshipWithId.split(":");
   // tokens come in the form [relationshipId, accountId, exporterCompanyName, <number>, (Employee, Agent, Citizen), <number>]
 
   const [, accountId, exporterCompanyName] = relationshipIdTokens; // we will take only what we need
