@@ -1,4 +1,4 @@
-import { type Session, type SessionData, createCookieSessionStorage } from "@remix-run/node";
+import { type Session, type SessionData, createCookie, createCookieSessionStorage } from "@remix-run/node";
 import { getEnv } from "./env.server";
 import type { URI } from "./types";
 
@@ -14,6 +14,26 @@ const { getSession, commitSession, destroySession } = createCookieSessionStorage
     secure: ENV.APP_USES_HTTP,
   },
 });
+
+// Refresh tokens live in their own cookie (not the session) so the signed session
+// cookie stays well under the ~4096 byte browser cookie size limit.
+const refreshTokenCookie = createCookie("fesRefreshToken", {
+  httpOnly: true,
+  maxAge: 86400,
+  sameSite: "lax",
+  secrets: [ENV.SESSION_SECRET],
+  secure: ENV.APP_USES_HTTP,
+});
+
+const getRefreshTokenFromRequest = async (request: Request): Promise<string | undefined> => {
+  const value = await refreshTokenCookie.parse(request.headers.get("Cookie"));
+  return typeof value === "string" ? value : undefined;
+};
+
+const serializeRefreshTokenCookie = async (refreshToken: string): Promise<string> =>
+  await refreshTokenCookie.serialize(refreshToken);
+
+const clearRefreshTokenCookie = async (): Promise<string> => await refreshTokenCookie.serialize("", { maxAge: 0 });
 
 const getSessionFromRequest = async (request: Request) => await getSession(request.headers.get("Cookie"));
 
@@ -67,4 +87,12 @@ function clearSession(session: Session<SessionData, SessionData>, uri?: URI) {
   }
 }
 
-export { getSessionFromRequest, commitSession, destroySession, clearSession };
+export {
+  getSessionFromRequest,
+  commitSession,
+  destroySession,
+  clearSession,
+  getRefreshTokenFromRequest,
+  serializeRefreshTokenCookie,
+  clearRefreshTokenCookie,
+};

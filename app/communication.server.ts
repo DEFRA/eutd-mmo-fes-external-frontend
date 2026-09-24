@@ -18,6 +18,14 @@ const commonRequestHeaders = (bearerToken: string) => ({
   Authorization: `Bearer ${bearerToken}`,
 });
 
+// Ensures thrown error Responses always carry a JSON body so callers can safely call .json() on them
+const jsonErrorResponse = (message: string, status: number, statusText?: string): Response =>
+  new Response(JSON.stringify({ message, status }), {
+    status,
+    statusText,
+    headers: { "Content-Type": "application/json" },
+  });
+
 const ENV = getEnv();
 
 // Short timeout for lightweight GET calls (reference data, client-ip, etc.).
@@ -63,12 +71,12 @@ export const get: Get = async (
     });
 
     if (!response.ok && ![400, 403, 404].includes(response.status)) {
-      throw new Response(response.statusText, response);
+      throw jsonErrorResponse(response.statusText, response.status, response.statusText);
     }
     return response;
   } catch (e) {
     if (e instanceof DOMException && e.name === "AbortError") {
-      throw new Response("Gateway Timeout", { status: 504 });
+      throw jsonErrorResponse("Gateway Timeout", 504);
     }
     throw e;
   } finally {
@@ -96,13 +104,13 @@ export const post: Post = async (
     });
 
     if (!response.ok && ![400, 403, 404].includes(response.status)) {
-      throw new Response(response.statusText, response);
+      throw jsonErrorResponse(response.statusText, response.status, response.statusText);
     }
 
     return response;
   } catch (e) {
     if (e instanceof DOMException && e.name === "AbortError") {
-      throw new Response("Gateway Timeout", { status: 504 });
+      throw jsonErrorResponse("Gateway Timeout", 504);
     }
     throw e;
   } finally {
@@ -126,7 +134,7 @@ export const put: Put = async (
   });
 
   if (!response.ok && ![400, 403].includes(response.status)) {
-    throw new Response(response.statusText, response);
+    throw jsonErrorResponse(response.statusText, response.status, response.statusText);
   }
 
   return response;
@@ -146,7 +154,7 @@ export const deleteRequest: Delete = async (
   });
 
   if (!response.ok && ![400, 403].includes(response.status)) {
-    throw new Response(response.statusText, response);
+    throw jsonErrorResponse(response.statusText, response.status, response.statusText);
   }
 
   return response;
