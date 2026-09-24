@@ -5,7 +5,14 @@ import crypto from "node:crypto";
 import { type TypedResponse, redirect, type Session } from "react-router";
 import { getEnv } from "~/env.server";
 import { type CallbackParamsType, Issuer, type TokenSet, type BaseClient, custom } from "openid-client";
-import { commitSession, destroySession, getSessionFromRequest } from "~/sessions.server";
+import {
+  commitSession,
+  destroySession,
+  getSessionFromRequest,
+  getRefreshTokenFromRequest,
+  serializeRefreshTokenCookie,
+  clearRefreshTokenCookie,
+} from "~/sessions.server";
 import { createEnrolment, enrolmentStatus, getDynamicsToken, getEnrolmentRequests } from "~/.server";
 
 import logger from "~/logger.server";
@@ -50,7 +57,7 @@ export const getBearerTokenForRequest = async (request: Request): Promise<string
     return id_token;
   }
 
-  const storedRefreshToken = session.get("refresh_token");
+  const storedRefreshToken = await getRefreshTokenFromRequest(request);
 
   if (!storedRefreshToken) {
     throw redirect(await buildLoginRedirectUrl());
@@ -65,13 +72,16 @@ export const getBearerTokenForRequest = async (request: Request): Promise<string
     }
 
     setTokenId(refreshedTokenSet.id_token, session);
-    setRefreshToken(refreshedTokenSet.refresh_token ?? storedRefreshToken, session);
 
-    throw redirect(request.url, {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    });
+    // the refresh token lives in its own cookie so the session cookie stays under the browser size limit
+    const headers = new Headers();
+    headers.append("Set-Cookie", await commitSession(session));
+    headers.append(
+      "Set-Cookie",
+      await serializeRefreshTokenCookie(refreshedTokenSet.refresh_token ?? storedRefreshToken)
+    );
+
+    throw redirect(request.url, { headers });
   } catch (e) {
     if (e instanceof Response) {
       throw e;
@@ -167,17 +177,6 @@ const setTokenId: (id: string, session: Session) => void = (id: string, session:
   session.set("token_id", id);
 };
 
-const setRefreshToken: (refreshToken: string | undefined, session: Session) => void = (
-  refreshToken: string | undefined,
-  session: Session
-) => {
-  session.unset("refresh_token");
-
-  if (refreshToken) {
-    session.set("refresh_token", refreshToken);
-  }
-};
-
 const TOKEN_REFRESH_BUFFER_SECONDS = 300;
 
 // True when the token has no readable exp claim, or expires within the refresh buffer
@@ -218,7 +217,7 @@ const getDecodedPayload: (id_token: string) => jwt.JwtPayload = (id_token: strin
   return decoded;
 };
 
-const processTokenEnrolment = async (tokenSet: TokenSet, session: Session): Promise<void> => {
+const processTokenEnrolment = async (tokenSet: TokenSet, session: Session): Promise<string | undefined> => {
   if (!tokenSet?.id_token) {
     throw new Error("No token provided");
   }
@@ -236,11 +235,13 @@ const processTokenEnrolment = async (tokenSet: TokenSet, session: Session): Prom
       }
 
       setTokenId(id_token, session);
-      setRefreshToken(refresh_token, session);
+      return refresh_token;
     }
+
+    return undefined;
   } else if (enrolmentCount > 0) {
     setTokenId(tokenSet.id_token, session);
-    setRefreshToken(tokenSet.refresh_token, session);
+    return tokenSet.refresh_token;
   } else {
     throw new Error("User has no enrolments");
   }
@@ -256,18 +257,22 @@ export const onLoginReturnHandler = async (request: Request): Promise<Response> 
 
     const session = await getSessionFromRequest(request);
 
-    await processTokenEnrolment(tokenSet, session);
+    const refreshToken = await processTokenEnrolment(tokenSet, session);
 
     const params = {
       loggedIn: "yes",
     };
 
+    // the refresh token lives in its own cookie so the session cookie stays under the browser size limit
+    const headers = new Headers();
+    headers.append("Set-Cookie", await commitSession(session));
+    headers.append(
+      "Set-Cookie",
+      refreshToken ? await serializeRefreshTokenCookie(refreshToken) : await clearRefreshTokenCookie()
+    );
+
     // render the home page for logged in user URL=‘/’
-    return redirect("/?" + querystring.stringify(params), {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    });
+    return redirect("/?" + querystring.stringify(params), { headers });
   } catch (e) {
     if (e instanceof Error) {
       logger.error(`[IDM-V2][AUTHENTICATION][ERROR][${e.stack ?? e}]`);
@@ -330,11 +335,11 @@ export const logout = async (request: Request): Promise<TypedResponse<never>> =>
   if (adminUser) {
     const redirectUri = `https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=${ENV.IDENTITY_APPDOMAIN}/`;
 
-    throw redirect(redirectUri, {
-      headers: {
-        "Set-Cookie": await destroySession(session),
-      },
-    });
+    const adminLogoutHeaders = new Headers();
+    adminLogoutHeaders.append("Set-Cookie", await destroySession(session));
+    adminLogoutHeaders.append("Set-Cookie", await clearRefreshTokenCookie());
+
+    throw redirect(redirectUri, { headers: adminLogoutHeaders });
   }
 
   const clientId = ENV.IDM_CLIENTID;
@@ -343,9 +348,9 @@ export const logout = async (request: Request): Promise<TypedResponse<never>> =>
   const cl = await getClient(clientId, clientSecret);
   const redirectTo = cl.endSessionUrl({ client_id: clientId });
 
-  throw redirect(redirectTo, {
-    headers: {
-      "Set-Cookie": await destroySession(session),
-    },
-  });
+  const logoutHeaders = new Headers();
+  logoutHeaders.append("Set-Cookie", await destroySession(session));
+  logoutHeaders.append("Set-Cookie", await clearRefreshTokenCookie());
+
+  throw redirect(redirectTo, { headers: logoutHeaders });
 };
