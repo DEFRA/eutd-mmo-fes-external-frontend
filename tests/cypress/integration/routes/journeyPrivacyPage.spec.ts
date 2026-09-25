@@ -144,6 +144,15 @@ describe("Journey dashboards should redirect to privacy page when user has not a
     cy.get("#acceptAndContinue").should("be.visible");
   });
 
+  it("renders the translated acceptance button label", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PrivacyEmpty,
+    };
+
+    cy.visit(ccDashboardUrl, { qs: { ...testParams } });
+    cy.get("#acceptAndContinue").should("have.text", "Accept and continue");
+  });
+
   it("PS dashboard should redirect to privacy notice", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PrivacyEmpty,
