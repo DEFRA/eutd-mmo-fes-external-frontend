@@ -124,7 +124,7 @@ describe("CC: Entering the address manually with errors", () => {
     cy.get("#townCity").type("Test City");
     cy.get("#postcode").type("12345");
     cy.get("#country").type("Albania");
-    cy.get("[id^='country-option']").contains("Albania").click();
+    cy.get(".autocomplete__option").contains("Albania").click();
     cy.get("#country").should("have.value", "Albania");
 
     cy.get("[data-testid=continue]").click();
