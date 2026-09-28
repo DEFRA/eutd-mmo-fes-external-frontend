@@ -206,6 +206,7 @@ describe("Manual landing page render with page guard", () => {
       .contains("The date landed is the date the vessel finishes its fishing trip and unloads its catch at port")
       .should("be.visible");
     cy.get("div .govuk-details__summary").eq(2).contains("What is a high seas area?");
+    clickSummary(2);
     cy.get("div .govuk-details__text")
       .eq(2)
       .should("contain", "high seas")
@@ -304,7 +305,9 @@ describe("Manual landing page render with page guard", () => {
 
     cy.get("body").then(($b) => {
       if ($b.find("input[role='combobox']").length) {
-        cy.get("input[role='combobox']").first().clear().type("ZZZ-not-found").should("have.value", "ZZZ-not-found");
+        cy.get("input[role='combobox']").first().should("be.visible").clear();
+        cy.get("input[role='combobox']").first().type("ZZZ-not-found");
+        cy.get("input[role='combobox']").first().should("have.value", "ZZZ-not-found");
       } else {
         cy.get("#select-vessel").should("exist");
       }
