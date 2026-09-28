@@ -215,9 +215,11 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.get("body").then(($body) => {
       if ($body.find('[data-testid="add-another-container"]').length > 0) {
         cy.get('[data-testid="add-another-container"]').click();
-        cy.get('input[name="containerNumbers.1"]').clear().type("DEFJ9876543");
+        cy.get('input[name="containerNumbers.1"]').should("be.visible").clear();
+        cy.get('input[name="containerNumbers.1"]').type("DEFJ9876543");
         cy.get('[data-testid="add-another-container"]').click();
-        cy.get('input[name="containerNumbers.2"]').clear().type("GHIJ5555555");
+        cy.get('input[name="containerNumbers.2"]').should("be.visible").clear();
+        cy.get('input[name="containerNumbers.2"]').type("GHIJ5555555");
       } else {
         cy.get('input[name="containerNumbers.1"]').clear().type("DEFJ9876543");
         cy.get('input[name="containerNumbers.2"]').clear().type("GHIJ5555555");
@@ -246,7 +248,8 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
         cy.get('[data-testid="add-another-container"]').click();
         // Leave containerNumbers.1 empty
         cy.get('[data-testid="add-another-container"]').click();
-        cy.get('input[name="containerNumbers.2"]').clear().type("ABCJ0123457");
+        cy.get('input[name="containerNumbers.2"]').should("be.visible").clear();
+        cy.get('input[name="containerNumbers.2"]').type("ABCJ0123457");
       } else {
         cy.get('input[name="containerNumbers.1"]').clear();
         cy.get('input[name="containerNumbers.2"]').clear().type("ABCJ0123457");
