@@ -5,6 +5,18 @@ const productsUrl = `${documentUrl}/what-are-you-exporting`;
 
 const waitForPage = (timeout = 1000) => cy.document({ timeout }).its("readyState").should("eq", "complete");
 
+// FI0-11120: the DCX autocomplete's hydration re-mount can flip #species between
+// disabled/enabled more than once. Require several consecutive polls to see it
+// enabled (via Cypress's built-in retry loop, no fixed wait) before continuing,
+// so a transient enabled window right before it flips back doesn't fool us.
+const waitForSpeciesInteractable = (timeout = 15000, requiredConsecutivePasses = 3) => {
+  let consecutivePasses = 0;
+  cy.get("input#species", { timeout }).should(($el) => {
+    consecutivePasses = $el.prop("disabled") ? 0 : consecutivePasses + 1;
+    expect(consecutivePasses, "consecutive enabled polls").to.be.gte(requiredConsecutivePasses);
+  });
+};
+
 const selectFirstAutocompleteOption = (fallbackValue = "Albacore", timeout = 500) => {
   const ensureSpeciesHasValue = () => {
     cy.get("#species").then(($species) => {
@@ -75,6 +87,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
   });
 
   it("should set the selected species value correctly", () => {
+    waitForSpeciesInteractable();
     cy.get("#species").type("Albacore");
     waitForPage();
     selectFirstAutocompleteOption("Albacore");
@@ -89,18 +102,17 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
   });
 
   it("should handle selecting species multiple times in succession", () => {
+    waitForSpeciesInteractable();
     cy.get("#species").type("Cod");
     waitForPage();
     selectFirstAutocompleteOption("Cod", 1500);
 
     cy.get("#species").then(($species) => {
       if ($species.is("select")) {
-        cy.get("#species option")
-          .its("length")
-          .then((optionCount) => {
-            const nextIndex = optionCount > 2 ? 2 : 1;
-            cy.get("#species").should("be.enabled").select(nextIndex);
-          });
+        const optionCount = $species.find("option").length;
+        const nextIndex = optionCount > 2 ? 2 : 1;
+        cy.get("#species").should("be.enabled");
+        cy.get("#species").select(nextIndex);
         return;
       }
 
@@ -118,6 +130,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
   });
 
   it("should maintain form consistency after species selection", () => {
+    waitForSpeciesInteractable();
     cy.get("#species").type("Pollock");
     waitForPage();
     selectFirstAutocompleteOption("Pollock", 1500);
@@ -132,6 +145,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
   });
 
   it("should allow subsequent field population after species selection", () => {
+    waitForSpeciesInteractable();
     cy.get("#species").type("Hake");
     waitForPage();
     selectFirstAutocompleteOption("Hake", 2000);
@@ -148,6 +162,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
   });
 
   it("should execute all statements in handleSpeciesSelection", () => {
+    waitForSpeciesInteractable();
     cy.get("#species").type("Scallop");
     waitForPage();
     selectFirstAutocompleteOption("Scallop");

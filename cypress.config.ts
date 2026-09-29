@@ -35,6 +35,7 @@ export default defineConfig({
   // defaultCommandTimeout: 20000,
   defaultCommandTimeout: 10000, // 10 seconds
   pageLoadTimeout: 60000, // 60 seconds
+  execTimeout: 60000, // 60 seconds for system commands
   retries: {
     runMode: 3,
     openMode: 3,
