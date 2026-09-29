@@ -2,9 +2,10 @@ import { Title } from "~/components";
 import { useTranslation } from "react-i18next";
 
 export const PrivacyNotice = () => {
-  const { t } = useTranslation(["privacyNotice", "common"]);
+  const { t, i18n } = useTranslation(["privacyNotice", "common"]);
   const openInNewTabText = t("commonHelpLinkOpenInNewTab", { ns: "common" });
   const bulletListClassName = "govuk-list govuk-list--bullet";
+  const isWelsh = i18n.language === "cy";
 
   const renderExternalLink = (href: string, labelKey: string) => (
     <a
@@ -79,6 +80,14 @@ export const PrivacyNotice = () => {
     "privacyPageRightsLegalObligationLi3",
     "privacyPageRightsLegalObligationLi4",
     "privacyPageRightsLegalObligationLi5",
+  ];
+  const rightUrls = [
+    "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/individual-rights/individual-rights/right-to-be-informed",
+    "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/individual-rights/individual-rights/right-of-access/",
+    "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/individual-rights/individual-rights/right-to-rectification/",
+    "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/individual-rights/individual-rights/right-to-restrict-processing/",
+    "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/individual-rights/individual-rights/right-to-object/",
+    "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/individual-rights/individual-rights/rights-related-to-automated-decision-making-including-profiling/",
   ];
 
   return (
@@ -209,10 +218,7 @@ export const PrivacyNotice = () => {
             "privacyPagePersonalInformationCharterLinkText"
           )}
           {t("privacyPageRetentionDesc4Middle")}
-          {renderExternalLink(
-            "https://www.gov.uk/government/organisations/marine-management-organisation/about/personal-information-charter#how-long-we-will-keep-data",
-            "privacyPageHowLongWeKeepDataLinkText"
-          )}
+          {t("privacyPageHowLongWeKeepDataLinkText")}
           {t("privacyPageRetentionDesc4Suffix")}
         </p>
 
@@ -225,7 +231,14 @@ export const PrivacyNotice = () => {
         </ul>
 
         <h2 className="govuk-heading-l">{t("privacyPageNoDataHeading")}</h2>
-        <p>{t("privacyPageNoDataDesc")}</p>
+        <p>
+          {t("privacyPageNoDataDescPrefix")}
+          {renderExternalLink(
+            "https://www.gov.uk/government/publications/compliance-and-enforcement-strategy/compliance-and-enforcement-strategy",
+            "privacyPageComplianceEnforcementStrategyLinkText"
+          )}
+          {t("privacyPageNoDataDescSuffix")}
+        </p>
 
         <h2 className="govuk-heading-l">{t("privacyPageTransferHeading")}</h2>
         <p>{t("privacyPageTransferDesc1")}</p>
@@ -236,21 +249,36 @@ export const PrivacyNotice = () => {
           )}
         </p>
         <p>{t("privacyPageTransferDesc2")}</p>
-        <p>{t("privacyPageTransferDesc3")}</p>
-        <p>{t("privacyPageTransferDesc4")}</p>
+        <p>
+          {t("privacyPageTransferDesc3Prefix")}
+          {renderExternalLink(
+            "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/international-transfers/international-transfers-a-guide/",
+            "privacyPageAppropriateSafeguardsLinkText"
+          )}
+          {t("privacyPageTransferDesc3Suffix")}
+        </p>
+        <p>
+          {t("privacyPageTransferDesc4Prefix")}
+          {renderExternalLink(
+            "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/international-transfers/international-transfers-a-guide/",
+            "privacyPageAppropriateSafeguardsLinkText"
+          )}
+          {t("privacyPageTransferDesc4Suffix")}
+        </p>
+        <p>{t("privacyPageTransferDesc5")}</p>
 
         <h2 className="govuk-heading-l">{t("privacyPageRightsHeading")}</h2>
         <p>{t("privacyPageRightsDesc1")}</p>
         <h3 className="govuk-heading-m">{t("privacyPageRightsPublicTaskHeading")}</h3>
         <ul className={bulletListClassName}>
-          {publicTaskRightsKeys.map((key) => (
-            <li key={key}>{t(key)}</li>
+          {publicTaskRightsKeys.map((key, index) => (
+            <li key={key}>{renderExternalLink(rightUrls[index], key)}</li>
           ))}
         </ul>
         <h3 className="govuk-heading-m">{t("privacyPageRightsLegalObligationHeading")}</h3>
         <ul className={bulletListClassName}>
-          {legalObligationRightsKeys.map((key) => (
-            <li key={key}>{t(key)}</li>
+          {legalObligationRightsKeys.map((key, index) => (
+            <li key={key}>{renderExternalLink(rightUrls[index], key)}</li>
           ))}
         </ul>
         <p>{t("privacyPageRightsDesc2")}</p>
@@ -315,6 +343,27 @@ export const PrivacyNotice = () => {
         </p>
 
         <h3 className="govuk-heading-m">{t("privacyPageOtherControllersHeading")}</h3>
+        {isWelsh && (
+          <>
+            <p>
+              {t("privacyPageWelshGovernmentName")}
+              <br />
+              {t("privacyPageWelshGovernmentDpo")}
+              <br />
+              {t("privacyPageWelshGovernmentPark")}
+              <br />
+              {t("privacyPageWelshGovernmentCity")}
+              <br />
+              CF10 3NQ
+            </p>
+            <p>
+              {t("email")}:{" "}
+              <a className="govuk-link" href="mailto:Data.ProtectionOfficer@gov.wales">
+                Data.ProtectionOfficer@gov.wales
+              </a>
+            </p>
+          </>
+        )}
         <p>
           Department of Environment, Food and Agriculture
           <br />
@@ -355,25 +404,27 @@ export const PrivacyNotice = () => {
             dpa@gov.scot
           </a>
         </p>
-        <p>
-          Welsh Government
-          <br />
-          Data Protection Officer
-          <br />
-          Welsh Government
-          <br />
-          Cathays Park
-          <br />
-          Cardiff
-          <br />
-          CF10 3NQ
-        </p>
-        <p>
-          {t("email")}:{" "}
-          <a className="govuk-link" href="mailto:Data.ProtectionOfficer@gov.wales">
-            Data.ProtectionOfficer@gov.wales
-          </a>
-        </p>
+        {!isWelsh && (
+          <>
+            <p>
+              {t("privacyPageWelshGovernmentName")}
+              <br />
+              {t("privacyPageWelshGovernmentDpo")}
+              <br />
+              {t("privacyPageWelshGovernmentPark")}
+              <br />
+              {t("privacyPageWelshGovernmentCity")}
+              <br />
+              CF10 3NQ
+            </p>
+            <p>
+              {t("email")}:{" "}
+              <a className="govuk-link" href="mailto:Data.ProtectionOfficer@gov.wales">
+                Data.ProtectionOfficer@gov.wales
+              </a>
+            </p>
+          </>
+        )}
         <p>
           Department of Agriculture, Environment and Rural Affairs
           <br />
