@@ -211,13 +211,16 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.get("#flagState").type("Greece");
 
     // Fill existing container fields, or add if the hydrated add button is present.
-    cy.get('input[name="containerNumbers.0"]').clear().type("ABCJ1234567");
+    cy.get('input[name="containerNumbers.0"]').should("be.visible").clear();
+    cy.get('input[name="containerNumbers.0"]').type("ABCJ1234567");
     cy.get("body").then(($body) => {
       if ($body.find('[data-testid="add-another-container"]').length > 0) {
         cy.get('[data-testid="add-another-container"]').click();
-        cy.get('input[name="containerNumbers.1"]').clear().type("DEFJ9876543");
+        cy.get('input[name="containerNumbers.1"]').should("be.visible").clear();
+        cy.get('input[name="containerNumbers.1"]').type("DEFJ9876543");
         cy.get('[data-testid="add-another-container"]').click();
-        cy.get('input[name="containerNumbers.2"]').clear().type("GHIJ5555555");
+        cy.get('input[name="containerNumbers.2"]').should("be.visible").clear();
+        cy.get('input[name="containerNumbers.2"]').type("GHIJ5555555");
       } else {
         cy.get('input[name="containerNumbers.1"]').clear().type("DEFJ9876543");
         cy.get('input[name="containerNumbers.2"]').clear().type("GHIJ5555555");
@@ -240,13 +243,15 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.get("#flagState").type("Greece");
 
     // Leave middle container empty while still submitting valid values around it.
-    cy.get('input[name="containerNumbers.0"]').clear().type("ABCJ0123456");
+    cy.get('input[name="containerNumbers.0"]').should("be.visible").clear();
+    cy.get('input[name="containerNumbers.0"]').type("ABCJ0123456");
     cy.get("body").then(($body) => {
       if ($body.find('[data-testid="add-another-container"]').length > 0) {
         cy.get('[data-testid="add-another-container"]').click();
         // Leave containerNumbers.1 empty
         cy.get('[data-testid="add-another-container"]').click();
-        cy.get('input[name="containerNumbers.2"]').clear().type("ABCJ0123457");
+        cy.get('input[name="containerNumbers.2"]').should("be.visible").clear();
+        cy.get('input[name="containerNumbers.2"]').type("ABCJ0123457");
       } else {
         cy.get('input[name="containerNumbers.1"]').clear();
         cy.get('input[name="containerNumbers.2"]').clear().type("ABCJ0123457");

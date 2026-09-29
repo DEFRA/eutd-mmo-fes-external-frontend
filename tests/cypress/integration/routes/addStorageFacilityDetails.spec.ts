@@ -37,14 +37,17 @@ describe("Add Storage Facility Address", () => {
     );
 
     // Expandable guidance should be present with title and content
-    cy.get("details.govuk-details")
-      .should("exist")
-      .within(() => {
-        cy.get("summary").contains("What is the arrival date?");
-        cy.contains(
-          "This is the date the product arrives at the storage facility and is unloaded. If unloading happens later, enter the date the product was physically removed from the transport and received into storage."
-        ).should("be.visible");
-      });
+    cy.get("details.govuk-details").should("exist");
+    cy.get(".govuk-details__summary-text").contains("What is the arrival date?");
+
+    // Click to expand and verify content
+    cy.get(".govuk-details__summary").click();
+    cy.get(".govuk-details__text")
+      .should("be.visible")
+      .and(
+        "contain",
+        "This is the date the product arrives at the storage facility and is unloaded. If unloading happens later, enter the date the product was physically removed from the transport and received into storage."
+      );
 
     cy.contains("[data-testid=goToAddAddress-button]", /^Add the storage facility address$/).should("be.visible");
 
