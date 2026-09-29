@@ -211,7 +211,8 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.get("#flagState").type("Greece");
 
     // Fill existing container fields, or add if the hydrated add button is present.
-    cy.get('input[name="containerNumbers.0"]').clear().type("ABCJ1234567");
+    cy.get('input[name="containerNumbers.0"]').should("be.visible").clear();
+    cy.get('input[name="containerNumbers.0"]').type("ABCJ1234567");
     cy.get("body").then(($body) => {
       if ($body.find('[data-testid="add-another-container"]').length > 0) {
         cy.get('[data-testid="add-another-container"]').click();
@@ -242,7 +243,8 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.get("#flagState").type("Greece");
 
     // Leave middle container empty while still submitting valid values around it.
-    cy.get('input[name="containerNumbers.0"]').clear().type("ABCJ0123456");
+    cy.get('input[name="containerNumbers.0"]').should("be.visible").clear();
+    cy.get('input[name="containerNumbers.0"]').type("ABCJ0123456");
     cy.get("body").then(($body) => {
       if ($body.find('[data-testid="add-another-container"]').length > 0) {
         cy.get('[data-testid="add-another-container"]').click();
