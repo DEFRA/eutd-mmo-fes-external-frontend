@@ -106,14 +106,6 @@ const WhatAreYouExporting = () => {
     scrollToId("productsTab");
   };
 
-  // The tab links render as `<a href="#eventKey">` without preventDefault, so activating them
-  // (click or keyboard Enter) lets the browser append the hash to the URL. Stop that here.
-  const preventTabHashNavigation = (event: React.MouseEvent<HTMLElement>) => {
-    if ((event.target as HTMLElement).closest("[data-tab-id]")) {
-      event.preventDefault();
-    }
-  };
-
   useScrollOnPageLoad();
 
   useEffect(() => {
@@ -164,7 +156,7 @@ const WhatAreYouExporting = () => {
             </ul>
           </div>
           <Title title={t("ccAddSpeciesPageHeader")} />
-          <div className="govuk-tabs" data-module="govuk-tabs" id="productTabs" onClickCapture={preventTabHashNavigation}>
+          <div className="govuk-tabs" data-module="govuk-tabs" id="productTabs">
             <TabGroup
               containerClassName="govuk-tabs"
               className="govuk-tabs__list"
