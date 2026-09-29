@@ -59,7 +59,7 @@
     "classnames": "^2.5.1",
     "cross-fetch": "^4.1.0",
     "cryptr": "6.3.0",
-    "cypress": "^14.5.3",
+    "cypress": "^15.10.0",
     "date-fns": "3.6.0",
     "govuk-frontend": "5.13.0",
     "i18next": "^24.0.0",
@@ -162,7 +162,7 @@
     "*.+(js|tsx|ts|json)": "prettier --ignore-unknown --ignore-path .gitignore --write"
   },
   "allowScripts": {
-    "cypress@16.1.0": true,
+    "cypress@15.21.1": true,
     "dtrace-provider@0.8.8": true,
     "esbuild@0.28.2": true,
     "fsevents@2.3.3": true,
