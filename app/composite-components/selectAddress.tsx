@@ -28,7 +28,7 @@ export const SelectAddress = ({ postcode, postcodeaddresses, errors, actionUri, 
     <div>
       <SecureForm method="post" action={actionUri} csrf={csrf}>
         <div className="govuk-grid-column">
-          <h4 className="govuk-!-margin-bottom-2">{t("commonWhatExportersAddressPostcode")}</h4>
+          <h2 className="govuk-heading-s govuk-!-margin-bottom-2">{t("commonWhatExportersAddressPostcode")}</h2>
           {postcode}
           <div className="govuk-grid-row">
             <div className="govuk-grid-column-full">
@@ -52,6 +52,10 @@ export const SelectAddress = ({ postcode, postcodeaddresses, errors, actionUri, 
                   error={{
                     text: t(errors?.addressError?.message, { ns: "errorsText" }) || "",
                     className: "govuk-error-message",
+                    visuallyHiddenText: {
+                      text: t("commonErrorText", { ns: "errorsText" }),
+                      className: "govuk-visually-hidden",
+                    },
                   }}
                   containerClassName={!isEmpty(errors) ? "govuk-form-group govuk-form-group--error" : ""}
                 />

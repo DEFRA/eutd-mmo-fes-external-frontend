@@ -112,18 +112,12 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
         return;
       }
 
-      cy.get('input[name="issuingCountry"]', { timeout: 8000 })
-        .should("be.visible")
-        .should("be.enabled")
-        .click();
+      cy.get('input[name="issuingCountry"]', { timeout: 8000 }).should("be.visible").should("be.enabled").click();
       cy.get('input[name="issuingCountry"]', { timeout: 8000 }).type("Spa");
-      cy.get('input[name="issuingCountry"]')
-        .should("have.attr", "aria-expanded", "true");
+      cy.get('input[name="issuingCountry"]').should("have.attr", "aria-expanded", "true");
       cy.contains("li", "Spain").click();
 
-      cy.get('input[name="issuingCountry"]')
-        .should("have.value", "Spain")
-        .and("have.attr", "aria-expanded", "false");
+      cy.get('input[name="issuingCountry"]').should("have.value", "Spain").and("have.attr", "aria-expanded", "false");
     });
   });
 

@@ -38,9 +38,16 @@ type DepartureProductSummaryProps = {
 type ConsignmentWeightTableFormProps = {
   catches: StorageDocumentCatch[] | undefined;
   transportType: "arrival" | "departure";
+  documentNumber: string;
+  returnUrl: string;
 };
 
-export const ConsignmentWeightTableForm = ({ catches, transportType }: ConsignmentWeightTableFormProps) => {
+export const ConsignmentWeightTableForm = ({
+  catches,
+  transportType,
+  documentNumber,
+  returnUrl,
+}: ConsignmentWeightTableFormProps) => {
   const { t } = useTranslation(["sdDepartureProductSummary", "common"]);
   const actionData = useActionData();
   const errors = actionData?.errors ?? {};
@@ -195,16 +202,16 @@ export const ConsignmentWeightTableForm = ({ catches, transportType }: Consignme
                       data-testid={`edit-button-${catchItem.id}`}
                     />
                     {catches.length > 1 && (
-                      <Button
-                        label={t("commonRemoveButton", { ns: "common" })}
-                        type={BUTTON_TYPE.SUBMIT}
-                        className="govuk-button govuk-!-margin-right-3 govuk-button--secondary"
+                      <a
+                        href={`/create-non-manipulation-document/${documentNumber}/remove-product/${catchItem._id}?returnUrl=${encodeURIComponent(returnUrl)}`}
+                        role="button"
+                        draggable="false"
+                        className="govuk-button govuk-button--secondary"
                         data-module="govuk-button"
-                        name="_action"
-                        // @ts-ignore
-                        value={`remove-` + index}
-                        data-testid={`edit-button-${catchItem.id}`}
-                      />
+                        data-testid={`remove-button-${catchItem.id}`}
+                      >
+                        {t("commonRemoveButton", { ns: "common" })}
+                      </a>
                     )}
                   </>
                 ) : (
@@ -359,6 +366,14 @@ const DepartureProductSummary = () => {
     scrollToId("storageDepartureTab");
   };
 
+  // The tab links render as `<a href="#eventKey">` without preventDefault, so activating them
+  // (click or keyboard Enter) lets the browser append the hash to the URL. Stop that here.
+  const preventTabHashNavigation = (event: React.MouseEvent<HTMLElement>) => {
+    if ((event.target as HTMLElement).closest("[data-tab-id]")) {
+      event.preventDefault();
+    }
+  };
+
   useScrollOnPageLoad();
 
   useEffect(() => {
@@ -372,6 +387,9 @@ const DepartureProductSummary = () => {
     csrf,
     displayOptionalSuffix: displayOptionalSuffix,
     documentNumber,
+    returnUrl: route("/create-non-manipulation-document/:documentNumber/departure-product-summary", {
+      documentNumber,
+    }),
   };
 
   return (
@@ -389,7 +407,7 @@ const DepartureProductSummary = () => {
               <Trans i18nKey="multiline">{t("sdDepartureProductSummaryInfo")}</Trans>
             </strong>
           </div>
-          <div className="govuk-tabs" data-module="govuk-tabs" id="productTabs">
+          <div className="govuk-tabs" data-module="govuk-tabs" id="productTabs" onClickCapture={preventTabHashNavigation}>
             <SecureForm method="post" csrf={csrf}>
               <TabGroup
                 containerClassName="govuk-tabs"

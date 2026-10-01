@@ -151,6 +151,22 @@ describe("PS: Entering the address manually with errors", () => {
 });
 
 describe("PS: On Selected Address", () => {
+  it("should show a valid heading level for the selected postcode", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSExporterSelectAddress,
+    };
+
+    cy.visit(psPageUrl, { qs: { ...testParams } });
+
+    cy.get("input[name=postcode]").type("12345");
+    cy.get("#findaddress").click();
+
+    cy.contains("h2", "Postcode").should("be.visible");
+    cy.get("body").then(($body) => {
+      expect($body.find("h4:contains('Postcode')")).to.have.lengthOf(0);
+    });
+  });
+
   it("should populate selected address into form", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSExporterSelectAddress,
@@ -216,7 +232,7 @@ describe("PS: On Selected Address", () => {
 
     cy.get("#findaddress").click();
 
-    cy.findByRole("link", { name: "Enter a postcode" }).should("be.visible");
+    cy.findByRole("link", { name: "Error: Enter a postcode" }).should("be.visible");
   });
 
   it("should display error if the entered postcode is invalid", () => {
@@ -229,7 +245,7 @@ describe("PS: On Selected Address", () => {
     cy.get("#findaddress").click();
 
     cy.findByRole("link", {
-      name: "Postcode must be between 5 and 8 characters, and contain only letters, numbers, spaces, hyphens and commas",
+      name: "Error: Postcode must be between 5 and 8 characters, and contain only letters, numbers, spaces, hyphens and commas",
     }).should("be.visible");
   });
 

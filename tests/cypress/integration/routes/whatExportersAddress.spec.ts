@@ -124,7 +124,7 @@ describe("CC: Entering the address manually with errors", () => {
     cy.get("#townCity").type("Test City");
     cy.get("#postcode").type("12345");
     cy.get("#country").type("Albania");
-    cy.get("[id^='country-option']").contains("Albania").click();
+    cy.get(".autocomplete__option").contains("Albania").click();
     cy.get("#country").should("have.value", "Albania");
 
     cy.get("[data-testid=continue]").click();
@@ -415,7 +415,7 @@ describe("CC: On Selected Address", () => {
 
     cy.get("#findaddress").click();
 
-    cy.findByRole("link", { name: "Enter a postcode" }).should("be.visible");
+    cy.findByRole("link", { name: "Error: Enter a postcode" }).should("be.visible");
   });
 
   it("should display error if the entered postcode is invalid", () => {
@@ -428,7 +428,7 @@ describe("CC: On Selected Address", () => {
     cy.get("#findaddress").click();
 
     cy.findByRole("link", {
-      name: "Postcode must be between 5 and 8 characters, and contain only letters, numbers, spaces, hyphens and commas",
+      name: "Error: Postcode must be between 5 and 8 characters, and contain only letters, numbers, spaces, hyphens and commas",
     }).should("be.visible");
   });
 

@@ -106,8 +106,8 @@ describe("Landings entry page: choosing an option", () => {
     cy.visit(landingsUrl, { qs: { ...testParams } });
     cy.get("form").submit();
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a[href='#landingsEntryOption']", /^Select an option to continue$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
+    cy.contains("a[href='#landingsEntryOption']", /^Error:Select an option to continue$/).should("be.visible");
   });
 
   it("should redirect to the forbidden page if the user is unauthorised to get the landings type", () => {
@@ -322,8 +322,8 @@ describe("Landings entry page: form submission and errors", () => {
     cy.visit(landingsUrl, { qs: { ...testParams } });
     cy.get("form").submit();
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a[href='#landingsEntryOption']", /^Select an option to continue$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
+    cy.contains("a[href='#landingsEntryOption']", /^Error:Select an option to continue$/).should("be.visible");
   });
 
   it("should handle form submission and redirect correctly based on nextUri", () => {

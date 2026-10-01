@@ -79,7 +79,7 @@ describe("Add Consignment Details: save and continue", () => {
 
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
   });
 
   it("should display error with interpolated values when description exceeds character limit", () => {

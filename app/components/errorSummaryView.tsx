@@ -36,6 +36,7 @@ export const ErrorSummaryView = ({
       data-module="govuk-error-summary"
     >
       <h2 className="govuk-error-summary__title" id="error-summary-title">
+        <span className="govuk-visually-hidden">{t("commonErrorText", { ns: "errorsText" })}</span>
         {t("commonErrorHeading", { ns: "common" })}
       </h2>
       <div className="govuk-error-summary__body">
@@ -51,6 +52,7 @@ export const ErrorSummaryView = ({
                   href={hasLinkData ? linkData[index].href : `#${errorKey}`}
                   {...(!hasLinkData && { onClick: onErrorSummaryLinkClick })}
                 >
+                  <span className="govuk-visually-hidden">{t("commonErrorText", { ns: "errorsText" })}</span>
                   {errorHasValue
                     ? t(error.message, { ...error.value, interpolation: { escapeValue: false } })
                     : t(error.message)}

@@ -74,7 +74,7 @@ describe("Add Storage Facility Approval - Error (Max Length)", () => {
 
   it("should show approval number max length validation error on save and continue", () => {
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", "There is a problem");
+    cy.contains("h2", "Error:There is a problem");
     cy.contains("a", /Approval number must not exceed 50 characters$/)
       .should("be.visible")
       .should("have.attr", "href", "#storageFacilities-facilityApproval");
@@ -111,7 +111,7 @@ describe("Add Storage Facility Approval - Invalid Characters", () => {
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001@#$");
     cy.get("#storageFacilities-facilityStorage").check();
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", "There is a problem");
+    cy.contains("h2", "Error:There is a problem");
     cy.contains(
       "a",
       /Approval number must only contain letters, numbers, hyphens, full stops, forward slashes and spaces$/
@@ -149,7 +149,7 @@ describe("Add Storage Facility Approval - How product is stored error", () => {
     };
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", "There is a problem");
+    cy.contains("h2", "Error:There is a problem");
     cy.contains("a", /Select how the product was stored$/)
       .should("be.visible")
       .should("have.attr", "href", "#storageFacilities-facilityStorage");
@@ -171,7 +171,7 @@ describe("Add Storage Facility Approval - Welsh Translations", () => {
     cy.get(".govuk-label").contains("Rhif cymeradwyo");
 
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", "Mae yna broblem");
+    cy.contains("h2", "Gwall:Mae yna broblem");
     cy.contains("a", /Ni chaiff rhif y gymeradwyaeth fod yn fwy na 50 o gymeriadau$/)
       .should("be.visible")
       .should("have.attr", "href", "#storageFacilities-facilityApproval");
@@ -186,7 +186,7 @@ describe("Add Storage Facility Approval - Welsh Translations", () => {
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001@#$");
     cy.get("#storageFacilities-facilityStorage").check();
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", "Mae yna broblem");
+    cy.contains("h2", "Gwall:Mae yna broblem");
     cy.contains(
       "a",
       /Rhaid i rif y gymeradwyaeth gynnwys llythrennau, rhifau, cysylltnodau, atalnodau llawn, blaenslaesau a bylchau yn unig$/

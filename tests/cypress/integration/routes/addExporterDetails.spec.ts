@@ -908,7 +908,7 @@ describe("Add exporter details - Address validation error messages", () => {
 
       // Verify error summary appears
       cy.get(".govuk-error-summary").should("exist");
-      cy.get(".govuk-error-summary__title").should("contain", "There is a problem");
+      cy.get(".govuk-error-summary__title").should("contain", "Error:There is a problem");
 
       // Verify correct error message in summary
       cy.get(".govuk-error-summary__list").should("contain", "Add the exporter's address");

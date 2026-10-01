@@ -236,6 +236,10 @@ const PAGE_MATCHERS: PageMatcher[] = [
     test: (p) => /^\/create-processing-statement\/.*\/remove-product\/.*$/i.test(p),
     page: Page.ProcessingStatementRemoveProduct,
   },
+  {
+    test: (p) => /^\/create-non-manipulation-document\/.*\/remove-product\/.*$/i.test(p),
+    page: Page.StorageDocumentRemoveProduct,
+  },
 ];
 
 export const getPageNameFromUrl = (url: string): string => {

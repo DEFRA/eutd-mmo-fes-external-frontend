@@ -136,6 +136,7 @@ export const LandingDetailsSummary = ({
       <div className="govuk-summary-list__row govuk-form-group--error" id={errorObject.key}>
         <dd className="govuk-summary-list__value govuk-summary-list__value--no-border">
           <p className="govuk-error-message govuk-!-margin-left-2 govuk-!-padding-top-2">
+            <span className="govuk-visually-hidden">{t("commonErrorText", { ns: "errorsText" })}</span>
             {t(errorObject.message, {
               ns: "errorsText",
               species: speciesLabel,
