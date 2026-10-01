@@ -16,6 +16,7 @@ import {
 } from "~/.server";
 import { displayErrorMessages, getStrOrDefault } from "~/helpers";
 import type { IErrorsTransformed } from "~/types";
+import { useIsHydrated } from "~/hooks/useIsHydrated";
 
 export const loader: LoaderFunction = async ({ request, params }) =>
   processingStatemenGenericLoader(request, params, ["healthCertificateNumber", "healthCertificateDate"]);
@@ -116,10 +117,15 @@ const AddHealthCertificate = () => {
   const hasHealthCertificateNumberError = !isEmpty(errors?.healthCertificateNumber);
   const [daySelected = "", monthSelected = "", yearSelected = ""] =
     healthCertificateDate === null ? " " : healthCertificateDate.split("/");
+  const isHydrated = useIsHydrated();
 
   return (
     <Main
-      backUrl={route("/create-processing-statement/:documentNumber/add-processing-plant-address", { documentNumber })}
+      backUrl={
+        isHydrated
+          ? route("/create-processing-statement/:documentNumber/add-processing-plant-details", { documentNumber })
+          : route("/create-processing-statement/:documentNumber/add-processing-plant-address", { documentNumber })
+      }
     >
       {hasErrors && <ErrorSummary errors={displayErrorMessages(errors)} />}
       <div className="govuk-grid-row">

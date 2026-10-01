@@ -21,3 +21,4 @@ export * from "./storageDocument";
 export * from "./favourites";
 export * from "./sessions";
 export * from "./meta";
+export * from "./establishment";
