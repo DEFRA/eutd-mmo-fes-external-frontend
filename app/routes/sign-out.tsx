@@ -79,7 +79,7 @@ const SignOut = () => {
 
   useEffect(() => {
     if (idleTime === 0) {
-      navigate(route("/logout"));
+      void navigate(route("/logout"));
     }
   }, [idleTime]);
 

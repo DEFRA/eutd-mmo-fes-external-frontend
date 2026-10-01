@@ -40,7 +40,7 @@ export const CookieBanner = () => {
     setShowConfirmation(true);
 
     // Save to database
-    saveCookiePreference(true);
+    void saveCookiePreference(true);
   };
 
   const handleReject = () => {
@@ -50,7 +50,7 @@ export const CookieBanner = () => {
     setShowConfirmation(true);
 
     // Save to database
-    saveCookiePreference(false);
+    void saveCookiePreference(false);
   };
 
   const handleHideBanner = () => {
