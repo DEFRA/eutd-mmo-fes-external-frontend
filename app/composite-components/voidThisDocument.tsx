@@ -14,25 +14,6 @@ export const VoidthisDocumentComponent = ({ journey, actionData, backUrl }: Void
   const { csrf } = useLoaderData();
   const { errors = {} } = actionData;
 
-  useEffect(() => {
-    const isBackForwardNavigation = () => {
-      const navigationEntry = window.performance?.getEntriesByType("navigation")?.[0] as
-        | PerformanceNavigationTiming
-        | undefined;
-      return navigationEntry?.type === "back_forward";
-    };
-
-    const handlePageShow = (event: PageTransitionEvent) => {
-      if (event.persisted || isBackForwardNavigation()) {
-        revalidate();
-      }
-    };
-
-    window.addEventListener("pageshow", handlePageShow);
-
-    return () => window.removeEventListener("pageshow", handlePageShow);
-  }, [revalidate]);
-
   return (
     <YesNoConfirmationPage
       csrf={csrf}
