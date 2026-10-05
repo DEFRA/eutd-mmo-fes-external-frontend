@@ -87,6 +87,7 @@ export enum Page {
   ProgressStorageDocument = "ProgressStorageDocument",
   AddCatchDetails = "AddCatchDetails",
   AddProcessingPlantDetails = "AddProcessingPlantDetails",
+  AddProcessingPlant = "AddProcessingPlant",
   CatchWeights = "CatchWeights",
   AddProcessingPlantAddress = "AddProcessingPlantAddress",
   WhatprocessingPlantAddress = "whatprocessingPlantAddress",
@@ -463,6 +464,12 @@ export const pages: Pages = {
   [Page.AddProcessingPlantDetails]: {
     path: "/create-processing-statement/:documentNumber/add-processing-plant-details",
     title: "processingPlantDetailsTitle",
+    homeLink: "processing-statement",
+    hideFavouritesLink: true,
+  },
+  [Page.AddProcessingPlant]: {
+    path: "/create-processing-statement/:documentNumber/add-processing-plant",
+    title: "processingPlantTitle",
     homeLink: "processing-statement",
     hideFavouritesLink: true,
   },

@@ -42,6 +42,7 @@ export const allNamespaces = [
   "uploadGuidance",
   "addLandings",
   "addConsignmentDetails",
+  "addProcessingPlant",
   "addProcessingPlantDetails",
   "addCatchWeights",
   "addProcessingPlantAddress",

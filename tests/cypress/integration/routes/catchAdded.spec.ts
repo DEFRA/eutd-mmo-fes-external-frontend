@@ -53,7 +53,7 @@ describe("PS: Catch added", () => {
 
     cy.get("a[id^=change-GBR-2023-PS-2305703F5-012345678]").should("have.length", 3);
     cy.contains("button", "Save and continue").click();
-    cy.url().should("include", "/add-processing-plant-details");
+    cy.url().should("include", "/add-processing-plant");
   });
 
   it("should click Change link", () => {
@@ -84,7 +84,7 @@ describe("PS: Catch added", () => {
     );
 
     cy.contains("button", "Save and continue").click();
-    cy.url().should("include", "/add-processing-plant-details");
+    cy.url().should("include", "/add-processing-plant");
     cy.url().should("not.include", "/add-catch-details");
   });
 
@@ -144,7 +144,7 @@ describe("PS: Catch added", () => {
     cy.get("#errorIsland").should("not.exist");
     cy.get('input[name="addAnotherCatch"][value="No"]').check();
     cy.contains("button", "Save and continue").click();
-    cy.url().should("include", "/add-processing-plant-details");
+    cy.url().should("include", "/add-processing-plant");
   });
 
   it("should handle save as draft action correctly", () => {
@@ -1210,7 +1210,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
 
     // Click Save and Continue to navigate away
     cy.contains("button", "Save and continue").click();
-    cy.url().should("include", "/add-processing-plant-details");
+    cy.url().should("include", "/add-processing-plant");
 
     // Navigate back to the catch-added page
     cy.visit(pageUrl, { qs: { ...testParams } });
@@ -1791,7 +1791,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
     it("should handle determineRedirectUrl with empty nextUri", () => {
       cy.get('input[name="addAnotherCatch"][value="No"]').check();
       cy.contains("button", "Save and continue").click();
-      cy.url().should("include", "/add-processing-plant-details");
+      cy.url().should("include", "/add-processing-plant");
     });
   });
 });

@@ -35,7 +35,7 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
   });
 
   it("should render page with existing address and show change button", () => {
@@ -59,7 +59,7 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
     cy.url().should("include", "GBR-2025-PS-FFA360309");
   });
 
@@ -77,7 +77,7 @@ describe("Add Processing Plant Address", () => {
         cy.get("form").submit();
       }
     });
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
   });
 
   it("should handle continue with manual address when clicking on choosing the option to enter the address manually", () => {
@@ -268,7 +268,7 @@ describe("Add Processing Plant Address", () => {
       cy.wrap($form).submit();
     });
 
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
   });
 
   it("should redirect to next step when continue is triggered with valid address data", () => {
@@ -289,7 +289,7 @@ describe("Add Processing Plant Address", () => {
       }
     });
 
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
   });
 
   it("should handle getaddress action and update session with manual address step", () => {
@@ -390,7 +390,7 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
   });
 
   it("should handle save as draft with session cleanup", () => {
@@ -493,7 +493,7 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
     cy.url().should("include", "GBR-2025-PS-FFA360309");
   });
 

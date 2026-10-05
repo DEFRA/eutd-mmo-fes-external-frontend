@@ -457,9 +457,7 @@ const createErrorResponse = async (errorData: ErrorResponse, session: any): Prom
 };
 
 const determineRedirectUrl = (nextUri: string, documentNumber?: string): string =>
-  !nextUri || isEmpty(nextUri)
-    ? `/create-processing-statement/${documentNumber}/add-processing-plant-details`
-    : nextUri;
+  !nextUri || isEmpty(nextUri) ? `/create-processing-statement/${documentNumber}/add-processing-plant` : nextUri;
 
 const populateNavigationLinks = (
   t: TFunction<"common"[], undefined>,

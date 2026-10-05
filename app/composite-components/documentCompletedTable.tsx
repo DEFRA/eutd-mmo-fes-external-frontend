@@ -155,22 +155,20 @@ export const DocumentCompletedTable = ({
           </table>
         </div>
       ) : (
-        <div className="govuk-grid-row">
-          <div className="govuk-grid-column">
-            <h2 className="govuk-heading-l">{t("completed")}</h2>
-            {journey === "storageNotes" && (
-              <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-            )}
-            <div data-testid={`no-${camelCaseToSpacedLowerCase(journey)}-created-this-month`}>
-              {t(`${journey}DashboardCompleteSubtitleText`, {
-                journey: camelCaseToSpacedLowerCase(journey),
-                ns: "dashboard",
-              })}
-            </div>
-            {journey === "storageNotes" && (
-              <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-            )}
+        <div className="tablewrapper">
+          <h2 className="govuk-heading-l">{t("completed")}</h2>
+          {journey === "storageNotes" && (
+            <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+          )}
+          <div data-testid={`no-${camelCaseToSpacedLowerCase(journey)}-created-this-month`}>
+            {t(`${journey}DashboardCompleteSubtitleText`, {
+              journey: camelCaseToSpacedLowerCase(journey),
+              ns: "dashboard",
+            })}
           </div>
+          {journey === "storageNotes" && (
+            <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+          )}
         </div>
       )}
 
@@ -180,7 +178,12 @@ export const DocumentCompletedTable = ({
         </div>
       )}
 
-      <nav className="govuk-pagination" role="navigation" aria-label="results" data-testid={`${journey}-pagination`}>
+      <nav
+        className="govuk-pagination govuk-!-padding-top-5"
+        role="navigation"
+        aria-label="results"
+        data-testid={`${journey}-pagination`}
+      >
         <div className="govuk-pagination__prev">
           {disableNext === 1 ? (
             <>
