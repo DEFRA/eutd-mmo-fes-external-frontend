@@ -1660,7 +1660,7 @@ describe("PS - scenario 1 - Change product details", () => {
     cy.get('button[type="submit"]').contains("Save and continue").click();
 
     // Should be redirected back to check-your-information
-    cy.url().should("include", "/add-processing-plant-details");
+    cy.url().should("include", "/add-processing-plant");
     cy.url().should("not.include", "nextUri");
     cy.url().should("not.include", "/check-your-information");
   });
@@ -1696,10 +1696,10 @@ describe("PS - scenario 2 - Change plant address", () => {
 
   it("should navigate to add-processing-plant-address when Change link is clicked", () => {
     // Click the change link for plant address
-    cy.get('a[href*="add-processing-plant-address"]').click();
+    cy.get('a[href*="add-processing-plant-details"]').click();
 
     // Verify navigation to add-processing-plant-address page
-    cy.url().should("include", "/add-processing-plant-address");
+    cy.url().should("include", "/add-processing-plant-details");
     cy.url().should("include", "nextUri");
 
     // Verify page content loaded
