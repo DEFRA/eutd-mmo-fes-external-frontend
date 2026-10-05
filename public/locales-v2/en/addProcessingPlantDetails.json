@@ -1,11 +1,8 @@
 {
   "psAddProcessingPDAddProcessingPlantDetails": "Add processing plant details",
-  "psAddProcessingPDAlertText": "An address must be added for this processing plant.",
   "psAddProcessingPDPlantName": "Processing plant name",
-  "psAddProcessingPDEstablishment": "Processing plant name and approval number",
-  "psAddProcessingPDEstablishmentHint": "Search for an approved processing plant by name or approval number",
-  "psAddProcessingPDPlantApprovalNumber": "Plant approval number",
-  "psAddProcessingPDHintTextForPlantApprovalNumber": "This is sometimes called a site code. For example, UK/1234/EC",
+  "psAddProcessingPDApprovalNumber": "Approval number (if applicable)",
+  "psAddProcessingPDApprovalNumberHint": "This is the establishment's approval number, for example 2093. If the establishment has more than one site, it may have a suffix, for example 4308-0014.",
   "psAddProcessingPDPersonResponsibleForThisConsignment": "Person responsible for this consignment",
   "psAddProcessingPDHintTextForPersonResponsibleForThisConsignment": "Enter the name of the person in charge at the processing plant. For example, John Smith",
   "psAddProcessingPDSaveButtonLabel": "Add address"

@@ -900,18 +900,6 @@ const AddCatchDetailsIndex = () => {
                 onExportAfterChange={(e) => setCurrentExportWeightAfterProcessing(e.currentTarget.value)}
               />
               <div className="govuk-button-group">
-                <button
-                  id="cancel"
-                  type={BUTTON_TYPE.SUBMIT}
-                  className="govuk-button govuk-button--secondary"
-                  data-module="govuk-button"
-                  name="_action"
-                  value="cancelCatch"
-                  data-testid="cancel-button"
-                  onClick={resetFormValues}
-                >
-                  {t("commonCancelButtonCancelButtonText", { ns: "common" })}
-                </button>
                 <Button
                   id="addProductDetails"
                   label={t(addProductDetailsConfig.label, { ns: "psAddCatchDetails" })}
@@ -924,6 +912,18 @@ const AddCatchDetailsIndex = () => {
                   data-testid="add-product-details"
                   onClick={() => setAddButtonClicked(true)}
                 />
+                <button
+                  id="cancel"
+                  type={BUTTON_TYPE.SUBMIT}
+                  className="govuk-button govuk-button--secondary"
+                  data-module="govuk-button"
+                  name="_action"
+                  value="cancelCatch"
+                  data-testid="cancel-button"
+                  onClick={resetFormValues}
+                >
+                  {t("commonCancelButtonCancelButtonText", { ns: "common" })}
+                </button>
               </div>
               <div className="govuk-!-width-full-width">
                 <CatchDetailsTable

@@ -27,76 +27,70 @@ export const SelectAddress = ({ postcode, postcodeaddresses, errors, actionUri, 
   return (
     <div>
       <SecureForm method="post" action={actionUri} csrf={csrf}>
-        <div className="govuk-grid-column">
-          <h2 className="govuk-heading-s govuk-!-margin-bottom-2">{t("commonWhatExportersAddressPostcode")}</h2>
-          {postcode}
-          <div className="govuk-grid-row">
-            <div className="govuk-grid-column-full">
-              <Button
-                type={BUTTON_TYPE.SUBMIT}
-                name="_action"
-                label={t("commonWhatExportersAddressChangeLink")}
-                value="changelink"
-                className="govuk-button govuk-button--secondary govuk-!-margin-top-2"
-                data-testid="change-postcode"
-              />
-              <div className="govuk-form-group">
-                <FormSelect
-                  label={t("commonWhatExportersAddressSelectAddress")}
-                  id="selectAddress"
-                  nullOption={nullOption}
-                  options={options}
-                  name="selectaddress"
-                  labelClassName="govuk-label"
-                  selectClassName={`govuk-select govuk-grid-column-full`}
-                  error={{
-                    text: t(errors?.addressError?.message, { ns: "errorsText" }) || "",
-                    className: "govuk-error-message",
-                    visuallyHiddenText: {
-                      text: t("commonErrorText", { ns: "errorsText" }),
-                      className: "govuk-visually-hidden",
-                    },
-                  }}
-                  containerClassName={!isEmpty(errors) ? "govuk-form-group govuk-form-group--error" : ""}
-                />
-              </div>
-              <div className="govuk-button-group">
-                <Button
-                  id="cancel"
-                  type={BUTTON_TYPE.SUBMIT}
-                  name="_action"
-                  label={t("commonSecondaryCancelButton")}
-                  //@ts-ignore
-                  value="cancel"
-                  className="govuk-button govuk-button--secondary"
-                  data-testid="cancel"
-                />
-                <Button
-                  id="getaddress"
-                  type={BUTTON_TYPE.SUBMIT}
-                  name="_action"
-                  data-module="govuk-button"
-                  //@ts-ignore
-                  value="getaddress"
-                  label={t("commonContinueButtonContinueButtonText")}
-                  className="govuk-button"
-                  data-testid="getaddress"
-                />
-              </div>
-              <div className="govuk-button-group">
-                <Button
-                  id="enter-address-manually-link"
-                  type={BUTTON_TYPE.SUBMIT}
-                  name="_action"
-                  label={t("commonWhatExportersAddressNotFoundText")}
-                  //@ts-ignore
-                  value="navigateToManualAddress"
-                  className="govuk-button govuk-button--secondary"
-                  data-testid="manualAddress"
-                />
-              </div>
-            </div>
-          </div>
+        <h2 className="govuk-heading-s govuk-!-margin-bottom-2">{t("commonWhatExportersAddressPostcode")}</h2>
+        {postcode}
+        <Button
+          type={BUTTON_TYPE.SUBMIT}
+          name="_action"
+          label={t("commonWhatExportersAddressChangeLink")}
+          value="changelink"
+          className="govuk-button govuk-button--secondary govuk-!-margin-top-2"
+          data-testid="change-postcode"
+        />
+        <div className="govuk-form-group">
+          <FormSelect
+            label={t("commonWhatExportersAddressSelectAddress")}
+            id="selectAddress"
+            nullOption={nullOption}
+            options={options}
+            name="selectaddress"
+            labelClassName="govuk-label"
+            selectClassName="govuk-select govuk-grid-column-full"
+            error={{
+              text: t(errors?.addressError?.message, { ns: "errorsText" }) || "",
+              className: "govuk-error-message",
+              visuallyHiddenText: {
+                text: t("commonErrorText", { ns: "errorsText" }),
+                className: "govuk-visually-hidden",
+              },
+            }}
+            containerClassName={!isEmpty(errors) ? "govuk-form-group govuk-form-group--error" : ""}
+          />
+        </div>
+        <div className="govuk-button-group">
+          <Button
+            id="getaddress"
+            type={BUTTON_TYPE.SUBMIT}
+            name="_action"
+            data-module="govuk-button"
+            //@ts-ignore
+            value="getaddress"
+            label={t("commonContinueButtonContinueButtonText")}
+            className="govuk-button"
+            data-testid="getaddress"
+          />
+          <Button
+            id="cancel"
+            type={BUTTON_TYPE.SUBMIT}
+            name="_action"
+            label={t("commonSecondaryCancelButton")}
+            //@ts-ignore
+            value="cancel"
+            className="govuk-button govuk-button--secondary"
+            data-testid="cancel"
+          />
+        </div>
+        <div className="govuk-button-group">
+          <Button
+            id="enter-address-manually-link"
+            type={BUTTON_TYPE.SUBMIT}
+            name="_action"
+            label={t("commonWhatExportersAddressNotFoundText")}
+            //@ts-ignore
+            value="navigateToManualAddress"
+            className="govuk-button govuk-button--secondary"
+            data-testid="manualAddress"
+          />
         </div>
         <input type="hidden" defaultValue={postcode} name="postcode" />
       </SecureForm>

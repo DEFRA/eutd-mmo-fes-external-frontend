@@ -392,7 +392,7 @@ const handleContinueManualAddress = async (
   form: FormData,
   plantAddressFormData: any,
   plantAddressBearerToken: string,
-  documentNumber: string,
+  documentNumber: string | undefined,
   csrf: string
 ) => {
   const plantAddressCurrentStep: ExporterAddressStep = "manualAddress";
@@ -415,6 +415,7 @@ const handleContinueManualAddress = async (
 
   const payload: Exporter = {
     addressOne: plantAddressFormData.plantAddressOne,
+    addressType: "processingPlant",
     buildingName: plantAddressFormData.plantBuildingName,
     buildingNumber: plantAddressFormData.plantBuildingNumber,
     country: plantAddressFormData.plantCountry,
@@ -475,7 +476,7 @@ const handleDefaultActions = async (
   form: FormData,
   session: any,
   plantAddressBearerToken: string,
-  documentNumber: string
+  documentNumber: string | undefined
 ) => {
   const nextUri = form.get("nextUri") as string;
   const isDraft = form.get("_action") === "saveAsDraft";
@@ -511,7 +512,7 @@ const handleDefaultActions = async (
   }
 
   const defaultRedirect = isEmpty(nextUri)
-    ? route("/create-processing-statement/:documentNumber/add-health-certificate", { documentNumber })
+    ? route("/create-processing-statement/:documentNumber/add-processing-plant-details", { documentNumber })
     : nextUri;
 
   return redirect(defaultRedirect, {
@@ -540,17 +541,14 @@ const AddProcessingPlantAddress = () => {
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <SecureForm method="post" csrf={csrf}>
-            <div className="govuk-grid-column-full">
-              <Title title={`${t("psAddProcessingPlantAddressDetailsAddressText")}`} />
-              <p>
-                {plantAddressOne}
-                <br />
-                {plantTownCity}
-                <br />
-                {plantPostcode}
-              </p>
-            </div>
-            <br />
+            <Title title={`${t("psAddProcessingPlantAddressDetailsAddressText")}`} />
+            <p>
+              {plantAddressOne}
+              <br />
+              {plantTownCity}
+              <br />
+              {plantPostcode}
+            </p>
             <div className="govuk-button-group">
               <Button
                 id="goToAddAddress"
