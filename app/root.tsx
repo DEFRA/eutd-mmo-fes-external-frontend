@@ -13,7 +13,6 @@ import {
   useLoaderData,
   useLocation,
   useMatches,
-  useRevalidator,
   type LinksFunction,
   type LoaderFunction,
   type MetaFunction,
@@ -371,31 +370,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export default function App() {
   const data = useLoaderData<IMainAppProps>();
   useChangeLanguage(data.locale);
-
-  const { revalidate } = useRevalidator();
-  const { pathname } = useLocation();
-  const exclusionPaths = new Set(["/", "/cookies"]);
-  const exclusionPathPatterns = [
-    /^\/create-catch-certificate\/[^/]+\/progress$/,
-    /^\/create-processing-statement\/[^/]+\/progress$/,
-    /^\/create-non-manipulation-document\/[^/]+\/progress$/,
-    /^\/create-catch-certificate\/[^/]+\/landings-entry$/,
-    /^\/create-processing-statement\/[^/]+\/add-catch-details$/,
-    /^\/create-processing-statement\/[^/]+\/add-catch-details\/[^/]+$/,
-    /^\/create-non-manipulation-document\/[^/]+\/add-product-to-this-consignment$/,
-    /^\/create-non-manipulation-document\/[^/]+\/add-product-to-this-consignment\/[^/]+$/,
-  ];
-
-  const isExcludedPath = (path: string) =>
-    exclusionPaths.has(path) || exclusionPathPatterns.some((pattern) => pattern.test(path));
-
-  // invoke the loader function to revalidate page data, except on the root route
-  // to avoid triple-loading caused by revalidation on hydration
-  useEffect(() => {
-    if (!isExcludedPath(pathname)) {
-      revalidate();
-    }
-  }, [revalidate, pathname]);
 
   useEffect(() => {
     const htmlScriptPrototype = "noModule" in HTMLScriptElement.prototype ? "govuk-frontend-supported" : "";
