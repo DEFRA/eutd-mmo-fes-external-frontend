@@ -1,130 +1,67 @@
-const documentUrl = "/create-processing-statement/GBR-2022-PS-12EE387DB";
-const pageUrl = `${documentUrl}/add-catch-details/0`;
-
 import { type ITestParams, TestCaseId } from "~/types";
 
-const waitForPage = () => cy.document({ timeout: 1000 }).its("readyState").should("eq", "complete");
+const documentUrl = "/create-processing-statement/GBR-2022-PS-0D12ABA0A";
+const productId = "GBR-2025-PS-FDC3D66E1-1760436601";
+const pageUrl = `${documentUrl}/add-catch-details/${productId}?pageNo=1`;
 
-const setSpecies = (value: string) => {
-  cy.get("#catches-0-species", { timeout: 8000 }).then(($el) => {
-    if ($el.is("select")) {
-      cy.wrap($el).should("be.enabled").select(value);
-      return;
-    }
+// Hydration-complete gate: root.tsx useEffect focuses this span after hydrateRoot() settles
+const waitForHydration = () => cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
-    cy.wrap($el).clear().type(value);
-  });
+// Types then clicks the matching listbox option so the menu collapses before any later interaction
+const selectAutocompleteOption = (inputId: string, value: string) => {
+  cy.get(`#${inputId}`, { timeout: 8000 }).should("be.visible").and("be.enabled").clear().type(value);
+  cy.get(`#${inputId}__listbox`).contains("li", value).click();
+  cy.get(`#${inputId}`).should("have.value", value).and("have.attr", "aria-expanded", "false");
 };
+
+const setSpecies = () => selectAutocompleteOption("catches-0-species", "Bigeye tuna (BET)");
+const setIssuingCountry = () => selectAutocompleteOption("catches-0-issuingCountry", "Spain");
 
 const enableIssuingCountry = () => {
   cy.get('label[for="catchCertificateType-non_uk"]', { timeout: 8000 }).should("be.visible").click();
-  waitForPage();
-};
-
-const getEnabledIssuingCountryField = () =>
-  cy.get('input[name="issuingCountry"], select[name="issuingCountry"]', { timeout: 8000 }).then(($fields) => {
-    const enabledInput = $fields.filter("input:enabled").first();
-    if (enabledInput.length > 0) {
-      return cy.wrap(enabledInput);
-    }
-
-    const enabledSelect = $fields.filter("select:enabled").first();
-    if (enabledSelect.length > 0) {
-      return cy.wrap(enabledSelect);
-    }
-
-    throw new Error("No enabled issuing country control found");
-  });
-
-const setIssuingCountry = (value: string) => {
-  getEnabledIssuingCountryField().then(($el) => {
-    if ($el.is("select")) {
-      cy.get("#catches-0-issuingCountry option", { timeout: 8000 }).then(($options) => {
-        const matched = [...$options].find((option) => {
-          const opt = option as HTMLOptionElement;
-          return opt.value === value || opt.text.trim() === value;
-        }) as HTMLOptionElement | undefined;
-
-        expect(!!matched, `issuing country option ${value} exists`).to.equal(true);
-        cy.get("#catches-0-issuingCountry").should("be.enabled").invoke("val", matched!.value).trigger("change");
-      });
-      return;
-    }
-
-    cy.wrap($el).clear().type(value);
-  });
+  cy.get('[data-testid="issuing-country-wrapper"]').should("not.have.class", "app-hide-when-js");
 };
 
 describe("PS: Add Catch Details - Issuing Country behavior", () => {
   it("should clear issuing country after adding a catch", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSCatchAddedBlankOneCatch,
+      testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    waitForPage();
+    waitForHydration();
 
-    setSpecies("Bigeye tuna (BET)");
-    waitForPage();
-
+    setSpecies();
     enableIssuingCountry();
-
-    setIssuingCountry("Spain");
+    setIssuingCountry();
 
     cy.get('input[name="catchCertificateNumber"]').type("CERT12345");
     cy.get('input[name="totalWeightLanded"]').type("10");
     cy.get('input[name="exportWeightBeforeProcessing"]').type("5");
     cy.get('input[name="exportWeightAfterProcessing"]').type("4");
 
-    cy.get('[data-testid="add-product-details"]').click();
-    waitForPage();
+    cy.get('[data-testid="add-product-details"]').should("be.visible").click();
 
     cy.get('input[name="catchCertificateNumber"]', { timeout: 10000 }).should("have.value", "");
-    cy.get("body").then(($body) => {
-      const field = $body.find("#catches-0-issuingCountry");
-      if (field.length > 0) {
-        cy.get("#catches-0-issuingCountry").should("have.value", "");
-      } else {
-        cy.get("#catches-0-issuingCountry", { timeout: 2000 }).should("not.exist");
-      }
-    });
-    cy.get('input[name="totalWeightLanded"]', { timeout: 10000 }).should("have.value", "");
-    cy.get('input[name="exportWeightBeforeProcessing"]', { timeout: 10000 }).should("have.value", "");
-    cy.get('input[name="exportWeightAfterProcessing"]', { timeout: 10000 }).should("have.value", "");
+    cy.get("#catches-0-issuingCountry").should("have.value", "");
+    cy.get('input[name="totalWeightLanded"]').should("have.value", "");
+    cy.get('input[name="exportWeightBeforeProcessing"]').should("have.value", "");
+    cy.get('input[name="exportWeightAfterProcessing"]').should("have.value", "");
   });
 
   it("should collapse the issuing country dropdown after selecting a country", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.PSCatchAddedBlankOneCatch,
+      testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    waitForPage();
+    waitForHydration();
 
-    setSpecies("Bigeye tuna (BET)");
-    waitForPage();
+    setSpecies();
     enableIssuingCountry();
+    setIssuingCountry();
 
-    getEnabledIssuingCountryField().then(($field) => {
-      if ($field.is("select")) {
-        setIssuingCountry("Spain");
-        cy.get("#catches-0-issuingCountry").should("have.value", "Spain");
-        return;
-      }
-
-      cy.get('input[name="issuingCountry"]', { timeout: 8000 })
-        .should("be.visible")
-        .should("be.enabled")
-        .click();
-      cy.get('input[name="issuingCountry"]', { timeout: 8000 }).type("Spa");
-      cy.get('input[name="issuingCountry"]')
-        .should("have.attr", "aria-expanded", "true");
-      cy.contains("li", "Spain").click();
-
-      cy.get('input[name="issuingCountry"]')
-        .should("have.value", "Spain")
-        .and("have.attr", "aria-expanded", "false");
-    });
+    cy.get("#catches-0-issuingCountry").should("have.value", "Spain").and("have.attr", "aria-expanded", "false");
   });
 
   it("should clear issuing country when user removes it and clicks Add (issue reproduction)", () => {
@@ -133,36 +70,18 @@ describe("PS: Add Catch Details - Issuing Country behavior", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
-    waitForPage();
+    waitForHydration();
 
-    setSpecies("Bigeye tuna (BET)");
-    waitForPage();
-
+    setSpecies();
     enableIssuingCountry();
+    setIssuingCountry();
 
-    getEnabledIssuingCountryField().should("exist");
+    cy.get("#catches-0-issuingCountry").should("be.enabled").focus().type("{selectall}{backspace}");
+    cy.get("#catches-0-issuingCountry").should("have.value", "");
 
-    setIssuingCountry("Spain");
+    cy.get('[data-testid="add-product-details"]').should("be.visible").click();
 
-    getEnabledIssuingCountryField().then(($field) => {
-      if ($field.is("select")) {
-        cy.get("#catches-0-issuingCountry").should("be.enabled").invoke("val", "").trigger("change");
-      } else {
-        cy.wrap($field).should("be.enabled").focus().type("{selectall}{backspace}");
-      }
-    });
-    getEnabledIssuingCountryField().should("have.value", "");
-
-    cy.get('[data-testid="add-product-details"]').click();
-    waitForPage();
-
-    cy.get('input[name="issuingCountry"], select[name="issuingCountry"]', { timeout: 2000 }).then(($field) => {
-      if ($field.length > 0) {
-        const enabledField = $field.filter(":enabled").first();
-        if (enabledField.length > 0) {
-          cy.wrap(enabledField).should("have.value", "");
-        }
-      }
-    });
+    cy.get(".govuk-error-summary", { timeout: 10000 }).should("be.visible");
+    cy.get("#catches-0-issuingCountry").should("be.visible").and("have.value", "");
   });
 });
