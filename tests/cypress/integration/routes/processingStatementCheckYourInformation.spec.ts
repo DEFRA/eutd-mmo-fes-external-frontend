@@ -121,7 +121,7 @@ describe("Check Your Information page: updated exporter", () => {
 });
 
 describe("Check Your Information (Summary) page: plant address change-link visibility", () => {
-  it("hides plant address Change link for JS journey", () => {
+  it("shows plant address Change link for JS journey", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCheckYourInformationJsPlantAddressNoChange,
     };
@@ -129,7 +129,7 @@ describe("Check Your Information (Summary) page: plant address change-link visib
     cy.contains("dt", "Address")
       .parent()
       .within(() => {
-        cy.contains("a", "Change").should("not.exist");
+        cy.contains("a", "Change").should("exist");
       });
   });
 

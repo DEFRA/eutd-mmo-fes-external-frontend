@@ -3,6 +3,7 @@ import { rest } from "msw";
 import sdProductAddedPageData from "@/fixtures/storageDocumentApi/storageDocumentProductAddedPageData.json";
 import sdProductAddedValidData from "@/fixtures/storageDocumentApi/storageDocumentProductAddedValidData.json";
 import sdProductAddedInvalidData from "@/fixtures/storageDocumentApi/storageDocumentProductAddedInvalidData.json";
+import sdProductAddedData from "@/fixtures/storageDocumentApi/storageDocumentProductAddedData.json";
 import sdProductAddedNoCatches from "@/fixtures/storageDocumentApi/storageDocumentNoCatches.json";
 import species from "@/fixtures/referenceDataApi/species.json";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
@@ -29,7 +30,8 @@ const storageProductAddedHandler: ITestHandler = {
     rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) => res(ctx.json(sdProductAddedValidData))),
   ],
   [TestCaseId.SDProductAddedInvalid]: () => [
-    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(sdProductAddedInvalidData))),
+    // GET must not carry errors/errorsUrl - only the POST validation response should fail
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(sdProductAddedData))),
     rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
       res(ctx.status(400), ctx.json(sdProductAddedInvalidData))
     ),
