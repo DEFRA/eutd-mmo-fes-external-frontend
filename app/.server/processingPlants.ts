@@ -49,6 +49,14 @@ export const matchEstablishment = (
   return establishments.find((establishment) => normalize(establishment.tradingName) === normalizedPlantName);
 };
 
+export const formatEstablishmentLabel = (establishment: Establishment): string => {
+  const cityName = establishment.address?.cityName?.trim();
+  const postcode = establishment.address?.postCode?.code?.trim();
+  const addressSuffix = cityName && postcode ? ` - ${cityName}, ${postcode}` : "";
+
+  return `${establishment.tradingName} (${establishment.approvalNumber?.content})${addressSuffix}`;
+};
+
 export const mapEstablishmentToPlantAddress = (
   establishment: Establishment
 ): {

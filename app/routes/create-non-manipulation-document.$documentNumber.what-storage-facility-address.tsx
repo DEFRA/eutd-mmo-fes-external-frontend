@@ -349,6 +349,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
     const payload: Exporter = {
       addressOne: formData.facilityAddressOne,
+      addressType: "storageFacility",
       subBuildingName: formData.facilitySubBuildingName,
       buildingNumber: formData.facilityBuildingNumber,
       buildingName: formData.facilityBuildingName,

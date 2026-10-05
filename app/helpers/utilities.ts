@@ -182,6 +182,7 @@ const PAGE_MATCHERS: PageMatcher[] = [
   { test: (p) => p.includes("/copy-this-processing-statement"), page: Page.CopyThisProcessingStatement },
   { test: (p) => p.includes("/copy-this-non-manipulation-document"), page: Page.CopyThisStorageDocument },
   { test: (p) => p.includes("/add-processing-plant-details"), page: Page.AddProcessingPlantDetails },
+  { test: (p) => p.includes("/add-processing-plant"), page: Page.AddProcessingPlant },
   { test: (p) => p.includes("/add-health-certificate"), page: Page.AddProcessingHealthCertificate },
   { test: (p) => p.includes("/processing-statement-created"), page: Page.ProcessingStatementCreated },
   {

@@ -33,6 +33,7 @@ export interface Exporter {
   accountId?: string;
   addressOne?: string;
   addressTwo?: string;
+  addressType?: "processingPlant" | "storageFacility";
   buildingName?: string | null;
   buildingNumber?: string | null;
   country?: string;

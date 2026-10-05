@@ -1,6 +1,6 @@
 import * as React from "react";
 import { WhatExportersAddress } from "~/composite-components";
-import { type ActionFunction, type LoaderFunction, redirect } from "react-router";
+import { type ActionFunction, type LoaderFunction, redirect, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { route } from "routes-gen";
 import { apiCallFailed } from "~/communication.server";
@@ -41,7 +41,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   /* istanbul ignore next */
   const testCaseId = setApiMock(request.url);
 
-  const { documentNumber } = params;
+  const { documentNumber = "" } = params;
 
   const bearerToken = await getBearerTokenForRequest(request);
   const processingStatement: ProcessingStatement | IUnauthorised = await getProcessingStatement(
@@ -192,6 +192,7 @@ const handleContinueManualAddress = async (
 
   const payload: Exporter = {
     addressOne: formData.plantAddressOne,
+    addressType: "processingPlant",
     buildingName: formData.plantBuildingName,
     buildingNumber: formData.plantBuildingNumber,
     country: formData.plantCountry,
@@ -257,7 +258,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const bearerToken = await getBearerTokenForRequest(request);
   const form = await request.formData();
-  const { documentNumber } = params;
+  const { documentNumber = "" } = params;
   const buttonClicked = form.get("_action") as ExporterAddressButtonType;
 
   // Preserve nextUri from the request URL
@@ -434,11 +435,14 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 const LookupAddressPage = () => {
   const { t } = useTranslation(["addProcessingPlantAddress", "common"]);
+  const { documentNumber = "" } = useParams();
 
   return (
     <WhatExportersAddress
       journey="processingStatement"
       title={t("psProcessingPlantAddressWhatIsProcessingPlantAddress", { ns: "addProcessingPlantAddress" })}
+      backUrl={route("/create-processing-statement/:documentNumber/add-processing-plant", { documentNumber })}
+      postcodeHintText={t("psProcessingPlantAddressPostcodeHint", { ns: "addProcessingPlantAddress" })}
     />
   );
 };

@@ -260,6 +260,7 @@
   background-color: #fafafa;
   color: #646b6f;
   cursor: not-allowed;
+  white-space: pre-line;
 }
 
 .autocomplete__hint,

@@ -63,6 +63,7 @@
   "psDeleteProcessingStatementTitle": "Are you sure you want to delete this processing statement? - Create a UK processing statement - GOV.UK",
   "sdDeleteStorageDocumentTitle": "Are you sure you want to delete this storage document? - Create a UK non-manipulation document - GOV.UK",
   "processingPlantDetailsTitle": "Add processing plant details - Create a UK processing statement - GOV.UK",
+  "processingPlantTitle": "Which processing plant do you want to use? - Create a UK processing statement - GOV.UK",
   "processingPlantAddressTitle": "Add processing plant address - Create a UK processing statement - GOV.UK",
   "pswhatexporterAddressTitle": "What is the exporter’s address - Create a UK processing statement - GOV.UK",
   "sdwhatexporterAddressTitle": "What is the exporter’s address - Create a UK non-manipulation document - GOV.UK",
