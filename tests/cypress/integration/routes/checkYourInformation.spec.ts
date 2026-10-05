@@ -1272,11 +1272,6 @@ describe("CC - scenario 2 - Change transport mode", () => {
     cy.url().should("include", "/how-does-the-export-leave-the-uk");
     cy.url().then((url) => cy.log(`STEP #4A - Current URL: ${url}`));
 
-    cy.log("STEP #5 - Wait for client-side data fetch to complete");
-    cy.intercept("GET", "**/how-does-the-export-leave-the-uk/1.data*").as("dataFetch");
-    cy.wait("@dataFetch");
-    cy.log("STEP #5A - Data fetch completed");
-
     cy.log("STEP #6 - Wait for the form to be fully loaded and stable");
     cy.get('input[name="vehicle"]').should("exist");
     cy.get('input[name="vehicle"][value="plane"]').should("be.enabled"); // Wait for hydration to complete
@@ -1388,10 +1383,6 @@ describe("NMD - scenario 4 - Change arrival transport mode", () => {
       });
     });
 
-    cy.log("STEP #3 - Setting up intercept for data fetch BEFORE clicking");
-    // Set up intercept BEFORE clicking to catch the .data request
-    cy.intercept("GET", "**/*.data*").as("dataFetch");
-
     cy.log("STEP #3A - Clicking change link for arrival transport mode");
     // Click the change link for arrival transport mode
     cy.get('[href*="how-does-the-consignment-arrive-to-the-uk"]').first().click();
@@ -1399,10 +1390,6 @@ describe("NMD - scenario 4 - Change arrival transport mode", () => {
     cy.log("STEP #4 - Verifying navigation to transport selection page");
     // Verify we're on the transport selection page
     cy.url().should("include", "/how-does-the-consignment-arrive-to-the-uk");
-
-    cy.log("STEP #4A - Waiting for data fetch to complete");
-    // Wait for the client-side data fetch that re-renders the form
-    cy.wait("@dataFetch");
 
     cy.log("STEP #5 - Checking form elements exist");
     // Wait for the form to be fully loaded and radio buttons to be interactable
@@ -1515,18 +1502,11 @@ describe("NMD - scenario 5 - Change departure transport mode - no change scenari
       cy.log(`STEP #2D - Departure transport links found: ${departureLinks.length}`);
     });
 
-    // Set up intercept BEFORE clicking
-    cy.intercept("GET", "**/how-does-the-consignment-leave-the-uk.data*").as("dataFetch");
-
     cy.log("STEP #3 - Click the change link for departure transport mode");
     cy.get('[href*="how-does-the-consignment-leave-the-uk"]').first().click();
 
     // Verify we're on the transport selection page
     cy.url().should("include", "/how-does-the-consignment-leave-the-uk");
-
-    // Wait for client-side data fetch
-    cy.wait("@dataFetch");
-    cy.log("STEP #4 - Data fetch completed");
 
     // Wait for form to be stable and the expected pre-filled radio button to be interactable
     cy.get('input[name="vehicle"]').should("exist");
@@ -1572,17 +1552,11 @@ describe("NMD - scenario 6 - Change departure transport mode", () => {
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
 
-    // Set up intercept BEFORE clicking
-    cy.intercept("GET", "**/how-does-the-consignment-leave-the-uk.data*").as("dataFetch");
-
     // Click the change link for departure transport mode (use correct NMD URL)
     cy.get('[href*="how-does-the-consignment-leave-the-uk"]').first().click();
 
     // Verify we're on the transport selection page
     cy.url().should("include", "/how-does-the-consignment-leave-the-uk");
-
-    // Wait for client-side data fetch
-    cy.wait("@dataFetch");
 
     // Wait for the form to be fully loaded and stable
     cy.get('input[name="vehicle"]').should("exist");
