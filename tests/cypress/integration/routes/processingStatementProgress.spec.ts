@@ -26,7 +26,7 @@ describe("ProgressPage - Processing plant rows by JS mode", () => {
     cy.get('[data-testid="progress-processingPlantAddress-title"]').should(
       "have.attr",
       "href",
-      `${certificateUrl}/add-processing-plant-details`
+      `${certificateUrl}/add-processing-plant-address`
     );
     cy.get("li strong:contains('COMPLETE')").should("have.length", 6);
   });
