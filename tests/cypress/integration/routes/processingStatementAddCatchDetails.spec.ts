@@ -2135,6 +2135,8 @@ describe("PS: Add catch details - no-JS to JS transition", () => {
     };
 
     cy.visit(validAddCatchDetailsUrl, { qs: { ...testParams } });
+    // wait for hydration before interacting
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
     cy.get('[data-testid="issuing-country-wrapper"]').should("have.class", "app-hide-when-js");
     cy.get("#catches-0-issuingCountry").should("not.be.visible");
