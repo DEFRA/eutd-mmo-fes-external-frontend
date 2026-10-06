@@ -37,14 +37,17 @@ describe("Add Storage Facility Address", () => {
     );
 
     // Expandable guidance should be present with title and content
-    cy.get("details.govuk-details")
-      .should("exist")
-      .within(() => {
-        cy.get("summary").contains("What is the arrival date?");
-        cy.contains(
-          "This is the date the product arrives at the storage facility and is unloaded. If unloading happens later, enter the date the product was physically removed from the transport and received into storage."
-        ).should("be.visible");
-      });
+    cy.get("details.govuk-details").should("exist");
+    cy.get(".govuk-details__summary-text").contains("What is the arrival date?");
+
+    // Click to expand and verify content
+    cy.get(".govuk-details__summary").click();
+    cy.get(".govuk-details__text")
+      .should("be.visible")
+      .and(
+        "contain",
+        "This is the date the product arrives at the storage facility and is unloaded. If unloading happens later, enter the date the product was physically removed from the transport and received into storage."
+      );
 
     cy.contains("[data-testid=goToAddAddress-button]", /^Add the storage facility address$/).should("be.visible");
 
@@ -111,8 +114,8 @@ describe("Add Storage Facility Address - Error", () => {
 
   it("should show facility name validation error", () => {
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", "There is a problem");
-    cy.contains("a", /^Enter the facility name$/)
+    cy.contains("h2", "Error:There is a problem");
+    cy.contains("a", /^Error:Enter the facility name$/)
       .should("be.visible")
       .should("have.attr", "href", "#storageFacilities-facilityName");
     cy.get(".govuk-error-summary").should("be.visible");
@@ -120,8 +123,8 @@ describe("Add Storage Facility Address - Error", () => {
 
   it("should show address validation error", () => {
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", "There is a problem");
-    cy.contains("a", /^Enter the address$/)
+    cy.contains("h2", "Error:There is a problem");
+    cy.contains("a", /^Error:Enter the address$/)
       .should("be.visible")
       .should("have.attr", "href", "#storageFacilities-facilityAddressOne");
   });
@@ -240,7 +243,7 @@ describe("Add Storage Facility Address - Error Both Name and Date", () => {
 
     cy.url({ timeout: 10000 }).should("include", "/add-storage-facility-details");
     cy.get(".govuk-error-summary", { timeout: 10000 }).should("be.visible");
-    cy.contains("h2", "There is a problem").should("be.visible");
+    cy.contains("h2", "Error:There is a problem").should("be.visible");
     cy.contains("Enter the facility name").should("be.visible");
     cy.contains("Arrival date must be a real date").should("be.visible");
   });

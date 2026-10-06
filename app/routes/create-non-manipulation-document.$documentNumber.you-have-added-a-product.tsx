@@ -8,6 +8,7 @@ import {
   type LoaderFunction,
   type ActionFunction,
 } from "react-router";
+import { Form } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button, BUTTON_TYPE, Details } from "@capgeminiuk/dcx-react-library";
 
@@ -186,23 +187,25 @@ const YouHaveAddedAProduct = () => {
                             className: "govuk-visually-hidden",
                           }}
                         />
-                        {catches.length > 1 && (
-                          <Button
-                            id={`remove-species-${index}`}
-                            label={t("commonRemoveButton")}
-                            className="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
-                            type={BUTTON_TYPE.SUBMIT}
-                            data-module="govuk-button"
-                            name="_action"
-                            value="remove"
-                            data-testid="remove-button"
-                            visuallyHiddenText={{
-                              text: item.product,
-                              className: "govuk-visually-hidden",
-                            }}
-                          />
-                        )}
                       </SecureForm>
+                      {catches.length > 1 && (
+                        <Form
+                          method="get"
+                          action={`/create-non-manipulation-document/${documentNumber}/remove-product/${item._id}`}
+                          className="govuk-!-display-inline"
+                        >
+                          <button
+                            id={`remove-species-${index}`}
+                            type="submit"
+                            className="govuk-button govuk-button--secondary govuk-!-margin-bottom-0"
+                            data-module="govuk-button"
+                            data-testid="remove-button"
+                          >
+                            {t("commonRemoveButton")}
+                            <span className="govuk-visually-hidden"> {item.product}</span>
+                          </button>
+                        </Form>
+                      )}
                     </td>
                   </tr>
                 );

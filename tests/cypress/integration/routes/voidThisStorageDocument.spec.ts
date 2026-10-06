@@ -25,7 +25,7 @@ describe("void this draft storage document page", () => {
       .contains("Are you sure you want to void this non-manipulation document?")
       .should("be.visible");
     cy.get('[data-testid="continue"]').click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
 
     cy.get(".govuk-list > li > a").contains("Select yes if you want to void the current document").should("be.visible");
     cy.get(".govuk-error-message").contains("Select yes if you want to void the current document").should("be.visible");

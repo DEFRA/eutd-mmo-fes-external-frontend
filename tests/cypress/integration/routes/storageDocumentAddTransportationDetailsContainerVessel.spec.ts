@@ -86,10 +86,10 @@ describe("Save and Continue button - UnHappy path", () => {
 
     cy.get("[data-testid=save-and-continue").click();
     cy.get(".govuk-error-summary__list").contains("Enter the vessel name");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
-    cy.contains("a", /^Enter the flag state$/).should("be.visible");
-    cy.contains("a", /^Enter the vessel name$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place the export leaves the UK$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the flag state$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the vessel name$/).should("be.visible");
   });
 });
 
@@ -144,8 +144,8 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the point of destination$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the point of destination$/).should("be.visible");
   });
 
   it("should display error when point of destination exceeds 100 characters", () => {
@@ -156,8 +156,8 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
     const longString = new Array(102).join("a");
     cy.get("#pointOfDestination").type(longString);
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Point of destination must not exceed 100 characters$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
+    cy.contains("a", /^Error:Point of destination must not exceed 100 characters$/).should("be.visible");
   });
 
   it("should save valid fields and redirect to dashboard when saving as draft with invalid pointOfDestination", () => {
@@ -193,10 +193,10 @@ describe("Container Vessel Point of Destination - Validation Scenarios", () => {
     cy.visit(pageUrl, { qs: { ...testParams } });
     cy.get("#pointOfDestination").type("Invalid@#$%");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
+      /^Error:Point of destination must only contain letters, numbers, hyphens, apostrophes, spaces and forward slashes$/
     ).should("be.visible");
   });
 });

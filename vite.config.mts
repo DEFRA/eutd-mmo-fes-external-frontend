@@ -50,10 +50,11 @@ export default defineConfig({
 
         // Use the exposed transform from vite, instead of directly
         // transforming with esbuild
+        // Cast needed: esbuild's SourceMap.sourcesContent allows nulls, rollup's does not
         return transformWithEsbuild(code, id, {
           loader: "jsx",
           jsx: "automatic",
-        });
+        }) as any;
       },
     },
     // Dev-only: intercept OIDC/AAD form_post callbacks before React Router's

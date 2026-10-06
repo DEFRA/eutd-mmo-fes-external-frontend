@@ -56,6 +56,7 @@
   "ccCommonExportWeightGreaterError": "Rhowch y pwysau allforio fel rhif sy’n fwy na 0",
   "ccStartDateInvalidError": "Rhaid i'r dyddiad dechrau fod yn ddyddiad go iawn",
   "ccStartDateMaxError": "Ni chaiff y dyddiad dechrau fod ar ôl y dyddiad glanio",
+  "ccStartDateFutureError": "Ni chaiff y dyddiad dechrau fod yn y dyfodol",
   "ccCommonArrivalDateMissingError": "Mae'r Dyddiad Cyrraedd ar goll",
   "ccArrivalDateValidationError": "Rhaid i'r dyddiad cyrraedd fod yn ddyddiad go iawn",
   "ccUploadFilePageErrorInvalidFile": "Mae'r ffeil a ddewiswyd yn annilys. Er enghraifft, efallai bod y data yn anhygyrch, yn llwgr, neu mewn strwythur anghywir.",

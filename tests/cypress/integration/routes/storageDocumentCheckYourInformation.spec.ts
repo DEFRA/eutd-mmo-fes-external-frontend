@@ -259,7 +259,7 @@ describe("Check Your Information (Summary) page: document submission validation 
 
     cy.get("[data-testid=create-sd-button]").click();
     cy.url().should("include", "/check-your-information");
-    cy.get("#error-summary-title").contains("There is a problem");
+    cy.get("#error-summary-title").contains("Error:There is a problem");
     cy.get("a[href='#validationError']").contains("The document entered is no longer valid");
     cy.get(".govuk-error-message").contains("The document entered is no longer valid");
   });

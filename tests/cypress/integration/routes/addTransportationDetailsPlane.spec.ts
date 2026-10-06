@@ -74,8 +74,8 @@ describe("Add Transportation Details Plane: Allowed", () => {
     );
     cy.get("[data-testid=save-and-continue").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Flight number must not exceed 15 characters$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
+    cy.contains("a", /^Error:Flight number must not exceed 15 characters$/).should("be.visible");
   });
 
   it("should display error when flight number alphanumeric text", () => {
@@ -86,8 +86,8 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.get("#flightNumber").type("TestNumber..$@@");
     cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Flight number must only contain letters and numbers$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
+    cy.contains("a", /^Error:Flight number must only contain letters and numbers$/).should("be.visible");
   });
 
   it("should display errors", () => {
@@ -97,10 +97,9 @@ describe("Add Transportation Details Plane: Allowed", () => {
     cy.visit(planePageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
     cy.get("form").submit();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the flight number$/).should("be.visible");
-    // cy.contains("a", /^Enter the container identification number or numbers$/).should("be.visible");
-    cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the flight number$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place the export leaves the UK$/).should("be.visible");
   });
 
   it("should navigate to cc dashboard page on click of save as draft button", () => {
@@ -161,8 +160,8 @@ describe("Add Transportation Details Plane: Air Waybill Number Validation", () =
     cy.get("#departurePlace").type("Heathrow Airport");
     cy.get("#airwayBillNumber").type("A".repeat(51));
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Air waybill number must not exceed 50 characters$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
+    cy.contains("a", /^Error:Air waybill number must not exceed 50 characters$/).should("be.visible");
   });
 
   it("should display error when air waybill number contains invalid characters", () => {
@@ -175,10 +174,10 @@ describe("Add Transportation Details Plane: Air Waybill Number Validation", () =
     cy.get("#departurePlace").type("Heathrow Airport");
     cy.get("#airwayBillNumber").type("AWB!@#$%");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Air waybill number must only contain letters, numbers, hyphens, full stops and forward slashes$/
+      /^Error:Air waybill number must only contain letters, numbers, hyphens, full stops and forward slashes$/
     ).should("be.visible");
   });
 
@@ -219,10 +218,10 @@ describe("Add Transportation Details Plane: Container Identification Number Vali
     cy.get("#departurePlace").type("Heathrow Airport");
     cy.get('input[name="containerNumbers.0"]').type("ABC123!@#");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Enter a container number in the correct format\. This must be letters and numbers only\.$/
+      /^Error:Enter a container number in the correct format\. This must be letters and numbers only\.$/
     ).should("be.visible");
   });
 

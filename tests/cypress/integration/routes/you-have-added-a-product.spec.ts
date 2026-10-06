@@ -11,6 +11,10 @@ describe("SD: you-have-added-product page", () => {
     cy.get(".govuk-heading-xl").contains("You have added 2 products to this consignment");
 
     cy.contains("button", "Remove").click();
+    cy.url().should("include", "/remove-product/");
+    cy.get("#removeProduct").check();
+    cy.contains("button", "Save and continue").click();
+    cy.url().should("include", "/you-have-added-a-product");
 
     cy.get("#errorIsland").should("not.exist");
 
@@ -66,6 +70,7 @@ describe("SD: you-have-added-product page", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.get(".govuk-heading-xl").contains("You have added 2 products to this consignment");
     cy.contains("button", "Remove").click();
+    cy.url().should("include", "/remove-product/");
     cy.get("body").should("exist");
   });
 
@@ -105,6 +110,10 @@ describe("SD: you-have-added-product page", () => {
     cy.get("tbody.govuk-table__body tr.govuk-table__row").should("have.length", 2);
 
     cy.get('[data-testid="remove-button"]').first().click();
+    cy.url().should("include", "/remove-product/");
+    cy.get("#removeProduct").check();
+    cy.contains("button", "Save and continue").click();
+    cy.url().should("include", "/you-have-added-a-product");
     cy.get("tbody.govuk-table__body tr.govuk-table__row").should("have.length", 1);
 
     cy.get("#addAnotherProduct").check();
@@ -691,15 +700,19 @@ describe("SD: you-have-added-product page", () => {
         });
     });
 
-    it("should render Remove button with correct action value (component lines 210-220)", () => {
+    it("should render Remove button navigating to the remove-product confirmation page (component lines 210-220)", () => {
       const testParams: ITestParams = {
         testCaseId: TestCaseId.SDYouHaveAddedAProduct,
       };
       cy.visit(sdPageUrl, { qs: { ...testParams } });
 
-      // Verify Remove button has correct action value
-      cy.get('[data-testid="remove-button"]').first().should("have.attr", "value", "remove");
-      cy.get('[data-testid="remove-button"]').first().should("have.attr", "name", "_action");
+      // Verify Remove button navigates to the remove-product confirmation page for the correct catch
+      cy.get('[data-testid="remove-button"]')
+        .first()
+        .parents("form")
+        .should("have.attr", "method", "get")
+        .should("have.attr", "action")
+        .and("include", "/remove-product/");
     });
 
     it("should render Details component with guidance content (component lines 258-262)", () => {

@@ -66,10 +66,10 @@ describe("Save and Continue button - UnHappy path", () => {
 
     cy.get("[data-testid=save-and-continue").click();
     cy.get(".govuk-error-summary__list").contains("Enter the vessel name");
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
-    cy.contains("a", /^Enter the place the export leaves the UK$/).should("be.visible");
-    cy.contains("a", /^Enter the flag state$/).should("be.visible");
-    cy.contains("a", /^Enter the vessel name$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the place the export leaves the UK$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the flag state$/).should("be.visible");
+    cy.contains("a", /^Error:Enter the vessel name$/).should("be.visible");
   });
 });
 
@@ -136,10 +136,10 @@ describe("Add Transportation Details Container Vessel: Container Identification 
     cy.get("#departurePlace").type("Felixstowe Port");
     cy.get('input[name="containerNumbers.0"]').type("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABC");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+      /^Error:Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
     ).should("be.visible");
   });
 
@@ -153,10 +153,10 @@ describe("Add Transportation Details Container Vessel: Container Identification 
     cy.get("#departurePlace").type("Felixstowe Port");
     cy.get('input[name="containerNumbers.0"]').type("ABC123!@#");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+      /^Error:Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
     ).should("be.visible");
   });
 
@@ -211,13 +211,16 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.get("#flagState").type("Greece");
 
     // Fill existing container fields, or add if the hydrated add button is present.
-    cy.get('input[name="containerNumbers.0"]').clear().type("ABCJ1234567");
+    cy.get('input[name="containerNumbers.0"]').should("be.visible").clear();
+    cy.get('input[name="containerNumbers.0"]').type("ABCJ1234567");
     cy.get("body").then(($body) => {
       if ($body.find('[data-testid="add-another-container"]').length > 0) {
         cy.get('[data-testid="add-another-container"]').click();
-        cy.get('input[name="containerNumbers.1"]').clear().type("DEFJ9876543");
+        cy.get('input[name="containerNumbers.1"]').should("be.visible").clear();
+        cy.get('input[name="containerNumbers.1"]').type("DEFJ9876543");
         cy.get('[data-testid="add-another-container"]').click();
-        cy.get('input[name="containerNumbers.2"]').clear().type("GHIJ5555555");
+        cy.get('input[name="containerNumbers.2"]').should("be.visible").clear();
+        cy.get('input[name="containerNumbers.2"]').type("GHIJ5555555");
       } else {
         cy.get('input[name="containerNumbers.1"]').clear().type("DEFJ9876543");
         cy.get('input[name="containerNumbers.2"]').clear().type("GHIJ5555555");
@@ -240,13 +243,15 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
     cy.get("#flagState").type("Greece");
 
     // Leave middle container empty while still submitting valid values around it.
-    cy.get('input[name="containerNumbers.0"]').clear().type("ABCJ0123456");
+    cy.get('input[name="containerNumbers.0"]').should("be.visible").clear();
+    cy.get('input[name="containerNumbers.0"]').type("ABCJ0123456");
     cy.get("body").then(($body) => {
       if ($body.find('[data-testid="add-another-container"]').length > 0) {
         cy.get('[data-testid="add-another-container"]').click();
         // Leave containerNumbers.1 empty
         cy.get('[data-testid="add-another-container"]').click();
-        cy.get('input[name="containerNumbers.2"]').clear().type("ABCJ0123457");
+        cy.get('input[name="containerNumbers.2"]').should("be.visible").clear();
+        cy.get('input[name="containerNumbers.2"]').type("ABCJ0123457");
       } else {
         cy.get('input[name="containerNumbers.1"]').clear();
         cy.get('input[name="containerNumbers.2"]').clear().type("ABCJ0123457");
@@ -284,10 +289,10 @@ describe("Add Transportation Details Container Vessel: Multiple Container Number
 
     cy.get("[data-testid=save-and-continue]").click();
 
-    cy.contains("h2", /^There is a problem$/).should("be.visible");
+    cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains(
       "a",
-      /^Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
+      /^Error:Enter a shipping container number in the correct format. This must be 11 characters: 3 letters, then U, J, Z or R, then 7 numbers.$/
     ).should("be.visible");
   });
 
