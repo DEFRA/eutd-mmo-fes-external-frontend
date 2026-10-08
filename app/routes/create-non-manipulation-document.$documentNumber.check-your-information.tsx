@@ -324,7 +324,7 @@ const CheckYourInformation = () => {
                   lowerCase(t("sdCommonFacilityNameTitle", { ns: "sdCheckYourInformation" }))
                 }
                 className="govuk-link"
-                href={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details?nextUri=${route(
+                href={`/create-non-manipulation-document/${documentNumber}/which-storage-facility?nextUri=${route(
                   "/create-non-manipulation-document/:documentNumber/check-your-information",
                   { documentNumber }
                 )}`}

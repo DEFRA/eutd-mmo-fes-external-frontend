@@ -198,6 +198,30 @@
   position: relative;
 }
 
+/* PDF FI0-11562 scenario 2: selected establishment summary must not look like a hyperlink -
+   plain bordered box with bold trading name, and a plain-text "Change" control. */
+.app-establishment-summary {
+  border: 1px solid #b1b4b6;
+  padding: 15px;
+}
+
+.app-change-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: #0b0c0c;
+  font-family: inherit;
+  font-size: 1rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.app-change-button:hover,
+.app-change-button:focus {
+  text-decoration: none;
+}
+
+
 .autocomplete__option {
   border-bottom: solid #b1b4b6;
   border-width: 1px 0;

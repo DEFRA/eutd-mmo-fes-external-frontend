@@ -183,7 +183,7 @@ describe("ProgressPage - Links", () => {
     cy.contains("a", "Storage facility details").should("be.visible");
     cy.contains("a", "Storage facility details")
       .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/add-storage-facility-details`);
+      .should("have.attr", "href", `${certificateUrl}/which-storage-facility`);
   });
 });
 

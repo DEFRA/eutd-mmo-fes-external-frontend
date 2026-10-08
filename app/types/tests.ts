@@ -709,6 +709,12 @@ export enum TestCaseId {
   SDAddStorageApprovalMaxLengthSaveAsDraft = "sdAddStorageApprovalMaxLengthSaveAsDraft",
   SDAddStorageApprovalNoJs = "sdAddStorageApprovalNoJs",
 
+  SDWhichStorageFacilityContinue = "sdWhichStorageFacilityContinue",
+  SDWhichStorageFacilityWithSavedSelection = "sdWhichStorageFacilityWithSavedSelection",
+  SDWhichStorageFacilitySavedManualEntry = "sdWhichStorageFacilitySavedManualEntry",
+  SDWhichStorageFacilityEmptyContinue = "sdWhichStorageFacilityEmptyContinue",
+  SDWhichStorageFacilityManualEntry = "sdWhichStorageFacilityManualEntry",
+
   PSAddCatchWeights = "psAddCatchWeights",
   PSAddCatchWeightUnauthorised = "psAddCatchWeightUnauthorised",
   PSPostAddCatchWeights = "psPostAddCatchWeights",

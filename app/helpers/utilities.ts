@@ -226,7 +226,7 @@ const PAGE_MATCHERS: PageMatcher[] = [
   },
   { test: (p) => p.includes("/catch-added"), page: Page.CatchAdded },
   { test: (p) => p.includes("/what-processing-plant-address"), page: Page.WhatprocessingPlantAddress },
-  { test: (p) => p.includes("/add-storage-facility-details"), page: Page.AddStorageFacility },
+  { test: (p) => p.includes("/which-storage-facility"), page: Page.AddStorageFacility },
   { test: (p) => p.includes("/add-storage-facility-approval"), page: Page.StorageDocumentStorageFacilityApproval },
   { test: (p) => p.includes("/what-storage-facility-address"), page: Page.WhatStorageFacility },
   {

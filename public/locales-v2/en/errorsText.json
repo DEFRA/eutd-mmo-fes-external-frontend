@@ -177,6 +177,7 @@
   "psAddProcessingPlantAddressErrorFormatPlantName": "Processing plant name must only contain letters, numbers, apostrophes (' or ’), full stops, hyphens, commas, forward slashes, back slashes, ampersands, and spaces",
   "psAddProcessingPlantAddressErrorAddress": "Enter the address",
   "psAddProcessingPlantAddressErrorCountryNotUk": "Select a UK country for the processing plant address",
+  "sdWhichStorageFacilitySelectError": "You must select a storage facility or enter the facility details manually",
   "psAddCatchWeightsErrorEnterTotalWeightLandedInKG": "Enter the total weight landed in kg",
   "psAddCatchWeightsErrorEnterTotalWeightMaximum2Decimal": "Enter the total weight shown on catch certificate as a number with a maximum of 2 decimal places",
   "psAddCatchWeightsErrorEnterExportWeightInKGBeforeProcessing": "Enter the weight of raw material in kg",

@@ -131,7 +131,7 @@ describe("SD: Entering the address manually with errors", () => {
     cy.get("#country").type("Albania");
 
     cy.get("[data-testid=continue]").click();
-    cy.url().should("include", "/add-storage-facility-details");
+    cy.url().should("include", "/which-storage-facility");
     cy.get(".govuk-error-summary").should("not.exist");
   });
 
@@ -260,7 +260,7 @@ describe("SD: On Selected Address", () => {
 
     cy.get("[data-testid=cancel]").click();
 
-    cy.url().should("include", "/add-storage-facility-details");
+    cy.url().should("include", "/which-storage-facility");
   });
 });
 
