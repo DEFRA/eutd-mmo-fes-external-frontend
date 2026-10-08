@@ -224,7 +224,7 @@ describe("PS: add processing plant", () => {
     );
     cy.get('[data-testid="no-processing-plant-results"]').should(
       "contain.text",
-      "If you still cannot find the facility, enter the details manually."
+      "No results foundCheck the company name or approval number and try again.If you can't find the address, select 'Enter the address manually'.You can only enter a UK address."
     );
 
     getProcessingPlantSearchInput().clear();

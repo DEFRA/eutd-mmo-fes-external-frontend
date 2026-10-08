@@ -344,6 +344,28 @@ const AddProcessingPlant = () => {
                 customNonJSComp={
                   isHydrated ? undefined : (
                     <>
+                      {savedPlantDetails && (
+                        <div className="govuk-!-margin-bottom-6 app-selected-address">
+                          <strong>
+                            {t("psAddProcessingPlantAddressSummaryHeading", { ns: "addProcessingPlant" })}
+                          </strong>
+                          <br />
+                          <p className="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">{plantName}</p>
+                          <p className="govuk-body govuk-!-margin-bottom-1">
+                            {t("psAddProcessingPlantSummaryApprovalNumberLabel", { ns: "addProcessingPlant" })}:{" "}
+                            {savedPlantDetails?.approvalNumber}
+                          </p>
+                          {savedPlantDetails?.addressLine && (
+                            <p className="govuk-body govuk-!-margin-bottom-1">{savedPlantDetails.addressLine}</p>
+                          )}
+                          {savedPlantDetails?.cityName && (
+                            <p className="govuk-body govuk-!-margin-bottom-1">{savedPlantDetails.cityName}</p>
+                          )}
+                          {savedPlantDetails?.postcode && (
+                            <p className="govuk-body govuk-!-margin-bottom-1">{savedPlantDetails.postcode}</p>
+                          )}
+                        </div>
+                      )}
                       {!isEmpty(errors?.plantName) && (
                         <ErrorMessage
                           id="plantName-error"
