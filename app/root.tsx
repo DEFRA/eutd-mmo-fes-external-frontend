@@ -41,6 +41,7 @@ declare global {
     gtag: any;
     clarity: (...args: unknown[]) => void;
     dataLayer: unknown[];
+    __fesAnalyticsLoaded?: boolean;
   }
 }
 
@@ -108,26 +109,65 @@ const Template = ({
   const { i18n } = useTranslation();
   const nonce = useNonce();
   const isHydrated = useIsHydrated();
+  const previousAnalyticsAcceptedRef = useRef(analyticsCookieAccepted);
 
   useChangeLanguage(locale);
 
   useEffect(() => {
     const analyticsAllowed = shouldRenderGA(analyticsCookieAccepted);
-    if (!analyticsAllowed) {
+    const previouslyAccepted = previousAnalyticsAcceptedRef.current;
+    previousAnalyticsAcceptedRef.current = analyticsCookieAccepted;
+    // ga-disable-<id> is Google's documented opt-out flag, read by both gtag.js and gtm.js
+    const windowRecord = globalThis.window as unknown as Record<string, unknown>;
+
+    globalThis.window.dataLayer = globalThis.window.dataLayer || [];
+    if (typeof globalThis.window.gtag !== "function") {
+      globalThis.window.gtag = function () {
+        globalThis.window.dataLayer.push(arguments);
+      };
+    }
+
+    // Revoke Clarity + GA consent only on a true -> false transition; never on cleanup (see below).
+    if (isProdEnv() && previouslyAccepted && !analyticsCookieAccepted) {
+      if (typeof globalThis.window.clarity === "function") {
+        globalThis.window.clarity("consent", false);
+      }
+      if (gaId?.length) {
+        windowRecord[`ga-disable-${gaId}`] = true;
+      }
+      if (typeof globalThis.window.gtag === "function") {
+        globalThis.window.gtag("consent", "update", { analytics_storage: "denied", ad_storage: "denied" });
+      }
+    }
+
+    // Re-grant Clarity + GA consent on a false -> true transition within the same page lifetime.
+    if (analyticsAllowed && globalThis.window.__fesAnalyticsLoaded && !previouslyAccepted) {
+      if (typeof globalThis.window.clarity === "function") {
+        globalThis.window.clarity("consentv2", { ad_Storage: "denied", analytics_Storage: "granted" });
+      }
+      if (gaId?.length) {
+        windowRecord[`ga-disable-${gaId}`] = false;
+      }
+      if (typeof globalThis.window.gtag === "function") {
+        globalThis.window.gtag("consent", "update", { analytics_storage: "granted" });
+      }
       return;
     }
 
-    const injectedScripts: HTMLScriptElement[] = [];
+    if (!analyticsAllowed || globalThis.window.__fesAnalyticsLoaded) {
+      return;
+    }
 
-    const appendScript = (id: string, src: string): HTMLScriptElement => {
+    const appendScript = (id: string, src: string): void => {
+      if (document.getElementById(id)) {
+        return;
+      }
       const script = document.createElement("script");
       script.id = id;
       script.async = true;
       script.src = src;
       script.nonce = nonce;
       document.head.appendChild(script);
-      injectedScripts.push(script);
-      return script;
     };
 
     if (clarityProjectId?.length) {
@@ -143,27 +183,7 @@ const Template = ({
       globalThis.window.clarity("consentv2", { ad_Storage: "denied", analytics_Storage: "granted" });
     }
 
-    const originalOpen = XMLHttpRequest.prototype.open;
-    const originalSend = XMLHttpRequest.prototype.send;
-
-    XMLHttpRequest.prototype.open = function (method: string, url: string | URL): any {
-      if (typeof url === "string" && url.includes("google-analytics.com/j/collect")) {
-        (this as any)._uaBlocked = true;
-      }
-      return originalOpen.apply(this, arguments as any);
-    };
-
-    XMLHttpRequest.prototype.send = function (): any {
-      if ((this as any)._uaBlocked) {
-        return;
-      }
-      return originalSend.apply(this, arguments as any);
-    };
-
     if (gtmId?.length) {
-      const disableKey = `ga-disable-${gaId}`;
-      (globalThis as any)[disableKey] = true;
-
       globalThis.window.dataLayer = globalThis.window.dataLayer || [];
       globalThis.window.dataLayer.push({
         "gtm.start": Date.now(),
@@ -173,43 +193,7 @@ const Template = ({
       appendScript("gtm-external", `https://www.googletagmanager.com/gtm.js?id=${gtmId}`);
     }
 
-    if (gaId?.length) {
-      appendScript("gtag-external", `https://www.googletagmanager.com/gtag/js?id=${gaId}`);
-
-      globalThis.window.dataLayer = globalThis.window.dataLayer || [];
-      globalThis.window.gtag = (...args: unknown[]) => {
-        globalThis.window.dataLayer.push(args);
-      };
-
-      globalThis.window.gtag("js", new Date());
-      globalThis.window.gtag("config", gaId, {
-        cookie_flags: "SameSite=None;Secure",
-        cookie_domain: globalThis.window.location.hostname,
-        cookie_path: "/",
-        cookie_expires: 63072000,
-        anonymize_ip: true,
-        allow_google_signals: false,
-        allow_ad_personalization_signals: false,
-        cookie_update: true,
-        send_page_view: true,
-        transport_type: "beacon",
-      });
-    }
-
-    return () => {
-      if (typeof globalThis.window.clarity === "function") {
-        globalThis.window.clarity("consent", false);
-      }
-
-      XMLHttpRequest.prototype.open = originalOpen;
-      XMLHttpRequest.prototype.send = originalSend;
-
-      injectedScripts.forEach((script) => {
-        if (document.head.contains(script)) {
-          script.remove();
-        }
-      });
-    };
+    globalThis.window.__fesAnalyticsLoaded = true;
   }, [analyticsCookieAccepted, clarityProjectId, gaId, gtmId, nonce]);
 
   useEffect(() => {
@@ -349,8 +333,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const { documentNumber } = params;
   const analyticsCookie = (await parseCookie(analyticsAcceptedCookie, request)) as IAnalyticsAcceptedCookie;
 
-  // Response objects with Set-Cookie headers work with v3_singleFetch
-  // Single fetch will unwrap the response and preserve headers
   return new Response(
     JSON.stringify({
       ...data,
