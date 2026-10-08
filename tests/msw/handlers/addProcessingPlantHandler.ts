@@ -101,11 +101,19 @@ const {
   ...processingStatementWithoutSavedPlant
 } = processingStatement;
 
-const processingPlantSelectionErrorResponse = {
-  errors: {
-    plantName: "psAddProcessingPlantErrorSelectPlant",
-  },
-};
+const processingPlantSelectionErrorResponse = (isNonJs: boolean) =>
+  isNonJs
+    ? {
+        errors: {
+          plantName: "psAddProcessingPlantAddressErrorNullPlantName",
+          plantApprovalNumber: "psAddProcessingPDErrorPlantApprovalNumber",
+        },
+      }
+    : {
+        errors: {
+          processingPlant: "psAddProcessingPlantErrorSelectPlant",
+        },
+      };
 
 const getProcessingPlantsHandlers = (plants: unknown[]) => [
   rest.get(PROCESSING_PLANTS_URL, (req, res, ctx) => res(ctx.json(plants))),
@@ -142,20 +150,45 @@ const addProcessingPlantHandler: ITestHandler = {
   [TestCaseId.PSAddProcessingPlantNoMatchContinue]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithoutSavedPlant))),
     ...getProcessingPlantsHandlers(processingPlantsNoMatch),
-    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
-      res(ctx.status(400), ctx.json(processingPlantSelectionErrorResponse))
-    ),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), async (req, res, ctx) => {
+      const body = await req.json();
+      const isNonJs = body?.isNonJs === true || body?.isNonJs === "true";
+      return res(ctx.status(400), ctx.json(processingPlantSelectionErrorResponse(isNonJs)));
+    }),
   ],
   [TestCaseId.PSAddProcessingPlantEmptyContinue]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithoutSavedPlant))),
     ...getProcessingPlantsHandlers(processingPlantsNoMatch),
-    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
-      res(ctx.status(400), ctx.json(processingPlantSelectionErrorResponse))
-    ),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), async (req, res, ctx) => {
+      const body = await req.json();
+      const isNonJs = body?.isNonJs === true || body?.isNonJs === "true";
+      return res(ctx.status(400), ctx.json(processingPlantSelectionErrorResponse(isNonJs)));
+    }),
   ],
   [TestCaseId.PSAddProcessingPlantManualEntry]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
     ...getProcessingPlantsHandlers(processingPlants),
+  ],
+  [TestCaseId.PSAddProcessingPlantSaveAsDraft]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithoutSavedPlant))),
+    ...getProcessingPlantsHandlers(processingPlants),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(processingStatement))
+    ),
+  ],
+  [TestCaseId.PSAddProcessingPlantSaveAsDraftWithErrors]: () => [
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithoutSavedPlant))),
+    ...getProcessingPlantsHandlers(processingPlants),
+    // First probe validates and returns field errors, second forced save must still persist draft.
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(processingStatement))
+    ),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res.once(
+        ctx.status(400),
+        ctx.json({ errors: { plantApprovalNumber: "psAddProcessingPDErrorPlantApprovalNumber" } })
+      )
+    ),
   ],
   // Base fixture ships with stale manual plantSubBuildingName/plantBuildingName/plantStreetName/plantCounty values;
   // matching an establishment with a full address must map plantAddressOne/plantTownCity/plantPostcode/plantCountry
@@ -179,7 +212,8 @@ const addProcessingPlantHandler: ITestHandler = {
         body.plantCounty === "";
 
       if (!hasMappedAddress || !hasClearedSubFields) {
-        return res(ctx.status(400), ctx.json(processingPlantSelectionErrorResponse));
+        const isNonJs = body?.isNonJs === true || body?.isNonJs === "true";
+        return res(ctx.status(400), ctx.json(processingPlantSelectionErrorResponse(isNonJs)));
       }
 
       return res(ctx.json({ ...processingStatementWithoutSavedPlant, ...body }));
