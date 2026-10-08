@@ -29,6 +29,7 @@ import {
   mapEstablishmentToPlantAddress,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
+import { commitSession, getSessionFromRequest } from "~/sessions.server";
 
 type ProcessingPlantSearchResult = {
   label: string;
@@ -154,11 +155,20 @@ export const action: ActionFunction = async ({ request, params }) => {
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
+  const session = await getSessionFromRequest(request);
+  session.unset("currentStep");
+  session.unset("postcode");
+  session.unset("addressOne");
+  session.unset("csrf");
+
   const action = form.get("_action");
 
   if (action === "navigateToManualAddress") {
     return redirect(
-      route("/create-processing-statement/:documentNumber/what-processing-plant-address", { documentNumber })
+      route("/create-processing-statement/:documentNumber/what-processing-plant-address", { documentNumber }),
+      {
+        headers: { "Set-Cookie": await commitSession(session) },
+      }
     );
   }
 
@@ -209,7 +219,10 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
 
   return redirect(
-    route("/create-processing-statement/:documentNumber/add-processing-plant-details", { documentNumber })
+    route("/create-processing-statement/:documentNumber/add-processing-plant-details", { documentNumber }),
+    {
+      headers: { "Set-Cookie": await commitSession(session) },
+    }
   );
 };
 
@@ -227,6 +240,8 @@ const AddProcessingPlant = () => {
   );
   const [selectedPlant, setSelectedPlant] = useState<ProcessingPlantSearchResult | undefined>(savedPlantDetails);
   const processingPlantOptions = processingPlantResults.map((result) => result.label);
+  const showNoResultsMessage =
+    isHydrated && searchTerm.trim().length >= minCharsBeforeSearch && processingPlantResults.length === 0;
 
   const handlePlantSelected = (label: string) => {
     const match = processingPlantResults.find((result) => result.label === label);
@@ -272,7 +287,7 @@ const AddProcessingPlant = () => {
           <Title title={t("psAddProcessingPlantHeading", { ns: "addProcessingPlant" })} />
           <SecureForm method="post" csrf={csrf}>
             {isHydrated && selectedPlant ? (
-              <div className="govuk-!-margin-bottom-6">
+              <div className="govuk-!-margin-bottom-6 app-selected-address">
                 <p className="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
                   {selectedPlant.tradingName}
                 </p>
@@ -394,13 +409,24 @@ const AddProcessingPlant = () => {
                 onChange={setSearchTerm}
                 onSelected={handlePlantSelected}
                 minCharsBeforeSearch={minCharsBeforeSearch}
-                notFoundText={
-                  searchTerm.trim().length >= minCharsBeforeSearch
-                    ? t("commonNoResultsFound", { ns: "addProcessingPlant" })
-                    : ""
-                }
+                notFoundText=""
               />
             )}
+            <div role="status" aria-live="polite" aria-atomic="true">
+              {showNoResultsMessage && (
+                <p className="govuk-body" data-testid="no-processing-plant-results">
+                  <strong className="govuk-!-font-weight-bold">
+                    {t("psAddProcessingPlantNoResultsHeading", { ns: "addProcessingPlant" })}
+                  </strong>
+                  <br />
+                  {t("psAddProcessingPlantNoResultsCheckDetails", { ns: "addProcessingPlant" })}
+                  <br />
+                  {t("psAddProcessingPlantNoResultsEnterManually", { ns: "addProcessingPlant" })}
+                  <br />
+                  {t("psAddProcessingPlantNoResultsHint", { ns: "addProcessingPlant" })}
+                </p>
+              )}
+            </div>
             <div className="govuk-button-group">
               <Button
                 id="continue"
