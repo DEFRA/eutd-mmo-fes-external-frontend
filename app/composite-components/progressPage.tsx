@@ -42,7 +42,6 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
     transport,
     products,
     catches,
-    isNonJs,
   } = useLoaderData<ProgressLoaderProps>();
 
   const { t } = useTranslation(["progress", "common"]);
@@ -154,7 +153,7 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
       );
     }
     if (journey === "processingStatement") {
-      return psProgressTableDataBuilder(progress as IProcessingStatementProgressSteps, errors, products, isNonJs);
+      return psProgressTableDataBuilder(progress as IProcessingStatementProgressSteps, errors, products);
     }
     return sdProgressTableDataBuilder(progress as IStorageDocumentProgressSteps, errors, catches);
   };
