@@ -16,7 +16,10 @@ const visitPage = (testCaseId: TestCaseId, disableScripts = false) => {
 
 const getStorageFacilitySearchInput = () => {
   cy.get("label[for='storageFacility']", { timeout: 20000 }).should("exist");
-  return cy.get("#storageFacility", { timeout: 20000 }).should("be.visible");
+  // Pre-hydration this id belongs to a native <select> (progressive enhancement) which gets
+  // swapped out for the real text input once React hydrates - scope to "input" so Cypress keeps
+  // retrying until the swap has happened, rather than grabbing the soon-to-be-detached select.
+  return cy.get("input#storageFacility", { timeout: 20000 }).should("be.visible");
 };
 
 const selectAutocompleteOptionContaining = (text: string) => {
