@@ -47,10 +47,9 @@ describe("Cookie Banner Integration in Root", () => {
       cy.visit("/?loggedIn=yes");
       cy.url().should("include", "/");
 
-      // Check that GA scripts are not loaded
-      cy.window().then((win) => {
+      cy.document().then((doc) => {
         // eslint-disable-next-line no-unused-expressions
-        expect((win as Window & { gtag?: unknown }).gtag).to.be.undefined;
+        expect(doc.getElementById("gtm-external")).to.be.null;
       });
     });
 
