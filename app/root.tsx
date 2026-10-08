@@ -120,6 +120,13 @@ const Template = ({
     // ga-disable-<id> is Google's documented opt-out flag, read by both gtag.js and gtm.js
     const windowRecord = globalThis.window as unknown as Record<string, unknown>;
 
+    globalThis.window.dataLayer = globalThis.window.dataLayer || [];
+    if (typeof globalThis.window.gtag !== "function") {
+      globalThis.window.gtag = function () {
+        globalThis.window.dataLayer.push(arguments);
+      };
+    }
+
     // Revoke Clarity + GA consent only on a true -> false transition; never on cleanup (see below).
     if (isProdEnv() && previouslyAccepted && !analyticsCookieAccepted) {
       if (typeof globalThis.window.clarity === "function") {
@@ -184,27 +191,6 @@ const Template = ({
       });
 
       appendScript("gtm-external", `https://www.googletagmanager.com/gtm.js?id=${gtmId}`);
-    } else if (gaId?.length) {
-      appendScript("gtag-external", `https://www.googletagmanager.com/gtag/js?id=${gaId}`);
-
-      globalThis.window.dataLayer = globalThis.window.dataLayer || [];
-      globalThis.window.gtag = (...args: unknown[]) => {
-        globalThis.window.dataLayer.push(args);
-      };
-
-      globalThis.window.gtag("js", new Date());
-      globalThis.window.gtag("config", gaId, {
-        cookie_flags: "SameSite=None;Secure",
-        cookie_domain: globalThis.window.location.hostname,
-        cookie_path: "/",
-        cookie_expires: 63072000,
-        anonymize_ip: true,
-        allow_google_signals: false,
-        allow_ad_personalization_signals: false,
-        cookie_update: true,
-        send_page_view: true,
-        transport_type: "beacon",
-      });
     }
 
     globalThis.window.__fesAnalyticsLoaded = true;
