@@ -254,8 +254,8 @@ describe("Add Storage Facility Approval - Arrival date validation", () => {
     cy.contains(".govuk-error-summary a", "Select how the product was stored").should("be.visible");
 
     cy.contains(".govuk-error-summary a", "Arrival date must be a real date").click();
-    // scrollToId focuses the target after a short setTimeout.
-    cy.wait(200);
+    // scrollToId focuses the target after a short setTimeout - cy.focused()+should retries
+    // automatically until that happens, instead of waiting a fixed amount of time.
     cy.focused().should("have.id", "storageFacilities-facilityArrivalDate");
   });
 
