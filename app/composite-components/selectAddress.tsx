@@ -29,14 +29,16 @@ export const SelectAddress = ({ postcode, postcodeaddresses, errors, actionUri, 
       <SecureForm method="post" action={actionUri} csrf={csrf}>
         <h2 className="govuk-heading-s govuk-!-margin-bottom-2">{t("commonWhatExportersAddressPostcode")}</h2>
         {postcode}
-        <Button
-          type={BUTTON_TYPE.SUBMIT}
-          name="_action"
-          label={t("commonWhatExportersAddressChangeLink")}
-          value="changelink"
-          className="govuk-button govuk-button--secondary govuk-!-margin-top-2"
-          data-testid="change-postcode"
-        />
+        <div className="govuk-button-group">
+          <Button
+            type={BUTTON_TYPE.SUBMIT}
+            name="_action"
+            label={t("commonWhatExportersAddressChangeLink")}
+            value="changelink"
+            className="govuk-button govuk-button--secondary govuk-!-margin-top-2"
+            data-testid="change-postcode"
+          />
+        </div>
         <div className="govuk-form-group">
           <FormSelect
             label={t("commonWhatExportersAddressSelectAddress")}

@@ -1,7 +1,9 @@
 {
   "psAddProcessingPDAddProcessingPlantDetails": "Ychwanegwch fanylion y safle prosesu",
-  "psAddProcessingPDPlantName": "Processing plant name",
+  "psAddProcessingPDPlantName": "Enw'r safle prosesu",
+  "psAddProcessingPDApprovalNumber": "Rhif cymeradwyo'r",
   "psAddProcessingPDPersonResponsibleForThisConsignment": "Y person sy’n gyfrifol am y llwyth hwn",
+  "psAddProcessingPDApprovalNumberHint": "Dyma rif cymeradwyo'r sefydliad, er enghraifft 2093. Os oes gan y sefydliad fwy nag un safle, gall fod ganddo ôl-ddodiad, er enghraifft 4308-0014.",
   "psAddProcessingPDHintTextForPersonResponsibleForThisConsignment": "Rhowch enw'r person sy’n gyfrifol yn y safle prosesu. Er enghraifft John Smith",
   "psAddProcessingPDSaveButtonLabel": "Ychwanegu cyfeiriad"
 }

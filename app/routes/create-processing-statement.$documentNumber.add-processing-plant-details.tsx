@@ -102,6 +102,9 @@ export const loader: LoaderFunction = async ({ request, params }) =>
     "plantName",
     "plantApprovalNumber",
     "personResponsibleForConsignment",
+    "plantAddressOne",
+    "plantTownCity",
+    "plantPostcode",
   ]);
 
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
@@ -152,8 +155,17 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
 const AddProcessingPlantDetails = () => {
   const { t } = useTranslation(["addProcessingPlantDetails"]);
-  const { documentNumber, plantName, plantApprovalNumber, personResponsibleForConsignment, nextUri, csrf } =
-    useLoaderData<LoaderPlantDetails>();
+  const {
+    documentNumber,
+    plantName,
+    plantApprovalNumber,
+    personResponsibleForConsignment,
+    plantAddressOne,
+    plantTownCity,
+    plantPostcode,
+    nextUri,
+    csrf,
+  } = useLoaderData<LoaderPlantDetails>();
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
   const errorKeysInOrder = ["plantName", "plantApprovalNumber", "personResponsibleForConsignment"];
@@ -201,7 +213,20 @@ const AddProcessingPlantDetails = () => {
                   />
                 </div>
               ) : (
-                <input type="hidden" name="plantName" value={plantName} />
+                <div className="govuk-grid-row">
+                  <div className="govuk-grid-column-two-thirds">
+                    <div className="govuk-!-margin-bottom-6 app-selected-address">
+                      <strong>{t("psAddProcessingPlantAddressSummaryHeading", { ns: "addProcessingPlant" })}</strong>
+                      <br />
+                      <br />
+                      <p className="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">{plantName}</p>
+                      {plantAddressOne && <p className="govuk-body govuk-!-margin-bottom-1">{plantAddressOne}</p>}
+                      {plantTownCity && <p className="govuk-body govuk-!-margin-bottom-1">{plantTownCity}</p>}
+                      {plantPostcode && <p className="govuk-body govuk-!-margin-bottom-1">{plantPostcode}</p>}
+                      <input type="hidden" name="plantName" value={plantName} />
+                    </div>
+                  </div>
+                </div>
               )}
               <div
                 className={

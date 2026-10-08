@@ -10,6 +10,7 @@ import directLanding from "./directLanding.css?url";
 import ReactDatePickerStyles from "./react-datepicker.css?url";
 import utils from "./utils.css?url";
 import catchCertificates from "./catch-certificates.css?url";
+import processingPlants from "./processing-plants.css?url";
 
 export const getStyles = () => [
   { rel: "stylesheet", href: govuk_frontend },
@@ -24,4 +25,5 @@ export const getStyles = () => [
   { rel: "stylesheet", href: ReactDatePickerStyles },
   { rel: "stylesheet", href: utils },
   { rel: "stylesheet", href: catchCertificates },
+  { rel: "stylesheet", href: processingPlants },
 ];

@@ -1,11 +1,15 @@
 {
-  "psAddProcessingPlantHeading": "Which processing plant do you want to use?",
-  "psAddProcessingPlantLabel": "Enter your processing plant",
-  "psAddProcessingPlantHint": "Start typing a company name or approval number to search for a facility.",
-  "psAddProcessingPlantManualButton": "Enter plant details manually",
-  "psAddProcessingPlantNameLabel": "Processing plant name",
-  "psAddProcessingPlantApprovalNumberLabel": "Plant approval number",
-  "psAddProcessingPlantSummaryApprovalNumberLabel": "Approval number",
+  "psAddProcessingPlantHeading": "Pa safle prosesu hoffech chi ei ddefnyddio?",
+  "psAddProcessingPlantLabel": "Rhowch eich safle prosesu",
+  "psAddProcessingPlantHint": "Dechreuwch deipio enw cwmni neu rif cymeradwyo i chwilio am gyfleuster.",
+  "psAddProcessingPlantManualButton": "Rhowch fanylion y safle â llaw",
+  "psAddProcessingPlantNameLabel": "Enw'r safle prosesu",
+  "psAddProcessingPlantApprovalNumberLabel": "Rhif cymeradwyo (os yw'n gymwys)",
+  "psAddProcessingPlantSummaryApprovalNumberLabel": "Rhif cymeradwyo",
+  "psAddProcessingPlantAddressSummaryHeading": "Cyfeiriad y safle prosesu",
   "psAddProcessingPlantApprovalNumberHint": "This is sometimes called a site code. For example, UK/1234/EC",
-  "commonNoResultsFound": "No results found\nCheck the company name or approval number and try again.\nIf you still cannot find the facility, enter the details manually."
+  "psAddProcessingPlantNoResultsHeading": "Dim canlyniadau wedi’i canfod",
+  "psAddProcessingPlantNoResultsCheckDetails": "Check the company name or approval number and try again.",
+  "psAddProcessingPlantNoResultsEnterManually": "Os na allwch chi ddod o hyd i'r cyfeiriad, dewiswch ‘Rhowch y cyfeiriad eich hunan’.",
+  "psAddProcessingPlantNoResultsHint": "Dim ond cyfeiriad yn y DU y cewch ei roi."
 }
