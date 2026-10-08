@@ -97,12 +97,8 @@ export const DocumentCreatedComponent = ({ journey }: DocumentCreatedType) => {
   /* istanbul ignore next */
   useEffect(() => {
     if (shouldRenderGA(analyticsCookieAccepted)) {
-      //Protect from gtag not yet loaded
-      if (window.gtag) {
-        window.gtag("event", gtagName, {
-          numberOfVessels: noOfVessels,
-        });
-      }
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: gtagName, numberOfVessels: noOfVessels });
     }
   }, []);
 
