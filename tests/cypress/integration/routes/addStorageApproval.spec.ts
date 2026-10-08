@@ -215,6 +215,9 @@ describe("Add Storage Facility Approval - Non JavaScript", () => {
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
 
     cy.get(".govuk-heading-xl").contains("Add storage facility details");
+    cy.get('input[name="facilityArrivalDateDay"]').type("17");
+    cy.get('input[name="facilityArrivalDateMonth"]').type("09");
+    cy.get('input[name="facilityArrivalDateYear"]').type("2025");
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001");
     cy.get("#storageFacilities-facilityStorage").check();
     cy.get('[data-testid="save-and-continue"]').click();

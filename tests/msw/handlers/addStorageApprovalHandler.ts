@@ -1,4 +1,5 @@
 import { rest } from "msw";
+import isEmpty from "lodash/isEmpty";
 import { type ITestHandler, TestCaseId } from "~/types";
 import {
   GET_STORAGE_DOCUMENT,
@@ -24,6 +25,17 @@ const addStorageApprovalHandler: ITestHandler = {
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentFacilityOneNoArrival))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+    // The arrival-date check no longer short-circuits before the backend call (so both errors can
+    // show together) - this must therefore respond to save-and-continue too, not just GET requests.
+    rest.post(mockSaveAndValidateDocument("storageNotes"), async (req, res, ctx) => {
+      const body = await req.json();
+
+      if (isEmpty(body.facilityStorage)) {
+        return res(ctx.status(400), ctx.json(storageDocumentFacilityStorageError));
+      }
+
+      return res(ctx.json({ ...storageDocumentFacilityOneNoArrival, ...body }));
+    }),
   ],
   [TestCaseId.SDAddStorageApprovalComplete]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),

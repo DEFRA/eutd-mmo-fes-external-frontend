@@ -8,6 +8,7 @@ import classNames from "classnames";
 
 import { Main, Title, BackToProgressLink, SecureForm, AutocompleteFormField, ErrorSummary } from "~/components";
 import { useIsHydrated } from "~/hooks";
+import setApiMock from "tests/msw/helpers/setApiMock";
 import logger from "~/logger";
 import { displayErrorMessagesInOrder, getTransformedError } from "~/helpers";
 import {
@@ -87,6 +88,7 @@ const getArrivalBackUrl = (request: Request, documentNumber: string | undefined,
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
+  setApiMock(request.url);
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
   const url = new URL(request.url);
