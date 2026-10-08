@@ -56,12 +56,16 @@ describe("PS: add processing plant details - save and continue success", () => {
     fillForm("UK/1234/EC", "Jane Doe");
     cy.get("[data-testid='save-and-continue']").click();
 
-    cy.url().should(
-      "match",
-      new RegExp(
-        `/create-processing-statement/${documentNumber}/(add-health-certificate|add-processing-plant-address)$`
-      )
-    );
+    cy.url().should("include", `/create-processing-statement/${documentNumber}/add-health-certificate`);
+  });
+
+  it("should progress to add health certificate in the non-JS journey", () => {
+    visitPage(TestCaseId.PSAddProcessingPlantDetailsMatchByApproval, true);
+
+    fillForm("UK/1234/EC", "Jane Doe");
+    cy.get("[data-testid='save-and-continue']").click();
+
+    cy.url().should("include", "/add-health-certificate");
   });
 });
 
@@ -131,11 +135,6 @@ describe("PS: add processing plant details - no saved plantName", () => {
     fillForm("UK/1234/EC", "Jane Doe");
     cy.get("[data-testid='save-and-continue']").click();
 
-    cy.url().should(
-      "match",
-      new RegExp(
-        `/create-processing-statement/${documentNumber}/(add-health-certificate|add-processing-plant-address)$`
-      )
-    );
+    cy.url().should("include", `/create-processing-statement/${documentNumber}/add-health-certificate`);
   });
 });

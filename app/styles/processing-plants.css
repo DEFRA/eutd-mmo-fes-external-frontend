@@ -4,3 +4,34 @@
   border: 1px solid #b1b4b6;
   background-color: #fff;
 }
+
+/* Hides the SSR no-JS fallback the instant data-js is set (pre-paint), ahead of React's slower hydration flip. */
+[data-js="enabled"] .app-processing-plant-nonjs-only {
+  display: none;
+}
+
+/* Visual stand-in for the Autocomplete field, shown only for the brief pre-hydration window on JS-enabled
+   clients so there's no blank gap; unmounted by React once isHydrated flips true. Hidden for genuine no-JS. */
+.app-processing-plant-placeholder {
+  display: none;
+}
+
+[data-js="enabled"] .app-processing-plant-placeholder {
+  display: block;
+}
+
+.app-processing-plant-manual-entry {
+  display: none;
+}
+
+[data-js="enabled"] .app-processing-plant-manual-entry {
+  display: inline-block;
+}
+
+.app-processing-plant-save-draft {
+  display: inline-block;
+}
+
+[data-js="enabled"] .app-processing-plant-save-draft {
+  display: none;
+}

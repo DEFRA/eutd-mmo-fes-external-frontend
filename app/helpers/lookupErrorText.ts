@@ -381,7 +381,6 @@ export const getErrorMessage = (key: string): string => {
     "error.catches.incomplete": "commonProgressProductDetailsRequiredError",
     "error.consignmentDescription.incomplete": "psProgressConsignmentDescriptionRequiredError",
     "error.processingPlant.incomplete": "psProgressProcessingPlantIdRequiredError",
-    "error.processingPlantAddress.incomplete": "psProgressProcessingPlantAddressRequiredError",
     "error.exportHealthCertificate.incomplete": "psProgressHealthCertificateRequiredError",
     "error.exportDestination.incomplete": "commonProgressExportDestinationRequiredError",
     "error.startDate.seasonalFish.invalidate": "ccAddLandingStartDateRestrictedError",

@@ -22,17 +22,16 @@ type LoaderPlantDetails = {
   plantName?: string;
   plantApprovalNumber?: string;
   personResponsibleForConsignment?: string;
+  plantAddressOne?: string;
+  plantTownCity?: string;
+  plantPostcode?: string;
   nextUri?: string;
   csrf: string;
 };
 
-const getContinueRedirect = (isNonJs: boolean, nextUri: string, documentNumber: string | undefined) => {
+const getContinueRedirect = (nextUri: string, documentNumber: string | undefined) => {
   if (!isEmpty(nextUri)) {
     return nextUri;
-  }
-
-  if (isNonJs) {
-    return route("/create-processing-statement/:documentNumber/add-processing-plant-address", { documentNumber });
   }
 
   return route("/create-processing-statement/:documentNumber/add-health-certificate", { documentNumber });
@@ -150,7 +149,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     return errorResponse as Response;
   }
 
-  return redirect(getContinueRedirect(isNonJs, nextUri, documentNumber));
+  return redirect(getContinueRedirect(nextUri, documentNumber));
 };
 
 const AddProcessingPlantDetails = () => {

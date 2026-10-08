@@ -145,6 +145,8 @@ export enum TestCaseId {
   PSAddProcessingPlantEmptyContinue = "psAddProcessingPlantEmptyContinue",
   PSAddProcessingPlantNoMatchContinue = "psAddProcessingPlantNoMatchContinue",
   PSAddProcessingPlantManualEntry = "psAddProcessingPlantManualEntry",
+  PSAddProcessingPlantSaveAsDraft = "psAddProcessingPlantSaveAsDraft",
+  PSAddProcessingPlantSaveAsDraftWithErrors = "psAddProcessingPlantSaveAsDraftWithErrors",
   PSAddProcessingPlantMatchedAddressMapped = "psAddProcessingPlantMatchedAddressMapped",
   PSProgressNonJsPlantRows = "psProgressNonJsPlantRows",
   PSProgressJsPlantRows = "psProgressJsPlantRows",

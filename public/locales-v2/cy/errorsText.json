@@ -199,7 +199,6 @@
   "psAddCatchDetailsErrorNonUKCCNumberCharLimit": "Ni chaiff rhif y dystysgrif ddalfa fod yn fwy na 52 o gymeriadau",
   "psProgressConsignmentDescriptionRequiredError": "Rhaid i chi gwblhau adran manylion y llwyth cyn bwrw ymlaen",
   "psProgressProcessingPlantIdRequiredError": "Rhaid i chi gwblhau adran ID yr orsaf brosesu cyn bwrw ymlaen",
-  "psProgressProcessingPlantAddressRequiredError": "Rhaid i chi gwblhau adran cyfeiriad y safle prosesu cyn bwrw ymlaen",
   "psProgressHealthCertificateRequiredError": "Rhaid i chi gwblhau adran tystysgrif iechyd allforio cyn bwrw ymlaen",
   "commonProgressExportDestinationRequiredError": "Rhaid i chi gwblhau adran pen y daith allforio cyn bwrw ymlaen",
   "psAddCatchDetailsErrorUKCCInValid": " Nid yw’r dystysgrif ddalfa a gyflwynwyd yn ddilys mwyach",

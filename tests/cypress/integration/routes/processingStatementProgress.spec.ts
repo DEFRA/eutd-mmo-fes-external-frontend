@@ -14,37 +14,37 @@ describe("ProgressPage - Cache-Control header", () => {
   });
 });
 
-describe("ProgressPage - Processing plant rows by JS mode", () => {
-  it("points the processing plant address row at the plant details page for the JS journey", () => {
+describe("ProgressPage - Processing plant details row", () => {
+  it("uses a single processing plant details row and links to add-processing-plant for the JS journey", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSProgressJsPlantRows,
     };
 
     cy.visit(progressUrl, { qs: { ...testParams } });
     cy.get('[data-testid="progress-processingPlant-wrapper"]').should("exist");
-    cy.get('[data-testid="progress-processingPlantAddress-wrapper"]').should("exist");
-    cy.get('[data-testid="progress-processingPlantAddress-title"]').should(
+    cy.get('[data-testid="progress-processingPlantAddress-wrapper"]').should("not.exist");
+    cy.get('[data-testid="progress-processingPlant-title"]').should(
       "have.attr",
       "href",
-      `${certificateUrl}/add-processing-plant-address`
+      `${certificateUrl}/add-processing-plant`
     );
-    cy.get("li strong:contains('COMPLETE')").should("have.length", 6);
+    cy.get("li strong:contains('COMPLETE')").should("have.length", 5);
   });
 
-  it("points the processing plant address row at the plant address page for the non-JS journey", () => {
+  it("uses a single processing plant details row and links to add-processing-plant for the non-JS journey", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSProgressNonJsPlantRows,
     };
 
     cy.visit(progressUrl, { qs: { ...testParams } });
     cy.get('[data-testid="progress-processingPlant-wrapper"]').should("exist");
-    cy.get('[data-testid="progress-processingPlantAddress-wrapper"]').should("exist");
-    cy.get('[data-testid="progress-processingPlantAddress-title"]').should(
+    cy.get('[data-testid="progress-processingPlantAddress-wrapper"]').should("not.exist");
+    cy.get('[data-testid="progress-processingPlant-title"]').should(
       "have.attr",
       "href",
-      `${certificateUrl}/add-processing-plant-address`
+      `${certificateUrl}/add-processing-plant`
     );
-    cy.get("li strong:contains('COMPLETE')").should("have.length", 6);
+    cy.get("li strong:contains('COMPLETE')").should("have.length", 5);
   });
 });
 
@@ -81,13 +81,13 @@ describe("ProgressPage - Incomplete Application", () => {
   });
 
   it("should display number of completed required sections", () => {
-    cy.contains("[data-testid='completedSections']", "You have completed 0 of 6 required sections.");
+    cy.contains("[data-testid='completedSections']", "You have completed 0 of 5 required sections.");
     cy.get("body").should("exist");
   });
 
   it("should display the correct tags", () => {
     cy.get("li strong:contains('OPTIONAL')").should("have.length", 1);
-    cy.get("li strong:contains('INCOMPLETE')").should("have.length", 6);
+    cy.get("li strong:contains('INCOMPLETE')").should("have.length", 5);
   });
 
   it("should not render duplicate id attributes in the progress list", () => {
@@ -130,10 +130,6 @@ describe("ProgressPage - Incomplete Application", () => {
     );
     cy.contains(
       "a",
-      /^Error:You must complete the processing plant address section before being able to continue$/
-    ).should("be.visible");
-    cy.contains(
-      "a",
       /^Error:You must complete the export health certificate section before being able to continue$/
     ).should("be.visible");
     cy.contains("a", /^Error:You must complete the export destination section before being able to continue$/).should(
@@ -157,12 +153,12 @@ describe("ProgressPage - Completed Application", () => {
   });
 
   it("should display number of completed required sections", () => {
-    cy.contains("[data-testid='completedSections']", "You have completed 6 of 6 required sections.");
+    cy.contains("[data-testid='completedSections']", "You have completed 5 of 5 required sections.");
     cy.get("body").should("exist");
   });
 
   it("should display the correct tags", () => {
-    cy.get("li strong:contains('COMPLETE')").should("have.length", 6);
+    cy.get("li strong:contains('COMPLETE')").should("have.length", 5);
   });
 
   it("should redirect to check-your-information page when click on Check your answers button", () => {
