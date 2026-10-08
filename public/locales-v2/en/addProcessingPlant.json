@@ -4,8 +4,12 @@
   "psAddProcessingPlantHint": "Start typing a company name or approval number to search for a facility.",
   "psAddProcessingPlantManualButton": "Enter plant details manually",
   "psAddProcessingPlantNameLabel": "Processing plant name",
-  "psAddProcessingPlantApprovalNumberLabel": "Plant approval number",
+  "psAddProcessingPlantApprovalNumberLabel": "Approval number (if applicable)",
   "psAddProcessingPlantSummaryApprovalNumberLabel": "Approval number",
+  "psAddProcessingPlantAddressSummaryHeading": "Processing plant address",
   "psAddProcessingPlantApprovalNumberHint": "This is sometimes called a site code. For example, UK/1234/EC",
-  "commonNoResultsFound": "No results found\nCheck the company name or approval number and try again.\nIf you still cannot find the facility, enter the details manually."
+  "psAddProcessingPlantNoResultsHeading": "No results found",
+  "psAddProcessingPlantNoResultsCheckDetails": "Check the company name or approval number and try again.",
+  "psAddProcessingPlantNoResultsEnterManually": "If you can't find the address, select 'Enter the address manually'.",
+  "psAddProcessingPlantNoResultsHint": "You can only enter a UK address."
 }
