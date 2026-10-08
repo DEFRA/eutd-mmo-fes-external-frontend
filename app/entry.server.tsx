@@ -34,8 +34,8 @@ const buildCspHeader = (nonce: string, isProduction: boolean): string => {
       "default-src 'self'",
       `script-src 'self' 'nonce-${nonce}' ${SCRIPT_HASH_ALLOWLIST} www.googletagmanager.com www.google-analytics.com *.clarity.ms`,
       "style-src 'self'",
-      "connect-src 'self' dc.services.visualstudio.com js.monitor.azure.com region1.google-analytics.com www.google-analytics.com *.clarity.ms",
-      "img-src 'self' www.googletagmanager.com www.google-analytics.com *.clarity.ms *.bing.com",
+      "connect-src 'self' dc.services.visualstudio.com js.monitor.azure.com *.clarity.ms *.google-analytics.com *.analytics.google.com *.googletagmanager.com *.google.com",
+      "img-src 'self' www.googletagmanager.com *.google-analytics.com *.clarity.ms *.bing.com",
       "frame-src 'self' www.googletagmanager.com",
     ].join("; ");
   }
