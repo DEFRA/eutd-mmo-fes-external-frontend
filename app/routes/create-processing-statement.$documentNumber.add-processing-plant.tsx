@@ -304,9 +304,7 @@ const AddProcessingPlant = () => {
   const isHydrated = useIsHydrated();
 
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [processingPlantResults, setProcessingPlantResults] = useState<ProcessingPlantSearchResult[]>(
-    savedPlantDetails ? [savedPlantDetails] : []
-  );
+  const [processingPlantResults, setProcessingPlantResults] = useState<ProcessingPlantSearchResult[]>([]);
   const [selectedPlant, setSelectedPlant] = useState<ProcessingPlantSearchResult | undefined>(savedPlantDetails);
   const processingPlantOptions = processingPlantResults.map((result) => result.label);
   const showNoResultsMessage =
@@ -329,12 +327,7 @@ const AddProcessingPlant = () => {
       try {
         const response = await fetch(`/get-processing-plants?search=${searchTerm}`);
         const plantOptions: ProcessingPlantSearchResult[] = await response.json();
-        const fresh = plantOptions ?? [];
-        const merged =
-          savedPlantDetails && !fresh.some((result) => result.label === savedPlantDetails.label)
-            ? [savedPlantDetails, ...fresh]
-            : fresh;
-        setProcessingPlantResults(merged);
+        setProcessingPlantResults(plantOptions ?? []);
       } catch (e) {
         logger.info("[ADD-PROCESSING-PLANT][GET-PROCESSING-PLANTS][ERROR]");
         if (e instanceof Error) {
