@@ -210,6 +210,29 @@ describe("PS: add processing plant", () => {
     cy.url().should("not.include", detailsUrl);
   });
 
+  it("should show and hide the no-results message as the search term changes", () => {
+    visitPage(TestCaseId.PSAddProcessingPlantNoMatchContinue);
+
+    getProcessingPlantSearchInput().clear();
+    getProcessingPlantSearchInput().type("Unknown Plant");
+
+    cy.get('[data-testid="no-processing-plant-results"]').should("be.visible");
+    cy.get('[data-testid="no-processing-plant-results"] strong').should("have.text", "No results found");
+    cy.get('[data-testid="no-processing-plant-results"]').should(
+      "contain.text",
+      "Check the company name or approval number and try again."
+    );
+    cy.get('[data-testid="no-processing-plant-results"]').should(
+      "contain.text",
+      "No results foundCheck the company name or approval number and try again.If you can't find the address, select 'Enter the address manually'.You can only enter a UK address."
+    );
+
+    getProcessingPlantSearchInput().clear();
+    getProcessingPlantSearchInput().type("U");
+
+    cy.get('[data-testid="no-processing-plant-results"]').should("not.exist");
+  });
+
   it("should redirect to manual plant address page when secondary button is clicked", () => {
     visitPage(TestCaseId.PSAddProcessingPlantManualEntry);
 
@@ -231,11 +254,30 @@ describe("PS: add processing plant", () => {
     cy.get("input[name='plantApprovalNumber']").should("be.visible").invoke("val").should("not.equal", "");
   });
 
+  it("should show the processing plant address summary without JavaScript when a saved plant exists", () => {
+    visitPage(TestCaseId.PSAddProcessingPlantWithSavedSelection, true);
+
+    cy.get("input[name='plantName']").should("have.value", "Test Fish Plant");
+    cy.contains("strong", "Processing plant address").should("be.visible");
+    cy.contains("p", "Test Fish Plant").should("be.visible");
+    cy.contains("p", "Approval number: UK/1234/EC").should("be.visible");
+    cy.contains("p", "Hull").should("be.visible");
+    cy.contains("p", "HU1 2AB").should("be.visible");
+  });
+
+  it("should not render the processing plant address summary without JavaScript when there is no saved plant", () => {
+    visitPage(TestCaseId.PSAddProcessingPlantEmptyContinue, true);
+
+    cy.get("input[name='plantName']").should("be.visible").and("have.value", "");
+    cy.contains("strong", "Processing plant address").should("not.exist");
+  });
+
   it("should work without JavaScript and show blocking errors when no processing plant match is found", () => {
     visitPage(TestCaseId.PSAddProcessingPlantNoMatchContinue, true);
 
     cy.get("input[name='plantName']").should("be.visible").type("Unknown Plant");
     cy.get("input[name='plantApprovalNumber']").should("be.visible").type("UK/9999/EC");
+    cy.get('[data-testid="no-processing-plant-results"]').should("not.exist");
     cy.get('[data-testid="save-and-continue"]').click();
 
     cy.get(".govuk-error-summary").should(
