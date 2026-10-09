@@ -1,6 +1,6 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const addStorageFacilityUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/which-storage-facility";
+const addStorageFacilityUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility";
 const addStorageApprovalUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility-approval";
 const progressUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/progress";
 const storageFacilityUrl =

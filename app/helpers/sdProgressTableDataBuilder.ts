@@ -78,7 +78,7 @@ export const sdProgressTableDataBuilder = (
           title: "sdProgressStoragefacilities",
           status: progress?.storageFacilities,
           testId: "storageFacilities",
-          url: `${sdContext}/which-storage-facility`,
+          url: `${sdContext}/add-storage-facility`,
           error: errors?.storageFacilities,
         },
       ],

@@ -50,7 +50,7 @@ type LoaderData = {
 
 const minCharsBeforeSearch = 2;
 
-const whichStorageFacilityUri = "/create-non-manipulation-document/:documentNumber/which-storage-facility";
+const whichStorageFacilityUri = "/create-non-manipulation-document/:documentNumber/add-storage-facility";
 
 const getArrivalBackUrl = (request: Request, documentNumber: string | undefined, storageDocument: StorageDocument) => {
   const url = new URL(request.url);
@@ -320,7 +320,7 @@ const WhichStorageFacility = () => {
         const facilities: StorageFacilitySearchResult[] = await response.json();
         setFacilityResults(facilities ?? []);
       } catch (e) {
-        logger.info("[WHICH-STORAGE-FACILITY][GET-STORAGE-FACILITIES][ERROR]");
+        logger.info("[ADD-STORAGE-FACILITY][GET-STORAGE-FACILITIES][ERROR]");
         if (e instanceof Error) {
           logger.error(e);
         }

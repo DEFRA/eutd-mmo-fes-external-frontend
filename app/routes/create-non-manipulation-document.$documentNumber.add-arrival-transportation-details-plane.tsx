@@ -70,7 +70,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     currentUri: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-plane", {
       documentNumber,
     }),
-    nextUri: route("/create-non-manipulation-document/:documentNumber/which-storage-facility", {
+    nextUri: route("/create-non-manipulation-document/:documentNumber/add-storage-facility", {
       documentNumber,
     }),
     journey: "storageNotes",

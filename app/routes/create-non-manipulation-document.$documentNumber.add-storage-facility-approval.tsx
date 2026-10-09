@@ -66,7 +66,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const sd = storageDocumentDetails as StorageDocument;
   const establishments = await getStorageFacilities();
   // Recomputed every request rather than persisted - the facility can only change via
-  // which-storage-facility, so the registry is always the source of truth for this flag.
+  // add-storage-facility, so the registry is always the source of truth for this flag.
   const isMatchedEstablishment = Boolean(
     matchEstablishment(establishments, sd.facilityName, sd.facilityApprovalNumber)
   );
@@ -267,13 +267,13 @@ const AddStorageFacilityApproval = () => {
   const [daySelected = "", monthSelected = "", yearSelected = ""] =
     selectedArrivalDate && typeof selectedArrivalDate === "string" ? selectedArrivalDate.split("/") : " ";
 
-  // The address is always known by this page (which-storage-facility requires a registry match
+  // The address is always known by this page (add-storage-facility requires a registry match
   // or a completed manual address first) - the facility name is shown when known, but is no
   // longer collected or editable here.
   const hasAddress = isMatchedEstablishment || hasFacility;
 
   return (
-    <Main backUrl={`/create-non-manipulation-document/${documentNumber}/which-storage-facility`}>
+    <Main backUrl={`/create-non-manipulation-document/${documentNumber}/add-storage-facility`}>
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorTransformedMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">

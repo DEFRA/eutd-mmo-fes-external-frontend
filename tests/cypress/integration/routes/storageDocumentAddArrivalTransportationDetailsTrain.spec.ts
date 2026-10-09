@@ -1,7 +1,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 const documentNumber = "GBR-2022-SD-3FE1169D1";
 const certificateUrl = `/create-non-manipulation-document/${documentNumber}`;
-const storageFacilityUrl = `${certificateUrl}/which-storage-facility`;
+const storageFacilityUrl = `${certificateUrl}/add-storage-facility`;
 const trainPageUrl = `${certificateUrl}/add-arrival-transportation-details-train`;
 
 describe("Add Transportation Details Train: Allowed", () => {

@@ -1,7 +1,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 const documentNumber = "GBR-2022-SD-3FE1169D1";
-const pageUrl = `/create-non-manipulation-document/${documentNumber}/which-storage-facility`;
+const pageUrl = `/create-non-manipulation-document/${documentNumber}/add-storage-facility`;
 const approvalUrl = `/create-non-manipulation-document/${documentNumber}/add-storage-facility-approval`;
 const manualAddressUrl = `/create-non-manipulation-document/${documentNumber}/what-storage-facility-address`;
 

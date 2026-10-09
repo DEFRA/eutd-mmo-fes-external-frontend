@@ -15,13 +15,10 @@ import {
   createCSRFToken,
   getBearerTokenForRequest,
   getCountries,
-  getStorageDocument,
-  getStorageFacilities,
   handleManualAddressErrors,
   hasLookUpAddressError,
   isCancelAddAddress,
   isGetAddress,
-  matchEstablishment,
   postCodeLookUp,
   updateStorageDocumentFacility,
   validateCSRFToken,
@@ -39,7 +36,6 @@ import type {
   IExporter,
   ILookUpAddress,
   ILookUpAddressDetails,
-  StorageDocument,
   StorageFacility,
 } from "~/types";
 
@@ -288,7 +284,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     session.unset("postcode");
     const updatedSession = await commitSession(session);
 
-    return redirect(`/create-non-manipulation-document/${documentNumber}/which-storage-facility`, {
+    return redirect(`/create-non-manipulation-document/${documentNumber}/add-storage-facility`, {
       headers: { "Set-Cookie": updatedSession },
     });
   }
@@ -299,28 +295,18 @@ export const action: ActionFunction = async ({ request, params }) => {
     session.set("csrf", csrf);
     session.unset("postcode");
     const updatedSession = await commitSession(session);
-    const [countries, establishments, existingStatement] = await Promise.all([
-      getCountries(),
-      getStorageFacilities(),
-      getStorageDocument(bearerToken, documentNumber),
-    ]);
+    const countries = await getCountries();
 
-    const sd = existingStatement as StorageDocument;
-    // A registry match only ever has a single-line address (no granular building/street/county
-    // breakdown) - don't resurface those sub-fields if they're leftover from an earlier,
-    // now-superseded manual entry on this same document.
-    const isMatchedEstablishment = Boolean(
-      matchEstablishment(establishments, sd.facilityName, sd.facilityApprovalNumber)
-    );
+    // Manual entry always starts from a blank form, never pre-filled from a previously saved address.
     const postcodeaddress: ILookUpAddressDetails = {
-      building_number: isMatchedEstablishment ? "" : sd.facilityBuildingNumber ?? "",
-      sub_building_name: isMatchedEstablishment ? "" : sd.facilitySubBuildingName ?? "",
-      building_name: isMatchedEstablishment ? "" : sd.facilityBuildingName ?? "",
-      street_name: isMatchedEstablishment ? "" : sd.facilityStreetName ?? "",
-      city: isMatchedEstablishment ? "" : sd.facilityTownCity ?? "",
-      county: isMatchedEstablishment ? "" : sd.facilityCounty ?? "",
-      postCode: isMatchedEstablishment ? "" : sd.facilityPostcode ?? "",
-      country: isMatchedEstablishment ? "" : sd.facilityCountry ?? "",
+      building_number: "",
+      sub_building_name: "",
+      building_name: "",
+      street_name: "",
+      city: "",
+      county: "",
+      postCode: "",
+      country: "",
     };
 
     return new Response(JSON.stringify({ currentStep, postcodeaddress: postcodeaddress, countries, csrf }), {
@@ -403,7 +389,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     session.unset("currentStep");
     const updatedSession = await commitSession(session);
 
-    return redirect(`/create-non-manipulation-document/${documentNumber}/which-storage-facility`, {
+    return redirect(`/create-non-manipulation-document/${documentNumber}/add-storage-facility`, {
       headers: { "Set-Cookie": updatedSession },
     });
   }

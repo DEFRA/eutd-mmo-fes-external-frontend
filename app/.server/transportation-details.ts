@@ -680,7 +680,7 @@ export const commonSaveTransportDetails = async (
     saveAsDraftRoute = route("/create-catch-certificate/catch-certificates");
   }
   const progressRoute = payload.arrival
-    ? route("/create-non-manipulation-document/:documentNumber/which-storage-facility", { documentNumber })
+    ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility", { documentNumber })
     : route("/create-non-manipulation-document/:documentNumber/departure-product-summary", { documentNumber });
 
   // Redirect to dashboard after saving valid fields
@@ -696,7 +696,7 @@ export const commonSaveTransportDetails = async (
   // determine the correct back link immediately after redirect.
   let finalRedirect = isEmpty(nextUri) ? progressRoute : nextUri;
 
-  if (payload.arrival && finalRedirect.includes("which-storage-facility")) {
+  if (payload.arrival && finalRedirect.includes("add-storage-facility")) {
     const vehicleParam = encodeURIComponent(String(payload.vehicle ?? ""));
     if (isEmpty(nextUri)) {
       finalRedirect = `${progressRoute}?arrivalVehicle=${vehicleParam}`;

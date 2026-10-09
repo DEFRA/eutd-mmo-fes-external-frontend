@@ -546,7 +546,7 @@ export const pages: Pages = {
     hideFavouritesLink: true,
   },
   [Page.AddStorageFacility]: {
-    path: "/create-non-manipulation-document/:documentNumber/which-storage-facility",
+    path: "/create-non-manipulation-document/:documentNumber/add-storage-facility",
     title: "sdWhichStorageFacilityTitle",
     homeLink: "non-manipulation-document",
     hideFavouritesLink: true,

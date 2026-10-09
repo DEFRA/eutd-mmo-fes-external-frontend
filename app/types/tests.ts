@@ -287,7 +287,7 @@ export enum TestCaseId {
   SDStorageFacilityAddressWithSubBuildingError = "sdStorageFacilityAddressWithSubBuildingError",
   SDStorageFacilityAddressWith403 = "sdStorageFacilityAddressWith403",
   SDStorageFacilityAddressManualEntry = "sdStorageFacilityAddressManualEntry",
-  SDStorageFacilityAddressPrePopulated = "sdStorageFacilityAddressPrePopulated",
+  SDStorageFacilityAddressStoredAddressNotPrefilled = "sdStorageFacilityAddressStoredAddressNotPrefilled",
 
   SDYouHaveAddedAProduct = "sdYouHaveAddedAProduct",
   SDYouHaveAddedAProductDraft = "SDYouHaveAddedAProductSaveContinue",
