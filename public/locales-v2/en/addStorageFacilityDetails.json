@@ -1,7 +1,8 @@
 {
   "sdAddStorageDetailsHeader": "Add storage facility details",
-  "sdAddStorageApprovalDetailsHeader": "Add storage facility approval details",
+  "sdAddStorageApprovalDetailsHeader": "Add storage facility details",
   "sdFacilityName": "Storage facility name",
+  "sdFacilitySummaryApprovalNumberLabel": "Approval number",
   "sdAddStorageFacilityDetailsAddressText": "An address must be provided for this storage facility.",
   "sdAddStorageFacilityDetailsAddAddressText": "Add the storage facility address",
   "sdChangeStorageFacilityAddressHiddenText": "storage facility address",
@@ -14,6 +15,7 @@
   "productStorageOtherLabel": "Other",
   "productStorageApprovalNumberLabel": "Approval number (if applicable)",
   "hintApprovalNumber": "If the storage facility has an approval number enter it here. For example, UK/ABC/001, 1 UK 22028 or TSF001.",
+  "hintApprovalNumberMatched": "This is the establishment's approval number, taken from the storage facility you selected.",
   "productApprovalheadingLabel": "This section is optional. You can skip it and continue. These questions will become mandatory from 10 January 2026, under new EU regulations.",
   "optionalText": "(optional)",
   "sdAddStorageAddressRequired": "A storage facility address must be added here.",

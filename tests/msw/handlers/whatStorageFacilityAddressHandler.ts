@@ -44,7 +44,7 @@ const whatStorageFacilityAddressHandler: ITestHandler = {
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json({ facilityBuildingNumber: null }))),
     rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) => res(ctx.json(manualAddressValid))),
   ],
-  [TestCaseId.SDStorageFacilityAddressPrePopulated]: () => [
+  [TestCaseId.SDStorageFacilityAddressStoredAddressNotPrefilled]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
     rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) => res(ctx.json(manualAddressValid))),
     rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) => res(ctx.json(storageDocument))),

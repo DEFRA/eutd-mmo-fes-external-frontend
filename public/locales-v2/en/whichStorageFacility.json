@@ -1,0 +1,8 @@
+{
+  "sdWhichStorageFacilityHeading": "Which storage facility do you want to use?",
+  "sdWhichStorageFacilityLabel": "Enter your storage facility",
+  "sdWhichStorageFacilityHint": "Start typing a company name or approval number to search for a facility.",
+  "sdWhichStorageFacilityManualButton": "Enter facility details manually",
+  "sdWhichStorageFacilityApprovalNumberLabel": "Approval number",
+  "sdWhichStorageFacilityNoResultsFound": "No results found\nCheck the company name or registration number and try again.\nIf you still cannot find the facility, enter the details manually."
+}

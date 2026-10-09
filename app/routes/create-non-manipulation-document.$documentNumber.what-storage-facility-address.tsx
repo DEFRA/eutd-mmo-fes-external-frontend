@@ -15,7 +15,6 @@ import {
   createCSRFToken,
   getBearerTokenForRequest,
   getCountries,
-  getStorageDocument,
   handleManualAddressErrors,
   hasLookUpAddressError,
   isCancelAddAddress,
@@ -37,7 +36,6 @@ import type {
   IExporter,
   ILookUpAddress,
   ILookUpAddressDetails,
-  StorageDocument,
   StorageFacility,
 } from "~/types";
 
@@ -286,7 +284,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     session.unset("postcode");
     const updatedSession = await commitSession(session);
 
-    return redirect(`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details`, {
+    return redirect(`/create-non-manipulation-document/${documentNumber}/add-storage-facility`, {
       headers: { "Set-Cookie": updatedSession },
     });
   }
@@ -297,21 +295,18 @@ export const action: ActionFunction = async ({ request, params }) => {
     session.set("csrf", csrf);
     session.unset("postcode");
     const updatedSession = await commitSession(session);
-    const [countries, existingStatement] = await Promise.all([
-      getCountries(),
-      getStorageDocument(bearerToken, documentNumber),
-    ]);
+    const countries = await getCountries();
 
-    const sd = existingStatement as StorageDocument;
+    // Manual entry always starts from a blank form, never pre-filled from a previously saved address.
     const postcodeaddress: ILookUpAddressDetails = {
-      building_number: sd.facilityBuildingNumber ?? "",
-      sub_building_name: sd.facilitySubBuildingName ?? "",
-      building_name: sd.facilityBuildingName ?? "",
-      street_name: sd.facilityStreetName ?? "",
-      city: sd.facilityTownCity ?? "",
-      county: sd.facilityCounty ?? "",
-      postCode: sd.facilityPostcode ?? "",
-      country: sd.facilityCountry ?? "",
+      building_number: "",
+      sub_building_name: "",
+      building_name: "",
+      street_name: "",
+      city: "",
+      county: "",
+      postCode: "",
+      country: "",
     };
 
     return new Response(JSON.stringify({ currentStep, postcodeaddress: postcodeaddress, countries, csrf }), {
@@ -394,7 +389,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     session.unset("currentStep");
     const updatedSession = await commitSession(session);
 
-    return redirect(`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details`, {
+    return redirect(`/create-non-manipulation-document/${documentNumber}/add-storage-facility`, {
       headers: { "Set-Cookie": updatedSession },
     });
   }

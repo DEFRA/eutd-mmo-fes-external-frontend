@@ -47,6 +47,7 @@ export const allNamespaces = [
   "addCatchWeights",
   "addProcessingPlantAddress",
   "addStorageFacilityDetails",
+  "whichStorageFacility",
   "psCheckYourInformation",
   "addHealthCertificate",
   "privacyNotice",
