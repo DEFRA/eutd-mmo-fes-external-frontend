@@ -29,6 +29,7 @@ import {
   mapEstablishmentToPlantAddress,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
+import { commitSession, getSessionFromRequest } from "~/sessions.server";
 
 type ProcessingPlantSearchResult = {
   label: string;
@@ -64,6 +65,61 @@ const parseEstablishmentLabel = (value: string): { plantName: string; plantAppro
     plantName: match[1].trim(),
     plantApprovalNumber: match[2].trim(),
   };
+};
+
+const saveDraftPlantSelection = async (
+  bearerToken: string,
+  documentNumber: string | undefined,
+  plantData: { plantName: string; plantApprovalNumber: string },
+  plantUrl: string,
+  isNonJs: boolean
+): Promise<void> => {
+  const validationResponse = await updateProcessingStatement(
+    bearerToken,
+    documentNumber,
+    plantData,
+    plantUrl,
+    undefined,
+    false,
+    false,
+    undefined,
+    isNonJs
+  );
+
+  if (!validationResponse) {
+    await updateProcessingStatement(
+      bearerToken,
+      documentNumber,
+      plantData,
+      plantUrl,
+      undefined,
+      true,
+      false,
+      undefined,
+      isNonJs
+    );
+    return;
+  }
+
+  const responseData = await (validationResponse as Response).clone().json();
+  const invalidFieldNames = new Set(Object.keys(responseData?.errors ?? {}));
+  const filteredData: Record<string, string | null> = { ...plantData };
+
+  for (const invalidField of invalidFieldNames) {
+    filteredData[invalidField] = null;
+  }
+
+  await updateProcessingStatement(
+    bearerToken,
+    documentNumber,
+    filteredData,
+    plantUrl,
+    undefined,
+    true,
+    false,
+    undefined,
+    isNonJs
+  );
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -154,11 +210,20 @@ export const action: ActionFunction = async ({ request, params }) => {
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
+  const session = await getSessionFromRequest(request);
+  session.unset("currentStep");
+  session.unset("postcode");
+  session.unset("addressOne");
+  session.unset("csrf");
+
   const action = form.get("_action");
 
   if (action === "navigateToManualAddress") {
     return redirect(
-      route("/create-processing-statement/:documentNumber/what-processing-plant-address", { documentNumber })
+      route("/create-processing-statement/:documentNumber/add-processing-plant-address", { documentNumber }),
+      {
+        headers: { "Set-Cookie": await commitSession(session) },
+      }
     );
   }
 
@@ -170,11 +235,10 @@ export const action: ActionFunction = async ({ request, params }) => {
     ? (form.get("plantApprovalNumber") as string) ?? ""
     : parsedProcessingPlant.plantApprovalNumber;
 
-  const establishments = await getProcessingPlants();
+  const establishments = isNonJs ? [] : await getProcessingPlants();
   const hasSubmittedPlant = !isEmpty(plantName) || !isEmpty(plantApprovalNumber);
-  const matchedEstablishment = hasSubmittedPlant
-    ? matchEstablishment(establishments, plantName, plantApprovalNumber)
-    : undefined;
+  const matchedEstablishment =
+    !isNonJs && hasSubmittedPlant ? matchEstablishment(establishments, plantName, plantApprovalNumber) : undefined;
 
   const bearerToken = await getBearerTokenForRequest(request);
   const payload = matchedEstablishment
@@ -192,6 +256,20 @@ export const action: ActionFunction = async ({ request, params }) => {
         plantApprovalNumber,
       };
 
+  if (action === "saveAsDraft") {
+    await saveDraftPlantSelection(
+      bearerToken,
+      documentNumber,
+      payload as { plantName: string; plantApprovalNumber: string },
+      "/create-processing-statement/:documentNumber/add-processing-plant",
+      isNonJs
+    );
+
+    return redirect(route("/create-processing-statement/processing-statements"), {
+      headers: { "Set-Cookie": await commitSession(session) },
+    });
+  }
+
   const errorResponse = await updateProcessingStatement(
     bearerToken,
     documentNumber,
@@ -208,9 +286,13 @@ export const action: ActionFunction = async ({ request, params }) => {
     return errorResponse as Response;
   }
 
-  return redirect(
-    route("/create-processing-statement/:documentNumber/add-processing-plant-details", { documentNumber })
-  );
+  const nextRoute = isNonJs
+    ? route("/create-processing-statement/:documentNumber/add-processing-plant-address", { documentNumber })
+    : route("/create-processing-statement/:documentNumber/add-processing-plant-details", { documentNumber });
+
+  return redirect(nextRoute, {
+    headers: { "Set-Cookie": await commitSession(session) },
+  });
 };
 
 const AddProcessingPlant = () => {
@@ -227,6 +309,8 @@ const AddProcessingPlant = () => {
   );
   const [selectedPlant, setSelectedPlant] = useState<ProcessingPlantSearchResult | undefined>(savedPlantDetails);
   const processingPlantOptions = processingPlantResults.map((result) => result.label);
+  const showNoResultsMessage =
+    isHydrated && searchTerm.trim().length >= minCharsBeforeSearch && processingPlantResults.length === 0;
 
   const handlePlantSelected = (label: string) => {
     const match = processingPlantResults.find((result) => result.label === label);
@@ -266,13 +350,17 @@ const AddProcessingPlant = () => {
 
   return (
     <Main backUrl={route("/create-processing-statement/:documentNumber/catch-added", { documentNumber })}>
-      {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessagesInOrder(errors, ["plantName"])} />}
+      {!isEmpty(errors) && (
+        <ErrorSummary
+          errors={displayErrorMessagesInOrder(errors, ["processingPlant", "plantName", "plantApprovalNumber"])}
+        />
+      )}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-two-thirds">
           <Title title={t("psAddProcessingPlantHeading", { ns: "addProcessingPlant" })} />
           <SecureForm method="post" csrf={csrf}>
             {isHydrated && selectedPlant ? (
-              <div className="govuk-!-margin-bottom-6">
+              <div className="govuk-!-margin-bottom-6 app-selected-address">
                 <p className="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
                   {selectedPlant.tradingName}
                 </p>
@@ -304,103 +392,170 @@ const AddProcessingPlant = () => {
                 <input type="hidden" name="processingPlant" value={selectedPlant.label} />
               </div>
             ) : (
-              <AutocompleteFormField
-                id="processingPlant"
-                name="processingPlant"
-                options={processingPlantOptions}
-                optionsId="processing-plant-option"
-                errorMessageText={errors?.plantName ? t(errors?.plantName?.message ?? "", { ns: "errorsText" }) : ""}
-                defaultValue={savedPlantOption ?? ""}
-                labelText={isHydrated ? t("psAddProcessingPlantLabel") : undefined}
-                labelClassName="govuk-label govuk-!-font-weight-bold"
-                hintText={isHydrated ? t("psAddProcessingPlantHint") : undefined}
-                containerClassName={classNames("govuk-form-group", {
-                  "govuk-form-group--error": errors?.plantName,
-                })}
-                selectProps={{
-                  selectClassName: "govuk-select govuk-!-width-full",
-                }}
-                inputProps={{
-                  id: "processingPlant",
-                  className: classNames("govuk-input govuk-!-width-full", {
-                    "govuk-input--error": errors?.plantName,
-                  }),
-                }}
-                customNonJSComp={
-                  isHydrated ? undefined : (
-                    <>
-                      {!isEmpty(errors?.plantName) && (
-                        <ErrorMessage
-                          id="plantName-error"
-                          text={t(errors?.plantName?.message ?? "", { ns: "errorsText" })}
-                          visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
-                        />
-                      )}
-                      <FormInput
-                        containerClassName={classNames("govuk-form-group govuk-!-two-thirds", {
-                          "govuk-form-group--error": errors?.plantName,
-                        })}
-                        label={t("psAddProcessingPlantNameLabel", { ns: "addProcessingPlant" })}
-                        labelClassName="govuk-label govuk-!-font-weight-bold"
-                        name="plantName"
-                        type="text"
-                        inputClassName={classNames("govuk-input", {
-                          "govuk-input--error": errors?.plantName,
-                        })}
-                        inputProps={{
-                          defaultValue: plantName,
-                          id: "plantName",
-                          className: "govuk-input govuk-!-width-two-thirds",
-                        }}
-                        hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-                        hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-                      />
-                      {!isEmpty(errors?.plantApprovalNumber) && (
-                        <ErrorMessage
-                          id="plantApprovalNumber-error"
-                          text={t(errors?.plantApprovalNumber?.message ?? "", { ns: "errorsText" })}
-                          visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
-                        />
-                      )}
-                      <FormInput
-                        containerClassName={classNames("govuk-form-group govuk-!-two-thirds", {
-                          "govuk-form-group--error": errors?.plantApprovalNumber,
-                        })}
-                        label={t("psAddProcessingPlantApprovalNumberLabel", { ns: "addProcessingPlant" })}
-                        labelClassName="govuk-label govuk-!-font-weight-bold"
-                        name="plantApprovalNumber"
-                        type="text"
-                        inputClassName={classNames("govuk-input", {
-                          "govuk-input--error": errors?.plantApprovalNumber,
-                        })}
-                        inputProps={{
-                          defaultValue: plantApprovalNumber,
-                          id: "plantApprovalNumber",
-                          "aria-describedby": "hint-plantApprovalNumber",
-                          className: "govuk-input govuk-!-width-two-thirds",
-                        }}
-                        hint={{
-                          id: "hint-plantApprovalNumber",
-                          position: "above",
-                          text: t("psAddProcessingPlantApprovalNumberHint", { ns: "addProcessingPlant" }),
-                          className: "govuk-hint",
-                        }}
-                        hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-                        hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-                      />
-                    </>
-                  )
-                }
-                onChange={setSearchTerm}
-                onSelected={handlePlantSelected}
-                minCharsBeforeSearch={minCharsBeforeSearch}
-                notFoundText={
-                  searchTerm.trim().length >= minCharsBeforeSearch
-                    ? t("commonNoResultsFound", { ns: "addProcessingPlant" })
-                    : ""
-                }
-              />
+              <>
+                {!isHydrated && !savedPlantDetails && (
+                  <div className="govuk-form-group app-processing-plant-placeholder">
+                    <label className="govuk-label govuk-!-font-weight-bold" htmlFor="processingPlant-placeholder">
+                      {t("psAddProcessingPlantLabel")}
+                    </label>
+                    <div className="govuk-hint">{t("psAddProcessingPlantHint")}</div>
+                    <input
+                      className="govuk-input govuk-!-width-full"
+                      id="processingPlant-placeholder"
+                      type="text"
+                      disabled
+                      aria-hidden="true"
+                      tabIndex={-1}
+                    />
+                  </div>
+                )}
+                <AutocompleteFormField
+                  id="processingPlant"
+                  name="processingPlant"
+                  options={processingPlantOptions}
+                  optionsId="processing-plant-option"
+                  errorMessageText={
+                    errors?.processingPlant ? t(errors?.processingPlant?.message ?? "", { ns: "errorsText" }) : ""
+                  }
+                  defaultValue={savedPlantOption ?? ""}
+                  labelText={isHydrated ? t("psAddProcessingPlantLabel") : undefined}
+                  labelClassName="govuk-label govuk-!-font-weight-bold"
+                  hintText={isHydrated ? t("psAddProcessingPlantHint") : undefined}
+                  containerClassName={classNames("govuk-form-group", {
+                    "govuk-form-group--error": errors?.processingPlant,
+                  })}
+                  selectProps={{
+                    selectClassName: "govuk-select govuk-!-width-full",
+                  }}
+                  inputProps={{
+                    id: "processingPlant",
+                    className: classNames("govuk-input govuk-!-width-full", {
+                      "govuk-input--error": errors?.processingPlant,
+                    }),
+                  }}
+                  customNonJSComp={
+                    isHydrated ? undefined : (
+                      <div className="app-processing-plant-nonjs-only">
+                        {savedPlantDetails && (
+                          <div className="govuk-!-margin-bottom-6 app-selected-address">
+                            <strong>
+                              {t("psAddProcessingPlantAddressSummaryHeading", { ns: "addProcessingPlant" })}
+                            </strong>
+                            <br />
+                            <p className="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">{plantName}</p>
+                            <p className="govuk-body govuk-!-margin-bottom-1">
+                              {t("psAddProcessingPlantSummaryApprovalNumberLabel", { ns: "addProcessingPlant" })}:{" "}
+                              {savedPlantDetails?.approvalNumber}
+                            </p>
+                            {savedPlantDetails?.addressLine && (
+                              <p className="govuk-body govuk-!-margin-bottom-1">{savedPlantDetails.addressLine}</p>
+                            )}
+                            {savedPlantDetails?.cityName && (
+                              <p className="govuk-body govuk-!-margin-bottom-1">{savedPlantDetails.cityName}</p>
+                            )}
+                            {savedPlantDetails?.postcode && (
+                              <p className="govuk-body govuk-!-margin-bottom-1">{savedPlantDetails.postcode}</p>
+                            )}
+                          </div>
+                        )}
+                        <div
+                          className={
+                            !isEmpty(errors?.plantName)
+                              ? "govuk-form-group govuk-form-group--error"
+                              : "govuk-form-group"
+                          }
+                        >
+                          {!isEmpty(errors?.plantName) && (
+                            <ErrorMessage
+                              id="plantName-error"
+                              text={t(errors?.plantName?.message ?? "", { ns: "errorsText" })}
+                              visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                            />
+                          )}
+                          <FormInput
+                            containerClassName={classNames("govuk-form-group govuk-!-two-thirds", {
+                              "govuk-form-group--error": errors?.plantName,
+                            })}
+                            label={t("psAddProcessingPlantNameLabel", { ns: "addProcessingPlant" })}
+                            labelClassName="govuk-label govuk-!-font-weight-bold"
+                            name="plantName"
+                            type="text"
+                            inputClassName={classNames("govuk-input govuk-!-width-two-thirds", {
+                              "govuk-input--error govuk-!-width-two-thirds": errors?.plantName,
+                            })}
+                            inputProps={{
+                              defaultValue: plantName,
+                              id: "plantName",
+                            }}
+                            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+                            hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+                          />
+                        </div>
+                        <div
+                          className={
+                            !isEmpty(errors?.plantApprovalNumber)
+                              ? "govuk-form-group govuk-form-group--error"
+                              : "govuk-form-group"
+                          }
+                        >
+                          {!isEmpty(errors?.plantApprovalNumber) && (
+                            <ErrorMessage
+                              id="plantApprovalNumber-error"
+                              text={t(errors?.plantApprovalNumber?.message ?? "", { ns: "errorsText" })}
+                              visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                            />
+                          )}
+                          <FormInput
+                            containerClassName={classNames("govuk-form-group govuk-!-two-thirds", {
+                              "govuk-form-group--error": errors?.plantApprovalNumber,
+                            })}
+                            label={t("psAddProcessingPlantApprovalNumberLabel", { ns: "addProcessingPlant" })}
+                            labelClassName="govuk-label govuk-!-font-weight-bold"
+                            name="plantApprovalNumber"
+                            type="text"
+                            inputClassName={classNames("govuk-input govuk-!-width-two-thirds", {
+                              "govuk-input--error govuk-!-width-two-thirds": errors?.plantApprovalNumber,
+                            })}
+                            inputProps={{
+                              defaultValue: plantApprovalNumber,
+                              id: "plantApprovalNumber",
+                              "aria-describedby": "hint-plantApprovalNumber",
+                            }}
+                            hint={{
+                              id: "hint-plantApprovalNumber",
+                              position: "above",
+                              text: t("psAddProcessingPlantApprovalNumberHint", { ns: "addProcessingPlant" }),
+                              className: "govuk-hint",
+                            }}
+                            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+                            hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+                          />
+                        </div>
+                      </div>
+                    )
+                  }
+                  onChange={setSearchTerm}
+                  onSelected={handlePlantSelected}
+                  minCharsBeforeSearch={minCharsBeforeSearch}
+                  notFoundText=""
+                />
+              </>
             )}
+            <div role="status" aria-live="polite" aria-atomic="true">
+              {showNoResultsMessage && (
+                <p className="govuk-body" data-testid="no-processing-plant-results">
+                  <strong className="govuk-!-font-weight-bold">
+                    {t("psAddProcessingPlantNoResultsHeading", { ns: "addProcessingPlant" })}
+                  </strong>
+                  <br />
+                  {t("psAddProcessingPlantNoResultsCheckDetails", { ns: "addProcessingPlant" })}
+                  <br />
+                  {t("psAddProcessingPlantNoResultsEnterManually", { ns: "addProcessingPlant" })}
+                  <br />
+                  {t("psAddProcessingPlantNoResultsHint", { ns: "addProcessingPlant" })}
+                </p>
+              )}
+            </div>
             <div className="govuk-button-group">
               <Button
                 id="continue"
@@ -416,11 +571,20 @@ const AddProcessingPlant = () => {
               <Button
                 id="navigateToManualAddress"
                 label={t("psAddProcessingPlantManualButton")}
-                className="govuk-button govuk-button--secondary"
+                className="govuk-button govuk-button--secondary app-processing-plant-manual-entry"
                 type={BUTTON_TYPE.SUBMIT}
                 name="_action"
                 value="navigateToManualAddress"
                 data-testid="manual-entry-button"
+              />
+              <Button
+                id="saveAsDraft"
+                label={t("commonSaveAsDraftButtonSaveAsDraftText", { ns: "common" })}
+                className="govuk-button govuk-button--secondary app-processing-plant-save-draft"
+                type={BUTTON_TYPE.SUBMIT}
+                name="_action"
+                value="saveAsDraft"
+                data-testid="save-draft-button"
               />
             </div>
             <input type="hidden" name="isNonJs" value={(!isHydrated).toString()} />

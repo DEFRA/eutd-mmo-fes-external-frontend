@@ -201,7 +201,6 @@
   "psAddCatchDetailsErrorNonUKCCNumberCharLimit": "Catch certificate number must not exceed 52 characters",
   "psProgressConsignmentDescriptionRequiredError": "You must complete the consignment description section before being able to continue",
   "psProgressProcessingPlantIdRequiredError": "You must complete the processing plant ID section before being able to continue",
-  "psProgressProcessingPlantAddressRequiredError": "You must complete the processing plant address section before being able to continue",
   "psProgressHealthCertificateRequiredError": "You must complete the export health certificate section before being able to continue",
   "commonProgressExportDestinationRequiredError": "You must complete the export destination section before being able to continue",
   "psAddCatchDetailsErrorUKCCInValid": "The catch certificate entered is no longer valid",
