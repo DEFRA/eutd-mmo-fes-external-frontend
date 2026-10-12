@@ -27,13 +27,15 @@ describe("Add Storage Facility Approval", () => {
       .first()
       .should("have.text", "name")
       .and("have.class", "govuk-!-font-weight-bold");
-    cy.get("#storageFacilities-facilityArrivalDate").then(($arrivalDate) => {
-      cy.get("#storageFacilities-facilityName").then(($facilityName) => {
-        expect(
-          $arrivalDate[0].compareDocumentPosition($facilityName[0]) & Node.DOCUMENT_POSITION_FOLLOWING
-        ).to.not.equal(0);
+    cy.get(".govuk-details__summary")
+      .should("contain.text", "What is the arrival date?")
+      .then(($arrivalDateInfo) => {
+        cy.get("#storageFacilities-facilityName").then(($facilityName) => {
+          expect(
+            $arrivalDateInfo[0].compareDocumentPosition($facilityName[0]) & Node.DOCUMENT_POSITION_FOLLOWING
+          ).to.not.equal(0);
+        });
       });
-    });
     cy.contains("p", "Approval number: UK/ABC/001").should("be.visible");
     cy.contains("p", "MMO, LANCASTER HOUSE, HAMPSHIRE COURT").should("be.visible");
 

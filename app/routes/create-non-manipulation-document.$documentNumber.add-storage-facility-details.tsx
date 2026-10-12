@@ -316,6 +316,23 @@ const AddStorageFacilityApproval = () => {
                   "This should be the date the product arrives at the storage facility. For example, 25/07/2025.",
               })}
             />
+            <details className="govuk-details" data-module="govuk-details">
+              <summary className="govuk-details__summary">
+                <span className="govuk-details__summary-text">
+                  {t("sdStorageArrivalDateGuidanceTitle", {
+                    ns: "addStorageFacilityDetails",
+                    defaultValue: "What is the arrival date?",
+                  })}
+                </span>
+              </summary>
+              <div className="govuk-details__text">
+                {t("sdStorageArrivalDateGuidanceText", {
+                  ns: "addStorageFacilityDetails",
+                  defaultValue:
+                    "This is the date the product arrives at the storage facility and is unloaded. If unloading happens later, enter the date the product was physically removed from the transport and received into storage.",
+                })}
+              </div>
+            </details>
             <div
               className={
                 isEmpty(errors?.["storageFacilities-facilityName"])
@@ -351,23 +368,6 @@ const AddStorageFacilityApproval = () => {
                 hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
               />
             </div>
-            <details className="govuk-details" data-module="govuk-details">
-              <summary className="govuk-details__summary">
-                <span className="govuk-details__summary-text">
-                  {t("sdStorageArrivalDateGuidanceTitle", {
-                    ns: "addStorageFacilityDetails",
-                    defaultValue: "What is the arrival date?",
-                  })}
-                </span>
-              </summary>
-              <div className="govuk-details__text">
-                {t("sdStorageArrivalDateGuidanceText", {
-                  ns: "addStorageFacilityDetails",
-                  defaultValue:
-                    "This is the date the product arrives at the storage facility and is unloaded. If unloading happens later, enter the date the product was physically removed from the transport and received into storage.",
-                })}
-              </div>
-            </details>
             <div
               className={
                 isEmpty(errors?.["storageFacilities-facilityApproval"])

@@ -54,7 +54,7 @@ describe("SD: which storage facility", () => {
     cy.contains("p", "Test Cold Store").should("be.visible");
     cy.contains("p", "Approval number: UK/5555/CS").should("be.visible");
     cy.contains("p", "Hull, HU1 2AB").should("be.visible");
-    cy.get('[data-testid="change-storage-facility"]').should("be.visible");
+    cy.get('[data-testid="change-storage-facility"]').should("be.visible").and("have.css", "color", "rgb(0, 48, 120)");
   });
 
   it("should allow changing from summary back to search for a saved selection", () => {
