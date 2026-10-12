@@ -99,6 +99,30 @@ describe("Transport Details Table", () => {
   });
 });
 
+describe("Transport Details Table server rendering", () => {
+  it("server-renders the empty column header as a scoped th", () => {
+    const certificateUrl = "/create-catch-certificate/GBR-2025-CC-136BEC4E4";
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DoYouHaveAdditionalTransportTypes,
+    };
+
+    cy.request({
+      url: `${certificateUrl}/do-you-have-additional-transport-types`,
+      qs: { ...testParams },
+    })
+      .its("body")
+      .should((html) => {
+        const document = new DOMParser().parseFromString(html, "text/html");
+        const emptyHeader = Array.from(document.querySelectorAll("thead th[scope='col']")).find(
+          (header) => !header.textContent?.trim()
+        );
+
+        expect(emptyHeader?.tagName).to.eq("TH");
+        expect(emptyHeader?.getAttribute("scope")).to.eq("col");
+      });
+  });
+});
+
 describe("DoYouHaveAdditionalTransportTypes", () => {
   const certificateUrl = "/create-catch-certificate/GBR-2025-CC-136BEC4E4";
   const doYouHaveAdditionalTransportTypesUrl = `${certificateUrl}/do-you-have-additional-transport-types`;
