@@ -97,7 +97,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   );
 };
 
-const approvalUrl = "/create-non-manipulation-document/:documentNumber/add-storage-facility-approval";
+const facilityDetailsUrl = "/create-non-manipulation-document/:documentNumber/add-storage-facility-details";
 
 // nonJsDateValidation always keys its error "facilityArrivalDate", but the Day/Month/Year inputs
 // all share the DateFieldWithPicker's own id ("storageFacilities-facilityArrivalDate") - remap so
@@ -125,7 +125,7 @@ const saveAsDraftFacilityApproval = async (
   const validationResponse = await updateStorageDocumentFacility(
     bearerToken,
     documentNumber,
-    approvalUrl,
+    facilityDetailsUrl,
     false,
     undefined,
     facilityData
@@ -144,7 +144,7 @@ const saveAsDraftFacilityApproval = async (
     }
   }
 
-  await updateStorageDocumentFacility(bearerToken, documentNumber, approvalUrl, true, undefined, dataToSave);
+  await updateStorageDocumentFacility(bearerToken, documentNumber, facilityDetailsUrl, true, undefined, dataToSave);
 };
 
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
@@ -178,6 +178,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   );
 
   const facilityData: Partial<StorageDocument> = {
+    facilityName: (values["facilityName"] as string) ?? "",
     facilityApprovalNumber: isEmpty(values["approvalNumber"]) ? undefined : (values["approvalNumber"] as string),
     facilityStorage: isEmpty(values["facilityStorage"]) ? undefined : (values["facilityStorage"] as string),
     facilityArrivalDate: selectedDate,
@@ -204,7 +205,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const errorResponse = await updateStorageDocumentFacility(
     bearerToken,
     documentNumber,
-    approvalUrl,
+    facilityDetailsUrl,
     false,
     undefined,
     facilityData
@@ -225,7 +226,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   session.set(
     "backLinkForFacilityAdded",
-    `/create-non-manipulation-document/${documentNumber}/add-storage-facility-approval`
+    `/create-non-manipulation-document/${documentNumber}/add-storage-facility-details`
   );
 
   return redirect(
@@ -261,6 +262,7 @@ const AddStorageFacilityApproval = () => {
     facilityStorage?: string;
   }>() ?? { errors: {} };
   const { errors = {} } = actionData;
+  const [facilityNameValue, setFacilityNameValue] = React.useState(facilityName ?? "");
 
   useScrollOnPageError(errors);
 
@@ -268,8 +270,7 @@ const AddStorageFacilityApproval = () => {
     selectedArrivalDate && typeof selectedArrivalDate === "string" ? selectedArrivalDate.split("/") : " ";
 
   // The address is always known by this page (add-storage-facility requires a registry match
-  // or a completed manual address first) - the facility name is shown when known, but is no
-  // longer collected or editable here.
+  // or a completed manual address first).
   const hasAddress = isMatchedEstablishment || hasFacility;
 
   return (
@@ -280,14 +281,14 @@ const AddStorageFacilityApproval = () => {
           <Title title={t("sdAddStorageApprovalDetailsHeader")} />
           <SecureForm
             method="post"
-            action={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-approval`}
+            action={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details`}
             csrf={csrf}
           >
             {hasAddress && (
               <div className="app-establishment-summary govuk-!-margin-bottom-6" data-testid="facility-summary">
-                <p className="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
-                  {isEmpty(facilityName) ? facilityAddressOne : facilityName}
-                </p>
+                {facilityName && (
+                  <p className="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">{facilityName}</p>
+                )}
                 {approvalNumber && (
                   <p className="govuk-body govuk-!-margin-bottom-1">
                     {t("sdFacilitySummaryApprovalNumberLabel")}: {approvalNumber}
@@ -315,6 +316,41 @@ const AddStorageFacilityApproval = () => {
                   "This should be the date the product arrives at the storage facility. For example, 25/07/2025.",
               })}
             />
+            <div
+              className={
+                isEmpty(errors?.["storageFacilities-facilityName"])
+                  ? "govuk-form-group"
+                  : "govuk-form-group govuk-form-group--error"
+              }
+            >
+              {!isEmpty(errors?.["storageFacilities-facilityName"]) && (
+                <ErrorMessage
+                  id="storageFacilities-facilityName-error"
+                  text={t(errors?.["storageFacilities-facilityName"]?.message, { ns: "errorsText" })}
+                  visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                />
+              )}
+              <FormInput
+                containerClassName="govuk-form-group govuk-!-width-two-thirds"
+                label={t("sdFacilityName", { ns: "addStorageFacilityDetails" })}
+                labelClassName="govuk-label govuk-label--s"
+                name="facilityName"
+                type="text"
+                value={facilityNameValue}
+                onChange={(event: React.FormEvent<HTMLInputElement>) => setFacilityNameValue(event.currentTarget.value)}
+                inputClassName={classNames("govuk-input", {
+                  "govuk-input--error": errors?.["storageFacilities-facilityName"],
+                })}
+                inputProps={{
+                  id: "storageFacilities-facilityName",
+                  "aria-describedby": isEmpty(errors?.["storageFacilities-facilityName"])
+                    ? undefined
+                    : "storageFacilities-facilityName-error",
+                }}
+                hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+                hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
+              />
+            </div>
             <details className="govuk-details" data-module="govuk-details">
               <summary className="govuk-details__summary">
                 <span className="govuk-details__summary-text">

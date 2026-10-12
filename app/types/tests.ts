@@ -699,6 +699,7 @@ export enum TestCaseId {
   SDAddStorageFacilityAddressWithPlaneTransport = "sdAddStorageFacilityAddressWithPlaneTransport",
   SDAddStorageFacilityAddressWithContainerVesselTransport = "sdAddStorageFacilityAddressWithContainerVesselTransport",
   SDAddStorageApprovalComplete = "sdAddStorageApprovalComplete",
+  SDAddStorageApprovalNameError = "sdAddStorageApprovalNameError",
   SDAddStorageApprovalError = "sdAddStorageApprovalError",
   SDAddStorageApprovalForbidden = "sdAddStorageApprovalForbidden",
   SDAddStorageSaveAsDraft = "sdAddStorageSaveAsDraft",

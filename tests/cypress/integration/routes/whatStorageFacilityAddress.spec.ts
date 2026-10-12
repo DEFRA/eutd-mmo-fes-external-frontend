@@ -19,6 +19,12 @@ describe("SD: What storage facility address page", () => {
     cy.get(".govuk-heading-xl").contains("What is the storage facility address?");
   });
 
+  it("should render a back link to storage facility search", () => {
+    cy.findByRole("link", { name: "Back" })
+      .should("be.visible")
+      .and("have.attr", "href", "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-storage-facility");
+  });
+
   it("should render the buttons texts", () => {
     cy.get(".govuk-button-group button").contains("Cancel").should("be.visible");
     cy.get('[data-testid="findaddress"]').should("be.visible").contains("Find address");

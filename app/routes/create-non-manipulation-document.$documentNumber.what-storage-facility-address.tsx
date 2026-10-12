@@ -464,7 +464,7 @@ const WhatFacilityAddress = () => {
   };
 
   return (
-    <Main>
+    <Main backUrl={`/create-non-manipulation-document/${documentNumber}/add-storage-facility`}>
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorTransformedMessages(errorsTransformed)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">

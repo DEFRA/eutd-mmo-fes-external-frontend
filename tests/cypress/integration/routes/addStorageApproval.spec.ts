@@ -1,7 +1,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 const addStorageFacilityUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility";
-const addStorageApprovalUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility-approval";
+const addStorageApprovalUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility-details";
 const progressUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/progress";
 const storageFacilityUrl =
   "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/how-does-the-consignment-leave-the-uk";
@@ -21,11 +21,21 @@ describe("Add Storage Facility Approval", () => {
       .should("have.attr", "href", addStorageFacilityUrl);
     cy.get(".govuk-heading-xl").contains("Add storage facility details");
 
-    // Facility summary box (name, address) is shown for an already-saved facility - no editable name input.
-    cy.contains("p", "name").should("be.visible");
+    cy.contains("label", "Storage facility name").should("be.visible");
+    cy.get("#storageFacilities-facilityName").should("have.value", "name");
+    cy.get('[data-testid="facility-summary"] p')
+      .first()
+      .should("have.text", "name")
+      .and("have.class", "govuk-!-font-weight-bold");
+    cy.get("#storageFacilities-facilityArrivalDate").then(($arrivalDate) => {
+      cy.get("#storageFacilities-facilityName").then(($facilityName) => {
+        expect(
+          $arrivalDate[0].compareDocumentPosition($facilityName[0]) & Node.DOCUMENT_POSITION_FOLLOWING
+        ).to.not.equal(0);
+      });
+    });
     cy.contains("p", "Approval number: UK/ABC/001").should("be.visible");
     cy.contains("p", "MMO, LANCASTER HOUSE, HAMPSHIRE COURT").should("be.visible");
-    cy.get('input[name="facilityName"]').should("not.exist");
 
     // Arrival date label must be bold.
     cy.contains("legend", "Arrival date").find("label").should("have.class", "govuk-!-font-weight-bold");
@@ -49,6 +59,23 @@ describe("Add Storage Facility Approval", () => {
     cy.get("#backToProgress").click();
     cy.url().should("include", "/progress");
   });
+
+  it("should show an error when the storage facility name is blank", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageApprovalNameError,
+    };
+    cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
+
+    cy.get("#storageFacilities-facilityName").should("have.value", "");
+    cy.get("#storageFacilities-facilityStorage").check();
+    cy.get("[data-testid=save-and-continue]").click();
+
+    cy.contains(".govuk-error-summary a", "Enter the facility name")
+      .should("be.visible")
+      .and("have.attr", "href", "#storageFacilities-facilityName");
+    cy.get("#storageFacilities-facilityName-error").should("be.visible");
+    cy.get("#storageFacilities-facilityName").should("have.class", "govuk-input--error");
+  });
 });
 
 describe("Add Storage Facility Approval - Complete", () => {
@@ -58,6 +85,8 @@ describe("Add Storage Facility Approval - Complete", () => {
     };
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
 
+    cy.get("#storageFacilities-facilityName").clear();
+    cy.get("#storageFacilities-facilityName").type("Updated storage facility");
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001");
     cy.get("#storageFacilities-facilityStorage").check();
     cy.get("[data-testid=save-and-continue]").click();

@@ -39,7 +39,7 @@ const storageDocumentWithSavedFacility = {
   facilityApprovalNumber: "UK/5555/CS",
 };
 
-// A manual address saved before the facility name is captured (on add-storage-facility-approval) -
+// A manual address saved before the facility name is captured (on add-storage-facility-details) -
 // the summary must still display, falling back to the address as its bold heading.
 const { facilityName: _facilityName, ...storageDocumentNoFacilitiesWithoutName } =
   storageDocumentNoFacilities as Record<string, unknown>;

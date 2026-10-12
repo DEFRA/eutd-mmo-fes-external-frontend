@@ -2,7 +2,7 @@ import { type ITestParams, TestCaseId } from "~/types";
 
 const documentNumber = "GBR-2022-SD-3FE1169D1";
 const pageUrl = `/create-non-manipulation-document/${documentNumber}/add-storage-facility`;
-const approvalUrl = `/create-non-manipulation-document/${documentNumber}/add-storage-facility-approval`;
+const approvalUrl = `/create-non-manipulation-document/${documentNumber}/add-storage-facility-details`;
 const manualAddressUrl = `/create-non-manipulation-document/${documentNumber}/what-storage-facility-address`;
 
 const visitPage = (testCaseId: TestCaseId, disableScripts = false) => {
@@ -72,7 +72,25 @@ describe("SD: which storage facility", () => {
     cy.contains("p", "Manualville, MN1 1AA").should("be.visible");
   });
 
-  it("should live search and continue to add-storage-facility-approval when a match is selected", () => {
+  it("should show and hide the no-results message as the search term changes", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilityContinue);
+
+    getStorageFacilitySearchInput().clear();
+    getStorageFacilitySearchInput().type("Unknown Storage Facility");
+
+    cy.get('[data-testid="no-storage-facility-results"]').should("be.visible");
+    cy.get('[data-testid="no-storage-facility-results"] strong').should("have.text", "No results found");
+    cy.get('[data-testid="no-storage-facility-results"]').should(
+      "contain.text",
+      "Check the company name or registration number and try again."
+    );
+
+    getStorageFacilitySearchInput().clear();
+    getStorageFacilitySearchInput().type("U");
+    cy.get('[data-testid="no-storage-facility-results"]').should("not.exist");
+  });
+
+  it("should live search and continue to add-storage-facility-details when a match is selected", () => {
     visitPage(TestCaseId.SDWhichStorageFacilityContinue);
 
     getStorageFacilitySearchInput().clear();
@@ -116,8 +134,8 @@ describe("SD: which storage facility", () => {
   it("should work without JavaScript using the preloaded select list", () => {
     visitPage(TestCaseId.SDWhichStorageFacilityContinue, true);
 
-    cy.get("select#storageFacility").should("be.visible");
-    cy.get("select#storageFacility").select("Test Cold Store (UK/5555/CS) - Hull, HU1 2AB");
+    cy.get("select.app-storage-facility-non-js-select").should("be.visible");
+    cy.get("select.app-storage-facility-non-js-select").select("Test Cold Store (UK/5555/CS) - Hull, HU1 2AB");
     cy.get('[data-testid="save-and-continue"]').click();
 
     cy.url().should("include", approvalUrl);

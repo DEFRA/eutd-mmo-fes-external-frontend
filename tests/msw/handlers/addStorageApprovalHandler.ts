@@ -30,6 +30,17 @@ const addStorageApprovalHandler: ITestHandler = {
     rest.post(mockSaveAndValidateDocument("storageNotes"), async (req, res, ctx) => {
       const body = await req.json();
 
+      if (!body.facilityName?.trim()) {
+        return res(
+          ctx.status(400),
+          ctx.json({
+            errors: {
+              "storageFacilities-facilityName": "sdAddStorageFacilityDetailsErrorEnterTheFacilityName",
+            },
+          })
+        );
+      }
+
       if (isEmpty(body.facilityStorage)) {
         return res(ctx.status(400), ctx.json(storageDocumentFacilityStorageError));
       }
@@ -42,6 +53,23 @@ const addStorageApprovalHandler: ITestHandler = {
     rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(exporterDetails))),
     rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
       res(ctx.json(storageDocumentFacilityOne))
+    ),
+  ],
+  [TestCaseId.SDAddStorageApprovalNameError]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) =>
+      res(ctx.json({ ...storageDocumentFacilityOneNoArrival, facilityName: "" }))
+    ),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          errors: {
+            "storageFacilities-facilityName": "sdAddStorageFacilityDetailsErrorEnterTheFacilityName",
+          },
+        })
+      )
     ),
   ],
   [TestCaseId.SDAddStorageApprovalError]: () => [

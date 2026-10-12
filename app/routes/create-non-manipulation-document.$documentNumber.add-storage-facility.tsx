@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { route } from "routes-gen";
 import { useLoaderData, redirect, type LoaderFunction, type ActionFunction, useActionData } from "react-router";
 import { useTranslation } from "react-i18next";
-import { BUTTON_TYPE, Button } from "@capgeminiuk/dcx-react-library";
+import { BUTTON_TYPE, Button, FormSelect } from "@capgeminiuk/dcx-react-library";
 import classNames from "classnames";
 
 import { Main, Title, BackToProgressLink, SecureForm, AutocompleteFormField, ErrorSummary } from "~/components";
@@ -117,7 +117,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const matched = matchEstablishment(establishments, sd.facilityName, sd.facilityApprovalNumber);
   // The facility name is optional here - a manual address can be saved (via "Enter facility
-  // details manually") before a name is collected on the following add-storage-facility-approval page.
+  // details manually") before a name is collected on the following add-storage-facility-details page.
   const hasManualAddress = !isEmpty(sd.facilityAddressOne);
 
   let savedFacilityOption: string | undefined;
@@ -245,7 +245,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     if (hasExistingManualAddress) {
       return redirect(
         isEmpty(nextUri)
-          ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-approval", {
+          ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", {
               documentNumber,
             })
           : nextUri
@@ -279,7 +279,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   return redirect(
     isEmpty(nextUri)
-      ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-approval", { documentNumber })
+      ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", { documentNumber })
       : nextUri
   );
 };
@@ -300,6 +300,11 @@ const WhichStorageFacility = () => {
     savedFacilityDetails
   );
   const facilityOptions = facilityResults.map((result) => result.label);
+  const showNoResultsMessage =
+    isHydrated && searchTerm.trim().length >= minCharsBeforeSearch && facilityResults.length === 0;
+  const [noResultsHeading, noResultsSearchHint, noResultsManualEntryHint] = t(
+    "sdWhichStorageFacilityNoResultsFound"
+  ).split("\n");
 
   const handleFacilitySelected = (label: string) => {
     const match = facilityResults.find((result) => result.label === label);
@@ -375,37 +380,59 @@ const WhichStorageFacility = () => {
                 <input type="hidden" name="facilityPostcode" value={selectedFacility.postcode} />
               </div>
             ) : (
-              <AutocompleteFormField
-                id="storageFacility"
-                name="storageFacility"
-                options={isHydrated ? facilityOptions : getNonJsOptions()}
-                optionsId="storage-facility-option"
-                errorMessageText={
-                  errors?.storageFacility ? t(errors?.storageFacility?.message ?? "", { ns: "errorsText" }) : ""
-                }
-                defaultValue={savedFacilityOption ?? ""}
-                labelText={t("sdWhichStorageFacilityLabel")}
-                labelClassName="govuk-label govuk-!-font-weight-bold"
-                hintText={t("sdWhichStorageFacilityHint")}
-                containerClassName={classNames("govuk-form-group", {
-                  "govuk-form-group--error": errors?.storageFacility,
-                })}
-                selectProps={{
-                  selectClassName: "govuk-select govuk-!-width-full",
-                }}
-                inputProps={{
-                  id: "storageFacility",
-                  className: classNames("govuk-input govuk-!-width-full", {
-                    "govuk-input--error": errors?.storageFacility,
-                  }),
-                }}
-                onChange={setSearchTerm}
-                onSelected={handleFacilitySelected}
-                minCharsBeforeSearch={minCharsBeforeSearch}
-                notFoundText={
-                  searchTerm.trim().length >= minCharsBeforeSearch ? t("sdWhichStorageFacilityNoResultsFound") : ""
-                }
-              />
+              <>
+                <AutocompleteFormField
+                  id="storageFacility"
+                  name="storageFacility"
+                  options={isHydrated ? facilityOptions : getNonJsOptions()}
+                  optionsId="storage-facility-option"
+                  errorMessageText={
+                    errors?.storageFacility ? t(errors?.storageFacility?.message ?? "", { ns: "errorsText" }) : ""
+                  }
+                  defaultValue={savedFacilityOption ?? ""}
+                  labelText={t("sdWhichStorageFacilityLabel")}
+                  labelClassName="govuk-label govuk-!-font-weight-bold"
+                  hintText={t("sdWhichStorageFacilityHint")}
+                  containerClassName={classNames("govuk-form-group", {
+                    "govuk-form-group--error": errors?.storageFacility,
+                  })}
+                  selectProps={{
+                    selectClassName: "govuk-select govuk-!-width-full",
+                  }}
+                  customNonJSComp={
+                    isHydrated ? undefined : (
+                      <FormSelect
+                        name="storageFacility"
+                        id="storageFacility"
+                        options={getNonJsOptions()}
+                        defaultValue={savedFacilityOption ?? ""}
+                        selectClassName="govuk-select govuk-!-width-full app-storage-facility-non-js-select"
+                      />
+                    )
+                  }
+                  inputProps={{
+                    id: "storageFacility",
+                    className: classNames("govuk-input govuk-!-width-full", {
+                      "govuk-input--error": errors?.storageFacility,
+                    }),
+                  }}
+                  onChange={setSearchTerm}
+                  onSelected={handleFacilitySelected}
+                  minCharsBeforeSearch={minCharsBeforeSearch}
+                  notFoundText=""
+                />
+                <div role="status" aria-live="polite" aria-atomic="true">
+                  {showNoResultsMessage && (
+                    <p className="govuk-body" data-testid="no-storage-facility-results">
+                      <strong className="govuk-!-font-weight-bold">{noResultsHeading}</strong>
+                      <br />
+                      {noResultsSearchHint}
+                      <br />
+                      {noResultsManualEntryHint}
+                    </p>
+                  )}
+                </div>
+              </>
             )}
             <div className="govuk-button-group">
               <Button
