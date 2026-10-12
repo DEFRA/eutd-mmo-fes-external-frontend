@@ -50,10 +50,11 @@ describe("Transport Details Table", () => {
       }
     });
 
-    // The fourth header is intentionally empty and rendered as a <td>.
+    // The fourth header is intentionally empty but remains a column header.
     cy.get("thead tr").within(() => {
       cy.get("th").contains("Transport type").should("exist");
-      cy.get("td.govuk-table__header").should("have.length.at.least", 1);
+      cy.get("th").should("have.length", 5);
+      cy.get("th").eq(3).should("be.empty").and("have.attr", "scope", "col");
     });
   });
 
