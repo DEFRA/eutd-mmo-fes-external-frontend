@@ -47,7 +47,12 @@ export const GET_STORAGE_DOCUMENT = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/sto
 export const USER_ATTRIBUTES = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/userAttributes`;
 export const GET_GEAR_CATEGORIES_URL = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/gear-categories`;
 export const GET_RFMO_AREAS_URL = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/rfmo-areas`;
-export const PROCESSING_PLANTS_URL = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/processing-plants`;
+export const APPROVED_FOOD_ESTABLISHMENTS_TOKEN_URL = ENV.DEFRA_TRADE_API_OAUTH_TOKEN_URL;
+
+const approvedFoodEstablishmentsSearchPath = "/establishments/search";
+
+export const getApprovedFoodEstablishmentsSearchUrl = () =>
+  `${ENV.MDM_APPROVED_FOOD_ESTABLISHMENTS_BASE_URL}${approvedFoodEstablishmentsSearchPath}`;
 
 export const getAddProcessingStatementUrl = (currentUrl: string, saveToRedisIfErrors: boolean) =>
   `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/processingStatement/saveAndValidate?c=${currentUrl}&saveToRedisIfErrors=${
@@ -179,7 +184,8 @@ export const mockGetGearCategoriesUrl = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1
 export const mockGetGearTypesByCategoriesUrl = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/gear-type/:gearCategory`;
 export const mockEuCatchStatus = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/certificate/eu-data-integration/check-status`;
 export const mockValidateLandingURL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/export-certificates/landing/validate`;
-export const mockProcessingPlantsUrl = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/processing-plants`;
+export const mockApprovedFoodEstablishmentsTokenUrl = ENV.DEFRA_TRADE_API_OAUTH_TOKEN_URL;
+export const mockApprovedFoodEstablishmentsSearchUrl = `${ENV.MDM_APPROVED_FOOD_ESTABLISHMENTS_BASE_URL}${approvedFoodEstablishmentsSearchPath}`;
 
 export const mockSaveAndValidateDocument = (journey: Journey) =>
   `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/${journey}/saveAndValidate`;

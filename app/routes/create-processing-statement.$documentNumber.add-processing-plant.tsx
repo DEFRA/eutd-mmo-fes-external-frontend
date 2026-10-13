@@ -1,35 +1,26 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { getEnv } from "~/env.server";
 import { route } from "routes-gen";
 import { useLoaderData, redirect, type LoaderFunction, type ActionFunction, useActionData } from "react-router";
 import { useTranslation } from "react-i18next";
-import { BUTTON_TYPE, Button, FormInput } from "@capgeminiuk/dcx-react-library";
+import { BUTTON_TYPE, Button } from "@capgeminiuk/dcx-react-library";
 import classNames from "classnames";
 
-import {
-  Main,
-  Title,
-  BackToProgressLink,
-  SecureForm,
-  AutocompleteFormField,
-  ErrorMessage,
-  ErrorSummary,
-} from "~/components";
-import { useIsHydrated } from "~/hooks";
+import { Main, Title, BackToProgressLink, SecureForm, AutocompleteFormField, ErrorSummary } from "~/components";
 import logger from "~/logger";
 import { displayErrorMessagesInOrder } from "~/helpers";
 import {
   validateCSRFToken,
-  formatEstablishmentLabel,
   getBearerTokenForRequest,
   updateProcessingStatement,
-  getProcessingPlants,
-  matchEstablishment,
   processingStatemenGenericLoader,
-  mapEstablishmentToPlantAddress,
+  searchProcessingPlants,
+  formatEstablishmentLabel,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
+import type { Establishment } from "~/types";
 
 type ProcessingPlantSearchResult = {
   label: string;
@@ -42,20 +33,23 @@ type ProcessingPlantSearchResult = {
   country?: string;
 };
 
-type LoaderData = {
+type AddProcessingPlantLoaderData = {
   documentNumber: string;
   csrf: string;
   plantName: string;
   plantApprovalNumber: string;
   savedPlantOption?: string;
   savedPlantDetails?: ProcessingPlantSearchResult;
+  minCharsBeforeSearch: number;
+  labels: ProcessingPlantSearchResult[];
 };
 
-const minCharsBeforeSearch = 2;
-
+// Non-JS posts the <select>'s label text ("Name (Approval) - Postcode") with no address fields.
+// Use greedy matching so a trading name containing "(...)" (e.g. "Andy's Seafoods (Grimsby) Ltd")
+// doesn't get misread as the approval number - the real approval number is always the last "(...)".
 const parseEstablishmentLabel = (value: string): { plantName: string; plantApprovalNumber: string } => {
   const trimmed = value.trim();
-  const match = /^(.*?) \(([^)]*)\)/.exec(trimmed);
+  const match = /^(.*) \(([^)]*)\)(?:\s-\s.*)?$/.exec(trimmed);
 
   if (!match) {
     return { plantName: "", plantApprovalNumber: "" };
@@ -136,71 +130,88 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     "plantPostcode",
   ]);
 
+  const minCharsBeforeSearch = Number.parseInt(getEnv().APPROVED_ESTABLISHMENT_SEARCH_MIN_LENGTH, 10);
+
   const contentType = genericLoaderResponse.headers.get("Content-Type") ?? "";
   if (genericLoaderResponse.status !== 200 || !contentType.includes("application/json")) {
     return genericLoaderResponse;
   }
 
   const loaderData = await genericLoaderResponse.clone().json();
-  const {
-    plantName,
-    plantApprovalNumber,
-    plantAddressOne,
-    plantSubBuildingName,
-    plantBuildingName,
-    plantStreetName,
-    plantTownCity,
-    plantPostcode,
-    plantCounty,
-    plantCountry,
-  } = loaderData;
+  const { plantName, plantApprovalNumber, plantAddressOne, plantTownCity, plantPostcode, plantCounty, plantCountry } =
+    loaderData;
+
+  const establishments: Establishment[] = await searchProcessingPlants("");
 
   let savedPlantOption: string | undefined;
   let savedPlantDetails: ProcessingPlantSearchResult | undefined;
+
   if (plantName && plantApprovalNumber) {
-    const establishments = await getProcessingPlants();
-    const matched = matchEstablishment(establishments, plantName, plantApprovalNumber);
-    savedPlantOption = matched ? formatEstablishmentLabel(matched) : `${plantName} (${plantApprovalNumber})`;
+    const matched = establishments.find(
+      (establishment) =>
+        establishment.approvalNumber?.content?.trim().toLowerCase() === plantApprovalNumber.trim().toLowerCase()
+    );
 
-    const hasManualAddressOverride =
-      !isEmpty(plantAddressOne) ||
-      !isEmpty(plantSubBuildingName) ||
-      !isEmpty(plantBuildingName) ||
-      !isEmpty(plantStreetName) ||
-      !isEmpty(plantTownCity) ||
-      !isEmpty(plantPostcode) ||
-      !isEmpty(plantCounty) ||
-      !isEmpty(plantCountry);
+    // Match the label format produced below for the full list, so the non-JS <select>'s
+    // defaultValue lines up with one of its <option> values and shows as pre-selected.
+    savedPlantOption = formatEstablishmentLabel(
+      matched ?? {
+        tradingName: plantName,
+        approvalNumber: { content: plantApprovalNumber },
+        address: { postCode: { code: plantPostcode } },
+      }
+    );
 
-    if (hasManualAddressOverride) {
-      savedPlantDetails = {
-        label: savedPlantOption,
-        tradingName: plantName,
-        approvalNumber: plantApprovalNumber,
-        addressLine: plantAddressOne ?? "",
-        cityName: plantTownCity ?? "",
-        postcode: plantPostcode ?? "",
-        county: plantCounty ?? "",
-        country: plantCountry ?? "",
-      };
-    } else if (matched) {
-      savedPlantDetails = {
-        label: savedPlantOption,
-        tradingName: plantName,
-        approvalNumber: plantApprovalNumber,
-        addressLine: matched.address?.line1 ?? "",
-        cityName: matched.address?.cityName ?? "",
-        postcode: matched.address?.postCode?.code ?? "",
-        county: matched.address?.line4 ?? "",
-        country: matched.address?.country?.countryName ?? "",
-      };
-    }
+    savedPlantDetails = {
+      label: savedPlantOption,
+      tradingName: plantName,
+      approvalNumber: plantApprovalNumber,
+      addressLine: plantAddressOne ?? "",
+      cityName: plantTownCity ?? "",
+      postcode: plantPostcode ?? "",
+      county: plantCounty ?? "",
+      country: plantCountry ?? "",
+    };
   }
 
-  return new Response(JSON.stringify({ ...loaderData, savedPlantOption, savedPlantDetails }), {
-    status: 200,
-    headers: new Headers(genericLoaderResponse.headers),
-  });
+  const labels: ProcessingPlantSearchResult[] = establishments.map((establishment) => ({
+    label: formatEstablishmentLabel(establishment),
+    tradingName: establishment.tradingName ?? "",
+    approvalNumber: establishment.approvalNumber?.content ?? "",
+    addressLine: [
+      establishment.address?.line1,
+      establishment.address?.line2,
+      establishment.address?.line3,
+      establishment.address?.line4,
+    ]
+      .filter(Boolean)
+      .join(", "),
+    cityName: establishment.address?.cityName ?? "",
+    postcode: establishment.address?.postCode?.code ?? "",
+    country: establishment.address?.country?.countryName ?? "",
+  }));
+
+  // The saved plant may fall outside the default search page - add it so the non-JS
+  // <select> still offers it as a (pre-selected) option.
+  if (savedPlantOption && !labels.some((label) => label.label === savedPlantOption)) {
+    labels.unshift({
+      label: savedPlantOption,
+      tradingName: plantName,
+      approvalNumber: plantApprovalNumber,
+      addressLine: plantAddressOne ?? "",
+      cityName: plantTownCity ?? "",
+      postcode: plantPostcode ?? "",
+      country: plantCountry ?? "",
+    });
+  }
+
+  return new Response(
+    JSON.stringify({ ...loaderData, savedPlantOption, savedPlantDetails, minCharsBeforeSearch, labels }),
+    {
+      status: 200,
+      headers: new Headers(genericLoaderResponse.headers),
+    }
+  );
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -227,34 +238,47 @@ export const action: ActionFunction = async ({ request, params }) => {
     );
   }
 
-  const submittedPlant = (form.get("processingPlant") as string) ?? "";
   const isNonJs = form.get("isNonJs") === "true";
-  const parsedProcessingPlant = parseEstablishmentLabel(submittedPlant);
-  const plantName = isNonJs ? (form.get("plantName") as string) ?? "" : parsedProcessingPlant.plantName;
-  const plantApprovalNumber = isNonJs
-    ? (form.get("plantApprovalNumber") as string) ?? ""
-    : parsedProcessingPlant.plantApprovalNumber;
-
-  const establishments = isNonJs ? [] : await getProcessingPlants();
-  const hasSubmittedPlant = !isEmpty(plantName) || !isEmpty(plantApprovalNumber);
-  const matchedEstablishment =
-    !isNonJs && hasSubmittedPlant ? matchEstablishment(establishments, plantName, plantApprovalNumber) : undefined;
-
   const bearerToken = await getBearerTokenForRequest(request);
-  const payload = matchedEstablishment
-    ? {
-        plantName: matchedEstablishment.tradingName,
-        plantApprovalNumber: matchedEstablishment.approvalNumber?.content,
-        ...mapEstablishmentToPlantAddress(matchedEstablishment),
-        plantSubBuildingName: "",
-        plantBuildingName: "",
-        plantStreetName: "",
-        plantCounty: "",
-      }
-    : {
-        plantName,
-        plantApprovalNumber,
-      };
+
+  let payload = {
+    plantName: (form.get("plantName") as string) ?? "",
+    plantApprovalNumber: (form.get("plantApprovalNumber") as string) ?? "",
+    plantAddressOne: (form.get("plantAddressOne") as string) ?? "",
+    plantTownCity: (form.get("plantTownCity") as string) ?? "",
+    plantCounty: (form.get("plantCounty") as string) ?? "",
+    plantCityName: (form.get("plantCityName") as string) ?? "",
+    plantPostcode: (form.get("plantPostcode") as string) ?? "",
+    plantCountry: (form.get("plantCountry") as string) ?? "",
+  };
+
+  if (isNonJs) {
+    const { plantName, plantApprovalNumber } = parseEstablishmentLabel((form.get("processingPlant") as string) ?? "");
+
+    const establishments = plantApprovalNumber ? await searchProcessingPlants(plantApprovalNumber) : [];
+    const establishment = establishments.find(
+      (candidate) =>
+        candidate.approvalNumber?.content?.trim().toLowerCase() === plantApprovalNumber.trim().toLowerCase()
+    );
+
+    payload = {
+      plantName: establishment?.tradingName ?? plantName,
+      plantApprovalNumber,
+      plantAddressOne: [
+        establishment?.address?.line1,
+        establishment?.address?.line2,
+        establishment?.address?.line3,
+        establishment?.address?.line4,
+      ]
+        .filter(Boolean)
+        .join(", "),
+      plantTownCity: establishment?.address?.cityName ?? "",
+      plantCounty: "",
+      plantCityName: "",
+      plantPostcode: establishment?.address?.postCode?.code ?? "",
+      plantCountry: establishment?.address?.country?.countryName ?? "",
+    };
+  }
 
   if (action === "saveAsDraft") {
     await saveDraftPlantSelection(
@@ -286,9 +310,9 @@ export const action: ActionFunction = async ({ request, params }) => {
     return errorResponse as Response;
   }
 
-  const nextRoute = isNonJs
-    ? route("/create-processing-statement/:documentNumber/add-processing-plant-address", { documentNumber })
-    : route("/create-processing-statement/:documentNumber/add-processing-plant-details", { documentNumber });
+  const nextRoute = route("/create-processing-statement/:documentNumber/add-processing-plant-details", {
+    documentNumber,
+  });
 
   return redirect(nextRoute, {
     headers: { "Set-Cookie": await commitSession(session) },
@@ -297,15 +321,19 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 const AddProcessingPlant = () => {
   const { t } = useTranslation(["addProcessingPlant", "common"]);
-  const { documentNumber, csrf, plantName, plantApprovalNumber, savedPlantOption, savedPlantDetails } =
-    useLoaderData<LoaderData>();
+  const { documentNumber, csrf, savedPlantOption, savedPlantDetails, minCharsBeforeSearch, labels } =
+    useLoaderData<AddProcessingPlantLoaderData>();
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
-  const isHydrated = useIsHydrated();
+  // Plain mount-detection: useSyncExternalStore-based hydration hooks can get stuck
+  // false after a hydration mismatch recovery re-render; this always eventually flips.
+  const [isHydrated, setIsHydrated] = useState(false);
+  useEffect(() => setIsHydrated(true), []);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [processingPlantResults, setProcessingPlantResults] = useState<ProcessingPlantSearchResult[]>([]);
+  const [processingPlantResults, setProcessingPlantResults] = useState<ProcessingPlantSearchResult[]>(labels);
   const [selectedPlant, setSelectedPlant] = useState<ProcessingPlantSearchResult | undefined>(savedPlantDetails);
+  const [selectPlantOption, setSelectPlantOption] = useState<string | undefined>(savedPlantOption);
   const processingPlantOptions = processingPlantResults.map((result) => result.label);
   const showNoResultsMessage =
     isHydrated && searchTerm.trim().length >= minCharsBeforeSearch && processingPlantResults.length === 0;
@@ -314,6 +342,7 @@ const AddProcessingPlant = () => {
     const match = processingPlantResults.find((result) => result.label === label);
     if (match) {
       setSelectedPlant(match);
+      setSelectPlantOption(label);
     }
   };
 
@@ -370,6 +399,7 @@ const AddProcessingPlant = () => {
                 {selectedPlant.postcode && (
                   <p className="govuk-body govuk-!-margin-bottom-1">{selectedPlant.postcode}</p>
                 )}
+                {selectedPlant.country && <p className="govuk-body govuk-!-margin-bottom-1">{selectedPlant.country}</p>}
                 <a
                   href="#"
                   className="govuk-link"
@@ -377,162 +407,57 @@ const AddProcessingPlant = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     setSelectedPlant(undefined);
+                    setSelectPlantOption(undefined);
                     setSearchTerm("");
                   }}
                 >
                   {t("commonWhatExportersAddressChangeLink", { ns: "common" })}
                 </a>
-                <input type="hidden" name="processingPlant" value={selectedPlant.label} />
+                <input type="hidden" name="plantName" value={selectedPlant.tradingName} />
+                <input type="hidden" name="plantApprovalNumber" value={selectedPlant.approvalNumber} />
+                <input type="hidden" name="plantAddressOne" value={selectedPlant.addressLine ?? ""} />
+                <input type="hidden" name="plantCounty" value={selectedPlant.county ?? ""} />
+                <input type="hidden" name="plantTownCity" value={selectedPlant.cityName ?? ""} />
+                <input type="hidden" name="plantPostcode" value={selectedPlant.postcode ?? ""} />
+                <input type="hidden" name="plantCountry" value={selectedPlant.country ?? ""} />
               </div>
             ) : (
-              <>
-                {!isHydrated && !savedPlantDetails && (
-                  <div className="govuk-form-group app-processing-plant-placeholder">
-                    <label className="govuk-label govuk-!-font-weight-bold" htmlFor="processingPlant-placeholder">
-                      {t("psAddProcessingPlantLabel")}
-                    </label>
-                    <div className="govuk-hint">{t("psAddProcessingPlantHint")}</div>
-                    <input
-                      className="govuk-input govuk-!-width-full"
-                      id="processingPlant-placeholder"
-                      type="text"
-                      disabled
-                      aria-hidden="true"
-                      tabIndex={-1}
-                    />
-                  </div>
-                )}
-                <AutocompleteFormField
-                  id="processingPlant"
-                  name="processingPlant"
-                  options={processingPlantOptions}
-                  optionsId="processing-plant-option"
-                  errorMessageText={
-                    errors?.processingPlant ? t(errors?.processingPlant?.message ?? "", { ns: "errorsText" }) : ""
-                  }
-                  defaultValue={savedPlantOption ?? ""}
-                  labelText={isHydrated ? t("psAddProcessingPlantLabel") : undefined}
-                  labelClassName="govuk-label govuk-!-font-weight-bold"
-                  hintText={isHydrated ? t("psAddProcessingPlantHint") : undefined}
-                  containerClassName={classNames("govuk-form-group", {
+              <AutocompleteFormField
+                id="processingPlant"
+                name="processingPlant"
+                options={processingPlantOptions}
+                optionsId="processing-plant-option"
+                errorMessageText={
+                  errors?.processingPlant ? t(errors?.processingPlant?.message ?? "", { ns: "errorsText" }) : ""
+                }
+                errorVisuallyHiddenText={{
+                  text: t("commonErrorText", { ns: "errorsText" }),
+                  className: "govuk-visually-hidden",
+                }}
+                defaultValue={selectPlantOption ?? ""}
+                labelText={t("psAddProcessingPlantLabel")}
+                labelClassName="govuk-label govuk-!-font-weight-bold"
+                hintText={t("psAddProcessingPlantHint")}
+                containerClassName={classNames(
+                  !isHydrated ? "govuk-form-group app-processing-plant-nonjs-only" : "govuk-form-group",
+                  {
                     "govuk-form-group--error": errors?.processingPlant,
-                  })}
-                  selectProps={{
-                    selectClassName: "govuk-select govuk-!-width-full",
-                  }}
-                  inputProps={{
-                    id: "processingPlant",
-                    className: classNames("govuk-input govuk-!-width-full", {
-                      "govuk-input--error": errors?.processingPlant,
-                    }),
-                  }}
-                  customNonJSComp={
-                    isHydrated ? undefined : (
-                      <div className="app-processing-plant-nonjs-only">
-                        {savedPlantDetails && (
-                          <div className="govuk-!-margin-bottom-6 app-selected-address">
-                            <strong>
-                              {t("psAddProcessingPlantAddressSummaryHeading", { ns: "addProcessingPlant" })}
-                            </strong>
-                            <br />
-                            <p className="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">{plantName}</p>
-                            <p className="govuk-body govuk-!-margin-bottom-1">
-                              {t("psAddProcessingPlantSummaryApprovalNumberLabel", { ns: "addProcessingPlant" })}:{" "}
-                              {savedPlantDetails?.approvalNumber}
-                            </p>
-                            {savedPlantDetails?.addressLine && (
-                              <p className="govuk-body govuk-!-margin-bottom-1">{savedPlantDetails.addressLine}</p>
-                            )}
-                            {savedPlantDetails?.cityName && (
-                              <p className="govuk-body govuk-!-margin-bottom-1">{savedPlantDetails.cityName}</p>
-                            )}
-                            {savedPlantDetails?.postcode && (
-                              <p className="govuk-body govuk-!-margin-bottom-1">{savedPlantDetails.postcode}</p>
-                            )}
-                          </div>
-                        )}
-                        <div
-                          className={
-                            !isEmpty(errors?.plantName)
-                              ? "govuk-form-group govuk-form-group--error"
-                              : "govuk-form-group"
-                          }
-                        >
-                          {!isEmpty(errors?.plantName) && (
-                            <ErrorMessage
-                              id="plantName-error"
-                              text={t(errors?.plantName?.message ?? "", { ns: "errorsText" })}
-                              visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
-                            />
-                          )}
-                          <FormInput
-                            containerClassName={classNames("govuk-form-group govuk-!-two-thirds", {
-                              "govuk-form-group--error": errors?.plantName,
-                            })}
-                            label={t("psAddProcessingPlantNameLabel", { ns: "addProcessingPlant" })}
-                            labelClassName="govuk-label govuk-!-font-weight-bold"
-                            name="plantName"
-                            type="text"
-                            inputClassName={classNames("govuk-input govuk-!-width-two-thirds", {
-                              "govuk-input--error govuk-!-width-two-thirds": errors?.plantName,
-                            })}
-                            inputProps={{
-                              defaultValue: plantName,
-                              id: "plantName",
-                            }}
-                            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-                            hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-                          />
-                        </div>
-                        <div
-                          className={
-                            !isEmpty(errors?.plantApprovalNumber)
-                              ? "govuk-form-group govuk-form-group--error"
-                              : "govuk-form-group"
-                          }
-                        >
-                          {!isEmpty(errors?.plantApprovalNumber) && (
-                            <ErrorMessage
-                              id="plantApprovalNumber-error"
-                              text={t(errors?.plantApprovalNumber?.message ?? "", { ns: "errorsText" })}
-                              visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
-                            />
-                          )}
-                          <FormInput
-                            containerClassName={classNames("govuk-form-group govuk-!-two-thirds", {
-                              "govuk-form-group--error": errors?.plantApprovalNumber,
-                            })}
-                            label={t("psAddProcessingPlantApprovalNumberLabel", { ns: "addProcessingPlant" })}
-                            labelClassName="govuk-label govuk-!-font-weight-bold"
-                            name="plantApprovalNumber"
-                            type="text"
-                            inputClassName={classNames("govuk-input govuk-!-width-two-thirds", {
-                              "govuk-input--error govuk-!-width-two-thirds": errors?.plantApprovalNumber,
-                            })}
-                            inputProps={{
-                              defaultValue: plantApprovalNumber,
-                              id: "plantApprovalNumber",
-                              "aria-describedby": "hint-plantApprovalNumber",
-                            }}
-                            hint={{
-                              id: "hint-plantApprovalNumber",
-                              position: "above",
-                              text: t("psAddProcessingPlantApprovalNumberHint", { ns: "addProcessingPlant" }),
-                              className: "govuk-hint",
-                            }}
-                            hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-                            hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-                          />
-                        </div>
-                      </div>
-                    )
                   }
-                  onChange={setSearchTerm}
-                  onSelected={handlePlantSelected}
-                  minCharsBeforeSearch={minCharsBeforeSearch}
-                  notFoundText=""
-                />
-              </>
+                )}
+                selectProps={{
+                  selectClassName: "govuk-select govuk-!-width-full",
+                }}
+                inputProps={{
+                  id: "processingPlant",
+                  className: classNames("govuk-input govuk-!-width-full", {
+                    "govuk-input--error": errors?.processingPlant,
+                  }),
+                }}
+                onChange={setSearchTerm}
+                onSelected={handlePlantSelected}
+                minCharsBeforeSearch={minCharsBeforeSearch}
+                notFoundText=""
+              />
             )}
             <div role="status" aria-live="polite" aria-atomic="true">
               {showNoResultsMessage && (
@@ -569,15 +494,6 @@ const AddProcessingPlant = () => {
                 name="_action"
                 value="navigateToManualAddress"
                 data-testid="manual-entry-button"
-              />
-              <Button
-                id="saveAsDraft"
-                label={t("commonSaveAsDraftButtonSaveAsDraftText", { ns: "common" })}
-                className="govuk-button govuk-button--secondary app-processing-plant-save-draft"
-                type={BUTTON_TYPE.SUBMIT}
-                name="_action"
-                value="saveAsDraft"
-                data-testid="save-draft-button"
               />
             </div>
             <input type="hidden" name="isNonJs" value={(!isHydrated).toString()} />
