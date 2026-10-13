@@ -10,6 +10,17 @@ import {
 
 const processingPlants = [
   {
+    id: "duplicate-processing-plant-id",
+    tradingName: "MDM Duplicate Processing A",
+    approvalNumber: { content: "UK/5555/EC" },
+    address: { postCode: { code: "DN1 2AB" } },
+  },
+  {
+    id: "duplicate-processing-plant-id",
+    tradingName: "MDM Duplicate Processing B",
+    approvalNumber: { content: "UK/6666/EC" },
+  },
+  {
     tradingName: "Test Fish Plant",
     approvalNumber: {
       content: "UK/1234/EC",
@@ -125,7 +136,10 @@ const filterPlantsBySearch = (plants: any[], searchTerm: string) => {
   return plants.filter((plant) => {
     const tradingName = plant.tradingName?.toLowerCase?.() ?? "";
     const approval = plant.approvalNumber?.content?.toLowerCase?.() ?? "";
-    return tradingName.includes(normalized) ?? approval.includes(normalized);
+    if (tradingName.includes(normalized)) {
+      return true;
+    }
+    return approval.includes(normalized);
   });
 };
 
@@ -140,7 +154,7 @@ const getProcessingPlantsHandlers = (plants: any[]) => [
     )
   ),
   rest.get(mockApprovedFoodEstablishmentsSearchUrl, (req, res, ctx) => {
-    const searchTerm = req.url.searchParams.get("searchTerm") ?? "";
+    const searchTerm = req.url.searchParams.get("q") ?? "";
     return res(
       ctx.json({
         content: filterPlantsBySearch(plants, searchTerm),
@@ -236,8 +250,7 @@ const addProcessingPlantHandler: ITestHandler = {
         body.plantCounty === "";
 
       if (!hasMappedAddress || !hasClearedSubFields) {
-        const isNonJs = body?.isNonJs === true || body?.isNonJs === "true";
-        return res(ctx.status(400), ctx.json(processingPlantSelectionErrorResponse(isNonJs)));
+        return res(ctx.status(400), ctx.json(processingPlantSelectionErrorResponse()));
       }
 
       return res(ctx.json({ ...processingStatementWithoutSavedPlant, ...body }));

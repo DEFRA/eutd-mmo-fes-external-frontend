@@ -15,7 +15,7 @@ const SEARCH_TIMEOUT_MS = 3000;
 const TOKEN_TIMEOUT_MS = 3000;
 const TOKEN_SAFETY_WINDOW_MS = 60_000;
 
-type EstablishmentType = "processing" | "storage";
+export type EstablishmentType = "processing" | "storage";
 
 type OAuthTokenResponse = {
   access_token: string;
@@ -271,7 +271,10 @@ const callSearchApi = async (type: EstablishmentType, term: string, token: strin
   return response;
 };
 
-export const searchEstablishments = async (type: EstablishmentType, term: string): Promise<Establishment[]> => {
+export const searchApprovedFoodEstablishments = async (
+  type: EstablishmentType,
+  term: string
+): Promise<Establishment[]> => {
   const trimmedTerm = term.trim();
 
   try {

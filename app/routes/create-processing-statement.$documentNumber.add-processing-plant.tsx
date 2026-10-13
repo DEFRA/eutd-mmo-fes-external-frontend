@@ -15,7 +15,7 @@ import {
   getBearerTokenForRequest,
   updateProcessingStatement,
   processingStatemenGenericLoader,
-  searchProcessingPlants,
+  searchEstablishments,
   formatEstablishmentLabel,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
@@ -141,7 +141,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const { plantName, plantApprovalNumber, plantAddressOne, plantTownCity, plantPostcode, plantCounty, plantCountry } =
     loaderData;
 
-  const establishments: Establishment[] = await searchProcessingPlants("");
+  const establishments: Establishment[] = await searchEstablishments("processing", "");
 
   let savedPlantOption: string | undefined;
   let savedPlantDetails: ProcessingPlantSearchResult | undefined;
@@ -255,7 +255,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   if (isNonJs) {
     const { plantName, plantApprovalNumber } = parseEstablishmentLabel((form.get("processingPlant") as string) ?? "");
 
-    const establishments = plantApprovalNumber ? await searchProcessingPlants(plantApprovalNumber) : [];
+    const establishments = plantApprovalNumber ? await searchEstablishments("processing", plantApprovalNumber) : [];
     const establishment = establishments.find(
       (candidate) =>
         candidate.approvalNumber?.content?.trim().toLowerCase() === plantApprovalNumber.trim().toLowerCase()

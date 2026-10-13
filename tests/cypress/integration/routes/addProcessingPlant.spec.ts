@@ -42,6 +42,19 @@ describe("PS: add processing plant - rendering", () => {
   });
 });
 
+describe("PS: add processing plant - shared establishment search", () => {
+  it("deduplicates MDM ids and formats the result label", () => {
+    visitPage(TestCaseId.PSAddProcessingPlantContinue);
+
+    cy.request("/get-processing-plants?search=MDM%20Duplicate").then((response) => {
+      expect(response.status).to.equal(200);
+      expect(response.body.map((establishment: { label: string }) => establishment.label)).to.deep.equal([
+        "MDM Duplicate Processing A (UK/5555/EC) - DN1 2AB",
+      ]);
+    });
+  });
+});
+
 describe("PS: add processing plant - save and continue button", () => {
   it("should progress to add-processing-plant-details when a plant is selected and continue is clicked", () => {
     visitPage(TestCaseId.PSAddProcessingPlantContinue);

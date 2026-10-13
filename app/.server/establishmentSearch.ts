@@ -1,9 +1,8 @@
-import serverLogger from "~/logger.server";
 import type { Establishment } from "~/types";
-import { searchEstablishments } from "~/.server";
+import serverLogger from "~/logger.server";
+import { searchApprovedFoodEstablishments, type EstablishmentType } from "./approvedFoodEstablishmentsClient";
 
-// MDM's own establishment id is the authoritative unique identifier; it's the only reliable
-// way to tell two distinct records apart when they'd otherwise render the same option label.
+// MDM's establishment id is authoritative; older records fall back to approval number or trading name.
 const getEstablishmentId = (establishment: Establishment): string =>
   (establishment.id ?? establishment.approvalNumber?.content ?? establishment.tradingName ?? "").trim().toLowerCase();
 
@@ -20,13 +19,13 @@ const dedupeEstablishmentsById = (establishments: Establishment[]): Establishmen
   });
 };
 
-export const searchProcessingPlants = async (term: string): Promise<Establishment[]> => {
+export const searchEstablishments = async (type: EstablishmentType, term: string): Promise<Establishment[]> => {
   try {
-    const establishments = await searchEstablishments("processing", term);
+    const establishments = await searchApprovedFoodEstablishments(type, term);
     return dedupeEstablishmentsById(establishments);
-  } catch (e) {
-    if (e instanceof Error) {
-      serverLogger.error(`[SEARCH-PROCESSING-PLANTS][FAIL][ERROR][${e.stack ?? e}]`);
+  } catch (error) {
+    if (error instanceof Error) {
+      serverLogger.error(`[SEARCH-ESTABLISHMENT][${type.toUpperCase()}][FAIL][ERROR][${error.stack ?? error}]`);
     }
 
     return [];

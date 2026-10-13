@@ -2,7 +2,7 @@ import { getReferenceData } from "~/communication.server";
 import serverLogger from "~/logger.server";
 import type { Establishment } from "~/types";
 import { STORAGE_FACILITIES_URL } from "~/urls.server";
-import { formatEstablishmentLabel } from "./processingPlants";
+import { formatEstablishmentLabel } from "./establishmentSearch";
 
 const onGetStorageFacilitiesResponse = async (response: Response): Promise<Establishment[]> => {
   switch (response.status) {

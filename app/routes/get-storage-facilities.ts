@@ -3,6 +3,7 @@ import { formatEstablishmentLabel, searchEstablishments } from "~/.server";
 import type { Establishment } from "~/types";
 import serverLogger from "~/logger.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
+import { getEnv } from "~/env.server";
 
 type StorageFacilitySearchResult = {
   label: string;
@@ -20,7 +21,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url);
     const searchTerm = (url.searchParams.get("search") ?? "").trim().toLowerCase();
 
-    if (searchTerm.length < 2) {
+    const minSearchLength = Number.parseInt(getEnv().APPROVED_ESTABLISHMENT_SEARCH_MIN_LENGTH, 10);
+
+    if (searchTerm.length < minSearchLength) {
       return new Response(JSON.stringify([]), {
         status: 200,
         headers: {

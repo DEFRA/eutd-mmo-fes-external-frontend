@@ -14,6 +14,17 @@ import {
 
 const storageFacilities = [
   {
+    id: "duplicate-storage-facility-id",
+    tradingName: "MDM Duplicate Storage A",
+    approvalNumber: { content: "UK/7777/CS" },
+    address: { postCode: { code: "HU2 3CD" } },
+  },
+  {
+    id: "duplicate-storage-facility-id",
+    tradingName: "MDM Duplicate Storage B",
+    approvalNumber: { content: "UK/8888/CS" },
+  },
+  {
     tradingName: "Test Cold Store",
     approvalNumber: {
       content: "UK/5555/CS",

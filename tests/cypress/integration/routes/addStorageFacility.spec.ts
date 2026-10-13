@@ -36,6 +36,17 @@ type StorageFacilitySearchResult = {
 };
 
 describe("SD: which storage facility", () => {
+  it("deduplicates MDM ids and formats the result label", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilityContinue);
+
+    cy.request("/get-storage-facilities?search=MDM%20Duplicate").then((response) => {
+      expect(response.status).to.equal(200);
+      expect(response.body.map((establishment: { label: string }) => establishment.label)).to.deep.equal([
+        "MDM Duplicate Storage A (UK/7777/CS) - HU2 3CD",
+      ]);
+    });
+  });
+
   it("should render heading, hint and both action buttons", () => {
     visitPage(TestCaseId.SDWhichStorageFacilityContinue);
 
