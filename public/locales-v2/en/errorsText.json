@@ -172,7 +172,7 @@
   "psAddProcessingPDErrorPersonResponsibleForConsignmentLength": "Person responsible for this consignment must not exceed 50 characters",
   "psAddProcessingPDErrorResponsibleValidation": "Person responsible must only contain letters, hyphens, spaces, and single quotes",
   "psAddProcessingPlantErrorSelectPlant": "You must select a processing plant or enter the plant details manually",
-  "psAddProcessingPlantAddressErrorMaxLimitPlantName": "Processing plant name must not exceed 54 characters",
+  "psAddProcessingPlantAddressErrorMaxLimitPlantName": "Processing plant name must not exceed 65 characters",
   "psAddProcessingPlantAddressErrorNullPlantName": "Enter the processing plant name",
   "psAddProcessingPlantAddressErrorFormatPlantName": "Processing plant name must only contain letters, numbers, apostrophes (' or ’), full stops, hyphens, commas, forward slashes, back slashes, ampersands, and spaces",
   "psAddProcessingPlantAddressErrorAddress": "Enter the address",

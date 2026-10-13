@@ -1,8 +1,9 @@
 import { type LoaderFunction } from "react-router";
-import { formatEstablishmentLabel, getProcessingPlants } from "~/.server";
+import { formatEstablishmentLabel, searchProcessingPlants } from "~/.server";
 import type { Establishment } from "~/types";
 import serverLogger from "~/logger.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
+import { getEnv } from "~/env.server";
 
 type ProcessingPlantSearchResult = {
   label: string;
@@ -11,6 +12,7 @@ type ProcessingPlantSearchResult = {
   addressLine: string;
   cityName: string;
   postcode: string;
+  country: string;
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -18,9 +20,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     setApiMock(request.url);
 
     const url = new URL(request.url);
-    const searchTerm = (url.searchParams.get("search") ?? "").trim().toLowerCase();
+    const searchTerm = (url.searchParams.get("search") ?? "").trim();
+    const minSearchLength = Number.parseInt(getEnv().APPROVED_ESTABLISHMENT_SEARCH_MIN_LENGTH, 10);
 
-    if (searchTerm.length < 2) {
+    if (searchTerm.length < minSearchLength) {
       return new Response(JSON.stringify([]), {
         status: 200,
         headers: {
@@ -29,24 +32,24 @@ export const loader: LoaderFunction = async ({ request }) => {
       });
     }
 
-    const establishments: Establishment[] = await getProcessingPlants();
+    const establishments: Establishment[] = await searchProcessingPlants(searchTerm);
 
-    const labels: ProcessingPlantSearchResult[] = establishments
-      .filter((establishment) => {
-        const tradingName = establishment.tradingName?.toLowerCase() ?? "";
-        const approvalNumber = establishment.approvalNumber?.content?.toLowerCase() ?? "";
-
-        return tradingName.includes(searchTerm) || approvalNumber.includes(searchTerm);
-      })
-      .filter((establishment) => establishment.tradingName && establishment.approvalNumber?.content)
-      .map((establishment) => ({
-        label: formatEstablishmentLabel(establishment),
-        tradingName: establishment.tradingName ?? "",
-        approvalNumber: establishment.approvalNumber?.content ?? "",
-        addressLine: establishment.address?.line1 ?? "",
-        cityName: establishment.address?.cityName ?? "",
-        postcode: establishment.address?.postCode?.code ?? "",
-      }));
+    const labels: ProcessingPlantSearchResult[] = establishments.map((establishment) => ({
+      label: formatEstablishmentLabel(establishment),
+      tradingName: establishment.tradingName ?? "",
+      approvalNumber: establishment.approvalNumber?.content ?? "",
+      addressLine: [
+        establishment.address?.line1,
+        establishment.address?.line2,
+        establishment.address?.line3,
+        establishment.address?.line4,
+      ]
+        .filter(Boolean)
+        .join(", "),
+      cityName: establishment.address?.cityName ?? "",
+      postcode: establishment.address?.postCode?.code ?? "",
+      country: establishment.address?.country?.countryName ?? "",
+    }));
 
     return new Response(JSON.stringify(labels), {
       status: 200,
