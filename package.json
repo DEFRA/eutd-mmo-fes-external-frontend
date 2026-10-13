@@ -33,7 +33,7 @@
     "post:test:all": "npm run :report:coverage",
     "pre:test:ci": "npm run delete:reports",
     ":test:ci": "cypress install && cypress run --quiet",
-    ":report:coverage": "nyc report --reporter lcov --reporter text --reporter cobertura --report-dir coverage",
+    ":report:coverage": "nyc report --reporter lcov --reporter text --reporter cobertura",
     "post:report:coverage": "jrm test-results/junit.xml \"test-results/*.xml\""
   },
   "dependencies": {
