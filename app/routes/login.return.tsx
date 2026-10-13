@@ -5,7 +5,7 @@ import { onLoginReturnHandler } from "~/.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import logger from "~/logger.server";
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = ({ request }) => {
   setApiMock(request.url);
 
   logger.info(`[IDM-V2][GET /login/return][Request: ${request.url}]`);

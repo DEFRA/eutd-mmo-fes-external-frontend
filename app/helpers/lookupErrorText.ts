@@ -63,6 +63,8 @@ export const getErrorMessage = (key: string): string => {
     "error.country.string.base": "commonWhatExportersAddressErrorCountry",
     "error.country.any.invalid": "commonWhatExportersAddressErrorCountry",
     "error.country.string.pattern.base": "commonWhatExportersAddressErrorCountry",
+    "error.country.plantAddress.nonUK": "psAddProcessingPlantAddressErrorCountryNotUk",
+    "error.country.storageFacility.nonUK": "sdAddStorageFacilityAddressErrorCountryNotUk",
     "error.country.string.emoji": "emojiCharactersNotPermitted",
     "error.streetName.string.empty": "commonWhatExportersAddressErrorStreetName",
     "error.subBuildingName.string.pattern.base": "commonWhatExportersAddressErrorSubBuildingValidation",
