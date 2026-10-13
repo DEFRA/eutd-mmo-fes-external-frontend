@@ -3,8 +3,8 @@ import { type ITestHandler, TestCaseId } from "~/types";
 import processingStatement from "@/fixtures/processingStatementApi/processingStatement.json";
 import {
   GET_PROCESSING_STATEMENT,
-  PROCESSING_PLANTS_URL,
-  mockProcessingPlantsUrl,
+  mockApprovedFoodEstablishmentsSearchUrl,
+  mockApprovedFoodEstablishmentsTokenUrl,
   mockSaveAndValidateDocument,
 } from "~/urls.server";
 
@@ -15,6 +15,7 @@ const processingPlants = [
       content: "UK/1234/EC",
     },
     address: {
+      line1: "Harbour House",
       cityName: "Hull",
       postCode: {
         code: "HU1 2AB",
@@ -31,6 +32,12 @@ const processingPlants = [
     tradingName: "Harbour Seafood Processors",
     approvalNumber: {
       content: "UK/2222/EC",
+    },
+    address: {
+      line1: "Gate 1",
+      line2: "Dock Estate",
+      line3: "North Pier",
+      line4: "Shed 8",
     },
   },
   {
@@ -91,6 +98,8 @@ const processingStatementWithSavedPlantNoManualAddress = {
   ...processingStatementWithoutManualAddress,
   plantName: "Test Fish Plant",
   plantApprovalNumber: "UK/1234/EC",
+  plantTownCity: "Hull",
+  plantPostcode: "HU1 2AB",
 };
 
 // The base fixture ships with a pre-set plantName/plantApprovalNumber (used by other specs),
@@ -101,35 +110,54 @@ const {
   ...processingStatementWithoutSavedPlant
 } = processingStatement;
 
-const processingPlantSelectionErrorResponse = (isNonJs: boolean) =>
-  isNonJs
-    ? {
-        errors: {
-          plantName: "psAddProcessingPlantAddressErrorNullPlantName",
-          plantApprovalNumber: "psAddProcessingPDErrorPlantApprovalNumber",
-        },
-      }
-    : {
-        errors: {
-          processingPlant: "psAddProcessingPlantErrorSelectPlant",
-        },
-      };
+const processingPlantSelectionErrorResponse = () => ({
+  errors: {
+    processingPlant: "psAddProcessingPlantErrorSelectPlant",
+  },
+});
 
-const getProcessingPlantsHandlers = (plants: unknown[]) => [
-  rest.get(PROCESSING_PLANTS_URL, (req, res, ctx) => res(ctx.json(plants))),
-  rest.get(mockProcessingPlantsUrl, (req, res, ctx) => res(ctx.json(plants))),
+const filterPlantsBySearch = (plants: any[], searchTerm: string) => {
+  const normalized = searchTerm.trim().toLowerCase();
+  if (!normalized) {
+    return plants;
+  }
+
+  return plants.filter((plant) => {
+    const tradingName = plant.tradingName?.toLowerCase?.() ?? "";
+    const approval = plant.approvalNumber?.content?.toLowerCase?.() ?? "";
+    return tradingName.includes(normalized) ?? approval.includes(normalized);
+  });
+};
+
+const getProcessingPlantsHandlers = (plants: any[]) => [
+  rest.post(mockApprovedFoodEstablishmentsTokenUrl, (req, res, ctx) =>
+    res(
+      ctx.json({
+        access_token: "approved-food-establishments-token",
+        token_type: "Bearer",
+        expires_in: 3600,
+      })
+    )
+  ),
+  rest.get(mockApprovedFoodEstablishmentsSearchUrl, (req, res, ctx) => {
+    const searchTerm = req.url.searchParams.get("searchTerm") ?? "";
+    return res(
+      ctx.json({
+        content: filterPlantsBySearch(plants, searchTerm),
+      })
+    );
+  }),
 ];
 
 const addProcessingPlantHandler: ITestHandler = {
   [TestCaseId.PSAddProcessingPlantContinue]: () => [
-    // subsequent loads (e.g. details page after saving) — lowest MSW priority
-    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithSavedPlant))),
+    // react-router issues both a document GET and a parallel .data revalidation GET for the
+    // same navigation; a once()/fallback split here races between them, so keep this consistent.
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithoutSavedPlant))),
     ...getProcessingPlantsHandlers(processingPlants),
     rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
       res(ctx.json(processingStatement))
     ),
-    // initial page load — highest MSW priority, consumed once
-    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res.once(ctx.json(processingStatementWithoutSavedPlant))),
   ],
   [TestCaseId.PSAddProcessingPlantWithSavedSelection]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) =>
@@ -150,20 +178,16 @@ const addProcessingPlantHandler: ITestHandler = {
   [TestCaseId.PSAddProcessingPlantNoMatchContinue]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithoutSavedPlant))),
     ...getProcessingPlantsHandlers(processingPlantsNoMatch),
-    rest.post(mockSaveAndValidateDocument("processingStatement"), async (req, res, ctx) => {
-      const body = await req.json();
-      const isNonJs = body?.isNonJs === true || body?.isNonJs === "true";
-      return res(ctx.status(400), ctx.json(processingPlantSelectionErrorResponse(isNonJs)));
-    }),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), async (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(processingPlantSelectionErrorResponse()))
+    ),
   ],
   [TestCaseId.PSAddProcessingPlantEmptyContinue]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithoutSavedPlant))),
     ...getProcessingPlantsHandlers(processingPlantsNoMatch),
-    rest.post(mockSaveAndValidateDocument("processingStatement"), async (req, res, ctx) => {
-      const body = await req.json();
-      const isNonJs = body?.isNonJs === true || body?.isNonJs === "true";
-      return res(ctx.status(400), ctx.json(processingPlantSelectionErrorResponse(isNonJs)));
-    }),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), async (req, res, ctx) =>
+      res(ctx.status(400), ctx.json(processingPlantSelectionErrorResponse()))
+    ),
   ],
   [TestCaseId.PSAddProcessingPlantManualEntry]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatement))),
