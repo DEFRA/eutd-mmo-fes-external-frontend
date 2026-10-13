@@ -11,10 +11,6 @@ import crossFetch from "cross-fetch";
 /* istanbul ignore next */
 const fetchImpl = process.env.NODE_ENV === "test" ? crossFetch : fetch;
 
-const SEARCH_TIMEOUT_MS = 3000;
-const TOKEN_TIMEOUT_MS = 3000;
-const TOKEN_SAFETY_WINDOW_MS = 60_000;
-
 type EstablishmentType = "processing" | "storage";
 
 type OAuthTokenResponse = {
@@ -91,7 +87,10 @@ const getCachedToken = (): string | undefined => {
     return undefined;
   }
 
-  if (tokenCache.expiresAtMs <= getNow() + TOKEN_SAFETY_WINDOW_MS) {
+  if (
+    tokenCache.expiresAtMs <=
+    getNow() + Number.parseInt(ENV.APPROVED_ESTABLISHMENT_SEARCH_TOKEN_SAFETY_WINDOW_MS, 10)
+  ) {
     tokenCache = undefined;
     return undefined;
   }
@@ -137,7 +136,7 @@ const requestAccessToken = async (): Promise<string> => {
       },
       body: formBody,
     },
-    TOKEN_TIMEOUT_MS
+    Number.parseInt(ENV.APPROVED_ESTABLISHMENT_SEARCH_TOKEN_TIMEOUT_MS, 10)
   );
 
   await trackDependency(
@@ -255,7 +254,7 @@ const callSearchApi = async (type: EstablishmentType, term: string, token: strin
         ENV.DEFRA_TRADE_API_APIM_HEADER_VALUE
       ),
     },
-    SEARCH_TIMEOUT_MS
+    Number.parseInt(ENV.APPROVED_ESTABLISHMENT_SEARCH_TIMEOUT_MS, 10)
   );
 
   serverLogger.debug("[APPROVED-FOOD-ESTABLISHMENTS][SEARCH][RESPONSE]");
