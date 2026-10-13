@@ -724,16 +724,6 @@ const AddLandings = () => {
                 </>
               </Details>
               <div className="govuk-button-group ">
-                <Button
-                  type={BUTTON_TYPE.SUBMIT}
-                  name="_action"
-                  label={t("commonSecondaryCancelButton", { ns: "common" })}
-                  // @ts-ignore
-                  value={cancelActionName}
-                  className="govuk-button govuk-button--secondary"
-                  id={cancelActionName}
-                  data-testid={cancelActionName}
-                />
                 {canAddLanding && (
                   <Button
                     type={BUTTON_TYPE.SUBMIT}
@@ -751,6 +741,16 @@ const AddLandings = () => {
                     data-testid="submit"
                   />
                 )}
+                <Button
+                  type={BUTTON_TYPE.SUBMIT}
+                  name="_action"
+                  label={t("commonSecondaryCancelButton", { ns: "common" })}
+                  // @ts-ignore
+                  value={cancelActionName}
+                  className="govuk-button govuk-button--secondary"
+                  id={cancelActionName}
+                  data-testid={cancelActionName}
+                />
               </div>
             </div>
           </SecureForm>

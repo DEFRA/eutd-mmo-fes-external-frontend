@@ -246,18 +246,6 @@ const UploadFile = () => {
             </table>
             <div className="govuk-button-group">
               <Button
-                label={t("commonCancelButtonCancelButtonText", {
-                  ns: "common",
-                })}
-                className="govuk-button govuk-button--secondary"
-                type={BUTTON_TYPE.SUBMIT}
-                data-module="govuk-button"
-                name="_action"
-                //@ts-ignore
-                value="cancel"
-                data-testid="cancel"
-              />
-              <Button
                 id="continue"
                 label={t("commonContinueButtonSaveAndContinueButton", {
                   ns: "common",
@@ -269,6 +257,18 @@ const UploadFile = () => {
                 //@ts-ignore
                 value="saveAndContinue"
                 name="_action"
+              />
+              <Button
+                label={t("commonCancelButtonCancelButtonText", {
+                  ns: "common",
+                })}
+                className="govuk-button govuk-button--secondary"
+                type={BUTTON_TYPE.SUBMIT}
+                data-module="govuk-button"
+                name="_action"
+                //@ts-ignore
+                value="cancel"
+                data-testid="cancel"
               />
             </div>
           </SecureForm>

@@ -54,6 +54,15 @@ export const CopyVoidConfirmationForm = ({ errors, journey }: Props) => {
       <br />
       <div className="govuk-button-group">
         <Button
+          label={t("commonContinueButtonContinueButtonText", {
+            ns: "common",
+          })}
+          className="govuk-button"
+          type={BUTTON_TYPE.SUBMIT}
+          data-module="govuk-button"
+          data-testid="continue"
+        />
+        <Button
           label={t("commonCancelButtonCancelButtonText", {
             ns: "common",
           })}
@@ -64,15 +73,6 @@ export const CopyVoidConfirmationForm = ({ errors, journey }: Props) => {
           type={BUTTON_TYPE.SUBMIT}
           data-module="govuk-button"
           data-testid="cancel"
-        />
-        <Button
-          label={t("commonContinueButtonContinueButtonText", {
-            ns: "common",
-          })}
-          className="govuk-button"
-          type={BUTTON_TYPE.SUBMIT}
-          data-module="govuk-button"
-          data-testid="continue"
         />
       </div>
       <input type="hidden" name="journey" value={journey} />
