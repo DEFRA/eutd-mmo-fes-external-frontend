@@ -289,7 +289,7 @@ export enum TestCaseId {
   SDStorageFacilityAddressWithSubBuildingError = "sdStorageFacilityAddressWithSubBuildingError",
   SDStorageFacilityAddressWith403 = "sdStorageFacilityAddressWith403",
   SDStorageFacilityAddressManualEntry = "sdStorageFacilityAddressManualEntry",
-  SDStorageFacilityAddressPrePopulated = "sdStorageFacilityAddressPrePopulated",
+  SDStorageFacilityAddressStoredAddressNotPrefilled = "sdStorageFacilityAddressStoredAddressNotPrefilled",
 
   SDYouHaveAddedAProduct = "sdYouHaveAddedAProduct",
   SDYouHaveAddedAProductDraft = "SDYouHaveAddedAProductSaveContinue",
@@ -699,6 +699,7 @@ export enum TestCaseId {
   SDAddStorageFacilityAddressWithPlaneTransport = "sdAddStorageFacilityAddressWithPlaneTransport",
   SDAddStorageFacilityAddressWithContainerVesselTransport = "sdAddStorageFacilityAddressWithContainerVesselTransport",
   SDAddStorageApprovalComplete = "sdAddStorageApprovalComplete",
+  SDAddStorageApprovalNameError = "sdAddStorageApprovalNameError",
   SDAddStorageApprovalError = "sdAddStorageApprovalError",
   SDAddStorageApprovalForbidden = "sdAddStorageApprovalForbidden",
   SDAddStorageSaveAsDraft = "sdAddStorageSaveAsDraft",
@@ -710,6 +711,12 @@ export enum TestCaseId {
   SDAddStorageApprovalInvalidCharactersSaveAsDraft = "sdAddStorageApprovalInvalidCharactersSaveAsDraft",
   SDAddStorageApprovalMaxLengthSaveAsDraft = "sdAddStorageApprovalMaxLengthSaveAsDraft",
   SDAddStorageApprovalNoJs = "sdAddStorageApprovalNoJs",
+
+  SDWhichStorageFacilityContinue = "sdWhichStorageFacilityContinue",
+  SDWhichStorageFacilityWithSavedSelection = "sdWhichStorageFacilityWithSavedSelection",
+  SDWhichStorageFacilitySavedManualEntry = "sdWhichStorageFacilitySavedManualEntry",
+  SDWhichStorageFacilityEmptyContinue = "sdWhichStorageFacilityEmptyContinue",
+  SDWhichStorageFacilityManualEntry = "sdWhichStorageFacilityManualEntry",
 
   PSAddCatchWeights = "psAddCatchWeights",
   PSAddCatchWeightUnauthorised = "psAddCatchWeightUnauthorised",

@@ -464,7 +464,7 @@ export const executeAction = async (request: Request, params: Params): Promise<R
   }
 
   if (addAnotherFacility) {
-    return redirect(`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details`, {
+    return redirect(`/create-non-manipulation-document/${documentNumber}/add-storage-facility`, {
       headers: {
         "Set-Cookie": await commitSession(session),
       },

@@ -54,6 +54,7 @@ import addProductToConsignementHandler from "./addProductToConsignementHandler";
 import loginHandler from "./loginHandler";
 import transportDocumentsHandler from "./transportDocumentsHandler";
 import addStorageApprovalHandler from "./addStorageApprovalHandler";
+import whichStorageFacilityHandler from "./whichStorageFacilityHandler";
 import departureSummaryHandlerHandler from "./departureSummaryHandler";
 import removeProductHandler from "./removeProductHandler";
 import euDataIntegrationHandler from "./euDataIntegrationHandler";
@@ -107,6 +108,7 @@ const rootTestHandler: ITestHandler = {
   ...storageDocumentCreatedHandler,
   ...addStorageFacilityHandler,
   ...addStorageApprovalHandler,
+  ...whichStorageFacilityHandler,
   ...whatStorageFacilityAddressHandler,
   ...addLandingsHandler,
   ...addProductToConsignementHandler,

@@ -1,135 +1,92 @@
 import * as React from "react";
-import { Main, Title, BackToProgressLink, ErrorSummary, SecureForm } from "~/components";
+import { Main, Title, BackToProgressLink, SecureForm, ErrorSummary, ErrorMessage } from "~/components";
 import { useTranslation } from "react-i18next";
-import { Button, BUTTON_TYPE, ErrorPosition, FormInput } from "@capgeminiuk/dcx-react-library";
-import { useActionData, useLoaderData, redirect, type LoaderFunction, type ActionFunction } from "react-router";
+import { FormInput } from "@capgeminiuk/dcx-react-library";
+import { useActionData, useLoaderData, redirect, type ActionFunction, type LoaderFunction } from "react-router";
 
 import { route } from "routes-gen";
-import type { StorageDocument, IUnauthorised, IErrorsTransformed, ErrorResponse } from "~/types";
+import type { StorageDocument, IUnauthorised, IErrorsTransformed } from "~/types";
 import {
   getBearerTokenForRequest,
   validateResponseData,
   instanceOfUnauthorised,
   getStorageDocument,
-  updateStorageDocumentFacility,
   createCSRFToken,
+  updateStorageDocumentFacility,
   validateCSRFToken,
+  getStorageFacilities,
+  matchEstablishment,
   nonJsDateValidation,
 } from "~/.server";
-import isEmpty from "lodash/isEmpty";
-import {
-  displayErrorTransformedMessages,
-  getErrorMessage,
-  getStrOrDefault,
-  getTransformedError,
-  toISODateFormat,
-  toDDMMYYYYFormat,
-} from "~/helpers";
 import setApiMock from "tests/msw/helpers/setApiMock";
-import { DateFieldWithPicker } from "~/composite-components";
+import { ButtonGroup, DateFieldWithPicker } from "~/composite-components";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import classNames from "classnames";
+import { getEnv } from "~/env.server";
+import isEmpty from "lodash/isEmpty";
+import { displayErrorTransformedMessages, getStrOrDefault, toDDMMYYYYFormat, toISODateFormat } from "~/helpers";
 import { useScrollOnPageError } from "~/hooks";
-import i18next from "~/i18next.server";
-import type { Session } from "@remix-run/node";
-import type { TFunction } from "i18next";
 
 type loaderStorageFacility = {
   documentNumber: string;
-  facilityName: string;
+  approvalNumber: string;
+  facilityStorage?: string;
+  facilityName?: string;
   facilityAddressOne?: string;
   facilityTownCity?: string;
   facilityPostcode?: string;
+  selectedArrivalDate?: string;
+  isMatchedEstablishment: boolean;
+  hasFacility: boolean;
+  displayOptionalSuffix: boolean;
   nextUri?: string;
-  hasFacility?: boolean;
   csrf: string;
-  selectedArrivalDate: string;
-  backUrl: string;
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  /* istanbul ignore next */
   setApiMock(request.url);
-
   const { documentNumber } = params;
   const bearerToken = await getBearerTokenForRequest(request);
   const url = new URL(request.url);
   const nextUri = url.searchParams.get("nextUri") ?? "";
-  const storageDocument: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
-
-  if (instanceOfUnauthorised(storageDocument)) {
-    return redirect("/forbidden");
-  }
+  const storageDocumentDetails: StorageDocument | IUnauthorised = await getStorageDocument(bearerToken, documentNumber);
+  const displayOptionalSuffix = getEnv().EU_CATCH_FIELDS_OPTIONAL === "true";
 
   const session = await getSessionFromRequest(request);
-  session.unset(`documentNumber-${documentNumber}`);
-  session.unset(`copyDocumentAcknowledged-${documentNumber}`);
-  session.unset(`copyDocument-${documentNumber}`);
-
-  session.unset("currentStep");
-  session.unset("postcode");
-  session.unset("addressOne");
 
   const csrf = await createCSRFToken(request);
   session.set("csrf", csrf);
 
-  validateResponseData(storageDocument);
+  if (instanceOfUnauthorised(storageDocumentDetails)) {
+    return redirect("/forbidden");
+  }
 
-  const hasFacility =
-    storageDocument?.facilityAddressOne !== undefined && storageDocument?.facilityPostcode !== undefined;
+  validateResponseData(storageDocumentDetails);
 
-  const getBackUrl = () => {
-    // Prefer an explicit arrivalVehicle query param (set by the transport save redirect)
-    // so we can determine the correct back link immediately after redirect.
-    const url = new URL(request.url);
-    const arrivalVehicleParam = url.searchParams.get("arrivalVehicle");
-
-    const arrivalVehicle = arrivalVehicleParam ?? storageDocument?.arrivalTransport?.vehicle;
-
-    if (arrivalVehicle) {
-      const arrivalTransportRoutes: Record<string, string> = {
-        truck: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-truck", {
-          documentNumber,
-        }),
-        train: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-train", {
-          documentNumber,
-        }),
-        plane: route("/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-plane", {
-          documentNumber,
-        }),
-        containerVessel: route(
-          "/create-non-manipulation-document/:documentNumber/add-arrival-transportation-details-container-vessel",
-          {
-            documentNumber,
-          }
-        ),
-      };
-
-      return (
-        arrivalTransportRoutes[arrivalVehicle] ??
-        route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
-          documentNumber,
-        })
-      );
-    }
-
-    return route("/create-non-manipulation-document/:documentNumber/how-does-the-consignment-arrive-to-the-uk", {
-      documentNumber,
-    });
-  };
+  const sd = storageDocumentDetails as StorageDocument;
+  const establishments = await getStorageFacilities();
+  // Recomputed every request rather than persisted - the facility can only change via
+  // add-storage-facility, so the registry is always the source of truth for this flag.
+  const isMatchedEstablishment = Boolean(
+    matchEstablishment(establishments, sd.facilityName, sd.facilityApprovalNumber)
+  );
+  const hasFacility = !isEmpty(sd.facilityAddressOne) && !isEmpty(sd.facilityPostcode);
 
   return new Response(
     JSON.stringify({
       documentNumber,
-      facilityAddressOne: storageDocument?.facilityAddressOne,
-      facilityTownCity: storageDocument?.facilityTownCity,
-      facilityPostcode: storageDocument?.facilityPostcode,
-      facilityName: storageDocument?.facilityName,
       nextUri,
+      displayOptionalSuffix,
+      approvalNumber: sd.facilityApprovalNumber,
+      facilityStorage: sd.facilityStorage,
+      facilityName: sd.facilityName,
+      facilityAddressOne: sd.facilityAddressOne,
+      facilityTownCity: sd.facilityTownCity,
+      facilityPostcode: sd.facilityPostcode,
+      selectedArrivalDate: sd.facilityArrivalDate,
+      isMatchedEstablishment,
       hasFacility,
       csrf,
-      selectedArrivalDate: storageDocument?.facilityArrivalDate,
-      backUrl: getBackUrl(),
     }),
     {
       headers: {
@@ -140,196 +97,54 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   );
 };
 
-// Helper function to validate facility fields
-const validateFacilityFields = (
-  values: Record<string, FormDataEntryValue>,
-  result: Response | null,
-  t: TFunction,
-  fieldPrefixName: string,
-  fieldPrefixDate: string
-): Array<{ key: string; message: string }> => {
-  const errorsArr: Array<{ key: string; message: string }> = [];
+const facilityDetailsUrl = "/create-non-manipulation-document/:documentNumber/add-storage-facility-details";
 
-  if (result !== null) {
-    errorsArr.push({
-      key: "storageFacilities-facilityArrivalDate",
-      message: t(getErrorMessage(`error.${fieldPrefixDate}.date.isoDate`)),
-    });
+// nonJsDateValidation always keys its error "facilityArrivalDate", but the Day/Month/Year inputs
+// all share the DateFieldWithPicker's own id ("storageFacilities-facilityArrivalDate") - remap so
+// the error summary link's href/focus target actually matches an element in the DOM (the Day input,
+// being first in markup order).
+const dateFieldId = "storageFacilities-facilityArrivalDate";
+const remapDateErrorKey = (errors: IErrorsTransformed): IErrorsTransformed => {
+  const dateError = errors.facilityArrivalDate;
+  if (!dateError) {
+    return errors;
   }
 
-  if (!values["facilityName"] || String(values["facilityName"]).trim() === "") {
-    errorsArr.push({
-      key: fieldPrefixName,
-      message: "sdAddStorageFacilityDetailsErrorEnterTheFacilityName",
-    });
-  }
-
-  return errorsArr;
-};
-
-// Helper function to handle add address action
-const handleGoToAddAddress = async (
-  values: Record<string, FormDataEntryValue>,
-  selectedDate: string | undefined,
-  session: Session,
-  result: Response | null,
-  t: TFunction,
-  documentNumber: string
-): Promise<Response> => {
-  session.set("facilityName", String(getStrOrDefault(values["facilityName"] as string)));
-  session.set("selectedArrivalDate", selectedDate);
-
-  const fieldPrefixName = "storageFacilities-facilityName";
-  const fieldPrefixDate = "facilityArrivalDate";
-  const errorsArr = validateFacilityFields(values, result, t, fieldPrefixName, fieldPrefixDate);
-
-  if (errorsArr.length > 0) {
-    return new Response(
-      JSON.stringify({
-        values,
-        errors: getTransformedError(errorsArr),
-      }),
-      {
-        status: 400,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  }
-
-  return redirect(`/create-non-manipulation-document/${documentNumber}/what-storage-facility-address`, {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
-  });
-};
-
-// Helper to extract valid facility fields after a draft validation response
-const getValidFacilityData = async (
-  validationResponse: Response | ErrorResponse | null | undefined,
-  storageFacilityData: Partial<StorageDocument>
-): Promise<Partial<StorageDocument>> => {
-  if (!(validationResponse instanceof Response)) {
-    return storageFacilityData;
-  }
-
-  const responseData = await validationResponse.clone().json();
-  const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
-
-  const filteredFacility = { ...storageFacilityData };
-
-  if (errorKeys.some((k) => k.includes("facilityName"))) {
-    filteredFacility.facilityName = null as unknown as string;
-  }
-
-  if (errorKeys.some((k) => k.includes("facilityArrivalDate"))) {
-    filteredFacility.facilityArrivalDate = null as unknown as string;
-  }
-
-  return filteredFacility;
-};
-
-// Helper function to handle save as draft action
-const handleSaveAsDraft = async (
-  bearerToken: string,
-  documentNumber: string,
-  values: Record<string, FormDataEntryValue>,
-  selectedDate: string | undefined,
-  session: Session
-): Promise<Response> => {
-  session.unset("facilityName");
-  session.unset("selectedArrivalDate");
-
-  const storageFacilityData = {
-    facilityName: String(getStrOrDefault(values["facilityName"] as string)),
-    facilityArrivalDate: selectedDate,
+  const { facilityArrivalDate, ...rest } = errors;
+  return {
+    [dateFieldId]: { ...dateError, key: dateFieldId, fieldId: `${dateFieldId}-error` },
+    ...rest,
   };
+};
 
+const saveAsDraftFacilityApproval = async (
+  bearerToken: string,
+  documentNumber: string | undefined,
+  facilityData: Partial<StorageDocument>
+): Promise<void> => {
   const validationResponse = await updateStorageDocumentFacility(
     bearerToken,
     documentNumber,
-    "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
+    facilityDetailsUrl,
     false,
-    false,
-    storageFacilityData
-  );
-
-  const dataToSave = await getValidFacilityData(validationResponse, storageFacilityData);
-
-  await updateStorageDocumentFacility(
-    bearerToken,
-    documentNumber,
-    "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
-    true,
-    false,
-    dataToSave
-  );
-
-  return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
-    headers: { "Set-Cookie": await commitSession(session) },
-  });
-};
-
-// Helper function to handle save and continue action
-const handleSaveAndContinue = async (
-  bearerToken: string,
-  documentNumber: string,
-  values: Record<string, FormDataEntryValue>,
-  selectedDate: string | undefined,
-  session: Session,
-  nextUri: string,
-  isDraft: boolean = false
-): Promise<Response> => {
-  const saveToRedisIfErrors = isDraft;
-  const errorResponse = await updateStorageDocumentFacility(
-    bearerToken,
-    documentNumber,
-    "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
-    saveToRedisIfErrors,
     undefined,
-    {
-      facilityName: String(getStrOrDefault(values["facilityName"] as string)),
-      facilityArrivalDate: selectedDate,
-    }
+    facilityData
   );
 
-  if (errorResponse instanceof Response) {
-    // When there are errors and JavaScript is disabled, include the submitted form values
-    // so they can be used to repopulate the form fields
-    const responseData = await errorResponse.json();
+  const dataToSave: Partial<StorageDocument> = { ...facilityData };
 
-    // Explicitly include the form values in the response under 'values' key
-    const combinedResponse = {
-      ...responseData,
-      values: {
-        facilityName: String(getStrOrDefault(values["facilityName"] as string)),
-        facilityArrivalDate: selectedDate,
-        facilityArrivalDateDay: values["facilityArrivalDateDay"],
-        facilityArrivalDateMonth: values["facilityArrivalDateMonth"],
-        facilityArrivalDateYear: values["facilityArrivalDateYear"],
-      },
-    };
+  if (validationResponse instanceof Response) {
+    const responseData = await validationResponse.clone().json();
+    const errorKeys: string[] = responseData?.errors ? Object.keys(responseData.errors) : [];
 
-    return new Response(JSON.stringify(combinedResponse), {
-      status: 400,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    for (const key of Object.keys(dataToSave) as Array<keyof StorageDocument>) {
+      if (errorKeys.some((k) => k.includes(key) || k.includes("facilityApproval"))) {
+        dataToSave[key] = undefined;
+      }
+    }
   }
 
-  session.unset("facilityName");
-  session.unset("selectedArrivalDate");
-
-  return redirect(
-    isEmpty(nextUri) ? `/create-non-manipulation-document/${documentNumber}/add-storage-facility-approval` : nextUri,
-    {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    }
-  );
+  await updateStorageDocumentFacility(bearerToken, documentNumber, facilityDetailsUrl, true, undefined, dataToSave);
 };
 
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
@@ -337,15 +152,17 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (!documentNumber) {
     return redirect("/forbidden");
   }
+
   const bearerToken = await getBearerTokenForRequest(request);
   const session = await getSessionFromRequest(request);
   const form = await request.formData();
-  const nextUri = form.get("nextUri") as string;
-  const { _action, ...values } = Object.fromEntries(form);
-  const t = await i18next.getFixedT(request, ["errorsText", "uploadFile"]);
 
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
+
+  const { _action, ...values } = Object.fromEntries(form);
+  const isDraft = _action === "saveAsDraft";
+  const nextUri = form.get("nextUri") as string;
 
   const facilityArrivalDateYear = form.get("facilityArrivalDateYear") as string;
   const facilityArrivalDateMonth = form.get("facilityArrivalDateMonth") as string;
@@ -359,107 +176,139 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
     getStrOrDefault(facilityArrivalDateMonth),
     getStrOrDefault(facilityArrivalDateYear)
   );
-  const result = await nonJsDateValidation(request, values, selectedDateInISOFormat, "facilityArrivalDate");
 
-  if (_action === "add-facilityArrivalDate") {
-    return (
-      result ??
-      new Response(JSON.stringify({ values }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      })
-    );
+  const facilityData: Partial<StorageDocument> = {
+    facilityName: (values["facilityName"] as string) ?? "",
+    facilityApprovalNumber: isEmpty(values["approvalNumber"]) ? undefined : (values["approvalNumber"] as string),
+    facilityStorage: isEmpty(values["facilityStorage"]) ? undefined : (values["facilityStorage"] as string),
+    facilityArrivalDate: selectedDate,
+  };
+
+  if (isDraft) {
+    // Drafts intentionally skip arrival-date validation below - incomplete data is allowed.
+    await saveAsDraftFacilityApproval(bearerToken, documentNumber, facilityData);
+    return redirect(route("/create-non-manipulation-document/non-manipulation-documents"), {
+      headers: { "Set-Cookie": await commitSession(session) },
+    });
   }
 
-  if (_action === "goToAddAddress") {
-    return handleGoToAddAddress(values, selectedDate, session, result, t, documentNumber);
+  const dateValidationResponse = await nonJsDateValidation(
+    request,
+    values,
+    selectedDateInISOFormat,
+    "facilityArrivalDate"
+  );
+  const dateErrors: IErrorsTransformed = dateValidationResponse
+    ? remapDateErrorKey((await dateValidationResponse.clone().json())?.errors ?? {})
+    : {};
+
+  const errorResponse = await updateStorageDocumentFacility(
+    bearerToken,
+    documentNumber,
+    facilityDetailsUrl,
+    false,
+    undefined,
+    facilityData
+  );
+
+  if (errorResponse || !isEmpty(dateErrors)) {
+    const backendErrors: IErrorsTransformed =
+      errorResponse instanceof Response ? (await errorResponse.clone().json())?.errors ?? {} : {};
+
+    // Merge so both the arrival date and backend (storage type, approval number, etc.) errors
+    // can be shown together, instead of the date check short-circuiting the backend call. Date
+    // errors are spread first so they're listed before the backend's in the error summary.
+    return new Response(JSON.stringify({ errors: { ...dateErrors, ...backendErrors } }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
-  if (_action === "saveAsDraft") {
-    return handleSaveAsDraft(bearerToken, documentNumber, values, selectedDate, session);
-  }
+  session.set(
+    "backLinkForFacilityAdded",
+    `/create-non-manipulation-document/${documentNumber}/add-storage-facility-details`
+  );
 
-  return handleSaveAndContinue(bearerToken, documentNumber, values, selectedDate, session, nextUri, false);
+  return redirect(
+    isEmpty(nextUri)
+      ? `/create-non-manipulation-document/${documentNumber}/how-does-the-consignment-leave-the-uk`
+      : nextUri,
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    }
+  );
 };
 
-const getArrivalDateFromAction = (actionData: any, type: string): string => {
-  const year = actionData?.values?.[`${type}Year`] ?? "";
-  const month = actionData?.values?.[`${type}Month`] ?? "";
-  const day = actionData?.values?.[`${type}Day`] ?? "";
-  return year || month || day ? `${year}-${month}-${day}` : "";
-};
-
-const AddStorageFacilityDetails = () => {
+const AddStorageFacilityApproval = () => {
   const { t } = useTranslation(["addStorageFacilityDetails", "common"]);
   const {
     documentNumber,
+    approvalNumber,
+    facilityStorage,
+    facilityName,
     facilityAddressOne,
     facilityTownCity,
     facilityPostcode,
-    facilityName,
-    nextUri,
-    hasFacility,
-    csrf,
     selectedArrivalDate,
-    backUrl,
+    isMatchedEstablishment,
+    hasFacility,
+    nextUri,
+    csrf,
   } = useLoaderData<loaderStorageFacility>();
-  const actionData = useActionData<{ errors: IErrorsTransformed; values?: Record<string, any> }>() ?? { errors: {} };
-  const { errors = {}, values: submittedValues } = actionData;
-  const hasErrors = !isEmpty(errors);
-  const hasFacilityNameError = !isEmpty(errors?.["storageFacilities-facilityName"]);
+  const actionData = useActionData<{
+    errors: IErrorsTransformed;
+    facilityStorage?: string;
+  }>() ?? { errors: {} };
+  const { errors = {} } = actionData;
+  const [facilityNameValue, setFacilityNameValue] = React.useState(facilityName ?? "");
 
-  // Helper function to get the value to display - prefer submitted form data when there are errors
-  const getFormValue = (fieldName: string, defaultValue: any) => {
-    if (hasErrors && submittedValues?.[fieldName] !== undefined) {
-      return submittedValues[fieldName];
-    }
-    return defaultValue;
-  };
-
-  const arrivalDateFromAction = getArrivalDateFromAction(actionData, "facilityArrivalDate");
-
-  const getDateFromActionOrLoader = (dateFromAction: string, dateFromLoader: string | undefined): string =>
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- intentionally use || so empty strings fall through to the loader date
-    dateFromAction?.trim() || dateFromLoader?.trim() || "";
+  useScrollOnPageError(errors);
 
   const [daySelected = "", monthSelected = "", yearSelected = ""] =
     selectedArrivalDate && typeof selectedArrivalDate === "string" ? selectedArrivalDate.split("/") : " ";
 
-  useScrollOnPageError(errors);
+  // The address is always known by this page (add-storage-facility requires a registry match
+  // or a completed manual address first).
+  const hasAddress = isMatchedEstablishment || hasFacility;
+
   return (
-    <Main backUrl={backUrl}>
-      {hasErrors && <ErrorSummary errors={displayErrorTransformedMessages(errors)} />}
+    <Main backUrl={`/create-non-manipulation-document/${documentNumber}/add-storage-facility`}>
+      {!isEmpty(errors) && <ErrorSummary errors={displayErrorTransformedMessages(errors)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
-          <Title title={`${t("sdAddStorageDetailsHeader")}`} />
+          <Title title={t("sdAddStorageApprovalDetailsHeader")} />
           <SecureForm
             method="post"
             action={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details`}
             csrf={csrf}
           >
-            <div className="govuk-warning-text">
-              <span className="govuk-warning-text__icon" aria-hidden="true">
-                !
-              </span>
-              <strong className="govuk-warning-text__text">
-                <span className="govuk-visually-hidden">Warning</span>
-                {t("sdAddStorageAddressRequired")}
-              </strong>
-            </div>
+            {hasAddress && (
+              <div className="app-establishment-summary govuk-!-margin-bottom-6" data-testid="facility-summary">
+                {facilityName && (
+                  <p className="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">{facilityName}</p>
+                )}
+                {approvalNumber && (
+                  <p className="govuk-body govuk-!-margin-bottom-1">
+                    {t("sdFacilitySummaryApprovalNumberLabel")}: {approvalNumber}
+                  </p>
+                )}
+                {facilityName && facilityAddressOne && (
+                  <p className="govuk-body govuk-!-margin-bottom-1">{facilityAddressOne}</p>
+                )}
+                {facilityTownCity && <p className="govuk-body govuk-!-margin-bottom-1">{facilityTownCity}</p>}
+                {facilityPostcode && <p className="govuk-body govuk-!-margin-bottom-1">{facilityPostcode}</p>}
+              </div>
+            )}
             <DateFieldWithPicker
-              id={"storageFacilities-facilityArrivalDate"}
+              id="storageFacilities-facilityArrivalDate"
               name="facilityArrivalDate"
               errors={errors?.["storageFacilities-facilityArrivalDate"] || errors?.facilityArrivalDate}
-              dateSelected={getDateFromActionOrLoader(
-                arrivalDateFromAction,
-                yearSelected + "-" + monthSelected + "-" + daySelected
-              )}
+              dateSelected={`${yearSelected}-${monthSelected}-${daySelected}`}
               getDateSelected={() => {}}
-              label={t("sdStorageArrivalDate", {
-                ns: "addStorageFacilityDetails",
-                defaultValue: "Arrival date",
-              })}
-              labelStyle="normal"
+              label={t("sdStorageArrivalDate", { ns: "addStorageFacilityDetails", defaultValue: "Arrival date" })}
+              labelStyle="bold"
               translationNs="addStorageFacilityDetails"
               hintText={t("sdStorageArrivalDateInfo", {
                 ns: "addStorageFacilityDetails",
@@ -484,92 +333,161 @@ const AddStorageFacilityDetails = () => {
                 })}
               </div>
             </details>
-            <FormInput
-              containerClassName={
-                hasFacilityNameError
-                  ? "govuk-form-group govuk-!-width-one-half govuk-form-group--error"
-                  : "govuk-form-group govuk-!-width-one-half"
+            <div
+              className={
+                isEmpty(errors?.["storageFacilities-facilityName"])
+                  ? "govuk-form-group"
+                  : "govuk-form-group govuk-form-group--error"
               }
-              label={t("sdFacilityName")}
-              name="facilityName"
-              type="text"
-              inputClassName={classNames("govuk-input", {
-                "govuk-input--error": errors?.["storageFacilities-facilityName"],
-              })}
-              errorProps={{
-                className: isEmpty(errors?.["storageFacilities-facilityName"]) ? "" : "govuk-error-message",
-              }}
-              staticErrorMessage={t(errors?.["storageFacilities-facilityName"]?.message, {
-                ns: "errorsText",
-              })}
-              errorPosition={ErrorPosition.AFTER_LABEL}
-              inputProps={{
-                defaultValue: getFormValue("facilityName", facilityName),
-                id: "storageFacilities-facilityName",
-              }}
-              hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-              hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-            />
-            {hasFacility ? (
-              <p>
-                {facilityAddressOne}
-                <br />
-                {facilityTownCity}
-                <br />
-                {facilityPostcode}
-              </p>
-            ) : null}
-            <br />
-            <div className="govuk-button-group">
-              <Button
-                id="storageFacilities-facilityAddressOne"
-                label={
-                  hasFacility
-                    ? t("commonWhatExportersAddressChangeLink", { ns: "common" })
-                    : t("sdAddStorageFacilityDetailsAddAddressText")
-                }
-                visuallyHiddenText={
-                  hasFacility
-                    ? {
-                        text: t("sdChangeStorageFacilityAddressHiddenText", { ns: "addStorageFacilityDetails" }),
-                        className: "govuk-visually-hidden",
-                      }
-                    : undefined
-                }
-                className="govuk-button govuk-button--secondary"
-                type={BUTTON_TYPE.SUBMIT}
-                data-module="govuk-button"
-                name="_action"
-                //@ts-ignore
-                value="goToAddAddress"
-                data-testid="goToAddAddress-button"
+            >
+              {!isEmpty(errors?.["storageFacilities-facilityName"]) && (
+                <ErrorMessage
+                  id="storageFacilities-facilityName-error"
+                  text={t(errors?.["storageFacilities-facilityName"]?.message, { ns: "errorsText" })}
+                  visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                />
+              )}
+              <FormInput
+                containerClassName="govuk-form-group govuk-!-width-two-thirds"
+                label={t("sdFacilityName", { ns: "addStorageFacilityDetails" })}
+                labelClassName="govuk-label govuk-label--s"
+                name="facilityName"
+                type="text"
+                value={facilityNameValue}
+                onChange={(event: React.FormEvent<HTMLInputElement>) => setFacilityNameValue(event.currentTarget.value)}
+                inputClassName={classNames("govuk-input", {
+                  "govuk-input--error": errors?.["storageFacilities-facilityName"],
+                })}
+                inputProps={{
+                  id: "storageFacilities-facilityName",
+                  "aria-describedby": isEmpty(errors?.["storageFacilities-facilityName"])
+                    ? undefined
+                    : "storageFacilities-facilityName-error",
+                }}
+                hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+                hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
               />
-              <Button
-                id="saveAsDraft"
-                label={t("commonSaveAsDraftButtonSaveAsDraftText", { ns: "common" })}
-                className="govuk-button govuk-button--secondary"
-                type={BUTTON_TYPE.SUBMIT}
-                data-module="govuk-button"
-                name="_action"
-                // @ts-ignore
-                value="saveAsDraft"
-                data-testid="save-draft-button"
+            </div>
+            <div
+              className={
+                isEmpty(errors?.["storageFacilities-facilityApproval"])
+                  ? "govuk-form-group"
+                  : "govuk-form-group govuk-form-group--error"
+              }
+            >
+              {isEmpty(errors?.["storageFacilities-facilityApproval"]) ? null : (
+                <ErrorMessage
+                  id="storageFacilities-facilityApproval-error"
+                  text={t(errors?.["storageFacilities-facilityApproval"]?.message, {
+                    ns: "errorsText",
+                  })}
+                  visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                />
+              )}
+              <FormInput
+                containerClassName="govuk-form-group  govuk-!-width-two-thirds"
+                label={t("productStorageApprovalNumberLabel", { ns: "addStorageFacilityDetails" })}
+                labelClassName="govuk-label govuk-label--s"
+                name="approvalNumber"
+                hint={{
+                  position: "above",
+                  className: "govuk-hint",
+                  id: "hint-storageFacilities-approvalNumber",
+                  text: t(isMatchedEstablishment ? "hintApprovalNumberMatched" : "hintApprovalNumber", {
+                    ns: "addStorageFacilityDetails",
+                  }),
+                }}
+                type="text"
+                inputClassName={classNames("govuk-input govuk-input--width-10 margin-top-10")}
+                inputProps={{
+                  defaultValue: approvalNumber,
+                  id: "storageFacilities-facilityApproval",
+                  "aria-describedby": isEmpty(errors?.["storageFacilities-facilityApproval"])
+                    ? "hint-storageFacilities-approvalNumber"
+                    : "hint-storageFacilities-approvalNumber storageFacilities-facilityApproval-error",
+                }}
+                hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+                hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
               />
             </div>
             <br />
-            <div className="govuk-button-group">
-              <Button
-                id="continue"
-                label={t("commonContinueButtonSaveAndContinueButton", { ns: "common" })}
-                className="govuk-button"
-                type={BUTTON_TYPE.SUBMIT}
-                data-module="govuk-button"
-                name="_action"
-                // @ts-ignore
-                value="saveAndContinue"
-                data-testid="save-and-continue"
-              />
+            <div
+              className={
+                isEmpty(errors?.["storageFacilities-facilityStorage"])
+                  ? "govuk-form-group"
+                  : "govuk-form-group govuk-form-group--error"
+              }
+            >
+              <fieldset
+                className="govuk-fieldset"
+                aria-describedby={
+                  isEmpty(errors?.["storageFacilities-facilityStorage"])
+                    ? "product-storage-hint"
+                    : "product-storage-hint storageFacilities-facilityStorage-error"
+                }
+              >
+                <legend className="govuk-fieldset__legend govuk-fieldset__legend--s">
+                  {t("productStorageLegend", { ns: "addStorageFacilityDetails" })}{" "}
+                </legend>
+                {isEmpty(errors?.["storageFacilities-facilityStorage"]) ? null : (
+                  <ErrorMessage
+                    id="storageFacilities-facilityStorage-error"
+                    text={t(errors?.["storageFacilities-facilityStorage"]?.message, {
+                      ns: "errorsText",
+                    })}
+                    visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                  />
+                )}
+                <div id="product-storage-hint" className="govuk-hint">
+                  {t("productStorageHint", { ns: "addStorageFacilityDetails" })}
+                </div>
+                <div className="govuk-radios" data-module="govuk-radios">
+                  <div className="govuk-radios__item">
+                    <input
+                      className="govuk-radios__input"
+                      id="storageFacilities-facilityStorage"
+                      name="facilityStorage"
+                      type="radio"
+                      value="Chilled"
+                      defaultChecked={actionData.facilityStorage === "Chilled" || facilityStorage === "Chilled"}
+                    />
+                    <label className="govuk-label govuk-radios__label" htmlFor="chilled">
+                      {t("productStorageChilledLabel", { ns: "addStorageFacilityDetails" })}
+                    </label>
+                  </div>
+                  <div className="govuk-radios__item">
+                    <input
+                      className="govuk-radios__input"
+                      id="frozen"
+                      name="facilityStorage"
+                      type="radio"
+                      value="Frozen"
+                      defaultChecked={actionData.facilityStorage === "Frozen" || facilityStorage === "Frozen"}
+                    />
+                    <label className="govuk-label govuk-radios__label" htmlFor="frozen">
+                      {t("productStorageFrozenLabel", { ns: "addStorageFacilityDetails" })}
+                    </label>
+                  </div>
+                  <div className="govuk-radios__divider">
+                    {t("productStorageOrLabel", { ns: "addStorageFacilityDetails" })}
+                  </div>
+                  <div className="govuk-radios__item">
+                    <input
+                      className="govuk-radios__input"
+                      id="other"
+                      name="facilityStorage"
+                      type="radio"
+                      value="Other"
+                      defaultChecked={actionData.facilityStorage === "Other" || facilityStorage === "Other"}
+                    />
+                    <label className="govuk-label govuk-radios__label" htmlFor="other">
+                      {t("productStorageOtherLabel", { ns: "addStorageFacilityDetails" })}
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
             </div>
+            <ButtonGroup />
             <input type="hidden" name="nextUri" value={nextUri} />
           </SecureForm>
           <BackToProgressLink
@@ -582,4 +500,4 @@ const AddStorageFacilityDetails = () => {
   );
 };
 
-export default AddStorageFacilityDetails;
+export default AddStorageFacilityApproval;
