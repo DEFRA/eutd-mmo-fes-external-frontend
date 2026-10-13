@@ -205,8 +205,6 @@ const getSearchFilters = (type: EstablishmentType): Record<string, string> => {
   };
 };
 
-// NOTE: example request URL for the search API:
-// /api/approvedFoodEstablishments/establishments/search?q=CL%20120&section=A.VIII&capability=processing&limit=25&offset=0
 const buildSearchUrl = (type: EstablishmentType, term: string): string => {
   const url = new URL(getApprovedFoodEstablishmentsSearchUrl());
 
@@ -219,7 +217,7 @@ const buildSearchUrl = (type: EstablishmentType, term: string): string => {
     url.searchParams.set(key, value);
   }
 
-  url.searchParams.set("limit", "25");
+  url.searchParams.set("limit", ENV.APPROVED_ESTABLISHMENT_SEARCH_LIMIT);
   url.searchParams.set("offset", "0");
 
   return url.toString();

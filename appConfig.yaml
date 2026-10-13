@@ -23,6 +23,10 @@ appSettings:
     value: 'true'
     type: config
 
+  - key: APPROVED_ESTABLISHMENT_SEARCH_LIMIT
+    value: '1000'
+    type: config
+
   - key: APPROVED_ESTABLISHMENT_SEARCH_MIN_LENGTH
     value: '2'
     type: config
