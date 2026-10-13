@@ -201,16 +201,6 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
       <SecureForm method="post" csrf={csrf}>
         <div className="govuk-button-group">
           <Button
-            className="govuk-button govuk-button--secondary"
-            label={t("commonProgressReturnToDashboard")}
-            type={BUTTON_TYPE.SUBMIT}
-            data-module="govuk-button"
-            name="_action"
-            //@ts-ignore
-            value="returnToDashboard"
-            data-testid="return-to-dashboard-button"
-          />
-          <Button
             className="govuk-button"
             label={t("commonProgressPageContinueButtonLabel")}
             type={BUTTON_TYPE.SUBMIT}
@@ -219,6 +209,16 @@ export const ProgressPageComponent = ({ journey }: ProgressPageType) => {
             //@ts-ignore
             value="continue"
             data-testid="continue-button"
+          />
+          <Button
+            className="govuk-button govuk-button--secondary"
+            label={t("commonProgressReturnToDashboard")}
+            type={BUTTON_TYPE.SUBMIT}
+            data-module="govuk-button"
+            name="_action"
+            //@ts-ignore
+            value="returnToDashboard"
+            data-testid="return-to-dashboard-button"
           />
         </div>
       </SecureForm>
