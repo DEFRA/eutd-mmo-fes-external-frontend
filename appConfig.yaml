@@ -30,7 +30,19 @@ appSettings:
   - key: APPROVED_ESTABLISHMENT_SEARCH_MIN_LENGTH
     value: '2'
     type: config
-  
+
+  - key: APPROVED_ESTABLISHMENT_SEARCH_TIMEOUT_MS
+    value: '60000'
+    type: config
+
+  - key: APPROVED_ESTABLISHMENT_SEARCH_TOKEN_TIMEOUT_MS
+    value: '60000'
+    type: config
+
+  - key: APPROVED_ESTABLISHMENT_SEARCH_TOKEN_SAFETY_WINDOW_MS
+    value: '60000'
+    type: config
+
   - key: BASE_URL
     value: '#{{ externalFrontendBaseUrl }}'
     type: config
