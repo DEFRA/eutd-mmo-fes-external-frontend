@@ -1,7 +1,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
-const addStorageFacilityUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility-details";
-const addStorageApprovalUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility-approval";
+const addStorageFacilityUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility";
+const addStorageApprovalUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/add-storage-facility-details";
 const progressUrl = "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/progress";
 const storageFacilityUrl =
   "/create-non-manipulation-document/GBR-2022-SD-3FE1169D1/how-does-the-consignment-leave-the-uk";
@@ -19,7 +19,29 @@ describe("Add Storage Facility Approval", () => {
     cy.contains("a", /^Back$/)
       .should("be.visible")
       .should("have.attr", "href", addStorageFacilityUrl);
-    cy.get(".govuk-heading-xl").contains("Add storage facility approval details");
+    cy.get(".govuk-heading-xl").contains("Add storage facility details");
+
+    cy.contains("label", "Storage facility name").should("be.visible");
+    cy.get("#storageFacilities-facilityName").should("have.value", "name");
+    cy.get('[data-testid="facility-summary"] p')
+      .first()
+      .should("have.text", "name")
+      .and("have.class", "govuk-!-font-weight-bold");
+    cy.get(".govuk-details__summary")
+      .should("contain.text", "What is the arrival date?")
+      .then(($arrivalDateInfo) => {
+        cy.get("#storageFacilities-facilityName").then(($facilityName) => {
+          expect(
+            $arrivalDateInfo[0].compareDocumentPosition($facilityName[0]) & Node.DOCUMENT_POSITION_FOLLOWING
+          ).to.not.equal(0);
+        });
+      });
+    cy.contains("p", "Approval number: UK/ABC/001").should("be.visible");
+    cy.contains("p", "MMO, LANCASTER HOUSE, HAMPSHIRE COURT").should("be.visible");
+
+    // Arrival date label must be bold.
+    cy.contains("legend", "Arrival date").find("label").should("have.class", "govuk-!-font-weight-bold");
+
     cy.get(".govuk-label").contains("Approval number (if applicable)");
     cy.get(".govuk-hint").contains(
       "If the storage facility has an approval number enter it here. For example, UK/ABC/001, 1 UK 22028 or TSF001."
@@ -39,6 +61,23 @@ describe("Add Storage Facility Approval", () => {
     cy.get("#backToProgress").click();
     cy.url().should("include", "/progress");
   });
+
+  it("should show an error when the storage facility name is blank", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageApprovalNameError,
+    };
+    cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
+
+    cy.get("#storageFacilities-facilityName").should("have.value", "");
+    cy.get("#storageFacilities-facilityStorage").check();
+    cy.get("[data-testid=save-and-continue]").click();
+
+    cy.contains(".govuk-error-summary a", "Enter the facility name")
+      .should("be.visible")
+      .and("have.attr", "href", "#storageFacilities-facilityName");
+    cy.get("#storageFacilities-facilityName-error").should("be.visible");
+    cy.get("#storageFacilities-facilityName").should("have.class", "govuk-input--error");
+  });
 });
 
 describe("Add Storage Facility Approval - Complete", () => {
@@ -48,6 +87,8 @@ describe("Add Storage Facility Approval - Complete", () => {
     };
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
 
+    cy.get("#storageFacilities-facilityName").clear();
+    cy.get("#storageFacilities-facilityName").type("Updated storage facility");
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001");
     cy.get("#storageFacilities-facilityStorage").check();
     cy.get("[data-testid=save-and-continue]").click();
@@ -204,10 +245,13 @@ describe("Add Storage Facility Approval - Non JavaScript", () => {
     };
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
 
-    cy.get(".govuk-heading-xl").contains("Add storage facility approval details");
+    cy.get(".govuk-heading-xl").contains("Add storage facility details");
+    cy.get('input[name="facilityArrivalDateDay"]').type("17");
+    cy.get('input[name="facilityArrivalDateMonth"]').type("09");
+    cy.get('input[name="facilityArrivalDateYear"]').type("2025");
     cy.get("#storageFacilities-facilityApproval").type("UK/ABC/001");
     cy.get("#storageFacilities-facilityStorage").check();
-    cy.get("[data-testid=save-and-continue]").click();
+    cy.get('[data-testid="save-and-continue"]').click();
     cy.url().should("include", "/how-does-the-consignment-leave-the-uk");
   });
 });
@@ -219,5 +263,70 @@ describe("Add Storage Facility Approval - Forbidden", () => {
     };
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
     cy.url().should("include", "/forbidden");
+  });
+});
+
+describe("Add Storage Facility Approval - Arrival date validation", () => {
+  beforeEach(() => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageApproval,
+    };
+    cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
+  });
+
+  it("should show the arrival date error first, ahead of the storage type error, and focus the Day field", () => {
+    cy.get("[data-testid=save-and-continue]").click();
+
+    cy.get(".govuk-error-summary li")
+      .first()
+      .should("contain", "Arrival date must be a real date")
+      .find("a")
+      .should("have.attr", "href", "#storageFacilities-facilityArrivalDate");
+    cy.contains(".govuk-error-summary a", "Select how the product was stored").should("be.visible");
+
+    cy.contains(".govuk-error-summary a", "Arrival date must be a real date").click();
+    // scrollToId focuses the target after a short setTimeout - cy.focused()+should retries
+    // automatically until that happens, instead of waiting a fixed amount of time.
+    cy.focused().should("have.id", "storageFacilities-facilityArrivalDate");
+  });
+
+  it("should show an error when year 0000 is entered", () => {
+    cy.get('input[name="facilityArrivalDateDay"]').type("01");
+    cy.get('input[name="facilityArrivalDateMonth"]').type("01");
+    cy.get('input[name="facilityArrivalDateYear"]').type("0000");
+    cy.get("#storageFacilities-facilityStorage").check();
+    cy.get("[data-testid=save-and-continue]").click();
+
+    cy.contains("Arrival date must be a real date").should("be.visible");
+    cy.get(".govuk-error-summary").should("be.visible");
+  });
+});
+
+describe("Add Storage Facility Approval: save as draft retains valid fields", () => {
+  it("should redirect to dashboard without error when save as draft is clicked with invalid fields", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftWithErrors,
+    };
+    cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-draft-button]").click();
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
+
+  it("should redirect to dashboard and null out arrival date when only arrival date is invalid", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftWithArrivalDateError,
+    };
+    cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-draft-button]").click();
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
+  });
+
+  it("should redirect to dashboard when no validation errors on save as draft", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageFacilityDetailsSaveAsDraftNoErrors,
+    };
+    cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
+    cy.get("[data-testid=save-draft-button]").click();
+    cy.url().should("include", "/create-non-manipulation-document/non-manipulation-documents");
   });
 });

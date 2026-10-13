@@ -11,7 +11,7 @@ import crossFetch from "cross-fetch";
 /* istanbul ignore next */
 const fetchImpl = process.env.NODE_ENV === "test" ? crossFetch : fetch;
 
-type EstablishmentType = "processing" | "storage";
+export type EstablishmentType = "processing" | "storage";
 
 type OAuthTokenResponse = {
   access_token: string;
@@ -269,7 +269,10 @@ const callSearchApi = async (type: EstablishmentType, term: string, token: strin
   return response;
 };
 
-export const searchEstablishments = async (type: EstablishmentType, term: string): Promise<Establishment[]> => {
+export const searchApprovedFoodEstablishments = async (
+  type: EstablishmentType,
+  term: string
+): Promise<Establishment[]> => {
   const trimmedTerm = term.trim();
 
   try {

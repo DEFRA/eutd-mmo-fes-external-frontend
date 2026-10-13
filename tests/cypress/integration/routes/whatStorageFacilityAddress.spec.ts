@@ -19,6 +19,12 @@ describe("SD: What storage facility address page", () => {
     cy.get(".govuk-heading-xl").contains("What is the storage facility address?");
   });
 
+  it("should render a back link to storage facility search", () => {
+    cy.findByRole("link", { name: "Back" })
+      .should("be.visible")
+      .and("have.attr", "href", "/create-non-manipulation-document/GBR-2022-SD-F71D98A30/add-storage-facility");
+  });
+
   it("should render the buttons texts", () => {
     cy.get(".govuk-button-group button").contains("Cancel").should("be.visible");
     cy.get('[data-testid="findaddress"]').should("be.visible").contains("Find address");
@@ -131,7 +137,7 @@ describe("SD: Entering the address manually with errors", () => {
     cy.get("#country").type("Albania");
 
     cy.get("[data-testid=continue]").click();
-    cy.url().should("include", "/add-storage-facility-details");
+    cy.url().should("include", "/add-storage-facility");
     cy.get(".govuk-error-summary").should("not.exist");
   });
 
@@ -260,26 +266,38 @@ describe("SD: On Selected Address", () => {
 
     cy.get("[data-testid=cancel]").click();
 
-    cy.url().should("include", "/add-storage-facility-details");
+    cy.url().should("include", "/add-storage-facility");
   });
 });
 
-describe("SD: Entering the address manually pre-populates existing address", () => {
-  it("should pre-populate all address fields from the stored document", () => {
+describe("SD: Entering the address manually starts from a blank form", () => {
+  it("should not pre-populate address fields from the stored document", () => {
     const testParams: ITestParams = {
-      testCaseId: TestCaseId.SDStorageFacilityAddressPrePopulated,
+      testCaseId: TestCaseId.SDStorageFacilityAddressStoredAddressNotPrefilled,
     };
 
     cy.visit(sdPageUrl, { qs: { ...testParams } });
     cy.findByText(/^Enter the address manually$/).click();
 
-    cy.get("#buildingNumber").should("have.value", "56");
-    cy.get("#buildingName").should("have.value", "Arc House");
-    cy.get("#subBuildingName").should("have.value", "3");
-    cy.get("#streetName").should("have.value", "test");
-    cy.get("#townCity").should("have.value", "Brussels");
-    cy.get("#county").should("have.value", "pre");
-    cy.get("#postcode").should("have.value", "sw11aa");
-    cy.get("#country").should("have.value", "Belgium");
+    cy.get("#buildingNumber").should("have.value", "");
+    cy.get("#buildingName").should("have.value", "");
+    cy.get("#subBuildingName").should("have.value", "");
+    cy.get("#streetName").should("have.value", "");
+    cy.get("#townCity").should("have.value", "");
+    cy.get("#county").should("have.value", "");
+    cy.get("#postcode").should("have.value", "");
+    cy.get("#country").should("have.value", "");
+  });
+
+  it("should only contain what the user types, with nothing from the stored address appended", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDStorageFacilityAddressStoredAddressNotPrefilled,
+    };
+
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+    cy.findByText(/^Enter the address manually$/).click();
+
+    cy.get("#townCity").type("Newcastle");
+    cy.get("#townCity").should("have.value", "Newcastle");
   });
 });

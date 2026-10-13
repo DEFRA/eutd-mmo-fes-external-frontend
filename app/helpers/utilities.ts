@@ -226,8 +226,11 @@ const PAGE_MATCHERS: PageMatcher[] = [
   },
   { test: (p) => p.includes("/catch-added"), page: Page.CatchAdded },
   { test: (p) => p.includes("/what-processing-plant-address"), page: Page.WhatprocessingPlantAddress },
-  { test: (p) => p.includes("/add-storage-facility-details"), page: Page.AddStorageFacility },
-  { test: (p) => p.includes("/add-storage-facility-approval"), page: Page.StorageDocumentStorageFacilityApproval },
+  {
+    test: (p) => p.includes("/add-storage-facility") && !p.includes("/add-storage-facility-details"),
+    page: Page.AddStorageFacility,
+  },
+  { test: (p) => p.includes("/add-storage-facility-details"), page: Page.StorageDocumentStorageFacilityApproval },
   { test: (p) => p.includes("/what-storage-facility-address"), page: Page.WhatStorageFacility },
   {
     test: (p) => /^\/create-non-manipulation-document\/.*\/how-does-the-consignment-arrive-to-the-uk$/i.test(p),

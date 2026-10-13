@@ -49,7 +49,6 @@
   line-height: 1.3157894737;
 }
 
-
 .autocomplete__input {
   font-family: "GDS Transport", arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -196,6 +195,28 @@
 
 .autocomplete__menu--inline {
   position: relative;
+}
+
+/* Keep the summary's Change button blue like the processing-plant GOV.UK link. */
+.app-establishment-summary {
+  border: 1px solid #b1b4b6;
+  padding: 15px;
+}
+
+.app-change-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: #003078;
+  font-family: inherit;
+  font-size: 1rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.app-change-button:hover,
+.app-change-button:focus {
+  text-decoration: none;
 }
 
 .autocomplete__option {

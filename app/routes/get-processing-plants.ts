@@ -1,5 +1,5 @@
 import { type LoaderFunction } from "react-router";
-import { formatEstablishmentLabel, searchProcessingPlants } from "~/.server";
+import { formatEstablishmentLabel, searchEstablishments } from "~/.server";
 import type { Establishment } from "~/types";
 import serverLogger from "~/logger.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
@@ -32,7 +32,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       });
     }
 
-    const establishments: Establishment[] = await searchProcessingPlants(searchTerm);
+    const establishments: Establishment[] = await searchEstablishments("processing", searchTerm);
 
     const labels: ProcessingPlantSearchResult[] = establishments.map((establishment) => ({
       label: formatEstablishmentLabel(establishment),
