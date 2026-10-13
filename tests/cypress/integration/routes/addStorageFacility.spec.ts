@@ -135,7 +135,7 @@ describe("SD: which storage facility", () => {
     visitPage(TestCaseId.SDWhichStorageFacilityContinue, true);
 
     cy.get("select.app-storage-facility-non-js-select").should("be.visible");
-    cy.get("select.app-storage-facility-non-js-select").select("Test Cold Store (UK/5555/CS) - Hull, HU1 2AB");
+    cy.get("select.app-storage-facility-non-js-select").select("Test Cold Store (UK/5555/CS) - HU1 2AB");
     cy.get('[data-testid="save-and-continue"]').click();
 
     cy.url().should("include", approvalUrl);

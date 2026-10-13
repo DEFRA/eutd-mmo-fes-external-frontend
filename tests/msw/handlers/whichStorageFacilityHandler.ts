@@ -1,10 +1,12 @@
 import { rest } from "msw";
-import { type ITestHandler, TestCaseId } from "~/types";
+import { type Establishment, type ITestHandler, TestCaseId } from "~/types";
 import storageDocumentNoFacilities from "@/fixtures/storageDocumentApi/storageDocumentNoFacilities.json";
 import storageDocuments from "@/fixtures/dashboardApi/sdDrafts.json";
 import {
   GET_STORAGE_DOCUMENT,
   STORAGE_FACILITIES_URL,
+  mockApprovedFoodEstablishmentsSearchUrl,
+  mockApprovedFoodEstablishmentsTokenUrl,
   mockStorageFacilitiesUrl,
   mockGetAllDocumentsUrl,
   mockSaveAndValidateDocument,
@@ -50,9 +52,29 @@ const storageDocumentWithSavedManualAddressNoName = {
   facilityPostcode: "MN1 1AA",
 };
 
-const getStorageFacilitiesHandlers = (facilities: unknown[]) => [
+const filterFacilitiesBySearch = (facilities: Establishment[], searchTerm: string): Establishment[] => {
+  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+  if (!normalizedSearchTerm) {
+    return facilities;
+  }
+
+  return facilities.filter((facility) => {
+    const tradingName = facility.tradingName?.toLowerCase() ?? "";
+    const approvalNumber = facility.approvalNumber?.content?.toLowerCase() ?? "";
+    return tradingName.includes(normalizedSearchTerm) || approvalNumber.includes(normalizedSearchTerm);
+  });
+};
+
+const getStorageFacilitiesHandlers = (facilities: Establishment[]) => [
   rest.get(STORAGE_FACILITIES_URL, (req, res, ctx) => res(ctx.json(facilities))),
   rest.get(mockStorageFacilitiesUrl, (req, res, ctx) => res(ctx.json(facilities))),
+  rest.post(mockApprovedFoodEstablishmentsTokenUrl, (req, res, ctx) =>
+    res(ctx.json({ access_token: "approved-food-establishments-token", token_type: "Bearer", expires_in: 3600 }))
+  ),
+  rest.get(mockApprovedFoodEstablishmentsSearchUrl, (req, res, ctx) => {
+    const searchTerm = req.url.searchParams.get("q") ?? "";
+    return res(ctx.json({ content: filterFacilitiesBySearch(facilities, searchTerm) }));
+  }),
 ];
 
 const whichStorageFacilityHandler: ITestHandler = {

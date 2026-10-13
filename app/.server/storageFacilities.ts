@@ -17,6 +17,29 @@ const onGetStorageFacilitiesResponse = async (response: Response): Promise<Estab
   }
 };
 
+const normalize = (value?: string): string => value?.trim().toLowerCase() ?? "";
+
+export const matchEstablishment = (
+  establishments: Establishment[],
+  facilityName?: string,
+  facilityApprovalNumber?: string
+): Establishment | undefined => {
+  const normalizedApprovalNumber = normalize(facilityApprovalNumber);
+  if (normalizedApprovalNumber) {
+    const approvalNumberMatch = establishments.find(
+      (establishment) => normalize(establishment.approvalNumber?.content) === normalizedApprovalNumber
+    );
+    if (approvalNumberMatch) {
+      return approvalNumberMatch;
+    }
+  }
+
+  const normalizedFacilityName = normalize(facilityName);
+  return normalizedFacilityName
+    ? establishments.find((establishment) => normalize(establishment.tradingName) === normalizedFacilityName)
+    : undefined;
+};
+
 export const getStorageFacilities = async (): Promise<Establishment[]> => {
   try {
     const response: Response = await getReferenceData(STORAGE_FACILITIES_URL);
