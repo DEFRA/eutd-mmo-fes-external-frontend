@@ -54,3 +54,4 @@ export * from "./deleteDraftForm";
 export * from "./howDoesTheConsignmentArriveToTheUk";
 export * from "./processingPlants";
 export * from "./storageFacilities";
+export * from "./approvedFoodEstablishmentsClient";

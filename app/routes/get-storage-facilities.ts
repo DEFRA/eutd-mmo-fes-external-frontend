@@ -1,5 +1,5 @@
 import { type LoaderFunction } from "react-router";
-import { formatEstablishmentLabel, getStorageFacilities } from "~/.server";
+import { formatEstablishmentLabel, searchEstablishments } from "~/.server";
 import type { Establishment } from "~/types";
 import serverLogger from "~/logger.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
@@ -29,7 +29,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       });
     }
 
-    const establishments: Establishment[] = await getStorageFacilities();
+    const establishments: Establishment[] = await searchEstablishments("storage", searchTerm);
 
     const labels: StorageFacilitySearchResult[] = establishments
       .filter((establishment) => {
@@ -54,11 +54,11 @@ export const loader: LoaderFunction = async ({ request }) => {
         "Content-Type": "application/json",
       },
     });
-  } catch (e) {
-    if (e instanceof Error) {
-      serverLogger.error(`[GET-STORAGE-FACILITIES-SEARCH][ERROR][${e.stack ?? e}]`);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      serverLogger.error(`[GET-STORAGE-FACILITIES-SEARCH][ERROR][${error.stack ?? error}]`);
     }
 
-    throw e;
+    throw error;
   }
 };
