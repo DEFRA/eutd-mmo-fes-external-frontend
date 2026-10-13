@@ -7,5 +7,5 @@
   "commonProgressProcessingPlantAddress": "cyfeiriad y safle prosesu",
   "psAddProcessingPlantAddressDetailsAddTheProcessingPlantAddressLinktext": "Ychwanegwch gyfeiriad y safle prosesu",
   "psProcessingPlantAddressWhatIsProcessingPlantAddress": "Beth yw cyfeiriad y safle prosesu?",
-  "psProcessingPlantAddressPostcodeHint": "If you can’t find the address, select ‘Enter the address manually’. You can only enter a UK address."
+  "psProcessingPlantAddressPostcodeHint": "Os na allwch ddod o hyd i'r cyfeiriad, dewiswch 'Nodi cyfeiriad y safle â llaw'. Dim ond cyfeiriad yn y DU y gallwch ei nodi."
 }

@@ -205,8 +205,6 @@ const getSearchFilters = (type: EstablishmentType): Record<string, string> => {
   };
 };
 
-// NOTE: example request URL for the search API:
-// /api/approvedFoodEstablishments/establishments/search?q=CL%20120&section=A.VIII&capability=processing&limit=25&offset=0
 const buildSearchUrl = (type: EstablishmentType, term: string): string => {
   const url = new URL(getApprovedFoodEstablishmentsSearchUrl());
 
@@ -219,7 +217,7 @@ const buildSearchUrl = (type: EstablishmentType, term: string): string => {
     url.searchParams.set(key, value);
   }
 
-  url.searchParams.set("limit", "25");
+  url.searchParams.set("limit", ENV.APPROVED_ESTABLISHMENT_SEARCH_LIMIT);
   url.searchParams.set("offset", "0");
 
   return url.toString();
@@ -231,6 +229,7 @@ const toEstablishments = async (response: Response): Promise<Establishment[]> =>
   }
 
   const data = (await response.json()) as EstablishmentSearchResponse | Establishment[];
+  serverLogger.debug("[APPROVED-FOOD-ESTABLISHMENTS][SEARCH][RAW-RESPONSE]", JSON.stringify(data));
   if (Array.isArray(data)) {
     return data;
   }
@@ -245,7 +244,7 @@ const callSearchApi = async (type: EstablishmentType, term: string, token: strin
   const requestUrl = buildSearchUrl(type, term);
   const startTime = Date.now();
 
-  serverLogger.debug("[APPROVED-FOOD-ESTABLISHMENTS][SEARCH][REQUEST]");
+  serverLogger.debug("[APPROVED-FOOD-ESTABLISHMENTS][SEARCH][REQUEST][URL]", requestUrl);
   const response = await doFetchWithTimeout(
     requestUrl,
     {
