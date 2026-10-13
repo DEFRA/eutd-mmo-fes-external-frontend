@@ -231,6 +231,7 @@ const toEstablishments = async (response: Response): Promise<Establishment[]> =>
   }
 
   const data = (await response.json()) as EstablishmentSearchResponse | Establishment[];
+  serverLogger.debug("[APPROVED-FOOD-ESTABLISHMENTS][SEARCH][RAW-RESPONSE]", JSON.stringify(data));
   if (Array.isArray(data)) {
     return data;
   }
