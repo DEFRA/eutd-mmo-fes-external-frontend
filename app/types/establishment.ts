@@ -9,6 +9,7 @@ export interface EstablishmentAddress {
 }
 
 export interface Establishment {
+  id?: string;
   approvalNumber?: { content?: string };
   tradingName?: string;
   address?: EstablishmentAddress;

@@ -22,6 +22,10 @@ appSettings:
   - key: APP_USES_HTTPS
     value: 'true'
     type: config
+
+  - key: APPROVED_ESTABLISHMENT_SEARCH_MIN_LENGTH
+    value: '2'
+    type: config
   
   - key: BASE_URL
     value: '#{{ externalFrontendBaseUrl }}'
@@ -43,6 +47,30 @@ appSettings:
   
   - key: DASHBOARD_FEEDBACK_URL
     value: 'https://defragroup.eu.qualtrics.com/jfe/form/SV_1S5DVwag5rcTrAq'
+    type: config
+
+  - key: DEFRA_TRADE_API_APIM_HEADER_NAME
+    value: '#{{ apimHeaderName }}'
+    type: config
+
+  - key: DEFRA_TRADE_API_APIM_HEADER_VALUE
+    value: 'DEFRA-TRADE-API-APIM-HEADER-VALUE'
+    type: secret
+
+  - key: DEFRA_TRADE_API_OAUTH_CLIENT_ID
+    value: 'DEFRA-TRADE-API-OAUTH-CLIENT-ID'
+    type: secret
+
+  - key: DEFRA_TRADE_API_OAUTH_CLIENT_SECRET
+    value: 'DEFRA-TRADE-API-OAUTH-CLIENT-SECRET'
+    type: secret
+
+  - key: DEFRA_TRADE_API_OAUTH_SCOPE
+    value: '#{{ DEFRA-TRADE-API-OAUTH-SCOPE }}'
+    type: config
+
+  - key: DEFRA_TRADE_API_OAUTH_TOKEN_URL
+    value: '#{{ DEFRA-TRADE-API-OAUTH-TOKEN-URL }}'
     type: config
   
   - key: DISABLE_IDM
@@ -151,6 +179,10 @@ appSettings:
   
   - key: MAXIMUM_PRODUCT_DESCRIPTION_LENGTH
     value: '50'
+    type: config
+
+  - key: MDM_APPROVED_FOOD_ESTABLISHMENTS_BASE_URL
+    value: '#{{ MDM-APPROVED-FOOD-ESTABLISHMENTS-BASE-URL }}'
     type: config
   
   - key: MMO_ECC_ORCHESTRATION_SVC_URL
