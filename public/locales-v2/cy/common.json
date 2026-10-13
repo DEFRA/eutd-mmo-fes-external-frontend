@@ -113,7 +113,7 @@
   "commonWhatExportDestinationSelectTheDestinationCountry": "Dewiswch wlad pen y daith",
   "commonWhatExportDestinationHintSelectTheDestinationCountry": "Dyma'r wlad ar ben y daith allforio, nid y gwledydd y bydd yn pasio drwyddynt. Ni fydd y wybodaeth hon yn ymddangos ar y ddogfen derfynol.",
   "commonConfirmDocumentVoidPageHeader": "Ydych chi’n siŵr eich bod am ddirymu’r {{journeyText}}?",
-  "commonNoResultsFound": "Dim canlyniadau wedi’i canfod",
+  "commonNoResultsFound": "Ni chanfuwyd unrhyw ganlyniadau.",
   "commonChangeLink": "Newid",
   "commonEditLink": "Golygu",
   "commonRemoveButton": "Tynnu",
