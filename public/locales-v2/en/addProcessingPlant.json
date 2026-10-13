@@ -10,6 +10,6 @@
   "psAddProcessingPlantApprovalNumberHint": "This is sometimes called a site code. For example, UK/1234/EC",
   "psAddProcessingPlantNoResultsHeading": "No results found",
   "psAddProcessingPlantNoResultsCheckDetails": "Check the company name or approval number and try again.",
-  "psAddProcessingPlantNoResultsEnterManually": "If you can't find the address, select 'Enter the address manually'.",
+  "psAddProcessingPlantNoResultsEnterManually": "If you can't find the address, select 'Enter plant address manually'.",
   "psAddProcessingPlantNoResultsHint": "You can only enter a UK address."
 }
