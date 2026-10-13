@@ -2,7 +2,7 @@
 import { type ITestParams, TestCaseId } from "~/types";
 
 describe("Loader function for idm login", () => {
-  it("should return status 500", () => {
+  it("should return a 500 HTML error response", () => {
     cy.request({
       method: "GET",
       url: "/login/return",
@@ -10,6 +10,7 @@ describe("Loader function for idm login", () => {
     }).as("loader");
     cy.get("@loader").should((response) => {
       expect(response.status).to.eq(500);
+      expect(response.headers["content-type"]).to.include("text/html");
     });
   });
 });
