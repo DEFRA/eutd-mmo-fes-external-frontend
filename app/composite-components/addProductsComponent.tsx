@@ -274,15 +274,6 @@ export const AddProductsComponent = ({
         )}
       </div>
       <div className="govuk-button-group">
-        <Button
-          type={BUTTON_TYPE.SUBMIT}
-          name="_action"
-          // @ts-ignore
-          value="cancel"
-          label={t("commonSecondaryCancelButton", { ns: "common" })}
-          className="govuk-button govuk-button--secondary"
-          data-testid="cancel"
-        />
         {displayAddProduct && (
           <Button
             id="add-product"
@@ -295,6 +286,15 @@ export const AddProductsComponent = ({
             data-testid="add-product"
           />
         )}
+        <Button
+          type={BUTTON_TYPE.SUBMIT}
+          name="_action"
+          // @ts-ignore
+          value="cancel"
+          label={t("commonSecondaryCancelButton", { ns: "common" })}
+          className="govuk-button govuk-button--secondary"
+          data-testid="cancel"
+        />
       </div>
       <input type="hidden" readOnly name="speciesCode" value={speciesCodeNojs} />
       <input type="hidden" readOnly name="stateLabel" value={stateLabelNojs} />

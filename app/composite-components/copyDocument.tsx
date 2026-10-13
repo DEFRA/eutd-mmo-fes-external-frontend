@@ -121,15 +121,6 @@ export const CopyDocumentComponent = ({ journey }: CopyDocumentType) => {
               <Button
                 type={BUTTON_TYPE.SUBMIT}
                 name="_action"
-                label={t("commonSecondaryCancelButton", { ns: "common" })}
-                //@ts-ignore
-                value="cancel"
-                className="govuk-button govuk-button--secondary"
-                data-testid="cancel"
-              />
-              <Button
-                type={BUTTON_TYPE.SUBMIT}
-                name="_action"
                 label={t("commonCopyCreatedraftJourney", {
                   journeyText: t(journey, { ns: "common" }),
                 })}
@@ -137,6 +128,15 @@ export const CopyDocumentComponent = ({ journey }: CopyDocumentType) => {
                 value="continue"
                 className="govuk-button"
                 data-testid="continue"
+              />
+              <Button
+                type={BUTTON_TYPE.SUBMIT}
+                name="_action"
+                label={t("commonSecondaryCancelButton", { ns: "common" })}
+                //@ts-ignore
+                value="cancel"
+                className="govuk-button govuk-button--secondary"
+                data-testid="cancel"
               />
             </div>
             <input type="hidden" name="journey" value={journey} />
