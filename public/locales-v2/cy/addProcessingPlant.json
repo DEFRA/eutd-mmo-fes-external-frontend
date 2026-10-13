@@ -8,8 +8,8 @@
   "psAddProcessingPlantSummaryApprovalNumberLabel": "Rhif cymeradwyo",
   "psAddProcessingPlantAddressSummaryHeading": "Cyfeiriad y safle prosesu",
   "psAddProcessingPlantApprovalNumberHint": "This is sometimes called a site code. For example, UK/1234/EC",
-  "psAddProcessingPlantNoResultsHeading": "Dim canlyniadau wedi’i canfod",
-  "psAddProcessingPlantNoResultsCheckDetails": "Check the company name or approval number and try again.",
-  "psAddProcessingPlantNoResultsEnterManually": "Os na allwch chi ddod o hyd i'r cyfeiriad, dewiswch ‘Rhowch y cyfeiriad eich hunan’.",
-  "psAddProcessingPlantNoResultsHint": "Dim ond cyfeiriad yn y DU y cewch ei roi."
+  "psAddProcessingPlantNoResultsHeading": "Ni chanfuwyd unrhyw ganlyniadau.",
+  "psAddProcessingPlantNoResultsCheckDetails": "Gwiriwch enw'r cwmni neu'r rhif cymeradwyo a cheisiwch eto.",
+  "psAddProcessingPlantNoResultsEnterManually": "Os na allwch ddod o hyd i'r cyfeiriad, dewiswch 'Nodi cyfeiriad y safle â llaw'.",
+  "psAddProcessingPlantNoResultsHint": "Dim ond cyfeiriad yn y DU y gallwch ei nodi."
 }
