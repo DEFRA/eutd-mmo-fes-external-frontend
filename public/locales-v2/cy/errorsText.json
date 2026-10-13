@@ -170,7 +170,7 @@
   "psAddProcessingPDFormatErrorPlantApprovalNumber": "Rhowch rif cymeradwyo'r safle yn y fformat cywir",
   "psAddProcessingPDErrorPersonResponsibleForConsignmentLength": "Does dim modd i’r person sy’n gyfrifol am y llwyth hwn fod yn fwy na 50 o nodau ",
   "psAddProcessingPDErrorResponsibleValidation": "Rhaid i enw’r person cyfrifol gynnwys llythrennau, cysylltnodau, bylchau a dyfynodau sengl yn unig",
-  "psAddProcessingPlantErrorSelectPlant": "You must select a processing plant or enter the plant details manually",
+  "psAddProcessingPlantErrorSelectPlant": "Rhaid i chi ddewis safle prosesu neu nodi manylion y safle â llaw.",
   "psAddProcessingPlantAddressErrorMaxLimitPlantName": "Ni chaiff enw’r safle fod yn fwy na 65 nod",
   "psAddProcessingPlantAddressErrorNullPlantName": "Rhowch enw’r safle",
   "psAddProcessingPlantAddressErrorFormatPlantName": "Rhaid i enw’r safle gynnwys llythrennau, rhifau, collnodau (' neu ’), atalnodau llawn, cysylltnodau, atalnodau, blaenslaesau, ôlslaesau, ampersands, a bylchau]",
