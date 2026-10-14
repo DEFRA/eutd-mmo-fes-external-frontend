@@ -8,6 +8,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "strictNullChecks": true,
+    "jsx": "react-jsx",
     "types": ["cypress", "@testing-library/cypress"]
   }
 }
