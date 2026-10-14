@@ -228,7 +228,7 @@ const toEstablishments = async (response: Response): Promise<Establishment[]> =>
   }
 
   const data = (await response.json()) as EstablishmentSearchResponse | Establishment[];
-  serverLogger.debug("[APPROVED-FOOD-ESTABLISHMENTS][SEARCH][RAW-RESPONSE]", JSON.stringify(data));
+
   if (Array.isArray(data)) {
     return data;
   }
@@ -243,7 +243,6 @@ const callSearchApi = async (type: EstablishmentType, term: string, token: strin
   const requestUrl = buildSearchUrl(type, term);
   const startTime = Date.now();
 
-  serverLogger.debug("[APPROVED-FOOD-ESTABLISHMENTS][SEARCH][REQUEST][URL]", requestUrl);
   const response = await doFetchWithTimeout(
     requestUrl,
     {
