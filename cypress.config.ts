@@ -16,7 +16,7 @@ export default defineConfig({
     },
     supportFile: "tests/cypress/support/e2e.js",
   },
-  env: {
+  expose: {
     codeCoverage: {
       url: `http://${hostname}:${port}/coverage`,
     },

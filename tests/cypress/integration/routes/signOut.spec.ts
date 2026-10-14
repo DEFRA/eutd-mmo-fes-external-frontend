@@ -93,4 +93,20 @@ describe("Sign Out Page", () => {
       );
     });
   });
+
+  it("should reject the continue action when the CSRF token is missing", () => {
+    cy.request({
+      method: "POST",
+      url: "/sign-out",
+      form: true,
+      body: {
+        _action: "continue",
+      },
+      failOnStatusCode: false,
+      followRedirect: false,
+    }).then((response) => {
+      expect(response.status).to.equal(302);
+      expect(response.redirectedToUrl).to.include("/forbidden");
+    });
+  });
 });
