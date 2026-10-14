@@ -441,10 +441,8 @@ export const hasRequiredDataProcessingStatementSummary = (
   const hasPlantName = !isEmpty(processingStatement.plantName);
 
   const hasPlantAddressOne = !isEmpty(processingStatement.plantAddressOne);
-  const hasPlantTownCity = !isEmpty(processingStatement.plantTownCity);
   const hasPlantPostcode = !isEmpty(processingStatement.plantPostcode);
-  const hasPlantAddress =
-    !!processingStatement._plantDetailsUpdated || (hasPlantAddressOne && hasPlantTownCity && hasPlantPostcode);
+  const hasPlantAddress = !!processingStatement._plantDetailsUpdated || (hasPlantAddressOne && hasPlantPostcode);
 
   const hasExportedTo = !isEmpty(processingStatement.exportedTo);
   const hasCatches =
@@ -460,7 +458,7 @@ export const hasRequiredDataProcessingStatementSummary = (
         validateWeight(item.totalWeightLanded) &&
         validateWeight(item.exportWeightBeforeProcessing) &&
         validateWeight(item.exportWeightAfterProcessing) &&
-        parseFloat(item.exportWeightBeforeProcessing) <= parseFloat(item.totalWeightLanded) &&
+        Number.parseFloat(item.exportWeightBeforeProcessing) <= Number.parseFloat(item.totalWeightLanded) &&
         !isEmpty(item.speciesCommodityCode)
     );
 

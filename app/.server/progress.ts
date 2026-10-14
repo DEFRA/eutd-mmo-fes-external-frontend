@@ -52,7 +52,7 @@ const onGetProgressResponse = async (response: Response): Promise<IProgress> => 
         serverLogger.error(`[PROGRESS][GET-PROGRESS][FAILED][${e}]`);
         return { progress: null };
       }
-    case 400:
+    case 400: {
       const data = await response.json();
       return {
         errors: Object.keys(data).map((key: string) => ({
@@ -60,6 +60,7 @@ const onGetProgressResponse = async (response: Response): Promise<IProgress> => 
           message: getErrorMessage(data[key]),
         })),
       };
+    }
     case 403:
       return {
         errors: [],
@@ -93,7 +94,7 @@ const onCheckProgressResponse = async (response: Response): Promise<IProgress> =
       return {
         errors: [],
       };
-    case 400:
+    case 400: {
       const data = await response.json();
       return {
         errors: Object.keys(data).map((key: string) => ({
@@ -101,6 +102,7 @@ const onCheckProgressResponse = async (response: Response): Promise<IProgress> =
           message: getErrorMessage(data[key]),
         })),
       };
+    }
     case 403:
       return {
         errors: [],

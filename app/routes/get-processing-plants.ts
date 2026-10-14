@@ -34,7 +34,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const establishments: Establishment[] = await searchEstablishments("processing", searchTerm);
 
-    const labels: ProcessingPlantSearchResult[] = establishments.map((establishment) => ({
+    const labels: ProcessingPlantSearchResult[] = establishments.map((establishment: Establishment) => ({
       label: formatEstablishmentLabel(establishment),
       tradingName: establishment.tradingName ?? "",
       approvalNumber: establishment.approvalNumber?.content ?? "",
@@ -48,7 +48,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         .join(", "),
       cityName: establishment.address?.cityName ?? "",
       postcode: establishment.address?.postCode?.code ?? "",
-      country: establishment.address?.country?.countryName ?? "",
+      country: establishment.country ?? establishment.address?.country?.countryName ?? "",
     }));
 
     return new Response(JSON.stringify(labels), {

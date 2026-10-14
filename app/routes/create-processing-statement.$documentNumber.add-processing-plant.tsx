@@ -42,6 +42,7 @@ type AddProcessingPlantLoaderData = {
   savedPlantDetails?: ProcessingPlantSearchResult;
   minCharsBeforeSearch: number;
   labels: ProcessingPlantSearchResult[];
+  nextUri?: string;
 };
 
 // Non-JS posts the <select>'s label text ("Name (Approval) - Postcode") with no address fields.
@@ -217,7 +218,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const action: ActionFunction = async ({ request, params }) => {
   const { documentNumber } = params;
   const form = await request.formData();
-
+  const nextUri = form.get("nextUri") as string;
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
@@ -310,9 +311,11 @@ export const action: ActionFunction = async ({ request, params }) => {
     return errorResponse as Response;
   }
 
-  const nextRoute = route("/create-processing-statement/:documentNumber/add-processing-plant-details", {
-    documentNumber,
-  });
+  const nextRoute = !isEmpty(nextUri)
+    ? nextUri
+    : route("/create-processing-statement/:documentNumber/add-processing-plant-details", {
+        documentNumber,
+      });
 
   return redirect(nextRoute, {
     headers: { "Set-Cookie": await commitSession(session) },
@@ -321,7 +324,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 const AddProcessingPlant = () => {
   const { t } = useTranslation(["addProcessingPlant", "common"]);
-  const { documentNumber, csrf, savedPlantOption, savedPlantDetails, minCharsBeforeSearch, labels } =
+  const { documentNumber, csrf, savedPlantOption, savedPlantDetails, minCharsBeforeSearch, labels, nextUri } =
     useLoaderData<AddProcessingPlantLoaderData>();
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
@@ -497,6 +500,7 @@ const AddProcessingPlant = () => {
               />
             </div>
             <input type="hidden" name="isNonJs" value={(!isHydrated).toString()} />
+            <input type="hidden" name="nextUri" value={nextUri} />
           </SecureForm>
           <BackToProgressLink
             progressUri="/create-processing-statement/:documentNumber/progress"
