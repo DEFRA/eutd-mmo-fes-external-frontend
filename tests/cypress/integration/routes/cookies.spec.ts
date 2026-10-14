@@ -132,6 +132,21 @@ describe("Cookie Radio Updates", () => {
     cy.get(".govuk-notification-banner__heading").should("not.be.empty");
     cy.get(".govuk-notification-banner__content a.govuk-link").should("be.visible").and("have.attr", "href", "/");
   });
+
+  it("should render the success banner fallback without JavaScript", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.UserAttributes,
+      disableScripts: true,
+    };
+
+    cy.visit(cookieUrl, { qs: { ...testParams } });
+    cy.get("#cookieAnalyticsReject").check();
+    cy.get("#saveCookieSettings").click();
+
+    cy.get(".govuk-notification-banner--success").should("be.visible");
+    cy.get(".govuk-notification-banner__heading").should("contain.text", "Go back to the page you were looking at.");
+    cy.get(".govuk-notification-banner__content a.govuk-link").should("not.exist");
+  });
 });
 
 describe("Journey dashboards should redirect to cookie page when user has not accepted cookie statement", () => {

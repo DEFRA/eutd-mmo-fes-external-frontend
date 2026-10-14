@@ -270,6 +270,21 @@ describe("PS: Catch added", () => {
     cy.get("tbody tr").should("have.length.greaterThan", 0);
   });
 
+  it("clears the search input before the reset form submits", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSCatchAddedTwoCatches,
+    };
+
+    cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.get("form").then(($form) => {
+      $form.on("submit", (event) => event.preventDefault());
+    });
+
+    cy.get('input[name="q"]').type("AGH");
+    cy.get('[data-testid="filter-search-reset"]').click();
+    cy.get('input[name="q"]').should("have.value", "");
+  });
+
   it("should filter catches when searching for existing species code AGH", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,

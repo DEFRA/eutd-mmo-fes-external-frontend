@@ -1,4 +1,13 @@
+import * as React from "react";
+import { render } from "@testing-library/react";
+import i18next from "i18next";
+import { I18nextProvider } from "react-i18next";
+// The instrumentation step generates JavaScript without declaration files.
+// @ts-expect-error generated test artifact has no declaration file
+import { ErrorSummaryView } from "../../../../instrumented/components/errorSummaryView.js";
 import { type ITestParams, TestCaseId } from "~/types";
+
+const errorSummaryTestI18n = i18next.createInstance();
 
 describe("ErrorSummary Component: Edge cases and code coverage", () => {
   describe("Empty errors array", () => {
@@ -475,5 +484,48 @@ describe("ErrorSummary Component: Edge cases and code coverage", () => {
         expect(rect.top).to.be.greaterThan(-1);
       });
     });
+  });
+});
+describe("ErrorSummaryView component branches", () => {
+  before(() =>
+    errorSummaryTestI18n.init({
+      lng: "en",
+      fallbackLng: "en",
+      defaultNS: "common",
+      ns: ["common", "errorsText"],
+      resources: {
+        en: {
+          common: { commonErrorHeading: "There is a problem" },
+          errorsText: { commonErrorText: "Error:" },
+        },
+      },
+    })
+  );
+
+  it("renders custom and fallback error links with and without interpolation values", () => {
+    const errors = [
+      { key: "linked-error", message: "linked error", value: { count: 1 } },
+      { key: "fallback-error", message: "fallback error" },
+    ];
+    const { container } = render(
+      React.createElement(
+        I18nextProvider,
+        { i18n: errorSummaryTestI18n },
+        React.createElement(ErrorSummaryView, { errors, linkData: [{ href: "/custom-error" }] })
+      )
+    );
+    const links = container.querySelectorAll<HTMLAnchorElement>(".govuk-error-summary__list a");
+
+    expect(links).to.have.length(2);
+    expect(links[0].getAttribute("href")).to.eq("/custom-error");
+    expect(links[1].getAttribute("href")).to.eq("#fallback-error");
+  });
+
+  it("defaults to an empty errors list when omitted", () => {
+    const { container } = render(
+      React.createElement(I18nextProvider, { i18n: errorSummaryTestI18n }, React.createElement(ErrorSummaryView, {}))
+    );
+
+    expect(container.querySelectorAll(".govuk-error-summary__list li")).to.have.length(0);
   });
 });
