@@ -144,7 +144,7 @@ describe("Check Your Information (Summary) page: plant address change-link visib
         cy.contains("a", "Change")
           .should("be.visible")
           .should("have.attr", "href")
-          .and("include", "/add-processing-plant-address");
+          .and("include", "/add-processing-plant");
       });
   });
 });

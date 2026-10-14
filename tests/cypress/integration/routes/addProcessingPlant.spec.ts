@@ -57,7 +57,7 @@ describe("PS: add processing plant - shared establishment search", () => {
 
 describe("PS: add processing plant - save and continue button", () => {
   it("should progress to add-processing-plant-details when a plant is selected and continue is clicked", () => {
-    visitPage(TestCaseId.PSAddProcessingPlantContinue);
+    visitPage(TestCaseId.PSAddProcessingPlantWithSavedSelectionManualAddress);
 
     cy.get("[data-testid='save-and-continue']").click();
 

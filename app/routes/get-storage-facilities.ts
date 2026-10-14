@@ -49,6 +49,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         addressLine: establishment.address?.line1 ?? "",
         cityName: establishment.address?.cityName ?? "",
         postcode: establishment.address?.postCode?.code ?? "",
+        country: establishment.country ?? establishment.address?.country?.countryName ?? "",
       }));
 
     return new Response(JSON.stringify(labels), {

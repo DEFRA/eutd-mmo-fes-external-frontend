@@ -383,7 +383,7 @@ const CheckYourInformation = () => {
                 <a
                   id="plantNameChangeLink"
                   className="govuk-link"
-                  href={`${route("/create-processing-statement/:documentNumber/add-processing-plant-details", {
+                  href={`${route("/create-processing-statement/:documentNumber/add-processing-plant", {
                     documentNumber,
                   })}?nextUri=${route("/create-processing-statement/:documentNumber/check-your-information", {
                     documentNumber,
@@ -427,7 +427,7 @@ const CheckYourInformation = () => {
                 to={
                   "/create-processing-statement/" +
                   documentNumber +
-                  "/add-processing-plant-address?nextUri=" +
+                  "/add-processing-plant?nextUri=" +
                   encodeURIComponent("/create-processing-statement/" + documentNumber + "/check-your-information")
                 }
               >
