@@ -184,8 +184,6 @@ export const mockGetGearCategoriesUrl = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1
 export const mockGetGearTypesByCategoriesUrl = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/gear-type/:gearCategory`;
 export const mockEuCatchStatus = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/certificate/eu-data-integration/check-status`;
 export const mockValidateLandingURL = `${ENV.MMO_ECC_ORCHESTRATION_SVC_URL}/v1/export-certificates/landing/validate`;
-export const mockProcessingPlantsUrl = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/processing-plants`;
-export const mockStorageFacilitiesUrl = `${ENV.MMO_ECC_REFERENCE_SVC_URL}/v1/storage-facilities`;
 export const mockApprovedFoodEstablishmentsTokenUrl = ENV.DEFRA_TRADE_API_OAUTH_TOKEN_URL;
 export const mockApprovedFoodEstablishmentsSearchUrl = `${ENV.MDM_APPROVED_FOOD_ESTABLISHMENTS_BASE_URL}${approvedFoodEstablishmentsSearchPath}`;
 

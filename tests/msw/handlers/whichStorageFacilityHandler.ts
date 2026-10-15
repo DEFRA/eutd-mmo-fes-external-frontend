@@ -4,10 +4,8 @@ import storageDocumentNoFacilities from "@/fixtures/storageDocumentApi/storageDo
 import storageDocuments from "@/fixtures/dashboardApi/sdDrafts.json";
 import {
   GET_STORAGE_DOCUMENT,
-  STORAGE_FACILITIES_URL,
   mockApprovedFoodEstablishmentsSearchUrl,
   mockApprovedFoodEstablishmentsTokenUrl,
-  mockStorageFacilitiesUrl,
   mockGetAllDocumentsUrl,
   mockSaveAndValidateDocument,
 } from "~/urls.server";
@@ -117,8 +115,6 @@ const filterFacilitiesBySearch = (facilities: Establishment[], searchTerm: strin
 };
 
 const getStorageFacilitiesHandlers = (facilities: Establishment[]) => [
-  rest.get(STORAGE_FACILITIES_URL, (req, res, ctx) => res(ctx.json(facilities))),
-  rest.get(mockStorageFacilitiesUrl, (req, res, ctx) => res(ctx.json(facilities))),
   rest.post(mockApprovedFoodEstablishmentsTokenUrl, (req, res, ctx) =>
     res(ctx.json({ access_token: "approved-food-establishments-token", token_type: "Bearer", expires_in: 3600 }))
   ),
