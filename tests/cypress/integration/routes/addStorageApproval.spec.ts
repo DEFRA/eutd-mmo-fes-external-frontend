@@ -67,8 +67,10 @@ describe("Add Storage Facility Approval", () => {
   it("should show MDM address lines without the country for a matched storage facility", () => {
     cy.visit(addStorageApprovalUrl, { qs: { testCaseId: TestCaseId.SDAddStorageApprovalFullMdmAddress } });
 
-    cy.get('[data-testid="facility-summary"]').should("contain.text", "Unit 8 Peterseat Drive, Altens, Aberdeen");
-    cy.get('[data-testid="facility-summary"]').should("contain.text", "AB12 3HT");
+    cy.get('[data-testid="facility-summary"]').should(
+      "contain.text",
+      "Storage facility addressDFDS Logistics Scotland AberdeenApproval number: AA 220Unit 8 Peterseat DriveAB12 3HT"
+    );
     cy.get('[data-testid="facility-summary"]').should("not.contain.text", "United Kingdom");
   });
 
