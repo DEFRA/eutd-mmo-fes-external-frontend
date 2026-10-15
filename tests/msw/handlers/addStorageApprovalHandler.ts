@@ -3,7 +3,6 @@ import isEmpty from "lodash/isEmpty";
 import { type ITestHandler, TestCaseId } from "~/types";
 import {
   GET_STORAGE_DOCUMENT,
-  STORAGE_FACILITIES_URL,
   mockGetAllDocumentsUrl,
   mockGetProgress,
   mockSaveAndValidateDocument,
@@ -61,23 +60,6 @@ const addStorageApprovalHandler: ITestHandler = {
           facilityPostcode: "AB12 3HT",
           facilityCountry: "",
         })
-      )
-    ),
-    rest.get(STORAGE_FACILITIES_URL, (req, res, ctx) =>
-      res(
-        ctx.json([
-          {
-            tradingName: "DFDS Logistics Scotland Aberdeen",
-            approvalNumber: { content: "AA 220" },
-            address: {
-              line1: "Unit 8 Peterseat Drive",
-              line2: "Altens",
-              line3: "Aberdeen",
-              postCode: { code: "AB12 3HT" },
-              country: { countryName: "" },
-            },
-          },
-        ])
       )
     ),
   ],
