@@ -14,6 +14,13 @@ const createApplicationInsightService = () => {
       config: {
         instrumentationKey,
         enableCorsCorrelation: true,
+        correlationHeaderExcludedDomains: [
+          "*.google-analytics.com",
+          "*.analytics.google.com",
+          "*.googletagmanager.com",
+          "*.google.com",
+          "*.clarity.ms",
+        ],
         cookieCfg: {
           enabled: true,
           domain: globalThis.window === undefined ? undefined : globalThis.window.location.hostname,

@@ -1,4 +1,5 @@
 import { TestCaseId, type ITestParams } from "~/types";
+import { decodeRemixCookie, encodeRemixCookie } from "../helpers";
 
 describe("Cookie Banner Integration in Root", () => {
   describe("Banner Positioning", () => {
@@ -46,10 +47,9 @@ describe("Cookie Banner Integration in Root", () => {
       cy.visit("/?loggedIn=yes");
       cy.url().should("include", "/");
 
-      // Check that GA scripts are not loaded
-      cy.window().then((win) => {
+      cy.document().then((doc) => {
         // eslint-disable-next-line no-unused-expressions
-        expect((win as Window & { gtag?: unknown }).gtag).to.be.undefined;
+        expect(doc.getElementById("gtm-external")).to.be.null;
       });
     });
 
@@ -59,7 +59,7 @@ describe("Cookie Banner Integration in Root", () => {
       };
 
       cy.clearCookies();
-      cy.setCookie("analytics_cookies_accepted", JSON.stringify({ analyticsAccepted: true }));
+      cy.setCookie("analytics_cookies_accepted", encodeRemixCookie({ analyticsAccepted: true }));
 
       cy.visit("/?loggedIn=yes", { qs: { ...testParams } });
 
@@ -90,7 +90,7 @@ describe("Cookie Banner Integration in Root", () => {
         testCaseId: TestCaseId.UserAttributes,
       };
 
-      cy.setCookie("analytics_cookies_accepted", JSON.stringify({ analyticsAccepted: false }));
+      cy.setCookie("analytics_cookies_accepted", encodeRemixCookie({ analyticsAccepted: false }));
 
       // Test multiple routes with loggedIn parameter
       const routes = ["/?loggedIn=yes", "/cookies?loggedIn=yes", "/accessibility?loggedIn=yes"];
@@ -169,6 +169,44 @@ describe("Cookie Banner Integration in Root", () => {
           // Just verify the English version is displayed
           cy.get(".govuk-cookie-banner__heading").should("contain", "Cookies on Fish Export Service");
         }
+      });
+    });
+  });
+
+  describe("CSRF Token Fetch on Non-Index Routes", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.UserAttributes,
+    };
+
+    it("should GET a CSRF token then POST the preference when accepting on a non-index route", () => {
+      cy.clearCookies();
+      // Spy only (no stub response) so both requests reach the server, which MSW backs
+      cy.intercept("GET", "/set-cookie-preference").as("getCsrf");
+      cy.intercept("POST", "/set-cookie-preference").as("savePreference");
+
+      cy.visit("/cookies?loggedIn=yes", { qs: { ...testParams } });
+      cy.contains("button", "Accept analytics cookies").click();
+
+      cy.wait("@getCsrf");
+      cy.wait("@savePreference").then((interception) => {
+        expect(interception.request.body).to.include("acceptsCookies=true");
+        expect(interception.request.body).to.include("csrf=");
+      });
+
+      cy.getCookie("analytics_cookies_accepted").then((cookie) => {
+        expect(decodeRemixCookie(decodeURIComponent(cookie?.value ?? ""))).to.deep.equal({ analyticsAccepted: true });
+      });
+    });
+
+    it("should return 403 when posting a preference with no csrf field", () => {
+      cy.request({
+        method: "POST",
+        url: "/set-cookie-preference",
+        form: true,
+        body: { acceptsCookies: "true" },
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.equal(403);
       });
     });
   });

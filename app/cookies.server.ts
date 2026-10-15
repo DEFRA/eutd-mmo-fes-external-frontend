@@ -6,6 +6,7 @@ export const analyticsAcceptedCookie = createCookie("analytics_cookies_accepted"
   sameSite: "strict",
   httpOnly: false,
   secure: true,
+  maxAge: 60 * 60 * 24 * 365,
 });
 
 export type II18nextCookie = string;
