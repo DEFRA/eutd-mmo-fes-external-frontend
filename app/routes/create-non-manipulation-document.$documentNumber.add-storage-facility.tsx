@@ -19,7 +19,6 @@ import {
   getBearerTokenForRequest,
   getStorageDocument,
   getStorageFacilities,
-  getStorageFacilitiesNoJs,
   mapEstablishmentToFacilityAddress,
   updateStorageDocumentFacility,
   createCSRFToken,
@@ -120,8 +119,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   session.unset("addressOne");
 
   const sd = storageDocument as StorageDocument;
-  const [establishments, noJsFacilityOptions] = await Promise.all([getStorageFacilities(), getStorageFacilitiesNoJs()]);
-  let facilityOptionsNoJs = noJsFacilityOptions;
+  const establishments: Establishment[] = await searchEstablishments("storage", "");
+  let facilityOptionsNoJs = await getStorageFacilities();
 
   const matched = matchEstablishment(establishments, sd.facilityName, sd.facilityApprovalNumber);
   // The facility name is optional here - a manual address can be saved (via "Enter facility
@@ -222,26 +221,6 @@ const resolveStorageFacilitySelection = async (
       facilityPostcode: (form.get("facilityPostcode") as string) ?? "",
       facilityCountry: (form.get("facilityCountry") as string) ?? "",
     };
-
-    const establishments = await getStorageFacilities();
-    if (submittedFacilityLabel) {
-      matchedEstablishment = establishments.find((e) => formatEstablishmentLabel(e) === submittedFacilityLabel);
-    } else if (!isEmpty(facilityName)) {
-      matchedEstablishment = matchEstablishment(establishments, facilityName, facilityApprovalNumber);
-    }
-
-    if (matchedEstablishment) {
-      facilityName = matchedEstablishment.tradingName ?? facilityName;
-      facilityApprovalNumber = matchedEstablishment.approvalNumber?.content ?? facilityApprovalNumber;
-      facilityAddress = {
-        ...mapEstablishmentToFacilityAddress(matchedEstablishment),
-        facilityBuildingNumber: "",
-        facilitySubBuildingName: "",
-        facilityBuildingName: "",
-        facilityStreetName: "",
-        facilityCounty: "",
-      };
-    }
   }
 
   return { facilityName, facilityApprovalNumber, facilityAddress };

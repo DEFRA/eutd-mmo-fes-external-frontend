@@ -467,7 +467,6 @@ const AddProcessingPlant = () => {
                 {selectedPlant.postcode && (
                   <p className="govuk-body govuk-!-margin-bottom-1">{selectedPlant.postcode}</p>
                 )}
-                {selectedPlant.country && <p className="govuk-body govuk-!-margin-bottom-1">{selectedPlant.country}</p>}
                 <a
                   href="#"
                   className="govuk-link"

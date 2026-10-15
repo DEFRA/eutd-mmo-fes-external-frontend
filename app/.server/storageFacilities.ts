@@ -1,21 +1,6 @@
-import { getReferenceData } from "~/communication.server";
 import serverLogger from "~/logger.server";
 import type { Establishment } from "~/types";
-import { STORAGE_FACILITIES_URL } from "~/urls.server";
 import { formatEstablishmentLabel, searchEstablishments } from "./establishmentSearch";
-
-const onGetStorageFacilitiesResponse = async (response: Response): Promise<Establishment[]> => {
-  switch (response.status) {
-    case 200:
-      return await response.json();
-    case 204:
-    case 400:
-    case 500:
-      return [];
-    default:
-      throw new Error(`Unexpected error: ${response.status}`);
-  }
-};
 
 const normalize = (value?: string): string => value?.trim().toLowerCase() ?? "";
 
@@ -40,20 +25,7 @@ export const matchEstablishment = (
     : undefined;
 };
 
-export const getStorageFacilities = async (): Promise<Establishment[]> => {
-  try {
-    const response: Response = await getReferenceData(STORAGE_FACILITIES_URL);
-    return onGetStorageFacilitiesResponse(response);
-  } catch (e) {
-    if (e instanceof Error) {
-      serverLogger.error(`[GET-STORAGE-FACILITIES][FAIL][ERROR][${e.stack ?? e}]`);
-    }
-
-    return [];
-  }
-};
-
-export const getStorageFacilitiesNoJs = async (): Promise<string[]> => {
+export const getStorageFacilities = async (): Promise<string[]> => {
   try {
     const establishments = await searchEstablishments("storage", "");
     return Array.isArray(establishments)
