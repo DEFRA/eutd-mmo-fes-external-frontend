@@ -22,9 +22,12 @@ describe("Add Storage Facility Approval", () => {
     cy.get(".govuk-heading-xl").contains("Add storage facility details");
 
     cy.contains("label", "Storage facility name").should("be.visible");
+    cy.get('[data-testid="facility-summary-column"]').should("have.class", "govuk-grid-column-two-thirds");
+    cy.get('[data-testid="facility-summary"] strong').should("have.text", "Storage facility address");
     cy.get("#storageFacilities-facilityName").should("have.value", "name");
+    cy.get('[data-testid="facility-summary"]').contains("MMO, LANCASTER HOUSE, HAMPSHIRE COURT").should("be.visible");
     cy.get('[data-testid="facility-summary"] p')
-      .first()
+      .eq(1)
       .should("have.text", "name")
       .and("have.class", "govuk-!-font-weight-bold");
     cy.get(".govuk-details__summary")
@@ -48,6 +51,10 @@ describe("Add Storage Facility Approval", () => {
     );
 
     cy.get(".govuk-radios").should("be.visible");
+    cy.get('input[name="facilityStorage"][type="radio"]').should("have.length", 3);
+    cy.get('input[name="facilityStorage"][type="checkbox"]').should("not.exist");
+    cy.get('label[for="storageFacilities-facilityStorage"]').click();
+    cy.get("#storageFacilities-facilityStorage").should("be.checked");
     cy.get(".govuk-radios").contains("Chilled");
     cy.get(".govuk-radios").contains("Frozen");
     cy.get(".govuk-radios").contains("Other");
@@ -55,6 +62,14 @@ describe("Add Storage Facility Approval", () => {
     cy.contains("button", "Save as draft").should("be.visible");
 
     cy.get("#backToProgress").should("be.visible").should("have.attr", "href", progressUrl);
+  });
+
+  it("should show MDM address lines without the country for a matched storage facility", () => {
+    cy.visit(addStorageApprovalUrl, { qs: { testCaseId: TestCaseId.SDAddStorageApprovalFullMdmAddress } });
+
+    cy.get('[data-testid="facility-summary"]').should("contain.text", "Unit 8 Peterseat Drive, Altens, Aberdeen");
+    cy.get('[data-testid="facility-summary"]').should("contain.text", "AB12 3HT");
+    cy.get('[data-testid="facility-summary"]').should("not.contain.text", "United Kingdom");
   });
 
   it("should redirect to progress page", () => {
@@ -68,6 +83,7 @@ describe("Add Storage Facility Approval", () => {
     };
     cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
 
+    cy.get('[data-testid="facility-summary"]').contains("MMO, LANCASTER HOUSE, HAMPSHIRE COURT").should("be.visible");
     cy.get("#storageFacilities-facilityName").should("have.value", "");
     cy.get("#storageFacilities-facilityStorage").check();
     cy.get("[data-testid=save-and-continue]").click();
@@ -77,6 +93,39 @@ describe("Add Storage Facility Approval", () => {
       .and("have.attr", "href", "#storageFacilities-facilityName");
     cy.get("#storageFacilities-facilityName-error").should("be.visible");
     cy.get("#storageFacilities-facilityName").should("have.class", "govuk-input--error");
+  });
+
+  it("should show the updated town or city error without adding a town input", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageApprovalTownError,
+    };
+    cy.visit(addStorageApprovalUrl, { qs: { ...testParams } });
+
+    cy.get('[data-testid="facility-summary"]').should("be.visible");
+    cy.get("#storageFacilities-facilityStorage").check();
+    cy.get("[data-testid=save-and-continue]").click();
+
+    cy.focused().should("have.id", "errorIsland");
+    cy.contains(".govuk-error-summary a", "This address is missing a town or city. Select a different address.")
+      .should("be.visible")
+      .and("have.attr", "href", "#storageFacilities-facilityTownCity");
+    cy.get("#storageFacilities-facilityTownCity-error").should("not.exist");
+    cy.get("#storageFacilities-facilityTownCity").should("contain.text", "Storage facility address");
+    cy.get("input[name='facilityTownCity']").should("not.exist");
+  });
+
+  it("should show the updated town or city error in Welsh", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDAddStorageApprovalTownError,
+    };
+    cy.visit(addStorageApprovalUrl, { qs: { ...testParams, lng: "cy" } });
+
+    cy.get("#storageFacilities-facilityStorage").check();
+    cy.get("[data-testid=save-and-continue]").click();
+
+    cy.contains(".govuk-error-summary a", "Mae tref neu ddinas ar goll o'r cyfeiriad hwn. Dewiswch gyfeiriad gwahanol.")
+      .should("be.visible")
+      .and("have.attr", "href", "#storageFacilities-facilityTownCity");
   });
 });
 

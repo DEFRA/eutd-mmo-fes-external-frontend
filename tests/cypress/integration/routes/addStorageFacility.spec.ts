@@ -58,13 +58,25 @@ describe("SD: which storage facility", () => {
     cy.get('[data-testid="manual-entry-button"]').should("be.visible");
   });
 
+  it("should show the hydrated autocomplete without the fallback select flash", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilityContinue);
+
+    cy.get("html").should("have.attr", "data-js", "enabled");
+    getStorageFacilitySearchInput();
+    cy.get(".app-storage-facility-nonjs-only").should("not.exist");
+    cy.get(".app-storage-facility-placeholder").should("not.exist");
+  });
+
   it("should show selected storage facility summary immediately for a registry match", () => {
     visitPage(TestCaseId.SDWhichStorageFacilityWithSavedSelection);
 
     cy.get("input.autocomplete__input").should("not.exist");
     cy.contains("p", "Test Cold Store").should("be.visible");
     cy.contains("p", "Approval number: UK/5555/CS").should("be.visible");
-    cy.contains("p", "Hull, HU1 2AB").should("be.visible");
+    cy.contains("p", "1 Dock Road, Altens, Aberdeen").should("be.visible");
+    cy.contains("p", "Hull").should("be.visible");
+    cy.contains("p", "HU1 2AB").should("be.visible");
+    cy.get('[data-testid="selected-facility"]').should("not.contain.text", "United Kingdom");
     cy.get('[data-testid="change-storage-facility"]').should("be.visible").and("have.css", "color", "rgb(0, 48, 120)");
   });
 
@@ -72,15 +84,40 @@ describe("SD: which storage facility", () => {
     visitPage(TestCaseId.SDWhichStorageFacilityWithSavedSelection);
 
     cy.get('[data-testid="change-storage-facility"]').click();
-    getStorageFacilitySearchInput();
+    getStorageFacilitySearchInput().should("have.value", "Test Cold Store (UK/5555/CS) - HU1 2AB");
     cy.contains("p", "Approval number: UK/5555/CS").should("not.exist");
+  });
+
+  it("should replace the saved value and select a different facility after clicking Change", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilityWithSavedSelection);
+
+    cy.get('[data-testid="change-storage-facility"]').click();
+    getStorageFacilitySearchInput().type("Gourdie Farm Associates");
+    cy.get('input[name="facilityName"]').should("have.value", "Test Cold Store");
+    cy.get('input[name="facilityApprovalNumber"]').should("have.value", "UK/5555/CS");
+    cy.get('input[name="facilityAddressOne"]').should("have.value", "1 Dock Road, Altens, Aberdeen");
+    cy.get('input[name="facilityTownCity"]').should("have.value", "Hull");
+    cy.get('input[name="facilityPostcode"]').should("have.value", "HU1 2AB");
+    selectAutocompleteOptionContaining("Gourdie Farm Associates");
+
+    cy.get('[data-testid="selected-facility"]').should("contain.text", "Gourdie Farm Associates");
+    cy.get("[data-testid='selected-facility']").should("contain.text", "DB 022");
+    cy.get('input[name="facilityName"]').should("have.value", "Gourdie Farm Associates");
+    cy.get('input[name="facilityAddressOne"]').should("have.value", "Gourdie Farm");
+    cy.get('input[name="facilityTownCity"]').should("have.value", "Dundee");
+    cy.get('input[name="facilityPostcode"]').should("have.value", "DD2 1XD");
+
+    cy.get('[data-testid="save-and-continue"]').click();
+    cy.url().should("include", approvalUrl);
   });
 
   it("should fall back to the address as the bold heading for a manual entry saved before a name was captured", () => {
     visitPage(TestCaseId.SDWhichStorageFacilitySavedManualEntry);
 
     cy.contains("p", "12 Manual Street").should("be.visible");
-    cy.contains("p", "Manualville, MN1 1AA").should("be.visible");
+    cy.contains("p", "Manualville").should("be.visible");
+    cy.contains("p", "MN1 1AA").should("be.visible");
+    cy.get('[data-testid="selected-facility"]').should("not.contain.text", "United Kingdom");
   });
 
   it("should show and hide the no-results message as the search term changes", () => {
@@ -121,6 +158,16 @@ describe("SD: which storage facility", () => {
     });
   });
 
+  it("should continue to details when a selected address has no town or city", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilityContinue);
+
+    getStorageFacilitySearchInput().type("Storage Without Town");
+    selectAutocompleteOptionContaining("Storage Without Town");
+    cy.get('[data-testid="save-and-continue"]').click();
+
+    cy.url().should("include", approvalUrl);
+  });
+
   it("should show a blocking error when no value is entered and continue is clicked", () => {
     visitPage(TestCaseId.SDWhichStorageFacilityEmptyContinue);
 
@@ -145,8 +192,34 @@ describe("SD: which storage facility", () => {
   it("should work without JavaScript using the preloaded select list", () => {
     visitPage(TestCaseId.SDWhichStorageFacilityContinue, true);
 
+    cy.get(".app-storage-facility-nonjs-only label[for='storageFacility']")
+      .should("be.visible")
+      .and("contain.text", "Enter your storage facility");
+    cy.get(".app-storage-facility-nonjs-only .govuk-hint")
+      .should("be.visible")
+      .and("contain.text", "Start typing a company name or approval number to search for a facility.");
     cy.get("select.app-storage-facility-non-js-select").should("be.visible");
     cy.get("select.app-storage-facility-non-js-select").select("Test Cold Store (UK/5555/CS) - HU1 2AB");
+    cy.get('[data-testid="save-and-continue"]').click();
+
+    cy.url().should("include", approvalUrl);
+  });
+
+  it("should preload the saved facility in the full no-JavaScript option list", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilityWithSavedSelection, true);
+
+    cy.get('[data-testid="saved-facility-no-js"]').should("not.exist");
+    cy.get("select.app-storage-facility-non-js-select").should("have.value", "Test Cold Store (UK/5555/CS) - HU1 2AB");
+    cy.get("select.app-storage-facility-non-js-select option").should(
+      "contain.text",
+      "Gourdie Farm Associates (DB 022) - DD2 1XD"
+    );
+  });
+
+  it("should continue without JavaScript when the selected address has no town or city", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilityContinue, true);
+
+    cy.get("select.app-storage-facility-non-js-select").select("Storage Without Town (UK/9999/CS) - HU3 4AB");
     cy.get('[data-testid="save-and-continue"]').click();
 
     cy.url().should("include", approvalUrl);

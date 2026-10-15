@@ -15,6 +15,7 @@ import {
   validateCSRFToken,
   formatEstablishmentLabel,
   matchEstablishment,
+  searchEstablishments,
   getBearerTokenForRequest,
   getStorageDocument,
   getStorageFacilities,
@@ -51,6 +52,12 @@ type LoaderData = {
 const minCharsBeforeSearch = 2;
 
 const whichStorageFacilityUri = "/create-non-manipulation-document/:documentNumber/add-storage-facility";
+
+const keepStorageAutocompleteFocusedOnOptionMouseDown = (event: React.MouseEvent<HTMLFormElement>) => {
+  if (event.target instanceof Element && event.target.closest(".autocomplete__option")) {
+    event.preventDefault();
+  }
+};
 
 const getArrivalBackUrl = (request: Request, documentNumber: string | undefined, storageDocument: StorageDocument) => {
   const url = new URL(request.url);
@@ -113,7 +120,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   session.unset("addressOne");
 
   const sd = storageDocument as StorageDocument;
-  const [establishments, facilityOptionsNoJs] = await Promise.all([getStorageFacilities(), getStorageFacilitiesNoJs()]);
+  const [establishments, noJsFacilityOptions] = await Promise.all([getStorageFacilities(), getStorageFacilitiesNoJs()]);
+  let facilityOptionsNoJs = noJsFacilityOptions;
 
   const matched = matchEstablishment(establishments, sd.facilityName, sd.facilityApprovalNumber);
   // The facility name is optional here - a manual address can be saved (via "Enter facility
@@ -125,13 +133,14 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   if (matched) {
     savedFacilityOption = formatEstablishmentLabel(matched);
+    const address = mapEstablishmentToFacilityAddress(matched);
     savedFacilityDetails = {
       label: savedFacilityOption,
       tradingName: matched.tradingName ?? "",
       approvalNumber: matched.approvalNumber?.content ?? "",
-      addressLine: matched.address?.line1 ?? "",
-      cityName: matched.address?.cityName ?? "",
-      postcode: matched.address?.postCode?.code ?? "",
+      addressLine: address.facilityAddressOne ?? "",
+      cityName: address.facilityTownCity ?? "",
+      postcode: address.facilityPostcode ?? "",
     };
   } else if (hasManualAddress) {
     savedFacilityOption = isEmpty(sd.facilityName)
@@ -145,6 +154,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       cityName: sd.facilityTownCity ?? "",
       postcode: sd.facilityPostcode ?? "",
     };
+  }
+
+  if (savedFacilityOption && !facilityOptionsNoJs.includes(savedFacilityOption)) {
+    const firstFacilityOption = facilityOptionsNoJs[0] === "" ? 1 : 0;
+    facilityOptionsNoJs = [
+      ...facilityOptionsNoJs.slice(0, firstFacilityOption),
+      savedFacilityOption,
+      ...facilityOptionsNoJs.slice(firstFacilityOption),
+    ];
   }
 
   return new Response(
@@ -166,6 +184,92 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   );
 };
 
+type ResolvedStorageFacilitySelection = {
+  facilityName: string;
+  facilityApprovalNumber: string;
+  facilityAddress: Partial<StorageDocument>;
+};
+
+const resolveStorageFacilitySelection = async (
+  form: FormData,
+  isNonJs: boolean
+): Promise<ResolvedStorageFacilitySelection> => {
+  let facilityName = "";
+  let facilityApprovalNumber = "";
+  let facilityAddress: Partial<StorageDocument> = {};
+  let matchedEstablishment: Establishment | undefined;
+  const submittedFacilityLabel = ((form.get("storageFacility") as string) ?? "").trim();
+
+  if (isNonJs) {
+    const establishments: Establishment[] = await searchEstablishments("storage", "");
+    matchedEstablishment = establishments.find((e) => formatEstablishmentLabel(e) === submittedFacilityLabel);
+
+    if (matchedEstablishment) {
+      facilityName = matchedEstablishment.tradingName ?? "";
+      facilityApprovalNumber = matchedEstablishment.approvalNumber?.content ?? "";
+      facilityAddress = mapEstablishmentToFacilityAddress(matchedEstablishment);
+    }
+  } else {
+    facilityName = ((form.get("facilityName") as string) ?? "").trim();
+    facilityApprovalNumber = ((form.get("facilityApprovalNumber") as string) ?? "").trim();
+    facilityAddress = {
+      facilityAddressOne: (form.get("facilityAddressOne") as string) ?? "",
+      facilityTownCity: (form.get("facilityTownCity") as string) ?? "",
+      facilityPostcode: (form.get("facilityPostcode") as string) ?? "",
+      facilityCountry: (form.get("facilityCountry") as string) ?? "",
+    };
+
+    const establishments = await getStorageFacilities();
+    if (submittedFacilityLabel) {
+      matchedEstablishment = establishments.find((e) => formatEstablishmentLabel(e) === submittedFacilityLabel);
+    } else if (!isEmpty(facilityName)) {
+      matchedEstablishment = matchEstablishment(establishments, facilityName, facilityApprovalNumber);
+    }
+
+    if (matchedEstablishment) {
+      facilityName = matchedEstablishment.tradingName ?? facilityName;
+      facilityApprovalNumber = matchedEstablishment.approvalNumber?.content ?? facilityApprovalNumber;
+      facilityAddress = {
+        ...mapEstablishmentToFacilityAddress(matchedEstablishment),
+        facilityBuildingNumber: "",
+        facilitySubBuildingName: "",
+        facilityBuildingName: "",
+        facilityStreetName: "",
+        facilityCounty: "",
+      };
+    }
+  }
+
+  return { facilityName, facilityApprovalNumber, facilityAddress };
+};
+
+const handleEmptyStorageFacilitySelection = async (
+  bearerToken: string,
+  documentNumber: string | undefined,
+  nextUri: string
+): Promise<Response> => {
+  const existingDocument = await getStorageDocument(bearerToken, documentNumber);
+  const hasExistingManualAddress =
+    !instanceOfUnauthorised(existingDocument) && !isEmpty((existingDocument as StorageDocument).facilityAddressOne);
+
+  if (hasExistingManualAddress) {
+    return redirect(
+      isEmpty(nextUri)
+        ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", {
+            documentNumber,
+          })
+        : nextUri
+    );
+  }
+
+  const errors = getTransformedError([{ key: "storageFacility", message: "sdWhichStorageFacilitySelectError" }]);
+
+  return new Response(JSON.stringify({ errors }), {
+    status: 400,
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
 export const action: ActionFunction = async ({ request, params }) => {
   const { documentNumber } = params;
   const form = await request.formData();
@@ -183,81 +287,16 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const isNonJs = form.get("isNonJs") === "true";
   const bearerToken = await getBearerTokenForRequest(request);
-
-  let facilityName = "";
-  let facilityApprovalNumber = "";
-  let facilityAddress: Partial<StorageDocument> = {};
-
-  if (isNonJs) {
-    const selectedLabel = ((form.get("storageFacility") as string) ?? "").trim();
-    const establishments: Establishment[] = await getStorageFacilities();
-    const matched = establishments.find((e) => formatEstablishmentLabel(e) === selectedLabel);
-
-    if (matched) {
-      facilityName = matched.tradingName ?? "";
-      facilityApprovalNumber = matched.approvalNumber?.content ?? "";
-      facilityAddress = mapEstablishmentToFacilityAddress(matched);
-    }
-  } else {
-    facilityName = ((form.get("facilityName") as string) ?? "").trim();
-    facilityApprovalNumber = ((form.get("facilityApprovalNumber") as string) ?? "").trim();
-    facilityAddress = {
-      facilityAddressOne: (form.get("facilityAddressOne") as string) ?? "",
-      facilityTownCity: (form.get("facilityTownCity") as string) ?? "",
-      facilityPostcode: (form.get("facilityPostcode") as string) ?? "",
-      facilityCountry: (form.get("facilityCountry") as string) ?? "",
-    };
-
-    // The submitted hidden fields can't tell a fresh registry match apart from a continuing
-    // manual entry, so re-resolve against the registry here. On a match, use its address as the
-    // source of truth and blank the manual-only sub-fields (building/sub-building/street/county)
-    // so a stale manual entry from BEFORE this facility was matched can't leak back in later via
-    // "Enter the address manually" - mirrors add-processing-plant.tsx's equivalent payload.
-    const establishments = await getStorageFacilities();
-    const matched = !isEmpty(facilityName)
-      ? matchEstablishment(establishments, facilityName, facilityApprovalNumber)
-      : undefined;
-
-    if (matched) {
-      facilityApprovalNumber = matched.approvalNumber?.content ?? facilityApprovalNumber;
-      facilityAddress = {
-        ...mapEstablishmentToFacilityAddress(matched),
-        facilityBuildingNumber: "",
-        facilitySubBuildingName: "",
-        facilityBuildingName: "",
-        facilityStreetName: "",
-        facilityCounty: "",
-      };
-    }
-  }
+  const { facilityName, facilityApprovalNumber, facilityAddress } = await resolveStorageFacilitySelection(
+    form,
+    isNonJs
+  );
 
   const nextUri = form.get("nextUri") as string;
   const hasSelection = !isEmpty(facilityName) || !isEmpty(facilityAddress.facilityAddressOne);
 
   if (!hasSelection) {
-    // Non-JS users (and a defensive fallback for JS) can reach here with nothing submitted even
-    // though a manual address was already saved for this document on a previous visit - in that
-    // case the facility name is simply still pending on the next page, not a validation error.
-    const existingDocument = await getStorageDocument(bearerToken, documentNumber);
-    const hasExistingManualAddress =
-      !instanceOfUnauthorised(existingDocument) && !isEmpty((existingDocument as StorageDocument).facilityAddressOne);
-
-    if (hasExistingManualAddress) {
-      return redirect(
-        isEmpty(nextUri)
-          ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", {
-              documentNumber,
-            })
-          : nextUri
-      );
-    }
-
-    const errors = getTransformedError([{ key: "storageFacility", message: "sdWhichStorageFacilitySelectError" }]);
-
-    return new Response(JSON.stringify({ errors }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
+    return handleEmptyStorageFacilitySelection(bearerToken, documentNumber, nextUri);
   }
 
   const errorResponse = await updateStorageDocumentFacility(
@@ -289,16 +328,18 @@ const WhichStorageFacility = () => {
   const { documentNumber, csrf, nextUri, backUrl, savedFacilityOption, savedFacilityDetails, facilityOptionsNoJs } =
     useLoaderData<LoaderData>();
   const actionData = useActionData() ?? {};
-  const { errors = {} } = actionData;
+  const { errors = {}, submittedFacilityLabel } = actionData;
   const isHydrated = useIsHydrated();
 
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [facilitySearchDefaultValue, setFacilitySearchDefaultValue] = useState(savedFacilityOption ?? "");
   const [facilityResults, setFacilityResults] = useState<StorageFacilitySearchResult[]>(
     savedFacilityDetails ? [savedFacilityDetails] : []
   );
   const [selectedFacility, setSelectedFacility] = useState<StorageFacilitySearchResult | undefined>(
     savedFacilityDetails
   );
+  const [facilityBeingChanged, setFacilityBeingChanged] = useState<StorageFacilitySearchResult | undefined>();
   const facilityOptions = facilityResults.map((result) => result.label);
   const showNoResultsMessage =
     isHydrated && searchTerm.trim().length >= minCharsBeforeSearch && facilityResults.length === 0;
@@ -310,6 +351,7 @@ const WhichStorageFacility = () => {
     const match = facilityResults.find((result) => result.label === label);
     if (match) {
       setSelectedFacility(match);
+      setFacilityBeingChanged(undefined);
     }
   };
 
@@ -338,6 +380,7 @@ const WhichStorageFacility = () => {
   }, [searchTerm]);
 
   const getNonJsOptions = () => (!isEmpty(facilityOptionsNoJs) ? facilityOptionsNoJs : [""]);
+  const facilityToSubmit = selectedFacility ?? facilityBeingChanged;
 
   return (
     <Main backUrl={backUrl}>
@@ -345,8 +388,8 @@ const WhichStorageFacility = () => {
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-two-thirds">
           <Title title={t("sdWhichStorageFacilityHeading")} />
-          <SecureForm method="post" csrf={csrf}>
-            {isHydrated && selectedFacility ? (
+          <SecureForm method="post" csrf={csrf} onMouseDown={keepStorageAutocompleteFocusedOnOptionMouseDown}>
+            {isHydrated && selectedFacility && !errors?.storageFacility ? (
               <div className="app-establishment-summary govuk-!-margin-bottom-6" data-testid="selected-facility">
                 <p className="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
                   {selectedFacility.tradingName || selectedFacility.addressLine}
@@ -359,28 +402,44 @@ const WhichStorageFacility = () => {
                 {selectedFacility.tradingName && selectedFacility.addressLine && (
                   <p className="govuk-body govuk-!-margin-bottom-1">{selectedFacility.addressLine}</p>
                 )}
-                <p className="govuk-body govuk-!-margin-bottom-3">
-                  {[selectedFacility.cityName, selectedFacility.postcode].filter(Boolean).join(", ")}
-                </p>
+                {selectedFacility.cityName && (
+                  <p className="govuk-body govuk-!-margin-bottom-1">{selectedFacility.cityName}</p>
+                )}
+                {selectedFacility.postcode && (
+                  <p className="govuk-body govuk-!-margin-bottom-1">{selectedFacility.postcode}</p>
+                )}
                 <button
                   type="button"
                   className="app-change-button"
                   data-testid="change-storage-facility"
                   onClick={() => {
+                    setFacilityBeingChanged(selectedFacility);
                     setSelectedFacility(undefined);
+                    setFacilitySearchDefaultValue(selectedFacility.label);
                     setSearchTerm("");
                   }}
                 >
                   {t("commonWhatExportersAddressChangeLink", { ns: "common" })}
                 </button>
-                <input type="hidden" name="facilityName" value={selectedFacility.tradingName} />
-                <input type="hidden" name="facilityApprovalNumber" value={selectedFacility.approvalNumber} />
-                <input type="hidden" name="facilityAddressOne" value={selectedFacility.addressLine} />
-                <input type="hidden" name="facilityTownCity" value={selectedFacility.cityName} />
-                <input type="hidden" name="facilityPostcode" value={selectedFacility.postcode} />
               </div>
             ) : (
               <>
+                {!isHydrated && !savedFacilityDetails && (
+                  <div className="govuk-form-group app-storage-facility-placeholder">
+                    <label className="govuk-label govuk-!-font-weight-bold" htmlFor="storageFacility-placeholder">
+                      {t("sdWhichStorageFacilityLabel")}
+                    </label>
+                    <div className="govuk-hint">{t("sdWhichStorageFacilityHint")}</div>
+                    <input
+                      className="govuk-input govuk-!-width-full"
+                      id="storageFacility-placeholder"
+                      type="text"
+                      disabled
+                      aria-hidden="true"
+                      tabIndex={-1}
+                    />
+                  </div>
+                )}
                 <AutocompleteFormField
                   id="storageFacility"
                   name="storageFacility"
@@ -389,10 +448,10 @@ const WhichStorageFacility = () => {
                   errorMessageText={
                     errors?.storageFacility ? t(errors?.storageFacility?.message ?? "", { ns: "errorsText" }) : ""
                   }
-                  defaultValue={savedFacilityOption ?? ""}
-                  labelText={t("sdWhichStorageFacilityLabel")}
+                  defaultValue={submittedFacilityLabel ?? selectedFacility?.label ?? facilitySearchDefaultValue}
+                  labelText={isHydrated ? t("sdWhichStorageFacilityLabel") : undefined}
                   labelClassName="govuk-label govuk-!-font-weight-bold"
-                  hintText={t("sdWhichStorageFacilityHint")}
+                  hintText={isHydrated ? t("sdWhichStorageFacilityHint") : undefined}
                   containerClassName={classNames("govuk-form-group", {
                     "govuk-form-group--error": errors?.storageFacility,
                   })}
@@ -401,13 +460,19 @@ const WhichStorageFacility = () => {
                   }}
                   customNonJSComp={
                     isHydrated ? undefined : (
-                      <FormSelect
-                        name="storageFacility"
-                        id="storageFacility"
-                        options={getNonJsOptions()}
-                        defaultValue={savedFacilityOption ?? ""}
-                        selectClassName="govuk-select govuk-!-width-full app-storage-facility-non-js-select"
-                      />
+                      <div className="app-storage-facility-nonjs-only">
+                        <label className="govuk-label govuk-!-font-weight-bold" htmlFor="storageFacility">
+                          {t("sdWhichStorageFacilityLabel")}
+                        </label>
+                        <div className="govuk-hint">{t("sdWhichStorageFacilityHint")}</div>
+                        <FormSelect
+                          name="storageFacility"
+                          id="storageFacility"
+                          options={getNonJsOptions()}
+                          defaultValue={submittedFacilityLabel ?? savedFacilityOption ?? ""}
+                          selectClassName="govuk-select govuk-!-width-full app-storage-facility-non-js-select"
+                        />
+                      </div>
                     )
                   }
                   inputProps={{
@@ -415,6 +480,11 @@ const WhichStorageFacility = () => {
                     className: classNames("govuk-input govuk-!-width-full", {
                       "govuk-input--error": errors?.storageFacility,
                     }),
+                    onFocus: (event) => {
+                      if (facilitySearchDefaultValue) {
+                        event.currentTarget.select();
+                      }
+                    },
                   }}
                   onChange={setSearchTerm}
                   onSelected={handleFacilitySelected}
@@ -432,6 +502,15 @@ const WhichStorageFacility = () => {
                     </p>
                   )}
                 </div>
+              </>
+            )}
+            {facilityToSubmit && (
+              <>
+                <input type="hidden" name="facilityName" value={facilityToSubmit.tradingName} />
+                <input type="hidden" name="facilityApprovalNumber" value={facilityToSubmit.approvalNumber} />
+                <input type="hidden" name="facilityAddressOne" value={facilityToSubmit.addressLine} />
+                <input type="hidden" name="facilityTownCity" value={facilityToSubmit.cityName} />
+                <input type="hidden" name="facilityPostcode" value={facilityToSubmit.postcode} />
               </>
             )}
             <div className="govuk-button-group">

@@ -31,6 +31,8 @@ const storageFacilities = [
     },
     address: {
       line1: "1 Dock Road",
+      line2: "Altens",
+      line3: "Aberdeen",
       cityName: "Hull",
       postCode: {
         code: "HU1 2AB",
@@ -43,6 +45,31 @@ const storageFacilities = [
       content: "UK/6666/CS",
     },
   },
+  {
+    tradingName: "Gourdie Farm Associates",
+    approvalNumber: {
+      content: "DB 022",
+    },
+    address: {
+      line1: "Gourdie Farm",
+      cityName: "Dundee",
+      postCode: {
+        code: "DD2 1XD",
+      },
+    },
+  },
+  {
+    tradingName: "Storage Without Town",
+    approvalNumber: {
+      content: "UK/9999/CS",
+    },
+    address: {
+      line1: "8 Harbour Road",
+      postCode: {
+        code: "HU3 4AB",
+      },
+    },
+  },
 ];
 
 // Matched establishment already saved on the document.
@@ -51,7 +78,6 @@ const storageDocumentWithSavedFacility = {
   facilityName: "Test Cold Store",
   facilityApprovalNumber: "UK/5555/CS",
 };
-
 // A manual address saved before the facility name is captured (on add-storage-facility-details) -
 // the summary must still display, falling back to the address as its bold heading.
 const { facilityName: _facilityName, ...storageDocumentNoFacilitiesWithoutName } =
@@ -99,9 +125,10 @@ const whichStorageFacilityHandler: ITestHandler = {
   [TestCaseId.SDWhichStorageFacilityWithSavedSelection]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentWithSavedFacility))),
     ...getStorageFacilitiesHandlers(storageFacilities),
-    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
-      res(ctx.json(storageDocumentWithSavedFacility))
-    ),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), async (req, res, ctx) => {
+      const body = await req.json();
+      return res(ctx.json({ ...storageDocumentWithSavedFacility, ...body }));
+    }),
   ],
   [TestCaseId.SDWhichStorageFacilitySavedManualEntry]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentWithSavedManualAddressNoName))),
