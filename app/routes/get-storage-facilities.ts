@@ -1,5 +1,5 @@
 import { type LoaderFunction } from "react-router";
-import { formatEstablishmentLabel, searchEstablishments } from "~/.server";
+import { formatEstablishmentLabel, mapEstablishmentToFacilityAddress, searchEstablishments } from "~/.server";
 import type { Establishment } from "~/types";
 import serverLogger from "~/logger.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
@@ -42,15 +42,17 @@ export const loader: LoaderFunction = async ({ request }) => {
         return tradingName.includes(searchTerm) || approvalNumber.includes(searchTerm);
       })
       .filter((establishment) => establishment.tradingName && establishment.approvalNumber?.content)
-      .map((establishment) => ({
-        label: formatEstablishmentLabel(establishment),
-        tradingName: establishment.tradingName ?? "",
-        approvalNumber: establishment.approvalNumber?.content ?? "",
-        addressLine: establishment.address?.line1 ?? "",
-        cityName: establishment.address?.cityName ?? "",
-        postcode: establishment.address?.postCode?.code ?? "",
-        country: establishment.country ?? establishment.address?.country?.countryName ?? "",
-      }));
+      .map((establishment) => {
+        const address = mapEstablishmentToFacilityAddress(establishment);
+        return {
+          label: formatEstablishmentLabel(establishment),
+          tradingName: establishment.tradingName ?? "",
+          approvalNumber: establishment.approvalNumber?.content ?? "",
+          addressLine: address.facilityAddressOne ?? "",
+          cityName: address.facilityTownCity ?? "",
+          postcode: address.facilityPostcode ?? "",
+        };
+      });
 
     return new Response(JSON.stringify(labels), {
       status: 200,

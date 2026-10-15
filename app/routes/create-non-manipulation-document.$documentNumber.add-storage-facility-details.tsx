@@ -16,6 +16,7 @@ import {
   validateCSRFToken,
   getStorageFacilities,
   matchEstablishment,
+  mapEstablishmentToFacilityAddress,
   nonJsDateValidation,
 } from "~/.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
@@ -67,9 +68,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const establishments = await getStorageFacilities();
   // Recomputed every request rather than persisted - the facility can only change via
   // add-storage-facility, so the registry is always the source of truth for this flag.
-  const isMatchedEstablishment = Boolean(
-    matchEstablishment(establishments, sd.facilityName, sd.facilityApprovalNumber)
-  );
+  const matchedEstablishment = matchEstablishment(establishments, sd.facilityName, sd.facilityApprovalNumber);
+  const matchedAddress = matchedEstablishment ? mapEstablishmentToFacilityAddress(matchedEstablishment) : undefined;
+  const isMatchedEstablishment = Boolean(matchedEstablishment);
   const hasFacility = !isEmpty(sd.facilityAddressOne) && !isEmpty(sd.facilityPostcode);
 
   return new Response(
@@ -80,9 +81,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       approvalNumber: sd.facilityApprovalNumber,
       facilityStorage: sd.facilityStorage,
       facilityName: sd.facilityName,
-      facilityAddressOne: sd.facilityAddressOne,
-      facilityTownCity: sd.facilityTownCity,
-      facilityPostcode: sd.facilityPostcode,
+      facilityAddressOne: matchedAddress?.facilityAddressOne ?? sd.facilityAddressOne,
+      facilityTownCity: matchedAddress?.facilityTownCity ?? sd.facilityTownCity,
+      facilityPostcode: matchedAddress?.facilityPostcode ?? sd.facilityPostcode,
       selectedArrivalDate: sd.facilityArrivalDate,
       isMatchedEstablishment,
       hasFacility,
@@ -242,7 +243,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 };
 
 const AddStorageFacilityApproval = () => {
-  const { t } = useTranslation(["addStorageFacilityDetails", "common"]);
+  const { t } = useTranslation(["addStorageFacilityDetails", "common", "errorsText"]);
   const {
     documentNumber,
     approvalNumber,
@@ -285,20 +286,31 @@ const AddStorageFacilityApproval = () => {
             csrf={csrf}
           >
             {hasAddress && (
-              <div className="app-establishment-summary govuk-!-margin-bottom-6" data-testid="facility-summary">
-                {facilityName && (
-                  <p className="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">{facilityName}</p>
-                )}
-                {approvalNumber && (
-                  <p className="govuk-body govuk-!-margin-bottom-1">
-                    {t("sdFacilitySummaryApprovalNumberLabel")}: {approvalNumber}
-                  </p>
-                )}
-                {facilityName && facilityAddressOne && (
-                  <p className="govuk-body govuk-!-margin-bottom-1">{facilityAddressOne}</p>
-                )}
-                {facilityTownCity && <p className="govuk-body govuk-!-margin-bottom-1">{facilityTownCity}</p>}
-                {facilityPostcode && <p className="govuk-body govuk-!-margin-bottom-1">{facilityPostcode}</p>}
+              <div className="govuk-grid-row">
+                <div className="govuk-grid-column-two-thirds" data-testid="facility-summary-column">
+                  <div
+                    id="storageFacilities-facilityTownCity"
+                    className="app-establishment-summary govuk-!-margin-bottom-6"
+                    data-testid="facility-summary"
+                  >
+                    <p className="govuk-body govuk-!-margin-bottom-3">
+                      <strong>
+                        {t("sdStorageFacilityAddressSummaryHeading", { ns: "addStorageFacilityDetails" })}
+                      </strong>
+                    </p>
+                    {facilityName && (
+                      <p className="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">{facilityName}</p>
+                    )}
+                    {approvalNumber && (
+                      <p className="govuk-body govuk-!-margin-bottom-1">
+                        {t("sdFacilitySummaryApprovalNumberLabel")}: {approvalNumber}
+                      </p>
+                    )}
+                    {facilityAddressOne && <p className="govuk-body govuk-!-margin-bottom-1">{facilityAddressOne}</p>}
+                    {facilityTownCity && <p className="govuk-body govuk-!-margin-bottom-1">{facilityTownCity}</p>}
+                    {facilityPostcode && <p className="govuk-body govuk-!-margin-bottom-1">{facilityPostcode}</p>}
+                  </div>
+                </div>
               </div>
             )}
             <DateFieldWithPicker
@@ -451,7 +463,7 @@ const AddStorageFacilityApproval = () => {
                       value="Chilled"
                       defaultChecked={actionData.facilityStorage === "Chilled" || facilityStorage === "Chilled"}
                     />
-                    <label className="govuk-label govuk-radios__label" htmlFor="chilled">
+                    <label className="govuk-label govuk-radios__label" htmlFor="storageFacilities-facilityStorage">
                       {t("productStorageChilledLabel", { ns: "addStorageFacilityDetails" })}
                     </label>
                   </div>

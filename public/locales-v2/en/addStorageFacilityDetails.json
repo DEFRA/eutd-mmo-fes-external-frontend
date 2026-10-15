@@ -2,6 +2,7 @@
   "sdAddStorageDetailsHeader": "Add storage facility details",
   "sdAddStorageApprovalDetailsHeader": "Add storage facility details",
   "sdFacilityName": "Storage facility name",
+  "sdStorageFacilityAddressSummaryHeading": "Storage facility address",
   "sdFacilitySummaryApprovalNumberLabel": "Approval number",
   "sdAddStorageFacilityDetailsAddressText": "An address must be provided for this storage facility.",
   "sdAddStorageFacilityDetailsAddAddressText": "Add the storage facility address",

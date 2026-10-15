@@ -2,7 +2,7 @@ import { getReferenceData } from "~/communication.server";
 import serverLogger from "~/logger.server";
 import type { Establishment } from "~/types";
 import { STORAGE_FACILITIES_URL } from "~/urls.server";
-import { formatEstablishmentLabel } from "./establishmentSearch";
+import { formatEstablishmentLabel, searchEstablishments } from "./establishmentSearch";
 
 const onGetStorageFacilitiesResponse = async (response: Response): Promise<Establishment[]> => {
   switch (response.status) {
@@ -55,7 +55,7 @@ export const getStorageFacilities = async (): Promise<Establishment[]> => {
 
 export const getStorageFacilitiesNoJs = async (): Promise<string[]> => {
   try {
-    const establishments = await getStorageFacilities();
+    const establishments = await searchEstablishments("storage", "");
     return Array.isArray(establishments)
       ? establishments.reduce((acc: string[], cur: Establishment) => [...acc, formatEstablishmentLabel(cur)], [""])
       : [""];
@@ -79,9 +79,10 @@ export const mapEstablishmentToFacilityAddress = (
   const address = establishment.address;
   const facilityTownCity = address?.cityName;
   const facilityPostcode = address?.postCode?.code;
+  const facilityCountry = address?.country?.countryName?.trim();
   return {
     facilityAddressOne: [address?.line1, address?.line2, address?.line3, address?.line4].filter(Boolean).join(", "),
-    facilityCountry: address?.country?.countryName ?? "United Kingdom",
+    facilityCountry: facilityCountry ? address?.country?.countryName : "United Kingdom",
     ...(typeof facilityTownCity === "string" ? { facilityTownCity } : {}),
     ...(typeof facilityPostcode === "string" ? { facilityPostcode } : {}),
   };

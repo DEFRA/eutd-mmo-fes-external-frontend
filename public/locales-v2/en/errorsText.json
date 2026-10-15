@@ -178,6 +178,7 @@
   "psAddProcessingPlantAddressErrorAddress": "Enter the address",
   "psAddProcessingPlantAddressErrorCountryNotUk": "Select a UK country for the processing plant address",
   "sdWhichStorageFacilitySelectError": "You must select a storage facility or enter the facility details manually",
+  "sdAddStorageFacilityDetailsErrorEnterTheTown": "This address is missing a town or city. Select a different address.",
   "psAddCatchWeightsErrorEnterTotalWeightLandedInKG": "Enter the total weight landed in kg",
   "psAddCatchWeightsErrorEnterTotalWeightMaximum2Decimal": "Enter the total weight shown on catch certificate as a number with a maximum of 2 decimal places",
   "psAddCatchWeightsErrorEnterExportWeightInKGBeforeProcessing": "Enter the weight of raw material in kg",
