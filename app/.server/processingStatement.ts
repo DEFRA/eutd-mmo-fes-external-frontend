@@ -35,11 +35,12 @@ export const getProcessingStatement = async (
 
 const onGetProcessingStatement = async (response: Response): Promise<ProcessingStatement | IUnauthorised> => {
   switch (response.status) {
-    case 200:
+    case 200: {
       const processingStatement: ProcessingStatement = await response.json();
       return {
         ...processingStatement,
       };
+    }
     case 403:
       return {
         unauthorised: true,
@@ -77,7 +78,7 @@ export const addProcessingDetails = async (
 const onAddProcessingDetails = async (response: Response): Promise<ProcessingStatement | IUnauthorised> => {
   switch (response.status) {
     case 200:
-    case 400:
+    case 400: {
       const data = (await response.json()) ?? {};
       return {
         ...data,
@@ -88,6 +89,7 @@ const onAddProcessingDetails = async (response: Response): Promise<ProcessingSta
             }))
           : {},
       };
+    }
     case 403:
       return {
         unauthorised: true,

@@ -166,8 +166,6 @@ const AddProcessingPlantDetails = () => {
     plantAddressOne,
     plantTownCity,
     plantPostcode,
-    plantCounty,
-    plantCountry,
     nextUri,
     csrf,
   } = useLoaderData<LoaderPlantDetails>();
@@ -235,8 +233,6 @@ const AddProcessingPlantDetails = () => {
                       {plantAddressOne && <p className="govuk-body govuk-!-margin-bottom-1">{plantAddressOne}</p>}
                       {plantTownCity && <p className="govuk-body govuk-!-margin-bottom-1">{plantTownCity}</p>}
                       {plantPostcode && <p className="govuk-body govuk-!-margin-bottom-1">{plantPostcode}</p>}
-                      {plantCounty && <p className="govuk-body govuk-!-margin-bottom-1">{plantCounty}</p>}
-                      {plantCountry && <p className="govuk-body govuk-!-margin-bottom-1">{plantCountry}</p>}
                       <input type="hidden" name="plantName" value={plantName} />
                     </div>
                   </div>
