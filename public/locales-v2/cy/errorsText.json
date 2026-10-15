@@ -216,6 +216,7 @@
   "psAddHealthCertificateErrorTodayOrPastSubmitDateError": "Rhaid i ddyddiad y dystysgrif iechyd fod yn heddiw neu yn y gorffennol.",
   "sdAddStorageFacilityDetailsErrorEnterTheFacilityName": "Rhowch enw’r cyfleuster",
   "sdAddStorageFacilityDetailsErrorEnterTheAddress": "Rhowch y cyfeiriad",
+  "sdAddStorageFacilityDetailsErrorEnterTheTown": "Mae tref neu ddinas ar goll o'r cyfeiriad hwn. Dewiswch gyfeiriad gwahanol.",
   "sdAddStorageFacilityApprovalCharacterError": "Ni chaiff rhif y gymeradwyaeth fod yn fwy na 50 o gymeriadau",
   "sdAddStorageFacilityApprovalInvalidError": "Rhaid i rif y gymeradwyaeth gynnwys llythrennau, rhifau, cysylltnodau, atalnodau llawn, blaenslaesau a bylchau yn unig",
   "sdAddStorageFacilityAddressErrorCountryNotUk": "Dewiswch wlad yn y DU ar gyfer cyfeiriad y cyfleuster storio",
