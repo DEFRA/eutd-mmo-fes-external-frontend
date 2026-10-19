@@ -48,15 +48,6 @@ export const ExporterPostcodeLookUp = ({ errors, postcode, actionUri, csrf }: Ex
           <Button
             type={BUTTON_TYPE.SUBMIT}
             name="_action"
-            label={t("commonSecondaryCancelButton")}
-            //@ts-ignore
-            value="cancel"
-            className="govuk-button govuk-button--secondary"
-            data-testid="cancel"
-          />
-          <Button
-            type={BUTTON_TYPE.SUBMIT}
-            name="_action"
             data-module="govuk-button"
             id="findaddress"
             //@ts-ignore
@@ -64,6 +55,15 @@ export const ExporterPostcodeLookUp = ({ errors, postcode, actionUri, csrf }: Ex
             label={t("commonWhatExportersAddressFindAddress")}
             className="govuk-button"
             data-testid="findaddress"
+          />
+          <Button
+            type={BUTTON_TYPE.SUBMIT}
+            name="_action"
+            label={t("commonSecondaryCancelButton")}
+            //@ts-ignore
+            value="cancel"
+            className="govuk-button govuk-button--secondary"
+            data-testid="cancel"
           />
         </div>
       </div>

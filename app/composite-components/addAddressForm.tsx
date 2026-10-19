@@ -243,16 +243,6 @@ export const AddAddressForm = ({
       </div>
       <div className="govuk-button-group">
         <Button
-          id="cancel"
-          type={BUTTON_TYPE.SUBMIT}
-          name="_action"
-          label={t("commonSecondaryCancelButton")}
-          //@ts-ignore
-          value="cancelManualAddress"
-          className="govuk-button govuk-button--secondary"
-          data-testid="cancel"
-        />
-        <Button
           id="continue"
           type={BUTTON_TYPE.SUBMIT}
           name="_action"
@@ -261,6 +251,16 @@ export const AddAddressForm = ({
           value="continueManualAddress"
           className="govuk-button"
           data-testid="continue"
+        />
+        <Button
+          id="cancel"
+          type={BUTTON_TYPE.SUBMIT}
+          name="_action"
+          label={t("commonSecondaryCancelButton")}
+          //@ts-ignore
+          value="cancelManualAddress"
+          className="govuk-button govuk-button--secondary"
+          data-testid="cancel"
         />
       </div>
       <input type="hidden" name="journey" value={journey} />

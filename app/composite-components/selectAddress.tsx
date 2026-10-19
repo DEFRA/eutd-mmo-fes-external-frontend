@@ -62,16 +62,6 @@ export const SelectAddress = ({ postcode, postcodeaddresses, errors, actionUri, 
               </div>
               <div className="govuk-button-group">
                 <Button
-                  id="cancel"
-                  type={BUTTON_TYPE.SUBMIT}
-                  name="_action"
-                  label={t("commonSecondaryCancelButton")}
-                  //@ts-ignore
-                  value="cancel"
-                  className="govuk-button govuk-button--secondary"
-                  data-testid="cancel"
-                />
-                <Button
                   id="getaddress"
                   type={BUTTON_TYPE.SUBMIT}
                   name="_action"
@@ -81,6 +71,16 @@ export const SelectAddress = ({ postcode, postcodeaddresses, errors, actionUri, 
                   label={t("commonContinueButtonContinueButtonText")}
                   className="govuk-button"
                   data-testid="getaddress"
+                />
+                <Button
+                  id="cancel"
+                  type={BUTTON_TYPE.SUBMIT}
+                  name="_action"
+                  label={t("commonSecondaryCancelButton")}
+                  //@ts-ignore
+                  value="cancel"
+                  className="govuk-button govuk-button--secondary"
+                  data-testid="cancel"
                 />
               </div>
               <div className="govuk-button-group">
