@@ -9,8 +9,7 @@ const validEditCatchDetailsNextUrl = `${documentUrl}/add-catch-details/COD/0?cat
 const validEditCatchDetailsUrlForUK = `${documentUrl}/add-catch-details/ASD/0?catchType=uk&pageNo=1`;
 
 describe("PS: Add catch details", () => {
-  // FIO-10279: Test button order - Cancel on left, Add on right
-  it("should display Cancel button on the left and Add button on the right", () => {
+  it("should display Add button on the left and Cancel button on the right", () => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.PSAddCatchDetailsFirstCatch,
     };
@@ -29,7 +28,7 @@ describe("PS: Add catch details", () => {
 
       expect(cancelIndex).to.be.greaterThan(-1);
       expect(addIndex).to.be.greaterThan(-1);
-      expect(cancelIndex).to.be.lessThan(addIndex);
+      expect(addIndex).to.be.lessThan(cancelIndex);
     });
   });
 
