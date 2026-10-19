@@ -206,6 +206,7 @@ const getSearchFilters = (type: EstablishmentType): Record<string, string> => {
 
 const buildSearchUrl = (type: EstablishmentType, term: string): string => {
   const url = new URL(getApprovedFoodEstablishmentsSearchUrl());
+  url.searchParams.set("country", "GB");
 
   if (term.length) {
     url.searchParams.set("q", term);
@@ -242,6 +243,7 @@ const callSearchApi = async (type: EstablishmentType, term: string, token: strin
 
   const requestUrl = buildSearchUrl(type, term);
   const startTime = Date.now();
+  serverLogger.debug(`[APPROVED-FOOD-ESTABLISHMENTS][SEARCH][REQUEST][${requestUrl}]`);
 
   const response = await doFetchWithTimeout(
     requestUrl,
