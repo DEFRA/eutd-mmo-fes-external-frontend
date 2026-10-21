@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useRevalidator } from "react-router";
 import { route } from "routes-gen";
 
 export const CookieBanner = () => {
@@ -9,6 +9,7 @@ export const CookieBanner = () => {
   const [isHidden, setIsHidden] = useState(true);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [acceptedChoice, setAcceptedChoice] = useState(false);
+  const { revalidate } = useRevalidator();
 
   useEffect(() => {
     // Check if URL contains loggedIn=yes parameter
@@ -21,35 +22,43 @@ export const CookieBanner = () => {
 
   const saveCookiePreference = async (acceptsCookies: boolean) => {
     try {
-      await fetch("/set-cookie-preference", {
+      // Fetch a route-agnostic token so the banner works on any page, not just "/"
+      const csrfResponse = await fetch("/set-cookie-preference", { credentials: "same-origin" });
+      const { csrf } = (await csrfResponse.json()) as { csrf?: string };
+
+      const body = new URLSearchParams();
+      body.set("acceptsCookies", String(acceptsCookies));
+      body.set("csrf", csrf ?? "");
+
+      const response = await fetch("/set-cookie-preference", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: JSON.stringify({ acceptsCookies }),
+        body,
       });
+
+      if (response.ok) {
+        void revalidate();
+      }
     } catch {
-      // Silent fail - cookie is still set locally for immediate UX
+      // Silent fail - banner confirmation still shown; preference not persisted
     }
   };
 
   const handleAccept = () => {
-    // Set cookie client-side
-    document.cookie = `analytics_cookies_accepted=${JSON.stringify({ analyticsAccepted: true })}; path=/; SameSite=Strict; Secure`;
     setAcceptedChoice(true);
     setShowConfirmation(true);
 
-    // Save to database
+    // Save to database and refresh the analytics cookie from the server
     void saveCookiePreference(true);
   };
 
   const handleReject = () => {
-    // Set cookie client-side
-    document.cookie = `analytics_cookies_accepted=${JSON.stringify({ analyticsAccepted: false })}; path=/; SameSite=Strict; Secure`;
     setAcceptedChoice(false);
     setShowConfirmation(true);
 
-    // Save to database
+    // Save to database and refresh the analytics cookie from the server
     void saveCookiePreference(false);
   };
 

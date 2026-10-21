@@ -10,17 +10,6 @@ export const ButtonGroup = ({ saveButtonLabel }: ButtonGroupProps) => {
   return (
     <div className="govuk-button-group">
       <Button
-        id="saveAsDraft"
-        label={t("commonSaveAsDraftButtonSaveAsDraftText")}
-        className="govuk-button govuk-button--secondary"
-        type={BUTTON_TYPE.SUBMIT}
-        data-module="govuk-button"
-        name="_action"
-        // @ts-ignore
-        value="saveAsDraft"
-        data-testid="save-draft-button"
-      />
-      <Button
         id="continue"
         label={saveButtonLabel ?? t("commonContinueButtonSaveAndContinueButton")}
         className="govuk-button"
@@ -30,6 +19,17 @@ export const ButtonGroup = ({ saveButtonLabel }: ButtonGroupProps) => {
         // @ts-ignore
         value="saveAndContinue"
         data-testid="save-and-continue"
+      />
+      <Button
+        id="saveAsDraft"
+        label={t("commonSaveAsDraftButtonSaveAsDraftText")}
+        className="govuk-button govuk-button--secondary"
+        type={BUTTON_TYPE.SUBMIT}
+        data-module="govuk-button"
+        name="_action"
+        // @ts-ignore
+        value="saveAsDraft"
+        data-testid="save-draft-button"
       />
     </div>
   );

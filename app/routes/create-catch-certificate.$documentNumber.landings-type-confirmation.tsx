@@ -81,16 +81,6 @@ const LandingsTypeConfirmation = () => {
             <br />
             <div className="govuk-button-group">
               <Button
-                id="saveAsDraft"
-                type={BUTTON_TYPE.SUBMIT}
-                name="_action"
-                label={t("commonSecondaryCancelButton", { ns: "common" })}
-                // @ts-ignore
-                value="cancel"
-                className="govuk-button govuk-button--secondary"
-                data-testid="cancel"
-              />
-              <Button
                 id="continue"
                 type={BUTTON_TYPE.SUBMIT}
                 name="_action"
@@ -99,6 +89,16 @@ const LandingsTypeConfirmation = () => {
                 value="continue"
                 className="govuk-button"
                 data-testid="continue"
+              />
+              <Button
+                id="saveAsDraft"
+                type={BUTTON_TYPE.SUBMIT}
+                name="_action"
+                label={t("commonSecondaryCancelButton", { ns: "common" })}
+                // @ts-ignore
+                value="cancel"
+                className="govuk-button govuk-button--secondary"
+                data-testid="cancel"
               />
             </div>
             <input type="hidden" defaultValue={newLanding} name="newLanding" />

@@ -1,4 +1,5 @@
 import { type ITestParams, TestCaseId } from "~/types";
+import { decodeRemixCookie, encodeRemixCookie } from "../../helpers";
 
 const visitCookiesPage = (search = "") => {
   const testParams: ITestParams = {
@@ -61,7 +62,7 @@ describe("Cookie Banner", () => {
 
     it("should display the cookie banner even when cookie preference is already set", () => {
       // Set cookie preference
-      cy.setCookie("analytics_cookies_accepted", JSON.stringify({ analyticsAccepted: true }));
+      cy.setCookie("analytics_cookies_accepted", encodeRemixCookie({ analyticsAccepted: true }));
 
       cy.visit("/?loggedIn=yes");
 
@@ -86,46 +87,60 @@ describe("Cookie Banner", () => {
   });
 
   describe("Database Integration", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.UserAttributes,
+    };
+
     beforeEach(() => {
-      // Intercept API calls to set-cookie-preference
-      cy.intercept("POST", "/set-cookie-preference", {
-        statusCode: 200,
-        body: { success: true },
-      }).as("saveCookiePreference");
+      // Spy only (no stub response) so the requests reach the real routes, which MSW backs
+      cy.intercept("GET", "/set-cookie-preference").as("getCsrf");
+      cy.intercept("POST", "/set-cookie-preference").as("saveCookiePreference");
     });
 
     it("should call API to save preference when accepting cookies", () => {
-      cy.visit("/?loggedIn=yes");
+      cy.visit("/?loggedIn=yes", { qs: { ...testParams } });
 
       // Click accept button
       cy.contains("button", "Accept analytics cookies").click();
 
-      // Wait for API call
+      // Wait for the CSRF fetch then the save call
+      cy.wait("@getCsrf");
       cy.wait("@saveCookiePreference").then((interception) => {
         // Verify request body
-        expect(interception.request.body).to.deep.equal({ acceptsCookies: true });
+        expect(interception.request.body).to.include("acceptsCookies=true");
+        expect(interception.request.body).to.include("csrf=");
         // Verify request headers
-        expect(interception.request.headers["content-type"]).to.include("application/json");
+        expect(interception.request.headers["content-type"]).to.include("application/x-www-form-urlencoded");
+      });
+
+      cy.getCookie("analytics_cookies_accepted").then((cookie) => {
+        expect(decodeRemixCookie(decodeURIComponent(cookie?.value ?? ""))).to.deep.equal({ analyticsAccepted: true });
       });
     });
 
     it("should call API to save preference when rejecting cookies", () => {
-      cy.visit("/?loggedIn=yes");
+      cy.visit("/?loggedIn=yes", { qs: { ...testParams } });
 
       // Click reject button
       cy.contains("button", "Reject analytics cookies").click();
 
-      // Wait for API call
+      // Wait for the CSRF fetch then the save call
+      cy.wait("@getCsrf");
       cy.wait("@saveCookiePreference").then((interception) => {
         // Verify request body
-        expect(interception.request.body).to.deep.equal({ acceptsCookies: false });
+        expect(interception.request.body).to.include("acceptsCookies=false");
+        expect(interception.request.body).to.include("csrf=");
         // Verify request headers
-        expect(interception.request.headers["content-type"]).to.include("application/json");
+        expect(interception.request.headers["content-type"]).to.include("application/x-www-form-urlencoded");
+      });
+
+      cy.getCookie("analytics_cookies_accepted").then((cookie) => {
+        expect(decodeRemixCookie(decodeURIComponent(cookie?.value ?? ""))).to.deep.equal({ analyticsAccepted: false });
       });
     });
 
     it("should handle API failure gracefully when accepting cookies", () => {
-      // Override intercept to simulate failure
+      // Override intercept to simulate failure (no Set-Cookie header returned)
       cy.intercept("POST", "/set-cookie-preference", {
         statusCode: 500,
         body: { success: false, error: "Internal server error" },
@@ -142,8 +157,8 @@ describe("Cookie Banner", () => {
         "You've accepted analytics cookies. You can change your cookie settings at any time."
       );
 
-      // Cookie should still be set locally
-      cy.getCookie("analytics_cookies_accepted").should("exist");
+      // Preference is not persisted when the server call fails
+      cy.getCookie("analytics_cookies_accepted").should("not.exist");
     });
 
     it("should handle network error gracefully", () => {
@@ -158,8 +173,8 @@ describe("Cookie Banner", () => {
       // Should still show confirmation message
       cy.get(".govuk-cookie-banner__content").should("contain", "You've accepted analytics cookies");
 
-      // Cookie should still be set locally
-      cy.getCookie("analytics_cookies_accepted").should("exist");
+      // Preference is not persisted when the request fails
+      cy.getCookie("analytics_cookies_accepted").should("not.exist");
     });
   });
 
@@ -209,7 +224,7 @@ describe("Cookie Banner", () => {
 
   describe("Accept Analytics Cookies", () => {
     it("should set cookie and show confirmation message when accepting cookies", () => {
-      cy.visit("/?loggedIn=yes");
+      cy.visit("/?loggedIn=yes", { qs: { testCaseId: TestCaseId.UserAttributes } });
 
       // Click accept button
       cy.contains("button", "Accept analytics cookies").click();
@@ -255,7 +270,7 @@ describe("Cookie Banner", () => {
 
   describe("Reject Analytics Cookies", () => {
     it("should set cookie and show confirmation message when rejecting cookies", () => {
-      cy.visit("/?loggedIn=yes");
+      cy.visit("/?loggedIn=yes", { qs: { testCaseId: TestCaseId.UserAttributes } });
 
       // Click reject button
       cy.contains("button", "Reject analytics cookies").click();
@@ -333,7 +348,7 @@ describe("Cookie Banner", () => {
 
   describe("Cookie Persistence", () => {
     it("should show banner again after page reload when loggedIn=yes is present", () => {
-      cy.visit("/?loggedIn=yes");
+      cy.visit("/?loggedIn=yes", { qs: { testCaseId: TestCaseId.UserAttributes } });
 
       // Accept cookies
       cy.contains("button", "Accept analytics cookies").click();
@@ -352,7 +367,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should show banner again after page reload for rejection when loggedIn=yes is present", () => {
-      cy.visit("/?loggedIn=yes");
+      cy.visit("/?loggedIn=yes", { qs: { testCaseId: TestCaseId.UserAttributes } });
 
       // Reject cookies
       cy.contains("button", "Reject analytics cookies").click();
@@ -371,7 +386,7 @@ describe("Cookie Banner", () => {
     });
 
     it("should persist cookie across different routes and show banner when loggedIn=yes", () => {
-      cy.visit("/?loggedIn=yes");
+      cy.visit("/?loggedIn=yes", { qs: { testCaseId: TestCaseId.UserAttributes } });
 
       // Accept cookies
       cy.contains("button", "Accept analytics cookies").click();
@@ -442,7 +457,7 @@ describe("Cookie Banner", () => {
 
   describe("Edge Cases", () => {
     it("should handle rapid clicks on accept button", () => {
-      cy.visit("/?loggedIn=yes");
+      cy.visit("/?loggedIn=yes", { qs: { testCaseId: TestCaseId.UserAttributes } });
 
       // Get the accept button and click it once
       // After first click, button is replaced with confirmation message
@@ -488,14 +503,14 @@ describe("Cookie Banner", () => {
     });
 
     it("should maintain cookie value structure", () => {
-      cy.visit("/?loggedIn=yes");
+      cy.visit("/?loggedIn=yes", { qs: { testCaseId: TestCaseId.UserAttributes } });
 
       // Accept cookies
       cy.contains("button", "Accept analytics cookies").click();
 
       // Check cookie value structure
       cy.getCookie("analytics_cookies_accepted").then((cookie) => {
-        const value = JSON.parse(cookie?.value ?? "{}");
+        const value = decodeRemixCookie<{ analyticsAccepted: boolean }>(decodeURIComponent(cookie?.value ?? ""));
         expect(value).to.have.property("analyticsAccepted");
         // eslint-disable-next-line no-unused-expressions
         expect(value.analyticsAccepted).to.be.true;
@@ -503,14 +518,14 @@ describe("Cookie Banner", () => {
     });
 
     it("should maintain cookie value structure for rejection", () => {
-      cy.visit("/?loggedIn=yes");
+      cy.visit("/?loggedIn=yes", { qs: { testCaseId: TestCaseId.UserAttributes } });
 
       // Reject cookies
       cy.contains("button", "Reject analytics cookies").click();
 
       // Check cookie value structure
       cy.getCookie("analytics_cookies_accepted").then((cookie) => {
-        const value = JSON.parse(cookie?.value ?? "{}");
+        const value = decodeRemixCookie<{ analyticsAccepted: boolean }>(decodeURIComponent(cookie?.value ?? ""));
         expect(value).to.have.property("analyticsAccepted");
         // eslint-disable-next-line no-unused-expressions
         expect(value.analyticsAccepted).to.be.false;

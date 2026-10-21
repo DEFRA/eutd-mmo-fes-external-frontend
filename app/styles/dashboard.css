@@ -81,7 +81,7 @@
 
 @media (max-width: 320px) {
   .table-adjust-font {
-    font-size: 14px !important;
+    font-size: 14px;
   }
 }
 
