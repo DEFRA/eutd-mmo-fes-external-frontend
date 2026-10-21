@@ -32,6 +32,7 @@ import storageDocumentDashboardHandler from "./storageDocumentDashboardHandler";
 import addConsignmentDetailsHandler from "./addConsignmentDetailsHandler";
 import addProcessingPlantDetailsHandler from "./addProcessingPlantDetailsHandler";
 import addProcessingPlantAddressHandler from "./addProcessingPlantAddressHandler";
+import addProcessingPlantHandler from "./addProcessingPlantHandler";
 import whatStorageFacilityAddressHandler from "./whatStorageFacilityAddressHandler";
 
 import dashboardHandler from "./dashboardHandler";
@@ -92,6 +93,7 @@ const rootTestHandler: ITestHandler = {
   ...storageDocumentDashboardHandler,
   ...addConsignmentDetailsHandler,
   ...addProcessingPlantDetailsHandler,
+  ...addProcessingPlantHandler,
   ...addProcessingPlantAddressHandler,
   ...addPSHealthCertificateHandler,
   ...dashboardHandler,

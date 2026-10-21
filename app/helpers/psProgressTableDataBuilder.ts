@@ -8,7 +8,8 @@ import type {
 export const psProgressTableDataBuilder = (
   progress: IProcessingStatementProgressSteps,
   errors?: IErrorsTransformed,
-  products?: ProcessingStatementProduct[]
+  products?: ProcessingStatementProduct[],
+  isNonJs?: boolean
 ): Array<IProgressDataSection> => {
   const psContext = "/create-processing-statement/:documentNumber";
 
@@ -56,7 +57,7 @@ export const psProgressTableDataBuilder = (
           title: "psProgressProcessingPlantId",
           status: progress?.processingPlant,
           testId: "processingPlant",
-          url: `${psContext}/add-processing-plant-details`,
+          url: isNonJs ? `${psContext}/add-processing-plant-details` : `${psContext}/add-processing-plant`,
           error: errors?.processingPlant,
         },
         {

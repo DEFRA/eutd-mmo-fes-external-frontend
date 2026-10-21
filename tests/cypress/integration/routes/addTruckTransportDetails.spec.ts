@@ -151,8 +151,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     cy.get("#registrationNumber").type(
       "registrationNumberregistrationNumberregistrationNumberregistrationNumberregistrationNumberregistrationNumberregistrationNumber"
     );
-    cy.get("[data-testid=save-and-continue").click();
-    cy.get("form").submit();
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Error:Registration number must not exceed 50 characters$/).should("be.visible");
   });
@@ -163,8 +162,7 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("#registrationNumber").type("registrationNumber..");
-    cy.get("[data-testid=save-and-continue").click();
-    cy.get("form").submit();
+    cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Error:Registration number must only contain letters, numbers, hyphens, and spaces$/).should(
       "be.visible"
@@ -177,7 +175,6 @@ describe("Add Transportation Details Truck: Allowed", () => {
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.get("form").submit();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
     cy.contains("a", /^Error:Enter the nationality of vehicle$/).should("be.visible");
     cy.contains("a", /^Error:Enter the registration number$/).should("be.visible");
@@ -238,7 +235,6 @@ describe("Add Transportation Details Truck: Nationality Field Error State", () =
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.get("form").submit();
 
     cy.get("#nationalityOfVehicle").parents(".govuk-form-group").should("have.class", "govuk-form-group--error");
     cy.get("#nationalityOfVehicle").should("have.class", "govuk-input--error");
@@ -250,11 +246,14 @@ describe("Add Transportation Details Truck: Nationality Field Error State", () =
       testCaseId: TestCaseId.TruckTransportErrors,
     };
     cy.visit(truckPageUrl, { qs: { ...testParams } });
+    // wait for hydration to complete before interacting
+    cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
     cy.get("[data-testid=save-and-continue]").click();
-    cy.get("form").submit();
-
-    cy.get("#nationalityOfVehicle").type("United");
-    cy.get(".autocomplete__menu").should("exist");
+    cy.get("#nationalityOfVehicle").should("have.class", "govuk-input--error");
+    // wait for the post-error focus steal (errorIsland) to settle before typing, or the autocomplete's onBlur closes the menu
+    cy.focused().should("have.id", "errorIsland");
+    cy.get("#nationalityOfVehicle").click().type("United");
+    cy.get(".autocomplete__menu").should("be.visible").and("contain.text", "United Kingdom");
   });
 
   it("should have aria-describedby attribute pointing to hint", () => {

@@ -123,7 +123,7 @@ describe("CC: Entering the address manually with errors", () => {
     // Leave all address fields blank but fill in required fields
     cy.get("#townCity").type("Test City");
     cy.get("#postcode").type("12345");
-    cy.get("#country").type("Albania");
+    cy.get("#country").clear().type("Albania");
     cy.get(".autocomplete__option").contains("Albania").click();
     cy.get("#country").should("have.value", "Albania");
 
@@ -149,7 +149,7 @@ describe("CC: Entering the address manually with errors", () => {
     cy.get("#subBuildingName").type("Flat 1");
     cy.get("#townCity").type("Test City");
     cy.get("#postcode").type("12345");
-    cy.get("#country").type("Albania");
+    cy.get("#country").clear().type("Albania");
 
     cy.get("[data-testid=continue]").click();
 
@@ -170,7 +170,7 @@ describe("CC: Entering the address manually with errors", () => {
     cy.get("#buildingNumber").type("123");
     cy.get("#townCity").type("Test City");
     cy.get("#postcode").type("12345");
-    cy.get("#country").type("Albania");
+    cy.get("#country").clear().type("Albania");
 
     cy.get("[data-testid=continue]").click();
 
@@ -191,7 +191,7 @@ describe("CC: Entering the address manually with errors", () => {
     cy.get("#buildingName").type("Test Villa");
     cy.get("#townCity").type("Test City");
     cy.get("#postcode").type("12345");
-    cy.get("#country").type("Albania");
+    cy.get("#country").clear().type("Albania");
 
     cy.get("[data-testid=continue]").click();
 
@@ -212,7 +212,7 @@ describe("CC: Entering the address manually with errors", () => {
     cy.get("#streetName").type("Main Street");
     cy.get("#townCity").type("Test City");
     cy.get("#postcode").type("12345");
-    cy.get("#country").type("Albania");
+    cy.get("#country").clear().type("Albania");
 
     cy.get("[data-testid=continue]").click();
 
@@ -236,7 +236,7 @@ describe("CC: Entering the address manually with errors", () => {
     cy.get("#townCity").type("Test");
     cy.get("#county").type("Test");
     cy.get("#postcode").type("12345");
-    cy.get("#country").type("Albania");
+    cy.get("#country").clear().type("Albania");
 
     cy.get("[data-testid=continue]").click();
     cy.url().should("include", "/add-exporter-details");
@@ -257,7 +257,7 @@ describe("CC: Entering the address manually with errors", () => {
     cy.get("#townCity").type("Test");
     cy.get("#county").type("Test");
     cy.get("#postcode").type("12345");
-    cy.get("#country").type("Albania");
+    cy.get("#country").clear().type("Albania");
 
     cy.get("[data-testid=continue]").click();
     cy.url().should("include", "/forbidden");
