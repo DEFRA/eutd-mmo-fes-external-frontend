@@ -58,6 +58,9 @@ const keepStorageAutocompleteFocusedOnOptionMouseDown = (event: React.MouseEvent
   }
 };
 
+const getSavedManualFacilityLabel = (sd: StorageDocument) =>
+  isEmpty(sd.facilityName) ? sd.facilityAddressOne : `${sd.facilityName} (${sd.facilityApprovalNumber ?? ""})`.trim();
+
 const getArrivalBackUrl = (request: Request, documentNumber: string | undefined, storageDocument: StorageDocument) => {
   const url = new URL(request.url);
   const arrivalVehicleParam = url.searchParams.get("arrivalVehicle");
@@ -142,9 +145,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       postcode: address.facilityPostcode ?? "",
     };
   } else if (hasManualAddress) {
-    savedFacilityOption = isEmpty(sd.facilityName)
-      ? sd.facilityAddressOne
-      : `${sd.facilityName} (${sd.facilityApprovalNumber ?? ""})`.trim();
+    savedFacilityOption = getSavedManualFacilityLabel(sd);
     savedFacilityDetails = {
       label: savedFacilityOption ?? "",
       tradingName: sd.facilityName ?? "",
@@ -225,13 +226,17 @@ const resolveStorageFacilitySelection = async (
 const handleEmptyStorageFacilitySelection = async (
   bearerToken: string,
   documentNumber: string | undefined,
-  nextUri: string
+  nextUri: string,
+  submittedFacilityLabel: string
 ): Promise<Response> => {
   const existingDocument = await getStorageDocument(bearerToken, documentNumber);
-  const hasExistingManualAddress =
-    !instanceOfUnauthorised(existingDocument) && !isEmpty((existingDocument as StorageDocument).facilityAddressOne);
+  const savedManualLabel =
+    !instanceOfUnauthorised(existingDocument) && !isEmpty((existingDocument as StorageDocument).facilityAddressOne)
+      ? getSavedManualFacilityLabel(existingDocument as StorageDocument)?.trim()
+      : undefined;
 
-  if (hasExistingManualAddress) {
+  // Non-JS can't resolve a manual address to a registry entry, so only an unchanged saved label may continue.
+  if (!isEmpty(submittedFacilityLabel) && submittedFacilityLabel === savedManualLabel) {
     return redirect(
       isEmpty(nextUri)
         ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", {
@@ -243,7 +248,7 @@ const handleEmptyStorageFacilitySelection = async (
 
   const errors = getTransformedError([{ key: "storageFacility", message: "sdWhichStorageFacilitySelectError" }]);
 
-  return new Response(JSON.stringify({ errors }), {
+  return new Response(JSON.stringify({ errors, submittedFacilityLabel }), {
     status: 400,
     headers: { "Content-Type": "application/json" },
   });
@@ -275,7 +280,12 @@ export const action: ActionFunction = async ({ request, params }) => {
   const hasSelection = !isEmpty(facilityName) || !isEmpty(facilityAddress.facilityAddressOne);
 
   if (!hasSelection) {
-    return handleEmptyStorageFacilitySelection(bearerToken, documentNumber, nextUri);
+    return handleEmptyStorageFacilitySelection(
+      bearerToken,
+      documentNumber,
+      nextUri,
+      ((form.get("storageFacility") as string) ?? "").trim()
+    );
   }
 
   const errorResponse = await updateStorageDocumentFacility(
@@ -358,7 +368,7 @@ const WhichStorageFacility = () => {
     void searchStorageFacilities();
   }, [searchTerm]);
 
-  const getNonJsOptions = () => (!isEmpty(facilityOptionsNoJs) ? facilityOptionsNoJs : [""]);
+  const getNonJsOptions = () => facilityOptionsNoJs.filter(Boolean);
   const facilityToSubmit = selectedFacility ?? facilityBeingChanged;
 
   return (
@@ -449,7 +459,13 @@ const WhichStorageFacility = () => {
                           id="storageFacility"
                           options={getNonJsOptions()}
                           defaultValue={submittedFacilityLabel ?? savedFacilityOption ?? ""}
-                          selectClassName="govuk-select govuk-!-width-full app-storage-facility-non-js-select"
+                          nullOption={t("sdWhichStorageFacilitySelectPlaceholder")}
+                          selectClassName={classNames(
+                            "govuk-select govuk-!-width-full app-storage-facility-non-js-select",
+                            {
+                              "govuk-select--error": errors?.storageFacility,
+                            }
+                          )}
                         />
                       </div>
                     )

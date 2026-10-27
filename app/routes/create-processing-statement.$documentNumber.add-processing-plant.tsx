@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getEnv } from "~/env.server";
 import { route } from "routes-gen";
 import { useLoaderData, redirect, type LoaderFunction, type ActionFunction, useActionData } from "react-router";
@@ -9,7 +9,7 @@ import classNames from "classnames";
 
 import { Main, Title, BackToProgressLink, SecureForm, AutocompleteFormField, ErrorSummary } from "~/components";
 import logger from "~/logger";
-import { displayErrorMessagesInOrder } from "~/helpers";
+import { displayErrorMessagesInOrder, getTransformedError } from "~/helpers";
 import {
   validateCSRFToken,
   getBearerTokenForRequest,
@@ -189,7 +189,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       .join(", "),
     cityName: establishment.address?.cityName ?? "",
     postcode: establishment.address?.postCode?.code ?? "",
-    country: establishment.address?.country?.countryName ?? "",
+    country:
+      (typeof establishment.country === "string" ? establishment.country : establishment.country?.countryName) ??
+      establishment.address?.country?.countryName ??
+      "",
   }));
 
   // The saved plant may fall outside the default search page - add it so the non-JS
@@ -240,6 +243,18 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
 
   const isNonJs = form.get("isNonJs") === "true";
+  const processingPlant = (form.get("processingPlant") as string) ?? "";
+  if (isNonJs && action === "saveAndContinue" && !processingPlant.trim()) {
+    const errors = getTransformedError([
+      { key: "processingPlant", message: "psAddProcessingPlantAddressErrorNullPlantName" },
+    ]);
+
+    return new Response(JSON.stringify({ errors, processingPlant }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   const bearerToken = await getBearerTokenForRequest(request);
 
   let payload = {
@@ -253,8 +268,8 @@ export const action: ActionFunction = async ({ request, params }) => {
     plantCountry: (form.get("plantCountry") as string) ?? "",
   };
 
-  if (isNonJs) {
-    const { plantName, plantApprovalNumber } = parseEstablishmentLabel((form.get("processingPlant") as string) ?? "");
+  if (processingPlant.trim()) {
+    const { plantName, plantApprovalNumber } = parseEstablishmentLabel(processingPlant);
 
     const establishments = plantApprovalNumber ? await searchEstablishments("processing", plantApprovalNumber) : [];
     const establishment = establishments.find(
@@ -327,16 +342,64 @@ const AddProcessingPlant = () => {
   const { documentNumber, csrf, savedPlantOption, savedPlantDetails, minCharsBeforeSearch, labels, nextUri } =
     useLoaderData<AddProcessingPlantLoaderData>();
   const actionData = useActionData() ?? {};
-  const { errors = {} } = actionData;
+  const { errors = {}, processingPlant: submittedProcessingPlant } = actionData;
   // Plain mount-detection: useSyncExternalStore-based hydration hooks can get stuck
   // false after a hydration mismatch recovery re-render; this always eventually flips.
   const [isHydrated, setIsHydrated] = useState(false);
   useEffect(() => setIsHydrated(true), []);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = searchContainerRef.current;
+    if (!container) return;
+
+    const syncAutocompleteAria = () => {
+      const input = container.querySelector<HTMLInputElement>("#processingPlant");
+      if (!input) return;
+
+      const listbox = container.querySelector<HTMLElement>("#processingPlant__listbox");
+      const activeOption = listbox?.querySelector<HTMLElement>('[role="option"][aria-selected="true"][id]');
+      const expanded = Boolean(listbox);
+
+      if (input.getAttribute("aria-expanded") !== String(expanded)) {
+        input.setAttribute("aria-expanded", String(expanded));
+      }
+
+      if (listbox) {
+        if (input.getAttribute("aria-controls") !== listbox.id) input.setAttribute("aria-controls", listbox.id);
+        if (input.getAttribute("aria-owns") !== listbox.id) input.setAttribute("aria-owns", listbox.id);
+      } else {
+        input.removeAttribute("aria-controls");
+        input.removeAttribute("aria-owns");
+      }
+
+      if (activeOption) {
+        if (input.getAttribute("aria-activedescendant") !== activeOption.id) {
+          input.setAttribute("aria-activedescendant", activeOption.id);
+        }
+      } else {
+        input.removeAttribute("aria-activedescendant");
+      }
+    };
+
+    const observer = new MutationObserver(syncAutocompleteAria);
+    observer.observe(container, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ["aria-expanded", "aria-controls", "aria-owns", "aria-activedescendant"],
+    });
+    syncAutocompleteAria();
+
+    return () => observer.disconnect();
+  }, [isHydrated]);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [processingPlantResults, setProcessingPlantResults] = useState<ProcessingPlantSearchResult[]>(labels);
   const [selectedPlant, setSelectedPlant] = useState<ProcessingPlantSearchResult | undefined>(savedPlantDetails);
-  const [selectPlantOption, setSelectPlantOption] = useState<string | undefined>(savedPlantOption);
+  const [selectPlantOption, setSelectPlantOption] = useState<string | undefined>(
+    submittedProcessingPlant ?? savedPlantOption
+  );
   const processingPlantOptions = processingPlantResults.map((result) => result.label);
   const showNoResultsMessage =
     isHydrated && searchTerm.trim().length >= minCharsBeforeSearch && processingPlantResults.length === 0;
@@ -381,7 +444,7 @@ const AddProcessingPlant = () => {
         />
       )}
       <div className="govuk-grid-row">
-        <div className="govuk-grid-column-two-thirds">
+        <div className="govuk-grid-column-two-thirds" ref={searchContainerRef}>
           <Title title={t("psAddProcessingPlantHeading", { ns: "addProcessingPlant" })} />
           <SecureForm method="post" csrf={csrf}>
             {isHydrated && selectedPlant ? (
@@ -409,7 +472,7 @@ const AddProcessingPlant = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     setSelectedPlant(undefined);
-                    setSelectPlantOption(undefined);
+                    setSelectPlantOption(selectedPlant.label);
                     setSearchTerm("");
                   }}
                 >
@@ -448,6 +511,7 @@ const AddProcessingPlant = () => {
                 )}
                 selectProps={{
                   selectClassName: "govuk-select govuk-!-width-full",
+                  nullOption: t("psAddProcessingPlantSelectPlaceholder"),
                 }}
                 inputProps={{
                   id: "processingPlant",

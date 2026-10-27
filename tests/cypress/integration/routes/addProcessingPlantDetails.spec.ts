@@ -19,6 +19,7 @@ describe("PS: add processing plant details - rendering", () => {
   it("should render approval number and person responsible fields without warning or establishment inputs", () => {
     visitPage(TestCaseId.PSAddProcessingPlantDetails);
 
+    cy.title().should("eq", "Add processing plant details - Create a UK processing statement - GOV.UK");
     cy.get(".govuk-heading-xl").should("be.visible");
     cy.get("[data-testid='warning-message']").should("not.exist");
     cy.get("#processingPlant").should("not.exist");
