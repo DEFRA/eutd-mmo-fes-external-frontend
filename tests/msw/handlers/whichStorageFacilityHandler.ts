@@ -14,6 +14,17 @@ import {
 
 const storageFacilities = [
   {
+    tradingName: "DFDS Logistics Scotland Aberdeen",
+    approvalNumber: { content: "AA 220" },
+    address: {
+      line1: "Unit 8 Peterseat Drive",
+      line2: "Altens",
+      line3: "Aberdeen",
+      cityName: "",
+      postCode: { code: "AB12 3HT" },
+    },
+  },
+  {
     id: "duplicate-storage-facility-id",
     tradingName: "MDM Duplicate Storage A",
     approvalNumber: { content: "UK/7777/CS" },

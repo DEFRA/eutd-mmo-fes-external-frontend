@@ -59,9 +59,6 @@ const keepStorageAutocompleteFocusedOnOptionMouseDown = (event: React.MouseEvent
   }
 };
 
-const getSavedManualFacilityLabel = (sd: StorageDocument) =>
-  isEmpty(sd.facilityName) ? sd.facilityAddressOne : `${sd.facilityName} (${sd.facilityApprovalNumber ?? ""})`.trim();
-
 const getArrivalBackUrl = (request: Request, documentNumber: string | undefined, storageDocument: StorageDocument) => {
   const url = new URL(request.url);
   const arrivalVehicleParam = url.searchParams.get("arrivalVehicle");
@@ -146,7 +143,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       postcode: address.facilityPostcode ?? "",
     };
   } else if (hasManualAddress) {
-    savedFacilityOption = getSavedManualFacilityLabel(sd);
+    savedFacilityOption = isEmpty(sd.facilityName)
+      ? sd.facilityAddressOne
+      : `${sd.facilityName} (${sd.facilityApprovalNumber ?? ""})`.trim();
     savedFacilityDetails = {
       label: savedFacilityOption ?? "",
       tradingName: sd.facilityName ?? "",
@@ -201,6 +200,10 @@ const resolveStorageFacilitySelection = async (
   let matchedEstablishment: Establishment | undefined;
   const submittedFacilityLabel = ((form.get("storageFacility") as string) ?? "").trim();
 
+  if (form.has("storageFacility") && !submittedFacilityLabel) {
+    return { facilityName, facilityApprovalNumber, facilityAddress };
+  }
+
   if (isNonJs) {
     const establishments: Establishment[] = await searchEstablishments("storage", "");
     matchedEstablishment = establishments.find((e) => formatEstablishmentLabel(e) === submittedFacilityLabel);
@@ -251,13 +254,10 @@ const handleEmptyStorageFacilitySelection = async (
   submittedFacilityLabel: string
 ): Promise<Response> => {
   const existingDocument = await getStorageDocument(bearerToken, documentNumber);
-  const savedManualLabel =
-    !instanceOfUnauthorised(existingDocument) && !isEmpty((existingDocument as StorageDocument).facilityAddressOne)
-      ? getSavedManualFacilityLabel(existingDocument as StorageDocument)?.trim()
-      : undefined;
+  const hasExistingManualAddress =
+    !instanceOfUnauthorised(existingDocument) && !isEmpty((existingDocument as StorageDocument).facilityAddressOne);
 
-  // Non-JS can't resolve a manual address to a registry entry, so only an unchanged saved label may continue.
-  if (!isEmpty(submittedFacilityLabel) && submittedFacilityLabel === savedManualLabel) {
+  if (hasExistingManualAddress && submittedFacilityLabel) {
     return redirect(
       isEmpty(nextUri)
         ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", {
@@ -358,7 +358,11 @@ const WhichStorageFacility = () => {
   ).split("\n");
 
   const handleFacilitySelected = (label: string) => {
-    const match = facilityResults.find((result) => result.label === label);
+    const match = facilityResults.find((result) => {
+      const option = document.createElement("span");
+      option.textContent = result.label;
+      return result.label === label || option.innerHTML === label;
+    });
     if (match) {
       setSelectedFacility(match);
       setFacilityBeingChanged(undefined);
@@ -366,6 +370,8 @@ const WhichStorageFacility = () => {
   };
 
   useEffect(() => {
+    const controller = new AbortController();
+    let active = true;
     const searchStorageFacilities = async (): Promise<void> => {
       if (searchTerm.length < minCharsBeforeSearch) {
         setFacilityResults((prev) => (prev.length === 0 ? prev : []));
@@ -373,10 +379,13 @@ const WhichStorageFacility = () => {
       }
 
       try {
-        const response = await fetch(`/get-storage-facilities?search=${searchTerm}`);
+        const response = await fetch(`/get-storage-facilities?search=${encodeURIComponent(searchTerm)}`, {
+          signal: controller.signal,
+        });
         const facilities: StorageFacilitySearchResult[] = await response.json();
-        setFacilityResults(facilities ?? []);
+        if (active) setFacilityResults(facilities ?? []);
       } catch (e) {
+        if (!active) return;
         logger.info("[ADD-STORAGE-FACILITY][GET-STORAGE-FACILITIES][ERROR]");
         if (e instanceof Error) {
           logger.error(e);
@@ -387,6 +396,10 @@ const WhichStorageFacility = () => {
     };
 
     void searchStorageFacilities();
+    return () => {
+      active = false;
+      controller.abort();
+    };
   }, [searchTerm]);
 
   const getNonJsOptions = () => facilityOptionsNoJs.filter(Boolean);
@@ -481,12 +494,7 @@ const WhichStorageFacility = () => {
                           options={getNonJsOptions()}
                           defaultValue={submittedFacilityLabel ?? savedFacilityOption ?? ""}
                           nullOption={t("sdWhichStorageFacilitySelectPlaceholder")}
-                          selectClassName={classNames(
-                            "govuk-select govuk-!-width-full app-storage-facility-non-js-select",
-                            {
-                              "govuk-select--error": errors?.storageFacility,
-                            }
-                          )}
+                          selectClassName="govuk-select govuk-!-width-full app-storage-facility-non-js-select"
                         />
                       </div>
                     )
@@ -496,13 +504,24 @@ const WhichStorageFacility = () => {
                     className: classNames("govuk-input govuk-!-width-full", {
                       "govuk-input--error": errors?.storageFacility,
                     }),
+                    onInput: (event) => {
+                      if (!event.currentTarget.value.trim()) {
+                        setSearchTerm("");
+                        setFacilityBeingChanged(undefined);
+                        setFacilitySearchDefaultValue("");
+                      }
+                    },
                     onFocus: (event) => {
                       if (facilitySearchDefaultValue) {
                         event.currentTarget.select();
                       }
                     },
                   }}
-                  onChange={setSearchTerm}
+                  onChange={(value) => {
+                    setSearchTerm(value);
+                    setFacilityBeingChanged(undefined);
+                    setFacilitySearchDefaultValue("");
+                  }}
                   onSelected={handleFacilitySelected}
                   minCharsBeforeSearch={minCharsBeforeSearch}
                   notFoundText=""

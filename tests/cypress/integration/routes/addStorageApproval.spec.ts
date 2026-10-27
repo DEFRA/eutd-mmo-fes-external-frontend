@@ -67,9 +67,23 @@ describe("Add Storage Facility Approval", () => {
   it("should show MDM address lines without the country for a matched storage facility", () => {
     cy.visit(addStorageApprovalUrl, { qs: { testCaseId: TestCaseId.SDAddStorageApprovalFullMdmAddress } });
 
-    cy.get('[data-testid="facility-summary"]').should("contain.text", "Unit 8 Peterseat Drive, Altens, Aberdeen");
-    cy.get('[data-testid="facility-summary"]').should("contain.text", "AB12 3HT");
+    cy.get('[data-testid="facility-summary"]').should(
+      "contain.text",
+      "Storage facility addressDFDS Logistics Scotland AberdeenApproval number: AA 220Unit 8 Peterseat Drive, Altens, AberdeenAberdeenAB12 3HT"
+    );
     cy.get('[data-testid="facility-summary"]').should("not.contain.text", "United Kingdom");
+  });
+
+  it("saves the registry locality for DFDS instead of reporting a missing town", () => {
+    cy.visit(addStorageApprovalUrl, {
+      qs: { testCaseId: TestCaseId.SDAddStorageApprovalFullMdmAddress, disableScripts: true },
+    });
+    cy.get('input[name="facilityArrivalDateDay"]').type("09");
+    cy.get('input[name="facilityArrivalDateMonth"]').type("01");
+    cy.get('input[name="facilityArrivalDateYear"]').type("2024");
+    cy.get("#storageFacilities-facilityStorage").check();
+    cy.get("[data-testid=save-and-continue]").click();
+    cy.location("pathname").should("eq", storageFacilityUrl);
   });
 
   it("should redirect to progress page", () => {
@@ -348,6 +362,28 @@ describe("Add Storage Facility Approval - Arrival date validation", () => {
 
     cy.contains("Arrival date must be a real date").should("be.visible");
     cy.get(".govuk-error-summary").should("be.visible");
+  });
+
+  it("rejects an arrival earlier than the arrival transport departure date", () => {
+    cy.get('input[name="facilityArrivalDateDay"]').type("01");
+    cy.get('input[name="facilityArrivalDateMonth"]').type("11");
+    cy.get('input[name="facilityArrivalDateYear"]').type("1111");
+    cy.get("#storageFacilities-facilityStorage").check();
+    cy.get("[data-testid=save-and-continue]").click();
+    cy.get(".govuk-error-summary a[href='#storageFacilities-facilityArrivalDate']").should("be.visible");
+    cy.location("pathname").should("eq", addStorageApprovalUrl);
+  });
+
+  it("allows an arrival on the arrival transport departure date", () => {
+    cy.visit(addStorageApprovalUrl, {
+      qs: { testCaseId: TestCaseId.SDAddStorageApproval, disableScripts: true },
+    });
+    cy.get('input[name="facilityArrivalDateDay"]').type("09");
+    cy.get('input[name="facilityArrivalDateMonth"]').type("01");
+    cy.get('input[name="facilityArrivalDateYear"]').type("2024");
+    cy.get("#storageFacilities-facilityStorage").check();
+    cy.get("[data-testid=save-and-continue]").click();
+    cy.location("pathname").should("eq", storageFacilityUrl);
   });
 });
 

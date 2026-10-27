@@ -25,8 +25,15 @@ import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import classNames from "classnames";
 import { getEnv } from "~/env.server";
 import isEmpty from "lodash/isEmpty";
-import { displayErrorTransformedMessages, getStrOrDefault, toDDMMYYYYFormat, toISODateFormat } from "~/helpers";
+import {
+  displayErrorTransformedMessages,
+  getStrOrDefault,
+  getTransformedError,
+  toDDMMYYYYFormat,
+  toISODateFormat,
+} from "~/helpers";
 import { useScrollOnPageError } from "~/hooks";
+import moment from "moment";
 
 type loaderStorageFacility = {
   documentNumber: string;
@@ -202,6 +209,24 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   const dateErrors: IErrorsTransformed = dateValidationResponse
     ? remapDateErrorKey((await dateValidationResponse.clone().json())?.errors ?? {})
     : {};
+
+  const storageDocument = await getStorageDocument(bearerToken, documentNumber);
+  if (instanceOfUnauthorised(storageDocument)) return redirect("/forbidden");
+  validateResponseData(storageDocument);
+  const sd = storageDocument as StorageDocument;
+  const dateFormats = ["DD/MM/YYYY", "D/M/YYYY", "DD/M/YYYY", "D/MM/YYYY", "YYYY-MM-DD"];
+  const departureDate = moment(sd.arrivalTransport?.departureDate, dateFormats, true);
+  const arrivalDate = moment(selectedDate, dateFormats, true);
+  if (isEmpty(dateErrors) && departureDate.isValid() && arrivalDate.isBefore(departureDate, "day")) {
+    Object.assign(
+      dateErrors,
+      getTransformedError([{ key: dateFieldId, message: "sdArrivalDateBeforeDepatureDateValidationError" }])
+    );
+  }
+
+  const establishments = await searchEstablishments("storage", sd.facilityApprovalNumber ?? sd.facilityName ?? "");
+  const establishment = matchEstablishment(establishments, sd.facilityName, sd.facilityApprovalNumber);
+  if (establishment) Object.assign(facilityData, mapEstablishmentToFacilityAddress(establishment));
 
   const errorResponse = await updateStorageDocumentFacility(
     bearerToken,

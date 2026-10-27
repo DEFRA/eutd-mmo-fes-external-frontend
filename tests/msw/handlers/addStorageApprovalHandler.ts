@@ -3,12 +3,13 @@ import isEmpty from "lodash/isEmpty";
 import { type ITestHandler, TestCaseId } from "~/types";
 import {
   GET_STORAGE_DOCUMENT,
-  STORAGE_FACILITIES_URL,
   mockGetAllDocumentsUrl,
   mockGetProgress,
   mockSaveAndValidateDocument,
   mockTransportDetailsUrl,
   mockAddExporterDetails,
+  mockApprovedFoodEstablishmentsSearchUrl,
+  mockApprovedFoodEstablishmentsTokenUrl,
 } from "~/urls.server";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
 import storageDocumentFacilityApprovalError from "@/fixtures/storageDocumentApi/storageDocumentFacilityApprovalError.json";
@@ -63,23 +64,40 @@ const addStorageApprovalHandler: ITestHandler = {
         })
       )
     ),
-    rest.get(STORAGE_FACILITIES_URL, (req, res, ctx) =>
+    rest.post(mockApprovedFoodEstablishmentsTokenUrl, (req, res, ctx) =>
+      res(ctx.json({ access_token: "storage-test-token", expires_in: 3600 }))
+    ),
+    rest.get(mockApprovedFoodEstablishmentsSearchUrl, (req, res, ctx) =>
       res(
-        ctx.json([
-          {
-            tradingName: "DFDS Logistics Scotland Aberdeen",
-            approvalNumber: { content: "AA 220" },
-            address: {
-              line1: "Unit 8 Peterseat Drive",
-              line2: "Altens",
-              line3: "Aberdeen",
-              postCode: { code: "AB12 3HT" },
-              country: { countryName: "" },
+        ctx.json({
+          content: [
+            {
+              tradingName: "DFDS Logistics Scotland Aberdeen",
+              approvalNumber: { content: "AA 220" },
+              address: {
+                line1: "Unit 8 Peterseat Drive",
+                line2: "Altens",
+                line3: "Aberdeen",
+                cityName: "",
+                postCode: { code: "AB12 3HT" },
+              },
             },
-          },
-        ])
+          ],
+        })
       )
     ),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), async (req, res, ctx) => {
+      const body = await req.json();
+      if (body.facilityTownCity !== "Aberdeen") {
+        return res(
+          ctx.status(400),
+          ctx.json({
+            errors: { "storageFacilities-facilityTownCity": "sdAddStorageFacilityDetailsErrorEnterTheTown" },
+          })
+        );
+      }
+      return res(ctx.json({ ...storageDocumentFacilityOneNoArrival, ...body }));
+    }),
   ],
   [TestCaseId.SDAddStorageApprovalComplete]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
