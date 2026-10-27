@@ -56,6 +56,9 @@ const processingPlants = [
     approvalNumber: {
       content: "UK/4444/EC",
     },
+    country: {
+      countryName: "United Kingdom",
+    },
     address: {
       line1: "Unit 4",
       line2: "Fish Quay",

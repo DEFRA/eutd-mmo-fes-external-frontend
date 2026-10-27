@@ -1,6 +1,7 @@
 {
   "psAddProcessingPlantHeading": "Pa safle prosesu hoffech chi ei ddefnyddio?",
   "psAddProcessingPlantLabel": "Rhowch eich safle prosesu",
+  "psAddProcessingPlantSelectPlaceholder": "Dewiswch eich safle prosesu",
   "psAddProcessingPlantHint": "Dechreuwch deipio enw cwmni neu rif cymeradwyo i chwilio am gyfleuster.",
   "psAddProcessingPlantManualButton": "Rhowch fanylion y safle â llaw",
   "psAddProcessingPlantNameLabel": "Enw'r safle prosesu",
