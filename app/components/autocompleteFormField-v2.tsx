@@ -23,6 +23,7 @@ type AutocompleteFormFieldProps = {
   selectProps: {
     selectClassName: string;
     id?: string;
+    nullOption?: string;
   };
   inputProps: React.InputHTMLAttributes<HTMLInputElement>;
   resultUlClass?: string;

@@ -205,6 +205,20 @@ describe("SD: which storage facility", () => {
     cy.url().should("include", approvalUrl);
   });
 
+  it("should show the empty placeholder and selection error in the no-JavaScript journey", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilityEmptyContinue, true);
+
+    const facilitySelect = "select.app-storage-facility-non-js-select";
+    cy.get(facilitySelect).should("have.value", "");
+    cy.get(`${facilitySelect} option[value='']`).should("have.text", "Select your storage facility");
+    cy.get('[data-testid="save-and-continue"]').click();
+
+    cy.get(".govuk-error-summary")
+      .should("be.visible")
+      .and("contain.text", "You must select a storage facility or enter the facility details manually");
+    cy.get(facilitySelect).should("have.value", "");
+  });
+
   it("should preload the saved facility in the full no-JavaScript option list", () => {
     visitPage(TestCaseId.SDWhichStorageFacilityWithSavedSelection, true);
 
@@ -214,6 +228,66 @@ describe("SD: which storage facility", () => {
       "contain.text",
       "Gourdie Farm Associates (DB 022) - DD2 1XD"
     );
+  });
+
+  it("should keep an emptied saved facility selection blank after a no-JavaScript validation error", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilityWithSavedSelection, true);
+
+    const facilitySelect = "select.app-storage-facility-non-js-select";
+    cy.get(facilitySelect).should("have.value", "Test Cold Store (UK/5555/CS) - HU1 2AB");
+    cy.get(facilitySelect).select("");
+    cy.get('[data-testid="save-and-continue"]').click();
+
+    cy.get(".govuk-error-summary").should(
+      "contain",
+      "You must select a storage facility or enter the facility details manually"
+    );
+    cy.get(".govuk-error-message").should(
+      "contain.text",
+      "You must select a storage facility or enter the facility details manually"
+    );
+    cy.get(".govuk-error-summary__list li").should("have.length", 1);
+    cy.get(".govuk-error-summary__list a").should("have.attr", "href", "#storageFacility").click();
+    cy.get(facilitySelect).should("have.focus");
+    cy.get(facilitySelect).should("have.value", "").and("have.class", "govuk-select--error");
+    cy.url().should("include", pageUrl);
+    cy.url().should("not.include", approvalUrl);
+  });
+
+  it("should show the Welsh selection error when an emptied saved facility is submitted without JavaScript", () => {
+    cy.visit(pageUrl, {
+      qs: { testCaseId: TestCaseId.SDWhichStorageFacilityWithSavedSelection, disableScripts: true, lng: "cy" },
+    });
+
+    cy.get("select.app-storage-facility-non-js-select").select("");
+    cy.get('[data-testid="save-and-continue"]').click();
+
+    const welshError = "Rhaid i chi ddewis cyfleuster storio neu nodi manylion y cyfleuster â llaw";
+    cy.get(".govuk-error-summary").should("contain.text", welshError);
+    cy.get(".govuk-error-message").should("contain.text", welshError);
+    cy.url().should("not.include", approvalUrl);
+  });
+
+  it("should continue without JavaScript when the saved manual facility is left unchanged", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilitySavedManualEntry, true);
+
+    cy.get("select.app-storage-facility-non-js-select").should("have.value", "12 Manual Street");
+    cy.get('[data-testid="save-and-continue"]').click();
+
+    cy.url().should("include", approvalUrl);
+  });
+
+  it("should show an error when a saved manual facility is cleared without JavaScript", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilitySavedManualEntry, true);
+
+    cy.get("select.app-storage-facility-non-js-select").select("");
+    cy.get('[data-testid="save-and-continue"]').click();
+
+    cy.get(".govuk-error-summary").should(
+      "contain",
+      "You must select a storage facility or enter the facility details manually"
+    );
+    cy.url().should("not.include", approvalUrl);
   });
 
   it("should continue without JavaScript when the selected address has no town or city", () => {

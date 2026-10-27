@@ -75,6 +75,9 @@ const storageDocumentWithSavedFacility = {
   ...storageDocumentNoFacilities,
   facilityName: "Test Cold Store",
   facilityApprovalNumber: "UK/5555/CS",
+  facilityAddressOne: "1 Dock Road, Altens, Aberdeen",
+  facilityTownCity: "Hull",
+  facilityPostcode: "HU1 2AB",
 };
 // A manual address saved before the facility name is captured (on add-storage-facility-details) -
 // the summary must still display, falling back to the address as its bold heading.

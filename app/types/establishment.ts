@@ -13,5 +13,5 @@ export interface Establishment {
   approvalNumber?: { content?: string };
   tradingName?: string;
   address?: EstablishmentAddress;
-  country?: string;
+  country?: string | { countryName?: string };
 }

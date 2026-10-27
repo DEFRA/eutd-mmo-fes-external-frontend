@@ -1,6 +1,7 @@
 {
   "psAddProcessingPlantHeading": "Which processing plant do you want to use?",
   "psAddProcessingPlantLabel": "Enter your processing plant",
+  "psAddProcessingPlantSelectPlaceholder": "Select your processing plant",
   "psAddProcessingPlantHint": "Start typing a company name or approval number to search for a facility.",
   "psAddProcessingPlantManualButton": "Enter plant details manually",
   "psAddProcessingPlantNameLabel": "Processing plant name",

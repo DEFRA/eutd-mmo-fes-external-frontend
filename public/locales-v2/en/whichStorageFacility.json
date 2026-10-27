@@ -1,6 +1,7 @@
 {
   "sdWhichStorageFacilityHeading": "Which storage facility do you want to use?",
   "sdWhichStorageFacilityLabel": "Enter your storage facility",
+  "sdWhichStorageFacilitySelectPlaceholder": "Select your storage facility",
   "sdWhichStorageFacilityHint": "Start typing a company name or approval number to search for a facility.",
   "sdWhichStorageFacilityManualButton": "Enter facility details manually",
   "sdWhichStorageFacilityApprovalNumberLabel": "Approval number",
