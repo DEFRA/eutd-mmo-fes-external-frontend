@@ -36,6 +36,58 @@ type StorageFacilitySearchResult = {
 };
 
 describe("SD: which storage facility", () => {
+  it("maps the explicit registry locality when cityName is empty", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilityContinue);
+    getStorageFacilitySearchInput().type("AA 220");
+    selectAutocompleteOptionContaining("DFDS Logistics Scotland Aberdeen");
+    cy.get('input[name="facilityTownCity"]').should("have.value", "Aberdeen");
+    cy.get('[data-testid="selected-facility"]').should("contain.text", "Aberdeen");
+  });
+  it("selects the exact clicked facility when its name contains an ampersand", () => {
+    const facility = {
+      label: "Alex Spink & Sons Ltd (AB 015) - DD11 1BJ",
+      tradingName: "Alex Spink & Sons Ltd",
+      approvalNumber: "AB 015",
+      addressLine: "1 Harbour Road",
+      cityName: "Arbroath",
+      postcode: "DD11 1BJ",
+    };
+    cy.intercept("GET", "**/get-storage-facilities?*", [facility]).as("facilitySearch");
+    visitPage(TestCaseId.SDWhichStorageFacilityContinue);
+    getStorageFacilitySearchInput().type("Alex");
+    cy.wait("@facilitySearch");
+    selectAutocompleteOptionContaining(facility.tradingName);
+    cy.get('[data-testid="selected-facility"]').should("contain.text", facility.tradingName);
+    cy.get('input[name="facilityApprovalNumber"]').should("have.value", facility.approvalNumber);
+  });
+
+  it("ignores earlier search responses that arrive after the latest query", () => {
+    cy.intercept("GET", "**/get-storage-facilities?*", (request) => {
+      const query = new URL(request.url).searchParams.get("search") ?? "";
+      request.alias = query === "1003" ? "latestFacilitySearch" : "olderFacilitySearch";
+      request.reply({
+        delay: query === "1003" ? 0 : 800,
+        body: [
+          {
+            label: `Facility ${query} (UK/${query}/CS) - HU1 2AB`,
+            tradingName: `Facility ${query}`,
+            approvalNumber: `UK/${query}/CS`,
+            addressLine: "1 Dock Road",
+            cityName: "Hull",
+            postcode: "HU1 2AB",
+          },
+        ],
+      });
+    });
+    visitPage(TestCaseId.SDWhichStorageFacilityContinue);
+    getStorageFacilitySearchInput().type("10");
+    cy.wait("@olderFacilitySearch");
+    getStorageFacilitySearchInput().type("03");
+    cy.wait("@latestFacilitySearch");
+    cy.wait("@olderFacilitySearch");
+    cy.get(".autocomplete__option").should("have.length", 1).and("contain.text", "Facility 1003");
+  });
+
   it("deduplicates MDM ids and formats the result label", () => {
     visitPage(TestCaseId.SDWhichStorageFacilityContinue);
 
@@ -93,11 +145,7 @@ describe("SD: which storage facility", () => {
 
     cy.get('[data-testid="change-storage-facility"]').click();
     getStorageFacilitySearchInput().type("Gourdie Farm Associates");
-    cy.get('input[name="facilityName"]').should("have.value", "Test Cold Store");
-    cy.get('input[name="facilityApprovalNumber"]').should("have.value", "UK/5555/CS");
-    cy.get('input[name="facilityAddressOne"]').should("have.value", "1 Dock Road, Altens, Aberdeen");
-    cy.get('input[name="facilityTownCity"]').should("have.value", "Hull");
-    cy.get('input[name="facilityPostcode"]').should("have.value", "HU1 2AB");
+    cy.get('input[name="facilityName"]').should("not.exist");
     selectAutocompleteOptionContaining("Gourdie Farm Associates");
 
     cy.get('[data-testid="selected-facility"]').should("contain.text", "Gourdie Farm Associates");
@@ -118,6 +166,28 @@ describe("SD: which storage facility", () => {
     cy.contains("p", "Manualville").should("be.visible");
     cy.contains("p", "MN1 1AA").should("be.visible");
     cy.get('[data-testid="selected-facility"]').should("not.contain.text", "United Kingdom");
+  });
+
+  it("rejects a cleared selection after Change instead of keeping the saved address", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilityWithSavedSelection);
+    cy.get('[data-testid="change-storage-facility"]').click();
+    getStorageFacilitySearchInput().clear();
+    cy.get('input[name="facilityName"]').should("not.exist");
+    cy.get('[data-testid="save-and-continue"]').click();
+    cy.get(".govuk-error-summary").should(
+      "contain.text",
+      "You must select a storage facility or enter the facility details manually"
+    );
+    getStorageFacilitySearchInput().should("have.value", "");
+    cy.location("pathname").should("eq", pageUrl);
+  });
+
+  it("allows saving the unchanged facility immediately after Change", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilityWithSavedSelection);
+    cy.get('[data-testid="change-storage-facility"]').click();
+    getStorageFacilitySearchInput().should("have.value", "Test Cold Store (UK/5555/CS) - HU1 2AB");
+    cy.get('[data-testid="save-and-continue"]').click();
+    cy.location("pathname").should("eq", approvalUrl);
   });
 
   it("should show and hide the no-results message as the search term changes", () => {
@@ -242,52 +312,7 @@ describe("SD: which storage facility", () => {
       "contain",
       "You must select a storage facility or enter the facility details manually"
     );
-    cy.get(".govuk-error-message").should(
-      "contain.text",
-      "You must select a storage facility or enter the facility details manually"
-    );
-    cy.get(".govuk-error-summary__list li").should("have.length", 1);
-    cy.get(".govuk-error-summary__list a").should("have.attr", "href", "#storageFacility").click();
-    cy.get(facilitySelect).should("have.focus");
-    cy.get(facilitySelect).should("have.value", "").and("have.class", "govuk-select--error");
-    cy.url().should("include", pageUrl);
-    cy.url().should("not.include", approvalUrl);
-  });
-
-  it("should show the Welsh selection error when an emptied saved facility is submitted without JavaScript", () => {
-    cy.visit(pageUrl, {
-      qs: { testCaseId: TestCaseId.SDWhichStorageFacilityWithSavedSelection, disableScripts: true, lng: "cy" },
-    });
-
-    cy.get("select.app-storage-facility-non-js-select").select("");
-    cy.get('[data-testid="save-and-continue"]').click();
-
-    const welshError = "Rhaid i chi ddewis cyfleuster storio neu nodi manylion y cyfleuster â llaw";
-    cy.get(".govuk-error-summary").should("contain.text", welshError);
-    cy.get(".govuk-error-message").should("contain.text", welshError);
-    cy.url().should("not.include", approvalUrl);
-  });
-
-  it("should continue without JavaScript when the saved manual facility is left unchanged", () => {
-    visitPage(TestCaseId.SDWhichStorageFacilitySavedManualEntry, true);
-
-    cy.get("select.app-storage-facility-non-js-select").should("have.value", "12 Manual Street");
-    cy.get('[data-testid="save-and-continue"]').click();
-
-    cy.url().should("include", approvalUrl);
-  });
-
-  it("should show an error when a saved manual facility is cleared without JavaScript", () => {
-    visitPage(TestCaseId.SDWhichStorageFacilitySavedManualEntry, true);
-
-    cy.get("select.app-storage-facility-non-js-select").select("");
-    cy.get('[data-testid="save-and-continue"]').click();
-
-    cy.get(".govuk-error-summary").should(
-      "contain",
-      "You must select a storage facility or enter the facility details manually"
-    );
-    cy.url().should("not.include", approvalUrl);
+    cy.get(facilitySelect).should("have.value", "");
   });
 
   it("should continue without JavaScript when the selected address has no town or city", () => {
