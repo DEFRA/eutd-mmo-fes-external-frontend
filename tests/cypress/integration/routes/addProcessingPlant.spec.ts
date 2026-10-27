@@ -11,6 +11,14 @@ const visitPage = (testCaseId: TestCaseId, disableScripts = false) => {
 describe("PS: add processing plant - rendering", () => {
   beforeEach(() => visitPage(TestCaseId.PSAddProcessingPlantContinue));
 
+  it("should render the page title in Welsh when Welsh is selected", () => {
+    cy.visit(pageUrl, {
+      qs: { testCaseId: TestCaseId.PSAddProcessingPlantContinue, lng: "cy" },
+    });
+
+    cy.title().should("eq", "Pa safle prosesu hoffech chi ei ddefnyddio? - Creu datganiad prosesu yn y DU - GOV.UK");
+  });
+
   it("should render the page heading and hint", () => {
     cy.get(".govuk-heading-xl").should("be.visible").and("contain.text", "Which processing plant do you want to use?");
     cy.contains("Start typing a company name or approval number to search for a facility.").should("be.visible");
