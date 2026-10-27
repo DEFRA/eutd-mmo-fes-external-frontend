@@ -244,10 +244,12 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   const isNonJs = form.get("isNonJs") === "true";
   const processingPlant = (form.get("processingPlant") as string) ?? "";
-  if (isNonJs && action === "saveAndContinue" && !processingPlant.trim()) {
-    const errors = getTransformedError([
-      { key: "processingPlant", message: "psAddProcessingPlantAddressErrorNullPlantName" },
-    ]);
+  if (
+    action === "saveAndContinue" &&
+    !processingPlant.trim() &&
+    (isNonJs || !((form.get("plantName") as string) ?? "").trim())
+  ) {
+    const errors = getTransformedError([{ key: "processingPlant", message: "psAddProcessingPlantErrorSelectPlant" }]);
 
     return new Response(JSON.stringify({ errors, processingPlant }), {
       status: 400,
@@ -472,7 +474,7 @@ const AddProcessingPlant = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     setSelectedPlant(undefined);
-                    setSelectPlantOption(selectedPlant.label);
+                    setSelectPlantOption("");
                     setSearchTerm("");
                   }}
                 >
