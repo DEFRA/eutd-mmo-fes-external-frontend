@@ -136,7 +136,8 @@ describe("SD: which storage facility", () => {
     visitPage(TestCaseId.SDWhichStorageFacilityWithSavedSelection);
 
     cy.get('[data-testid="change-storage-facility"]').click();
-    getStorageFacilitySearchInput().should("have.value", "Test Cold Store (UK/5555/CS) - HU1 2AB");
+    getStorageFacilitySearchInput().should("have.value", "");
+    cy.get('input[name="facilityName"]').should("not.exist");
     cy.contains("p", "Approval number: UK/5555/CS").should("not.exist");
   });
 
@@ -182,10 +183,12 @@ describe("SD: which storage facility", () => {
     cy.location("pathname").should("eq", pageUrl);
   });
 
-  it("allows saving the unchanged facility immediately after Change", () => {
+  it("allows saving a newly selected facility after Change", () => {
     visitPage(TestCaseId.SDWhichStorageFacilityWithSavedSelection);
     cy.get('[data-testid="change-storage-facility"]').click();
-    getStorageFacilitySearchInput().should("have.value", "Test Cold Store (UK/5555/CS) - HU1 2AB");
+    getStorageFacilitySearchInput().should("have.value", "").type("Test Cold Store");
+    selectAutocompleteOptionContaining("Test Cold Store");
+    cy.get('input[name="facilityName"]').should("have.value", "Test Cold Store");
     cy.get('[data-testid="save-and-continue"]').click();
     cy.location("pathname").should("eq", approvalUrl);
   });

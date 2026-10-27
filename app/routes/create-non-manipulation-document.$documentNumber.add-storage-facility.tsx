@@ -436,9 +436,9 @@ const WhichStorageFacility = () => {
                   className="app-change-button"
                   data-testid="change-storage-facility"
                   onClick={() => {
-                    setFacilityBeingChanged(selectedFacility);
+                    setFacilityBeingChanged(undefined);
                     setSelectedFacility(undefined);
-                    setFacilitySearchDefaultValue(selectedFacility.label);
+                    setFacilitySearchDefaultValue("");
                     setSearchTerm("");
                   }}
                 >

@@ -11,7 +11,7 @@ const visitPage = (testCaseId: TestCaseId, disableScripts = false) => {
 describe("PS: add processing plant - rendering", () => {
   beforeEach(() => visitPage(TestCaseId.PSAddProcessingPlantContinue));
 
-  it("shows one plant-name error when no plant is selected in the non-JavaScript journey", () => {
+  it("shows one selection error when no plant is selected in the non-JavaScript journey", () => {
     visitPage(TestCaseId.PSAddProcessingPlantWithSavedSelectionManualAddress, true);
 
     cy.get("select#processingPlant").should("have.value", "Test Fish Plant (UK/1234/EC) - HU1 2AB");
@@ -24,7 +24,12 @@ describe("PS: add processing plant - rendering", () => {
     cy.get(".govuk-error-summary__list li").should("have.length", 1);
     cy.get(".govuk-error-summary__list a")
       .should("have.attr", "href", "#processingPlant")
-      .and("contain.text", "Enter the processing plant name");
+      .and("contain.text", "You must select a processing plant or enter the plant details manually.");
+    cy.get(".govuk-error-message").should(
+      "contain.text",
+      "You must select a processing plant or enter the plant details manually."
+    );
+    cy.get(".govuk-error-summary").should("not.contain.text", "Enter the processing plant name");
     cy.get(".govuk-error-summary").should("not.contain.text", "Enter the plant approval number");
     cy.get(".govuk-error-summary__list a").click();
     cy.get("select#processingPlant").should("have.focus");
@@ -131,22 +136,31 @@ describe("PS: add processing plant - autocomplete accessibility and country mapp
 });
 
 describe("PS: add processing plant - save and continue button", () => {
-  it("shows the current plant in the search input after clicking Change", () => {
+  it("clears the search input after Change and requires a new plant selection", () => {
     cy.visit(pageUrl, {
       qs: { testCaseId: TestCaseId.PSAddProcessingPlantWithSavedSelectionManualAddress },
     });
 
     cy.get("[data-testid='change-processing-plant']").click();
-    cy.get("#processingPlant").should("have.value", "Test Fish Plant (UK/1234/EC) - HU1 2AB");
+    cy.get("input#processingPlant").should("have.value", "");
+    cy.get('input[name="plantName"]').should("not.exist");
+    cy.get("[data-testid='save-and-continue']").click();
+    cy.get(".govuk-error-summary").should(
+      "contain.text",
+      "You must select a processing plant or enter the plant details manually."
+    );
+    cy.location("pathname").should("eq", pageUrl);
   });
 
-  it("submits the selected plant when saving immediately after Change", () => {
+  it("submits a newly selected plant after Change", () => {
     cy.visit(pageUrl, {
       qs: { testCaseId: TestCaseId.PSAddProcessingPlantWithSavedSelectionManualAddress },
     });
 
     cy.get("[data-testid='change-processing-plant']").click();
-    cy.get("#processingPlant").should("have.value", "Test Fish Plant (UK/1234/EC) - HU1 2AB");
+    cy.get("input#processingPlant").should("have.value", "").type("Coastal");
+    cy.contains("#processingPlant__listbox [role='option']", "Coastal Fish Exports Ltd").click();
+    cy.get('input[name="plantName"]').should("have.value", "Coastal Fish Exports Ltd");
     cy.get("[data-testid='save-and-continue']").click();
 
     cy.url().should("include", `/create-processing-statement/${documentNumber}/add-processing-plant-details`);
