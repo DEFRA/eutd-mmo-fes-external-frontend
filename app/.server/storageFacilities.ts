@@ -49,7 +49,17 @@ export const mapEstablishmentToFacilityAddress = (
   facilityCountry?: string;
 } => {
   const address = establishment.address;
-  const facilityTownCity = address?.cityName;
+  const localityLine = [address?.line4, address?.line3, address?.line2].find((line) => line?.trim());
+  const addressParts =
+    address?.line1
+      ?.split(",")
+      .map((part) => part.trim())
+      .filter(Boolean) ?? [];
+  const facilityTownCity = [
+    address?.cityName?.trim(),
+    localityLine?.trim(),
+    addressParts.length >= 3 ? addressParts.at(-1) : undefined,
+  ].find(Boolean);
   const facilityPostcode = address?.postCode?.code;
   const facilityCountry = address?.country?.countryName?.trim();
   return {
