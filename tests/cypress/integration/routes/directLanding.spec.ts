@@ -1168,6 +1168,22 @@ describe("Direct Landing Error Messages - Welsh", () => {
       "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000"
     );
   });
+
+  it("should display the Welsh gear category error when adding a category without selecting one", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.DirectLandingErrors,
+      lng: "cy",
+      disableScripts: true,
+    };
+    cy.visit(directLandingUrl, { qs: { ...testParams } });
+    cy.get("select#gearCategory").select("");
+    cy.get("[data-testid='add-gear-category']").click();
+
+    const expectedError = "Rhaid ichi ddewis opsiwn categori gêr er mwyn ychwanegu categori gêr";
+    cy.get("#error-summary-title").should("contain.text", "Gwall:Mae yna broblem");
+    cy.get(".govuk-error-summary__list a").should("contain.text", expectedError);
+    cy.get(".govuk-error-message").should("contain.text", expectedError);
+  });
 });
 
 describe("Direct Landing - Client-side fetch error resilience", () => {
