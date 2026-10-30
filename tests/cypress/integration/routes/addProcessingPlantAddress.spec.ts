@@ -35,7 +35,7 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
   });
 
   it("should render page with existing address and show change button", () => {
@@ -49,6 +49,8 @@ describe("Add Processing Plant Address", () => {
       "contain",
       "processing plant address"
     );
+    cy.contains("button", "Save and continue").should("be.visible");
+    cy.contains("button", "Save as draft").should("be.visible");
   });
 
   it("should redirect to health certificate page when nextUri is empty", () => {
@@ -57,7 +59,7 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
     cy.url().should("include", "GBR-2025-PS-FFA360309");
   });
 
@@ -75,7 +77,7 @@ describe("Add Processing Plant Address", () => {
         cy.get("form").submit();
       }
     });
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
   });
 
   it("should handle continue with manual address when clicking on choosing the option to enter the address manually", () => {
@@ -266,7 +268,7 @@ describe("Add Processing Plant Address", () => {
       cy.wrap($form).submit();
     });
 
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
   });
 
   it("should redirect to next step when continue is triggered with valid address data", () => {
@@ -287,7 +289,7 @@ describe("Add Processing Plant Address", () => {
       }
     });
 
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
   });
 
   it("should handle getaddress action and update session with manual address step", () => {
@@ -388,7 +390,7 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
   });
 
   it("should handle save as draft with session cleanup", () => {
@@ -491,7 +493,7 @@ describe("Add Processing Plant Address", () => {
     };
     cy.visit(psAddressUrl, { qs: { ...testParams } });
     cy.get("[data-testid=save-and-continue]").click();
-    cy.url().should("include", "add-health-certificate");
+    cy.url().should("include", "add-processing-plant-details");
     cy.url().should("include", "GBR-2025-PS-FFA360309");
   });
 
@@ -528,5 +530,25 @@ describe("Add Processing Plant Address", () => {
     cy.get("#townCity").should("have.value", "My Test City");
     cy.get("#county").should("have.value", "Plant County");
     cy.get("#postcode").should("have.value", "My Post Code");
+  });
+
+  it("should show an error summary and stay on the page when save and continue fails validation", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddProcessingPlantDetailsError,
+    };
+    cy.visit(psAddressUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-and-continue']").click();
+    cy.get("#error-summary-title").should("be.visible");
+    cy.url().should("include", "/add-processing-plant-address");
+  });
+
+  // FI0-10577: saving a draft must succeed even when the document fails validation.
+  it("should redirect to the dashboard when save as draft is clicked with validation errors", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.PSAddProcessingPlantAddressSaveAsDraftWithErrors,
+    };
+    cy.visit(psAddressUrl, { qs: { ...testParams } });
+    cy.get("[data-testid='save-draft-button']").click();
+    cy.url().should("include", "/create-processing-statement/processing-statements");
   });
 });

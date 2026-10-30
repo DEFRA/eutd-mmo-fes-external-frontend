@@ -87,6 +87,7 @@ export enum Page {
   ProgressStorageDocument = "ProgressStorageDocument",
   AddCatchDetails = "AddCatchDetails",
   AddProcessingPlantDetails = "AddProcessingPlantDetails",
+  AddProcessingPlant = "AddProcessingPlant",
   CatchWeights = "CatchWeights",
   AddProcessingPlantAddress = "AddProcessingPlantAddress",
   WhatprocessingPlantAddress = "whatprocessingPlantAddress",
@@ -466,6 +467,12 @@ export const pages: Pages = {
     homeLink: "processing-statement",
     hideFavouritesLink: true,
   },
+  [Page.AddProcessingPlant]: {
+    path: "/create-processing-statement/:documentNumber/add-processing-plant",
+    title: "processingPlantTitle",
+    homeLink: "processing-statement",
+    hideFavouritesLink: true,
+  },
   [Page.AddProcessingPlantAddress]: {
     path: "/create-processing-statement/:documentNumber/add-processing-plant-address",
     title: "processingPlantAddressTitle",
@@ -491,7 +498,7 @@ export const pages: Pages = {
     hideFavouritesLink: true,
   },
   [Page.StorageDocumentStorageFacilityApproval]: {
-    path: "/create-non-manipulation-document/:documentNumber/add-storage-facility-approval",
+    path: "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
     title: "sdAddStorageFacilityApprovalTitle",
     homeLink: "non-manipulation-document",
     hideFavouritesLink: true,
@@ -539,8 +546,8 @@ export const pages: Pages = {
     hideFavouritesLink: true,
   },
   [Page.AddStorageFacility]: {
-    path: "/create-non-manipulation-document/:documentNumber/add-storage-facility-details",
-    title: "sdAddStorageFacilityTitle",
+    path: "/create-non-manipulation-document/:documentNumber/add-storage-facility",
+    title: "sdWhichStorageFacilityTitle",
     homeLink: "non-manipulation-document",
     hideFavouritesLink: true,
   },

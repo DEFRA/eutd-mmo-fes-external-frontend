@@ -181,6 +181,7 @@ const PAGE_MATCHERS: PageMatcher[] = [
   { test: (p) => p.includes("/add-catch-details"), page: Page.AddCatchDetails },
   { test: (p) => p.includes("/copy-this-processing-statement"), page: Page.CopyThisProcessingStatement },
   { test: (p) => p.includes("/copy-this-non-manipulation-document"), page: Page.CopyThisStorageDocument },
+  { test: (p) => p.includes("/add-processing-plant"), page: Page.AddProcessingPlant },
   { test: (p) => p.includes("/add-processing-plant-details"), page: Page.AddProcessingPlantDetails },
   { test: (p) => p.includes("/add-health-certificate"), page: Page.AddProcessingHealthCertificate },
   { test: (p) => p.includes("/processing-statement-created"), page: Page.ProcessingStatementCreated },
@@ -225,8 +226,11 @@ const PAGE_MATCHERS: PageMatcher[] = [
   },
   { test: (p) => p.includes("/catch-added"), page: Page.CatchAdded },
   { test: (p) => p.includes("/what-processing-plant-address"), page: Page.WhatprocessingPlantAddress },
-  { test: (p) => p.includes("/add-storage-facility-details"), page: Page.AddStorageFacility },
-  { test: (p) => p.includes("/add-storage-facility-approval"), page: Page.StorageDocumentStorageFacilityApproval },
+  {
+    test: (p) => p.includes("/add-storage-facility") && !p.includes("/add-storage-facility-details"),
+    page: Page.AddStorageFacility,
+  },
+  { test: (p) => p.includes("/add-storage-facility-details"), page: Page.StorageDocumentStorageFacilityApproval },
   { test: (p) => p.includes("/what-storage-facility-address"), page: Page.WhatStorageFacility },
   {
     test: (p) => /^\/create-non-manipulation-document\/.*\/how-does-the-consignment-arrive-to-the-uk$/i.test(p),

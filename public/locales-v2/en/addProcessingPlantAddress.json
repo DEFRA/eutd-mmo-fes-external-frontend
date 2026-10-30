@@ -6,5 +6,6 @@
   "psAddProcessingPlantAddressDetailsAnAddressMustBeAddedForThisProcessingPlant": "An address must be added for this processing plant.",
   "commonProgressProcessingPlantAddress": "processing plant address",
   "psAddProcessingPlantAddressDetailsAddTheProcessingPlantAddressLinktext": "Add the processing plant address",
-  "psProcessingPlantAddressWhatIsProcessingPlantAddress": "What is the processing plant address?"
+  "psProcessingPlantAddressWhatIsProcessingPlantAddress": "What is the processing plant address?",
+  "psProcessingPlantAddressPostcodeHint": "If you can’t find the address, select ‘Enter the address manually’. You can only enter a UK address."
 }

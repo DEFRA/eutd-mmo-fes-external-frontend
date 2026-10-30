@@ -1,0 +1,8 @@
+{
+  "sdWhichStorageFacilityHeading": "Pa gyfleuster storio hoffech chi ei ddefnyddio?",
+  "sdWhichStorageFacilityLabel": "Rhowch eich cyfleuster storio",
+  "sdWhichStorageFacilitySelectPlaceholder": "Dewiswch eich cyfleuster storio",
+  "sdWhichStorageFacilityHint": "Dechreuwch deipio enw cwmni neu rif cymeradwyo i chwilio am gyfleuster.",
+  "sdWhichStorageFacilityManualButton": "Rhowch fanylion y cyfleuster â llaw",
+  "sdWhichStorageFacilityNoResultsFound": "Heb ganfod unrhyw ganlyniadau\nGwiriwch enw'r cwmni neu'r rhif cofrestru a rhowch gynnig arall arni.\nOs na allwch ddod o hyd i'r cyfleuster o hyd, nodwch y manylion â llaw."
+}

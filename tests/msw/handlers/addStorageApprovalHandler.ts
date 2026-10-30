@@ -1,4 +1,5 @@
 import { rest } from "msw";
+import isEmpty from "lodash/isEmpty";
 import { type ITestHandler, TestCaseId } from "~/types";
 import {
   GET_STORAGE_DOCUMENT,
@@ -7,6 +8,8 @@ import {
   mockSaveAndValidateDocument,
   mockTransportDetailsUrl,
   mockAddExporterDetails,
+  mockApprovedFoodEstablishmentsSearchUrl,
+  mockApprovedFoodEstablishmentsTokenUrl,
 } from "~/urls.server";
 import storageDocument from "@/fixtures/storageDocumentApi/storageDocument.json";
 import storageDocumentFacilityApprovalError from "@/fixtures/storageDocumentApi/storageDocumentFacilityApprovalError.json";
@@ -24,6 +27,77 @@ const addStorageApprovalHandler: ITestHandler = {
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentFacilityOneNoArrival))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
     rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+    // The arrival-date check no longer short-circuits before the backend call (so both errors can
+    // show together) - this must therefore respond to save-and-continue too, not just GET requests.
+    rest.post(mockSaveAndValidateDocument("storageNotes"), async (req, res, ctx) => {
+      const body = await req.json();
+
+      if (!body.facilityName?.trim()) {
+        return res(
+          ctx.status(400),
+          ctx.json({
+            errors: {
+              "storageFacilities-facilityName": "sdAddStorageFacilityDetailsErrorEnterTheFacilityName",
+            },
+          })
+        );
+      }
+
+      if (isEmpty(body.facilityStorage)) {
+        return res(ctx.status(400), ctx.json(storageDocumentFacilityStorageError));
+      }
+
+      return res(ctx.json({ ...storageDocumentFacilityOneNoArrival, ...body }));
+    }),
+  ],
+  [TestCaseId.SDAddStorageApprovalFullMdmAddress]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) =>
+      res(
+        ctx.json({
+          ...storageDocumentFacilityOneNoArrival,
+          facilityName: "DFDS Logistics Scotland Aberdeen",
+          facilityApprovalNumber: "AA 220",
+          facilityAddressOne: "Unit 8 Peterseat Drive",
+          facilityTownCity: "",
+          facilityPostcode: "AB12 3HT",
+          facilityCountry: "",
+        })
+      )
+    ),
+    rest.post(mockApprovedFoodEstablishmentsTokenUrl, (req, res, ctx) =>
+      res(ctx.json({ access_token: "storage-test-token", expires_in: 3600 }))
+    ),
+    rest.get(mockApprovedFoodEstablishmentsSearchUrl, (req, res, ctx) =>
+      res(
+        ctx.json({
+          content: [
+            {
+              tradingName: "DFDS Logistics Scotland Aberdeen",
+              approvalNumber: { content: "AA 220" },
+              address: {
+                line1: "Unit 8 Peterseat Drive",
+                line2: "Altens",
+                line3: "Aberdeen",
+                cityName: "",
+                postCode: { code: "AB12 3HT" },
+              },
+            },
+          ],
+        })
+      )
+    ),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), async (req, res, ctx) => {
+      const body = await req.json();
+      if (body.facilityTownCity !== "Aberdeen") {
+        return res(
+          ctx.status(400),
+          ctx.json({
+            errors: { "storageFacilities-facilityTownCity": "sdAddStorageFacilityDetailsErrorEnterTheTown" },
+          })
+        );
+      }
+      return res(ctx.json({ ...storageDocumentFacilityOneNoArrival, ...body }));
+    }),
   ],
   [TestCaseId.SDAddStorageApprovalComplete]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),
@@ -31,6 +105,44 @@ const addStorageApprovalHandler: ITestHandler = {
     rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
       res(ctx.json(storageDocumentFacilityOne))
     ),
+  ],
+  [TestCaseId.SDAddStorageApprovalNameError]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) =>
+      res(ctx.json({ ...storageDocumentFacilityOneNoArrival, facilityName: "" }))
+    ),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), (req, res, ctx) =>
+      res(
+        ctx.status(400),
+        ctx.json({
+          errors: {
+            "storageFacilities-facilityName": "sdAddStorageFacilityDetailsErrorEnterTheFacilityName",
+          },
+        })
+      )
+    ),
+  ],
+  [TestCaseId.SDAddStorageApprovalTownError]: () => [
+    rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) =>
+      res(ctx.json({ ...storageDocumentFacilityOneNoArrival, facilityTownCity: "" }))
+    ),
+    rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(storageDocumentProgress))),
+    rest.get(mockTransportDetailsUrl, (req, res, ctx) => res(ctx.json(truckDetails))),
+    rest.post(mockSaveAndValidateDocument("storageNotes"), async (req, res, ctx) => {
+      const body = await req.json();
+      if (!body.facilityTownCity?.trim()) {
+        return res(
+          ctx.status(400),
+          ctx.json({
+            errors: {
+              "storageFacilities-facilityTownCity": "sdAddStorageFacilityDetailsErrorEnterTheTown",
+            },
+          })
+        );
+      }
+      return res(ctx.json({ ...storageDocumentFacilityOneNoArrival, ...body }));
+    }),
   ],
   [TestCaseId.SDAddStorageApprovalError]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocument))),

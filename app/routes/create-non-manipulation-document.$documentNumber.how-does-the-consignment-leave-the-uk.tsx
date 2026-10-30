@@ -44,7 +44,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 const HowDoesTheExportLeaveTheUk = () => (
   <HowDoesTransportTakesPlaceInTheUkForm
     type={Page.StorageDocumentHowDoesTheExportLeaveTheUk}
-    backUrl="/create-non-manipulation-document/:documentNumber/add-storage-facility-approval"
+    backUrl="/create-non-manipulation-document/:documentNumber/add-storage-facility-details"
     progressUri="/create-non-manipulation-document/:documentNumber/progress"
   />
 );

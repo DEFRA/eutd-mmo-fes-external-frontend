@@ -1,7 +1,9 @@
 {
   "sdAddStorageDetailsHeader": "Ychwanegu manylion cyfleuster storio",
-  "sdAddStorageApprovalDetailsHeader": "Ychwanegu manylion cymeradwyo cyfleuster storio",
+  "sdAddStorageApprovalDetailsHeader": "Ychwanegu manylion cyfleuster storio",
   "sdFacilityName": " Enw’r cyfleuster",
+  "sdStorageFacilityAddressSummaryHeading": "Cyfeiriad y cyfleuster storio",
+  "sdFacilitySummaryApprovalNumberLabel": "Rhif cymeradwyo",
   "sdAddStorageFacilityDetailsAddressText": "Rhaid rhoi cyfeiriad ar gyfer y cyfleuster storio hwn.",
   "sdAddStorageFacilityDetailsAddAddressText": "Ychwanegwch gyfeiriad y cyfleuster storio",
   "sdChangeStorageFacilityAddressHiddenText": "cyfeiriad y cyfleuster storio",

@@ -15,21 +15,99 @@ import {
 import isEmpty from "lodash/isEmpty";
 import { ButtonGroup } from "~/composite-components";
 import classNames from "classnames";
+import { useIsHydrated } from "~/hooks";
 
-type loaderPlantDetails = {
+type LoaderPlantDetails = {
   documentNumber: string;
   plantName?: string;
   plantApprovalNumber?: string;
   personResponsibleForConsignment?: string;
+  plantAddressOne?: string;
+  plantTownCity?: string;
+  plantPostcode?: string;
+  plantCounty?: string;
+  plantCountry?: string;
   nextUri?: string;
   csrf: string;
 };
 
+const getContinueRedirect = (nextUri: string, documentNumber: string | undefined) => {
+  if (!isEmpty(nextUri)) {
+    return nextUri;
+  }
+
+  return route("/create-processing-statement/:documentNumber/add-health-certificate", { documentNumber });
+};
+
+const saveDraftPlantData = async (
+  bearerToken: string,
+  documentNumber: string | undefined,
+  plantData: {
+    plantName?: string;
+    plantApprovalNumber: string | undefined;
+    personResponsibleForConsignment: string;
+  },
+  plantUrl: string,
+  isNonJs: boolean
+) => {
+  const validationResponse = await updateProcessingStatement(
+    bearerToken,
+    documentNumber,
+    plantData,
+    plantUrl,
+    undefined,
+    false,
+    false,
+    undefined,
+    isNonJs
+  );
+
+  if (!validationResponse) {
+    await updateProcessingStatement(
+      bearerToken,
+      documentNumber,
+      plantData,
+      plantUrl,
+      undefined,
+      true,
+      false,
+      undefined,
+      isNonJs
+    );
+    return;
+  }
+
+  const responseData = await (validationResponse as Response).clone().json();
+  const invalidFieldNames = new Set(Object.keys(responseData?.errors ?? {}));
+  const filteredData: Record<string, string | null | undefined> = { ...plantData };
+
+  for (const invalidField of invalidFieldNames) {
+    filteredData[invalidField] = null;
+  }
+
+  await updateProcessingStatement(
+    bearerToken,
+    documentNumber,
+    filteredData,
+    plantUrl,
+    undefined,
+    true,
+    false,
+    undefined,
+    isNonJs
+  );
+};
+
 export const loader: LoaderFunction = async ({ request, params }) =>
-  processingStatemenGenericLoader(request, params, [
+  await processingStatemenGenericLoader(request, params, [
     "plantName",
     "plantApprovalNumber",
     "personResponsibleForConsignment",
+    "plantAddressOne",
+    "plantTownCity",
+    "plantPostcode",
+    "plantCounty",
+    "plantCountry",
   ]);
 
 export const action: ActionFunction = async ({ request, params }): Promise<Response> => {
@@ -38,6 +116,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
 
   const form = await request.formData();
   const nextUri = form.get("nextUri") as string;
+  const isNonJs = form.get("isNonJs") === "true";
   const { _action, ...values } = Object.fromEntries(form);
 
   const isDraft = _action === "saveAsDraft";
@@ -46,81 +125,58 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
   if (!isValid) return redirect("/forbidden");
 
   const plantData = {
-    plantName: values["plantName"] as string,
+    plantName: values["plantName"] as string | undefined,
     plantApprovalNumber: values["plantApprovalNumber"] as string,
     personResponsibleForConsignment: values["personResponsibleForConsignment"] as string,
   };
   const plantUrl = "/create-processing-statement/:documentNumber/add-processing-plant-details";
 
   if (isDraft) {
-    // Validate-first: saveToRedisIfErrors=false so nothing is persisted on the first call
-    const validationResponse = await updateProcessingStatement(
-      bearerToken,
-      documentNumber,
-      plantData,
-      plantUrl,
-      undefined,
-      false, // saveToRedisIfErrors = false (validate only)
-      false // returnDataOnly = false (get a Response we can inspect)
-    );
-    if (validationResponse) {
-      const responseData = await (validationResponse as Response).clone().json();
-      let errorKeys: string[] = [];
-      /* istanbul ignore else */
-      if (responseData?.errors) {
-        errorKeys = Object.keys(responseData.errors);
-      }
-      const invalidFieldNames = new Set(errorKeys);
-      // Start with all submitted fields, then null out invalid ones so the
-      // client-side Redis merge clears any previously-saved bad values.
-      const filteredData: Record<string, string | null> = { ...plantData };
-      for (const invalidField of invalidFieldNames) {
-        filteredData[invalidField] = null;
-      }
-      await updateProcessingStatement(bearerToken, documentNumber, filteredData, plantUrl, undefined, true, false);
-    } else {
-      // No errors – persist all fields as draft
-      await updateProcessingStatement(bearerToken, documentNumber, plantData, plantUrl, undefined, true, false);
-    }
+    await saveDraftPlantData(bearerToken, documentNumber, plantData, plantUrl, isNonJs);
+
     return redirect(route("/create-processing-statement/processing-statements"));
   }
 
-  // Save and continue – validate without saving; return errors or redirect
   const errorResponse = await updateProcessingStatement(
     bearerToken,
     documentNumber,
     plantData,
     plantUrl,
     undefined,
-    false, // saveToRedisIfErrors = false
-    true // returnDataOnly = true (existing save-and-continue behaviour)
+    false,
+    true,
+    undefined,
+    isNonJs
   );
 
   if (errorResponse) {
     return errorResponse as Response;
   }
 
-  return redirect(
-    isEmpty(nextUri)
-      ? route("/create-processing-statement/:documentNumber/add-processing-plant-address", { documentNumber })
-      : nextUri
-  );
+  return redirect(getContinueRedirect(nextUri, documentNumber));
 };
 
 const AddProcessingPlantDetails = () => {
   const { t } = useTranslation(["addProcessingPlantDetails"]);
-  const { documentNumber, plantName, plantApprovalNumber, personResponsibleForConsignment, nextUri, csrf } =
-    useLoaderData<loaderPlantDetails>();
+  const {
+    documentNumber,
+    plantName,
+    plantApprovalNumber,
+    personResponsibleForConsignment,
+    plantAddressOne,
+    plantTownCity,
+    plantPostcode,
+    nextUri,
+    csrf,
+  } = useLoaderData<LoaderPlantDetails>();
   const actionData = useActionData() ?? {};
   const { errors = {} } = actionData;
   const errorKeysInOrder = ["plantName", "plantApprovalNumber", "personResponsibleForConsignment"];
 
+  const isHydrated = useIsHydrated();
+
   return (
-    <Main
-      backUrl={route("/create-processing-statement/:documentNumber/catch-added", {
-        documentNumber,
-      })}
-    >
+    <Main backUrl={route("/create-processing-statement/:documentNumber/add-processing-plant", { documentNumber })}>
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorMessagesInOrder(errors, errorKeysInOrder)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
@@ -129,44 +185,59 @@ const AddProcessingPlantDetails = () => {
               <legend className="govuk-fieldset__legend govuk-fieldset__legend">
                 <Title title={`${t("psAddProcessingPDAddProcessingPlantDetails")}`} />
               </legend>
-              <div className="govuk-warning-text" data-testid="warning-message" role="note">
-                <span className="govuk-warning-text__icon" aria-hidden="true">
-                  !
-                </span>
-                <strong className="govuk-warning-text__text">
-                  <span className="govuk-warning-text__assistive govuk-visually-hidden">
-                    {t("commonWarning", { ns: "common" })}
-                  </span>
-                  {t("psAddProcessingPDAlertText")}
-                </strong>
-              </div>
-              <div
-                className={isEmpty(errors?.plantName) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"}
-              >
-                {!isEmpty(errors?.plantName) && (
-                  <ErrorMessage
-                    id="plantName-error"
-                    text={t(errors?.plantName?.message, { ns: "errorsText" })}
-                    visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+              {isEmpty(plantName) ? (
+                <div
+                  className={
+                    isEmpty(errors?.plantName) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"
+                  }
+                >
+                  {!isEmpty(errors?.plantName) && (
+                    <ErrorMessage
+                      id="plantName-error"
+                      text={t(errors?.plantName?.message ?? "", { ns: "errorsText" })}
+                      visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
+                    />
+                  )}
+                  <FormInput
+                    containerClassName="govuk-form-group govuk-!-width-two-thirds"
+                    label={t("psAddProcessingPDPlantName")}
+                    labelClassName="govuk-label govuk-!-font-weight-bold"
+                    name="plantName"
+                    type="text"
+                    inputClassName={classNames("govuk-input", {
+                      "govuk-input--error": errors?.plantName,
+                    })}
+                    inputProps={{
+                      defaultValue: plantName,
+                      id: "plantName",
+                    }}
+                    hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
+                    hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
                   />
-                )}
-                <FormInput
-                  containerClassName="govuk-form-group govuk-!-width-two-thirds"
-                  label={t("psAddProcessingPDPlantName")}
-                  labelClassName="govuk-label govuk-!-font-weight-bold"
-                  name="plantName"
-                  type="text"
-                  inputClassName={classNames("govuk-input", {
-                    "govuk-input--error": errors?.plantName,
-                  })}
-                  inputProps={{
-                    defaultValue: plantName,
-                    id: "plantName",
-                  }}
-                  hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
-                  hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
-                />
-              </div>
+                </div>
+              ) : (
+                <div className="govuk-grid-row">
+                  <div className="govuk-grid-column-two-thirds">
+                    <div className="govuk-!-margin-bottom-6 app-selected-address">
+                      <p className="govuk-body govuk-!-margin-bottom-3">
+                        <strong>{t("psAddProcessingPlantAddressSummaryHeading", { ns: "addProcessingPlant" })}</strong>
+                      </p>
+                      {plantName && (
+                        <p className="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">{plantName}</p>
+                      )}
+                      {plantApprovalNumber && (
+                        <p className="govuk-body govuk-!-margin-bottom-1">
+                          {t("psAddProcessingPlantSummaryApprovalNumberLabel")}: {plantApprovalNumber}
+                        </p>
+                      )}
+                      {plantAddressOne && <p className="govuk-body govuk-!-margin-bottom-1">{plantAddressOne}</p>}
+                      {plantTownCity && <p className="govuk-body govuk-!-margin-bottom-1">{plantTownCity}</p>}
+                      {plantPostcode && <p className="govuk-body govuk-!-margin-bottom-1">{plantPostcode}</p>}
+                      <input type="hidden" name="plantName" value={plantName} />
+                    </div>
+                  </div>
+                </div>
+              )}
               <div
                 className={
                   isEmpty(errors?.plantApprovalNumber) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"
@@ -175,13 +246,13 @@ const AddProcessingPlantDetails = () => {
                 {!isEmpty(errors?.plantApprovalNumber) && (
                   <ErrorMessage
                     id="plantApprovalNumber-error"
-                    text={t(errors?.plantApprovalNumber?.message, { ns: "errorsText" })}
+                    text={t(errors?.plantApprovalNumber?.message ?? "", { ns: "errorsText" })}
                     visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                   />
                 )}
                 <FormInput
                   containerClassName="govuk-form-group govuk-!-width-two-thirds"
-                  label={t("psAddProcessingPDPlantApprovalNumber")}
+                  label={t("psAddProcessingPDApprovalNumber")}
                   labelClassName="govuk-label govuk-!-font-weight-bold"
                   name="plantApprovalNumber"
                   type="text"
@@ -196,7 +267,7 @@ const AddProcessingPlantDetails = () => {
                   hint={{
                     id: "hint-plantApprovalNumber",
                     position: "above",
-                    text: t("psAddProcessingPDHintTextForPlantApprovalNumber"),
+                    text: t("psAddProcessingPDApprovalNumberHint"),
                     className: "govuk-hint",
                   }}
                   hiddenErrorText={t("commonErrorText", { ns: "errorsText" })}
@@ -213,7 +284,7 @@ const AddProcessingPlantDetails = () => {
                 {!isEmpty(errors?.personResponsibleForConsignment) && (
                   <ErrorMessage
                     id="personResponsibleForConsignment-error"
-                    text={t(errors?.personResponsibleForConsignment?.message, { ns: "errorsText" })}
+                    text={t(errors?.personResponsibleForConsignment?.message ?? "", { ns: "errorsText" })}
                     visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                   />
                 )}
@@ -241,7 +312,8 @@ const AddProcessingPlantDetails = () => {
                   hiddenErrorTextProps={{ className: "govuk-visually-hidden" }}
                 />
               </div>
-              <ButtonGroup saveButtonLabel={t("psAddProcessingPDSaveButtonLabel")} />
+              <ButtonGroup />
+              <input type="hidden" name="isNonJs" value={(!isHydrated).toString()} />
               <input type="hidden" name="nextUri" value={nextUri} />
             </fieldset>
           </SecureForm>

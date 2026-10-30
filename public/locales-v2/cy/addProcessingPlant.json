@@ -1,0 +1,16 @@
+{
+  "psAddProcessingPlantHeading": "Pa safle prosesu hoffech chi ei ddefnyddio?",
+  "psAddProcessingPlantLabel": "Rhowch eich safle prosesu",
+  "psAddProcessingPlantSelectPlaceholder": "Dewiswch eich safle prosesu",
+  "psAddProcessingPlantHint": "Dechreuwch deipio enw cwmni neu rif cymeradwyo i chwilio am gyfleuster.",
+  "psAddProcessingPlantManualButton": "Rhowch fanylion y safle â llaw",
+  "psAddProcessingPlantNameLabel": "Enw'r safle prosesu",
+  "psAddProcessingPlantApprovalNumberLabel": "Rhif cymeradwyo (os yw'n gymwys)",
+  "psAddProcessingPlantSummaryApprovalNumberLabel": "Rhif cymeradwyo",
+  "psAddProcessingPlantAddressSummaryHeading": "Cyfeiriad y safle prosesu",
+  "psAddProcessingPlantApprovalNumberHint": "This is sometimes called a site code. For example, UK/1234/EC",
+  "psAddProcessingPlantNoResultsHeading": "Ni chanfuwyd unrhyw ganlyniadau.",
+  "psAddProcessingPlantNoResultsCheckDetails": "Gwiriwch enw'r cwmni neu'r rhif cymeradwyo a cheisiwch eto.",
+  "psAddProcessingPlantNoResultsEnterManually": "Os na allwch ddod o hyd i'r cyfeiriad, dewiswch 'Nodi cyfeiriad y safle â llaw'.",
+  "psAddProcessingPlantNoResultsHint": "Dim ond cyfeiriad yn y DU y gallwch ei nodi."
+}

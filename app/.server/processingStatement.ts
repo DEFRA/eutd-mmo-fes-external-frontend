@@ -35,11 +35,12 @@ export const getProcessingStatement = async (
 
 const onGetProcessingStatement = async (response: Response): Promise<ProcessingStatement | IUnauthorised> => {
   switch (response.status) {
-    case 200:
+    case 200: {
       const processingStatement: ProcessingStatement = await response.json();
       return {
         ...processingStatement,
       };
+    }
     case 403:
       return {
         unauthorised: true,
@@ -77,7 +78,7 @@ export const addProcessingDetails = async (
 const onAddProcessingDetails = async (response: Response): Promise<ProcessingStatement | IUnauthorised> => {
   switch (response.status) {
     case 200:
-    case 400:
+    case 400: {
       const data = (await response.json()) ?? {};
       return {
         ...data,
@@ -88,6 +89,7 @@ const onAddProcessingDetails = async (response: Response): Promise<ProcessingSta
             }))
           : {},
       };
+    }
     case 403:
       return {
         unauthorised: true,
@@ -441,10 +443,8 @@ export const hasRequiredDataProcessingStatementSummary = (
   const hasPlantName = !isEmpty(processingStatement.plantName);
 
   const hasPlantAddressOne = !isEmpty(processingStatement.plantAddressOne);
-  const hasPlantTownCity = !isEmpty(processingStatement.plantTownCity);
   const hasPlantPostcode = !isEmpty(processingStatement.plantPostcode);
-  const hasPlantAddress =
-    !!processingStatement._plantDetailsUpdated || (hasPlantAddressOne && hasPlantTownCity && hasPlantPostcode);
+  const hasPlantAddress = !!processingStatement._plantDetailsUpdated || (hasPlantAddressOne && hasPlantPostcode);
 
   const hasExportedTo = !isEmpty(processingStatement.exportedTo);
   const hasCatches =
@@ -460,7 +460,7 @@ export const hasRequiredDataProcessingStatementSummary = (
         validateWeight(item.totalWeightLanded) &&
         validateWeight(item.exportWeightBeforeProcessing) &&
         validateWeight(item.exportWeightAfterProcessing) &&
-        parseFloat(item.exportWeightBeforeProcessing) <= parseFloat(item.totalWeightLanded) &&
+        Number.parseFloat(item.exportWeightBeforeProcessing) <= Number.parseFloat(item.totalWeightLanded) &&
         !isEmpty(item.speciesCommodityCode)
     );
 

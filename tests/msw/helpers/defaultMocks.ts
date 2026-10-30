@@ -8,6 +8,8 @@ import {
   COMMODITY_CODES,
   mockGetIdmUserDetails,
   mockGetIdmAddressDetails,
+  mockApprovedFoodEstablishmentsTokenUrl,
+  mockApprovedFoodEstablishmentsSearchUrl,
 } from "~/urls.server";
 
 import empty from "@/fixtures/empty.json";
@@ -16,6 +18,14 @@ import dynamixUserDetails from "@/fixtures/dynamixApi/userDetails.json";
 import dynamixAddresses from "@/fixtures/dynamixApi/addresses.json";
 import userAttributes from "@/fixtures/userAttributesApi/getUserAttributes.json";
 import commodities from "@/fixtures/referenceDataApi/commodites.json";
+
+const token = {
+  access_token: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
+  token_type: "Bearer",
+  expires_in: 3600,
+  refresh_token: "def50200a1b2c3d4e5f6...",
+  scope: "openid profile email",
+};
 
 const setupDefaultMocks = () =>
   [
@@ -30,6 +40,10 @@ const setupDefaultMocks = () =>
     rest.get(
       "https://your-account.cpdev.cui.defra.gov.uk/idphub/b2c/b2c_1a_cui_cpdev_signupsignin/.well-known/openid-configuration",
       (req, res, ctx) => res(ctx.status(204))
+    ),
+    rest.post(mockApprovedFoodEstablishmentsTokenUrl, (req, res, ctx) => res(ctx.json(token))),
+    rest.get(mockApprovedFoodEstablishmentsSearchUrl, (req, res, ctx) =>
+      res(ctx.json({ content: [], total: 0, limit: 25, offset: 0 }))
     ),
   ].forEach((mock) => server.instance.use(mock));
 

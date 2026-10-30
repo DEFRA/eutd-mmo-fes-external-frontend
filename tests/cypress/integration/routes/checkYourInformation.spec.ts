@@ -1272,11 +1272,6 @@ describe("CC - scenario 2 - Change transport mode", () => {
     cy.url().should("include", "/how-does-the-export-leave-the-uk");
     cy.url().then((url) => cy.log(`STEP #4A - Current URL: ${url}`));
 
-    cy.log("STEP #5 - Wait for client-side data fetch to complete");
-    cy.intercept("GET", "**/how-does-the-export-leave-the-uk/1.data*").as("dataFetch");
-    cy.wait("@dataFetch");
-    cy.log("STEP #5A - Data fetch completed");
-
     cy.log("STEP #6 - Wait for the form to be fully loaded and stable");
     cy.get('input[name="vehicle"]').should("exist");
     cy.get('input[name="vehicle"][value="plane"]').should("be.enabled"); // Wait for hydration to complete
@@ -1388,10 +1383,6 @@ describe("NMD - scenario 4 - Change arrival transport mode", () => {
       });
     });
 
-    cy.log("STEP #3 - Setting up intercept for data fetch BEFORE clicking");
-    // Set up intercept BEFORE clicking to catch the .data request
-    cy.intercept("GET", "**/*.data*").as("dataFetch");
-
     cy.log("STEP #3A - Clicking change link for arrival transport mode");
     // Click the change link for arrival transport mode
     cy.get('[href*="how-does-the-consignment-arrive-to-the-uk"]').first().click();
@@ -1399,10 +1390,6 @@ describe("NMD - scenario 4 - Change arrival transport mode", () => {
     cy.log("STEP #4 - Verifying navigation to transport selection page");
     // Verify we're on the transport selection page
     cy.url().should("include", "/how-does-the-consignment-arrive-to-the-uk");
-
-    cy.log("STEP #4A - Waiting for data fetch to complete");
-    // Wait for the client-side data fetch that re-renders the form
-    cy.wait("@dataFetch");
 
     cy.log("STEP #5 - Checking form elements exist");
     // Wait for the form to be fully loaded and radio buttons to be interactable
@@ -1515,18 +1502,11 @@ describe("NMD - scenario 5 - Change departure transport mode - no change scenari
       cy.log(`STEP #2D - Departure transport links found: ${departureLinks.length}`);
     });
 
-    // Set up intercept BEFORE clicking
-    cy.intercept("GET", "**/how-does-the-consignment-leave-the-uk.data*").as("dataFetch");
-
     cy.log("STEP #3 - Click the change link for departure transport mode");
     cy.get('[href*="how-does-the-consignment-leave-the-uk"]').first().click();
 
     // Verify we're on the transport selection page
     cy.url().should("include", "/how-does-the-consignment-leave-the-uk");
-
-    // Wait for client-side data fetch
-    cy.wait("@dataFetch");
-    cy.log("STEP #4 - Data fetch completed");
 
     // Wait for form to be stable and the expected pre-filled radio button to be interactable
     cy.get('input[name="vehicle"]').should("exist");
@@ -1572,17 +1552,11 @@ describe("NMD - scenario 6 - Change departure transport mode", () => {
     // Verify we're on check-your-information page
     cy.url().should("include", "/check-your-information");
 
-    // Set up intercept BEFORE clicking
-    cy.intercept("GET", "**/how-does-the-consignment-leave-the-uk.data*").as("dataFetch");
-
     // Click the change link for departure transport mode (use correct NMD URL)
     cy.get('[href*="how-does-the-consignment-leave-the-uk"]').first().click();
 
     // Verify we're on the transport selection page
     cy.url().should("include", "/how-does-the-consignment-leave-the-uk");
-
-    // Wait for client-side data fetch
-    cy.wait("@dataFetch");
 
     // Wait for the form to be fully loaded and stable
     cy.get('input[name="vehicle"]').should("exist");
@@ -1660,7 +1634,7 @@ describe("PS - scenario 1 - Change product details", () => {
     cy.get('button[type="submit"]').contains("Save and continue").click();
 
     // Should be redirected back to check-your-information
-    cy.url().should("include", "/add-processing-plant-details");
+    cy.url().should("include", "/add-processing-plant");
     cy.url().should("not.include", "nextUri");
     cy.url().should("not.include", "/check-your-information");
   });
@@ -1689,17 +1663,17 @@ describe("PS - scenario 2 - Change plant address", () => {
     cy.get(".govuk-summary-list__key").filter(':contains("Address")').should("exist", "Address field should exist");
 
     // Verify Change link exists next to the Address field
-    cy.get('a[href*="add-processing-plant-address"]', { timeout: 10000 })
+    cy.get('a[href*="add-processing-plant"]', { timeout: 10000 })
       .should("exist", "Change link for Address should exist")
       .should("contain", "Change");
   });
 
-  it("should navigate to add-processing-plant-address when Change link is clicked", () => {
+  it("should navigate to add-processing-plant when Change link is clicked", () => {
     // Click the change link for plant address
-    cy.get('a[href*="add-processing-plant-address"]').click();
+    cy.get('a[href*="add-processing-plant"]').eq(0).click();
 
-    // Verify navigation to add-processing-plant-address page
-    cy.url().should("include", "/add-processing-plant-address");
+    // Verify navigation to add-processing-plant page
+    cy.url().should("include", "/add-processing-plant");
     cy.url().should("include", "nextUri");
 
     // Verify page content loaded
@@ -1707,19 +1681,11 @@ describe("PS - scenario 2 - Change plant address", () => {
   });
 
   it("should return to check-your-information after completing updates and pressing Save and continue", () => {
-    cy.log("=== TEST START ===");
+    cy.get('a[href*="add-processing-plant"]').eq(0).click();
 
-    // Click the change link for plant address
-    cy.log("TEST STEP 1: Click change link");
-    cy.get('a[href*="add-processing-plant-address"]').click();
-
-    // Verify we're on add-processing-plant-address page (summary view)
-    cy.log("TEST STEP 2: Verify on add-processing-plant-address");
-    cy.url().should("include", "/add-processing-plant-address");
+    cy.url().should("include", "/add-processing-plant");
     cy.url().should("include", "nextUri");
 
-    // Verify the hidden input has the nextUri value
-    cy.log("TEST STEP 2A: Verify hidden nextUri input");
     cy.get('input[name="nextUri"]')
       .should("exist")
       .invoke("val")
@@ -1728,54 +1694,13 @@ describe("PS - scenario 2 - Change plant address", () => {
         expect(val).to.include("/check-your-information");
       });
 
-    // Click the "Change" button to open the address form
-    cy.log("TEST STEP 3: Click Change button (goToAddAddress)");
-    cy.get('button[id="goToAddAddress"]').click();
-
-    // Now we're on the address entry form (WhatExportersAddress component)
-    cy.log("TEST STEP 4: Verify on what-processing-plant-address");
-    cy.url().should("include", "/what-processing-plant-address");
+    cy.url().should("include", "/add-processing-plant");
     cy.url().should("include", "nextUri");
 
-    // Click "Enter the address manually" to use manual address entry
-    cy.log("TEST STEP 5: Click Enter the address manually");
-    cy.contains("button", "Enter the address manually").click();
-
-    // Fill in manual address fields
-    cy.log("TEST STEP 6: Fill in address fields");
-    cy.get('input[name="buildingNumber"]').clear();
-    cy.get('input[name="buildingNumber"]').type("456");
-
-    cy.get('input[name="streetName"]').clear();
-    cy.get('input[name="streetName"]').type("New Avenue");
-
-    cy.get('input[name="townCity"]').clear();
-    cy.get('input[name="townCity"]').type("Manchester");
-
-    cy.get('input[name="postcode"]').clear();
-    cy.get('input[name="postcode"]').type("M1 1AA");
-
-    cy.get('input[id="country"]').type("United Kingdom{enter}");
-
-    // Click Continue with the new address
-    cy.log("TEST STEP 7: Click Continue");
-    cy.get('button[type="submit"]').contains("Continue").click();
-
-    // Should return to add-processing-plant-address page with updated address (summary view)
-    cy.log("TEST STEP 8: Verify returned to add-processing-plant-address");
-    cy.url().should("include", "/add-processing-plant-address");
-    cy.url().should("include", "nextUri");
-
-    // Click Save and continue from the summary page
-    cy.log("TEST STEP 9: Click Save and continue from summary page");
     cy.get('button[type="submit"]').contains("Save and continue").click();
 
-    // Health certificate section is already complete, so should skip /add-health-certificate
-    // and navigate directly back to check-your-information
-    cy.log("TEST STEP 10: Verify final navigation to check-your-information");
     cy.url().should("include", "/check-your-information");
     cy.url().should("not.include", "nextUri");
-    cy.url().should("not.include", "/add-health-certificate");
   });
 });
 

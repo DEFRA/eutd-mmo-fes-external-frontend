@@ -15,6 +15,12 @@ describe("PS: What processing plant address page", () => {
     cy.get(".govuk-heading-xl").contains("What is the processing plant address?").should("be.visible");
   });
 
+  it("should render a back link to add processing plant", () => {
+    cy.get(".govuk-back-link")
+      .should("be.visible")
+      .and("have.attr", "href", "/create-processing-statement/GBR-2022-PS-F71D98A30/add-processing-plant");
+  });
+
   it("should render the buttons texts", () => {
     cy.get(".govuk-button-group button").contains("Cancel");
     cy.get('[data-testid="findaddress"]').should("be.visible").contains("Find address");
@@ -22,9 +28,7 @@ describe("PS: What processing plant address page", () => {
 
   it("should render the input label and hint text", () => {
     cy.get("div .govuk-hint")
-      .contains(
-        "If you cannot find the address or you need to add a non-UK address, click the link 'Enter the address manually'"
-      )
+      .contains("If you can’t find the address, select ‘Enter the address manually’. You can only enter a UK address.")
       .should("be.visible");
   });
 });

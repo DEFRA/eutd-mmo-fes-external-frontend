@@ -53,18 +53,11 @@ export const psProgressTableDataBuilder = (
       testId: "processing",
       rows: [
         {
-          title: "psProgressProcessingPlantId",
+          title: "psProgressProcessingPlantDetails",
           status: progress?.processingPlant,
           testId: "processingPlant",
-          url: `${psContext}/add-processing-plant-details`,
+          url: `${psContext}/add-processing-plant`,
           error: errors?.processingPlant,
-        },
-        {
-          title: "psProgressProcessingPlantAddress",
-          status: progress?.processingPlantAddress,
-          testId: "processingPlantAddress",
-          url: `${psContext}/add-processing-plant-address`,
-          error: errors?.processingPlantAddress,
         },
       ],
     },
