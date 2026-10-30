@@ -138,7 +138,6 @@
   "ccDirectLandingTotalWeightExceededError": "Rhaid i gyfanswm pwysau cyfun yr holl gynhyrchion fod yn llai na 100,000,000,000",
   "ccCommonExportWeightAsNumberError": "Rhowch y pwysau allforio fel rhif, fel 500 neu 500.50",
   "ccAddLandingSelectGearCategoryListNullError": "Dewiswch gategori gêr",
-  "ccAddLandingGearCategoryAddButtonError": "Rhaid ichi ddewis opsiwn categori gêr er mwyn ychwanegu categori gêr",
   "ccAddLandingSelectGearTypeListNullError": "Dewiswch fath o gêr",
   "ccAddLandingGearTypeEmptyError": "Dewiswch fath o gêr",
   "ccAddLandingGearTypeInvalidError": "Nid yw'r math o gêr a ddewiswyd yn ddilys ar gyfer y categori gêr a ddewiswyd",
