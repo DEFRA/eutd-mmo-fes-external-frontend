@@ -28,10 +28,6 @@ describe("Direct landing page render", () => {
     cy.title().should("eq", "Add your trip - Create a UK catch certificate - GOV.UK");
   });
 
-  it("should render the important notice", () => {
-    cy.get(".govuk-warning-text__text").should("contain.text", "From 10 January 2026");
-  });
-
   it("should render the insert text", () => {
     cy.get("p").contains("Please Note:");
     cy.get("#directLandingsGuidanceMessage")

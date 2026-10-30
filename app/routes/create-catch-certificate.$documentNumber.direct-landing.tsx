@@ -11,7 +11,6 @@ import {
   RfmoSelector,
   HighSeasAreasDetails,
   FaoAreaSelector,
-  ImportantNotice,
   AddLandingsVesselHelpContent,
 } from "~/components";
 import { route } from "routes-gen";
@@ -338,7 +337,6 @@ const DirectLanding = () => {
             </ul>
           </div>
           <Title title={t("ccDirectLandingAddYourLandingTitle")} />
-          <ImportantNotice messageKey="commonAddTripDetailsWarningContent" />
           <SecureForm method="post" noValidate csrf={csrf}>
             <div className="form-light-grey-bg govuk-!-padding-5 govuk-!-margin-bottom-5">
               <DateFieldWithPicker
