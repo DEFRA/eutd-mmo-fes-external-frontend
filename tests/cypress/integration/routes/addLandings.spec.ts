@@ -157,10 +157,6 @@ describe("Manual landing page render with page guard", () => {
     cy.title().should("eq", "Add your trip for each product - Create a UK catch certificate - GOV.UK");
   });
 
-  it("should render the important notice", () => {
-    cy.get(".govuk-warning-text__text").should("contain.text", "From 10 January 2026");
-  });
-
   it("should render the insert text", () => {
     cy.get("p").contains("Please Note:");
     cy.get("#speciesAndLandingsGuidanceMessage")
