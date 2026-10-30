@@ -5,7 +5,7 @@ import { FormInput } from "@capgeminiuk/dcx-react-library";
 import { useActionData, useLoaderData, redirect, type ActionFunction, type LoaderFunction } from "react-router";
 
 import { route } from "routes-gen";
-import type { StorageDocument, IUnauthorised, IErrorsTransformed } from "~/types";
+import type { StorageDocument, IUnauthorised, IErrorsTransformed, Establishment } from "~/types";
 import {
   getBearerTokenForRequest,
   validateResponseData,
@@ -14,10 +14,10 @@ import {
   createCSRFToken,
   updateStorageDocumentFacility,
   validateCSRFToken,
-  getStorageFacilities,
   matchEstablishment,
   mapEstablishmentToFacilityAddress,
   nonJsDateValidation,
+  searchEstablishments,
 } from "~/.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { ButtonGroup, DateFieldWithPicker } from "~/composite-components";
@@ -72,7 +72,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   validateResponseData(storageDocumentDetails);
 
   const sd = storageDocumentDetails as StorageDocument;
-  const establishments = await getStorageFacilities();
+  const establishments: Establishment[] = await searchEstablishments("storage", "");
   // Recomputed every request rather than persisted - the facility can only change via
   // add-storage-facility, so the registry is always the source of truth for this flag.
   const matchedEstablishment = matchEstablishment(establishments, sd.facilityName, sd.facilityApprovalNumber);
