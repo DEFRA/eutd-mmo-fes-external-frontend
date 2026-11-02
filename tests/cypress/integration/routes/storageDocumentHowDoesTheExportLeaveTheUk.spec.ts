@@ -14,7 +14,7 @@ describe("HowDoesTheExportLeaveTheUk", () => {
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/)
       .should("be.visible")
-      .should("have.attr", "href", `${certificateUrl}/add-storage-facility-approval`);
+      .should("have.attr", "href", `${certificateUrl}/add-storage-facility-details`);
 
     cy.get(".govuk-fieldset__heading").contains("How do you transport the consignment out of the UK?");
 

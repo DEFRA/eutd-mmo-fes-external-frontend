@@ -1,0 +1,23 @@
+{
+  "catches": [
+    {
+      "_id": "64550db5c61c2d186476b888",
+      "product": "",
+      "commodityCode": "",
+      "certificateNumber": "",
+      "productWeight": "",
+      "placeOfUnloading": "dover",
+      "dateOfUnloading": "03/05/2023",
+      "transportUnloadedFrom": "43",
+      "id": "someDocumentNumber-1683295546",
+      "scientificName": "Pardachirus pavoninus",
+      "certificateType": "uk",
+      "supportingDocuments": ["invalid-format-doc@"],
+      "productDescription": "",
+      "netWeightProductArrival": "",
+      "netWeightFisheryProductArrival": ""
+    }
+  ],
+  "validationErrors": [],
+  "addAnotherProduct": "No"
+}

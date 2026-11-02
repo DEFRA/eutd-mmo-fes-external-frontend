@@ -144,7 +144,13 @@ describe("SD: you-have-added-product page", () => {
     cy.visit(sdPageUrl, { qs: { ...testParams } });
 
     cy.contains("button", "Save and continue").click();
-    cy.get("body").should("exist");
+
+    cy.get("#errorIsland").should("exist");
+    cy.get(".govuk-error-summary").should("be.visible");
+    cy.get(".govuk-error-summary__list li").should("have.length.at.least", 1);
+
+    cy.url().should("include", "/you-have-added-a-product");
+    cy.url().should("not.include", "/how-does-the-consignment-arrive-to-the-uk");
   });
 
   // Error handling coverage tests

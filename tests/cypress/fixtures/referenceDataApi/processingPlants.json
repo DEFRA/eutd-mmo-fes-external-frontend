@@ -1,0 +1,37 @@
+[
+  {
+    "tradingName": "Ocean Prime Processing Ltd",
+    "approvalNumber": {
+      "content": "UK/1111/EC"
+    },
+    "address": {
+      "line1": "Unit 1 Dock Road",
+      "line2": "Industrial Estate",
+      "cityName": "Grimsby",
+      "postCode": {
+        "code": "DN31 1AB"
+      },
+      "country": {
+        "countryName": "United Kingdom"
+      }
+    }
+  },
+  {
+    "tradingName": "Harbour Seafood Processors",
+    "approvalNumber": {
+      "content": "UK/2222/EC"
+    },
+    "address": {
+      "line1": "Pier House",
+      "line2": "Quayside",
+      "line3": "Docklands",
+      "cityName": "Hull",
+      "postCode": {
+        "code": "HU1 2CD"
+      },
+      "country": {
+        "countryName": "United Kingdom"
+      }
+    }
+  }
+]

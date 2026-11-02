@@ -51,7 +51,7 @@ export const action: ActionFunction = async ({ request, params }): Promise<Respo
       documentNumber,
     }),
     journey: "storageNotes",
-    nextUri: route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", {
+    nextUri: route("/create-non-manipulation-document/:documentNumber/add-storage-facility", {
       documentNumber,
     }),
     railwayBillNumber,

@@ -311,7 +311,7 @@ const CheckYourInformation = () => {
                   lowerCase(t("sdCommonFacilityNameTitle", { ns: "sdCheckYourInformation" }))
                 }
                 className="govuk-link"
-                href={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details?nextUri=${route(
+                href={`/create-non-manipulation-document/${documentNumber}/add-storage-facility?nextUri=${route(
                   "/create-non-manipulation-document/:documentNumber/check-your-information",
                   { documentNumber }
                 )}`}
@@ -354,7 +354,7 @@ const CheckYourInformation = () => {
                   lowerCase(t("sdCheckYourInformationApprovalNumber", { ns: "sdCheckYourInformation" }))
                 }
                 className="govuk-link"
-                href={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-approval?nextUri=${route(
+                href={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details?nextUri=${route(
                   "/create-non-manipulation-document/:documentNumber/check-your-information",
                   { documentNumber }
                 )}`}
@@ -380,7 +380,7 @@ const CheckYourInformation = () => {
                     t("sdCheckYourInformationProductStorage", { ns: "sdCheckYourInformation" })
                   }
                   className="govuk-link"
-                  href={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-approval?nextUri=${route(
+                  href={`/create-non-manipulation-document/${documentNumber}/add-storage-facility-details?nextUri=${route(
                     "/create-non-manipulation-document/:documentNumber/check-your-information",
                     { documentNumber }
                   )}`}

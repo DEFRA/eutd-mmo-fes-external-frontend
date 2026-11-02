@@ -12,9 +12,11 @@ import { ExporterPostcodeLookUp } from "./exporterPostcodeLookUp";
 type WhatExportersAddressProps = {
   journey: Journey;
   title: string;
+  backUrl?: string;
+  postcodeHintText?: string;
 };
 
-export const WhatExportersAddress = ({ title, journey }: WhatExportersAddressProps) => {
+export const WhatExportersAddress = ({ title, journey, backUrl, postcodeHintText }: WhatExportersAddressProps) => {
   const {
     documentNumber,
     countries,
@@ -75,7 +77,14 @@ export const WhatExportersAddress = ({ title, journey }: WhatExportersAddressPro
           />
         );
       default:
-        return <ExporterPostcodeLookUp postcode={postcode} errors={errors} csrf={actionCsrf ?? csrf} />;
+        return (
+          <ExporterPostcodeLookUp
+            postcode={postcode}
+            errors={errors}
+            csrf={actionCsrf ?? csrf}
+            postcodeHintText={postcodeHintText}
+          />
+        );
     }
   };
 
@@ -86,16 +95,16 @@ export const WhatExportersAddress = ({ title, journey }: WhatExportersAddressPro
   };
 
   return (
-    <Main>
+    <Main backUrl={backUrl}>
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorTransformedMessages(errorsTransformed)} />}
       <div className="govuk-grid-row">
-        <div className="govuk-grid-column-full">
+        <div className="govuk-grid-column-two-thirds">
           <Title className="govuk-!-margin-bottom-6" title={title} />
         </div>
       </div>
       {renderStepComponent()}
       <div className="govuk-grid-row">
-        <div className="govuk-grid-column-full">
+        <div className="govuk-grid-column-two-thirds">
           <BackToProgressLink progressUri={progressRoutes[journey]} documentNumber={documentNumber} />
         </div>
       </div>

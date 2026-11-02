@@ -6,5 +6,6 @@
   "psAddProcessingPlantAddressDetailsAnAddressMustBeAddedForThisProcessingPlant": "Rhaid rhoi cyfeiriad ar gyfer y safle prosesu hwn.",
   "commonProgressProcessingPlantAddress": "cyfeiriad y safle prosesu",
   "psAddProcessingPlantAddressDetailsAddTheProcessingPlantAddressLinktext": "Ychwanegwch gyfeiriad y safle prosesu",
-  "psProcessingPlantAddressWhatIsProcessingPlantAddress": "Beth yw cyfeiriad y safle prosesu?"
+  "psProcessingPlantAddressWhatIsProcessingPlantAddress": "Beth yw cyfeiriad y safle prosesu?",
+  "psProcessingPlantAddressPostcodeHint": "Os na allwch ddod o hyd i'r cyfeiriad, dewiswch 'Nodi cyfeiriad y safle â llaw'. Dim ond cyfeiriad yn y DU y gallwch ei nodi."
 }

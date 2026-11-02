@@ -32,6 +32,7 @@ import storageDocumentDashboardHandler from "./storageDocumentDashboardHandler";
 import addConsignmentDetailsHandler from "./addConsignmentDetailsHandler";
 import addProcessingPlantDetailsHandler from "./addProcessingPlantDetailsHandler";
 import addProcessingPlantAddressHandler from "./addProcessingPlantAddressHandler";
+import addProcessingPlantHandler from "./addProcessingPlantHandler";
 import whatStorageFacilityAddressHandler from "./whatStorageFacilityAddressHandler";
 
 import dashboardHandler from "./dashboardHandler";
@@ -53,6 +54,7 @@ import addProductToConsignementHandler from "./addProductToConsignementHandler";
 import loginHandler from "./loginHandler";
 import transportDocumentsHandler from "./transportDocumentsHandler";
 import addStorageApprovalHandler from "./addStorageApprovalHandler";
+import whichStorageFacilityHandler from "./whichStorageFacilityHandler";
 import departureSummaryHandlerHandler from "./departureSummaryHandler";
 import removeProductHandler from "./removeProductHandler";
 import euDataIntegrationHandler from "./euDataIntegrationHandler";
@@ -92,6 +94,7 @@ const rootTestHandler: ITestHandler = {
   ...storageDocumentDashboardHandler,
   ...addConsignmentDetailsHandler,
   ...addProcessingPlantDetailsHandler,
+  ...addProcessingPlantHandler,
   ...addProcessingPlantAddressHandler,
   ...addPSHealthCertificateHandler,
   ...dashboardHandler,
@@ -105,6 +108,7 @@ const rootTestHandler: ITestHandler = {
   ...storageDocumentCreatedHandler,
   ...addStorageFacilityHandler,
   ...addStorageApprovalHandler,
+  ...whichStorageFacilityHandler,
   ...whatStorageFacilityAddressHandler,
   ...addLandingsHandler,
   ...addProductToConsignementHandler,

@@ -24,7 +24,7 @@ type howDoesTransportTakesPlaceInTheUkFormProps = {
     | Page.HowDoesTheExportLeaveTheUk
     | Page.StorageDocumentHowDoesTheExportLeaveTheUk;
   backUrl:
-    | "/create-non-manipulation-document/:documentNumber/add-storage-facility-approval"
+    | "/create-non-manipulation-document/:documentNumber/add-storage-facility-details"
     | "/create-non-manipulation-document/:documentNumber/add-product-to-this-consignment"
     | "/create-non-manipulation-document/:documentNumber/you-have-added-a-product";
   progressUri: string;

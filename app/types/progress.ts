@@ -54,7 +54,6 @@ export interface ICatchCertificateProgressSteps extends IBaseProgressSteps {
 export interface IProcessingStatementProgressSteps extends IBaseProgressSteps {
   processedProductDetails: ProgressStatus;
   processingPlant: ProgressStatus;
-  processingPlantAddress: ProgressStatus;
   exportHealthCertificate: ProgressStatus;
   exportDestination: ProgressStatus;
 }
@@ -82,4 +81,5 @@ export interface ProgressLoaderProps {
   transportSummary?: string | null;
   products?: ProcessingStatementProduct[];
   catches?: StorageDocumentCatch[];
+  isNonJs?: boolean;
 }

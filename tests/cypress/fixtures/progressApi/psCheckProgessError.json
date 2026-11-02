@@ -3,6 +3,5 @@
   "exportDestination": "error.exportDestination.incomplete",
   "exportHealthCertificate": "error.exportHealthCertificate.incomplete",
   "exporter": "error.exporter.incomplete",
-  "processingPlant": "error.processingPlant.incomplete",
-  "processingPlantAddress": "error.processingPlantAddress.incomplete"
+  "processingPlant": "error.processingPlant.incomplete"
 }

@@ -116,9 +116,9 @@ const getNextLinkHref = (documentNumber: string, productId: string, nextLink: nu
   `/create-processing-statement/${documentNumber}/add-catch-details/${productId}&pageNo=${nextLink}`;
 const getDefaultSelectedSpeciesCode = (speciesCode: string) => speciesCode ?? "";
 
-// Helper function to determine if issuing country field should be shown
-const shouldShowIssuingCountry = (isHydrated: boolean, currentCatchCertificateType: string): boolean =>
-  !isHydrated || currentCatchCertificateType === "non_uk";
+// Hidden once JS can toggle it; without JS it stays visible so the field remains completable.
+const isIssuingCountryHiddenWhenJs = (currentCatchCertificateType: string): boolean =>
+  currentCatchCertificateType !== "non_uk";
 
 // Helper function to get error message for a field
 const getErrorMessage = (errors: any, fieldKey: string, t: any): string =>
@@ -269,7 +269,7 @@ const IssuingCountryField: React.FC<{
       searchHandler={(query, opts) => (opts as string[]).filter((o) => o.toLowerCase().includes(query.toLowerCase()))}
       onSelected={(country) => setSelectedIssuingCountry(country)}
       optionsId="issuing-country-option"
-      containerClassName={classNames("govuk-form-group", {
+      containerClassName={classNames("govuk-form-group app-autocomplete", {
         "govuk-form-group--error": hasError(errors, fieldKey),
       })}
       selectProps={{
@@ -343,7 +343,7 @@ const SpeciesAutocompleteField: React.FC<{
       labelText={t("speciesNameText", { ns: "psAddCatchDetails" })}
       hintText={t("speciesNameHintText", { ns: "psAddCatchDetails" })}
       minCharsBeforeSearch={2}
-      containerClassName={classNames("govuk-form-group", {
+      containerClassName={classNames("govuk-form-group app-autocomplete", {
         "govuk-form-group--error": hasError(errors, fieldKey),
       })}
       selectProps={{
@@ -760,7 +760,12 @@ const AddCatchDetailsIndex = () => {
                 handleCatchCertificateTypeChange={handleCatchCertificateTypeChange}
                 submittedCatchCertificateType={submittedFormData.catchCertificateType}
               />
-              {shouldShowIssuingCountry(isHydrated, currentCatchCertificateType) && (
+              <div
+                data-testid="issuing-country-wrapper"
+                className={classNames({
+                  "app-hide-when-js": isIssuingCountryHiddenWhenJs(currentCatchCertificateType),
+                })}
+              >
                 <IssuingCountryField
                   catchIndex={catchIndex}
                   isReset={isReset}
@@ -772,7 +777,7 @@ const AddCatchDetailsIndex = () => {
                   setSelectedIssuingCountry={setSelectedIssuingCountry}
                   submittedIssuingCountry={submittedFormData.issuingCountry}
                 />
-              )}
+              </div>
               <FormInput
                 containerClassName="govuk-form-group"
                 label={t("psCatchCertificate", { ns: "psAddCatchDetails" })}

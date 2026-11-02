@@ -4,10 +4,9 @@
     "exporter": "COMPLETE",
     "processedProductDetails": "COMPLETE",
     "processingPlant": "COMPLETE",
-    "processingPlantAddress": "COMPLETE",
     "exportHealthCertificate": "COMPLETE",
     "exportDestination": "COMPLETE"
   },
-  "requiredSections": 6,
-  "completedSections": 6
+  "requiredSections": 5,
+  "completedSections": 5
 }
