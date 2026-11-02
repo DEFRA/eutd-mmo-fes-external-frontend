@@ -11,7 +11,6 @@ import {
   HighSeasAreasDetails,
   RfmoSelector,
   FaoAreaSelector,
-  ImportantNotice,
   AddLandingsVesselHelpContent,
 } from "~/components";
 import { route } from "routes-gen";
@@ -435,7 +434,6 @@ const AddLandings = () => {
             </ul>
           </div>
           <Title title={t("ccAddLandingHeader")} />
-          <ImportantNotice messageKey="commonAddTripDetailsWarningContent" />
           <SecureForm method="post" key={renderCounter} csrf={csrf}>
             {isEditing && <input type="hidden" name="landingId" defaultValue={landingId} />}
             {isEditing && <input type="hidden" name="existingLandingWeight" defaultValue={selectedWeight} />}
