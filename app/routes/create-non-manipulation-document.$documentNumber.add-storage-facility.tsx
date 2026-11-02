@@ -58,6 +58,11 @@ const keepStorageAutocompleteFocusedOnOptionMouseDown = (event: React.MouseEvent
   }
 };
 
+const getSavedManualFacilityLabel = (storageDocument: StorageDocument): string =>
+  isEmpty(storageDocument.facilityName)
+    ? storageDocument.facilityAddressOne ?? ""
+    : `${storageDocument.facilityName} (${storageDocument.facilityApprovalNumber ?? ""})`.trim();
+
 const getArrivalBackUrl = (request: Request, documentNumber: string | undefined, storageDocument: StorageDocument) => {
   const url = new URL(request.url);
   const arrivalVehicleParam = url.searchParams.get("arrivalVehicle");
@@ -142,11 +147,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       postcode: address.facilityPostcode ?? "",
     };
   } else if (hasManualAddress) {
-    savedFacilityOption = isEmpty(sd.facilityName)
-      ? sd.facilityAddressOne
-      : `${sd.facilityName} (${sd.facilityApprovalNumber ?? ""})`.trim();
+    savedFacilityOption = getSavedManualFacilityLabel(sd);
     savedFacilityDetails = {
-      label: savedFacilityOption ?? "",
+      label: savedFacilityOption,
       tradingName: sd.facilityName ?? "",
       approvalNumber: sd.facilityApprovalNumber ?? "",
       addressLine: sd.facilityAddressOne ?? "",
@@ -233,10 +236,14 @@ const handleEmptyStorageFacilitySelection = async (
   submittedFacilityLabel: string
 ): Promise<Response> => {
   const existingDocument = await getStorageDocument(bearerToken, documentNumber);
-  const hasExistingManualAddress =
-    !instanceOfUnauthorised(existingDocument) && !isEmpty((existingDocument as StorageDocument).facilityAddressOne);
+  const isSubmittingSavedManualAddress =
+    !instanceOfUnauthorised(existingDocument) &&
+    !isEmpty((existingDocument as StorageDocument).facilityAddressOne) &&
+    submittedFacilityLabel === getSavedManualFacilityLabel(existingDocument as StorageDocument);
 
-  if (hasExistingManualAddress && submittedFacilityLabel) {
+  // Only the saved manual address itself (e.g. re-submitted from the no-JS select) is accepted;
+  // any other unmatched text must be rejected rather than silently keeping the saved address.
+  if (isSubmittingSavedManualAddress) {
     return redirect(
       isEmpty(nextUri)
         ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", {
