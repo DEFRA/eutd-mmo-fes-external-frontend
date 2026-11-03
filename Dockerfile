@@ -1,6 +1,6 @@
 # This assumes that the parent image has been built locally using production and development build configuration as defra-node
 # and defra-node-development tagged with a version.
-ARG DEFRA_BASE_IMAGE_TAG=latest-24
+ARG DEFRA_BASE_IMAGE_TAG=latest-26
 FROM defradigital/node-development:$DEFRA_BASE_IMAGE_TAG AS base
 
 # We have production dependencies requiring node-gyp builds which don't
