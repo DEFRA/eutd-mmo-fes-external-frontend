@@ -8,6 +8,7 @@ describe("Add product to this consignment  page", () => {
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
   });
 
   it("should show Remove and Add Another buttons correctly based on selection length", () => {
@@ -119,6 +120,7 @@ describe("Add product to this consignment page: comprehensive coverage tests", (
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("#add-supporting-doc-button").should("be.visible");
     cy.get('input[id^="catches-0-supportingDocuments-"]')
@@ -143,6 +145,7 @@ describe("Add product to this consignment page: Welsh validation", () => {
       testCaseId: TestCaseId.SDAddProductConsignmentDataSpeicesError,
     };
     cy.visit(pageUrl, { qs: { ...testParams, lng: "cy" } });
+    cy.waitForHydration();
 
     cy.get("label[for='catches-0-product']")
       .contains("Cod neu enw rhywogaeth y Sefydliad Bwyd ac Amaethyddiaeth (FAO)")
@@ -159,6 +162,7 @@ describe("Add product to this consignment: entry document type question", () => 
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Question is visible with non-UK selected (fixture default)
     cy.contains("Which entry document did you use?").should("be.visible");
@@ -173,6 +177,7 @@ describe("Add product to this consignment: entry document type question", () => 
       testCaseId: TestCaseId.SDAddProductConsignmentWithEntryDocumentType,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get(`#catches-0-entryDocumentType`).should("be.checked");
     cy.get(`input[name="entryDocumentType"][value="processingStatement"]`).should("not.be.checked");
@@ -184,6 +189,7 @@ describe("Add product to this consignment: entry document type question", () => 
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get(`input[name="entryDocumentType"][value="processingStatement"]`).click();
     cy.get(`input[name="entryDocumentType"][value="processingStatement"]`).should("be.checked");
@@ -200,6 +206,7 @@ describe("Add product to this consignment: entry document type question", () => 
       lng: "cy",
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.contains("Pa ddogfen mynediad ddefnyddioch chi?").should("be.visible");
     cy.contains("Tystysgrif dalfa").should("be.visible");
@@ -228,6 +235,7 @@ describe("Add product to this consignment: entry document type question", () => 
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // No option selected initially — entry document field not visible
     cy.get(`input[name="entryDocument"]`).should("not.be.visible");
@@ -238,6 +246,7 @@ describe("Add product to this consignment: entry document type question", () => 
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get(`#catches-0-entryDocumentType`).click();
     cy.get(`#catches-0-entryDocumentType`).should("be.checked");
@@ -249,6 +258,7 @@ describe("Add product to this consignment: entry document type question", () => 
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get(`input[name="entryDocumentType"][value="processingStatement"]`).click();
     cy.get(`input[name="entryDocument"]`).filter(":visible").should("exist");
@@ -259,6 +269,7 @@ describe("Add product to this consignment: entry document type question", () => 
       testCaseId: TestCaseId.SDAddProductConsignmentDataWithEmptySupportingDocuments,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get(`input[name="entryDocumentType"][value="storageNotes"]`).click();
     cy.get(`input[name="entryDocument"]`).filter(":visible").should("exist");
@@ -269,6 +280,7 @@ describe("Add product to this consignment: entry document type question", () => 
       testCaseId: TestCaseId.SDAddProductConsignmentWithEntryDocumentType,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Fixture has entryDocumentType: "catchCertificate" — field should be visible and pre-filled
     cy.get(`input[name="entryDocument"]`).filter(":visible").should("exist");
@@ -284,6 +296,7 @@ describe("Add product to this consignment: entry document type error", () => {
       testCaseId: TestCaseId.SDAddProductConsignmentEntryDocumentTypeRequired,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Select non-UK to make the question visible, then submit
     cy.get(`input[name="docIssuedInUk"][value="non_uk"]`).click();
@@ -300,6 +313,7 @@ describe("Add product to this consignment: entry document type error", () => {
       lng: "cy",
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get(`input[name="docIssuedInUk"][value="non_uk"]`).click();
     cy.get("[data-testid*='save-and-continue']").eq(0).click();
@@ -313,6 +327,7 @@ describe("Add product to this consignment: entry document type error", () => {
       testCaseId: TestCaseId.SDAddProductConsignmentEntryDocumentTypeRequired,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Question is always visible — but the error element should not exist without submitting
     cy.get(`input[name="docIssuedInUk"][value="uk"]`).click();

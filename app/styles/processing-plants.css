@@ -4,8 +4,3 @@
   border: 1px solid #b1b4b6;
   background-color: #fff;
 }
-
-/* Hides the SSR no-JS fallback the instant data-js is set (pre-paint), ahead of React's slower hydration flip. */
-[data-js="enabled"] .app-processing-plant-nonjs-only {
-  display: none;
-}

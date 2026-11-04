@@ -104,6 +104,7 @@ describe("PS: add processing plant - shared establishment search", () => {
 describe("PS: add processing plant - autocomplete accessibility and country mapping", () => {
   it("keeps ARIA references valid while the results list is closed and open", () => {
     cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSAddProcessingPlantSaveAsDraft } });
+    cy.waitForHydration();
 
     cy.get("#processingPlant").should(($input) => {
       expect($input).to.have.attr("aria-expanded", "false");
@@ -128,6 +129,7 @@ describe("PS: add processing plant - autocomplete accessibility and country mapp
 
   it("stores the selected plant country name rather than an object", () => {
     cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSAddProcessingPlantSaveAsDraft } });
+    cy.waitForHydration();
 
     cy.get("#processingPlant").type("Coastal");
     cy.get("#processingPlant__listbox [role='option']").contains("Coastal Fish Exports Ltd").click();
@@ -140,6 +142,7 @@ describe("PS: add processing plant - save and continue button", () => {
     cy.visit(pageUrl, {
       qs: { testCaseId: TestCaseId.PSAddProcessingPlantWithSavedSelectionManualAddress },
     });
+    cy.waitForHydration();
 
     cy.get("[data-testid='change-processing-plant']").click();
     cy.get("input#processingPlant").should("have.value", "");
@@ -156,6 +159,7 @@ describe("PS: add processing plant - save and continue button", () => {
     cy.visit(pageUrl, {
       qs: { testCaseId: TestCaseId.PSAddProcessingPlantWithSavedSelectionManualAddress },
     });
+    cy.waitForHydration();
 
     cy.get("[data-testid='change-processing-plant']").click();
     cy.get("input#processingPlant").should("have.value", "").type("Coastal");

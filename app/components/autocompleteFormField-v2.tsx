@@ -2,6 +2,7 @@ import { Autocomplete, AutoCompleteErrorPosition } from "@capgeminiuk/dcx-react-
 import { useTranslation } from "react-i18next";
 import type { Species } from "~/types";
 import React, { type ReactElement } from "react";
+import classNames from "classnames";
 
 type AutocompleteFormFieldProps = {
   id: string;
@@ -75,6 +76,12 @@ export const AutocompleteFormField = ({
   const { t } = useTranslation("common");
   const [status, setStatus] = React.useState("");
   const listboxId = `${id}__listbox`;
+  // The pre-hydration <select> must be as wide as the input it becomes, so reuse the input's width utility.
+  const inputWidthClass = /govuk-!-width-[\w-]+/.exec(inputProps?.className ?? "")?.[0];
+  const selectClassName =
+    inputWidthClass && !selectProps.selectClassName.includes("govuk-!-width-")
+      ? classNames(selectProps.selectClassName, inputWidthClass)
+      : selectProps.selectClassName;
   const change = (length: number, property: string, position: number) => {
     let newText = "";
     if (length === 0) {
@@ -96,7 +103,7 @@ export const AutocompleteFormField = ({
       name={name}
       options={options}
       notFoundText={notFoundText ?? t("commonNoResultsFound")}
-      containerClassName={containerClassName ?? "govuk-form-group"}
+      containerClassName={classNames(containerClassName ?? "govuk-form-group", "app-autocomplete")}
       errorId={errorId}
       errorPosition={errorPosition ?? AutoCompleteErrorPosition.AFTER_HINT}
       errorMessageText={errorMessageText}
@@ -114,7 +121,7 @@ export const AutocompleteFormField = ({
       hintText={hintText}
       hintClass={hintClass ?? "govuk-hint"}
       hintId={`${id}-hint`}
-      selectProps={selectProps}
+      selectProps={{ ...selectProps, selectClassName }}
       resultId={listboxId}
       inputProps={{
         // Ensure tests and controlled inputs always have a defined value/defaultValue
