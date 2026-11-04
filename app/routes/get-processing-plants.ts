@@ -48,10 +48,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         .join(", "),
       cityName: establishment.address?.cityName ?? "",
       postcode: establishment.address?.postCode?.code ?? "",
-      country:
-        (typeof establishment.country === "string" ? establishment.country : establishment.country?.countryName) ??
-        establishment.address?.country?.countryName ??
-        "",
+      country: establishment.address?.country?.name ?? "",
     }));
 
     return new Response(JSON.stringify(labels), {

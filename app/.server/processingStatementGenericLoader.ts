@@ -11,7 +11,7 @@ import {
   createCSRFToken,
 } from "~/.server";
 
-export const processingStatemenGenericLoader = async (request: Request, params: Params, returnData: string[]) => {
+export const processingStatementGenericLoader = async (request: Request, params: Params, returnData: string[]) => {
   /* istanbul ignore next */
   setApiMock(request.url);
   // Get bearer token for API requests

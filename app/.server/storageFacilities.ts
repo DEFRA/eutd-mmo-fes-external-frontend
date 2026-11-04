@@ -61,10 +61,10 @@ export const mapEstablishmentToFacilityAddress = (
     addressParts.length >= 3 ? addressParts.at(-1) : undefined,
   ].find(Boolean);
   const facilityPostcode = address?.postCode?.code;
-  const facilityCountry = address?.country?.countryName?.trim();
+  const facilityCountry = address?.country?.name?.trim();
   return {
     facilityAddressOne: [address?.line1, address?.line2, address?.line3, address?.line4].filter(Boolean).join(", "),
-    facilityCountry: facilityCountry ? address?.country?.countryName : "United Kingdom",
+    facilityCountry: facilityCountry ? address?.country?.name : "United Kingdom",
     ...(typeof facilityTownCity === "string" ? { facilityTownCity } : {}),
     ...(typeof facilityPostcode === "string" ? { facilityPostcode } : {}),
   };
