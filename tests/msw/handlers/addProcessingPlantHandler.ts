@@ -56,9 +56,6 @@ const processingPlants = [
     approvalNumber: {
       content: "UK/4444/EC",
     },
-    country: {
-      countryName: "United Kingdom",
-    },
     address: {
       line1: "Unit 4",
       line2: "Fish Quay",
@@ -67,7 +64,7 @@ const processingPlants = [
         code: "DN31 1SR",
       },
       country: {
-        countryName: "United Kingdom",
+        name: "United Kingdom",
       },
     },
   },
@@ -172,9 +169,13 @@ const addProcessingPlantHandler: ITestHandler = {
     // same navigation; a once()/fallback split here races between them, so keep this consistent.
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithoutSavedPlant))),
     ...getProcessingPlantsHandlers(processingPlants),
-    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
-      res(ctx.json(processingStatement))
-    ),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), async (req, res, ctx) => {
+      const payload = await req.json();
+      if (payload.plantApprovalNumber === "UK/4444/EC" && payload.plantCountry !== "United Kingdom") {
+        return res(ctx.status(400), ctx.json({ errors: { plantCountry: "Invalid MDM country mapping" } }));
+      }
+      return res(ctx.json(processingStatement));
+    }),
   ],
   [TestCaseId.PSAddProcessingPlantWithSavedSelection]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) =>

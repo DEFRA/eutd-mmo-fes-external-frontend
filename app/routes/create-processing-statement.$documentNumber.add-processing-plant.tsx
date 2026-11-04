@@ -14,7 +14,7 @@ import {
   validateCSRFToken,
   getBearerTokenForRequest,
   updateProcessingStatement,
-  processingStatemenGenericLoader,
+  processingStatementGenericLoader,
   searchEstablishments,
   formatEstablishmentLabel,
 } from "~/.server";
@@ -118,7 +118,7 @@ const saveDraftPlantSelection = async (
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const genericLoaderResponse = await processingStatemenGenericLoader(request, params, [
+  const genericLoaderResponse = await processingStatementGenericLoader(request, params, [
     "plantName",
     "plantApprovalNumber",
     "plantAddressOne",
@@ -189,10 +189,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       .join(", "),
     cityName: establishment.address?.cityName ?? "",
     postcode: establishment.address?.postCode?.code ?? "",
-    country:
-      (typeof establishment.country === "string" ? establishment.country : establishment.country?.countryName) ??
-      establishment.address?.country?.countryName ??
-      "",
+    country: establishment.address?.country?.name ?? "",
   }));
 
   // The saved plant may fall outside the default search page - add it so the non-JS
@@ -265,7 +262,6 @@ export const action: ActionFunction = async ({ request, params }) => {
     plantAddressOne: (form.get("plantAddressOne") as string) ?? "",
     plantTownCity: (form.get("plantTownCity") as string) ?? "",
     plantCounty: (form.get("plantCounty") as string) ?? "",
-    plantCityName: (form.get("plantCityName") as string) ?? "",
     plantPostcode: (form.get("plantPostcode") as string) ?? "",
     plantCountry: (form.get("plantCountry") as string) ?? "",
   };
@@ -292,9 +288,8 @@ export const action: ActionFunction = async ({ request, params }) => {
         .join(", "),
       plantTownCity: establishment?.address?.cityName ?? "",
       plantCounty: "",
-      plantCityName: "",
       plantPostcode: establishment?.address?.postCode?.code ?? "",
-      plantCountry: establishment?.address?.country?.countryName ?? "",
+      plantCountry: establishment?.address?.country?.name ?? "",
     };
   }
 
