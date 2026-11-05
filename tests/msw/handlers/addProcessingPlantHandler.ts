@@ -52,6 +52,25 @@ const processingPlants = [
     },
   },
   {
+    id: "fss-ad-042",
+    country: "Scotland",
+    tradingName: "Bakkafrost Scotland Limited",
+    approvalNumber: {
+      content: "AD 042",
+    },
+    address: {
+      line1: "Ardkinglas",
+      line2: "Cairndow",
+      line3: "Argyll",
+      postCode: {
+        code: "PA26 8BH",
+      },
+      country: {
+        name: "United Kingdom",
+      },
+    },
+  },
+  {
     tradingName: "Coastal Fish Exports Ltd",
     approvalNumber: {
       content: "UK/4444/EC",
@@ -173,6 +192,12 @@ const addProcessingPlantHandler: ITestHandler = {
       const payload = await req.json();
       if (payload.plantApprovalNumber === "UK/4444/EC" && payload.plantCountry !== "United Kingdom") {
         return res(ctx.status(400), ctx.json({ errors: { plantCountry: "Invalid MDM country mapping" } }));
+      }
+      if (
+        payload.plantApprovalNumber === "AD 042" &&
+        (payload.plantAddressOne !== "Ardkinglas, Cairndow" || payload.plantTownCity !== "Argyll")
+      ) {
+        return res(ctx.status(400), ctx.json({ errors: { plantTownCity: "Invalid MDM address mapping" } }));
       }
       return res(ctx.json(processingStatement));
     }),
