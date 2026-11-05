@@ -9,7 +9,7 @@ import { displayErrorMessagesInOrder } from "~/helpers";
 import {
   getBearerTokenForRequest,
   updateProcessingStatement,
-  processingStatemenGenericLoader,
+  processingStatementGenericLoader,
   validateCSRFToken,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
@@ -99,7 +99,7 @@ const saveDraftPlantData = async (
 };
 
 export const loader: LoaderFunction = async ({ request, params }) =>
-  await processingStatemenGenericLoader(request, params, [
+  await processingStatementGenericLoader(request, params, [
     "plantName",
     "plantApprovalNumber",
     "personResponsibleForConsignment",
