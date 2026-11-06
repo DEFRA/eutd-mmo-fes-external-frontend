@@ -22,6 +22,14 @@ declare global {
        * @example cy.waitForUiUpdate(500)
        */
       waitForUiUpdate(timeout?: number): Chainable<void>;
+
+      /**
+       * Wait until React has hydrated the page (the <html> element gets data-hydrated="true").
+       * Call after cy.visit and before interacting with controls that only exist once hydrated.
+       * Not for pages rendered with disableScripts, which never hydrate.
+       * @example cy.visit(url); cy.waitForHydration();
+       */
+      waitForHydration(): Chainable<void>;
     }
   }
 }

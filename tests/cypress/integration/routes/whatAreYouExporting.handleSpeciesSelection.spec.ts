@@ -84,6 +84,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
   });
 
   it("should set the selected species value correctly", () => {
@@ -191,6 +192,7 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     waitForPage(15000);
   });
 
@@ -215,6 +217,7 @@ describe("WCAG SC 3.1.2 - lang='en' on English-language select options (hydrated
       lng: "cy",
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     waitForPage(15000);
 
     cy.get("[data-testid*='edit-button']").eq(0).click();
@@ -261,6 +264,7 @@ describe("What are you exporting - Autocomplete aria-controls accessibility (FI0
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     // Wait for DCX hydration re-mount to fully complete before each test.
     // The hydration failure → full client re-render is a one-time event; once
     // input#species is enabled the component tree is stable for the rest of the test.
@@ -294,6 +298,7 @@ describe("WCAG SC 3.1.2 - lang='en' on English-language select options (hydrated
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("input#species", { timeout: 15000 }).should("not.be.disabled");
 
     cy.get("[data-testid*='edit-button']").eq(0).click();

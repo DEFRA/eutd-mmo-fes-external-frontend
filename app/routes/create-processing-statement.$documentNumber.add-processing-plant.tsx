@@ -488,12 +488,9 @@ const AddProcessingPlant = () => {
                 labelText={t("psAddProcessingPlantLabel")}
                 labelClassName="govuk-label govuk-!-font-weight-bold"
                 hintText={t("psAddProcessingPlantHint")}
-                containerClassName={classNames(
-                  !isHydrated ? "govuk-form-group app-processing-plant-nonjs-only" : "govuk-form-group",
-                  {
-                    "govuk-form-group--error": errors?.processingPlant,
-                  }
-                )}
+                containerClassName={classNames("govuk-form-group", {
+                  "govuk-form-group--error": errors?.processingPlant,
+                })}
                 selectProps={{
                   selectClassName: "govuk-select govuk-!-width-full",
                   nullOption: t("psAddProcessingPlantSelectPlaceholder"),
