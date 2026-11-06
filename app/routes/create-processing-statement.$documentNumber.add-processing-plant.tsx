@@ -14,13 +14,14 @@ import {
   validateCSRFToken,
   getBearerTokenForRequest,
   updateProcessingStatement,
-  processingStatemenGenericLoader,
+  processingStatementGenericLoader,
   searchEstablishments,
   formatEstablishmentLabel,
 } from "~/.server";
 import isEmpty from "lodash/isEmpty";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import type { Establishment } from "~/types";
+import { formatEstablishmentAddress } from "~/helpers/establishmentAddress";
 
 type ProcessingPlantSearchResult = {
   label: string;
@@ -118,7 +119,7 @@ const saveDraftPlantSelection = async (
 };
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const genericLoaderResponse = await processingStatemenGenericLoader(request, params, [
+  const genericLoaderResponse = await processingStatementGenericLoader(request, params, [
     "plantName",
     "plantApprovalNumber",
     "plantAddressOne",
@@ -179,20 +180,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     label: formatEstablishmentLabel(establishment),
     tradingName: establishment.tradingName ?? "",
     approvalNumber: establishment.approvalNumber?.content ?? "",
-    addressLine: [
-      establishment.address?.line1,
-      establishment.address?.line2,
-      establishment.address?.line3,
-      establishment.address?.line4,
-    ]
-      .filter(Boolean)
-      .join(", "),
-    cityName: establishment.address?.cityName ?? "",
+    ...formatEstablishmentAddress(establishment.address),
     postcode: establishment.address?.postCode?.code ?? "",
-    country:
-      (typeof establishment.country === "string" ? establishment.country : establishment.country?.countryName) ??
-      establishment.address?.country?.countryName ??
-      "",
+    country: establishment.address?.country?.name ?? "",
   }));
 
   // The saved plant may fall outside the default search page - add it so the non-JS
@@ -265,7 +255,6 @@ export const action: ActionFunction = async ({ request, params }) => {
     plantAddressOne: (form.get("plantAddressOne") as string) ?? "",
     plantTownCity: (form.get("plantTownCity") as string) ?? "",
     plantCounty: (form.get("plantCounty") as string) ?? "",
-    plantCityName: (form.get("plantCityName") as string) ?? "",
     plantPostcode: (form.get("plantPostcode") as string) ?? "",
     plantCountry: (form.get("plantCountry") as string) ?? "",
   };
@@ -279,22 +268,16 @@ export const action: ActionFunction = async ({ request, params }) => {
         candidate.approvalNumber?.content?.trim().toLowerCase() === plantApprovalNumber.trim().toLowerCase()
     );
 
+    const { addressLine, cityName } = formatEstablishmentAddress(establishment?.address);
+
     payload = {
       plantName: establishment?.tradingName ?? plantName,
       plantApprovalNumber,
-      plantAddressOne: [
-        establishment?.address?.line1,
-        establishment?.address?.line2,
-        establishment?.address?.line3,
-        establishment?.address?.line4,
-      ]
-        .filter(Boolean)
-        .join(", "),
-      plantTownCity: establishment?.address?.cityName ?? "",
+      plantAddressOne: addressLine,
+      plantTownCity: cityName,
       plantCounty: "",
-      plantCityName: "",
       plantPostcode: establishment?.address?.postCode?.code ?? "",
-      plantCountry: establishment?.address?.country?.countryName ?? "",
+      plantCountry: establishment?.address?.country?.name ?? "",
     };
   }
 

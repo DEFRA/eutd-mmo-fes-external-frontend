@@ -52,12 +52,28 @@ const processingPlants = [
     },
   },
   {
+    id: "fss-ad-042",
+    country: "Scotland",
+    tradingName: "Bakkafrost Scotland Limited",
+    approvalNumber: {
+      content: "AD 042",
+    },
+    address: {
+      line1: "Ardkinglas",
+      line2: "Cairndow",
+      line3: "Argyll",
+      postCode: {
+        code: "PA26 8BH",
+      },
+      country: {
+        name: "United Kingdom",
+      },
+    },
+  },
+  {
     tradingName: "Coastal Fish Exports Ltd",
     approvalNumber: {
       content: "UK/4444/EC",
-    },
-    country: {
-      countryName: "United Kingdom",
     },
     address: {
       line1: "Unit 4",
@@ -67,7 +83,7 @@ const processingPlants = [
         code: "DN31 1SR",
       },
       country: {
-        countryName: "United Kingdom",
+        name: "United Kingdom",
       },
     },
   },
@@ -172,9 +188,19 @@ const addProcessingPlantHandler: ITestHandler = {
     // same navigation; a once()/fallback split here races between them, so keep this consistent.
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithoutSavedPlant))),
     ...getProcessingPlantsHandlers(processingPlants),
-    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
-      res(ctx.json(processingStatement))
-    ),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), async (req, res, ctx) => {
+      const payload = await req.json();
+      if (payload.plantApprovalNumber === "UK/4444/EC" && payload.plantCountry !== "United Kingdom") {
+        return res(ctx.status(400), ctx.json({ errors: { plantCountry: "Invalid MDM country mapping" } }));
+      }
+      if (
+        payload.plantApprovalNumber === "AD 042" &&
+        (payload.plantAddressOne !== "Ardkinglas, Cairndow" || payload.plantTownCity !== "Argyll")
+      ) {
+        return res(ctx.status(400), ctx.json({ errors: { plantTownCity: "Invalid MDM address mapping" } }));
+      }
+      return res(ctx.json(processingStatement));
+    }),
   ],
   [TestCaseId.PSAddProcessingPlantWithSavedSelection]: () => [
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) =>

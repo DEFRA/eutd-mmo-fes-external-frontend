@@ -99,6 +99,27 @@ describe("PS: add processing plant - shared establishment search", () => {
       ]);
     });
   });
+
+  it("uses the last non-empty address line as the city when cityName is absent", () => {
+    visitPage(TestCaseId.PSAddProcessingPlantContinue);
+
+    cy.request("/get-processing-plants?search=Bakkafrost").then((response) => {
+      expect(response.status).to.equal(200);
+      expect(response.body).to.have.length(1);
+      expect(response.body[0]).to.include({
+        addressLine: "Ardkinglas, Cairndow",
+        cityName: "Argyll",
+      });
+    });
+
+    cy.request("/get-processing-plants?search=Harbour").then((response) => {
+      expect(response.status).to.equal(200);
+      expect(response.body[0]).to.include({
+        addressLine: "Gate 1, Dock Estate, North Pier",
+        cityName: "Shed 8",
+      });
+    });
+  });
 });
 
 describe("PS: add processing plant - autocomplete accessibility and country mapping", () => {
@@ -134,6 +155,34 @@ describe("PS: add processing plant - autocomplete accessibility and country mapp
     cy.get("#processingPlant").type("Coastal");
     cy.get("#processingPlant__listbox [role='option']").contains("Coastal Fish Exports Ltd").click();
     cy.get('input[name="plantCountry"]').should("have.value", "United Kingdom");
+  });
+
+  it("maps the MDM address country in search results", () => {
+    visitPage(TestCaseId.PSAddProcessingPlantContinue);
+
+    cy.request("/get-processing-plants?search=Coastal").then((response) => {
+      expect(response.status).to.equal(200);
+      expect(response.body).to.have.length(1);
+      expect(response.body[0].country).to.equal("United Kingdom");
+    });
+  });
+
+  it("saves the MDM address country without JavaScript", () => {
+    visitPage(TestCaseId.PSAddProcessingPlantContinue, true);
+
+    cy.get("select#processingPlant").select("Coastal Fish Exports Ltd (UK/4444/EC) - DN31 1SR");
+    cy.get("[data-testid='save-and-continue']").click();
+
+    cy.location("pathname").should("eq", `/create-processing-statement/${documentNumber}/add-processing-plant-details`);
+  });
+
+  it("saves a Scottish establishment's final address line as the city without JavaScript", () => {
+    visitPage(TestCaseId.PSAddProcessingPlantContinue, true);
+
+    cy.get("select#processingPlant").select("Bakkafrost Scotland Limited (AD 042) - PA26 8BH");
+    cy.get("[data-testid='save-and-continue']").click();
+
+    cy.location("pathname").should("eq", `/create-processing-statement/${documentNumber}/add-processing-plant-details`);
   });
 });
 
