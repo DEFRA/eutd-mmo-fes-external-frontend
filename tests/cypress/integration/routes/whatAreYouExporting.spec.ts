@@ -1709,13 +1709,16 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
   });
 });
 
-// After the action the loader revalidates and its new key remounts the form, replacing every field. Wait for
-// that revalidation so Cypress is not interacting with elements that are about to be detached.
+// After the action the loader revalidates and its new key remounts the form, replacing every field a moment after
+// the error summary appears. Wait for the replacement so Cypress is not interacting with elements about to be detached.
 const submitDuplicateProduct = () => {
-  cy.intercept("GET", "**/what-are-you-exporting.data*").as("revalidate");
-  cy.get("[data-testid='add-product']").eq(0).click();
-  cy.wait("@revalidate");
-  cy.get("#errorIsland").should("exist");
+  cy.get("select#state").then(($stateBeforeSubmit) => {
+    cy.get("[data-testid='add-product']").eq(0).click();
+    cy.get("#errorIsland").should("exist");
+    cy.get("select#state").should(($state) => {
+      expect($state[0], "state select has been remounted").not.to.equal($stateBeforeSubmit[0]);
+    });
+  });
 };
 
 describe("Duplicate product error - form remains fully interactive", () => {
