@@ -1708,6 +1708,16 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
     });
   });
 });
+
+// After the action the loader revalidates and its new key remounts the form, replacing every field. Wait for
+// that revalidation so Cypress is not interacting with elements that are about to be detached.
+const submitDuplicateProduct = () => {
+  cy.intercept("GET", "**/what-are-you-exporting.data*").as("revalidate");
+  cy.get("[data-testid='add-product']").eq(0).click();
+  cy.wait("@revalidate");
+  cy.get("#errorIsland").should("exist");
+};
+
 describe("Duplicate product error - form remains fully interactive", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
@@ -1726,8 +1736,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should display the duplicate product error inline on the species field", () => {
-    cy.get("[data-testid='add-product']").eq(0).click();
-    cy.get("#errorIsland").should("exist");
+    submitDuplicateProduct();
     cy.contains(/The combination of species, state, presentation and commodity code must be unique/).should(
       "be.visible"
     );
@@ -1740,8 +1749,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
     { fieldSelector: "#species", label: "species autocomplete field" },
   ].forEach(({ fieldSelector, label }) => {
     it(`should keep the ${label} enabled after a duplicate product error`, () => {
-      cy.get("[data-testid='add-product']").eq(0).click();
-      cy.get("#errorIsland").should("exist");
+      submitDuplicateProduct();
       cy.get(fieldSelector).should("exist").and("not.be.disabled");
     });
   });
@@ -1757,22 +1765,19 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should allow the user to re-select a state value after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click();
-    cy.get("#errorIsland").should("exist");
+    submitDuplicateProduct();
 
     cy.get("select#state").should("not.be.disabled").select(0);
   });
 
   it("should allow the user to attempt re-submission after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click();
-    cy.get("#errorIsland").should("exist");
+    submitDuplicateProduct();
 
     cy.get("[data-testid='add-product']").eq(0).should("exist").should("not.be.disabled");
   });
 
   it("should allow the user to cancel after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click();
-    cy.get("#errorIsland").should("exist");
+    submitDuplicateProduct();
 
     cy.get("[data-testid='cancel']").should("exist").should("not.be.disabled").click();
   });
