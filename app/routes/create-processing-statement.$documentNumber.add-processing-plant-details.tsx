@@ -252,7 +252,7 @@ const AddProcessingPlantDetails = () => {
                 )}
                 <FormInput
                   containerClassName="govuk-form-group govuk-!-width-two-thirds"
-                  label={t("psAddProcessingPDApprovalNumber")}
+                  label={t("psAddProcessingPlantSummaryApprovalNumberLabel")}
                   labelClassName="govuk-label govuk-!-font-weight-bold"
                   name="plantApprovalNumber"
                   type="text"
