@@ -29,6 +29,7 @@
   "psProgressProductsConsignment": "Consignment description",
   "psProgressProductsCatchDetails": "Catch details",
   "psProgressProcessingPlantDetails": "Processing plant details",
+  "psProgressProcessingPlantAddress": "Processing plant address",
   "psProgressTransportationExportHealthCertificate": "Export Health certificate",
   "commonProgressTransportationExportDestination": "Export destination",
   "commonProgressNotificationMsgIsNotVoided": "This draft was created by copying document {{c}}. You are reminded that you must not use a processing statememt or data for catches that have already been exported as this is a serious offence and may result in enforcement action being taken.",

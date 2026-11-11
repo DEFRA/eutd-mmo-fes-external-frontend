@@ -233,4 +233,57 @@ describe("PS: add processing plant - save and continue button", () => {
     cy.get(".govuk-error-summary").contains("You must select a processing plant or enter the plant details manually");
     cy.url().should("include", "/add-processing-plant");
   });
+
+  it("shows editable plant name on details after selecting an establishment, then switching to manual entry", () => {
+    visitPage(TestCaseId.PSAddProcessingPlantManualAfterSelection, true);
+
+    cy.get("select#processingPlant").select("Test Fish Plant (UK/1234/EC) - HU1 2AB");
+    cy.get("[data-testid='save-and-continue']").click();
+    cy.location("pathname").should("eq", `/create-processing-statement/${documentNumber}/add-processing-plant-details`);
+
+    cy.get(".govuk-back-link").click();
+    cy.location("pathname").should("eq", `/create-processing-statement/${documentNumber}/add-processing-plant`);
+
+    cy.get("[data-testid='manual-entry-button']").click();
+    cy.location("pathname").should("eq", `/create-processing-statement/${documentNumber}/add-processing-plant-address`);
+    cy.get('[data-testid="goToAddAddress-button"]').click();
+    cy.location("pathname").should(
+      "eq",
+      `/create-processing-statement/${documentNumber}/what-processing-plant-address`
+    );
+    cy.findByText(/^Enter the address manually$/).click();
+    cy.get("#buildingNumber").type("12");
+    cy.get("#streetName").type("Dock Street");
+    cy.get("#townCity").type("Hull");
+    cy.get("#postcode").type("HU1 2AB");
+    cy.get("#country").type("United Kingdom");
+    cy.get("[data-testid=continue]").click();
+
+    cy.get("[data-testid='save-and-continue']").click();
+    cy.location("pathname").should("eq", `/create-processing-statement/${documentNumber}/add-processing-plant-details`);
+    cy.get("#plantName").should("be.visible");
+    cy.contains("label", "Processing plant name").should("be.visible");
+    cy.get(".app-selected-address").should("not.exist");
+  });
+
+  it("shows editable plant name on details when manual entry is chosen immediately", () => {
+    visitPage(TestCaseId.PSAddProcessingPlantManualAfterSelection);
+
+    cy.get("[data-testid='manual-entry-button']").click();
+    cy.location("pathname").should("eq", `/create-processing-statement/${documentNumber}/add-processing-plant-address`);
+
+    cy.findByText(/^Enter the address manually$/).click();
+    cy.get("#buildingNumber").type("22");
+    cy.get("#streetName").type("Quayside Road");
+    cy.get("#townCity").type("Grimsby");
+    cy.get("#postcode").type("DN31 1SR");
+    cy.get("#country").type("United Kingdom");
+    cy.get("[data-testid=continue]").click();
+
+    cy.get("[data-testid='save-and-continue']").click();
+    cy.location("pathname").should("eq", `/create-processing-statement/${documentNumber}/add-processing-plant-details`);
+    cy.get("#plantName").should("be.visible");
+    cy.contains("label", "Processing plant name").should("be.visible");
+    cy.get(".app-selected-address").should("not.exist");
+  });
 });
