@@ -185,7 +185,7 @@ const AddProcessingPlantDetails = () => {
               <legend className="govuk-fieldset__legend govuk-fieldset__legend">
                 <Title title={`${t("psAddProcessingPDAddProcessingPlantDetails")}`} />
               </legend>
-              {isEmpty(plantName) ? (
+              {isEmpty(plantApprovalNumber) ? (
                 <div
                   className={
                     isEmpty(errors?.plantName) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"
