@@ -174,7 +174,7 @@ const UploadFile = () => {
                   label={t("ccUploadFileButton")}
                   //@ts-ignore
                   value="upload"
-                  className="govuk-button"
+                  className="govuk-button app-hide-when-js"
                   data-testid="upload"
                 />
               )}

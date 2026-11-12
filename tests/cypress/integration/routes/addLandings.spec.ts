@@ -19,8 +19,9 @@ const selectFirstNonEmptyOption = (selector: string) => {
 
 const selectFirstGearTypeOption = () => {
   cy.get("body").then(($body) => {
-    if ($body.find("[data-testid='add-gear-category']").length > 0) {
-      cy.get("[data-testid='add-gear-category']").first().click();
+    // The button only exists for users without JavaScript; with JavaScript it is hidden until hydration removes it
+    if ($body.find("[data-testid='add-gear-category']:visible").length > 0) {
+      cy.get("[data-testid='add-gear-category']:visible").first().click();
     }
   });
   cy.document({ timeout: 300 }).its("readyState").should("eq", "complete");

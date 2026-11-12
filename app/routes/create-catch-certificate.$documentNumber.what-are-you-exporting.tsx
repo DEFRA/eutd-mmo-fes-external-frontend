@@ -19,7 +19,7 @@ import type { ErrorResponse, LabelAndValue, Product, SearchState, Species } from
 import { displayErrorMessages, scrollToId } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
 import { ErrorSummary } from "~/components/errorSummary";
-import { useScrollOnPageLoad } from "~/hooks";
+import { useKeepScrollOnTabClick, useScrollOnPageLoad } from "~/hooks";
 import { WhatAreYouExportingAction, WhatAreYouExportingLoader } from "~/models";
 
 type WhatAreYouExportingProps = {
@@ -107,6 +107,8 @@ const WhatAreYouExporting = () => {
   };
 
   useScrollOnPageLoad();
+  const productTabsRef = useRef<HTMLDivElement>(null);
+  useKeepScrollOnTabClick(productTabsRef);
 
   useEffect(() => {
     if (hasErrors) {
@@ -123,28 +125,28 @@ const WhatAreYouExporting = () => {
     <Main backUrl={backUrl}>
       {hasErrors && <ErrorSummary errors={displayErrorMessages(errors)} />}
       <div aria-live="assertive" aria-atomic="true">
-      {isProductAddSuccess && (
-        <NotificationBanner
-          header={t("commonImportant", { ns: "common" })}
-          messages={[
-            `${t("commonProductText", { ns: "common" })} ${isProductAddSuccess} ${t(
-              "ccWhatExportingFromAddtoFavouriteNotification",
-              { ns: "whatAreYouExporting" }
-            )}`,
-          ]}
-        />
-      )}
-      {isProductAddFailure && (
-        <NotificationBanner
-          header={t("commonImportant", { ns: "common" })}
-          messages={[
-            `${t("commonProductText", { ns: "common" })} ${isProductAddFailure} ${t(
-              "ccWhatExportingFromProductExistNotification",
-              { ns: "whatAreYouExporting" }
-            )}`,
-          ]}
-        />
-      )}
+        {isProductAddSuccess && (
+          <NotificationBanner
+            header={t("commonImportant", { ns: "common" })}
+            messages={[
+              `${t("commonProductText", { ns: "common" })} ${isProductAddSuccess} ${t(
+                "ccWhatExportingFromAddtoFavouriteNotification",
+                { ns: "whatAreYouExporting" }
+              )}`,
+            ]}
+          />
+        )}
+        {isProductAddFailure && (
+          <NotificationBanner
+            header={t("commonImportant", { ns: "common" })}
+            messages={[
+              `${t("commonProductText", { ns: "common" })} ${isProductAddFailure} ${t(
+                "ccWhatExportingFromProductExistNotification",
+                { ns: "whatAreYouExporting" }
+              )}`,
+            ]}
+          />
+        )}
       </div>
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
@@ -156,7 +158,7 @@ const WhatAreYouExporting = () => {
             </ul>
           </div>
           <Title title={t("ccAddSpeciesPageHeader")} />
-          <div className="govuk-tabs" data-module="govuk-tabs" id="productTabs">
+          <div className="govuk-tabs" data-module="govuk-tabs" id="productTabs" ref={productTabsRef}>
             <TabGroup
               containerClassName="govuk-tabs"
               className="govuk-tabs__list"

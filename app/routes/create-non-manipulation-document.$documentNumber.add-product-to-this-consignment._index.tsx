@@ -531,11 +531,13 @@ const AddProductIndex = () => {
 
   // Track if we've already done the initial reset to prevent it from running repeatedly
   const hasPerformedInitialReset = useRef(false);
+  const [isInitialResetDone, setIsInitialResetDone] = useState(false);
 
   // Reset to 1 field after hydration if it was initialized with 5 empty fields (non-JS mode)
   // ONLY do this ONCE on initial hydration - use ref to track and prevent repeated resets
   useEffect(() => {
     if (isHydrated && !hasPerformedInitialReset.current && !updatedSupportingDocuments?.length && isEmpty(errors)) {
+      setIsInitialResetDone(true);
       setSupportingDocuments((prev) => {
         const areAllFieldsEmpty = prev.every((doc) => doc === "");
         if (prev.length === maximumEntryDocsAllowed && areAllFieldsEmpty) {
@@ -546,6 +548,15 @@ const AddProductIndex = () => {
       });
     }
   }, [isHydrated, updatedSupportingDocuments, errors, maximumEntryDocsAllowed]);
+
+  // The server renders every empty supporting document row and the effect above collapses them to one once
+  // hydrated. Hide the extra rows up front (JS only) until that has happened so they do not flash and disappear.
+  const collapsesOnHydration =
+    !isInitialResetDone &&
+    isEmpty(errors) &&
+    !updatedSupportingDocuments?.length &&
+    supportingDocuments.length === maximumEntryDocsAllowed &&
+    supportingDocuments.every((doc) => doc === "");
 
   const supportingDocumentsLabel = getSupportingDocumentsLabel(displayOptionalSuffix, t);
   const productDescriptionLabelKey = getProductDescriptionLabelKey();
@@ -719,7 +730,7 @@ const AddProductIndex = () => {
                       visuallyHiddenText={t("commonErrorText", { ns: "errorsText" })}
                     />
                   )}
-                  <div className="govuk-radios">
+                  <div className="govuk-radios app-entry-document-radios">
                     {entryDocumentTypeOptions.map((option, index) => (
                       <React.Fragment key={option.id}>
                         <div className="govuk-radios__item">
@@ -794,7 +805,7 @@ const AddProductIndex = () => {
               </div>
               {!isHydrated && (
                 <FormInput
-                  containerClassName="govuk-form-group govuk-!-margin-top-4"
+                  containerClassName="govuk-form-group govuk-!-margin-top-4 app-hide-when-js"
                   label={t("entryDocument", { ns: "addProductToThisConsignment" })}
                   labelClassName="govuk-label govuk-!-font-weight-bold"
                   name="entryDocument"
@@ -839,6 +850,7 @@ const AddProductIndex = () => {
                   optionsId="issuing-country-option"
                   containerClassName={classNames("govuk-form-group", {
                     "govuk-form-group--error": errors?.[issuingCountryKey]?.message,
+                    "app-hide-when-js": !isNonUkCertificate,
                   })}
                   selectProps={{
                     selectClassName: classNames("govuk-select govuk-!-width-one-half", {
@@ -889,7 +901,9 @@ const AddProductIndex = () => {
                   return (
                     <div
                       key={`supporting-document-${index + 1}`}
-                      className="govuk-button-group govuk-!-margin-bottom-4 supporting-document-row"
+                      className={classNames("govuk-button-group govuk-!-margin-bottom-4 supporting-document-row", {
+                        "app-hide-when-js": collapsesOnHydration && index > 0,
+                      })}
                     >
                       <FormInput
                         containerClassName="govuk-!-width-one-half govuk-!-margin-right-3"
@@ -943,7 +957,7 @@ const AddProductIndex = () => {
                           value={`removeSupportingDoc-${index}`}
                           id={`remove-supporting-doc-button-${index}`}
                           data-testid={`remove-supporting-doc-${index}`}
-                          className="govuk-button govuk-button--secondary govuk-!-margin-left-2"
+                          className="govuk-button govuk-button--secondary govuk-!-margin-left-2 app-hide-when-js"
                           data-module="govuk-button"
                         >
                           {t("commonRemoveButton", { ns: "common" })}
@@ -964,6 +978,16 @@ const AddProductIndex = () => {
                     aria-label={t("commonAddAnotherSupportingDocAriaLabel", { ns: "common" })}
                   />
                 )}
+                {collapsesOnHydration && (
+                  <button
+                    type="button"
+                    aria-hidden="true"
+                    tabIndex={-1}
+                    className="govuk-button govuk-button--secondary govuk-!-margin-top-2 app-show-when-js"
+                  >
+                    {t("commonAddAnotherButtonText", { ns: "common" })}
+                  </button>
+                )}
                 {!isHydrated && supportingDocuments.length < maximumEntryDocsAllowed && (
                   <button
                     type="submit"
@@ -971,7 +995,7 @@ const AddProductIndex = () => {
                     value="addSupportingDoc"
                     id="add-supporting-doc-button"
                     data-testid="add-supporting-doc-button"
-                    className="govuk-button govuk-button--secondary govuk-!-margin-top-2"
+                    className="govuk-button govuk-button--secondary govuk-!-margin-top-2 app-hide-when-js"
                     data-module="govuk-button"
                   >
                     {t("commonAddAnotherButtonText", { ns: "common" })}
@@ -1027,13 +1051,13 @@ const AddProductIndex = () => {
                   containerClassName="govuk-form-group govuk-!-width-full"
                   name="species"
                   type="text"
-                  inputClassName={classNames("govuk-input", {
+                  inputClassName={classNames("govuk-input app-width-one-half-when-js", {
                     "govuk-input--error": hasCatchesSpeciesError,
                   })}
                   inputProps={{
                     defaultValue: getFormValue("species", catchDetails?.product ?? ""),
                     id: productKey,
-                    className: classNames("govuk-input", {
+                    className: classNames("govuk-input app-width-one-half-when-js", {
                       "govuk-input--error": errors?.[productKey]?.message,
                     }),
                   }}
