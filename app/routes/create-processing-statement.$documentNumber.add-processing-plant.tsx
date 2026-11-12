@@ -21,6 +21,7 @@ import {
 import isEmpty from "lodash/isEmpty";
 import { commitSession, getSessionFromRequest } from "~/sessions.server";
 import type { Establishment } from "~/types";
+import { formatEstablishmentAddress } from "~/helpers/establishmentAddress";
 
 type ProcessingPlantSearchResult = {
   label: string;
@@ -179,15 +180,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     label: formatEstablishmentLabel(establishment),
     tradingName: establishment.tradingName ?? "",
     approvalNumber: establishment.approvalNumber?.content ?? "",
-    addressLine: [
-      establishment.address?.line1,
-      establishment.address?.line2,
-      establishment.address?.line3,
-      establishment.address?.line4,
-    ]
-      .filter(Boolean)
-      .join(", "),
-    cityName: establishment.address?.cityName ?? "",
+    ...formatEstablishmentAddress(establishment.address),
     postcode: establishment.address?.postCode?.code ?? "",
     country: establishment.address?.country?.name ?? "",
   }));
@@ -219,6 +212,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const { documentNumber } = params;
   const form = await request.formData();
   const nextUri = form.get("nextUri") as string;
+  const isNonJs = form.get("isNonJs") === "true";
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
@@ -231,6 +225,24 @@ export const action: ActionFunction = async ({ request, params }) => {
   const action = form.get("_action");
 
   if (action === "navigateToManualAddress") {
+    const bearerToken = await getBearerTokenForRequest(request);
+    const clearedPlantData: Record<string, string | null | undefined> = {
+      plantName: null,
+      plantApprovalNumber: null,
+    };
+
+    await updateProcessingStatement(
+      bearerToken,
+      documentNumber,
+      clearedPlantData,
+      "/create-processing-statement/:documentNumber/add-processing-plant",
+      undefined,
+      true,
+      false,
+      undefined,
+      isNonJs
+    );
+
     return redirect(
       route("/create-processing-statement/:documentNumber/add-processing-plant-address", { documentNumber }),
       {
@@ -239,7 +251,6 @@ export const action: ActionFunction = async ({ request, params }) => {
     );
   }
 
-  const isNonJs = form.get("isNonJs") === "true";
   const processingPlant = (form.get("processingPlant") as string) ?? "";
   if (
     action === "saveAndContinue" &&
@@ -275,18 +286,13 @@ export const action: ActionFunction = async ({ request, params }) => {
         candidate.approvalNumber?.content?.trim().toLowerCase() === plantApprovalNumber.trim().toLowerCase()
     );
 
+    const { addressLine, cityName } = formatEstablishmentAddress(establishment?.address);
+
     payload = {
       plantName: establishment?.tradingName ?? plantName,
       plantApprovalNumber,
-      plantAddressOne: [
-        establishment?.address?.line1,
-        establishment?.address?.line2,
-        establishment?.address?.line3,
-        establishment?.address?.line4,
-      ]
-        .filter(Boolean)
-        .join(", "),
-      plantTownCity: establishment?.address?.cityName ?? "",
+      plantAddressOne: addressLine,
+      plantTownCity: cityName,
       plantCounty: "",
       plantPostcode: establishment?.address?.postCode?.code ?? "",
       plantCountry: establishment?.address?.country?.name ?? "",

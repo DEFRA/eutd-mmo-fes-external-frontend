@@ -14,9 +14,10 @@ import {
 } from "~/urls.server";
 let isUnauthorised = false;
 
-// Base fixture ships with a saved plantName; strip it to simulate a free-text/no-match plant
-// that still needs a processing plant name entered on this page.
-const { plantName: _plantName, ...processingStatementWithoutPlantName } = processingStatement;
+// Manual-entry journeys are identified by a missing approval number. Keep plantName to
+// mirror stale data cases while still requiring editable plant name input on this page.
+const { plantApprovalNumber: _plantApprovalNumber, ...processingStatementWithoutPlantApprovalNumber } =
+  processingStatement;
 
 const processingPlantNameErrorResponse = {
   errors: {
@@ -96,7 +97,7 @@ const addProcessingPlantDetailsHandler: ITestHandler = {
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocuments))),
   ],
   [TestCaseId.PSAddProcessingPlantDetailsNoPlantName]: () => [
-    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithoutPlantName))),
+    rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithoutPlantApprovalNumber))),
     rest.post(mockSaveAndValidateDocument("processingStatement"), async (req, res, ctx) => {
       const body = await req.json();
 
@@ -104,7 +105,7 @@ const addProcessingPlantDetailsHandler: ITestHandler = {
         return res(ctx.status(400), ctx.json(processingPlantNameErrorResponse));
       }
 
-      return res(ctx.json({ ...processingStatementWithoutPlantName, ...body }));
+      return res(ctx.json({ ...processingStatementWithoutPlantApprovalNumber, ...body }));
     }),
   ],
 };

@@ -1,11 +1,17 @@
 import { rest } from "msw";
 import { type ITestHandler, TestCaseId } from "~/types";
 import processingStatement from "@/fixtures/processingStatementApi/processingStatement.json";
+import processingStatementNoAddress from "@/fixtures/processingStatementApi/processingStatementNoAddress.json";
+import manualAddressValid from "@/fixtures/referenceDataApi/manualAddressValid.json";
+import addressSearchValid from "@/fixtures/referenceDataApi/addressSearchValid.json";
 import {
   GET_PROCESSING_STATEMENT,
+  mockAddExporterDetails,
   mockApprovedFoodEstablishmentsSearchUrl,
   mockApprovedFoodEstablishmentsTokenUrl,
+  mockFindExporterAddressUrl,
   mockSaveAndValidateDocument,
+  mockValidateExporterAddressUrl,
 } from "~/urls.server";
 
 const processingPlants = [
@@ -49,6 +55,25 @@ const processingPlants = [
       line2: "Dock Estate",
       line3: "North Pier",
       line4: "Shed 8",
+    },
+  },
+  {
+    id: "fss-ad-042",
+    country: "Scotland",
+    tradingName: "Bakkafrost Scotland Limited",
+    approvalNumber: {
+      content: "AD 042",
+    },
+    address: {
+      line1: "Ardkinglas",
+      line2: "Cairndow",
+      line3: "Argyll",
+      postCode: {
+        code: "PA26 8BH",
+      },
+      country: {
+        name: "United Kingdom",
+      },
     },
   },
   {
@@ -174,6 +199,12 @@ const addProcessingPlantHandler: ITestHandler = {
       if (payload.plantApprovalNumber === "UK/4444/EC" && payload.plantCountry !== "United Kingdom") {
         return res(ctx.status(400), ctx.json({ errors: { plantCountry: "Invalid MDM country mapping" } }));
       }
+      if (
+        payload.plantApprovalNumber === "AD 042" &&
+        (payload.plantAddressOne !== "Ardkinglas, Cairndow" || payload.plantTownCity !== "Argyll")
+      ) {
+        return res(ctx.status(400), ctx.json({ errors: { plantTownCity: "Invalid MDM address mapping" } }));
+      }
       return res(ctx.json(processingStatement));
     }),
   ],
@@ -260,6 +291,26 @@ const addProcessingPlantHandler: ITestHandler = {
       return res(ctx.json({ ...processingStatementWithoutSavedPlant, ...body }));
     }),
   ],
+  [TestCaseId.PSAddProcessingPlantManualAfterSelection]: () => {
+    let processingStatementState = { ...processingStatementNoAddress };
+
+    return [
+      rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementState))),
+      rest.get(mockAddExporterDetails, (req, res, ctx) => res(ctx.json(processingStatementState))),
+      rest.get(mockFindExporterAddressUrl, (req, res, ctx) => res(ctx.json(addressSearchValid))),
+      ...getProcessingPlantsHandlers(processingPlants),
+      rest.post(mockValidateExporterAddressUrl, (req, res, ctx) => res(ctx.json(manualAddressValid))),
+      rest.post(mockSaveAndValidateDocument("processingStatement"), async (req, res, ctx) => {
+        const payload = await req.json();
+        processingStatementState = {
+          ...processingStatementState,
+          ...payload,
+        };
+
+        return res(ctx.json(processingStatementState));
+      }),
+    ];
+  },
 };
 
 export default addProcessingPlantHandler;

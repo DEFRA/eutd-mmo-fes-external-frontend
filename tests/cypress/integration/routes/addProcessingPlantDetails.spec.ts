@@ -24,7 +24,7 @@ describe("PS: add processing plant details - rendering", () => {
     cy.get("[data-testid='warning-message']").should("not.exist");
     cy.get("#processingPlant").should("not.exist");
     cy.get("#plantName").should("not.exist");
-    cy.contains("label", "Approval number (if applicable)").should("be.visible");
+    cy.contains("label", "Approval number").should("be.visible");
     cy.contains(
       "This is the establishment's approval number, for example 2093. If the establishment has more than one site, it may have a suffix, for example 4308-0014."
     ).should("be.visible");
