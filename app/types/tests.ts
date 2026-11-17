@@ -148,6 +148,7 @@ export enum TestCaseId {
   PSAddProcessingPlantSaveAsDraft = "psAddProcessingPlantSaveAsDraft",
   PSAddProcessingPlantSaveAsDraftWithErrors = "psAddProcessingPlantSaveAsDraftWithErrors",
   PSAddProcessingPlantMatchedAddressMapped = "psAddProcessingPlantMatchedAddressMapped",
+  PSAddProcessingPlantManualAfterSelection = "psAddProcessingPlantManualAfterSelection",
   PSProgressNonJsPlantRows = "psProgressNonJsPlantRows",
   PSProgressJsPlantRows = "psProgressJsPlantRows",
   PSCheckYourInformationJsPlantAddressNoChange = "psCheckYourInformationJsPlantAddressNoChange",

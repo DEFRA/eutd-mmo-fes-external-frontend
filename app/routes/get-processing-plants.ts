@@ -4,6 +4,7 @@ import type { Establishment } from "~/types";
 import serverLogger from "~/logger.server";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import { getEnv } from "~/env.server";
+import { formatEstablishmentAddress } from "~/helpers/establishmentAddress";
 
 type ProcessingPlantSearchResult = {
   label: string;
@@ -38,15 +39,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       label: formatEstablishmentLabel(establishment),
       tradingName: establishment.tradingName ?? "",
       approvalNumber: establishment.approvalNumber?.content ?? "",
-      addressLine: [
-        establishment.address?.line1,
-        establishment.address?.line2,
-        establishment.address?.line3,
-        establishment.address?.line4,
-      ]
-        .filter(Boolean)
-        .join(", "),
-      cityName: establishment.address?.cityName ?? "",
+      ...formatEstablishmentAddress(establishment.address),
       postcode: establishment.address?.postCode?.code ?? "",
       country: establishment.address?.country?.name ?? "",
     }));

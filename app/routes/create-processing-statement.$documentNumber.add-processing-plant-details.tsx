@@ -185,7 +185,7 @@ const AddProcessingPlantDetails = () => {
               <legend className="govuk-fieldset__legend govuk-fieldset__legend">
                 <Title title={`${t("psAddProcessingPDAddProcessingPlantDetails")}`} />
               </legend>
-              {isEmpty(plantName) ? (
+              {isEmpty(plantApprovalNumber) ? (
                 <div
                   className={
                     isEmpty(errors?.plantName) ? "govuk-form-group" : "govuk-form-group govuk-form-group--error"
@@ -252,7 +252,7 @@ const AddProcessingPlantDetails = () => {
                 )}
                 <FormInput
                   containerClassName="govuk-form-group govuk-!-width-two-thirds"
-                  label={t("psAddProcessingPDApprovalNumber")}
+                  label={t("psAddProcessingPlantSummaryApprovalNumberLabel")}
                   labelClassName="govuk-label govuk-!-font-weight-bold"
                   name="plantApprovalNumber"
                   type="text"
