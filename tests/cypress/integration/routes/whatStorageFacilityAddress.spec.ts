@@ -301,3 +301,59 @@ describe("SD: Entering the address manually starts from a blank form", () => {
     cy.get("#townCity").should("have.value", "Newcastle");
   });
 });
+
+describe("SD: Entering the address manually replaces the saved storage facility", () => {
+  const documentNumber = "GBR-2022-SD-F71D98A30";
+  const checkYourInformationUri = `/create-non-manipulation-document/${documentNumber}/check-your-information`;
+
+  const enterManualAddress = () => {
+    cy.findByText(/^Enter the address manually$/).click();
+
+    // Inputs stay disabled until the page hydrates.
+    cy.get("#buildingNumber").should("not.be.disabled").type("123");
+    cy.get("#streetName").type("Street 1");
+    cy.get("#townCity").type("Test");
+    cy.get("#postcode").type("12345");
+    cy.get("#country").type("Albania");
+
+    cy.get("[data-testid=continue]").click();
+  };
+
+  it("should not keep the previously saved facility once a manual address is entered", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDStorageFacilityAddressReplacesSavedFacility,
+    };
+
+    cy.visit(sdPageUrl, { qs: { ...testParams } });
+    enterManualAddress();
+
+    cy.url().should("include", "/add-storage-facility");
+    cy.get('[data-testid="selected-facility"]').should("contain.text", "Street 1");
+    cy.get('[data-testid="selected-facility"]').should("not.contain.text", "Test Cold Store");
+    cy.get('[data-testid="selected-facility"]').should("not.contain.text", "UK/5555/CS");
+  });
+
+  it("should carry the check your information return link through the manual address journey", () => {
+    const testParams: ITestParams = {
+      testCaseId: TestCaseId.SDStorageFacilityAddressReplacesSavedFacility,
+    };
+
+    cy.visit(`/create-non-manipulation-document/${documentNumber}/add-storage-facility`, {
+      qs: { ...testParams, nextUri: checkYourInformationUri },
+    });
+    cy.get("[data-testid=manual-entry-button]", { timeout: 20000 }).click();
+
+    cy.url().should("include", "/what-storage-facility-address");
+    cy.url().should("include", `nextUri=${encodeURIComponent(checkYourInformationUri)}`);
+    enterManualAddress();
+
+    cy.url().should("include", "/add-storage-facility");
+    cy.url().should("include", `nextUri=${encodeURIComponent(checkYourInformationUri)}`);
+    cy.get('[data-testid="selected-facility"]').should("contain.text", "Street 1");
+
+    cy.get("[data-testid=save-and-continue]").click();
+
+    cy.url().should("include", "/add-storage-facility-details");
+    cy.url().should("include", `nextUri=${encodeURIComponent(checkYourInformationUri)}`);
+  });
+});
