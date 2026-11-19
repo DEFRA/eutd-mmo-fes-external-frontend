@@ -11,6 +11,31 @@
   display: none;
 }
 
+/* Placeholder for a control React only renders after hydration, so JS users see it from first paint. */
+.app-show-when-js {
+  display: none;
+}
+
+[data-js="enabled"] .app-show-when-js {
+  display: inline-block;
+}
+
+/* The no-JS fallback input is full width; the autocomplete it becomes is half width. */
+[data-js="enabled"] .app-width-one-half-when-js {
+  width: 50%;
+}
+
+/* Hydrated radios have a conditional sibling after each item, so the last item keeps its bottom margin. */
+html[data-js="enabled"]:not([data-hydrated]) .app-entry-document-radios .govuk-radios__item:last-child {
+  margin-bottom: 10px;
+}
+
+/* Before hydration the tab group renders every panel stacked; once hydrated only the active panel
+   is rendered. Hide the inactive panels until then so the layout does not jump. */
+html[data-js="enabled"]:not([data-hydrated]) #productTabs .govuk-tabs__panel ~ .govuk-tabs__panel {
+  display: none;
+}
+
 html,
 body {
   overflow-x: hidden;

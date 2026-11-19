@@ -151,8 +151,10 @@ describe("Upload favourites page: handling data", () => {
 
 describe("Upload favourites page: validating inputs", () => {
   it("should display an error when species is not selected", () => {
+    // The Add species button only exists for users without JavaScript
     const testParams = {
       testCaseId: TestCaseId.ManageFavourites,
+      disableScripts: true,
     };
 
     cy.visit(uploadFavouritesUrl, { qs: { ...testParams } });

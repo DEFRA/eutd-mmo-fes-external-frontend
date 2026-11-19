@@ -154,7 +154,7 @@ export const CommonDatePicker = ({
             <Button
               label={t("commonAddDateText", { ns: "common" })}
               type={BUTTON_TYPE.SUBMIT}
-              className="govuk-button govuk-button--primary govuk-!-margin-top-6 govuk-!-margin-bottom-0"
+              className="govuk-button govuk-button--primary govuk-!-margin-top-6 govuk-!-margin-bottom-0 app-hide-when-js"
               data-module="govuk-button"
               name="_action"
               // @ts-ignore
