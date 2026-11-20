@@ -2,8 +2,10 @@ import { rest } from "msw";
 import { type Establishment, type ITestHandler, TestCaseId } from "~/types";
 import storageDocumentNoFacilities from "@/fixtures/storageDocumentApi/storageDocumentNoFacilities.json";
 import storageDocuments from "@/fixtures/dashboardApi/sdDrafts.json";
+import manualAddressValid from "@/fixtures/exporterApi/manualAddressValid.json";
 import {
   GET_STORAGE_DOCUMENT,
+  MANUAL_EXPORTER_ADDRESS_URL,
   mockApprovedFoodEstablishmentsSearchUrl,
   mockApprovedFoodEstablishmentsTokenUrl,
   mockGetAllDocumentsUrl,
@@ -124,6 +126,10 @@ const getStorageFacilitiesHandlers = (facilities: Establishment[]) => [
   }),
 ];
 
+// Mimics the backend merging the posted fields over the stored document, so a field the client
+// omits (or sends as undefined) keeps its old value.
+let storageDocumentSavedWithFacility: Record<string, unknown> = storageDocumentWithSavedFacility;
+
 const whichStorageFacilityHandler: ITestHandler = {
   [TestCaseId.SDWhichStorageFacilityContinue]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentNoFacilities))),
@@ -147,6 +153,19 @@ const whichStorageFacilityHandler: ITestHandler = {
       res(ctx.json(storageDocumentWithSavedManualAddressNoName))
     ),
   ],
+  [TestCaseId.SDStorageFacilityAddressReplacesSavedFacility]: () => {
+    storageDocumentSavedWithFacility = storageDocumentWithSavedFacility;
+
+    return [
+      rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentSavedWithFacility))),
+      rest.post(MANUAL_EXPORTER_ADDRESS_URL, (req, res, ctx) => res(ctx.json(manualAddressValid))),
+      ...getStorageFacilitiesHandlers(storageFacilities),
+      rest.post(mockSaveAndValidateDocument("storageNotes"), async (req, res, ctx) => {
+        storageDocumentSavedWithFacility = { ...storageDocumentSavedWithFacility, ...(await req.json()) };
+        return res(ctx.json(storageDocumentSavedWithFacility));
+      }),
+    ];
+  },
   [TestCaseId.SDWhichStorageFacilityEmptyContinue]: () => [
     rest.get(GET_STORAGE_DOCUMENT, (req, res, ctx) => res(ctx.json(storageDocumentNoFacilities))),
     ...getStorageFacilitiesHandlers(storageFacilities),
