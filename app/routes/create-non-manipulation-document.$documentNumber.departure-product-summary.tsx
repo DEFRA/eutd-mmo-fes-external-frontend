@@ -11,7 +11,7 @@ import type { IErrorsTransformed, ITransport, IUnauthorised, StorageDocument, St
 import { backUri, displayErrorMessages, scrollToId } from "~/helpers";
 import isEmpty from "lodash/isEmpty";
 import { ErrorSummary } from "~/components/errorSummary";
-import { useKeepScrollOnTabClick, useScrollOnPageLoad } from "~/hooks";
+import { useScrollOnPageLoad } from "~/hooks";
 import setApiMock from "tests/msw/helpers/setApiMock";
 import {
   createCSRFToken,
@@ -374,8 +374,6 @@ const DepartureProductSummary = () => {
   };
 
   useScrollOnPageLoad();
-  const productTabsRef = useRef<HTMLDivElement>(null);
-  useKeepScrollOnTabClick(productTabsRef);
 
   useEffect(() => {
     if (!isEmpty(errors)) {
@@ -408,7 +406,7 @@ const DepartureProductSummary = () => {
               <Trans i18nKey="multiline">{t("sdDepartureProductSummaryInfo")}</Trans>
             </strong>
           </div>
-          <div className="govuk-tabs" data-module="govuk-tabs" id="productTabs" ref={productTabsRef}>
+          <div className="govuk-tabs" data-module="govuk-tabs" id="productTabs">
             <SecureForm method="post" csrf={csrf}>
               <TabGroup
                 containerClassName="govuk-tabs"

@@ -10,7 +10,6 @@ describe("Product favourites page", () => {
       args: ["catchCertificate"],
     };
     cy.visit(productFavouritesUrl, { qs: { ...testParams } });
-    cy.waitForHydration();
   });
 
   it("should render a back link", () => {
@@ -128,7 +127,6 @@ describe("Product favourites page with errors", () => {
       args: ["catchCertificate"],
     };
     cy.visit(productFavouritesUrl, { qs: { ...testParams } });
-    cy.waitForHydration();
   });
 
   it("should show errors click of add product button", () => {
@@ -145,7 +143,6 @@ describe("Product favourites page: handling data", () => {
     };
 
     cy.visit(productFavouritesUrl, { qs: { ...testParams } });
-    cy.waitForHydration();
 
     cy.get("form").should("be.visible");
     cy.get("[name='species']").should("have.value", "");
@@ -154,10 +151,8 @@ describe("Product favourites page: handling data", () => {
 
 describe("Product favourites page: validating inputs", () => {
   it("should display an error when species is not selected", () => {
-    // The Add species button only exists for users without JavaScript
     const testParams = {
       testCaseId: TestCaseId.ManageFavourites,
-      disableScripts: true,
     };
 
     cy.visit(productFavouritesUrl, { qs: { ...testParams } });
@@ -177,7 +172,6 @@ describe("Product favourites page: removing a product", () => {
     };
 
     cy.visit(productFavouritesUrl, { qs: { ...testParams } });
-    cy.waitForHydration();
 
     cy.get("[data-testid='remove-button-PRD465']").click();
     cy.url().should("include", "/product-favourites");
