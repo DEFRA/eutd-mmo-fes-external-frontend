@@ -58,6 +58,21 @@ const keepStorageAutocompleteFocusedOnOptionMouseDown = (event: React.MouseEvent
   }
 };
 
+const withNextUri = (uri: string, nextUri?: string | null): string =>
+  isEmpty(nextUri) ? uri : `${uri}?nextUri=${encodeURIComponent(nextUri as string)}`;
+
+// A facility without a name (manual address) still needs its name collected on the details page,
+// which then returns the user to nextUri.
+const getContinueUri = (documentNumber: string | undefined, nextUri: string, facilityName?: string): string => {
+  const detailsUri = route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", {
+    documentNumber,
+  });
+
+  if (isEmpty(nextUri)) return detailsUri;
+
+  return isEmpty(facilityName) ? withNextUri(detailsUri, nextUri) : nextUri;
+};
+
 const getSavedManualFacilityLabel = (storageDocument: StorageDocument): string =>
   isEmpty(storageDocument.facilityName)
     ? storageDocument.facilityAddressOne ?? ""
@@ -244,13 +259,7 @@ const handleEmptyStorageFacilitySelection = async (
   // Only the saved manual address itself (e.g. re-submitted from the no-JS select) is accepted;
   // any other unmatched text must be rejected rather than silently keeping the saved address.
   if (isSubmittingSavedManualAddress) {
-    return redirect(
-      isEmpty(nextUri)
-        ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", {
-            documentNumber,
-          })
-        : nextUri
-    );
+    return redirect(getContinueUri(documentNumber, nextUri, (existingDocument as StorageDocument).facilityName));
   }
 
   const errors = getTransformedError([{ key: "storageFacility", message: "sdWhichStorageFacilitySelectError" }]);
@@ -272,7 +281,10 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   if (_action === "navigateToManualAddress") {
     return redirect(
-      route("/create-non-manipulation-document/:documentNumber/what-storage-facility-address", { documentNumber })
+      withNextUri(
+        route("/create-non-manipulation-document/:documentNumber/what-storage-facility-address", { documentNumber }),
+        form.get("nextUri") as string
+      )
     );
   }
 
@@ -312,11 +324,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     return errorResponse as Response;
   }
 
-  return redirect(
-    isEmpty(nextUri)
-      ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", { documentNumber })
-      : nextUri
-  );
+  return redirect(getContinueUri(documentNumber, nextUri, facilityName));
 };
 
 const WhichStorageFacility = () => {

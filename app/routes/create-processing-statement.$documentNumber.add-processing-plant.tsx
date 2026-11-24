@@ -212,6 +212,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const { documentNumber } = params;
   const form = await request.formData();
   const nextUri = form.get("nextUri") as string;
+  const isNonJs = form.get("isNonJs") === "true";
   const isValid = await validateCSRFToken(request, form);
   if (!isValid) return redirect("/forbidden");
 
@@ -224,6 +225,24 @@ export const action: ActionFunction = async ({ request, params }) => {
   const action = form.get("_action");
 
   if (action === "navigateToManualAddress") {
+    const bearerToken = await getBearerTokenForRequest(request);
+    const clearedPlantData: Record<string, string | null | undefined> = {
+      plantName: null,
+      plantApprovalNumber: null,
+    };
+
+    await updateProcessingStatement(
+      bearerToken,
+      documentNumber,
+      clearedPlantData,
+      "/create-processing-statement/:documentNumber/add-processing-plant",
+      undefined,
+      true,
+      false,
+      undefined,
+      isNonJs
+    );
+
     return redirect(
       route("/create-processing-statement/:documentNumber/add-processing-plant-address", { documentNumber }),
       {
@@ -232,7 +251,6 @@ export const action: ActionFunction = async ({ request, params }) => {
     );
   }
 
-  const isNonJs = form.get("isNonJs") === "true";
   const processingPlant = (form.get("processingPlant") as string) ?? "";
   if (
     action === "saveAndContinue" &&
