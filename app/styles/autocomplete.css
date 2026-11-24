@@ -38,14 +38,17 @@
 }
 
 /* Before hydration the Autocomplete renders a native <select>; after hydration it becomes
-   .autocomplete__input. Suppressing the native arrow makes the two visually identical so the
-   swap is imperceptible. Gated on data-js so no-JS users keep the select's dropdown affordance. */
-[data-js="enabled"] .app-autocomplete .govuk-select {
+   .autocomplete__input. Suppressing the native arrow and matching the input's full width makes the
+   two visually identical so the swap is imperceptible. Gated on data-js so no-JS users keep the
+   select's dropdown affordance. */
+[data-js="enabled"] .app-autocomplete .govuk-select,
+[data-js="enabled"] #dcx-autocomplete-wrapper .govuk-select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   background-image: none;
   min-width: 0;
+  width: 100%;
   line-height: 1.3157894737;
 }
 
