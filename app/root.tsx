@@ -210,19 +210,20 @@ const Template = ({
       lang={locale}
       dir={i18n.dir()}
       data-js={isHydrated ? "enabled" : undefined}
+      data-hydrated={isHydrated ? "true" : undefined}
       suppressHydrationWarning
     >
       <head>
         <Meta />
         <Links />
       </head>
-      <body className="govuk-template__body govuk-body">
-        {/* Runs before first paint so JS-only styling applies without a visible no-JS-to-JS flip. */}
+      <body className="govuk-template__body govuk-body" suppressHydrationWarning>
+        {/* Runs before first paint so JS-only styling (data-js, GOV.UK js-enabled classes) applies without a visible no-JS-to-JS flip. */}
         {!disableScripts && (
           <script
             nonce={nonce}
             dangerouslySetInnerHTML={{
-              __html: `document.documentElement.setAttribute('data-js','enabled')`,
+              __html: `document.documentElement.setAttribute('data-js','enabled');document.body.classList.add('js-enabled');if('noModule' in HTMLScriptElement.prototype)document.body.classList.add('govuk-frontend-supported')`,
             }}
           />
         )}
@@ -354,10 +355,10 @@ export default function App() {
   useChangeLanguage(data.locale);
 
   useEffect(() => {
-    const htmlScriptPrototype = "noModule" in HTMLScriptElement.prototype ? "govuk-frontend-supported" : "";
-    document.body.className = document.body.className
-      ? `${document.body.className} js-enabled ${htmlScriptPrototype}`
-      : `js-enabled ${htmlScriptPrototype}`;
+    document.body.classList.add("js-enabled");
+    if ("noModule" in HTMLScriptElement.prototype) {
+      document.body.classList.add("govuk-frontend-supported");
+    }
 
     // Dynamic import to avoid SSR issues with govuk-frontend
     import("govuk-frontend")

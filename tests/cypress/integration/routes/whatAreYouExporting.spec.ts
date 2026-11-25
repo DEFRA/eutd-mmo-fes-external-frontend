@@ -73,6 +73,7 @@ describe("What are you exporting page", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
   });
 
   it("should render a back link to add-exporter-details for non-CSV upload", () => {
@@ -114,7 +115,7 @@ describe("What are you exporting page", () => {
 
   it("should submit product with out any errors", () => {
     cy.get("[data-testid*='edit-button'").eq(0).click();
-    cy.get("#species").contains("Albacore (ALB)");
+    cy.get("#species").should("have.value", "Aesop shrimp (AES)");
     cy.get("#state").contains("Fresh");
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("16051000");
@@ -124,7 +125,7 @@ describe("What are you exporting page", () => {
 
   it("should submit product with out any errors without adding to favourites", () => {
     cy.get("[data-testid*='edit-button'").eq(0).click();
-    cy.get("#species").contains("Albacore (ALB)");
+    cy.get("#species").should("have.value", "Aesop shrimp (AES)");
     cy.get("#state").contains("Fresh");
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("16051000");
@@ -137,6 +138,9 @@ describe("What are you exporting page", () => {
     cy.contains("label", "State").should("be.visible");
     cy.contains("label", "Presentation").should("be.visible");
     cy.contains("label", "Commodity Code").should("be.visible");
+
+    // Only the active tab panel is rendered once hydrated, so the favourites label needs its tab opened
+    cy.get("[data-tab-id='favouritesTab']").click();
     cy.contains("label", "Product").should("be.visible");
   });
 
@@ -151,6 +155,7 @@ describe("What are you exporting page", () => {
   });
 
   it("should render mangage favourites link", () => {
+    cy.get("[data-tab-id='favouritesTab']").click();
     cy.contains("a", /^Manage your product favourites$/).should("be.visible");
   });
 
@@ -260,11 +265,12 @@ describe("What are you exporting page when js is enabled", () => {
       testCaseId: TestCaseId.WhatAreYouExportingEditErrorsOnSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
   });
 
   it("should submit product and display any errors", () => {
     cy.get("[data-testid*='edit-button'").eq(0).click();
-    cy.get("#species").contains("Albacore (ALB)");
+    cy.get("#species").should("have.value", "Aesop shrimp (AES)");
     cy.get("#state").contains("Fresh");
     cy.get("#presentation").contains("Whole");
     cy.get("#commodity_code").contains("16051000");
@@ -279,6 +285,7 @@ describe("What are you exporting page direct landing", () => {
       testCaseId: TestCaseId.WhatAreYouExportingDirectLanding,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
   });
   it("should render the  Save and continue button and redirect to direct-landing", () => {
     cy.findByRole("button", { name: "Save and continue" });
@@ -293,6 +300,7 @@ describe("Errors on click of add product button", () => {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
   });
 
   it("should show errors click of add product button", () => {
@@ -313,6 +321,7 @@ describe("Welsh errors on click of add product button", () => {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams, lng: "cy" } });
+    cy.waitForHydration();
   });
 
   it("should show the Welsh species error", () => {
@@ -329,6 +338,7 @@ describe("Errors on click of add product button from favourites", () => {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnSaveFromFavourites,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("[data-tab-id='favouritesTab']").click();
     cy.get("#add-from-favourites").should("be.visible");
     cy.get("#add-from-favourites [data-testid='add-product']").click();
@@ -347,6 +357,7 @@ describe("Errors on click of add product button from favourites", () => {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnSaveFromFavourites,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("[data-tab-id='favouritesTab']").click();
     cy.get("#add-from-favourites").should("be.visible");
     cy.get("#add-from-favourites [data-testid='add-product']").click();
@@ -363,6 +374,7 @@ describe("Save and continue what are you exporting page", () => {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("[data-testid=save-and-continue]").click();
     cy.contains("h2", /^Error:There is a problem$/).should("be.visible");
@@ -376,6 +388,7 @@ describe("Add a product when addedToFavourites is false", () => {
       testCaseId: TestCaseId.WhatAreYouExportingNoFavourite,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("#add-product").click();
     cy.get(".govuk-error-summary").should("not.exist");
@@ -389,6 +402,7 @@ describe("What are you exporting page: page guard", () => {
     };
 
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.url().should("include", "/forbidden");
   });
@@ -398,6 +412,7 @@ describe("What are you exporting page: page guard", () => {
       testCaseId: TestCaseId.WhatAreYouExportingPageGuard,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.url().should("include", landingsUrl);
   });
 });
@@ -408,6 +423,7 @@ describe("What are you exporting page: with 100 products", () => {
       testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("#add-product").should("not.exist");
   });
 
@@ -418,6 +434,7 @@ describe("What are you exporting page: with 100 products", () => {
     cy.visit(`${productsUrl}?productId=GBR-2022-CC-C9B55725C-54573020-44ee-401c-b437-47dc869ef148`, {
       qs: { ...testParams },
     });
+    cy.waitForHydration();
     cy.get("#add-product").should("not.exist");
   });
 
@@ -426,6 +443,7 @@ describe("What are you exporting page: with 100 products", () => {
       testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
     };
     cy.visit(`${productsUrl}?productId=Invalid`, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("#add-product").should("not.exist");
   });
 });
@@ -436,6 +454,7 @@ describe("What are you exporting page: add Product to favourites", () => {
       testCaseId: TestCaseId.WhatAreYouExportingProductAddedToFavourites,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
   });
 
   it("should add product to favourites when add product button is clicked", () => {
@@ -454,6 +473,7 @@ describe("What are you exporting page: editing product with errors", () => {
       testCaseId: TestCaseId.WhatAreYouExportingEditErrorsOnSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("[data-testid*='edit-button'").eq(0).scrollIntoView().should("be.visible").click("topLeft");
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
@@ -477,6 +497,7 @@ describe("What are you exporting page: CSV upload journey back button", () => {
       testCaseId: TestCaseId.WhatAreYouExportingUploadEntry,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.findByRole("link", { name: "Back" }).click();
     cy.url().should("eq", `http://localhost:3000${documentUrl}/upload-file`);
   });
@@ -488,6 +509,7 @@ describe("What are you exporting page: Additional coverage for component renderi
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify no error summary when no errors
     cy.get(".govuk-error-summary").should("not.exist");
@@ -502,6 +524,7 @@ describe("What are you exporting page: Additional coverage for component renderi
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Submit without filling form to trigger errors
     cy.get("[data-testid='add-product']").eq(0).click();
@@ -516,6 +539,7 @@ describe("What are you exporting page: Additional coverage for component renderi
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify products table renders
     cy.get(".govuk-table").should("be.visible");
@@ -531,6 +555,7 @@ describe("What are you exporting page: Additional coverage for component renderi
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify key field is present (indicates data from loader)
     cy.get("form").should("exist");
@@ -545,6 +570,7 @@ describe("What are you exporting page: Additional coverage for component renderi
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Switch to favourites tab
     cy.get("[data-tab-id='favouritesTab']").click();
@@ -562,6 +588,7 @@ describe("What are you exporting page: Additional coverage for component renderi
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify all form fields exist
     cy.get("#species").should("exist");
@@ -577,6 +604,7 @@ describe("What are you exporting page: Additional coverage for component renderi
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("#speciesAndLandingsGuidanceMessage").should("be.visible");
     cy.get("#speciesAndLandingsGuidanceMessage li").should("have.length", 2);
@@ -587,6 +615,7 @@ describe("What are you exporting page: Additional coverage for component renderi
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("input[name='nextUri']").should("exist");
   });
@@ -596,6 +625,7 @@ describe("What are you exporting page: Additional coverage for component renderi
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.contains("label", "Add to product favourites").should("be.visible");
   });
@@ -605,6 +635,7 @@ describe("What are you exporting page: Additional coverage for component renderi
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Products tab content should be visible by default
     cy.get("#add-products").should("be.visible");
@@ -618,6 +649,7 @@ describe("What are you exporting page: Additional coverage for component renderi
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // State dropdown should still render even with action data
     cy.get("#state").should("exist");
@@ -628,6 +660,7 @@ describe("What are you exporting page: Additional coverage for component renderi
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Commodity code dropdown should still render
     cy.get("#commodity_code").should("exist");
@@ -640,6 +673,7 @@ describe("What are you exporting page: Favourites tab with product limit", () =>
       testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("[data-tab-id='favouritesTab']").click();
     cy.get("[data-testid='add-product']").should("not.exist");
   });
@@ -651,6 +685,7 @@ describe("What are you exporting page: Back URL for upload journey", () => {
       testCaseId: TestCaseId.WhatAreYouExportingUploadEntry,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.findByRole("link", { name: "Back" }).should("have.attr", "href").and("include", "/upload-file");
   });
 
@@ -659,6 +694,7 @@ describe("What are you exporting page: Back URL for upload journey", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.findByRole("link", { name: "Back" }).should("have.attr", "href").and("include", "/add-exporter-details");
   });
 });
@@ -669,6 +705,7 @@ describe("What are you exporting page: Tab interaction and handleTab function", 
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Switch to favourites tab first
     cy.get("[data-tab-id='favouritesTab']").click();
@@ -687,6 +724,7 @@ describe("What are you exporting page: Tab interaction and handleTab function", 
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Start on favourites tab
     cy.get("[data-tab-id='favouritesTab']").click();
@@ -707,6 +745,7 @@ describe("What are you exporting page: Error scrolling behavior", () => {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("[data-testid='add-product']").eq(0).click();
 
@@ -719,6 +758,7 @@ describe("What are you exporting page: Error scrolling behavior", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get(".govuk-error-summary").should("not.exist");
   });
@@ -730,6 +770,7 @@ describe("What are you exporting page: State and presentation lookup for non-JS"
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify state dropdown is rendered
     cy.get("#state").should("exist");
@@ -740,6 +781,7 @@ describe("What are you exporting page: State and presentation lookup for non-JS"
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Submit form to trigger action and get action data
     cy.get("[data-testid='add-product']").eq(0).click();
@@ -760,6 +802,7 @@ describe("What are you exporting page: Product display limit checks", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("[data-testid='add-product']").should("be.visible");
   });
@@ -769,6 +812,7 @@ describe("What are you exporting page: Product display limit checks", () => {
       testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("[data-testid='add-product']").should("not.exist");
   });
@@ -778,6 +822,7 @@ describe("What are you exporting page: Product display limit checks", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Checkbox should exist when under limit
     cy.get("#addToFavourites").should("exist");
@@ -793,6 +838,7 @@ describe("What are you exporting page: Selected values from action data", () => 
       testCaseId: TestCaseId.WhatAreYouExportingEditErrorsOnSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("[data-testid*='edit-button']").eq(0).click();
     cy.get("#species").should("have.value", "Aesop shrimp (AES)");
@@ -803,6 +849,7 @@ describe("What are you exporting page: Selected values from action data", () => 
       testCaseId: TestCaseId.WhatAreYouExportingEditErrorsOnSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Edit a product
     cy.get("[data-testid*='edit-button']").eq(0).scrollIntoView().should("be.visible").click("topLeft");
@@ -833,6 +880,7 @@ describe("What are you exporting page: Notification Banners", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify no notification banner is displayed
     cy.get(".govuk-notification-banner").should("not.exist");
@@ -845,6 +893,7 @@ describe("What are you exporting page: Error object transformation", () => {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Submit form to trigger errors
     cy.get("[data-testid='add-product']").eq(0).click();
@@ -859,6 +908,7 @@ describe("What are you exporting page: Error object transformation", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // With no errors, the error summary should not exist
     cy.get(".govuk-error-summary").should("not.exist");
@@ -875,6 +925,7 @@ describe("What are you exporting page: Error object transformation", () => {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("[data-testid='add-product']").eq(0).click();
 
@@ -898,6 +949,7 @@ describe("What are you exporting page: TabRef and handleTab functionality", () =
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Start on favourites tab
     cy.get("[data-tab-id='favouritesTab']").click();
@@ -916,6 +968,7 @@ describe("What are you exporting page: TabRef and handleTab functionality", () =
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Switch to favourites tab
     cy.get("[data-tab-id='favouritesTab']").click();
@@ -933,6 +986,7 @@ describe("What are you exporting page: TabRef and handleTab functionality", () =
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Switch tabs to ensure tabRef is working
     cy.get("[data-tab-id='favouritesTab']").click();
@@ -953,6 +1007,7 @@ describe("What are you exporting page: useEffect error scrolling", () => {
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Trigger validation errors
     cy.get("[data-testid='add-product']").eq(0).click();
@@ -967,6 +1022,7 @@ describe("What are you exporting page: useEffect error scrolling", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // No errors, so errorIsland should not exist
     cy.get("#errorIsland").should("not.exist");
@@ -987,6 +1043,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Hidden input for nextUri should exist (even if undefined/empty)
     cy.get("input[name='nextUri']").should("exist");
@@ -997,6 +1054,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Submit to get action data with stateLookupNonJs
     cy.get("[data-testid='add-product']").eq(0).click();
@@ -1011,6 +1069,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Commodity code field should exist even with empty array
     cy.get("#commodity_code").should("exist");
@@ -1021,6 +1080,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Test that component renders with fallback values
     cy.get("#species").should("exist");
@@ -1037,6 +1097,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
       testCaseId: TestCaseId.WhatAreYouExportingWith100Products,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // displayAddProduct should be false, hiding add button
     cy.get("[data-testid='add-product']").should("not.exist");
@@ -1054,6 +1115,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify state dropdown has options (mapped from stateLookup)
     cy.get("#state").should("exist");
@@ -1065,6 +1127,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Select a species and state to populate presentations
     cy.get("#species").invoke("val", "Albacore (ALB)").trigger("change");
@@ -1079,6 +1142,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Click edit to enable edit mode
     cy.get("[data-testid*='edit-button']").first().click();
@@ -1093,6 +1157,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify all critical props are rendered in the component
     cy.get("#species").should("exist"); // species prop
@@ -1110,6 +1175,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // With no action data, should use loader data fallbacks
     cy.get("#species").should("exist");
@@ -1123,6 +1189,7 @@ describe("What are you exporting page: Edge cases and conditional rendering", ()
       testCaseId: TestCaseId.WhatAreYouExportingErrorsOnProductSave,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("[data-testid='add-product']").eq(0).click();
 
@@ -1138,6 +1205,7 @@ describe("What are you exporting page: useScrollOnPageLoad hook", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Page should load and scroll to top (hook behavior)
     cy.get("h1").should("be.visible");
@@ -1151,6 +1219,7 @@ describe("What are you exporting page: Main component props", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.findByRole("link", { name: "Back" }).should("have.attr", "href").and("include", "/add-exporter-details");
   });
@@ -1160,6 +1229,7 @@ describe("What are you exporting page: Main component props", () => {
       testCaseId: TestCaseId.WhatAreYouExportingUploadEntry,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.findByRole("link", { name: "Back" }).should("have.attr", "href").and("include", "/upload-file");
   });
@@ -1171,6 +1241,7 @@ describe("AddProducts Component: Basic Rendering and Integration", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify all form fields exist
     cy.get("#species").should("exist");
@@ -1187,6 +1258,7 @@ describe("AddProducts Component: Basic Rendering and Integration", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Click edit on existing product
     cy.get("[data-testid*='edit-button']").first().click();
@@ -1206,6 +1278,7 @@ describe("AddProducts Component: Basic Rendering and Integration", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Edit a product
     cy.get("[data-testid*='edit-button']").first().click();
@@ -1226,6 +1299,7 @@ describe("AddProducts Component: Basic Rendering and Integration", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Edit product to populate hidden fields
     cy.get("[data-testid*='edit-button']").first().click();
@@ -1242,6 +1316,7 @@ describe("AddProducts Component: Basic Rendering and Integration", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Check the checkbox
     cy.get("#addToFavourites").check();
@@ -1259,6 +1334,7 @@ describe("AddProducts useEffect hooks: Complete coverage without intercepts", ()
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
   });
 
   describe("useEffect for isReset - Form reset on navigation actions", () => {
@@ -1444,6 +1520,7 @@ describe("handleSpeciesSelection function: Complete coverage", () => {
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
   });
 
   describe("Basic species selection functionality", () => {
@@ -1495,6 +1572,7 @@ describe("AddProducts Component: State holder initialization with nullish values
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     // Fresh page load - all holders should use || [] fallback
     cy.get("#state option").should("have.length", 1);
     cy.get("#presentation option").should("have.length", 1);
@@ -1508,6 +1586,7 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
       testCaseId: TestCaseId.WhatAreYouExporting,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
   });
 
   describe("stateInputProps.defaultValue assignment (line 298)", () => {
@@ -1629,12 +1708,26 @@ describe("AddProducts Component: defaultValue input props - Lines 298-300 covera
     });
   });
 });
+
+// After the action the loader revalidates and its new key remounts the form, replacing every field a moment after
+// the error summary appears. Wait for the replacement so Cypress is not interacting with elements about to be detached.
+const submitDuplicateProduct = () => {
+  cy.get("select#state").then(($stateBeforeSubmit) => {
+    cy.get("[data-testid='add-product']").eq(0).click();
+    cy.get("#errorIsland").should("exist");
+    cy.get("select#state").should(($state) => {
+      expect($state[0], "state select has been remounted").not.to.equal($stateBeforeSubmit[0]);
+    });
+  });
+};
+
 describe("Duplicate product error - form remains fully interactive", () => {
   beforeEach(() => {
     const testParams: ITestParams = {
       testCaseId: TestCaseId.WhatAreYouExportingDuplicateProduct,
     };
     cy.visit(productsUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
   });
 
   it("should display the duplicate product error message in the error summary", () => {
@@ -1646,8 +1739,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should display the duplicate product error inline on the species field", () => {
-    cy.get("[data-testid='add-product']").eq(0).click();
-    cy.get("#errorIsland").should("exist");
+    submitDuplicateProduct();
     cy.contains(/The combination of species, state, presentation and commodity code must be unique/).should(
       "be.visible"
     );
@@ -1660,8 +1752,7 @@ describe("Duplicate product error - form remains fully interactive", () => {
     { fieldSelector: "#species", label: "species autocomplete field" },
   ].forEach(({ fieldSelector, label }) => {
     it(`should keep the ${label} enabled after a duplicate product error`, () => {
-      cy.get("[data-testid='add-product']").eq(0).click();
-      cy.get("#errorIsland").should("exist");
+      submitDuplicateProduct();
       cy.get(fieldSelector).should("exist").and("not.be.disabled");
     });
   });
@@ -1677,22 +1768,19 @@ describe("Duplicate product error - form remains fully interactive", () => {
   });
 
   it("should allow the user to re-select a state value after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click();
-    cy.get("#errorIsland").should("exist");
+    submitDuplicateProduct();
 
     cy.get("select#state").should("not.be.disabled").select(0);
   });
 
   it("should allow the user to attempt re-submission after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click();
-    cy.get("#errorIsland").should("exist");
+    submitDuplicateProduct();
 
     cy.get("[data-testid='add-product']").eq(0).should("exist").should("not.be.disabled");
   });
 
   it("should allow the user to cancel after a duplicate product error", () => {
-    cy.get("[data-testid='add-product']").eq(0).click();
-    cy.get("#errorIsland").should("exist");
+    submitDuplicateProduct();
 
     cy.get("[data-testid='cancel']").should("exist").should("not.be.disabled").click();
   });

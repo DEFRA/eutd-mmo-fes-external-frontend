@@ -33,3 +33,9 @@ Cypress.Commands.add("waitForUiUpdate", (timeout = 0) => {
     cy.wrap(null, { log: false }).then(() => new Cypress.Promise((resolve) => setTimeout(resolve, timeout)));
   }
 });
+
+// Pages render a no-JS fallback (e.g. a <select>) that is visible until React hydrates and swaps it for the JS
+// control. Use this before interacting with a JS-only control so the test does not act on the fallback.
+Cypress.Commands.add("waitForHydration", () => {
+  cy.get("html[data-hydrated='true']", { timeout: 20000 }).should("exist");
+});
