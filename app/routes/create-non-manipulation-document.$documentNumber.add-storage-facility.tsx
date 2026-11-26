@@ -58,6 +58,26 @@ const keepStorageAutocompleteFocusedOnOptionMouseDown = (event: React.MouseEvent
   }
 };
 
+const withNextUri = (uri: string, nextUri?: string | null): string =>
+  isEmpty(nextUri) ? uri : `${uri}?nextUri=${encodeURIComponent(nextUri as string)}`;
+
+// A facility without a name (manual address) still needs its name collected on the details page,
+// which then returns the user to nextUri.
+const getContinueUri = (documentNumber: string | undefined, nextUri: string, facilityName?: string): string => {
+  const detailsUri = route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", {
+    documentNumber,
+  });
+
+  if (isEmpty(nextUri)) return detailsUri;
+
+  return isEmpty(facilityName) ? withNextUri(detailsUri, nextUri) : nextUri;
+};
+
+const getSavedManualFacilityLabel = (storageDocument: StorageDocument): string =>
+  isEmpty(storageDocument.facilityName)
+    ? storageDocument.facilityAddressOne ?? ""
+    : `${storageDocument.facilityName} (${storageDocument.facilityApprovalNumber ?? ""})`.trim();
+
 const getArrivalBackUrl = (request: Request, documentNumber: string | undefined, storageDocument: StorageDocument) => {
   const url = new URL(request.url);
   const arrivalVehicleParam = url.searchParams.get("arrivalVehicle");
@@ -142,11 +162,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       postcode: address.facilityPostcode ?? "",
     };
   } else if (hasManualAddress) {
-    savedFacilityOption = isEmpty(sd.facilityName)
-      ? sd.facilityAddressOne
-      : `${sd.facilityName} (${sd.facilityApprovalNumber ?? ""})`.trim();
+    savedFacilityOption = getSavedManualFacilityLabel(sd);
     savedFacilityDetails = {
-      label: savedFacilityOption ?? "",
+      label: savedFacilityOption,
       tradingName: sd.facilityName ?? "",
       approvalNumber: sd.facilityApprovalNumber ?? "",
       addressLine: sd.facilityAddressOne ?? "",
@@ -233,17 +251,15 @@ const handleEmptyStorageFacilitySelection = async (
   submittedFacilityLabel: string
 ): Promise<Response> => {
   const existingDocument = await getStorageDocument(bearerToken, documentNumber);
-  const hasExistingManualAddress =
-    !instanceOfUnauthorised(existingDocument) && !isEmpty((existingDocument as StorageDocument).facilityAddressOne);
+  const isSubmittingSavedManualAddress =
+    !instanceOfUnauthorised(existingDocument) &&
+    !isEmpty((existingDocument as StorageDocument).facilityAddressOne) &&
+    submittedFacilityLabel === getSavedManualFacilityLabel(existingDocument as StorageDocument);
 
-  if (hasExistingManualAddress && submittedFacilityLabel) {
-    return redirect(
-      isEmpty(nextUri)
-        ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", {
-            documentNumber,
-          })
-        : nextUri
-    );
+  // Only the saved manual address itself (e.g. re-submitted from the no-JS select) is accepted;
+  // any other unmatched text must be rejected rather than silently keeping the saved address.
+  if (isSubmittingSavedManualAddress) {
+    return redirect(getContinueUri(documentNumber, nextUri, (existingDocument as StorageDocument).facilityName));
   }
 
   const errors = getTransformedError([{ key: "storageFacility", message: "sdWhichStorageFacilitySelectError" }]);
@@ -265,7 +281,10 @@ export const action: ActionFunction = async ({ request, params }) => {
 
   if (_action === "navigateToManualAddress") {
     return redirect(
-      route("/create-non-manipulation-document/:documentNumber/what-storage-facility-address", { documentNumber })
+      withNextUri(
+        route("/create-non-manipulation-document/:documentNumber/what-storage-facility-address", { documentNumber }),
+        form.get("nextUri") as string
+      )
     );
   }
 
@@ -305,11 +324,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     return errorResponse as Response;
   }
 
-  return redirect(
-    isEmpty(nextUri)
-      ? route("/create-non-manipulation-document/:documentNumber/add-storage-facility-details", { documentNumber })
-      : nextUri
-  );
+  return redirect(getContinueUri(documentNumber, nextUri, facilityName));
 };
 
 const WhichStorageFacility = () => {

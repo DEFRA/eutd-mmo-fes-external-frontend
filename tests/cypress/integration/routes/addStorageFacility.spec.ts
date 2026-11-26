@@ -183,6 +183,20 @@ describe("SD: which storage facility", () => {
     cy.location("pathname").should("eq", pageUrl);
   });
 
+  it("shows a validation error when an unmatched value is entered after Change instead of redirecting", () => {
+    visitPage(TestCaseId.SDWhichStorageFacilityWithSavedSelection);
+    cy.get('[data-testid="change-storage-facility"]').click();
+    getStorageFacilitySearchInput().type("asfadsfdsfadsf");
+    cy.get('input[name="facilityName"]').should("not.exist");
+    cy.get('[data-testid="save-and-continue"]').click();
+    cy.get(".govuk-error-summary").should(
+      "contain.text",
+      "You must select a storage facility or enter the facility details manually"
+    );
+    getStorageFacilitySearchInput().should("have.value", "asfadsfdsfadsf");
+    cy.location("pathname").should("eq", pageUrl);
+  });
+
   it("allows saving a newly selected facility after Change", () => {
     visitPage(TestCaseId.SDWhichStorageFacilityWithSavedSelection);
     cy.get('[data-testid="change-storage-facility"]').click();

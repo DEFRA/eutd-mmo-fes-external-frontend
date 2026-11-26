@@ -1,5 +1,12 @@
 import * as React from "react";
-import { redirect, useActionData, useLoaderData, type ActionFunction, type LoaderFunction } from "react-router";
+import {
+  redirect,
+  useActionData,
+  useLoaderData,
+  useSearchParams,
+  type ActionFunction,
+  type LoaderFunction,
+} from "react-router";
 
 import isEmpty from "lodash/isEmpty";
 import { useEffect } from "react";
@@ -47,6 +54,14 @@ function matchesSelectedCountry(c: ICountry, selectedCountry: string): boolean {
   );
 }
 
+const addStorageFacilityUri = (documentNumber: string | undefined) =>
+  `/create-non-manipulation-document/${documentNumber}/add-storage-facility`;
+
+// nextUri (e.g. check-your-information) is carried on the query string so it survives each step of the
+// address wizard and can be handed back to add-storage-facility.
+const withNextUri = (uri: string, nextUri?: string | null): string =>
+  isEmpty(nextUri) ? uri : `${uri}?nextUri=${encodeURIComponent(nextUri as string)}`;
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   /* istanbul ignore next */
   setApiMock(request.url);
@@ -65,7 +80,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   // Parallelise countries reference-data with the postcode lookup when a postcode
   // is already in the session — both are independent network calls.
-  const actionUri = `/create-non-manipulation-document/${documentNumber}/what-storage-facility-address`;
+  const actionUri = withNextUri(
+    `/create-non-manipulation-document/${documentNumber}/what-storage-facility-address`,
+    new URL(request.url).searchParams.get("nextUri")
+  );
   const [countries, lookupResponse] = await Promise.all([
     getCountries(),
     isEmpty(postcode) ? Promise.resolve(null as ILookUpAddress | null) : postCodeLookUp(postcode),
@@ -157,11 +175,12 @@ export const action: ActionFunction = async ({ request, params }) => {
   const bearerToken = await getBearerTokenForRequest(request);
   const form = await request.formData();
   const { documentNumber } = params;
+  const nextUri = new URL(request.url).searchParams.get("nextUri");
 
   const buttonClicked = form.get("_action") as ExporterAddressButtonType;
   const session = await getSessionFromRequest(request);
   const formData: StorageFacility = {
-    facilityName: session.get("facilityName"),
+    facilityName: "",
     facilityAddressOne: form.get("selectaddress") as string,
     facilityBuildingNumber: form.get("buildingNumber") as string,
     facilitySubBuildingName: form.get("subBuildingName") as string,
@@ -171,7 +190,6 @@ export const action: ActionFunction = async ({ request, params }) => {
     facilityCountry: form.get("country") as string,
     facilityTownCity: form.get("townCity") as string,
     facilityPostcode: form.get("postcode") as string,
-    facilityArrivalDate: session.get("selectedArrivalDate") as string,
   };
 
   const isValid = await validateCSRFToken(request, form);
@@ -284,7 +302,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     session.unset("postcode");
     const updatedSession = await commitSession(session);
 
-    return redirect(`/create-non-manipulation-document/${documentNumber}/add-storage-facility`, {
+    return redirect(withNextUri(addStorageFacilityUri(documentNumber), nextUri), {
       headers: { "Set-Cookie": updatedSession },
     });
   }
@@ -383,13 +401,16 @@ export const action: ActionFunction = async ({ request, params }) => {
       undefined,
       {
         ...formData,
+        // A manually entered facility replaces the previous one, so its name (blank in formData) and
+        // approval number must not survive; both are collected again on add-storage-facility-details.
+        facilityApprovalNumber: "",
       }
     );
 
     session.unset("currentStep");
     const updatedSession = await commitSession(session);
 
-    return redirect(`/create-non-manipulation-document/${documentNumber}/add-storage-facility`, {
+    return redirect(withNextUri(addStorageFacilityUri(documentNumber), nextUri), {
       headers: { "Set-Cookie": updatedSession },
     });
   }
@@ -421,6 +442,7 @@ const WhatFacilityAddress = () => {
     postcode: "",
   };
   const errorsTransformed = errors as IErrorsTransformed;
+  const [searchParams] = useSearchParams();
 
   const currentStep: ExporterAddressStep = actionStep || loaderStep;
   const postcodeaddresses = loaderPostcode ? loaderPostcodeaddresses : actionPostcodeaddress;
@@ -464,7 +486,7 @@ const WhatFacilityAddress = () => {
   };
 
   return (
-    <Main backUrl={`/create-non-manipulation-document/${documentNumber}/add-storage-facility`}>
+    <Main backUrl={withNextUri(addStorageFacilityUri(documentNumber), searchParams.get("nextUri"))}>
       {!isEmpty(errors) && <ErrorSummary errors={displayErrorTransformedMessages(errorsTransformed)} />}
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">

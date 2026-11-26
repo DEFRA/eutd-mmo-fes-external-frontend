@@ -9,7 +9,8 @@ const port = process.env.PORT ?? 3000;
 
 // Build ID for cache-busting locale JSON files
 // Uses BUILD_ID env var from Docker build, commit SHA, or timestamp as fallback
-const BUILD_ID = process.env.BUILD_ID ?? process.env.GIT_COMMIT ?? Date.now().toString();
+// `||` (not `??`): the Dockerfile defaults BUILD_ID to "", which must fall through to the next source
+const BUILD_ID = process.env.BUILD_ID || process.env.GIT_COMMIT || Date.now().toString();
 const INSTRUMENTED_JS_FILE_PATTERN = /instrumented\/.*\.js$/;
 
 export default defineConfig({

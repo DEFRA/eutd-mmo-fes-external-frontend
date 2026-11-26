@@ -11,7 +11,7 @@ import isEmpty from "lodash/isEmpty";
 import {
   getBearerTokenForRequest,
   updateProcessingStatement,
-  processingStatemenGenericLoader,
+  processingStatementGenericLoader,
   validateCSRFToken,
 } from "~/.server";
 import { displayErrorMessages, getStrOrDefault } from "~/helpers";
@@ -19,7 +19,7 @@ import type { IErrorsTransformed } from "~/types";
 import { useIsHydrated } from "~/hooks/useIsHydrated";
 
 export const loader: LoaderFunction = async ({ request, params }) =>
-  processingStatemenGenericLoader(request, params, ["healthCertificateNumber", "healthCertificateDate"]);
+  processingStatementGenericLoader(request, params, ["healthCertificateNumber", "healthCertificateDate"]);
 
 const handleSaveAsDraft = async (
   bearerToken: string,
