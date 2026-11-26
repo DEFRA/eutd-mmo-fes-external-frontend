@@ -35,6 +35,9 @@ const addConsignmentDetailsHandler: ITestHandler = {
   [TestCaseId.PSAddConsignmentDetailsEditMode]: () => [
     rest.get(SPECIES_URL, (req, res, ctx) => res(ctx.json(species))),
     rest.get(GET_PROCESSING_STATEMENT, (req, res, ctx) => res(ctx.json(processingStatementWithProducts))),
+    rest.post(mockSaveAndValidateDocument("processingStatement"), (req, res, ctx) =>
+      res(ctx.json(processingStatementWithProducts))
+    ),
     rest.get(getProgressUrl("processingStatement"), (req, res, ctx) => res(ctx.json(psProgressIncomplete))),
     rest.get(mockGetAllDocumentsUrl, (req, res, ctx) => res(ctx.json(psDocument))),
     rest.get(mockGetProgress, (req, res, ctx) => res(ctx.json(psProgressIncomplete))),

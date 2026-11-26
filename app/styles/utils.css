@@ -48,3 +48,26 @@ body {
 .govuk-link--no-visited-state:focus {
   color: #0b0c0c;
 }
+
+.app-input-with-action {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.app-input-with-action .govuk-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.app-input-with-action .govuk-button {
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.app-input--locked {
+  background-color: #f3f2f1;
+  border-color: #505a5f;
+  cursor: default;
+  caret-color: transparent;
+}
