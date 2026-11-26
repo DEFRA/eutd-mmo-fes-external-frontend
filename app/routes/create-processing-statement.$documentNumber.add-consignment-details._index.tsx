@@ -1,5 +1,6 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { Details, FormInput, ErrorPosition, Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import { redirect, useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
 
@@ -316,6 +317,19 @@ const AddConsignmentDetailsIndex = () => {
     commodityCodes.find((autoCompleteOption) => autoCompleteOption.value === commodityCode)?.label ?? ""
   );
   const [currentProductDescription, setCurrentProductDescription] = useState<string | undefined>(description ?? "");
+  const descriptionInputRef = useRef<HTMLInputElement>(null);
+  const [isDescriptionUnlocked, setIsDescriptionUnlocked] = useState(false);
+
+  // Locked only once hydrated (no-JS users cannot unlock it) and never while a description error needs correcting.
+  const canLockDescription =
+    isHydrated && isEditing && !isEmpty(description) && isEmpty(errors?.consignmentDescription);
+  const isDescriptionLocked = canLockDescription && !isDescriptionUnlocked;
+
+  const handleChangeDescription = () => {
+    // Flush so readOnly is cleared before focusing; otherwise mobile browsers do not open the keyboard.
+    flushSync(() => setIsDescriptionUnlocked(true));
+    descriptionInputRef.current?.focus();
+  };
 
   useEffect(() => {
     if (isEmpty(errors) && lang === null) {
@@ -396,12 +410,36 @@ const AddConsignmentDetailsIndex = () => {
                     inputProps={{
                       id: "consignmentDescription",
                       "aria-describedby": "hint-consignmentDescription",
+                      readOnly: isDescriptionLocked,
+                      ref: descriptionInputRef,
                     }}
                     value={currentProductDescription ?? description}
                     data-testid="consignmentDescription"
-                    inputClassName={
-                      isEmpty(errors?.consignmentDescription) ? "govuk-input" : "govuk-input govuk-input--error"
-                    }
+                    inputClassName={classNames("govuk-input", {
+                      "govuk-input--error": !isEmpty(errors?.consignmentDescription),
+                      "app-input--locked": isDescriptionLocked,
+                    })}
+                    inputDivProps={{ className: "app-input-with-action" }}
+                    suffix={{
+                      properties: {},
+                      content: isDescriptionLocked ? (
+                        <button
+                          id="change-description"
+                          type="button"
+                          className="govuk-button govuk-button--secondary"
+                          data-module="govuk-button"
+                          data-testid="change-description-button"
+                          onClick={handleChangeDescription}
+                        >
+                          {t("commonChangeLink", { ns: "common" })}
+                          <span className="govuk-visually-hidden">
+                            {" "}
+                            {t("addConsignmentDetailsConsignmentDescriptionHeader").toLowerCase()}
+                          </span>
+                        </button>
+                      ) : undefined,
+                    }}
+                    onBlur={() => setIsDescriptionUnlocked(false)}
                     hint={{
                       id: "hint-consignmentDescription",
                       position: "above",
