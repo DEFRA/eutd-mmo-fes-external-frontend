@@ -209,10 +209,12 @@ const Template = ({
       className="govuk-template govuk-template--rebranded"
       lang={locale}
       dir={i18n.dir()}
+      translate="no"
       data-js={isHydrated ? "enabled" : undefined}
       suppressHydrationWarning
     >
       <head>
+        <meta name="google" content="notranslate" />
         <Meta />
         <Links />
       </head>

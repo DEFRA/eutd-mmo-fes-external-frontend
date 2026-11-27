@@ -24,6 +24,16 @@ describe("App Root", () => {
       cy.get("html").should("have.attr", "lang").and("not.be.empty");
     });
 
+    it("should disable browser auto-translation on the html element", () => {
+      cy.visit(pageUrl, { qs: { ...templateTestParams } });
+      cy.get("html").should("have.attr", "translate", "no");
+    });
+
+    it("should include the notranslate meta tag in the head", () => {
+      cy.visit(pageUrl, { qs: { ...templateTestParams } });
+      cy.get("head meta[name='google'][content='notranslate']").should("have.length", 1);
+    });
+
     it("should render the hidden focusable span used for skip-navigation (useRef)", () => {
       cy.visit(pageUrl, { qs: { ...templateTestParams } });
       cy.get("span[tabindex='-1']").first().should("exist");
