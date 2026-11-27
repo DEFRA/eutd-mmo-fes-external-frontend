@@ -127,7 +127,7 @@ export const AddProductsComponent = ({
           <Button
             label={isEdit ? t("ccUpdateSpeciesButton") : t("ccAddSpeciesButton")}
             type={BUTTON_TYPE.SUBMIT}
-            className="govuk-button govuk-button--primary"
+            className="govuk-button govuk-button--primary app-hide-when-js"
             data-module="govuk-button"
             name="_action"
             // @ts-ignore
@@ -146,7 +146,7 @@ export const AddProductsComponent = ({
           <label className="govuk-label govuk-!-font-weight-bold" htmlFor="state" id="state-label">
             {t("ccFavouritesPageProductTableRowState")}
           </label>
-          {!isHydrated && <div className="govuk-hint">{t("ccAddStateHint")}</div>}{" "}
+          {!isHydrated && <div className="govuk-hint app-hide-when-js">{t("ccAddStateHint")}</div>}{" "}
           <select
             name="state"
             id="state"
@@ -166,7 +166,7 @@ export const AddProductsComponent = ({
           <Button
             label={isEdit ? t("ccUpdateStateButton") : t("ccAddStateButton")}
             type={BUTTON_TYPE.SUBMIT}
-            className="govuk-button govuk-button--primary"
+            className="govuk-button govuk-button--primary app-hide-when-js"
             data-module="govuk-button"
             name="_action"
             // @ts-ignore
@@ -187,7 +187,7 @@ export const AddProductsComponent = ({
           <label className="govuk-label govuk-!-font-weight-bold" htmlFor="presentation" id="presentation-label">
             {t("ccFavouritesPageProductTableRowPresentation")}
           </label>
-          {!isHydrated && <div className="govuk-hint">{t("ccAddPresentationHint")}</div>}
+          {!isHydrated && <div className="govuk-hint app-hide-when-js">{t("ccAddPresentationHint")}</div>}
           <select
             name="presentation"
             id="presentation"
@@ -208,7 +208,7 @@ export const AddProductsComponent = ({
           <Button
             label={isEdit ? t("ccUpdatePresentationButton") : t("ccAddPresentationButton")}
             type={BUTTON_TYPE.SUBMIT}
-            className="govuk-button govuk-button--primary"
+            className="govuk-button govuk-button--primary app-hide-when-js"
             data-module="govuk-button"
             name="_action"
             // @ts-ignore
@@ -229,7 +229,7 @@ export const AddProductsComponent = ({
           <label className="govuk-label govuk-!-font-weight-bold" htmlFor="commodity_code" id="commoditycode-label">
             {t("ccFavouritesPageFormCommodityCodeField")}
           </label>
-          {!isHydrated && <div className="govuk-hint">{t("ccAddCommodityHint")}</div>}
+          {!isHydrated && <div className="govuk-hint app-hide-when-js">{t("ccAddCommodityHint")}</div>}
           <select
             name="commodityCode"
             id="commodity_code"

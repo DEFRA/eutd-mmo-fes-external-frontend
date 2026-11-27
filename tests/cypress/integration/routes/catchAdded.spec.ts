@@ -11,6 +11,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(progressUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.contains("a", /^Back$/).should("be.visible");
     cy.contains("a", /^Back$/).should("have.attr", "href");
   });
@@ -21,6 +22,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(progressUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.findByRole("link", { name: "Processed product details" }).click();
     cy.url().should("include", "/add-consignment-details");
   });
@@ -31,6 +33,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(progressUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.findByRole("link", { name: "Processed product details" }).click();
     cy.url().should("include", "/catch-added");
 
@@ -46,6 +49,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.title().should(
       "eq",
       "You have added 1 processed products to this consignment - Create a UK processing statement - GOV.UK"
@@ -62,6 +66,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.title().should(
       "eq",
       "You have added 1 processed products to this consignment - Create a UK processing statement - GOV.UK"
@@ -78,6 +83,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.title().should(
       "eq",
       "You have added 1 processed product to this consignment - Create a UK processing statement - GOV.UK"
@@ -94,6 +100,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.document({ timeout: 500 }).its("readyState").should("eq", "complete"); // Wait for hydration
     cy.get('[name="addAnotherCatch"][value="Yes"]').should("exist");
     cy.get('label[for="addAnotherCatch"]').click();
@@ -108,6 +115,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.contains("button", "Save and continue").click();
     cy.get("#errorIsland").should("exist");
     cy.url().should("include", "/catch-added");
@@ -119,6 +127,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.contains("button", "Save and continue").click();
     cy.get("#errorIsland").should("exist");
     cy.get("#errorIsland").should("be.visible");
@@ -141,6 +150,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("#errorIsland").should("not.exist");
     cy.get('input[name="addAnotherCatch"][value="No"]').check();
     cy.contains("button", "Save and continue").click();
@@ -153,6 +163,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('input[name="addAnotherCatch"][value="No"]').check();
     cy.contains("button", "Save as draft").click();
     cy.url().should("include", "/processing-statements");
@@ -164,6 +175,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('input[name="addAnotherCatch"][value="No"]').check();
     cy.contains("button", "Save and continue").click();
     cy.get("#errorIsland").should("exist");
@@ -176,6 +188,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").first().click();
     cy.url().should("include", "add-consignment-details");
   });
@@ -186,6 +199,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('[data-testid="filter-search-submit"]').should("contain.text", "Search");
   });
 
@@ -195,6 +209,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('[data-testid="filter-search-reset"]').should("contain.text", "Reset");
   });
 
@@ -204,6 +219,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('[data-testid="filter-search-submit"]').should("have.text", "Search");
     cy.get('[data-testid="filter-search-submit"]').should("have.attr", "value", "search");
     cy.get('[data-testid="filter-search-reset"]').should("have.text", "Reset");
@@ -216,6 +232,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('label[for*="filter"]').should("exist");
     cy.get('input[name="q"]')
       .should("have.attr", "id")
@@ -230,6 +247,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get(".govuk-form-group").should("exist");
     cy.get("label.govuk-label").should("exist");
     cy.get('input[type="search"]').should("exist");
@@ -250,6 +268,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('input[name="q"]').should("have.attr", "type", "search");
     cy.get('input[name="q"]').should("have.class", "govuk-input");
     cy.get('input[name="q"]').should("have.attr", "name", "q");
@@ -262,6 +281,7 @@ describe("PS: Catch added", () => {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('input[name="q"]').type("NonExistentSpeciesOrProduct");
     cy.get('[data-testid="filter-search-submit"]').click();
     cy.get("tbody tr").should("exist");
@@ -276,6 +296,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("form").then(($form) => {
       $form.on("submit", (event) => event.preventDefault());
     });
@@ -290,6 +311,7 @@ describe("PS: Catch added", () => {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Get initial count of rows
     cy.get("tbody tr").its("length").as("initialRowCount");
@@ -316,6 +338,7 @@ describe("PS: Catch added", () => {
       testCaseId: TestCaseId.PSCatchAddedTwoCatches,
     };
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Search for species that exists in fixture (Gymnotus pantherinus)
     cy.get('input[name="q"]').type("Gymnotus");
@@ -335,6 +358,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('input[name="q"]').should("have.value", "");
     cy.get('input[name="q"]').type("  ");
     cy.get('[data-testid="filter-search-submit"]').should("exist");
@@ -348,6 +372,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get('td[id$="-species"]')
       .first()
@@ -371,6 +396,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get('input[name="q"]').should("exist");
     cy.get('input[name="q"]').should("have.value", "");
@@ -391,6 +417,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     const specialSearches = ["123", "@#$", "test-123", "COD", "cod"];
 
@@ -410,6 +437,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('input[name="q"]').type("CompletelyNonExistentMatch123XYZ");
     cy.get('[data-testid="filter-search-submit"]').click();
     cy.get("tbody").should("exist");
@@ -423,6 +451,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('[data-testid="filter-search-submit"]')
       .should("exist")
       .and("contain.text", "Search")
@@ -440,6 +469,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get('[data-testid="filter-search-reset"]')
       .should("exist")
@@ -460,6 +490,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get('button[name="actionType"][value="search"]')
       .should("exist")
@@ -481,6 +512,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("tbody tr").its("length").as("initialCount");
     cy.get('input[name="q"]').as("searchInput");
@@ -503,6 +535,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get(".govuk-hint").should("exist");
     cy.get(".govuk-hint").should("contain.text", "You can search by product description, FAO code or species name");
@@ -514,6 +547,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get('input[name="q"]').should("have.attr", "aria-describedby");
 
@@ -535,6 +569,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get('input[name="q"]')
       .should("have.attr", "id")
@@ -555,6 +590,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get(".govuk-hint").should("be.visible");
     cy.get(".govuk-hint").should("have.class", "govuk-hint");
@@ -575,6 +611,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("[data-testid='warning-message']").should("exist");
     cy.get("[data-testid='warning-message']").should("have.attr", "role", "note");
     cy.get("[data-testid='warning-message']").should("contain", "To edit product information, press change.");
@@ -587,6 +624,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("thead tr th").should("have.length", 7);
     cy.get("thead tr").within(() => {
@@ -610,6 +648,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify Change link is in the first column (Product Description)
     cy.get("tbody tr")
@@ -630,6 +669,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("tbody tr").its("length").as("initialCount");
 
@@ -658,6 +698,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get(".govuk-hint").should("exist");
     cy.get(".govuk-hint").should("contain.text", "You can search by product description, FAO code or species name");
@@ -669,6 +710,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get('input[name="q"]').should("have.attr", "aria-describedby");
 
@@ -690,6 +732,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get('input[name="q"]')
       .should("have.attr", "id")
@@ -710,6 +753,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get(".govuk-hint").should("be.visible");
     cy.get(".govuk-hint").should("have.class", "govuk-hint");
@@ -730,6 +774,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").first().should("have.class", "govuk-link");
     cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").first().should("not.have.class", "govuk-button");
     cy.get("[data-testid='change-GBR-2023-PS-2305703F5-012345678']").first().should("match", "a");
@@ -746,6 +791,7 @@ describe("PS: Catch added", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get("tbody tr")
       .first()
@@ -769,6 +815,7 @@ describe("PS: Catch added - page guard", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.url().should("include", "/add-consignment-details");
   });
 
@@ -778,6 +825,7 @@ describe("PS: Catch added - page guard", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.url().should("include", "/add-consignment-details/_product_id_1");
   });
 });
@@ -789,10 +837,12 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get(".govuk-pagination__item--current").should("contain", "1");
     cy.get(".govuk-pagination__list .govuk-pagination__link").contains("2").click();
     cy.get(".govuk-pagination__item--current").should("contain", "2");
     cy.visit(`${pageUrl}?pageNo=2`, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get(".govuk-pagination__item--current").should("contain", "2");
     cy.get(".govuk-pagination__list .govuk-pagination__link").contains("1").click();
     cy.get(".govuk-pagination__item--current").should("contain", "1");
@@ -804,6 +854,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get(".govuk-pagination").should("not.exist");
     cy.get('[data-testid="pagination"]').should("not.exist");
   });
@@ -814,6 +865,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get(".govuk-pagination").should("exist");
     cy.get(".govuk-pagination").should("be.visible");
   });
@@ -824,6 +876,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("tbody tr").should("have.length", 15);
     cy.get('td[id$="-productDescription"]')
       .first()
@@ -840,6 +893,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get(".govuk-pagination__link").contains("2").click();
     cy.get("tbody tr").should("have.length", 7);
     cy.get('td[id$="-productDescription"]').should("exist");
@@ -852,6 +906,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('td[id="catches-0-productDescription"]').should("exist");
     cy.get('a[id="change-GBR-2023-PS-2305703F5-012345678"]').should("exist");
     cy.get(".govuk-pagination__link").contains("2").click();
@@ -865,6 +920,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get(".govuk-pagination__link").contains("2").click();
     cy.get("[data-testid='change-GBR-2023-PS-2305703F5-987654321']").first().click();
     cy.url().should("include", "/add-consignment-details");
@@ -889,6 +945,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify the disabled previous link structure matches the selected code
     cy.get(".govuk-pagination__prev").within(() => {
@@ -910,6 +967,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Navigate to last page
     cy.get(".govuk-pagination__link").contains("2").click();
@@ -934,6 +992,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Navigate to page 2
     cy.get(".govuk-pagination__link").contains("2").click();
@@ -954,6 +1013,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify the clickable next link structure uses navigationLinks?.nextLink()
     cy.get(".govuk-pagination__next").within(() => {
@@ -971,6 +1031,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get(".govuk-pagination__item--current").should("contain", "1");
     cy.get(".govuk-pagination__item--current").should("have.class", "govuk-pagination__item");
     cy.get(".govuk-pagination__item--current .govuk-pagination__link").should("exist");
@@ -986,6 +1047,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(`${pageUrl}?pageNo=2`, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("tbody tr").should("have.length", 7);
     cy.get(".govuk-pagination__item--current").should("contain", "2");
     cy.url().should("include", "pageNo=2");
@@ -997,6 +1059,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('[data-testid="pagination"]').should("not.exist");
 
     const manyTestParams: ITestParams = {
@@ -1004,6 +1067,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...manyTestParams } });
+    cy.waitForHydration();
     cy.get('[data-testid="pagination"]').should("exist");
   });
 
@@ -1013,6 +1077,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get(".govuk-pagination").should("have.attr", "role", "navigation");
     cy.get(".govuk-pagination").should("have.attr", "aria-label", "results");
     cy.get(".govuk-pagination").should("have.attr", "data-testid", "pagination");
@@ -1030,6 +1095,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Should not show pagination
     cy.get('[data-testid="pagination"]').should("not.exist");
@@ -1042,6 +1108,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Should show pagination
     cy.get('[data-testid="pagination"]').should("exist");
@@ -1054,6 +1121,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("tbody tr").should("have.length", 15); // First page
     cy.get('td[id$="-catchCertificateNumber"]').should("have.length", 15);
     cy.get('td[id$="-catchCertificateNumber"]').each(($el) => {
@@ -1067,6 +1135,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('nav[role="navigation"]').should("exist");
     cy.get('nav[aria-label="results"]').should("exist");
     cy.get(".govuk-pagination__icon").should("have.attr", "aria-hidden", "true");
@@ -1080,6 +1149,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get(".govuk-pagination__list .govuk-pagination__item").should("have.length", 2);
 
     cy.get(".govuk-pagination__list").within(() => {
@@ -1094,6 +1164,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("tbody tr").should("have.length", 15);
     cy.get(".govuk-pagination__link").contains("2").click();
     cy.get("tbody tr").should("have.length", 7);
@@ -1105,6 +1176,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get("nav.govuk-pagination").should("exist");
     cy.get("nav.govuk-pagination").should("have.attr", "role", "navigation");
     cy.get("nav.govuk-pagination").should("have.attr", "aria-label", "results");
@@ -1120,6 +1192,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get(".govuk-pagination__prev svg path").should(
       "have.attr",
@@ -1142,6 +1215,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // On first page: isFirstPage ? (disabled content) : navigationLinks?.previousLink()
     cy.get(".govuk-pagination__prev").within(() => {
@@ -1176,6 +1250,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get(".govuk-pagination__link").contains("2").click();
     cy.get(".govuk-pagination__item--current").should("contain", "2");
     cy.get(".govuk-pagination__prev a").should("exist");
@@ -1191,6 +1266,7 @@ describe("PS: Catch added - Pagination", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get(".govuk-pagination__item--current").should("contain", "1");
     cy.get(".govuk-pagination__next a").should("exist");
     cy.get(".govuk-pagination__next a").click();
@@ -1207,6 +1283,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     // Hydration-complete gate
     cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
@@ -1229,6 +1306,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
 
     // Navigate back to the catch-added page
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify that the search filter is cleared (input should be empty)
     cy.get('input[name="q"]').should("have.value", "");
@@ -1240,6 +1318,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     // Hydration-complete gate
     cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
@@ -1258,6 +1337,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
 
     // Navigate back to the catch-added page freshly (without q param)
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify that the search filter is cleared
     cy.get('input[name="q"]').should("have.value", "");
@@ -1269,6 +1349,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     // Hydration-complete gate
     cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
@@ -1289,6 +1370,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
 
     // Navigate back to the catch-added page
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Verify that the search filter is cleared
     cy.get('input[name="q"]').should("have.value", "");
@@ -1300,6 +1382,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     // Hydration-complete gate
     cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
@@ -1334,6 +1417,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     // Hydration-complete gate
     cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
@@ -1363,6 +1447,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Search by species code (e.g., COD, SAL)
     cy.get('input[name="q"]').type("COD");
@@ -1381,6 +1466,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Search by product description partial match
     cy.get('input[name="q"]').type("Product");
@@ -1399,6 +1485,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Search with only whitespace
     cy.get('input[name="q"]').type("   ");
@@ -1414,6 +1501,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Search with different case
     cy.get('input[name="q"]').clear();
@@ -1433,6 +1521,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
 
     const customParam = "testParam=value";
     cy.visit(`${pageUrl}?${customParam}`, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get('input[name="q"]').type("test");
     cy.get('[data-testid="filter-search-submit"]').click();
@@ -1448,6 +1537,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get('input[name="addAnotherCatch"][value="No"]').check();
     cy.contains("button", "Save and continue").click();
@@ -1463,6 +1553,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Search for text that definitely doesn't exist
     cy.get('input[name="q"]').clear();
@@ -1484,6 +1575,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Check that weight values are displayed with proper formatting
     cy.get('td[id*="totalWeightLanded"]').should("contain.text", "kg");
@@ -1498,9 +1590,11 @@ describe("PS: Catch added - session clearing on navigation", () => {
 
     // First visit with a query to set session state
     cy.visit(`${pageUrl}?q=test`, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Then visit without query - should clear session state
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('input[name="q"]').should("have.value", "");
   });
 
@@ -1510,6 +1604,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.url().should("include", "/add-consignment-details");
   });
 
@@ -1520,6 +1615,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
 
     const customNextUri = "/custom-next-page";
     cy.visit(`${pageUrl}?nextUri=${encodeURIComponent(customNextUri)}`, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get('input[name="addAnotherCatch"][value="No"]').check();
     cy.contains("button", "Save and continue").click();
@@ -1534,6 +1630,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
 
     const customNextUri = "/check-your-information";
     cy.visit(pageUrl + `?nextUri=${encodeURIComponent(customNextUri)}`, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     cy.get('input[name="addAnotherCatch"][value="No"]').check();
     cy.contains("button", "Save and continue").click();
@@ -1547,6 +1644,7 @@ describe("PS: Catch added - session clearing on navigation", () => {
     };
 
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
 
     // Check if pagination exists
     cy.get("body").then(($body) => {
@@ -1572,6 +1670,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
   it("should display 'No catches added' for product without catches", () => {
     cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedProductWithNoCatches } });
+    cy.waitForHydration();
     cy.contains("No catches added").should("exist");
     cy.get("strong.govuk-tag.govuk-tag--grey").should("exist");
   });
@@ -1579,6 +1678,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
   it("should show validation error when saving product with description but no catches", () => {
     // Covers both validateProductsHaveCatches and handleValidationError (merged duplicate)
     cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedSaveAndContinueValidationError } });
+    cy.waitForHydration();
     cy.get('input[name="addAnotherCatch"][value="No"]').check();
     cy.contains("button", "Save and continue").click();
     cy.get("#errorIsland").should("exist");
@@ -1587,25 +1687,30 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
   it("should group catches by product in catchesByProduct", () => {
     cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedTwoProductsOnlyOneWithCatches } });
+    cy.waitForHydration();
     cy.get("strong.govuk-tag").should("have.length.greaterThan", 0);
     cy.contains("No catches added").should("exist");
   });
 
   it("should apply applyMatchedFromSession filtering when hasActiveQuery is true", () => {
     cy.visit(`${pageUrl}?q=Atlantic`, { qs: { testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName } });
+    cy.waitForHydration();
     cy.get('input[name="q"]').should("have.value", "Atlantic");
   });
 
   it("should clear session state when navigating without query param after previous search", () => {
     const testParams: ITestParams = { testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName };
     cy.visit(`${pageUrl}?q=test`, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('input[name="q"]').should("have.value", "test");
     cy.visit(pageUrl, { qs: { ...testParams } });
+    cy.waitForHydration();
     cy.get('input[name="q"]').should("have.value", "");
   });
 
   it("should show product description in summary heading when single product", () => {
     cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedBlankOneCatch } });
+    cy.waitForHydration();
     cy.get("#summary-table-title").should("exist");
   });
 
@@ -1613,6 +1718,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
   it("should reset filter and clear all catches/products filters", () => {
     cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedResetFilter } });
+    cy.waitForHydration();
     // Hydration-complete gate: root.tsx useEffect focuses this span after hydrateRoot() settles
     cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
@@ -1637,6 +1743,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
 
   it("should test getExistingParams excludes pageNo from filter reset URL", () => {
     cy.visit(`${pageUrl}?pageNo=2`, { qs: { testCaseId: TestCaseId.PSCatchAddedManyMockCatches } });
+    cy.waitForHydration();
     // Hydration-complete gate
     cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
 
@@ -1661,6 +1768,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
   describe("filter interactions — PSCatchAddedFilterBySpeciesName", () => {
     beforeEach(() => {
       cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedFilterBySpeciesName } });
+      cy.waitForHydration();
       // Hydration-complete gate: root.tsx useEffect focuses this span after hydrateRoot() settles
       cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
     });
@@ -1725,6 +1833,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
   describe("filter interactions — PSCatchAddedFilterByProductDescription", () => {
     beforeEach(() => {
       cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedFilterByProductDescription } });
+      cy.waitForHydration();
       // Hydration-complete gate: root.tsx useEffect focuses this span after hydrateRoot() settles
       cy.get('span[tabindex="-1"]', { timeout: 15000 }).should("be.focused");
     });
@@ -1762,6 +1871,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
   describe("pagination and navigation — PSCatchAddedManyMockCatches", () => {
     beforeEach(() => {
       cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedManyMockCatches } });
+      cy.waitForHydration();
     });
 
     it("should handle pagination with paginatedCatches filtering", () => {
@@ -1791,6 +1901,7 @@ describe("PS: Catch added - New Filter & Validation Features", () => {
   describe("static page checks — PSCatchAddedTwoCatches", () => {
     beforeEach(() => {
       cy.visit(pageUrl, { qs: { testCaseId: TestCaseId.PSCatchAddedTwoCatches } });
+      cy.waitForHydration();
     });
 
     it("should display warning message about editing product information", () => {

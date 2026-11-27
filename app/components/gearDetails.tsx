@@ -103,7 +103,7 @@ export const GearDetails = ({
             id="add-gear-category"
             label={addLandingGearCategoryButton}
             type={BUTTON_TYPE.SUBMIT}
-            className="govuk-button govuk-button--primary govuk-!-margin-bottom-0"
+            className="govuk-button govuk-button--primary govuk-!-margin-bottom-0 app-hide-when-js"
             data-module="govuk-button"
             name="_action"
             // @ts-ignore
