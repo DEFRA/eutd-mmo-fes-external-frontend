@@ -119,6 +119,7 @@ export enum TestCaseId {
 
   PSAddConsignmentDetails = "psAddConsignmentDetails",
   PSAddConsignmentDetailsEditMode = "psAddConsignmentDetailsEditMode",
+  PSAddConsignmentDetailsEditModeSubmitSelectedCommodity = "psAddConsignmentDetailsEditModeSubmitSelectedCommodity",
   PSAddConsignmentDetailsWithProducts = "psAddConsignmentDetailsWithProducts",
   PSAddConsignmentDetailsWithProductsUnauthorized = "PSAddConsignmentDetailsWithProductsUnauthorized",
   PSPostAddConsignmentDetails = "psPostAddConsignmentDetails",
