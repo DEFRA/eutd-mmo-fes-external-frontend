@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import { Details, FormInput, ErrorPosition, Button, BUTTON_TYPE } from "@capgeminiuk/dcx-react-library";
 import { redirect, useActionData, useLoaderData, type LoaderFunction, type ActionFunction } from "react-router";
@@ -73,6 +73,36 @@ const resolveCommodityCodeFromInput = (value: string, commodities: CodeAndDescri
   });
 
   return selectedCommodity?.code ?? "";
+};
+
+const getCommodityCodeLabel = (commodityCodes: LabelAndValue[], currentCommodityCode?: string): string =>
+  commodityCodes.find((autoCompleteOption) => autoCompleteOption.value === currentCommodityCode)?.label ?? "";
+
+const getCommodityCodeOptions = (commodityCodes: LabelAndValue[], isHydrated: boolean): string[] => {
+  const labels = commodityCodes.map(({ label }) => label);
+
+  if (isHydrated) {
+    return labels;
+  }
+
+  return ["", ...labels];
+};
+
+const isFocusWithinEditablePair = (
+  nextFocusedElement: EventTarget | null,
+  editablePairWrapper: HTMLDivElement | null
+): boolean => {
+  if (!(nextFocusedElement instanceof HTMLElement)) {
+    return false;
+  }
+
+  if (editablePairWrapper?.contains(nextFocusedElement)) {
+    return true;
+  }
+
+  const commodityListbox = document.getElementById("commodityCode__listbox");
+
+  return commodityListbox?.contains(nextFocusedElement) ?? false;
 };
 
 // Helper to build valid product data, clearing any fields that failed validation
@@ -314,31 +344,66 @@ const AddConsignmentDetailsIndex = () => {
   const actionData = useActionData<{ errors?: any }>() ?? {};
   const { errors = {} } = actionData;
   const [selectedCommodityCode, setSelectedCommodityCode] = useState<string | undefined>(
-    commodityCodes.find((autoCompleteOption) => autoCompleteOption.value === commodityCode)?.label ?? ""
+    getCommodityCodeLabel(commodityCodes, commodityCode)
   );
   const [currentProductDescription, setCurrentProductDescription] = useState<string | undefined>(description ?? "");
   const descriptionInputRef = useRef<HTMLInputElement>(null);
-  const [isDescriptionUnlocked, setIsDescriptionUnlocked] = useState(false);
+  const editablePairWrapperRef = useRef<HTMLDivElement>(null);
+  const [isEditablePairUnlocked, setIsEditablePairUnlocked] = useState(false);
+  const hasDescriptionError = !isEmpty(errors?.consignmentDescription);
+  const hasCommodityCodeError = !isEmpty(errors?.commodityCode);
+  const hasEditablePairErrors = hasDescriptionError || hasCommodityCodeError;
+  const hasValidationErrors = !isEmpty(errors);
 
-  // Locked only once hydrated (no-JS users cannot unlock it) and never while a description error needs correcting.
-  const canLockDescription =
-    isHydrated && isEditing && !isEmpty(description) && isEmpty(errors?.consignmentDescription);
-  const isDescriptionLocked = canLockDescription && !isDescriptionUnlocked;
+  // Locked only once hydrated (no-JS users cannot unlock it) and never while field errors need correcting.
+  const canLockEditablePair = isHydrated && isEditing && !isEmpty(commodityCode) && !hasEditablePairErrors;
+  const isDescriptionLocked = canLockEditablePair && !isEditablePairUnlocked;
+  const isCommodityCodeLocked = canLockEditablePair && !isEditablePairUnlocked;
+  const commodityCodeOptions = useMemo(
+    () => getCommodityCodeOptions(commodityCodes, isHydrated),
+    [commodityCodes, isHydrated]
+  );
+  const commodityCodeErrorMessage = errors?.commodityCode?.message
+    ? t(errors?.commodityCode?.message, { ns: "errorsText" })
+    : "";
+  const commodityCodeAriaDescribedBy = errors?.commodityCode?.message
+    ? "commodityCode-hint commodityCode-error"
+    : "commodityCode-hint";
 
   const handleChangeDescription = () => {
     // Flush so readOnly is cleared before focusing; otherwise mobile browsers do not open the keyboard.
-    flushSync(() => setIsDescriptionUnlocked(true));
+    flushSync(() => setIsEditablePairUnlocked(true));
     descriptionInputRef.current?.focus();
   };
 
-  useEffect(() => {
-    if (isEmpty(errors) && lang === null) {
-      setCurrentProductDescription(description ?? "");
-      setSelectedCommodityCode(
-        commodityCodes.find((autoCompleteOption) => autoCompleteOption.value === commodityCode)?.label ?? ""
-      );
+  const handleEditablePairBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+    if (!isEditablePairUnlocked) {
+      return;
     }
-  }, [description, commodityCodes]);
+
+    if (isFocusWithinEditablePair(event.relatedTarget, editablePairWrapperRef.current)) {
+      return;
+    }
+
+    window.setTimeout(() => {
+      if (isFocusWithinEditablePair(document.activeElement, editablePairWrapperRef.current)) {
+        return;
+      }
+
+      setIsEditablePairUnlocked(false);
+    }, 0);
+  };
+
+  const handleCommodityCodeSelected = useCallback((value: string) => {
+    setSelectedCommodityCode(value);
+  }, []);
+
+  useEffect(() => {
+    if (!hasValidationErrors && lang === null) {
+      setCurrentProductDescription(description ?? "");
+      setSelectedCommodityCode(getCommodityCodeLabel(commodityCodes, commodityCode));
+    }
+  }, [description, commodityCode, hasValidationErrors, lang]);
 
   useEffect(() => {
     if (!isEmpty(errors)) {
@@ -401,6 +466,8 @@ const AddConsignmentDetailsIndex = () => {
                       ? "govuk-form-group"
                       : "govuk-form-group govuk-form-group--error"
                   }
+                  ref={editablePairWrapperRef}
+                  onBlur={handleEditablePairBlur}
                 >
                   <FormInput
                     containerClassName="govuk-form-group govuk-label--s"
@@ -439,7 +506,6 @@ const AddConsignmentDetailsIndex = () => {
                         </button>
                       ) : undefined,
                     }}
-                    onBlur={() => setIsDescriptionUnlocked(false)}
                     hint={{
                       id: "hint-consignmentDescription",
                       position: "above",
@@ -460,35 +526,57 @@ const AddConsignmentDetailsIndex = () => {
                   <div id="commodityCode-hint" className="govuk-hint">
                     {t("addConsignmentDetailsConsignmentDescriptionHint")}
                   </div>
-                  <AutocompleteFormField
-                    id="commodityCode"
-                    name="commodityCode"
-                    errorMessageText={t(errors?.commodityCode?.message, { ns: "errorsText" })}
-                    defaultValue={selectedCommodityCode ?? ""}
-                    options={
-                      isHydrated
-                        ? commodityCodes.map(({ label }) => label)
-                        : ["", ...commodityCodes.map(({ label }) => label)]
-                    }
-                    optionsId="commodity-option"
-                    labelClassName="govuk-label"
-                    containerClassName={classNames("govuk-form-group govuk-!-width-full", {
-                      "govuk-form-group--error": errors?.commodityCode?.message,
-                    })}
-                    selectProps={{
-                      selectClassName: classNames("govuk-select govuk-!-width-full", {
-                        "govuk-select--error": errors?.commodityCode?.message,
-                      }),
-                    }}
-                    labelText={""}
-                    inputProps={{
-                      className: classNames("govuk-input", {
-                        "govuk-input--error": errors?.commodityCode?.message,
-                      }),
-                      "aria-describedby": "commodityCode-hint",
-                    }}
-                    onSelected={(value) => setSelectedCommodityCode(value)}
-                  />
+                  {isCommodityCodeLocked ? (
+                    <div
+                      className={classNames("govuk-form-group govuk-!-width-full", {
+                        "govuk-form-group--error": errors?.commodityCode?.message,
+                      })}
+                    >
+                      {errors?.commodityCode?.message && (
+                        <p id="commodityCode-error" className="govuk-error-message">
+                          <span className="govuk-visually-hidden">{t("commonErrorText", { ns: "errorsText" })}</span>
+                          {commodityCodeErrorMessage}
+                        </p>
+                      )}
+                      <input
+                        id="commodityCode"
+                        name="commodityCode"
+                        type="text"
+                        className={classNames("govuk-input app-input--locked", {
+                          "govuk-input--error": errors?.commodityCode?.message,
+                        })}
+                        value={selectedCommodityCode ?? ""}
+                        aria-describedby={commodityCodeAriaDescribedBy}
+                        readOnly
+                      />
+                    </div>
+                  ) : (
+                    <AutocompleteFormField
+                      id="commodityCode"
+                      name="commodityCode"
+                      errorMessageText={commodityCodeErrorMessage}
+                      defaultValue={selectedCommodityCode ?? ""}
+                      options={commodityCodeOptions}
+                      optionsId="commodity-option"
+                      labelClassName="govuk-label"
+                      containerClassName={classNames("govuk-form-group govuk-!-width-full", {
+                        "govuk-form-group--error": errors?.commodityCode?.message,
+                      })}
+                      selectProps={{
+                        selectClassName: classNames("govuk-select govuk-!-width-full", {
+                          "govuk-select--error": errors?.commodityCode?.message,
+                        }),
+                      }}
+                      labelText={""}
+                      inputProps={{
+                        className: classNames("govuk-input", {
+                          "govuk-input--error": errors?.commodityCode?.message,
+                        }),
+                        "aria-describedby": commodityCodeAriaDescribedBy,
+                      }}
+                      onSelected={handleCommodityCodeSelected}
+                    />
+                  )}
                 </div>
                 <Details
                   summary={t("addConsignmentDetailsConsignmentHelpTitle")}
