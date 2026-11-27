@@ -60,7 +60,7 @@ export const addGearCategoryAction = async (
     const errors = getTransformedError([
       {
         key: "gearCategory",
-        message: getErrorMessage("error.gearCategory.string.empty"),
+        message: getErrorMessage("ccAddLandingGearCategoryAddButtonError"),
       },
     ]);
 

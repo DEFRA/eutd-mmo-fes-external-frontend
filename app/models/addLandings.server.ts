@@ -518,7 +518,6 @@ export const AddLandingsAction = async (request: Request, params: Params): Promi
       selectedHighSeasArea,
       selectedWeight,
       selectedVessel,
-      // TODO: we should just rename these for consistency?
       gearCategory: selectedGearCategory,
       gearType: selectedGearType,
       selectedRfmo,
